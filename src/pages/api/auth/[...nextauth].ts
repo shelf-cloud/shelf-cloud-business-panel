@@ -16,7 +16,6 @@ const options: NextAuthOptions = {
     providers: [
         CredentialsProvider({
             name: 'Credentials',
-
             credentials: {
                 username: { label: "Username", type: "text", placeholder: "jsmith" },
                 password: { label: "Password", type: "password" }

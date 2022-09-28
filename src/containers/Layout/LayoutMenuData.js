@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 
 const Navdata = () => {
     //state data
-    const [isDashboard, setIsDashboard] = useState(false);
-    const [isApps, setIsApps] = useState(false);
+    const [isWarehouse, setIsWarehouse] = useState(false);
+    const [isOrders, setIsOrders] = useState(false);
     const [isAuth, setIsAuth] = useState(false);
     const [isPages, setIsPages] = useState(false);
     const [isBaseUi, setIsBaseUi] = useState(false);
@@ -15,7 +15,7 @@ const Navdata = () => {
     const [isMaps, setIsMaps] = useState(false);
     const [isMultiLevel, setIsMultiLevel] = useState(false);
 
-    // Apps
+    // Orders
     const [isEmail, setEmail] = useState(false);
     const [isSubEmail, setSubEmail] = useState(false);
     const [isEcommerce, setIsEcommerce] = useState(false);
@@ -51,7 +51,7 @@ const Navdata = () => {
     const [isLevel1, setIsLevel1] = useState(false);
     const [isLevel2, setIsLevel2] = useState(false);
 
-    const [iscurrentState, setIscurrentState] = useState('Dashboard');
+    const [iscurrentState, setIscurrentState] = useState('Warehouse');
 
     function updateIconSidebar(e) {
         if (e && e.target && e.target.getAttribute("subitems")) {
@@ -69,11 +69,11 @@ const Navdata = () => {
 
     useEffect(() => {
         document.body.classList.remove('twocolumn-panel');
-        if (iscurrentState !== 'Dashboard') {
-            setIsDashboard(false);
+        if (iscurrentState !== 'Warehouse') {
+            setIsWarehouse(false);
         }
-        if (iscurrentState !== 'Apps') {
-            setIsApps(false);
+        if (iscurrentState !== 'Orders') {
+            setIsOrders(false);
         }
         if (iscurrentState !== 'Auth') {
             setIsAuth(false);
@@ -114,8 +114,8 @@ const Navdata = () => {
         }
     }, [
         iscurrentState,
-        isDashboard,
-        isApps,
+        isWarehouse,
+        isOrders,
         isAuth,
         isPages,
         isBaseUi,
@@ -138,11 +138,11 @@ const Navdata = () => {
             label: "Warehouse",
             icon: "ri-dashboard-2-line",
             link: "/#",
-            stateVariables: isDashboard,
+            stateVariables: isWarehouse,
             click: function (e) {
                 e.preventDefault();
-                setIsDashboard(!isDashboard);
-                setIscurrentState('Dashboard');
+                setIsWarehouse(!isWarehouse);
+                setIscurrentState('Warehouse');
                 updateIconSidebar(e);
             },
             subItems: [
@@ -167,11 +167,11 @@ const Navdata = () => {
             link: "/#",
             click: function (e) {
                 e.preventDefault();
-                setIsApps(!isApps);
-                setIscurrentState('Apps');
+                setIsOrders(!isOrders);
+                setIscurrentState('Orders');
                 updateIconSidebar(e);
             },
-            stateVariables: isApps,
+            stateVariables: isOrders,
             subItems: [
                 {
                     id: "allOrders",

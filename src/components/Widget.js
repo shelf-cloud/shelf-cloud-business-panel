@@ -67,7 +67,7 @@ const Widget = ({ summary }) => {
                 <div>
                   <div className="avatar-sm flex-shrink-0">
                     <span className="avatar-title bg-soft-info rounded-circle fs-2">
-                      <FeatherIcon icon="activity" className="text-info" />
+                      <FeatherIcon icon="dollar-sign" className="text-info" />
                     </span>
                   </div>
                 </div>
@@ -95,7 +95,7 @@ const Widget = ({ summary }) => {
                 <div>
                   <div className="avatar-sm flex-shrink-0">
                     <span className="avatar-title bg-soft-info rounded-circle fs-2">
-                      <FeatherIcon icon="clock" className="text-info" />
+                      <FeatherIcon icon="package" className="text-info" />
                     </span>
                   </div>
                 </div>
@@ -124,7 +124,7 @@ const Widget = ({ summary }) => {
                 <div>
                   <div className="avatar-sm flex-shrink-0">
                     <span className="avatar-title bg-soft-info rounded-circle fs-2">
-                      <FeatherIcon icon="external-link" className="text-info" />
+                      <FeatherIcon icon="box" className="text-info" />
                     </span>
                   </div>
                 </div>
