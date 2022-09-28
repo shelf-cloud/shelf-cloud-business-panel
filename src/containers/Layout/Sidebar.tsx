@@ -13,7 +13,11 @@ import ShipnovoLogo from '../../assets/images/shipnovo-logo.png'
 import VerticalLayout from './VerticalLayout'
 import { Container } from 'reactstrap'
 
-const Sidebar = ({ layoutType }) => {
+type Props = {
+  layoutType: string
+}
+
+const Sidebar = ({ layoutType }: Props) => {
   useEffect(() => {
     var verticalOverlay = document.getElementsByClassName('vertical-overlay')
     if (verticalOverlay) {
@@ -96,7 +100,7 @@ const Sidebar = ({ layoutType }) => {
               <Container fluid>
                 <div id="two-column-menu"></div>
                 <ul className="navbar-nav" id="navbar-nav">
-                  <VerticalLayout layoutType={layoutType} />
+                  <VerticalLayout />
                 </ul>
               </Container>
             </SimpleBar>

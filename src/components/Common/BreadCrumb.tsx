@@ -2,7 +2,12 @@ import React from 'react'
 import Link from 'next/link'
 import { Col, Row } from 'reactstrap'
 
-const BreadCrumb = ({ title, pageTitle }) => {
+type Props = {
+  title: string,
+  pageTitle: string
+}
+
+const BreadCrumb = ({ title, pageTitle }: Props) => {
   return (
     <React.Fragment>
       <Row>

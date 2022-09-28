@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, ReactElement } from 'react'
 import PropTypes from 'prop-types'
 
 //import Components
@@ -6,7 +6,11 @@ import Header from './Header'
 import Sidebar from './Sidebar'
 import Footer from './Footer'
 
-const Layout = (props) => {
+interface Props {
+  children: ReactElement;
+}
+
+const Layout = ({children}: Props) => {
   const [headerClass, setHeaderClass] = useState('')
 
   // class add remove in header
@@ -29,7 +33,7 @@ const Layout = (props) => {
         <Header headerClass={headerClass} />
         <Sidebar layoutType={'vertical'} />
         <div className="main-content">
-          {props.children}
+          {children}
           <Footer />
         </div>
       </div>

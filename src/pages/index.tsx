@@ -19,9 +19,6 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
       },
     }
   }
-
-  // const { data } = await axios('/api/getBusinessSummary')
-
   return {
     props: { session },
   }

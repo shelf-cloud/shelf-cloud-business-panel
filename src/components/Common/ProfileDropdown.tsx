@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useSession } from '@auth/client'
 import Image from 'next/image'
 import {
@@ -12,7 +12,7 @@ import {
 import avatar1 from '../../assets/images/avatar-5.jpg'
 
 const ProfileDropdown = () => {
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
 
   //Dropdown Toggle
   const [isProfileDropdown, setIsProfileDropdown] = useState(false)

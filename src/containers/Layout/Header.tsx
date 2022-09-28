@@ -9,16 +9,13 @@ import logoDark from '../../assets/images/logo-dark.png'
 import logoLight from '../../assets/images/logo-light.png'
 
 //import Components
-// import SearchOption from '../Components/Common/SearchOption'
-// import LanguageDropdown from '../Components/Common/LanguageDropdown'
-// import WebAppsDropdown from '../Components/Common/WebAppsDropdown'
-// import MyCartDropdown from '../Components/Common/MyCartDropdown'
-// import FullScreenDropdown from '../Components/Common/FullScreenDropdown'
-// import NotificationDropdown from '../Components/Common/NotificationDropdown'
 import ProfileDropdown from '../../components/Common/ProfileDropdown'
-// import LightDark from '../Components/Common/LightDark'
 
-const Header = ({ headerClass }) => {
+type Props = {
+  headerClass: string
+}
+
+const Header = ({ headerClass }: Props) => {
   const [search, setSearch] = useState(false)
   const toogleSearch = () => {
     setSearch(!search)
@@ -28,7 +25,7 @@ const Header = ({ headerClass }) => {
     var windowSize = document.documentElement.clientWidth
 
     if (windowSize > 767) {
-      document.querySelector('.hamburger-icon').classList.toggle('open')
+      document?.querySelector('.hamburger-icon')?.classList.toggle('open')
     }
 
     //For collapse horizontal menu

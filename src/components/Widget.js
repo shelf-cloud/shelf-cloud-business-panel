@@ -3,7 +3,14 @@ import { Card, CardBody, Col, Row } from 'reactstrap'
 import CountUp from 'react-countup'
 import FeatherIcon from 'feather-icons-react'
 
-
+// type Props = {
+//   summary: {
+//     binsUSed: number,
+//     currentBalance: number,
+//     skus: number,
+//     totalInventoryQty: number,
+//   }
+// }
 const Widget = ({ summary }) => {
 
   return (

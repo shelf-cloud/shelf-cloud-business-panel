@@ -2,12 +2,9 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
 import { Collapse } from 'reactstrap'
-// Import Data
 import navdata from './LayoutMenuData'
-//i18n
-// import { withTranslation } from 'react-i18next'
 
-const VerticalLayout = (props) => {
+const VerticalLayout = () => {
   const navData = navdata().props.children
 
   // useEffect(() => {
@@ -30,7 +27,7 @@ const VerticalLayout = (props) => {
   //   }
   // }, [props.location.pathname, props.layoutType])
 
-  function activateParentDropdown(item) {
+  function activateParentDropdown(item: any) {
     item.classList.add('active')
     let parentCollapseDiv = item.closest('.collapse.menu-dropdown')
 
@@ -73,10 +70,10 @@ const VerticalLayout = (props) => {
     return false
   }
 
-  const removeActivation = (items) => {
-    let actiItems = items.filter((x) => x.classList.contains('active'))
+  const removeActivation = (items: any) => {
+    let actiItems = items.filter((x: any) => x.classList.contains('active'))
 
-    actiItems.forEach((item) => {
+    actiItems.forEach((item: any) => {
       if (item.classList.contains('menu-link')) {
         if (!item.classList.contains('active')) {
           item.setAttribute('aria-expanded', false)
@@ -98,7 +95,7 @@ const VerticalLayout = (props) => {
   return (
     <React.Fragment>
       {/* menu Items */}
-      {(navData || []).map((item, key) => {
+      {(navData || []).map((item: any, key: any) => {
         return (
           <React.Fragment key={key}>
             {/* Main Header */}
@@ -134,11 +131,14 @@ const VerticalLayout = (props) => {
                   <ul className="nav nav-sm flex-column test">
                     {/* subItms  */}
                     {item.subItems &&
-                      (item.subItems || []).map((subItem, key) => (
+                      (item.subItems || []).map((subItem: any, key: any) => (
                         <React.Fragment key={key}>
                           {!subItem.isChildItem ? (
                             <li className="nav-item">
-                              <Link href={subItem.link ? subItem.link : '/#'} passHref>
+                              <Link
+                                href={subItem.link ? subItem.link : '/#'}
+                                passHref
+                              >
                                 <a className="nav-link">
                                   {subItem.label}
                                   {subItem.badgeName ? (
@@ -157,7 +157,7 @@ const VerticalLayout = (props) => {
                             </li>
                           ) : (
                             <li className="nav-item">
-                              <Link href={"/#"} passHref>
+                              <Link href={'/#'} passHref>
                                 <a
                                   onClick={subItem.click}
                                   className="nav-link"
@@ -175,7 +175,7 @@ const VerticalLayout = (props) => {
                                   {/* child subItms  */}
                                   {subItem.childItems &&
                                     (subItem.childItems || []).map(
-                                      (childItem, key) => (
+                                      (childItem: any, key: any) => (
                                         <React.Fragment key={key}>
                                           {!childItem.childItems ? (
                                             <li className="nav-item">
@@ -194,7 +194,7 @@ const VerticalLayout = (props) => {
                                             </li>
                                           ) : (
                                             <li className="nav-item">
-                                              <Link href={"/#"} passHref>
+                                              <Link href={'/#'} passHref>
                                                 <a
                                                   className="nav-link"
                                                   onClick={childItem.click}
@@ -218,7 +218,10 @@ const VerticalLayout = (props) => {
                                               >
                                                 <ul className="nav nav-sm flex-column">
                                                   {childItem.childItems.map(
-                                                    (subChildItem, key) => (
+                                                    (
+                                                      subChildItem: any,
+                                                      key: any
+                                                    ) => (
                                                       <li
                                                         className="nav-item"
                                                         key={key}
