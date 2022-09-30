@@ -2,56 +2,12 @@ import React, { useEffect, useState } from "react";
 
 const Navdata = () => {
     //state data
+    const [isDashboard, setIsDashboard] = useState(false);
     const [isWarehouse, setIsWarehouse] = useState(false);
-    const [isOrders, setIsOrders] = useState(false);
-    const [isAuth, setIsAuth] = useState(false);
-    const [isPages, setIsPages] = useState(false);
-    const [isBaseUi, setIsBaseUi] = useState(false);
-    const [isAdvanceUi, setIsAdvanceUi] = useState(false);
-    const [isForms, setIsForms] = useState(false);
-    const [isTables, setIsTables] = useState(false);
-    const [isCharts, setIsCharts] = useState(false);
-    const [isIcons, setIsIcons] = useState(false);
-    const [isMaps, setIsMaps] = useState(false);
-    const [isMultiLevel, setIsMultiLevel] = useState(false);
+    const [isShipments, setIsShipments] = useState(false);
+    const [isReceiving, setIsReceiving] = useState(false);
 
-    // Orders
-    const [isEmail, setEmail] = useState(false);
-    const [isSubEmail, setSubEmail] = useState(false);
-    const [isEcommerce, setIsEcommerce] = useState(false);
-    const [isProjects, setIsProjects] = useState(false);
-    const [isTasks, setIsTasks] = useState(false);
-    const [isCRM, setIsCRM] = useState(false);
-    const [isCrypto, setIsCrypto] = useState(false);
-    const [isInvoices, setIsInvoices] = useState(false);
-    const [isSupportTickets, setIsSupportTickets] = useState(false);
-    const [isNFTMarketplace, setIsNFTMarketplace] = useState(false);
-
-
-    // Authentication
-    const [isSignIn, setIsSignIn] = useState(false);
-    const [isSignUp, setIsSignUp] = useState(false);
-    const [isPasswordReset, setIsPasswordReset] = useState(false);
-    const [isPasswordCreate, setIsPasswordCreate] = useState(false);
-    const [isLockScreen, setIsLockScreen] = useState(false);
-    const [isLogout, setIsLogout] = useState(false);
-    const [isSuccessMessage, setIsSuccessMessage] = useState(false);
-    const [isVerification, setIsVerification] = useState(false);
-    const [isError, setIsError] = useState(false);
-
-    // Pages
-    const [isProfile, setIsProfile] = useState(false);
-    const [isLanding, setIsLanding] = useState(false);
-
-
-    // Charts
-    const [isApex, setIsApex] = useState(false);
-
-    // Multi Level
-    const [isLevel1, setIsLevel1] = useState(false);
-    const [isLevel2, setIsLevel2] = useState(false);
-
-    const [iscurrentState, setIscurrentState] = useState('Warehouse');
+    const [iscurrentState, setIscurrentState] = useState('Dashboard');
 
     function updateIconSidebar(e) {
         if (e && e.target && e.target.getAttribute("subitems")) {
@@ -69,63 +25,24 @@ const Navdata = () => {
 
     useEffect(() => {
         document.body.classList.remove('twocolumn-panel');
+        if (iscurrentState !== 'Dashboard') {
+            setIsDashboard(false);
+        }
         if (iscurrentState !== 'Warehouse') {
             setIsWarehouse(false);
         }
-        if (iscurrentState !== 'Orders') {
-            setIsOrders(false);
+        if (iscurrentState !== 'Shipments') {
+            setIsShipments(false);
         }
-        if (iscurrentState !== 'Auth') {
-            setIsAuth(false);
-        }
-        if (iscurrentState !== 'Pages') {
-            setIsPages(false);
-        }
-        if (iscurrentState !== 'BaseUi') {
-            setIsBaseUi(false);
-        }
-        if (iscurrentState !== 'AdvanceUi') {
-            setIsAdvanceUi(false);
-        }
-        if (iscurrentState !== 'Forms') {
-            setIsForms(false);
-        }
-        if (iscurrentState !== 'Tables') {
-            setIsTables(false);
-        }
-        if (iscurrentState !== 'Charts') {
-            setIsCharts(false);
-        }
-        if (iscurrentState !== 'Icons') {
-            setIsIcons(false);
-        }
-        if (iscurrentState !== 'Maps') {
-            setIsMaps(false);
-        }
-        if (iscurrentState !== 'MuliLevel') {
-            setIsMultiLevel(false);
-        }
-        if (iscurrentState === 'Widgets') {
-            history.push("/widgets");
-            document.body.classList.add('twocolumn-panel');
-        }
-        if (iscurrentState !== 'Landing') {
-            setIsLanding(false);
+        if (iscurrentState !== 'Receiving') {
+            setIsReceiving(false);
         }
     }, [
         iscurrentState,
+        isDashboard,
         isWarehouse,
-        isOrders,
-        isAuth,
-        isPages,
-        isBaseUi,
-        isAdvanceUi,
-        isForms,
-        isTables,
-        isCharts,
-        isIcons,
-        isMaps,
-        isMultiLevel
+        isShipments,
+        isReceiving
     ]);
 
     const menuItems = [
@@ -134,9 +51,30 @@ const Navdata = () => {
             isHeader: true,
         },
         {
+            id: "dashboard",
+            label: "Dashboard",
+            icon: "ri-dashboard-2-line",
+            link: "/#",
+            stateVariables: isDashboard,
+            click: function (e) {
+                e.preventDefault();
+                setIsDashboard(!isDashboard);
+                setIscurrentState('Dashboard');
+                updateIconSidebar(e);
+            },
+            subItems: [
+                {
+                    id: "Summary",
+                    label: "Summary",
+                    link: "/",
+                    parentId: "dashboard",
+                }
+            ],
+        },
+        {
             id: "warehouse",
             label: "Warehouse",
-            icon: "ri-dashboard-2-line",
+            icon: "ri-building-4-line",
             link: "/#",
             stateVariables: isWarehouse,
             click: function (e) {
@@ -147,50 +85,89 @@ const Navdata = () => {
             },
             subItems: [
                 {
-                    id: "Summary",
-                    label: "Summary",
+                    id: "products",
+                    label: "Products",
+                    link: "/Products",
+                    parentId: "warehouse",
+                },
+                {
+                    id: "inventorylog",
+                    label: "Inventory Log",
                     link: "/",
                     parentId: "warehouse",
                 },
                 {
-                    id: "inventory",
-                    label: "Inventory",
+                    id: "addproduct",
+                    label: "Add Product",
                     link: "/",
                     parentId: "warehouse",
-                }
+                },
+                {
+                    id: "storage",
+                    label: "Storage",
+                    link: "/",
+                    parentId: "warehouse",
+                },
             ],
         },
         {
-            id: "orders",
-            label: "Orders",
-            icon: "ri-apps-2-line",
+            id: "shipments",
+            label: "Shipments",
+            icon: "ri-file-list-3-line",
             link: "/#",
+            stateVariables: isShipments,
             click: function (e) {
                 e.preventDefault();
-                setIsOrders(!isOrders);
-                setIscurrentState('Orders');
+                setIsShipments(!isShipments);
+                setIscurrentState('Shipments');
                 updateIconSidebar(e);
             },
-            stateVariables: isOrders,
             subItems: [
                 {
-                    id: "allOrders",
-                    label: "All Orders",
+                    id: "shipments",
+                    label: "Shipment Transactions",
                     link: "/",
                     parentId: "orders",
                 },
                 {
-                    id: "createOrder",
+                    id: "createorder",
                     label: "Create Order",
                     link: "/",
                     parentId: "orders",
                 },
                 {
-                    id: "createOrder",
-                    label: "Create Order",
+                    id: "createwholesale",
+                    label: "Create wholesale Order",
                     link: "/",
                     parentId: "orders",
                 },
+            ],
+        },
+        {
+            id: "receiving",
+            label: "Receiving",
+            icon: "ri-truck-line",
+            link: "/#",
+            stateVariables: isReceiving,
+            click: function (e) {
+                e.preventDefault();
+                setIsReceiving(!isReceiving);
+                setIscurrentState('Receiving');
+                updateIconSidebar(e);
+            },
+            subItems: [
+                {
+                    id: "receiving",
+                    label: "Receiving Transactions",
+                    link: "/",
+                    parentId: "orders",
+                },
+                {
+                    id: "createreceiving",
+                    label: "Create Receiving",
+                    link: "/",
+                    parentId: "orders",
+                }
             ],
         },
     ];

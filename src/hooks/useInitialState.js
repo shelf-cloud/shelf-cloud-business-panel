@@ -11,10 +11,9 @@ import {
   layoutPositionTypes,
   topbarThemeTypes,
   leftsidbarSizeTypes,
-  leftSidebarViewTypes,  
-  leftSidebarImageTypes  
-} from "../components/constants/layout";
-
+  leftSidebarViewTypes,
+  leftSidebarImageTypes,
+} from '../components/constants/layout'
 
 const initialState = {
   layoutType: layoutTypes.VERTICAL,
@@ -27,40 +26,60 @@ const initialState = {
   leftSidebarViewType: leftSidebarViewTypes.DEFAULT,
   leftSidebarImageType: leftSidebarImageTypes.NONE,
   user: {},
+  products: [],
+  transations: [],
+  showInventoryBinsModal: false,
+  modalProductInfo: {},
 }
 
 const useInitialState = () => {
   const [state, setState] = useState(initialState)
 
   useEffect(() => {
+    document.documentElement.setAttribute('lang', 'en')
+    document.documentElement.setAttribute('data-layout-style', 'default')
+    document.documentElement.setAttribute('data-sidebar-size', 'lg')
+    document.documentElement.setAttribute('data-sidebar', 'dark')
+    document.documentElement.setAttribute('data-layout-mode', 'light')
+    document.documentElement.setAttribute('data-layout-width', 'fluid')
+    document.documentElement.setAttribute('data-layout-position', 'fixed')
+    document.documentElement.setAttribute('data-topbar', 'light')
+    document.documentElement.setAttribute('data-layout', 'vertical')
+    document.documentElement.setAttribute('data-sidebar-image', 'none')
 
-    document.documentElement.setAttribute("lang", "en")
-    document.documentElement.setAttribute("data-layout-style", "default")
-    document.documentElement.setAttribute("data-sidebar-size", "lg")
-    document.documentElement.setAttribute("data-sidebar", "dark")
-    document.documentElement.setAttribute("data-layout-mode", "light")
-    document.documentElement.setAttribute("data-layout-width", "fluid")
-    document.documentElement.setAttribute("data-layout-position", "fixed")
-    document.documentElement.setAttribute("data-topbar", "light")
-    document.documentElement.setAttribute("data-layout", "vertical")
-    document.documentElement.setAttribute("data-sidebar-image", "none")
-
-    axios('/api/getuser')
-    .then(({data}) => setState({
-      ...state,
-      user: data
-    }))
-
+    axios('/api/getuser').then(({ data }) =>
+      setState({
+        ...state,
+        user: data,
+      })
+    )
   }, [])
-  
-  // const addToCart = (payload) => {
-  //   setState({
-  //     ...state,
-  //     cart: state.cart.includes(payload)
-  //       ? state.cart
-  //       : [...state.cart, payload],
-  //   })
-  // }
+
+  const setProducts = (payload) => {
+    setState({
+      ...state,
+      products: payload,
+    })
+  }
+
+  const setshowInventoryBinsModal = (payload) => {
+    setState({
+      ...state,
+      showInventoryBinsModal: payload,
+    })
+  }
+
+  const setModalProductInfo = (inventoryId, businessId, sku) => {
+    setState({
+      ...state,
+      modalProductInfo: {
+        inventoryId,
+        businessId,
+        sku
+      },
+      showInventoryBinsModal: true,
+    })
+  }
 
   // const removeFromCart = (payload) => {
   //   setState({
@@ -85,6 +104,9 @@ const useInitialState = () => {
 
   return {
     state,
+    setProducts,
+    setshowInventoryBinsModal,
+    setModalProductInfo
   }
 }
 

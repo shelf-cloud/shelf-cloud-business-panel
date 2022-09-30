@@ -3,7 +3,7 @@
 //       url: string;
 //     };
 //   }
-  
+
 //   export interface Cuenco {
 //     _id: string;
 //     title: string;
@@ -41,4 +41,39 @@ export interface Business {
     receivingManHour: number;
     receivingPalletCost: number;
     receivingWrapService: number;
+}
+
+
+export interface RowType {
+    Image: string;
+    Title: string;
+    SKU: string;
+    ASIN: string;
+    FNSKU: string;
+    Barcode: string;
+    Quantity: {};
+    unitDimensions: {};
+    boxDimensions: {};
+    qtyBox: number;
+}
+export interface Product {
+    inventoryId: number;
+    businessId: number;
+    business: string;
+    image: string;
+    title: string;
+    barcode: string;
+    sku: string;
+    asin: string;
+    fnSku: string;
+    quantity: number;
+    weight: number;
+    length: number;
+    width: number;
+    height: number;
+    boxQty: number;
+    boxWeight: number;
+    boxLength: number;
+    boxWidth: number;
+    boxHeight: number;
 }

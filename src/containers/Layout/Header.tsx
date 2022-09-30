@@ -16,10 +16,6 @@ type Props = {
 }
 
 const Header = ({ headerClass }: Props) => {
-  const [search, setSearch] = useState(false)
-  const toogleSearch = () => {
-    setSearch(!search)
-  }
 
   const toogleMenuBtn = () => {
     var windowSize = document.documentElement.clientWidth
@@ -102,46 +98,9 @@ const Header = ({ headerClass }: Props) => {
                   <span></span>
                 </span>
               </button>
-
-              {/* <SearchOption /> */}
             </div>
 
             <div className="d-flex align-items-center">
-              <Dropdown
-                isOpen={search}
-                toggle={toogleSearch}
-                className="d-md-none topbar-head-dropdown header-item"
-              >
-                <DropdownToggle
-                  type="button"
-                  tag="button"
-                  className="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"
-                >
-                  <i className="bx bx-search fs-22"></i>
-                </DropdownToggle>
-                <DropdownMenu className="dropdown-menu-lg dropdown-menu-end p-0">
-                  <Form className="p-3">
-                    <div className="form-group m-0">
-                      <div className="input-group">
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="Search ..."
-                          aria-label="Recipient's username"
-                        />
-                        <button className="btn btn-primary" type="submit">
-                          <i className="mdi mdi-magnify"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </Form>
-                </DropdownMenu>
-              </Dropdown>
-
-              {/* NotificationDropdown */}
-              {/* <NotificationDropdown /> */}
-
-              {/* ProfileDropdown */}
               <ProfileDropdown />
             </div>
           </div>
