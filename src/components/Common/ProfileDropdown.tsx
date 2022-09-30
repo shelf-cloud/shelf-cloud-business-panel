@@ -55,7 +55,7 @@ const ProfileDropdown = () => {
           <div className="dropdown-divider"></div>
           <DropdownItem href="/logout">
             <i className="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>{' '}
-            <span className="align-middle" data-key="t-logout" onClick={() => signOut({ callbackUrl: '/api/auth/signin' })}>
+            <span className="align-middle" data-key="t-logout" onClick={() => signOut()}>
               Logout
             </span>
           </DropdownItem>
