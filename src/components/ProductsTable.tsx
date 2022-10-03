@@ -20,7 +20,7 @@ type Props = {
   pending: boolean
 }
 
-const BasicTable = ({ tableData, pending }: Props) => {
+const ProductsTable = ({ tableData, pending }: Props) => {
   const { setModalProductInfo }: any = useContext(AppContext)
 
   const columns: any = [
@@ -243,4 +243,4 @@ const BasicTable = ({ tableData, pending }: Props) => {
   )
 }
 
-export default BasicTable
+export default ProductsTable

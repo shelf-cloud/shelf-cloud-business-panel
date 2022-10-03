@@ -17,7 +17,7 @@ import {
 } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
-import BasicTable from '@components/ProductsTable'
+import ProductsTable from '@components/ProductsTable'
 import InventoryBinsModal from '@components/InventoryBinsModal'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -44,7 +44,7 @@ type Props = {
   }
 }
 
-const DataTables = ({ session }: Props) => {
+const Products = ({ session }: Props) => {
   const { state, setProducts }: any = useContext(AppContext)
   const [pending, setPending] = useState(true)
   const [tableData, setTableData] = useState<RowType[]>(state.products)
@@ -128,7 +128,6 @@ const DataTables = ({ session }: Props) => {
               <Col lg={12}>
                 <Card>
                   <CardHeader>
-                    {/* <h5 className="card-title mb-0">Basic Datatables</h5> */}
                     <form className="app-search d-flex flex-row justify-content-end align-items-center p-0">
                       <div className="position-relative">
                         <Input
@@ -151,7 +150,7 @@ const DataTables = ({ session }: Props) => {
                     </form>
                   </CardHeader>
                   <CardBody>
-                    <BasicTable tableData={tableData} pending={pending} />
+                    <ProductsTable tableData={tableData} pending={pending} />
                   </CardBody>
                 </Card>
               </Col>
@@ -164,4 +163,4 @@ const DataTables = ({ session }: Props) => {
   )
 }
 
-export default DataTables
+export default Products
