@@ -4,12 +4,12 @@ export const getServerSideProps: GetServerSideProps<{}> = async () => {
   return {
     redirect: {
       destination: '/api/auth/signin',
-      permanent: false,
+      permanent: true,
     },
   }
 }
 
-const Logout = () => {
+const logout = () => {
   return (
     <div>
       <div className="page-content"></div>
@@ -17,4 +17,4 @@ const Logout = () => {
   )
 }
 
-export default Logout
+export default logout
