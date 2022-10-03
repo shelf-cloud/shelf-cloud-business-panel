@@ -21,8 +21,8 @@ type Props = {
 }
 
 const BasicTable = ({ tableData, pending }: Props) => {
-  const { state, setshowInventoryBinsModal, setModalProductInfo }: any =
-    useContext(AppContext)
+  const { setModalProductInfo }: any = useContext(AppContext)
+
   const columns: any = [
     {
       name: (
@@ -70,39 +70,61 @@ const BasicTable = ({ tableData, pending }: Props) => {
       width: '80px',
     },
     {
-      name: <span className="font-weight-bold fs-13">Title</span>,
-      selector: (row: { Title: any }) => row.Title,
+      name: (
+        <span className="font-weight-bold fs-13">
+          Title
+          <br />
+          SKU
+        </span>
+      ),
+      selector: (row: any) => {
+        return (
+          <div>
+            <p style={{ margin: '0px', fontWeight: '800' }}>{row.Title}</p>
+            <p style={{ margin: '0px' }}>{row.SKU}</p>
+          </div>
+        )
+      },
       sortable: true,
       wrap: true,
-      grow: 1,
+      grow: 1.5,
       //   compact: true,
     },
+    // {
+    //   name: <span className="font-weight-bold fs-13">SKU</span>,
+    //   selector: (row: { SKU: any }) => row.SKU,
+    //   sortable: true,
+    //   grow: 1.3,
+    //   //   wrap: true,
+    //   //   compact: true,
+    // },
     {
-      name: <span className="font-weight-bold fs-13">SKU</span>,
-      selector: (row: { SKU: any }) => row.SKU,
+      name: <span className="font-weight-bold fs-13">ASIN<br/>FNSKU<br/>Barcode</span>,
+      selector: (row: any) => {
+        return (
+          <div>
+            <p style={{ margin: '0px' }}>{row.ASIN}</p>
+            <p style={{ margin: '0px' }}>{row.FNSKU}</p>
+            <p style={{ margin: '0px' }}>{row.Barcode}</p>
+          </div>
+        )
+      },
       sortable: true,
+      compact: true,
       grow: 1.3,
-      //   wrap: true,
-      //   compact: true,
     },
-    {
-      name: <span className="font-weight-bold fs-13">ASIN</span>,
-      selector: (row: { ASIN: any }) => row.ASIN,
-      sortable: true,
-      compact: true,
-    },
-    {
-      name: <span className="font-weight-bold fs-13">FNSKU</span>,
-      selector: (row: { FNSKU: any }) => row.FNSKU,
-      sortable: true,
-      compact: true,
-    },
-    {
-      name: <span className="font-weight-bold fs-13">Barcode</span>,
-      selector: (row: { Barcode: any }) => row.Barcode,
-      sortable: true,
-      compact: true,
-    },
+    // {
+    //   name: <span className="font-weight-bold fs-13">FNSKU</span>,
+    //   selector: (row: { FNSKU: any }) => row.FNSKU,
+    //   sortable: true,
+    //   compact: true,
+    // },
+    // {
+    //   name: <span className="font-weight-bold fs-13">Barcode</span>,
+    //   selector: (row: { Barcode: any }) => row.Barcode,
+    //   sortable: true,
+    //   compact: true,
+    // },
     {
       name: <span className="font-weight-bold fs-13">Quantity</span>,
       selector: (cell: any) => {
@@ -131,7 +153,7 @@ const BasicTable = ({ tableData, pending }: Props) => {
       name: <span className="font-weight-bold fs-13">Unit Dimensions</span>,
       sortable: false,
       compact: true,
-      grow: 1.6,
+      grow: 1.4,
       selector: (cell: any) => {
         return (
           <div style={{ padding: '7px 0px' }}>
@@ -155,7 +177,7 @@ const BasicTable = ({ tableData, pending }: Props) => {
       name: <span className="font-weight-bold fs-13">Box Dimensions</span>,
       sortable: false,
       compact: true,
-      grow: 1.6,
+      grow: 1.4,
       selector: (cell: { boxDimensions: any }) => {
         return (
           <div style={{ padding: '7px 5px 7px 0px' }}>
