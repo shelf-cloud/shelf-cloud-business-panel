@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
-import { RowType, Product } from '@typings'
+import { LogRowType, Product } from '@typings'
 import axios from 'axios'
 import Head from 'next/head'
 import {
@@ -17,8 +17,9 @@ import {
 } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
-import ProductsTable from '@components/ProductsTable'
+import useSWR from 'swr'
 import InventoryBinsModal from '@components/InventoryBinsModal'
+import DataTable from 'react-data-table-component'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -45,76 +46,87 @@ type Props = {
 }
 
 const InventoryLogs = ({ session }: Props) => {
-  const { state, setProducts }: any = useContext(AppContext)
+  const { state }: any = useContext(AppContext)
   const [pending, setPending] = useState(true)
-  const [tableData, setTableData] = useState<RowType[]>(state.products)
+  const [logData, setLogData] = useState<LogRowType[]>([])
   const [serachValue, setSerachValue] = useState('')
+  const title = `Inventory Log | ${session?.user?.name}`
+
+  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
+  const { data, error } = useSWR(
+    state.user.businessId
+      ? `/api/getBusinessInventoryLog?businessId=${state.user.businessId}`
+      : null,
+    fetcher
+  )
+  useEffect(() => {
+    if (data) {
+      setLogData(data)
+      setPending(false)
+    }
+  }, [data])
 
   const filterByText = (e: any) => {
     if (e.target.value !== '') {
       setSerachValue(e.target.value)
-      const filterTable = tableData.filter(
-        (item) =>
-          item.Title.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          item.SKU.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          item.ASIN.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          item.FNSKU.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          item.Barcode.toLowerCase().includes(e.target.value.toLowerCase())
+      const filterTable = logData.filter(
+        (log: any) =>
+          log.sku.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          log.details.toLowerCase().includes(e.target.value.toLowerCase())
       )
-      setTableData(filterTable)
+      setLogData(filterTable)
     } else {
       setSerachValue(e.target.value)
-      setTableData(state.products)
+      setLogData(data)
     }
   }
   const clearSearch = () => {
     setSerachValue('')
-    setTableData(state.products)
+    setLogData(data)
   }
 
-  useEffect(() => {
-    const bringProducts = async () => {
-      const response = await axios('/api/getBusinessInventory')
-      const list: RowType[] = []
+  const columns: any = [
+    {
+      name: <span className="fw-bolder fs-5">SKU</span>,
+      selector: (row: { sku: string }) => row.sku,
+      sortable: true,
+      center: true,
+    },
+    {
+      name: <span className="fw-bolder fs-5">Date</span>,
+      selector: (row: { date: string }) => row.date,
+      sortable: true,
+      center: true,
+    },
+    {
+      name: <span className="fw-bolder fs-5">Details</span>,
+      selector: (row: { details: string }) => row.details,
+      sortable: true,
+      center: true,
+    },
+  ]
 
-      response.data.forEach((product: Product) => {
-        const row = {
-          Image: product.image,
-          Title: product.title,
-          SKU: product.sku,
-          ASIN: product.asin,
-          FNSKU: product.fnSku,
-          Barcode: product.barcode,
-          Quantity: {
-            quantity: product.quantity,
-            inventoryId: product.inventoryId,
-            businessId: product.businessId,
-            sku: product.sku
-          },
-          unitDimensions: {
-            weight: product.weight,
-            length: product.length,
-            width: product.width,
-            height: product.height,
-          },
-          boxDimensions: {
-            weight: product.boxWeight,
-            length: product.boxLength,
-            width: product.boxWidth,
-            height: product.boxHeight,
-          },
-          qtyBox: product.boxQty,
-        }
-        list.push(row)
-      })
-      setTableData(list)
-      setProducts(list)
-      setPending(false)
-    }
-    bringProducts()
-  }, [])
+  const conditionalRowStyles = [
+    {
+      when: (row: any) => row.details.includes('Added'),
+      style: {
+        backgroundColor: 'rgba(163, 228, 215, 0.3)',
+      },
+    },
+    {
+      when: (row: any) => row.details.includes('Remove'),
+      style: {
+        backgroundColor: 'rgba(245, 183, 177, 0.3)',
+      },
+    },
+    {
+      when: (row: any) => row.details.includes('Move'),
+      style: {
+        backgroundColor: 'rgba(250, 215, 160, 0.3)',
+      },
+    },
+  ]
 
-  const title = `Products | ${session?.user?.name}`
   return (
     <div>
       <Head>
@@ -150,7 +162,15 @@ const InventoryLogs = ({ session }: Props) => {
                     </form>
                   </CardHeader>
                   <CardBody>
-                    <ProductsTable tableData={tableData} pending={pending} />
+                    <DataTable
+                      columns={columns}
+                      data={logData}
+                      progressPending={pending}
+                      // pagination
+                      striped={true}
+                      highlightOnHover={true}
+                      conditionalRowStyles={conditionalRowStyles}
+                    />
                   </CardBody>
                 </Card>
               </Col>

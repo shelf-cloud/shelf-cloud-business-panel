@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
-import { RowType, Product } from '@typings'
+import { ProductRowType, Product } from '@typings'
 import axios from 'axios'
 import Head from 'next/head'
 import {
@@ -17,6 +17,7 @@ import {
 } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
+import useSWR from 'swr'
 import ProductsTable from '@components/ProductsTable'
 import InventoryBinsModal from '@components/InventoryBinsModal'
 
@@ -45,10 +46,57 @@ type Props = {
 }
 
 const Products = ({ session }: Props) => {
-  const { state, setProducts }: any = useContext(AppContext)
+  const { state }: any = useContext(AppContext)
   const [pending, setPending] = useState(true)
-  const [tableData, setTableData] = useState<RowType[]>(state.products)
+  const [tableData, setTableData] = useState<ProductRowType[]>(state.products)
   const [serachValue, setSerachValue] = useState('')
+
+  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
+  const { data, error } = useSWR(
+    state.user.businessId
+      ? `/api/getBusinessInventory?businessId=${state.user.businessId}`
+      : null,
+    fetcher
+  )
+
+  useEffect(() => {
+    if (data) {
+      const list: ProductRowType[] = []
+
+      data.forEach((product: Product) => {
+        const row = {
+          Image: product.image,
+          Title: product.title,
+          SKU: product.sku,
+          ASIN: product.asin,
+          FNSKU: product.fnSku,
+          Barcode: product.barcode,
+          Quantity: {
+            quantity: product.quantity,
+            inventoryId: product.inventoryId,
+            businessId: product.businessId,
+            sku: product.sku,
+          },
+          unitDimensions: {
+            weight: product.weight,
+            length: product.length,
+            width: product.width,
+            height: product.height,
+          },
+          boxDimensions: {
+            weight: product.boxWeight,
+            length: product.boxLength,
+            width: product.boxWidth,
+            height: product.boxHeight,
+          },
+          qtyBox: product.boxQty,
+        }
+        list.push(row)
+      })
+      setTableData(list)
+      setPending(false)
+    }
+  }, [data])
 
   const filterByText = (e: any) => {
     if (e.target.value !== '') {
@@ -71,48 +119,6 @@ const Products = ({ session }: Props) => {
     setSerachValue('')
     setTableData(state.products)
   }
-
-  useEffect(() => {
-    const bringProducts = async () => {
-      const response = await axios('/api/getBusinessInventory')
-      const list: RowType[] = []
-
-      response.data.forEach((product: Product) => {
-        const row = {
-          Image: product.image,
-          Title: product.title,
-          SKU: product.sku,
-          ASIN: product.asin,
-          FNSKU: product.fnSku,
-          Barcode: product.barcode,
-          Quantity: {
-            quantity: product.quantity,
-            inventoryId: product.inventoryId,
-            businessId: product.businessId,
-            sku: product.sku
-          },
-          unitDimensions: {
-            weight: product.weight,
-            length: product.length,
-            width: product.width,
-            height: product.height,
-          },
-          boxDimensions: {
-            weight: product.boxWeight,
-            length: product.boxLength,
-            width: product.boxWidth,
-            height: product.boxHeight,
-          },
-          qtyBox: product.boxQty,
-        }
-        list.push(row)
-      })
-      setTableData(list)
-      setProducts(list)
-      setPending(false)
-    }
-    bringProducts()
-  }, [])
 
   const title = `Products | ${session?.user?.name}`
   return (
@@ -158,7 +164,7 @@ const Products = ({ session }: Props) => {
           </Container>
         </div>
       </React.Fragment>
-      <InventoryBinsModal />
+      {state.showInventoryBinsModal && <InventoryBinsModal />}
     </div>
   )
 }

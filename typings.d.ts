@@ -43,8 +43,14 @@ export interface Business {
     receivingWrapService: number;
 }
 
+export interface LogRowType {
+    id: number;
+    sku: string;
+    date: string;
+    details: string;
+}
 
-export interface RowType {
+export interface ProductRowType {
     Image: string;
     Title: string;
     SKU: string;

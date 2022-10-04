@@ -12,9 +12,7 @@ const getBusinessInventory: NextApiHandler<Business> = async (request, response)
         return
     }
 
-    axios.post(`${process.env.API_DOMAIN_SERVICES}/getBusinessInventory.php`, {
-        username: session?.user?.name
-    })
+    axios(`${process.env.API_DOMAIN_SERVICES}/getBusinessInventory.php?businessId=${request.query.businessId}`)
         .then(({ data }) => {
             response.json(data)})
         .catch((error) => {

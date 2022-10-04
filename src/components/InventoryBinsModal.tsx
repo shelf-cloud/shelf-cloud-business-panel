@@ -9,7 +9,7 @@ import {
 } from 'reactstrap'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
-import { Product, RowType } from '@typings'
+// import { Product, RowType } from '@typings'
 import DataTable from 'react-data-table-component'
 
 type Props = {}
@@ -21,10 +21,7 @@ function InventoryBinsModal({}: Props) {
 
   useEffect(() => {
     const bringProductBins = async () => {
-      const response = await axios.post('/api/getProductInventoryBins', {
-        inventoryId: state.modalProductInfo.inventoryId,
-        businessId: state.modalProductInfo.businessId,
-      })
+      const response = await axios(`/api/getProductInventoryBins?inventoryId=${state.modalProductInfo.inventoryId}&businessId=${state.modalProductInfo.businessId}`)
       setBins(response.data)
       setLoading(false)
     }

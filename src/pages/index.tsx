@@ -1,3 +1,5 @@
+import { useContext, useEffect, useState } from 'react'
+import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 // import Image from 'next/image'
@@ -6,7 +8,7 @@ import { getSession } from '@auth/client'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import Widget from '@components/Widget'
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -25,15 +27,30 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 }
 
 const Home = () => {
+  const { state }: any = useContext(AppContext)
   const [summary, setsummary] = useState({})
-  
+
+  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
+  const { data, error } = useSWR(
+    state.user.businessId
+      ? `/api/getBusinessSummary?businessId=${state.user.businessId}`
+      : null,
+    fetcher
+  )
+
   useEffect(() => {
-    const bringSummary = async () => {
-      const response = await axios('/api/getBusinessSummary')
-      setsummary(response.data)
+    if (data) {
+      setsummary(data)
     }
-    bringSummary()
-  }, [])
+  }, [data])
+
+  // useEffect(() => {
+  //   const bringSummary = async () => {
+  //     const response = await axios('/api/getBusinessSummary')
+  //     setsummary(response.data)
+  //   }
+  //   bringSummary()
+  // }, [])
 
   return (
     <div>

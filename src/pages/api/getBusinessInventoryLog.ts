@@ -11,10 +11,7 @@ const getbusinesssumary: NextApiHandler<Business> = async (request, response) =>
         return
     }
 
-    axios.post(`${process.env.API_DOMAIN_SERVICES}/getProductInventoryBins.php`, {
-        inventoryId: request.body.inventoryId,
-        businessId: request.body.businessId,
-    })
+    axios(`${process.env.API_DOMAIN_SERVICES}/getBusinessInventoryLog.php?businessId=${request.query.businessId}`)
         .then(({ data }) => {
             response.json(data)})
         .catch((error) => {
