@@ -122,7 +122,7 @@ const AddProducts = ({ session }: Props) => {
         window.scrollTo(0, 0)
         setMsg(response.data.msg)
         setProductSucces(true)
-        // resetForm()
+        resetForm()
         setTimeout(() => setProductSucces(false), 6000)
       } else {
         window.scrollTo(0, 0)
