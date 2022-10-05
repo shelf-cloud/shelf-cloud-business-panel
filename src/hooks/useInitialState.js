@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import useSWR from 'swr'
 
 //constants
 import {
@@ -35,6 +36,21 @@ const initialState = {
 const useInitialState = () => {
   const [state, setState] = useState(initialState)
 
+  const fetcher = (endPoint) => axios(endPoint).then((res) => res.data)
+  const { data, error } = useSWR(
+    '/api/getuser',
+    fetcher
+  )
+
+  useEffect(() => {
+    if (data) {
+      setState({
+        ...state,
+        user: data,
+      })
+    }
+  }, [data])
+
   useEffect(() => {
     document.documentElement.setAttribute('lang', 'en')
     document.documentElement.setAttribute('data-layout-style', 'default')
@@ -47,12 +63,12 @@ const useInitialState = () => {
     document.documentElement.setAttribute('data-layout', 'vertical')
     document.documentElement.setAttribute('data-sidebar-image', 'none')
 
-    axios('/api/getuser').then(({ data }) =>
-      setState({
-        ...state,
-        user: data,
-      })
-    )
+    // axios('/api/getuser').then(({ data }) =>
+    //   setState({
+    //     ...state,
+    //     user: data,
+    //   })
+    // )
   }, [])
 
   const setProducts = (payload) => {
@@ -75,7 +91,7 @@ const useInitialState = () => {
       modalProductInfo: {
         inventoryId,
         businessId,
-        sku
+        sku,
       },
       showInventoryBinsModal: true,
     })
@@ -106,7 +122,7 @@ const useInitialState = () => {
     state,
     setProducts,
     setshowInventoryBinsModal,
-    setModalProductInfo
+    setModalProductInfo,
   }
 }
 
