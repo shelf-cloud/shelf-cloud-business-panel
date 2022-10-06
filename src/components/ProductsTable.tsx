@@ -21,7 +21,12 @@ type Props = {
 }
 
 const ProductsTable = ({ tableData, pending }: Props) => {
-  const { setModalProductInfo }: any = useContext(AppContext)
+  const { setModalProductInfo, setModalProductDetails }: any =
+    useContext(AppContext)
+
+    const setProductInactive = (inventoryId: number, businessId: number, sku: string) => {
+      confirm(`Are you sure you want to set Inactive: ${sku}`)
+    }
 
   const columns: any = [
     {
@@ -90,16 +95,16 @@ const ProductsTable = ({ tableData, pending }: Props) => {
       grow: 1.5,
       //   compact: true,
     },
-    // {
-    //   name: <span className="font-weight-bold fs-13">SKU</span>,
-    //   selector: (row: { SKU: any }) => row.SKU,
-    //   sortable: true,
-    //   grow: 1.3,
-    //   //   wrap: true,
-    //   //   compact: true,
-    // },
     {
-      name: <span className="font-weight-bold fs-13">ASIN<br/>FNSKU<br/>Barcode</span>,
+      name: (
+        <span className="font-weight-bold fs-13">
+          ASIN
+          <br />
+          FNSKU
+          <br />
+          Barcode
+        </span>
+      ),
       selector: (row: any) => {
         return (
           <div>
@@ -113,18 +118,6 @@ const ProductsTable = ({ tableData, pending }: Props) => {
       compact: true,
       grow: 1.3,
     },
-    // {
-    //   name: <span className="font-weight-bold fs-13">FNSKU</span>,
-    //   selector: (row: { FNSKU: any }) => row.FNSKU,
-    //   sortable: true,
-    //   compact: true,
-    // },
-    // {
-    //   name: <span className="font-weight-bold fs-13">Barcode</span>,
-    //   selector: (row: { Barcode: any }) => row.Barcode,
-    //   sortable: true,
-    //   compact: true,
-    // },
     {
       name: <span className="font-weight-bold fs-13">Quantity</span>,
       selector: (cell: any) => {
@@ -208,7 +201,7 @@ const ProductsTable = ({ tableData, pending }: Props) => {
       name: <span className="font-weight-bold fs-13">Action</span>,
       sortable: false,
       compact: true,
-      cell: () => {
+      cell: (row: any) => {
         return (
           <UncontrolledDropdown className="dropdown d-inline-block">
             <DropdownToggle
@@ -218,12 +211,29 @@ const ProductsTable = ({ tableData, pending }: Props) => {
               <i className="ri-more-fill align-middle"></i>
             </DropdownToggle>
             <DropdownMenu className="dropdown-menu-end">
-              {/* <DropdownItem href="#!">
-                <i className="ri-eye-fill align-bottom me-2 text-muted"></i>View
-              </DropdownItem> */}
-              <DropdownItem className="edit-item-btn">
+              <DropdownItem
+                className="edit-item-btn"
+                onClick={() =>
+                  setModalProductDetails(
+                    row.btns.inventoryId,
+                    row.btns.businessId,
+                    row.btns.sku
+                  )
+                }
+              >
                 <i className="ri-pencil-fill align-bottom me-2 text-muted"></i>
                 Edit
+              </DropdownItem>
+              <DropdownItem
+                className="text-danger"
+                onClick={() => setProductInactive(
+                  row.btns.inventoryId,
+                  row.btns.businessId,
+                  row.btns.sku
+                )}
+              >
+                <i className="las la-eye-slash align-bottom me-2"></i> Set
+                Inactive
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>

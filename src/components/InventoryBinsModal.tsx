@@ -21,7 +21,9 @@ function InventoryBinsModal({}: Props) {
 
   useEffect(() => {
     const bringProductBins = async () => {
-      const response = await axios(`/api/getProductInventoryBins?inventoryId=${state.modalProductInfo.inventoryId}&businessId=${state.modalProductInfo.businessId}`)
+      const response = await axios(
+        `/api/getProductInventoryBins?inventoryId=${state.modalProductInfo.inventoryId}&businessId=${state.modalProductInfo.businessId}`
+      )
       setBins(response.data)
       setLoading(false)
     }
@@ -54,19 +56,15 @@ function InventoryBinsModal({}: Props) {
         setshowInventoryBinsModal(!state.showInventoryBinsModal)
       }}
     >
-      <ModalHeader>
+      <ModalHeader
+        toggle={() => {
+          setshowInventoryBinsModal(!state.showInventoryBinsModal)
+        }}
+      >
         <h3 className="modal-title" id="myModalLabel">
           Current Warehouse Inventory
         </h3>
         <h5>SKU: {state.modalProductInfo.sku}</h5>
-        {/* <Button
-          type="button"
-          className="btn-close"
-          onClick={() => {
-            setshowInventoryBinsModal(false)
-          }}
-          aria-label="Close"
-        ></Button> */}
       </ModalHeader>
       <ModalBody>
         <DataTable

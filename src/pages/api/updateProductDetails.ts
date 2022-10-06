@@ -1,17 +1,19 @@
 import { NextApiHandler } from 'next'
 import { getSession } from '@auth/client'
-import { Business } from '@typings'
 import axios from 'axios'
 
-const getBusinessInventoryLog: NextApiHandler<Business> = async (request, response) => {
+const updateProductDetails: NextApiHandler = async (request, response) => {
     const session = await getSession({ req: request })
+
     if (session == null) {
         response.status(401).end()
 
         return
     }
 
-    axios(`${process.env.API_DOMAIN_SERVICES}/getBusinessInventoryLog.php?businessId=${request.query.businessId}`)
+    axios.post(`${process.env.API_DOMAIN_SERVICES}/updateProductDetails.php?businessId=${request.query.businessId}`, {
+        productInfo: request.body.productInfo
+    })
         .then(({ data }) => {
             response.json(data)})
         .catch((error) => {
@@ -19,4 +21,4 @@ const getBusinessInventoryLog: NextApiHandler<Business> = async (request, respon
         });
 }
 
-export default getBusinessInventoryLog
+export default updateProductDetails

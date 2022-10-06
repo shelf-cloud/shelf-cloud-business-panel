@@ -28,9 +28,10 @@ const initialState = {
   leftSidebarImageType: leftSidebarImageTypes.NONE,
   user: {},
   products: [],
-  transations: [],
   showInventoryBinsModal: false,
   modalProductInfo: {},
+  showEditProductModal: false,
+  modalProductDetails: {}
 }
 
 const useInitialState = () => {
@@ -84,6 +85,13 @@ const useInitialState = () => {
       showInventoryBinsModal: payload,
     })
   }
+  const setShowEditProductModal = (payload) => {
+    setState({
+      ...state,
+      showEditProductModal: false,
+      showEditProductModal: payload,
+    })
+  }
 
   const setModalProductInfo = (inventoryId, businessId, sku) => {
     setState({
@@ -93,7 +101,21 @@ const useInitialState = () => {
         businessId,
         sku,
       },
+      showEditProductModal: false,
       showInventoryBinsModal: true,
+    })
+  }
+
+  const setModalProductDetails = (inventoryId, businessId, sku) => {
+    setState({
+      ...state,
+      modalProductDetails: {
+        inventoryId,
+        businessId,
+        sku,
+      },
+      showInventoryBinsModal: false,
+      showEditProductModal: true,
     })
   }
 
@@ -123,6 +145,8 @@ const useInitialState = () => {
     setProducts,
     setshowInventoryBinsModal,
     setModalProductInfo,
+    setShowEditProductModal,
+    setModalProductDetails
   }
 }
 

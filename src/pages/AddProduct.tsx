@@ -53,6 +53,7 @@ const AddProducts = ({ session }: Props) => {
   const title = `Add Product | ${session?.user?.name}`
   const [productSucces, setProductSucces] = useState(false)
   const [productFail, setProductFail] = useState(false)
+  const [useSameUnitDimensions, setUseSameUnitDimensions] = useState(false)
   const [msg, setMsg] = useState('')
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
@@ -76,8 +77,12 @@ const AddProducts = ({ session }: Props) => {
       boxqty: '',
     },
     validationSchema: Yup.object({
-      title: Yup.string().max(100, 'Title is to Long').required('Please Enter Your Title'),
-      sku: Yup.string().max(50, 'SKU is to Long').required('Please Enter Your Sku'),
+      title: Yup.string()
+        .max(100, 'Title is to Long')
+        .required('Please Enter Your Title'),
+      sku: Yup.string()
+        .max(50, 'SKU is to Long')
+        .required('Please Enter Your Sku'),
       image: Yup.string().url(),
       asin: Yup.string().max(50, 'Asin is to Long'),
       fnsku: Yup.string().max(50, 'Fnsku is to Long'),
@@ -143,6 +148,32 @@ const AddProducts = ({ session }: Props) => {
   const HandleAddProduct = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
+  }
+
+  const handleBoxDimensionsCheckbox = () => {
+
+    // console.log(validation)
+    validation.setFieldValue('boxweight', validation.values.weight)
+
+    if (!useSameUnitDimensions) {
+      setUseSameUnitDimensions(true)
+      validation.setFieldValue('boxweight', validation.values.weight)
+      validation.setFieldValue('boxwidth', validation.values.width)
+      validation.setFieldValue('boxlength', validation.values.length)
+      validation.setFieldValue('boxheight', validation.values.height)
+      validation.setFieldValue('boxqty', 1)
+      validation.validateForm()
+      console.log('is using the same')
+    } else {
+      setUseSameUnitDimensions(false)
+      validation.setFieldValue('boxweight', '')
+      validation.setFieldValue('boxwidth', '')
+      validation.setFieldValue('boxlength', '')
+      validation.setFieldValue('boxheight', '')
+      validation.setFieldValue('boxqty', '')
+      validation.validateForm()
+      console.log('is using the Diferrent')
+    }
   }
   return (
     <div>
@@ -478,7 +509,22 @@ const AddProducts = ({ session }: Props) => {
                       </FormGroup>
                     </Col>
                     <div className="border mt-3 border-dashed"></div>
-                    <h5 className="fs-5 m-3 fw-bolder">Box Dimensions</h5>
+                    <div className="align-items-center d-flex">
+                      <h5 className="fs-5 m-3 fw-bolder">Box Dimensions</h5>
+                      <div className="flex-shrink-0">
+                        <div className="form-check form-switch form-switch-right form-switch-md">
+                          <Label className="form-label text-muted">
+                            Use Unit Dimensions
+                          </Label>
+                          <Input
+                            className="form-check-input code-switcher"
+                            type="checkbox"
+                            checked={useSameUnitDimensions}
+                            onChange={handleBoxDimensionsCheckbox}
+                          />
+                        </div>
+                      </div>
+                    </div>
                     <Col md={3}>
                       <FormGroup className="mb-3">
                         <Label

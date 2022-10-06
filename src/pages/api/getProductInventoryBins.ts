@@ -3,7 +3,7 @@ import { getSession } from '@auth/client'
 import { Business } from '@typings'
 import axios from 'axios'
 
-const getbusinesssumary: NextApiHandler<Business> = async (request, response) => {
+const getProductInventoryBins: NextApiHandler<Business> = async (request, response) => {
     const session = await getSession({ req: request })
     if (session == null) {
         response.status(401).end()
@@ -19,4 +19,4 @@ const getbusinesssumary: NextApiHandler<Business> = async (request, response) =>
         });
 }
 
-export default getbusinesssumary
+export default getProductInventoryBins

@@ -20,6 +20,7 @@ import { getSession } from '@auth/client'
 import useSWR from 'swr'
 import ProductsTable from '@components/ProductsTable'
 import InventoryBinsModal from '@components/InventoryBinsModal'
+import EditProductModal from '@components/EditProductModal'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -48,7 +49,8 @@ type Props = {
 const Products = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
   const [pending, setPending] = useState(true)
-  const [tableData, setTableData] = useState<ProductRowType[]>(state.products)
+  const [allData, setAllData] = useState<ProductRowType[]>([])
+  const [tableData, setTableData] = useState<ProductRowType[]>([])
   const [serachValue, setSerachValue] = useState('')
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
@@ -90,10 +92,16 @@ const Products = ({ session }: Props) => {
             height: product.boxHeight,
           },
           qtyBox: product.boxQty,
+          btns: {
+            inventoryId: product.inventoryId,
+            businessId: product.businessId,
+            sku: product.sku,
+          },
         }
         list.push(row)
       })
       setTableData(list)
+      setAllData(list)
       setPending(false)
     }
   }, [data])
@@ -101,7 +109,7 @@ const Products = ({ session }: Props) => {
   const filterByText = (e: any) => {
     if (e.target.value !== '') {
       setSerachValue(e.target.value)
-      const filterTable = tableData.filter(
+      const filterTable = allData.filter(
         (item) =>
           item.Title.toLowerCase().includes(e.target.value.toLowerCase()) ||
           item.SKU.toLowerCase().includes(e.target.value.toLowerCase()) ||
@@ -112,12 +120,12 @@ const Products = ({ session }: Props) => {
       setTableData(filterTable)
     } else {
       setSerachValue(e.target.value)
-      setTableData(state.products)
+      setTableData(allData)
     }
   }
   const clearSearch = () => {
     setSerachValue('')
-    setTableData(state.products)
+    setTableData(allData)
   }
 
   const title = `Products | ${session?.user?.name}`
@@ -165,6 +173,7 @@ const Products = ({ session }: Props) => {
         </div>
       </React.Fragment>
       {state.showInventoryBinsModal && <InventoryBinsModal />}
+      {state.showEditProductModal && <EditProductModal />}
     </div>
   )
 }
