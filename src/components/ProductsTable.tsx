@@ -184,10 +184,10 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
               <span>Length: {cell.boxDimensions.length} in</span>
             </Row>
             <Row>
-              <span>Width: {cell.boxDimensions.weight} in</span>
+              <span>Width: {cell.boxDimensions.width} in</span>
             </Row>
             <Row>
-              <span>Height: {cell.boxDimensions.weight} in</span>
+              <span>Height: {cell.boxDimensions.height} in</span>
             </Row>
           </div>
         )
