@@ -24,7 +24,7 @@ const DashboardHeader = ({ user }: Props) => {
                 <div className="d-flex flex-row justify-content-end">
                   <Flatpickr
                     className="form-control border-0 w-100 shadow"
-                    style={{ minWidth: '105%' }}
+                    // style={{ minWidth: '105%' }}
                     options={{
                       mode: 'range',
                       dateFormat: 'd M, Y',
