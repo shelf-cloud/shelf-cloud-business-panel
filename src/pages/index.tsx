@@ -9,6 +9,7 @@ import BreadCrumb from '@components/Common/BreadCrumb'
 import Widget from '@components/Widget'
 import axios from 'axios'
 import useSWR from 'swr'
+import DashboardHeader from '@components/DashboardHeader'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -64,8 +65,11 @@ const Home = () => {
         <Container fluid>
           <BreadCrumb title="Dashboard" pageTitle="Dashboards" />
           <Row>
-            <Col xxl={5}>
-              <Widget summary={summary} />
+            <Col>
+              <DashboardHeader user={state.user.name} />
+              <Row>
+                <Widget summary={summary} />
+              </Row>
             </Col>
           </Row>
         </Container>
