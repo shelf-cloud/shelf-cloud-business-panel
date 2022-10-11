@@ -3,7 +3,7 @@ import { getSession } from '@auth/client'
 import { Business } from '@typings'
 import axios from 'axios'
 
-const getbusinesssumary: NextApiHandler<Business> = async (request, response) => {
+const getBusinessInactiveInventory: NextApiHandler<Business> = async (request, response) => {
     const session = await getSession({ req: request })
 
     if (session == null) {
@@ -12,7 +12,7 @@ const getbusinesssumary: NextApiHandler<Business> = async (request, response) =>
         return
     }
 
-    axios(`${process.env.API_DOMAIN_SERVICES}/getBusinessSummary.php?businessId=${request.query.businessId}&startDate=${request.query.startDate}&endDate=${request.query.endDate}`)
+    axios(`${process.env.API_DOMAIN_SERVICES}/getBusinessInactiveInventory.php?businessId=${request.query.businessId}`)
         .then(({ data }) => {
             response.json(data)})
         .catch((error) => {
@@ -20,4 +20,4 @@ const getbusinesssumary: NextApiHandler<Business> = async (request, response) =>
         });
 }
 
-export default getbusinesssumary
+export default getBusinessInactiveInventory

@@ -11,25 +11,21 @@ import {
   Label,
   Modal,
   ModalBody,
-  ModalFooter,
   ModalHeader,
   Row,
   Spinner,
-  UncontrolledAlert,
 } from 'reactstrap'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
+import { toast } from 'react-toastify'
 
 type Props = {}
 
 function EditProductModal({}: Props) {
   const { state, setShowEditProductModal }: any = useContext(AppContext)
-  const [productSucces, setProductSucces] = useState(false)
-  const [productFail, setProductFail] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [msg, setMsg] = useState('')
 
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
@@ -102,15 +98,9 @@ function EditProductModal({}: Props) {
           }
         )
       if (!response.data.error) {
-        window.scrollTo(0, 0)
-        setMsg(response.data.msg)
-        setProductSucces(true)
-        setTimeout(() => setProductSucces(false), 8000)
+        toast.success(response.data.msg)
       } else {
-        window.scrollTo(0, 0)
-        setMsg(response.data.msg)
-        setProductFail(true)
-        setTimeout(() => setProductFail(false), 8000)
+        toast.error(response.data.msg)
       }
     },
   })
@@ -125,8 +115,6 @@ function EditProductModal({}: Props) {
     }
     bringProductBins()
     return () => {
-      setProductSucces(false)
-      setProductFail(false)
       setLoading(true)
     }
   }, [
@@ -162,24 +150,6 @@ function EditProductModal({}: Props) {
         {!loading && (
           <Form onSubmit={HandleAddProduct}>
             <Row>
-              {productSucces && (
-                <UncontrolledAlert
-                  color="success"
-                  className="alert-border-left"
-                >
-                  <i className="ri-check-double-line me-3 align-middle fs-16"></i>
-                  <strong>Product Updated!</strong> - {msg}
-                </UncontrolledAlert>
-              )}
-              {productFail && (
-                <UncontrolledAlert
-                  color="danger"
-                  className="alert-border-left mb-xl-0"
-                >
-                  <i className="ri-error-warning-line me-3 align-middle fs-16"></i>
-                  <strong>Product Not Saved</strong> - {msg}
-                </UncontrolledAlert>
-              )}
               <h5 className="fs-5 m-3 fw-bolder">Product Details</h5>
               <Col md={6} className="d-none">
                 <FormGroup className="mb-3">

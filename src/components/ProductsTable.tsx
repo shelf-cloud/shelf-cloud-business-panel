@@ -4,7 +4,6 @@ import Image from 'next/image'
 import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import AppContext from '@context/AppContext'
-// import setProducts from '@hooks/useInitialState'
 import {
   Button,
   DropdownItem,
@@ -18,15 +17,19 @@ import {
 type Props = {
   tableData: ProductRowType[]
   pending: boolean
+  changeProductState: (
+    inventoryId: number,
+    businessId: number,
+    sku: string,
+  ) => {},
+  setMsg: string,
+  icon: string,
+  activeText: string
 }
 
-const ProductsTable = ({ tableData, pending }: Props) => {
+const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, activeText }: Props) => {
   const { setModalProductInfo, setModalProductDetails }: any =
     useContext(AppContext)
-
-    const setProductInactive = (inventoryId: number, businessId: number, sku: string) => {
-      confirm(`Are you sure you want to set Inactive: ${sku}`)
-    }
 
   const columns: any = [
     {
@@ -224,17 +227,20 @@ const ProductsTable = ({ tableData, pending }: Props) => {
                 <i className="ri-pencil-fill align-bottom me-2 text-muted"></i>
                 Edit
               </DropdownItem>
-              <DropdownItem
-                className="text-danger"
-                onClick={() => setProductInactive(
-                  row.btns.inventoryId,
-                  row.btns.businessId,
-                  row.btns.sku
-                )}
-              >
-                <i className="las la-eye-slash align-bottom me-2"></i> Set
-                Inactive
-              </DropdownItem>
+              {(row.Quantity.quantity == 0 || !row.btns.state) && (
+                <DropdownItem
+                  className={activeText}
+                  onClick={() =>
+                    changeProductState(
+                      row.btns.inventoryId,
+                      row.btns.businessId,
+                      row.btns.sku,
+                    )
+                  }
+                >
+                  <i className={icon}></i> {setMsg}
+                </DropdownItem>
+              )}
             </DropdownMenu>
           </UncontrolledDropdown>
         )
@@ -243,13 +249,15 @@ const ProductsTable = ({ tableData, pending }: Props) => {
   ]
 
   return (
-    <DataTable
-      columns={columns}
-      data={tableData}
-      progressPending={pending}
-      striped={true}
-      dense
-    />
+    <>
+      <DataTable
+        columns={columns}
+        data={tableData}
+        progressPending={pending}
+        striped={true}
+        dense
+      />
+    </>
   )
 }
 

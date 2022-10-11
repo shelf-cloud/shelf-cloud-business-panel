@@ -48,7 +48,7 @@ type Props = {
   }
 }
 
-const Products = ({ session }: Props) => {
+const InactiveProducts = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<ProductRowType[]>([])
@@ -58,7 +58,7 @@ const Products = ({ session }: Props) => {
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data, error } = useSWR(
     state.user.businessId
-      ? `/api/getBusinessInventory?businessId=${state.user.businessId}`
+      ? `/api/getBusinessInactiveInventory?businessId=${state.user.businessId}`
       : null,
     fetcher
   )
@@ -141,7 +141,7 @@ const Products = ({ session }: Props) => {
     const response = await axios.post(
       `/api/setStateToProduct?businessId=${businessId}&inventoryId=${inventoryId}`,
       {
-        newState: 0,
+        newState: 1,
         sku,
       }
     )
@@ -193,9 +193,9 @@ const Products = ({ session }: Props) => {
                       tableData={tableData}
                       pending={pending}
                       changeProductState={changeProductState}
-                      setMsg={'Set Inactive'}
-                      icon={'las la-eye-slash align-bottom me-2'}
-                      activeText={'text-danger'}
+                      setMsg={'Set Active'}
+                      icon={'las la-eye align-bottom me-2'}
+                      activeText={'text-success'}
                     />
                   </CardBody>
                 </Card>
@@ -210,4 +210,4 @@ const Products = ({ session }: Props) => {
   )
 }
 
-export default Products
+export default InactiveProducts

@@ -10,6 +10,7 @@ import Widget from '@components/Widget'
 import axios from 'axios'
 import useSWR from 'swr'
 import DashboardHeader from '@components/DashboardHeader'
+import moment from 'moment'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -30,28 +31,34 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 const Home = () => {
   const { state }: any = useContext(AppContext)
   const [summary, setsummary] = useState({})
+  const [dashboardStartDate, setDashboardStartDate] = useState(
+    moment().subtract(30, 'days').format('YYYY-MM-DD')
+  )
+  const [dashboardEndDate, setDashboardEndDate] = useState(
+    moment().format('YYYY-MM-DD')
+  )
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data, error } = useSWR(
     state.user.businessId
-      ? `/api/getBusinessSummary?businessId=${state.user.businessId}`
+      ? `/api/getBusinessSummary?businessId=${state.user.businessId}&startDate=${dashboardStartDate}&endDate=${dashboardEndDate}`
       : null,
     fetcher
   )
+
+  const handleChangeDates = (dateStr: string) => {
+    if (dateStr.includes(' to ')) {
+      const dates = dateStr.split(' to ')
+      setDashboardStartDate(moment(dates[0], 'DD-MM-YYYY').format('YYYY-MM-DD'))
+      setDashboardEndDate(moment(dates[1], 'DD-MM-YYYY').format('YYYY-MM-DD'))
+    }
+  }
 
   useEffect(() => {
     if (data) {
       setsummary(data)
     }
   }, [data])
-
-  // useEffect(() => {
-  //   const bringSummary = async () => {
-  //     const response = await axios('/api/getBusinessSummary')
-  //     setsummary(response.data)
-  //   }
-  //   bringSummary()
-  // }, [])
 
   return (
     <div>
@@ -66,7 +73,12 @@ const Home = () => {
           <BreadCrumb title="Dashboard" pageTitle="Dashboards" />
           <Row>
             <Col>
-              <DashboardHeader user={state.user.name} />
+              <DashboardHeader
+                user={state.user.name}
+                handleChangeDates={handleChangeDates}
+                startDate={dashboardStartDate}
+                endDate={dashboardEndDate}
+              />
               <Row>
                 <Widget summary={summary} />
               </Row>

@@ -2,131 +2,101 @@ import React from 'react'
 import { Card, CardBody, Col, Row } from 'reactstrap'
 import CountUp from 'react-countup'
 import FeatherIcon from 'feather-icons-react'
+import Link from 'next/link'
 
-// type Props = {
-//   summary: {
-//     binsUSed: number,
-//     currentBalance: number,
-//     skus: number,
-//     totalInventoryQty: number,
-//   }
-// }
 const Widget = ({ summary }) => {
-
   return (
     <React.Fragment>
       <Row>
-        <Col md={6}>
+        <Col xl={3} md={6}>
           <Card className="card-animate">
             <CardBody>
-              <div className="d-flex justify-content-between">
-                <div>
-                  <p className="fw-medium text-muted mb-0">Used Bins</p>
-                  <h2 className="mt-4 ff-secondary fw-semibold">
-                    <span className="counter-value">
-                      <CountUp
-                        start={0}
-                        end={summary?.binsUSed}
-                        decimals={0}
-                        duration={2}
-                      />
-                    </span>
-                  </h2>
+              <div className="d-flex align-items-center">
+                <div className="flex-grow-1 overflow-hidden">
+                  <p className="text-uppercase fw-medium text-muted text-truncate mb-0">
+                    Storage Charges
+                  </p>
                 </div>
-                <div>
-                  <div className="avatar-sm flex-shrink-0">
-                    <span className="avatar-title bg-soft-info rounded-circle fs-2">
-                      <FeatherIcon icon="archive" className="text-info" />
-                    </span>
-                  </div>
+                <div className="flex-shrink-0">
+                  <h5 className={'fs-14 mb-0 fw-bold'}>
+                    {summary?.binsUSed} Bins
+                  </h5>
                 </div>
               </div>
-            </CardBody>
-          </Card>
-        </Col>
-
-        <Col md={6}>
-          <Card className="card-animate">
-            <CardBody>
-              <div className="d-flex justify-content-between">
+              <div className="d-flex align-items-end justify-content-between mt-4">
                 <div>
-                  <p className="fw-medium text-muted mb-0">Current Balance</p>
-                  <h2 className="mt-4 ff-secondary fw-semibold">
-                    {`$ `}
-                    <span className="counter-value" data-target="97.66">
+                  <h4 className="fs-22 fw-semibold ff-secondary mb-4">
+                    <span className="counter-value" data-target="559.25">
                       <CountUp
                         start={0}
+                        prefix={'$'}
+                        // suffix={item.suffix}
+                        separator={'.'}
                         end={summary?.currentBalance}
                         decimals={2}
-                        duration={2}
-                        separator={','}
+                        duration={1}
                       />
                     </span>
-                  </h2>
+                  </h4>
+                  <Link href="#" className="text-decoration-underline">
+                    Storage
+                  </Link>
                 </div>
-                <div>
-                  <div className="avatar-sm flex-shrink-0">
-                    <span className="avatar-title bg-soft-info rounded-circle fs-2">
-                      <FeatherIcon icon="dollar-sign" className="text-info" />
-                    </span>
-                  </div>
+                <div className="avatar-sm flex-shrink-0">
+                  <span
+                    className={
+                      'avatar-title rounded fs-3 bg-soft-info'
+                    }
+                  >
+                    <i className='text-info bx bxs-box'></i>
+                  </span>
                 </div>
               </div>
             </CardBody>
           </Card>
         </Col>
-      </Row>
-
-      <Row>
-        <Col md={6}>
+        <Col xl={3} md={6}>
           <Card className="card-animate">
             <CardBody>
-              <div className="d-flex justify-content-between">
-                <div>
-                  <p className="fw-medium text-muted mb-0">
-                    Total SKUs
+              <div className="d-flex align-items-center">
+                <div className="flex-grow-1 overflow-hidden">
+                  <p className="text-uppercase fw-medium text-muted text-truncate mb-0">
+                    Total Inventory
                   </p>
-                  <h2 className="mt-4 ff-secondary fw-semibold">
-                    <span className="counter-value" data-target="3">
-                      <CountUp start={0} end={summary?.skus} duration={2} />
-                    </span>
-                  </h2>
                 </div>
-                <div>
-                  <div className="avatar-sm flex-shrink-0">
-                    <span className="avatar-title bg-soft-info rounded-circle fs-2">
-                      <FeatherIcon icon="package" className="text-info" />
-                    </span>
-                  </div>
+                <div className="flex-shrink-0">
+                  <h5 className={'fs-14 mb-0 fw-bold'}>
+                  {summary?.skus} SKUs
+                  </h5>
                 </div>
               </div>
-            </CardBody>
-          </Card>
-        </Col>
-
-        <Col md={6}>
-          <Card className="card-animate">
-            <CardBody>
-              <div className="d-flex justify-content-between">
+              <div className="d-flex align-items-end justify-content-between mt-4">
                 <div>
-                  <p className="fw-medium text-muted mb-0">Total Inventory Qty</p>
-                  <h2 className="mt-4 ff-secondary fw-semibold">
-                    <span className="counter-value" data-target="33.48">
+                  <h4 className="fs-22 fw-semibold ff-secondary mb-4">
+                    <span className="counter-value" data-target="559.25">
                       <CountUp
                         start={0}
+                        // prefix={'$'}
+                        // suffix={item.suffix}
+                        // separator={'.'}
                         end={summary?.totalInventoryQty}
                         decimals={0}
-                        duration={2}
+                        duration={1}
                       />
                     </span>
-                  </h2>
+                  </h4>
+                  <Link href="/Products" className="text-decoration-underline">
+                    Products
+                  </Link>
                 </div>
-                <div>
-                  <div className="avatar-sm flex-shrink-0">
-                    <span className="avatar-title bg-soft-info rounded-circle fs-2">
-                      <FeatherIcon icon="box" className="text-info" />
-                    </span>
-                  </div>
+                <div className="avatar-sm flex-shrink-0">
+                  <span
+                    className={
+                      'avatar-title rounded fs-3 bg-soft-success'
+                    }
+                  >
+                    <i className='text-success las la-clipboard-list'></i>
+                  </span>
                 </div>
               </div>
             </CardBody>

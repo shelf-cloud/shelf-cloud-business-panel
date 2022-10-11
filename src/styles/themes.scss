@@ -79,6 +79,13 @@ body {
   border: none !important;
 }
 
+@media only screen and (min-width: 992px) {
+  .datePicker{
+    min-width: 100% !important;
+  }
+}
+
+
 @include media-breakpoint-down(sm) {
   .fc-toolbar {
     display: block !important;

@@ -82,4 +82,5 @@ export interface Product {
     boxLength: number;
     boxWidth: number;
     boxHeight: number;
+    activeState: boolean;
 }

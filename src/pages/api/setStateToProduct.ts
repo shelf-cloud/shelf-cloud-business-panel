@@ -1,9 +1,8 @@
 import { NextApiHandler } from 'next'
 import { getSession } from '@auth/client'
-import { Business } from '@typings'
 import axios from 'axios'
 
-const getbusinesssumary: NextApiHandler<Business> = async (request, response) => {
+const setStateToProduct: NextApiHandler = async (request, response) => {
     const session = await getSession({ req: request })
 
     if (session == null) {
@@ -12,7 +11,10 @@ const getbusinesssumary: NextApiHandler<Business> = async (request, response) =>
         return
     }
 
-    axios(`${process.env.API_DOMAIN_SERVICES}/getBusinessSummary.php?businessId=${request.query.businessId}&startDate=${request.query.startDate}&endDate=${request.query.endDate}`)
+    axios.post(`${process.env.API_DOMAIN_SERVICES}/setStateToProduct.php?businessId=${request.query.businessId}&inventoryId=${request.query.inventoryId}`, {
+        newState: request.body.newState,
+        sku: request.body.sku
+    })
         .then(({ data }) => {
             response.json(data)})
         .catch((error) => {
@@ -20,4 +22,4 @@ const getbusinesssumary: NextApiHandler<Business> = async (request, response) =>
         });
 }
 
-export default getbusinesssumary
+export default setStateToProduct

@@ -2,12 +2,17 @@
 import React from 'react'
 import { Col, Row } from 'reactstrap'
 import Flatpickr from 'react-flatpickr'
+import moment from 'moment'
 
 type Props = {
-  user: string
+  user: string,
+  startDate: string,
+  endDate: string,
+  handleChangeDates: Function
 }
 
-const DashboardHeader = ({ user }: Props) => {
+const DashboardHeader = ({ user, startDate, endDate, handleChangeDates }: Props) => {
+  
   return (
     <React.Fragment>
       <Row className="mb-3 pb-1">
@@ -21,15 +26,15 @@ const DashboardHeader = ({ user }: Props) => {
             </div>
             <div className="mt-3 mt-lg-0">
               <form action="#">
-                <div className="d-flex flex-row justify-content-end">
+                <div className="d-flex flex-row justify-content-end w-100">
                   <Flatpickr
-                    className="form-control border-0 w-100 shadow"
-                    // style={{ minWidth: '105%' }}
+                    className="form-control border-0 shadow datePicker"
                     options={{
                       mode: 'range',
-                      dateFormat: 'd M, Y',
-                      defaultDate: ['01 Jan 2022', '31 Jan 2022'],
+                      dateFormat: 'd/m/Y',
+                      defaultDate: [moment(startDate, 'YYYY-MM-DD').format('DD-MM-YYYY'), moment(endDate, 'YYYY-MM-DD').format('DD-MM-YYYY')],
                     }}
+                    onChange={(selectedDates, dateStr) => handleChangeDates(dateStr)}
                   />
                   <div className="input-group-text bg-primary border-primary text-white">
                     <i className="ri-calendar-2-line"></i>

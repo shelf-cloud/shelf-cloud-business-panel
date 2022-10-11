@@ -108,6 +108,12 @@ const Navdata = () => {
                     link: "/Storage",
                     parentId: "warehouse",
                 },
+                {
+                    id: "inactive",
+                    label: "Inactive Products",
+                    link: "/InactiveProducts",
+                    parentId: "warehouse",
+                },
             ],
         },
         {
