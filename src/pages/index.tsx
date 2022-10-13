@@ -11,6 +11,9 @@ import axios from 'axios'
 import useSWR from 'swr'
 import DashboardHeader from '@components/DashboardHeader'
 import moment from 'moment'
+import MostInvenotryList from '@components/MostInvenotryList'
+import { Summary } from '@typings'
+import TotalChagesList from '@components/TotalChagesList'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -30,7 +33,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 
 const Home = () => {
   const { state }: any = useContext(AppContext)
-  const [summary, setsummary] = useState({})
+  const [summary, setSummary] = useState<Summary>()
   const [dashboardStartDate, setDashboardStartDate] = useState(
     moment().subtract(30, 'days').format('YYYY-MM-DD')
   )
@@ -56,7 +59,7 @@ const Home = () => {
 
   useEffect(() => {
     if (data) {
-      setsummary(data)
+      setSummary(data)
     }
   }, [data])
 
@@ -81,6 +84,10 @@ const Home = () => {
               />
               <Row>
                 <Widget summary={summary} />
+              </Row>
+              <Row>
+                <MostInvenotryList products={summary?.mostInventory} />
+                <TotalChagesList totalCharges={summary?.totalCharges}/>
               </Row>
             </Col>
           </Row>

@@ -19,8 +19,33 @@
 //     image: Image;
 //     ingredientes: Ingredientes[];
 //   }
+export interface Summary {
+    binsUSed: number;
+    skus: number;
+    totalInventoryQty: number;
+    currentBalance: number;
+    mostInventory: ProductSummary[];
+    totalCharges: TotalChagres;
+}
 
+export interface ProductSummary {
+    inventoryId: number;
+    title: string;
+    sku: string;
+    image: string;
+    totalQty: number;
+}
 
+export interface TotalChagres {
+    totalpickpackCharge: number;
+    totalshippingCharge: number;
+    totallabeling: number;
+    totalreceivingService: number;
+    totalreceivingPallets: number;
+    totalreceivingWrapService: number;
+    totalmanHour: number;
+    totalextraCharge: number;
+}
 export interface Business {
     id: number;
     name: string;

@@ -43,12 +43,8 @@ const Widget = ({ summary }) => {
                   </Link>
                 </div>
                 <div className="avatar-sm flex-shrink-0">
-                  <span
-                    className={
-                      'avatar-title rounded fs-3 bg-soft-info'
-                    }
-                  >
-                    <i className='text-info bx bxs-box'></i>
+                  <span className={'avatar-title rounded fs-3 bg-soft-info'}>
+                    <i className="text-info bx bxs-box"></i>
                   </span>
                 </div>
               </div>
@@ -65,9 +61,7 @@ const Widget = ({ summary }) => {
                   </p>
                 </div>
                 <div className="flex-shrink-0">
-                  <h5 className={'fs-14 mb-0 fw-bold'}>
-                  {summary?.skus} SKUs
-                  </h5>
+                  <h5 className={'fs-14 mb-0 fw-bold'}>{summary?.skus} SKUs</h5>
                 </div>
               </div>
               <div className="d-flex align-items-end justify-content-between mt-4">
@@ -90,13 +84,107 @@ const Widget = ({ summary }) => {
                   </Link>
                 </div>
                 <div className="avatar-sm flex-shrink-0">
-                  <span
-                    className={
-                      'avatar-title rounded fs-3 bg-soft-success'
-                    }
-                  >
-                    <i className='text-success las la-clipboard-list'></i>
+                  <span className={'avatar-title rounded fs-3 bg-soft-success'}>
+                    <i className="text-success las la-clipboard-list"></i>
                   </span>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </Col>
+        <Col xl={3} md={6}>
+          <Card className="card-animate">
+            <CardBody>
+              <div className="d-flex align-items-center">
+                <div className="flex-grow-1 overflow-hidden">
+                  <p className="text-uppercase fw-medium text-muted text-truncate mb-0">
+                    Total Shipments
+                  </p>
+                </div>
+                <div className="flex-shrink-0">
+                  <h5 className={'fs-14 mb-0 fw-bold'}>
+                    <div className="flex-shrink-0">
+                      <h5 className={'fs-14 mb-0 text-success'}>
+                        {true ? (
+                          <i
+                            className={
+                              'fs-13 align-middle ri-arrow-right-up-line'
+                            }
+                          ></i>
+                        ) : null}{' '}
+                        100 %
+                      </h5>
+                    </div>
+                  </h5>
+                </div>
+              </div>
+              <div className="d-flex align-items-end justify-content-between mt-4">
+                <div>
+                  <h4 className="fs-22 fw-semibold ff-secondary mb-4">
+                    <span className="counter-value" data-target="559.25">
+                      <CountUp
+                        start={0}
+                        // prefix={'$'}
+                        // suffix={item.suffix}
+                        // separator={'.'}
+                        end={summary?.totalShipments}
+                        decimals={0}
+                        duration={1}
+                      />
+                    </span>
+                  </h4>
+                  <Link href="/Shipments" className="text-decoration-underline">
+                    Shipments
+                  </Link>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </Col>
+        <Col xl={3} md={6}>
+          <Card className="card-animate">
+            <CardBody>
+              <div className="d-flex align-items-center">
+                <div className="flex-grow-1 overflow-hidden">
+                  <p className="text-uppercase fw-medium text-muted text-truncate mb-0">
+                    Pick and Pack Charges
+                  </p>
+                </div>
+                <div className="flex-shrink-0">
+                  <h5 className={'fs-14 mb-0 fw-bold'}>
+                    <div className="flex-shrink-0">
+                      <h5 className={'fs-14 mb-0 text-success'}>
+                        {true ? (
+                          <i
+                            className={
+                              'fs-13 align-middle ri-arrow-right-up-line'
+                            }
+                          ></i>
+                        ) : null}{' '}
+                        100 %
+                      </h5>
+                    </div>
+                  </h5>
+                </div>
+              </div>
+              <div className="d-flex align-items-end justify-content-between mt-4">
+                <div>
+                  <h4 className="fs-22 fw-semibold ff-secondary mb-4">
+                    <span className="counter-value" data-target="559.25">
+                      <CountUp
+                        start={0}
+                        prefix={'$ '}
+                        // suffix={item.suffix}
+                        separator={'.'}
+                        end={summary?.totalCharges.totalpickpackCharge}
+                        decimals={2}
+                        duration={1}
+                      />
+                    </span>
+                  </h4>
+                  <Link href="/Shipments" className="text-decoration-underline">
+                    Shipments
+                  </Link>
                 </div>
               </div>
             </CardBody>
