@@ -4,9 +4,19 @@ import { ExpanderComponentProps } from 'react-data-table-component'
 import { Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
 import Animation from '@components/Common/Animation'
 
+type Props = {
+  data: OrderRowType
+}
+
+type Product = {
+  name: string
+  sku: string,
+  unitPrice: number,
+  quantity: number,
+}
 const ShipmentExpandedDetail: React.FC<
   ExpanderComponentProps<OrderRowType>
-> = ({ data }) => {
+> = ({ data }: Props) => {
   return (
     <div>
       {data.orderType == 'Shipment' && (
@@ -62,11 +72,11 @@ const ShipmentExpandedDetail: React.FC<
                         </tr>
                       </thead>
                       <tbody>
-                        {data.orderItems.map((product, key) => (
+                        {data.orderItems.map((product: Product, key) => (
                           <tr key={key}>
                             <td>
                               <h5 className="fs-15 fw-bold text-primary">
-                                {product.name}
+                                {product.name || ''}
                               </h5>
                             </td>
                             <td>
