@@ -38,13 +38,15 @@ const Widget = ({ summary }) => {
                       />
                     </span>
                   </h4>
-                  <Link href="#" className="text-decoration-underline">
-                    Storage
+                  <Link href="#">
+                    <span className="text-primary text-decoration-underline">
+                      Storage
+                    </span>
                   </Link>
                 </div>
                 <div className="avatar-sm flex-shrink-0">
-                  <span className={'avatar-title rounded fs-3 bg-soft-info'}>
-                    <i className="text-info bx bxs-box"></i>
+                  <span className={'avatar-title rounded fs-3 bg-soft-success'}>
+                    <i className="text-success bx bxs-box"></i>
                   </span>
                 </div>
               </div>
@@ -79,13 +81,15 @@ const Widget = ({ summary }) => {
                       />
                     </span>
                   </h4>
-                  <Link href="/Products" className="text-decoration-underline">
-                    Products
+                  <Link href="/Products">
+                    <span className="text-primary text-decoration-underline">
+                      Products
+                    </span>
                   </Link>
                 </div>
                 <div className="avatar-sm flex-shrink-0">
-                  <span className={'avatar-title rounded fs-3 bg-soft-success'}>
-                    <i className="text-success las la-clipboard-list"></i>
+                  <span className={'avatar-title rounded fs-3 bg-soft-primary'}>
+                    <i className="text-primary las la-clipboard-list"></i>
                   </span>
                 </div>
               </div>
@@ -104,16 +108,27 @@ const Widget = ({ summary }) => {
                 <div className="flex-shrink-0">
                   <h5 className={'fs-14 mb-0 fw-bold'}>
                     <div className="flex-shrink-0">
-                      <h5 className={'fs-14 mb-0 text-success'}>
-                        {true ? (
+                      {summary?.shipmentsDiff >= 0 ? (
+                        <h5 className={'fs-14 mb-0 text-success'}>
                           <i
                             className={
                               'fs-13 align-middle ri-arrow-right-up-line'
                             }
                           ></i>
-                        ) : null}{' '}
-                        100 %
-                      </h5>
+                          {` +`}
+                          {summary?.shipmentsDiff.toFixed(0)} %
+                        </h5>
+                      ) : (
+                        <h5 className={'fs-14 mb-0 text-danger'}>
+                          <i
+                            className={
+                              'fs-13 align-middle ri-arrow-right-down-line'
+                            }
+                          ></i>
+                          {` `}
+                          {summary?.shipmentsDiff.toFixed(0)} %
+                        </h5>
+                      )}
                     </div>
                   </h5>
                 </div>
@@ -133,9 +148,16 @@ const Widget = ({ summary }) => {
                       />
                     </span>
                   </h4>
-                  <Link href="/Shipments" className="text-decoration-underline">
-                    Shipments
+                  <Link href="/Shipments">
+                    <span className="text-primary text-decoration-underline">
+                      Shipments
+                    </span>
                   </Link>
+                </div>
+                <div className="avatar-sm flex-shrink-0">
+                  <span className={'avatar-title rounded fs-3 bg-soft-info'}>
+                    <i className="text-info ri-list-unordered"></i>
+                  </span>
                 </div>
               </div>
             </CardBody>
@@ -153,16 +175,27 @@ const Widget = ({ summary }) => {
                 <div className="flex-shrink-0">
                   <h5 className={'fs-14 mb-0 fw-bold'}>
                     <div className="flex-shrink-0">
-                      <h5 className={'fs-14 mb-0 text-success'}>
-                        {true ? (
+                      {summary?.pickPackDiff >= 0 ? (
+                        <h5 className={'fs-14 mb-0 text-success'}>
                           <i
                             className={
                               'fs-13 align-middle ri-arrow-right-up-line'
                             }
                           ></i>
-                        ) : null}{' '}
-                        100 %
-                      </h5>
+                          {` +`}
+                          {summary?.pickPackDiff.toFixed(0)} %
+                        </h5>
+                      ) : (
+                        <h5 className={'fs-14 mb-0 text-danger'}>
+                          <i
+                            className={
+                              'fs-13 align-middle ri-arrow-right-down-line'
+                            }
+                          ></i>
+                          {` `}
+                          {summary?.pickPackDiff.toFixed(0)} %
+                        </h5>
+                      )}
                     </div>
                   </h5>
                 </div>
@@ -182,9 +215,16 @@ const Widget = ({ summary }) => {
                       />
                     </span>
                   </h4>
-                  <Link href="/Shipments" className="text-decoration-underline">
-                    Shipments
+                  <Link href="/Shipments">
+                    <span className="text-primary text-decoration-underline">
+                      Shipments
+                    </span>
                   </Link>
+                </div>
+                <div className="avatar-sm flex-shrink-0">
+                  <span className={'avatar-title rounded fs-3 bg-soft-info'}>
+                    <i className="text-info las la-boxes"></i>
+                  </span>
                 </div>
               </div>
             </CardBody>

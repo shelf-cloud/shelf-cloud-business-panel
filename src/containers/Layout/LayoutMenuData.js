@@ -132,7 +132,7 @@ const Navdata = () => {
                 {
                     id: "shipments",
                     label: "Shipment Transactions",
-                    link: "/",
+                    link: "/Shipments",
                     parentId: "orders",
                 },
                 {

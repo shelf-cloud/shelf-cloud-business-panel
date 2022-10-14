@@ -12,7 +12,7 @@ type Props = {
 const TotalChagesList = ({ totalCharges }: Props) => {
   return (
     <React.Fragment>
-      <Col xl={6}>
+      <Col xl={4}>
         <Card>
           <CardHeader className="align-items-center d-flex">
             <h4 className="card-title mb-0 flex-grow-1">
@@ -22,7 +22,7 @@ const TotalChagesList = ({ totalCharges }: Props) => {
 
           <CardBody>
             <div className="table-responsive table-card">
-              <table className="table table-hover table-centered align-middle table-nowrap mb-0">
+              <table className="table table-sm table-hover table-centered align-middle table-nowrap mb-0">
                 <tbody>
                   <tr>
                     <td>

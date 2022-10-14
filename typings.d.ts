@@ -109,3 +109,57 @@ export interface Product {
     boxHeight: number;
     activeState: boolean;
 }
+
+
+export interface OrderItem {
+    sku: string;
+    name: string;
+    boxQty: number;
+    quantity: number;
+    businessId: number;
+}
+export interface OrderRowType {
+    id: string;
+    businessId: string;
+    orderId: string;
+    orderNumber: string;
+    orderDate: string;
+    closedDate: string;
+    orderStatus: string;
+    orderType: string;
+    trackingNumber: string;
+    pickpackCharge: number;
+    shippingCharge: number;
+    labeling: number;
+    receivingService: number;
+    receivingPallets: number;
+    receivingWrapService: number;
+    manHour: number;
+    extraCharge: number;
+    shipName: string;
+    shipStreet: string;
+    shipCity: string;
+    shipState: string;
+    shipZipcode: string;
+    shipCountry: string;
+    orderTotal: number;
+    orderPaid: number;
+    orderShipping: number;
+    carrierService: string;
+    carrierUsed: string;
+    carrierType: string;
+    carrierShipping: number;
+    onixShipping: number;
+    storeId: string;
+    orderItems: [];
+    totalItems: number;
+    numberPallets: number;
+    numberBoxes: number;
+    shrinkWrap: number;
+    manHours: number;
+    manualChanges: boolean;
+    manualChangesShipping: boolean;
+    invoiced: boolean;
+    proofOfShipped: string;
+    totalCharge: number;
+}

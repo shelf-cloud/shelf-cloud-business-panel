@@ -19,6 +19,8 @@
     "bootstrap": "^5.2.1",
     "feather-icons-react": "0.5.0",
     "formik": "^2.2.9",
+    "lord-icon-element": "^3.4.4",
+    "lottie-web": "^5.9.6",
     "moment": "^2.29.4",
     "next": "12.3.1",
     "next-auth": "^4.10.3",
