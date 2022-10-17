@@ -59,8 +59,8 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
         )
       },
       sortable: true,
-      wrap: false,
-    //   grow: 1.5,
+      wrap: true,
+      grow: 1.3,
       center: true,
       //   compact: true,
     },
@@ -68,25 +68,30 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
       name: <span className="fw-bolder fs-13">Status</span>,
       selector: (row: OrderRowType) => {
         switch (row.orderStatus) {
-          case 'shipped' || 'received':
+          case 'shipped':
+          case 'received':
             return (
               <span className="badge text-uppercase badge-soft-success">
                 {' '}
                 {row.orderStatus}{' '}
               </span>
             )
-          case 'awaiting_shipment' || 'awating':
+            break
+          case 'awaiting_shipment':
+          case 'awating':
             return (
               <span className="badge text-uppercase badge-soft-secondary">
-                {' awating'}
+                {' awating '}
               </span>
             )
+            break
           case 'on_hold':
             return (
               <span className="badge text-uppercase badge-soft-warning">
-                {' on hold'}
+                {' on hold '}
               </span>
             )
+            break
           case 'cancelled':
             return (
               <span className="badge text-uppercase badge-soft-danger">
@@ -94,15 +99,14 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
                 {row.orderStatus}{' '}
               </span>
             )
-
-
+            break
           default:
             break
         }
       },
       sortable: true,
       wrap: true,
-      grow: 2,
+      // grow: 2,
       center: true,
       //   compact: true,
     },
@@ -111,7 +115,7 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
       selector: (row: OrderRowType) => row.orderType,
       sortable: true,
       wrap: true,
-      grow: 1.5,
+      grow: 1.2,
       center: true,
       //   compact: true,
     },
@@ -120,7 +124,7 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
       selector: (row: OrderRowType) => row.orderDate,
       sortable: true,
       wrap: true,
-      grow: 1.5,
+      grow: 1.2,
       center: true,
       //   compact: true,
     },
@@ -129,7 +133,7 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
       selector: (row: OrderRowType) => row.closedDate || '',
       sortable: true,
       wrap: true,
-      grow: 1.5,
+      grow: 1.2,
       center: true,
       //   compact: true,
     },
@@ -138,7 +142,7 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
       selector: (row: OrderRowType) => row.trackingNumber || '',
       sortable: true,
       wrap: true,
-      grow: 1.5,
+      grow: 2,
       center: true,
       //   compact: true,
     },
@@ -147,7 +151,7 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
       selector: (row: OrderRowType) => row.totalItems || '',
       sortable: true,
       wrap: true,
-      grow: 1.5,
+      // grow: 1.5,
       center: true,
       //   compact: true,
     },
@@ -156,7 +160,7 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
       selector: (row: OrderRowType) => `$ ${row.totalCharge.toFixed(2) || 0.0}`,
       sortable: true,
       wrap: true,
-      grow: 1.5,
+      // grow: 1.5,
       center: true,
       //   compact: true,
     },

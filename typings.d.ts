@@ -162,4 +162,13 @@ export interface OrderRowType {
     invoiced: boolean;
     proofOfShipped: string;
     totalCharge: number;
+    totalReceivedItems?: number;
+}
+
+export interface ShipmentOrderItem {
+    name: string;
+    sku: string;
+    unitPrice: number;
+    quantity: number;
+    qtyReceived?:number;
 }

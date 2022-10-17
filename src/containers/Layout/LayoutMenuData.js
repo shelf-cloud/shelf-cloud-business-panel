@@ -131,20 +131,20 @@ const Navdata = () => {
             subItems: [
                 {
                     id: "shipments",
-                    label: "Shipment Transactions",
+                    label: "Shipments",
                     link: "/Shipments",
                     parentId: "orders",
                 },
                 {
                     id: "createorder",
                     label: "Create Order",
-                    link: "/",
+                    link: "/CreateOrder",
                     parentId: "orders",
                 },
                 {
                     id: "createwholesale",
                     label: "Create wholesale Order",
-                    link: "/",
+                    link: "/CreateWholeSaleOrder",
                     parentId: "orders",
                 },
             ],
@@ -164,8 +164,8 @@ const Navdata = () => {
             subItems: [
                 {
                     id: "receiving",
-                    label: "Receiving Transactions",
-                    link: "/",
+                    label: "Receivings",
+                    link: "/Receivings",
                     parentId: "orders",
                 },
                 {

@@ -48,7 +48,7 @@ type Props = {
   }
 }
 
-const Shipments = ({ session }: Props) => {
+const Receiving = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
   const [shipmentsStartDate, setShipmentsStartDate] = useState(
     moment().subtract(30, 'days').format('YYYY-MM-DD')
@@ -64,7 +64,7 @@ const Shipments = ({ session }: Props) => {
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data, error } = useSWR(
     state.user.businessId
-      ? `/api/getShipmentsOrders?businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`
+      ? `/api/getReceivingOrders?businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`
       : null,
     fetcher
   )
@@ -120,7 +120,7 @@ const Shipments = ({ session }: Props) => {
     }
   }
 
-  const title = `Shipments | ${session?.user?.name}`
+  const title = `Receivings | ${session?.user?.name}`
   return (
     <div>
       <Head>
@@ -130,7 +130,7 @@ const Shipments = ({ session }: Props) => {
         <div className="page-content">
           <ToastContainer />
           <Container fluid>
-            <BreadCrumb title="Shipments" pageTitle="Shipments" />
+            <BreadCrumb title="Receivings" pageTitle="Receiving" />
             <Row>
               <Col lg={12}>
                 <Card>
@@ -195,4 +195,4 @@ const Shipments = ({ session }: Props) => {
   )
 }
 
-export default Shipments
+export default Receiving

@@ -39,9 +39,9 @@ const Widget = ({ summary }) => {
                     </span>
                   </h4>
                   <Link href="#">
-                    <span className="text-primary text-decoration-underline">
+                    <a className="text-primary text-decoration-underline">
                       Storage
-                    </span>
+                    </a>
                   </Link>
                 </div>
                 <div className="avatar-sm flex-shrink-0">
@@ -82,9 +82,9 @@ const Widget = ({ summary }) => {
                     </span>
                   </h4>
                   <Link href="/Products">
-                    <span className="text-primary text-decoration-underline">
+                    <a className="text-primary text-decoration-underline">
                       Products
-                    </span>
+                    </a>
                   </Link>
                 </div>
                 <div className="avatar-sm flex-shrink-0">
@@ -149,9 +149,9 @@ const Widget = ({ summary }) => {
                     </span>
                   </h4>
                   <Link href="/Shipments">
-                    <span className="text-primary text-decoration-underline">
+                    <a className="text-primary text-decoration-underline">
                       Shipments
-                    </span>
+                    </a>
                   </Link>
                 </div>
                 <div className="avatar-sm flex-shrink-0">
@@ -216,9 +216,9 @@ const Widget = ({ summary }) => {
                     </span>
                   </h4>
                   <Link href="/Shipments">
-                    <span className="text-primary text-decoration-underline">
+                    <a className="text-primary text-decoration-underline">
                       Shipments
-                    </span>
+                    </a>
                   </Link>
                 </div>
                 <div className="avatar-sm flex-shrink-0">

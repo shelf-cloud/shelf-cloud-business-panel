@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import SimpleBar from 'simplebar-react'
-import 'simplebar/dist/simplebar.min.css';
+import 'simplebar/dist/simplebar.min.css'
 //import logo
 import logoSm from '../../assets/images/logo-sm.png'
 import logoDark from '../../assets/images/logo-dark.png'
@@ -49,36 +49,20 @@ const Sidebar = ({ layoutType }: Props) => {
   return (
     <React.Fragment>
       <div className="app-menu navbar-menu">
-        <div className="navbar-brand-box">
+        <div className="navbar-brand-box p-2">
           <Link href="/" passHref>
-            <a className="logo logo-dark">
-              <span className="logo-sm">
-                <Image src={ShipnovoLogo} alt="" />
-              </span>
-              <span className="logo-lg">
-                <Image src={ShipnovoLogo} alt="" />
-              </span>
+            <a>
+              <div className="w-100 position-relative">
+                <Image
+                  className="rounded-3"
+                  src={ShipnovoLogo}
+                  layout="intrinsic"
+                  alt="ShipNovo Logo"
+                  objectFit="contain"
+                />
+              </div>
             </a>
           </Link>
-
-          <Link href="/" passHref>
-            <a className="logo logo-light">
-              <span className="logo-sm">
-                <Image src={ShipnovoLogo} alt="" />
-              </span>
-              <span className="logo-lg">
-                <Image src={ShipnovoLogo} alt="" />
-              </span>
-            </a>
-          </Link>
-          <button
-            onClick={addEventListenerOnSmHoverMenu}
-            type="button"
-            className="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
-            id="vertical-hover"
-          >
-            <i className="ri-record-circle-line"></i>
-          </button>
         </div>
         {layoutType === 'horizontal' ? (
           <div id="scrollbar">
