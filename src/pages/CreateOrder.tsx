@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { GetServerSideProps } from 'next'
 import axios from 'axios'
 import * as Yup from 'yup'
-import { useFormik } from 'formik'
+import { Field, FieldArray, Formik, Form } from 'formik'
 import Head from 'next/head'
 import {
   Button,
@@ -12,7 +12,6 @@ import {
   CardHeader,
   Col,
   Container,
-  Form,
   FormFeedback,
   FormGroup,
   Input,
@@ -23,6 +22,7 @@ import {
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import AppContext from '@context/AppContext'
+import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -51,68 +51,83 @@ type Props = {
 const CreateOrder = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
   const title = `Add Product | ${session?.user?.name}`
-  const [productSucces, setProductSucces] = useState(false)
-  const [productFail, setProductFail] = useState(false)
-  const [useSameUnitDimensions, setUseSameUnitDimensions] = useState(false)
+  const [ready, setReady] = useState(false)
+  const [skus, setSkus] = useState([])
+  const [validSkus, setValidSkus] = useState<string[]>([])
   const [msg, setMsg] = useState('')
-  const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
 
-    initialValues: {
-      recipient: '',
-      company: '',
-      orderNumber: '',
-      adress1: '',
-      adress2: '',
-      city: '',
-      state: '',
-      zipCode: '',
-      country: '',
-      phoneNumber: '',
-      email: '',
-      amount: '',
-      shipping: '',
-      tax: '',
-    },
-    validationSchema: Yup.object({
-      title: Yup.string()
-        .max(100, 'Title is to Long')
-        .required('Please Enter Your Title'),
-    }),
-    onSubmit: async (values, { resetForm }) => {
-    //   const response = await axios.post(
-    //     `api/createNewProduct?businessId=${state.user.businessId}`,
-    //     {
-    //       productInfo: values,
-    //     }
-    //   )
-    //   if (!response.data.error) {
-    //     window.scrollTo(0, 0)
-    //     setMsg(response.data.msg)
-    //     setProductSucces(true)
-    //     resetForm()
-    //     setTimeout(() => setProductSucces(false), 6000)
-    //   } else {
-    //     window.scrollTo(0, 0)
-    //     setMsg(response.data.msg)
-    //     setProductFail(true)
-    //     setTimeout(() => setProductFail(false), 6000)
-    //   }
-    },
+  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
+  const { data, error } = useSWR(
+    state.user.businessId
+      ? `/api/getSkus?businessId=${state.user.businessId}`
+      : null,
+    fetcher
+  )
+
+  useEffect(() => {
+    if (data) {
+      data.map((skus: { sku: string; name: string }) => {
+        setValidSkus(prev => {
+          return [...prev, skus.sku]
+        })
+      })
+      setSkus(data)
+    }
+  }, [data])
+
+  const initialValues = {
+    recipient: '',
+    company: '',
+    orderNumber: '',
+    adress1: '',
+    adress2: '',
+    city: '',
+    state: '',
+    zipCode: '',
+    country: '',
+    phoneNumber: '',
+    email: '',
+    amount: '',
+    shipping: '',
+    tax: '',
+    products: [
+      {
+        sku: '',
+        name: '',
+        qty: '',
+        price: '',
+      },
+    ],
+  }
+
+  const validationSchema = Yup.object({
+    recipient: Yup.string()
+      .max(10, 'Title is to Long')
+      .required('Please Enter Your Title'),
+    products: Yup.array()
+      .of(
+        Yup.object({
+          sku: Yup.string()
+            .oneOf(validSkus, 'Must be a Valid SKU')
+            .required('Required SKU'),
+          name: Yup.string()
+            .max(50, 'Name is to Long')
+            .required('Required Name'),
+          qty: Yup.number()
+            .min(1, 'Quantity Must be Grater than 0')
+            .required('Required Qty'),
+          price: Yup.number().required('Required Price'),
+        })
+      )
+      .required('Must have products'),
   })
 
   useEffect(() => {
+    setReady(true)
     return () => {
-      setProductSucces(false)
-      setProductFail(false)
+      setReady(false)
     }
   }, [])
-
-  const HandleAddProduct = (event: any) => {
-    event.preventDefault()
-    // validation.handleSubmit()
-  }
 
   return (
     <div>
@@ -122,454 +137,688 @@ const CreateOrder = ({ session }: Props) => {
       <React.Fragment>
         <div className="page-content">
           <Container fluid>
-            <BreadCrumb title="Add Products" pageTitle="Warehouse" />
+            <BreadCrumb title="Create Order" pageTitle="Shipments" />
             <Card>
               <CardBody>
-                <Form onSubmit={HandleAddProduct}>
-                  <Row>
-                    {productSucces && (
-                      <UncontrolledAlert
-                        color="success"
-                        className="alert-border-left"
-                      >
-                        <i className="ri-check-double-line me-3 align-middle fs-16"></i>
-                        <strong>Order Saved!</strong> - {msg}
-                      </UncontrolledAlert>
+                {ready && (
+                  <Formik
+                    initialValues={initialValues}
+                    validationSchema={validationSchema}
+                    onSubmit={async (values, { resetForm }) => {
+                      console.log(values)
+                    }}
+                  >
+                    {({
+                      values,
+                      errors,
+                      touched,
+                      handleChange,
+                      handleBlur,
+                    }) => (
+                      <Form>
+                        <Row>
+                          <Col md={7}>
+                            <FormGroup className="mb-3">
+                              <Label
+                                htmlFor="firstNameinput"
+                                className="form-label"
+                              >
+                                *Recipient
+                              </Label>
+                              <Input
+                                type="text"
+                                className="form-control"
+                                placeholder="Recipient..."
+                                id="recipient"
+                                name="recipient"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.recipient || ''}
+                                invalid={
+                                  touched.recipient && errors.recipient
+                                    ? true
+                                    : false
+                                }
+                              />
+                              {touched.recipient && errors.recipient ? (
+                                <FormFeedback type="invalid">
+                                  {errors.recipient}
+                                </FormFeedback>
+                              ) : null}
+                            </FormGroup>
+                            <FormGroup className="mb-3">
+                              <Label
+                                htmlFor="lastNameinput"
+                                className="form-label"
+                              >
+                                Company
+                              </Label>
+                              <Input
+                                type="text"
+                                className="form-control"
+                                placeholder="Company..."
+                                id="company"
+                                name="company"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.company || ''}
+                                invalid={
+                                  touched.company && errors.company
+                                    ? true
+                                    : false
+                                }
+                              />
+                              {touched.company && errors.company ? (
+                                <FormFeedback type="invalid">
+                                  {errors.company}
+                                </FormFeedback>
+                              ) : null}
+                            </FormGroup>
+                          </Col>
+                          <Col md={5}>
+                            <FormGroup className="mb-3">
+                              <Label
+                                htmlFor="lastNameinput"
+                                className="form-label"
+                              >
+                                Order Number
+                              </Label>
+                              <Input
+                                type="text"
+                                className="form-control"
+                                placeholder="Order Number..."
+                                id="orderNumber"
+                                name="orderNumber"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.orderNumber || ''}
+                                invalid={
+                                  touched.orderNumber && errors.orderNumber
+                                    ? true
+                                    : false
+                                }
+                              />
+                              {touched.orderNumber && errors.orderNumber ? (
+                                <FormFeedback type="invalid">
+                                  {errors.orderNumber}
+                                </FormFeedback>
+                              ) : null}
+                            </FormGroup>
+                          </Col>
+                          <Col md={7}>
+                            <FormGroup className="mb-3">
+                              <Label
+                                htmlFor="compnayNameinput"
+                                className="form-label"
+                              >
+                                Address 1
+                              </Label>
+                              <Input
+                                type="text"
+                                className="form-control"
+                                placeholder="Address..."
+                                id="adress1"
+                                name="adress1"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.adress1 || ''}
+                                invalid={
+                                  touched.adress1 && errors.adress1
+                                    ? true
+                                    : false
+                                }
+                              />
+                              {touched.adress1 && errors.adress1 ? (
+                                <FormFeedback type="invalid">
+                                  {errors.adress1}
+                                </FormFeedback>
+                              ) : null}
+                            </FormGroup>
+                            <FormGroup className="mb-3">
+                              <Input
+                                type="text"
+                                className="form-control"
+                                placeholder="Address..."
+                                id="adress2"
+                                name="adress2"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.adress2 || ''}
+                                invalid={
+                                  touched.adress2 && errors.adress2
+                                    ? true
+                                    : false
+                                }
+                              />
+                              {touched.adress2 && errors.adress2 ? (
+                                <FormFeedback type="invalid">
+                                  {errors.adress2}
+                                </FormFeedback>
+                              ) : null}
+                            </FormGroup>
+                            <Col
+                              md={12}
+                              className="d-flex justify-content-between w-100"
+                            >
+                              <Col md={2}>
+                                <FormGroup className="mb-3">
+                                  <Label
+                                    htmlFor="compnayNameinput"
+                                    className="form-label"
+                                  >
+                                    *City
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="City..."
+                                    id="city"
+                                    name="city"
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.city || ''}
+                                    invalid={
+                                      touched.city && errors.city ? true : false
+                                    }
+                                  />
+                                  {touched.city && errors.city ? (
+                                    <FormFeedback type="invalid">
+                                      {errors.city}
+                                    </FormFeedback>
+                                  ) : null}
+                                </FormGroup>
+                              </Col>
+                              <Col md={2}>
+                                <FormGroup className="mb-3">
+                                  <Label
+                                    htmlFor="compnayNameinput"
+                                    className="form-label"
+                                  >
+                                    *State
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="State..."
+                                    id="state"
+                                    name="state"
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.state || ''}
+                                    invalid={
+                                      touched.state && errors.state
+                                        ? true
+                                        : false
+                                    }
+                                  />
+                                  {touched.state && errors.state ? (
+                                    <FormFeedback type="invalid">
+                                      {errors.state}
+                                    </FormFeedback>
+                                  ) : null}
+                                </FormGroup>
+                              </Col>
+                              <Col md={2}>
+                                <FormGroup className="mb-3">
+                                  <Label
+                                    htmlFor="compnayNameinput"
+                                    className="form-label"
+                                  >
+                                    *Zip Code
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Zip Code..."
+                                    id="zipCode"
+                                    name="zipCode"
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.zipCode || ''}
+                                    invalid={
+                                      touched.zipCode && errors.zipCode
+                                        ? true
+                                        : false
+                                    }
+                                  />
+                                  {touched.zipCode && errors.zipCode ? (
+                                    <FormFeedback type="invalid">
+                                      {errors.zipCode}
+                                    </FormFeedback>
+                                  ) : null}
+                                </FormGroup>
+                              </Col>
+                              <Col md={2}>
+                                <FormGroup className="mb-3">
+                                  <Label
+                                    htmlFor="compnayNameinput"
+                                    className="form-label"
+                                  >
+                                    *Country
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Country..."
+                                    id="country"
+                                    name="country"
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.country || ''}
+                                    invalid={
+                                      touched.country && errors.country
+                                        ? true
+                                        : false
+                                    }
+                                  />
+                                  {touched.country && errors.country ? (
+                                    <FormFeedback type="invalid">
+                                      {errors.country}
+                                    </FormFeedback>
+                                  ) : null}
+                                </FormGroup>
+                              </Col>
+                            </Col>
+                            <FormGroup className="mb-3">
+                              <Label
+                                htmlFor="lastNameinput"
+                                className="form-label"
+                              >
+                                Phone #
+                              </Label>
+                              <Input
+                                type="text"
+                                className="form-control"
+                                placeholder="Phone Number..."
+                                id="phoneNumber"
+                                name="phoneNumber"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.phoneNumber || ''}
+                                invalid={
+                                  touched.phoneNumber && errors.phoneNumber
+                                    ? true
+                                    : false
+                                }
+                              />
+                              {touched.phoneNumber && errors.phoneNumber ? (
+                                <FormFeedback type="invalid">
+                                  {errors.phoneNumber}
+                                </FormFeedback>
+                              ) : null}
+                            </FormGroup>
+                            <FormGroup className="mb-3">
+                              <Label
+                                htmlFor="lastNameinput"
+                                className="form-label"
+                              >
+                                Email
+                              </Label>
+                              <Input
+                                type="text"
+                                className="form-control"
+                                placeholder="Email Address..."
+                                id="email"
+                                name="email"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.email || ''}
+                                invalid={
+                                  touched.email && errors.email ? true : false
+                                }
+                              />
+                              {touched.email && errors.email ? (
+                                <FormFeedback type="invalid">
+                                  {errors.email}
+                                </FormFeedback>
+                              ) : null}
+                            </FormGroup>
+                          </Col>
+                          <Col md={5}>
+                            <FormGroup className="mb-3">
+                              <Label
+                                htmlFor="lastNameinput"
+                                className="form-label"
+                              >
+                                Amount Paid
+                              </Label>
+                              <Input
+                                type="text"
+                                className="form-control"
+                                placeholder="Amount..."
+                                id="amount"
+                                name="amount"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.amount || ''}
+                                invalid={
+                                  touched.amount && errors.amount ? true : false
+                                }
+                              />
+                              {touched.amount && errors.amount ? (
+                                <FormFeedback type="invalid">
+                                  {errors.amount}
+                                </FormFeedback>
+                              ) : null}
+                            </FormGroup>
+                            <FormGroup className="mb-3">
+                              <Label
+                                htmlFor="lastNameinput"
+                                className="form-label"
+                              >
+                                Shipping Paid
+                              </Label>
+                              <Input
+                                type="text"
+                                className="form-control"
+                                placeholder="Shipping..."
+                                id="shipping"
+                                name="shipping"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.shipping || ''}
+                                invalid={
+                                  touched.shipping && errors.shipping
+                                    ? true
+                                    : false
+                                }
+                              />
+                              {touched.shipping && errors.shipping ? (
+                                <FormFeedback type="invalid">
+                                  {errors.shipping}
+                                </FormFeedback>
+                              ) : null}
+                            </FormGroup>
+                            <FormGroup className="mb-3">
+                              <Label
+                                htmlFor="lastNameinput"
+                                className="form-label"
+                              >
+                                Tax Paid
+                              </Label>
+                              <Input
+                                type="text"
+                                className="form-control"
+                                placeholder="Tax..."
+                                id="tax"
+                                name="tax"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.tax || ''}
+                                invalid={
+                                  touched.tax && errors.tax ? true : false
+                                }
+                              />
+                              {touched.tax && errors.tax ? (
+                                <FormFeedback type="invalid">
+                                  {errors.tax}
+                                </FormFeedback>
+                              ) : null}
+                            </FormGroup>
+                          </Col>
+                          <div className="border mt-3 border-dashed" />
+                          <Row>
+                            <h5 className="fs-5 m-3 fw-bolder">
+                              Order Products
+                            </h5>
+                            <Col xl={12}>
+                              <table className="table table-hover table-centered align-middle">
+                                <thead>
+                                  <th></th>
+                                  <th>SKU</th>
+                                  <th>Name</th>
+                                  <th>Qty</th>
+                                  <th>Price</th>
+                                </thead>
+                                <tbody>
+                                  <FieldArray name="products">
+                                    {({ remove, push }) => (
+                                      <>
+                                        {values.products.map(
+                                          (product, index) => (
+                                            <tr key={index}>
+                                              <td>
+                                                {index > 0 ? (
+                                                  <Row className="d-flex flex-row flex-nowrap justify-content-between align-items-center mb-3">
+                                                    <Button
+                                                      type="button"
+                                                      className="btn-icon btn-success"
+                                                      onClick={() =>
+                                                        push({
+                                                          sku: '',
+                                                          name: '',
+                                                          qty: '',
+                                                          price: '',
+                                                        })
+                                                      }
+                                                    >
+                                                      <i className="fs-2 las la-plus-circle" />
+                                                    </Button>
+                                                    <Button
+                                                      type="button"
+                                                      className="btn-icon btn-danger"
+                                                      onClick={() =>
+                                                        remove(index)
+                                                      }
+                                                    >
+                                                      <i className="fs-2 las la-minus-circle" />
+                                                    </Button>
+                                                  </Row>
+                                                ) : (
+                                                  <Row className="d-flex flex-row flex-nowrap justify-content-end align-items-center mb-3">
+                                                    <Button
+                                                      type="button"
+                                                      className="btn-icon btn-success"
+                                                      onClick={() =>
+                                                        push({
+                                                          sku: '',
+                                                          name: '',
+                                                          qty: '',
+                                                          price: '',
+                                                        })
+                                                      }
+                                                    >
+                                                      <i className="fs-2 las la-plus-circle" />
+                                                    </Button>
+                                                  </Row>
+                                                )}
+                                              </td>
+                                              <td>
+                                                <Field
+                                                  name={`products.${index}.sku`}
+                                                >
+                                                  {({
+                                                    form: {
+                                                      touche,
+                                                      errors,
+                                                      isValid,
+                                                    },
+                                                    meta,
+                                                  }: any) => (
+                                                    <FormGroup className="mb-3">
+                                                      <Input
+                                                        type="text"
+                                                        className="form-select"
+                                                        name={`products.${index}.sku`}
+                                                        list="skuList"
+                                                        placeholder="Sku..."
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                        invalid={
+                                                          meta.touched &&
+                                                          meta.error
+                                                            ? true
+                                                            : false
+                                                        }
+                                                      />
+                                                      {meta.touched &&
+                                                      meta.error ? (
+                                                        <FormFeedback type="invalid">
+                                                          {meta.error}
+                                                        </FormFeedback>
+                                                      ) : null}
+                                                    </FormGroup>
+                                                  )}
+                                                </Field>
+                                                <datalist id="skuList">
+                                                  {skus.map(
+                                                    (
+                                                      skus: {
+                                                        sku: string
+                                                        name: string
+                                                      },
+                                                      index
+                                                    ) => (
+                                                      <option
+                                                        key={index}
+                                                        value={skus.sku}
+                                                      >
+                                                        {skus.sku} / {skus.name}
+                                                      </option>
+                                                    )
+                                                  )}
+                                                </datalist>
+                                              </td>
+                                              <td>
+                                                <Field
+                                                  name={`products.${index}.name`}
+                                                >
+                                                  {({
+                                                    form: {
+                                                      touche,
+                                                      errors,
+                                                      isValid,
+                                                    },
+                                                    meta,
+                                                  }: any) => (
+                                                    <FormGroup className="mb-3">
+                                                      <Input
+                                                        type="text"
+                                                        className="form-control"
+                                                        name={`products.${index}.name`}
+                                                        placeholder="Name..."
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                        invalid={
+                                                          meta.touched &&
+                                                          meta.error
+                                                            ? true
+                                                            : false
+                                                        }
+                                                      />
+                                                      {meta.touched &&
+                                                      meta.error ? (
+                                                        <FormFeedback type="invalid">
+                                                          {meta.error}
+                                                        </FormFeedback>
+                                                      ) : null}
+                                                    </FormGroup>
+                                                  )}
+                                                </Field>
+                                              </td>
+                                              <td>
+                                                <Field
+                                                  name={`products.${index}.qty`}
+                                                >
+                                                  {({
+                                                    form: {
+                                                      touche,
+                                                      errors,
+                                                      isValid,
+                                                    },
+                                                    meta,
+                                                  }: any) => (
+                                                    <FormGroup className="mb-3">
+                                                      <Input
+                                                        type="number"
+                                                        className="form-control"
+                                                        name={`products.${index}.qty`}
+                                                        placeholder="Qty..."
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                        invalid={
+                                                          meta.touched &&
+                                                          meta.error
+                                                            ? true
+                                                            : false
+                                                        }
+                                                      />
+                                                      {meta.touched &&
+                                                      meta.error ? (
+                                                        <FormFeedback type="invalid">
+                                                          {meta.error}
+                                                        </FormFeedback>
+                                                      ) : null}
+                                                    </FormGroup>
+                                                  )}
+                                                </Field>
+                                              </td>
+                                              <td>
+                                                <Field
+                                                  name={`products.${index}.price`}
+                                                >
+                                                  {({
+                                                    form: {
+                                                      touche,
+                                                      errors,
+                                                      isValid,
+                                                    },
+                                                    meta,
+                                                  }: any) => (
+                                                    <FormGroup className="mb-3">
+                                                      <Input
+                                                        type="number"
+                                                        className="form-control"
+                                                        name={`products.${index}.price`}
+                                                        placeholder="Price..."
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                        invalid={
+                                                          meta.touched &&
+                                                          meta.error
+                                                            ? true
+                                                            : false
+                                                        }
+                                                      />
+                                                      {meta.touched &&
+                                                      meta.error ? (
+                                                        <FormFeedback type="invalid">
+                                                          {meta.error}
+                                                        </FormFeedback>
+                                                      ) : null}
+                                                    </FormGroup>
+                                                  )}
+                                                </Field>
+                                              </td>
+                                            </tr>
+                                          )
+                                        )}
+                                        {errors.products === 'string' ? (
+                                          <div>{errors.products}</div>
+                                        ) : null}
+                                      </>
+                                    )}
+                                  </FieldArray>
+                                </tbody>
+                              </table>
+                            </Col>
+                          </Row>
+                          <h5 className="fs-14 mb-3 text-muted">
+                            *You must complete all required fields or you will
+                            not be able to create your product.
+                          </h5>
+                          <Col md={12}>
+                            <div className="text-end">
+                              <Button type="submit" className="btn btn-primary">
+                                Add
+                              </Button>
+                            </div>
+                          </Col>
+                        </Row>
+                      </Form>
                     )}
-                    {productFail && (
-                      <UncontrolledAlert
-                        color="danger"
-                        className="alert-border-left mb-xl-0"
-                      >
-                        <i className="ri-error-warning-line me-3 align-middle fs-16"></i>
-                        <strong>Order Not Saved</strong> - {msg}
-                      </UncontrolledAlert>
-                    )}
-                    <h5 className="fs-5 m-3 fw-bolder">Order Details</h5>
-                    <Col md={8}>
-                      <FormGroup className="mb-3">
-                        <Label htmlFor="firstNameinput" className="form-label">
-                          *Recipient
-                        </Label>
-                        <Input
-                          type="text"
-                          className="form-control"
-                          placeholder="Recipient..."
-                          id="recipient"
-                          name="recipient"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.recipient || ''}
-                          invalid={
-                            validation.touched.recipient &&
-                            validation.errors.recipient
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.touched.recipient &&
-                        validation.errors.recipient ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.recipient}
-                          </FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                      <FormGroup className="mb-3">
-                        <Label htmlFor="lastNameinput" className="form-label">
-                          Company
-                        </Label>
-                        <Input
-                          type="text"
-                          className="form-control"
-                          placeholder="Company..."
-                          id="company"
-                          name="company"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.company || ''}
-                          invalid={
-                            validation.touched.company &&
-                            validation.errors.company
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.touched.company &&
-                        validation.errors.company ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.company}
-                          </FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                    </Col>
-                    <Col md={4}>
-                      <FormGroup className="mb-3">
-                        <Label htmlFor="lastNameinput" className="form-label">
-                          Order Number
-                        </Label>
-                        <Input
-                          type="text"
-                          className="form-control"
-                          placeholder="Order Number..."
-                          id="orderNumber"
-                          name="orderNumber"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.orderNumber || ''}
-                          invalid={
-                            validation.touched.orderNumber &&
-                            validation.errors.orderNumber
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.touched.orderNumber &&
-                        validation.errors.orderNumber ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.orderNumber}
-                          </FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                    </Col>
-                    <Col md={8}>
-                      <FormGroup className="mb-3">
-                        <Label
-                          htmlFor="compnayNameinput"
-                          className="form-label"
-                        >
-                          Address 1
-                        </Label>
-                        <Input
-                          type="text"
-                          className="form-control"
-                          placeholder="Address..."
-                          id="adress1"
-                          name="adress1"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.adress1 || ''}
-                          invalid={
-                            validation.touched.adress1 &&
-                            validation.errors.adress1
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.touched.adress1 &&
-                        validation.errors.adress1 ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.adress1}
-                          </FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                      <FormGroup className="mb-3">
-                        <Input
-                          type="text"
-                          className="form-control"
-                          placeholder="Address..."
-                          id="adress2"
-                          name="adress2"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.adress2 || ''}
-                          invalid={
-                            validation.touched.adress2 &&
-                            validation.errors.adress2
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.touched.adress2 &&
-                        validation.errors.adress2 ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.adress2}
-                          </FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                      <Col md={12} className='d-flex justify-content-between w-100'>
-                        <Col md={2}>
-                          <FormGroup className="mb-3">
-                            <Label
-                              htmlFor="compnayNameinput"
-                              className="form-label"
-                            >
-                              *City
-                            </Label>
-                            <Input
-                              type="text"
-                              className="form-control"
-                              placeholder="City..."
-                              id="city"
-                              name="city"
-                              onChange={validation.handleChange}
-                              onBlur={validation.handleBlur}
-                              value={validation.values.city || ''}
-                              invalid={
-                                validation.touched.city &&
-                                validation.errors.city
-                                  ? true
-                                  : false
-                              }
-                            />
-                            {validation.touched.city &&
-                            validation.errors.city ? (
-                              <FormFeedback type="invalid">
-                                {validation.errors.city}
-                              </FormFeedback>
-                            ) : null}
-                          </FormGroup>
-                        </Col>
-                        <Col md={2}>
-                          <FormGroup className="mb-3">
-                            <Label
-                              htmlFor="compnayNameinput"
-                              className="form-label"
-                            >
-                              *State
-                            </Label>
-                            <Input
-                              type="text"
-                              className="form-control"
-                              placeholder="State..."
-                              id="state"
-                              name="state"
-                              onChange={validation.handleChange}
-                              onBlur={validation.handleBlur}
-                              value={validation.values.state || ''}
-                              invalid={
-                                validation.touched.state &&
-                                validation.errors.state
-                                  ? true
-                                  : false
-                              }
-                            />
-                            {validation.touched.state &&
-                            validation.errors.state ? (
-                              <FormFeedback type="invalid">
-                                {validation.errors.state}
-                              </FormFeedback>
-                            ) : null}
-                          </FormGroup>
-                        </Col>
-                        <Col md={2}>
-                          <FormGroup className="mb-3">
-                            <Label
-                              htmlFor="compnayNameinput"
-                              className="form-label"
-                            >
-                              *Zip Code
-                            </Label>
-                            <Input
-                              type="text"
-                              className="form-control"
-                              placeholder="Zip Code..."
-                              id="zipCode"
-                              name="zipCode"
-                              onChange={validation.handleChange}
-                              onBlur={validation.handleBlur}
-                              value={validation.values.zipCode || ''}
-                              invalid={
-                                validation.touched.zipCode &&
-                                validation.errors.zipCode
-                                  ? true
-                                  : false
-                              }
-                            />
-                            {validation.touched.zipCode &&
-                            validation.errors.zipCode ? (
-                              <FormFeedback type="invalid">
-                                {validation.errors.zipCode}
-                              </FormFeedback>
-                            ) : null}
-                          </FormGroup>
-                        </Col>
-                        <Col md={2}>
-                          <FormGroup className="mb-3">
-                            <Label
-                              htmlFor="compnayNameinput"
-                              className="form-label"
-                            >
-                              *Country
-                            </Label>
-                            <Input
-                              type="text"
-                              className="form-control"
-                              placeholder="Country..."
-                              id="country"
-                              name="country"
-                              onChange={validation.handleChange}
-                              onBlur={validation.handleBlur}
-                              value={validation.values.country || ''}
-                              invalid={
-                                validation.touched.country &&
-                                validation.errors.country
-                                  ? true
-                                  : false
-                              }
-                            />
-                            {validation.touched.country &&
-                            validation.errors.country ? (
-                              <FormFeedback type="invalid">
-                                {validation.errors.country}
-                              </FormFeedback>
-                            ) : null}
-                          </FormGroup>
-                        </Col>                        
-                      </Col>
-                      <FormGroup className="mb-3">
-                        <Label htmlFor="lastNameinput" className="form-label">
-                          Phone #
-                        </Label>
-                        <Input
-                          type="text"
-                          className="form-control"
-                          placeholder="Phone Number..."
-                          id="phoneNumber"
-                          name="phoneNumber"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.phoneNumber || ''}
-                          invalid={
-                            validation.touched.phoneNumber &&
-                            validation.errors.phoneNumber
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.touched.phoneNumber &&
-                        validation.errors.phoneNumber ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.phoneNumber}
-                          </FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                      <FormGroup className="mb-3">
-                        <Label htmlFor="lastNameinput" className="form-label">
-                          Email
-                        </Label>
-                        <Input
-                          type="text"
-                          className="form-control"
-                          placeholder="Email Address..."
-                          id="email"
-                          name="email"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.email || ''}
-                          invalid={
-                            validation.touched.email &&
-                            validation.errors.email
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.touched.email &&
-                        validation.errors.email ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.email}
-                          </FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                    </Col>
-                    <Col md={4}>
-                      <FormGroup className="mb-3">
-                        <Label htmlFor="lastNameinput" className="form-label">
-                          Amount Paid
-                        </Label>
-                        <Input
-                          type="text"
-                          className="form-control"
-                          placeholder="Amount..."
-                          id="amount"
-                          name="amount"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.amount || ''}
-                          invalid={
-                            validation.touched.amount &&
-                            validation.errors.amount
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.touched.amount &&
-                        validation.errors.amount ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.amount}
-                          </FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                      <FormGroup className="mb-3">
-                        <Label htmlFor="lastNameinput" className="form-label">
-                          Shipping Paid
-                        </Label>
-                        <Input
-                          type="text"
-                          className="form-control"
-                          placeholder="Shipping..."
-                          id="shipping"
-                          name="shipping"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.shipping || ''}
-                          invalid={
-                            validation.touched.shipping &&
-                            validation.errors.shipping
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.touched.shipping &&
-                        validation.errors.shipping ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.shipping}
-                          </FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                      <FormGroup className="mb-3">
-                        <Label htmlFor="lastNameinput" className="form-label">
-                          Tax Paid
-                        </Label>
-                        <Input
-                          type="text"
-                          className="form-control"
-                          placeholder="Tax..."
-                          id="tax"
-                          name="tax"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.tax || ''}
-                          invalid={
-                            validation.touched.tax &&
-                            validation.errors.tax
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.touched.tax &&
-                        validation.errors.tax ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.tax}
-                          </FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                    </Col>
-                    <div className="border mt-3 border-dashed"></div>
-                    <h5 className="fs-5 m-3 fw-bolder">Order Products</h5>
-                    
-                    <h5 className="fs-14 mb-3 text-muted">
-                      *You must complete all required fields or you will not be
-                      able to create your product.
-                    </h5>
-                    <Col md={12}>
-                      <div className="text-end">
-                        <Button type="submit" className="btn btn-primary">
-                          Add
-                        </Button>
-                      </div>
-                    </Col>
-                  </Row>
-                </Form>
+                  </Formik>
+                )}
               </CardBody>
             </Card>
           </Container>
