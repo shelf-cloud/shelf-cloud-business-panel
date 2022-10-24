@@ -82,20 +82,22 @@ const Receiving = ({ session }: Props) => {
       setSerachValue(e.target.value)
       const filterTable: OrderRowType[] = allData.filter(
         (order) =>
-          order.orderNumber
-            .toLowerCase()
+          order?.orderNumber
+            ?.toLowerCase()
             .includes(e.target.value.toLowerCase()) ||
-          order.orderStatus
-            .toLowerCase()
+          order?.orderStatus
+            ?.toLowerCase()
             .includes(e.target.value.toLowerCase()) ||
-          order.orderType
-            .toLowerCase()
+          order?.orderType
+            ?.toLowerCase()
             .includes(e.target.value.toLowerCase()) ||
-          order.shipName.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          order.trackingNumber
-            .toLowerCase()
+          order?.shipName
+            ?.toLowerCase()
             .includes(e.target.value.toLowerCase()) ||
-          order.orderItems.some(
+          order?.trackingNumber
+            ?.toLowerCase()
+            .includes(e.target.value.toLowerCase()) ||
+          order?.orderItems?.some(
             (item: ShipmentOrderItem) =>
               item.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
               item.sku.toLowerCase().includes(e.target.value.toLowerCase())
@@ -134,9 +136,14 @@ const Receiving = ({ session }: Props) => {
             <Row>
               <Col lg={12}>
                 <Card>
-                  <CardHeader className='d-flex justify-content-between'>
+                  <CardHeader className="d-flex justify-content-between">
                     <div className="mt-3 mt-lg-0 d-flex flex-row align-items-center">
-                    <h5 className='mb-0 fw-bold text-primary me-3' style={{width: 'fit-content'}}>Filter By Dates:</h5>
+                      <h5
+                        className="mb-0 fw-bold text-primary me-3"
+                        style={{ width: 'fit-content' }}
+                      >
+                        Filter By Dates:
+                      </h5>
                       <div className="d-flex shadow-lg">
                         <Flatpickr
                           className="form-control border-0 datePicker"

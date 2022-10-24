@@ -41,10 +41,8 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
       name: <span className="fw-bolder fs-13">Order Number</span>,
       selector: (row: OrderRowType) => {
         return (
-          <div>
-            <p style={{ margin: '0px', fontWeight: '800' }}>
+          <div style={{ margin: '0px', fontWeight: '800' }}>
               {row.orderNumber}
-            </p>
           </div>
         )
       },

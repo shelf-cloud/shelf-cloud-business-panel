@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useMemo } from 'react'
 import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
-import { ProductRowType, Product } from '@typings'
+import { Product, wholesaleProductRow } from '@typings'
 import axios from 'axios'
 import Head from 'next/head'
 import { ToastContainer, toast } from 'react-toastify'
@@ -23,7 +23,7 @@ import { getSession } from '@auth/client'
 import useSWR from 'swr'
 import InventoryBinsModal from '@components/InventoryBinsModal'
 import WholeSaleTable from '@components/WholeSaleTable'
-import WholeSaleOrderModal from '@components/wholeSaleOrderModal'
+import WholeSaleOrderModal from '@components/WholeSaleOrderModal'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -53,61 +53,65 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
   const { state, setWholeSaleOrderModal }: any = useContext(AppContext)
   const orderNumberStart = session?.user?.name.substring(0, 3).toUpperCase()
   const [pending, setPending] = useState(true)
-  const [allData, setAllData] = useState<ProductRowType[]>([])
-  const [tableData, setTableData] = useState<ProductRowType[]>([])
+  const [allData, setAllData] = useState<wholesaleProductRow[]>([])
   const [serachValue, setSerachValue] = useState('')
-  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data, error } = useSWR(
-    state.user.businessId
-      ? `/api/getBusinessInventory?businessId=${state.user.businessId}`
-      : null,
-    fetcher
-  )
+  
+  // const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
+  // const { data, error } = useSWR(
+  //   state.user.businessId
+  //     ? `/api/getWholesaleInventory?businessId=${state.user.businessId}`
+  //     : null,
+  //   fetcher
+  // )
+
+  const filteredItems = useMemo(() => {
+    return allData.filter(
+      (item:wholesaleProductRow) =>
+        item?.title?.toLowerCase().includes(serachValue.toLowerCase()) ||
+        item?.sku?.toLowerCase().includes(serachValue.toLowerCase())
+    )
+  }, [allData, serachValue])
 
   useEffect(() => {
-    if (data) {
-      const list: ProductRowType[] = []
-
-      data.forEach((product: Product) => {
-        const row = {
-          Image: product.image,
-          Title: product.title,
-          SKU: product.sku,
-          Quantity: {
-            quantity: product.quantity,
-            inventoryId: product.inventoryId,
-            businessId: product.businessId,
+    const bringWholesaleInv = async () => {
+      await axios(
+        `/api/getWholesaleInventory?businessId=${state.user.businessId}`
+      ).then((res) => {
+        const list: wholesaleProductRow[] = []
+        res.data.forEach((product: Product) => {
+          const row = {
+            image: product.image,
+            title: product.title,
             sku: product.sku,
-          },
-          qtyBox: product.boxQty,
-        }
-        list.push(row)
+            quantity: {
+              quantity: product.quantity,
+              inventoryId: product.inventoryId,
+              businessId: product.businessId,
+              sku: product.sku,
+            },
+            qtyBox: product.boxQty,
+            orderQty: '',
+            totalToShip: 0
+          }
+          list.push(row)
+        })
+        setAllData(list)
+        setPending(false)
       })
-      setTableData(list)
-      setAllData(list)
-      setPending(false)
     }
-  }, [data])
-
-  const filterByText = (e: any) => {
-    if (e.target.value !== '') {
-      setSerachValue(e.target.value)
-      const filterTable = allData.filter(
-        (item) =>
-          item.Title.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          item.SKU.toLowerCase().includes(e.target.value.toLowerCase())
-      )
-      setTableData(filterTable)
-    } else {
-      setSerachValue(e.target.value)
-      setTableData(allData)
+    state.user.businessId && bringWholesaleInv()
+    return () => {
+      setAllData([])
+      setPending(true)
     }
-  }
+  }, [state.user.businessId])
 
-  const clearSearch = () => {
-    setSerachValue('')
-    setTableData(allData)
-  }
+  const orderProducts = useMemo(() => {
+    return allData.filter(
+      (item:wholesaleProductRow) =>
+        Number(item?.orderQty) > 0
+    )
+  }, [allData])
 
   const title = `Create WholeSale Order | ${session?.user?.name}`
   return (
@@ -128,11 +132,11 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                       <div>
                         <h3 className="fs-3 fw-semibold text-primary">
                           Total SKUs in Order:{' '}
-                          {state?.wholesaleOrderProducts?.length}
+                          {orderProducts.length}
                         </h3>
                         <h5 className="fs-5 fw-normal text-primary">
                           Total Qty to Ship in Order:{' '}
-                          {state?.wholesaleOrderProducts?.length}
+                          {orderProducts.reduce((total: number, item: wholesaleProductRow) => total + Number(item.totalToShip), 0)}
                         </h5>
                       </div>
                       <div>
@@ -157,7 +161,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                           placeholder="Search..."
                           id="search-options"
                           value={serachValue}
-                          onChange={filterByText}
+                          onChange={(e) => setSerachValue(e.target.value)}
                         />
                         <span className="mdi mdi-magnify search-widget-icon"></span>
                         <span
@@ -165,7 +169,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                           id="search-close-options"
                         ></span>
                       </div>
-                      <Button className="btn-soft-dark" onClick={clearSearch}>
+                      <Button className="btn-soft-dark" onClick={() => setSerachValue('')}>
                         Clear
                       </Button>
                     </form>
@@ -177,8 +181,8 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                       <table className="table table-sm table-striped align-middle table-responsive">
                         <thead>
                           <tr className="fs-5 fw-semibold text-center">
-                            <th className='text-start'>Image</th>
-                            <th className='text-start'>
+                            <th className="text-start">Image</th>
+                            <th className="text-start">
                               Title
                               <br />
                               SKU
@@ -192,8 +196,14 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                           </tr>
                         </thead>
                         <tbody className="text-center">
-                          {tableData.map((product, index) => (
-                            <WholeSaleTable key={index} product={product} />
+                          {filteredItems.map((product, index) => (
+                            <WholeSaleTable
+                              key={product.sku}
+                              index={index}
+                              product={product}
+                              allData={allData}
+                              setAllData={setAllData}
+                            />
                           ))}
                         </tbody>
                       </table>
@@ -206,7 +216,9 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
         </div>
       </React.Fragment>
       {state.showInventoryBinsModal && <InventoryBinsModal />}
-      {state.showWholeSaleOrderModal && <WholeSaleOrderModal orderNumberStart={orderNumberStart} />}
+      {state.showWholeSaleOrderModal && (
+        <WholeSaleOrderModal orderNumberStart={orderNumberStart} orderProducts={orderProducts}/>
+      )}
     </div>
   )
 }

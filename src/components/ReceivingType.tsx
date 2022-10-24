@@ -124,7 +124,7 @@ const ReceivingType = ({ data }: Props) => {
                     ))}
                     <tr className="bg-primary text-white fw-bolder">
                       <td></td>
-                      <td className="text-end">Total QTY</td>
+                      <td className="text-end text-nowrap">Total QTY</td>
                       <td className="text-center">{data.totalItems}</td>
                       <td className="text-center">{data.totalReceivedItems}</td>
                     </tr>

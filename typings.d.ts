@@ -159,6 +159,22 @@ export interface ShipmentOrderItem {
 }
 
 // WHOLESALE ORDERS
+export interface wholesaleProductRow {
+    image: string,
+    title: string,
+    sku: string,
+    quantity: {
+        quantity: number,
+        inventoryId: number,
+        businessId: number,
+        sku: string,
+    },
+    qtyBox: number,
+    orderQty: string,
+    totalToShip: number
+}
+
+
 export interface WholeSaleOrderProduct {
     businessId: number;
     sku: string;

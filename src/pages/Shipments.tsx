@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useMemo } from 'react'
 import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
 import { OrderRowType, ShipmentOrderItem } from '@typings'
@@ -58,8 +58,8 @@ const Shipments = ({ session }: Props) => {
   )
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<OrderRowType[]>([])
-  const [tableData, setTableData] = useState<OrderRowType[]>([])
-  const [serachValue, setSerachValue] = useState('')
+  const [searchValue, setSearchValue] = useState<String>('')
+  const [searchType, setSearchType] = useState<String>('')
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data, error } = useSWR(
@@ -71,46 +71,78 @@ const Shipments = ({ session }: Props) => {
 
   useEffect(() => {
     if (data) {
-      setTableData(data)
       setAllData(data)
       setPending(false)
     }
   }, [data])
 
-  const filterByText = (e: any) => {
-    if (e.target.value !== '') {
-      setSerachValue(e.target.value)
-      const filterTable: OrderRowType[] = allData.filter(
+  const filterDataTable = useMemo(() => {
+    if (searchValue === '' && searchType === '') {
+      return allData
+    }
+
+    if (searchValue !== '') {
+      const newDataTable = allData.filter(
         (order) =>
-          order.orderNumber
-            .toLowerCase()
-            .includes(e.target.value.toLowerCase()) ||
-          order.orderStatus
-            .toLowerCase()
-            .includes(e.target.value.toLowerCase()) ||
-          order.orderType
-            .toLowerCase()
-            .includes(e.target.value.toLowerCase()) ||
-          order.shipName.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          order.trackingNumber
-            .toLowerCase()
-            .includes(e.target.value.toLowerCase()) ||
-          order.orderItems.some(
+          order?.orderNumber
+            ?.toLowerCase()
+            .includes(searchValue.toLowerCase()) ||
+          order?.orderStatus
+            ?.toLowerCase()
+            .includes(searchValue.toLowerCase()) ||
+          order?.orderType?.toLowerCase().includes(searchValue.toLowerCase()) ||
+          order?.shipName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+          order?.trackingNumber
+            ?.toLowerCase()
+            .includes(searchValue.toLowerCase()) ||
+          order?.orderItems?.some(
             (item: ShipmentOrderItem) =>
-              item.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
-              item.sku.toLowerCase().includes(e.target.value.toLowerCase())
+              item?.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
+              item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
           )
       )
-      setTableData(filterTable)
-    } else {
-      setSerachValue(e.target.value)
-      setTableData(allData)
+      if (searchType !== '') {
+        return newDataTable.filter((order) =>
+          order?.orderType?.toLowerCase().includes(searchType.toLowerCase())
+        )
+      } else {
+        return newDataTable
+      }
     }
-  }
-  const clearSearch = () => {
-    setSerachValue('')
-    setTableData(allData)
-  }
+
+    if (searchType !== '') {
+      const newDataTable = allData.filter((order) =>
+        order?.orderType?.toLowerCase().includes(searchType.toLowerCase())
+      )
+      if (searchValue !== '') {
+        return newDataTable.filter(
+          (order) =>
+            order?.orderNumber
+              ?.toLowerCase()
+              .includes(searchValue.toLowerCase()) ||
+            order?.orderStatus
+              ?.toLowerCase()
+              .includes(searchValue.toLowerCase()) ||
+            order?.orderType
+              ?.toLowerCase()
+              .includes(searchValue.toLowerCase()) ||
+            order?.shipName
+              ?.toLowerCase()
+              .includes(searchValue.toLowerCase()) ||
+            order?.trackingNumber
+              ?.toLowerCase()
+              .includes(searchValue.toLowerCase()) ||
+            order?.orderItems?.some(
+              (item: ShipmentOrderItem) =>
+                item?.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
+            )
+        )
+      } else {
+        return newDataTable
+      }
+    }
+  }, [allData, searchValue, searchType])
 
   const handleChangeDates = (dateStr: string) => {
     if (dateStr.includes(' to ')) {
@@ -134,9 +166,14 @@ const Shipments = ({ session }: Props) => {
             <Row>
               <Col lg={12}>
                 <Card>
-                  <CardHeader className='d-flex justify-content-between'>
+                  <CardHeader className="d-flex justify-content-between">
                     <div className="mt-3 mt-lg-0 d-flex flex-row align-items-center">
-                    <h5 className='mb-0 fw-bold text-primary me-3' style={{width: 'fit-content'}}>Filter By Dates:</h5>
+                      <h5
+                        className="mb-0 fw-bold text-primary me-3"
+                        style={{ width: 'fit-content' }}
+                      >
+                        Filter By Dates:
+                      </h5>
                       <div className="d-flex shadow-lg">
                         <Flatpickr
                           className="form-control border-0 datePicker"
@@ -161,6 +198,27 @@ const Shipments = ({ session }: Props) => {
                         </div>
                       </div>
                     </div>
+                    <div className="mt-3 mt-lg-0 d-flex flex-row align-items-center">
+                      <h5
+                        className="mb-0 fw-bold text-primary me-3"
+                        style={{ width: 'fit-content' }}
+                      >
+                        Filter By Type:
+                      </h5>
+                      <div className="shadow">
+                        <Input
+                          type="select"
+                          className="form-control"
+                          id="type"
+                          name="type"
+                          onChange={(e) => setSearchType(e.target.value)}
+                        >
+                          <option value="">All Types</option>
+                          <option value="Wholesale">Wholesale</option>
+                          <option value="Shipment">Shipment</option>
+                        </Input>
+                      </div>
+                    </div>
                     <div className="app-search d-flex flex-row justify-content-end align-items-center p-0">
                       <div className="position-relative">
                         <Input
@@ -168,8 +226,7 @@ const Shipments = ({ session }: Props) => {
                           className="form-control"
                           placeholder="Search..."
                           id="search-options"
-                          value={serachValue}
-                          onChange={filterByText}
+                          onChange={(e) => setSearchValue(e.target.value)}
                         />
                         <span className="mdi mdi-magnify search-widget-icon"></span>
                         <span
@@ -177,13 +234,19 @@ const Shipments = ({ session }: Props) => {
                           id="search-close-options"
                         ></span>
                       </div>
-                      <Button className="btn-soft-dark" onClick={clearSearch}>
+                      <Button
+                        className="btn-soft-dark"
+                        onClick={() => setSearchValue('')}
+                      >
                         Clear
                       </Button>
                     </div>
                   </CardHeader>
                   <CardBody>
-                    <ShipmentsTable tableData={tableData} pending={pending} />
+                    <ShipmentsTable
+                      tableData={filterDataTable || []}
+                      pending={pending}
+                    />
                   </CardBody>
                 </Card>
               </Col>

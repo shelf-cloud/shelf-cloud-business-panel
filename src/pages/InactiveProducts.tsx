@@ -114,11 +114,11 @@ const InactiveProducts = ({ session }: Props) => {
       setSerachValue(e.target.value)
       const filterTable = allData.filter(
         (item) =>
-          item.Title.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          item.SKU.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          item.ASIN.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          item.FNSKU.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          item.Barcode.toLowerCase().includes(e.target.value.toLowerCase())
+          item?.Title?.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          item?.SKU?.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          item?.ASIN?.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          item?.FNSKU?.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          item?.Barcode?.toLowerCase().includes(e.target.value.toLowerCase())
       )
       setTableData(filterTable)
     } else {

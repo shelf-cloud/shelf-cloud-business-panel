@@ -20,12 +20,14 @@ import axios from 'axios'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { WholeSaleOrderProduct } from '@typings'
+import { WholeSaleOrderProduct, wholesaleProductRow } from '@typings'
+import router from 'next/router'
 
 type Props = {
-  orderNumberStart: string
+  orderNumberStart: string,
+  orderProducts: wholesaleProductRow[]
 }
-const WholeSaleOrderModal = ({ orderNumberStart }: Props) => {
+const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
   const { state, setWholeSaleOrderModal }: any = useContext(AppContext)
 
   useEffect(() => {
@@ -52,24 +54,35 @@ const WholeSaleOrderModal = ({ orderNumberStart }: Props) => {
         .required('Please Choose a Type'),
     }),
     onSubmit: async (values, {resetForm}) => {
-      // console.log(values)
+      const response = await axios.post(
+        `api/createWholesaleOrder?businessId=${state.user.businessId}`,
+        {
+          orderInfo: {
+            orderNumber: values.orderNumber,
+            carrierService: values.type,
+            isPallets: values.type == 'LTL' ? true : false,
+            numberOfPallets: values.type == 'LTL' ? values.numberOfPallets : 0,
+            orderProducts: orderProducts.map(product => {
+              return {
+                sku: product.sku,
+                name: product.title,
+                boxQty: product.qtyBox,
+                quantity: product.totalToShip,
+                businessId: product.quantity.businessId
+              }
+            })
+          },
+        }
+      )
 
-      // const response = await axios.post(
-      //   `api/createWholesaleOrder?businessId=${state.user.businessId}`,
-      //   {
-      //     orderInfo: {
-            
-      //     },
-      //   }
-      // )
-      // console.log(response.data)
-      // if (!response.data.error) {
-      //   toast.success(response.data.msg)
-      //   // resetForm()
-      //   // router.push('/Shipments')
-      // } else {
-      //   toast.error(response.data.msg)
-      // }
+      if (!response.data.error) {
+        toast.success(response.data.msg)
+        resetForm()
+        setWholeSaleOrderModal(false)
+        router.push('/Shipments')
+      } else {
+        toast.error(response.data.msg)
+      }
     },
   })
 
@@ -81,7 +94,7 @@ const WholeSaleOrderModal = ({ orderNumberStart }: Props) => {
   return (
     <Modal
       fade={false}
-      size="xl"
+      size="lg"
       id="myModal"
       isOpen={state.showWholeSaleOrderModal}
       toggle={() => {
@@ -208,12 +221,12 @@ const WholeSaleOrderModal = ({ orderNumberStart }: Props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {state?.wholesaleOrderProducts?.map(
-                    (product: WholeSaleOrderProduct, index: number) => (
+                  {orderProducts?.map(
+                    (product, index: number) => (
                       <tr key={index}>
                         <td>{product.sku}</td>
-                        <td className="text-center">{product.totalBoxes}</td>
-                        <td className="text-center">{product.quantity}</td>
+                        <td className="text-center">{product.orderQty}</td>
+                        <td className="text-center">{product.totalToShip}</td>
                       </tr>
                     )
                   )}

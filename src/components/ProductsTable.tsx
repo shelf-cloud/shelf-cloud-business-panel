@@ -68,7 +68,7 @@ const ProductsTable = ({
           <div
             style={{
               width: '80px',
-              height: '100px',
+              height: '70px',
               padding: '2px 0px',
               position: 'relative',
             }}
