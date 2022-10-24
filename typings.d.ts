@@ -1,24 +1,4 @@
-// interface Image {
-//     asset: {
-//       url: string;
-//     };
-//   }
 
-//   export interface Cuenco {
-//     _id: string;
-//     title: string;
-//     slug: {
-//       current: string;
-//     };
-//     price: number;
-//     description: string;
-//     listIngredients: string;
-//     listAlergens: string;
-//     tags: [];
-//     categorias: [];
-//     image: Image;
-//     ingredientes: Ingredientes[];
-//   }
 export interface Summary {
     binsUSed: number;
     skus: number;
@@ -79,12 +59,17 @@ export interface ProductRowType {
     Image: string;
     Title: string;
     SKU: string;
-    ASIN: string;
-    FNSKU: string;
-    Barcode: string;
-    Quantity: {};
-    unitDimensions: {};
-    boxDimensions: {};
+    ASIN?: string;
+    FNSKU?: string;
+    Barcode?: string;
+    Quantity: {
+        inventoryId: number;
+        businessId: number;
+        sku: string;
+        quantity: number;
+    };
+    unitDimensions?: {};
+    boxDimensions?: {};
     qtyBox: number;
 }
 export interface Product {
@@ -170,5 +155,31 @@ export interface ShipmentOrderItem {
     sku: string;
     unitPrice: number;
     quantity: number;
-    qtyReceived?:number;
+    qtyReceived?: number;
+}
+
+// WHOLESALE ORDERS
+export interface WholeSaleOrderProduct {
+    businessId: number;
+    sku: string;
+    name: string;
+    quantity: number;
+    boxQty: number;
+    totalBoxes: number;
+}
+export interface WholeSaleOrder {
+    businessId: number;
+    orderId: string;
+    orderNumber: string;
+    orderDate: string;
+    orderStatus: string;
+    orderType: string;
+    pickpackCharge: number;
+    labeling: number;
+    carrierService: string;
+    carrierType: string;
+    orderItems: WholeSaleOrderProduct[];
+    totalItems: number;
+    numberPallets: number;
+    numberBoxes: number;
 }

@@ -17,43 +17,74 @@ const ShipmentType = ({ data }: Props) => {
     <div style={{ backgroundColor: '#f3f3f9', padding: '10px' }}>
       <Row>
         <Col xl={4}>
-          <Card>
-            <CardHeader className="d-flex flex-row justify-content-between align-items-center position-relative">
-              <h5 className="fw-bold">Shipping</h5>
-              {/* <div style={{ position: 'absolute', right: '0px' }}>
+          <Col xl={12}>
+            <Card>
+              <CardHeader className="d-flex flex-row justify-content-between align-items-center position-relative">
+                <h5 className="fw-bold">Shipping</h5>
+                {/* <div style={{ position: 'absolute', right: '0px' }}>
                 <Animation
                   src="https://cdn.lordicon.com/uetqnvvg.json"
                   colors="primary:#405189,secondary:#0ab39c"
                   style={{ width: '50px', height: '50px' }}
                 />
               </div> */}
-            </CardHeader>
-            <CardBody>
-              <table className="table table-sm">
-                <tbody>
-                  <tr>
-                    <td className="fw-bold">Service Requested:</td>
-                    <td>{data.carrierService}</td>
-                  </tr>
-                  <tr>
-                    <td className="fw-bold">Service Used:</td>
-                    <td>{data.carrierType}</td>
-                  </tr>
-                  <tr>
-                    <td className="fw-bold">Customer Name:</td>
-                    <td>{data.shipName}</td>
-                  </tr>
-                  <tr>
-                    <td className="fw-bold">Address:</td>
-                    <td>
-                      {data.shipStreet}, {data.shipCity}, {data.shipState},{' '}
-                      {data.shipZipcode}, {data.shipCountry}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </CardBody>
-          </Card>
+              </CardHeader>
+              <CardBody>
+                <table className="table table-sm">
+                  <tbody>
+                    <tr>
+                      <td className="fw-bold">Service Requested:</td>
+                      <td>{data.carrierService}</td>
+                    </tr>
+                    <tr>
+                      <td className="fw-bold">Service Used:</td>
+                      <td>{data.carrierType}</td>
+                    </tr>
+                    <tr>
+                      <td className="fw-bold">Customer Name:</td>
+                      <td>{data.shipName}</td>
+                    </tr>
+                    <tr>
+                      <td className="fw-bold">Address:</td>
+                      <td>
+                        {data.shipStreet}, {data.shipCity}, {data.shipState},{' '}
+                        {data.shipZipcode}, {data.shipCountry}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </CardBody>
+            </Card>
+          </Col>
+          <Col xl={12}>
+            <Card>
+              <CardHeader>
+                <h5 className="fw-bold">Charge Details</h5>
+              </CardHeader>
+              <CardBody>
+                <table className="table table-sm table-bordered table-nowrap mb-0">
+                  <tbody>
+                    <tr>
+                      <td className="fw-bold">Pick Pack Charge</td>
+                      <td>$ {data.pickpackCharge.toFixed(2)}</td>
+                    </tr>
+                    <tr>
+                      <td className="fw-bold">Shipping Charge</td>
+                      <td>$ {data.onixShipping.toFixed(2)}</td>
+                    </tr>
+                    <tr>
+                      <td className="fw-bold">Extra Charge</td>
+                      <td>$ {data.extraCharge.toFixed(2)}</td>
+                    </tr>
+                    <tr className="bg-primary text-white fw-semibold">
+                      <td className="fw-bold">TOTAL</td>
+                      <td>$ {data.totalCharge.toFixed(2)}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </CardBody>
+            </Card>
+          </Col>
         </Col>
         <Col xl={8}>
           <Card>
@@ -98,36 +129,7 @@ const ShipmentType = ({ data }: Props) => {
         </Col>
       </Row>
       <Row>
-        <Col xl={4}>
-          <Card>
-            <CardHeader>
-              <h5 className="fw-bold">Charge Details</h5>
-            </CardHeader>
-            <CardBody>
-              <table className="table table-sm table-bordered table-nowrap mb-0">
-                <tbody>
-                  <tr>
-                    <td className="fw-bold">Pick Pack Charge</td>
-                    <td>$ {data.pickpackCharge.toFixed(2)}</td>
-                  </tr>
-                  <tr>
-                    <td className="fw-bold">Shipping Charge</td>
-                    <td>$ {data.onixShipping.toFixed(2)}</td>
-                  </tr>
-                  <tr>
-                    <td className="fw-bold">Extra Charge</td>
-                    <td>$ {data.extraCharge.toFixed(2)}</td>
-                  </tr>
-                  <tr className="bg-primary text-white fw-semibold">
-                    <td className="fw-bold">TOTAL</td>
-                    <td>$ {data.totalCharge.toFixed(2)}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </CardBody>
-          </Card>
-        </Col>
-        <Col xl={6}>
+        <Col xl={12}>
           <div className="lastSection_container"></div>
         </Col>
       </Row>

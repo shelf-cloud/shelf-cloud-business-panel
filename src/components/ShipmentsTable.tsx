@@ -1,17 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { OrderRowType } from '@typings'
-import Image from 'next/image'
-import React, { useContext } from 'react'
+import React from 'react'
 import DataTable from 'react-data-table-component'
-import AppContext from '@context/AppContext'
 import {
-  Button,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
   Input,
-  Row,
-  UncontrolledDropdown,
 } from 'reactstrap'
 import ShipmentExpandedDetail from './ShipmentExpandedDetail'
 
@@ -21,8 +13,6 @@ type Props = {
 }
 
 const ShipmentsTable = ({ tableData, pending }: Props) => {
-  const { setModalProductInfo, setModalProductDetails }: any =
-    useContext(AppContext)
 
   const columns: any = [
     {

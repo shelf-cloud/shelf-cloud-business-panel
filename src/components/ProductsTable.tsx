@@ -20,14 +20,21 @@ type Props = {
   changeProductState: (
     inventoryId: number,
     businessId: number,
-    sku: string,
-  ) => {},
-  setMsg: string,
-  icon: string,
+    sku: string
+  ) => {}
+  setMsg: string
+  icon: string
   activeText: string
 }
 
-const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, activeText }: Props) => {
+const ProductsTable = ({
+  tableData,
+  pending,
+  changeProductState,
+  setMsg,
+  icon,
+  activeText,
+}: Props) => {
   const { setModalProductInfo, setModalProductDetails }: any =
     useContext(AppContext)
 
@@ -58,7 +65,14 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       name: <span className="font-weight-bold fs-13">Image</span>,
       selector: (cell: { Image: any }) => {
         return (
-          <div style={{ height: '60px' }}>
+          <div
+            style={{
+              width: '80px',
+              height: '100px',
+              padding: '2px 0px',
+              position: 'relative',
+            }}
+          >
             <Image
               src={
                 cell.Image
@@ -67,7 +81,8 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
               }
               alt="product Image"
               layout="fill"
-              className="imagesFit"
+              objectFit="contain"
+              objectPosition="center"
             />
           </div>
         )
@@ -234,7 +249,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
                     changeProductState(
                       row.btns.inventoryId,
                       row.btns.businessId,
-                      row.btns.sku,
+                      row.btns.sku
                     )
                   }
                 >

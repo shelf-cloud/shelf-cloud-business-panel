@@ -27,11 +27,12 @@ const initialState = {
   leftSidebarViewType: leftSidebarViewTypes.DEFAULT,
   leftSidebarImageType: leftSidebarImageTypes.NONE,
   user: {},
-  products: [],
+  wholesaleOrderProducts: [],
   showInventoryBinsModal: false,
   modalProductInfo: {},
   showEditProductModal: false,
-  modalProductDetails: {}
+  modalProductDetails: {},
+  showWholeSaleOrderModal: false,
 }
 
 const useInitialState = () => {
@@ -119,26 +120,26 @@ const useInitialState = () => {
     })
   }
 
-  // const removeFromCart = (payload) => {
-  //   setState({
-  //     ...state,
-  //     cart: state.cart.filter((items) => items.id !== payload.id),
-  //   })
-  // }
+  const addWholesaleProduct = (product) => {
+    setState({
+      ...state,
+      wholesaleOrderProducts: [...state.wholesaleOrderProducts, product]
+    })
+  }
 
-  // const toggleOrder = () => {
-  //   setState({
-  //     ...state,
-  //     orderIsOpen: !state.orderIsOpen,
-  //   })
-  // }
+  const removeWholesaleProduct = (sku) => {
+    setState({
+      ...state,
+      wholesaleOrderProducts: state.wholesaleOrderProducts.filter((product) => product.sku !== sku)
+    })
+  }
 
-  // const toggleMenu = () => {
-  //   setState({
-  //     ...state,
-  //     menuIsOpen: !state.menuIsOpen,
-  //   })
-  // }
+  const setWholeSaleOrderModal = (payload) => {
+    setState({
+      ...state,
+      showWholeSaleOrderModal: payload
+    })
+  }
 
   return {
     state,
@@ -146,7 +147,10 @@ const useInitialState = () => {
     setshowInventoryBinsModal,
     setModalProductInfo,
     setShowEditProductModal,
-    setModalProductDetails
+    setModalProductDetails,
+    addWholesaleProduct,
+    removeWholesaleProduct,
+    setWholeSaleOrderModal
   }
 }
 

@@ -61,10 +61,10 @@ function InventoryBinsModal({}: Props) {
           setshowInventoryBinsModal(!state.showInventoryBinsModal)
         }}
       >
-        <h3 className="modal-title" id="myModalLabel">
+        <p className="modal-title fs-3" id="myModalLabel">
           Current Warehouse Inventory
-        </h3>
-        <h5>SKU: {state.modalProductInfo.sku}</h5>
+        </p>
+        <p className='fs-5'>SKU: {state.modalProductInfo.sku}</p>
       </ModalHeader>
       <ModalBody>
         <DataTable

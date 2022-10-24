@@ -1,28 +1,29 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
+import { ProductRowType, Product } from '@typings'
 import axios from 'axios'
-import * as Yup from 'yup'
-import { FieldArray, useFormik, validateYupSchema } from 'formik'
 import Head from 'next/head'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.min.css'
 import {
+  Badge,
   Button,
   Card,
   CardBody,
   CardHeader,
   Col,
   Container,
-  Form,
-  FormFeedback,
-  FormGroup,
   Input,
-  Label,
   Row,
-  UncontrolledAlert,
 } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
-import AppContext from '@context/AppContext'
+import useSWR from 'swr'
+import InventoryBinsModal from '@components/InventoryBinsModal'
+import WholeSaleTable from '@components/WholeSaleTable'
+import WholeSaleOrderModal from '@components/wholeSaleOrderModal'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -49,79 +50,66 @@ type Props = {
 }
 
 const CreateWholeSaleOrder = ({ session }: Props) => {
-  const { state }: any = useContext(AppContext)
-  const title = `Add Product | ${session?.user?.name}`
-  const [productSucces, setProductSucces] = useState(false)
-  const [productFail, setProductFail] = useState(false)
-  const [useSameUnitDimensions, setUseSameUnitDimensions] = useState(false)
-  const [msg, setMsg] = useState('')
-  const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
-
-    initialValues: {
-      recipient: '',
-      company: '',
-      orderNumber: '',
-      adress1: '',
-      adress2: '',
-      city: '',
-      state: '',
-      zipCode: '',
-      country: '',
-      phoneNumber: '',
-      email: '',
-      amount: '',
-      shipping: '',
-      tax: '',
-      products: [
-        {
-          sku: '',
-          name: '',
-          qty: '',
-          price: '',
-        },
-      ],
-    },
-    validationSchema: Yup.object({
-      title: Yup.string()
-        .max(100, 'Title is to Long')
-        .required('Please Enter Your Title'),
-    }),
-    onSubmit: async (values, { resetForm }) => {
-      //   const response = await axios.post(
-      //     `api/createNewProduct?businessId=${state.user.businessId}`,
-      //     {
-      //       productInfo: values,
-      //     }
-      //   )
-      //   if (!response.data.error) {
-      //     window.scrollTo(0, 0)
-      //     setMsg(response.data.msg)
-      //     setProductSucces(true)
-      //     resetForm()
-      //     setTimeout(() => setProductSucces(false), 6000)
-      //   } else {
-      //     window.scrollTo(0, 0)
-      //     setMsg(response.data.msg)
-      //     setProductFail(true)
-      //     setTimeout(() => setProductFail(false), 6000)
-      //   }
-    },
-  })
+  const { state, setWholeSaleOrderModal }: any = useContext(AppContext)
+  const orderNumberStart = session?.user?.name.substring(0, 3).toUpperCase()
+  const [pending, setPending] = useState(true)
+  const [allData, setAllData] = useState<ProductRowType[]>([])
+  const [tableData, setTableData] = useState<ProductRowType[]>([])
+  const [serachValue, setSerachValue] = useState('')
+  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
+  const { data, error } = useSWR(
+    state.user.businessId
+      ? `/api/getBusinessInventory?businessId=${state.user.businessId}`
+      : null,
+    fetcher
+  )
 
   useEffect(() => {
-    return () => {
-      setProductSucces(false)
-      setProductFail(false)
-    }
-  }, [])
+    if (data) {
+      const list: ProductRowType[] = []
 
-  const HandleAddProduct = (event: any) => {
-    event.preventDefault()
-    // validation.handleSubmit()
+      data.forEach((product: Product) => {
+        const row = {
+          Image: product.image,
+          Title: product.title,
+          SKU: product.sku,
+          Quantity: {
+            quantity: product.quantity,
+            inventoryId: product.inventoryId,
+            businessId: product.businessId,
+            sku: product.sku,
+          },
+          qtyBox: product.boxQty,
+        }
+        list.push(row)
+      })
+      setTableData(list)
+      setAllData(list)
+      setPending(false)
+    }
+  }, [data])
+
+  const filterByText = (e: any) => {
+    if (e.target.value !== '') {
+      setSerachValue(e.target.value)
+      const filterTable = allData.filter(
+        (item) =>
+          item.Title.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          item.SKU.toLowerCase().includes(e.target.value.toLowerCase())
+      )
+      setTableData(filterTable)
+    } else {
+      setSerachValue(e.target.value)
+      setTableData(allData)
+    }
   }
 
+  const clearSearch = () => {
+    setSerachValue('')
+    setTableData(allData)
+  }
+
+  const title = `Create WholeSale Order | ${session?.user?.name}`
   return (
     <div>
       <Head>
@@ -129,532 +117,96 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
       </Head>
       <React.Fragment>
         <div className="page-content">
+          <ToastContainer />
           <Container fluid>
-            <BreadCrumb title="Add Products" pageTitle="Warehouse" />
-            <Card>
-              <CardBody>
-                <Form onSubmit={HandleAddProduct}>
-                  <Row>
-                    {productSucces && (
-                      <UncontrolledAlert
-                        color="success"
-                        className="alert-border-left"
-                      >
-                        <i className="ri-check-double-line me-3 align-middle fs-16"></i>
-                        <strong>Order Saved!</strong> - {msg}
-                      </UncontrolledAlert>
-                    )}
-                    {productFail && (
-                      <UncontrolledAlert
-                        color="danger"
-                        className="alert-border-left mb-xl-0"
-                      >
-                        <i className="ri-error-warning-line me-3 align-middle fs-16"></i>
-                        <strong>Order Not Saved</strong> - {msg}
-                      </UncontrolledAlert>
-                    )}
-                    <h5 className="fs-5 m-3 fw-bolder">Order Details</h5>
-                    <Col md={7}>
-                      <FormGroup className="mb-3">
-                        <Label htmlFor="firstNameinput" className="form-label">
-                          *Recipient
-                        </Label>
-                        <Input
-                          type="text"
-                          className="form-control"
-                          placeholder="Recipient..."
-                          id="recipient"
-                          name="recipient"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.recipient || ''}
-                          invalid={
-                            validation.touched.recipient &&
-                            validation.errors.recipient
-                              ? true
-                              : false
+            <BreadCrumb title="Create WholeSale Order" pageTitle="Shipments" />
+            <Row>
+              <Col lg={12}>
+                <Card>
+                  <CardHeader>
+                    <div className="d-flex justify-content-between align-center mt-3 mb-3">
+                      <div>
+                        <h3 className="fs-3 fw-semibold text-primary">
+                          Total SKUs in Order:{' '}
+                          {state?.wholesaleOrderProducts?.length}
+                        </h3>
+                        <h5 className="fs-5 fw-normal text-primary">
+                          Total Qty to Ship in Order:{' '}
+                          {state?.wholesaleOrderProducts?.length}
+                        </h5>
+                      </div>
+                      <div>
+                        <Button
+                          className="fs-5 btn"
+                          color="primary"
+                          onClick={() =>
+                            setWholeSaleOrderModal(
+                              !state.showWholeSaleOrderModal
+                            )
                           }
-                        />
-                        {validation.touched.recipient &&
-                        validation.errors.recipient ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.recipient}
-                          </FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                      <FormGroup className="mb-3">
-                        <Label htmlFor="lastNameinput" className="form-label">
-                          Company
-                        </Label>
-                        <Input
-                          type="text"
-                          className="form-control"
-                          placeholder="Company..."
-                          id="company"
-                          name="company"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.company || ''}
-                          invalid={
-                            validation.touched.company &&
-                            validation.errors.company
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.touched.company &&
-                        validation.errors.company ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.company}
-                          </FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                    </Col>
-                    <Col md={5}>
-                      <FormGroup className="mb-3">
-                        <Label htmlFor="lastNameinput" className="form-label">
-                          Order Number
-                        </Label>
-                        <Input
-                          type="text"
-                          className="form-control"
-                          placeholder="Order Number..."
-                          id="orderNumber"
-                          name="orderNumber"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.orderNumber || ''}
-                          invalid={
-                            validation.touched.orderNumber &&
-                            validation.errors.orderNumber
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.touched.orderNumber &&
-                        validation.errors.orderNumber ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.orderNumber}
-                          </FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                    </Col>
-                    <Col md={7}>
-                      <FormGroup className="mb-3">
-                        <Label
-                          htmlFor="compnayNameinput"
-                          className="form-label"
                         >
-                          Address 1
-                        </Label>
-                        <Input
-                          type="text"
-                          className="form-control"
-                          placeholder="Address..."
-                          id="adress1"
-                          name="adress1"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.adress1 || ''}
-                          invalid={
-                            validation.touched.adress1 &&
-                            validation.errors.adress1
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.touched.adress1 &&
-                        validation.errors.adress1 ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.adress1}
-                          </FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                      <FormGroup className="mb-3">
-                        <Input
-                          type="text"
-                          className="form-control"
-                          placeholder="Address..."
-                          id="adress2"
-                          name="adress2"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.adress2 || ''}
-                          invalid={
-                            validation.touched.adress2 &&
-                            validation.errors.adress2
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.touched.adress2 &&
-                        validation.errors.adress2 ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.adress2}
-                          </FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                      <Col
-                        md={12}
-                        className="d-flex justify-content-between w-100"
-                      >
-                        <Col md={2}>
-                          <FormGroup className="mb-3">
-                            <Label
-                              htmlFor="compnayNameinput"
-                              className="form-label"
-                            >
-                              *City
-                            </Label>
-                            <Input
-                              type="text"
-                              className="form-control"
-                              placeholder="City..."
-                              id="city"
-                              name="city"
-                              onChange={validation.handleChange}
-                              onBlur={validation.handleBlur}
-                              value={validation.values.city || ''}
-                              invalid={
-                                validation.touched.city &&
-                                validation.errors.city
-                                  ? true
-                                  : false
-                              }
-                            />
-                            {validation.touched.city &&
-                            validation.errors.city ? (
-                              <FormFeedback type="invalid">
-                                {validation.errors.city}
-                              </FormFeedback>
-                            ) : null}
-                          </FormGroup>
-                        </Col>
-                        <Col md={2}>
-                          <FormGroup className="mb-3">
-                            <Label
-                              htmlFor="compnayNameinput"
-                              className="form-label"
-                            >
-                              *State
-                            </Label>
-                            <Input
-                              type="text"
-                              className="form-control"
-                              placeholder="State..."
-                              id="state"
-                              name="state"
-                              onChange={validation.handleChange}
-                              onBlur={validation.handleBlur}
-                              value={validation.values.state || ''}
-                              invalid={
-                                validation.touched.state &&
-                                validation.errors.state
-                                  ? true
-                                  : false
-                              }
-                            />
-                            {validation.touched.state &&
-                            validation.errors.state ? (
-                              <FormFeedback type="invalid">
-                                {validation.errors.state}
-                              </FormFeedback>
-                            ) : null}
-                          </FormGroup>
-                        </Col>
-                        <Col md={2}>
-                          <FormGroup className="mb-3">
-                            <Label
-                              htmlFor="compnayNameinput"
-                              className="form-label"
-                            >
-                              *Zip Code
-                            </Label>
-                            <Input
-                              type="text"
-                              className="form-control"
-                              placeholder="Zip Code..."
-                              id="zipCode"
-                              name="zipCode"
-                              onChange={validation.handleChange}
-                              onBlur={validation.handleBlur}
-                              value={validation.values.zipCode || ''}
-                              invalid={
-                                validation.touched.zipCode &&
-                                validation.errors.zipCode
-                                  ? true
-                                  : false
-                              }
-                            />
-                            {validation.touched.zipCode &&
-                            validation.errors.zipCode ? (
-                              <FormFeedback type="invalid">
-                                {validation.errors.zipCode}
-                              </FormFeedback>
-                            ) : null}
-                          </FormGroup>
-                        </Col>
-                        <Col md={2}>
-                          <FormGroup className="mb-3">
-                            <Label
-                              htmlFor="compnayNameinput"
-                              className="form-label"
-                            >
-                              *Country
-                            </Label>
-                            <Input
-                              type="text"
-                              className="form-control"
-                              placeholder="Country..."
-                              id="country"
-                              name="country"
-                              onChange={validation.handleChange}
-                              onBlur={validation.handleBlur}
-                              value={validation.values.country || ''}
-                              invalid={
-                                validation.touched.country &&
-                                validation.errors.country
-                                  ? true
-                                  : false
-                              }
-                            />
-                            {validation.touched.country &&
-                            validation.errors.country ? (
-                              <FormFeedback type="invalid">
-                                {validation.errors.country}
-                              </FormFeedback>
-                            ) : null}
-                          </FormGroup>
-                        </Col>
-                      </Col>
-                      <FormGroup className="mb-3">
-                        <Label htmlFor="lastNameinput" className="form-label">
-                          Phone #
-                        </Label>
-                        <Input
-                          type="text"
-                          className="form-control"
-                          placeholder="Phone Number..."
-                          id="phoneNumber"
-                          name="phoneNumber"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.phoneNumber || ''}
-                          invalid={
-                            validation.touched.phoneNumber &&
-                            validation.errors.phoneNumber
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.touched.phoneNumber &&
-                        validation.errors.phoneNumber ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.phoneNumber}
-                          </FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                      <FormGroup className="mb-3">
-                        <Label htmlFor="lastNameinput" className="form-label">
-                          Email
-                        </Label>
-                        <Input
-                          type="text"
-                          className="form-control"
-                          placeholder="Email Address..."
-                          id="email"
-                          name="email"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.email || ''}
-                          invalid={
-                            validation.touched.email && validation.errors.email
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.touched.email && validation.errors.email ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.email}
-                          </FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                    </Col>
-                    <Col md={5}>
-                      <FormGroup className="mb-3">
-                        <Label htmlFor="lastNameinput" className="form-label">
-                          Amount Paid
-                        </Label>
-                        <Input
-                          type="text"
-                          className="form-control"
-                          placeholder="Amount..."
-                          id="amount"
-                          name="amount"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.amount || ''}
-                          invalid={
-                            validation.touched.amount &&
-                            validation.errors.amount
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.touched.amount &&
-                        validation.errors.amount ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.amount}
-                          </FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                      <FormGroup className="mb-3">
-                        <Label htmlFor="lastNameinput" className="form-label">
-                          Shipping Paid
-                        </Label>
-                        <Input
-                          type="text"
-                          className="form-control"
-                          placeholder="Shipping..."
-                          id="shipping"
-                          name="shipping"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.shipping || ''}
-                          invalid={
-                            validation.touched.shipping &&
-                            validation.errors.shipping
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.touched.shipping &&
-                        validation.errors.shipping ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.shipping}
-                          </FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                      <FormGroup className="mb-3">
-                        <Label htmlFor="lastNameinput" className="form-label">
-                          Tax Paid
-                        </Label>
-                        <Input
-                          type="text"
-                          className="form-control"
-                          placeholder="Tax..."
-                          id="tax"
-                          name="tax"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.tax || ''}
-                          invalid={
-                            validation.touched.tax && validation.errors.tax
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.touched.tax && validation.errors.tax ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.tax}
-                          </FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                    </Col>
-                    <div className="border mt-3 border-dashed"></div>
-                    <h5 className="fs-5 m-3 fw-bolder">Order Products</h5>
-                    <Button
-                      onClick={() => 
-                        validation.values.products.push({
-                          sku: '',
-                          name: '',
-                          qty: '',
-                          price: '',
-                        })
-                      }
-                    >
-                      Add Product
-                    </Button>
-                    <Col xl={12}>
-                      <table className="table">
-                        <thead>
-                          <th>{`SKU`}</th>
-                          <th>{`Name`}</th>
-                          <th>{`Qty`}</th>
-                          <th>{`Price`}</th>
-                        </thead>
-                        <tbody>
-                              <tr>
-                                <td>
-                                  <Input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Sku..."
-                                    id={`products0sku`}
-                                    name={`products0sku`}
-                                    onChange={validation.handleChange}
-                                    onBlur={validation.handleBlur}
-                                    value={validation.values.products[0].sku || ''}
-                                  />
-                                </td>
-                                <td>
-                                  <Input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Name..."
-                                    id={`products0name`}
-                                    name={`products0name`}
-                                    onChange={validation.handleChange}
-                                    onBlur={validation.handleBlur}
-                                    value={validation.values.products[0].name || ''}
-                                  />
-                                </td>
-                                <td>
-                                  <Input
-                                    type="number"
-                                    className="form-control"
-                                    placeholder="Qty..."
-                                    id={`products0qty`}
-                                    name={`products0qty`}
-                                    onChange={validation.handleChange}
-                                    onBlur={validation.handleBlur}
-                                    value={validation.values.products[0].qty || ''}
-                                  />
-                                </td>
-                                <td>
-                                  <Input
-                                    type="number"
-                                    className="form-control"
-                                    placeholder="Price..."
-                                    id={`products0price`}
-                                    name={`products0price`}
-                                    onChange={validation.handleChange}
-                                    onBlur={validation.handleBlur}
-                                    value={validation.values.products[0].price || ''}
-                                  />
-                                </td>
-                              </tr>
-                        </tbody>
-                      </table>
-                    </Col>
-                    <h5 className="fs-14 mb-3 text-muted">
-                      *You must complete all required fields or you will not be
-                      able to create your product.
-                    </h5>
-                    <Col md={12}>
-                      <div className="text-end">
-                        <Button type="submit" className="btn btn-primary">
-                          Add
+                          Create Order
                         </Button>
                       </div>
-                    </Col>
-                  </Row>
-                </Form>
-              </CardBody>
-            </Card>
+                    </div>
+                    <form className="app-search d-flex flex-row justify-content-end align-items-center p-0">
+                      <div className="position-relative">
+                        <Input
+                          type="text"
+                          className="form-control"
+                          placeholder="Search..."
+                          id="search-options"
+                          value={serachValue}
+                          onChange={filterByText}
+                        />
+                        <span className="mdi mdi-magnify search-widget-icon"></span>
+                        <span
+                          className="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none"
+                          id="search-close-options"
+                        ></span>
+                      </div>
+                      <Button className="btn-soft-dark" onClick={clearSearch}>
+                        Clear
+                      </Button>
+                    </form>
+                  </CardHeader>
+                  <CardBody>
+                    {pending ? (
+                      <h3>Loading...</h3>
+                    ) : (
+                      <table className="table table-sm table-striped align-middle table-responsive">
+                        <thead>
+                          <tr className="fs-5 fw-semibold text-center">
+                            <th className='text-start'>Image</th>
+                            <th className='text-start'>
+                              Title
+                              <br />
+                              SKU
+                            </th>
+                            <th>Wharehouse Quantity</th>
+                            <th>Qty/Box</th>
+                            <th>
+                              Order Qty <br /> (Master Boxes)
+                            </th>
+                            <th>Total To Ship</th>
+                          </tr>
+                        </thead>
+                        <tbody className="text-center">
+                          {tableData.map((product, index) => (
+                            <WholeSaleTable key={index} product={product} />
+                          ))}
+                        </tbody>
+                      </table>
+                    )}
+                  </CardBody>
+                </Card>
+              </Col>
+            </Row>
           </Container>
         </div>
       </React.Fragment>
+      {state.showInventoryBinsModal && <InventoryBinsModal />}
+      {state.showWholeSaleOrderModal && <WholeSaleOrderModal orderNumberStart={orderNumberStart} />}
     </div>
   )
 }

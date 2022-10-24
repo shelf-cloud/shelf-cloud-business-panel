@@ -23,6 +23,8 @@ import {
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import AppContext from '@context/AppContext'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.min.css'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -124,16 +126,10 @@ const AddProducts = ({ session }: Props) => {
         }
       )
       if (!response.data.error) {
-        window.scrollTo(0, 0)
-        setMsg(response.data.msg)
-        setProductSucces(true)
+        toast.success(response.data.msg)
         resetForm()
-        setTimeout(() => setProductSucces(false), 6000)
       } else {
-        window.scrollTo(0, 0)
-        setMsg(response.data.msg)
-        setProductFail(true)
-        setTimeout(() => setProductFail(false), 6000)
+        toast.error(response.data.msg)
       }
     },
   })
@@ -151,7 +147,6 @@ const AddProducts = ({ session }: Props) => {
   }
 
   const handleBoxDimensionsCheckbox = () => {
-
     // console.log(validation)
     validation.setFieldValue('boxweight', validation.values.weight)
 
@@ -182,6 +177,7 @@ const AddProducts = ({ session }: Props) => {
       </Head>
       <React.Fragment>
         <div className="page-content">
+          <ToastContainer />
           <Container fluid>
             <BreadCrumb title="Add Products" pageTitle="Warehouse" />
             <Card>

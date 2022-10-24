@@ -23,6 +23,9 @@ import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import AppContext from '@context/AppContext'
 import useSWR from 'swr'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.min.css'
+import router from 'next/router'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -51,9 +54,12 @@ type Props = {
 const CreateOrder = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
   const title = `Add Product | ${session?.user?.name}`
+  const orderNumberStart = session?.user?.name.substring(0, 3).toUpperCase()
   const [ready, setReady] = useState(false)
   const [skus, setSkus] = useState([])
   const [validSkus, setValidSkus] = useState<string[]>([])
+  const [countries, setcountries] = useState([])
+  const [validCountries, setValidCountries] = useState<string[]>([])
   const [msg, setMsg] = useState('')
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
@@ -66,19 +72,21 @@ const CreateOrder = ({ session }: Props) => {
 
   useEffect(() => {
     if (data) {
-      data.map((skus: { sku: string; name: string }) => {
-        setValidSkus(prev => {
-          return [...prev, skus.sku]
-        })
-      })
-      setSkus(data)
+      setValidCountries(data.validCountries)
+      setValidSkus(data.validSkus)
+      setSkus(data.skus)
+      setcountries(data.countries)
+      setReady(true)
+    }
+    return () => {
+      setReady(false)
     }
   }, [data])
 
   const initialValues = {
-    recipient: '',
+    name: '',
     company: '',
-    orderNumber: '',
+    orderNumber: `00${state?.user?.orderNumber}`,
     adress1: '',
     adress2: '',
     city: '',
@@ -93,7 +101,7 @@ const CreateOrder = ({ session }: Props) => {
     products: [
       {
         sku: '',
-        name: '',
+        title: '',
         qty: '',
         price: '',
       },
@@ -101,34 +109,68 @@ const CreateOrder = ({ session }: Props) => {
   }
 
   const validationSchema = Yup.object({
-    recipient: Yup.string()
-      .max(10, 'Title is to Long')
-      .required('Please Enter Your Title'),
+    name: Yup.string()
+      .max(100, 'Recipient text is to Long')
+      .required('Please Enter Your Recipient'),
+    company: Yup.string().max(100, 'Company text is to Long'),
+    orderNumber: Yup.string()
+      .max(50, 'Order Number is to Long')
+      .required('Required Order Number'),
+    adress1: Yup.string().required('Required Adress'),
+    adress2: Yup.string(),
+    city: Yup.string().required('Required City'),
+    state: Yup.string().required('Required State'),
+    zipCode: Yup.string().required('Required Zip Code'),
+    country: Yup.string()
+      .oneOf(validCountries, 'Must be a Valid Country Code')
+      .required('Required Country'),
+    phoneNumber: Yup.string().required('Required Phone'),
+    email: Yup.string().email(),
+    amount: Yup.number()
+      .min(0, 'Amount must be greater than or equal to 0')
+      .required('Required Amount'),
+    shipping: Yup.number()
+      .min(0, 'Shipping must be greater than or equal to 0')
+      .required('Required Shipping'),
+    tax: Yup.number()
+      .min(0, 'Tax must be greater than or equal to 0')
+      .required('Required Tax'),
     products: Yup.array()
       .of(
         Yup.object({
           sku: Yup.string()
             .oneOf(validSkus, 'Must be a Valid SKU')
             .required('Required SKU'),
-          name: Yup.string()
+          title: Yup.string()
             .max(50, 'Name is to Long')
             .required('Required Name'),
           qty: Yup.number()
-            .min(1, 'Quantity Must be Grater than 0')
+            .integer('Qty must be an integer')
+            .min(1, 'Quantity must be greater than 0')
             .required('Required Qty'),
-          price: Yup.number().required('Required Price'),
+          price: Yup.number()
+            .min(0, 'Price must be greater than or equal to 0')
+            .required('Required Price'),
         })
       )
       .required('Must have products'),
   })
 
-  useEffect(() => {
-    setReady(true)
-    return () => {
-      setReady(false)
+  const handleSubmit = async (values: any, { resetForm }: any) => {
+    const response = await axios.post(
+      `api/createNewOrder?businessId=${state.user.businessId}`,
+      {
+        orderInfo: values,
+      }
+    )
+    if (!response.data.error) {
+      toast.success(response.data.msg)
+      resetForm()
+      router.push('/Shipments')
+    } else {
+      toast.error(response.data.msg)
     }
-  }, [])
-
+  }
   return (
     <div>
       <Head>
@@ -136,6 +178,7 @@ const CreateOrder = ({ session }: Props) => {
       </Head>
       <React.Fragment>
         <div className="page-content">
+          <ToastContainer />
           <Container fluid>
             <BreadCrumb title="Create Order" pageTitle="Shipments" />
             <Card>
@@ -144,9 +187,9 @@ const CreateOrder = ({ session }: Props) => {
                   <Formik
                     initialValues={initialValues}
                     validationSchema={validationSchema}
-                    onSubmit={async (values, { resetForm }) => {
-                      console.log(values)
-                    }}
+                    onSubmit={(values, { resetForm }) =>
+                      handleSubmit(values, { resetForm })
+                    }
                   >
                     {({
                       values,
@@ -169,20 +212,18 @@ const CreateOrder = ({ session }: Props) => {
                                 type="text"
                                 className="form-control"
                                 placeholder="Recipient..."
-                                id="recipient"
-                                name="recipient"
+                                id="name"
+                                name="name"
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                value={values.recipient || ''}
+                                value={values.name || ''}
                                 invalid={
-                                  touched.recipient && errors.recipient
-                                    ? true
-                                    : false
+                                  touched.name && errors.name ? true : false
                                 }
                               />
-                              {touched.recipient && errors.recipient ? (
+                              {touched.name && errors.name ? (
                                 <FormFeedback type="invalid">
-                                  {errors.recipient}
+                                  {errors.name}
                                 </FormFeedback>
                               ) : null}
                             </FormGroup>
@@ -221,28 +262,37 @@ const CreateOrder = ({ session }: Props) => {
                                 htmlFor="lastNameinput"
                                 className="form-label"
                               >
-                                Order Number
+                                *Order Number
                               </Label>
-                              <Input
-                                type="text"
-                                className="form-control"
-                                placeholder="Order Number..."
-                                id="orderNumber"
-                                name="orderNumber"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.orderNumber || ''}
-                                invalid={
-                                  touched.orderNumber && errors.orderNumber
-                                    ? true
-                                    : false
-                                }
-                              />
-                              {touched.orderNumber && errors.orderNumber ? (
-                                <FormFeedback type="invalid">
-                                  {errors.orderNumber}
-                                </FormFeedback>
-                              ) : null}
+                              <div className="input-group">
+                                <span
+                                  className="input-group-text fw-semibold fs-5"
+                                  id="basic-addon1"
+                                >
+                                  {orderNumberStart}-
+                                </span>
+                                <Input
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="Order Number..."
+                                  aria-describedby="basic-addon1"
+                                  id="orderNumber"
+                                  name="orderNumber"
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                  value={values.orderNumber || ''}
+                                  invalid={
+                                    touched.orderNumber && errors.orderNumber
+                                      ? true
+                                      : false
+                                  }
+                                />
+                                {touched.orderNumber && errors.orderNumber ? (
+                                  <FormFeedback type="invalid">
+                                    {errors.orderNumber}
+                                  </FormFeedback>
+                                ) : null}
+                              </div>
                             </FormGroup>
                           </Col>
                           <Col md={7}>
@@ -251,7 +301,7 @@ const CreateOrder = ({ session }: Props) => {
                                 htmlFor="compnayNameinput"
                                 className="form-label"
                               >
-                                Address 1
+                                *Address 1
                               </Label>
                               <Input
                                 type="text"
@@ -298,9 +348,9 @@ const CreateOrder = ({ session }: Props) => {
                             </FormGroup>
                             <Col
                               md={12}
-                              className="d-flex justify-content-between w-100"
+                              className="d-flex justify-content-between w-100 gap-1"
                             >
-                              <Col md={2}>
+                              <Col md={3}>
                                 <FormGroup className="mb-3">
                                   <Label
                                     htmlFor="compnayNameinput"
@@ -328,7 +378,7 @@ const CreateOrder = ({ session }: Props) => {
                                   ) : null}
                                 </FormGroup>
                               </Col>
-                              <Col md={2}>
+                              <Col md={3}>
                                 <FormGroup className="mb-3">
                                   <Label
                                     htmlFor="compnayNameinput"
@@ -401,6 +451,7 @@ const CreateOrder = ({ session }: Props) => {
                                     className="form-control"
                                     placeholder="Country..."
                                     id="country"
+                                    list="countries"
                                     name="country"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
@@ -416,6 +467,24 @@ const CreateOrder = ({ session }: Props) => {
                                       {errors.country}
                                     </FormFeedback>
                                   ) : null}
+                                  <datalist id="countries">
+                                    {countries.map(
+                                      (
+                                        country: {
+                                          name: string
+                                          code: string
+                                        },
+                                        index
+                                      ) => (
+                                        <option
+                                          key={`country${index}`}
+                                          value={country.code}
+                                        >
+                                          {country.name} / {country.code}
+                                        </option>
+                                      )
+                                    )}
+                                  </datalist>
                                 </FormGroup>
                               </Col>
                             </Col>
@@ -424,7 +493,7 @@ const CreateOrder = ({ session }: Props) => {
                                 htmlFor="lastNameinput"
                                 className="form-label"
                               >
-                                Phone #
+                                *Phone #
                               </Label>
                               <Input
                                 type="text"
@@ -480,7 +549,7 @@ const CreateOrder = ({ session }: Props) => {
                                 htmlFor="lastNameinput"
                                 className="form-label"
                               >
-                                Amount Paid
+                                *Amount Paid
                               </Label>
                               <Input
                                 type="text"
@@ -506,7 +575,7 @@ const CreateOrder = ({ session }: Props) => {
                                 htmlFor="lastNameinput"
                                 className="form-label"
                               >
-                                Shipping Paid
+                                *Shipping Paid
                               </Label>
                               <Input
                                 type="text"
@@ -534,7 +603,7 @@ const CreateOrder = ({ session }: Props) => {
                                 htmlFor="lastNameinput"
                                 className="form-label"
                               >
-                                Tax Paid
+                                *Tax Paid
                               </Label>
                               <Input
                                 type="text"
@@ -558,17 +627,27 @@ const CreateOrder = ({ session }: Props) => {
                           </Col>
                           <div className="border mt-3 border-dashed" />
                           <Row>
-                            <h5 className="fs-5 m-3 fw-bolder">
+                            <h5 className="fs-5 m-0 mt-3 mb-3 fw-bolder mw-100">
                               Order Products
                             </h5>
-                            <Col xl={12}>
+                            <Col xl={12} className="p-0">
                               <table className="table table-hover table-centered align-middle">
                                 <thead>
-                                  <th></th>
-                                  <th>SKU</th>
-                                  <th>Name</th>
-                                  <th>Qty</th>
-                                  <th>Price</th>
+                                  <tr>
+                                    <th className="fs-4\5 m-0 fw-semibold text-center bg-primary text-white"></th>
+                                    <th className="fs-4\5 m-0 fw-semibold text-center bg-primary text-white">
+                                      SKU
+                                    </th>
+                                    <th className="fs-4\5 m-0 fw-semibold text-center bg-primary text-white">
+                                      Title
+                                    </th>
+                                    <th className="fs-4\5 m-0 fw-semibold text-center bg-primary text-white">
+                                      Qty
+                                    </th>
+                                    <th className="fs-4\5 m-0 fw-semibold text-center bg-primary text-white">
+                                      Price
+                                    </th>
+                                  </tr>
                                 </thead>
                                 <tbody>
                                   <FieldArray name="products">
@@ -644,6 +723,10 @@ const CreateOrder = ({ session }: Props) => {
                                                         placeholder="Sku..."
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
+                                                        value={
+                                                          values.products[index]
+                                                            .sku || ''
+                                                        }
                                                         invalid={
                                                           meta.touched &&
                                                           meta.error
@@ -670,7 +753,7 @@ const CreateOrder = ({ session }: Props) => {
                                                       index
                                                     ) => (
                                                       <option
-                                                        key={index}
+                                                        key={`sku${index}`}
                                                         value={skus.sku}
                                                       >
                                                         {skus.sku} / {skus.name}
@@ -681,7 +764,7 @@ const CreateOrder = ({ session }: Props) => {
                                               </td>
                                               <td>
                                                 <Field
-                                                  name={`products.${index}.name`}
+                                                  name={`products.${index}.title`}
                                                 >
                                                   {({
                                                     form: {
@@ -695,10 +778,15 @@ const CreateOrder = ({ session }: Props) => {
                                                       <Input
                                                         type="text"
                                                         className="form-control"
-                                                        name={`products.${index}.name`}
-                                                        placeholder="Name..."
+                                                        name={`products.${index}.title`}
+                                                        placeholder="Title..."
+                                                        list="skuNames"
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
+                                                        value={
+                                                          values.products[index]
+                                                            .title || ''
+                                                        }
                                                         invalid={
                                                           meta.touched &&
                                                           meta.error
@@ -715,6 +803,21 @@ const CreateOrder = ({ session }: Props) => {
                                                     </FormGroup>
                                                   )}
                                                 </Field>
+                                                <datalist id="skuNames">
+                                                  {skus.map(
+                                                    (
+                                                      skus: {
+                                                        name: string
+                                                      },
+                                                      index
+                                                    ) => (
+                                                      <option
+                                                        key={`skuName${index}`}
+                                                        value={skus.name}
+                                                      />
+                                                    )
+                                                  )}
+                                                </datalist>
                                               </td>
                                               <td>
                                                 <Field
@@ -730,12 +833,16 @@ const CreateOrder = ({ session }: Props) => {
                                                   }: any) => (
                                                     <FormGroup className="mb-3">
                                                       <Input
-                                                        type="number"
+                                                        type="text"
                                                         className="form-control"
                                                         name={`products.${index}.qty`}
                                                         placeholder="Qty..."
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
+                                                        value={
+                                                          values.products[index]
+                                                            .qty || ''
+                                                        }
                                                         invalid={
                                                           meta.touched &&
                                                           meta.error
@@ -767,12 +874,16 @@ const CreateOrder = ({ session }: Props) => {
                                                   }: any) => (
                                                     <FormGroup className="mb-3">
                                                       <Input
-                                                        type="number"
+                                                        type="text"
                                                         className="form-control"
                                                         name={`products.${index}.price`}
                                                         placeholder="Price..."
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
+                                                        value={
+                                                          values.products[index]
+                                                            .price || ''
+                                                        }
                                                         invalid={
                                                           meta.touched &&
                                                           meta.error
@@ -793,9 +904,6 @@ const CreateOrder = ({ session }: Props) => {
                                             </tr>
                                           )
                                         )}
-                                        {errors.products === 'string' ? (
-                                          <div>{errors.products}</div>
-                                        ) : null}
                                       </>
                                     )}
                                   </FieldArray>
@@ -809,8 +917,11 @@ const CreateOrder = ({ session }: Props) => {
                           </h5>
                           <Col md={12}>
                             <div className="text-end">
-                              <Button type="submit" className="btn btn-primary">
-                                Add
+                              <Button
+                                type="submit"
+                                className="fs-5 btn bg-primary"
+                              >
+                                Add Order
                               </Button>
                             </div>
                           </Col>

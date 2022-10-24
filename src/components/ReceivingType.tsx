@@ -17,44 +17,83 @@ const ReceivingType = ({ data }: Props) => {
     <div style={{ backgroundColor: '#f3f3f9', padding: '10px' }}>
       <Row>
         <Col xl={4}>
-          <Card>
-            <CardHeader className="d-flex flex-row justify-content-between align-items-center position-relative">
-              <h5 className="fw-bold">Shipping</h5>
-              {/* <div style={{ position: 'absolute', right: '0px' }}>
+          <Col xl={12}>
+            <Card>
+              <CardHeader className="d-flex flex-row justify-content-between align-items-center position-relative">
+                <h5 className="fw-bold">Shipping</h5>
+                {/* <div style={{ position: 'absolute', right: '0px' }}>
                 <Animation
                   src="https://cdn.lordicon.com/uetqnvvg.json"
                   colors="primary:#405189,secondary:#0ab39c"
                   style={{ width: '50px', height: '50px' }}
                 />
               </div> */}
-            </CardHeader>
-            <CardBody>
-              <table className="table table-sm">
-                <tbody>
-                  <tr>
-                    <td className="fw-bold">Type of Service:</td>
-                    <td>{data.carrierService}</td>
-                  </tr>
-                  <tr>
-                    <td className="fw-bold"># Of Pallets:</td>
-                    <td>{data.numberPallets}</td>
-                  </tr>
-                  <tr>
-                    <td className="fw-bold"># Of Boxes:</td>
-                    <td>{data.numberBoxes}</td>
-                  </tr>
-                  <tr>
-                    <td className="fw-bold">Shrink Wrap:</td>
-                    <td>{data.shrinkWrap}</td>
-                  </tr>
-                  <tr>
-                    <td className="fw-bold">Man Hours:</td>
-                    <td>{data.manHours}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </CardBody>
-          </Card>
+              </CardHeader>
+              <CardBody>
+                <table className="table table-sm">
+                  <tbody>
+                    <tr>
+                      <td className="fw-bold">Type of Service:</td>
+                      <td>{data.carrierService}</td>
+                    </tr>
+                    <tr>
+                      <td className="fw-bold"># Of Pallets:</td>
+                      <td>{data.numberPallets}</td>
+                    </tr>
+                    <tr>
+                      <td className="fw-bold"># Of Boxes:</td>
+                      <td>{data.numberBoxes}</td>
+                    </tr>
+                    <tr>
+                      <td className="fw-bold">Shrink Wrap:</td>
+                      <td>{data.shrinkWrap}</td>
+                    </tr>
+                    <tr>
+                      <td className="fw-bold">Man Hours:</td>
+                      <td>{data.manHours}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </CardBody>
+            </Card>
+          </Col>
+          <Col xl={12}>
+            <Card>
+              <CardHeader>
+                <h5 className="fw-bold">Charge Details</h5>
+              </CardHeader>
+              <CardBody>
+                <table className="table table-sm table-bordered table-nowrap mb-0">
+                  <tbody>
+                    <tr>
+                      <td className="fw-bold">Service</td>
+                      <td>$ {data.receivingService.toFixed(2)}</td>
+                    </tr>
+                    <tr>
+                      <td className="fw-bold">Pallets</td>
+                      <td>$ {data.receivingPallets.toFixed(2)}</td>
+                    </tr>
+                    <tr>
+                      <td className="fw-bold">Wrap Service</td>
+                      <td>$ {data.receivingWrapService.toFixed(2)}</td>
+                    </tr>
+                    <tr>
+                      <td className="fw-bold">Man Hour</td>
+                      <td>$ {data.manHour.toFixed(2)}</td>
+                    </tr>
+                    <tr>
+                      <td className="fw-bold">Extra Charge</td>
+                      <td>$ {data.extraCharge.toFixed(2)}</td>
+                    </tr>
+                    <tr className="bg-primary text-white fw-semibold">
+                      <td className="fw-bold">TOTAL</td>
+                      <td>$ {data.totalCharge.toFixed(2)}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </CardBody>
+            </Card>
+          </Col>
         </Col>
         <Col xl={8}>
           <Card>
@@ -97,57 +136,15 @@ const ReceivingType = ({ data }: Props) => {
         </Col>
       </Row>
       <Row>
-        <Col xl={4}>
+        <Col xl={12} className="d-flex justify-content-end align-items-end">
           <Card>
-            <CardHeader>
-              <h5 className="fw-bold">Charge Details</h5>
-            </CardHeader>
-            <CardBody>
-              <table className="table table-sm table-bordered table-nowrap mb-0">
-                <tbody>
-                  <tr>
-                    <td className="fw-bold">Service</td>
-                    <td>$ {data.receivingService.toFixed(2)}</td>
-                  </tr>
-                  <tr>
-                    <td className="fw-bold">Pallets</td>
-                    <td>$ {data.receivingPallets.toFixed(2)}</td>
-                  </tr>
-                  <tr>
-                    <td className="fw-bold">Wrap Service</td>
-                    <td>$ {data.receivingWrapService.toFixed(2)}</td>
-                  </tr>
-                  <tr>
-                    <td className="fw-bold">Man Hour</td>
-                    <td>$ {data.manHour.toFixed(2)}</td>
-                  </tr>
-                  <tr>
-                    <td className="fw-bold">Extra Charge</td>
-                    <td>$ {data.extraCharge.toFixed(2)}</td>
-                  </tr>
-                  <tr className="bg-primary text-white fw-semibold">
-                    <td className="fw-bold">TOTAL</td>
-                    <td>$ {data.totalCharge.toFixed(2)}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </CardBody>
-          </Card>
-        </Col>
-        <Col xl={8} className="d-flex justify-content-end align-items-end">
-          <Card>
-            {data.proofOfShipped != '' && data.proofOfShipped != null ? (
+            {data.proofOfShipped != '' && data.proofOfShipped != null && (
               <a href={data.proofOfShipped} target="blank">
                 <Button color="info" className="btn-label">
                   <i className="las la-truck label-icon align-middle fs-16 me-2" />
                   Proof Of Received
                 </Button>
               </a>
-            ) : (
-              <Button color="warning" className="btn-label">
-                <i className="las la-eye-slash label-icon align-middle fs-16 me-2" />
-                Proof Not Available
-              </Button>
             )}
           </Card>
         </Col>
