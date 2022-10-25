@@ -58,7 +58,7 @@ const Shipments = ({ session }: Props) => {
   )
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<OrderRowType[]>([])
-  const [searchValue, setSearchValue] = useState<String>('')
+  const [searchValue, setSearchValue] = useState<any>('')
   const [searchType, setSearchType] = useState<String>('')
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
@@ -226,6 +226,7 @@ const Shipments = ({ session }: Props) => {
                           className="form-control"
                           placeholder="Search..."
                           id="search-options"
+                          value={searchValue}
                           onChange={(e) => setSearchValue(e.target.value)}
                         />
                         <span className="mdi mdi-magnify search-widget-icon"></span>
