@@ -191,10 +191,10 @@ const WholeSaleTable = ({ allData, setAllData, pending }: Props) => {
           <>
             <Input
               type="number"
-              disabled={row?.maxOrderQty || 0 <= 0 ? true : false}
+              disabled={(row?.maxOrderQty || 0) <= 0 ? true : false}
               className="form-control"
               placeholder={
-                row?.maxOrderQty || 0 <= 0 ? 'Not Enough Qty' : 'Order Qty...'
+                (row?.maxOrderQty || 0) <= 0 ? 'Not Enough Qty' : 'Order Qty...'
               }
               value={row.orderQty}
               onChange={(e) =>
