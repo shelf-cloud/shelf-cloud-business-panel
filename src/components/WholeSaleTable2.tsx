@@ -191,23 +191,23 @@ const WholeSaleTable = ({ allData, setAllData, pending }: Props) => {
           <>
             <Input
               type="number"
-              disabled={row.maxOrderQty <= 0 ? true : false}
+              disabled={row?.maxOrderQty || 0 <= 0 ? true : false}
               className="form-control"
               placeholder={
-                row.maxOrderQty <= 0 ? 'Not Enough Qty' : 'Order Qty...'
+                row?.maxOrderQty || 0 <= 0 ? 'Not Enough Qty' : 'Order Qty...'
               }
               value={row.orderQty}
               onChange={(e) =>
                 handleOrderQty(
                   e.target.value,
                   row.sku,
-                  row.qtyBox
+                  row?.qtyBox || 0
                 )
               }
               max={row.maxOrderQty}
-              invalid={Number(row.orderQty) > row.maxOrderQty ? true : false}
+              invalid={Number(row.orderQty) > (row?.maxOrderQty || 0) ? true : false}
             />
-            {Number(row.orderQty) > row.maxOrderQty ? (
+            {Number(row.orderQty) > (row?.maxOrderQty || 0) ? (
               <FormFeedback className="text-start" type="invalid">
                 Not enough Master Boxes!
               </FormFeedback>
