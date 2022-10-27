@@ -5,7 +5,7 @@ import { GetServerSideProps } from 'next'
 import { WholesaleProduct, wholesaleProductRow } from '@typings'
 import axios from 'axios'
 import Head from 'next/head'
-import { ToastContainer} from 'react-toastify'
+import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
 import {
   Button,
@@ -21,7 +21,6 @@ import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 // import useSWR from 'swr'
 import InventoryBinsModal from '@components/InventoryBinsModal'
-import WholeSaleTable from '@components/WholeSaleTable'
 import WholeSaleTable2 from '@components/WholeSaleTable2'
 import WholeSaleOrderModal from '@components/WholeSaleOrderModal'
 
@@ -92,7 +91,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
             qtyBox: product.boxQty,
             orderQty: '',
             totalToShip: 0,
-            maxOrderQty: product.maxOrderQty
+            maxOrderQty: product.maxOrderQty,
           }
           list.push(row)
         })
@@ -186,36 +185,6 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                       setAllData={setAllData}
                       pending={pending}
                     />
-
-                    {/* // <table className="table table-sm table-striped align-middle table-responsive">
-                      //   <thead>
-                      //     <tr className="fs-5 fw-semibold text-center">
-                      //       <th className="text-start">Image</th>
-                      //       <th className="text-start">
-                      //         Title
-                      //         <br />
-                      //         SKU
-                      //       </th>
-                      //       <th>Wharehouse Quantity</th>
-                      //       <th>Qty/Box</th>
-                      //       <th>
-                      //         Order Qty <br /> (Master Boxes)
-                      //       </th>
-                      //       <th>Total To Ship</th>
-                      //     </tr>
-                      //   </thead>
-                      //   <tbody className="text-center">
-                      //     {filteredItems.map((product, index) => (
-                      //       <WholeSaleTable
-                      //         key={product.sku}
-                      //         index={index}
-                      //         product={product}
-                      //         allData={allData}
-                      //         setAllData={setAllData}
-                      //       />
-                      //     ))}
-                      //   </tbody>
-                      // </table> */}
                   </CardBody>
                 </Card>
               </Col>
