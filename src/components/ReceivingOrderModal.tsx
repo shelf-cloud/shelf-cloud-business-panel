@@ -20,15 +20,14 @@ import axios from 'axios'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { WholeSaleOrderProduct, wholesaleProductRow } from '@typings'
+import { wholesaleProductRow } from '@typings'
 import router from 'next/router'
-import moment from 'moment'
 
 type Props = {
   orderNumberStart: string
   orderProducts: wholesaleProductRow[]
 }
-const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
+const ReceivingOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
   const { state, setWholeSaleOrderModal }: any = useContext(AppContext)
 
   useEffect(() => {
@@ -43,56 +42,35 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
 
     initialValues: {
       orderNumber: `00${state?.user?.orderNumber}`,
-      type: '',
-      numberOfPallets: 1,
     },
     validationSchema: Yup.object({
       orderNumber: Yup.string()
         .max(100, 'Title is to Long')
         .required('Please enter Order Number'),
-      type: Yup.string()
-        .oneOf(['LTL', 'Parcel Boxes'], 'Please Choose a Type')
-        .required('Please Choose a Type'),
     }),
     onSubmit: async (values, { resetForm }) => {
       const response = await axios.post(
-        `api/createWholesaleOrder?businessId=${state.user.businessId}`,
+        `api/createReceivingOrder?businessId=${state.user.businessId}`,
         {
           shippingProducts: orderProducts.map((product) => {
             return {
               sku: product.sku,
-              qty: product.totalToShip,
+              qty: Number(product.orderQty),
               storeId: state.user.businessId,
               qtyPicked: 0,
               pickedHistory: [],
             }
           }),
-          groovePackerProducts: orderProducts.map((product) => {
-            return {
-              sku: product.sku,
-              qty: product.totalToShip,
-              storeId: state.user.businessId,
-              qtyScanned: 0,
-              history: [{
-                sku: product.sku,
-                status: 'Awaiting',
-                user: state.user.name,
-                date: moment().format('YYYY-MM-DD h:mm:ss')
-              }],
-            }
-          }),
           orderInfo: {
             orderNumber: values.orderNumber,
-            carrierService: values.type,
-            isPallets: values.type == 'LTL' ? true : false,
-            numberOfPallets: values.type == 'LTL' ? values.numberOfPallets : 0,
             orderProducts: orderProducts.map((product) => {
               return {
                 sku: product.sku,
                 name: product.title,
                 boxQty: product.qtyBox,
-                quantity: product.totalToShip,
+                quantity: Number(product.orderQty),
                 businessId: product.quantity.businessId,
+                qtyReceived: 0,
               }
             }),
           },
@@ -103,7 +81,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
         toast.success(response.data.msg)
         resetForm()
         setWholeSaleOrderModal(false)
-        router.push('/Shipments')
+        router.push('/Receivings')
       } else {
         toast.error(response.data.msg)
       }
@@ -174,74 +152,12 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                 </div>
               </FormGroup>
             </Col>
-            <Row>
-              <Col md={6}>
-                <FormGroup className="mb-3">
-                  <Label htmlFor="firstNameinput" className="form-label">
-                    *Type of Shipment
-                  </Label>
-                  <Input
-                    type="select"
-                    className="form-control"
-                    id="type"
-                    name="type"
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    invalid={
-                      validation.touched.type && validation.errors.type
-                        ? true
-                        : false
-                    }
-                  >
-                    <option value="">Choose a Type..</option>
-                    <option value="LTL">Pallets</option>
-                    <option value="Parcel Boxes">Parcel Boxes</option>
-                  </Input>
-                  {validation.touched.type && validation.errors.type ? (
-                    <FormFeedback type="invalid">
-                      {validation.errors.type}
-                    </FormFeedback>
-                  ) : null}
-                </FormGroup>
-              </Col>
-              {validation.values.type == 'LTL' && (
-                <Col md={4}>
-                  <FormGroup className="mb-3">
-                    <Label htmlFor="firstNameinput" className="form-label">
-                      *How many Pallets will be used?
-                    </Label>
-                    <Input
-                      type="number"
-                      className="form-control"
-                      id="numberOfPallets"
-                      name="numberOfPallets"
-                      onChange={validation.handleChange}
-                      onBlur={validation.handleBlur}
-                      value={validation.values.numberOfPallets || ''}
-                      invalid={
-                        validation.touched.numberOfPallets &&
-                        validation.errors.numberOfPallets
-                          ? true
-                          : false
-                      }
-                    />
-                    {validation.touched.numberOfPallets &&
-                    validation.errors.numberOfPallets ? (
-                      <FormFeedback type="invalid">
-                        {validation.errors.numberOfPallets}
-                      </FormFeedback>
-                    ) : null}
-                  </FormGroup>
-                </Col>
-              )}
-            </Row>
             <Col md={12}>
               <table className="table align-middle table-responsive table-nowrap table-striped-columns">
                 <thead>
                   <tr>
                     <th>SKU</th>
-                    <th className="text-center">Master Boxes</th>
-                    <th className="text-center">Total Qty To Ship</th>
+                    <th className="text-center">Total to Received</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -249,7 +165,6 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     <tr key={index}>
                       <td>{product.sku}</td>
                       <td className="text-center">{product.orderQty}</td>
-                      <td className="text-center">{product.totalToShip}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -269,4 +184,4 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
   )
 }
 
-export default WholeSaleOrderModal
+export default ReceivingOrderModal

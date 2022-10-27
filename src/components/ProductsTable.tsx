@@ -38,38 +38,66 @@ const ProductsTable = ({
   const { setModalProductInfo, setModalProductDetails }: any =
     useContext(AppContext)
 
+  const caseInsensitiveSort = (rowA: ProductRowType, rowB: ProductRowType) => {
+    const a = rowA.Title.toLowerCase()
+    const b = rowB.Title.toLowerCase()
+
+    if (a > b) {
+      return 1
+    }
+
+    if (b > a) {
+      return -1
+    }
+
+    return 0
+  }
+  const quantitySort = (rowA: ProductRowType, rowB: ProductRowType) => {
+    const a = Number(rowA.Quantity.quantity)
+    const b = Number(rowB.Quantity.quantity)
+
+    if (a > b) {
+      return 1
+    }
+
+    if (b > a) {
+      return -1
+    }
+
+    return 0
+  }
   const columns: any = [
-    {
-      name: (
-        <Input
-          className="form-check-input fs-15"
-          type="checkbox"
-          name="checkAll"
-          value="option1"
-        />
-      ),
-      cell: () => (
-        <input
-          className="form-check-input fs-15"
-          type="checkbox"
-          name="checkAll"
-          value="option1"
-        />
-      ),
-      sortable: false,
-      width: '50px',
-      compact: true,
-      center: true,
-    },
+    // {
+    //   name: (
+    //     <Input
+    //       className="form-check-input fs-15"
+    //       type="checkbox"
+    //       name="checkAll"
+    //       value="option1"
+    //     />
+    //   ),
+    //   cell: () => (
+    //     <input
+    //       className="form-check-input fs-15"
+    //       type="checkbox"
+    //       name="checkAll"
+    //       value="option1"
+    //     />
+    //   ),
+    //   sortable: false,
+    //   width: '50px',
+    //   compact: true,
+    //   center: true,
+    // },
     {
       name: <span className="font-weight-bold fs-13">Image</span>,
       selector: (cell: { Image: any }) => {
         return (
           <div
             style={{
-              width: '80px',
-              height: '70px',
-              padding: '2px 0px',
+              width: '70px',
+              height: '60px',
+              margin: '2px 0px',
               position: 'relative',
             }}
           >
@@ -111,6 +139,7 @@ const ProductsTable = ({
       sortable: true,
       wrap: true,
       grow: 1.5,
+      sortFunction: caseInsensitiveSort,
       //   compact: true,
     },
     {
@@ -132,7 +161,7 @@ const ProductsTable = ({
           </div>
         )
       },
-      sortable: true,
+      sortable: false,
       compact: true,
       grow: 1.3,
     },
@@ -159,6 +188,7 @@ const ProductsTable = ({
       sortable: true,
       compact: true,
       center: true,
+      sortFunction: quantitySort
     },
     {
       name: <span className="font-weight-bold fs-13">Unit Dimensions</span>,
@@ -271,6 +301,7 @@ const ProductsTable = ({
         progressPending={pending}
         striped={true}
         dense
+        defaultSortFieldId={2}
       />
     </>
   )

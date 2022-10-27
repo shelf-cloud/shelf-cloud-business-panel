@@ -135,7 +135,7 @@ const InventoryLogs = ({ session }: Props) => {
       <React.Fragment>
         <div className="page-content">
           <Container fluid>
-            <BreadCrumb title="Products" pageTitle="Warehouse" />
+            <BreadCrumb title="Inventory Log" pageTitle="Warehouse" />
             <Row>
               <Col lg={12}>
                 <Card>

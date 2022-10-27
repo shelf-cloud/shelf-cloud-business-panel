@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useMemo } from 'react'
 import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
 import { ProductRowType, Product } from '@typings'
@@ -23,6 +23,7 @@ import useSWR from 'swr'
 import ProductsTable from '@components/ProductsTable'
 import InventoryBinsModal from '@components/InventoryBinsModal'
 import EditProductModal from '@components/EditProductModal'
+import { CSVLink, CSVDownload } from 'react-csv'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -98,7 +99,7 @@ const Products = ({ session }: Props) => {
             inventoryId: product.inventoryId,
             businessId: product.businessId,
             sku: product.sku,
-            state: product.activeState
+            state: product.activeState,
           },
         }
         list.push(row)
@@ -152,6 +153,50 @@ const Products = ({ session }: Props) => {
     }
   }
 
+  const csvData = useMemo(() => {
+    const data: any[] = [
+      [
+        'Title',
+        'SKU',
+        'AISN',
+        'FNSKU',
+        'Barcode',
+        'Quantity',
+        'Weight',
+        'Length',
+        'Width',
+        'Height',
+        'Box Weight',
+        'Box Length',
+        'Box Width',
+        'Box Height',
+        'Box Quantity',
+      ],
+    ]
+
+    allData.forEach((item) =>
+      data.push([
+        item?.Title,
+        item?.SKU,
+        item?.ASIN,
+        item?.FNSKU,
+        item?.Barcode,
+        item?.Quantity?.quantity,
+        item?.unitDimensions?.weight,
+        item?.unitDimensions?.length,
+        item?.unitDimensions?.width,
+        item?.unitDimensions?.height,
+        item?.boxDimensions?.weight,
+        item?.boxDimensions?.length,
+        item?.boxDimensions?.width,
+        item?.boxDimensions?.height,
+        item?.qtyBox,
+      ])
+    )
+
+    return data
+  }, [allData])
+
   const title = `Products | ${session?.user?.name}`
   return (
     <div>
@@ -167,6 +212,18 @@ const Products = ({ session }: Props) => {
               <Col lg={12}>
                 <Card>
                   <CardHeader>
+                    <Row className="pb-3 text-end">
+                      <CSVLink
+                        data={csvData}
+                        filename={`${session?.user?.name.toUpperCase()}-Products.csv`}
+                      >
+                        <Button color='primary' className='btn-label fs-6'>
+                          <i className="las la-file-download label-icon align-middle fs-2 me-2" />
+                          Export
+                        </Button>
+                      </CSVLink>
+                      {/* <CSVDownload data={csvData} target="_blank" /> */}
+                    </Row>
                     <form className="app-search d-flex flex-row justify-content-end align-items-center p-0">
                       <div className="position-relative">
                         <Input

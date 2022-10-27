@@ -20,10 +20,12 @@ import axios from 'axios'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
+import { useSWRConfig } from 'swr'
 
 type Props = {}
 
 function EditProductModal({}: Props) {
+  const { mutate } = useSWRConfig()
   const { state, setShowEditProductModal }: any = useContext(AppContext)
   const [loading, setLoading] = useState(true)
 
@@ -40,15 +42,15 @@ function EditProductModal({}: Props) {
       asin: '',
       fnsku: '',
       barcode: '',
-      weight: '',
-      width: '',
-      length: '',
-      height: '',
-      boxweight: '',
-      boxwidth: '',
-      boxlength: '',
-      boxheight: '',
-      boxqty: '',
+      // weight: '',
+      // width: '',
+      // length: '',
+      // height: '',
+      // boxweight: '',
+      // boxwidth: '',
+      // boxlength: '',
+      // boxheight: '',
+      // boxqty: '',
     },
     validationSchema: Yup.object({
       title: Yup.string()
@@ -99,6 +101,8 @@ function EditProductModal({}: Props) {
         )
       if (!response.data.error) {
         toast.success(response.data.msg)
+        mutate(`/api/getBusinessInventory?businessId=${state.user.businessId}`)
+        setShowEditProductModal(false)
       } else {
         toast.error(response.data.msg)
       }
@@ -242,6 +246,7 @@ function EditProductModal({}: Props) {
                     *SKU
                   </Label>
                   <Input
+                    disabled={true}
                     type="text"
                     className="form-control"
                     placeholder="Sku..."
@@ -371,7 +376,7 @@ function EditProductModal({}: Props) {
                   ) : null}
                 </FormGroup>
               </Col>
-              <div className="border mt-3 border-dashed"></div>
+              {/* <div className="border mt-3 border-dashed"></div>
               <h5 className="fs-5 m-3 fw-bolder">Unit Dimensions</h5>
               <Col md={3}>
                 <FormGroup className="mb-3">
@@ -480,8 +485,8 @@ function EditProductModal({}: Props) {
                     </FormFeedback>
                   ) : null}
                 </FormGroup>
-              </Col>
-              <div className="border mt-3 border-dashed"></div>
+              </Col> */}
+              {/* <div className="border mt-3 border-dashed"></div>
               <h5 className="fs-5 m-3 fw-bolder">Box Dimensions</h5>
               <Col md={3}>
                 <FormGroup className="mb-3">
@@ -623,7 +628,7 @@ function EditProductModal({}: Props) {
                     </FormFeedback>
                   ) : null}
                 </FormGroup>
-              </Col>
+              </Col> */}
               <h5 className="fs-14 mb-3 text-muted">
                 *You must complete all required fields or you will not be able
                 to create your product.

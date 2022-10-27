@@ -1,0 +1,245 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { wholesaleProductRow } from '@typings'
+import Image from 'next/image'
+import React, { useContext} from 'react'
+import AppContext from '@context/AppContext'
+import { Button, FormFeedback, Input } from 'reactstrap'
+import DataTable from 'react-data-table-component'
+
+type Props = {
+  allData: wholesaleProductRow[]
+  setAllData: (allData: wholesaleProductRow[]) => void
+  pending: boolean
+}
+
+const WholeSaleTable = ({ allData, setAllData, pending }: Props) => {
+  const { setModalProductInfo }: any = useContext(AppContext)
+
+  const handleOrderQty = (
+    value: string,
+    sku: string,
+    qtyBox: number,
+  ) => {
+    if (Number(value) == 0 || value == '') {
+      const newData: any = allData.map((item) => {
+        if (item.sku === sku) {
+          item.orderQty = ''
+          item.totalToShip = 0
+          return item
+        } else {
+          return item
+        }
+      })
+
+      setAllData(newData)
+      return
+    }
+    const totalQtyShip = Number(value) * qtyBox
+    const newData: any = allData.map((item) => {
+      if (item.sku === sku) {
+        item.orderQty = value
+        item.totalToShip = totalQtyShip
+        return item
+      } else {
+        return item
+      }
+    })
+    setAllData(newData)
+  }
+
+  const caseInsensitiveSort = (
+    rowA: wholesaleProductRow,
+    rowB: wholesaleProductRow
+  ) => {
+    const a = rowA.title.toLowerCase()
+    const b = rowB.title.toLowerCase()
+
+    if (a > b) {
+      return 1
+    }
+
+    if (b > a) {
+      return -1
+    }
+
+    return 0
+  }
+
+  const quantitySort = (
+    rowA: wholesaleProductRow,
+    rowB: wholesaleProductRow
+  ) => {
+    const a = Number(rowA.quantity.quantity)
+    const b = Number(rowB.quantity.quantity)
+
+    if (a > b) {
+      return 1
+    }
+
+    if (b > a) {
+      return -1
+    }
+
+    return 0
+  }
+
+  const conditionalRowStyles = [
+    {
+      when: (row: wholesaleProductRow) => Number(row.maxOrderQty) == 0,
+      classNames: ['bg-warning bg-opacity-25'],
+    },
+    {
+      when: (row: wholesaleProductRow) => Number(row.orderQty) > 0,
+      classNames: ['bg-success bg-opacity-25'],
+    },
+  ]
+
+  const columns: any = [
+    {
+      name: <span className="fw-bold fs-5">Image</span>,
+      selector: (row: wholesaleProductRow) => {
+        return (
+          <div
+            style={{
+              width: '70px',
+              height: '60px',
+              margin: '2px 0px',
+              position: 'relative',
+            }}
+          >
+            <Image
+              src={
+                row.image
+                  ? row.image
+                  : 'https://electrostoregroup.com/Onix/img/no-image.png'
+              }
+              alt="product Image"
+              layout="fill"
+              objectFit="contain"
+              objectPosition="center"
+            />
+          </div>
+        )
+      },
+      sortable: false,
+      center: true,
+      compact: true,
+      width: '80px',
+    },
+    {
+      name: (
+        <span className="fw-bold fs-5">
+          Title
+          <br />
+          SKU
+        </span>
+      ),
+      selector: (row: wholesaleProductRow) => {
+        return (
+          <div>
+            <p style={{ margin: '0px', fontWeight: '800' }}>{row.title}</p>
+            <p style={{ margin: '0px' }}>{row.sku}</p>
+          </div>
+        )
+      },
+      sortable: true,
+      wrap: true,
+      grow: 1,
+      sortFunction: caseInsensitiveSort,
+      //   compact: true,
+    },
+    {
+      name: <span className="fw-bold fs-5">Quantity</span>,
+      selector: (cell: any) => {
+        return (
+          <Button
+            color="info"
+            outline
+            className="btn btn-ghost-info"
+            onClick={() => {
+              setModalProductInfo(
+                cell.quantity.inventoryId,
+                cell.quantity.businessId,
+                cell.quantity.sku
+              )
+            }}
+          >
+            {cell.quantity.quantity}
+          </Button>
+        )
+      },
+      sortable: true,
+      compact: true,
+      center: true,
+      sortFunction: quantitySort,
+    },
+    {
+      name: <span className="fw-bold fs-5">Qty/Box</span>,
+      selector: (row: wholesaleProductRow) => row.qtyBox,
+      sortable: true,
+      center: true,
+      compact: true,
+    },
+    {
+      name: (
+        <span className="fw-bold fs-5">
+          Order Qty <br /> (Master Boxes)
+        </span>
+      ),
+      selector: (row: wholesaleProductRow) => {
+        return (
+          <>
+            <Input
+              type="number"
+              disabled={row.maxOrderQty <= 0 ? true : false}
+              className="form-control"
+              placeholder={
+                row.maxOrderQty <= 0 ? 'Not Enough Qty' : 'Order Qty...'
+              }
+              value={row.orderQty}
+              onChange={(e) =>
+                handleOrderQty(
+                  e.target.value,
+                  row.sku,
+                  row.qtyBox
+                )
+              }
+              max={row.maxOrderQty}
+              invalid={Number(row.orderQty) > row.maxOrderQty ? true : false}
+            />
+            {Number(row.orderQty) > row.maxOrderQty ? (
+              <FormFeedback className="text-start" type="invalid">
+                Not enough Master Boxes!
+              </FormFeedback>
+            ) : null}
+          </>
+        )
+      },
+      sortable: false,
+      center: true,
+      compact: true,
+    },
+    {
+      name: <span className="fw-bold fs-5">Total To Ship</span>,
+      selector: (row: wholesaleProductRow) => row.totalToShip,
+      sortable: true,
+      center: true,
+      compact: true,
+    },
+  ]
+
+  return (
+    <>
+      <DataTable
+        columns={columns}
+        data={allData}
+        progressPending={pending}
+        striped={true}
+        defaultSortFieldId={2}
+        conditionalRowStyles={conditionalRowStyles}
+      />
+    </>
+  )
+}
+
+export default WholeSaleTable

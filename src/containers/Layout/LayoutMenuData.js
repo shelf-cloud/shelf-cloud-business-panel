@@ -182,7 +182,7 @@ const Navdata = () => {
         {
           id: 'createreceiving',
           label: 'Create Receiving',
-          link: '/',
+          link: '/CreateReceiving',
           parentId: 'orders',
         },
       ],

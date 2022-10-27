@@ -61,9 +61,9 @@ const WholeSaleTable = ({ product, allData, setAllData }: Props) => {
       <td>
         <div
           style={{
-            width: '80px',
+            width: '70px',
             height: '50px',
-            padding: '2px 0px',
+            margin: '2px 0px',
             position: 'relative',
           }}
         >

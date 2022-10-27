@@ -68,8 +68,18 @@ export interface ProductRowType {
         sku: string;
         quantity: number;
     };
-    unitDimensions?: {};
-    boxDimensions?: {};
+    unitDimensions?: {
+        weight: number;
+        length: number;
+        width: number;
+        height: number;
+    };
+    boxDimensions?: {
+        weight: number;
+        length: number;
+        width: number;
+        height: number;
+    };
     qtyBox: number;
 }
 export interface Product {
@@ -93,6 +103,27 @@ export interface Product {
     boxWidth: number;
     boxHeight: number;
     activeState: boolean;
+}
+
+// STORAGE PRODUCTS
+export interface StorageBin {
+    binName: string;
+    idBin: number;
+    quantity: number;
+    binBalance:number;
+}
+export interface StorageRowProduct {
+    inventoryId: number;
+    businessId: number;
+    business: string;
+    image: string;
+    title: string;
+    sku: string;
+    bins: StorageBin[];
+    currentBalance: number;
+    totalBins:number;
+    totalQuantity:number;
+
 }
 
 
@@ -159,19 +190,44 @@ export interface ShipmentOrderItem {
 }
 
 // WHOLESALE ORDERS
+
+export interface WholesaleProduct {
+    inventoryId: number;
+    businessId: number;
+    business: string;
+    image: string;
+    title: string;
+    barcode: string;
+    sku: string;
+    asin: string;
+    fnSku: string;
+    quantity: number;
+    weight: number;
+    length: number;
+    width: number;
+    height: number;
+    boxQty: number;
+    boxWeight: number;
+    boxLength: number;
+    boxWidth: number;
+    boxHeight: number;
+    activeState: boolean;
+    maxOrderQty:number;
+}
 export interface wholesaleProductRow {
-    image: string,
-    title: string,
-    sku: string,
+    image: string;
+    title: string;
+    sku: string;
     quantity: {
-        quantity: number,
-        inventoryId: number,
-        businessId: number,
-        sku: string,
-    },
-    qtyBox: number,
-    orderQty: string,
-    totalToShip: number
+        quantity: number;
+        inventoryId: number;
+        businessId: number;
+        sku: string;
+    };
+    qtyBox?: number;
+    orderQty: string;
+    totalToShip?: number;
+    maxOrderQty?:number;
 }
 
 

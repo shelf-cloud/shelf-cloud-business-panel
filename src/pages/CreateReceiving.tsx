@@ -19,11 +19,10 @@ import {
 } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
-// import useSWR from 'swr'
+import useSWR from 'swr'
 import InventoryBinsModal from '@components/InventoryBinsModal'
-import WholeSaleTable from '@components/WholeSaleTable'
-import WholeSaleTable2 from '@components/WholeSaleTable2'
-import WholeSaleOrderModal from '@components/WholeSaleOrderModal'
+import ReceivingOrderTable from '@components/ReceivingOrderTable'
+import ReceivingOrderModal from '@components/ReceivingOrderModal'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -56,13 +55,13 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
   const [allData, setAllData] = useState<wholesaleProductRow[]>([])
   const [serachValue, setSerachValue] = useState('')
 
-  // const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  // const { data, error } = useSWR(
-  //   state.user.businessId
-  //     ? `/api/getWholesaleInventory?businessId=${state.user.businessId}`
-  //     : null,
-  //   fetcher
-  // )
+  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
+  const { data, error } = useSWR(
+    state.user.businessId
+      ? `/api/getWholesaleInventory?businessId=${state.user.businessId}`
+      : null,
+    fetcher
+  )
 
   const filteredItems = useMemo(() => {
     return allData.filter(
@@ -73,12 +72,9 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
   }, [allData, serachValue])
 
   useEffect(() => {
-    const bringWholesaleInv = async () => {
-      await axios(
-        `/api/getWholesaleInventory?businessId=${state.user.businessId}`
-      ).then((res) => {
-        const list: wholesaleProductRow[] = []
-        res.data.forEach((product: WholesaleProduct) => {
+    if(data) {
+      const list: wholesaleProductRow[] = []
+        data.forEach((product: WholesaleProduct) => {
           const row = {
             image: product.image,
             title: product.title,
@@ -89,23 +85,14 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
               businessId: product.businessId,
               sku: product.sku,
             },
-            qtyBox: product.boxQty,
             orderQty: '',
-            totalToShip: 0,
-            maxOrderQty: product.maxOrderQty
           }
           list.push(row)
         })
         setAllData(list)
         setPending(false)
-      })
     }
-    state.user.businessId && bringWholesaleInv()
-    return () => {
-      setAllData([])
-      setPending(true)
-    }
-  }, [state.user.businessId])
+  }, [data])
 
   const orderProducts = useMemo(() => {
     return allData.filter(
@@ -113,7 +100,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
     )
   }, [allData])
 
-  const title = `Create WholeSale Order | ${session?.user?.name}`
+  const title = `Create Receiving Order | ${session?.user?.name}`
   return (
     <div>
       <Head>
@@ -123,7 +110,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
         <div className="page-content">
           <ToastContainer />
           <Container fluid>
-            <BreadCrumb title="Create WholeSale Order" pageTitle="Shipments" />
+            <BreadCrumb title="Create Receiving Order" pageTitle="Receiving" />
             <Row>
               <Col lg={12}>
                 <Card>
@@ -137,7 +124,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                           Total Qty to Ship in Order:{' '}
                           {orderProducts.reduce(
                             (total: number, item: wholesaleProductRow) =>
-                              total + Number(item.totalToShip),
+                              total + Number(item.orderQty),
                             0
                           )}
                         </h5>
@@ -152,7 +139,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                             )
                           }
                         >
-                          Create Order
+                          Create Receiving
                         </Button>
                       </div>
                     </div>
@@ -181,41 +168,11 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                     </form>
                   </CardHeader>
                   <CardBody>
-                    <WholeSaleTable2
+                    <ReceivingOrderTable
                       allData={filteredItems}
                       setAllData={setAllData}
                       pending={pending}
                     />
-
-                    {/* // <table className="table table-sm table-striped align-middle table-responsive">
-                      //   <thead>
-                      //     <tr className="fs-5 fw-semibold text-center">
-                      //       <th className="text-start">Image</th>
-                      //       <th className="text-start">
-                      //         Title
-                      //         <br />
-                      //         SKU
-                      //       </th>
-                      //       <th>Wharehouse Quantity</th>
-                      //       <th>Qty/Box</th>
-                      //       <th>
-                      //         Order Qty <br /> (Master Boxes)
-                      //       </th>
-                      //       <th>Total To Ship</th>
-                      //     </tr>
-                      //   </thead>
-                      //   <tbody className="text-center">
-                      //     {filteredItems.map((product, index) => (
-                      //       <WholeSaleTable
-                      //         key={product.sku}
-                      //         index={index}
-                      //         product={product}
-                      //         allData={allData}
-                      //         setAllData={setAllData}
-                      //       />
-                      //     ))}
-                      //   </tbody>
-                      // </table> */}
                   </CardBody>
                 </Card>
               </Col>
@@ -225,7 +182,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
       </React.Fragment>
       {state.showInventoryBinsModal && <InventoryBinsModal />}
       {state.showWholeSaleOrderModal && (
-        <WholeSaleOrderModal
+        <ReceivingOrderModal
           orderNumberStart={orderNumberStart}
           orderProducts={orderProducts}
         />

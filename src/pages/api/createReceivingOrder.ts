@@ -2,7 +2,7 @@ import { NextApiHandler } from 'next'
 import { getSession } from '@auth/client'
 import axios from 'axios'
 
-const createWholesaleOrder: NextApiHandler = async (request, response) => {
+const createReceivingOrder: NextApiHandler = async (request, response) => {
     const session = await getSession({ req: request })
 
     if (session == null) {
@@ -11,9 +11,8 @@ const createWholesaleOrder: NextApiHandler = async (request, response) => {
         return
     }
 
-    axios.post(`${process.env.API_DOMAIN_SERVICES}/createWholesaleOrder.php?businessId=${request.query.businessId}`, {
+    axios.post(`${process.env.API_DOMAIN_SERVICES}/createReceivingOrder.php?businessId=${request.query.businessId}`, {
         shippingProducts: request.body.shippingProducts,
-        groovePackerProducts: request.body.groovePackerProducts,
         orderInfo: request.body.orderInfo
     })
         .then(({ data }) => {
@@ -24,4 +23,4 @@ const createWholesaleOrder: NextApiHandler = async (request, response) => {
         });
 }
 
-export default createWholesaleOrder
+export default createReceivingOrder
