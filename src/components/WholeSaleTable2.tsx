@@ -8,11 +8,12 @@ import DataTable from 'react-data-table-component'
 
 type Props = {
   allData: wholesaleProductRow[]
+  filteredItems: wholesaleProductRow[]
   setAllData: (allData: wholesaleProductRow[]) => void
   pending: boolean
 }
 
-const WholeSaleTable = ({ allData, setAllData, pending }: Props) => {
+const WholeSaleTable = ({ allData, filteredItems, setAllData, pending }: Props) => {
   const { setModalProductInfo }: any = useContext(AppContext)
 
   const handleOrderQty = (
@@ -232,7 +233,7 @@ const WholeSaleTable = ({ allData, setAllData, pending }: Props) => {
     <>
       <DataTable
         columns={columns}
-        data={allData}
+        data={filteredItems}
         progressPending={pending}
         striped={true}
         defaultSortFieldId={2}

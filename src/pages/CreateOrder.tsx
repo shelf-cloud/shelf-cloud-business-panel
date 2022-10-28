@@ -57,6 +57,7 @@ const CreateOrder = ({ session }: Props) => {
   const orderNumberStart = session?.user?.name.substring(0, 3).toUpperCase()
   const [ready, setReady] = useState(false)
   const [skus, setSkus] = useState([])
+  const [skusTitles, setSkusTitles] = useState<any>({})
   const [validSkus, setValidSkus] = useState<string[]>([])
   const [countries, setcountries] = useState([])
   const [validCountries, setValidCountries] = useState<string[]>([])
@@ -76,6 +77,7 @@ const CreateOrder = ({ session }: Props) => {
       setValidSkus(data.validSkus)
       setSkus(data.skus)
       setcountries(data.countries)
+      setSkusTitles(data.skuTitle)
       setReady(true)
     }
     return () => {
@@ -171,6 +173,7 @@ const CreateOrder = ({ session }: Props) => {
       toast.error(response.data.msg)
     }
   }
+
   return (
     <div>
       <Head>
@@ -721,7 +724,22 @@ const CreateOrder = ({ session }: Props) => {
                                                         name={`products.${index}.sku`}
                                                         list="skuList"
                                                         placeholder="Sku..."
-                                                        onChange={handleChange}
+                                                        onChange={(e:any) => {
+                                                          handleChange(e)
+                                                          e.target.value == ''
+                                                            ? (values.products[
+                                                                index
+                                                              ].title = ''[
+                                                                e.target.value
+                                                              ])
+                                                            : (values.products[
+                                                                index
+                                                              ].title =
+                                                                skusTitles[
+                                                                  e.target.value
+                                                                ])
+                                                        }}
+                                                        // onChange={(e) => handleChangeInSKU(e.target.value, values, index)}
                                                         onBlur={handleBlur}
                                                         value={
                                                           values.products[index]

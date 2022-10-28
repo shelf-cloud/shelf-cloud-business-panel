@@ -126,7 +126,7 @@ export interface StorageRowProduct {
 
 }
 
-
+// SHIPMENTS
 export interface OrderItem {
     sku: string;
     name: string;
@@ -179,6 +179,8 @@ export interface OrderRowType {
     proofOfShipped: string;
     totalCharge: number;
     totalReceivedItems?: number;
+    isThird: boolean;
+    thirdInfo: string;
 }
 
 export interface ShipmentOrderItem {

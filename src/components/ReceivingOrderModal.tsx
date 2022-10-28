@@ -119,7 +119,7 @@ const ReceivingOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
             <Col md={6}>
               <FormGroup className="mb-3">
                 <Label htmlFor="firstNameinput" className="form-label">
-                  *Order Number
+                  *Transaction Number
                 </Label>
                 <div className="input-group">
                   <span

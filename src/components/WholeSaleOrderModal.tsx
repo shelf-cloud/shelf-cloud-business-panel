@@ -45,6 +45,8 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
       orderNumber: `00${state?.user?.orderNumber}`,
       type: '',
       numberOfPallets: 1,
+      isThird: false,
+      thirdInfo: '',
     },
     validationSchema: Yup.object({
       orderNumber: Yup.string()
@@ -53,6 +55,11 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
       type: Yup.string()
         .oneOf(['LTL', 'Parcel Boxes'], 'Please Choose a Type')
         .required('Please Choose a Type'),
+      isThird: Yup.boolean(),
+      thirdInfo: Yup.string().when('isThird', {
+        is: true,
+        then: Yup.string().required('Must enter Third Party Information'),
+      }),
     }),
     onSubmit: async (values, { resetForm }) => {
       const response = await axios.post(
@@ -73,12 +80,14 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
               qty: product.totalToShip,
               storeId: state.user.businessId,
               qtyScanned: 0,
-              history: [{
-                sku: product.sku,
-                status: 'Awaiting',
-                user: state.user.name,
-                date: moment().format('YYYY-MM-DD h:mm:ss')
-              }],
+              history: [
+                {
+                  sku: product.sku,
+                  status: 'Awaiting',
+                  user: state.user.name,
+                  date: moment().format('YYYY-MM-DD h:mm:ss'),
+                },
+              ],
             }
           }),
           orderInfo: {
@@ -86,6 +95,8 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
             carrierService: values.type,
             isPallets: values.type == 'LTL' ? true : false,
             numberOfPallets: values.type == 'LTL' ? values.numberOfPallets : 0,
+            isthird: values.isThird,
+            thirdInfo: values.thirdInfo,
             orderProducts: orderProducts.map((product) => {
               return {
                 sku: product.sku,
@@ -137,7 +148,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
       <ModalBody>
         <Form onSubmit={HandleAddProduct}>
           <Row>
-            <h5 className="fs-5 m-3 fw-bolder">Order Details</h5>
+            <h5 className="fs-5 m-3 fw-bolder text-primary">Order Details</h5>
             <Col md={6}>
               <FormGroup className="mb-3">
                 <Label htmlFor="firstNameinput" className="form-label">
@@ -235,6 +246,58 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                 </Col>
               )}
             </Row>
+            <Col md={12}>
+              <FormGroup
+                switch
+                className="mb-3 flex flex-row justify-content-start align-items-center"
+                style={{ padding: '0px 0px' }}
+              >
+                <Input
+                  type="switch"
+                  checked={validation.values.isThird}
+                  className="form-control"
+                  style={{ margin: '0px 1em 0px 0px' }}
+                  id="isThird"
+                  name="isThird"
+                  onChange={validation.handleChange}
+                  onBlur={validation.handleBlur}
+                />
+                <Label className="fs-5" check>
+                  Creating Shipment for{' '}
+                  {validation.values.isThird ? (
+                    <span className="fw-bold text-primary">Third Party</span>
+                  ) : (
+                    <span className="fw-bold text-primary">FBA</span>
+                  )}
+                </Label>
+              </FormGroup>
+              {validation.values.isThird && (
+                <>
+                  <Input
+                    type="textarea"
+                    id="thirdInfo"
+                    name="thirdInfo"
+                    placeholder="Please enter the Third Party Shipping Information: Recepient, Company, Address, City, State, Zipcode, Country."
+                    value={validation.values.thirdInfo}
+                    onChange={validation.handleChange}
+                    onBlur={validation.handleBlur}
+                    invalid={
+                      validation.touched.thirdInfo && validation.errors.thirdInfo
+                        ? true
+                        : false
+                    }
+                  />
+                  {validation.touched.thirdInfo && validation.errors.thirdInfo ? (
+                    <FormFeedback type="invalid">
+                      {validation.errors.thirdInfo}
+                    </FormFeedback>
+                  ) : null}
+                  <h5 className="fs-12 mb-3 text-muted">
+                    *Additional shipping costs apply to this type of shipping.
+                  </h5>
+                </>
+              )}
+            </Col>
             <Col md={12}>
               <table className="table align-middle table-responsive table-nowrap table-striped-columns">
                 <thead>

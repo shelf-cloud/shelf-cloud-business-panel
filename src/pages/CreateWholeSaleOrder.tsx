@@ -181,7 +181,8 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                   </CardHeader>
                   <CardBody>
                     <WholeSaleTable2
-                      allData={filteredItems}
+                      allData={allData}
+                      filteredItems={filteredItems}
                       setAllData={setAllData}
                       pending={pending}
                     />

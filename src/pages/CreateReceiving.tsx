@@ -58,7 +58,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data, error } = useSWR(
     state.user.businessId
-      ? `/api/getWholesaleInventory?businessId=${state.user.businessId}`
+      ? `/api/getReceivingInventory?businessId=${state.user.businessId}`
       : null,
     fetcher
   )
@@ -169,7 +169,8 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                   </CardHeader>
                   <CardBody>
                     <ReceivingOrderTable
-                      allData={filteredItems}
+                      allData={allData}
+                      filteredItems={filteredItems}
                       setAllData={setAllData}
                       pending={pending}
                     />

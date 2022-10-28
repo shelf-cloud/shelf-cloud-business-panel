@@ -48,6 +48,12 @@ const WholeSaleType = ({ data }: Props) => {
                       <td className="fw-bold"># Of Boxes:</td>
                       <td>{data.numberBoxes}</td>
                     </tr>
+                    {data.isThird && (
+                      <tr>
+                        <td className="fw-bold">Third Party Shipping Info:</td>
+                        <td>{data.thirdInfo}</td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </CardBody>

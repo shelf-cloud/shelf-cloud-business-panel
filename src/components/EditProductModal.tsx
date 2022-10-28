@@ -93,12 +93,12 @@ function EditProductModal({}: Props) {
         .integer('Only integers'),
     }),
     onSubmit: async (values) => {
-        const response = await axios.post(
-          `api/updateProductDetails?businessId=${state.user.businessId}`,
-          {
-            productInfo: values,
-          }
-        )
+      const response = await axios.post(
+        `api/updateProductDetails?businessId=${state.user.businessId}`,
+        {
+          productInfo: values,
+        }
+      )
       if (!response.data.error) {
         toast.success(response.data.msg)
         mutate(`/api/getBusinessInventory?businessId=${state.user.businessId}`)
@@ -328,6 +328,7 @@ function EditProductModal({}: Props) {
                     Barcode
                   </Label>
                   <Input
+                    disabled={true}
                     type="text"
                     className="form-control"
                     placeholder="Barcode..."

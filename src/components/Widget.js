@@ -38,7 +38,7 @@ const Widget = ({ summary }) => {
                       />
                     </span>
                   </h4>
-                  <Link href="#">
+                  <Link href="Storage">
                     <a className="text-primary text-decoration-underline">
                       Storage
                     </a>
