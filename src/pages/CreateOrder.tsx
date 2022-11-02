@@ -22,7 +22,7 @@ import {
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import AppContext from '@context/AppContext'
-import useSWR from 'swr'
+import useSWR, { useSWRConfig } from 'swr'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
 import router from 'next/router'
@@ -53,6 +53,7 @@ type Props = {
 
 const CreateOrder = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
+  const { mutate } = useSWRConfig()
   const title = `Add Product | ${session?.user?.name}`
   const orderNumberStart = session?.user?.name.substring(0, 3).toUpperCase()
   const [ready, setReady] = useState(false)
@@ -94,18 +95,18 @@ const CreateOrder = ({ session }: Props) => {
     city: '',
     state: '',
     zipCode: '',
-    country: '',
+    country: 'US',
     phoneNumber: '',
     email: '',
-    amount: '',
-    shipping: '',
-    tax: '',
+    amount: '0',
+    shipping: '0',
+    tax: '0',
     products: [
       {
         sku: '',
         title: '',
-        qty: '',
-        price: '',
+        qty: 1,
+        price: '0',
       },
     ],
   }
@@ -126,7 +127,7 @@ const CreateOrder = ({ session }: Props) => {
     country: Yup.string()
       .oneOf(validCountries, 'Must be a Valid Country Code')
       .required('Required Country'),
-    phoneNumber: Yup.string().required('Required Phone'),
+    phoneNumber: Yup.string(),
     email: Yup.string().email(),
     amount: Yup.number()
       .min(0, 'Amount must be greater than or equal to 0')
@@ -166,6 +167,7 @@ const CreateOrder = ({ session }: Props) => {
       }
     )
     if (!response.data.error) {
+      mutate('/api/getuser')
       toast.success(response.data.msg)
       resetForm()
       router.push('/Shipments')
@@ -669,8 +671,8 @@ const CreateOrder = ({ session }: Props) => {
                                                         push({
                                                           sku: '',
                                                           name: '',
-                                                          qty: '',
-                                                          price: '',
+                                                          qty: 1,
+                                                          price: 0,
                                                         })
                                                       }
                                                     >
@@ -937,7 +939,7 @@ const CreateOrder = ({ session }: Props) => {
                                 type="submit"
                                 className="fs-5 btn bg-primary"
                               >
-                                Add Order
+                                Create Order
                               </Button>
                             </div>
                           </Col>

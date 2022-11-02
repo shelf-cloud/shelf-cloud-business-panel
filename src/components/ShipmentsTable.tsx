@@ -16,28 +16,6 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
 
   const columns: any = [
     {
-      name: (
-        <Input
-          className="form-check-input fs-15"
-          type="checkbox"
-          name="checkAll"
-          value="option1"
-        />
-      ),
-      cell: () => (
-        <input
-          className="form-check-input fs-15"
-          type="checkbox"
-          name="checkAll"
-          value="option1"
-        />
-      ),
-      sortable: false,
-      width: '50px',
-      compact: true,
-      center: true,
-    },
-    {
       name: <span className="fw-bolder fs-13">Order Number</span>,
       selector: (row: OrderRowType) => {
         return (
