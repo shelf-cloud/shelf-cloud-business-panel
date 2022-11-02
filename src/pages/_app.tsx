@@ -5,6 +5,7 @@ import useInitialState from '@hooks/useInitialState.js'
 import { SessionProvider } from '@auth/client'
 import { Session } from 'next-auth'
 import Layout from '@containers/Layout/Layout'
+import 'react-toastify/dist/ReactToastify.min.css'
 
 function MyApp({
   Component,

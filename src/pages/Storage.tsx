@@ -7,7 +7,16 @@ import { GetServerSideProps } from 'next'
 import { getSession } from 'next-auth/react'
 import Head from 'next/head'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
-import { Button, Card, CardBody, CardHeader, Col, Container, Input, Row } from 'reactstrap'
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Container,
+  Input,
+  Row,
+} from 'reactstrap'
 import useSWR from 'swr'
 import StorageWidgets from '@components/StorageWidgets'
 
@@ -45,7 +54,10 @@ const Storage = ({ session }: Props) => {
     return allData.filter(
       (item: StorageRowProduct) =>
         item?.title?.toLowerCase().includes(serachValue.toLowerCase()) ||
-        item?.sku?.toLowerCase().includes(serachValue.toLowerCase())
+        item?.sku?.toLowerCase().includes(serachValue.toLowerCase()) ||
+        item?.bins?.some((bin) =>
+          bin.binName.toLowerCase().includes(serachValue.toLowerCase())
+        )
     )
   }, [allData, serachValue])
 
@@ -77,7 +89,10 @@ const Storage = ({ session }: Props) => {
               <Col lg={12}>
                 <Card>
                   <CardHeader>
-                    <StorageWidgets currentBalance={data?.totalCurrentBalance} binsUSed={data?.totalBinsUSed} />
+                    <StorageWidgets
+                      currentBalance={data?.totalCurrentBalance}
+                      binsUSed={data?.totalBinsUSed}
+                    />
                     <form className="app-search d-flex flex-row justify-content-end align-items-center p-0">
                       <div className="position-relative">
                         <Input
@@ -103,7 +118,7 @@ const Storage = ({ session }: Props) => {
                     </form>
                   </CardHeader>
                   <CardBody>
-                  <StorageTable
+                    <StorageTable
                       tableData={filteredItems || []}
                       pending={pending}
                     />

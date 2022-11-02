@@ -47,6 +47,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
       numberOfPallets: 1,
       isThird: false,
       thirdInfo: '',
+      hasProducts: orderProducts.length,
     },
     validationSchema: Yup.object({
       orderNumber: Yup.string()
@@ -60,6 +61,10 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
         is: true,
         then: Yup.string().required('Must enter Third Party Information'),
       }),
+      hasProducts: Yup.number().min(
+        1,
+        'To create an order, you must add at least one product'
+      ),
     }),
     onSubmit: async (values, { resetForm }) => {
       const response = await axios.post(
@@ -247,7 +252,29 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
               )}
             </Row>
             <Col md={12}>
-              <FormGroup
+              <div className="flex flex-row w-100 justify-content-start align-items-center pb-3">
+                <Button
+                  type="button"
+                  className={
+                    'me-3 ' + (validation.values.isThird ? 'text-muted' : '')
+                  }
+                  color={validation.values.isThird ? 'light' : 'primary'}
+                  onClick={() => validation.setFieldValue('isThird', false)}
+                >
+                  FBA
+                </Button>
+                <Button
+                  type="button"
+                  className={
+                    '' + (validation.values.isThird ? '' : 'text-muted')
+                  }
+                  color={validation.values.isThird ? 'primary' : 'light'}
+                  onClick={() => validation.setFieldValue('isThird', true)}
+                >
+                  Third Party
+                </Button>
+              </div>
+              {/* <FormGroup
                 switch
                 className="mb-3 flex flex-row justify-content-start align-items-center"
                 style={{ padding: '0px 0px' }}
@@ -270,7 +297,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     <span className="fw-bold text-primary">FBA</span>
                   )}
                 </Label>
-              </FormGroup>
+              </FormGroup> */}
               {validation.values.isThird && (
                 <>
                   <Input
@@ -282,12 +309,14 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     invalid={
-                      validation.touched.thirdInfo && validation.errors.thirdInfo
+                      validation.touched.thirdInfo &&
+                      validation.errors.thirdInfo
                         ? true
                         : false
                     }
                   />
-                  {validation.touched.thirdInfo && validation.errors.thirdInfo ? (
+                  {validation.touched.thirdInfo &&
+                  validation.errors.thirdInfo ? (
                     <FormFeedback type="invalid">
                       {validation.errors.thirdInfo}
                     </FormFeedback>
@@ -299,6 +328,13 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
               )}
             </Col>
             <Col md={12}>
+              <h5>Total Products in Order: {validation.values.hasProducts}</h5>
+              {validation.touched.hasProducts &&
+              validation.errors.hasProducts ? (
+                <p className='text-danger'>
+                  {validation.errors.hasProducts}
+                </p>
+              ) : null}
               <table className="table align-middle table-responsive table-nowrap table-striped-columns">
                 <thead>
                   <tr>

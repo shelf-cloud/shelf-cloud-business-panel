@@ -729,9 +729,7 @@ const CreateOrder = ({ session }: Props) => {
                                                           e.target.value == ''
                                                             ? (values.products[
                                                                 index
-                                                              ].title = ''[
-                                                                e.target.value
-                                                              ])
+                                                              ].title = '')
                                                             : (values.products[
                                                                 index
                                                               ].title =

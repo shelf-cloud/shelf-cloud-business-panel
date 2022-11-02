@@ -6,7 +6,6 @@ import { ProductRowType, Product } from '@typings'
 import axios from 'axios'
 import Head from 'next/head'
 import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.min.css'
 import {
   Button,
   Card,

@@ -140,7 +140,7 @@ const Navdata = () => {
               },
               {
                 id: 'createwholesale',
-                label: 'Create wholesale Order',
+                label: 'Create Wholesale Order',
                 link: '/CreateWholeSaleOrder',
                 parentId: 'orders',
               },
@@ -154,7 +154,7 @@ const Navdata = () => {
               },
               {
                 id: 'createwholesale',
-                label: 'Create wholesale Order',
+                label: 'Create Wholesale Order',
                 link: '/CreateWholeSaleOrder',
                 parentId: 'orders',
               },

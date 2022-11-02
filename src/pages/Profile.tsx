@@ -1,5 +1,7 @@
 import BreadCrumb from '@components/Common/BreadCrumb'
 import AppContext from '@context/AppContext'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
 import { GetServerSideProps } from 'next'
 import { getSession } from 'next-auth/react'
 import Head from 'next/head'
@@ -13,6 +15,8 @@ import {
   Col,
   Container,
   Form,
+  FormFeedback,
+  FormGroup,
   Input,
   Label,
   Nav,
@@ -22,6 +26,8 @@ import {
   TabContent,
   TabPane,
 } from 'reactstrap'
+import axios from 'axios'
+import { toast, ToastContainer } from 'react-toastify'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -56,6 +62,83 @@ const Profile = ({ session }: Props) => {
   const tabChange = (tab: any) => {
     if (activeTab !== tab) setActiveTab(tab)
   }
+
+  const validation = useFormik({
+    // enableReinitialize : use this flag when initial values needs to be changed
+    enableReinitialize: true,
+
+    initialValues: {
+      companyName: String(state?.user?.name),
+      email: session?.user?.email,
+    },
+    validationSchema: Yup.object({
+      companyName: Yup.string()
+        .max(80, 'Name is to Long')
+        .required('Please Enter Your Company Name'),
+      email: Yup.string().email(),
+    }),
+    onSubmit: async (values) => {
+      const response = await axios.post(
+        `api/updateUserDetails?businessId=${state.user.businessId}`,
+        {
+          userDetails: values,
+        }
+      )
+      if (!response.data.error) {
+        toast.success(response.data.msg)
+      } else {
+        toast.error(response.data.msg)
+      }
+    },
+  })
+
+  const validationChangePassword = useFormik({
+    // enableReinitialize : use this flag when initial values needs to be changed
+    enableReinitialize: true,
+
+    initialValues: {
+      currentPassword: '',
+      newPassword1: '',
+      newPassword2: '',
+    },
+    validationSchema: Yup.object({
+      currentPassword: Yup.string().required(
+        'Please Enter Your Current Password'
+      ),
+      newPassword1: Yup.string()
+        .min(8, 'Password must be at least 8 characters')
+        .required('Please Enter Your New Password'),
+      newPassword2: Yup.string()
+        .min(8, 'Password must be at least 8 characters')
+        .oneOf([Yup.ref('newPassword1'), null], "Passwords don't match!")
+        .required('Please Enter Your Confirmation Password'),
+    }),
+    onSubmit: async (values, { resetForm }) => {
+      // const response = await axios.post(
+      //   `api/createNewProduct?businessId=${state.user.businessId}`,
+      //   {
+      //     productInfo: values,
+      //   }
+      // )
+      // if (!response.data.error) {
+      //   toast.success(response.data.msg)
+      //   resetForm()
+      // } else {
+      //   toast.error(response.data.msg)
+      // }
+    },
+  })
+
+  const handleUpdateProfile = (event: any) => {
+    event.preventDefault()
+    validation.handleSubmit()
+  }
+
+  const handleChangePassword = (event: any) => {
+    event.preventDefault()
+    validation.handleSubmit()
+  }
+
   return (
     <div>
       <Head>
@@ -65,6 +148,7 @@ const Profile = ({ session }: Props) => {
       <React.Fragment>
         <div className="page-content">
           <Container fluid>
+            <ToastContainer />
             <BreadCrumb title="Profile" pageTitle="Profile" />
             <Row>
               <Col lg={12}>
@@ -83,6 +167,7 @@ const Profile = ({ session }: Props) => {
                           }
                           onClick={() => {
                             tabChange('1')
+                            validation.setFieldValue('isPasswordTab', false)
                           }}
                         >
                           <>
@@ -101,6 +186,7 @@ const Profile = ({ session }: Props) => {
                           }
                           onClick={() => {
                             tabChange('2')
+                            validation.setFieldValue('isPasswordTab', true)
                           }}
                           type="button"
                         >
@@ -115,46 +201,76 @@ const Profile = ({ session }: Props) => {
                   <CardBody className="p-4">
                     <TabContent activeTab={activeTab}>
                       <TabPane tabId="1">
-                        <Form>
+                        <Form onSubmit={handleUpdateProfile}>
                           <Row>
                             <Col lg={6}>
-                              <div className="mb-3">
+                              <FormGroup className="mb-3">
                                 <Label
-                                  htmlFor="firstnameInput"
+                                  htmlFor="firstNameinput"
                                   className="form-label"
                                 >
-                                  Company Name
+                                  *Company Name
                                 </Label>
                                 <Input
                                   type="text"
                                   className="form-control"
-                                  id="firstnameInput"
-                                  value={state?.user?.name}
-                                  placeholder="Enter your firstname"
+                                  placeholder="Company Name..."
+                                  id="companyName"
+                                  name="companyName"
+                                  onChange={validation.handleChange}
+                                  onBlur={validation.handleBlur}
+                                  value={validation.values.companyName || ''}
+                                  invalid={
+                                    validation.touched.companyName &&
+                                    validation.errors.companyName
+                                      ? true
+                                      : false
+                                  }
                                 />
-                              </div>
+                                {validation.touched.companyName &&
+                                validation.errors.companyName ? (
+                                  <FormFeedback type="invalid">
+                                    {validation.errors.companyName}
+                                  </FormFeedback>
+                                ) : null}
+                              </FormGroup>
                             </Col>
                             <Col lg={6}>
-                              <div className="mb-3">
+                              <FormGroup className="mb-3">
                                 <Label
-                                  htmlFor="emailInput"
+                                  htmlFor="firstNameinput"
                                   className="form-label"
                                 >
-                                  Email Address
+                                  *Email Address
                                 </Label>
                                 <Input
-                                  type="email"
+                                  type="text"
                                   className="form-control"
-                                  id="emailInput"
-                                  placeholder="Enter your email"
-                                  value={session?.user?.email}
+                                  placeholder="Email Address..."
+                                  id="email"
+                                  name="email"
+                                  onChange={validation.handleChange}
+                                  onBlur={validation.handleBlur}
+                                  value={validation.values.email || ''}
+                                  invalid={
+                                    validation.touched.email &&
+                                    validation.errors.email
+                                      ? true
+                                      : false
+                                  }
                                 />
-                              </div>
+                                {validation.touched.email &&
+                                validation.errors.email ? (
+                                  <FormFeedback type="invalid">
+                                    {validation.errors.email}
+                                  </FormFeedback>
+                                ) : null}
+                              </FormGroup>
                             </Col>
                             <Col lg={12}>
                               <div className="hstack gap-2 justify-content-end">
                                 <button
-                                  type="button"
+                                  type="submit"
                                   className="btn btn-primary fs-5"
                                 >
                                   Updates
@@ -173,60 +289,140 @@ const Profile = ({ session }: Props) => {
                       </TabPane>
 
                       <TabPane tabId="2">
-                        <Form>
+                        <Form onSubmit={handleChangePassword}>
                           <Row className="g-2">
                             <Col lg={4}>
-                              <div>
+                              <FormGroup className="mb-3">
                                 <Label
-                                  htmlFor="oldpasswordInput"
+                                  htmlFor="firstNameinput"
                                   className="form-label"
                                 >
-                                  Old Password*
+                                  *Old Password
                                 </Label>
                                 <Input
                                   type="password"
                                   className="form-control"
-                                  id="oldpasswordInput"
-                                  placeholder="Enter current password"
+                                  placeholder="Enter Current Password"
+                                  id="currentPassword"
+                                  name="currentPassword"
+                                  onChange={
+                                    validationChangePassword.handleChange
+                                  }
+                                  onBlur={validationChangePassword.handleBlur}
+                                  value={
+                                    validationChangePassword.values
+                                      .currentPassword || ''
+                                  }
+                                  invalid={
+                                    validationChangePassword.touched
+                                      .currentPassword &&
+                                    validationChangePassword.errors
+                                      .currentPassword
+                                      ? true
+                                      : false
+                                  }
                                 />
-                              </div>
+                                {validationChangePassword.touched
+                                  .currentPassword &&
+                                validationChangePassword.errors
+                                  .currentPassword ? (
+                                  <FormFeedback type="invalid">
+                                    {
+                                      validationChangePassword.errors
+                                        .currentPassword
+                                    }
+                                  </FormFeedback>
+                                ) : null}
+                              </FormGroup>
                             </Col>
 
                             <Col lg={4}>
-                              <div>
+                              <FormGroup className="mb-3">
                                 <Label
-                                  htmlFor="newpasswordInput"
+                                  htmlFor="firstNameinput"
                                   className="form-label"
                                 >
-                                  New Password*
+                                  *New Password
                                 </Label>
                                 <Input
                                   type="password"
                                   className="form-control"
-                                  id="newpasswordInput"
-                                  placeholder="Enter new password"
+                                  placeholder="Enter New Password"
+                                  id="newPassword1"
+                                  name="newPassword1"
+                                  onChange={
+                                    validationChangePassword.handleChange
+                                  }
+                                  onBlur={validationChangePassword.handleBlur}
+                                  value={
+                                    validationChangePassword.values
+                                      .newPassword1 || ''
+                                  }
+                                  invalid={
+                                    validationChangePassword.touched
+                                      .newPassword1 &&
+                                    validationChangePassword.errors.newPassword1
+                                      ? true
+                                      : false
+                                  }
                                 />
-                              </div>
+                                {validationChangePassword.touched
+                                  .newPassword1 &&
+                                validationChangePassword.errors.newPassword1 ? (
+                                  <FormFeedback type="invalid">
+                                    {
+                                      validationChangePassword.errors
+                                        .newPassword1
+                                    }
+                                  </FormFeedback>
+                                ) : null}
+                              </FormGroup>
                             </Col>
 
                             <Col lg={4}>
-                              <div>
+                              <FormGroup className="mb-3">
                                 <Label
-                                  htmlFor="confirmpasswordInput"
+                                  htmlFor="firstNameinput"
                                   className="form-label"
                                 >
-                                  Confirm Password*
+                                  *Confirm Password
                                 </Label>
                                 <Input
                                   type="password"
                                   className="form-control"
-                                  id="confirmpasswordInput"
-                                  placeholder="Confirm password"
+                                  placeholder="Enter New Password"
+                                  id="newPassword2"
+                                  name="newPassword2"
+                                  onChange={
+                                    validationChangePassword.handleChange
+                                  }
+                                  onBlur={validationChangePassword.handleBlur}
+                                  value={
+                                    validationChangePassword.values
+                                      .newPassword2 || ''
+                                  }
+                                  invalid={
+                                    validationChangePassword.touched
+                                      .newPassword2 &&
+                                    validationChangePassword.errors.newPassword2
+                                      ? true
+                                      : false
+                                  }
                                 />
-                              </div>
+                                {validationChangePassword.touched
+                                  .newPassword2 &&
+                                validationChangePassword.errors.newPassword2 ? (
+                                  <FormFeedback type="invalid">
+                                    {
+                                      validationChangePassword.errors
+                                        .newPassword2
+                                    }
+                                  </FormFeedback>
+                                ) : null}
+                              </FormGroup>
                             </Col>
 
-                            <Col lg={12}>
+                            {/* <Col lg={12}>
                               <div className="mb-3">
                                 <Link
                                   href={'/'}
@@ -235,7 +431,7 @@ const Profile = ({ session }: Props) => {
                                   Forgot Password ?
                                 </Link>
                               </div>
-                            </Col>
+                            </Col> */}
 
                             <Col lg={12}>
                               <div className="text-end">

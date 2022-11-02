@@ -111,6 +111,7 @@ export interface StorageBin {
     idBin: number;
     quantity: number;
     binBalance:number;
+    countEntry:boolean;
 }
 export interface StorageRowProduct {
     inventoryId: number;

@@ -147,7 +147,7 @@ const AddProducts = ({ session }: Props) => {
   }
 
   const handleBoxDimensionsCheckbox = () => {
-    // console.log(validation)
+
     validation.setFieldValue('boxweight', validation.values.weight)
 
     if (!useSameUnitDimensions) {
@@ -158,7 +158,6 @@ const AddProducts = ({ session }: Props) => {
       validation.setFieldValue('boxheight', validation.values.height)
       validation.setFieldValue('boxqty', 1)
       validation.validateForm()
-      console.log('is using the same')
     } else {
       setUseSameUnitDimensions(false)
       validation.setFieldValue('boxweight', '')
@@ -167,7 +166,6 @@ const AddProducts = ({ session }: Props) => {
       validation.setFieldValue('boxheight', '')
       validation.setFieldValue('boxqty', '')
       validation.validateForm()
-      console.log('is using the Diferrent')
     }
   }
   return (
