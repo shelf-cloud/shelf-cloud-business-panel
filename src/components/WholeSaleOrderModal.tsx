@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-// ALTER TABLE `dbpruebas` ADD `activeState` BOOLEAN NOT NULL DEFAULT TRUE AFTER `image`;
 import React, { useState, useEffect, useContext } from 'react'
 import {
   Button,
+  Card,
   Col,
   Form,
   FormFeedback,
@@ -13,23 +13,30 @@ import {
   ModalBody,
   ModalHeader,
   Row,
-  Spinner,
 } from 'reactstrap'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { WholeSaleOrderProduct, wholesaleProductRow } from '@typings'
+import { wholesaleProductRow } from '@typings'
 import router from 'next/router'
 import moment from 'moment'
+import Dropzone from 'react-dropzone'
+// import Image from 'next/image'
+import { ref, uploadBytes } from 'firebase/storage'
+import { storage } from '@firebase'
+import { useSession } from 'next-auth/react'
 
 type Props = {
   orderNumberStart: string
   orderProducts: wholesaleProductRow[]
 }
 const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
+  const { data: session } = useSession()
   const { state, setWholeSaleOrderModal }: any = useContext(AppContext)
+  const [selectedFiles, setselectedFiles] = useState([])
+  const [errorFile, setErrorFile] = useState(false)
 
   useEffect(() => {
     return () => {
@@ -67,6 +74,21 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
       ),
     }),
     onSubmit: async (values, { resetForm }) => {
+      const docTime = moment().format('DD-MM-YYYY-HH-mm-ss-a')
+      const storageRef = ref(
+        storage,
+        `shelf-cloud/etiquetas-fba-${session?.user?.name}-${docTime}.pdf`
+      )
+      if (selectedFiles.length == 0) {
+        setErrorFile(true)
+        return
+      }
+
+      setErrorFile(false)
+      await uploadBytes(storageRef, selectedFiles[0]).then((snapshot) => {
+        toast.success('Successfully uploaded labels!')
+      })
+
       const response = await axios.post(
         `api/createWholesaleOrder?businessId=${state.user.businessId}`,
         {
@@ -102,6 +124,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
             numberOfPallets: values.type == 'LTL' ? values.numberOfPallets : 0,
             isthird: values.isThird,
             thirdInfo: values.thirdInfo,
+            labelsName: `etiquetas-fba-${session?.user?.name}-${docTime}.pdf`,
             orderProducts: orderProducts.map((product) => {
               return {
                 sku: product.sku,
@@ -116,9 +139,9 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
       )
 
       if (!response.data.error) {
+        setWholeSaleOrderModal(false)
         toast.success(response.data.msg)
         resetForm()
-        setWholeSaleOrderModal(false)
         router.push('/Shipments')
       } else {
         toast.error(response.data.msg)
@@ -129,6 +152,26 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
   const HandleAddProduct = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
+  }
+
+  function handleAcceptedFiles(files: any) {
+    files.map((file: any) =>
+      Object.assign(file, {
+        preview: URL.createObjectURL(file),
+        formattedSize: formatBytes(file.size),
+      })
+    )
+    setselectedFiles(files)
+  }
+
+  function formatBytes(bytes: any, decimals = 2) {
+    if (bytes === 0) return '0 Bytes'
+    const k = 1024
+    const dm = decimals < 0 ? 0 : decimals
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
   }
 
   return (
@@ -155,43 +198,43 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
           <Row>
             <h5 className="fs-5 m-3 fw-bolder text-primary">Order Details</h5>
             <Col md={6}>
-              <FormGroup className="mb-3">
-                <Label htmlFor="firstNameinput" className="form-label">
-                  *Order Number
-                </Label>
-                <div className="input-group">
-                  <span
-                    className="input-group-text fw-semibold fs-5"
-                    id="basic-addon1"
-                  >
-                    {orderNumberStart}-
-                  </span>
-                  <Input
-                    type="text"
-                    className="form-control"
-                    id="orderNumber"
-                    name="orderNumber"
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.orderNumber || ''}
-                    invalid={
-                      validation.touched.orderNumber &&
-                      validation.errors.orderNumber
-                        ? true
-                        : false
-                    }
-                  />
-                  {validation.touched.orderNumber &&
-                  validation.errors.orderNumber ? (
-                    <FormFeedback type="invalid">
-                      {validation.errors.orderNumber}
-                    </FormFeedback>
-                  ) : null}
-                </div>
-              </FormGroup>
-            </Col>
-            <Row>
-              <Col md={6}>
+              <Col md={12}>
+                <FormGroup className="mb-3">
+                  <Label htmlFor="firstNameinput" className="form-label">
+                    *Order Number
+                  </Label>
+                  <div className="input-group">
+                    <span
+                      className="input-group-text fw-semibold fs-5"
+                      id="basic-addon1"
+                    >
+                      {orderNumberStart}-
+                    </span>
+                    <Input
+                      type="text"
+                      className="form-control"
+                      id="orderNumber"
+                      name="orderNumber"
+                      onChange={validation.handleChange}
+                      onBlur={validation.handleBlur}
+                      value={validation.values.orderNumber || ''}
+                      invalid={
+                        validation.touched.orderNumber &&
+                        validation.errors.orderNumber
+                          ? true
+                          : false
+                      }
+                    />
+                    {validation.touched.orderNumber &&
+                    validation.errors.orderNumber ? (
+                      <FormFeedback type="invalid">
+                        {validation.errors.orderNumber}
+                      </FormFeedback>
+                    ) : null}
+                  </div>
+                </FormGroup>
+              </Col>
+              <Col md={12}>
                 <FormGroup className="mb-3">
                   <Label htmlFor="firstNameinput" className="form-label">
                     *Type of Shipment
@@ -221,7 +264,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                 </FormGroup>
               </Col>
               {validation.values.type == 'LTL' && (
-                <Col md={4}>
+                <Col md={12}>
                   <FormGroup className="mb-3">
                     <Label htmlFor="firstNameinput" className="form-label">
                       *How many Pallets will be used?
@@ -250,7 +293,77 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                   </FormGroup>
                 </Col>
               )}
-            </Row>
+            </Col>
+            <Col md={6}>
+              <Dropzone
+                multiple={false}
+                onDrop={(acceptedFiles) => {
+                  handleAcceptedFiles(acceptedFiles)
+                }}
+              >
+                {({ getRootProps, getInputProps }) => (
+                  <div className="dropzone dz-clickable cursor-pointer">
+                    <div className="dz-message needsclick" {...getRootProps()}>
+                      <div className="mb-3">
+                        <i className="display-4 text-muted ri-upload-cloud-2-fill" />
+                      </div>
+                      <h4>Drop Only PDF files here or click to upload.</h4>
+                    </div>
+                  </div>
+                )}
+              </Dropzone>
+              <div className="list-unstyled mb-0" id="file-previews">
+                {selectedFiles.map((f: any, i) => {
+                  return (
+                    <Card
+                      className="mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete"
+                      key={i + '-file'}
+                    >
+                      <div className="p-2">
+                        <Row className="align-items-center">
+                          {/* <Col className="col-auto">
+                            <Image
+                              data-dz-thumbnail=""
+                              height={'40px'}
+                              width={'40px'}
+                              objectFit="cover"
+                              objectPosition="center"
+                              className="avatar-sm rounded bg-light"
+                              alt={f.name}
+                              src={'https://electrostoregroup.com/Onix/img/no-image.png'}
+                            />
+                          </Col> */}
+                          <Col className="d-flex justify-content-between align-items-center">
+                            <div>
+                              <p className="text-muted font-weight-bold m-0">
+                                {f.name}
+                              </p>
+                              <p className="mb-0">
+                                <strong>{f.formattedSize}</strong>
+                              </p>
+                            </div>
+                            <div>
+                              <Button
+                                color="light"
+                                className="btn-icon"
+                                onClick={() => setselectedFiles([])}
+                              >
+                                <i className=" ri-close-line" />
+                              </Button>
+                            </div>
+                          </Col>
+                        </Row>
+                      </div>
+                    </Card>
+                  )
+                })}
+              </div>
+              {errorFile && (
+                <p className="text-danger m-0">
+                  You must Upload the FBA Labels to create order.
+                </p>
+              )}
+            </Col>
             <Col md={12}>
               <div className="flex flex-row w-100 justify-content-start align-items-center pb-3">
                 <Button
@@ -331,9 +444,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
               <h5>Total Products in Order: {validation.values.hasProducts}</h5>
               {validation.touched.hasProducts &&
               validation.errors.hasProducts ? (
-                <p className='text-danger'>
-                  {validation.errors.hasProducts}
-                </p>
+                <p className="text-danger">{validation.errors.hasProducts}</p>
               ) : null}
               <table className="table align-middle table-responsive table-nowrap table-striped-columns">
                 <thead>

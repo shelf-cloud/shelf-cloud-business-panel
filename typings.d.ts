@@ -182,6 +182,7 @@ export interface OrderRowType {
     totalReceivedItems?: number;
     isThird: boolean;
     thirdInfo: string;
+    labelsName: string;
 }
 
 export interface ShipmentOrderItem {

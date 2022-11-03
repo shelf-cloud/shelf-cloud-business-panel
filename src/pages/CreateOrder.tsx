@@ -498,7 +498,7 @@ const CreateOrder = ({ session }: Props) => {
                                 htmlFor="lastNameinput"
                                 className="form-label"
                               >
-                                *Phone #
+                                Phone #
                               </Label>
                               <Input
                                 type="text"

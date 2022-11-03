@@ -140,8 +140,20 @@ const WholeSaleType = ({ data }: Props) => {
             {data.proofOfShipped != '' && data.proofOfShipped != null && (
               <a href={data.proofOfShipped} target="blank">
                 <Button color="info" className="btn-label">
-                  <i className="las la-truck label-icon align-middle fs-16 me-2" />
+                  <i className="las la-truck label-icon align-middle fs-3 me-2" />
                   Proof Of Shipped
+                </Button>
+              </a>
+            )}
+
+            {data.labelsName != '' && (
+              <a
+                href={`https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/shelf-cloud%2F${data.labelsName}?alt=media&token=837cdbcf-11ab-4555-9697-50f1c6a3d0e3`}
+                target="blank"
+              >
+                <Button color="secondary" className="btn-label">
+                  <i className="las la-toilet-paper label-icon align-middle fs-3 me-2" />
+                  Labels
                 </Button>
               </a>
             )}

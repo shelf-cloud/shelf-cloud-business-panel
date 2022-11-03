@@ -52,8 +52,11 @@
       "@typings": [
         "../typings.d.ts"
       ],
+      "@firebase": [
+        "firebase.js"
+      ],
     }
   },
-  "include": ["next-env.d.ts", "api/**/*.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "api/**/*.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],
   "exclude": ["node_modules"]
 }
