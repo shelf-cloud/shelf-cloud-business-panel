@@ -40,6 +40,8 @@ const Navdata = () => {
     }
   }, [iscurrentState, isDashboard, isWarehouse, isShipments, isReceiving])
 
+  useEffect(() => {}, [state.user])
+
   const menuItems = [
     {
       label: 'Menu',
@@ -123,42 +125,14 @@ const Navdata = () => {
         setIscurrentState('Shipments')
         updateIconSidebar(e)
       },
-      subItems:
-        state.user?.NumberShipId > 1
-          ? [
-              {
-                id: 'shipments',
-                label: 'Shipments',
-                link: '/Shipments',
-                parentId: 'orders',
-              },
-              {
-                id: 'createorder',
-                label: 'Create Order',
-                link: '/CreateOrder',
-                parentId: 'orders',
-              },
-              {
-                id: 'createwholesale',
-                label: 'Create Wholesale Order',
-                link: '/CreateWholeSaleOrder',
-                parentId: 'orders',
-              },
-            ]
-          : [
-              {
-                id: 'shipments',
-                label: 'Shipments',
-                link: '/Shipments',
-                parentId: 'orders',
-              },
-              {
-                id: 'createwholesale',
-                label: 'Create Wholesale Order',
-                link: '/CreateWholeSaleOrder',
-                parentId: 'orders',
-              },
-            ],
+      subItems: [
+        {
+          id: 'shipments',
+          label: 'Shipments',
+          link: '/Shipments',
+          parentId: 'orders',
+        },
+      ],
     },
     {
       id: 'receiving',
@@ -188,6 +162,24 @@ const Navdata = () => {
       ],
     },
   ]
+
+  if (state.user?.showCreateOrder) {
+    menuItems[3].subItems.push({
+      id: 'createorder',
+      label: 'Create Order',
+      link: '/CreateOrder',
+      parentId: 'orders',
+    })
+  }
+  if (state.user?.showWholeSale) {
+    menuItems[3].subItems.push({
+      id: 'createwholesale',
+      label: 'Create Wholesale Order',
+      link: '/CreateWholeSaleOrder',
+      parentId: 'orders',
+    })
+  }
+
   return <React.Fragment>{menuItems}</React.Fragment>
 }
 export default Navdata

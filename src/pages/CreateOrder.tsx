@@ -684,7 +684,7 @@ const CreateOrder = ({ session }: Props) => {
                                                           sku: '',
                                                           name: '',
                                                           qty: 1,
-                                                          price: 0,
+                                                          price: '0',
                                                         })
                                                       }
                                                     >
@@ -709,8 +709,8 @@ const CreateOrder = ({ session }: Props) => {
                                                         push({
                                                           sku: '',
                                                           name: '',
-                                                          qty: '',
-                                                          price: '',
+                                                          qty: 1,
+                                                          price: '0',
                                                         })
                                                       }
                                                     >

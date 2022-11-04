@@ -130,8 +130,8 @@ const VerticalLayout = () => {
                 >
                   <ul className="nav nav-sm flex-column test">
                     {/* subItms  */}
-                    {item.subItems &&
-                      (item.subItems || []).map((subItem: any, key: any) => (
+                    {item?.subItems &&
+                      (item?.subItems || []).map((subItem: any, key: any) => (
                         <React.Fragment key={key}>
                           {!subItem.isChildItem ? (
                             <li className="nav-item">
