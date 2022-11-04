@@ -10,8 +10,8 @@ import {
 import Link from 'next/link'
 
 //import images
-import avatar1 from '../../assets/images/avatar-5.jpg'
-import { Router, useRouter } from 'next/router'
+import avatar1 from '../../assets/images/avatar-shelfcloud.png'
+import { useRouter } from 'next/router'
 
 const ProfileDropdown = () => {
   const { data: session } = useSession()

@@ -1,6 +1,5 @@
 import { NextApiHandler } from 'next'
 import { getSession } from '@auth/client'
-import { Business } from '@typings'
 import axios from 'axios'
 
 const getbusinesssumary: NextApiHandler = async (request, response) => {

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { GetServerSideProps } from 'next'
 import axios from 'axios'
 import * as Yup from 'yup'
@@ -9,7 +9,6 @@ import {
   Button,
   Card,
   CardBody,
-  CardHeader,
   Col,
   Container,
   Form,
@@ -18,7 +17,6 @@ import {
   Input,
   Label,
   Row,
-  UncontrolledAlert,
 } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
@@ -53,10 +51,7 @@ type Props = {
 const AddProducts = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
   const title = `Add Product | ${session?.user?.name}`
-  const [productSucces, setProductSucces] = useState(false)
-  const [productFail, setProductFail] = useState(false)
   const [useSameUnitDimensions, setUseSameUnitDimensions] = useState(false)
-  const [msg, setMsg] = useState('')
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
@@ -134,13 +129,6 @@ const AddProducts = ({ session }: Props) => {
     },
   })
 
-  useEffect(() => {
-    return () => {
-      setProductSucces(false)
-      setProductFail(false)
-    }
-  }, [])
-
   const HandleAddProduct = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
@@ -182,24 +170,6 @@ const AddProducts = ({ session }: Props) => {
               <CardBody>
                 <Form onSubmit={HandleAddProduct}>
                   <Row>
-                    {productSucces && (
-                      <UncontrolledAlert
-                        color="success"
-                        className="alert-border-left"
-                      >
-                        <i className="ri-check-double-line me-3 align-middle fs-16"></i>
-                        <strong>Product Saved!</strong> - {msg}
-                      </UncontrolledAlert>
-                    )}
-                    {productFail && (
-                      <UncontrolledAlert
-                        color="danger"
-                        className="alert-border-left mb-xl-0"
-                      >
-                        <i className="ri-error-warning-line me-3 align-middle fs-16"></i>
-                        <strong>Product Not Saved</strong> - {msg}
-                      </UncontrolledAlert>
-                    )}
                     <h5 className="fs-5 m-3 fw-bolder">Product Details</h5>
                     <Col md={6}>
                       <FormGroup className="mb-3">

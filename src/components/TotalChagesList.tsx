@@ -1,8 +1,6 @@
 import React from 'react'
-import Link from 'next/link'
 import { Card, CardBody, CardHeader, Col } from 'reactstrap'
-import Image from 'next/image'
-import { ProductSummary, TotalChagres } from '@typings'
+import { TotalChagres } from '@typings'
 import CountUp from 'react-countup'
 
 type Props = {

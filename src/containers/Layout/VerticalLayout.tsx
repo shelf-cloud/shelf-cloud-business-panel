@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
 import { Collapse } from 'reactstrap'
@@ -27,70 +27,70 @@ const VerticalLayout = () => {
   //   }
   // }, [props.location.pathname, props.layoutType])
 
-  function activateParentDropdown(item: any) {
-    item.classList.add('active')
-    let parentCollapseDiv = item.closest('.collapse.menu-dropdown')
+  // function activateParentDropdown(item: any) {
+  //   item.classList.add('active')
+  //   let parentCollapseDiv = item.closest('.collapse.menu-dropdown')
 
-    if (parentCollapseDiv) {
-      // to set aria expand true remaining
-      parentCollapseDiv.classList.add('show')
-      parentCollapseDiv.parentElement.children[0].classList.add('active')
-      parentCollapseDiv.parentElement.children[0].setAttribute(
-        'aria-expanded',
-        'true'
-      )
-      if (parentCollapseDiv.parentElement.closest('.collapse.menu-dropdown')) {
-        parentCollapseDiv.parentElement
-          .closest('.collapse')
-          .classList.add('show')
-        if (
-          parentCollapseDiv.parentElement.closest('.collapse')
-            .previousElementSibling
-        )
-          parentCollapseDiv.parentElement
-            .closest('.collapse')
-            .previousElementSibling.classList.add('active')
-        if (
-          parentCollapseDiv.parentElement
-            .closest('.collapse')
-            .previousElementSibling.closest('.collapse')
-        ) {
-          parentCollapseDiv.parentElement
-            .closest('.collapse')
-            .previousElementSibling.closest('.collapse')
-            .classList.add('show')
-          parentCollapseDiv.parentElement
-            .closest('.collapse')
-            .previousElementSibling.closest('.collapse')
-            .previousElementSibling.classList.add('active')
-        }
-      }
-      return false
-    }
-    return false
-  }
+  //   if (parentCollapseDiv) {
+  //     // to set aria expand true remaining
+  //     parentCollapseDiv.classList.add('show')
+  //     parentCollapseDiv.parentElement.children[0].classList.add('active')
+  //     parentCollapseDiv.parentElement.children[0].setAttribute(
+  //       'aria-expanded',
+  //       'true'
+  //     )
+  //     if (parentCollapseDiv.parentElement.closest('.collapse.menu-dropdown')) {
+  //       parentCollapseDiv.parentElement
+  //         .closest('.collapse')
+  //         .classList.add('show')
+  //       if (
+  //         parentCollapseDiv.parentElement.closest('.collapse')
+  //           .previousElementSibling
+  //       )
+  //         parentCollapseDiv.parentElement
+  //           .closest('.collapse')
+  //           .previousElementSibling.classList.add('active')
+  //       if (
+  //         parentCollapseDiv.parentElement
+  //           .closest('.collapse')
+  //           .previousElementSibling.closest('.collapse')
+  //       ) {
+  //         parentCollapseDiv.parentElement
+  //           .closest('.collapse')
+  //           .previousElementSibling.closest('.collapse')
+  //           .classList.add('show')
+  //         parentCollapseDiv.parentElement
+  //           .closest('.collapse')
+  //           .previousElementSibling.closest('.collapse')
+  //           .previousElementSibling.classList.add('active')
+  //       }
+  //     }
+  //     return false
+  //   }
+  //   return false
+  // }
 
-  const removeActivation = (items: any) => {
-    let actiItems = items.filter((x: any) => x.classList.contains('active'))
+  // const removeActivation = (items: any) => {
+  //   let actiItems = items.filter((x: any) => x.classList.contains('active'))
 
-    actiItems.forEach((item: any) => {
-      if (item.classList.contains('menu-link')) {
-        if (!item.classList.contains('active')) {
-          item.setAttribute('aria-expanded', false)
-        }
-        if (item.nextElementSibling) {
-          item.nextElementSibling.classList.remove('show')
-        }
-      }
-      if (item.classList.contains('nav-link')) {
-        if (item.nextElementSibling) {
-          item.nextElementSibling.classList.remove('show')
-        }
-        item.setAttribute('aria-expanded', false)
-      }
-      item.classList.remove('active')
-    })
-  }
+  //   actiItems.forEach((item: any) => {
+  //     if (item.classList.contains('menu-link')) {
+  //       if (!item.classList.contains('active')) {
+  //         item.setAttribute('aria-expanded', false)
+  //       }
+  //       if (item.nextElementSibling) {
+  //         item.nextElementSibling.classList.remove('show')
+  //       }
+  //     }
+  //     if (item.classList.contains('nav-link')) {
+  //       if (item.nextElementSibling) {
+  //         item.nextElementSibling.classList.remove('show')
+  //       }
+  //       item.setAttribute('aria-expanded', false)
+  //     }
+  //     item.classList.remove('active')
+  //   })
+  // }
 
   return (
     <React.Fragment>

@@ -1,4 +1,4 @@
-import { OrderRowType, StorageRowProduct } from '@typings'
+import { StorageRowProduct } from '@typings'
 import React from 'react'
 import { ExpanderComponentProps } from 'react-data-table-component'
 import StorageType from '@components/StorageType'

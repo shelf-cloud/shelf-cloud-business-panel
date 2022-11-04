@@ -3,7 +3,6 @@ import { StorageRowProduct } from '@typings'
 import React from 'react'
 import DataTable from 'react-data-table-component'
 import Image from 'next/image'
-import { Input, Row } from 'reactstrap'
 import StorageExpandedDetails from './StorageExpandedDetails'
 
 type Props = {

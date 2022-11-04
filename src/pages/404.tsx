@@ -9,9 +9,7 @@ const Animation = dynamic(() => import('@components/Common/Animation'), {
   ssr: false,
 })
 
-type Props = {}
-
-const NotFound = (props: Props) => {
+const NotFound = () => {
   return (
     <div>
       <Head>

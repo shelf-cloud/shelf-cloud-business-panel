@@ -62,7 +62,7 @@ const Storage = ({ session }: Props) => {
   }, [allData, serachValue])
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data, error } = useSWR(
+  const { data } = useSWR(
     state.user.businessId
       ? `/api/getStorageInventory?businessId=${state.user.businessId}`
       : null,

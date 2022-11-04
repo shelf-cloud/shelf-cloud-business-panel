@@ -9,7 +9,6 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownToggle,
-  Input,
   Row,
   UncontrolledDropdown,
 } from 'reactstrap'

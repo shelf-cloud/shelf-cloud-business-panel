@@ -56,7 +56,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
   const [serachValue, setSerachValue] = useState('')
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data, error } = useSWR(
+  const { data } = useSWR(
     state.user.businessId
       ? `/api/getReceivingInventory?businessId=${state.user.businessId}`
       : null,

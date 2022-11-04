@@ -5,7 +5,6 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
-  Spinner,
 } from 'reactstrap'
 import AppContext from '@context/AppContext'
 import axios from 'axios'

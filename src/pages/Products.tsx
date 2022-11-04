@@ -22,7 +22,7 @@ import useSWR from 'swr'
 import ProductsTable from '@components/ProductsTable'
 import InventoryBinsModal from '@components/InventoryBinsModal'
 import EditProductModal from '@components/EditProductModal'
-import { CSVLink, CSVDownload } from 'react-csv'
+import { CSVLink } from 'react-csv'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -56,7 +56,7 @@ const Products = ({ session }: Props) => {
   const [serachValue, setSerachValue] = useState('')
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data, error } = useSWR(
+  const { data } = useSWR(
     state.user.businessId
       ? `/api/getBusinessInventory?businessId=${state.user.businessId}`
       : null,

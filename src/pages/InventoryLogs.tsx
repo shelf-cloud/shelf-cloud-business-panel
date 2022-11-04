@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
-import { LogRowType, Product } from '@typings'
+import { LogRowType } from '@typings'
 import axios from 'axios'
 import Head from 'next/head'
 import {
@@ -53,7 +53,7 @@ const InventoryLogs = ({ session }: Props) => {
   const title = `Inventory Log | ${session?.user?.name}`
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data, error } = useSWR(
+  const { data } = useSWR(
     state.user.businessId
       ? `/api/getBusinessInventoryLog?businessId=${state.user.businessId}`
       : null,

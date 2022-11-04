@@ -1,9 +1,8 @@
 import { NextApiHandler } from 'next'
 import { getSession } from '@auth/client'
-import { Business } from '@typings'
 import axios from 'axios'
 
-const getProductInventoryBins: NextApiHandler<Business> = async (request, response) => {
+const getProductInventoryBins: NextApiHandler = async (request, response) => {
     const session = await getSession({ req: request })
     if (session == null) {
         response.status(401).end()

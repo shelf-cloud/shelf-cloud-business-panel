@@ -5,7 +5,6 @@ import * as Yup from 'yup'
 import { GetServerSideProps } from 'next'
 import { getSession } from 'next-auth/react'
 import Head from 'next/head'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useContext, useState } from 'react'
 import {
@@ -113,7 +112,7 @@ const Profile = ({ session }: Props) => {
         .oneOf([Yup.ref('newPassword1'), null], "Passwords don't match!")
         .required('Please Enter Your Confirmation Password'),
     }),
-    onSubmit: async (values, { resetForm }) => {
+    onSubmit: async (_values) => {
       // const response = await axios.post(
       //   `api/createNewProduct?businessId=${state.user.businessId}`,
       //   {

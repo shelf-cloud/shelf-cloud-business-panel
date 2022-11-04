@@ -4,10 +4,7 @@ import Link from 'next/link'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 //import logo
-import logoSm from '../../assets/images/logo-sm.png'
-import logoDark from '../../assets/images/logo-dark.png'
-import logoLight from '../../assets/images/logo-light.png'
-import ShipnovoLogo from '../../assets/images/shipnovo-logo.png'
+import ShelfCloudLogo from '../../assets/images/shelfcloud-logo-v.jpg'
 
 //Import Components
 import VerticalLayout from './VerticalLayout'
@@ -27,24 +24,24 @@ const Sidebar = ({ layoutType }: Props) => {
     }
   })
 
-  const addEventListenerOnSmHoverMenu = () => {
-    // add listener Sidebar Hover icon on change layout from setting
-    if (
-      document.documentElement.getAttribute('data-sidebar-size') === 'sm-hover'
-    ) {
-      document.documentElement.setAttribute(
-        'data-sidebar-size',
-        'sm-hover-active'
-      )
-    } else if (
-      document.documentElement.getAttribute('data-sidebar-size') ===
-      'sm-hover-active'
-    ) {
-      document.documentElement.setAttribute('data-sidebar-size', 'sm-hover')
-    } else {
-      document.documentElement.setAttribute('data-sidebar-size', 'sm-hover')
-    }
-  }
+  // const addEventListenerOnSmHoverMenu = () => {
+  //   // add listener Sidebar Hover icon on change layout from setting
+  //   if (
+  //     document.documentElement.getAttribute('data-sidebar-size') === 'sm-hover'
+  //   ) {
+  //     document.documentElement.setAttribute(
+  //       'data-sidebar-size',
+  //       'sm-hover-active'
+  //     )
+  //   } else if (
+  //     document.documentElement.getAttribute('data-sidebar-size') ===
+  //     'sm-hover-active'
+  //   ) {
+  //     document.documentElement.setAttribute('data-sidebar-size', 'sm-hover')
+  //   } else {
+  //     document.documentElement.setAttribute('data-sidebar-size', 'sm-hover')
+  //   }
+  // }
 
   return (
     <React.Fragment>
@@ -55,9 +52,9 @@ const Sidebar = ({ layoutType }: Props) => {
               <div className="w-100 position-relative">
                 <Image
                   className="rounded-3"
-                  src={ShipnovoLogo}
+                  src={ShelfCloudLogo}
                   layout="intrinsic"
-                  alt="ShipNovo Logo"
+                  alt="ShelfCloud Logo"
                   objectFit="contain"
                 />
               </div>

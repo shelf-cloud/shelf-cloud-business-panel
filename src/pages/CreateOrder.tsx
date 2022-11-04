@@ -9,7 +9,6 @@ import {
   Button,
   Card,
   CardBody,
-  CardHeader,
   Col,
   Container,
   FormFeedback,
@@ -17,7 +16,6 @@ import {
   Input,
   Label,
   Row,
-  UncontrolledAlert,
 } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
@@ -62,10 +60,9 @@ const CreateOrder = ({ session }: Props) => {
   const [validSkus, setValidSkus] = useState<string[]>([])
   const [countries, setcountries] = useState([])
   const [validCountries, setValidCountries] = useState<string[]>([])
-  const [msg, setMsg] = useState('')
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data, error } = useSWR(
+  const { data } = useSWR(
     state.user.businessId
       ? `/api/getSkus?businessId=${state.user.businessId}`
       : null,
@@ -186,7 +183,7 @@ const CreateOrder = ({ session }: Props) => {
           <ToastContainer />
           <Container fluid>
             <BreadCrumb title="Create Order" pageTitle="Shipments" />
-            <Card>
+            <Card className="fs-6">
               <CardBody>
                 {ready && (
                   <Formik
@@ -206,16 +203,17 @@ const CreateOrder = ({ session }: Props) => {
                       <Form>
                         <Row>
                           <Col md={7}>
-                            <FormGroup className="mb-3">
+                            <FormGroup className="createOrder_inputs">
                               <Label
                                 htmlFor="firstNameinput"
-                                className="form-label"
+                                className="form-label mb-0"
                               >
                                 *Recipient
                               </Label>
                               <Input
                                 type="text"
                                 className="form-control"
+                                style={{ padding: '0.2rem 0.9rem' }}
                                 placeholder="Recipient..."
                                 id="name"
                                 name="name"
@@ -232,16 +230,17 @@ const CreateOrder = ({ session }: Props) => {
                                 </FormFeedback>
                               ) : null}
                             </FormGroup>
-                            <FormGroup className="mb-3">
+                            <FormGroup className="createOrder_inputs">
                               <Label
                                 htmlFor="lastNameinput"
-                                className="form-label"
+                                className="form-label mb-0"
                               >
                                 Company
                               </Label>
                               <Input
                                 type="text"
                                 className="form-control"
+                                style={{ padding: '0.2rem 0.9rem' }}
                                 placeholder="Company..."
                                 id="company"
                                 name="company"
@@ -262,16 +261,17 @@ const CreateOrder = ({ session }: Props) => {
                             </FormGroup>
                           </Col>
                           <Col md={5}>
-                            <FormGroup className="mb-3">
+                            <FormGroup className="createOrder_inputs">
                               <Label
                                 htmlFor="lastNameinput"
-                                className="form-label"
+                                className="form-label mb-0"
                               >
                                 *Order Number
                               </Label>
                               <div className="input-group">
                                 <span
                                   className="input-group-text fw-semibold fs-5"
+                                  style={{ padding: '0.2rem 0.9rem' }}
                                   id="basic-addon1"
                                 >
                                   {orderNumberStart}-
@@ -279,6 +279,7 @@ const CreateOrder = ({ session }: Props) => {
                                 <Input
                                   type="text"
                                   className="form-control"
+                                  style={{ padding: '0.2rem 0.9rem' }}
                                   placeholder="Order Number..."
                                   aria-describedby="basic-addon1"
                                   id="orderNumber"
@@ -301,16 +302,17 @@ const CreateOrder = ({ session }: Props) => {
                             </FormGroup>
                           </Col>
                           <Col md={7}>
-                            <FormGroup className="mb-3">
+                            <FormGroup className="createOrder_inputs">
                               <Label
                                 htmlFor="compnayNameinput"
-                                className="form-label"
+                                className="form-label mb-0"
                               >
                                 *Address 1
                               </Label>
                               <Input
                                 type="text"
                                 className="form-control"
+                                style={{ padding: '0.2rem 0.9rem' }}
                                 placeholder="Address..."
                                 id="adress1"
                                 name="adress1"
@@ -329,10 +331,11 @@ const CreateOrder = ({ session }: Props) => {
                                 </FormFeedback>
                               ) : null}
                             </FormGroup>
-                            <FormGroup className="mb-3">
+                            <FormGroup className="createOrder_inputs mt-1">
                               <Input
                                 type="text"
                                 className="form-control"
+                                style={{ padding: '0.2rem 0.9rem' }}
                                 placeholder="Address..."
                                 id="adress2"
                                 name="adress2"
@@ -356,16 +359,17 @@ const CreateOrder = ({ session }: Props) => {
                               className="d-flex justify-content-between w-100 gap-1"
                             >
                               <Col md={3}>
-                                <FormGroup className="mb-3">
+                                <FormGroup className="createOrder_inputs">
                                   <Label
                                     htmlFor="compnayNameinput"
-                                    className="form-label"
+                                    className="form-label mb-0"
                                   >
                                     *City
                                   </Label>
                                   <Input
                                     type="text"
                                     className="form-control"
+                                    style={{ padding: '0.2rem 0.9rem' }}
                                     placeholder="City..."
                                     id="city"
                                     name="city"
@@ -384,16 +388,17 @@ const CreateOrder = ({ session }: Props) => {
                                 </FormGroup>
                               </Col>
                               <Col md={3}>
-                                <FormGroup className="mb-3">
+                                <FormGroup className="createOrder_inputs">
                                   <Label
                                     htmlFor="compnayNameinput"
-                                    className="form-label"
+                                    className="form-label mb-0"
                                   >
                                     *State
                                   </Label>
                                   <Input
                                     type="text"
                                     className="form-control"
+                                    style={{ padding: '0.2rem 0.9rem' }}
                                     placeholder="State..."
                                     id="state"
                                     name="state"
@@ -414,16 +419,17 @@ const CreateOrder = ({ session }: Props) => {
                                 </FormGroup>
                               </Col>
                               <Col md={2}>
-                                <FormGroup className="mb-3">
+                                <FormGroup className="createOrder_inputs">
                                   <Label
                                     htmlFor="compnayNameinput"
-                                    className="form-label"
+                                    className="form-label mb-0"
                                   >
                                     *Zip Code
                                   </Label>
                                   <Input
                                     type="text"
                                     className="form-control"
+                                    style={{ padding: '0.2rem 0.9rem' }}
                                     placeholder="Zip Code..."
                                     id="zipCode"
                                     name="zipCode"
@@ -444,16 +450,17 @@ const CreateOrder = ({ session }: Props) => {
                                 </FormGroup>
                               </Col>
                               <Col md={2}>
-                                <FormGroup className="mb-3">
+                                <FormGroup className="createOrder_inputs">
                                   <Label
                                     htmlFor="compnayNameinput"
-                                    className="form-label"
+                                    className="form-label mb-0"
                                   >
                                     *Country
                                   </Label>
                                   <Input
                                     type="text"
                                     className="form-control"
+                                    style={{ padding: '0.2rem 0.9rem' }}
                                     placeholder="Country..."
                                     id="country"
                                     list="countries"
@@ -493,16 +500,17 @@ const CreateOrder = ({ session }: Props) => {
                                 </FormGroup>
                               </Col>
                             </Col>
-                            <FormGroup className="mb-3">
+                            <FormGroup className="createOrder_inputs">
                               <Label
                                 htmlFor="lastNameinput"
-                                className="form-label"
+                                className="form-label mb-0"
                               >
                                 Phone #
                               </Label>
                               <Input
                                 type="text"
                                 className="form-control"
+                                style={{ padding: '0.2rem 0.9rem' }}
                                 placeholder="Phone Number..."
                                 id="phoneNumber"
                                 name="phoneNumber"
@@ -521,16 +529,17 @@ const CreateOrder = ({ session }: Props) => {
                                 </FormFeedback>
                               ) : null}
                             </FormGroup>
-                            <FormGroup className="mb-3">
+                            <FormGroup className="createOrder_inputs">
                               <Label
                                 htmlFor="lastNameinput"
-                                className="form-label"
+                                className="form-label mb-0"
                               >
                                 Email
                               </Label>
                               <Input
                                 type="text"
                                 className="form-control"
+                                style={{ padding: '0.2rem 0.9rem' }}
                                 placeholder="Email Address..."
                                 id="email"
                                 name="email"
@@ -549,7 +558,7 @@ const CreateOrder = ({ session }: Props) => {
                             </FormGroup>
                           </Col>
                           <Col md={5}>
-                            <FormGroup className="mb-3">
+                            <FormGroup className="createOrder_inputs">
                               <Label
                                 htmlFor="lastNameinput"
                                 className="form-label"
@@ -559,6 +568,7 @@ const CreateOrder = ({ session }: Props) => {
                               <Input
                                 type="text"
                                 className="form-control"
+                                style={{ padding: '0.2rem 0.9rem' }}
                                 placeholder="Amount..."
                                 id="amount"
                                 name="amount"
@@ -575,7 +585,7 @@ const CreateOrder = ({ session }: Props) => {
                                 </FormFeedback>
                               ) : null}
                             </FormGroup>
-                            <FormGroup className="mb-3">
+                            <FormGroup className="createOrder_inputs">
                               <Label
                                 htmlFor="lastNameinput"
                                 className="form-label"
@@ -585,6 +595,7 @@ const CreateOrder = ({ session }: Props) => {
                               <Input
                                 type="text"
                                 className="form-control"
+                                style={{ padding: '0.2rem 0.9rem' }}
                                 placeholder="Shipping..."
                                 id="shipping"
                                 name="shipping"
@@ -603,7 +614,7 @@ const CreateOrder = ({ session }: Props) => {
                                 </FormFeedback>
                               ) : null}
                             </FormGroup>
-                            <FormGroup className="mb-3">
+                            <FormGroup className="createOrder_inputs">
                               <Label
                                 htmlFor="lastNameinput"
                                 className="form-label"
@@ -613,6 +624,7 @@ const CreateOrder = ({ session }: Props) => {
                               <Input
                                 type="text"
                                 className="form-control"
+                                style={{ padding: '0.2rem 0.9rem' }}
                                 placeholder="Tax..."
                                 id="tax"
                                 name="tax"
@@ -630,26 +642,26 @@ const CreateOrder = ({ session }: Props) => {
                               ) : null}
                             </FormGroup>
                           </Col>
-                          <div className="border mt-3 border-dashed" />
+                          {/* <div className="border mt-3 border-dashed" /> */}
                           <Row>
-                            <h5 className="fs-5 m-0 mt-3 mb-3 fw-bolder mw-100">
+                            {/* <h5 className="fs-5 m-0 mt-1 mb-1 fw-bolder mw-100">
                               Order Products
-                            </h5>
-                            <Col xl={12} className="p-0">
+                            </h5> */}
+                            <Col xl={12} className="p-0 mt-1">
                               <table className="table table-hover table-centered align-middle">
                                 <thead>
                                   <tr>
-                                    <th className="fs-4\5 m-0 fw-semibold text-center bg-primary text-white"></th>
-                                    <th className="fs-4\5 m-0 fw-semibold text-center bg-primary text-white">
+                                    <th className="py-1 fs-6 m-0 fw-semibold text-center bg-primary text-white"></th>
+                                    <th className="py-1 fs-6 m-0 fw-semibold text-center bg-primary text-white">
                                       SKU
                                     </th>
-                                    <th className="fs-4\5 m-0 fw-semibold text-center bg-primary text-white">
+                                    <th className="py-1 fs-6 m-0 fw-semibold text-center bg-primary text-white">
                                       Title
                                     </th>
-                                    <th className="fs-4\5 m-0 fw-semibold text-center bg-primary text-white">
+                                    <th className="py-1 fs-6 m-0 fw-semibold text-center bg-primary text-white">
                                       Qty
                                     </th>
-                                    <th className="fs-4\5 m-0 fw-semibold text-center bg-primary text-white">
+                                    <th className="py-1 fs-6 m-0 fw-semibold text-center bg-primary text-white">
                                       Price
                                     </th>
                                   </tr>
@@ -659,11 +671,11 @@ const CreateOrder = ({ session }: Props) => {
                                     {({ remove, push }) => (
                                       <>
                                         {values.products.map(
-                                          (product, index) => (
+                                          (_product, index) => (
                                             <tr key={index}>
                                               <td>
                                                 {index > 0 ? (
-                                                  <Row className="d-flex flex-row flex-nowrap justify-content-between align-items-center mb-3">
+                                                  <Row className="d-flex flex-row flex-nowrap justify-content-center gap-2 align-items-center mb-0">
                                                     <Button
                                                       type="button"
                                                       className="btn-icon btn-success"
@@ -689,7 +701,7 @@ const CreateOrder = ({ session }: Props) => {
                                                     </Button>
                                                   </Row>
                                                 ) : (
-                                                  <Row className="d-flex flex-row flex-nowrap justify-content-end align-items-center mb-3">
+                                                  <Row className="d-flex flex-row flex-nowrap justify-content-center align-items-center mb-0">
                                                     <Button
                                                       type="button"
                                                       className="btn-icon btn-success"
@@ -711,22 +723,19 @@ const CreateOrder = ({ session }: Props) => {
                                                 <Field
                                                   name={`products.${index}.sku`}
                                                 >
-                                                  {({
-                                                    form: {
-                                                      touche,
-                                                      errors,
-                                                      isValid,
-                                                    },
-                                                    meta,
-                                                  }: any) => (
-                                                    <FormGroup className="mb-3">
+                                                  {({ meta }: any) => (
+                                                    <FormGroup className="createOrder_inputs">
                                                       <Input
                                                         type="text"
                                                         className="form-select"
+                                                        style={{
+                                                          padding:
+                                                            '0.2rem 0.9rem',
+                                                        }}
                                                         name={`products.${index}.sku`}
                                                         list="skuList"
                                                         placeholder="Sku..."
-                                                        onChange={(e:any) => {
+                                                        onChange={(e: any) => {
                                                           handleChange(e)
                                                           e.target.value == ''
                                                             ? (values.products[
@@ -784,18 +793,15 @@ const CreateOrder = ({ session }: Props) => {
                                                 <Field
                                                   name={`products.${index}.title`}
                                                 >
-                                                  {({
-                                                    form: {
-                                                      touche,
-                                                      errors,
-                                                      isValid,
-                                                    },
-                                                    meta,
-                                                  }: any) => (
-                                                    <FormGroup className="mb-3">
+                                                  {({ meta }: any) => (
+                                                    <FormGroup className="createOrder_inputs">
                                                       <Input
                                                         type="text"
                                                         className="form-control"
+                                                        style={{
+                                                          padding:
+                                                            '0.2rem 0.9rem',
+                                                        }}
                                                         name={`products.${index}.title`}
                                                         placeholder="Title..."
                                                         list="skuNames"
@@ -841,18 +847,15 @@ const CreateOrder = ({ session }: Props) => {
                                                 <Field
                                                   name={`products.${index}.qty`}
                                                 >
-                                                  {({
-                                                    form: {
-                                                      touche,
-                                                      errors,
-                                                      isValid,
-                                                    },
-                                                    meta,
-                                                  }: any) => (
-                                                    <FormGroup className="mb-3">
+                                                  {({ meta }: any) => (
+                                                    <FormGroup className="createOrder_inputs">
                                                       <Input
                                                         type="text"
                                                         className="form-control"
+                                                        style={{
+                                                          padding:
+                                                            '0.2rem 0.9rem',
+                                                        }}
                                                         name={`products.${index}.qty`}
                                                         placeholder="Qty..."
                                                         onChange={handleChange}
@@ -882,18 +885,15 @@ const CreateOrder = ({ session }: Props) => {
                                                 <Field
                                                   name={`products.${index}.price`}
                                                 >
-                                                  {({
-                                                    form: {
-                                                      touche,
-                                                      errors,
-                                                      isValid,
-                                                    },
-                                                    meta,
-                                                  }: any) => (
-                                                    <FormGroup className="mb-3">
+                                                  {({ meta }: any) => (
+                                                    <FormGroup className="createOrder_inputs">
                                                       <Input
                                                         type="text"
                                                         className="form-control"
+                                                        style={{
+                                                          padding:
+                                                            '0.2rem 0.9rem',
+                                                        }}
                                                         name={`products.${index}.price`}
                                                         placeholder="Price..."
                                                         onChange={handleChange}
@@ -929,7 +929,7 @@ const CreateOrder = ({ session }: Props) => {
                               </table>
                             </Col>
                           </Row>
-                          <h5 className="fs-14 mb-3 text-muted">
+                          <h5 className="fs-14 mb-0 text-muted">
                             *You must complete all required fields or you will
                             not be able to create your product.
                           </h5>

@@ -74,18 +74,18 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
       ),
     }),
     onSubmit: async (values, { resetForm }) => {
+      if (!values.isThird && selectedFiles.length == 0) {
+        setErrorFile(true)
+        return
+      }
+      setErrorFile(false)
       const docTime = moment().format('DD-MM-YYYY-HH-mm-ss-a')
       const storageRef = ref(
         storage,
         `shelf-cloud/etiquetas-fba-${session?.user?.name}-${docTime}.pdf`
       )
-      if (selectedFiles.length == 0) {
-        setErrorFile(true)
-        return
-      }
 
-      setErrorFile(false)
-      await uploadBytes(storageRef, selectedFiles[0]).then((snapshot) => {
+      await uploadBytes(storageRef, selectedFiles[0]).then((_snapshot) => {
         toast.success('Successfully uploaded labels!')
       })
 
@@ -301,7 +301,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                   handleAcceptedFiles(acceptedFiles)
                 }}
               >
-                {({ getRootProps, getInputProps }) => (
+                {({ getRootProps }) => (
                   <div className="dropzone dz-clickable cursor-pointer">
                     <div className="dz-message needsclick" {...getRootProps()}>
                       <div className="mb-3">

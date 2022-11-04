@@ -5,8 +5,8 @@ import CredentialsProvider from "next-auth/providers/credentials"
 const options: NextAuthOptions = {
     theme: {
         colorScheme: "light", // "auto" | "dark" | "light"
-        brandColor: "#0373D7", // Hex color code
-        logo: `${process.env.API_DOMAIN}/assets/shipnovo-logo.png`, // Absolute URL to image
+        brandColor: "#458BC9", // Hex color code
+        logo: `${process.env.API_DOMAIN}/assets/shelfcloud-logo-v.jpg`, // Absolute URL to image
     },
     debug: true,
     session: { maxAge: 60 * 60 },
@@ -19,7 +19,7 @@ const options: NextAuthOptions = {
                 username: { label: "Username", type: "text", placeholder: "jsmith" },
                 password: { label: "Password", type: "password" }
             },
-            async authorize(credentials, req) {
+            async authorize(credentials, _req) {
                 const res = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/shipnovo`, {
                     method: 'POST',
                     body: JSON.stringify(credentials),

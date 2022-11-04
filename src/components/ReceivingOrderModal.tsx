@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // ALTER TABLE `dbpruebas` ADD `activeState` BOOLEAN NOT NULL DEFAULT TRUE AFTER `image`;
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useEffect, useContext } from 'react'
 import {
   Button,
   Col,
@@ -13,7 +13,6 @@ import {
   ModalBody,
   ModalHeader,
   Row,
-  Spinner,
 } from 'reactstrap'
 import AppContext from '@context/AppContext'
 import axios from 'axios'

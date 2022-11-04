@@ -34,7 +34,7 @@ const DashboardHeader = ({ user, startDate, endDate, handleChangeDates }: Props)
                       dateFormat: 'd/m/Y',
                       defaultDate: [moment(startDate, 'YYYY-MM-DD').format('DD-MM-YYYY'), moment(endDate, 'YYYY-MM-DD').format('DD-MM-YYYY')],
                     }}
-                    onChange={(selectedDates, dateStr) => handleChangeDates(dateStr)}
+                    onChange={(_selectedDates, dateStr) => handleChangeDates(dateStr)}
                   />
                   <div className="input-group-text bg-primary border-primary text-white">
                     <i className="ri-calendar-2-line"></i>

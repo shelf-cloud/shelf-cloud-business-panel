@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Dropdown, DropdownMenu, DropdownToggle, Form } from 'reactstrap'
 
 //import images
 import logoSm from '../../assets/images/logo-sm.png'

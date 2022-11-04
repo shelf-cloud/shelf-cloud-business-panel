@@ -3,7 +3,7 @@ import { wholesaleProductRow } from '@typings'
 import Image from 'next/image'
 import React, { useContext} from 'react'
 import AppContext from '@context/AppContext'
-import { Button, FormFeedback, Input } from 'reactstrap'
+import { Button, Input } from 'reactstrap'
 import DataTable from 'react-data-table-component'
 
 type Props = {

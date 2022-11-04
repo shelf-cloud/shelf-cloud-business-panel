@@ -2,9 +2,6 @@
 import { OrderRowType } from '@typings'
 import React from 'react'
 import DataTable from 'react-data-table-component'
-import {
-  Input,
-} from 'reactstrap'
 import ShipmentExpandedDetail from './ShipmentExpandedDetail'
 
 type Props = {

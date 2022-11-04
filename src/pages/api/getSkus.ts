@@ -1,9 +1,8 @@
 import { NextApiHandler } from 'next'
 import { getSession } from '@auth/client'
-import { Business } from '@typings'
 import axios from 'axios'
 
-const getSkus: NextApiHandler<Business> = async (request, response) => {
+const getSkus: NextApiHandler = async (request, response) => {
     const session = await getSession({ req: request })
 
     if (session == null) {

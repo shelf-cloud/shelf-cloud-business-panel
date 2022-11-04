@@ -5,7 +5,7 @@ import { GetServerSideProps } from 'next'
 import { OrderRowType, ShipmentOrderItem } from '@typings'
 import axios from 'axios'
 import Head from 'next/head'
-import { ToastContainer, toast } from 'react-toastify'
+import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
 import {
   Button,
@@ -62,7 +62,7 @@ const Shipments = ({ session }: Props) => {
   const [searchType, setSearchType] = useState<String>('')
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data, error } = useSWR(
+  const { data } = useSWR(
     state.user.businessId
       ? `/api/getShipmentsOrders?businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`
       : null,
@@ -189,7 +189,7 @@ const Shipments = ({ session }: Props) => {
                               ),
                             ],
                           }}
-                          onChange={(selectedDates, dateStr) =>
+                          onChange={(_selectedDates, dateStr) =>
                             handleChangeDates(dateStr)
                           }
                         />
