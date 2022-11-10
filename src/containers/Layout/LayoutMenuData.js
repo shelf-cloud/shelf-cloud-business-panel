@@ -7,6 +7,7 @@ const Navdata = () => {
   const [isWarehouse, setIsWarehouse] = useState(false)
   const [isShipments, setIsShipments] = useState(false)
   const [isReceiving, setIsReceiving] = useState(false)
+  const [isBilling, setIsBilling] = useState(false)
 
   const [iscurrentState, setIscurrentState] = useState('Dashboard')
 
@@ -18,8 +19,9 @@ const Navdata = () => {
       activeIconItems.forEach((item) => {
         item.classList.remove('active')
         var id = item.getAttribute('subitems')
-        if (document.getElementById(id))
+        if (document.getElementById(id)) {
           document.getElementById(id).classList.remove('show')
+        }
       })
     }
   }
@@ -38,7 +40,17 @@ const Navdata = () => {
     if (iscurrentState !== 'Receiving') {
       setIsReceiving(false)
     }
-  }, [iscurrentState, isDashboard, isWarehouse, isShipments, isReceiving])
+    if (iscurrentState !== 'Billing') {
+      setIsBilling(false)
+    }
+  }, [
+    iscurrentState,
+    isDashboard,
+    isWarehouse,
+    isShipments,
+    isReceiving,
+    isBilling,
+  ])
 
   useEffect(() => {}, [state.user])
 
@@ -158,6 +170,27 @@ const Navdata = () => {
           label: 'Create Receiving',
           link: '/CreateReceiving',
           parentId: 'orders',
+        },
+      ],
+    },
+    {
+      id: 'billing',
+      label: 'Billing',
+      icon: 'ri-currency-line',
+      link: '/#',
+      stateVariables: isBilling,
+      click: function (e) {
+        e.preventDefault()
+        setIsBilling(!isBilling)
+        setIscurrentState('Billing')
+        updateIconSidebar(e)
+      },
+      subItems: [
+        {
+          id: 'invoices',
+          label: 'Invoices',
+          link: '/Invoices',
+          parentId: 'billing',
         },
       ],
     },

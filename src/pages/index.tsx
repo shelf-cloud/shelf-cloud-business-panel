@@ -14,6 +14,7 @@ import moment from 'moment'
 import MostInvenotryList from '@components/MostInvenotryList'
 import { Summary } from '@typings'
 import TotalChagesList from '@components/TotalChagesList'
+import InvoicesList from '@components/InvoicesList'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -86,8 +87,13 @@ const Home = () => {
                 <Widget summary={summary} />
               </Row>
               <Row>
-                <MostInvenotryList products={summary?.mostInventory} />
-                <TotalChagesList totalCharges={summary?.totalCharges}/>
+                <Col md={7}>
+                  <MostInvenotryList products={summary?.mostInventory} />
+                </Col>
+                <Col md={5}>
+                  <TotalChagesList totalCharges={summary?.totalCharges} />
+                  <InvoicesList invoices={summary?.invoices} />
+                </Col>
               </Row>
             </Col>
           </Row>

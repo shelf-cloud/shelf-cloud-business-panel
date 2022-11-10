@@ -57,6 +57,9 @@
       "@firebase": [
         "firebase.js"
       ],
+      "@lib/*": [
+        "lib/*"
+      ],
     }
   },
   "include": ["next-env.d.ts", "api/**/*.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],
