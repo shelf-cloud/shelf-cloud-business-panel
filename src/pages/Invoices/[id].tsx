@@ -62,7 +62,7 @@ const InvoiceDetails = () => {
                   <CardHeader className="d-flex flex-row justify-content-between align-items-start">
                     <div>
                       <Link className="" href={'/Invoices'}>
-                        Go Back
+                        Go Back Invoice
                       </Link>
                     </div>
                     <div className="text-end pe-5">
