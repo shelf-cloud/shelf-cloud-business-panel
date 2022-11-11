@@ -59,63 +59,85 @@ const InvoiceDetails = () => {
             <Row>
               <Col lg={12}>
                 <Card>
-                  <CardHeader className="d-flex flex-row justify-content-between align-items-start">
-                    <div>
-                      <Link href={'/Invoices'}>
-                        <div className='d-flex flex-row gap-1 text-decoration-none text-primary' style={{cursor: 'pointer'}}>
-                        <i className='ri-arrow-left-line' />Go Back
+                  {!loading ? (
+                    <>
+                      <CardHeader className="d-flex flex-row justify-content-between align-items-start">
+                        <div>
+                          <Link href={'/Invoices'}>
+                            <div
+                              className="d-flex flex-row gap-1 text-decoration-none text-primary"
+                              style={{ cursor: 'pointer' }}
+                            >
+                              <i className="ri-arrow-left-line" />
+                              Go Back
+                            </div>
+                          </Link>
                         </div>
-                      </Link>
-                    </div>
-                    <div className="text-end pe-5">
-                      <h1>INVOICE</h1>
-                      <h2 className="fs-1 fw-bold" style={{ color: '#458BC9' }}>
-                        {invoiceDetails?.invoice.invoiceNumber}
-                      </h2>
-                      <p className="m-0 fw-semibold">
-                        Invoice Date: {invoiceDetails?.invoice.createdDate}
-                      </p>
-                      <p className="m-0 fw-normal">
-                        Expire Date: {invoiceDetails?.invoice.expireDate}
-                      </p>
-                    </div>
-                  </CardHeader>
-                  <CardBody>
-                    {!loading && (
-                      <table className="table text-center table-striped-columns">
-                        <thead className="fs-5">
-                          <tr>
-                            <th>ORDER #</th>
-                            <th>TYPE</th>
-                            <th>DATE CLOSED</th>
-                            <th>ORDER TOTAL CHARGE</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {invoiceDetails?.orders.map((order) => (
-                            <tr key={order.orderNumber}>
-                              <td>{order.orderNumber}</td>
-                              <td>{order.orderType}</td>
-                              <td>{order.closedDate}</td>
-                              <td>{FormatCurrency.format(order.totalCharge)}</td>
+                        <div className="text-end pe-5">
+                          <h1>INVOICE</h1>
+                          <h2
+                            className="fs-1 fw-bold"
+                            style={{ color: '#458BC9' }}
+                          >
+                            {invoiceDetails?.invoice.invoiceNumber}
+                          </h2>
+                          <p className="m-0 fw-semibold">
+                            Invoice Date: {invoiceDetails?.invoice.createdDate}
+                          </p>
+                          <p className="m-0 fw-normal">
+                            Expire Date: {invoiceDetails?.invoice.expireDate}
+                          </p>
+                          <h4
+                            className={
+                              invoiceDetails?.invoice?.paid
+                                ? 'm-0 fw-bold text-success'
+                                : 'm-0 fw-bold text-danger'
+                            }
+                          >
+                            {invoiceDetails?.invoice?.paid ? 'Paid' : 'Due'}
+                          </h4>
+                        </div>
+                      </CardHeader>
+                      <CardBody>
+                        <table className="table text-center table-striped-columns">
+                          <thead className="fs-5">
+                            <tr>
+                              <th>ORDER #</th>
+                              <th>TYPE</th>
+                              <th>DATE CLOSED</th>
+                              <th>ORDER TOTAL CHARGE</th>
                             </tr>
-                          ))}
-                        </tbody>
-                        <tfoot className="fw-bold fs-5">
-                          <tr>
-                            <td className="text-end" colSpan={3}>
-                              Total
-                            </td>
-                            <td>
-                              {FormatCurrency.format(
-                                Number(invoiceDetails?.invoice?.totalCharge)
-                              )}
-                            </td>
-                          </tr>
-                        </tfoot>
-                      </table>
-                    )}
-                  </CardBody>
+                          </thead>
+                          <tbody>
+                            {invoiceDetails?.orders.map((order) => (
+                              <tr key={order.orderNumber}>
+                                <td>{order.orderNumber}</td>
+                                <td>{order.orderType}</td>
+                                <td>{order.closedDate}</td>
+                                <td>
+                                  {FormatCurrency.format(order.totalCharge)}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                          <tfoot className="fw-bold fs-5">
+                            <tr>
+                              <td className="text-end" colSpan={3}>
+                                Total
+                              </td>
+                              <td>
+                                {FormatCurrency.format(
+                                  Number(invoiceDetails?.invoice?.totalCharge)
+                                )}
+                              </td>
+                            </tr>
+                          </tfoot>
+                        </table>
+                      </CardBody>
+                    </>
+                  ) : (
+                    <CardHeader className='fw-bold fs-2 text-center'>Loading...</CardHeader>
+                  )}
                 </Card>
               </Col>
             </Row>

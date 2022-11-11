@@ -150,8 +150,8 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
       selector: (row: InvoiceList) => {
         return (
           <p
-            className={
-              moment(today).isAfter(row.expireDate)
+            className={ row.paid ? 'fs-14 my-1' :
+              moment(today).isSameOrAfter(row.expireDate)
                 ? 'fs-14 my-1 text-danger'
                 : 'fs-14 my-1'
             }

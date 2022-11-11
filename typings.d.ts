@@ -42,6 +42,7 @@ export interface InvoiceDetails {
   expireDate: string
   invoiceNumber: string
   totalCharge: number
+  paid: boolean
 }
 
 export interface OrderDetails {

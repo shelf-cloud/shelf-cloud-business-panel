@@ -44,13 +44,15 @@ const InvoicesList = ({ invoices }: Props) => {
                       <td>
                         <h5
                           className={
-                            moment(today).isAfter(invoice.expireDate)
+                            invoice.paid
+                              ? 'fs-14 my-1'
+                              : moment(today).isSameOrAfter(invoice.expireDate)
                               ? 'fs-14 my-1 text-danger'
                               : 'fs-14 my-1'
                           }
                         >
                           {moment(invoice.expireDate, 'YYYY-MM-DD').format(
-                            'DD/MM/YYYY'
+                            'LL'
                           )}
                         </h5>
                       </td>
