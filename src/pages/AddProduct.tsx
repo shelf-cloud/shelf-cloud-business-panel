@@ -83,7 +83,9 @@ const AddProducts = ({ session }: Props) => {
       image: Yup.string().url(),
       asin: Yup.string().max(50, 'Asin is to Long'),
       fnsku: Yup.string().max(50, 'Fnsku is to Long'),
-      barcode: Yup.string().max(50, 'barcode is to Long'),
+      barcode: Yup.string()
+        .max(50, 'barcode is to Long')
+        .required('Please Enter Your Barcode'),
       weight: Yup.number()
         .required('Please Enter Your Weight')
         .positive('Value must be grater than 0'),
@@ -135,7 +137,6 @@ const AddProducts = ({ session }: Props) => {
   }
 
   const handleBoxDimensionsCheckbox = () => {
-
     validation.setFieldValue('boxweight', validation.values.weight)
 
     if (!useSameUnitDimensions) {
@@ -478,7 +479,7 @@ const AddProducts = ({ session }: Props) => {
                       <div className="flex-shrink-0">
                         <div className="form-check form-switch form-switch-right form-switch-md">
                           <Label className="form-label text-muted">
-                            Use Unit Dimensions
+                            Same as unit dimensions
                           </Label>
                           <Input
                             className="form-check-input code-switcher"

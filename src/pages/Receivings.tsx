@@ -21,8 +21,8 @@ import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import useSWR from 'swr'
 import moment from 'moment'
-import ShipmentsTable from '@components/ShipmentsTable'
 import Flatpickr from 'react-flatpickr'
+import ReceivingTable from '@components/ReceivingTable'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -190,7 +190,7 @@ const Receiving = ({ session }: Props) => {
                     </div>
                   </CardHeader>
                   <CardBody>
-                    <ShipmentsTable tableData={tableData} pending={pending} />
+                    <ReceivingTable tableData={tableData} pending={pending} />
                   </CardBody>
                 </Card>
               </Col>

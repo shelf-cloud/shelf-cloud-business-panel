@@ -3,6 +3,7 @@ import { Card, CardBody, CardHeader, Col } from 'reactstrap'
 import { InvoiceList } from '@typings'
 import CountUp from 'react-countup'
 import moment from 'moment'
+import Link from 'next/link'
 
 type Props = {
   invoices: InvoiceList[] | undefined
@@ -22,11 +23,26 @@ const InvoicesList = ({ invoices }: Props) => {
           <CardBody>
             <div className="table-responsive table-card">
               <table className="table table-sm table-hover table-centered align-middle table-nowrap mb-0">
+                <thead>
+                  <tr>
+                    <th>Invoice #</th>
+                    <th>Total Charge</th>
+                    <th>Expire Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
                 <tbody>
                   {invoices?.map((invoice) => (
                     <tr key={invoice.invoiceNumber}>
                       <td>
-                        <h5 className="fs-14 my-1">{invoice.invoiceNumber}</h5>
+                        <Link href={`/Invoices/${invoice.idOfInvoice}`}>
+                          <h5
+                            className="fs-14 my-1 text-secondary"
+                            style={{ cursor: 'pointer' }}
+                          >
+                            {invoice.invoiceNumber}
+                          </h5>
+                        </Link>
                       </td>
                       <td>
                         <h5 className="fs-14 my-1 fw-normal text-start">
@@ -46,7 +62,7 @@ const InvoicesList = ({ invoices }: Props) => {
                           className={
                             invoice.paid
                               ? 'fs-14 my-1'
-                              : moment(today).isSameOrAfter(invoice.expireDate)
+                              : moment(today).isAfter(invoice.expireDate)
                               ? 'fs-14 my-1 text-danger'
                               : 'fs-14 my-1'
                           }
@@ -59,16 +75,22 @@ const InvoicesList = ({ invoices }: Props) => {
                       <td>
                         <h5
                           className={
-                            invoice.paid
-                              ? 'fs-14 my-1 text-success'
-                              : 'fs-14 my-1 text-danger'
+                            moment(today).isAfter(invoice.expireDate)
+                              ? 'fs-14 my-1 text-danger'
+                              : 'fs-14 my-1'
                           }
                         >
                           {invoice.paid
                             ? 'Paid'
                             : moment(today).isAfter(invoice.expireDate)
-                            ? 'Overdue'
-                            : 'Due'}
+                            ? `Past Due ${moment(invoice.expireDate).fromNow(
+                                true
+                              )}`
+                            : moment(today).isSame(invoice.expireDate)
+                            ? 'Due Today'
+                            : `Due in ${moment(invoice.expireDate).fromNow(
+                                true
+                              )}`}
                         </h5>
                       </td>
                     </tr>

@@ -82,7 +82,7 @@ const Navdata = () => {
     },
     {
       id: 'warehouse',
-      label: 'Warehouse',
+      label: 'Inventory',
       icon: 'ri-building-4-line',
       link: '/#',
       stateVariables: isWarehouse,
@@ -100,21 +100,9 @@ const Navdata = () => {
           parentId: 'warehouse',
         },
         {
-          id: 'inventorylog',
-          label: 'Inventory Log',
-          link: '/InventoryLogs',
-          parentId: 'warehouse',
-        },
-        {
           id: 'addproduct',
           label: 'Add Product',
           link: '/AddProduct',
-          parentId: 'warehouse',
-        },
-        {
-          id: 'storage',
-          label: 'Storage',
-          link: '/Storage',
           parentId: 'warehouse',
         },
         {
@@ -123,11 +111,17 @@ const Navdata = () => {
           link: '/InactiveProducts',
           parentId: 'warehouse',
         },
+        {
+          id: 'inventorylog',
+          label: 'Audit Log',
+          link: '/InventoryLogs',
+          parentId: 'warehouse',
+        },
       ],
     },
     {
       id: 'shipments',
-      label: 'Shipments',
+      label: 'Orders',
       icon: 'ri-file-list-3-line',
       link: '/#',
       stateVariables: isShipments,
@@ -140,7 +134,7 @@ const Navdata = () => {
       subItems: [
         {
           id: 'shipments',
-          label: 'Shipments',
+          label: 'Shipment Log',
           link: '/Shipments',
           parentId: 'orders',
         },
@@ -148,7 +142,7 @@ const Navdata = () => {
     },
     {
       id: 'receiving',
-      label: 'Receiving',
+      label: 'Inbound',
       icon: 'ri-truck-line',
       link: '/#',
       stateVariables: isReceiving,
@@ -160,15 +154,15 @@ const Navdata = () => {
       },
       subItems: [
         {
-          id: 'receiving',
-          label: 'Receivings',
-          link: '/Receivings',
-          parentId: 'orders',
-        },
-        {
           id: 'createreceiving',
           label: 'Create Receiving',
           link: '/CreateReceiving',
+          parentId: 'orders',
+        },
+        {
+          id: 'receiving',
+          label: 'Receiving Log',
+          link: '/Receivings',
           parentId: 'orders',
         },
       ],
@@ -187,6 +181,12 @@ const Navdata = () => {
       },
       subItems: [
         {
+          id: 'storage',
+          label: 'Current Storage Charges',
+          link: '/Storage',
+          parentId: 'billing',
+        },
+        {
           id: 'invoices',
           label: 'Invoices',
           link: '/Invoices',
@@ -197,7 +197,7 @@ const Navdata = () => {
   ]
 
   if (state.user?.showCreateOrder) {
-    menuItems[3].subItems.push({
+    menuItems[3].subItems.unshift({
       id: 'createorder',
       label: 'Create Order',
       link: '/CreateOrder',
@@ -205,7 +205,7 @@ const Navdata = () => {
     })
   }
   if (state.user?.showWholeSale) {
-    menuItems[3].subItems.push({
+    menuItems[3].subItems.unshift({
       id: 'createwholesale',
       label: 'Create Wholesale Order',
       link: '/CreateWholeSaleOrder',

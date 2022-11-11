@@ -32,12 +32,12 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
     const a = rowA.paid
       ? 'Paid'
       : moment(today).isAfter(rowA.expireDate)
-      ? 'Overdue'
+      ? 'Past Due'
       : 'Due'
     const b = rowB.paid
       ? 'Paid'
       : moment(today).isAfter(rowB.expireDate)
-      ? 'Overdue'
+      ? 'Past Due'
       : 'Due'
 
     if (a > b) {
@@ -119,14 +119,18 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
         return (
           <p
             className={
-              row.paid ? 'fs-14 my-1 text-success' : 'fs-14 my-1 text-danger'
+              moment(today).isAfter(row.expireDate)
+                ? 'fs-14 my-1 text-danger'
+                : 'fs-14 my-1'
             }
           >
             {row.paid
               ? 'Paid'
               : moment(today).isAfter(row.expireDate)
-              ? 'Overdue'
-              : 'Due'}
+              ? `Past Due ${moment(row.expireDate).fromNow(true)}`
+              : moment(today).isSame(row.expireDate)
+              ? 'Due Today'
+              : `Due in ${moment(row.expireDate).fromNow(true)}`}
           </p>
         )
       },
@@ -150,8 +154,10 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
       selector: (row: InvoiceList) => {
         return (
           <p
-            className={ row.paid ? 'fs-14 my-1' :
-              moment(today).isSameOrAfter(row.expireDate)
+            className={
+              row.paid
+                ? 'fs-14 my-1'
+                : moment(today).isSameOrAfter(row.expireDate)
                 ? 'fs-14 my-1 text-danger'
                 : 'fs-14 my-1'
             }

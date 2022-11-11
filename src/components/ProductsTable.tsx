@@ -154,7 +154,7 @@ const ProductsTable = ({
       selector: (row: any) => {
         return (
           <div>
-            <p style={{ margin: '0px' }}>{row.ASIN}</p>
+            <p style={{ margin: '0px' }}><a href={`https://www.amazon.com/exec/obidos/${row.ASIN}`} target="blank">{row.ASIN}</a></p>
             <p style={{ margin: '0px' }}>{row.FNSKU}</p>
             <p style={{ margin: '0px' }}>{row.Barcode}</p>
           </div>

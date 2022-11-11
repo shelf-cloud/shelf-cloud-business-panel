@@ -374,7 +374,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                   color={validation.values.isThird ? 'light' : 'primary'}
                   onClick={() => validation.setFieldValue('isThird', false)}
                 >
-                  FBA
+                  Prepaid Shipping Label
                 </Button>
                 <Button
                   type="button"
@@ -384,7 +384,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                   color={validation.values.isThird ? 'primary' : 'light'}
                   onClick={() => validation.setFieldValue('isThird', true)}
                 >
-                  Third Party
+                  Shelf-Cloud Preferred Carrier
                 </Button>
               </div>
               {/* <FormGroup
