@@ -1,5 +1,5 @@
 import BreadCrumb from '@components/Common/BreadCrumb'
-import { Format } from '@lib/FormatCurrency'
+import { FormatCurrency } from '@lib/FormatNumbers'
 import { InvoiceFullDetails } from '@typings'
 import axios from 'axios'
 import { GetServerSideProps } from 'next'
@@ -61,8 +61,10 @@ const InvoiceDetails = () => {
                 <Card>
                   <CardHeader className="d-flex flex-row justify-content-between align-items-start">
                     <div>
-                      <Link className="" href={'/Invoices'}>
-                        Go Back Invoice
+                      <Link href={'/Invoices'}>
+                        <div className='d-flex flex-row gap-1 text-decoration-none text-primary' style={{cursor: 'pointer'}}>
+                        <i className='ri-arrow-left-line' />Go Back
+                        </div>
                       </Link>
                     </div>
                     <div className="text-end pe-5">
@@ -73,7 +75,7 @@ const InvoiceDetails = () => {
                       <p className="m-0 fw-semibold">
                         Invoice Date: {invoiceDetails?.invoice.createdDate}
                       </p>
-                      <p className="m-0 fw-semibold">
+                      <p className="m-0 fw-normal">
                         Expire Date: {invoiceDetails?.invoice.expireDate}
                       </p>
                     </div>
@@ -95,7 +97,7 @@ const InvoiceDetails = () => {
                               <td>{order.orderNumber}</td>
                               <td>{order.orderType}</td>
                               <td>{order.closedDate}</td>
-                              <td>{Format.format(order.totalCharge)}</td>
+                              <td>{FormatCurrency.format(order.totalCharge)}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -105,7 +107,7 @@ const InvoiceDetails = () => {
                               Total
                             </td>
                             <td>
-                              {Format.format(
+                              {FormatCurrency.format(
                                 Number(invoiceDetails?.invoice?.totalCharge)
                               )}
                             </td>

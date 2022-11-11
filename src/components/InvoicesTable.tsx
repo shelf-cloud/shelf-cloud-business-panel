@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Format } from '@lib/FormatCurrency'
+import { FormatCurrency } from '@lib/FormatNumbers'
 import { InvoiceList } from '@typings'
 import moment from 'moment'
 import Link from 'next/link'
@@ -13,6 +13,89 @@ type Props = {
 
 const InvoicesTable = ({ filteredItems, pending }: Props) => {
   const today = moment().format('YYYY-MM-DD')
+
+  const sortInvoiceNumber = (rowA: InvoiceList, rowB: InvoiceList) => {
+    const a = rowA.invoiceNumber.toLowerCase()
+    const b = rowB.invoiceNumber.toLowerCase()
+
+    if (a > b) {
+      return 1
+    }
+
+    if (b > a) {
+      return -1
+    }
+
+    return 0
+  }
+  const sortStatus = (rowA: InvoiceList, rowB: InvoiceList) => {
+    const a = rowA.paid
+      ? 'Paid'
+      : moment(today).isAfter(rowA.expireDate)
+      ? 'Overdue'
+      : 'Due'
+    const b = rowB.paid
+      ? 'Paid'
+      : moment(today).isAfter(rowB.expireDate)
+      ? 'Overdue'
+      : 'Due'
+
+    if (a > b) {
+      return 1
+    }
+
+    if (b > a) {
+      return -1
+    }
+
+    return 0
+  }
+  const sortCreatedDates = (rowA: InvoiceList, rowB: InvoiceList) => {
+    const a = moment(rowA.createdDate, 'YYYY-MM-DD')
+    const b = moment(rowB.createdDate, 'YYYY-MM-DD')
+
+    if (a > b) {
+      return 1
+    }
+
+    if (b > a) {
+      return -1
+    }
+
+    return 0
+  }
+  const sortExpireDates = (rowA: InvoiceList, rowB: InvoiceList) => {
+    const a = moment(rowA.expireDate, 'YYYY-MM-DD')
+    const b = moment(rowB.expireDate, 'YYYY-MM-DD')
+
+    if (a > b) {
+      return 1
+    }
+
+    if (b > a) {
+      return -1
+    }
+
+    return 0
+  }
+  const sortTotal = (rowA: InvoiceList, rowB: InvoiceList) => {
+    const a = rowA.totalCharge
+    const b = rowB.totalCharge
+
+    if (a > b) {
+      return 1
+    }
+
+    if (b > a) {
+      return -1
+    }
+
+    return 0
+  }
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    selectAllRowsItemText: 'All',
+  }
   const columns: any = [
     {
       name: <span className="fw-bold fs-5">Invoice Number</span>,
@@ -28,23 +111,39 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
       sortable: true,
       wrap: true,
       grow: 1,
-      //   compact: true,
+      sortFunction: sortInvoiceNumber,
     },
     {
       name: <span className="fw-bold fs-5">Status</span>,
       selector: (row: InvoiceList) => {
-        return row.paid ? 'Paid' : 'Due'
+        return (
+          <p
+            className={
+              row.paid ? 'fs-14 my-1 text-success' : 'fs-14 my-1 text-danger'
+            }
+          >
+            {row.paid
+              ? 'Paid'
+              : moment(today).isAfter(row.expireDate)
+              ? 'Overdue'
+              : 'Due'}
+          </p>
+        )
       },
       sortable: true,
       center: true,
       compact: true,
+      sortFunction: sortStatus,
     },
     {
       name: <span className="fw-bold fs-5">Invoice Date</span>,
-      selector: (row: InvoiceList) => row.createdDate,
+      selector: (row: InvoiceList) => {
+        return moment(row.createdDate, 'YYYY-MM-DD').format('LL')
+      },
       sortable: true,
       center: true,
       compact: true,
+      sortFunction: sortCreatedDates,
     },
     {
       name: <span className="fw-bold fs-5">Expire Date</span>,
@@ -57,31 +156,27 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
                 : 'fs-14 my-1'
             }
           >
-            {row.expireDate}
+            {moment(row.expireDate, 'YYYY-MM-DD').format('LL')}
           </p>
         )
       },
       sortable: true,
       center: true,
       compact: true,
+      sortFunction: sortExpireDates,
     },
     {
       name: <span className="fw-bold fs-5">Total Invoice</span>,
-      selector: (row: InvoiceList) => Format.format(row.totalCharge),
+      selector: (row: InvoiceList) => FormatCurrency.format(row.totalCharge),
       sortable: true,
       center: true,
       compact: true,
+      sortFunction: sortTotal,
     },
     {
       name: <span className="fw-bold fs-5"></span>,
       selector: (row: InvoiceList) => {
-        return (
-          <Link
-            href={`/Invoices/${row.idOfInvoice}`}
-          >
-            View Details
-          </Link>
-        )
+        return <Link href={`/Invoices/${row.idOfInvoice}`}>View Details</Link>
       },
       sortable: false,
       center: true,
@@ -96,7 +191,8 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
         data={filteredItems}
         progressPending={pending}
         striped={true}
-        defaultSortFieldId={4}
+        pagination
+        paginationComponentOptions={paginationComponentOptions}
       />
     </>
   )

@@ -74,7 +74,7 @@ const Widget = ({ summary }) => {
                         start={0}
                         // prefix={'$'}
                         // suffix={item.suffix}
-                        // separator={'.'}
+                        separator={','}
                         end={summary?.totalInventoryQty}
                         decimals={0}
                         duration={1}
@@ -141,7 +141,7 @@ const Widget = ({ summary }) => {
                         start={0}
                         // prefix={'$'}
                         // suffix={item.suffix}
-                        // separator={'.'}
+                        separator={','}
                         end={summary?.totalShipments}
                         decimals={0}
                         duration={1}

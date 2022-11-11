@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Card, CardBody, CardHeader, Col } from 'reactstrap';
 import Image from 'next/image';
 import { ProductSummary } from '@typings';
+import { FormatIntNumber } from '@lib/FormatNumbers';
 
 type Props = {
     products: ProductSummary[] | undefined
@@ -35,7 +36,7 @@ const MostInvenotryList = ({products}: Props) => {
                                                 </div>
                                             </td>
                                             <td>
-                                                <h5 className="fs-14 my-1 fw-normal">{item.totalQty}</h5>
+                                                <h5 className="fs-14 my-1 fw-normal">{FormatIntNumber.format(item.totalQty)}</h5>
                                                 <span className="text-muted">Stock</span>
                                             </td>
                                         </tr>

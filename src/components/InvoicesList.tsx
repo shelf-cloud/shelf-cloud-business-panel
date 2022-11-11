@@ -26,14 +26,10 @@ const InvoicesList = ({ invoices }: Props) => {
                   {invoices?.map((invoice) => (
                     <tr key={invoice.invoiceNumber}>
                       <td>
-                        <div className="d-flex align-items-center">
-                          <h5 className="fs-14 my-1">
-                            {invoice.invoiceNumber}
-                          </h5>
-                        </div>
+                        <h5 className="fs-14 my-1">{invoice.invoiceNumber}</h5>
                       </td>
                       <td>
-                        <h5 className="fs-14 my-1 fw-normal">
+                        <h5 className="fs-14 my-1 fw-normal text-start">
                           <CountUp
                             start={0}
                             prefix={'$ '}
@@ -46,26 +42,32 @@ const InvoicesList = ({ invoices }: Props) => {
                         </h5>
                       </td>
                       <td>
-                        <div className="d-flex align-items-center">
-                          <h5
-                            className={
-                              moment(today).isAfter(invoice.expireDate)
-                                ? 'fs-14 my-1 text-danger'
-                                : 'fs-14 my-1'
-                            }
-                          >
-                            {moment(invoice.expireDate, 'YYYY-MM-DD').format(
-                              'DD/MM/YYYY'
-                            )}
-                          </h5>
-                        </div>
+                        <h5
+                          className={
+                            moment(today).isAfter(invoice.expireDate)
+                              ? 'fs-14 my-1 text-danger'
+                              : 'fs-14 my-1'
+                          }
+                        >
+                          {moment(invoice.expireDate, 'YYYY-MM-DD').format(
+                            'DD/MM/YYYY'
+                          )}
+                        </h5>
                       </td>
                       <td>
-                        <div className="d-flex align-items-center">
-                          <h5 className={invoice.paid ? 'fs-14 my-1 text-success' : 'fs-14 my-1 text-danger'}>
-                            {invoice.paid ? 'Paid' : 'Due'}
-                          </h5>
-                        </div>
+                        <h5
+                          className={
+                            invoice.paid
+                              ? 'fs-14 my-1 text-success'
+                              : 'fs-14 my-1 text-danger'
+                          }
+                        >
+                          {invoice.paid
+                            ? 'Paid'
+                            : moment(today).isAfter(invoice.expireDate)
+                            ? 'Overdue'
+                            : 'Due'}
+                        </h5>
                       </td>
                     </tr>
                   ))}
