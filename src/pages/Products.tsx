@@ -211,9 +211,10 @@ const Products = ({ session }: Props) => {
               <Col lg={12}>
                 <Card>
                   <CardHeader>
-                    <Row className="pb-3 text-end">
+                    <Row className="pb-3 d-flex justify-content-end">
                       <CSVLink
                         data={csvData}
+                        style={{width: 'fit-content'}}
                         filename={`${session?.user?.name.toUpperCase()}-Products.csv`}
                       >
                         <Button color='primary' className='btn-label fs-6'>

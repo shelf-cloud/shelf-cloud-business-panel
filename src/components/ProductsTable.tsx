@@ -52,15 +52,15 @@ const ProductsTable = ({
       '.barcodeSection svg{width:90%;transform: translate(0px, -10px) !important;}'
     html += '</style></head><body>'
     html +=
-      '<div class="barcodeSection"><p style="text-align:center;font-size: 200%">' +
+      '<div class="barcodeSection"><p style="text-align:center;">' +
       product.SKU +
       '</p><p style="text-align:center;white-space: nowrap;overflow: hidden;">' +
       product.Title +
       '</p><svg id="barcode" width="100%" height="100%"></svg></div>'
     html +=
       '</body><script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/JsBarcode.all.min.js"></script><script>JsBarcode("#barcode", "' +
-      product.SKU +
-      '");</script></html>'
+      product.Barcode +
+      '", {text: "'+product.Barcode+'",fontSize: 12,textMargin: 0, height:31});</script></html>'
     var wnd = window.open('about:Barcode-Generated', '', '_blank')
     wnd?.document.write(html)
   }
