@@ -14,21 +14,21 @@ const getuser: NextApiHandler = async (request, response) => {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY!)
       const msg = {
         'from': {
-          'name': request.body.message.companyName,
-          'email': request.body.message.email,
+          'name': 'Shelf Cloud Contact Form',
+          'email': 'onlinesales@electrostoresl.com',
         },
         'personalizations': [{
           'to': {
             'email': 'onlinesales@electrostoresl.com',
           },
           'dynamicTemplateData': {
+            'subject': `Shelf Cloud Contact from ${request.body.message.companyName}`,
             'businessName': request.body.message.companyName,
             'businessEmail': request.body.message.email,
             'businessSubject': request.body.message.subject,
             'businessMessage': request.body.message.message,
           },
         }],
-        'subject': request.body.message.subject,
         'templateId': 'd-482f81e23d1c4d9f83e326048ca74060',
       }
 
@@ -40,10 +40,11 @@ const getuser: NextApiHandler = async (request, response) => {
             message: 'Email has been sent'
           })
         })
-        .catch(() => {
+        .catch((error) => {
           response.json({
             error: true,
-            message: 'Error sending message'
+            message: 'Error sending message',
+            errorRes: error
           })
         })
 }
