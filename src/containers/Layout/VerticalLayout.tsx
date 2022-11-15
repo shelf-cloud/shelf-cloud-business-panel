@@ -262,7 +262,8 @@ const VerticalLayout = () => {
               <li className="nav-item">
                 <Link href={item.link ? item.link : '/#'} passHref>
                   <a className="nav-link menu-link">
-                    <i className={item.icon}></i> <span>{item.label}</span>
+                    <i className={item.icon}></i>
+                    <span data-key="t-apps">{item.label}</span>
                     {item.badgeName ? (
                       <span
                         className={'badge badge-pill bg-' + item.badgeColor}

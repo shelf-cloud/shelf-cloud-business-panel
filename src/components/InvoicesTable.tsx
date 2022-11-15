@@ -119,7 +119,9 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
         return (
           <p
             className={
-              moment(today).isAfter(row.expireDate)
+              row.paid
+                ? 'fs-14 my-1 text-success'
+                : moment(today).isAfter(row.expireDate)
                 ? 'fs-14 my-1 text-danger'
                 : 'fs-14 my-1'
             }

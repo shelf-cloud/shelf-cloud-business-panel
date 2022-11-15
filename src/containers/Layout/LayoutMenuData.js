@@ -63,7 +63,7 @@ const Navdata = () => {
       id: 'dashboard',
       label: 'Dashboard',
       icon: 'ri-dashboard-2-line',
-      link: '/#',
+      link: '/',
       stateVariables: isDashboard,
       click: function (e) {
         e.preventDefault()
@@ -71,20 +71,20 @@ const Navdata = () => {
         setIscurrentState('Dashboard')
         updateIconSidebar(e)
       },
-      subItems: [
-        {
-          id: 'Summary',
-          label: 'Summary',
-          link: '/',
-          parentId: 'dashboard',
-        },
-      ],
+      // subItems: [
+      //   // {
+      //   //   id: 'Summary',
+      //   //   label: 'Summary',
+      //   //   link: '/',
+      //   //   parentId: 'dashboard',
+      //   // },
+      // ],
     },
     {
       id: 'warehouse',
       label: 'Inventory',
       icon: 'ri-building-4-line',
-      link: '/#',
+      link: '#',
       stateVariables: isWarehouse,
       click: function (e) {
         e.preventDefault()
@@ -123,7 +123,7 @@ const Navdata = () => {
       id: 'shipments',
       label: 'Orders',
       icon: 'ri-file-list-3-line',
-      link: '/#',
+      link: '#',
       stateVariables: isShipments,
       click: function (e) {
         e.preventDefault()
@@ -144,7 +144,7 @@ const Navdata = () => {
       id: 'receiving',
       label: 'Inbound',
       icon: 'ri-truck-line',
-      link: '/#',
+      link: '#',
       stateVariables: isReceiving,
       click: function (e) {
         e.preventDefault()
@@ -171,7 +171,7 @@ const Navdata = () => {
       id: 'billing',
       label: 'Billing',
       icon: 'ri-currency-line',
-      link: '/#',
+      link: '#',
       stateVariables: isBilling,
       click: function (e) {
         e.preventDefault()

@@ -72,11 +72,10 @@ function PrintInvoice({ invoiceDetails }: Props) {
                   <div class="zone">
                       <div id="left1">
                       <img src="https://electrostoregroup.com/warehouseManager/assets/shelfcloud-logo-v.jpg" />
-                      <p>Shelf Cloud - Onix Venture Group</p>
-                      <p>9631 Premier Parkway</p>
+                      <p>9629 Premier Parkway</p>
                       <p>Miramar, FL 33025</p>
-                      <a href="mailto:info@onixventuregroup.com?Subject=Purchase%20Orders">info@onixventuregroup.com</a>
-                      <a href="https://www.onixventuregroup.com/" target="_blank">www.onixventuregroup.com</a>
+                      <a href="mailto:info@shelf-cloud.com?Subject=Purchase%20Orders">info@shelf-cloud.com</a>
+                      <a href="https://www.shelf-cloud.com" target="_blank">https://www.shelf-cloud.com</a>
                       
                       
                       <p style="font-size: 24px;font-weight: 900;text-transform: uppercase;margin: 13px 0px 0px 0px;">Business: ${invoiceDetails.invoice.businessName}</p>
