@@ -6,7 +6,7 @@ import { getStorage } from 'firebase/storage'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyBHShGd9H8llo3NhE7cbP9svv8dHt865TA',
+  apiKey: process.env.FIREBASE_API_KEY,
   authDomain: 'etiquetas-fba.firebaseapp.com',
   projectId: 'etiquetas-fba',
   storageBucket: 'etiquetas-fba.appspot.com',

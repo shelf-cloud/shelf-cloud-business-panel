@@ -292,7 +292,7 @@ const AddProducts = ({ session }: Props) => {
                           htmlFor="compnayNameinput"
                           className="form-label"
                         >
-                          Barcode
+                          UPC / Barcode
                         </Label>
                         <Input
                           type="text"

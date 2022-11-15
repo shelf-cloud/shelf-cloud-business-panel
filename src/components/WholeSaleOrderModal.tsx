@@ -50,9 +50,9 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
 
     initialValues: {
       orderNumber: `00${state?.user?.orderNumber}`,
-      type: '',
+      type: 'Parcel Boxes',
       numberOfPallets: 1,
-      isThird: false,
+      isThird: '',
       thirdInfo: '',
       hasProducts: orderProducts.length,
     },
@@ -63,9 +63,15 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
       type: Yup.string()
         .oneOf(['LTL', 'Parcel Boxes'], 'Please Choose a Type')
         .required('Please Choose a Type'),
-      isThird: Yup.boolean(),
+      numberOfPallets: Yup.number().when('type', {
+        is: 'LTL',
+        then: Yup.number()
+          .min(1, 'Must be greater than or equal to 1')
+          .required('Must enter Third Party Information'),
+      }),
+      isThird: Yup.string().required('Select a Shipment Payment Type'),
       thirdInfo: Yup.string().when('isThird', {
-        is: true,
+        is: 'true',
         then: Yup.string().required('Must enter Third Party Information'),
       }),
       hasProducts: Yup.number().min(
@@ -74,20 +80,22 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
       ),
     }),
     onSubmit: async (values, { resetForm }) => {
-      if (!values.isThird && selectedFiles.length == 0) {
+      if (values.isThird == 'false' && selectedFiles.length == 0) {
         setErrorFile(true)
         return
       }
       setErrorFile(false)
       const docTime = moment().format('DD-MM-YYYY-HH-mm-ss-a')
-      const storageRef = ref(
-        storage,
-        `shelf-cloud/etiquetas-fba-${session?.user?.name}-${docTime}.pdf`
-      )
 
-      await uploadBytes(storageRef, selectedFiles[0]).then((_snapshot) => {
-        toast.success('Successfully uploaded labels!')
-      })
+      if (values.isThird == 'false') {
+        const storageRef = ref(
+          storage,
+          `shelf-cloud/etiquetas-fba-${session?.user?.name}-${docTime}.pdf`
+        )
+        await uploadBytes(storageRef, selectedFiles[0]).then((_snapshot) => {
+          toast.success('Successfully uploaded labels!')
+        })
+      }
 
       const response = await axios.post(
         `api/createWholesaleOrder?businessId=${state.user.businessId}`,
@@ -122,9 +130,12 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
             carrierService: values.type,
             isPallets: values.type == 'LTL' ? true : false,
             numberOfPallets: values.type == 'LTL' ? values.numberOfPallets : 0,
-            isthird: values.isThird,
-            thirdInfo: values.thirdInfo,
-            labelsName: `etiquetas-fba-${session?.user?.name}-${docTime}.pdf`,
+            isthird: values.isThird == 'true' ? true : false,
+            thirdInfo: values.thirdInfo == 'true' ? values.thirdInfo : '',
+            labelsName:
+              values.isThird == 'false'
+                ? `etiquetas-fba-${session?.user?.name}-${docTime}.pdf`
+                : '',
             orderProducts: orderProducts.map((product) => {
               return {
                 sku: product.sku,
@@ -235,33 +246,42 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                 </FormGroup>
               </Col>
               <Col md={12}>
-                <FormGroup className="mb-3">
-                  <Label htmlFor="firstNameinput" className="form-label">
-                    *Type of Shipment
-                  </Label>
-                  <Input
-                    type="select"
-                    className="form-control"
-                    id="type"
-                    name="type"
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    invalid={
-                      validation.touched.type && validation.errors.type
-                        ? true
-                        : false
+                <Label htmlFor="firstNameinput" className="form-label">
+                  *Type of Shipment
+                </Label>
+                <div className="flex flex-row w-100 justify-content-start align-items-center pb-3">
+                  <Button
+                    type="button"
+                    className={
+                      'me-3 ' +
+                      (validation.values.type == 'Parcel Boxes'
+                        ? ''
+                        : 'text-muted')
+                    }
+                    color={
+                      validation.values.type == 'Parcel Boxes'
+                        ? 'primary'
+                        : 'light'
+                    }
+                    onClick={() =>
+                      validation.setFieldValue('type', 'Parcel Boxes')
                     }
                   >
-                    <option value="">Choose a Type..</option>
-                    <option value="LTL">Pallets</option>
-                    <option value="Parcel Boxes">Parcel Boxes</option>
-                  </Input>
-                  {validation.touched.type && validation.errors.type ? (
-                    <FormFeedback type="invalid">
-                      {validation.errors.type}
-                    </FormFeedback>
-                  ) : null}
-                </FormGroup>
+                    Parcel Boxes
+                  </Button>
+                  <Button
+                    type="button"
+                    className={
+                      '' + (validation.values.type == 'LTL' ? '' : 'text-muted')
+                    }
+                    color={
+                      validation.values.type == 'LTL' ? 'primary' : 'light'
+                    }
+                    onClick={() => validation.setFieldValue('type', 'LTL')}
+                  >
+                    Pallets
+                  </Button>
+                </div>
               </Col>
               {validation.values.type == 'LTL' && (
                 <Col md={12}>
@@ -293,6 +313,35 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                   </FormGroup>
                 </Col>
               )}
+              <Col md={12}>
+                <FormGroup className="mb-3">
+                  <Label htmlFor="firstNameinput" className="form-label">
+                    *Type of Shipment Payment
+                  </Label>
+                  <Input
+                    type="select"
+                    className="form-control"
+                    id="isThird"
+                    name="isThird"
+                    onChange={validation.handleChange}
+                    onBlur={validation.handleBlur}
+                    invalid={
+                      validation.touched.isThird && validation.errors.isThird
+                        ? true
+                        : false
+                    }
+                  >
+                    <option value="">Choose a Type..</option>
+                    <option value="false">Prepaid Shipping Label</option>
+                    <option value="true">Shelf-Cloud Preferred Carrier</option>
+                  </Input>
+                  {validation.touched.isThird && validation.errors.isThird ? (
+                    <FormFeedback type="invalid">
+                      {validation.errors.isThird}
+                    </FormFeedback>
+                  ) : null}
+                </FormGroup>
+              </Col>
             </Col>
             <Col md={6}>
               <Dropzone
@@ -365,53 +414,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
               )}
             </Col>
             <Col md={12}>
-              <div className="flex flex-row w-100 justify-content-start align-items-center pb-3">
-                <Button
-                  type="button"
-                  className={
-                    'me-3 ' + (validation.values.isThird ? 'text-muted' : '')
-                  }
-                  color={validation.values.isThird ? 'light' : 'primary'}
-                  onClick={() => validation.setFieldValue('isThird', false)}
-                >
-                  Prepaid Shipping Label
-                </Button>
-                <Button
-                  type="button"
-                  className={
-                    '' + (validation.values.isThird ? '' : 'text-muted')
-                  }
-                  color={validation.values.isThird ? 'primary' : 'light'}
-                  onClick={() => validation.setFieldValue('isThird', true)}
-                >
-                  Shelf-Cloud Preferred Carrier
-                </Button>
-              </div>
-              {/* <FormGroup
-                switch
-                className="mb-3 flex flex-row justify-content-start align-items-center"
-                style={{ padding: '0px 0px' }}
-              >
-                <Input
-                  type="switch"
-                  checked={validation.values.isThird}
-                  className="form-control"
-                  style={{ margin: '0px 1em 0px 0px' }}
-                  id="isThird"
-                  name="isThird"
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                />
-                <Label className="fs-5" check>
-                  Creating Shipment for{' '}
-                  {validation.values.isThird ? (
-                    <span className="fw-bold text-primary">Third Party</span>
-                  ) : (
-                    <span className="fw-bold text-primary">FBA</span>
-                  )}
-                </Label>
-              </FormGroup> */}
-              {validation.values.isThird && (
+              {validation.values.isThird == 'true' && (
                 <>
                   <Input
                     type="textarea"

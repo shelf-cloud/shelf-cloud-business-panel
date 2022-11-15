@@ -11,6 +11,58 @@ type Props = {
 
 const ShipmentsTable = ({ tableData, pending }: Props) => {
 
+  const orderNumber = (
+    rowA: OrderRowType,
+    rowB: OrderRowType
+  ) => {
+    const a = rowA.orderNumber.toLowerCase()
+    const b = rowB.orderNumber.toLowerCase()
+
+    if (a > b) {
+      return 1
+    }
+
+    if (b > a) {
+      return -1
+    }
+
+    return 0
+  }
+  const orderStatus = (
+    rowA: OrderRowType,
+    rowB: OrderRowType
+  ) => {
+    const a = rowA.orderStatus.toLowerCase()
+    const b = rowB.orderStatus.toLowerCase()
+
+    if (a > b) {
+      return 1
+    }
+
+    if (b > a) {
+      return -1
+    }
+
+    return 0
+  }
+  const orderType = (
+    rowA: OrderRowType,
+    rowB: OrderRowType
+  ) => {
+    const a = rowA.orderType.toLowerCase()
+    const b = rowB.orderType.toLowerCase()
+
+    if (a > b) {
+      return 1
+    }
+
+    if (b > a) {
+      return -1
+    }
+
+    return 0
+  }
+
   const columns: any = [
     {
       name: <span className="fw-bolder fs-13">Order Number</span>,
@@ -25,7 +77,7 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
       wrap: true,
       grow: 1.3,
       center: true,
-      //   compact: true,
+      sortFunction: orderNumber,
     },
     {
       name: <span className="fw-bolder fs-13">Status</span>,
@@ -71,7 +123,7 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
       wrap: true,
       // grow: 2,
       center: true,
-      //   compact: true,
+      sortFunction: orderStatus,
     },
     {
       name: <span className="fw-bolder fs-13">Type</span>,
@@ -80,7 +132,7 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
       wrap: true,
       grow: 1.2,
       center: true,
-      //   compact: true,
+      sortFunction: orderType,
     },
     {
       name: <span className="fw-bolder fs-13">Order Date</span>,

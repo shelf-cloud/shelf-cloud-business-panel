@@ -1,4 +1,5 @@
 import BreadCrumb from '@components/Common/BreadCrumb'
+import PrintInvoice from '@components/PrintInvoice'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { InvoiceFullDetails } from '@typings'
 import axios from 'axios'
@@ -8,7 +9,15 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { Card, CardBody, CardHeader, Col, Container, Row } from 'reactstrap'
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Container,
+  Row,
+} from 'reactstrap'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -64,16 +73,21 @@ const InvoiceDetails = () => {
                       <CardHeader className="d-flex flex-row justify-content-between align-items-start">
                         <div>
                           <Link href={'/Invoices'}>
-                            <div
-                              className="d-flex flex-row gap-1 text-decoration-none text-primary"
+                            <Button
+                              color="primary"
+                              outline
+                              // className="d-flex flex-row gap-1 text-decoration-none text-primary"
                               style={{ cursor: 'pointer' }}
                             >
-                              <i className="ri-arrow-left-line" />
-                              Go Back
-                            </div>
+                              <span className='icon-on'>
+                                <i className="ri-arrow-left-line align-bottom me-1" />
+                                Go Back
+                              </span>
+                            </Button>
                           </Link>
                         </div>
                         <div className="text-end pe-5">
+                          <PrintInvoice invoiceDetails={invoiceDetails!} />
                           <h1>INVOICE</h1>
                           <h2
                             className="fs-1 fw-bold"
@@ -136,7 +150,9 @@ const InvoiceDetails = () => {
                       </CardBody>
                     </>
                   ) : (
-                    <CardHeader className='fw-bold fs-2 text-center'>Loading...</CardHeader>
+                    <CardHeader className="fw-bold fs-2 text-center">
+                      Loading...
+                    </CardHeader>
                   )}
                 </Card>
               </Col>

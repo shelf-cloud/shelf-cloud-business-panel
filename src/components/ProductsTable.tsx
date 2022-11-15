@@ -37,6 +37,34 @@ const ProductsTable = ({
   const { setModalProductInfo, setModalProductDetails }: any =
     useContext(AppContext)
 
+  const loadBarcode = (product: ProductRowType) => {
+    var html = '<!DOCTYPE html><html><head>'
+    html += '<style>@page{margin:0px;}'
+    html += 'body{width:21cm;margin:0px;padding:0px;}'
+    html += '.pageBreak{page-break-after:always;}'
+    html +=
+      '.barcodeSection{position:relative;float:left;top:0cm;left:0.9cm;width: 6.7cm;height: 2.5cm;margin-right:0.3cm;text-align: center;overflow:hidden;margin-bottom:2px;}'
+    html += '.barcodeSection svg{transform: translate(0px, 0px) !important;}'
+    html += '.barcodeSection svg text{font:12px monospace !important;}'
+    html +=
+      '.barcodeSection p{position:relative;float:left;left:5%;width:95%;text-align:left;margin-top:0px;margin-bottom:0px;font-size:14px;z-index:5;}'
+    html +=
+      '.barcodeSection svg{width:90%;transform: translate(0px, -10px) !important;}'
+    html += '</style></head><body>'
+    html +=
+      '<div class="barcodeSection"><p style="text-align:center;font-size: 200%">' +
+      product.SKU +
+      '</p><p style="text-align:center;white-space: nowrap;overflow: hidden;">' +
+      product.Title +
+      '</p><svg id="barcode" width="100%" height="100%"></svg></div>'
+    html +=
+      '</body><script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/JsBarcode.all.min.js"></script><script>JsBarcode("#barcode", "' +
+      product.SKU +
+      '");</script></html>'
+    var wnd = window.open('about:Barcode-Generated', '', '_blank')
+    wnd?.document.write(html)
+  }
+
   const caseInsensitiveSort = (rowA: ProductRowType, rowB: ProductRowType) => {
     const a = rowA.Title.toLowerCase()
     const b = rowB.Title.toLowerCase()
@@ -154,9 +182,20 @@ const ProductsTable = ({
       selector: (row: any) => {
         return (
           <div>
-            <p style={{ margin: '0px' }}><a href={`https://www.amazon.com/exec/obidos/${row.ASIN}`} target="blank">{row.ASIN}</a></p>
+            <p style={{ margin: '0px' }}>
+              <a
+                href={`https://www.amazon.com/exec/obidos/ASIN${row.ASIN}`}
+                target="blank"
+              >
+                {row.ASIN}
+              </a>
+            </p>
             <p style={{ margin: '0px' }}>{row.FNSKU}</p>
-            <p style={{ margin: '0px' }}>{row.Barcode}</p>
+            <p style={{ margin: '0px' }}>
+              <a href="#" onClick={() => loadBarcode(row)}>
+                {row.Barcode}
+              </a>
+            </p>
           </div>
         )
       },
@@ -187,7 +226,7 @@ const ProductsTable = ({
       sortable: true,
       compact: true,
       center: true,
-      sortFunction: quantitySort
+      sortFunction: quantitySort,
     },
     {
       name: <span className="font-weight-bold fs-13">Unit Dimensions</span>,

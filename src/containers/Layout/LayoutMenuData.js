@@ -196,19 +196,20 @@ const Navdata = () => {
     },
   ]
 
-  if (state.user?.showCreateOrder) {
-    menuItems[3].subItems.unshift({
-      id: 'createorder',
-      label: 'Create Order',
-      link: '/CreateOrder',
-      parentId: 'orders',
-    })
-  }
   if (state.user?.showWholeSale) {
     menuItems[3].subItems.unshift({
       id: 'createwholesale',
       label: 'Create Wholesale Order',
       link: '/CreateWholeSaleOrder',
+      parentId: 'orders',
+    })
+  }
+  
+  if (state.user?.showCreateOrder) {
+    menuItems[3].subItems.unshift({
+      id: 'createorder',
+      label: 'Create Order',
+      link: '/CreateOrder',
       parentId: 'orders',
     })
   }

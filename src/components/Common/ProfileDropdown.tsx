@@ -57,6 +57,10 @@ const ProfileDropdown = () => {
               <i className="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i>
               <span className="align-middle">Profile</span>
             </DropdownItem>
+            <DropdownItem onClick={() => router.push('/ContactUs')}>
+              <i className="mdi mdi-email-fast text-muted fs-16 align-middle me-1"></i>
+              <span className="align-middle">Contact Us</span>
+            </DropdownItem>
             <div className="dropdown-divider"></div>
             <DropdownItem onClick={() => signOut()}>
               <i className="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>{' '}
