@@ -1,4 +1,6 @@
+import { FormatCurrency } from '@lib/FormatNumbers'
 import { InvoiceFullDetails } from '@typings'
+import moment from 'moment'
 import React from 'react'
 import { Button } from 'reactstrap'
 
@@ -11,6 +13,7 @@ function PrintInvoice({ invoiceDetails }: Props) {
     let invoice = `<!DOCTYPE html>
               <html lang="en">
               <head>
+                  <title>Invoice: ${invoiceDetails.invoice.businessName}-${invoiceDetails.invoice.invoiceNumber}</title>
                   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
                   <style>
       
@@ -84,7 +87,7 @@ function PrintInvoice({ invoiceDetails }: Props) {
                           ${invoiceDetails.invoice.invoiceNumber}
                       </h3>
                       <h5 style="font-weight: 700;">
-                          Invoice Date: ${invoiceDetails.invoice.createdDate}
+                          Invoice Date: ${moment(invoiceDetails.invoice.createdDate).format('DD/MM/YYYY')}
                       </h5>
                       </div><!--End Right-->
                   </div><!--End Zone-->
@@ -103,7 +106,7 @@ function PrintInvoice({ invoiceDetails }: Props) {
         (invoice += `<tr key=${index}>
                           <td>${order.orderNumber}</td>
                           <td>${order.orderType}</td>
-                          <td>${order.closedDate}</td>
+                          <td>${moment(order.closedDate).format('DD-MM-YYYY')}</td>
                           <td
                             style={{
                               display: 'block',
@@ -118,7 +121,7 @@ function PrintInvoice({ invoiceDetails }: Props) {
                                 textAlign: 'right',
                               }}
                             >
-                              $ ${order.totalCharge.toFixed(2)}
+                              ${FormatCurrency.format(order.totalCharge)}
                             </span>
                           </td>
                         </tr>`)
@@ -128,9 +131,7 @@ function PrintInvoice({ invoiceDetails }: Props) {
                       <tfoot class="table-light">
                       <tr style="font-weight: 700;">
                           <td colspan="3" style="text-align:right;">TOTAL</td>
-                          <td id="totalTotal" style="display: block;text-align: left;overflow: auto;"><span style="width: 60%;float: left;text-align: right;">$ ${invoiceDetails.invoice.totalCharge.toFixed(
-                            2
-                          )}</span></td>
+                          <td id="totalTotal" style="display: block;text-align: left;overflow: auto;"><span style="width: 60%;float: left;text-align: right;">${FormatCurrency.format(invoiceDetails.invoice.totalCharge)}</span></td>
                       </tr>
                       </tfoot>
                       
@@ -141,7 +142,7 @@ function PrintInvoice({ invoiceDetails }: Props) {
               <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
               </html>`
 
-    var wnd = window.open('about:printInvoice', '', '_blank')
+    var wnd = window.open('about:Invoice', 'Invoice Details', '_blank')
     wnd?.document.write(invoice)
   }
 

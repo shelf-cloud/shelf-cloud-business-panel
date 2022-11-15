@@ -2,7 +2,7 @@ import { NextApiHandler } from 'next'
 import { getSession } from '@auth/client'
 import sgMail from '@sendgrid/mail'
 
-const getuser: NextApiHandler = async (request, response) => {
+const sendMail: NextApiHandler = async (request, response) => {
     const session = await getSession({ req: request })
 
     if (session == null) {
@@ -49,4 +49,4 @@ const getuser: NextApiHandler = async (request, response) => {
         })
 }
 
-export default getuser
+export default sendMail

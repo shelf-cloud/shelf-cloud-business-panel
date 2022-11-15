@@ -75,6 +75,8 @@ const InvoicesList = ({ invoices }: Props) => {
                       <td>
                         <h5
                           className={
+                            invoice.paid
+                            ? 'fs-14 my-1' :
                             moment(today).isAfter(invoice.expireDate)
                               ? 'fs-14 my-1 text-danger'
                               : 'fs-14 my-1'

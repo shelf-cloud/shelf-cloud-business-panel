@@ -3,6 +3,7 @@ import PrintInvoice from '@components/PrintInvoice'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { InvoiceFullDetails } from '@typings'
 import axios from 'axios'
+import moment from 'moment'
 import { GetServerSideProps } from 'next'
 import { getSession } from 'next-auth/react'
 import Head from 'next/head'
@@ -96,10 +97,10 @@ const InvoiceDetails = () => {
                             {invoiceDetails?.invoice.invoiceNumber}
                           </h2>
                           <p className="m-0 fw-semibold">
-                            Invoice Date: {invoiceDetails?.invoice.createdDate}
+                            Invoice Date: {moment(invoiceDetails?.invoice.createdDate).format('DD/MM/YYYY')}
                           </p>
                           <p className="m-0 fw-normal">
-                            Expire Date: {invoiceDetails?.invoice.expireDate}
+                            Expire Date: {moment(invoiceDetails?.invoice.expireDate).format('DD/MM/YYYY')}
                           </p>
                           <h4
                             className={
@@ -127,7 +128,7 @@ const InvoiceDetails = () => {
                               <tr key={order.orderNumber}>
                                 <td>{order.orderNumber}</td>
                                 <td>{order.orderType}</td>
-                                <td>{order.closedDate}</td>
+                                <td>{moment(order.closedDate).format('DD/MM/YYYY')}</td>
                                 <td>
                                   {FormatCurrency.format(order.totalCharge)}
                                 </td>
