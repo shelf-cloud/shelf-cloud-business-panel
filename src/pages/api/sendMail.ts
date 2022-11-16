@@ -15,7 +15,7 @@ const sendMail: NextApiHandler = async (request, response) => {
       const msg = {
         'from': {
           'name': 'Shelf Cloud Contact Form',
-          'email': 'onlinesales@electrostoresl.com',
+          'email': 'info@shelf-cloud.com',
         },
         'personalizations': [{
           'to': {
