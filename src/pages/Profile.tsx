@@ -7,6 +7,7 @@ import { getSession } from 'next-auth/react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useContext, useState } from 'react'
+import { signOut } from '@auth/client'
 import {
   Card,
   CardBody,
@@ -112,19 +113,22 @@ const Profile = ({ session }: Props) => {
         .oneOf([Yup.ref('newPassword1'), null], "Passwords don't match!")
         .required('Please Enter Your Confirmation Password'),
     }),
-    onSubmit: async (_values) => {
-      // const response = await axios.post(
-      //   `api/createNewProduct?businessId=${state.user.businessId}`,
-      //   {
-      //     productInfo: values,
-      //   }
-      // )
-      // if (!response.data.error) {
-      //   toast.success(response.data.msg)
-      //   resetForm()
-      // } else {
-      //   toast.error(response.data.msg)
-      // }
+    onSubmit: async (values, { resetForm}) => {
+      const response = await axios.post(
+        `api/updatePassword?businessId=${state.user.businessId}`,
+        {
+          passwordInfo: values,
+        }
+      )
+      if (!response.data.error) {
+        toast.success(response.data.msg)
+        resetForm()
+        setTimeout(() => {
+          signOut()
+        }, 3000)
+      } else {
+        toast.error(response.data.msg)
+      }
     },
   })
 
@@ -135,7 +139,7 @@ const Profile = ({ session }: Props) => {
 
   const handleChangePassword = (event: any) => {
     event.preventDefault()
-    validation.handleSubmit()
+    validationChangePassword.handleSubmit()
   }
 
   return (
@@ -296,7 +300,7 @@ const Profile = ({ session }: Props) => {
                                   htmlFor="firstNameinput"
                                   className="form-label"
                                 >
-                                  *Old Password
+                                  *Curent Password
                                 </Label>
                                 <Input
                                   type="password"
@@ -435,7 +439,7 @@ const Profile = ({ session }: Props) => {
                             <Col lg={12}>
                               <div className="text-end">
                                 <button
-                                  type="button"
+                                  type="submit"
                                   className="btn btn-success"
                                 >
                                   Change Password
