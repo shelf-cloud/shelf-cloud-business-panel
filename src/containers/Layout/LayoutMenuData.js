@@ -55,14 +55,14 @@ const Navdata = () => {
   useEffect(() => {}, [state.user])
 
   const menuItems = [
-    {
-      label: 'Menu',
-      isHeader: true,
-    },
+    // {
+    //   label: 'Menu',
+    //   isHeader: true,
+    // },
     {
       id: 'dashboard',
       label: 'Dashboard',
-      icon: 'ri-dashboard-2-line',
+      icon: 'ri-function-fill',
       link: '/',
       stateVariables: isDashboard,
       click: function (e) {
@@ -83,7 +83,7 @@ const Navdata = () => {
     {
       id: 'warehouse',
       label: 'Inventory',
-      icon: 'ri-building-4-line',
+      icon: 'ri-file-list-2-line',
       link: '#',
       stateVariables: isWarehouse,
       click: function (e) {
@@ -122,7 +122,7 @@ const Navdata = () => {
     {
       id: 'shipments',
       label: 'Orders',
-      icon: 'ri-file-list-3-line',
+      icon: ' ri-shopping-cart-2-fill',
       link: '#',
       stateVariables: isShipments,
       click: function (e) {
@@ -170,7 +170,7 @@ const Navdata = () => {
     {
       id: 'billing',
       label: 'Billing',
-      icon: 'ri-currency-line',
+      icon: ' ri-file-list-3-fill',
       link: '#',
       stateVariables: isBilling,
       click: function (e) {

@@ -34,6 +34,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 
 const Home = () => {
   const { state }: any = useContext(AppContext)
+  const [loading, setLoading] = useState(true)
   const [summary, setSummary] = useState<Summary>()
   const [dashboardStartDate, setDashboardStartDate] = useState(
     moment().subtract(30, 'days').format('YYYY-MM-DD')
@@ -61,6 +62,7 @@ const Home = () => {
   useEffect(() => {
     if (data) {
       setSummary(data)
+      setLoading(false)
     }
   }, [data])
 
@@ -83,18 +85,26 @@ const Home = () => {
                 startDate={dashboardStartDate}
                 endDate={dashboardEndDate}
               />
-              <Row>
-                <Widget summary={summary} />
-              </Row>
-              <Row>
-                <Col md={7}>
-                  <MostInvenotryList products={summary?.mostInventory} />
-                </Col>
-                <Col md={5}>
-                  <TotalChagesList totalCharges={summary?.totalCharges} />
-                  <InvoicesList invoices={summary?.invoices} />
-                </Col>
-              </Row>
+              {!loading ? (
+                <>
+                  <Row>
+                    <Widget summary={summary} />
+                  </Row>
+                  <Row>
+                    <Col md={7}>
+                      <MostInvenotryList products={summary?.mostInventory} />
+                    </Col>
+                    <Col md={5}>
+                      <TotalChagesList totalCharges={summary?.totalCharges} />
+                      <InvoicesList invoices={summary?.invoices} />
+                    </Col>
+                  </Row>
+                </>
+              ) : (
+                <Row>
+                  <h5>Loading...</h5>
+                </Row>
+              )}
             </Col>
           </Row>
         </Container>

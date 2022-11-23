@@ -1,7 +1,8 @@
 import React from 'react'
 import { Card, CardBody, CardHeader, Col } from 'reactstrap'
 import { TotalChagres } from '@typings'
-import CountUp from 'react-countup'
+import ChargesChart from './ChargesChart'
+// import CountUp from 'react-countup'
 
 type Props = {
   totalCharges: TotalChagres | undefined
@@ -13,13 +14,12 @@ const TotalChagesList = ({ totalCharges }: Props) => {
       <Col>
         <Card>
           <CardHeader className="align-items-center d-flex">
-            <h4 className="card-title mb-0 flex-grow-1">
-              Total Charges
-            </h4>
+            <h4 className="card-title mb-0 flex-grow-1">Total Charges</h4>
           </CardHeader>
 
           <CardBody>
-            <div className="table-responsive table-card">
+            <ChargesChart totalCharges={totalCharges} />
+            {/* <div className="table-responsive table-card">
               <table className="table table-sm table-hover table-centered align-middle table-nowrap mb-0">
                 <tbody>
                   <tr>
@@ -144,7 +144,7 @@ const TotalChagesList = ({ totalCharges }: Props) => {
                   </tr>
                 </tbody>
               </table>
-            </div>
+            </div> */}
           </CardBody>
         </Card>
       </Col>

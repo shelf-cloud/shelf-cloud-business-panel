@@ -4,7 +4,7 @@ import Link from 'next/link'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 //import logo
-import ShelfCloudLogo from '../../assets/images/shelfcloud-logo-v.jpg'
+import ShelfCloudLogo from '../../assets/images/shelfcloud-white-h.png'
 
 //Import Components
 import VerticalLayout from './VerticalLayout'

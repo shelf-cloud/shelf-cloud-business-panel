@@ -58,42 +58,44 @@ const InvoicesList = ({ invoices }: Props) => {
                         </h5>
                       </td>
                       <td>
-                        <h5
+                        <span
                           className={
                             invoice.paid
-                              ? 'fs-14 my-1'
+                              ? 'fs-14 my-1 text-muted'
                               : moment(today).isAfter(invoice.expireDate)
                               ? 'fs-14 my-1 text-danger'
-                              : 'fs-14 my-1'
+                              : 'fs-14 my-1 text-muted'
                           }
                         >
                           {moment(invoice.expireDate, 'YYYY-MM-DD').format(
                             'LL'
                           )}
-                        </h5>
+                        </span>
                       </td>
                       <td>
-                        <h5
-                          className={
-                            invoice.paid
-                            ? 'fs-14 my-1 text-success' :
-                            moment(today).isAfter(invoice.expireDate)
-                              ? 'fs-14 my-1 text-danger'
-                              : 'fs-14 my-1'
-                          }
-                        >
-                          {invoice.paid
-                            ? 'Paid'
-                            : moment(today).isAfter(invoice.expireDate)
-                            ? `Past Due ${moment(invoice.expireDate).fromNow(
-                                true
-                              )}`
-                            : moment(today).isSame(invoice.expireDate)
-                            ? 'Due Today'
-                            : `Due in ${moment(invoice.expireDate).fromNow(
-                                true
-                              )}`}
-                        </h5>
+                        <div className='text-center px-2 py-1 rounded-2' style={{background: 'rgba(49, 154, 246, 0.1)'}}>
+                          <span
+                            className={
+                              invoice.paid
+                                ? 'fs-6 my-1 text-success'
+                                : moment(today).isAfter(invoice.expireDate)
+                                ? 'fs-6 my-1 text-danger'
+                                : 'fs-6 my-1'
+                            }
+                          >
+                            {invoice.paid
+                              ? 'Paid'
+                              : moment(today).isAfter(invoice.expireDate)
+                              ? `Past Due ${moment(invoice.expireDate).fromNow(
+                                  true
+                                )}`
+                              : moment(today).isSame(invoice.expireDate)
+                              ? 'Due Today'
+                              : `Due in ${moment(invoice.expireDate).fromNow(
+                                  true
+                                )}`}
+                          </span>
+                        </div>
                       </td>
                     </tr>
                   ))}

@@ -178,7 +178,7 @@ $grays: (
 
 // scss-docs-start color-variables
 $blue:       #3577f1;
-$indigo:     #405189;
+$indigo:     #4481FD; // #405189;
 $purple:     #6559cc;
 $pink:       #f672a7;
 $red:        #f06548;
@@ -537,7 +537,7 @@ $position-values: (
 //
 // Settings for the `<body>` element.
 
-$body-bg:                   #f3f3f9;
+$body-bg:                   #EFF3F6; // #f3f3f9;
 $body-color:                $gray-900;
 $body-text-align:           null;
 
@@ -667,6 +667,7 @@ $border-color:                var(--#{$variable-prefix}border-color);
 $border-radius:               .25rem;
 $border-radius-sm:            .2rem;
 $border-radius-lg:            .3rem;
+$border-radius-sc-1:          .75rem;
 $border-radius-pill:          50rem;
 // scss-docs-end border-radius-variables
 
@@ -1390,7 +1391,7 @@ $card-spacer-x:                     $spacer;
 $card-title-spacer-y:               $spacer * .5;
 $card-border-width:                 0;
 $card-border-color:                 rgba($black, .125);
-$card-border-radius:                $border-radius;
+$card-border-radius:                $border-radius-sc-1;
 $card-box-shadow:                   $box-shadow;
 $card-inner-border-radius:          subtract($card-border-radius, $card-border-width);
 $card-cap-padding-y:                $card-spacer-y;

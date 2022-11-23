@@ -44,7 +44,8 @@
 
 .apexcharts-gridline {
     pointer-events: none;
-    stroke: rgba(var(--#{$variable-prefix}light-rgb), .75);
+    // stroke: rgba(var(--#{$variable-prefix}light-rgb), .75);
+    stroke: rgba(225, 227, 229, 0.8) !important;
 }
 
 .apexcharts-legend-text {

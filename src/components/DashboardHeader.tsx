@@ -19,8 +19,8 @@ const DashboardHeader = ({ user, startDate, endDate, handleChangeDates }: Props)
         <Col xs={12}>
           <div className="d-flex align-items-lg-center flex-lg-row flex-column justify-content-between">
             <div>
-              <h4 className="fs-16 mb-1">Good Morning, <span className='capitalize'>{user}</span></h4>
-              <p className="text-muted mb-0">
+              <h4 className="fs-6 mb-1">Good Morning, <span className='capitalize'>{user}</span></h4>
+              <p className="fs-6 text-muted mb-0">
                 Here's what's happening with your Inventory today.
               </p>
             </div>
