@@ -28,25 +28,26 @@ const ProfileDropdown = () => {
         <Dropdown
           isOpen={isProfileDropdown}
           toggle={toggleProfileDropdown}
-          className="ms-sm-3 header-item topbar-user"
+          className="ms-sm-3 header-item rounded-5"
+          style={{backgroundColor: 'rgba(239, 243, 246, 0.5)'}}
         >
           <DropdownToggle tag="button" type="button" className="btn">
-            <span className="d-flex align-items-center">
-              <Image
-                className="rounded-circle header-profile-user"
-                src={avatar1}
-                width={35}
-                height={35}
-                alt="Header Avatar"
-              />
-              <span className="text-start ms-xl-2">
-                <span className="d-none d-xl-inline-block ms-1 fw-medium user-name-text">
-                  {session?.user?.name?.toUpperCase()}
+            <span className="d-flex align-items-center justify-content-between gap-2">
+              <span className="text-end">
+                <span className="d-none d-lg-inline-block fs-5 m-0 fw-medium user-name-text text-capitalize">
+                  {session?.user?.name}
                 </span>
-                <span className="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">
+                <span className="d-none d-lg-block fs-6 m-0 text-muted user-name-sub-text">
                   Manager
                 </span>
               </span>
+              <Image
+                className="rounded-circle header-profile-user"
+                src={avatar1}
+                width={40}
+                height={40}
+                alt="Header Avatar"
+              />
             </span>
           </DropdownToggle>
           <DropdownMenu className="dropdown-menu-end">

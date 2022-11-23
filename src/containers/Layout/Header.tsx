@@ -15,7 +15,6 @@ type Props = {
 }
 
 const Header = ({ headerClass }: Props) => {
-
   const toogleMenuBtn = () => {
     var windowSize = document.documentElement.clientWidth
 
@@ -61,30 +60,6 @@ const Header = ({ headerClass }: Props) => {
         <div className="layout-width">
           <div className="navbar-header">
             <div className="d-flex">
-              <div className="navbar-brand-box horizontal-logo">
-                <Link href="/" passHref>
-                  <a className="logo logo-dark">
-                    <span className="logo-sm">
-                      <Image src={logoSm} alt="" height="22" />
-                    </span>
-                    <span className="logo-lg">
-                      <Image src={logoDark} alt="" height="17" />
-                    </span>
-                  </a>
-                </Link>
-
-                <Link href="/" passHref>
-                  <a className="logo logo-light">
-                    <span className="logo-sm">
-                      <Image src={logoSm} alt="" height="22" />
-                    </span>
-                    <span className="logo-lg">
-                      <Image src={logoLight} alt="" height="17" />
-                    </span>
-                  </a>
-                </Link>
-              </div>
-
               <button
                 onClick={toogleMenuBtn}
                 type="button"

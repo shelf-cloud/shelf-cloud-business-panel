@@ -54,8 +54,8 @@ const Home = () => {
   const handleChangeDates = (dateStr: string) => {
     if (dateStr.includes(' to ')) {
       const dates = dateStr.split(' to ')
-      setDashboardStartDate(moment(dates[0], 'DD-MM-YYYY').format('YYYY-MM-DD'))
-      setDashboardEndDate(moment(dates[1], 'DD-MM-YYYY').format('YYYY-MM-DD'))
+      setDashboardStartDate(moment(dates[0], 'MMM DD').format('YYYY-MM-DD'))
+      setDashboardEndDate(moment(dates[1], 'MMM DD').format('YYYY-MM-DD'))
     }
   }
 

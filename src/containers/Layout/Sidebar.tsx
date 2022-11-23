@@ -5,6 +5,7 @@ import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 //import logo
 import ShelfCloudLogo from '../../assets/images/shelfcloud-white-h.png'
+import ShelfCloudLogoSolo from '../../assets/images/shelfcloud-white-solo.png'
 
 //Import Components
 import VerticalLayout from './VerticalLayout'
@@ -48,8 +49,17 @@ const Sidebar = ({ layoutType }: Props) => {
       <div className="app-menu navbar-menu">
         <div className="navbar-brand-box p-2">
           <Link href="/" passHref>
-            <a>
-              <div className="w-100 position-relative">
+            <a className='logo'>
+              <span className="w-100 position-relative logo-sm">
+                <Image
+                  className="rounded-3"
+                  src={ShelfCloudLogoSolo}
+                  layout="intrinsic"
+                  alt="ShelfCloud Logo"
+                  objectFit="contain"
+                />
+              </span>
+              <span className="w-100 position-relative logo-lg">
                 <Image
                   className="rounded-3"
                   src={ShelfCloudLogo}
@@ -57,7 +67,7 @@ const Sidebar = ({ layoutType }: Props) => {
                   alt="ShelfCloud Logo"
                   objectFit="contain"
                 />
-              </div>
+              </span>
             </a>
           </Link>
         </div>
