@@ -1,11 +1,4 @@
 import React from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-
-//import images
-import logoSm from '../../assets/images/logo-sm.png'
-import logoDark from '../../assets/images/logo-dark.png'
-import logoLight from '../../assets/images/logo-light.png'
 
 //import Components
 import ProfileDropdown from '../../components/Common/ProfileDropdown'
