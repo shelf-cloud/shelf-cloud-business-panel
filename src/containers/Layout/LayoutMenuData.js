@@ -71,14 +71,6 @@ const Navdata = () => {
         setIscurrentState('Dashboard')
         updateIconSidebar(e)
       },
-      // subItems: [
-      //   // {
-      //   //   id: 'Summary',
-      //   //   label: 'Summary',
-      //   //   link: '/',
-      //   //   parentId: 'dashboard',
-      //   // },
-      // ],
     },
     {
       id: 'warehouse',
@@ -136,7 +128,7 @@ const Navdata = () => {
           id: 'shipments',
           label: 'Shipment Log',
           link: '/Shipments',
-          parentId: 'orders',
+          parentId: 'shipments',
         },
       ],
     },
@@ -157,13 +149,13 @@ const Navdata = () => {
           id: 'createreceiving',
           label: 'Create Receiving',
           link: '/CreateReceiving',
-          parentId: 'orders',
+          parentId: 'receiving',
         },
         {
           id: 'receiving',
           label: 'Receiving Log',
           link: '/Receivings',
-          parentId: 'orders',
+          parentId: 'receiving',
         },
       ],
     },
@@ -197,20 +189,20 @@ const Navdata = () => {
   ]
 
   if (state.user?.showWholeSale) {
-    menuItems[3].subItems.unshift({
+    menuItems[2].subItems.unshift({
       id: 'createwholesale',
       label: 'Create Wholesale Order',
       link: '/CreateWholeSaleOrder',
-      parentId: 'orders',
+      parentId: 'shipments',
     })
   }
   
   if (state.user?.showCreateOrder) {
-    menuItems[3].subItems.unshift({
+    menuItems[2].subItems.unshift({
       id: 'createorder',
       label: 'Create Order',
       link: '/CreateOrder',
-      parentId: 'orders',
+      parentId: 'shipments',
     })
   }
 

@@ -103,7 +103,7 @@ const WholeSaleType = ({ data }: Props) => {
               <h5 className="fw-bold">Products</h5>
             </CardHeader>
             <CardBody>
-              <div className="table-responsive table-card">
+              <div className="table-responsive">
                 <table className="table table-sm align-middle table-borderless mb-0">
                   <thead className="table-light text-muted">
                     <tr>
@@ -115,10 +115,10 @@ const WholeSaleType = ({ data }: Props) => {
                   <tbody>
                     {data.orderItems.map((product: ShipmentOrderItem, key) => (
                       <tr key={key}>
-                        <td className="w-75 fs-15 fw-bold text-primary">
+                        <td className="w-50 fs-6 fw-semibold text-primary">
                           {product.name || ''}
                         </td>
-                        <td className="fs-15">{product.sku}</td>
+                        <td className="fs-6">{product.sku}</td>
                         <td className="text-center">{product.quantity}</td>
                       </tr>
                     ))}

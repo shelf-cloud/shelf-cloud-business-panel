@@ -3,94 +3,11 @@ import PropTypes from 'prop-types'
 import Link from 'next/link'
 import { Collapse } from 'reactstrap'
 import navdata from './LayoutMenuData'
+import { useRouter } from 'next/router'
 
 const VerticalLayout = () => {
   const navData = navdata().props.children
-
-  // useEffect(() => {
-  //   window.scrollTo({ top: 0, behavior: 'smooth' })
-  //   const initMenu = () => {
-  //     const pathName = process.env.PUBLIC_URL + props.location.pathname
-  //     const ul = document.getElementById('navbar-nav')
-  //     const items = ul.getElementsByTagName('a')
-  //     let itemsArray = [...items] // converts NodeList to Array
-  //     removeActivation(itemsArray)
-  //     let matchingMenuItem = itemsArray.find((x) => {
-  //       return x.pathname === pathName
-  //     })
-  //     if (matchingMenuItem) {
-  //       activateParentDropdown(matchingMenuItem)
-  //     }
-  //   }
-  //   if (props.layoutType === 'vertical') {
-  //     initMenu()
-  //   }
-  // }, [props.location.pathname, props.layoutType])
-
-  // function activateParentDropdown(item: any) {
-  //   item.classList.add('active')
-  //   let parentCollapseDiv = item.closest('.collapse.menu-dropdown')
-
-  //   if (parentCollapseDiv) {
-  //     // to set aria expand true remaining
-  //     parentCollapseDiv.classList.add('show')
-  //     parentCollapseDiv.parentElement.children[0].classList.add('active')
-  //     parentCollapseDiv.parentElement.children[0].setAttribute(
-  //       'aria-expanded',
-  //       'true'
-  //     )
-  //     if (parentCollapseDiv.parentElement.closest('.collapse.menu-dropdown')) {
-  //       parentCollapseDiv.parentElement
-  //         .closest('.collapse')
-  //         .classList.add('show')
-  //       if (
-  //         parentCollapseDiv.parentElement.closest('.collapse')
-  //           .previousElementSibling
-  //       )
-  //         parentCollapseDiv.parentElement
-  //           .closest('.collapse')
-  //           .previousElementSibling.classList.add('active')
-  //       if (
-  //         parentCollapseDiv.parentElement
-  //           .closest('.collapse')
-  //           .previousElementSibling.closest('.collapse')
-  //       ) {
-  //         parentCollapseDiv.parentElement
-  //           .closest('.collapse')
-  //           .previousElementSibling.closest('.collapse')
-  //           .classList.add('show')
-  //         parentCollapseDiv.parentElement
-  //           .closest('.collapse')
-  //           .previousElementSibling.closest('.collapse')
-  //           .previousElementSibling.classList.add('active')
-  //       }
-  //     }
-  //     return false
-  //   }
-  //   return false
-  // }
-
-  // const removeActivation = (items: any) => {
-  //   let actiItems = items.filter((x: any) => x.classList.contains('active'))
-
-  //   actiItems.forEach((item: any) => {
-  //     if (item.classList.contains('menu-link')) {
-  //       if (!item.classList.contains('active')) {
-  //         item.setAttribute('aria-expanded', false)
-  //       }
-  //       if (item.nextElementSibling) {
-  //         item.nextElementSibling.classList.remove('show')
-  //       }
-  //     }
-  //     if (item.classList.contains('nav-link')) {
-  //       if (item.nextElementSibling) {
-  //         item.nextElementSibling.classList.remove('show')
-  //       }
-  //       item.setAttribute('aria-expanded', false)
-  //     }
-  //     item.classList.remove('active')
-  //   })
-  // }
+  const {pathname} = useRouter()
 
   return (
     <React.Fragment>
@@ -107,7 +24,7 @@ const VerticalLayout = () => {
               <li className="nav-item">
                 <Link href={item.link ? item.link : '/#'} passHref>
                   <a
-                    className="nav-link menu-link"
+                    className={"nav-link menu-link " + (item?.subItems?.some((item:any) => pathname == item.link) && 'linkActive')}
                     onClick={item.click}
                     data-bs-toggle="collapse"
                   >
@@ -139,7 +56,7 @@ const VerticalLayout = () => {
                                 href={subItem.link ? subItem.link : '/#'}
                                 passHref
                               >
-                                <a className="nav-link">
+                                <a className={"nav-link menu-link w-auto " + (pathname == `${subItem.link}` && 'linkActive')}>
                                   {subItem.label}
                                   {subItem.badgeName ? (
                                     <span
@@ -261,7 +178,7 @@ const VerticalLayout = () => {
             ) : (
               <li className="nav-item">
                 <Link href={item.link ? item.link : '/#'} passHref>
-                  <a className="nav-link menu-link">
+                  <a className={"nav-link menu-link " + (pathname == '/' && 'linkActive')}>
                     <i className={item.icon}></i>
                     <span data-key="t-apps">{item.label}</span>
                     {item.badgeName ? (

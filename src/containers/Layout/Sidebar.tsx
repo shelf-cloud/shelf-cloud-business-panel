@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { signOut } from '@auth/client'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 //import logo
@@ -15,7 +16,7 @@ type Props = {
   layoutType: string
 }
 
-const Sidebar = ({ layoutType }: Props) => {
+const Sidebar = ({}: Props) => {
   useEffect(() => {
     var verticalOverlay = document.getElementsByClassName('vertical-overlay')
     if (verticalOverlay) {
@@ -49,7 +50,7 @@ const Sidebar = ({ layoutType }: Props) => {
       <div className="app-menu navbar-menu">
         <div className="navbar-brand-box p-2">
           <Link href="/" passHref>
-            <a className='logo'>
+            <a className="logo">
               <span className="w-100 position-relative logo-sm">
                 <Image
                   className="rounded-3"
@@ -66,38 +67,29 @@ const Sidebar = ({ layoutType }: Props) => {
                   layout="intrinsic"
                   alt="ShelfCloud Logo"
                   objectFit="contain"
+                  objectPosition='center'
                 />
               </span>
             </a>
           </Link>
         </div>
-        {layoutType === 'horizontal' ? (
-          <div id="scrollbar">
+        <React.Fragment>
+          <SimpleBar id="scrollbar" className="">
             <Container fluid>
               <div id="two-column-menu"></div>
               <ul className="navbar-nav" id="navbar-nav">
-                {/* <HorizontalLayout /> */}
+                <VerticalLayout />
               </ul>
             </Container>
+          </SimpleBar>
+          <div
+            className="logout_container"
+            onClick={() => signOut()}
+          >
+            <i className="mdi mdi-logout"></i>
+            <span>Logout</span>
           </div>
-        ) : layoutType === 'twocolumn' ? (
-          <React.Fragment>
-            {/* <TwoColumnLayout layoutType={layoutType} /> */}
-            <div className="sidebar-background"></div>
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
-            <SimpleBar id="scrollbar" className="h-100">
-              <Container fluid>
-                <div id="two-column-menu"></div>
-                <ul className="navbar-nav" id="navbar-nav">
-                  <VerticalLayout />
-                </ul>
-              </Container>
-            </SimpleBar>
-            <div className="sidebar-background"></div>
-          </React.Fragment>
-        )}
+        </React.Fragment>
       </div>
       <div className="vertical-overlay"></div>
     </React.Fragment>

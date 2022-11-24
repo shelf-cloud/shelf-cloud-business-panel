@@ -8,8 +8,8 @@ const StorageWidgets = ({ currentBalance, binsUSed }) => {
     <React.Fragment>
       <Row>
         <Col xl={3} md={6}>
-          <Card className="shadow-none mb-0">
-            <CardBody className='p-0'>
+          <div className="shadow-none mb-0">
+            <div className='p-0'>
               <div className="d-flex align-items-center">
                 <div className="flex-grow-1 overflow-hidden">
                   <p className="text-uppercase fw-semibold text-primary text-truncate mb-0">
@@ -34,12 +34,12 @@ const StorageWidgets = ({ currentBalance, binsUSed }) => {
                   </h4>
                 </div>
               </div>
-            </CardBody>
-          </Card>
+            </div>
+          </div>
         </Col>
         <Col xl={3} md={6}>
-          <Card className="shadow-none mb-0">
-            <CardBody className='p-0'>
+          <div className="shadow-none mb-0 border-start ps-3">
+            <div className='p-0'>
               <div className="d-flex align-items-center">
                 <div className="flex-grow-1 overflow-hidden">
                   <p className="text-uppercase fw-semibold text-primary text-truncate mb-0">
@@ -64,8 +64,8 @@ const StorageWidgets = ({ currentBalance, binsUSed }) => {
                   </h4>
                 </div>
               </div>
-            </CardBody>
-          </Card>
+            </div>
+          </div>
         </Col>
       </Row>
     </React.Fragment>
