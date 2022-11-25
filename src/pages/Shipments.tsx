@@ -165,8 +165,7 @@ const Shipments = ({ session }: Props) => {
                       >
                         <Input
                           type="text"
-                          className="form-control"
-                          style={{ backgroundColor: '#fff !important' }}
+                          className="form-control input_background_white"
                           placeholder="Search..."
                           id="search-options"
                           value={searchValue}
@@ -174,9 +173,8 @@ const Shipments = ({ session }: Props) => {
                         />
                         <span className="mdi mdi-magnify search-widget-icon fs-4"></span>
                         <span
-                          className="d-flex align-items-center justify-content-center"
+                          className="d-flex align-items-center justify-content-center input_background_white"
                           style={{
-                            backgroundColor: '#fff !important',
                             cursor: 'pointer',
                           }}
                           onClick={() => setSearchValue('')}

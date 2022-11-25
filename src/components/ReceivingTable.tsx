@@ -24,7 +24,7 @@ const ReceivingTable = ({ tableData, pending }: Props) => {
       sortable: true,
       wrap: true,
       grow: 1.3,
-      center: true,
+      left: true,
       //   compact: true,
     },
     {

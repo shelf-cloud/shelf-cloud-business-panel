@@ -137,13 +137,11 @@ const Receiving = ({ session }: Props) => {
                   <div className="col-sm-12 col-md-3">
                     <form className="app-search d-flex flex-row justify-content-end align-items-center p-0">
                       <div
-                        className="position-relative d-flex rounded-3 w-100 overflow-hidden"
-                        style={{ border: '1px solid #E1E3E5' }}
+                        className="position-relative d-flex rounded-3 w-100 overflow-hidden input_background_white"
                       >
                         <Input
                           type="text"
-                          className="form-control"
-                          style={{ backgroundColor: '#fff !important' }}
+                          className="form-control input_background_white"
                           placeholder="Search..."
                           id="search-options"
                           value={serachValue}
@@ -151,9 +149,8 @@ const Receiving = ({ session }: Props) => {
                         />
                         <span className="mdi mdi-magnify search-widget-icon fs-4"></span>
                         <span
-                          className="d-flex align-items-center justify-content-center"
+                          className="d-flex align-items-center justify-content-center input_background_white"
                           style={{
-                            backgroundColor: '#fff !important',
                             cursor: 'pointer',
                           }}
                           onClick={clearSearch}

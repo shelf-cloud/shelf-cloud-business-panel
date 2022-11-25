@@ -214,15 +214,14 @@ const Products = ({ session }: Props) => {
                       <div className="position-relative d-flex rounded-3 w-100 overflow-hidden" style={{border: '1px solid #E1E3E5'}}>
                         <Input
                           type="text"
-                          className="form-control"
-                          style={{backgroundColor: '#fff !important'}}
+                          className="form-control input_background_white"
                           placeholder="Search..."
                           id="search-options"
                           value={serachValue}
                           onChange={filterByText}
                         />
                         <span className="mdi mdi-magnify search-widget-icon fs-4"></span>
-                        <span className="d-flex align-items-center justify-content-center" style={{backgroundColor: '#fff !important', cursor: 'pointer'}} onClick={clearSearch}>
+                        <span className="d-flex align-items-center justify-content-center input_background_white" style={{cursor: 'pointer'}} onClick={clearSearch}>
                           <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
                         </span>
                       </div>
