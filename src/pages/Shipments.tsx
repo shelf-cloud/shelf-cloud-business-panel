@@ -7,16 +7,7 @@ import axios from 'axios'
 import Head from 'next/head'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Container,
-  Input,
-  Row,
-} from 'reactstrap'
+import { Card, CardBody, Col, Container, Input, Row } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import useSWR from 'swr'
@@ -147,8 +138,8 @@ const Shipments = ({ session }: Props) => {
   const handleChangeDates = (dateStr: string) => {
     if (dateStr.includes(' to ')) {
       const dates = dateStr.split(' to ')
-      setShipmentsStartDate(moment(dates[0], 'DD-MM-YYYY').format('YYYY-MM-DD'))
-      setShipmentsEndDate(moment(dates[1], 'DD-MM-YYYY').format('YYYY-MM-DD'))
+      setShipmentsStartDate(moment(dates[0], 'MMM DD').format('YYYY-MM-DD'))
+      setShipmentsEndDate(moment(dates[1], 'MMM DD').format('YYYY-MM-DD'))
     }
   }
 
@@ -165,84 +156,82 @@ const Shipments = ({ session }: Props) => {
             <BreadCrumb title="Shipments" pageTitle="Shipments" />
             <Row>
               <Col lg={12}>
-                <Card>
-                  <CardHeader className="d-flex justify-content-between">
-                    <div className="mt-3 mt-lg-0 d-flex flex-row align-items-center">
-                      <h5
-                        className="mb-0 fw-bold text-primary me-3"
-                        style={{ width: 'fit-content' }}
+                <Row className="d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-3 flex-md-row justify-content-md-between align-items-md-center">
+                  <div className="col-sm-12 col-md-3">
+                    <form className="app-search d-flex flex-row justify-content-end align-items-center p-0">
+                      <div
+                        className="position-relative d-flex rounded-3 w-100 overflow-hidden"
+                        style={{ border: '1px solid #E1E3E5' }}
                       >
-                        Filter By Dates:
-                      </h5>
-                      <div className="d-flex shadow-lg">
-                        <Flatpickr
-                          className="form-control border-0 datePicker"
-                          options={{
-                            mode: 'range',
-                            dateFormat: 'd/m/Y',
-                            defaultDate: [
-                              moment(shipmentsStartDate, 'YYYY-MM-DD').format(
-                                'DD-MM-YYYY'
-                              ),
-                              moment(shipmentsEndDate, 'YYYY-MM-DD').format(
-                                'DD-MM-YYYY'
-                              ),
-                            ],
-                          }}
-                          onChange={(_selectedDates, dateStr) =>
-                            handleChangeDates(dateStr)
-                          }
-                        />
-                        <div className="input-group-text bg-primary border-primary text-white">
-                          <i className="ri-calendar-2-line"></i>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="mt-3 mt-lg-0 d-flex flex-row align-items-center">
-                      <h5
-                        className="mb-0 fw-bold text-primary me-3"
-                        style={{ width: 'fit-content' }}
-                      >
-                        Filter By Type:
-                      </h5>
-                      <div className="shadow">
-                        <Input
-                          type="select"
-                          className="form-control"
-                          id="type"
-                          name="type"
-                          onChange={(e) => setSearchType(e.target.value)}
-                        >
-                          <option value="">All Types</option>
-                          <option value="Wholesale">Wholesale</option>
-                          <option value="Shipment">Shipment</option>
-                        </Input>
-                      </div>
-                    </div>
-                    <div className="app-search d-flex flex-row justify-content-end align-items-center p-0">
-                      <div className="position-relative">
                         <Input
                           type="text"
                           className="form-control"
+                          style={{ backgroundColor: '#fff !important' }}
                           placeholder="Search..."
                           id="search-options"
                           value={searchValue}
                           onChange={(e) => setSearchValue(e.target.value)}
                         />
-                        <span className="mdi mdi-magnify search-widget-icon"></span>
+                        <span className="mdi mdi-magnify search-widget-icon fs-4"></span>
                         <span
-                          className="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none"
-                          id="search-close-options"
-                        ></span>
+                          className="d-flex align-items-center justify-content-center"
+                          style={{
+                            backgroundColor: '#fff !important',
+                            cursor: 'pointer',
+                          }}
+                          onClick={() => setSearchValue('')}
+                        >
+                          <i className="mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted" />
+                        </span>
                       </div>
-                      <Button
-                        className="btn-soft-dark"
-                        onClick={() => setSearchValue('')}
-                      >
-                        Clear
-                      </Button>
+                    </form>
+                  </div>
+                  <div className="d-flex flex-column justify-content-center align-items-end gap-2 flex-md-row justify-content-md-between align-items-md-center w-auto">
+                    <div
+                      className="d-flex flex-row align-items-center justify-content-between gap-2 w-auto px-3 rounded-3"
+                      style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}
+                    >
+                      <i className="ri-calendar-2-line fs-5" />
+                      <Flatpickr
+                        className="border-0 fs-6 w-100 py-2"
+                        options={{
+                          mode: 'range',
+                          dateFormat: 'M d',
+                          defaultDate: [
+                            moment(shipmentsStartDate, 'YYYY-MM-DD').format(
+                              'MMM DD'
+                            ),
+                            moment(shipmentsEndDate, 'YYYY-MM-DD').format(
+                              'MMM DD'
+                            ),
+                          ],
+                        }}
+                        onChange={(_selectedDates, dateStr) =>
+                          handleChangeDates(dateStr)
+                        }
+                      />
+                      <i className="ri-arrow-down-s-line" />
                     </div>
-                  </CardHeader>
+                    <div
+                      className="d-flex flex-row align-items-center justify-content-between gap-2 w-auto px-3 py-0 rounded-3"
+                      style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}
+                    >
+                      <i className="ri-truck-line fs-5" />
+                      <Input
+                        type="select"
+                        className="border-0 fs-6 w-100"
+                        id="type"
+                        name="type"
+                        onChange={(e) => setSearchType(e.target.value)}
+                      >
+                        <option value="">All Types</option>
+                        <option value="Wholesale">Wholesale</option>
+                        <option value="Shipment">Shipment</option>
+                      </Input>
+                    </div>
+                  </div>
+                </Row>
+                <Card>
                   <CardBody>
                     <ShipmentsTable
                       tableData={filterDataTable || []}

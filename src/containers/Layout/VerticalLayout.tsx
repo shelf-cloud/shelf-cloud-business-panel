@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 
 const VerticalLayout = () => {
   const navData = navdata().props.children
-  const {pathname} = useRouter()
+  const { pathname } = useRouter()
 
   return (
     <React.Fragment>
@@ -24,7 +24,12 @@ const VerticalLayout = () => {
               <li className="nav-item">
                 <Link href={item.link ? item.link : '/#'} passHref>
                   <a
-                    className={"nav-link menu-link " + (item?.subItems?.some((item:any) => pathname == item.link) && 'linkActive')}
+                    className={
+                      'nav-link menu-link ' +
+                      (item?.subItems?.some(
+                        (item: any) => pathname == item.link
+                      ) && 'linkActive')
+                    }
                     onClick={item.click}
                     data-bs-toggle="collapse"
                   >
@@ -45,18 +50,27 @@ const VerticalLayout = () => {
                   isOpen={item.stateVariables}
                   id="sidebarApps"
                 >
-                  <ul className="nav nav-sm flex-column test">
+                  <ul
+                    className="nav nav-sm flex-column test"
+                    style={{ borderLeft: '2px solid rgba(255, 255, 255, 0.1)' }}
+                  >
                     {/* subItms  */}
                     {item?.subItems &&
                       (item?.subItems || []).map((subItem: any, key: any) => (
                         <React.Fragment key={key}>
                           {!subItem.isChildItem ? (
-                            <li className="nav-item">
+                            <li className="nav-item w-100">
                               <Link
                                 href={subItem.link ? subItem.link : '/#'}
                                 passHref
                               >
-                                <a className={"nav-link menu-link w-auto " + (pathname == `${subItem.link}` && 'linkActive')}>
+                                <a
+                                  className={
+                                    'nav-link menu-link w-auto ' +
+                                    (pathname == `${subItem.link}` &&
+                                      'subLinkActive')
+                                  }
+                                >
                                   {subItem.label}
                                   {subItem.badgeName ? (
                                     <span
@@ -178,7 +192,11 @@ const VerticalLayout = () => {
             ) : (
               <li className="nav-item">
                 <Link href={item.link ? item.link : '/#'} passHref>
-                  <a className={"nav-link menu-link " + (pathname == '/' && 'linkActive')}>
+                  <a
+                    className={
+                      'nav-link menu-link ' + (pathname == '/' && 'linkActive')
+                    }
+                  >
                     <i className={item.icon}></i>
                     <span data-key="t-apps">{item.label}</span>
                     {item.badgeName ? (

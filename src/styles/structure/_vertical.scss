@@ -16,6 +16,13 @@
   color: $vertical-menu-item-color-active !important;
   font-weight: 500;
 }
+.subLinkActive {
+  color: $vertical-menu-item-color-active !important;
+  font-weight: 500;
+  border-radius: 9px;
+  width: 90% !important;
+  background-color: rgba(255, 255, 255, 0.1);
+}
 
 .logout_container {
   position: absolute;
@@ -165,7 +172,8 @@
     }
 
     .nav-sm {
-      padding-left: $vertical-menu-item-icon-width;
+      margin-left: 1.75rem;
+      padding-left: 0.55rem;
 
       .nav-link {
         padding: $vertical-menu-sub-item-padding-y
@@ -176,17 +184,17 @@
         font-size: $vertical-menu-sub-item-font-size;
         font-family: $vertical-menu-sub-item-font-family;
 
-        &:before {
-          content: '';
-          width: 6px;
-          height: 1.5px;
-          background-color: $vertical-menu-sub-item-color;
-          position: absolute;
-          left: 2px;
-          top: 16.5px;
-          transition: all 0.4s ease-in-out;
-          opacity: 0.5;
-        }
+        // &:before {
+        //   content: '';
+        //   width: 6px;
+        //   height: 1.5px;
+        //   background-color: $vertical-menu-sub-item-color;
+        //   position: absolute;
+        //   left: 2px;
+        //   top: 16.5px;
+        //   transition: all 0.4s ease-in-out;
+        //   opacity: 0.5;
+        // }
 
         &:hover {
           color: $vertical-menu-sub-item-hover-color;
@@ -930,7 +938,8 @@
           }
 
           .nav-sm {
-            padding: 0;
+            margin-left: 0;
+            padding-left: 0.5rem;
 
             .nav-link {
               &:after {

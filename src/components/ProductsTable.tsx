@@ -208,9 +208,9 @@ const ProductsTable = ({
       selector: (cell: any) => {
         return (
           <Button
-            color="info"
+            color="primary"
             outline
-            className="btn btn-ghost-info"
+            className="btn btn-ghost-primary"
             onClick={() => {
               setModalProductInfo(
                 cell.Quantity.inventoryId,
@@ -291,10 +291,11 @@ const ProductsTable = ({
         return (
           <UncontrolledDropdown className="dropdown d-inline-block">
             <DropdownToggle
-              className="btn btn-soft-secondary btn-sm"
+              className="btn btn-light btn-sm m-0 p-0"
+              style={{border: '1px solid rgba(68, 129, 253, 0.06)'}}
               tag="button"
             >
-              <i className="ri-more-fill align-middle"></i>
+              <i className="mdi mdi-dots-vertical align-middle fs-2 m-0 p-2" style={{color: '#919FAF'}}></i>
             </DropdownToggle>
             <DropdownMenu className="dropdown-menu-end">
               <DropdownItem

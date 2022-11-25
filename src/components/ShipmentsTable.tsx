@@ -10,11 +10,7 @@ type Props = {
 }
 
 const ShipmentsTable = ({ tableData, pending }: Props) => {
-
-  const orderNumber = (
-    rowA: OrderRowType,
-    rowB: OrderRowType
-  ) => {
+  const orderNumber = (rowA: OrderRowType, rowB: OrderRowType) => {
     const a = rowA.orderNumber.toLowerCase()
     const b = rowB.orderNumber.toLowerCase()
 
@@ -28,10 +24,7 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
 
     return 0
   }
-  const orderStatus = (
-    rowA: OrderRowType,
-    rowB: OrderRowType
-  ) => {
+  const orderStatus = (rowA: OrderRowType, rowB: OrderRowType) => {
     const a = rowA.orderStatus.toLowerCase()
     const b = rowB.orderStatus.toLowerCase()
 
@@ -45,10 +38,7 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
 
     return 0
   }
-  const orderType = (
-    rowA: OrderRowType,
-    rowB: OrderRowType
-  ) => {
+  const orderType = (rowA: OrderRowType, rowB: OrderRowType) => {
     const a = rowA.orderType.toLowerCase()
     const b = rowB.orderType.toLowerCase()
 
@@ -68,8 +58,8 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
       name: <span className="fw-bolder fs-13">Order Number</span>,
       selector: (row: OrderRowType) => {
         return (
-          <div style={{ margin: '0px', fontWeight: '800' }}>
-              {row.orderNumber}
+          <div style={{ margin: '0px', fontWeight: '600' }}>
+            {row.orderNumber}
           </div>
         )
       },
@@ -86,7 +76,7 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
           case 'shipped':
           case 'received':
             return (
-              <span className="badge text-uppercase badge-soft-success">
+              <span className="badge text-uppercase badge-soft-success p-2">
                 {' '}
                 {row.orderStatus}{' '}
               </span>
@@ -95,21 +85,21 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
           case 'awaiting_shipment':
           case 'awating':
             return (
-              <span className="badge text-uppercase badge-soft-secondary">
+              <span className="badge text-uppercase badge-soft-secondary p-2">
                 {' awating '}
               </span>
             )
             break
           case 'on_hold':
             return (
-              <span className="badge text-uppercase badge-soft-warning">
+              <span className="badge text-uppercase badge-soft-warning p-2">
                 {' on hold '}
               </span>
             )
             break
           case 'cancelled':
             return (
-              <span className="badge text-uppercase badge-soft-danger">
+              <span className="badge text-uppercase badge-soft-danger p-2">
                 {' '}
                 {row.orderStatus}{' '}
               </span>
@@ -133,6 +123,9 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
       grow: 1.2,
       center: true,
       sortFunction: orderType,
+      style: {
+        color: '#727578',
+      },
     },
     {
       name: <span className="fw-bolder fs-13">Order Date</span>,
@@ -158,7 +151,7 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
       sortable: true,
       wrap: true,
       grow: 2,
-      center: true,
+      center: false,
       //   compact: true,
     },
     {
@@ -176,8 +169,10 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
       sortable: true,
       wrap: true,
       // grow: 1.5,
-      center: true,
-      //   compact: true,
+      right: true,
+      style: {
+        color: '#4481FD',
+      },
     },
   ]
 

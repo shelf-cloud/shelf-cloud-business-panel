@@ -10,7 +10,6 @@ import {
   Button,
   Card,
   CardBody,
-  CardHeader,
   Col,
   Container,
   Input,
@@ -209,42 +208,42 @@ const Products = ({ session }: Props) => {
             <BreadCrumb title="Products" pageTitle="Warehouse" />
             <Row>
               <Col lg={12}>
-                <Card>
-                  <CardHeader>
-                    <Row className="pb-3 d-flex justify-content-end">
-                      <CSVLink
-                        data={csvData}
-                        style={{width: 'fit-content'}}
-                        filename={`${session?.user?.name.toUpperCase()}-Products.csv`}
-                      >
-                        <Button color='primary' className='btn-label fs-6'>
-                          <i className="las la-file-download label-icon align-middle fs-2 me-2" />
-                          Export
-                        </Button>
-                      </CSVLink>
-                      {/* <CSVDownload data={csvData} target="_blank" /> */}
-                    </Row>
+                <Row className="d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-3 flex-md-row justify-content-md-between align-items-md-center">
+                  <div className='col-sm-12 col-md-3'>
                     <form className="app-search d-flex flex-row justify-content-end align-items-center p-0">
-                      <div className="position-relative">
+                      <div className="position-relative d-flex rounded-3 w-100 overflow-hidden" style={{border: '1px solid #E1E3E5'}}>
                         <Input
                           type="text"
                           className="form-control"
+                          style={{backgroundColor: '#fff !important'}}
                           placeholder="Search..."
                           id="search-options"
                           value={serachValue}
                           onChange={filterByText}
                         />
-                        <span className="mdi mdi-magnify search-widget-icon"></span>
-                        <span
-                          className="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none"
-                          id="search-close-options"
-                        ></span>
+                        <span className="mdi mdi-magnify search-widget-icon fs-4"></span>
+                        <span className="d-flex align-items-center justify-content-center" style={{backgroundColor: '#fff !important', cursor: 'pointer'}} onClick={clearSearch}>
+                          <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
+                        </span>
                       </div>
-                      <Button className="btn-soft-dark" onClick={clearSearch}>
-                        Clear
-                      </Button>
                     </form>
-                  </CardHeader>
+                  </div>
+                  <div className='w-auto'>
+                    <CSVLink
+                      data={csvData}
+                      style={{ width: 'fit-content' }}
+                      filename={`${session?.user?.name.toUpperCase()}-Products.csv`}
+                    >
+                      <Button color="primary" className="fs-5 py-1 p3-1">
+                        <i className="mdi mdi-arrow-down-bold label-icon align-middle fs-5 me-2" />
+                        Export
+                      </Button>
+                    </CSVLink>
+                  </div>
+                </Row>
+                <Card>
+                  {/* <CardHeader>
+                  </CardHeader> */}
                   <CardBody>
                     <ProductsTable
                       tableData={tableData}
