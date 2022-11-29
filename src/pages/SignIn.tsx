@@ -138,11 +138,10 @@ function SignIn({}: Props) {
           style={{ width: '65%' }}
         >
           <h2 className="fs-2 fw-bold text-white text-start m-0 p-0 w-100 mb-3">
-            Welcom Back
+            Welcome Back
           </h2>
           <p className="fs-6 fw-light text-white text-start m-0 p-0 w-100 mb-3">
-            Lorem ipsum dolor sit amet, tempor signiferumque usu id. Viris
-            nostrud discere est ut.
+            4 in 1 Cloud-Based Software Solutions for Small Business.
           </p>
           <div
             className="position-relative text-start mb-3"
