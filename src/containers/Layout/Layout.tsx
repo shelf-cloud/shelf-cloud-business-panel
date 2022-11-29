@@ -5,13 +5,16 @@ import PropTypes from 'prop-types'
 import Header from './Header'
 import Sidebar from './Sidebar'
 import Footer from './Footer'
+import { useRouter } from 'next/router'
 
 interface Props {
-  children: ReactElement;
+  children: ReactElement
 }
 
-const Layout = ({children}: Props) => {
+const Layout = ({ children }: Props) => {
   const [headerClass, setHeaderClass] = useState('')
+  const { pathname } = useRouter()
+  const noLayout = ['/SignIn']
 
   // class add remove in header
   useEffect(() => {
@@ -29,14 +32,18 @@ const Layout = ({children}: Props) => {
 
   return (
     <React.Fragment>
-      <div id="layout-wrapper">
-        <Header headerClass={headerClass} />
-        <Sidebar layoutType={'vertical'} />
-        <div className="main-content">
-          {children}
-          <Footer />
+      {noLayout.includes(pathname) ? (
+        <div>{children}</div>
+      ) : (
+        <div id="layout-wrapper">
+          <Header headerClass={headerClass} />
+          <Sidebar layoutType={'vertical'} />
+          <div className="main-content">
+            {children}
+            <Footer />
+          </div>
         </div>
-      </div>
+      )}
     </React.Fragment>
   )
 }

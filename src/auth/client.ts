@@ -1,5 +1,6 @@
 export {
     SessionProvider,
+    getProviders,
     useSession,
     getSession,
     getCsrfToken,
