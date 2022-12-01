@@ -96,7 +96,7 @@ function ContactUs({ session }: Props) {
         <div className="page-content">
           <ToastContainer />
           <Container fluid>
-            <BreadCrumb title="Invoices" pageTitle="Billing" />
+            <BreadCrumb title="Contact Us" pageTitle="Profile" />
             <Row>
               <Col lg={12}>
                 <Card className="border-top border-primary border-5 ">
