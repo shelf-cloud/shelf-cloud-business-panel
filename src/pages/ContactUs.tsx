@@ -126,11 +126,11 @@ function ContactUs({ session }: Props) {
                       </div>
                     </div>
                     <Col md={9} className="mx-auto my-0">
-                      <h3>Get in touch</h3>
+                      <h2 className='mb-4 fw-semibold'>Get in touch</h2>
                       <Form onSubmit={handleContactForm}>
                         <Row>
                           <Col lg={6}>
-                            <FormGroup className="mb-3">
+                            <FormGroup className="mb-4">
                               <Label
                                 htmlFor="firstNameinput"
                                 className="form-label"
@@ -160,7 +160,7 @@ function ContactUs({ session }: Props) {
                                 </FormFeedback>
                               ) : null}
                             </FormGroup>
-                            <FormGroup className="mb-3">
+                            <FormGroup className="mb-4">
                               <Label
                                 htmlFor="firstNameinput"
                                 className="form-label"
@@ -190,7 +190,7 @@ function ContactUs({ session }: Props) {
                                 </FormFeedback>
                               ) : null}
                             </FormGroup>
-                            <FormGroup className="mb-3">
+                            <FormGroup className="mb-4">
                               <Label
                                 htmlFor="firstNameinput"
                                 className="form-label"
@@ -223,9 +223,9 @@ function ContactUs({ session }: Props) {
                           </Col>
                           <Col
                             lg={6}
-                            className="h-auto d-flex flex-column justify-content-between pb-3"
+                            className="h-auto d-flex flex-column justify-content-between pb-4"
                           >
-                            <FormGroup className="mb-3 d-flex flex-column h-100 pb-md-4">
+                            <FormGroup className="mb-4 d-flex flex-column h-100 mb-md-5">
                               <Label
                                 htmlFor="firstNameinput"
                                 className="form-label"
