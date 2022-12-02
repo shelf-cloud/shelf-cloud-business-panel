@@ -166,12 +166,11 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
                       objectFit: 'contain',
                     }}
                   />
-                  {row.trackingNumber}
                   <a
                     href={`${row.trackingLink}${row.trackingNumber}`}
                     target="blank"
                   >
-                    <i className="fs-5 ri-external-link-fill" />
+                  {row.trackingNumber}
                   </a>
                 </div>
               )
@@ -190,12 +189,12 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
                       objectFit: 'contain',
                     }}
                   />
-                  {row.trackingNumber}
                   <a
                     href={`${row.trackingLink}${row.trackingNumber}`}
                     target="blank"
+                    style={{textDecoration: 'none', color: 'black'}}
                   >
-                    <i className="fs-5 ri-external-link-fill" />
+                  {row.trackingNumber}
                   </a>
                 </div>
               )
