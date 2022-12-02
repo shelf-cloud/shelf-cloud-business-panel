@@ -166,6 +166,8 @@ export interface OrderItem {
   businessId: number
 }
 export interface OrderRowType {
+  carrierIcon: string
+  trackingLink: string
   id: string
   businessId: string
   orderId: string

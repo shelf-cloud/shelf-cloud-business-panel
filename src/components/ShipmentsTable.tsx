@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { OrderRowType } from '@typings'
 import React from 'react'
@@ -147,7 +148,67 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
     },
     {
       name: <span className="fw-bolder fs-13">Tracking Number</span>,
-      selector: (row: OrderRowType) => row.trackingNumber || '',
+      selector: (row: OrderRowType) => {
+        let tracking
+        {
+          switch (true) {
+            case row.orderType == 'Shipment' &&
+              row.trackingNumber != '' &&
+              !!row.trackingLink:
+              tracking = (
+                <div className="trackingNumber_container">
+                  <img
+                    src={row.carrierIcon}
+                    alt="carrier logo"
+                    style={{
+                      width: '16px',
+                      height: '16px',
+                      objectFit: 'contain',
+                    }}
+                  />
+                  {row.trackingNumber}
+                  <a
+                    href={`${row.trackingLink}${row.trackingNumber}`}
+                    target="blank"
+                  >
+                    <i className="fs-5 ri-external-link-fill" />
+                  </a>
+                </div>
+              )
+              break
+            case row.orderType == 'Wholesale' &&
+              row.trackingNumber != '' &&
+              !!row.trackingLink && row.carrierService == 'Parcel Boxes':
+              tracking = (
+                <div className="trackingNumber_container">
+                  <img
+                    src={row.carrierIcon}
+                    alt="carrier logo"
+                    style={{
+                      width: '16px',
+                      height: '16px',
+                      objectFit: 'contain',
+                    }}
+                  />
+                  {row.trackingNumber}
+                  <a
+                    href={`${row.trackingLink}${row.trackingNumber}`}
+                    target="blank"
+                  >
+                    <i className="fs-5 ri-external-link-fill" />
+                  </a>
+                </div>
+              )
+              break
+            case row.trackingNumber == '':
+              tracking = row.trackingNumber
+              break
+            default:
+              tracking = row.trackingNumber
+          }
+        }
+        return tracking
+      },
       sortable: true,
       wrap: true,
       grow: 2,
