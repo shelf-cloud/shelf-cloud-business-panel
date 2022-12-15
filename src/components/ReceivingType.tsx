@@ -88,6 +88,18 @@ const ReceivingType = ({ data }: Props) => {
               </CardBody>
             </Card>
           </Col>
+          {data.extraComment != '' && (
+            <Col xl={12}>
+              <Card>
+                <CardHeader className="py-3">
+                  <h5 className="fw-semibold m-0">Order Comment</h5>
+                </CardHeader>
+                <CardBody>
+                  <p>{data.extraComment}</p>
+                </CardBody>
+              </Card>
+            </Col>
+          )}
         </Col>
         <Col xl={8}>
           <Card>

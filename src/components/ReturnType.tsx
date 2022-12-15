@@ -1,19 +1,50 @@
-import React, { useContext } from 'react'
-import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
+import React, { useContext, useState } from 'react'
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Row,
+  Spinner,
+} from 'reactstrap'
 // import Animation from '@components/Common/Animation'
 import { OrderRowType, ShipmentOrderItem } from '@typings'
+import axios from 'axios'
 import AppContext from '@context/AppContext'
+import { useSWRConfig } from 'swr'
+
 // import dynamic from 'next/dynamic';
 // const Animation = dynamic(() => import('@components/Common/Animation'), {
 //     ssr: false
 // });
 
 type Props = {
-  data: OrderRowType
+  data: OrderRowType,
+  apiMutateLink?: string
 }
 
-const ShipmentType = ({ data }: Props) => {
-  const { setModalCreateReturnInfo }: any = useContext(AppContext)
+const ReturnType = ({ data, apiMutateLink }: Props) => {
+  const { mutate } = useSWRConfig()
+  const { state }: any = useContext(AppContext)
+  const [loadingLabel, setLoadingLabel] = useState(false)
+  const handlePrintingLabel = async () => {
+    setLoadingLabel(true)
+    const response: any = await axios(
+      `/api/createLabelForOrder?businessId=${state.user.businessId}&orderId=${data.id}`
+    )
+
+    const linkSource = `data:application/pdf;base64,${response.data}`
+    const downloadLink = document.createElement('a')
+    const fileName = data.orderNumber + '-shipLabel.pdf'
+
+    downloadLink.href = linkSource
+    downloadLink.download = fileName
+    downloadLink.click()
+    mutate(apiMutateLink)
+    setLoadingLabel(false)
+  }
+
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
       <Row>
@@ -157,18 +188,14 @@ const ShipmentType = ({ data }: Props) => {
       <Row>
         <Col xl={12} className="d-flex justify-content-end align-items-end">
           <Card className="m-0">
-            {(data.orderStatus == 'shipped' && data.hasReturn == false && data.shipCountry == 'US') && (
-              <Button
-                color="warning"
-                className="btn-label"
-                onClick={() =>
-                  setModalCreateReturnInfo(data.businessId, data.id)
-                }
-              >
-                <i className="las la-reply label-icon align-middle fs-3 me-2" />
-                Create Return
-              </Button>
-            )}
+            <Button
+              color="secondary"
+              className="btn-label"
+              onClick={() => handlePrintingLabel()}
+            >
+              <i className="las la-toilet-paper label-icon align-middle fs-3 me-2" />
+              {loadingLabel ? <Spinner color="light" /> : 'Print Label'}
+            </Button>
           </Card>
         </Col>
       </Row>
@@ -176,4 +203,4 @@ const ShipmentType = ({ data }: Props) => {
   )
 }
 
-export default ShipmentType
+export default ReturnType

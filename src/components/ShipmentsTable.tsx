@@ -8,9 +8,10 @@ import ShipmentExpandedDetail from './ShipmentExpandedDetail'
 type Props = {
   tableData: OrderRowType[]
   pending: boolean
+  apiMutateLink: string
 }
 
-const ShipmentsTable = ({ tableData, pending }: Props) => {
+const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
   const orderNumber = (rowA: OrderRowType, rowB: OrderRowType) => {
     const a = rowA.orderNumber.toLowerCase()
     const b = rowB.orderNumber.toLowerCase()
@@ -59,16 +60,26 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
       name: <span className="fw-bolder fs-13">Order Number</span>,
       selector: (row: OrderRowType) => {
         return (
-          <div style={{ margin: '0px', fontWeight: '600' }}>
-            {row.orderNumber}
-          </div>
+          <>
+            <div style={{ margin: '0px', fontWeight: '600' }}>
+              {row.orderNumber}
+            </div>
+            {row.hasReturn && (
+              <span className="text-danger" style={{opacity: '80%'}}>
+                Return: <br />{row.orderNumber}-RT
+              </span>
+            )}
+          </>
         )
       },
       sortable: true,
       wrap: true,
-      grow: 1.3,
+      grow: 1.7,
       left: true,
       sortFunction: orderNumber,
+      style: {
+        padding: '8px 0px',
+      },
     },
     {
       name: <span className="fw-bolder fs-13">Status</span>,
@@ -76,6 +87,7 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
         switch (row.orderStatus) {
           case 'shipped':
           case 'received':
+          case 'Processed':
             return (
               <span className="badge text-uppercase badge-soft-success p-2">
                 {' '}
@@ -127,6 +139,20 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
       style: {
         color: '#727578',
       },
+      // conditionalCellStyles: [
+      //   {
+      //     when: (row: OrderRowType) => row.orderType == 'Return',
+      //     style: {
+      //       color: '#f06548',
+      //     },
+      //   },
+      //   {
+      //     when: (row: OrderRowType) => row.orderType != 'Return',
+      //     style: {
+      //       color: '#727578',
+      //     },
+      //   },
+      // ],
     },
     {
       name: <span className="fw-bolder fs-13">Order Date</span>,
@@ -135,7 +161,7 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
       wrap: true,
       grow: 1.2,
       center: true,
-      //   compact: true,
+      compact: true,
     },
     {
       name: <span className="fw-bolder fs-13">Order Closed</span>,
@@ -144,7 +170,7 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
       wrap: true,
       grow: 1.2,
       center: true,
-      //   compact: true,
+      compact: true,
     },
     {
       name: <span className="fw-bolder fs-13">Tracking Number</span>,
@@ -152,7 +178,7 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
         let tracking
         {
           switch (true) {
-            case row.orderType == 'Shipment' &&
+            case (row.orderType == 'Shipment' || row.orderType == 'Return') &&
               row.trackingNumber != '' &&
               !!row.trackingLink:
               tracking = (
@@ -169,15 +195,17 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
                   <a
                     href={`${row.trackingLink}${row.trackingNumber}`}
                     target="blank"
+                    style={{ textDecoration: 'none', color: 'black' }}
                   >
-                  {row.trackingNumber}
+                    {row.trackingNumber}
                   </a>
                 </div>
               )
               break
             case row.orderType == 'Wholesale' &&
               row.trackingNumber != '' &&
-              !!row.trackingLink && row.carrierService == 'Parcel Boxes':
+              !!row.trackingLink &&
+              row.carrierService == 'Parcel Boxes':
               tracking = (
                 <div className="trackingNumber_container">
                   <img
@@ -192,9 +220,9 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
                   <a
                     href={`${row.trackingLink}${row.trackingNumber}`}
                     target="blank"
-                    style={{textDecoration: 'none', color: 'black'}}
+                    style={{ textDecoration: 'none', color: 'black' }}
                   >
-                  {row.trackingNumber}
+                    {row.trackingNumber}
                   </a>
                 </div>
               )
@@ -210,9 +238,9 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
       },
       sortable: true,
       wrap: true,
-      grow: 2,
+      grow: 1.7,
       center: false,
-      //   compact: true,
+      compact: true,
     },
     {
       name: <span className="fw-bolder fs-13"># of Items</span>,
@@ -221,7 +249,7 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
       wrap: true,
       // grow: 1.5,
       center: true,
-      //   compact: true,
+        compact: true,
     },
     {
       name: <span className="fw-bolder fs-13">Total Charge</span>,
@@ -244,6 +272,7 @@ const ShipmentsTable = ({ tableData, pending }: Props) => {
         progressPending={pending}
         expandableRows
         expandableRowsComponent={ShipmentExpandedDetail}
+        expandableRowsComponentProps={{ apiMutateLink: apiMutateLink }}
         striped={true}
       />
     </>

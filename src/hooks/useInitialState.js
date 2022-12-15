@@ -33,6 +33,8 @@ const initialState = {
   showEditProductModal: false,
   modalProductDetails: {},
   showWholeSaleOrderModal: false,
+  modalCreateReturnInfo:{},
+  showCreateReturnModal: false
 }
 
 const useInitialState = () => {
@@ -86,10 +88,10 @@ const useInitialState = () => {
       showInventoryBinsModal: payload,
     })
   }
+
   const setShowEditProductModal = (payload) => {
     setState({
       ...state,
-      showEditProductModal: false,
       showEditProductModal: payload,
     })
   }
@@ -141,6 +143,24 @@ const useInitialState = () => {
     })
   }
 
+  const setModalCreateReturnInfo = (businessId, orderId) => {
+    setState({
+      ...state,
+      modalCreateReturnInfo: {
+        businessId,
+        orderId
+      },
+      showCreateReturnModal: true,
+    })
+  }
+
+  const setShowCreateReturnModal = (payload) => {
+    setState({
+      ...state,
+      showCreateReturnModal: payload,
+    })
+  }
+
   return {
     state,
     setProducts,
@@ -150,7 +170,9 @@ const useInitialState = () => {
     setModalProductDetails,
     addWholesaleProduct,
     removeWholesaleProduct,
-    setWholeSaleOrderModal
+    setWholeSaleOrderModal,
+    setModalCreateReturnInfo,
+    setShowCreateReturnModal
   }
 }
 

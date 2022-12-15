@@ -14,6 +14,7 @@ import useSWR from 'swr'
 import moment from 'moment'
 import ShipmentsTable from '@components/ShipmentsTable'
 import Flatpickr from 'react-flatpickr'
+import CreateReturnModal from '@components/CreateReturnModal'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -225,6 +226,7 @@ const Shipments = ({ session }: Props) => {
                         <option value="">All Types</option>
                         <option value="Wholesale">Wholesale</option>
                         <option value="Shipment">Shipment</option>
+                        <option value="Return">Return</option>
                       </Input>
                     </div>
                   </div>
@@ -234,6 +236,7 @@ const Shipments = ({ session }: Props) => {
                     <ShipmentsTable
                       tableData={filterDataTable || []}
                       pending={pending}
+                      apiMutateLink={`/api/getShipmentsOrders?businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`}
                     />
                   </CardBody>
                 </Card>
@@ -242,6 +245,7 @@ const Shipments = ({ session }: Props) => {
           </Container>
         </div>
       </React.Fragment>
+      {state.showCreateReturnModal && <CreateReturnModal apiMutateLink={`/api/getShipmentsOrders?businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`}/>}
     </div>
   )
 }

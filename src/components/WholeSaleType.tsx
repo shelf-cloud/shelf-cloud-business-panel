@@ -109,6 +109,18 @@ const WholeSaleType = ({ data }: Props) => {
               </CardBody>
             </Card>
           </Col>
+          {data.extraComment != '' && (
+            <Col xl={12}>
+              <Card>
+                <CardHeader className="py-3">
+                  <h5 className="fw-semibold m-0">Order Comment</h5>
+                </CardHeader>
+                <CardBody>
+                  <p>{data.extraComment}</p>
+                </CardBody>
+              </Card>
+            </Col>
+          )}
         </Col>
         <Col xl={8}>
           <Card>
@@ -122,7 +134,9 @@ const WholeSaleType = ({ data }: Props) => {
                     <tr>
                       <th scope="col">Title</th>
                       <th scope="col">Sku</th>
-                      <th className='text-center' scope="col">Qty</th>
+                      <th className="text-center" scope="col">
+                        Qty
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -136,9 +150,13 @@ const WholeSaleType = ({ data }: Props) => {
                       </tr>
                     ))}
                     <tr>
-                      <td className="text-start fs-5 fw-bold text-nowrap">Total QTY</td>
+                      <td className="text-start fs-5 fw-bold text-nowrap">
+                        Total QTY
+                      </td>
                       <td></td>
-                      <td className="text-center fw-bold fs-5 text-primary">{data.totalItems}</td>
+                      <td className="text-center fw-bold fs-5 text-primary">
+                        {data.totalItems}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -149,7 +167,7 @@ const WholeSaleType = ({ data }: Props) => {
       </Row>
       <Row>
         <Col xl={12} className="d-flex justify-content-end align-items-end">
-          <Card className='m-0'>
+          <Card className="m-0">
             {data.proofOfShipped != '' && data.proofOfShipped != null && (
               <a href={data.proofOfShipped} target="blank">
                 <Button color="info" className="btn-label">

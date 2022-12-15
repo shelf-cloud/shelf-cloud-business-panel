@@ -168,7 +168,7 @@ export interface OrderItem {
 export interface OrderRowType {
   carrierIcon: string
   trackingLink: string
-  id: string
+  id: number
   businessId: string
   orderId: string
   orderNumber: string
@@ -215,6 +215,8 @@ export interface OrderRowType {
   isThird: boolean
   thirdInfo: string
   labelsName: string
+  hasReturn: boolean
+  extraComment: string
 }
 
 export interface ShipmentOrderItem {
