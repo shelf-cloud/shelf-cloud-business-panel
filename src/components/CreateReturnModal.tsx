@@ -20,6 +20,7 @@ function CreateReturnModal({ apiMutateLink }: Props) {
   const [loading, setLoading] = useState(true)
   const [loadingConfirmation, setLoadingConfirmation] = useState(false)
   const [returnItemsList, setReturnItemsList] = useState<any>([])
+  const [errorMsg, setErrorMsg] = useState(false)
 
   useEffect(() => {
     const bringProductBins = async () => {
@@ -61,11 +62,21 @@ function CreateReturnModal({ apiMutateLink }: Props) {
   }
 
   const handleConfirmReturn = async () => {
+    setErrorMsg(false)
     setLoadingConfirmation(true)
+    const finalReturnItems = returnItemsList.filter(
+      (item: any) => item.quantity > 0
+    )
+    if(finalReturnItems.length == 0){
+      setErrorMsg(true)
+      setLoadingConfirmation(false)
+      return
+    }
+
     const response = await axios.post(
       `api/createReturnFromOrder?businessId=${state.user.businessId}&orderId=${state.modalCreateReturnInfo.orderId}`,
       {
-        returnItems: returnItemsList,
+        returnItems: finalReturnItems,
       }
     )
 
@@ -155,6 +166,9 @@ function CreateReturnModal({ apiMutateLink }: Props) {
                             style={{ width: '80px' }}
                             onChange={(e) => handleOnChangeQty(e, item.sku)}
                           >
+                            <option key={0} value={0}>
+                              {0}
+                            </option>
                             {Array(item.quantity)
                               .fill(0)
                               .map((_item: any, index: number) => (
@@ -171,6 +185,11 @@ function CreateReturnModal({ apiMutateLink }: Props) {
                   ))}
                 </tbody>
               </table>
+            )}
+            {errorMsg && (
+              <div className="d-flex justify-content-start align-items-center">
+              <p className='text-danger fs-6'>You must select at least 1 Quantity to return!</p>
+            </div>
             )}
             <div className="d-flex justify-content-end align-items-center">
               <Button color="success" onClick={() => handleConfirmReturn()}>
