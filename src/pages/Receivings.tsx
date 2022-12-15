@@ -49,7 +49,7 @@ type Props = {
 const Receiving = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
   const [shipmentsStartDate, setShipmentsStartDate] = useState(
-    moment().subtract(30, 'days').format('YYYY-MM-DD')
+    moment().subtract(3, 'months').format('YYYY-MM-DD')
   )
   const [shipmentsEndDate, setShipmentsEndDate] = useState(
     moment().format('YYYY-MM-DD')

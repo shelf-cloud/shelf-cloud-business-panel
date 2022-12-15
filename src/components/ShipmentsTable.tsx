@@ -65,7 +65,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
               {row.orderNumber}
             </div>
             {row.hasReturn && (
-              <span className="text-danger" style={{opacity: '80%'}}>
+              <span className="text-danger" style={{ opacity: '80%' }}>
                 Return: <br />{row.orderNumber}-RT
               </span>
             )}
@@ -87,11 +87,17 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
         switch (row.orderStatus) {
           case 'shipped':
           case 'received':
-          case 'Processed':
             return (
               <span className="badge text-uppercase badge-soft-success p-2">
                 {' '}
                 {row.orderStatus}{' '}
+              </span>
+            )
+            break
+          case 'Processed':
+            return (
+              <span className="badge text-uppercase badge-soft-secondary p-2">
+                {' awating '}
               </span>
             )
             break
@@ -249,7 +255,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
       wrap: true,
       // grow: 1.5,
       center: true,
-        compact: true,
+      compact: true,
     },
     {
       name: <span className="fw-bolder fs-13">Total Charge</span>,
