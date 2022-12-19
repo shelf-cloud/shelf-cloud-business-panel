@@ -66,7 +66,8 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
             </div>
             {row.hasReturn && (
               <span className="text-danger" style={{ opacity: '80%' }}>
-                Return: <br />{row.orderNumber}-RT
+                Return: <br />
+                {row.orderNumber}-RT
               </span>
             )}
           </>
@@ -89,15 +90,14 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
           case 'received':
             return (
               <span className="badge text-uppercase badge-soft-success p-2">
-                {' '}
-                {row.orderStatus}{' '}
+                {` ${row.orderStatus} `}
               </span>
             )
             break
           case 'Processed':
             return (
               <span className="badge text-uppercase badge-soft-secondary p-2">
-                {' awating '}
+                {` ${row.orderStatus} `}
               </span>
             )
             break
