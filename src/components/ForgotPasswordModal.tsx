@@ -52,7 +52,6 @@ const ForgotPasswordModal = ({ OpenForgotPassword, setOpenForgotPassword }: Prop
               className='form-control'
               id='email'
               name='email'
-              value={'onlinesales@electrostoresl.com'}
               placeholder='Enter your email'
               required
               ref={emailRef}
