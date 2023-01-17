@@ -8,7 +8,9 @@ import { Button, Label } from 'reactstrap'
 import { getSession, signIn } from '@auth/client'
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
-// import Link from 'next/link'
+import Link from 'next/link'
+import ForgotPasswordModal from '@components/ForgotPasswordModal'
+import { ToastContainer } from 'react-toastify'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -31,6 +33,7 @@ type Props = {}
 
 function SignIn({}: Props) {
   const [show, setShow] = useState(false)
+  const [OpenForgotPassword, setOpenForgotPassword] = useState(false)
   const { query } = useRouter()
   const usernameRef = useRef<any>(null)
   const passwordRef = useRef<any>(null)
@@ -46,6 +49,7 @@ function SignIn({}: Props) {
 
   return (
     <div className="vw-100 vh-100 d-flex ">
+      <ToastContainer />
       <div
         className="w-100 d-flex flex-column align-items-center justify-content-start"
         style={{ backgroundColor: '#FAFBFD' }}
@@ -67,13 +71,23 @@ function SignIn({}: Props) {
           </div>
         </div>
         <div
-          className="w-100 h-100 d-flex justify-content-center align-items-center"
+          className="col-10 col-lg-8 h-100 d-flex justify-content-center align-items-center"
           style={{ backgroundColor: '#FAFBFD' }}
         >
-          <div className="w-50 d-flex flex-column justify-content-start align-items-center">
-            <h2 className="fw-semibold mb-5">Sign in</h2>
-            <form onSubmit={handleSignInSubmit}>
-              <div className="mb-1 w-100">
+          <div className="w-75 d-flex flex-column justify-content-start align-items-center">
+            <h2 className="w-100 text-center fw-semibold mb-3">Sign in</h2>
+            <p className="w-100 text-center fs-5 mb-5">
+              New user?{' '}
+              <a
+                href={'https://www.shelf-cloud.com'}
+                target='blank'
+                className=" text-primary fw-semibold"
+              >
+                Create an account
+              </a>
+            </p>
+            <form onSubmit={handleSignInSubmit} className="w-100">
+              <div className="mb-4 w-100">
                 <Label htmlFor="username" className="form-label">
                   Username
                 </Label>
@@ -83,10 +97,11 @@ function SignIn({}: Props) {
                   id="username"
                   name="username"
                   placeholder="Enter username"
+                  required
                   ref={usernameRef}
                 />
               </div>
-              <div className="w-100">
+              <div className="mb-1 w-100">
                 <Label className="form-label" htmlFor="password-input">
                   Password
                 </Label>
@@ -96,6 +111,7 @@ function SignIn({}: Props) {
                     className="form-control pe-5"
                     placeholder="Enter password"
                     id="password"
+                    required
                     name="password"
                     ref={passwordRef}
                   />
@@ -114,11 +130,11 @@ function SignIn({}: Props) {
                   Verify your Sign In credentials!
                 </p>
               )}
-              {/* <div className="w-100 text-end">
-                <Link href="#" className="text-primary fw-5">
+              <div className="w-100 text-end">
+                <a href="#" className="text-primary fs-6" onClick={() => setOpenForgotPassword(true)}>
                   Forgot password?
-                </Link>
-              </div> */}
+                </a>
+              </div>
               <div className="mt-4 w-100">
                 <Button
                   color="primary"
@@ -129,6 +145,15 @@ function SignIn({}: Props) {
                 </Button>
               </div>
             </form>
+            <p className="w-100 text-left fs-5 mt-3">
+              Have a question?{' '}
+              <Link
+                href={'/ContactForm'}
+                className="text-primary fw-semibold"
+              >
+                Contact Us
+              </Link>
+            </p>
           </div>
         </div>
       </div>
@@ -137,10 +162,10 @@ function SignIn({}: Props) {
           className="d-flex flex-column justify-content-center align-items-start"
           style={{ width: '65%' }}
         >
-          <h2 className="fs-2 fw-bold text-white text-start m-0 p-0 w-100 mb-3">
+          <h2 className="fs-1 fw-bold text-white text-start m-0 p-0 w-100 mb-3">
             Welcome Back
           </h2>
-          <p className="fs-6 fw-light text-white text-start m-0 p-0 w-100 mb-3">
+          <p className="fs-5 fw-light text-white text-start m-0 p-0 w-100 mb-3">
             4 in 1 Cloud-Based Software Solutions for Small Business.
           </p>
           <div
@@ -180,6 +205,7 @@ function SignIn({}: Props) {
           </div>
         </div>
       </div>
+      {OpenForgotPassword && <ForgotPasswordModal OpenForgotPassword={OpenForgotPassword} setOpenForgotPassword={setOpenForgotPassword} />}
     </div>
   )
 }

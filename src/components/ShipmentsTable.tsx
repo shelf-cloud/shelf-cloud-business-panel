@@ -201,7 +201,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
                   <a
                     href={`${row.trackingLink}${row.trackingNumber}`}
                     target="blank"
-                    style={{ textDecoration: 'none', color: 'black' }}
+                    style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}
                   >
                     {row.trackingNumber}
                   </a>
@@ -226,7 +226,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
                   <a
                     href={`${row.trackingLink}${row.trackingNumber}`}
                     target="blank"
-                    style={{ textDecoration: 'none', color: 'black' }}
+                    style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}
                   >
                     {row.trackingNumber}
                   </a>

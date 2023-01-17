@@ -14,9 +14,8 @@ interface Props {
 const Layout = ({ children }: Props) => {
   const [headerClass, setHeaderClass] = useState('')
   const { pathname } = useRouter()
-  const noLayout = ['/SignIn']
+  const noLayout = ['SignIn' , 'ContactForm', 'Forgotpassword']
 
-  // class add remove in header
   useEffect(() => {
     window.addEventListener('scroll', scrollNavigation, true)
   })
@@ -32,7 +31,7 @@ const Layout = ({ children }: Props) => {
 
   return (
     <React.Fragment>
-      {noLayout.includes(pathname) ? (
+      {noLayout.includes(pathname.split('/')[1]) ? (
         <div>{children}</div>
       ) : (
         <div id="layout-wrapper">
