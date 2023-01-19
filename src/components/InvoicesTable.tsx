@@ -5,6 +5,7 @@ import moment from 'moment'
 import Link from 'next/link'
 import React from 'react'
 import DataTable from 'react-data-table-component'
+import { Button } from 'reactstrap'
 
 type Props = {
   filteredItems: InvoiceList[]
@@ -29,16 +30,8 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
     return 0
   }
   const sortStatus = (rowA: InvoiceList, rowB: InvoiceList) => {
-    const a = rowA.paid
-      ? 'Paid'
-      : moment(today).isAfter(rowA.expireDate)
-      ? 'Past Due'
-      : 'Due'
-    const b = rowB.paid
-      ? 'Paid'
-      : moment(today).isAfter(rowB.expireDate)
-      ? 'Past Due'
-      : 'Due'
+    const a = rowA.paid ? 'Paid' : moment(today).isAfter(rowA.expireDate) ? 'Past Due' : 'Due'
+    const b = rowB.paid ? 'Paid' : moment(today).isAfter(rowB.expireDate) ? 'Past Due' : 'Due'
 
     if (a > b) {
       return 1
@@ -98,13 +91,11 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
   }
   const columns: any = [
     {
-      name: <span className="fw-bold fs-5">Invoice Number</span>,
+      name: <span className='fw-bold fs-5'>Invoice Number</span>,
       selector: (row: InvoiceList) => {
         return (
           <div>
-            <p style={{ margin: '0px', fontWeight: '800' }}>
-              {row.invoiceNumber}
-            </p>
+            <p style={{ margin: '0px', fontWeight: '800' }}>{row.invoiceNumber}</p>
           </div>
         )
       },
@@ -114,7 +105,7 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
       sortFunction: sortInvoiceNumber,
     },
     {
-      name: <span className="fw-bold fs-5">Status</span>,
+      name: <span className='fw-bold fs-5'>Status</span>,
       selector: (row: InvoiceList) => {
         return (
           <p
@@ -124,8 +115,7 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
                 : moment(today).isAfter(row.expireDate)
                 ? 'fs-14 my-1 text-danger'
                 : 'fs-14 my-1'
-            }
-          >
+            }>
             {row.paid
               ? 'Paid'
               : moment(today).isAfter(row.expireDate)
@@ -142,7 +132,7 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
       sortFunction: sortStatus,
     },
     {
-      name: <span className="fw-bold fs-5">Invoice Date</span>,
+      name: <span className='fw-bold fs-5'>Invoice Date</span>,
       selector: (row: InvoiceList) => {
         return moment(row.createdDate, 'YYYY-MM-DD').format('LL')
       },
@@ -152,7 +142,7 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
       sortFunction: sortCreatedDates,
     },
     {
-      name: <span className="fw-bold fs-5">Expire Date</span>,
+      name: <span className='fw-bold fs-5'>Expire Date</span>,
       selector: (row: InvoiceList) => {
         return (
           <p
@@ -162,8 +152,7 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
                 : moment(today).isSameOrAfter(row.expireDate)
                 ? 'fs-14 my-1 text-danger'
                 : 'fs-14 my-1'
-            }
-          >
+            }>
             {moment(row.expireDate, 'YYYY-MM-DD').format('LL')}
           </p>
         )
@@ -174,7 +163,7 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
       sortFunction: sortExpireDates,
     },
     {
-      name: <span className="fw-bold fs-5">Total Invoice</span>,
+      name: <span className='fw-bold fs-5'>Total Invoice</span>,
       selector: (row: InvoiceList) => FormatCurrency.format(row.totalCharge),
       sortable: true,
       center: true,
@@ -182,7 +171,22 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
       sortFunction: sortTotal,
     },
     {
-      name: <span className="fw-bold fs-5"></span>,
+      name: <span className='fw-bold fs-5'></span>,
+      selector: (row: InvoiceList) => {
+        return (
+          <a href={`${row.payLink}`} target='blank'>
+            <Button className={row.paid ? 'btn btn-soft-success' : 'btn btn-primary'}>
+              {row.paid ? 'View Receipt' : 'Pay Now'}
+            </Button>
+          </a>
+        )
+      },
+      sortable: false,
+      center: true,
+      compact: true,
+    },
+    {
+      name: <span className='fw-bold fs-5'></span>,
       selector: (row: InvoiceList) => {
         return <Link href={`/Invoices/${row.idOfInvoice}`}>View Details</Link>
       },

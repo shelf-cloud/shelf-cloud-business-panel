@@ -33,6 +33,7 @@ export interface InvoiceList {
   createdDate?: string
   expireDate: string
   paid: boolean
+  payLink: string
   totalCharge: number
 }
 
@@ -43,6 +44,7 @@ export interface InvoiceDetails {
   invoiceNumber: string
   totalCharge: number
   paid: boolean
+  payLink: string
 }
 
 export interface OrderDetails {
