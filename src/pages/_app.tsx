@@ -5,6 +5,7 @@ import useInitialState from '@hooks/useInitialState.js'
 import { SessionProvider } from '@auth/client'
 import { Session } from 'next-auth'
 import Layout from '@containers/Layout/Layout'
+import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
 
 function MyApp({
@@ -17,6 +18,7 @@ function MyApp({
   return (
     <SessionProvider session={pageProps.session}>
       <AppContext.Provider value={initialState}>
+        <ToastContainer />
         <Layout>
           <Component {...pageProps} />
         </Layout>

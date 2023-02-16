@@ -53,40 +53,20 @@ function EditProductModal({}: Props) {
       // boxqty: '',
     },
     validationSchema: Yup.object({
-      title: Yup.string()
-        .max(100, 'Title is to Long')
-        .required('Please Enter Your Title'),
-      sku: Yup.string()
-        .max(50, 'SKU is to Long')
-        .required('Please Enter Your Sku'),
+      title: Yup.string().max(100, 'Title is to Long').required('Please Enter Your Title'),
+      sku: Yup.string().max(50, 'SKU is to Long').required('Please Enter Your Sku'),
       image: Yup.string().url(),
       asin: Yup.string().max(50, 'Asin is to Long'),
       fnsku: Yup.string().max(50, 'Fnsku is to Long'),
       barcode: Yup.string().max(50, 'barcode is to Long'),
-      weight: Yup.number()
-        .required('Please Enter Your Weight')
-        .positive('Value must be grater than 0'),
-      width: Yup.number()
-        .required('Please Enter Your Width')
-        .positive('Value must be grater than 0'),
-      length: Yup.number()
-        .required('Please Enter Your Length')
-        .positive('Value must be grater than 0'),
-      height: Yup.number()
-        .required('Please Enter Your Height')
-        .positive('Value must be grater than 0'),
-      boxweight: Yup.number()
-        .required('Please Enter Your Box Eeight')
-        .positive('Value must be grater than 0'),
-      boxwidth: Yup.number()
-        .required('Please Enter Your Box Width')
-        .positive('Value must be grater than 0'),
-      boxlength: Yup.number()
-        .required('Please Enter Your Box Length')
-        .positive('Value must be grater than 0'),
-      boxheight: Yup.number()
-        .required('Please Enter Your Box Height')
-        .positive('Value must be grater than 0'),
+      weight: Yup.number().required('Please Enter Your Weight').positive('Value must be grater than 0'),
+      width: Yup.number().required('Please Enter Your Width').positive('Value must be grater than 0'),
+      length: Yup.number().required('Please Enter Your Length').positive('Value must be grater than 0'),
+      height: Yup.number().required('Please Enter Your Height').positive('Value must be grater than 0'),
+      boxweight: Yup.number().required('Please Enter Your Box Eeight').positive('Value must be grater than 0'),
+      boxwidth: Yup.number().required('Please Enter Your Box Width').positive('Value must be grater than 0'),
+      boxlength: Yup.number().required('Please Enter Your Box Length').positive('Value must be grater than 0'),
+      boxheight: Yup.number().required('Please Enter Your Box Height').positive('Value must be grater than 0'),
       boxqty: Yup.number()
         .required('Please Enter Your Box Qty')
         .positive('Value must be grater than 0')
@@ -94,14 +74,14 @@ function EditProductModal({}: Props) {
     }),
     onSubmit: async (values) => {
       const response = await axios.post(
-        `api/updateProductDetails?businessId=${state.user.businessId}`,
+        `api/updateProductDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`,
         {
           productInfo: values,
         }
       )
       if (!response.data.error) {
         toast.success(response.data.msg)
-        mutate(`/api/getBusinessInventory?businessId=${state.user.businessId}`)
+        mutate(`/api/getBusinessInventory?region=${state.currentRegion}&businessId=${state.user.businessId}`)
         setShowEditProductModal(false)
       } else {
         toast.error(response.data.msg)
@@ -111,20 +91,22 @@ function EditProductModal({}: Props) {
 
   useEffect(() => {
     const bringProductBins = async () => {
-      const response = await axios(
-        `/api/getProductDetails?inventoryId=${state.modalProductDetails.inventoryId}&businessId=${state.modalProductDetails.businessId}`
-      )
-      validation.setValues(response.data)
-      setLoading(false)
+      const response = (await axios(
+        `/api/getProductDetails?region=${state.currentRegion}&inventoryId=${state.modalProductDetails.inventoryId}&businessId=${state.user.businessId}`
+      )) as any
+      if (response?.error) {
+        setLoading(false)
+        toast.error(response.message)
+      } else {
+        validation.setValues(response.data)
+        setLoading(false)
+      }
     }
     bringProductBins()
     return () => {
       setLoading(true)
     }
-  }, [
-    state.modalProductDetails.businessId,
-    state.modalProductDetails.inventoryId,
-  ])
+  }, [state.currentRegion, state.user.businessId, state.modalProductDetails.inventoryId])
 
   const HandleAddProduct = (event: any) => {
     event.preventDefault()
@@ -133,19 +115,17 @@ function EditProductModal({}: Props) {
 
   return (
     <Modal
-      size="xl"
-      id="myModal"
+      size='xl'
+      id='myModal'
       isOpen={state.showEditProductModal}
       toggle={() => {
         setShowEditProductModal(!state.showEditProductModal)
-      }}
-    >
+      }}>
       <ModalHeader
         toggle={() => {
           setShowEditProductModal(!state.showEditProductModal)
-        }}
-      >
-        <h3 className="modal-title" id="myModalLabel">
+        }}>
+        <h3 className='modal-title' id='myModalLabel'>
           Edit Product
         </h3>
         {loading && <Spinner />}
@@ -154,226 +134,174 @@ function EditProductModal({}: Props) {
         {!loading && (
           <Form onSubmit={HandleAddProduct}>
             <Row>
-              <h5 className="fs-5 m-3 fw-bolder">Product Details</h5>
-              <Col md={6} className="d-none">
-                <FormGroup className="mb-3">
-                  <Label htmlFor="firstNameinput" className="form-label">
+              <h5 className='fs-5 m-3 fw-bolder'>Product Details</h5>
+              <Col md={6} className='d-none'>
+                <FormGroup className='mb-3'>
+                  <Label htmlFor='firstNameinput' className='form-label'>
                     *InventoryId
                   </Label>
                   <Input
                     disabled
-                    type="number"
-                    className="form-control"
-                    id="inventoryId"
-                    name="inventoryId"
+                    type='number'
+                    className='form-control'
+                    id='inventoryId'
+                    name='inventoryId'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     value={validation.values.inventoryId || ''}
-                    invalid={
-                      validation.touched.inventoryId &&
-                      validation.errors.inventoryId
-                        ? true
-                        : false
-                    }
+                    invalid={validation.touched.inventoryId && validation.errors.inventoryId ? true : false}
                   />
-                  {validation.touched.inventoryId &&
-                  validation.errors.inventoryId ? (
-                    <FormFeedback type="invalid">
-                      {validation.errors.inventoryId}
-                    </FormFeedback>
+                  {validation.touched.inventoryId && validation.errors.inventoryId ? (
+                    <FormFeedback type='invalid'>{validation.errors.inventoryId}</FormFeedback>
                   ) : null}
                 </FormGroup>
               </Col>
-              <Col md={6} className="d-none">
-                <FormGroup className="mb-3">
-                  <Label htmlFor="firstNameinput" className="form-label">
+              <Col md={6} className='d-none'>
+                <FormGroup className='mb-3'>
+                  <Label htmlFor='firstNameinput' className='form-label'>
                     *BusinessId
                   </Label>
                   <Input
                     disabled
-                    type="number"
-                    className="form-control"
-                    id="businessId"
-                    name="businessId"
+                    type='number'
+                    className='form-control'
+                    id='businessId'
+                    name='businessId'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     value={validation.values.businessId || ''}
-                    invalid={
-                      validation.touched.businessId &&
-                      validation.errors.businessId
-                        ? true
-                        : false
-                    }
+                    invalid={validation.touched.businessId && validation.errors.businessId ? true : false}
                   />
-                  {validation.touched.businessId &&
-                  validation.errors.businessId ? (
-                    <FormFeedback type="invalid">
-                      {validation.errors.businessId}
-                    </FormFeedback>
+                  {validation.touched.businessId && validation.errors.businessId ? (
+                    <FormFeedback type='invalid'>{validation.errors.businessId}</FormFeedback>
                   ) : null}
                 </FormGroup>
               </Col>
               <Col md={6}>
-                <FormGroup className="mb-3">
-                  <Label htmlFor="firstNameinput" className="form-label">
+                <FormGroup className='mb-3'>
+                  <Label htmlFor='firstNameinput' className='form-label'>
                     *Title
                   </Label>
                   <Input
-                    type="text"
-                    className="form-control"
-                    placeholder="Title..."
-                    id="title"
-                    name="title"
+                    type='text'
+                    className='form-control'
+                    placeholder='Title...'
+                    id='title'
+                    name='title'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     value={validation.values.title || ''}
-                    invalid={
-                      validation.touched.title && validation.errors.title
-                        ? true
-                        : false
-                    }
+                    invalid={validation.touched.title && validation.errors.title ? true : false}
                   />
                   {validation.touched.title && validation.errors.title ? (
-                    <FormFeedback type="invalid">
-                      {validation.errors.title}
-                    </FormFeedback>
+                    <FormFeedback type='invalid'>{validation.errors.title}</FormFeedback>
                   ) : null}
                 </FormGroup>
               </Col>
               <Col md={6}>
-                <FormGroup className="mb-3">
-                  <Label htmlFor="lastNameinput" className="form-label">
+                <FormGroup className='mb-3'>
+                  <Label htmlFor='lastNameinput' className='form-label'>
                     *SKU
                   </Label>
                   <Input
                     disabled={true}
-                    type="text"
-                    className="form-control"
-                    placeholder="Sku..."
-                    id="sku"
-                    name="sku"
+                    type='text'
+                    className='form-control'
+                    placeholder='Sku...'
+                    id='sku'
+                    name='sku'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     value={validation.values.sku || ''}
-                    invalid={
-                      validation.touched.sku && validation.errors.sku
-                        ? true
-                        : false
-                    }
+                    invalid={validation.touched.sku && validation.errors.sku ? true : false}
                   />
                   {validation.touched.sku && validation.errors.sku ? (
-                    <FormFeedback type="invalid">
-                      {validation.errors.sku}
-                    </FormFeedback>
+                    <FormFeedback type='invalid'>{validation.errors.sku}</FormFeedback>
                   ) : null}
                 </FormGroup>
               </Col>
               <Col md={4}>
-                <FormGroup className="mb-3">
-                  <Label htmlFor="compnayNameinput" className="form-label">
+                <FormGroup className='mb-3'>
+                  <Label htmlFor='compnayNameinput' className='form-label'>
                     ASIN
                   </Label>
                   <Input
-                    type="text"
-                    className="form-control"
-                    placeholder="Asin..."
-                    id="asin"
-                    name="asin"
+                    type='text'
+                    className='form-control'
+                    placeholder='Asin...'
+                    id='asin'
+                    name='asin'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     value={validation.values.asin || ''}
-                    invalid={
-                      validation.touched.asin && validation.errors.asin
-                        ? true
-                        : false
-                    }
+                    invalid={validation.touched.asin && validation.errors.asin ? true : false}
                   />
                   {validation.touched.asin && validation.errors.asin ? (
-                    <FormFeedback type="invalid">
-                      {validation.errors.asin}
-                    </FormFeedback>
+                    <FormFeedback type='invalid'>{validation.errors.asin}</FormFeedback>
                   ) : null}
                 </FormGroup>
               </Col>
               <Col md={4}>
-                <FormGroup className="mb-3">
-                  <Label htmlFor="compnayNameinput" className="form-label">
+                <FormGroup className='mb-3'>
+                  <Label htmlFor='compnayNameinput' className='form-label'>
                     FNSKU
                   </Label>
                   <Input
-                    type="text"
-                    className="form-control"
-                    placeholder="Fnsku..."
-                    id="fnsku"
-                    name="fnsku"
+                    type='text'
+                    className='form-control'
+                    placeholder='Fnsku...'
+                    id='fnsku'
+                    name='fnsku'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     value={validation.values.fnsku || ''}
-                    invalid={
-                      validation.touched.fnsku && validation.errors.fnsku
-                        ? true
-                        : false
-                    }
+                    invalid={validation.touched.fnsku && validation.errors.fnsku ? true : false}
                   />
                   {validation.touched.fnsku && validation.errors.fnsku ? (
-                    <FormFeedback type="invalid">
-                      {validation.errors.fnsku}
-                    </FormFeedback>
+                    <FormFeedback type='invalid'>{validation.errors.fnsku}</FormFeedback>
                   ) : null}
                 </FormGroup>
               </Col>
               <Col md={4}>
-                <FormGroup className="mb-3">
-                  <Label htmlFor="compnayNameinput" className="form-label">
+                <FormGroup className='mb-3'>
+                  <Label htmlFor='compnayNameinput' className='form-label'>
                     Barcode
                   </Label>
                   <Input
                     disabled={true}
-                    type="text"
-                    className="form-control"
-                    placeholder="Barcode..."
-                    id="barcode"
-                    name="barcode"
+                    type='text'
+                    className='form-control'
+                    placeholder='Barcode...'
+                    id='barcode'
+                    name='barcode'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     value={validation.values.barcode || ''}
-                    invalid={
-                      validation.touched.barcode && validation.errors.barcode
-                        ? true
-                        : false
-                    }
+                    invalid={validation.touched.barcode && validation.errors.barcode ? true : false}
                   />
                   {validation.touched.barcode && validation.errors.barcode ? (
-                    <FormFeedback type="invalid">
-                      {validation.errors.barcode}
-                    </FormFeedback>
+                    <FormFeedback type='invalid'>{validation.errors.barcode}</FormFeedback>
                   ) : null}
                 </FormGroup>
               </Col>
               <Col md={12}>
-                <FormGroup className="mb-3">
-                  <Label htmlFor="lastNameinput" className="form-label">
+                <FormGroup className='mb-3'>
+                  <Label htmlFor='lastNameinput' className='form-label'>
                     Product Image
                   </Label>
                   <Input
-                    type="text"
-                    className="form-control"
-                    placeholder="Image URL..."
-                    id="image"
-                    name="image"
+                    type='text'
+                    className='form-control'
+                    placeholder='Image URL...'
+                    id='image'
+                    name='image'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     value={validation.values.image || ''}
-                    invalid={
-                      validation.touched.image && validation.errors.image
-                        ? true
-                        : false
-                    }
+                    invalid={validation.touched.image && validation.errors.image ? true : false}
                   />
                   {validation.touched.image && validation.errors.image ? (
-                    <FormFeedback type="invalid">
-                      {validation.errors.image}
-                    </FormFeedback>
+                    <FormFeedback type='invalid'>{validation.errors.image}</FormFeedback>
                   ) : null}
                 </FormGroup>
               </Col>
@@ -630,13 +558,12 @@ function EditProductModal({}: Props) {
                   ) : null}
                 </FormGroup>
               </Col> */}
-              <h5 className="fs-14 mb-3 text-muted">
-                *You must complete all required fields or you will not be able
-                to create your product.
+              <h5 className='fs-14 mb-3 text-muted'>
+                *You must complete all required fields or you will not be able to create your product.
               </h5>
               <Col md={12}>
-                <div className="text-end">
-                  <Button type="submit" color="primary" className="btn">
+                <div className='text-end'>
+                  <Button type='submit' color='primary' className='btn'>
                     Save Changes
                   </Button>
                 </div>

@@ -11,9 +11,10 @@ const getShipmentOrder: NextApiHandler = async (request, response) => {
         return
     }
 
-    axios(`${process.env.API_DOMAIN_SERVICES}/getShipmentOrder.php?businessId=${request.query.businessId}&orderId=${request.query.orderId}`)
+    axios(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/getShipmentOrder.php?businessId=${request.query.businessId}&orderId=${request.query.orderId}`)
         .then(({ data }) => {
-            response.json(data)})
+            response.json(data)
+        })
         .catch((error) => {
             response.end(error)
         });

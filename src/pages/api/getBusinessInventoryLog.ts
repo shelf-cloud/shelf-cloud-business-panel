@@ -11,7 +11,7 @@ const getBusinessInventoryLog: NextApiHandler<Business> = async (request, respon
         return
     }
 
-    axios(`${process.env.API_DOMAIN_SERVICES}/getBusinessInventoryLog.php?businessId=${request.query.businessId}`)
+    axios(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/getBusinessInventoryLog.php?businessId=${request.query.businessId}`)
         .then(({ data }) => {
             response.json(data)})
         .catch((error) => {

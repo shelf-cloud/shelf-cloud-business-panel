@@ -32,16 +32,16 @@ const DashboardHeader = ({
             </div>
             <div className="mt-3 mt-lg-0">
               <form action="#">
-                <div className="d-flex flex-row align-items-center justify-content-between gap-2 w-auto px-3 py-1 rounded-3 shadow" style={{backgroundColor: 'white', minWidth: '200px'}}>
+                <div className="d-flex flex-row align-items-center justify-content-between gap-2 w-auto px-3 py-1 rounded-3 shadow" style={{backgroundColor: 'white', minWidth: '220px'}}>
                   <i className="ri-calendar-2-line fs-5" />
                   <Flatpickr
                     className="border-0 fs-6 w-100"
                     options={{
                       mode: 'range',
-                      dateFormat: 'M d',
+                      dateFormat: 'd M y',
                       defaultDate: [
-                        moment(startDate, 'YYYY-MM-DD').format('MMM DD'),
-                        moment(endDate, 'YYYY-MM-DD').format('MMM DD'),
+                        moment(startDate, 'YYYY-MM-DD').format('DD MMM YY'),
+                        moment(endDate, 'YYYY-MM-DD').format('DD MMM YY'),
                       ],
                     }}
                     onChange={(_selectedDates, dateStr) =>

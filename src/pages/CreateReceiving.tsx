@@ -5,24 +5,15 @@ import { GetServerSideProps } from 'next'
 import { WholesaleProduct, wholesaleProductRow } from '@typings'
 import axios from 'axios'
 import Head from 'next/head'
-import { ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Container,
-  Input,
-  Row,
-} from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col, Container, Input, Row } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import useSWR from 'swr'
 import InventoryBinsModal from '@components/InventoryBinsModal'
 import ReceivingOrderTable from '@components/ReceivingOrderTable'
 import ReceivingOrderModal from '@components/ReceivingOrderModal'
+import { toast } from 'react-toastify'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -50,7 +41,9 @@ type Props = {
 
 const CreateWholeSaleOrder = ({ session }: Props) => {
   const { state, setWholeSaleOrderModal }: any = useContext(AppContext)
-  const orderNumberStart = session?.user?.name.substring(0, 3).toUpperCase()
+  const orderNumberStart = `${session?.user?.name.substring(0, 3).toUpperCase()}-${
+    state.currentRegion == 'us' ? 'US-' : 'EU-'
+  }`
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<wholesaleProductRow[]>([])
   const [serachValue, setSerachValue] = useState('')
@@ -58,7 +51,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data } = useSWR(
     state.user.businessId
-      ? `/api/getReceivingInventory?businessId=${state.user.businessId}`
+      ? `/api/getReceivingInventory?region=${state.currentRegion}&businessId=${state.user.businessId}`
       : null,
     fetcher
   )
@@ -72,32 +65,34 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
   }, [allData, serachValue])
 
   useEffect(() => {
-    if(data) {
+    if (data?.error) {
+      setAllData([])
+      setPending(false)
+      toast.error(data?.message)
+    } else if (data) {
       const list: wholesaleProductRow[] = []
-        data.forEach((product: WholesaleProduct) => {
-          const row = {
-            image: product.image,
-            title: product.title,
+      data.forEach((product: WholesaleProduct) => {
+        const row = {
+          image: product.image,
+          title: product.title,
+          sku: product.sku,
+          quantity: {
+            quantity: product.quantity,
+            inventoryId: product.inventoryId,
+            businessId: product.businessId,
             sku: product.sku,
-            quantity: {
-              quantity: product.quantity,
-              inventoryId: product.inventoryId,
-              businessId: product.businessId,
-              sku: product.sku,
-            },
-            orderQty: '',
-          }
-          list.push(row)
-        })
-        setAllData(list)
-        setPending(false)
+          },
+          orderQty: '',
+        }
+        list.push(row)
+      })
+      setAllData(list)
+      setPending(false)
     }
   }, [data])
 
   const orderProducts = useMemo(() => {
-    return allData.filter(
-      (item: wholesaleProductRow) => Number(item?.orderQty) > 0
-    )
+    return allData.filter((item: wholesaleProductRow) => Number(item?.orderQty) > 0)
   }, [allData])
 
   const title = `Create Receiving Order | ${session?.user?.name}`
@@ -107,62 +102,49 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
         <title>{title}</title>
       </Head>
       <React.Fragment>
-        <div className="page-content">
-          <ToastContainer />
+        <div className='page-content'>
           <Container fluid>
-            <BreadCrumb title="Create Receiving Order" pageTitle="Receiving" />
+            <BreadCrumb title='Create Receiving Order' pageTitle='Receiving' />
             <Row>
               <Col lg={12}>
                 <Card>
                   <CardHeader>
-                    <div className="d-flex justify-content-between align-center mt-3 mb-3">
+                    <div className='d-flex justify-content-between align-center mt-3 mb-3'>
                       <div>
-                        <h3 className="fs-3 fw-semibold text-primary">
-                          Total SKUs in Order: {orderProducts.length}
-                        </h3>
-                        <h5 className="fs-5 fw-normal text-primary">
+                        <h3 className='fs-3 fw-semibold text-primary'>Total SKUs in Order: {orderProducts.length}</h3>
+                        <h5 className='fs-5 fw-normal text-primary'>
                           Total Qty to Ship in Order:{' '}
                           {orderProducts.reduce(
-                            (total: number, item: wholesaleProductRow) =>
-                              total + Number(item.orderQty),
+                            (total: number, item: wholesaleProductRow) => total + Number(item.orderQty),
                             0
                           )}
                         </h5>
                       </div>
                       <div>
                         <Button
-                          className="fs-5 btn"
-                          color="primary"
-                          onClick={() =>
-                            setWholeSaleOrderModal(
-                              !state.showWholeSaleOrderModal
-                            )
-                          }
-                        >
+                          className='fs-5 btn'
+                          color='primary'
+                          onClick={() => setWholeSaleOrderModal(!state.showWholeSaleOrderModal)}>
                           Create Receiving
                         </Button>
                       </div>
                     </div>
-                    <form className="app-search d-flex flex-row justify-content-end align-items-center p-0">
-                      <div className="position-relative">
+                    <form className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
+                      <div className='position-relative'>
                         <Input
-                          type="text"
-                          className="form-control"
-                          placeholder="Search..."
-                          id="search-options"
+                          type='text'
+                          className='form-control'
+                          placeholder='Search...'
+                          id='search-options'
                           value={serachValue}
                           onChange={(e) => setSerachValue(e.target.value)}
                         />
-                        <span className="mdi mdi-magnify search-widget-icon"></span>
+                        <span className='mdi mdi-magnify search-widget-icon'></span>
                         <span
-                          className="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none"
-                          id="search-close-options"
-                        ></span>
+                          className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none'
+                          id='search-close-options'></span>
                       </div>
-                      <Button
-                        className="btn-soft-dark"
-                        onClick={() => setSerachValue('')}
-                      >
+                      <Button className='btn-soft-dark' onClick={() => setSerachValue('')}>
                         Clear
                       </Button>
                     </form>
@@ -183,10 +165,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
       </React.Fragment>
       {state.showInventoryBinsModal && <InventoryBinsModal />}
       {state.showWholeSaleOrderModal && (
-        <ReceivingOrderModal
-          orderNumberStart={orderNumberStart}
-          orderProducts={orderProducts}
-        />
+        <ReceivingOrderModal orderNumberStart={orderNumberStart} orderProducts={orderProducts} />
       )}
     </div>
   )

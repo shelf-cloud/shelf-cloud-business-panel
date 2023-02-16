@@ -11,11 +11,12 @@ const createReturnFromOrder: NextApiHandler = async (request, response) => {
         return
     }
 
-    axios.post(`${process.env.API_DOMAIN_SERVICES}/createReturnFromOrder.php?businessId=${request.query.businessId}&orderId=${request.query.orderId}`, {
+    axios.post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/createReturnFromOrder.php?businessId=${request.query.businessId}&orderId=${request.query.orderId}`, {
         returnItems: request.body.returnItems
     })
         .then(({ data }) => {
-            response.json(data)})
+            response.json(data)
+        })
         .catch((error) => {
             response.end(error)
         });

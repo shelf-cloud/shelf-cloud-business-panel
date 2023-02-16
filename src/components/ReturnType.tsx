@@ -31,7 +31,7 @@ const ReturnType = ({ data, apiMutateLink }: Props) => {
   const handlePrintingLabel = async () => {
     setLoadingLabel(true)
     const response: any = await axios(
-      `/api/createLabelForOrder?businessId=${state.user.businessId}&orderId=${data.id}`
+      `/api/createLabelForOrder?region=${state.currentRegion}&businessId=${state.user.businessId}&orderId=${data.id}`
     )
 
     const linkSource = `data:application/pdf;base64,${response.data}`

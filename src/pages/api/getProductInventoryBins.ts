@@ -10,7 +10,7 @@ const getProductInventoryBins: NextApiHandler = async (request, response) => {
         return
     }
 
-    axios(`${process.env.API_DOMAIN_SERVICES}/getProductInventoryBins.php?inventoryId=${request.query.inventoryId}&businessId=${request.query.businessId}`)
+    axios(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/getProductInventoryBins.php?inventoryId=${request.query.inventoryId}&businessId=${request.query.businessId}`)
         .then(({ data }) => {
             response.json(data)})
         .catch((error) => {

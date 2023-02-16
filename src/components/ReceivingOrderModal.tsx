@@ -40,16 +40,14 @@ const ReceivingOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
     enableReinitialize: true,
 
     initialValues: {
-      orderNumber: `00${state?.user?.orderNumber}`,
+      orderNumber: state.currentRegion ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
     },
     validationSchema: Yup.object({
-      orderNumber: Yup.string()
-        .max(100, 'Title is to Long')
-        .required('Please enter Order Number'),
+      orderNumber: Yup.string().max(100, 'Title is to Long').required('Please enter Order Number'),
     }),
     onSubmit: async (values, { resetForm }) => {
       const response = await axios.post(
-        `api/createReceivingOrder?businessId=${state.user.businessId}`,
+        `api/createReceivingOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`,
         {
           shippingProducts: orderProducts.map((product) => {
             return {
@@ -95,83 +93,70 @@ const ReceivingOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
   return (
     <Modal
       fade={false}
-      size="lg"
-      id="myModal"
+      size='lg'
+      id='myModal'
       isOpen={state.showWholeSaleOrderModal}
       toggle={() => {
         setWholeSaleOrderModal(!state.showWholeSaleOrderModal)
-      }}
-    >
+      }}>
       <ModalHeader
         toggle={() => {
           setWholeSaleOrderModal(!state.showWholeSaleOrderModal)
         }}
-        className="modal-title"
-        id="myModalLabel"
-      >
+        className='modal-title'
+        id='myModalLabel'>
         WholeSale Order
       </ModalHeader>
       <ModalBody>
         <Form onSubmit={HandleAddProduct}>
           <Row>
-            <h5 className="fs-5 m-3 fw-bolder">Order Details</h5>
+            <h5 className='fs-5 m-3 fw-bolder'>Order Details</h5>
             <Col md={6}>
-              <FormGroup className="mb-3">
-                <Label htmlFor="firstNameinput" className="form-label">
+              <FormGroup className='mb-3'>
+                <Label htmlFor='firstNameinput' className='form-label'>
                   *Transaction Number
                 </Label>
-                <div className="input-group">
-                  <span
-                    className="input-group-text fw-semibold fs-5"
-                    id="basic-addon1"
-                  >
-                    {orderNumberStart}-
+                <div className='input-group'>
+                  <span className='input-group-text fw-semibold fs-5' id='basic-addon1'>
+                    {orderNumberStart}
                   </span>
                   <Input
-                    type="text"
-                    className="form-control"
-                    id="orderNumber"
-                    name="orderNumber"
+                    type='text'
+                    className='form-control'
+                    id='orderNumber'
+                    name='orderNumber'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     value={validation.values.orderNumber || ''}
-                    invalid={
-                      validation.touched.orderNumber &&
-                      validation.errors.orderNumber
-                        ? true
-                        : false
-                    }
+                    invalid={validation.touched.orderNumber && validation.errors.orderNumber ? true : false}
                   />
-                  {validation.touched.orderNumber &&
-                  validation.errors.orderNumber ? (
-                    <FormFeedback type="invalid">
-                      {validation.errors.orderNumber}
-                    </FormFeedback>
+                  {validation.touched.orderNumber && validation.errors.orderNumber ? (
+                    <FormFeedback type='invalid'>{validation.errors.orderNumber}</FormFeedback>
                   ) : null}
                 </div>
               </FormGroup>
             </Col>
             <Col md={12}>
-              <table className="table align-middle table-responsive table-nowrap table-striped-columns">
+              <table className='table align-middle table-responsive table-nowrap table-striped-columns'>
                 <thead>
                   <tr>
                     <th>SKU</th>
-                    <th className="text-center">Total to Received</th>
+                    <th className='text-center'>Total to Received</th>
                   </tr>
                 </thead>
                 <tbody>
                   {orderProducts?.map((product, index: number) => (
                     <tr key={index}>
                       <td>{product.sku}</td>
-                      <td className="text-center">{product.orderQty}</td>
+                      <td className='text-center'>{product.orderQty}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </Col>
             <Col md={12}>
-              <div className="text-end">
-                <Button type="submit" color="success" className="btn">
+              <div className='text-end'>
+                <Button type='submit' color='success' className='btn'>
                   Confirm Order
                 </Button>
               </div>

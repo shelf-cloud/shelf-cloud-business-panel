@@ -9,7 +9,7 @@ import { Button, Label } from 'reactstrap'
 import { getSession } from '@auth/client'
 import { GetServerSideProps } from 'next'
 import axios from 'axios'
-import { toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -57,7 +57,6 @@ function ContactForm({}: Props) {
 
   return (
     <div className='vw-100 vh-100 d-flex relative'>
-      <ToastContainer />
       <div
         className='w-100 d-flex flex-column align-items-center justify-content-start'
         style={{ backgroundColor: '#FAFBFD' }}>

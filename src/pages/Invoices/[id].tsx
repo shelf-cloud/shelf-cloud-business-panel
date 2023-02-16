@@ -1,5 +1,6 @@
 import BreadCrumb from '@components/Common/BreadCrumb'
 import PrintInvoice from '@components/PrintInvoice'
+import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { InvoiceFullDetails } from '@typings'
 import axios from 'axios'
@@ -9,7 +10,8 @@ import { getSession } from 'next-auth/react'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 import { Button, Card, CardBody, CardHeader, Col, Container, Row } from 'reactstrap'
 import useSWR from 'swr'
 
@@ -31,15 +33,20 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 
 const InvoiceDetails = () => {
   const router = useRouter()
+  const { state }: any = useContext(AppContext)
   const { id } = router.query
   const [loading, setloading] = useState(true)
-  const [invoiceDetails, setInvoiceDetails] = useState<InvoiceFullDetails>()
+  const [invoiceDetails, setInvoiceDetails] = useState<InvoiceFullDetails | null>()
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(id ? `/api/getInvoiceDetails?id=${id}` : null, fetcher)
+  const { data } = useSWR(id ? `/api/getInvoiceDetails?region=${state.currentRegion}&id=${id}` : null, fetcher)
 
   useEffect(() => {
-    if (data) {
+    if (data?.error) {
+      setInvoiceDetails(null)
+      setloading(false)
+      toast.error(data?.message)
+    } else if (data) {
       setInvoiceDetails(data)
       setloading(false)
     }
@@ -79,7 +86,8 @@ const InvoiceDetails = () => {
                           <div className='d-flex gap-3 flex-row align-items-center mb-3'>
                             <PrintInvoice invoiceDetails={invoiceDetails!} />
                             <a href={`${invoiceDetails?.invoice.payLink}`} target='blank'>
-                              <Button className={invoiceDetails?.invoice.paid ? 'btn btn-soft-success' : 'btn btn-primary'}>
+                              <Button
+                                className={invoiceDetails?.invoice.paid ? 'btn btn-soft-success' : 'btn btn-primary'}>
                                 {invoiceDetails?.invoice.paid ? 'View Receipt' : 'Pay Now'}
                               </Button>
                             </a>

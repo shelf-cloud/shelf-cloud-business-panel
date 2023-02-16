@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from 'react'
 import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
-// import Image from 'next/image'
 import { Col, Container, Row } from 'reactstrap'
 import { getSession } from '@auth/client'
 import BreadCrumb from '@components/Common/BreadCrumb'
@@ -15,6 +14,7 @@ import MostInvenotryList from '@components/MostInvenotryList'
 import { Summary } from '@typings'
 import TotalChagesList from '@components/TotalChagesList'
 import InvoicesList from '@components/InvoicesList'
+import { toast } from 'react-toastify'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -35,7 +35,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 const Home = () => {
   const { state }: any = useContext(AppContext)
   const [loading, setLoading] = useState(true)
-  const [summary, setSummary] = useState<Summary>()
+  const [summary, setSummary] = useState<Summary | null>()
   const [dashboardStartDate, setDashboardStartDate] = useState(
     moment().subtract(30, 'days').format('YYYY-MM-DD')
   )
@@ -44,9 +44,9 @@ const Home = () => {
   )
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(
+  const {data} = useSWR(
     state.user.businessId
-      ? `/api/getBusinessSummary?businessId=${state.user.businessId}&startDate=${dashboardStartDate}&endDate=${dashboardEndDate}`
+      ? `/api/getBusinessSummary?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${dashboardStartDate}&endDate=${dashboardEndDate}`
       : null,
     fetcher
   )
@@ -54,13 +54,17 @@ const Home = () => {
   const handleChangeDates = (dateStr: string) => {
     if (dateStr.includes(' to ')) {
       const dates = dateStr.split(' to ')
-      setDashboardStartDate(moment(dates[0], 'MMM DD').format('YYYY-MM-DD'))
-      setDashboardEndDate(moment(dates[1], 'MMM DD').format('YYYY-MM-DD'))
+      setDashboardStartDate(moment(dates[0], 'DD MMM YY').format('YYYY-MM-DD'))
+      setDashboardEndDate(moment(dates[1], 'DD MMM YY').format('YYYY-MM-DD'))
     }
   }
 
   useEffect(() => {
-    if (data) {
+    if (data?.error){
+      setSummary(null)
+      setLoading(false)
+      toast.error(data?.message)
+    } else if(data) {
       setSummary(data)
       setLoading(false)
     }

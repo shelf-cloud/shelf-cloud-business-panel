@@ -11,7 +11,7 @@ const setStateToProduct: NextApiHandler = async (request, response) => {
         return
     }
 
-    axios.post(`${process.env.API_DOMAIN_SERVICES}/setStateToProduct.php?businessId=${request.query.businessId}&inventoryId=${request.query.inventoryId}`, {
+    axios.post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/setStateToProduct.php?businessId=${request.query.businessId}&inventoryId=${request.query.inventoryId}`, {
         newState: request.body.newState,
         sku: request.body.sku
     })

@@ -11,11 +11,12 @@ const updatePassword: NextApiHandler = async (request, response) => {
         return
     }
 
-    axios.post(`${process.env.API_DOMAIN_SERVICES}/updatePassword.php?businessId=${request.query.businessId}`, {
+    axios.post(`${process.env.API_LOGIN_SERVICE}/updatePassword.php?businessId=${request.query.businessId}`, {
         passwordInfo: request.body.passwordInfo
     })
         .then(({ data }) => {
-            response.json(data)})
+            response.json(data)
+        })
         .catch((error) => {
             response.end(error)
         });

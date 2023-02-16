@@ -23,10 +23,10 @@ const NotFound = () => {
           >
             <h1 className="fw-bold fs-1 mt-2 mb-2">PAGE NOT FOUND</h1>
             <h3 className="fw-normal fs-3 mt-2 mb-2">
-              Return to Home <Link href={'/'}>Return</Link>
+              Return to <Link href={'/'}>Home</Link>
             </h3>
             <Animation
-              src="https://lordicon.com/assets/animations/no-icons-to-show.json"
+              src="https://cdn.lordicon.com/cvpqeffe.json"
               colors="primary:#405189,secondary:#0ab39c"
               style={{ width: '100%', height: '500px' }}
             />

@@ -4,38 +4,19 @@ import Image from 'next/image'
 import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import AppContext from '@context/AppContext'
-import {
-  Button,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Row,
-  UncontrolledDropdown,
-} from 'reactstrap'
+import { Button, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from 'reactstrap'
 
 type Props = {
   tableData: ProductRowType[]
   pending: boolean
-  changeProductState: (
-    inventoryId: number,
-    businessId: number,
-    sku: string
-  ) => {}
+  changeProductState: (inventoryId: number, businessId: number, sku: string) => {}
   setMsg: string
   icon: string
   activeText: string
 }
 
-const ProductsTable = ({
-  tableData,
-  pending,
-  changeProductState,
-  setMsg,
-  icon,
-  activeText,
-}: Props) => {
-  const { setModalProductInfo, setModalProductDetails }: any =
-    useContext(AppContext)
+const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, activeText }: Props) => {
+  const { setModalProductInfo, setModalProductDetails, state }: any = useContext(AppContext)
 
   const loadBarcode = (product: ProductRowType) => {
     var html = '<!DOCTYPE html><html><head>'
@@ -48,8 +29,7 @@ const ProductsTable = ({
     html += '.barcodeSection svg text{font:12px monospace !important;}'
     html +=
       '.barcodeSection p{position:relative;float:left;left:5%;width:95%;text-align:left;margin-top:0px;margin-bottom:0px;font-size:14px;z-index:5;}'
-    html +=
-      '.barcodeSection svg{width:90%;transform: translate(0px, -10px) !important;}'
+    html += '.barcodeSection svg{width:90%;transform: translate(0px, -10px) !important;}'
     html += '</style></head><body>'
     html +=
       '<div class="barcodeSection"><p style="text-align:center;">' +
@@ -60,7 +40,9 @@ const ProductsTable = ({
     html +=
       '</body><script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/JsBarcode.all.min.js"></script><script>JsBarcode("#barcode", "' +
       product.Barcode +
-      '", {text: "'+product.Barcode+'",fontSize: 12,textMargin: 0, height:31});</script></html>'
+      '", {text: "' +
+      product.Barcode +
+      '",fontSize: 12,textMargin: 0, height:31});</script></html>'
     var wnd = window.open('about:Barcode-Generated', '', '_blank')
     wnd?.document.write(html)
   }
@@ -117,7 +99,7 @@ const ProductsTable = ({
     //   center: true,
     // },
     {
-      name: <span className="font-weight-bold fs-13">Image</span>,
+      name: <span className='font-weight-bold fs-13'>Image</span>,
       selector: (cell: { Image: any }) => {
         return (
           <div
@@ -126,18 +108,13 @@ const ProductsTable = ({
               height: '60px',
               margin: '2px 0px',
               position: 'relative',
-            }}
-          >
+            }}>
             <Image
-              src={
-                cell.Image
-                  ? cell.Image
-                  : 'https://electrostoregroup.com/Onix/img/no-image.png'
-              }
-              alt="product Image"
-              layout="fill"
-              objectFit="contain"
-              objectPosition="center"
+              src={cell.Image ? cell.Image : 'https://electrostoregroup.com/Onix/img/no-image.png'}
+              alt='product Image'
+              layout='fill'
+              objectFit='contain'
+              objectPosition='center'
             />
           </div>
         )
@@ -149,7 +126,7 @@ const ProductsTable = ({
     },
     {
       name: (
-        <span className="font-weight-bold fs-13">
+        <span className='font-weight-bold fs-13'>
           Title
           <br />
           SKU
@@ -171,7 +148,7 @@ const ProductsTable = ({
     },
     {
       name: (
-        <span className="font-weight-bold fs-13">
+        <span className='font-weight-bold fs-13'>
           ASIN
           <br />
           FNSKU
@@ -183,16 +160,13 @@ const ProductsTable = ({
         return (
           <div>
             <p style={{ margin: '0px' }}>
-              <a
-                href={`https://www.amazon.com/exec/obidos/ASIN${row.ASIN}`}
-                target="blank"
-              >
+              <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/exec/obidos/ASIN${row.ASIN}`} target='blank'>
                 {row.ASIN}
               </a>
             </p>
             <p style={{ margin: '0px' }}>{row.FNSKU}</p>
             <p style={{ margin: '0px' }}>
-              <a href="#" onClick={() => loadBarcode(row)}>
+              <a href='#' onClick={() => loadBarcode(row)}>
                 {row.Barcode}
               </a>
             </p>
@@ -204,21 +178,16 @@ const ProductsTable = ({
       grow: 1.3,
     },
     {
-      name: <span className="font-weight-bold fs-13">Quantity</span>,
+      name: <span className='font-weight-bold fs-13'>Quantity</span>,
       selector: (cell: any) => {
         return (
           <Button
-            color="primary"
+            color='primary'
             outline
-            className="btn btn-ghost-primary"
+            className='btn btn-ghost-primary'
             onClick={() => {
-              setModalProductInfo(
-                cell.Quantity.inventoryId,
-                cell.Quantity.businessId,
-                cell.Quantity.sku
-              )
-            }}
-          >
+              setModalProductInfo(cell.Quantity.inventoryId, state.user.businessId, cell.Quantity.sku)
+            }}>
             {cell.Quantity.quantity}
           </Button>
         )
@@ -229,7 +198,7 @@ const ProductsTable = ({
       sortFunction: quantitySort,
     },
     {
-      name: <span className="font-weight-bold fs-13">Unit Dimensions</span>,
+      name: <span className='font-weight-bold fs-13'>Unit Dimensions</span>,
       sortable: false,
       compact: true,
       grow: 1.4,
@@ -237,23 +206,23 @@ const ProductsTable = ({
         return (
           <div style={{ padding: '7px 0px' }}>
             <Row>
-              <span>Weight: {cell.unitDimensions.weight} lbs</span>
+              <span>Weight: {cell.unitDimensions.weight}  {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'lb' : 'kg')}</span>
             </Row>
             <Row>
-              <span>Length: {cell.unitDimensions.length} in</span>
+              <span>Length: {cell.unitDimensions.length} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}</span>
             </Row>
             <Row>
-              <span>Width: {cell.unitDimensions.width} in</span>
+              <span>Width: {cell.unitDimensions.width} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}</span>
             </Row>
             <Row>
-              <span>Height: {cell.unitDimensions.height} in</span>
+              <span>Height: {cell.unitDimensions.height} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}</span>
             </Row>
           </div>
         )
       },
     },
     {
-      name: <span className="font-weight-bold fs-13">Box Dimensions</span>,
+      name: <span className='font-weight-bold fs-13'>Box Dimensions</span>,
       sortable: false,
       compact: true,
       grow: 1.4,
@@ -261,67 +230,52 @@ const ProductsTable = ({
         return (
           <div style={{ padding: '7px 5px 7px 0px' }}>
             <Row>
-              <span>Weight: {cell.boxDimensions.weight} lbs</span>
+              <span>Weight: {cell.boxDimensions.weight} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'lb' : 'kg')}</span>
             </Row>
             <Row>
-              <span>Length: {cell.boxDimensions.length} in</span>
+              <span>Length: {cell.boxDimensions.length} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}</span>
             </Row>
             <Row>
-              <span>Width: {cell.boxDimensions.width} in</span>
+              <span>Width: {cell.boxDimensions.width} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}</span>
             </Row>
             <Row>
-              <span>Height: {cell.boxDimensions.height} in</span>
+              <span>Height: {cell.boxDimensions.height} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}</span>
             </Row>
           </div>
         )
       },
     },
     {
-      name: <span className="font-weight-bold fs-13">Qty/Box</span>,
+      name: <span className='font-weight-bold fs-13'>Qty/Box</span>,
       selector: (row: { qtyBox: any }) => row.qtyBox,
       sortable: true,
       center: true,
       compact: true,
     },
     {
-      name: <span className="font-weight-bold fs-13">Action</span>,
+      name: <span className='font-weight-bold fs-13'>Action</span>,
       sortable: false,
       compact: true,
       cell: (row: any) => {
         return (
-          <UncontrolledDropdown className="dropdown d-inline-block">
+          <UncontrolledDropdown className='dropdown d-inline-block'>
             <DropdownToggle
-              className="btn btn-light btn-sm m-0 p-0"
-              style={{border: '1px solid rgba(68, 129, 253, 0.06)'}}
-              tag="button"
-            >
-              <i className="mdi mdi-dots-vertical align-middle fs-2 m-0 p-2" style={{color: '#919FAF'}}></i>
+              className='btn btn-light btn-sm m-0 p-0'
+              style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }}
+              tag='button'>
+              <i className='mdi mdi-dots-vertical align-middle fs-2 m-0 p-2' style={{ color: '#919FAF' }}></i>
             </DropdownToggle>
-            <DropdownMenu className="dropdown-menu-end">
+            <DropdownMenu className='dropdown-menu-end'>
               <DropdownItem
-                className="edit-item-btn"
-                onClick={() =>
-                  setModalProductDetails(
-                    row.btns.inventoryId,
-                    row.btns.businessId,
-                    row.btns.sku
-                  )
-                }
-              >
-                <i className="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                Edit
+                className='edit-item-btn'
+                onClick={() => setModalProductDetails(row.btns.inventoryId, state.user.businessId, row.btns.sku)}>
+                <i className='ri-pencil-fill align-middle me-2 fs-5 text-muted'></i>
+                <span className='fs-6 fw-normal'>Edit</span >
               </DropdownItem>
               {(row.Quantity.quantity == 0 || !row.btns.state) && (
                 <DropdownItem
                   className={activeText}
-                  onClick={() =>
-                    changeProductState(
-                      row.btns.inventoryId,
-                      row.btns.businessId,
-                      row.btns.sku
-                    )
-                  }
-                >
+                  onClick={() => changeProductState(row.btns.inventoryId, state.user.businessId, row.btns.sku)}>
                   <i className={icon}></i> {setMsg}
                 </DropdownItem>
               )}

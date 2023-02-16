@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { wholesaleProductRow } from '@typings'
 import Image from 'next/image'
-import React, { useContext} from 'react'
+import React, { useContext } from 'react'
 import AppContext from '@context/AppContext'
 import { Button, FormFeedback, Input } from 'reactstrap'
 import DataTable from 'react-data-table-component'
@@ -14,13 +14,9 @@ type Props = {
 }
 
 const WholeSaleTable = ({ allData, filteredItems, setAllData, pending }: Props) => {
-  const { setModalProductInfo }: any = useContext(AppContext)
+  const { state, setModalProductInfo }: any = useContext(AppContext)
 
-  const handleOrderQty = (
-    value: string,
-    sku: string,
-    qtyBox: number,
-  ) => {
+  const handleOrderQty = (value: string, sku: string, qtyBox: number) => {
     if (Number(value) == 0 || value == '') {
       const newData: any = allData.map((item) => {
         if (item.sku === sku) {
@@ -48,10 +44,7 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending }: Props) 
     setAllData(newData)
   }
 
-  const caseInsensitiveSort = (
-    rowA: wholesaleProductRow,
-    rowB: wholesaleProductRow
-  ) => {
+  const caseInsensitiveSort = (rowA: wholesaleProductRow, rowB: wholesaleProductRow) => {
     const a = rowA.title.toLowerCase()
     const b = rowB.title.toLowerCase()
 
@@ -66,10 +59,7 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending }: Props) 
     return 0
   }
 
-  const quantitySort = (
-    rowA: wholesaleProductRow,
-    rowB: wholesaleProductRow
-  ) => {
+  const quantitySort = (rowA: wholesaleProductRow, rowB: wholesaleProductRow) => {
     const a = Number(rowA.quantity.quantity)
     const b = Number(rowB.quantity.quantity)
 
@@ -97,7 +87,7 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending }: Props) 
 
   const columns: any = [
     {
-      name: <span className="fw-bold fs-5">Image</span>,
+      name: <span className='fw-bold fs-5'>Image</span>,
       selector: (row: wholesaleProductRow) => {
         return (
           <div
@@ -106,18 +96,13 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending }: Props) 
               height: '60px',
               margin: '2px 0px',
               position: 'relative',
-            }}
-          >
+            }}>
             <Image
-              src={
-                row.image
-                  ? row.image
-                  : 'https://electrostoregroup.com/Onix/img/no-image.png'
-              }
-              alt="product Image"
-              layout="fill"
-              objectFit="contain"
-              objectPosition="center"
+              src={row.image ? row.image : 'https://electrostoregroup.com/Onix/img/no-image.png'}
+              alt='product Image'
+              layout='fill'
+              objectFit='contain'
+              objectPosition='center'
             />
           </div>
         )
@@ -129,7 +114,7 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending }: Props) 
     },
     {
       name: (
-        <span className="fw-bold fs-5">
+        <span className='fw-bold fs-5'>
           Title
           <br />
           SKU
@@ -150,21 +135,16 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending }: Props) 
       //   compact: true,
     },
     {
-      name: <span className="fw-bold fs-5">Quantity</span>,
+      name: <span className='fw-bold fs-5'>Quantity</span>,
       selector: (cell: any) => {
         return (
           <Button
-            color="info"
+            color='info'
             outline
-            className="btn btn-ghost-info"
+            className='btn btn-ghost-info'
             onClick={() => {
-              setModalProductInfo(
-                cell.quantity.inventoryId,
-                cell.quantity.businessId,
-                cell.quantity.sku
-              )
-            }}
-          >
+              setModalProductInfo(cell.quantity.inventoryId, state.user.businessId, cell.quantity.sku)
+            }}>
             {cell.quantity.quantity}
           </Button>
         )
@@ -175,7 +155,7 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending }: Props) 
       sortFunction: quantitySort,
     },
     {
-      name: <span className="fw-bold fs-5">Qty/Box</span>,
+      name: <span className='fw-bold fs-5'>Qty/Box</span>,
       selector: (row: wholesaleProductRow) => row.qtyBox,
       sortable: true,
       center: true,
@@ -183,7 +163,7 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending }: Props) 
     },
     {
       name: (
-        <span className="fw-bold fs-5">
+        <span className='fw-bold fs-5'>
           Order Qty <br /> (Master Boxes)
         </span>
       ),
@@ -191,25 +171,17 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending }: Props) 
         return (
           <>
             <Input
-              type="number"
+              type='number'
               disabled={(row?.maxOrderQty || 0) <= 0 ? true : false}
-              className="form-control"
-              placeholder={
-                (row?.maxOrderQty || 0) <= 0 ? 'Not Enough Qty' : 'Order Qty...'
-              }
+              className='form-control'
+              placeholder={(row?.maxOrderQty || 0) <= 0 ? 'Not Enough Qty' : 'Order Qty...'}
               value={row.orderQty}
-              onChange={(e) =>
-                handleOrderQty(
-                  e.target.value,
-                  row.sku,
-                  row?.qtyBox || 0
-                )
-              }
+              onChange={(e) => handleOrderQty(e.target.value, row.sku, row?.qtyBox || 0)}
               max={row.maxOrderQty}
               invalid={Number(row.orderQty) > (row?.maxOrderQty || 0) ? true : false}
             />
             {Number(row.orderQty) > (row?.maxOrderQty || 0) ? (
-              <FormFeedback className="text-start" type="invalid">
+              <FormFeedback className='text-start' type='invalid'>
                 Not enough Master Boxes!
               </FormFeedback>
             ) : null}
@@ -221,7 +193,7 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending }: Props) 
       compact: true,
     },
     {
-      name: <span className="fw-bold fs-5">Total To Ship</span>,
+      name: <span className='fw-bold fs-5'>Total To Ship</span>,
       selector: (row: wholesaleProductRow) => row.totalToShip,
       sortable: true,
       center: true,

@@ -26,6 +26,7 @@ const initialState = {
   leftsidbarSizeType: leftsidbarSizeTypes.DEFAULT,
   leftSidebarViewType: leftSidebarViewTypes.DEFAULT,
   leftSidebarImageType: leftSidebarImageTypes.NONE,
+  currentRegion: '',
   user: {},
   wholesaleOrderProducts: [],
   showInventoryBinsModal: false,
@@ -33,24 +34,22 @@ const initialState = {
   showEditProductModal: false,
   modalProductDetails: {},
   showWholeSaleOrderModal: false,
-  modalCreateReturnInfo:{},
-  showCreateReturnModal: false
+  modalCreateReturnInfo: {},
+  showCreateReturnModal: false,
 }
 
 const useInitialState = () => {
   const [state, setState] = useState(initialState)
 
   const fetcher = (endPoint) => axios(endPoint).then((res) => res.data)
-  const { data, error } = useSWR(
-    '/api/getuser',
-    fetcher
-  )
+  const { data, error } = useSWR('/api/getuser', fetcher)
 
   useEffect(() => {
     if (data) {
       setState({
         ...state,
         user: data,
+        currentRegion: data.defaultRegion,
       })
     }
   }, [data])
@@ -74,6 +73,13 @@ const useInitialState = () => {
     //   })
     // )
   }, [])
+
+  const setRegion = (payload) => {
+    setState({
+      ...state,
+      currentRegion: payload,
+    })
+  }
 
   const setProducts = (payload) => {
     setState({
@@ -125,21 +131,21 @@ const useInitialState = () => {
   const addWholesaleProduct = (product) => {
     setState({
       ...state,
-      wholesaleOrderProducts: [...state.wholesaleOrderProducts, product]
+      wholesaleOrderProducts: [...state.wholesaleOrderProducts, product],
     })
   }
 
   const removeWholesaleProduct = (sku) => {
     setState({
       ...state,
-      wholesaleOrderProducts: state.wholesaleOrderProducts.filter((product) => product.sku !== sku)
+      wholesaleOrderProducts: state.wholesaleOrderProducts.filter((product) => product.sku !== sku),
     })
   }
 
   const setWholeSaleOrderModal = (payload) => {
     setState({
       ...state,
-      showWholeSaleOrderModal: payload
+      showWholeSaleOrderModal: payload,
     })
   }
 
@@ -148,7 +154,7 @@ const useInitialState = () => {
       ...state,
       modalCreateReturnInfo: {
         businessId,
-        orderId
+        orderId,
       },
       showCreateReturnModal: true,
     })
@@ -163,6 +169,7 @@ const useInitialState = () => {
 
   return {
     state,
+    setRegion,
     setProducts,
     setshowInventoryBinsModal,
     setModalProductInfo,
@@ -172,7 +179,7 @@ const useInitialState = () => {
     removeWholesaleProduct,
     setWholeSaleOrderModal,
     setModalCreateReturnInfo,
-    setShowCreateReturnModal
+    setShowCreateReturnModal,
   }
 }
 

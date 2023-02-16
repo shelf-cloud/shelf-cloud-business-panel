@@ -8,7 +8,7 @@ const credentialsAuth: NextApiHandler<Business> = async (request, response) => {
         response.status(405).end()
     }
 
-    axios.post(`${process.env.API_DOMAIN_SERVICES}/login.php`, {
+    axios.post(`${process.env.API_LOGIN_SERVICE}/login.php`, {
         username: request.body.username,
         password: request.body.password
     })

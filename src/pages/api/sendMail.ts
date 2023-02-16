@@ -19,7 +19,7 @@ const sendMail: NextApiHandler = async (request, response) => {
         },
         'personalizations': [{
           'to': {
-            'email': 'info@shelf-cloud.com',
+            'email': request.query.region == 'us' ? 'info@shelf-cloud.com' : 'onlinesales@electrostoresl.com',
           },
           'dynamicTemplateData': {
             'subject': `Shelf Cloud Contact from ${request.body.message.companyName}`,

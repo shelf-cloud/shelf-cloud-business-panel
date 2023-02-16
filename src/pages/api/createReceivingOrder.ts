@@ -11,7 +11,7 @@ const createReceivingOrder: NextApiHandler = async (request, response) => {
         return
     }
 
-    axios.post(`${process.env.API_DOMAIN_SERVICES}/createReceivingOrder.php?businessId=${request.query.businessId}`, {
+    axios.post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/createReceivingOrder.php?businessId=${request.query.businessId}`, {
         shippingProducts: request.body.shippingProducts,
         orderInfo: request.body.orderInfo
     })

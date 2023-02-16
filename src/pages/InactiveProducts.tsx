@@ -5,21 +5,12 @@ import { GetServerSideProps } from 'next'
 import { ProductRowType, Product } from '@typings'
 import axios from 'axios'
 import Head from 'next/head'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Container,
-  Input,
-  Row,
-} from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col, Container, Input, Row } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
-import useSWR from 'swr'
+import useSWR, { useSWRConfig } from 'swr'
 import ProductsTable from '@components/ProductsTable'
 import InventoryBinsModal from '@components/InventoryBinsModal'
 import EditProductModal from '@components/EditProductModal'
@@ -50,6 +41,7 @@ type Props = {
 
 const InactiveProducts = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
+  const { mutate } = useSWRConfig()
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<ProductRowType[]>([])
   const [tableData, setTableData] = useState<ProductRowType[]>([])
@@ -57,17 +49,20 @@ const InactiveProducts = ({ session }: Props) => {
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data } = useSWR(
-    state.user.businessId
-      ? `/api/getBusinessInactiveInventory?businessId=${state.user.businessId}`
-      : null,
+    state.user.businessId ? `/api/getBusinessInactiveInventory?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
     fetcher
   )
 
   useEffect(() => {
-    if (data) {
+    if (data?.error) {
+      setTableData([])
+      setAllData([])
+      setPending(false)
+      toast.error(data?.message)
+    } else if(data){
       const list: ProductRowType[] = []
 
-      data.forEach((product: Product) => {
+      data?.forEach((product: Product) => {
         const row = {
           Image: product.image,
           Title: product.title,
@@ -98,7 +93,7 @@ const InactiveProducts = ({ session }: Props) => {
             inventoryId: product.inventoryId,
             businessId: product.businessId,
             sku: product.sku,
-            state: product.activeState
+            state: product.activeState,
           },
         }
         list.push(row)
@@ -131,22 +126,16 @@ const InactiveProducts = ({ session }: Props) => {
     setTableData(allData)
   }
 
-  const changeProductState = async (
-    inventoryId: number,
-    businessId: number,
-    sku: string
-  ) => {
+  const changeProductState = async (inventoryId: number, businessId: number, sku: string) => {
     confirm(`Are you sure you want to set Inactive: ${sku}`)
 
-    const response = await axios.post(
-      `/api/setStateToProduct?businessId=${businessId}&inventoryId=${inventoryId}`,
-      {
-        newState: 1,
-        sku,
-      }
-    )
+    const response = await axios.post(`/api/setStateToProduct?region=${state.currentRegion}&businessId=${businessId}&inventoryId=${inventoryId}`, {
+      newState: 1,
+      sku,
+    })
     if (!response.data.error) {
       toast.success(response.data.msg)
+      mutate(`/api/getBusinessInactiveInventory?region=${state.currentRegion}&businessId=${state.user.businessId}`)
     } else {
       toast.error(response.data.msg)
     }
@@ -159,31 +148,29 @@ const InactiveProducts = ({ session }: Props) => {
         <title>{title}</title>
       </Head>
       <React.Fragment>
-        <div className="page-content">
-          <ToastContainer />
+        <div className='page-content'>
           <Container fluid>
-            <BreadCrumb title="Products" pageTitle="Warehouse" />
+            <BreadCrumb title='Products' pageTitle='Warehouse' />
             <Row>
               <Col lg={12}>
                 <Card>
                   <CardHeader>
-                    <form className="app-search d-flex flex-row justify-content-end align-items-center p-0">
-                      <div className="position-relative">
+                    <form className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
+                      <div className='position-relative'>
                         <Input
-                          type="text"
-                          className="form-control"
-                          placeholder="Search..."
-                          id="search-options"
+                          type='text'
+                          className='form-control'
+                          placeholder='Search...'
+                          id='search-options'
                           value={serachValue}
                           onChange={filterByText}
                         />
-                        <span className="mdi mdi-magnify search-widget-icon"></span>
+                        <span className='mdi mdi-magnify search-widget-icon'></span>
                         <span
-                          className="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none"
-                          id="search-close-options"
-                        ></span>
+                          className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none'
+                          id='search-close-options'></span>
                       </div>
-                      <Button className="btn-soft-dark" onClick={clearSearch}>
+                      <Button className='btn-soft-dark' onClick={clearSearch}>
                         Clear
                       </Button>
                     </form>

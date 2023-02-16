@@ -11,9 +11,10 @@ const createLabelForOrder: NextApiHandler = async (request, response) => {
         return
     }
 
-    axios(`${process.env.API_DOMAIN_SERVICES}/createLabelForOrder.php?businessId=${request.query.businessId}&orderId=${request.query.orderId}`)
+    axios(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/createLabelForOrder.php?businessId=${request.query.businessId}&orderId=${request.query.orderId}`)
         .then(({ data }) => {
-            response.json(data)})
+            response.json(data)
+        })
         .catch((error) => {
             response.end(error)
         });

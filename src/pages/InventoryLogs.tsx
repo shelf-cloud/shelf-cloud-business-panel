@@ -20,6 +20,7 @@ import { getSession } from '@auth/client'
 import useSWR from 'swr'
 import InventoryBinsModal from '@components/InventoryBinsModal'
 import DataTable from 'react-data-table-component'
+import { toast } from 'react-toastify'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -55,12 +56,16 @@ const InventoryLogs = ({ session }: Props) => {
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data } = useSWR(
     state.user.businessId
-      ? `/api/getBusinessInventoryLog?businessId=${state.user.businessId}`
+      ? `/api/getBusinessInventoryLog?region=${state.currentRegion}&businessId=${state.user.businessId}`
       : null,
     fetcher
   )
   useEffect(() => {
-    if (data) {
+    if (data?.error){
+      setLogData([])
+      setPending(false)
+      toast.error(data?.message)
+    } else if (data) {
       setLogData(data)
       setPending(false)
     }

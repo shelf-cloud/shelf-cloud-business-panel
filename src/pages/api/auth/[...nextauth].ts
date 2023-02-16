@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth'
 import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import axios from 'axios'
 
 const options: NextAuthOptions = {
   theme: {
@@ -45,6 +46,21 @@ const options: NextAuthOptions = {
     signIn: '/SignIn',
   },
   callbacks: {
+    // async session({ session }) {
+
+    //   const userInfo = await axios.post(`${process.env.API_LOGIN_SERVICE}/getUser.php`, {
+    //     username: session?.user?.name
+    //   }) as any
+
+    //   session.user.businessId = userInfo.data.businessId
+    //   session.user.showCreateOrder = userInfo.data.showCreateOrder
+    //   session.user.showWholeSale = userInfo.data.showWholeSale
+    //   session.user.hasShelfCloudUsa = userInfo.data.hasShelfCloudUsa
+    //   session.user.hasShelfCloudEu = userInfo.data.hasShelfCloudEu
+    //   session.user.defaultRegion = userInfo.data.defaultRegion
+
+    //   return session
+    // },
     async redirect() {
       return '/'
     },

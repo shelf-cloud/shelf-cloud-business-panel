@@ -4,7 +4,7 @@ import sgMail from '@sendgrid/mail'
 
 const requestForgotPassword: NextApiHandler = async (request, response) => {
 
-    axios.post(`${process.env.API_DOMAIN_SERVICES}/requestForgotPassword.php`, {
+    axios.post(`${process.env.API_LOGIN_SERVICE}/requestForgotPassword.php`, {
         email: request.body.email
     })
         .then(({ data }) => {

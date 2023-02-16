@@ -11,9 +11,10 @@ const getReceivingInventory: NextApiHandler = async (request, response) => {
         return
     }
 
-    axios(`${process.env.API_DOMAIN_SERVICES}/getReceivingInventory.php?businessId=${request.query.businessId}`)
+    axios(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/getReceivingInventory.php?businessId=${request.query.businessId}`)
         .then(({ data }) => {
-            response.json(data)})
+            response.json(data)
+        })
         .catch((error) => {
             response.end(error)
         });

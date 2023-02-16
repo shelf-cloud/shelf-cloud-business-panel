@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { wholesaleProductRow } from '@typings'
 import Image from 'next/image'
-import React, { useContext} from 'react'
+import React, { useContext } from 'react'
 import AppContext from '@context/AppContext'
 import { Button, Input } from 'reactstrap'
 import DataTable from 'react-data-table-component'
@@ -14,12 +14,9 @@ type Props = {
 }
 
 const ReceivingOrderTable = ({ allData, filteredItems, setAllData, pending }: Props) => {
-  const { setModalProductInfo }: any = useContext(AppContext)
+  const { state, setModalProductInfo }: any = useContext(AppContext)
 
-  const handleOrderQty = (
-    value: string,
-    sku: string,
-  ) => {
+  const handleOrderQty = (value: string, sku: string) => {
     if (Number(value) == 0 || value == '') {
       const newData: any = allData.map((item) => {
         if (item.sku === sku) {
@@ -44,10 +41,7 @@ const ReceivingOrderTable = ({ allData, filteredItems, setAllData, pending }: Pr
     setAllData(newData)
   }
 
-  const caseInsensitiveSort = (
-    rowA: wholesaleProductRow,
-    rowB: wholesaleProductRow
-  ) => {
+  const caseInsensitiveSort = (rowA: wholesaleProductRow, rowB: wholesaleProductRow) => {
     const a = rowA.title.toLowerCase()
     const b = rowB.title.toLowerCase()
 
@@ -62,10 +56,7 @@ const ReceivingOrderTable = ({ allData, filteredItems, setAllData, pending }: Pr
     return 0
   }
 
-  const quantitySort = (
-    rowA: wholesaleProductRow,
-    rowB: wholesaleProductRow
-  ) => {
+  const quantitySort = (rowA: wholesaleProductRow, rowB: wholesaleProductRow) => {
     const a = Number(rowA.quantity.quantity)
     const b = Number(rowB.quantity.quantity)
 
@@ -89,7 +80,7 @@ const ReceivingOrderTable = ({ allData, filteredItems, setAllData, pending }: Pr
 
   const columns: any = [
     {
-      name: <span className="fw-bold fs-5">Image</span>,
+      name: <span className='fw-bold fs-5'>Image</span>,
       selector: (row: wholesaleProductRow) => {
         return (
           <div
@@ -98,18 +89,13 @@ const ReceivingOrderTable = ({ allData, filteredItems, setAllData, pending }: Pr
               height: '60px',
               margin: '2px 0px',
               position: 'relative',
-            }}
-          >
+            }}>
             <Image
-              src={
-                row.image
-                  ? row.image
-                  : 'https://electrostoregroup.com/Onix/img/no-image.png'
-              }
-              alt="product Image"
-              layout="fill"
-              objectFit="contain"
-              objectPosition="center"
+              src={row.image ? row.image : 'https://electrostoregroup.com/Onix/img/no-image.png'}
+              alt='product Image'
+              layout='fill'
+              objectFit='contain'
+              objectPosition='center'
             />
           </div>
         )
@@ -121,7 +107,7 @@ const ReceivingOrderTable = ({ allData, filteredItems, setAllData, pending }: Pr
     },
     {
       name: (
-        <span className="fw-bold fs-5">
+        <span className='fw-bold fs-5'>
           Title
           <br />
           SKU
@@ -142,21 +128,16 @@ const ReceivingOrderTable = ({ allData, filteredItems, setAllData, pending }: Pr
       //   compact: true,
     },
     {
-      name: <span className="fw-bold fs-5">Quantity</span>,
+      name: <span className='fw-bold fs-5'>Quantity</span>,
       selector: (cell: any) => {
         return (
           <Button
-            color="info"
+            color='info'
             outline
-            className="btn btn-ghost-info"
+            className='btn btn-ghost-info'
             onClick={() => {
-              setModalProductInfo(
-                cell.quantity.inventoryId,
-                cell.quantity.businessId,
-                cell.quantity.sku
-              )
-            }}
-          >
+              setModalProductInfo(cell.quantity.inventoryId, state.user.businessId, cell.quantity.sku)
+            }}>
             {cell.quantity.quantity}
           </Button>
         )
@@ -167,29 +148,17 @@ const ReceivingOrderTable = ({ allData, filteredItems, setAllData, pending }: Pr
       sortFunction: quantitySort,
     },
     {
-      name: (
-        <span className="fw-bold fs-5">
-          Qty To Receive
-        </span>
-      ),
+      name: <span className='fw-bold fs-5'>Qty To Receive</span>,
       selector: (row: wholesaleProductRow) => {
         return (
           <>
             <Input
-              type="number"
-              className="form-control"
-              placeholder={
-                'Order Qty...'
-              }
+              type='number'
+              className='form-control'
+              placeholder={'Order Qty...'}
               value={row.orderQty}
-              onChange={(e) =>
-                handleOrderQty(
-                  e.target.value,
-                  row.sku,
-                )
-              }
+              onChange={(e) => handleOrderQty(e.target.value, row.sku)}
               max={row.maxOrderQty}
-
             />
           </>
         )

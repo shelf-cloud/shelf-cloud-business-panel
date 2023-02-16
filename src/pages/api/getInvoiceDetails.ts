@@ -12,7 +12,7 @@ const getInvoiceDetails: NextApiHandler = async (request, response) => {
   }
 
   axios(
-    `${process.env.API_DOMAIN_SERVICES}/invoices.php?service=getInvoiceDetails&id=${request.query.id}`
+    `${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/invoices.php?service=getInvoiceDetails&id=${request.query.id}`
   )
     .then(({ data }) => {
       response.json(data)

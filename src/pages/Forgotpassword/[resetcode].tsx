@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
-import { toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 type Props = {}
 
 const ResetPasswordPage = ({}: Props) => {
@@ -57,7 +57,6 @@ const ResetPasswordPage = ({}: Props) => {
 
   return (
     <div className='vw-100 vh-100 d-flex flex-column relative'>
-      <ToastContainer />
       <div className='w-100 px-4 py-2 border-bottom' style={{ height: '80px', backgroundColor: '#FAFBFD' }}>
         <div className='position-relative d-flex align-self-center h-100' style={{ width: '20%', minWidth: '220px' }}>
           <Image src={ShelfCloudLogo} layout='intrinsic' alt='ShelfCloud Logo' objectFit='contain' />

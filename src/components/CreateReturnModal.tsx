@@ -25,7 +25,7 @@ function CreateReturnModal({ apiMutateLink }: Props) {
   useEffect(() => {
     const bringProductBins = async () => {
       const response: any = await axios(
-        `/api/getShipmentOrder?businessId=${state.user.businessId}&orderId=${state.modalCreateReturnInfo.orderId}`
+        `/api/getShipmentOrder?region=${state.currentRegion}&businessId=${state.user.businessId}&orderId=${state.modalCreateReturnInfo.orderId}`
       )
       setOrderInfo(response.data)
       setReturnItemsList(
@@ -45,10 +45,7 @@ function CreateReturnModal({ apiMutateLink }: Props) {
       setLoading(true)
       setReturnItemsList([])
     }
-  }, [
-    state.modalCreateReturnInfo.businessId,
-    state.modalCreateReturnInfo.orderId,
-  ])
+  }, [state.currentRegion, state.modalCreateReturnInfo.businessId, state.modalCreateReturnInfo.orderId])
 
   const handleOnChangeQty = (e: any, sku: string) => {
     setReturnItemsList(
@@ -64,17 +61,15 @@ function CreateReturnModal({ apiMutateLink }: Props) {
   const handleConfirmReturn = async () => {
     setErrorMsg(false)
     setLoadingConfirmation(true)
-    const finalReturnItems = returnItemsList.filter(
-      (item: any) => item.quantity > 0
-    )
-    if(finalReturnItems.length == 0){
+    const finalReturnItems = returnItemsList.filter((item: any) => item.quantity > 0)
+    if (finalReturnItems.length == 0) {
       setErrorMsg(true)
       setLoadingConfirmation(false)
       return
     }
 
     const response = await axios.post(
-      `api/createReturnFromOrder?businessId=${state.user.businessId}&orderId=${state.modalCreateReturnInfo.orderId}`,
+      `api/createReturnFromOrder?region=${state.currentRegion}&businessId=${state.user.businessId}&orderId=${state.modalCreateReturnInfo.orderId}`,
       {
         returnItems: finalReturnItems,
       }
@@ -93,19 +88,17 @@ function CreateReturnModal({ apiMutateLink }: Props) {
 
   return (
     <Modal
-      size="xl"
-      id="myModal"
+      size='xl'
+      id='myModal'
       isOpen={state.showCreateReturnModal}
       toggle={() => {
         setShowCreateReturnModal(!state.showCreateReturnModal)
-      }}
-    >
+      }}>
       <ModalHeader
         toggle={() => {
           setShowCreateReturnModal(!state.showCreateReturnModal)
-        }}
-      >
-        <h3 className="modal-title" id="myModalLabel">
+        }}>
+        <h3 className='modal-title' id='myModalLabel'>
           Create Return
         </h3>
         {loading && <Spinner />}
@@ -114,58 +107,57 @@ function CreateReturnModal({ apiMutateLink }: Props) {
         {!loading && (
           <>
             <h4>
-              <span className="fw-bold fs-4">Order: </span>
+              <span className='fw-bold fs-4'>Order: </span>
               {orderInfo?.orderNumber}
             </h4>
             <h4>
-              <span className="fw-bold fs-4">Status: </span>
+              <span className='fw-bold fs-4'>Status: </span>
               {orderInfo?.orderStatus}
             </h4>
             {orderInfo?.totalItems == 1 ? (
-              <table className="table table-striped table-responsive align-middle">
-                <thead className="table-light">
-                  <tr className="fw-bold">
+              <table className='table table-striped table-responsive align-middle'>
+                <thead className='table-light'>
+                  <tr className='fw-bold'>
                     <th>Item</th>
-                    <th className="text-center">Qty</th>
+                    <th className='text-center'>Qty</th>
                   </tr>
                 </thead>
                 <tbody>
                   {orderInfo?.orderItems.map((item: any) => (
                     <tr key={item.sku}>
                       <td>
-                        <span className="fw-bold">{item.name}</span>
+                        <span className='fw-bold'>{item.name}</span>
                         <br />
                         SKU: {item.sku}
                       </td>
-                      <td className="fw-bold text-center">{item.quantity}</td>
+                      <td className='fw-bold text-center'>{item.quantity}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             ) : (
-              <table className="table table-striped table-responsive align-middle">
-                <thead className="table-light">
-                  <tr className="fw-bold">
+              <table className='table table-striped table-responsive align-middle'>
+                <thead className='table-light'>
+                  <tr className='fw-bold'>
                     <th>Item</th>
-                    <th className="text-center">Qty</th>
+                    <th className='text-center'>Qty</th>
                   </tr>
                 </thead>
                 <tbody>
                   {orderInfo?.orderItems.map((item: any, index: number) => (
                     <tr key={item.sku}>
                       <td>
-                        <span className="fw-bold">{item.name}</span>
+                        <span className='fw-bold'>{item.name}</span>
                         <br />
                         SKU: {item.sku}
                       </td>
-                      <td className="fw-bold text-center">
-                        <div className="d-flex justify-content-center align-items-center flex-nowrap gap-3 fs-4">
+                      <td className='fw-bold text-center'>
+                        <div className='d-flex justify-content-center align-items-center flex-nowrap gap-3 fs-4'>
                           <select
-                            className="form-select"
+                            className='form-select'
                             value={returnItemsList[index].quantity}
                             style={{ width: '80px' }}
-                            onChange={(e) => handleOnChangeQty(e, item.sku)}
-                          >
+                            onChange={(e) => handleOnChangeQty(e, item.sku)}>
                             <option key={0} value={0}>
                               {0}
                             </option>
@@ -177,7 +169,7 @@ function CreateReturnModal({ apiMutateLink }: Props) {
                                 </option>
                               ))}
                           </select>
-                          <p className="m-0">of</p>
+                          <p className='m-0'>of</p>
                           {item.quantity}
                         </div>
                       </td>
@@ -187,17 +179,13 @@ function CreateReturnModal({ apiMutateLink }: Props) {
               </table>
             )}
             {errorMsg && (
-              <div className="d-flex justify-content-start align-items-center">
-              <p className='text-danger fs-6'>You must select at least 1 Quantity to return!</p>
-            </div>
+              <div className='d-flex justify-content-start align-items-center'>
+                <p className='text-danger fs-6'>You must select at least 1 Quantity to return!</p>
+              </div>
             )}
-            <div className="d-flex justify-content-end align-items-center">
-              <Button color="success" onClick={() => handleConfirmReturn()}>
-                {loadingConfirmation ? (
-                  <Spinner color="light" />
-                ) : (
-                  'Confirm Return'
-                )}
+            <div className='d-flex justify-content-end align-items-center'>
+              <Button color='success' onClick={() => handleConfirmReturn()}>
+                {loadingConfirmation ? <Spinner color='light' /> : 'Confirm Return'}
               </Button>
             </div>
           </>

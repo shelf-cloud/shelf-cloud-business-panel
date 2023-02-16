@@ -11,11 +11,12 @@ const updateProductDetails: NextApiHandler = async (request, response) => {
         return
     }
 
-    axios.post(`${process.env.API_DOMAIN_SERVICES}/updateProductDetails.php?businessId=${request.query.businessId}`, {
+    axios.post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/updateProductDetails.php?businessId=${request.query.businessId}`, {
         productInfo: request.body.productInfo
     })
         .then(({ data }) => {
-            response.json(data)})
+            response.json(data)
+        })
         .catch((error) => {
             response.end(error)
         });
