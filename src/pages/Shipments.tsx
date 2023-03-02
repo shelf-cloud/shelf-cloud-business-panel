@@ -165,7 +165,7 @@ const Shipments = ({ session }: Props) => {
                   <div className='d-flex flex-column justify-content-center align-items-end gap-2 flex-md-row justify-content-md-between align-items-md-center w-auto'>
                     <div
                       className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto px-3 rounded-3'
-                      style={{ backgroundColor: 'white', minWidth: '220px', border: '1px solid #E1E3E5' }}>
+                      style={{ backgroundColor: 'white', minWidth: '230px', border: '1px solid #E1E3E5' }}>
                       <i className='ri-calendar-2-line fs-5' />
                       <Flatpickr
                         className='border-0 fs-6 w-100 py-2'

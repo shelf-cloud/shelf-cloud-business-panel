@@ -40,9 +40,7 @@ type Props = {
 
 const CreateWholeSaleOrder = ({ session }: Props) => {
   const { state, setWholeSaleOrderModal }: any = useContext(AppContext)
-  const orderNumberStart = `${session?.user?.name.substring(0, 3).toUpperCase()}-${
-    state.currentRegion == 'us' ? 'US-' : 'EU-'
-  }`
+  const orderNumberStart = `${session?.user?.name.substring(0, 3).toUpperCase()}-`
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<wholesaleProductRow[]>([])
   const [serachValue, setSerachValue] = useState('')

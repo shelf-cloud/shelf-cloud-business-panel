@@ -42,15 +42,15 @@ const CreateOrder = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const title = `Add Product | ${session?.user?.name}`
-  const orderNumberStart = `${session?.user?.name.substring(0, 3).toUpperCase()}-${
-    state.currentRegion == 'us' ? 'US-' : 'EU-'
-  }`
+  const orderNumberStart = `${session?.user?.name.substring(0, 3).toUpperCase()}-`
   const [ready, setReady] = useState(false)
   const [skus, setSkus] = useState([])
   const [skusTitles, setSkusTitles] = useState<any>({})
   const [validSkus, setValidSkus] = useState<string[]>([])
+  const [inValidSkus, setInValidSkus] = useState<string[]>([])
   const [countries, setcountries] = useState([])
   const [validCountries, setValidCountries] = useState<string[]>([])
+  const [creatingOrder, setCreatingOrder] = useState(false)
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data } = useSWR(
@@ -62,6 +62,7 @@ const CreateOrder = ({ session }: Props) => {
     if (data?.error) {
       setValidCountries([])
       setValidSkus([])
+      setInValidSkus([])
       setSkus([])
       setcountries([])
       setSkusTitles({})
@@ -70,6 +71,7 @@ const CreateOrder = ({ session }: Props) => {
     } else if (data) {
       setValidCountries(data.validCountries)
       setValidSkus(data.validSkus)
+      setInValidSkus(data.invalidSkus)
       setSkus(data.skus)
       setcountries(data.countries)
       setSkusTitles(data.skuTitle)
@@ -123,7 +125,7 @@ const CreateOrder = ({ session }: Props) => {
     products: Yup.array()
       .of(
         Yup.object({
-          sku: Yup.string().oneOf(validSkus, 'Must be a Valid SKU').required('Required SKU'),
+          sku: Yup.string().oneOf(validSkus, 'Invalid SKU or There`s No Stock Available').notOneOf(inValidSkus, 'There`s no Stock for this SKU').required('Required SKU'),
           title: Yup.string().max(50, 'Name is to Long').required('Required Name'),
           qty: Yup.number()
             .integer('Qty must be an integer')
@@ -136,6 +138,7 @@ const CreateOrder = ({ session }: Props) => {
   })
 
   const handleSubmit = async (values: any, { resetForm }: any) => {
+    setCreatingOrder(true)
     const response = await axios.post(
       `api/createNewOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`,
       {
@@ -147,8 +150,10 @@ const CreateOrder = ({ session }: Props) => {
       toast.success(response.data.msg)
       resetForm()
       router.push('/Shipments')
+      setCreatingOrder(false)
     } else {
       toast.error(response.data.msg)
+      setCreatingOrder(false)
     }
   }
 
@@ -703,7 +708,7 @@ const CreateOrder = ({ session }: Props) => {
                           </h5>
                           <Col md={12}>
                             <div className='text-end'>
-                              <Button type='submit' className='fs-5 btn bg-primary'>
+                              <Button type='submit' disabled={creatingOrder} className='fs-5 btn bg-primary'>
                                 Create Order
                               </Button>
                             </div>

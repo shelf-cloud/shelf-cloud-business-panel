@@ -32,7 +32,7 @@ const DashboardHeader = ({
             </div>
             <div className="mt-3 mt-lg-0">
               <form action="#">
-                <div className="d-flex flex-row align-items-center justify-content-between gap-2 w-auto px-3 py-1 rounded-3 shadow" style={{backgroundColor: 'white', minWidth: '220px'}}>
+                <div className="d-flex flex-row align-items-center justify-content-between gap-2 w-auto px-3 py-1 rounded-3 shadow" style={{backgroundColor: 'white', minWidth: '230px'}}>
                   <i className="ri-calendar-2-line fs-5" />
                   <Flatpickr
                     className="border-0 fs-6 w-100"

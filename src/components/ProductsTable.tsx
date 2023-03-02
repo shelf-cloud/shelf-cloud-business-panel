@@ -76,28 +76,6 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
     return 0
   }
   const columns: any = [
-    // {
-    //   name: (
-    //     <Input
-    //       className="form-check-input fs-15"
-    //       type="checkbox"
-    //       name="checkAll"
-    //       value="option1"
-    //     />
-    //   ),
-    //   cell: () => (
-    //     <input
-    //       className="form-check-input fs-15"
-    //       type="checkbox"
-    //       name="checkAll"
-    //       value="option1"
-    //     />
-    //   ),
-    //   sortable: false,
-    //   width: '50px',
-    //   compact: true,
-    //   center: true,
-    // },
     {
       name: <span className='font-weight-bold fs-13'>Image</span>,
       selector: (cell: { Image: any }) => {
