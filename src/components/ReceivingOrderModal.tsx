@@ -53,7 +53,7 @@ const ReceivingOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
             return {
               sku: product.sku,
               qty: Number(product.orderQty),
-              storeId: state.user.businessId,
+              storeId: product.quantity.businessId,
               qtyPicked: 0,
               pickedHistory: [],
             }

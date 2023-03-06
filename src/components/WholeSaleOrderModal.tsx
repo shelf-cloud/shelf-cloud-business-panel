@@ -92,7 +92,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
             return {
               sku: product.sku,
               qty: product.totalToShip,
-              storeId: state.user.businessId,
+              storeId: product.quantity.businessId,
               qtyPicked: 0,
               pickedHistory: [],
             }
@@ -101,7 +101,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
             return {
               sku: product.sku,
               qty: product.totalToShip,
-              storeId: state.user.businessId,
+              storeId: product.quantity.businessId,
               qtyScanned: 0,
               history: [
                 {
