@@ -40,7 +40,7 @@ const ReceivingOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
     enableReinitialize: true,
 
     initialValues: {
-      orderNumber: state.currentRegion ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
+      orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
     },
     validationSchema: Yup.object({
       orderNumber: Yup.string().max(100, 'Title is to Long').required('Please enter Order Number'),

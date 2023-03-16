@@ -62,7 +62,7 @@ const AddProducts = ({ session }: Props) => {
       boxqty: '',
     },
     validationSchema: Yup.object({
-      title: Yup.string().max(100, 'Title is to Long').required('Please Enter Your Title'),
+      title: Yup.string().matches(/^[a-zA-Z0-9-Á-öø-ÿ\s]+$/, `Invalid characters: " ' @ ~ , ...`).max(100, 'Title is to Long').required('Please Enter Your Title'),
       sku: Yup.string().max(50, 'SKU is to Long').required('Please Enter Your Sku'),
       image: Yup.string().url(),
       asin: Yup.string().max(50, 'Asin is to Long'),

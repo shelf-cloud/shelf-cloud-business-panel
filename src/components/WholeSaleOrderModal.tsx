@@ -49,7 +49,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
     enableReinitialize: true,
 
     initialValues: {
-      orderNumber: state.currentRegion ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
+      orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
       type: 'Parcel Boxes',
       numberOfPallets: 1,
       isThird: '',

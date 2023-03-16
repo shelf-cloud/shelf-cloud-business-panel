@@ -5,7 +5,7 @@ import axios from 'axios'
 import * as Yup from 'yup'
 import { Field, FieldArray, Formik, Form } from 'formik'
 import Head from 'next/head'
-import { Button, Card, CardBody, Col, Container, FormFeedback, FormGroup, Input, Label, Row } from 'reactstrap'
+import { Button, Card, CardBody, Col, Container, FormFeedback, FormGroup, Input, Label, Row, Spinner } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import AppContext from '@context/AppContext'
@@ -85,13 +85,14 @@ const CreateOrder = ({ session }: Props) => {
   const initialValues = {
     name: '',
     company: '',
-    orderNumber: state.currentRegion ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
+    orderNumber:
+      state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
     adress1: '',
     adress2: '',
     city: '',
     state: '',
     zipCode: '',
-    country: 'US',
+    country: state.currentRegion == 'us' ? 'US' : 'ES',
     phoneNumber: '',
     email: '',
     amount: '0',
@@ -125,8 +126,11 @@ const CreateOrder = ({ session }: Props) => {
     products: Yup.array()
       .of(
         Yup.object({
-          sku: Yup.string().oneOf(validSkus, 'Invalid SKU or There`s No Stock Available').notOneOf(inValidSkus, 'There`s no Stock for this SKU').required('Required SKU'),
-          title: Yup.string().max(50, 'Name is to Long').required('Required Name'),
+          sku: Yup.string()
+            .oneOf(validSkus, 'Invalid SKU or There`s No Stock Available')
+            .notOneOf(inValidSkus, 'There`s no Stock for this SKU')
+            .required('Required SKU'),
+          title: Yup.string().max(100, 'Name is to Long').required('Required Name'),
           qty: Yup.number()
             .integer('Qty must be an integer')
             .min(1, 'Quantity must be greater than 0')
@@ -145,6 +149,7 @@ const CreateOrder = ({ session }: Props) => {
         orderInfo: values,
       }
     )
+
     if (!response.data.error) {
       mutate('/api/getuser')
       toast.success(response.data.msg)
@@ -709,7 +714,7 @@ const CreateOrder = ({ session }: Props) => {
                           <Col md={12}>
                             <div className='text-end'>
                               <Button type='submit' disabled={creatingOrder} className='fs-5 btn bg-primary'>
-                                Create Order
+                                {creatingOrder ? <Spinner /> : 'Create Order'}
                               </Button>
                             </div>
                           </Col>
