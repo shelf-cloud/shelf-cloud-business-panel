@@ -18,48 +18,20 @@
     "noUnusedParameters": true,
     "baseUrl": "src",
     "paths": {
-      "@pages/*": [
-        "pages/*"
-      ],
-      "@components/*": [
-        "components/*"
-      ],
-      "@containers/*": [
-        "containers/*"
-      ],
-      "@icons/*": [
-        "assets/icons/*"
-      ],
-      "@logos/*": [
-        "assets/logos/*"
-      ],
-      "@context/*": [
-        "context/*"
-      ],
-      "@styles/*": [
-        "styles/*"
-      ],
-      "@hooks/*": [
-        "hooks/*"
-      ],
-      "@assets/*": [
-        "assets/*"
-      ],
-      "@images/*": [
-        "assets/images/*"
-      ],
-      "@auth/*": [
-        "auth/*"
-      ],
-      "@typings": [
-        "../typings.d.ts"
-      ],
-      "@firebase": [
-        "firebase.js"
-      ],
-      "@lib/*": [
-        "lib/*"
-      ],
+      "@pages/*": ["pages/*"],
+      "@components/*": ["components/*"],
+      "@containers/*": ["containers/*"],
+      "@icons/*": ["assets/icons/*"],
+      "@logos/*": ["assets/logos/*"],
+      "@context/*": ["context/*"],
+      "@styles/*": ["styles/*"],
+      "@hooks/*": ["hooks/*"],
+      "@assets/*": ["assets/*"],
+      "@images/*": ["assets/images/*"],
+      "@auth/*": ["auth/*"],
+      "@typings": ["../typings.d.ts"],
+      "@firebase": ["firebase.js"],
+      "@lib/*": ["lib/*"]
     }
   },
   "include": ["next-env.d.ts", "api/**/*.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],

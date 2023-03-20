@@ -36,6 +36,7 @@ const initialState = {
   showWholeSaleOrderModal: false,
   modalCreateReturnInfo: {},
   showCreateReturnModal: false,
+  showUploadProductsModal: false,
 }
 
 const useInitialState = () => {
@@ -167,6 +168,13 @@ const useInitialState = () => {
     })
   }
 
+  const setUploadProductsModal = (payload) => {
+    setState({
+      ...state,
+      showUploadProductsModal: payload,
+    })
+  }
+
   return {
     state,
     setRegion,
@@ -180,6 +188,7 @@ const useInitialState = () => {
     setWholeSaleOrderModal,
     setModalCreateReturnInfo,
     setShowCreateReturnModal,
+    setUploadProductsModal,
   }
 }
 

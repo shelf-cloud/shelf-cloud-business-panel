@@ -11,6 +11,7 @@ import { getSession } from '@auth/client'
 import AppContext from '@context/AppContext'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
+import UploadProductsModal from '@components/UploadProductsModal'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -37,7 +38,7 @@ type Props = {
 }
 
 const AddProducts = ({ session }: Props) => {
-  const { state }: any = useContext(AppContext)
+  const { state, setUploadProductsModal }: any = useContext(AppContext)
   const title = `Add Product | ${session?.user?.name}`
   const [useSameUnitDimensions, setUseSameUnitDimensions] = useState(false)
   const validation = useFormik({
@@ -62,8 +63,14 @@ const AddProducts = ({ session }: Props) => {
       boxqty: '',
     },
     validationSchema: Yup.object({
-      title: Yup.string().matches(/^[a-zA-Z0-9-Á-öø-ÿ\s]+$/, `Invalid characters: " ' @ ~ , ...`).max(100, 'Title is to Long').required('Please Enter Your Title'),
-      sku: Yup.string().max(50, 'SKU is to Long').required('Please Enter Your Sku'),
+      title: Yup.string()
+        .matches(/^[a-zA-Z0-9-Á-öø-ÿ\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
+        .max(100, 'Title is to Long')
+        .required('Please Enter Your Title'),
+      sku: Yup.string()
+        .matches(/^[a-zA-Z0-9-\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
+        .max(50, 'SKU is to Long')
+        .required('Please Enter Your Sku'),
       image: Yup.string().url(),
       asin: Yup.string().max(50, 'Asin is to Long'),
       fnsku: Yup.string().max(50, 'Fnsku is to Long'),
@@ -134,6 +141,18 @@ const AddProducts = ({ session }: Props) => {
             <BreadCrumb title='Add Products' pageTitle='Warehouse' />
             <Card>
               <CardBody>
+                <Col md={12}>
+                  <div className='text-end'>
+                    <Button
+                      type='submit'
+                      color='primary'
+                      className='fs-5 py-1 p3-1'
+                      onClick={() => setUploadProductsModal(true)}>
+                      <i className='mdi mdi-arrow-up-bold-circle label-icon align-middle fs-4 me-2' />
+                      Upload File
+                    </Button>
+                  </div>
+                </Col>
                 <Form onSubmit={HandleAddProduct}>
                   <Row>
                     <h5 className='fs-5 m-3 fw-bolder'>Product Details</h5>
@@ -486,6 +505,7 @@ const AddProducts = ({ session }: Props) => {
           </Container>
         </div>
       </React.Fragment>
+      {state.showUploadProductsModal && <UploadProductsModal />}
     </div>
   )
 }
