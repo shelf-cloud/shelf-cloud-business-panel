@@ -37,6 +37,8 @@ const initialState = {
   modalCreateReturnInfo: {},
   showCreateReturnModal: false,
   showUploadProductsModal: false,
+  orderNumberfromInvoices: null,
+  showOrderDetailsOfInvoiceModal: false,
 }
 
 const useInitialState = () => {
@@ -175,6 +177,14 @@ const useInitialState = () => {
     })
   }
 
+  const setShowOrderDetailsOfInvoiceModal = (payload, orderNumber) => {
+    setState({
+      ...state,
+      orderNumberfromInvoices: orderNumber,
+      showOrderDetailsOfInvoiceModal: payload,
+    })
+  }
+
   return {
     state,
     setRegion,
@@ -189,6 +199,7 @@ const useInitialState = () => {
     setModalCreateReturnInfo,
     setShowCreateReturnModal,
     setUploadProductsModal,
+    setShowOrderDetailsOfInvoiceModal,
   }
 }
 

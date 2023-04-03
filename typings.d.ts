@@ -48,6 +48,7 @@ export interface InvoiceDetails {
 }
 
 export interface OrderDetails {
+  orderId: number;
   closedDate: string;
   orderNumber: string;
   orderType: string;

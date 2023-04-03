@@ -1,4 +1,5 @@
 import BreadCrumb from '@components/Common/BreadCrumb'
+import OrderDetailsFromInvoicesModal from '@components/OrderDetailsFromInvoicesModal'
 import PrintInvoice from '@components/PrintInvoice'
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
@@ -33,7 +34,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 
 const InvoiceDetails = () => {
   const router = useRouter()
-  const { state }: any = useContext(AppContext)
+  const { state, setShowOrderDetailsOfInvoiceModal }: any = useContext(AppContext)
   const { id } = router.query
   const [loading, setloading] = useState(true)
   const [invoiceDetails, setInvoiceDetails] = useState<InvoiceFullDetails | null>()
@@ -123,7 +124,16 @@ const InvoiceDetails = () => {
                           <tbody>
                             {invoiceDetails?.orders.map((order) => (
                               <tr key={order.orderNumber}>
-                                <td>{order.orderNumber}</td>
+                                <td
+                                  className={order.orderType != 'Storage' ? 'text-primary' : ''}
+                                  style={order.orderType != 'Storage' ? { cursor: 'pointer' } : {}}
+                                  onClick={
+                                    order.orderType != 'Storage'
+                                      ? () => setShowOrderDetailsOfInvoiceModal(true, order.orderId)
+                                      : () => {}
+                                  }>
+                                  {order.orderNumber}
+                                </td>
                                 <td>{order.orderType}</td>
                                 <td>{moment(order.closedDate).format('DD/MM/YYYY')}</td>
                                 <td>{FormatCurrency.format(order.totalCharge)}</td>
@@ -150,6 +160,7 @@ const InvoiceDetails = () => {
           </Container>
         </div>
       </React.Fragment>
+      {state.showOrderDetailsOfInvoiceModal && <OrderDetailsFromInvoicesModal />}
     </div>
   )
 }

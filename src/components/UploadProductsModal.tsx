@@ -32,7 +32,7 @@ const UploadProductsModal = ({}: Props) => {
       for (let v = 0; v < rowValues.length; v++) {
         switch (v) {
           case 0:
-            ;/^[a-zA-Z0-9-]{10,50}$/.test(rowValues[v])
+            ;/^[a-zA-Z0-9-]{4,50}$/.test(rowValues[v])
               ? () => {}
               : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
             break
