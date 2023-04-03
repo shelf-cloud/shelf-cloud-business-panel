@@ -46,6 +46,7 @@ const CreateOrder = ({ session }: Props) => {
   const [ready, setReady] = useState(false)
   const [skus, setSkus] = useState([])
   const [skusTitles, setSkusTitles] = useState<any>({})
+  const [skuQuantities, setSkuQuantities] = useState<any>({})
   const [validSkus, setValidSkus] = useState<string[]>([])
   const [inValidSkus, setInValidSkus] = useState<string[]>([])
   const [countries, setcountries] = useState([])
@@ -66,6 +67,7 @@ const CreateOrder = ({ session }: Props) => {
       setSkus([])
       setcountries([])
       setSkusTitles({})
+      setSkuQuantities({})
       setReady(true)
       toast.error(data?.message)
     } else if (data) {
@@ -75,6 +77,7 @@ const CreateOrder = ({ session }: Props) => {
       setSkus(data.skus)
       setcountries(data.countries)
       setSkusTitles(data.skuTitle)
+      setSkuQuantities(data.skuQuantities)
       setReady(true)
     }
     return () => {
@@ -134,6 +137,7 @@ const CreateOrder = ({ session }: Props) => {
           qty: Yup.number()
             .integer('Qty must be an integer')
             .min(1, 'Quantity must be greater than 0')
+            .when('sku', (sku, schema) => sku != '' ? schema.max(skuQuantities[sku], `Current SKU Stock is ${skuQuantities[sku] ? skuQuantities[sku] : 'unavailable' }`) : schema)
             .required('Required Qty'),
           price: Yup.number().min(0, 'Price must be greater than or equal to 0').required('Required Price'),
         })
@@ -662,6 +666,7 @@ const CreateOrder = ({ session }: Props) => {
                                                         padding: '0.2rem 0.9rem',
                                                       }}
                                                       name={`products.${index}.qty`}
+                                                      max={skuQuantities[values.products[index].sku]}
                                                       placeholder='Qty...'
                                                       onChange={handleChange}
                                                       onBlur={handleBlur}
