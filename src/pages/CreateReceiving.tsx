@@ -111,7 +111,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                       <div>
                         <h3 className='fs-3 fw-semibold text-primary'>Total SKUs in Order: {orderProducts.length}</h3>
                         <h5 className='fs-5 fw-normal text-primary'>
-                          Total Qty to Ship in Order:{' '}
+                          Total Qty to Receive in Order:{' '}
                           {orderProducts.reduce(
                             (total: number, item: wholesaleProductRow) => total + Number(item.orderQty),
                             0
