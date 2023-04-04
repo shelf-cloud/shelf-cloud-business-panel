@@ -11,6 +11,7 @@ import { Button, Card, CardBody, CardHeader, Col, Container, Input, Row } from '
 import useSWR from 'swr'
 import StorageWidgets from '@components/StorageWidgets'
 import { toast } from 'react-toastify'
+import StorageChart from '@components/StorageChart'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -40,6 +41,8 @@ const Storage = ({ session }: Props) => {
   const title = `Inventory Log | ${session?.user?.name}`
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<StorageRowProduct[]>([])
+  const [storageInvoices, setStorageInvoices] = useState<any[]>([])
+  const [storageDates, setStorageDates] = useState<any[]>([])
   const [serachValue, setSerachValue] = useState('')
 
   const filteredItems = useMemo(() => {
@@ -62,10 +65,14 @@ const Storage = ({ session }: Props) => {
   useEffect(() => {
     if (data?.error) {
       setAllData([])
+      setStorageDates([])
+      setStorageInvoices([])
       setPending(false)
       toast.error(data?.message)
     } else if (data) {
       setAllData(data.inventory)
+      setStorageInvoices(data.storageFees)
+      setStorageDates(data.storageDate)
       setPending(false)
     }
   }, [data])
@@ -83,7 +90,15 @@ const Storage = ({ session }: Props) => {
               <Col lg={12}>
                 <Card>
                   <CardHeader>
-                    <StorageWidgets currentBalance={data?.totalCurrentBalance} binsUSed={data?.totalBinsUSed} />
+                    <div className='d-flex flex-column flex-md-row justify-content-between gap-0 gap-md-5 mb-2'>
+                      <div className='col-xs-12 col-md-4'>
+                        <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>
+                          Monthly Storage Fees
+                        </p>
+                        <StorageChart storageInvoices={storageInvoices} storageDates={storageDates} />
+                      </div>
+                      <StorageWidgets currentBalance={data?.totalCurrentBalance} binsUSed={data?.totalBinsUSed} />
+                    </div>
                     <form className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
                       <div className='position-relative'>
                         <Input

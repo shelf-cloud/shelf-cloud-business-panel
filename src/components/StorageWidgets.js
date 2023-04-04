@@ -6,8 +6,8 @@ import Link from 'next/link'
 const StorageWidgets = ({ currentBalance, binsUSed }) => {
   return (
     <React.Fragment>
-      <Row>
-        <Col xl={3} md={6}>
+      <Row className='w-100'>
+        <Col>
           <div className="shadow-none mb-0">
             <div className='p-0'>
               <div className="d-flex align-items-center">
@@ -37,7 +37,7 @@ const StorageWidgets = ({ currentBalance, binsUSed }) => {
             </div>
           </div>
         </Col>
-        <Col xl={3} md={6}>
+        <Col>
           <div className="shadow-none mb-0 border-start ps-3">
             <div className='p-0'>
               <div className="d-flex align-items-center">
