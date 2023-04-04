@@ -83,6 +83,10 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending }: Props) 
       when: (row: wholesaleProductRow) => Number(row.orderQty) > 0,
       classNames: ['bg-success bg-opacity-25'],
     },
+    {
+      when: (row: wholesaleProductRow) => Number(row.orderQty) < 0,
+      classNames: ['bg-danger bg-opacity-25'],
+    },
   ]
 
   const columns: any = [
@@ -176,7 +180,15 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending }: Props) 
               className='form-control'
               placeholder={(row?.maxOrderQty || 0) <= 0 ? 'Not Enough Qty' : 'Order Qty...'}
               value={row.orderQty}
-              onChange={(e) => handleOrderQty(e.target.value, row.sku, row?.qtyBox || 0)}
+              onChange={(e) => {
+                if (Number(e.target.value) < 0) {
+                  document.getElementById(`Error-${row.sku}`)!.style.display = 'block'
+                  handleOrderQty(e.target.value, row.sku, row?.qtyBox || 0)
+                } else {
+                  document.getElementById(`Error-${row.sku}`)!.style.display = 'none'
+                  handleOrderQty(e.target.value, row.sku, row?.qtyBox || 0)
+                }
+              }}
               max={row.maxOrderQty}
               invalid={Number(row.orderQty) > (row?.maxOrderQty || 0) ? true : false}
             />
@@ -185,6 +197,9 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending }: Props) 
                 Not enough Master Boxes!
               </FormFeedback>
             ) : null}
+            <span className='fs-6 fw-normal text-danger' id={`Error-${row.sku}`} style={{ display: 'none' }}>
+              Quantity Error
+            </span>
           </>
         )
       },

@@ -44,6 +44,7 @@ const CreateOrder = ({ session }: Props) => {
   const title = `Add Product | ${session?.user?.name}`
   const orderNumberStart = `${session?.user?.name.substring(0, 3).toUpperCase()}-`
   const [ready, setReady] = useState(false)
+  const [isPickUpOrder, setIsPickUpOrder] = useState(false)
   const [skus, setSkus] = useState([])
   const [skusTitles, setSkusTitles] = useState<any>({})
   const [skuQuantities, setSkuQuantities] = useState<any>({})
@@ -135,10 +136,18 @@ const CreateOrder = ({ session }: Props) => {
             .required('Required SKU'),
           title: Yup.string().max(100, 'Name is to Long').required('Required Name'),
           qty: Yup.number()
+            .positive()
             .integer('Qty must be an integer')
             .min(1, 'Quantity must be greater than 0')
-            .when('sku', (sku, schema) => sku != '' ? schema.max(skuQuantities[sku], `Current SKU Stock is ${skuQuantities[sku] ? skuQuantities[sku] : 'unavailable' }`) : schema)
-            .required('Required Qty'),
+            .when('sku', (sku, schema) =>
+              sku != ''
+                ? schema.max(
+                    skuQuantities[sku],
+                    `Current SKU Stock is ${skuQuantities[sku] ? skuQuantities[sku] : 'unavailable'}`
+                  )
+                : schema
+            )
+            .required('Required Quantity'),
           price: Yup.number().min(0, 'Price must be greater than or equal to 0').required('Required Price'),
         })
       )
@@ -166,6 +175,25 @@ const CreateOrder = ({ session }: Props) => {
     }
   }
 
+  const handlePickUpOrder = async (values: any, isPickUpOrder: boolean) => {
+    if (isPickUpOrder) {
+      values.adress1 = 'PickUp Order'
+      values.adress2 = 'PickUp Order'
+      values.city = 'PickUp Order'
+      values.state = 'PickUp Order'
+      values.country = state.currentRegion == 'us' ? 'US' : 'ES'
+      values.zipCode = 'PickUp Order'
+    } else {
+      values.adress1 = ''
+      values.adress2 = ''
+      values.city = ''
+      values.state = ''
+      values.country = state.currentRegion == 'us' ? 'US' : 'ES'
+      values.zipCode = ''
+    }
+    setIsPickUpOrder(isPickUpOrder)
+  }
+
   return (
     <div>
       <Head>
@@ -184,6 +212,26 @@ const CreateOrder = ({ session }: Props) => {
                     onSubmit={(values, { resetForm }) => handleSubmit(values, { resetForm })}>
                     {({ values, errors, touched, handleChange, handleBlur }) => (
                       <Form>
+                        <Row>
+                          <div className='d-flex justify-content-end align-items-center'>
+                            <div className='form-check form-check-inline form-switch form-switch-lg form-switch-warning mb-2 mb-md-0'>
+                              <Label className='form-check-label' for='SwitchCheck4'>
+                                Select for PickUp Order
+                              </Label>
+                              <Input
+                                className='form-check-input'
+                                type='checkbox'
+                                role='switch'
+                                id='SwitchCheck4'
+                                onChange={async (e) => {
+                                  await handlePickUpOrder(values, !isPickUpOrder)
+                                  handleChange(e)
+                                }}
+                                defaultChecked={isPickUpOrder}
+                              />
+                            </div>
+                          </div>
+                        </Row>
                         <Row>
                           <Col md={7}>
                             <FormGroup className='createOrder_inputs'>

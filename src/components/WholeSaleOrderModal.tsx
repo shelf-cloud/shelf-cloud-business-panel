@@ -38,6 +38,15 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
   const [selectedFiles, setselectedFiles] = useState([])
   const [errorFile, setErrorFile] = useState(false)
 
+  const TotalMasterBoxes = orderProducts.reduce(
+    (total: number, item: wholesaleProductRow) => total + Number(item.orderQty),
+    0
+  )
+
+  const totalQuantityToShip = orderProducts.reduce(
+    (total: number, item: wholesaleProductRow) => total + Number(item.totalToShip),
+    0
+  )
   useEffect(() => {
     return () => {
       validation.resetForm()
@@ -49,7 +58,8 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
     enableReinitialize: true,
 
     initialValues: {
-      orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
+      orderNumber:
+        state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
       type: 'Parcel Boxes',
       numberOfPallets: 1,
       isThird: '',
@@ -79,7 +89,10 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
       const docTime = moment().format('DD-MM-YYYY-HH-mm-ss-a')
 
       if (values.isThird == 'false') {
-        const storageRef = ref(storage, `shelf-cloud/etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`)
+        const storageRef = ref(
+          storage,
+          `shelf-cloud/etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
+        )
         await uploadBytes(storageRef, selectedFiles[0]).then((_snapshot) => {
           toast.success('Successfully uploaded labels!')
         })
@@ -120,7 +133,10 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
             numberOfPallets: values.type == 'LTL' ? values.numberOfPallets : 0,
             isthird: values.isThird == 'true' ? true : false,
             thirdInfo: values.thirdInfo == 'true' ? values.thirdInfo : '',
-            labelsName: values.isThird == 'false' ? `etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf` : '',
+            labelsName:
+              values.isThird == 'false'
+                ? `etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
+                : '',
             orderProducts: orderProducts.map((product) => {
               return {
                 sku: product.sku,
@@ -362,7 +378,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
               )}
             </Col>
             <Col md={12}>
-              <h5>Total Products in Order: {validation.values.hasProducts}</h5>
+              <h5>Total SKUs in Order: {validation.values.hasProducts}</h5>
               {validation.touched.hasProducts && validation.errors.hasProducts ? (
                 <p className='text-danger'>{validation.errors.hasProducts}</p>
               ) : null}
@@ -382,6 +398,11 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                       <td className='text-center'>{product.totalToShip}</td>
                     </tr>
                   ))}
+                  <tr key={'totalMasterBoxes'} style={{ backgroundColor: '#e5e5e5' }}>
+                    <td className='fw-bold'>TOTAL</td>
+                    <td className='fw-bold text-center'>{TotalMasterBoxes}</td>
+                    <td className='fw-bold text-center'>{totalQuantityToShip}</td>
+                  </tr>
                 </tbody>
               </table>
             </Col>

@@ -105,7 +105,7 @@ const ReceivingOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
         }}
         className='modal-title'
         id='myModalLabel'>
-        WholeSale Order
+        Receiving Order
       </ModalHeader>
       <ModalBody>
         <Form onSubmit={HandleAddProduct}>

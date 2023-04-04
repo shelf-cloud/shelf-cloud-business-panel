@@ -76,6 +76,10 @@ const ReceivingOrderTable = ({ allData, filteredItems, setAllData, pending }: Pr
       when: (row: wholesaleProductRow) => Number(row.orderQty) > 0,
       classNames: ['bg-success bg-opacity-25'],
     },
+    {
+      when: (row: wholesaleProductRow) => Number(row.orderQty) < 0,
+      classNames: ['bg-danger bg-opacity-25'],
+    },
   ]
 
   const columns: any = [
@@ -157,9 +161,21 @@ const ReceivingOrderTable = ({ allData, filteredItems, setAllData, pending }: Pr
               className='form-control'
               placeholder={'Order Qty...'}
               value={row.orderQty}
-              onChange={(e) => handleOrderQty(e.target.value, row.sku)}
+              onChange={(e) => {
+                if (Number(e.target.value) < 0) {
+                  document.getElementById(`Error-${row.sku}`)!.style.display = 'block'
+                  handleOrderQty(e.target.value, row.sku)
+                } else {
+                  document.getElementById(`Error-${row.sku}`)!.style.display = 'none'
+                  handleOrderQty(e.target.value, row.sku)
+                }
+              }}
+              min={0}
               max={row.maxOrderQty}
             />
+            <span className='fs-6 fw-normal text-danger' id={`Error-${row.sku}`} style={{ display: 'none' }}>
+              Quantity Error
+            </span>
           </>
         )
       },

@@ -29,83 +29,85 @@ const UploadProductsModal = ({}: Props) => {
     }
     for (let i = 1; i < resultValues.length; i++) {
       const rowValues = resultValues[i] as any
-      for (let v = 0; v < rowValues.length; v++) {
-        switch (v) {
-          case 0:
-            ;/^[a-zA-Z0-9-]{4,50}$/.test(rowValues[v])
-              ? () => {}
-              : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
-            break
-          case 1:
-            ;/^[a-zA-Z0-9-Á-öø-ÿ\s]{10,100}$/.test(rowValues[v])
-              ? () => {}
-              : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
-            break
-          case 2:
-            ;/^[0-9]{5,20}$/.test(rowValues[v])
-              ? () => {}
-              : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
-            break
-          case 3:
-            ;() => {}
-            break
-          case 4:
-            ;() => {}
-            break
-          case 5:
-            ;/^[0-9]+?[.]?[0-9]{1,}$/.test(rowValues[v])
-              ? () => {}
-              : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
-            break
-          case 6:
-            ;/^[0-9]+?[.]?[0-9]{1,}$/.test(rowValues[v])
-              ? () => {}
-              : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
-            break
-          case 7:
-            ;/^[0-9]+?[.]?[0-9]{1,}$/.test(rowValues[v])
-              ? () => {}
-              : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
-            break
-          case 8:
-            ;/^[0-9]+?[.]?[0-9]{1,}$/.test(rowValues[v])
-              ? () => {}
-              : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
-            break
-          case 9:
-            ;/^[0-9]{1,}$$/.test(rowValues[v])
-              ? () => {}
-              : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
-            break
-          case 10:
-            ;/^[0-9]+?[.]?[0-9]{1,}$/.test(rowValues[v])
-              ? () => {}
-              : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
-            break
-          case 11:
-            ;/^[0-9]+?[.]?[0-9]{1,}$/.test(rowValues[v])
-              ? () => {}
-              : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
-            break
-          case 12:
-            ;/^[0-9]+?[.]?[0-9]{1,}$/.test(rowValues[v])
-              ? () => {}
-              : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
-            break
-          case 13:
-            ;/^[0-9]+?[.]?[0-9]{1,}$/.test(rowValues[v])
-              ? () => {}
-              : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
-            break
-          case 14:
-            ;/[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(
-              rowValues[v]
-            )
-              ? () => {}
-              : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
-            break
-          default:
-          // code block
+      if (rowValues[0] != '' && rowValues[0] != null) {
+        for (let v = 0; v < rowValues.length; v++) {
+          switch (v) {
+            case 0:
+              ;/^[a-zA-Z0-9-]{4,50}$/.test(rowValues[v])
+                ? () => {}
+                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              break
+            case 1:
+              ;/^[a-zA-Z0-9-Á-öø-ÿ\s]{10,100}$/.test(rowValues[v])
+                ? () => {}
+                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              break
+            case 2:
+              ;/^[0-9]{5,20}$/.test(rowValues[v])
+                ? () => {}
+                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              break
+            case 3:
+              ;() => {}
+              break
+            case 4:
+              ;() => {}
+              break
+            case 5:
+              ;/^[0-9]?[.]?[0-9]{1,}$/.test(rowValues[v])
+                ? () => {}
+                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              break
+            case 6:
+              ;/^[0-9]?[.]?[0-9]{1,}$/.test(rowValues[v])
+                ? () => {}
+                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              break
+            case 7:
+              ;/^[0-9]?[.]?[0-9]{1,}$/.test(rowValues[v])
+                ? () => {}
+                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              break
+            case 8:
+              ;/^[0-9]?[.]?[0-9]{1,}$/.test(rowValues[v])
+                ? () => {}
+                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              break
+            case 9:
+              ;/^[0-9]{1,}$/.test(rowValues[v])
+                ? () => {}
+                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              break
+            case 10:
+              ;/^[0-9]?[.]?[0-9]{1,}$/.test(rowValues[v])
+                ? () => {}
+                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              break
+            case 11:
+              ;/^[0-9]?[.]?[0-9]{1,}$/.test(rowValues[v])
+                ? () => {}
+                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              break
+            case 12:
+              ;/^[0-9]?[.]?[0-9]{1,}$/.test(rowValues[v])
+                ? () => {}
+                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              break
+            case 13:
+              ;/^[0-9]?[.]?[0-9]{1,}$/.test(rowValues[v])
+                ? () => {}
+                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              break
+            case 14:
+              ;/[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(
+                rowValues[v]
+              )
+                ? () => {}
+                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              break
+            default:
+            // code block
+          }
         }
       }
     }

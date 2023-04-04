@@ -57,15 +57,13 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
 
   const columns: any = [
     {
-      name: <span className="fw-bolder fs-13">Order Number</span>,
+      name: <span className='fw-bolder fs-13'>Order Number</span>,
       selector: (row: OrderRowType) => {
         return (
           <>
-            <div style={{ margin: '0px', fontWeight: '600' }}>
-              {row.orderNumber}
-            </div>
+            <div style={{ margin: '0px', fontWeight: '600' }}>{row.orderNumber}</div>
             {row.hasReturn && (
-              <span className="text-danger" style={{ opacity: '80%' }}>
+              <span className='text-danger' style={{ opacity: '80%' }}>
                 Return: <br />
                 {row.orderNumber}-RT
               </span>
@@ -83,46 +81,25 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
       },
     },
     {
-      name: <span className="fw-bolder fs-13">Status</span>,
+      name: <span className='fw-bolder fs-13'>Status</span>,
       selector: (row: OrderRowType) => {
         switch (row.orderStatus) {
           case 'shipped':
           case 'received':
-            return (
-              <span className="badge text-uppercase badge-soft-success p-2">
-                {` ${row.orderStatus} `}
-              </span>
-            )
+            return <span className='badge text-uppercase badge-soft-success p-2'>{` ${row.orderStatus} `}</span>
             break
           case 'Processed':
-            return (
-              <span className="badge text-uppercase badge-soft-secondary p-2">
-                {` ${row.orderStatus} `}
-              </span>
-            )
+            return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${row.orderStatus} `}</span>
             break
           case 'awaiting_shipment':
           case 'awating':
-            return (
-              <span className="badge text-uppercase badge-soft-secondary p-2">
-                {' awating '}
-              </span>
-            )
+            return <span className='badge text-uppercase badge-soft-secondary p-2'>{' awating '}</span>
             break
           case 'on_hold':
-            return (
-              <span className="badge text-uppercase badge-soft-warning p-2">
-                {' on hold '}
-              </span>
-            )
+            return <span className='badge text-uppercase badge-soft-warning p-2'>{' on hold '}</span>
             break
           case 'cancelled':
-            return (
-              <span className="badge text-uppercase badge-soft-danger p-2">
-                {' '}
-                {row.orderStatus}{' '}
-              </span>
-            )
+            return <span className='badge text-uppercase badge-soft-danger p-2'> {row.orderStatus} </span>
             break
           default:
             break
@@ -135,7 +112,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
       sortFunction: orderStatus,
     },
     {
-      name: <span className="fw-bolder fs-13">Type</span>,
+      name: <span className='fw-bolder fs-13'>Type</span>,
       selector: (row: OrderRowType) => row.orderType,
       sortable: true,
       wrap: true,
@@ -161,7 +138,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
       // ],
     },
     {
-      name: <span className="fw-bolder fs-13">Order Date</span>,
+      name: <span className='fw-bolder fs-13'>Order Date</span>,
       selector: (row: OrderRowType) => row.orderDate,
       sortable: true,
       wrap: true,
@@ -170,7 +147,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
       compact: true,
     },
     {
-      name: <span className="fw-bolder fs-13">Order Closed</span>,
+      name: <span className='fw-bolder fs-13'>Order Closed</span>,
       selector: (row: OrderRowType) => row.closedDate || '',
       sortable: true,
       wrap: true,
@@ -179,19 +156,22 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
       compact: true,
     },
     {
-      name: <span className="fw-bolder fs-13">Tracking Number</span>,
+      name: <span className='fw-bolder fs-13'>Tracking Number</span>,
       selector: (row: OrderRowType) => {
         let tracking
         {
           switch (true) {
+            case row.orderStatus == 'cancelled':
+              tracking = <></>
+              break
             case (row.orderType == 'Shipment' || row.orderType == 'Return') &&
               row.trackingNumber != '' &&
               !!row.trackingLink:
               tracking = (
-                <div className="trackingNumber_container">
+                <div className='trackingNumber_container'>
                   <img
                     src={row.carrierIcon}
-                    alt="carrier logo"
+                    alt='carrier logo'
                     style={{
                       width: '16px',
                       height: '16px',
@@ -200,9 +180,8 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
                   />
                   <a
                     href={`${row.trackingLink}${row.trackingNumber}`}
-                    target="blank"
-                    style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}
-                  >
+                    target='blank'
+                    style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
                     {row.trackingNumber}
                   </a>
                 </div>
@@ -213,10 +192,10 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
               !!row.trackingLink &&
               row.carrierService == 'Parcel Boxes':
               tracking = (
-                <div className="trackingNumber_container">
+                <div className='trackingNumber_container'>
                   <img
                     src={row.carrierIcon}
-                    alt="carrier logo"
+                    alt='carrier logo'
                     style={{
                       width: '16px',
                       height: '16px',
@@ -225,9 +204,8 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
                   />
                   <a
                     href={`${row.trackingLink}${row.trackingNumber}`}
-                    target="blank"
-                    style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}
-                  >
+                    target='blank'
+                    style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
                     {row.trackingNumber}
                   </a>
                 </div>
@@ -249,7 +227,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
       compact: true,
     },
     {
-      name: <span className="fw-bolder fs-13"># of Items</span>,
+      name: <span className='fw-bolder fs-13'># of Items</span>,
       selector: (row: OrderRowType) => row.totalItems || '',
       sortable: true,
       wrap: true,
@@ -258,7 +236,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
       compact: true,
     },
     {
-      name: <span className="fw-bolder fs-13">Total Charge</span>,
+      name: <span className='fw-bolder fs-13'>Total Charge</span>,
       selector: (row: OrderRowType) => `$ ${row.totalCharge.toFixed(2) || 0.0}`,
       sortable: true,
       wrap: true,
