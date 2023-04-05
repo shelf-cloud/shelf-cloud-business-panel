@@ -6,21 +6,19 @@ import Link from 'next/link'
 const StorageWidgets = ({ currentBalance, binsUSed }) => {
   return (
     <React.Fragment>
-      <Row className='w-100'>
+      <Row className='col-xs-12 col-md-5'>
         <Col>
-          <div className="shadow-none mb-0">
+          <div className='shadow-none mb-0'>
             <div className='p-0'>
-              <div className="d-flex align-items-center">
-                <div className="flex-grow-1 overflow-hidden">
-                  <p className="text-uppercase fw-semibold text-primary text-truncate mb-0">
-                    Total Storage Charges
-                  </p>
+              <div className='d-flex align-items-center'>
+                <div className='flex-grow-1 overflow-hidden'>
+                  <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>Current Storage Charges</p>
                 </div>
               </div>
-              <div className="d-flex align-items-end justify-content-between mt-1">
+              <div className='d-flex align-items-end justify-content-between mt-1'>
                 <div>
-                  <h4 className="fs-22 fw-semibold ff-secondary">
-                    <span className="counter-value">
+                  <h4 className='fs-22 fw-semibold ff-secondary'>
+                    <span className='counter-value'>
                       <CountUp
                         start={0}
                         prefix={'$'}
@@ -38,19 +36,17 @@ const StorageWidgets = ({ currentBalance, binsUSed }) => {
           </div>
         </Col>
         <Col>
-          <div className="shadow-none mb-0 border-start ps-3">
+          <div className='shadow-none mb-0 border-start ps-3'>
             <div className='p-0'>
-              <div className="d-flex align-items-center">
-                <div className="flex-grow-1 overflow-hidden">
-                  <p className="text-uppercase fw-semibold text-primary text-truncate mb-0">
-                    Total Bins Used
-                  </p>
+              <div className='d-flex align-items-center'>
+                <div className='flex-grow-1 overflow-hidden'>
+                  <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>Current Bins Used</p>
                 </div>
               </div>
-              <div className="d-flex align-items-end justify-content-between mt-1">
+              <div className='d-flex align-items-end justify-content-between mt-1'>
                 <div>
-                  <h4 className="fs-22 fw-semibold ff-secondary">
-                    <span className="counter-value">
+                  <h4 className='fs-22 fw-semibold ff-secondary'>
+                    <span className='counter-value'>
                       <CountUp
                         start={0}
                         // prefix={'$'}

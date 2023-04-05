@@ -12,6 +12,7 @@ import useSWR from 'swr'
 import InvoicesTable from '@components/InvoicesTable'
 import { InvoiceList } from '@typings'
 import { toast } from 'react-toastify'
+import InvoicesChart from '@components/InvoicesChart'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -41,6 +42,7 @@ const Invoices = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState([])
+  const [billingStatus, setBillingStatus] = useState([])
   const [serachValue, setSerachValue] = useState('')
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
@@ -58,10 +60,12 @@ const Invoices = ({ session }: Props) => {
   useEffect(() => {
     if (data?.error) {
       setAllData([])
+      setBillingStatus([])
       setPending(false)
       toast.error(data?.message)
     } else if (data) {
-      setAllData(data)
+      setAllData(data.invoices)
+      setBillingStatus(data.billingStatus)
       setPending(false)
     }
   }, [data])
@@ -80,25 +84,33 @@ const Invoices = ({ session }: Props) => {
               <Col lg={12}>
                 <Card>
                   <CardHeader>
-                    <form className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
-                      <div className='position-relative'>
-                        <Input
-                          type='text'
-                          className='form-control'
-                          placeholder='Search...'
-                          id='search-options'
-                          value={serachValue}
-                          onChange={(e) => setSerachValue(e.target.value)}
-                        />
-                        <span className='mdi mdi-magnify search-widget-icon'></span>
-                        <span
-                          className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none'
-                          id='search-close-options'></span>
-                      </div>
-                      <Button className='btn-soft-dark' onClick={() => setSerachValue('')}>
-                        Clear
-                      </Button>
-                    </form>
+                    {!pending && (
+                      <>
+                        <div className='col-xs-12 col-sm-6 col-lg-5 col-xl-4 col-xxl-3'>
+                          <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>Billing Status</p>
+                          <InvoicesChart billingStatus={billingStatus} />
+                        </div>
+                        <form className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
+                          <div className='position-relative'>
+                            <Input
+                              type='text'
+                              className='form-control'
+                              placeholder='Search...'
+                              id='search-options'
+                              value={serachValue}
+                              onChange={(e) => setSerachValue(e.target.value)}
+                            />
+                            <span className='mdi mdi-magnify search-widget-icon'></span>
+                            <span
+                              className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none'
+                              id='search-close-options'></span>
+                          </div>
+                          <Button className='btn-soft-dark' onClick={() => setSerachValue('')}>
+                            Clear
+                          </Button>
+                        </form>
+                      </>
+                    )}
                   </CardHeader>
                   <CardBody>
                     <InvoicesTable filteredItems={filteredItems} pending={pending} />

@@ -90,8 +90,8 @@ const Storage = ({ session }: Props) => {
               <Col lg={12}>
                 <Card>
                   <CardHeader>
-                    <div className='d-flex flex-column flex-md-row justify-content-between gap-0 gap-md-5 mb-2'>
-                      <div className='col-xs-12 col-md-4'>
+                    <div className='d-flex flex-column flex-md-row justify-content-start gap-0 gap-md-5 mb-2'>
+                      <div className='col-xs-12 col-sm-6 col-lg-5 col-xl-4 col-xxl-3'>
                         <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>
                           Monthly Storage Fees
                         </p>
