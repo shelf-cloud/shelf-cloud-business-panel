@@ -7,7 +7,7 @@ function InvoicesChart({ billingStatus }) {
   const series = billingStatus
 
   const options = {
-    labels: ['Pending', 'Overdue', 'Not Invoiced'],
+    labels: ['Pending Payment', 'Overdue Payment', 'Not Invoiced'],
     // chart: {
     //   toolbar: {
     //     show: false,
@@ -28,20 +28,19 @@ function InvoicesChart({ billingStatus }) {
     //     },
     //   },
     // },
-    // dataLabels: {
-    //   enabled: true,
-    //   formatter: function (val) {
-    //     if (val > 0) {
-    //       return FormatCurrency.format(val)
-    //     }
-    //   },
-    //   textAnchor: 'start',
-    //   style: {
-    //     fontSize: '14px',
-    //     fontWeight: 'bold',
-    //     colors: ['#000'],
-    //   },
-    // },
+    dataLabels: {
+      enabled: true,
+      formatter: function (val, opt) {
+        console.log(opt)
+        return FormatCurrency.format(billingStatus[opt.seriesIndex])
+      },
+      // textAnchor: 'start',
+      // style: {
+      //   fontSize: '14px',
+      //   fontWeight: 'bold',
+      //   colors: ['#000'],
+      // },
+    },
     colors: ['#4481FD', '#F06548', '#0AB39C'],
     // grid: {
     //   show: true,
