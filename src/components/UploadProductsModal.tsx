@@ -54,22 +54,22 @@ const UploadProductsModal = ({}: Props) => {
               ;() => {}
               break
             case 5:
-              ;/^[0-9]?[.]?[0-9]{1,}$/.test(rowValues[v])
+              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v])
                 ? () => {}
                 : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
             case 6:
-              ;/^[0-9]?[.]?[0-9]{1,}$/.test(rowValues[v])
+              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v])
                 ? () => {}
                 : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
             case 7:
-              ;/^[0-9]?[.]?[0-9]{1,}$/.test(rowValues[v])
+              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v])
                 ? () => {}
                 : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
             case 8:
-              ;/^[0-9]?[.]?[0-9]{1,}$/.test(rowValues[v])
+              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v])
                 ? () => {}
                 : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
@@ -79,22 +79,22 @@ const UploadProductsModal = ({}: Props) => {
                 : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
             case 10:
-              ;/^[0-9]?[.]?[0-9]{1,}$/.test(rowValues[v])
+              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v])
                 ? () => {}
                 : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
             case 11:
-              ;/^[0-9]?[.]?[0-9]{1,}$/.test(rowValues[v])
+              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v])
                 ? () => {}
                 : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
             case 12:
-              ;/^[0-9]?[.]?[0-9]{1,}$/.test(rowValues[v])
+              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v])
                 ? () => {}
                 : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
             case 13:
-              ;/^[0-9]?[.]?[0-9]{1,}$/.test(rowValues[v])
+              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v])
                 ? () => {}
                 : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
@@ -204,7 +204,11 @@ const UploadProductsModal = ({}: Props) => {
           You can import products in bulk by uploading a CSV file using the{' '}
           <a
             className='text-primary'
-            href='https://docs.google.com/spreadsheets/d/1eHz260ce5orrlv8Jc_rx0xc1uiYB_U5V21dB72lpi_w/template/preview'
+            href={
+              state.currentRegion == 'us'
+                ? 'https://docs.google.com/spreadsheets/d/1eHz260ce5orrlv8Jc_rx0xc1uiYB_U5V21dB72lpi_w/template/preview'
+                : 'https://docs.google.com/spreadsheets/d/1fCb_bxaFt3P2O5FPiPIInESBB8vFIPtQKUU86N2P8UQ/template/preview'
+            }
             target={'_blank'}
             rel='noreferrer'>
             template

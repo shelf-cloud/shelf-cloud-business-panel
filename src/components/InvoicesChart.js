@@ -41,7 +41,7 @@ function InvoicesChart({ billingStatus }) {
       //   colors: ['#000'],
       // },
     },
-    colors: ['#4481FD', '#F06548', '#0AB39C'],
+    colors: ['#0AB39C', '#F06548', '#4481FD'],
     // grid: {
     //   show: true,
     //   borderColor: '#000',

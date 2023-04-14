@@ -11,11 +11,12 @@ type Props = {
   filteredItems: wholesaleProductRow[]
   setAllData: (allData: wholesaleProductRow[]) => void
   pending: boolean
+  error: boolean
+  setError: (state: boolean) => void
 }
 
-const WholeSaleTable = ({ allData, filteredItems, setAllData, pending }: Props) => {
+const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError }: Props) => {
   const { state, setModalProductInfo }: any = useContext(AppContext)
-
   const handleOrderQty = (value: string, sku: string, qtyBox: number) => {
     if (Number(value) == 0 || value == '') {
       const newData: any = allData.map((item) => {
@@ -84,7 +85,7 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending }: Props) 
       classNames: ['bg-success bg-opacity-25'],
     },
     {
-      when: (row: wholesaleProductRow) => Number(row.orderQty) < 0,
+      when: (row: wholesaleProductRow) => Number(row.orderQty) < 0 || !Number.isInteger(Number(row.orderQty)),
       classNames: ['bg-danger bg-opacity-25'],
     },
   ]
@@ -181,11 +182,13 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending }: Props) 
               placeholder={(row?.maxOrderQty || 0) <= 0 ? 'Not Enough Qty' : 'Order Qty...'}
               value={row.orderQty}
               onChange={(e) => {
-                if (Number(e.target.value) < 0) {
+                if (Number(e.target.value) < 0 || !Number.isInteger(Number(e.target.value))) {
                   document.getElementById(`Error-${row.sku}`)!.style.display = 'block'
+                  setError(true)
                   handleOrderQty(e.target.value, row.sku, row?.qtyBox || 0)
                 } else {
                   document.getElementById(`Error-${row.sku}`)!.style.display = 'none'
+                  setError(false)
                   handleOrderQty(e.target.value, row.sku, row?.qtyBox || 0)
                 }
               }}
@@ -209,7 +212,7 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending }: Props) 
     },
     {
       name: <span className='fw-bold fs-5'>Total To Ship</span>,
-      selector: (row: wholesaleProductRow) => row.totalToShip,
+      selector: (row: wholesaleProductRow) => Number(row.totalToShip).toFixed(0),
       sortable: true,
       center: true,
       compact: true,

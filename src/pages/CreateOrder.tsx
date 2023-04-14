@@ -216,7 +216,7 @@ const CreateOrder = ({ session }: Props) => {
                           <div className='d-flex justify-content-end align-items-center'>
                             <div className='form-check form-check-inline form-switch form-switch-lg form-switch-warning mb-2 mb-md-0'>
                               <Label className='form-check-label' for='SwitchCheck4'>
-                                Select for PickUp Order
+                                Select for Local PickUp
                               </Label>
                               <Input
                                 className='form-check-input'

@@ -44,7 +44,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<wholesaleProductRow[]>([])
   const [serachValue, setSerachValue] = useState('')
-
+  const [error, setError] = useState(false)
   // const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   // const { data, error } = useSWR(
   //   state.user.businessId
@@ -127,6 +127,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                       </div>
                       <div>
                         <Button
+                          disabled={error}
                           className='fs-5 btn'
                           color='primary'
                           onClick={() => setWholeSaleOrderModal(!state.showWholeSaleOrderModal)}>
@@ -160,6 +161,8 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                       filteredItems={filteredItems}
                       setAllData={setAllData}
                       pending={pending}
+                      error={error}
+                      setError={setError}
                     />
                   </CardBody>
                 </Card>
