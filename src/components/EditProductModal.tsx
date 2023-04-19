@@ -42,6 +42,7 @@ function EditProductModal({}: Props) {
       asin: '',
       fnsku: '',
       barcode: '',
+      note: '',
       // weight: '',
       // width: '',
       // length: '',
@@ -299,6 +300,27 @@ function EditProductModal({}: Props) {
                     onBlur={validation.handleBlur}
                     value={validation.values.image || ''}
                     invalid={validation.touched.image && validation.errors.image ? true : false}
+                  />
+                  {validation.touched.image && validation.errors.image ? (
+                    <FormFeedback type='invalid'>{validation.errors.image}</FormFeedback>
+                  ) : null}
+                </FormGroup>
+              </Col>
+              <Col md={12}>
+                <FormGroup className='mb-3'>
+                  <Label htmlFor='lastNameinput' className='form-label'>
+                    Product Note
+                  </Label>
+                  <Input
+                    type='textarea'
+                    className='form-control'
+                    placeholder=''
+                    id='note'
+                    name='note'
+                    onChange={validation.handleChange}
+                    onBlur={validation.handleBlur}
+                    value={validation.values.note || ''}
+                    invalid={validation.touched.note && validation.errors.note ? true : false}
                   />
                   {validation.touched.image && validation.errors.image ? (
                     <FormFeedback type='invalid'>{validation.errors.image}</FormFeedback>

@@ -69,6 +69,7 @@ const Products = ({ session }: Props) => {
           Image: product.image,
           Title: product.title,
           SKU: product.sku,
+          note: product.note,
           ASIN: product.asin,
           FNSKU: product.fnSku,
           Barcode: product.barcode,

@@ -124,6 +124,7 @@ export interface Product {
   title: string
   barcode: string
   sku: string
+  note: string
   asin: string
   fnSku: string
   quantity: number

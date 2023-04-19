@@ -5,6 +5,7 @@ import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import AppContext from '@context/AppContext'
 import { Button, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from 'reactstrap'
+import TooltipComponent from './constants/Tooltip'
 
 type Props = {
   tableData: ProductRowType[]
@@ -114,7 +115,11 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
         return (
           <div>
             <p style={{ margin: '0px', fontWeight: '800' }}>{row.Title}</p>
-            <p style={{ margin: '0px' }}>{row.SKU}</p>
+            <p style={{ margin: '0px' }} className='d-flex flex-row justify-content-start align-items-start'>
+              {row.SKU}{' '}
+              {row.note != '' && <i className='ri-information-fill ms-2 fs-5 text-warning' id={`tooltip${row.SKU}`}></i>}
+            </p>
+            {row.note != '' && <TooltipComponent target={`tooltip${row.SKU}`} text={row.note} />}
           </div>
         )
       },
@@ -138,7 +143,9 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
         return (
           <div>
             <p style={{ margin: '0px' }}>
-              <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/exec/obidos/ASIN${row.ASIN}`} target='blank'>
+              <a
+                href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/exec/obidos/ASIN${row.ASIN}`}
+                target='blank'>
                 {row.ASIN}
               </a>
             </p>
@@ -184,16 +191,28 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
         return (
           <div style={{ padding: '7px 0px' }}>
             <Row>
-              <span>Weight: {cell.unitDimensions.weight}  {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'lb' : 'kg')}</span>
+              <span>
+                Weight: {cell.unitDimensions.weight}{' '}
+                {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'lb' : 'kg')}
+              </span>
             </Row>
             <Row>
-              <span>Length: {cell.unitDimensions.length} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}</span>
+              <span>
+                Length: {cell.unitDimensions.length}{' '}
+                {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
+              </span>
             </Row>
             <Row>
-              <span>Width: {cell.unitDimensions.width} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}</span>
+              <span>
+                Width: {cell.unitDimensions.width}{' '}
+                {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
+              </span>
             </Row>
             <Row>
-              <span>Height: {cell.unitDimensions.height} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}</span>
+              <span>
+                Height: {cell.unitDimensions.height}{' '}
+                {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
+              </span>
             </Row>
           </div>
         )
@@ -208,16 +227,28 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
         return (
           <div style={{ padding: '7px 5px 7px 0px' }}>
             <Row>
-              <span>Weight: {cell.boxDimensions.weight} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'lb' : 'kg')}</span>
+              <span>
+                Weight: {cell.boxDimensions.weight}{' '}
+                {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'lb' : 'kg')}
+              </span>
             </Row>
             <Row>
-              <span>Length: {cell.boxDimensions.length} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}</span>
+              <span>
+                Length: {cell.boxDimensions.length}{' '}
+                {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
+              </span>
             </Row>
             <Row>
-              <span>Width: {cell.boxDimensions.width} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}</span>
+              <span>
+                Width: {cell.boxDimensions.width}{' '}
+                {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
+              </span>
             </Row>
             <Row>
-              <span>Height: {cell.boxDimensions.height} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}</span>
+              <span>
+                Height: {cell.boxDimensions.height}{' '}
+                {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
+              </span>
             </Row>
           </div>
         )
@@ -248,7 +279,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
                 className='edit-item-btn'
                 onClick={() => setModalProductDetails(row.btns.inventoryId, state.user.businessId, row.btns.sku)}>
                 <i className='ri-pencil-fill align-middle me-2 fs-5 text-muted'></i>
-                <span className='fs-6 fw-normal'>Edit</span >
+                <span className='fs-6 fw-normal'>Edit</span>
               </DropdownItem>
               {(row.Quantity.quantity == 0 || !row.btns.state) && (
                 <DropdownItem
