@@ -132,7 +132,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
             isPallets: values.type == 'LTL' ? true : false,
             numberOfPallets: values.type == 'LTL' ? values.numberOfPallets : 0,
             isthird: values.isThird == 'true' ? true : false,
-            thirdInfo: values.thirdInfo == 'true' ? values.thirdInfo : '',
+            thirdInfo: values.isThird == 'true' ? values.thirdInfo : '',
             labelsName:
               values.isThird == 'false'
                 ? `etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`

@@ -3,6 +3,7 @@ import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
 // import Animation from '@components/Common/Animation'
 import { OrderRowType, ShipmentOrderItem } from '@typings'
 import AppContext from '@context/AppContext'
+import TooltipComponent from './constants/Tooltip'
 // import dynamic from 'next/dynamic';
 // const Animation = dynamic(() => import('@components/Common/Animation'), {
 //     ssr: false
@@ -58,7 +59,20 @@ const ShipmentType = ({ data }: Props) => {
                 <table className='table table-sm table-borderless table-nowrap mb-0'>
                   <tbody>
                     <tr className='border-bottom pb-2'>
-                      <td className='text-muted'>Pick Pack Charge</td>
+                      <td className='text-muted d-flex flex-row justify-content-start align-items-start'>
+                        Pick Pack Charge
+                        {data.chargesFees && (
+                          <>
+                            <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltip${data.orderId}`}></i>
+                            <TooltipComponent
+                              target={`tooltip${data.orderId}`}
+                              text={`$${data.chargesFees.orderCost?.toFixed(
+                                2
+                              )} first item + $${data.chargesFees.extraItemOrderCost?.toFixed(2)} addt'l.`}
+                            />
+                          </>
+                        )}
+                      </td>
                       <td className='fw-semibold text-end'>$ {data.pickpackCharge.toFixed(2)}</td>
                     </tr>
                     <tr className='border-bottom pb-2'>

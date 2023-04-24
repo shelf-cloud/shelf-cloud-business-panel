@@ -169,6 +169,24 @@ export interface OrderItem {
   quantity: number
   businessId: number
 }
+
+interface ChargesFees {
+  orderCost?: number
+  extraItemOrderCost?: number
+  shippingPercentageCost?: number
+  palletCost?: number
+  labelCost?: number
+  parcelBoxCost?: number
+  '40HQ-FL'?: number
+  '40HQ-P'?: number
+  '20HQ-FL'?: number
+  '20HQ-P'?: number
+  receivingPallets?: number
+  receivingManHour?: number
+  receivingPalletCost?: number
+  receivingWrapService?: number
+}
+
 export interface OrderRowType {
   carrierIcon: string
   trackingLink: string
@@ -189,6 +207,7 @@ export interface OrderRowType {
   receivingWrapService: number
   manHour: number
   extraCharge: number
+  chargesFees: ChargesFees
   shipName: string
   shipStreet: string
   shipCity: string
