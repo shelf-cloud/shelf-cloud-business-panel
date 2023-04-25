@@ -238,6 +238,7 @@ export interface OrderRowType {
   isThird: boolean
   thirdInfo: string
   labelsName: string
+  palletLabelsName?: string
   hasReturn: boolean
   extraComment: string
 }

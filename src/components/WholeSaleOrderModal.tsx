@@ -13,6 +13,7 @@ import {
   ModalBody,
   ModalHeader,
   Row,
+  Spinner,
 } from 'reactstrap'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
@@ -36,7 +37,10 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
   const { data: session } = useSession()
   const { state, setWholeSaleOrderModal }: any = useContext(AppContext)
   const [selectedFiles, setselectedFiles] = useState([])
+  const [palletSelectedFiles, setPalletSelectedFiles] = useState([])
   const [errorFile, setErrorFile] = useState(false)
+  const [errorPalletFile, setErrorPalletFile] = useState(false)
+  const [loading, setloading] = useState(false)
 
   const TotalMasterBoxes = orderProducts.reduce(
     (total: number, item: wholesaleProductRow) => total + Number(item.orderQty),
@@ -81,11 +85,19 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
       hasProducts: Yup.number().min(1, 'To create an order, you must add at least one product'),
     }),
     onSubmit: async (values, { resetForm }) => {
+      setloading(true)
       if (values.isThird == 'false' && selectedFiles.length == 0) {
         setErrorFile(true)
         return
       }
       setErrorFile(false)
+
+      if (values.type == 'LTL' && palletSelectedFiles.length == 0) {
+        setErrorPalletFile(true)
+        return
+      }
+      setErrorPalletFile(false)
+
       const docTime = moment().format('DD-MM-YYYY-HH-mm-ss-a')
 
       if (values.isThird == 'false') {
@@ -94,8 +106,18 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
           `shelf-cloud/etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
         )
         await uploadBytes(storageRef, selectedFiles[0]).then((_snapshot) => {
-          toast.success('Successfully uploaded labels!')
+          toast.success('Successfully uploaded Shipping labels!')
         })
+
+        if (values.type == 'LTL') {
+          const storageRef = ref(
+            storage,
+            `shelf-cloud/pallet-etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
+          )
+          await uploadBytes(storageRef, palletSelectedFiles[0]).then((_snapshot) => {
+            toast.success('Successfully uploaded Pallet labels!')
+          })
+        }
       }
 
       const response = await axios.post(
@@ -137,6 +159,10 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
               values.isThird == 'false'
                 ? `etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
                 : '',
+            palletLabels:
+              values.isThird == 'false' && values.type == 'LTL'
+                ? `pallet-etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
+                : '',
             orderProducts: orderProducts.map((product) => {
               return {
                 sku: product.sku,
@@ -158,6 +184,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
       } else {
         toast.error(response.data.msg)
       }
+      setloading(false)
     },
   })
 
@@ -176,6 +203,16 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
     setselectedFiles(files)
   }
 
+  function handlePalletAcceptedFiles(files: any) {
+    files.map((file: any) =>
+      Object.assign(file, {
+        preview: URL.createObjectURL(file),
+        formattedSize: formatBytes(file.size),
+      })
+    )
+    setPalletSelectedFiles(files)
+  }
+
   function formatBytes(bytes: any, decimals = 2) {
     if (bytes === 0) return '0 Bytes'
     const k = 1024
@@ -189,7 +226,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
   return (
     <Modal
       fade={false}
-      size='lg'
+      size='xl'
       id='myModal'
       isOpen={state.showWholeSaleOrderModal}
       toggle={() => {
@@ -300,62 +337,104 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
               </Col>
             </Col>
             <Col md={6}>
-              <Dropzone
-                multiple={false}
-                onDrop={(acceptedFiles) => {
-                  handleAcceptedFiles(acceptedFiles)
-                }}>
-                {({ getRootProps }) => (
-                  <div className='dropzone dz-clickable cursor-pointer'>
-                    <div className='dz-message needsclick' {...getRootProps()}>
-                      <div className='mb-3'>
-                        <i className='display-4 text-muted ri-upload-cloud-2-fill' />
+              <Row>
+                <Col>
+                  <Dropzone
+                    multiple={false}
+                    onDrop={(acceptedFiles) => {
+                      handleAcceptedFiles(acceptedFiles)
+                    }}>
+                    {({ getRootProps }) => (
+                      <div className='dropzone dz-clickable cursor-pointer'>
+                        <div className='dz-message needsclick' {...getRootProps()}>
+                          <div className='mb-3'>
+                            <i className='display-4 text-muted ri-upload-cloud-2-fill' />
+                          </div>
+                          <h4>Upload Shipping Labels. Drop Only PDF files here or click to upload.</h4>
+                        </div>
                       </div>
-                      <h4>Upload Shipping Labels. Drop Only PDF files here or click to upload.</h4>
-                    </div>
+                    )}
+                  </Dropzone>
+                  <div className='list-unstyled mb-0' id='file-previews'>
+                    {selectedFiles.map((f: any, i) => {
+                      return (
+                        <Card
+                          className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete'
+                          key={i + '-file'}>
+                          <div className='p-2'>
+                            <Row className='align-items-center'>
+                              <Col className='d-flex justify-content-between align-items-center'>
+                                <div>
+                                  <p className='text-muted font-weight-bold m-0'>{f.name}</p>
+                                  <p className='mb-0'>
+                                    <strong>{f.formattedSize}</strong>
+                                  </p>
+                                </div>
+                                <div>
+                                  <Button color='light' className='btn-icon' onClick={() => setselectedFiles([])}>
+                                    <i className=' ri-close-line' />
+                                  </Button>
+                                </div>
+                              </Col>
+                            </Row>
+                          </div>
+                        </Card>
+                      )
+                    })}
                   </div>
-                )}
-              </Dropzone>
-              <div className='list-unstyled mb-0' id='file-previews'>
-                {selectedFiles.map((f: any, i) => {
-                  return (
-                    <Card
-                      className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete'
-                      key={i + '-file'}>
-                      <div className='p-2'>
-                        <Row className='align-items-center'>
-                          {/* <Col className="col-auto">
-                            <Image
-                              data-dz-thumbnail=""
-                              height={'40px'}
-                              width={'40px'}
-                              objectFit="cover"
-                              objectPosition="center"
-                              className="avatar-sm rounded bg-light"
-                              alt={f.name}
-                              src={'https://electrostoregroup.com/Onix/img/no-image.png'}
-                            />
-                          </Col> */}
-                          <Col className='d-flex justify-content-between align-items-center'>
-                            <div>
-                              <p className='text-muted font-weight-bold m-0'>{f.name}</p>
-                              <p className='mb-0'>
-                                <strong>{f.formattedSize}</strong>
-                              </p>
+                  {errorFile && <p className='text-danger m-0'>You must Upload the FBA Labels to create order.</p>}
+                </Col>
+                <Col>
+                  {validation.values.type == 'LTL' && (
+                    <Dropzone
+                      multiple={false}
+                      onDrop={(acceptedFiles) => {
+                        handlePalletAcceptedFiles(acceptedFiles)
+                      }}>
+                      {({ getRootProps }) => (
+                        <div className='dropzone dz-clickable cursor-pointer'>
+                          <div className='dz-message needsclick' {...getRootProps()}>
+                            <div className='mb-3'>
+                              <i className='display-4 text-muted ri-upload-cloud-2-fill' />
                             </div>
-                            <div>
-                              <Button color='light' className='btn-icon' onClick={() => setselectedFiles([])}>
-                                <i className=' ri-close-line' />
-                              </Button>
-                            </div>
-                          </Col>
-                        </Row>
-                      </div>
-                    </Card>
-                  )
-                })}
-              </div>
-              {errorFile && <p className='text-danger m-0'>You must Upload the FBA Labels to create order.</p>}
+                            <h4>Upload Pallet Labels. Drop Only PDF files here or click to upload.</h4>
+                          </div>
+                        </div>
+                      )}
+                    </Dropzone>
+                  )}
+                  <div className='list-unstyled mb-0' id='file-previews'>
+                    {palletSelectedFiles.map((f: any, i) => {
+                      return (
+                        <Card
+                          className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete'
+                          key={i + '-file'}>
+                          <div className='p-2'>
+                            <Row className='align-items-center'>
+                              <Col className='d-flex justify-content-between align-items-center'>
+                                <div>
+                                  <p className='text-muted font-weight-bold m-0'>{f.name}</p>
+                                  <p className='mb-0'>
+                                    <strong>{f.formattedSize}</strong>
+                                  </p>
+                                </div>
+                                <div>
+                                  <Button color='light' className='btn-icon' onClick={() => setPalletSelectedFiles([])}>
+                                    <i className=' ri-close-line' />
+                                  </Button>
+                                </div>
+                              </Col>
+                            </Row>
+                          </div>
+                        </Card>
+                      )
+                    })}
+                  </div>
+                  {errorPalletFile && (
+                    <p className='text-danger m-0'>You must Upload the Pallet Labels to create order.</p>
+                  )}
+                </Col>
+              </Row>
             </Col>
             <Col md={12}>
               {validation.values.isThird == 'true' && (
@@ -408,8 +487,8 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
             </Col>
             <Col md={12}>
               <div className='text-end'>
-                <Button type='submit' color='success' className='btn'>
-                  Confirm Order
+                <Button disabled={loading} type='submit' color='success' className='btn'>
+                  {loading ? <Spinner color='#fff' /> : 'Confirm Order'}
                 </Button>
               </div>
             </Col>
