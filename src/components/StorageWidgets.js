@@ -2,17 +2,48 @@ import React from 'react'
 import { Card, CardBody, Col, Row } from 'reactstrap'
 import CountUp from 'react-countup'
 import Link from 'next/link'
+import moment from 'moment'
 
-const StorageWidgets = ({ currentBalance, binsUSed }) => {
+const StorageWidgets = ({ previousCharge, previousChargeDate, currentBalance, binsUSed }) => {
+  const currentMonthDays = moment().format('D') - 1
   return (
     <React.Fragment>
-      <Row className='col-xs-12 col-md-5'>
+      <Row className='col-xs-12 col-md-6 col-xl-8 gap-2'>
         <Col>
-          <div className='shadow-none mb-0'>
+          <div className='shadow-none mb-0 border-start ps-2'>
             <div className='p-0'>
               <div className='d-flex align-items-center'>
                 <div className='flex-grow-1 overflow-hidden'>
-                  <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>Current Storage Charges</p>
+                  <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>Previous Month Charge</p>
+                </div>
+              </div>
+              <div className='d-flex align-items-end justify-content-between mt-1'>
+                <div>
+                  <h4 className='fs-22 fw-semibold ff-secondary'>
+                    <span className='counter-value'>
+                      <CountUp
+                        start={0}
+                        prefix={'$'}
+                        // suffix={item.suffix}
+                        separator={'.'}
+                        end={previousCharge}
+                        decimals={2}
+                        duration={1}
+                      />
+                    </span>
+                  </h4>
+                  <span className='text-muted'>{previousChargeDate}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Col>
+        <Col>
+          <div className='shadow-none mb-0 border-start ps-2'>
+            <div className='p-0'>
+              <div className='d-flex align-items-center'>
+                <div className='flex-grow-1 overflow-hidden'>
+                  <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>Current Storage Balance</p>
                 </div>
               </div>
               <div className='d-flex align-items-end justify-content-between mt-1'>
@@ -30,13 +61,14 @@ const StorageWidgets = ({ currentBalance, binsUSed }) => {
                       />
                     </span>
                   </h4>
+                  <span className='text-muted'>{currentMonthDays} accumulated days</span>
                 </div>
               </div>
             </div>
           </div>
         </Col>
         <Col>
-          <div className='shadow-none mb-0 border-start ps-3'>
+          <div className='shadow-none mb-0 border-start ps-2'>
             <div className='p-0'>
               <div className='d-flex align-items-center'>
                 <div className='flex-grow-1 overflow-hidden'>

@@ -90,14 +90,14 @@ const Storage = ({ session }: Props) => {
               <Col lg={12}>
                 <Card>
                   <CardHeader>
-                    <div className='d-flex flex-column flex-md-row justify-content-start gap-0 gap-md-5 mb-2'>
+                    <div className='d-flex flex-column flex-md-row justify-content-start gap-0 gap-md-4 mb-2'>
                       <div className='col-xs-12 col-sm-6 col-lg-5 col-xl-4 col-xxl-3'>
                         <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>
                           Monthly Storage Fees
                         </p>
                         <StorageChart storageInvoices={storageInvoices} storageDates={storageDates} />
                       </div>
-                      <StorageWidgets currentBalance={data?.totalCurrentBalance} binsUSed={data?.totalBinsUSed} />
+                      <StorageWidgets previousCharge={storageInvoices[storageInvoices.length-1]} previousChargeDate={storageDates[storageDates.length-1]} currentBalance={data?.dailyStorageBalance} binsUSed={data?.totalBinsUSed} />
                     </div>
                     <form className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
                       <div className='position-relative'>
