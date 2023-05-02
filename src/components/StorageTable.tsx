@@ -113,7 +113,7 @@ const StorageTable = ({ tableData, pending }: Props) => {
       center: true,
     },
     {
-      name: <span className="fw-bold fs-5">Current Balance</span>,
+      name: <span className="fw-bold fs-5">Estimated Monthly Cost</span>,
       selector: (row: StorageRowProduct) =>
         `$ ${row.currentBalance.toFixed(2)}`,
       sortable: true,
