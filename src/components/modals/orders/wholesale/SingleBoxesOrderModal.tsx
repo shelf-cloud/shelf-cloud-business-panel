@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import {
   Button,
-  Card,
   Col,
   Form,
   FormFeedback,
@@ -23,23 +22,22 @@ import { toast } from 'react-toastify'
 import { wholesaleProductRow } from '@typings'
 import router from 'next/router'
 import moment from 'moment'
-import Dropzone from 'react-dropzone'
-// import Image from 'next/image'
-import { ref, uploadBytes } from 'firebase/storage'
-import { storage } from '@firebase'
-import { useSession } from 'next-auth/react'
+// import Dropzone from 'react-dropzone'
+// import { ref, uploadBytes } from 'firebase/storage'
+// import { storage } from '@firebase'
+// import { useSession } from 'next-auth/react'
 
 type Props = {
   orderNumberStart: string
   orderProducts: wholesaleProductRow[]
 }
-const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
-  const { data: session } = useSession()
-  const { state, setWholeSaleOrderModal }: any = useContext(AppContext)
-  const [selectedFiles, setselectedFiles] = useState([])
-  const [palletSelectedFiles, setPalletSelectedFiles] = useState([])
-  const [errorFile, setErrorFile] = useState(false)
-  const [errorPalletFile, setErrorPalletFile] = useState(false)
+const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
+  // const { data: session } = useSession()
+  const { state, setSingleBoxesOrderModal }: any = useContext(AppContext)
+  // const [selectedFiles, setselectedFiles] = useState([])
+  // const [palletSelectedFiles, setPalletSelectedFiles] = useState([])
+  // const [errorFile, setErrorFile] = useState(false)
+  // const [errorPalletFile, setErrorPalletFile] = useState(false)
   const [loading, setloading] = useState(false)
 
   const TotalMasterBoxes = orderProducts.reduce(
@@ -51,6 +49,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
     (total: number, item: wholesaleProductRow) => total + Number(item.totalToShip),
     0
   )
+
   useEffect(() => {
     return () => {
       validation.resetForm()
@@ -86,42 +85,45 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
     }),
     onSubmit: async (values, { resetForm }) => {
       setloading(true)
-      if (values.isThird == 'false' && selectedFiles.length == 0) {
-        setErrorFile(true)
-        return
-      }
-      setErrorFile(false)
 
-      if (values.type == 'LTL' && palletSelectedFiles.length == 0) {
-        setErrorPalletFile(true)
-        return
-      }
-      setErrorPalletFile(false)
+      // if (values.isThird == 'false' && selectedFiles.length == 0) {
+      //   setErrorFile(true)
+      //   setloading(false)
+      //   return
+      // }
+      // setErrorFile(false)
 
-      const docTime = moment().format('DD-MM-YYYY-HH-mm-ss-a')
+      // if (values.type == 'LTL' && palletSelectedFiles.length == 0) {
+      //   setErrorPalletFile(true)
+      //   setloading(false)
+      //   return
+      // }
+      // setErrorPalletFile(false)
 
-      if (values.isThird == 'false') {
-        const storageRef = ref(
-          storage,
-          `shelf-cloud/etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
-        )
-        await uploadBytes(storageRef, selectedFiles[0]).then((_snapshot) => {
-          toast.success('Successfully uploaded Shipping labels!')
-        })
+      // const docTime = moment().format('DD-MM-YYYY-HH-mm-ss-a')
 
-        if (values.type == 'LTL') {
-          const storageRef = ref(
-            storage,
-            `shelf-cloud/pallet-etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
-          )
-          await uploadBytes(storageRef, palletSelectedFiles[0]).then((_snapshot) => {
-            toast.success('Successfully uploaded Pallet labels!')
-          })
-        }
-      }
+      // if (values.isThird == 'false') {
+      //   const storageRef = ref(
+      //     storage,
+      //     `shelf-cloud/etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
+      //   )
+      //   await uploadBytes(storageRef, selectedFiles[0]).then((_snapshot) => {
+      //     toast.success('Successfully uploaded Shipping labels!')
+      //   })
+
+      //   if (values.type == 'LTL') {
+      //     const storageRef = ref(
+      //       storage,
+      //       `shelf-cloud/pallet-etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
+      //     )
+      //     await uploadBytes(storageRef, palletSelectedFiles[0]).then((_snapshot) => {
+      //       toast.success('Successfully uploaded Pallet labels!')
+      //     })
+      //   }
+      // }
 
       const response = await axios.post(
-        `api/createWholesaleOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`,
+        `api/createWholesaleOrderIndividualUnits?region=${state.currentRegion}&businessId=${state.user.businessId}`,
         {
           shippingProducts: orderProducts.map((product) => {
             return {
@@ -155,14 +157,8 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
             numberOfPallets: values.type == 'LTL' ? values.numberOfPallets : 0,
             isthird: values.isThird == 'true' ? true : false,
             thirdInfo: values.isThird == 'true' ? values.thirdInfo : '',
-            labelsName:
-              values.isThird == 'false'
-                ? `etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
-                : '',
-            palletLabels:
-              values.isThird == 'false' && values.type == 'LTL'
-                ? `pallet-etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
-                : '',
+            labelsName: '',
+            palletLabels: '',
             orderProducts: orderProducts.map((product) => {
               return {
                 sku: product.sku,
@@ -177,7 +173,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
       )
 
       if (!response.data.error) {
-        setWholeSaleOrderModal(false)
+        setSingleBoxesOrderModal(false)
         toast.success(response.data.msg)
         resetForm()
         router.push('/Shipments')
@@ -193,52 +189,52 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
     validation.handleSubmit()
   }
 
-  function handleAcceptedFiles(files: any) {
-    files.map((file: any) =>
-      Object.assign(file, {
-        preview: URL.createObjectURL(file),
-        formattedSize: formatBytes(file.size),
-      })
-    )
-    setselectedFiles(files)
-  }
+  // function handleAcceptedFiles(files: any) {
+  //   files.map((file: any) =>
+  //     Object.assign(file, {
+  //       preview: URL.createObjectURL(file),
+  //       formattedSize: formatBytes(file.size),
+  //     })
+  //   )
+  //   setselectedFiles(files)
+  // }
 
-  function handlePalletAcceptedFiles(files: any) {
-    files.map((file: any) =>
-      Object.assign(file, {
-        preview: URL.createObjectURL(file),
-        formattedSize: formatBytes(file.size),
-      })
-    )
-    setPalletSelectedFiles(files)
-  }
+  // function handlePalletAcceptedFiles(files: any) {
+  //   files.map((file: any) =>
+  //     Object.assign(file, {
+  //       preview: URL.createObjectURL(file),
+  //       formattedSize: formatBytes(file.size),
+  //     })
+  //   )
+  //   setPalletSelectedFiles(files)
+  // }
 
-  function formatBytes(bytes: any, decimals = 2) {
-    if (bytes === 0) return '0 Bytes'
-    const k = 1024
-    const dm = decimals < 0 ? 0 : decimals
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+  // function formatBytes(bytes: any, decimals = 2) {
+  //   if (bytes === 0) return '0 Bytes'
+  //   const k = 1024
+  //   const dm = decimals < 0 ? 0 : decimals
+  //   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
 
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
-  }
+  //   const i = Math.floor(Math.log(bytes) / Math.log(k))
+  //   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
+  // }
 
   return (
     <Modal
       fade={false}
       size='xl'
       id='myModal'
-      isOpen={state.showWholeSaleOrderModal}
+      isOpen={state.showSingleBoxesOrderModal}
       toggle={() => {
-        setWholeSaleOrderModal(!state.showWholeSaleOrderModal)
+        setSingleBoxesOrderModal(!state.showSingleBoxesOrderModal)
       }}>
       <ModalHeader
         toggle={() => {
-          setWholeSaleOrderModal(!state.showWholeSaleOrderModal)
+          setSingleBoxesOrderModal(!state.showSingleBoxesOrderModal)
         }}
         className='modal-title'
         id='myModalLabel'>
-        WholeSale Order with Master Boxes
+        WholeSale Order with Individual Units
       </ModalHeader>
       <ModalBody>
         <Form onSubmit={HandleAddProduct}>
@@ -337,7 +333,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
               </Col>
             </Col>
             <Col md={6}>
-              <Row>
+              {/* <Row>
                 <Col>
                   <Dropzone
                     multiple={false}
@@ -434,7 +430,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     <p className='text-danger m-0'>You must Upload the Pallet Labels to create order.</p>
                   )}
                 </Col>
-              </Row>
+              </Row> */}
             </Col>
             <Col md={12}>
               {validation.values.isThird == 'true' && (
@@ -458,14 +454,15 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
             </Col>
             <Col md={12}>
               <h5>Total SKUs in Order: {validation.values.hasProducts}</h5>
+              <span className='text-info fs-6 fw-light'>The distribution plan for boxes and items will be available after picking.</span>
               {validation.touched.hasProducts && validation.errors.hasProducts ? (
-                <p className='text-danger'>{validation.errors.hasProducts}</p>
+                <p className='text-light'>{validation.errors.hasProducts}</p>
               ) : null}
               <table className='table align-middle table-responsive table-nowrap table-striped-columns'>
                 <thead>
                   <tr>
                     <th>SKU</th>
-                    <th className='text-center'>Master Boxes</th>
+                    <th className='text-center'>Individual Units</th>
                     <th className='text-center'>Total Qty To Ship</th>
                   </tr>
                 </thead>
@@ -499,4 +496,4 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
   )
 }
 
-export default WholeSaleOrderModal
+export default SingleBoxesOrderModal

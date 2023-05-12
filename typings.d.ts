@@ -187,6 +187,34 @@ interface ChargesFees {
   receivingWrapService?: number
 }
 
+interface Plan {
+  items: {
+    sku: string,
+    name: string,
+    cartons: {
+      boxId: number,
+      qtyInBox: number
+    }[]
+  }[],
+  cartons: {
+    box: {
+      width: number,
+      height: number,
+      length: number,
+      weight: number
+    },
+    skus: {
+      sku: string,
+      qtyInBox: number
+    }[],
+    boxId: number
+  }[]
+}
+interface IndividualUnitsPlan {
+  plan: Plan
+  state: string
+}
+
 export interface OrderRowType {
   carrierIcon: string
   trackingLink: string
@@ -241,6 +269,8 @@ export interface OrderRowType {
   palletLabelsName?: string
   hasReturn: boolean
   extraComment: string
+  individualUnitsPlan?: IndividualUnitsPlan
+  isIndividualUnits?: boolean
 }
 
 export interface ShipmentOrderItem {

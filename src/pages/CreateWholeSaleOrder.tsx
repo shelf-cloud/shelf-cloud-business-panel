@@ -1,18 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useContext, useMemo } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
 import { WholesaleProduct, wholesaleProductRow } from '@typings'
 import axios from 'axios'
 import Head from 'next/head'
 import 'react-toastify/dist/ReactToastify.min.css'
-import { Button, Card, CardBody, CardHeader, Col, Container, Input, Row } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
-// import useSWR from 'swr'
 import InventoryBinsModal from '@components/InventoryBinsModal'
-import WholeSaleTable2 from '@components/WholeSaleTable2'
-import WholeSaleOrderModal from '@components/WholeSaleOrderModal'
+import MasterBoxes from '@components/orders/wholesale/MasterBoxes'
+import SingleItems from '@components/orders/wholesale/SingleItems'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -39,27 +38,10 @@ type Props = {
 }
 
 const CreateWholeSaleOrder = ({ session }: Props) => {
-  const { state, setWholeSaleOrderModal }: any = useContext(AppContext)
+  const { state }: any = useContext(AppContext)
   const orderNumberStart = `${session?.user?.name.substring(0, 3).toUpperCase()}-`
   const [pending, setPending] = useState(true)
-  const [allData, setAllData] = useState<wholesaleProductRow[]>([])
-  const [serachValue, setSerachValue] = useState('')
-  const [error, setError] = useState(false)
-  // const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  // const { data, error } = useSWR(
-  //   state.user.businessId
-  //     ? `/api/getWholesaleInventory?businessId=${state.user.businessId}`
-  //     : null,
-  //   fetcher
-  // )
-
-  const filteredItems = useMemo(() => {
-    return allData.filter(
-      (item: wholesaleProductRow) =>
-        item?.title?.toLowerCase().includes(serachValue.toLowerCase()) ||
-        item?.sku?.toLowerCase().includes(serachValue.toLowerCase())
-    )
-  }, [allData, serachValue])
+  const [completeData, setCompleteData] = useState<wholesaleProductRow[]>([])
 
   useEffect(() => {
     const bringWholesaleInv = async () => {
@@ -84,21 +66,22 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
             }
             list.push(row)
           })
-          setAllData(list)
+          setCompleteData(list)
           setPending(false)
         }
       )
     }
     state.user.businessId && bringWholesaleInv()
     return () => {
-      setAllData([])
+      setCompleteData([])
       setPending(true)
     }
   }, [state.currentRegion, state.user.businessId])
 
-  const orderProducts = useMemo(() => {
-    return allData.filter((item: wholesaleProductRow) => Number(item?.orderQty) > 0)
-  }, [allData])
+  const [activeTab, setActiveTab] = useState('1')
+  const tabChange = (tab: any) => {
+    if (activeTab !== tab) setActiveTab(tab)
+  }
 
   const title = `Create WholeSale Order | ${session?.user?.name}`
   return (
@@ -114,56 +97,53 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
               <Col lg={12}>
                 <Card>
                   <CardHeader>
-                    <div className='d-flex justify-content-between align-center mt-3 mb-3'>
-                      <div>
-                        <h3 className='fs-3 fw-semibold text-primary'>Total SKUs in Order: {orderProducts.length}</h3>
-                        <h5 className='fs-5 fw-normal text-primary'>
-                          Total Qty to Ship in Order:{' '}
-                          {orderProducts.reduce(
-                            (total: number, item: wholesaleProductRow) => total + Number(item.totalToShip),
-                            0
-                          )}
-                        </h5>
-                      </div>
-                      <div>
-                        <Button
-                          disabled={error}
-                          className='fs-5 btn'
-                          color='primary'
-                          onClick={() => setWholeSaleOrderModal(!state.showWholeSaleOrderModal)}>
-                          Create Order
-                        </Button>
-                      </div>
-                    </div>
-                    <form className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
-                      <div className='position-relative'>
-                        <Input
-                          type='text'
-                          className='form-control'
-                          placeholder='Search...'
-                          id='search-options'
-                          value={serachValue}
-                          onChange={(e) => setSerachValue(e.target.value)}
-                        />
-                        <span className='mdi mdi-magnify search-widget-icon'></span>
-                        <span
-                          className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none'
-                          id='search-close-options'></span>
-                      </div>
-                      <Button className='btn-soft-dark' onClick={() => setSerachValue('')}>
-                        Clear
-                      </Button>
-                    </form>
+                    <Nav className='nav-tabs-custom rounded card-header-tabs border-bottom-0' role='tablist'>
+                      <NavItem style={{ cursor: 'pointer' }}>
+                        <NavLink
+                          className={activeTab == '1' ? 'text-primary fs-4' : 'text-muted fs-5'}
+                          onClick={() => {
+                            tabChange('1')
+                          }}>
+                          <>
+                            <i className='fas fa-home'></i>
+                            Master Boxes
+                          </>
+                        </NavLink>
+                      </NavItem>
+                      <NavItem style={{ cursor: 'pointer' }}>
+                        <NavLink
+                          to='#'
+                          className={activeTab == '2' ? 'text-primary fs-4' : 'text-muted fs-5'}
+                          onClick={() => {
+                            tabChange('2')
+                          }}
+                          type='button'>
+                          <>
+                            <i className='far fa-user'></i>
+                            Individual Units
+                          </>
+                        </NavLink>
+                      </NavItem>
+                    </Nav>
                   </CardHeader>
                   <CardBody>
-                    <WholeSaleTable2
-                      allData={allData}
-                      filteredItems={filteredItems}
-                      setAllData={setAllData}
-                      pending={pending}
-                      error={error}
-                      setError={setError}
-                    />
+                    <TabContent activeTab={activeTab}>
+                      <TabPane tabId='1'>
+                        <MasterBoxes
+                          completeData={completeData}
+                          pending={pending}
+                          orderNumberStart={orderNumberStart}
+                        />
+                      </TabPane>
+
+                      <TabPane tabId='2'>
+                        <SingleItems
+                          completeData={completeData}
+                          pending={pending}
+                          orderNumberStart={orderNumberStart}
+                        />
+                      </TabPane>
+                    </TabContent>
                   </CardBody>
                 </Card>
               </Col>
@@ -172,9 +152,6 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
         </div>
       </React.Fragment>
       {state.showInventoryBinsModal && <InventoryBinsModal />}
-      {state.showWholeSaleOrderModal && (
-        <WholeSaleOrderModal orderNumberStart={orderNumberStart} orderProducts={orderProducts} />
-      )}
     </div>
   )
 }

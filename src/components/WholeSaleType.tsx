@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
 // import Animation from '@components/Common/Animation'
 import { OrderRowType, ShipmentOrderItem } from '@typings'
 import TooltipComponent from './constants/Tooltip'
+import IndividualUnitsPlanModal from './modals/orders/shipments/IndividualUnitsPlanModal'
+import AppContext from '@context/AppContext'
+import UploadIndividualUnitsLabelsModal from './modals/orders/shipments/UploadIndividualUnitsLabelsModal'
 
 // import dynamic from 'next/dynamic';
 // const Animation = dynamic(() => import('@components/Common/Animation'), {
@@ -14,6 +17,7 @@ type Props = {
 }
 
 const WholeSaleType = ({ data }: Props) => {
+  const { state, setIndividualUnitsPlan, setUploadIndividualUnitsLabelsModal }: any = useContext(AppContext)
   const [serviceFee, setServiceFee] = useState('')
 
   useEffect(() => {
@@ -140,7 +144,11 @@ const WholeSaleType = ({ data }: Props) => {
                     </tr>
                     <tr>
                       <td className='fw-bold'>TOTAL</td>
-                      <td className='text-primary fw-semibold text-end'>$ {data.totalCharge.toFixed(2)}</td>
+                      <td className='text-primary fw-semibold text-end'>
+                        {data.isIndividualUnits && data.individualUnitsPlan?.state == 'Pending'
+                          ? 'Pending'
+                          : `$ ${data.totalCharge.toFixed(2)}`}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -208,6 +216,16 @@ const WholeSaleType = ({ data }: Props) => {
             </a>
           )}
 
+          {data.isIndividualUnits && (
+            <Button
+              disabled={data.individualUnitsPlan?.state == 'Pending' ? true : false}
+              color='info'
+              className='btn-label'
+              onClick={() => setIndividualUnitsPlan(!state.showIndividualUnitsPlan)}>
+              <i className='las la-boxes label-icon align-middle fs-3 me-2' />
+              {data.individualUnitsPlan?.state == 'Pending' ? 'Waiting for plan...' : 'Individual Units Plan'}
+            </Button>
+          )}
           {data.labelsName != '' && (
             <a
               href={`https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/shelf-cloud%2F${data.labelsName}?alt=media&token=837cdbcf-11ab-4555-9697-50f1c6a3d0e3`}
@@ -228,8 +246,20 @@ const WholeSaleType = ({ data }: Props) => {
               </Button>
             </a>
           )}
+          {(data.labelsName == '' || (data.numberPallets > 0 && data.palletLabelsName == '')) && (
+            <Button
+              disabled={data.individualUnitsPlan?.state == 'Pending' ? true : false}
+              color='secondary'
+              className='btn-label'
+              onClick={() => setUploadIndividualUnitsLabelsModal(!state.showUploadIndividualUnitsLabelsModal)}>
+              <i className='las la-toilet-paper label-icon align-middle fs-3 me-2' />
+              Upload Labels
+            </Button>
+          )}
         </Col>
       </Row>
+      {state.showIndividualUnitsPlan && <IndividualUnitsPlanModal individualUnitsPlan={data.individualUnitsPlan!} />}
+      {state.showUploadIndividualUnitsLabelsModal && <UploadIndividualUnitsLabelsModal data={data} />}
     </div>
   )
 }

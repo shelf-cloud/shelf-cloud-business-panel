@@ -34,11 +34,14 @@ const initialState = {
   showEditProductModal: false,
   modalProductDetails: {},
   showWholeSaleOrderModal: false,
+  showSingleBoxesOrderModal: false,
   modalCreateReturnInfo: {},
   showCreateReturnModal: false,
   showUploadProductsModal: false,
   orderNumberfromInvoices: null,
   showOrderDetailsOfInvoiceModal: false,
+  showIndividualUnitsPlan: false,
+  showUploadIndividualUnitsLabelsModal: false
 }
 
 const useInitialState = () => {
@@ -151,6 +154,13 @@ const useInitialState = () => {
       showWholeSaleOrderModal: payload,
     })
   }
+  
+  const setSingleBoxesOrderModal = (payload) => {
+    setState({
+      ...state,
+      showSingleBoxesOrderModal: payload,
+    })
+  }
 
   const setModalCreateReturnInfo = (businessId, orderId) => {
     setState({
@@ -184,6 +194,20 @@ const useInitialState = () => {
       showOrderDetailsOfInvoiceModal: payload,
     })
   }
+  
+  const setIndividualUnitsPlan = (payload) => {
+    setState({
+      ...state,
+      showIndividualUnitsPlan: payload,
+    })
+  }
+  
+  const setUploadIndividualUnitsLabelsModal = (payload) => {
+    setState({
+      ...state,
+      showUploadIndividualUnitsLabelsModal: payload,
+    })
+  }
 
   return {
     state,
@@ -196,10 +220,13 @@ const useInitialState = () => {
     addWholesaleProduct,
     removeWholesaleProduct,
     setWholeSaleOrderModal,
+    setSingleBoxesOrderModal,
     setModalCreateReturnInfo,
     setShowCreateReturnModal,
     setUploadProductsModal,
     setShowOrderDetailsOfInvoiceModal,
+    setIndividualUnitsPlan,
+    setUploadIndividualUnitsLabelsModal
   }
 }
 

@@ -15,9 +15,9 @@ type Props = {
   setError: (state: boolean) => void
 }
 
-const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError }: Props) => {
+const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending, setError }: Props) => {
   const { state, setModalProductInfo }: any = useContext(AppContext)
-  const handleOrderQty = (value: string, sku: string, qtyBox: number) => {
+  const handleOrderQty = (value: string, sku: string) => {
     if (Number(value) == 0 || value == '') {
       const newData: any = allData.map((item) => {
         if (item.sku === sku) {
@@ -32,7 +32,7 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError 
       setAllData(newData)
       return
     }
-    const totalQtyShip = Number(value) * qtyBox
+    const totalQtyShip = Number(value)
     const newData: any = allData.map((item) => {
       if (item.sku === sku) {
         item.orderQty = value
@@ -86,6 +86,10 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError 
     },
     {
       when: (row: wholesaleProductRow) => Number(row.orderQty) < 0 || !Number.isInteger(Number(row.orderQty)),
+      classNames: ['bg-danger bg-opacity-25'],
+    },
+    {
+      when: (row: wholesaleProductRow) => Number(row.orderQty) > (row?.quantity.quantity || 0),
       classNames: ['bg-danger bg-opacity-25'],
     },
   ]
@@ -159,17 +163,17 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError 
       center: true,
       sortFunction: quantitySort,
     },
-    {
-      name: <span className='fw-bold fs-5'>Qty/Box</span>,
-      selector: (row: wholesaleProductRow) => row.qtyBox,
-      sortable: true,
-      center: true,
-      compact: true,
-    },
+    // {
+    //   name: <span className='fw-bold fs-5'>Qty/Box</span>,
+    //   selector: (row: wholesaleProductRow) => row.qtyBox,
+    //   sortable: true,
+    //   center: true,
+    //   compact: true,
+    // },
     {
       name: (
         <span className='fw-bold fs-5 text-center'>
-          Order Qty <br /> (Master Boxes)
+          Order Qty <br /> (Individual Units)
         </span>
       ),
       selector: (row: wholesaleProductRow) => {
@@ -177,30 +181,30 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError 
           <>
             <Input
               type='number'
-              disabled={(row?.maxOrderQty || 0) <= 0 ? true : false}
+              disabled={(row?.quantity.quantity || 0) <= 0 ? true : false}
               className='form-control'
-              placeholder={(row?.maxOrderQty || 0) <= 0 ? 'Not Enough Qty' : 'Order Qty...'}
+              placeholder={(row?.quantity.quantity || 0) <= 0 ? 'Not Enough Qty' : 'Order Qty...'}
               value={row.orderQty}
               onChange={(e) => {
                 if (Number(e.target.value) < 0 || !Number.isInteger(Number(e.target.value))) {
-                  document.getElementById(`Error-${row.sku}`)!.style.display = 'block'
+                  document.getElementById(`ErrorSingle-${row.sku}`)!.style.display = 'block'
                   setError(true)
-                  handleOrderQty(e.target.value, row.sku, row?.qtyBox || 0)
+                  handleOrderQty(e.target.value, row.sku)
                 } else {
-                  document.getElementById(`Error-${row.sku}`)!.style.display = 'none'
+                  document.getElementById(`ErrorSingle-${row.sku}`)!.style.display = 'none'
                   setError(false)
-                  handleOrderQty(e.target.value, row.sku, row?.qtyBox || 0)
+                  handleOrderQty(e.target.value, row.sku)
                 }
               }}
-              max={row.maxOrderQty}
-              invalid={Number(row.orderQty) > (row?.maxOrderQty || 0) ? true : false}
+              max={row.quantity.quantity}
+              invalid={Number(row.orderQty) > (row?.quantity.quantity || 0) ? true : false}
             />
-            {Number(row.orderQty) > (row?.maxOrderQty || 0) ? (
+            {Number(row.orderQty) > (row?.quantity.quantity || 0) ? (
               <FormFeedback className='text-start' type='invalid'>
-                Not enough Master Boxes!
+                Not enough quantity!
               </FormFeedback>
             ) : null}
-            <span className='fs-6 fw-normal text-danger' id={`Error-${row.sku}`} style={{ display: 'none' }}>
+            <span className='fs-6 fw-normal text-danger' id={`ErrorSingle-${row.sku}`} style={{ display: 'none' }}>
               Quantity Error
             </span>
           </>
@@ -233,4 +237,4 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError 
   )
 }
 
-export default WholeSaleTable
+export default WholeSaleTableSingleItem

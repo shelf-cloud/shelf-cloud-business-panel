@@ -68,6 +68,11 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
                 {row.orderNumber}-RT
               </span>
             )}
+            {row.isIndividualUnits && (
+              <span className='text-secondary' style={{ opacity: '80%' }}>
+                Individual Units
+              </span>
+            )}
           </>
         )
       },
@@ -237,7 +242,19 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
     },
     {
       name: <span className='fw-bolder fs-13'>Total Charge</span>,
-      selector: (row: OrderRowType) => `$ ${row.totalCharge.toFixed(2) || 0.0}`,
+      selector: (row: OrderRowType) => {
+        let totalCharge
+        {
+          switch (true) {
+            case row.isIndividualUnits && row.individualUnitsPlan?.state == 'Pending':
+              totalCharge = 'Wating Box Plan'
+              break
+            default:
+              totalCharge = `$ ${row.totalCharge.toFixed(2) || 0.0}`
+          }
+        }
+        return totalCharge
+      },
       sortable: true,
       wrap: true,
       // grow: 1.5,
