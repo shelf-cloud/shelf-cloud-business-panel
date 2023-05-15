@@ -1,4 +1,5 @@
 import AppContext from '@context/AppContext'
+import Image from 'next/image'
 import { IndividualUnitsPlan } from '@typings'
 import { useContext } from 'react'
 import { Button, Col, Modal, ModalBody, ModalHeader } from 'reactstrap'
@@ -93,7 +94,7 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
   return (
     <Modal
       fade={false}
-      size='lg'
+      size='xl'
       id='myModal'
       isOpen={state.showIndividualUnitsPlan}
       toggle={() => {
@@ -107,13 +108,82 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
         id='myModalLabel'>
         Individual Units Plan
       </ModalHeader>
-      <ModalBody>
-        <h5 className='mt-2'>Box List</h5>
+      <ModalBody style={{ overflow: 'auto' }}>
         <Col>
-          <table className='table align-middle table-responsive table-nowrap'>
+          <table className='table table-sm align-middle table-responsive table-striped table-nowrap table-bordered'>
             <thead className='table-light text-center fw-semibold'>
               <tr>
-                <td>Box ID</td>
+                <td className='text-start'>SKU Details</td>
+                <td>Units Boxed</td>
+                {individualUnitsPlan.plan.cartons.map((box) => (
+                  <td key={box.boxId}>BOX {box.boxId}</td>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {individualUnitsPlan.plan.items.map((item) => (
+                <tr key={item.sku}>
+                  <td>
+                    <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
+                      <div
+                        style={{
+                          width: '50px',
+                          height: '40px',
+                          margin: '2px 0px',
+                          position: 'relative',
+                        }}>
+                        <Image
+                          src={item.image ? item.image : 'https://electrostoregroup.com/Onix/img/no-image.png'}
+                          alt='product Image'
+                          layout='fill'
+                          objectFit='contain'
+                          objectPosition='center'
+                        />
+                      </div>
+                      <div>
+                        <span className='fw-bold'>{item.sku}</span>
+                        <br />
+                        <span className='fw-normal'>{item.name}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td className='text-center'>{item.qtyToShip}</td>
+                  {individualUnitsPlan.plan.cartons.map((box, index) =>
+                    box.skus.some((sku) => sku.sku == item.sku) ? (
+                      box.skus.map(
+                        (sku) =>
+                          sku.sku == item.sku &&
+                          index + 1 == box.boxId && (
+                            <td key={box.boxId} className='text-center'>
+                              {sku.qtyInBox}
+                            </td>
+                          )
+                      )
+                    ) : (
+                      <td className='text-center text-muted'>-</td>
+                    )
+                  )}
+                </tr>
+              ))}
+              <tr style={{ backgroundColor: '#E5E7E9' }}>
+                <td className='fw-bold'>Total SKUs: {individualUnitsPlan.plan.items.length}</td>
+                <td className='fw-bold text-center'>
+                  {individualUnitsPlan.plan.items.reduce((total: number, item) => total + Number(item.qtyToShip), 0)}
+                </td>
+                {individualUnitsPlan.plan.cartons.map((box) => (
+                  <td key={box.boxId} className='fw-bold text-center'>
+                    {box.skus.reduce((total: number, item) => total + Number(item.qtyInBox), 0)}
+                  </td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
+        </Col>
+        <Col>
+          <table className='table table-sm align-middle table-responsive table-striped table-nowrap table-bordered'>
+            <thead className='table-light text-center fw-semibold'>
+              <tr>
+                <td>Box #</td>
                 <td>Width {state.currentRegion == 'us' ? '(in)' : '(cm)'}</td>
                 <td>Height {state.currentRegion == 'us' ? '(in)' : '(cm)'}</td>
                 <td>Length {state.currentRegion == 'us' ? '(in)' : '(cm)'}</td>
@@ -130,33 +200,19 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
                   <td>{box.box.weight}</td>
                 </tr>
               ))}
+              <tr style={{ backgroundColor: '#E5E7E9' }}>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td className='text-center fw-bold'>
+                  Total:{' '}
+                  {individualUnitsPlan.plan.cartons.reduce((total: number, box) => total + Number(box.box.weight), 0)}{' '}
+                  {state.currentRegion == 'us' ? 'lb' : 'kg'}
+                </td>
+              </tr>
             </tbody>
           </table>
-        </Col>
-        <h5 className='mt-4'>Item List</h5>
-        <Col>
-          {individualUnitsPlan.plan.items.map((item) => (
-            <table key={item.sku} className='table table-sm align-middle table-responsive table-nowrap'>
-              <thead className='table-light fw-semibold'>
-                <tr>
-                  <td className='w-75'>
-                    <span className='fw-bold'>{item.sku}</span>
-                    <br />
-                    <span className='fw-normal'>{item.name}</span>
-                  </td>
-                  <td className='text-center'>Qty In Box</td>
-                </tr>
-              </thead>
-              <tbody>
-                {item.cartons.map((box) => (
-                  <tr key={box.boxId} className='text-center'>
-                    <td className='fw-bold'>{`BOX ${box.boxId}`}</td>
-                    <td>{box.qtyInBox}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ))}
         </Col>
         <Col md={12}>
           <div className='text-end'>

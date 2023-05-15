@@ -185,16 +185,20 @@ interface ChargesFees {
   receivingManHour?: number
   receivingPalletCost?: number
   receivingWrapService?: number
+  minQtyForIndividualUnitsOrder?: number
+  individualUnitCost?: number
 }
 
 interface Plan {
   items: {
     sku: string,
     name: string,
+    image: string,
     cartons: {
       boxId: number,
       qtyInBox: number
-    }[]
+    }[],
+    qtyToShip: number
   }[],
   cartons: {
     box: {

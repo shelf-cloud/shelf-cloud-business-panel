@@ -22,12 +22,21 @@ const WholeSaleType = ({ data }: Props) => {
 
   useEffect(() => {
     if (data.chargesFees) {
-      switch (data.carrierService) {
-        case 'Parcel Boxes':
+      switch (true) {
+        case !data.isIndividualUnits && data.carrierService == 'Parcel Boxes':
           setServiceFee(`${data.carrierService} - $ ${data.chargesFees.parcelBoxCost?.toFixed(2)} per box`)
           break
-        case 'LTL':
+        case !data.isIndividualUnits && data.carrierService == 'LTL':
           setServiceFee(`${data.carrierService} - $ ${data.chargesFees.palletCost?.toFixed(2)} per pallet`)
+          break
+        case data.isIndividualUnits:
+          setServiceFee(
+            `
+          ${data.carrierService} - $ ${data.chargesFees.individualUnitCost?.toFixed(2)} per unit
+          ${data.carrierService} - $ ${data.chargesFees.parcelBoxCost?.toFixed(2)} per box
+          ${data.carrierService} - $ ${data.chargesFees.palletCost?.toFixed(2)} per pallet
+          `
+          )
           break
         default:
           setServiceFee(`Type of service...`)
