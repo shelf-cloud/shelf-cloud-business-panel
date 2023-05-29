@@ -112,13 +112,13 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
             break
           case 'awaiting_shipment':
           case 'awating':
-            return <span className='badge text-uppercase badge-soft-secondary p-2'>{' awating '}</span>
+            return <span className='badge text-uppercase badge-soft-warning p-2'>{' awating '}</span>
             break
           case 'on_hold':
-            return <span className='badge text-uppercase badge-soft-warning p-2'>{' on hold '}</span>
+            return <span className='badge text-uppercase badge-soft-danger p-2'>{' on hold '}</span>
             break
           case 'cancelled':
-            return <span className='badge text-uppercase badge-soft-danger p-2'> {row.orderStatus} </span>
+            return <span className='badge text-uppercase badge-soft-dark p-2'> {row.orderStatus} </span>
             break
           default:
             break
@@ -164,14 +164,14 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
             <img
               src={row.channelLogo ? row.channelLogo : 'https://electrostoregroup.com/Onix/img/no-image.png'}
               alt='product Image'
-              id={`ChannelLogo-${row.orderId}`}
+              id={`ChannelLogo-${row.id}`}
               style={{
                 width: '25px',
                 height: '25px',
                 objectFit: 'contain',
               }}
             />
-            <UncontrolledTooltip placement='right' target={`ChannelLogo-${row.orderId}`}>
+            <UncontrolledTooltip placement='right' target={`ChannelLogo-${row.id}`}>
               {row.channelName}
             </UncontrolledTooltip>
           </>
