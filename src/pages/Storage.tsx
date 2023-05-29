@@ -12,6 +12,7 @@ import useSWR from 'swr'
 import StorageWidgets from '@components/StorageWidgets'
 import { toast } from 'react-toastify'
 import StorageChart from '@components/StorageChart'
+import CountUp from 'react-countup'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -97,8 +98,32 @@ const Storage = ({ session }: Props) => {
                         </p>
                         <StorageChart storageInvoices={storageInvoices} storageDates={storageDates} />
                       </div>
-                      <StorageWidgets previousCharge={storageInvoices[storageInvoices.length-1]} previousChargeDate={storageDates[storageDates.length-1]} currentBalance={data?.dailyStorageBalance} binsUSed={data?.totalBinsUSed} />
+                      <StorageWidgets
+                        previousCharge={storageInvoices[storageInvoices.length - 1]}
+                        previousChargeDate={storageDates[storageDates.length - 1]}
+                        currentBalance={data?.dailyStorageBalance}
+                        binsUSed={data?.totalBinsUSed}
+                      />
                     </div>
+                    <div className='d-flex flex-row justify-content-between'>
+                      <div>
+                        <p className='text-uppercase fw-semibold text-muted text-truncate mb-0'>
+                          *Estimated Total Monthly Cost
+                        </p>
+                        <h4 className='fs-18 fw-normal text-muted'>
+                          <span className='counter-value'>
+                            <CountUp
+                              start={0}
+                              prefix={'$'}
+                              // suffix={item.suffix}
+                              separator={'.'}
+                              end={data?.totalCurrentBalance}
+                              decimals={2}
+                              duration={0}
+                            />
+                          </span>
+                        </h4>
+                      </div>
                     <form className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
                       <div className='position-relative'>
                         <Input
@@ -118,6 +143,7 @@ const Storage = ({ session }: Props) => {
                         Clear
                       </Button>
                     </form>
+                    </div>
                   </CardHeader>
                   <CardBody>
                     <StorageTable tableData={filteredItems || []} pending={pending} />
