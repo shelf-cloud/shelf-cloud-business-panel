@@ -4,6 +4,7 @@ import { OrderRowType } from '@typings'
 import React from 'react'
 import DataTable from 'react-data-table-component'
 import ShipmentExpandedDetail from './ShipmentExpandedDetail'
+import { UncontrolledTooltip } from 'reactstrap'
 
 type Props = {
   tableData: OrderRowType[]
@@ -54,6 +55,20 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
 
     return 0
   }
+  const orderMarketplace = (rowA: OrderRowType, rowB: OrderRowType) => {
+    const a = rowA.channelName.toLowerCase()
+    const b = rowB.channelName.toLowerCase()
+
+    if (a > b) {
+      return 1
+    }
+
+    if (b > a) {
+      return -1
+    }
+
+    return 0
+  }
 
   const columns: any = [
     {
@@ -64,8 +79,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
             <div style={{ margin: '0px', fontWeight: '600' }}>{row.orderNumber}</div>
             {row.hasReturn && (
               <span className='text-danger' style={{ opacity: '80%' }}>
-                Return: <br />
-                {row.orderNumber}-RT
+                Return: {row.orderNumber}-RT
               </span>
             )}
             {row.isIndividualUnits && (
@@ -141,6 +155,33 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
       //     },
       //   },
       // ],
+    },
+    {
+      name: <span className='fw-bolder fs-13'>Marketplace</span>,
+      selector: (row: OrderRowType) => {
+        return (
+          <>
+            <img
+              src={row.channelLogo ? row.channelLogo : 'https://electrostoregroup.com/Onix/img/no-image.png'}
+              alt='product Image'
+              id={`ChannelLogo-${row.orderId}`}
+              style={{
+                width: '25px',
+                height: '25px',
+                objectFit: 'contain',
+              }}
+            />
+            <UncontrolledTooltip placement='right' target={`ChannelLogo-${row.orderId}`}>
+              {row.channelName}
+            </UncontrolledTooltip>
+          </>
+        )
+      },
+      sortable: true,
+      wrap: true,
+      grow: 1,
+      center: true,
+      sortFunction: orderMarketplace,
     },
     {
       name: <span className='fw-bolder fs-13'>Order Date</span>,

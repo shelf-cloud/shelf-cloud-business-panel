@@ -255,6 +255,8 @@ export interface OrderRowType {
   carrierShipping: number
   onixShipping: number
   storeId: string
+  channelName: string
+  channelLogo: string
   orderItems: []
   totalItems: number
   numberPallets: number
