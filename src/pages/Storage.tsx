@@ -119,7 +119,7 @@ const Storage = ({ session }: Props) => {
                               separator={'.'}
                               end={data?.totalCurrentBalance}
                               decimals={2}
-                              duration={0}
+                              duration={1}
                             />
                           </span>
                         </h4>
