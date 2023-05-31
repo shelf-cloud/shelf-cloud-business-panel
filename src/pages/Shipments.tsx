@@ -12,9 +12,10 @@ import { getSession } from '@auth/client'
 import useSWR from 'swr'
 import moment from 'moment'
 import ShipmentsTable from '@components/ShipmentsTable'
-import Flatpickr from 'react-flatpickr'
 import CreateReturnModal from '@components/CreateReturnModal'
 import { toast } from 'react-toastify'
+import FilterByDates from '@components/FilterByDates'
+import FilterByOthers from '@components/FilterByOthers'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -42,12 +43,14 @@ type Props = {
 
 const Shipments = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
-  const [shipmentsStartDate, setShipmentsStartDate] = useState(moment().subtract(3, 'months').format('YYYY-MM-DD'))
+  const [shipmentsStartDate, setShipmentsStartDate] = useState(moment().subtract(1, 'months').format('YYYY-MM-DD'))
   const [shipmentsEndDate, setShipmentsEndDate] = useState(moment().format('YYYY-MM-DD'))
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<OrderRowType[]>([])
   const [searchValue, setSearchValue] = useState<any>('')
-  const [searchType, setSearchType] = useState<String>('')
+  const [searchType, setSearchType] = useState<any>('')
+  const [searchStatus, setSearchStatus] = useState<any>('')
+  const [searchMarketplace, setSearchMarketplace] = useState<any>('')
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data } = useSWR(
@@ -69,12 +72,12 @@ const Shipments = ({ session }: Props) => {
   }, [data])
 
   const filterDataTable = useMemo(() => {
-    if (searchValue === '' && searchType === '') {
+    if (searchValue === '' && searchType === '' && searchStatus === '' && searchMarketplace === '') {
       return allData
     }
 
     if (searchValue !== '') {
-      const newDataTable = allData.filter(
+      let newDataTable = allData.filter(
         (order) =>
           order?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
           order?.orderStatus?.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -83,21 +86,37 @@ const Shipments = ({ session }: Props) => {
           order?.trackingNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
           order?.orderItems?.some(
             (item: ShipmentOrderItem) =>
-              item?.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
-              item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
+              item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
           )
       )
       if (searchType !== '') {
-        return newDataTable.filter((order) => order?.orderType?.toLowerCase().includes(searchType.toLowerCase()))
-      } else {
-        return newDataTable
+        newDataTable = newDataTable.filter((order) => order?.orderType?.toLowerCase().includes(searchType.toLowerCase()))
       }
+
+      if (searchStatus !== '') {
+        newDataTable = newDataTable.filter((order) => order?.orderStatus?.toLowerCase().includes(searchStatus.toLowerCase()))
+      }
+
+      if (searchMarketplace !== '') {
+        newDataTable = newDataTable.filter((order) => order?.channelName?.toLowerCase() == searchMarketplace.toLowerCase())
+      }
+
+      return newDataTable
     }
 
     if (searchType !== '') {
-      const newDataTable = allData.filter((order) => order?.orderType?.toLowerCase().includes(searchType.toLowerCase()))
+      let newDataTable = allData.filter((order) => order?.orderType?.toLowerCase().includes(searchType.toLowerCase()))
+
+      if (searchStatus !== '') {
+        newDataTable = newDataTable.filter((order) => order?.orderStatus?.toLowerCase().includes(searchStatus.toLowerCase()))
+      }
+
+      if (searchMarketplace !== '') {
+        newDataTable = newDataTable.filter((order) => order?.channelName?.toLowerCase() == searchMarketplace.toLowerCase())
+      }
+
       if (searchValue !== '') {
-        return newDataTable.filter(
+        newDataTable = newDataTable.filter(
           (order) =>
             order?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
             order?.orderStatus?.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -106,17 +125,75 @@ const Shipments = ({ session }: Props) => {
             order?.trackingNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
             order?.orderItems?.some(
               (item: ShipmentOrderItem) =>
-                item?.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
+                item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
             )
         )
-      } else {
-        return newDataTable
       }
-    }
-  }, [allData, searchValue, searchType])
 
-  const handleChangeDates = (dateStr: string) => {
+      return newDataTable
+    }
+
+    if (searchStatus !== '') {
+      let newDataTable = allData.filter((order) => order?.orderStatus?.toLowerCase().includes(searchStatus.toLowerCase()))
+
+      if (searchType !== '') {
+        newDataTable = newDataTable.filter((order) => order?.orderType?.toLowerCase().includes(searchType.toLowerCase()))
+      }
+      
+      if (searchMarketplace !== '') {
+        newDataTable = newDataTable.filter((order) => order?.channelName?.toLowerCase() == searchMarketplace.toLowerCase())
+      }
+
+      if (searchValue !== '') {
+        newDataTable = newDataTable.filter(
+          (order) =>
+            order?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            order?.orderStatus?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            order?.orderType?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            order?.shipName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            order?.trackingNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            order?.orderItems?.some(
+              (item: ShipmentOrderItem) =>
+                item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
+            )
+        )
+      }
+
+      return newDataTable
+    }
+    
+    if (searchMarketplace !== '') {
+      let newDataTable = allData.filter((order) => order?.channelName?.toLowerCase() == searchMarketplace.toLowerCase())
+
+      if (searchType !== '') {
+        newDataTable = newDataTable.filter((order) => order?.orderType?.toLowerCase().includes(searchType.toLowerCase()))
+      }
+
+      if (searchStatus !== '') {
+        newDataTable = newDataTable.filter((order) => order?.orderStatus?.toLowerCase().includes(searchStatus.toLowerCase()))
+      }
+
+      if (searchValue !== '') {
+        newDataTable = newDataTable.filter(
+          (order) =>
+            order?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            order?.orderStatus?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            order?.orderType?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            order?.shipName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            order?.trackingNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            order?.orderItems?.some(
+              (item: ShipmentOrderItem) =>
+                item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
+            )
+        )
+      }
+
+      return newDataTable
+    }
+
+  }, [allData, searchValue, searchType, searchStatus, searchMarketplace])
+
+  const handleChangeDatesFromPicker = (dateStr: string) => {
     if (dateStr.includes(' to ')) {
       const dates = dateStr.split(' to ')
       setShipmentsStartDate(moment(dates[0], 'DD MMM YY').format('YYYY-MM-DD'))
@@ -137,11 +214,26 @@ const Shipments = ({ session }: Props) => {
             <Row>
               <Col lg={12}>
                 <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-3 flex-md-row justify-content-md-between align-items-md-center'>
+                  <div className='d-flex flex-column justify-content-center align-items-end gap-2 flex-md-row justify-content-md-between align-items-md-center w-auto'>
+                    <FilterByDates
+                      shipmentsStartDate={shipmentsStartDate}
+                      setShipmentsStartDate={setShipmentsStartDate}
+                      setShipmentsEndDate={setShipmentsEndDate}
+                      shipmentsEndDate={shipmentsEndDate}
+                      handleChangeDatesFromPicker={handleChangeDatesFromPicker}
+                    />
+                    <FilterByOthers
+                      searchType={searchType}
+                      setSearchType={setSearchType}
+                      searchStatus={searchStatus}
+                      setSearchStatus={setSearchStatus}
+                      searchMarketplace={searchMarketplace}
+                      setSearchMarketplace={setSearchMarketplace}
+                    />
+                  </div>
                   <div className='col-sm-12 col-md-3'>
                     <form className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
-                      <div
-                        className='position-relative d-flex rounded-3 w-100 overflow-hidden'
-                        style={{ border: '1px solid #E1E3E5' }}>
+                      <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                         <Input
                           type='text'
                           className='form-control input_background_white'
@@ -161,42 +253,6 @@ const Shipments = ({ session }: Props) => {
                         </span>
                       </div>
                     </form>
-                  </div>
-                  <div className='d-flex flex-column justify-content-center align-items-end gap-2 flex-md-row justify-content-md-between align-items-md-center w-auto'>
-                    <div
-                      className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto px-3 rounded-3'
-                      style={{ backgroundColor: 'white', minWidth: '230px', border: '1px solid #E1E3E5' }}>
-                      <i className='ri-calendar-2-line fs-5' />
-                      <Flatpickr
-                        className='border-0 fs-6 w-100 py-2'
-                        options={{
-                          mode: 'range',
-                          dateFormat: 'd M y',
-                          defaultDate: [
-                            moment(shipmentsStartDate, 'YYYY-MM-DD').format('DD MMM YY'),
-                            moment(shipmentsEndDate, 'YYYY-MM-DD').format('DD MMM YY'),
-                          ],
-                        }}
-                        onChange={(_selectedDates, dateStr) => handleChangeDates(dateStr)}
-                      />
-                      <i className='ri-arrow-down-s-line' />
-                    </div>
-                    <div
-                      className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto px-3 py-0 rounded-3'
-                      style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
-                      <i className='ri-truck-line fs-5' />
-                      <Input
-                        type='select'
-                        className='border-0 fs-6 w-100'
-                        id='type'
-                        name='type'
-                        onChange={(e) => setSearchType(e.target.value)}>
-                        <option value=''>All Types</option>
-                        <option value='Wholesale'>Wholesale</option>
-                        <option value='Shipment'>Shipment</option>
-                        <option value='Return'>Return</option>
-                      </Input>
-                    </div>
                   </div>
                 </Row>
                 <Card>
