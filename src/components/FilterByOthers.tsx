@@ -102,7 +102,7 @@ const FilterByOthers = ({ searchType, setSearchType, searchStatus, setSearchStat
                   setSearchMarketplace(e.target.value)
                   setOpenDatesMenu(false)
                 }}>
-                <option value=''>All Status</option>
+                <option value=''>All Marketplaces</option>
                 <option value='Amazon'>Amazon</option>
                 <option value='Etsy'>Etsy</option>
                 <option value='Ebay'>Ebay</option>
