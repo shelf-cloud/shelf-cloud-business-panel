@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useRef, useState } from 'react'
+import AppContext from '@context/AppContext'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Input } from 'reactstrap'
 
 type Props = {
@@ -12,6 +13,7 @@ type Props = {
 }
 
 const FilterByOthers = ({ searchType, setSearchType, searchStatus, setSearchStatus, searchMarketplace, setSearchMarketplace }: Props) => {
+  const { state }: any = useContext(AppContext)
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const filterByOthersContainer = useRef<HTMLDivElement | null>(null)
 
@@ -103,12 +105,11 @@ const FilterByOthers = ({ searchType, setSearchType, searchStatus, setSearchStat
                   setOpenDatesMenu(false)
                 }}>
                 <option value=''>All Marketplaces</option>
-                <option value='Amazon'>Amazon</option>
-                <option value='Etsy'>Etsy</option>
-                <option value='Ebay'>Ebay</option>
-                <option value='Shopify'>Shopify</option>
-                <option value='Wholesale'>Wholesale</option>
-                <option value='Walmart'>Walmart</option>
+                {state?.user?.[`${state.currentRegion}`]?.marketplaces.map((market: string, index: number) => (
+                  <option key={`${market}-id${index}`} value={market}>
+                    {market}
+                  </option>
+                ))}
               </Input>
             </div>
             <span
