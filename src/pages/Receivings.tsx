@@ -117,7 +117,7 @@ const Receiving = ({ session }: Props) => {
               <Col lg={12}>
                 <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-3 flex-md-row justify-content-md-between align-items-md-center'>
                   <div className='col-sm-12 col-md-3'>
-                    <form className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
+                    <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
                       <div className='position-relative d-flex rounded-3 w-100 overflow-hidden input_background_white'>
                         <Input
                           type='text'
@@ -137,7 +137,7 @@ const Receiving = ({ session }: Props) => {
                           <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
                         </span>
                       </div>
-                    </form>
+                    </div>
                   </div>
                   <div className='w-auto'>
                     <div

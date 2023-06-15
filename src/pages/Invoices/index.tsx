@@ -90,7 +90,7 @@ const Invoices = ({ session }: Props) => {
                           <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>Billing Status</p>
                           <InvoicesChart billingStatus={billingStatus} />
                         </div>
-                        <form className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
+                        <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
                           <div className='position-relative'>
                             <Input
                               type='text'
@@ -108,7 +108,7 @@ const Invoices = ({ session }: Props) => {
                           <Button className='btn-soft-dark' onClick={() => setSerachValue('')}>
                             Clear
                           </Button>
-                        </form>
+                        </div>
                       </>
                     )}
                   </CardHeader>

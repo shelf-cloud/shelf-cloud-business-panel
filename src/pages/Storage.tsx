@@ -124,7 +124,7 @@ const Storage = ({ session }: Props) => {
                           </span>
                         </h4>
                       </div>
-                    <form className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
+                    <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
                       <div className='position-relative'>
                         <Input
                           type='text'
@@ -142,7 +142,7 @@ const Storage = ({ session }: Props) => {
                       <Button className='btn-soft-dark' onClick={() => setSerachValue('')}>
                         Clear
                       </Button>
-                    </form>
+                    </div>
                     </div>
                   </CardHeader>
                   <CardBody>
