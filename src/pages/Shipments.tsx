@@ -43,7 +43,7 @@ type Props = {
 
 const Shipments = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
-  const [shipmentsStartDate, setShipmentsStartDate] = useState(moment().subtract(1, 'months').format('YYYY-MM-DD'))
+  const [shipmentsStartDate, setShipmentsStartDate] = useState(moment().subtract(2, 'months').format('YYYY-MM-DD'))
   const [shipmentsEndDate, setShipmentsEndDate] = useState(moment().format('YYYY-MM-DD'))
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<OrderRowType[]>([])
