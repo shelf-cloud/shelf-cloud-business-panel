@@ -14,6 +14,7 @@ import ProductsTable from '@components/ProductsTable'
 import InventoryBinsModal from '@components/InventoryBinsModal'
 import EditProductModal from '@components/EditProductModal'
 import { CSVLink } from 'react-csv'
+import Link from 'next/link'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -49,9 +50,7 @@ const Products = ({ session }: Props) => {
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data } = useSWR(
-    state.user.businessId
-      ? `/api/getBusinessInventory?region=${state.currentRegion}&businessId=${state.user.businessId}`
-      : null,
+    state.user.businessId ? `/api/getBusinessInventory?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
     fetcher
   )
 
@@ -61,7 +60,7 @@ const Products = ({ session }: Props) => {
       setAllData([])
       setPending(false)
       toast.error(data?.message)
-    } else if(data){
+    } else if (data) {
       const list: ProductRowType[] = []
 
       data?.forEach((product: Product) => {
@@ -132,13 +131,10 @@ const Products = ({ session }: Props) => {
   const changeProductState = async (inventoryId: number, businessId: number, sku: string) => {
     confirm(`Are you sure you want to set Inactive: ${sku}`)
 
-    const response = await axios.post(
-      `/api/setStateToProduct?region=${state.currentRegion}&businessId=${businessId}&inventoryId=${inventoryId}`,
-      {
-        newState: 0,
-        sku,
-      }
-    )
+    const response = await axios.post(`/api/setStateToProduct?region=${state.currentRegion}&businessId=${businessId}&inventoryId=${inventoryId}`, {
+      newState: 0,
+      sku,
+    })
     if (!response.data.error) {
       toast.success(response.data.msg)
       mutate(`/api/getBusinessInventory?region=${state.currentRegion}&businessId=${state.user.businessId}`)
@@ -206,9 +202,7 @@ const Products = ({ session }: Props) => {
                 <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-3 flex-md-row justify-content-md-between align-items-md-center'>
                   <div className='col-sm-12 col-md-3'>
                     <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
-                      <div
-                        className='position-relative d-flex rounded-3 w-100 overflow-hidden'
-                        style={{ border: '1px solid #E1E3E5' }}>
+                      <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                         <Input
                           type='text'
                           className='form-control input_background_white'
@@ -227,11 +221,14 @@ const Products = ({ session }: Props) => {
                       </div>
                     </div>
                   </div>
-                  <div className='w-auto'>
-                    <CSVLink
-                      data={csvData}
-                      style={{ width: 'fit-content' }}
-                      filename={`${session?.user?.name.toUpperCase()}-Products.csv`}>
+                  <div className='w-auto d-flex flex-row align-items-center justify-content-between gap-4'>
+                    <Link href={'/AddProduct'} passHref>
+                      <Button color='primary' className='fs-5 py-1 p3-1'>
+                        <i className='mdi mdi-plus-circle label-icon align-middle fs-5 me-2' />
+                        Add Product
+                      </Button>
+                    </Link>
+                    <CSVLink data={csvData} style={{ width: 'fit-content' }} filename={`${session?.user?.name.toUpperCase()}-Products.csv`}>
                       <Button color='primary' className='fs-5 py-1 p3-1'>
                         <i className='mdi mdi-arrow-down-bold label-icon align-middle fs-5 me-2' />
                         Export

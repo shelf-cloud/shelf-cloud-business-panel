@@ -1,6 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { wholesaleProductRow } from '@typings'
-import Image from 'next/image'
 import React, { useContext } from 'react'
 import AppContext from '@context/AppContext'
 import { Button, FormFeedback, Input } from 'reactstrap'
@@ -102,12 +102,10 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError 
               margin: '2px 0px',
               position: 'relative',
             }}>
-            <Image
+            <img
               src={row.image ? row.image : 'https://electrostoregroup.com/Onix/img/no-image.png'}
               alt='product Image'
-              layout='fill'
-              objectFit='contain'
-              objectPosition='center'
+              style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
             />
           </div>
         )

@@ -20,7 +20,7 @@ const Widget = ({ summary }) => {
                 <p className='text-capitalize fw-medium mb-0 ms-2'>Previous Month Charge</p>
               </div>
               <div className='flex-shrink-0'>
-                <h5 className={'fs-6 mb-0 fw-bold'}>{summary?.previousMonth.date}</h5>
+                <h5 className={'fs-6 mb-0 fw-bold'}>{summary?.previousMonth?.date}</h5>
               </div>
             </div>
             <div className='d-flex align-items-end justify-content-between mt-2'>
@@ -30,7 +30,7 @@ const Widget = ({ summary }) => {
                     start={0}
                     prefix={'$'}
                     separator={'.'}
-                    end={summary?.previousMonth.charge}
+                    end={summary?.previousMonth?.charge}
                     decimals={2}
                     duration={1}
                   />

@@ -1,5 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
 import AppContext from '@context/AppContext'
-import Image from 'next/image'
 import { IndividualUnitsPlan } from '@typings'
 import { useContext } from 'react'
 import { Button, Col, Modal, ModalBody, ModalHeader } from 'reactstrap'
@@ -132,12 +132,10 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
                           margin: '2px 0px',
                           position: 'relative',
                         }}>
-                        <Image
+                        <img
                           src={item.image ? item.image : 'https://electrostoregroup.com/Onix/img/no-image.png'}
                           alt='product Image'
-                          layout='fill'
-                          objectFit='contain'
-                          objectPosition='center'
+                          style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                         />
                       </div>
                       <div>

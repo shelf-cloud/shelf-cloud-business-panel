@@ -1,8 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { StorageRowProduct } from '@typings'
 import React from 'react'
 import DataTable from 'react-data-table-component'
-import Image from 'next/image'
 import StorageExpandedDetails from './StorageExpandedDetails'
 
 type Props = {
@@ -57,16 +57,14 @@ const StorageTable = ({ tableData, pending }: Props) => {
               position: 'relative',
             }}
           >
-            <Image
+            <img
               src={
                 row.image
                   ? row.image
                   : 'https://electrostoregroup.com/Onix/img/no-image.png'
               }
-              alt="product Image"
-              layout="fill"
-              objectFit="contain"
-              objectPosition="center"
+              alt='Product Image'
+              style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
             />
           </div>
         )
