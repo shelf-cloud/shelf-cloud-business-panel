@@ -114,9 +114,9 @@ const ReceivingType = ({ data }: Props) => {
                           <>
                             <i
                               className='ri-information-fill ms-1 fs-6 text-muted'
-                              id={`tooltipWrap${data.orderId}`}></i>
+                              id={`tooltipPallet${data.orderId}`}></i>
                             <TooltipComponent
-                              target={`tooltipWrap${data.orderId}`}
+                              target={`tooltipPallet${data.orderId}`}
                               text={`$ ${data.chargesFees.receivingPalletCost} per pallet`}
                             />
                           </>

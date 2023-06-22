@@ -1,7 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 import React from 'react'
 import Link from 'next/link'
 import { Card, CardBody, CardHeader, Col } from 'reactstrap'
-import Image from 'next/image'
 import { ProductSummary } from '@typings'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 
@@ -37,11 +37,10 @@ const MostInvenotryList = ({ products }: Props) => {
                     <tr key={key}>
                       <td>
                         <div className="avatar-sm bg-light rounded p-1 me-2">
-                          <Image
+                          <img
                             src={item.image}
-                            alt=""
-                            width={60}
-                            height={60}
+                            alt="Product Img"
+                            style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                             className="img-fluid d-block"
                           />
                         </div>

@@ -179,8 +179,9 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
       },
       sortable: true,
       wrap: true,
-      grow: 1,
+      grow: 1.2,
       center: true,
+      compact: true,
       sortFunction: orderMarketplace,
     },
     {
