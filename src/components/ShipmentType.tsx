@@ -73,19 +73,19 @@ const ShipmentType = ({ data }: Props) => {
                           </>
                         )}
                       </td>
-                      <td className='fw-semibold text-end'>$ {data.pickpackCharge.toFixed(2)}</td>
+                      <td className='fw-semibold text-end'>$ {data.pickpackCharge?.toFixed(2)}</td>
                     </tr>
                     <tr className='border-bottom pb-2'>
                       <td className='text-muted'>Shipping Charge</td>
-                      <td className='fw-semibold text-end'>$ {data.onixShipping.toFixed(2)}</td>
+                      <td className='fw-semibold text-end'>$ {data.onixShipping?.toFixed(2)}</td>
                     </tr>
                     <tr className='border-bottom pb-2'>
                       <td className='text-muted'>Extra Charge</td>
-                      <td className='fw-semibold text-end'>$ {data.extraCharge.toFixed(2)}</td>
+                      <td className='fw-semibold text-end'>$ {data.extraCharge?.toFixed(2)}</td>
                     </tr>
                     <tr>
                       <td className='fw-bold'>TOTAL</td>
-                      <td className='text-primary fw-semibold text-end'>$ {data.totalCharge.toFixed(2)}</td>
+                      <td className='text-primary fw-semibold text-end'>$ {data.totalCharge?.toFixed(2)}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -130,7 +130,7 @@ const ShipmentType = ({ data }: Props) => {
                       <tr key={key} className='border-bottom py-2'>
                         <td className='w-50 fs-6 fw-semibold'>{product.name || ''}</td>
                         <td className='fs-6 text-muted'>{product.sku}</td>
-                        <td className='text-center'>$ {product.unitPrice.toFixed(2)}</td>
+                        <td className='text-center'>$ {product.unitPrice?.toFixed(2)}</td>
                         <td className='text-center'>{product.quantity}</td>
                       </tr>
                     ))}
