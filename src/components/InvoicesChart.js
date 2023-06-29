@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import AppContext from '@context/AppContext'
 import dynamic from 'next/dynamic'
 import { FormatCurrency } from '@lib/FormatNumbers'
 const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 function InvoicesChart({ billingStatus }) {
+  const { state } = useContext(AppContext)
   const series = billingStatus
 
   const options = {
@@ -32,7 +34,7 @@ function InvoicesChart({ billingStatus }) {
       enabled: true,
       formatter: function (val, opt) {
         console.log(opt)
-        return FormatCurrency.format(billingStatus[opt.seriesIndex])
+        return FormatCurrency(state.currentRegion, billingStatus[opt.seriesIndex])
       },
       // textAnchor: 'start',
       // style: {
@@ -64,7 +66,7 @@ function InvoicesChart({ billingStatus }) {
       },
       y: {
         formatter: function (value) {
-          return FormatCurrency.format(value)
+          return FormatCurrency(state.currentRegion, value)
         },
       },
     },

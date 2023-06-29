@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import AppContext from '@context/AppContext'
 import { Card, CardBody, Col, Row } from 'reactstrap'
 import CountUp from 'react-countup'
 import FeatherIcon from 'feather-icons-react'
 import Link from 'next/link'
 
 const Widget = ({ summary }) => {
+  const { state } = useContext(AppContext)
   return (
     <React.Fragment>
       <Col xl={3} md={6}>
@@ -28,8 +30,9 @@ const Widget = ({ summary }) => {
                 <span className='counter-value'>
                   <CountUp
                     start={0}
-                    prefix={'$'}
-                    separator={'.'}
+                    prefix={state.currentRegion == 'us' ? '$ ' : ''}
+                    suffix={state.currentRegion == 'eu' ? ' €' : ''}
+                    separator={state.currentRegion == 'us' ? '.' : ','}
                     end={summary?.previousMonth?.charge}
                     decimals={2}
                     duration={1}
@@ -265,9 +268,9 @@ const Widget = ({ summary }) => {
                 <span className='counter-value'>
                   <CountUp
                     start={0}
-                    prefix={'$ '}
-                    // suffix={item.suffix}
-                    separator={'.'}
+                    prefix={state.currentRegion == 'us' ? '$ ' : ''}
+                    suffix={state.currentRegion == 'eu' ? ' €' : ''}
+                    separator={state.currentRegion == 'us' ? '.' : ','}
                     end={summary?.totalCharges.totalpickpackCharge}
                     decimals={2}
                     duration={1}

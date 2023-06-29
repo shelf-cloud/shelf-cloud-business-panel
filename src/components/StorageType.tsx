@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Card, CardBody, Col, Row } from 'reactstrap'
 import { StorageBin, StorageRowProduct } from '@typings'
+import { FormatCurrency } from '@lib/FormatNumbers'
+import AppContext from '@context/AppContext'
 
 type Props = {
   data: StorageRowProduct
 }
 
 const StorageTable = ({ data }: Props) => {
+  const { state }: any = useContext(AppContext)
   return (
     <div style={{ backgroundColor: '#f3f3f9', padding: '10px' }}>
       <Row>
@@ -31,9 +34,9 @@ const StorageTable = ({ data }: Props) => {
                         <td className="fs-15">{bin.quantity}</td>
                         <td className="text-center">
                           {bin.idBin != 156
-                            ? `$ ${bin.binBalance.toFixed(2)}`
+                            ? FormatCurrency(state.currentRegion, bin.binBalance!)
                             : bin.countEntry
-                            ? `$ ${bin.binBalance.toFixed(2)}`
+                            ? FormatCurrency(state.currentRegion, bin.binBalance!)
                             : '--'}
                         </td>
                       </tr>

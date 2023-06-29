@@ -6,6 +6,7 @@ import TooltipComponent from './constants/Tooltip'
 import IndividualUnitsPlanModal from './modals/orders/shipments/IndividualUnitsPlanModal'
 import AppContext from '@context/AppContext'
 import UploadIndividualUnitsLabelsModal from './modals/orders/shipments/UploadIndividualUnitsLabelsModal'
+import { FormatCurrency } from '@lib/FormatNumbers'
 
 // import dynamic from 'next/dynamic';
 // const Animation = dynamic(() => import('@components/Common/Animation'), {
@@ -24,17 +25,17 @@ const WholeSaleType = ({ data }: Props) => {
     if (data.chargesFees) {
       switch (true) {
         case !data.isIndividualUnits && data.carrierService == 'Parcel Boxes':
-          setServiceFee(`${data.carrierService} - $ ${data.chargesFees.parcelBoxCost?.toFixed(2)} per box`)
+          setServiceFee(`${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.parcelBoxCost!)} per box`)
           break
         case !data.isIndividualUnits && data.carrierService == 'LTL':
-          setServiceFee(`${data.carrierService} - $ ${data.chargesFees.palletCost?.toFixed(2)} per pallet`)
+          setServiceFee(`${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.palletCost!)} per pallet`)
           break
         case data.isIndividualUnits:
           setServiceFee(
             `
-          ${data.carrierService} - $ ${data.chargesFees.individualUnitCost?.toFixed(2)} per unit
-          ${data.carrierService} - $ ${data.chargesFees.parcelBoxCost?.toFixed(2)} per box
-          ${data.carrierService} - $ ${data.chargesFees.palletCost?.toFixed(2)} per pallet
+          ${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.individualUnitCost!)} per unit
+          ${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.parcelBoxCost!)} per box
+          ${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.palletCost!)} per pallet
           `
           )
           break
@@ -46,7 +47,7 @@ const WholeSaleType = ({ data }: Props) => {
     return () => {
       setServiceFee('')
     }
-  }, [data])
+  }, [data, state.currentRegion])
 
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
@@ -107,11 +108,11 @@ const WholeSaleType = ({ data }: Props) => {
                           </>
                         )}
                       </td>
-                      <td className='fw-semibold text-end'>$ {data.pickpackCharge.toFixed(2)}</td>
+                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.pickpackCharge!)}</td>
                     </tr>
                     <tr className='border-bottom pb-2'>
                       <td className='text-muted'>Shipping Charge</td>
-                      <td className='fw-semibold text-end'>$ {data.onixShipping.toFixed(2)}</td>
+                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.onixShipping!)}</td>
                     </tr>
                     <tr className='border-bottom pb-2'>
                       <td className='text-muted d-flex flex-row justify-content-start align-items-start'>
@@ -128,7 +129,7 @@ const WholeSaleType = ({ data }: Props) => {
                           </>
                         )}
                       </td>
-                      <td className='fw-semibold text-end'>$ {data.labeling.toFixed(2)}</td>
+                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.labeling!)}</td>
                     </tr>
                     <tr className='border-bottom pb-2'>
                       <td className='text-muted d-flex flex-row justify-content-start align-items-start'>
@@ -145,18 +146,18 @@ const WholeSaleType = ({ data }: Props) => {
                           </>
                         )}
                       </td>
-                      <td className='fw-semibold text-end'>$ {data.manHour.toFixed(2)}</td>
+                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.manHour!)}</td>
                     </tr>
                     <tr className='border-bottom pb-2'>
                       <td className='text-muted'>Extra Charge</td>
-                      <td className='fw-semibold text-end'>$ {data.extraCharge.toFixed(2)}</td>
+                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.extraCharge!)}</td>
                     </tr>
                     <tr>
                       <td className='fw-bold'>TOTAL</td>
                       <td className='text-primary fw-semibold text-end'>
                         {data.isIndividualUnits && data.individualUnitsPlan?.state == 'Pending'
                           ? 'Pending'
-                          : `$ ${data.totalCharge.toFixed(2)}`}
+                          : `${FormatCurrency(state.currentRegion, data.totalCharge!)}`}
                       </td>
                     </tr>
                   </tbody>

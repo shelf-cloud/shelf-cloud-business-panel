@@ -17,7 +17,7 @@ import {
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { ShipmentOrderItem } from '@typings'
-import { FormatIntNumber } from '@lib/FormatNumbers'
+import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 
 type Props = {}
 
@@ -109,27 +109,27 @@ function OrderDetailsFromInvoicesModal({}: Props) {
                           <tbody>
                             <tr className='border-bottom pb-2'>
                               <td className='text-muted'>Pick Pack Charge</td>
-                              <td className='fw-semibold text-end'>$ {data.pickpackCharge?.toFixed(2)}</td>
+                              <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.pickpackCharge)}</td>
                             </tr>
                             <tr className='border-bottom pb-2'>
                               <td className='text-muted'>Shipping Charge</td>
-                              <td className='fw-semibold text-end'>$ {data.onixShipping?.toFixed(2)}</td>
+                              <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.onixShipping)}</td>
                             </tr>
                             <tr className='border-bottom pb-2'>
                               <td className='text-muted'>Labeling</td>
-                              <td className='fw-semibold text-end'>$ {data.labeling?.toFixed(2)}</td>
+                              <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.labeling)}</td>
                             </tr>
                             <tr className='border-bottom pb-2'>
                               <td className='text-muted'>Man Hour</td>
-                              <td className='fw-semibold text-end'>$ {data.manHour?.toFixed(2)}</td>
+                              <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.manHour)}</td>
                             </tr>
                             <tr className='border-bottom pb-2'>
                               <td className='text-muted'>Extra Charge</td>
-                              <td className='fw-semibold text-end'>$ {data.extraCharge?.toFixed(2)}</td>
+                              <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.extraCharge)}</td>
                             </tr>
                             <tr>
                               <td className='fw-bold'>TOTAL</td>
-                              <td className='text-primary fw-semibold text-end'>$ {data.totalCharge?.toFixed(2)}</td>
+                              <td className='text-primary fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.totalCharge)}</td>
                             </tr>
                           </tbody>
                         </table>
@@ -233,19 +233,19 @@ function OrderDetailsFromInvoicesModal({}: Props) {
                           <tbody>
                             <tr className='border-bottom pb-2'>
                               <td className='text-muted'>Pick Pack Charge</td>
-                              <td className='fw-semibold text-end'>$ {data.pickpackCharge?.toFixed(2)}</td>
+                              <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.pickpackCharge)}</td>
                             </tr>
                             <tr className='border-bottom pb-2'>
                               <td className='text-muted'>Shipping Charge</td>
-                              <td className='fw-semibold text-end'>$ {data.onixShipping?.toFixed(2)}</td>
+                              <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.onixShipping)}</td>
                             </tr>
                             <tr className='border-bottom pb-2'>
                               <td className='text-muted'>Extra Charge</td>
-                              <td className='fw-semibold text-end'>$ {data.extraCharge?.toFixed(2)}</td>
+                              <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.extraCharge)}</td>
                             </tr>
                             <tr>
                               <td className='fw-bold'>TOTAL</td>
-                              <td className='text-primary fw-semibold text-end'>$ {data.totalCharge?.toFixed(2)}</td>
+                              <td className='text-primary fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.totalCharge)}</td>
                             </tr>
                           </tbody>
                         </table>
@@ -290,7 +290,7 @@ function OrderDetailsFromInvoicesModal({}: Props) {
                               <tr key={key} className='border-bottom py-2'>
                                 <td className='w-50 fs-6 fw-semibold'>{product.name || ''}</td>
                                 <td className='fs-6 text-muted'>{product.sku}</td>
-                                <td className='text-center'>$ {product.unitPrice?.toFixed(2)}</td>
+                                <td className='text-center'>{FormatCurrency(state.currentRegion, product.unitPrice)}</td>
                                 <td className='text-center'>{product.quantity}</td>
                               </tr>
                             ))}
@@ -355,27 +355,27 @@ function OrderDetailsFromInvoicesModal({}: Props) {
                           <tbody>
                             <tr className='border-bottom pb-2'>
                               <td className='text-muted'>Service</td>
-                              <td className='fw-semibold text-end'>$ {data.receivingService?.toFixed(2)}</td>
+                              <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.receivingService)}</td>
                             </tr>
                             <tr className='border-bottom pb-2'>
                               <td className='text-muted'>Pallets</td>
-                              <td className='fw-semibold text-end'>$ {data.receivingPallets?.toFixed(2)}</td>
+                              <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.receivingPallets)}</td>
                             </tr>
                             <tr className='border-bottom pb-2'>
                               <td className='text-muted'>Wrap Service</td>
-                              <td className='fw-semibold text-end'>$ {data.receivingWrapService?.toFixed(2)}</td>
+                              <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.receivingWrapService)}</td>
                             </tr>
                             <tr className='border-bottom pb-2'>
                               <td className='text-muted'>Man Hour</td>
-                              <td className='fw-semibold text-end'>$ {data.manHour?.toFixed(2)}</td>
+                              <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.manHour)}</td>
                             </tr>
                             <tr className='border-bottom pb-2'>
                               <td className='text-muted'>Extra Charge</td>
-                              <td className='fw-semibold text-end'>$ {data.extraCharge?.toFixed(2)}</td>
+                              <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.extraCharge)}</td>
                             </tr>
                             <tr>
                               <td className='fw-bold'>TOTAL</td>
-                              <td className='text-primary fw-semibold text-end'>$ {data.totalCharge?.toFixed(2)}</td>
+                              <td className='text-primary fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.totalCharge)}</td>
                             </tr>
                           </tbody>
                         </table>
@@ -488,19 +488,19 @@ function OrderDetailsFromInvoicesModal({}: Props) {
                           <tbody>
                             <tr className='border-bottom pb-2'>
                               <td className='text-muted'>Pick Pack Charge</td>
-                              <td className='fw-semibold text-end'>$ {data.pickpackCharge?.toFixed(2)}</td>
+                              <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.pickpackCharge)}</td>
                             </tr>
                             <tr className='border-bottom pb-2'>
                               <td className='text-muted'>Shipping Charge</td>
-                              <td className='fw-semibold text-end'>$ {data.onixShipping?.toFixed(2)}</td>
+                              <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.onixShipping)}</td>
                             </tr>
                             <tr className='border-bottom pb-2'>
                               <td className='text-muted'>Extra Charge</td>
-                              <td className='fw-semibold text-end'>$ {data.extraCharge?.toFixed(2)}</td>
+                              <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.extraCharge)}</td>
                             </tr>
                             <tr>
                               <td className='fw-bold'>TOTAL</td>
-                              <td className='text-primary fw-semibold text-end'>$ {data.totalCharge?.toFixed(2)}</td>
+                              <td className='text-primary fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.totalCharge)}</td>
                             </tr>
                           </tbody>
                         </table>
@@ -545,7 +545,7 @@ function OrderDetailsFromInvoicesModal({}: Props) {
                               <tr key={key} className='border-bottom py-2'>
                                 <td className='w-50 fs-6 fw-semibold'>{product.name || ''}</td>
                                 <td className='fs-6 text-muted'>{product.sku}</td>
-                                <td className='text-center'>$ {product.unitPrice?.toFixed(2)}</td>
+                                <td className='text-center'>{FormatCurrency(state.currentRegion, product.unitPrice)}</td>
                                 <td className='text-center'>{product.quantity}</td>
                               </tr>
                             ))}

@@ -1,7 +1,8 @@
+import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { InvoiceFullDetails } from '@typings'
 import moment from 'moment'
-import React from 'react'
+import React, { useContext } from 'react'
 import { Button } from 'reactstrap'
 
 type Props = {
@@ -9,6 +10,7 @@ type Props = {
 }
 
 function PrintInvoice({ invoiceDetails }: Props) {
+  const { state }: any = useContext(AppContext)
   const printInvoice = () => {
     let invoice = `<!DOCTYPE html>
               <html lang="en">
@@ -27,8 +29,8 @@ function PrintInvoice({ invoiceDetails }: Props) {
                       width: 90%;
                       padding: 30px 40px;
                       margin: 30px auto;
-                      border: 4px solid #686868;
-                      border-radius: 7px;
+                      // border: 4px solid #686868;
+                      // border-radius: 7px;
                   }
                   .zone{
                       width: 100%;
@@ -71,14 +73,21 @@ function PrintInvoice({ invoiceDetails }: Props) {
                   <div id="container">
                   <div class="zone">
                       <div id="left1">
-                      <img src="https://electrostoregroup.com/warehouseManager/assets/shelfcloud-logo-v.jpg" />
-                      <p>9629 Premier Parkway</p>
-                      <p>Miramar, FL 33025</p>
-                      <a href="mailto:info@shelf-cloud.com?Subject=Purchase%20Orders">info@shelf-cloud.com</a>
+                      <img src="https://electrostoregroup.com/warehouseManager/assets/shelfcloud-logo-v.jpg" />`
+
+    state.currentRegion == 'us'
+      ? (invoice += `<p>9629 Premier Parkway</p>
+                      <p>Miramar, FL 33025</p>`)
+      : (invoice += `<p>Calle 21, Nave 49</p>
+        <p>Catarroja, Valencia 46470</p>`)
+
+    invoice += `<a href="mailto:info@shelf-cloud.com?Subject=Purchase%20Orders">info@shelf-cloud.com</a>
                       <a href="https://www.shelf-cloud.com" target="_blank">https://www.shelf-cloud.com</a>
                       
                       
-                      <p style="font-size: 24px;font-weight: 900;text-transform: uppercase;margin: 13px 0px 0px 0px;">Business: ${invoiceDetails.invoice.businessName}</p>
+                      <p style="font-size: 24px;font-weight: 900;text-transform: uppercase;margin: 13px 0px 0px 0px;">Business: ${
+                        invoiceDetails.invoice.businessName
+                      }</p>
                       </div><!--End Left-->
                       <div id="right1">
                       <h1 style="font-size: 62px;text-transform: uppercase;">Invoice</h1>
@@ -120,26 +129,61 @@ function PrintInvoice({ invoiceDetails }: Props) {
                                 textAlign: 'right',
                               }}
                             >
-                              ${FormatCurrency.format(order.totalCharge)}
+                              ${FormatCurrency(state.currentRegion, order.totalCharge)}
                             </span>
                           </td>
                         </tr>`)
     )
 
-    invoice += `</tbody>
-                      <tfoot class="table-light">
-                      <tr style="font-weight: 700;">
-                          <td colspan="3" style="text-align:right;">TOTAL</td>
-                          <td id="totalTotal" style="display: block;text-align: left;overflow: auto;"><span style="width: 60%;float: left;text-align: right;">${FormatCurrency.format(invoiceDetails.invoice.totalCharge)}</span></td>
-                      </tr>
-                      </tfoot>
-                      
-                      </table>
-                  </div><!--End Container-->
-                  
-              </body>
-              <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
-              </html>`
+    state.currentRegion == 'us'
+      ? (invoice += `</tbody>
+                        <tfoot class="table-light">
+                        <tr style="font-weight: 700;">
+                            <td colspan="3" style="text-align:right;">Total</td>
+                            <td id="totalTotal" style="display: block;text-align: left;overflow: auto;"><span style="width: 60%;float: left;text-align: right;">${FormatCurrency(
+                              state.currentRegion,
+                              invoiceDetails.invoice.totalCharge
+                            )}</span></td>
+                        </tr>
+                        </tfoot>
+                        
+                        </table>
+                    </div><!--End Container-->
+                    
+                </body>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+                </html>`)
+      : (invoice += `</tbody>
+                        <tfoot class="table-light">
+                        <tr style="font-weight: 700;">
+                            <td colspan="3" style="text-align:right;">Subtotal</td>
+                            <td id="totalTotal" style="display: block;text-align: left;overflow: auto;"><span style="width: 60%;float: left;text-align: right;">${FormatCurrency(
+                              state.currentRegion,
+                              invoiceDetails.invoice.totalCharge
+                            )}</span></td>
+                        </tr>
+                        <tr style="font-weight: 700;">
+                            <td colspan="3" style="text-align:right;">IVA 21%</td>
+                            <td id="totalTotal" style="display: block;text-align: left;overflow: auto;"><span style="width: 60%;float: left;text-align: right;">${FormatCurrency(
+                              state.currentRegion,
+                              invoiceDetails.invoice.totalCharge * 0.21
+                            )}</span></td>
+                        </tr>
+                        <tr style="font-weight: 700;">
+                            <td colspan="3" style="text-align:right;">Total</td>
+                            <td id="totalTotal" style="display: block;text-align: left;overflow: auto;"><span style="width: 60%;float: left;text-align: right;">${FormatCurrency(
+                              state.currentRegion,
+                              invoiceDetails.invoice.totalCharge + invoiceDetails.invoice.totalCharge * 0.21
+                            )}</span></td>
+                        </tr>
+                        </tfoot>
+                        
+                        </table>
+                    </div><!--End Container-->
+                    
+                </body>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+                </html>`)
 
     var wnd = window.open('about:Invoice', 'Invoice Details', '_blank')
     wnd?.document.write(invoice)
@@ -147,10 +191,8 @@ function PrintInvoice({ invoiceDetails }: Props) {
 
   return (
     <div>
-      <a href="#" onClick={() => printInvoice()}>
-        <Button className="btn btn-soft-primary">
-          Print Invoice
-        </Button>
+      <a href='#' onClick={() => printInvoice()}>
+        <Button className='btn btn-soft-primary'>Print Invoice</Button>
       </a>
     </div>
   )

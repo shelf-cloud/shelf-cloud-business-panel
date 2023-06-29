@@ -6,6 +6,7 @@ import axios from 'axios'
 import AppContext from '@context/AppContext'
 import { useSWRConfig } from 'swr'
 import TooltipComponent from './constants/Tooltip'
+import { FormatCurrency } from '@lib/FormatNumbers'
 
 // import dynamic from 'next/dynamic';
 // const Animation = dynamic(() => import('@components/Common/Animation'), {
@@ -23,9 +24,7 @@ const ReturnType = ({ data, apiMutateLink }: Props) => {
   const [loadingLabel, setLoadingLabel] = useState(false)
   const handlePrintingLabel = async () => {
     setLoadingLabel(true)
-    const response: any = await axios(
-      `/api/createLabelForOrder?region=${state.currentRegion}&businessId=${state.user.businessId}&orderId=${data.id}`
-    )
+    const response: any = await axios(`/api/createLabelForOrder?region=${state.currentRegion}&businessId=${state.user.businessId}&orderId=${data.id}`)
 
     const linkSource = `data:application/pdf;base64,${response.data}`
     const downloadLink = document.createElement('a')
@@ -89,26 +88,27 @@ const ReturnType = ({ data, apiMutateLink }: Props) => {
                             <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltip${data.orderId}`}></i>
                             <TooltipComponent
                               target={`tooltip${data.orderId}`}
-                              text={`$${data.chargesFees.orderCost?.toFixed(
-                                2
-                              )} first item + $${data.chargesFees.extraItemOrderCost?.toFixed(2)} addt'l.`}
+                              text={`${FormatCurrency(state.currentRegion, data.chargesFees.orderCost!)} first item + ${FormatCurrency(
+                                state.currentRegion,
+                                data.chargesFees.extraItemOrderCost!
+                              )} addt'l.`}
                             />
                           </>
                         )}
                       </td>
-                      <td className='fw-semibold text-end'>$ {data.pickpackCharge.toFixed(2)}</td>
+                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.pickpackCharge!)}</td>
                     </tr>
                     <tr className='border-bottom pb-2'>
                       <td className='text-muted'>Shipping Charge</td>
-                      <td className='fw-semibold text-end'>$ {data.onixShipping.toFixed(2)}</td>
+                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.onixShipping!)}</td>
                     </tr>
                     <tr className='border-bottom pb-2'>
                       <td className='text-muted'>Extra Charge</td>
-                      <td className='fw-semibold text-end'>$ {data.extraCharge.toFixed(2)}</td>
+                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.extraCharge!)}</td>
                     </tr>
                     <tr>
                       <td className='fw-bold'>TOTAL</td>
-                      <td className='text-primary fw-semibold text-end'>$ {data.totalCharge.toFixed(2)}</td>
+                      <td className='text-primary fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.totalCharge!)}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -153,7 +153,7 @@ const ReturnType = ({ data, apiMutateLink }: Props) => {
                       <tr key={key} className='border-bottom py-2'>
                         <td className='w-50 fs-6 fw-semibold'>{product.name || ''}</td>
                         <td className='fs-6 text-muted'>{product.sku}</td>
-                        <td className='text-center'>$ {product.unitPrice.toFixed(2)}</td>
+                        <td className='text-center'>{FormatCurrency(state.currentRegion, product.unitPrice!)}</td>
                         <td className='text-center'>{product.quantity}</td>
                       </tr>
                     ))}

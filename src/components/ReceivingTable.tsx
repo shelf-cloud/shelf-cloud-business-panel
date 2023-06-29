@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { OrderRowType } from '@typings'
-import React from 'react'
+import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import ShipmentExpandedDetail from './ShipmentExpandedDetail'
+import AppContext from '@context/AppContext'
 
 type Props = {
   tableData: OrderRowType[]
@@ -11,6 +12,7 @@ type Props = {
 }
 
 const ReceivingTable = ({ tableData, pending }: Props) => {
+  const { state }: any = useContext(AppContext)
   const columns: any = [
     {
       name: <span className="fw-bolder fs-13">Order Number</span>,
@@ -114,7 +116,7 @@ const ReceivingTable = ({ tableData, pending }: Props) => {
     {
       name: <span className="fw-bolder fs-13">Total Charge</span>,
       selector: (row: OrderRowType) =>
-        FormatCurrency.format(Number(row.totalCharge)),
+        FormatCurrency(state.currentRegion, Number(row.totalCharge)),
       sortable: true,
       wrap: true,
       // grow: 1.5,

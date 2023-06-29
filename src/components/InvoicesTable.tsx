@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { InvoiceList } from '@typings'
 import moment from 'moment'
 import Link from 'next/link'
-import React from 'react'
+import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import { Button } from 'reactstrap'
 
@@ -13,6 +14,7 @@ type Props = {
 }
 
 const InvoicesTable = ({ filteredItems, pending }: Props) => {
+  const { state }: any = useContext(AppContext)
   const today = moment().format('YYYY-MM-DD')
 
   const sortInvoiceNumber = (rowA: InvoiceList, rowB: InvoiceList) => {
@@ -164,7 +166,7 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
     },
     {
       name: <span className='fw-bold fs-5'>Total Invoice</span>,
-      selector: (row: InvoiceList) => FormatCurrency.format(row.totalCharge),
+      selector: (row: InvoiceList) => FormatCurrency(state.currentRegion, row.totalCharge),
       sortable: true,
       center: true,
       compact: true,
@@ -173,13 +175,17 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
     {
       name: <span className='fw-bold fs-5'></span>,
       selector: (row: InvoiceList) => {
-        return (
-          <a href={`${row.payLink}`} target='blank'>
-            <Button className={row.paid ? 'btn btn-soft-success' : 'btn btn-primary'}>
-              {row.paid ? 'View Receipt' : 'Pay Now'}
-            </Button>
-          </a>
-        )
+        if(state.currentRegion == 'us'){
+          return (
+            <a href={`${row.payLink}`} target='blank'>
+              <Button className={row.paid ? 'btn btn-soft-success' : 'btn btn-primary'}>
+                {row.paid ? 'View Receipt' : 'Pay Now'}
+              </Button>
+            </a>
+          )
+        } else {
+          return null
+        }
       },
       sortable: false,
       center: true,

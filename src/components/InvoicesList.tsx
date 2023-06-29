@@ -1,15 +1,17 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Button, Card, CardBody, CardHeader, Col } from 'reactstrap'
 import { InvoiceList } from '@typings'
 import CountUp from 'react-countup'
 import moment from 'moment'
 import Link from 'next/link'
+import AppContext from '@context/AppContext'
 
 type Props = {
   invoices: InvoiceList[] | undefined
 }
 
 const InvoicesList = ({ invoices }: Props) => {
+  const { state }: any = useContext(AppContext)
   const today = moment().format('YYYY-MM-DD')
 
   return (
@@ -46,9 +48,9 @@ const InvoicesList = ({ invoices }: Props) => {
                         <h5 className='fs-14 my-1 fw-normal text-start'>
                           <CountUp
                             start={0}
-                            prefix={'$ '}
-                            // suffix={item.suffix}
-                            separator={'.'}
+                            prefix={state.currentRegion == 'us' ? '$ ' : ''}
+                            suffix={state.currentRegion == 'eu' ? ' €' : ''}
+                            separator={state.currentRegion == 'us' ? '.' : ','}
                             end={invoice.totalCharge || 0}
                             decimals={2}
                             duration={1}

@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import AppContext from '@context/AppContext'
 import dynamic from 'next/dynamic'
 import { FormatCurrency } from '@lib/FormatNumbers'
 const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 function StorageChart({ storageInvoices, storageDates }) {
+  const { state } = useContext(AppContext)
   const series = [
     {
       name: 'Storage Fees',
@@ -69,7 +71,7 @@ function StorageChart({ storageInvoices, storageDates }) {
       },
       y: {
         formatter: function (value) {
-          return FormatCurrency.format(value)
+          return FormatCurrency(state.currentRegion, value)
         },
       },
     },

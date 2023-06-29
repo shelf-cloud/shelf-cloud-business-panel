@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
 // import Animation from '@components/Common/Animation'
 import { OrderRowType, ShipmentOrderItem } from '@typings'
-import { FormatIntNumber } from '@lib/FormatNumbers'
+import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import TooltipComponent from './constants/Tooltip'
+import AppContext from '@context/AppContext'
 
 // import dynamic from 'next/dynamic';
 // const Animation = dynamic(() => import('@components/Common/Animation'), {
@@ -15,28 +16,29 @@ type Props = {
 }
 
 const ReceivingType = ({ data }: Props) => {
+  const { state }: any = useContext(AppContext)
   const [serviceFee, setServiceFee] = useState('')
 
   useEffect(() => {
     if (data.chargesFees) {
       switch (data.carrierService) {
         case '20HQ-P':
-          setServiceFee(`${data.carrierService} - $ ${data.chargesFees['20HQ-P']?.toFixed(2)}`)
+          setServiceFee(`${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees['20HQ-P']!)}`)
           break
         case '40HQ-P':
-          setServiceFee(`${data.carrierService} - $ ${data.chargesFees['40HQ-P']?.toFixed(2)}`)
+          setServiceFee(`${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees['40HQ-P']!)}`)
           break
         case '20HQ-FL':
-          setServiceFee(`${data.carrierService} - $ ${data.chargesFees['20HQ-FL']?.toFixed(2)}`)
+          setServiceFee(`${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees['20HQ-FL']!)}`)
           break
         case '40HQ-FL':
-          setServiceFee(`${data.carrierService} - $ ${data.chargesFees['40HQ-FL']?.toFixed(2)}`)
+          setServiceFee(`${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees['40HQ-FL']!)}`)
           break
         case 'Pallets':
-          setServiceFee(`${data.carrierService} - $ ${data.chargesFees.receivingPallets?.toFixed(2)} per pallet`)
+          setServiceFee(`${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.receivingPallets!)} per pallet`)
           break
         case 'Parcel':
-          setServiceFee(`${data.carrierService} - $ ${data.chargesFees.parcelBoxCost?.toFixed(2)} per box`)
+          setServiceFee(`${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.parcelBoxCost!)} per box`)
           break
         default:
           setServiceFee(`Type of service...`)
@@ -46,7 +48,7 @@ const ReceivingType = ({ data }: Props) => {
     return () => {
       setServiceFee('')
     }
-  }, [data])
+  }, [data, state.currentRegion])
 
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
@@ -105,7 +107,7 @@ const ReceivingType = ({ data }: Props) => {
                           </>
                         )}
                       </td>
-                      <td className='fw-semibold text-end'>$ {data.receivingService.toFixed(2)}</td>
+                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.receivingService!)}</td>
                     </tr>
                     <tr className='border-bottom pb-2'>
                       <td className='text-muted'>
@@ -117,12 +119,12 @@ const ReceivingType = ({ data }: Props) => {
                               id={`tooltipPallet${data.orderId}`}></i>
                             <TooltipComponent
                               target={`tooltipPallet${data.orderId}`}
-                              text={`$ ${data.chargesFees.receivingPalletCost} per pallet`}
+                              text={`${FormatCurrency(state.currentRegion, data.chargesFees.receivingPalletCost!)} per pallet`}
                             />
                           </>
                         )}
                       </td>
-                      <td className='fw-semibold text-end'>$ {data.receivingPallets.toFixed(2)}</td>
+                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.receivingPallets!)}</td>
                     </tr>
                     <tr className='border-bottom pb-2'>
                       <td className='text-muted d-flex flex-row justify-content-start align-items-start'>
@@ -134,12 +136,12 @@ const ReceivingType = ({ data }: Props) => {
                               id={`tooltipWrap${data.orderId}`}></i>
                             <TooltipComponent
                               target={`tooltipWrap${data.orderId}`}
-                              text={`$ ${data.chargesFees.receivingWrapService} per wrap`}
+                              text={`${FormatCurrency(state.currentRegion, data.chargesFees.receivingWrapService!)} per wrap`}
                             />
                           </>
                         )}
                       </td>
-                      <td className='fw-semibold text-end'>$ {data.receivingWrapService.toFixed(2)}</td>
+                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.receivingWrapService!)}</td>
                     </tr>
                     <tr className='border-bottom pb-2'>
                       <td className='text-muted d-flex flex-row justify-content-start align-items-start'>
@@ -151,20 +153,20 @@ const ReceivingType = ({ data }: Props) => {
                               id={`tooltipHour${data.orderId}`}></i>
                             <TooltipComponent
                               target={`tooltipHour${data.orderId}`}
-                              text={`$ ${data.chargesFees.receivingManHour} per hour`}
+                              text={`${FormatCurrency(state.currentRegion, data.chargesFees.receivingManHour!)} per hour`}
                             />
                           </>
                         )}
                       </td>
-                      <td className='fw-semibold text-end'>$ {data.manHour.toFixed(2)}</td>
+                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.manHour!)}</td>
                     </tr>
                     <tr className='border-bottom pb-2'>
                       <td className='text-muted'>Extra Charge</td>
-                      <td className='fw-semibold text-end'>$ {data.extraCharge.toFixed(2)}</td>
+                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.extraCharge!)}</td>
                     </tr>
                     <tr>
                       <td className='fw-bold'>TOTAL</td>
-                      <td className='text-primary fw-semibold text-end'>$ {data.totalCharge.toFixed(2)}</td>
+                      <td className='text-primary fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.totalCharge!)}</td>
                     </tr>
                   </tbody>
                 </table>

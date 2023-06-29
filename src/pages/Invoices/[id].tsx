@@ -86,27 +86,21 @@ const InvoiceDetails = () => {
                         <div className='text-end pe-5'>
                           <div className='d-flex gap-3 flex-row align-items-center mb-3'>
                             <PrintInvoice invoiceDetails={invoiceDetails!} />
-                            <a href={`${invoiceDetails?.invoice.payLink}`} target='blank'>
-                              <Button
-                                className={invoiceDetails?.invoice.paid ? 'btn btn-soft-success' : 'btn btn-primary'}>
-                                {invoiceDetails?.invoice.paid ? 'View Receipt' : 'Pay Now'}
-                              </Button>
-                            </a>
+                            {state.currentRegion == 'us' && (
+                              <a href={`${invoiceDetails?.invoice.payLink}`} target='blank'>
+                                <Button className={invoiceDetails?.invoice.paid ? 'btn btn-soft-success' : 'btn btn-primary'}>
+                                  {invoiceDetails?.invoice.paid ? 'View Receipt' : 'Pay Now'}
+                                </Button>
+                              </a>
+                            )}
                           </div>
                           <h1>INVOICE</h1>
                           <h2 className='fs-1 fw-bold' style={{ color: '#458BC9' }}>
                             {invoiceDetails?.invoice.invoiceNumber}
                           </h2>
-                          <p className='m-0 fw-semibold'>
-                            Invoice Date: {moment(invoiceDetails?.invoice.createdDate).format('DD/MM/YYYY')}
-                          </p>
-                          <p className='m-0 fw-normal'>
-                            Expire Date: {moment(invoiceDetails?.invoice.expireDate).format('DD/MM/YYYY')}
-                          </p>
-                          <h4
-                            className={
-                              invoiceDetails?.invoice?.paid ? 'm-0 fw-bold text-success' : 'm-0 fw-bold text-danger'
-                            }>
+                          <p className='m-0 fw-semibold'>Invoice Date: {moment(invoiceDetails?.invoice.createdDate).format('DD/MM/YYYY')}</p>
+                          <p className='m-0 fw-normal'>Expire Date: {moment(invoiceDetails?.invoice.expireDate).format('DD/MM/YYYY')}</p>
+                          <h4 className={invoiceDetails?.invoice?.paid ? 'm-0 fw-bold text-success' : 'm-0 fw-bold text-danger'}>
                             {invoiceDetails?.invoice?.paid ? 'Paid' : 'Due'}
                           </h4>
                         </div>
@@ -127,26 +121,50 @@ const InvoiceDetails = () => {
                                 <td
                                   className={order.orderType != 'Storage' ? 'text-primary' : ''}
                                   style={order.orderType != 'Storage' ? { cursor: 'pointer' } : {}}
-                                  onClick={
-                                    order.orderType != 'Storage'
-                                      ? () => setShowOrderDetailsOfInvoiceModal(true, order.orderId)
-                                      : () => {}
-                                  }>
+                                  onClick={order.orderType != 'Storage' ? () => setShowOrderDetailsOfInvoiceModal(true, order.orderId) : () => {}}>
                                   {order.orderNumber}
                                 </td>
                                 <td>{order.orderType}</td>
                                 <td>{moment(order.closedDate).format('DD/MM/YYYY')}</td>
-                                <td>{FormatCurrency.format(order.totalCharge)}</td>
+                                <td>{FormatCurrency(state.currentRegion, order.totalCharge)}</td>
                               </tr>
                             ))}
                           </tbody>
                           <tfoot className='fw-bold fs-5'>
-                            <tr>
-                              <td className='text-end' colSpan={3}>
-                                Total
-                              </td>
-                              <td>{FormatCurrency.format(Number(invoiceDetails?.invoice?.totalCharge))}</td>
-                            </tr>
+                            {state.currentRegion == 'us' ? (
+                              <tr>
+                                <td className='text-end' colSpan={3}>
+                                  Total
+                                </td>
+                                <td>{FormatCurrency(state.currentRegion, Number(invoiceDetails?.invoice?.totalCharge))}</td>
+                              </tr>
+                            ) : (
+                              <>
+                                <tr>
+                                  <td className='text-end' colSpan={3}>
+                                    SubTotal
+                                  </td>
+                                  <td>{FormatCurrency(state.currentRegion, Number(invoiceDetails?.invoice?.totalCharge))}</td>
+                                </tr>
+                                <tr>
+                                  <td className='text-end' colSpan={3}>
+                                    IVA 21%
+                                  </td>
+                                  <td>{FormatCurrency(state.currentRegion, Number(invoiceDetails?.invoice?.totalCharge! * 0.21))}</td>
+                                </tr>
+                                <tr>
+                                  <td className='text-end' colSpan={3}>
+                                    Total
+                                  </td>
+                                  <td>
+                                    {FormatCurrency(
+                                      state.currentRegion,
+                                      Number(invoiceDetails?.invoice?.totalCharge! + invoiceDetails?.invoice?.totalCharge! * 0.21)
+                                    )}
+                                  </td>
+                                </tr>
+                              </>
+                            )}
                           </tfoot>
                         </table>
                       </CardBody>

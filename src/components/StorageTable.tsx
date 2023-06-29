@@ -1,9 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { StorageRowProduct } from '@typings'
-import React from 'react'
+import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import StorageExpandedDetails from './StorageExpandedDetails'
+import { FormatCurrency } from '@lib/FormatNumbers'
+import AppContext from '@context/AppContext'
 
 type Props = {
   tableData: StorageRowProduct[]
@@ -11,10 +13,8 @@ type Props = {
 }
 
 const StorageTable = ({ tableData, pending }: Props) => {
-  const caseInsensitiveSort = (
-    rowA: StorageRowProduct,
-    rowB: StorageRowProduct
-  ) => {
+  const { state }: any = useContext(AppContext)
+  const caseInsensitiveSort = (rowA: StorageRowProduct, rowB: StorageRowProduct) => {
     const a = rowA.title.toLowerCase()
     const b = rowB.title.toLowerCase()
 
@@ -46,7 +46,7 @@ const StorageTable = ({ tableData, pending }: Props) => {
 
   const columns: any = [
     {
-      name: <span className="fw-bold fs-5">Image</span>,
+      name: <span className='fw-bold fs-5'>Image</span>,
       selector: (row: StorageRowProduct) => {
         return (
           <div
@@ -55,14 +55,9 @@ const StorageTable = ({ tableData, pending }: Props) => {
               height: '60px',
               margin: '2px 0px',
               position: 'relative',
-            }}
-          >
+            }}>
             <img
-              src={
-                row.image
-                  ? row.image
-                  : 'https://electrostoregroup.com/Onix/img/no-image.png'
-              }
+              src={row.image ? row.image : 'https://electrostoregroup.com/Onix/img/no-image.png'}
               alt='Product Image'
               style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
             />
@@ -76,7 +71,7 @@ const StorageTable = ({ tableData, pending }: Props) => {
     },
     {
       name: (
-        <span className="fw-bold fs-5">
+        <span className='fw-bold fs-5'>
           Title
           <br />
           SKU
@@ -97,23 +92,22 @@ const StorageTable = ({ tableData, pending }: Props) => {
       //   compact: true,
     },
     {
-      name: <span className="fw-bold fs-5">Total Bins Used</span>,
+      name: <span className='fw-bold fs-5'>Total Bins Used</span>,
       selector: (row: StorageRowProduct) => row.totalBins,
       sortable: true,
       compact: true,
       center: true,
     },
     {
-      name: <span className="fw-bold fs-5">Total Quantity In Bin</span>,
+      name: <span className='fw-bold fs-5'>Total Quantity In Bin</span>,
       selector: (row: StorageRowProduct) => row.totalQuantity,
       sortable: true,
       compact: true,
       center: true,
     },
     {
-      name: <span className="fw-bold fs-5">Estimated Monthly Cost</span>,
-      selector: (row: StorageRowProduct) =>
-        `$ ${row.currentBalance.toFixed(2)}`,
+      name: <span className='fw-bold fs-5'>Estimated Monthly Cost</span>,
+      selector: (row: StorageRowProduct) => FormatCurrency(state.currentRegion, row.currentBalance!),
       sortable: true,
       compact: true,
       center: true,

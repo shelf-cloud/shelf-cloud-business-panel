@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import AppContext from '@context/AppContext'
 import { Card, CardBody, Col, Row } from 'reactstrap'
 import CountUp from 'react-countup'
 import Link from 'next/link'
 import moment from 'moment'
 
 const StorageWidgets = ({ previousCharge, previousChargeDate, currentBalance, binsUSed }) => {
+  const { state } = useContext(AppContext)
   const currentMonthDays = moment().format('D') - 1
   return (
     <React.Fragment>
@@ -23,9 +25,9 @@ const StorageWidgets = ({ previousCharge, previousChargeDate, currentBalance, bi
                     <span className='counter-value'>
                       <CountUp
                         start={0}
-                        prefix={'$'}
-                        // suffix={item.suffix}
-                        separator={'.'}
+                        prefix={state.currentRegion == 'us' ? '$ ' : ''}
+                        suffix={state.currentRegion == 'eu' ? ' €' : ''}
+                        separator={state.currentRegion == 'us' ? '.' : ','}
                         end={previousCharge}
                         decimals={2}
                         duration={1}
@@ -52,9 +54,9 @@ const StorageWidgets = ({ previousCharge, previousChargeDate, currentBalance, bi
                     <span className='counter-value'>
                       <CountUp
                         start={0}
-                        prefix={'$'}
-                        // suffix={item.suffix}
-                        separator={'.'}
+                        prefix={state.currentRegion == 'us' ? '$ ' : ''}
+                        suffix={state.currentRegion == 'eu' ? ' €' : ''}
+                        separator={state.currentRegion == 'us' ? '.' : ','}
                         end={currentBalance}
                         decimals={2}
                         duration={1}

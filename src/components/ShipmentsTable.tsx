@@ -1,10 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { OrderRowType } from '@typings'
-import React from 'react'
+import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import ShipmentExpandedDetail from './ShipmentExpandedDetail'
 import { UncontrolledTooltip } from 'reactstrap'
+import { FormatCurrency } from '@lib/FormatNumbers'
+import AppContext from '@context/AppContext'
 
 type Props = {
   tableData: OrderRowType[]
@@ -13,6 +15,7 @@ type Props = {
 }
 
 const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
+  const { state }: any = useContext(AppContext)
   const orderNumber = (rowA: OrderRowType, rowB: OrderRowType) => {
     const a = rowA.orderNumber.toLowerCase()
     const b = rowB.orderNumber.toLowerCase()
@@ -292,7 +295,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
               totalCharge = 'Wating Box Plan'
               break
             default:
-              totalCharge = `$ ${row.totalCharge.toFixed(2) || 0.0}`
+              totalCharge = FormatCurrency(state.currentRegion, row.totalCharge)
           }
         }
         return totalCharge

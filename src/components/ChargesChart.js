@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import AppContext from '@context/AppContext'
 import dynamic from 'next/dynamic'
 import { FormatCurrency } from '@lib/FormatNumbers'
 const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 function ChargesChart({ totalCharges }) {
+  const { state } = useContext(AppContext)
   const series = [
     {
       name: 'Charge',
@@ -41,7 +43,7 @@ function ChargesChart({ totalCharges }) {
       enabled: true,
       formatter: function (val) {
         if (val > 0) {
-          return FormatCurrency.format(val)
+          return FormatCurrency(state.currentRegion, val)
         }
       },
       textAnchor: 'start',
@@ -74,7 +76,7 @@ function ChargesChart({ totalCharges }) {
       },
       y: {
         formatter: function (value) {
-          return FormatCurrency.format(value)
+          return FormatCurrency(state.currentRegion, value)
         },
       },
     },
