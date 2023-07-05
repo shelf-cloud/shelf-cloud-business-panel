@@ -84,13 +84,13 @@ function PrintInvoice({ invoiceDetails }: Props) {
                       <p>Catarroja, Valencia 46470</p>`)
 
     invoice += `<a href="mailto:info@shelf-cloud.com?Subject=Purchase%20Orders">info@shelf-cloud.com</a>
-                      <a href="https://www.shelf-cloud.com" target="_blank">https://www.shelf-cloud.com</a>
-                      
-                      
-                      <p style="font-size: 24px;font-weight: 900;text-transform: uppercase;margin: 13px 0px 0px 0px;">Business: ${
-                        invoiceDetails.invoice.businessName
-                      }</p>
-                      </div><!--End Left-->
+                      <a href="https://www.shelf-cloud.com" target="_blank">https://www.shelf-cloud.com</a>`
+
+    state.currentRegion == 'us'
+      ? (invoice += `<p style="font-size: 24px;font-weight: 900;text-transform: uppercase;margin: 13px 0px 0px 0px;">Business: ${invoiceDetails.invoice.businessName}</p>`)
+      : (invoice += `<p style="font-size: 24px;font-weight: 900;text-transform: uppercase;margin: 13px 0px 0px 0px;">Business: ${invoiceDetails.invoice.businessName}</p><p>NIF: ${invoiceDetails.invoice.businessNif} Dirección: ${invoiceDetails.invoice.businessAddress}</p>`)
+
+    invoice += `</div><!--End Left-->
                       <div id="right1">
                       <h1 style="font-size: 62px;text-transform: uppercase;">Invoice</h1>
                       <h3 style="font-size: 50px;font-weight: 900;color: #458BC9;">
