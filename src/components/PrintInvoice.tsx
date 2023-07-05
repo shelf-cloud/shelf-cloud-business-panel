@@ -78,8 +78,10 @@ function PrintInvoice({ invoiceDetails }: Props) {
     state.currentRegion == 'us'
       ? (invoice += `<p>9629 Premier Parkway</p>
                       <p>Miramar, FL 33025</p>`)
-      : (invoice += `<p>Calle 21, Nave 49</p>
-        <p>Catarroja, Valencia 46470</p>`)
+      : (invoice += `<strong>ELETROSTORE SL</strong>
+                      <strong>B86710639</strong>
+                      <p>Calle 21, Nave 49</p>
+                      <p>Catarroja, Valencia 46470</p>`)
 
     invoice += `<a href="mailto:info@shelf-cloud.com?Subject=Purchase%20Orders">info@shelf-cloud.com</a>
                       <a href="https://www.shelf-cloud.com" target="_blank">https://www.shelf-cloud.com</a>
