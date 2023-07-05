@@ -39,6 +39,8 @@ export interface InvoiceList {
 
 export interface InvoiceDetails {
   businessName: string
+  businessNif: string
+  businessAddress: string
   createdDate: string
   expireDate: string
   invoiceNumber: string
@@ -351,4 +353,31 @@ export interface WholeSaleOrder {
   totalItems: number
   numberPallets: number
   numberBoxes: number
+}
+
+export interface Children {
+  available: number
+  idInventory: number
+  qty: number
+  sku: string
+  title: string
+}
+
+export interface KitRow {
+  kitId: number
+  businessId: number
+  business: string
+  image: string
+  title: string
+  barcode: string
+  sku: string
+  asin: string
+  fnSku: string
+  quantity: number
+  weight: number
+  length: number
+  width: number
+  height: number
+  activeState: boolean
+  children: Children[]
 }
