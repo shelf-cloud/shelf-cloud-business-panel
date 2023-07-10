@@ -50,6 +50,7 @@ const ReceivingType = ({ data }: Props) => {
     }
   }, [data, state.currentRegion])
 
+  const OrderId = data.orderId?.replace(' ', '')
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
       <Row>
@@ -100,10 +101,8 @@ const ReceivingType = ({ data }: Props) => {
                         Service
                         {data.chargesFees && (
                           <>
-                            <i
-                              className='ri-information-fill ms-1 fs-6 text-muted'
-                              id={`tooltipService${data.orderId}`}></i>
-                            <TooltipComponent target={`tooltipService${data.orderId}`} text={serviceFee} />
+                            <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltipService${OrderId}`}></i>
+                            <TooltipComponent target={`tooltipService${OrderId}`} text={serviceFee} />
                           </>
                         )}
                       </td>
@@ -114,11 +113,9 @@ const ReceivingType = ({ data }: Props) => {
                         Pallets
                         {data.chargesFees && (
                           <>
-                            <i
-                              className='ri-information-fill ms-1 fs-6 text-muted'
-                              id={`tooltipPallet${data.orderId}`}></i>
+                            <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltipPallet${OrderId}`}></i>
                             <TooltipComponent
-                              target={`tooltipPallet${data.orderId}`}
+                              target={`tooltipPallet${OrderId}`}
                               text={`${FormatCurrency(state.currentRegion, data.chargesFees.receivingPalletCost!)} per pallet`}
                             />
                           </>
@@ -131,11 +128,9 @@ const ReceivingType = ({ data }: Props) => {
                         Wrap Service
                         {data.chargesFees && (
                           <>
-                            <i
-                              className='ri-information-fill ms-1 fs-6 text-muted'
-                              id={`tooltipWrap${data.orderId}`}></i>
+                            <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltipWrap${OrderId}`}></i>
                             <TooltipComponent
-                              target={`tooltipWrap${data.orderId}`}
+                              target={`tooltipWrap${OrderId}`}
                               text={`${FormatCurrency(state.currentRegion, data.chargesFees.receivingWrapService!)} per wrap`}
                             />
                           </>
@@ -148,11 +143,9 @@ const ReceivingType = ({ data }: Props) => {
                         Man Hour
                         {data.chargesFees && (
                           <>
-                            <i
-                              className='ri-information-fill ms-1 fs-6 text-muted'
-                              id={`tooltipHour${data.orderId}`}></i>
+                            <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltipHour${OrderId}`}></i>
                             <TooltipComponent
-                              target={`tooltipHour${data.orderId}`}
+                              target={`tooltipHour${OrderId}`}
                               text={`${FormatCurrency(state.currentRegion, data.chargesFees.receivingManHour!)} per hour`}
                             />
                           </>
@@ -218,12 +211,8 @@ const ReceivingType = ({ data }: Props) => {
                     <tr>
                       <td className='text-start fs-5 fw-bold text-nowrap'>Total QTY</td>
                       <td></td>
-                      <td className='text-center fw-semibold fs-5 text-primary'>
-                        {FormatIntNumber.format(Number(data.totalItems))}
-                      </td>
-                      <td className='text-center fw-semibold fs-5 text-primary'>
-                        {FormatIntNumber.format(Number(data.totalReceivedItems))}
-                      </td>
+                      <td className='text-center fw-semibold fs-5 text-primary'>{FormatIntNumber.format(Number(data.totalItems))}</td>
+                      <td className='text-center fw-semibold fs-5 text-primary'>{FormatIntNumber.format(Number(data.totalReceivedItems))}</td>
                     </tr>
                   </tbody>
                 </table>
