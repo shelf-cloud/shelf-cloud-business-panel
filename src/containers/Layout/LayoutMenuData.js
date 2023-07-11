@@ -98,18 +98,6 @@ const Navdata = () => {
           parentId: 'warehouse',
         },
         {
-          id: 'kits',
-          label: 'Kits',
-          link: '/Kits',
-          parentId: 'warehouse',
-        },
-        {
-          id: 'addkit',
-          label: 'Add Kit',
-          link: '/AddKit',
-          parentId: 'warehouse',
-        },
-        {
           id: 'inactive',
           label: 'Inactive Products',
           link: '/InactiveProducts',
@@ -200,7 +188,7 @@ const Navdata = () => {
     },
   ]
 
-  if (state.user?.showWholeSale) {
+  if (state.user[state.currentRegion]?.showWholeSale) {
     menuItems[2].subItems.unshift({
       id: 'createwholesale',
       label: 'Create Wholesale Order',
@@ -209,12 +197,27 @@ const Navdata = () => {
     })
   }
   
-  if (state.user?.showCreateOrder) {
+  if (state.user[state.currentRegion]?.showCreateOrder) {
     menuItems[2].subItems.unshift({
       id: 'createorder',
       label: 'Create Order',
       link: '/CreateOrder',
       parentId: 'shipments',
+    })
+  }
+  
+  if (state.user[state.currentRegion]?.showKits) {
+    menuItems[1].subItems.unshift({
+      id: 'addkit',
+      label: 'Add Kit',
+      link: '/AddKit',
+      parentId: 'warehouse',
+    })
+    menuItems[1].subItems.unshift({
+      id: 'kits',
+      label: 'Kits',
+      link: '/Kits',
+      parentId: 'warehouse',
     })
   }
 

@@ -12,6 +12,7 @@ import { getSession } from '@auth/client'
 import InventoryBinsModal from '@components/InventoryBinsModal'
 import MasterBoxes from '@components/orders/wholesale/MasterBoxes'
 import SingleItems from '@components/orders/wholesale/SingleItems'
+import { useRouter } from 'next/router'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -38,38 +39,43 @@ type Props = {
 }
 
 const CreateWholeSaleOrder = ({ session }: Props) => {
+  const { push } = useRouter()
   const { state }: any = useContext(AppContext)
   const orderNumberStart = `${session?.user?.name.substring(0, 3).toUpperCase()}-`
   const [pending, setPending] = useState(true)
   const [completeData, setCompleteData] = useState<wholesaleProductRow[]>([])
 
   useEffect(() => {
+    if (!state.user[state.currentRegion]?.showWholeSale) {
+      push('/')
+    }
+  }, [])
+
+  useEffect(() => {
     const bringWholesaleInv = async () => {
-      await axios(`/api/getWholesaleInventory?region=${state.currentRegion}&businessId=${state.user.businessId}`).then(
-        (res) => {
-          const list: wholesaleProductRow[] = []
-          res.data.forEach((product: WholesaleProduct) => {
-            const row = {
-              image: product.image,
-              title: product.title,
+      await axios(`/api/getWholesaleInventory?region=${state.currentRegion}&businessId=${state.user.businessId}`).then((res) => {
+        const list: wholesaleProductRow[] = []
+        res.data.forEach((product: WholesaleProduct) => {
+          const row = {
+            image: product.image,
+            title: product.title,
+            sku: product.sku,
+            quantity: {
+              quantity: product.quantity,
+              inventoryId: product.inventoryId,
+              businessId: product.businessId,
               sku: product.sku,
-              quantity: {
-                quantity: product.quantity,
-                inventoryId: product.inventoryId,
-                businessId: product.businessId,
-                sku: product.sku,
-              },
-              qtyBox: product.boxQty,
-              orderQty: '',
-              totalToShip: 0,
-              maxOrderQty: product.maxOrderQty,
-            }
-            list.push(row)
-          })
-          setCompleteData(list)
-          setPending(false)
-        }
-      )
+            },
+            qtyBox: product.boxQty,
+            orderQty: '',
+            totalToShip: 0,
+            maxOrderQty: product.maxOrderQty,
+          }
+          list.push(row)
+        })
+        setCompleteData(list)
+        setPending(false)
+      })
     }
     state.user.businessId && bringWholesaleInv()
     return () => {
@@ -129,19 +135,11 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                   <CardBody>
                     <TabContent activeTab={activeTab}>
                       <TabPane tabId='1'>
-                        <MasterBoxes
-                          completeData={completeData}
-                          pending={pending}
-                          orderNumberStart={orderNumberStart}
-                        />
+                        <MasterBoxes completeData={completeData} pending={pending} orderNumberStart={orderNumberStart} />
                       </TabPane>
 
                       <TabPane tabId='2'>
-                        <SingleItems
-                          completeData={completeData}
-                          pending={pending}
-                          orderNumberStart={orderNumberStart}
-                        />
+                        <SingleItems completeData={completeData} pending={pending} orderNumberStart={orderNumberStart} />
                       </TabPane>
                     </TabContent>
                   </CardBody>

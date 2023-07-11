@@ -15,6 +15,7 @@ import EditProductModal from '@components/EditProductModal'
 // import { CSVLink } from 'react-csv'
 import Link from 'next/link'
 import KitsTable from '@components/kits/KitsTable'
+import { useRouter } from 'next/router'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -41,12 +42,19 @@ type Props = {
 }
 
 const Kits = ({ session }: Props) => {
+  const { push } = useRouter()
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<KitRow[]>([])
   const [tableData, setTableData] = useState<KitRow[]>([])
   const [serachValue, setSerachValue] = useState('')
+
+  useEffect(() => {
+    if (!state.user[state.currentRegion]?.showKits) {
+      push('/')
+    }
+  }, [])
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data } = useSWR(

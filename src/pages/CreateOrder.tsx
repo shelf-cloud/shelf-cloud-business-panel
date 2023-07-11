@@ -12,7 +12,7 @@ import AppContext from '@context/AppContext'
 import useSWR, { useSWRConfig } from 'swr'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
-import router from 'next/router'
+import router, { useRouter } from 'next/router'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -39,6 +39,7 @@ type Props = {
 }
 
 const CreateOrder = ({ session }: Props) => {
+  const { push } = useRouter()
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const title = `Add Product | ${session?.user?.name}`
@@ -53,6 +54,12 @@ const CreateOrder = ({ session }: Props) => {
   const [countries, setcountries] = useState([])
   const [validCountries, setValidCountries] = useState<string[]>([])
   const [creatingOrder, setCreatingOrder] = useState(false)
+
+  useEffect(() => {
+    if (!state.user[state.currentRegion]?.showCreateOrder) {
+      push('/')
+    }
+  }, [])
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data } = useSWR(
