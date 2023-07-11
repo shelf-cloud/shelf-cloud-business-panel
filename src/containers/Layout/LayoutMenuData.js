@@ -91,12 +91,12 @@ const Navdata = () => {
           link: '/Products',
           parentId: 'warehouse',
         },
-        {
-          id: 'addproduct',
-          label: 'Add Product',
-          link: '/AddProduct',
-          parentId: 'warehouse',
-        },
+        // {
+        //   id: 'addproduct',
+        //   label: 'Add Product',
+        //   link: '/AddProduct',
+        //   parentId: 'warehouse',
+        // },
         {
           id: 'inactive',
           label: 'Inactive Products',
@@ -207,12 +207,12 @@ const Navdata = () => {
   }
   
   if (state.user[state.currentRegion]?.showKits) {
-    menuItems[1].subItems.unshift({
-      id: 'addkit',
-      label: 'Add Kit',
-      link: '/AddKit',
-      parentId: 'warehouse',
-    })
+    // menuItems[1].subItems.unshift({
+    //   id: 'addkit',
+    //   label: 'Add Kit',
+    //   link: '/AddKit',
+    //   parentId: 'warehouse',
+    // })
     menuItems[1].subItems.unshift({
       id: 'kits',
       label: 'Kits',

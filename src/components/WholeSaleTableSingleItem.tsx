@@ -77,10 +77,6 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
 
   const conditionalRowStyles = [
     {
-      when: (row: wholesaleProductRow) => Number(row.maxOrderQty) == 0,
-      classNames: ['bg-warning bg-opacity-25'],
-    },
-    {
       when: (row: wholesaleProductRow) => Number(row.orderQty) > 0,
       classNames: ['bg-success bg-opacity-25'],
     },
