@@ -5,7 +5,7 @@ import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import AppContext from '@context/AppContext'
 import { Button, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from 'reactstrap'
-import TooltipComponent from '../constants/Tooltip'
+// import TooltipComponent from '../constants/Tooltip'
 import KitExpandedDetails from './KitExpandedDetails'
 
 type Props = {
@@ -117,7 +117,7 @@ const KitsTable = ({ tableData, pending, changeProductState, setMsg, icon, activ
             <p style={{ margin: '0px' }} className='d-flex flex-row justify-content-start align-items-start'>
               {row.sku} {row.note != '' && <i className='ri-information-fill ms-2 fs-5 text-warning' id={`tooltip${row.sku}`}></i>}
             </p>
-            {row.note != '' && <TooltipComponent target={`tooltip${row.sku}`} text={row.note} />}
+            {/* {row.note != '' && <TooltipComponent target={`tooltip${row.sku}`} text={row.note} />} */}
           </div>
         )
       },

@@ -11,7 +11,7 @@ const KitType = ({ data }: Props) => {
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
       <Row>
         <Col xl={12}>
-          <Card>
+          <Card className='m-0'>
             <CardHeader className='py-3'>
               <h5 className='fw-semibold m-0'>Kit Children</h5>
             </CardHeader>
@@ -39,12 +39,14 @@ const KitType = ({ data }: Props) => {
                         <td className='text-center'>{product.available}</td>
                       </tr>
                     ))}
-                    {/* <tr>
-                      <td className='text-start fs-5 fw-bold text-nowrap'>Total QTY</td>
+                    <tr>
                       <td></td>
+                      <td className='text-end fs-5 fw-bold text-nowrap'>Total Qty</td>
+                      <td className='text-center fs-5 text-primary'>
+                        {data.children.reduce((total, product: Children) => total + Number(product.qty), 0)}
+                      </td>
                       <td></td>
-                      <td className='text-center fs-5 text-primary'>{data.totalItems}</td>
-                    </tr> */}
+                    </tr>
                   </tbody>
                 </table>
               </div>
