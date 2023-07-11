@@ -98,6 +98,18 @@ const Navdata = () => {
           parentId: 'warehouse',
         },
         {
+          id: 'kits',
+          label: 'Kits',
+          link: '/Kits',
+          parentId: 'warehouse',
+        },
+        {
+          id: 'addkit',
+          label: 'Add Kit',
+          link: '/AddKit',
+          parentId: 'warehouse',
+        },
+        {
           id: 'inactive',
           label: 'Inactive Products',
           link: '/InactiveProducts',
