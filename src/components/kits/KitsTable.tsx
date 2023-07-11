@@ -18,7 +18,7 @@ type Props = {
 }
 
 const KitsTable = ({ tableData, pending, changeProductState, setMsg, icon, activeText }: Props) => {
-  const { setModalProductDetails, state }: any = useContext(AppContext)
+  const { state }: any = useContext(AppContext)
 
   const loadBarcode = (product: KitRow) => {
     var html = '<!DOCTYPE html><html><head>'
