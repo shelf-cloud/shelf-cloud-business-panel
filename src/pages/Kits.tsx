@@ -169,6 +169,20 @@ const Kits = ({ session }: Props) => {
             <Row>
               <Col lg={12}>
                 <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-3 flex-md-row justify-content-md-between align-items-md-center'>
+                  <div className='w-auto d-flex flex-row align-items-center justify-content-between gap-4'>
+                    <Link href={'/AddKit'} passHref>
+                      <Button color='primary' className='fs-5 py-1 p3-1'>
+                        <i className='mdi mdi-plus-circle label-icon align-middle fs-5 me-2' />
+                        Add Kit
+                      </Button>
+                    </Link>
+                    {/* <CSVLink data={csvData} style={{ width: 'fit-content' }} filename={`${session?.user?.name.toUpperCase()}-Products.csv`}>
+                      <Button color='primary' className='fs-5 py-1 p3-1'>
+                        <i className='mdi mdi-arrow-down-bold label-icon align-middle fs-5 me-2' />
+                        Export
+                      </Button>
+                    </CSVLink> */}
+                  </div>
                   <div className='col-sm-12 col-md-3'>
                     <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
                       <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
@@ -189,20 +203,6 @@ const Kits = ({ session }: Props) => {
                         </span>
                       </div>
                     </div>
-                  </div>
-                  <div className='w-auto d-flex flex-row align-items-center justify-content-between gap-4'>
-                    <Link href={'/AddKit'} passHref>
-                      <Button color='primary' className='fs-5 py-1 p3-1'>
-                        <i className='mdi mdi-plus-circle label-icon align-middle fs-5 me-2' />
-                        Add Kit
-                      </Button>
-                    </Link>
-                    {/* <CSVLink data={csvData} style={{ width: 'fit-content' }} filename={`${session?.user?.name.toUpperCase()}-Products.csv`}>
-                      <Button color='primary' className='fs-5 py-1 p3-1'>
-                        <i className='mdi mdi-arrow-down-bold label-icon align-middle fs-5 me-2' />
-                        Export
-                      </Button>
-                    </CSVLink> */}
                   </div>
                 </Row>
                 <Card>
