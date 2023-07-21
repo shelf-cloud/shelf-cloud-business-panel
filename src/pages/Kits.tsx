@@ -155,7 +155,7 @@ const Kits = ({ session }: Props) => {
   //   return data
   // }, [allData])
 
-  const title = `Products | ${session?.user?.name}`
+  const title = `Kits | ${session?.user?.name}`
   return (
     <div>
       <Head>
@@ -164,7 +164,7 @@ const Kits = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <Container fluid>
-            <BreadCrumb title='Products' pageTitle='Warehouse' />
+            <BreadCrumb title='Kits' pageTitle='Warehouse' />
             <Row>
               <Col lg={12}>
                 <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-3 flex-md-row justify-content-md-between align-items-md-center'>
