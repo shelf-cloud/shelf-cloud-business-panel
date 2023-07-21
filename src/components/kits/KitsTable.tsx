@@ -4,7 +4,7 @@ import { KitRow } from '@typings'
 import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import AppContext from '@context/AppContext'
-import { Button, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from 'reactstrap'
+import { DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from 'reactstrap'
 // import TooltipComponent from '../constants/Tooltip'
 import KitExpandedDetails from './KitExpandedDetails'
 
@@ -17,8 +17,8 @@ type Props = {
   activeText: string
 }
 
-const KitsTable = ({ tableData, pending, changeProductState, setMsg, icon, activeText }: Props) => {
-  const { state }: any = useContext(AppContext)
+const KitsTable = ({ tableData, pending}: Props) => {
+  const { state, setModalKitDetails }: any = useContext(AppContext)
 
   const loadBarcode = (product: KitRow) => {
     var html = '<!DOCTYPE html><html><head>'
@@ -110,7 +110,7 @@ const KitsTable = ({ tableData, pending, changeProductState, setMsg, icon, activ
           SKU
         </span>
       ),
-      selector: (row: any) => {
+      selector: (row: KitRow) => {
         return (
           <div>
             <p style={{ margin: '0px', fontWeight: '800' }}>{row.title}</p>
@@ -137,7 +137,7 @@ const KitsTable = ({ tableData, pending, changeProductState, setMsg, icon, activ
           Barcode
         </span>
       ),
-      selector: (row: any) => {
+      selector: (row: KitRow) => {
         return (
           <div>
             <p style={{ margin: '0px' }}>
@@ -160,20 +160,7 @@ const KitsTable = ({ tableData, pending, changeProductState, setMsg, icon, activ
     },
     {
       name: <span className='font-weight-bold fs-13'>Quantity</span>,
-      selector: (cell: any) => {
-        return (
-          <Button
-            color='primary'
-            outline
-            className='btn btn-ghost-primary'
-            // onClick={() => {
-            //   setModalProductInfo(cell.Quantity.inventoryId, state.user.businessId, cell.Quantity.sku)
-            // }}
-          >
-            {cell.quantity}
-          </Button>
-        )
-      },
+      selector: (cell: any) => cell.quantity,
       sortable: true,
       compact: true,
       center: true,
@@ -212,10 +199,17 @@ const KitsTable = ({ tableData, pending, changeProductState, setMsg, icon, activ
       },
     },
     {
+      name: <span className='font-weight-bold fs-13'>Qty/Box</span>,
+      selector: (row: { boxQty: number }) => row.boxQty,
+      sortable: true,
+      center: true,
+      compact: true,
+    },
+    {
       name: <span className='font-weight-bold fs-13'>Action</span>,
       sortable: false,
       compact: true,
-      cell: (row: any) => {
+      cell: (row: KitRow) => {
         return (
           <UncontrolledDropdown className='dropdown d-inline-block'>
             <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
@@ -224,16 +218,16 @@ const KitsTable = ({ tableData, pending, changeProductState, setMsg, icon, activ
             <DropdownMenu className='dropdown-menu-end'>
               <DropdownItem
                 className='edit-item-btn'
-                // onClick={() => setModalProductDetails(row.btns.inventoryId, state.user.businessId, row.btns.sku)}
+                onClick={() => setModalKitDetails(row.kitId, state.user.businessId, row.sku)}
                 >
                 <i className='ri-pencil-fill align-middle me-2 fs-5 text-muted'></i>
                 <span className='fs-6 fw-normal'>Edit</span>
               </DropdownItem>
-              {(row.quantity == 0 || !row.activeState) && (
+              {/* {(row.quantity == 0 || !row.activeState) && (
                 <DropdownItem className={activeText} onClick={() => changeProductState(row.btns.inventoryId, state.user.businessId, row.btns.sku)}>
                   <i className={icon}></i> {setMsg}
                 </DropdownItem>
-              )}
+              )} */}
             </DropdownMenu>
           </UncontrolledDropdown>
         )

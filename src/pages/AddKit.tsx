@@ -48,6 +48,8 @@ const AddKit = ({ session }: Props) => {
   const [skuQuantities, setSkuQuantities] = useState<any>({})
   const [validSkus, setValidSkus] = useState<string[]>([])
   const [inValidSkus, setInValidSkus] = useState<string[]>([])
+  const [duplicateSkus, setDuplicateSkus] = useState(false)
+
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data } = useSWR(state.user.businessId ? `/api/getSkus?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher)
 
@@ -84,6 +86,7 @@ const AddKit = ({ session }: Props) => {
     width: '',
     length: '',
     height: '',
+    boxqty: '',
     children: [
       {
         sku: '',
@@ -91,11 +94,6 @@ const AddKit = ({ session }: Props) => {
         qty: 1,
       },
     ],
-    // boxweight: '',
-    // boxwidth: '',
-    // boxlength: '',
-    // boxheight: '',
-    // boxqty: '',
   }
 
   const validationSchema = Yup.object({
@@ -134,14 +132,26 @@ const AddKit = ({ session }: Props) => {
         })
       )
       .required('Must have products'),
-    // boxweight: Yup.number().required('Please Enter Your Box Eeight').positive('Value must be grater than 0'),
-    // boxwidth: Yup.number().required('Please Enter Your Box Width').positive('Value must be grater than 0'),
-    // boxlength: Yup.number().required('Please Enter Your Box Length').positive('Value must be grater than 0'),
-    // boxheight: Yup.number().required('Please Enter Your Box Height').positive('Value must be grater than 0'),
-    // boxqty: Yup.number().required('Please Enter Your Box Qty').positive('Value must be grater than 0').integer('Only integers'),
   })
 
   const handleSubmit = async (values: any, { resetForm }: any) => {
+    const ChildrenSkus = (await values.children.map((child: any) => {
+      return child.sku
+    })) as String[]
+    if (
+      values.children.some((child: any) => {
+        const count = ChildrenSkus.filter((sku) => sku == child.sku)
+        if (count.length > 1) {
+          return true
+        } else {
+          return false
+        }
+      })
+    ) {
+      setDuplicateSkus(true)
+      return
+    }
+    setDuplicateSkus(false)
     setCreatingKit(true)
     const response = await axios.post(`api/createNewKit?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
       orderInfo: values,
@@ -285,25 +295,46 @@ const AddKit = ({ session }: Props) => {
                               {touched.barcode && errors.barcode ? <FormFeedback type='invalid'>{errors.barcode}</FormFeedback> : null}
                             </FormGroup>
                           </Col>
-                          <Col md={12}>
-                            <FormGroup className='mb-3'>
-                              <Label htmlFor='lastNameinput' className='form-label'>
-                                Product Image
-                              </Label>
-                              <Input
-                                type='text'
-                                className='form-control'
-                                placeholder='Image URL...'
-                                id='image'
-                                name='image'
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.image || ''}
-                                invalid={touched.image && errors.image ? true : false}
-                              />
-                              {touched.image && errors.image ? <FormFeedback type='invalid'>{errors.image}</FormFeedback> : null}
-                            </FormGroup>
-                          </Col>
+                          <Row>
+                            <Col md={9}>
+                              <FormGroup className='mb-3'>
+                                <Label htmlFor='lastNameinput' className='form-label'>
+                                  Product Image
+                                </Label>
+                                <Input
+                                  type='text'
+                                  className='form-control'
+                                  placeholder='Image URL...'
+                                  id='image'
+                                  name='image'
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                  value={values.image || ''}
+                                  invalid={touched.image && errors.image ? true : false}
+                                />
+                                {touched.image && errors.image ? <FormFeedback type='invalid'>{errors.image}</FormFeedback> : null}
+                              </FormGroup>
+                            </Col>
+                            <Col md={3}>
+                              <FormGroup className='mb-3'>
+                                <Label htmlFor='compnayNameinput' className='form-label'>
+                                  *Master Box Quantity
+                                </Label>
+                                <Input
+                                  type='number'
+                                  className='form-control'
+                                  placeholder='Box Qty...'
+                                  id='boxqty'
+                                  name='boxqty'
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                  value={values.boxqty || ''}
+                                  invalid={touched.boxqty && errors.boxqty ? true : false}
+                                />
+                                {touched.boxqty && errors.boxqty ? <FormFeedback type='invalid'>{errors.boxqty}</FormFeedback> : null}
+                              </FormGroup>
+                            </Col>
+                          </Row>
                           <div className='border mt-3 border-dashed'></div>
                           <h5 className='fs-5 m-3 fw-bolder'>Unit Dimensions</h5>
                           <Col md={3}>
@@ -383,125 +414,6 @@ const AddKit = ({ session }: Props) => {
                             </FormGroup>
                           </Col>
                           <div className='border mt-3 border-dashed'></div>
-                          {/* <div className='align-items-center d-flex'>
-                      <h5 className='fs-5 m-3 fw-bolder'>Box Dimensions</h5>
-                      <div className='flex-shrink-0'>
-                        <div className='form-check form-switch form-switch-right form-switch-md'>
-                          <Label className='form-label text-muted'>Same as unit dimensions</Label>
-                          <Input
-                            className='form-check-input code-switcher'
-                            type='checkbox'
-                            checked={useSameUnitDimensions}
-                            onChange={handleBoxDimensionsCheckbox}
-                          />
-                        </div>
-                      </div>
-                    </div> */}
-                          {/* <Col md={3}>
-                      <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label'>
-                          *Box Weight {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(lb)' : '(kg)')}
-                        </Label>
-                        <Input
-                          type='number'
-                          className='form-control'
-                          placeholder='Box Weight...'
-                          id='boxweight'
-                          name='boxweight'
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.boxweight || ''}
-                          invalid={touched.boxweight && errors.boxweight ? true : false}
-                        />
-                        {touched.boxweight && errors.boxweight ? (
-                          <FormFeedback type='invalid'>{errors.boxweight}</FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label'>
-                          *Box Width {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(in)' : '(cm)')}
-                        </Label>
-                        <Input
-                          type='number'
-                          className='form-control'
-                          placeholder='Box Width...'
-                          id='boxwidth'
-                          name='boxwidth'
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.boxwidth || ''}
-                          invalid={touched.boxwidth && errors.boxwidth ? true : false}
-                        />
-                        {touched.boxwidth && errors.boxwidth ? (
-                          <FormFeedback type='invalid'>{errors.boxwidth}</FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label'>
-                          *Box Length {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(in)' : '(cm)')}
-                        </Label>
-                        <Input
-                          type='number'
-                          className='form-control'
-                          placeholder='Box Length...'
-                          id='boxlength'
-                          name='boxlength'
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.boxlength || ''}
-                          invalid={touched.boxlength && errors.boxlength ? true : false}
-                        />
-                        {touched.boxlength && errors.boxlength ? (
-                          <FormFeedback type='invalid'>{errors.boxlength}</FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label'>
-                          *Box Height {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(in)' : '(cm)')}
-                        </Label>
-                        <Input
-                          type='number'
-                          className='form-control'
-                          placeholder='Box Height...'
-                          id='boxheight'
-                          name='boxheight'
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.boxheight || ''}
-                          invalid={touched.boxheight && errors.boxheight ? true : false}
-                        />
-                        {touched.boxheight && errors.boxheight ? (
-                          <FormFeedback type='invalid'>{errors.boxheight}</FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label'>
-                          *Box Quantity
-                        </Label>
-                        <Input
-                          type='number'
-                          className='form-control'
-                          placeholder='Box Qty...'
-                          id='boxqty'
-                          name='boxqty'
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.boxqty || ''}
-                          invalid={touched.boxqty && errors.boxqty ? true : false}
-                        />
-                        {touched.boxqty && errors.boxqty ? (
-                          <FormFeedback type='invalid'>{errors.boxqty}</FormFeedback>
-                        ) : null}
-                      </FormGroup>
-                    </Col> */}
                           <Row>
                             <h5 className='fs-5 m-3 mb-1 fw-bolder'>Kit Children</h5>
                             <Col xl={12} className='p-0 mt-1'>
@@ -631,9 +543,8 @@ const AddKit = ({ session }: Props) => {
                                                     onClick={() =>
                                                       push({
                                                         sku: '',
-                                                        name: '',
+                                                        title: '',
                                                         qty: 1,
-                                                        price: '0',
                                                       })
                                                     }>
                                                     <i className='fs-2 las la-plus-circle' />
@@ -650,7 +561,7 @@ const AddKit = ({ session }: Props) => {
                                                     onClick={() =>
                                                       push({
                                                         sku: '',
-                                                        name: '',
+                                                        title: '',
                                                         qty: 1,
                                                       })
                                                     }>
@@ -668,6 +579,11 @@ const AddKit = ({ session }: Props) => {
                               </table>
                             </Col>
                           </Row>
+                          {duplicateSkus && (
+                            <p style={{ width: '100%', marginTop: '0.25rem', fontSize: '0.875em', color: '#f06548' }}>
+                              Duplicate SKUS in Children List
+                            </p>
+                          )}
                           <h5 className='fs-14 my-0 text-muted fw-normal'>
                             *You must complete all required fields or you will not be able to create your product.
                           </h5>

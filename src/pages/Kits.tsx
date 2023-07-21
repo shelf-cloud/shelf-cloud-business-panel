@@ -10,12 +10,11 @@ import { Button, Card, CardBody, Col, Container, Input, Row } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import useSWR, { useSWRConfig } from 'swr'
-import InventoryBinsModal from '@components/InventoryBinsModal'
-import EditProductModal from '@components/EditProductModal'
 // import { CSVLink } from 'react-csv'
 import Link from 'next/link'
 import KitsTable from '@components/kits/KitsTable'
 import { useRouter } from 'next/router'
+import EditKitModal from '@components/kits/EditKitModal'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -224,8 +223,7 @@ const Kits = ({ session }: Props) => {
           </Container>
         </div>
       </React.Fragment>
-      {state.showInventoryBinsModal && <InventoryBinsModal />}
-      {state.showEditProductModal && <EditProductModal />}
+      {state.showEditKitModal && <EditKitModal />}
     </div>
   )
 }

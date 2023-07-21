@@ -33,6 +33,10 @@ const initialState = {
   modalProductInfo: {},
   showEditProductModal: false,
   modalProductDetails: {},
+
+  showEditKitModal: false,
+  modalKitDetails: {},
+
   showWholeSaleOrderModal: false,
   showSingleBoxesOrderModal: false,
   modalCreateReturnInfo: {},
@@ -41,7 +45,7 @@ const initialState = {
   orderNumberfromInvoices: null,
   showOrderDetailsOfInvoiceModal: false,
   showIndividualUnitsPlan: false,
-  showUploadIndividualUnitsLabelsModal: false
+  showUploadIndividualUnitsLabelsModal: false,
 }
 
 const useInitialState = () => {
@@ -121,6 +125,25 @@ const useInitialState = () => {
     })
   }
 
+  const setShowEditKitModal = (payload) => {
+    setState({
+      ...state,
+      showEditKitModal: payload,
+    })
+  }
+
+  const setModalKitDetails = (kitId, businessId, sku) => {
+    setState({
+      ...state,
+      modalKitDetails: {
+        kitId,
+        businessId,
+        sku,
+      },
+      showEditKitModal: true,
+    })
+  }
+
   const setModalProductDetails = (inventoryId, businessId, sku) => {
     setState({
       ...state,
@@ -154,7 +177,7 @@ const useInitialState = () => {
       showWholeSaleOrderModal: payload,
     })
   }
-  
+
   const setSingleBoxesOrderModal = (payload) => {
     setState({
       ...state,
@@ -194,14 +217,14 @@ const useInitialState = () => {
       showOrderDetailsOfInvoiceModal: payload,
     })
   }
-  
+
   const setIndividualUnitsPlan = (payload) => {
     setState({
       ...state,
       showIndividualUnitsPlan: payload,
     })
   }
-  
+
   const setUploadIndividualUnitsLabelsModal = (payload) => {
     setState({
       ...state,
@@ -216,6 +239,8 @@ const useInitialState = () => {
     setshowInventoryBinsModal,
     setModalProductInfo,
     setShowEditProductModal,
+    setShowEditKitModal,
+    setModalKitDetails,
     setModalProductDetails,
     addWholesaleProduct,
     removeWholesaleProduct,
@@ -226,7 +251,7 @@ const useInitialState = () => {
     setUploadProductsModal,
     setShowOrderDetailsOfInvoiceModal,
     setIndividualUnitsPlan,
-    setUploadIndividualUnitsLabelsModal
+    setUploadIndividualUnitsLabelsModal,
   }
 }
 

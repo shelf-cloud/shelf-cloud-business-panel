@@ -380,4 +380,5 @@ export interface KitRow {
   height: number
   activeState: boolean
   children: Children[]
+  note?: string
 }
