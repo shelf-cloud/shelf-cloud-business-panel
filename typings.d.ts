@@ -313,6 +313,15 @@ export interface WholesaleProduct {
   boxHeight: number
   activeState: boolean
   maxOrderQty: number
+  isKit?: boolean
+  children?: {
+    available: number
+    idInventory: number
+    maxKits: number
+    qty: number
+    sku: number
+    title: string
+  }[]
 }
 export interface wholesaleProductRow {
   image: string
@@ -328,6 +337,15 @@ export interface wholesaleProductRow {
   orderQty: string
   totalToShip?: number
   maxOrderQty?: number
+  isKit?: boolean
+  children?: {
+    available: number
+    idInventory: number
+    maxKits: number
+    qty: number
+    sku: number
+    title: string
+  }[]
 }
 
 export interface WholeSaleOrderProduct {

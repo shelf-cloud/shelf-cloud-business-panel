@@ -75,6 +75,21 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
     return 0
   }
 
+  const typeSort = (rowA: wholesaleProductRow, rowB: wholesaleProductRow) => {
+    const a = rowA.isKit!
+    const b = rowB.isKit!
+
+    if (a > b) {
+      return 1
+    }
+
+    if (b > a) {
+      return -1
+    }
+
+    return 0
+  }
+
   const conditionalRowStyles = [
     {
       when: (row: wholesaleProductRow) => Number(row.orderQty) > 0,
@@ -124,46 +139,73 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
         </span>
       ),
       selector: (row: wholesaleProductRow) => {
-        return (
-          <div>
-            <p style={{ margin: '0px', fontWeight: '800' }}>{row.title}</p>
-            <p style={{ margin: '0px' }}>{row.sku}</p>
-          </div>
-        )
+        if (row.isKit) {
+          return (
+            <div style={{ padding: '4px 0px' }}>
+              <p style={{ margin: '0px', fontWeight: '800' }}>{row.title}</p>
+              <p style={{ margin: '0px' }}>{row.sku}</p>
+              <ul style={{ margin: '0px' }}>
+                {row.children?.map((child) => (
+                  <li
+                    style={{ margin: '0px', fontSize: '10px' }}
+                    key={child.idInventory}>{`${child.title} | ${child.sku} | Available: ${child.available} | Used: ${child.qty}`}</li>
+                ))}
+              </ul>
+            </div>
+          )
+        } else {
+          return (
+            <div>
+              <p style={{ margin: '0px', fontWeight: '800' }}>{row.title}</p>
+              <p style={{ margin: '0px' }}>{row.sku}</p>
+            </div>
+          )
+        }
       },
       sortable: true,
       wrap: true,
-      grow: 1,
+      grow: 2,
       sortFunction: caseInsensitiveSort,
       //   compact: true,
     },
     {
+      name: <span className='fw-bold fs-5'>Type</span>,
+      selector: (cell: any) => {
+        if (cell.isKit) {
+          return <span className='badge text-uppercase badge-soft-info p-2'>kit</span>
+        } else {
+          return <span className='badge text-uppercase badge-soft-primary p-2'>product</span>
+        }
+      },
+      sortable: true,
+      compact: true,
+      center: true,
+      sortFunction: typeSort,
+    },
+    {
       name: <span className='fw-bold fs-5'>Quantity</span>,
       selector: (cell: any) => {
-        return (
-          <Button
-            color='info'
-            outline
-            className='btn btn-ghost-info'
-            onClick={() => {
-              setModalProductInfo(cell.quantity.inventoryId, state.user.businessId, cell.quantity.sku)
-            }}>
-            {cell.quantity.quantity}
-          </Button>
-        )
+        if (cell.isKit) {
+          return cell.quantity.quantity
+        } else {
+          return (
+            <Button
+              color='info'
+              outline
+              className='btn btn-ghost-info'
+              onClick={() => {
+                setModalProductInfo(cell.quantity.inventoryId, state.user.businessId, cell.quantity.sku)
+              }}>
+              {cell.quantity.quantity}
+            </Button>
+          )
+        }
       },
       sortable: true,
       compact: true,
       center: true,
       sortFunction: quantitySort,
     },
-    // {
-    //   name: <span className='fw-bold fs-5'>Qty/Box</span>,
-    //   selector: (row: wholesaleProductRow) => row.qtyBox,
-    //   sortable: true,
-    //   center: true,
-    //   compact: true,
-    // },
     {
       name: (
         <span className='fw-bold fs-5 text-center'>

@@ -464,6 +464,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                 <thead>
                   <tr>
                     <th>SKU</th>
+                    <th className='text-center'>Type</th>
                     <th className='text-center'>Master Boxes</th>
                     <th className='text-center'>Total Qty To Ship</th>
                   </tr>
@@ -472,12 +473,14 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                   {orderProducts?.map((product, index: number) => (
                     <tr key={index}>
                       <td>{product.sku}</td>
+                      <td className='text-center'>{product.isKit ? 'Kit' : 'Product'}</td>
                       <td className='text-center'>{product.orderQty}</td>
                       <td className='text-center'>{product.totalToShip}</td>
                     </tr>
                   ))}
                   <tr key={'totalMasterBoxes'} style={{ backgroundColor: '#e5e5e5' }}>
-                    <td className='fw-bold'>TOTAL</td>
+                    <td></td>
+                    <td className='fw-bold text-center'>TOTAL</td>
                     <td className='fw-bold text-center'>{TotalMasterBoxes}</td>
                     <td className='fw-bold text-center'>{totalQuantityToShip}</td>
                   </tr>

@@ -17,7 +17,7 @@ type Props = {
   activeText: string
 }
 
-const KitsTable = ({ tableData, pending}: Props) => {
+const KitsTable = ({ tableData, pending }: Props) => {
   const { state, setModalKitDetails }: any = useContext(AppContext)
 
   const loadBarcode = (product: KitRow) => {
@@ -170,7 +170,7 @@ const KitsTable = ({ tableData, pending}: Props) => {
       name: <span className='font-weight-bold fs-13'>Unit Dimensions</span>,
       sortable: false,
       compact: true,
-      grow: 1.4,
+      grow: 1.3,
       selector: (cell: any) => {
         return (
           <div style={{ padding: '7px 0px' }}>
@@ -199,6 +199,38 @@ const KitsTable = ({ tableData, pending}: Props) => {
       },
     },
     {
+      name: <span className='font-weight-bold fs-13'>Box Dimensions</span>,
+      sortable: false,
+      compact: true,
+      grow: 1.3,
+      selector: (cell: any) => {
+        return (
+          <div style={{ padding: '7px 5px 7px 0px' }}>
+            <Row>
+              <span>
+                Weight: {cell.boxweight} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'lb' : 'kg')}
+              </span>
+            </Row>
+            <Row>
+              <span>
+                Length: {cell.boxlength} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
+              </span>
+            </Row>
+            <Row>
+              <span>
+                Width: {cell.boxwidth} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
+              </span>
+            </Row>
+            <Row>
+              <span>
+                Height: {cell.boxheight} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
+              </span>
+            </Row>
+          </div>
+        )
+      },
+    },
+    {
       name: <span className='font-weight-bold fs-13'>Qty/Box</span>,
       selector: (row: { boxQty: number }) => row.boxQty,
       sortable: true,
@@ -216,10 +248,7 @@ const KitsTable = ({ tableData, pending}: Props) => {
               <i className='mdi mdi-dots-vertical align-middle fs-2 m-0 p-2' style={{ color: '#919FAF' }}></i>
             </DropdownToggle>
             <DropdownMenu className='dropdown-menu-end'>
-              <DropdownItem
-                className='edit-item-btn'
-                onClick={() => setModalKitDetails(row.kitId, state.user.businessId, row.sku)}
-                >
+              <DropdownItem className='edit-item-btn' onClick={() => setModalKitDetails(row.kitId, state.user.businessId, row.sku)}>
                 <i className='ri-pencil-fill align-middle me-2 fs-5 text-muted'></i>
                 <span className='fs-6 fw-normal'>Edit</span>
               </DropdownItem>

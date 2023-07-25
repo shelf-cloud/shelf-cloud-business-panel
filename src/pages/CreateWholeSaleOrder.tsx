@@ -60,6 +60,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
             image: product.image,
             title: product.title,
             sku: product.sku,
+            isKit: product.isKit,
             quantity: {
               quantity: product.quantity,
               inventoryId: product.inventoryId,
@@ -70,6 +71,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
             orderQty: '',
             totalToShip: 0,
             maxOrderQty: product.maxOrderQty,
+            children: product.children ? product.children : [],
           }
           list.push(row)
         })
