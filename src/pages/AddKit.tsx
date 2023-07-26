@@ -47,7 +47,6 @@ const AddKit = ({ session }: Props) => {
   const [skusTitles, setSkusTitles] = useState<any>({})
   const [skuQuantities, setSkuQuantities] = useState<any>({})
   const [validSkus, setValidSkus] = useState<string[]>([])
-  const [inValidSkus, setInValidSkus] = useState<string[]>([])
   const [duplicateSkus, setDuplicateSkus] = useState(false)
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
@@ -56,7 +55,6 @@ const AddKit = ({ session }: Props) => {
   useEffect(() => {
     if (data?.error) {
       setValidSkus([])
-      setInValidSkus([])
       setSkus([])
       setSkusTitles({})
       setSkuQuantities({})
@@ -64,7 +62,6 @@ const AddKit = ({ session }: Props) => {
       toast.error(data?.message)
     } else if (data) {
       setValidSkus(data.validSkus)
-      setInValidSkus(data.invalidSkus)
       setSkus(data.skus)
       setSkusTitles(data.skuTitle)
       setSkuQuantities(data.skuQuantities)
