@@ -125,9 +125,7 @@ const AddKit = ({ session }: Props) => {
     children: Yup.array()
       .of(
         Yup.object({
-          sku: Yup.string()
-            .oneOf(validSkus, 'Invalid SKU')
-            .required('Required SKU'),
+          sku: Yup.string().oneOf(validSkus, 'Invalid SKU').required('Required SKU'),
           title: Yup.string().max(100, 'Name is to Long').required('Required Name'),
           qty: Yup.number().positive().integer('Qty must be an integer').min(1, 'Quantity must be greater than 0').required('Required Quantity'),
         })
