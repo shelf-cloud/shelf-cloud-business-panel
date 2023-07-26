@@ -130,14 +130,7 @@ const AddKit = ({ session }: Props) => {
             .notOneOf(inValidSkus, 'There`s no Stock for this SKU')
             .required('Required SKU'),
           title: Yup.string().max(100, 'Name is to Long').required('Required Name'),
-          qty: Yup.number()
-            .positive()
-            .integer('Qty must be an integer')
-            .min(1, 'Quantity must be greater than 0')
-            .when('sku', (sku, schema) =>
-              sku != '' ? schema.max(skuQuantities[sku], `Current SKU Stock is ${skuQuantities[sku] ? skuQuantities[sku] : 'unavailable'}`) : schema
-            )
-            .required('Required Quantity'),
+          qty: Yup.number().positive().integer('Qty must be an integer').min(1, 'Quantity must be greater than 0').required('Required Quantity'),
         })
       )
       .required('Must have products'),
