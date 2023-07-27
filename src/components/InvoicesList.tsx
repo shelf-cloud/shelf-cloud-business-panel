@@ -31,7 +31,7 @@ const InvoicesList = ({ invoices }: Props) => {
                     <th>Total Charge</th>
                     <th>Expire Date</th>
                     <th>Status</th>
-                    <th>Payments</th>
+                    {state.currentRegion == 'us' && <th>Payments</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -39,13 +39,13 @@ const InvoicesList = ({ invoices }: Props) => {
                     <tr key={invoice.invoiceNumber}>
                       <td>
                         <Link href={`/Invoices/${invoice.idOfInvoice}`}>
-                          <h5 className='fs-14 my-1 text-secondary' style={{ cursor: 'pointer' }}>
+                          <h5 className='fs-14 my-1 text-secondary text-center' style={{ cursor: 'pointer' }}>
                             {invoice.invoiceNumber}
                           </h5>
                         </Link>
                       </td>
                       <td>
-                        <h5 className='fs-14 my-1 fw-normal text-start'>
+                        <h5 className='fs-14 my-1 fw-normal text-center'>
                           <CountUp
                             start={0}
                             prefix={state.currentRegion == 'us' ? '$ ' : ''}
@@ -57,7 +57,7 @@ const InvoicesList = ({ invoices }: Props) => {
                           />
                         </h5>
                       </td>
-                      <td>
+                      <td className='text-center'>
                         <span
                           className={
                             invoice.paid
@@ -91,13 +91,13 @@ const InvoicesList = ({ invoices }: Props) => {
                           </span>
                         </div>
                       </td>
-                      <td className='text-center'>
+                      {state.currentRegion == 'us' &&  <td className='text-center'>
                         <a href={`${invoice.payLink}`} target='blank'>
                           <Button className={'px-2 py-1 ' + (invoice.paid ? 'btn btn-soft-success' : 'btn btn-primary')}>
                             {invoice.paid ? 'View Receipt' : 'Pay Now'}
                           </Button>
                         </a>
-                      </td>
+                      </td>}
                     </tr>
                   ))}
                 </tbody>

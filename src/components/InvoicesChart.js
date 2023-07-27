@@ -33,7 +33,6 @@ function InvoicesChart({ billingStatus }) {
     dataLabels: {
       enabled: true,
       formatter: function (val, opt) {
-        console.log(opt)
         return FormatCurrency(state.currentRegion, billingStatus[opt.seriesIndex])
       },
       // textAnchor: 'start',
