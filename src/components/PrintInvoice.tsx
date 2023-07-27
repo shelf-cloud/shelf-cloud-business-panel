@@ -22,13 +22,14 @@ function PrintInvoice({ invoiceDetails }: Props) {
                   body {
                       margin: 0px;
                       padding: 0px;
+                      font-size: 12px;
                   }
                   #container{
                       min-height: 95vh;
                       max-height: 95vh;
                       width: 90%;
-                      padding: 30px 40px;
-                      margin: 30px auto;
+                      padding: 0px;
+                      margin: 0px auto;
                       // border: 4px solid #686868;
                       // border-radius: 7px;
                   }
@@ -51,7 +52,7 @@ function PrintInvoice({ invoiceDetails }: Props) {
                   }
                   #left1 p {
                       margin: 0px;
-                      font-size: 18px;
+                      font-size: 16px;
                   }#left1 img {
                       width: 280px;
                       object-fit: contain;
@@ -90,17 +91,17 @@ function PrintInvoice({ invoiceDetails }: Props) {
                       <a href="https://www.shelf-cloud.com" target="_blank">https://www.shelf-cloud.com</a>`)
 
     state.currentRegion == 'us'
-      ? (invoice += `<p style="font-size: 24px;font-weight: 900;text-transform: uppercase;margin: 13px 0px 0px 0px;">Business: ${invoiceDetails.invoice.businessName}</p>`)
-      : (invoice += `<p style="font-size: 24px;font-weight: 900;text-transform: uppercase;margin: 13px 0px 0px 0px;">Business: ${invoiceDetails.invoice.businessName}</p><p>NIF: ${invoiceDetails.invoice.businessNif} Dirección: ${invoiceDetails.invoice.businessAddress}</p>`)
+      ? (invoice += `<p style="font-size: 16px;font-weight: 900;text-transform: uppercase;margin: 13px 0px 0px 0px;">Business: ${invoiceDetails.invoice.businessName}</p>`)
+      : (invoice += `<p style="font-size: 16px;font-weight: 900;text-transform: uppercase;margin: 13px 0px 0px 0px;">Business: ${invoiceDetails.invoice.businessName}</p><p style="font-size: 16px;">NIF: ${invoiceDetails.invoice.businessNif} Dirección: ${invoiceDetails.invoice.businessAddress}</p>`)
 
     invoice += `</div><!--End Left-->
                       <div id="right1">
-                      <h1 style="font-size: 62px;text-transform: uppercase;">Invoice</h1>
-                      <h3 style="font-size: 50px;font-weight: 900;color: #458BC9;">
+                      <h1 style="font-size: 56px;text-transform: uppercase;">Invoice</h1>
+                      <h3 style="font-size: 42px;font-weight: 900;color: #458BC9;">
                           ${invoiceDetails.invoice.invoiceNumber}
                       </h3>
-                      <h5 style="font-weight: 700;">
-                          Invoice Date: ${moment(invoiceDetails.invoice.createdDate).format('DD/MM/YYYY')}
+                      <h5 style="font-size: 16px;font-weight: 500;">
+                          Invoice Date ${moment(invoiceDetails.invoice.createdDate).format('DD/MM/YYYY')}
                       </h5>
                       </div><!--End Right-->
                   </div><!--End Zone-->
@@ -141,16 +142,14 @@ function PrintInvoice({ invoiceDetails }: Props) {
     )
 
     state.currentRegion == 'us'
-      ? (invoice += `</tbody>
-                        <tfoot class="table-light">
-                        <tr style="font-weight: 700;">
+      ? (invoice += `<tr style="font-weight: 700;">
                             <td colspan="3" style="text-align:right;">Total</td>
                             <td id="totalTotal" style="display: block;text-align: left;overflow: auto;"><span style="width: 60%;float: left;text-align: right;">${FormatCurrency(
                               state.currentRegion,
                               invoiceDetails.invoice.totalCharge
                             )}</span></td>
                         </tr>
-                        </tfoot>
+                        </tbody>
                         
                         </table>
                     </div><!--End Container-->
@@ -158,9 +157,7 @@ function PrintInvoice({ invoiceDetails }: Props) {
                 </body>
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
                 </html>`)
-      : (invoice += `</tbody>
-                        <tfoot class="table-light">
-                        <tr style="font-weight: 700;">
+      : (invoice += `<tr style="font-weight: 700;">
                             <td colspan="3" style="text-align:right;">Subtotal</td>
                             <td id="totalTotal" style="display: block;text-align: left;overflow: auto;"><span style="width: 60%;float: left;text-align: right;">${FormatCurrency(
                               state.currentRegion,
@@ -181,7 +178,7 @@ function PrintInvoice({ invoiceDetails }: Props) {
                               invoiceDetails.invoice.totalCharge + invoiceDetails.invoice.totalCharge * 0.21
                             )}</span></td>
                         </tr>
-                        </tfoot>
+                        </tbody>
                         
                         </table>
                     </div><!--End Container-->
