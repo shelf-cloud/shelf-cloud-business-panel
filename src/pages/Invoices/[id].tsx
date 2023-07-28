@@ -144,13 +144,13 @@ const InvoiceDetails = () => {
                                   <td className='text-end' colSpan={3}>
                                     SubTotal
                                   </td>
-                                  <td>{FormatCurrency(state.currentRegion, Number(invoiceDetails?.invoice?.totalCharge))}</td>
+                                  <td>{FormatCurrency(state.currentRegion, Number(invoiceDetails?.invoice?.totalCharge! / 1.21))}</td>
                                 </tr>
                                 <tr>
                                   <td className='text-end' colSpan={3}>
                                     IVA 21%
                                   </td>
-                                  <td>{FormatCurrency(state.currentRegion, Number(invoiceDetails?.invoice?.totalCharge! * 0.21))}</td>
+                                  <td>{FormatCurrency(state.currentRegion, Number((invoiceDetails?.invoice?.totalCharge! / 1.21) * 0.21))}</td>
                                 </tr>
                                 <tr>
                                   <td className='text-end' colSpan={3}>
@@ -159,7 +159,7 @@ const InvoiceDetails = () => {
                                   <td>
                                     {FormatCurrency(
                                       state.currentRegion,
-                                      Number(invoiceDetails?.invoice?.totalCharge! + invoiceDetails?.invoice?.totalCharge! * 0.21)
+                                      Number(invoiceDetails?.invoice?.totalCharge!)
                                     )}
                                   </td>
                                 </tr>

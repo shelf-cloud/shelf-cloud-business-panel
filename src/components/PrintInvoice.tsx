@@ -161,21 +161,21 @@ function PrintInvoice({ invoiceDetails }: Props) {
                             <td colspan="3" style="text-align:right;">Subtotal</td>
                             <td id="totalTotal" style="display: block;text-align: left;overflow: auto;"><span style="width: 60%;float: left;text-align: right;">${FormatCurrency(
                               state.currentRegion,
-                              invoiceDetails.invoice.totalCharge
+                              (invoiceDetails.invoice.totalCharge / 1.21)
                             )}</span></td>
                         </tr>
                         <tr style="font-weight: 700;">
                             <td colspan="3" style="text-align:right;">IVA 21%</td>
                             <td id="totalTotal" style="display: block;text-align: left;overflow: auto;"><span style="width: 60%;float: left;text-align: right;">${FormatCurrency(
                               state.currentRegion,
-                              invoiceDetails.invoice.totalCharge * 0.21
+                              ((invoiceDetails.invoice.totalCharge / 1.21) * 0.21)
                             )}</span></td>
                         </tr>
                         <tr style="font-weight: 700;">
                             <td colspan="3" style="text-align:right;">Total</td>
                             <td id="totalTotal" style="display: block;text-align: left;overflow: auto;"><span style="width: 60%;float: left;text-align: right;">${FormatCurrency(
                               state.currentRegion,
-                              invoiceDetails.invoice.totalCharge + invoiceDetails.invoice.totalCharge * 0.21
+                              invoiceDetails.invoice.totalCharge
                             )}</span></td>
                         </tr>
                         </tbody>
