@@ -21,6 +21,7 @@ type Props = {
 const ReturnType = ({ data, apiMutateLink }: Props) => {
   const { mutate } = useSWRConfig()
   const { state }: any = useContext(AppContext)
+  const OrderId = data.orderId?.replaceAll(' ', '')
   const [loadingLabel, setLoadingLabel] = useState(false)
   const handlePrintingLabel = async () => {
     setLoadingLabel(true)
@@ -85,9 +86,9 @@ const ReturnType = ({ data, apiMutateLink }: Props) => {
                         Pick Pack Charge
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltip${data.orderId}`}></i>
+                            <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltip${OrderId}`}></i>
                             <TooltipComponent
-                              target={`tooltip${data.orderId}`}
+                              target={`tooltip${OrderId}`}
                               text={`${FormatCurrency(state.currentRegion, data.chargesFees.orderCost!)} first item + ${FormatCurrency(
                                 state.currentRegion,
                                 data.chargesFees.extraItemOrderCost!

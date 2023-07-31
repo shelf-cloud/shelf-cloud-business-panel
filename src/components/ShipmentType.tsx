@@ -16,6 +16,7 @@ type Props = {
 
 const ShipmentType = ({ data }: Props) => {
   const { state, setModalCreateReturnInfo }: any = useContext(AppContext)
+  const OrderId = data.orderId?.replaceAll(' ', '')
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
       <Row>
@@ -64,9 +65,9 @@ const ShipmentType = ({ data }: Props) => {
                         Pick Pack Charge
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltip${data.orderId}`}></i>
+                            <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltip${OrderId}`}></i>
                             <TooltipComponent
-                              target={`tooltip${data.orderId}`}
+                              target={`tooltip${OrderId}`}
                               text={`${FormatCurrency(state.currentRegion, data.chargesFees.orderCost!)} first item + ${FormatCurrency(
                                 state.currentRegion,
                                 data.chargesFees.extraItemOrderCost!

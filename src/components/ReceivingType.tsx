@@ -50,7 +50,7 @@ const ReceivingType = ({ data }: Props) => {
     }
   }, [data, state.currentRegion])
 
-  const OrderId = data.orderId?.replace(' ', '')
+  const OrderId = data.orderId?.replaceAll(' ', '')
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
       <Row>

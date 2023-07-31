@@ -48,7 +48,7 @@ const WholeSaleType = ({ data }: Props) => {
       setServiceFee('')
     }
   }, [data, state.currentRegion])
-
+  const OrderId = data.orderId?.replaceAll(' ', '')
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
       <Row>
@@ -101,10 +101,8 @@ const WholeSaleType = ({ data }: Props) => {
                         Pick Pack Charge
                         {data.chargesFees && (
                           <>
-                            <i
-                              className='ri-information-fill ms-1 fs-6 text-muted'
-                              id={`tooltipPick${data.orderId}`}></i>
-                            <TooltipComponent target={`tooltipPick${data.orderId}`} text={serviceFee} />
+                            <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltipPick${OrderId}`}></i>
+                            <TooltipComponent target={`tooltipPick${OrderId}`} text={serviceFee} />
                           </>
                         )}
                       </td>
@@ -119,13 +117,8 @@ const WholeSaleType = ({ data }: Props) => {
                         Labeling
                         {data.chargesFees && (
                           <>
-                            <i
-                              className='ri-information-fill ms-1 fs-6 text-muted'
-                              id={`tooltipLabel${data.orderId}`}></i>
-                            <TooltipComponent
-                              target={`tooltipLabel${data.orderId}`}
-                              text={`$ ${data.chargesFees.labelCost} per label`}
-                            />
+                            <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltipLabel${OrderId}`}></i>
+                            <TooltipComponent target={`tooltipLabel${OrderId}`} text={`$ ${data.chargesFees.labelCost} per label`} />
                           </>
                         )}
                       </td>
@@ -136,13 +129,8 @@ const WholeSaleType = ({ data }: Props) => {
                         Man Hour
                         {data.chargesFees && (
                           <>
-                            <i
-                              className='ri-information-fill ms-1 fs-6 text-muted'
-                              id={`tooltipManHour${data.orderId}`}></i>
-                            <TooltipComponent
-                              target={`tooltipManHour${data.orderId}`}
-                              text={`$ ${data.chargesFees.receivingManHour} per hour`}
-                            />
+                            <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltipManHour${OrderId}`}></i>
+                            <TooltipComponent target={`tooltipManHour${OrderId}`} text={`$ ${data.chargesFees.receivingManHour} per hour`} />
                           </>
                         )}
                       </td>
