@@ -49,15 +49,15 @@ function SignIn({}: Props) {
   return (
     <div className='vw-100 vh-100 d-flex '>
       <div
-        className='w-100 d-flex flex-column align-items-center justify-content-start'
+        className='w-100 h-100 d-flex flex-column align-items-center justify-content-start'
         style={{ backgroundColor: '#FAFBFD' }}>
-        <div className='w-100 px-4 py-2 border-bottom' style={{ height: '80px' }}>
+        <div className='w-100 px-4 py-2 border-bottom h-fit'>
           <div className='position-relative d-flex align-self-center h-100' style={{ width: '26%', minWidth: '220px' }}>
             <Image src={ShelfCloudLogo} layout='intrinsic' alt='ShelfCloud Logo' objectFit='contain' />
           </div>
         </div>
         <div
-          className='col-10 col-lg-8 h-100 d-flex justify-content-center align-items-center'
+          className='col-10 col-lg-8 h-fit m-auto d-flex justify-content-center align-items-center'
           style={{ backgroundColor: '#FAFBFD' }}>
           <div className='w-75 d-flex flex-column justify-content-start align-items-center'>
             <h2 className='w-100 text-center fw-semibold mb-3'>Sign in</h2>
