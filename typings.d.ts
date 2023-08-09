@@ -327,6 +327,9 @@ export interface wholesaleProductRow {
   image: string
   title: string
   sku: string
+  barcode?: string
+  asin?: string
+  fnSku?: string
   quantity: {
     quantity: number
     inventoryId: number

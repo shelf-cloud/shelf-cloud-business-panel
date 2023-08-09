@@ -169,6 +169,30 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
       //   compact: true,
     },
     {
+      name: (
+        <span className='fw-bold fs-6'>
+          ASIN
+          <br />
+          UPC
+          <br />
+          FNSKU
+        </span>
+      ),
+      selector: (row: wholesaleProductRow) => {
+        return (
+          <div>
+            <p style={{ margin: '0px' }}>{row.asin}</p>
+            <p style={{ margin: '0px' }}>{row.barcode}</p>
+            <p style={{ margin: '0px' }}>{row.fnSku}</p>
+          </div>
+        )
+      },
+      sortable: false,
+      wrap: true,
+      grow: 1,
+      compact: true,
+    },
+    {
       name: <span className='fw-bold fs-5'>Type</span>,
       selector: (cell: any) => {
         if (cell.isKit) {

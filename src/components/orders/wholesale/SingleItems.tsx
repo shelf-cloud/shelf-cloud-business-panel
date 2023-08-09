@@ -27,7 +27,10 @@ const SingleItems = ({ completeData, pending, orderNumberStart }: Props) => {
     return allData.filter(
       (item: wholesaleProductRow) =>
         item?.title?.toLowerCase().includes(serachValue.toLowerCase()) ||
-        item?.sku?.toLowerCase().includes(serachValue.toLowerCase())
+        item?.sku?.toLowerCase().includes(serachValue.toLowerCase()) ||
+        item?.asin?.toLowerCase().includes(serachValue.toLowerCase()) ||
+        item?.barcode?.toLowerCase().includes(serachValue.toLowerCase()) ||
+        item?.fnSku?.toLowerCase().includes(serachValue.toLowerCase())
     )
   }, [allData, serachValue])
 

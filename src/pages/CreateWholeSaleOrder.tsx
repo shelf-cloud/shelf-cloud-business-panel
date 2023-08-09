@@ -60,6 +60,9 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
             image: product.image,
             title: product.title,
             sku: product.sku,
+            barcode: product.barcode,
+            asin: product.asin,
+            fnSku: product.fnSku,
             isKit: product.isKit,
             quantity: {
               quantity: product.quantity,

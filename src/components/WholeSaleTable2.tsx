@@ -74,7 +74,7 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError 
 
     return 0
   }
-  
+
   const typeSort = (rowA: wholesaleProductRow, rowB: wholesaleProductRow) => {
     const a = rowA.isKit!
     const b = rowB.isKit!
@@ -140,14 +140,15 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError 
       ),
       selector: (row: wholesaleProductRow) => {
         if (row.isKit) {
-
           return (
             <div style={{ padding: '4px 0px' }}>
               <p style={{ margin: '0px', fontWeight: '800' }}>{row.title}</p>
               <p style={{ margin: '0px' }}>{row.sku}</p>
               <ul style={{ margin: '0px' }}>
                 {row.children?.map((child) => (
-                  <li style={{ margin: '0px', fontSize: '10px' }} key={child.idInventory}>{`${child.title} | ${child.sku} | Available: ${child.available} | Used: ${child.qty}`}</li>
+                  <li
+                    style={{ margin: '0px', fontSize: '10px' }}
+                    key={child.idInventory}>{`${child.title} | ${child.sku} | Available: ${child.available} | Used: ${child.qty}`}</li>
                 ))}
               </ul>
             </div>
@@ -166,6 +167,30 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError 
       grow: 2,
       sortFunction: caseInsensitiveSort,
       //   compact: true,
+    },
+    {
+      name: (
+        <span className='fw-bold fs-6'>
+          ASIN
+          <br />
+          UPC
+          <br />
+          FNSKU
+        </span>
+      ),
+      selector: (row: wholesaleProductRow) => {
+        return (
+          <div>
+            <p style={{ margin: '0px' }}>{row.asin}</p>
+            <p style={{ margin: '0px' }}>{row.barcode}</p>
+            <p style={{ margin: '0px' }}>{row.fnSku}</p>
+          </div>
+        )
+      },
+      sortable: false,
+      wrap: true,
+      grow: 1,
+      compact: true,
     },
     {
       name: <span className='fw-bold fs-5'>Type</span>,
