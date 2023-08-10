@@ -214,9 +214,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
             case row.orderStatus == 'cancelled':
               tracking = <></>
               break
-            case (row.orderType == 'Shipment' || row.orderType == 'Return') &&
-              row.trackingNumber != '' &&
-              !!row.trackingLink:
+            case (row.orderType == 'Shipment' || row.orderType == 'Return') && row.trackingNumber != '' && !!row.trackingLink:
               tracking = (
                 <div className='trackingNumber_container'>
                   <img
@@ -237,10 +235,23 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
                 </div>
               )
               break
-            case row.orderType == 'Wholesale' &&
-              row.trackingNumber != '' &&
-              !!row.trackingLink &&
-              row.carrierService == 'Parcel Boxes':
+            case (row.orderType == 'Shipment' || row.orderType == 'Return') && row.trackingNumber != '':
+              tracking = (
+                <div className='trackingNumber_container'>
+                  <img
+                    src={row.carrierIcon}
+                    alt='carrier logo'
+                    style={{
+                      width: '16px',
+                      height: '16px',
+                      objectFit: 'contain',
+                    }}
+                  />
+                  <p style={{ margin: '0px' }}>{row.trackingNumber}</p>
+                </div>
+              )
+              break
+            case row.orderType == 'Wholesale' && row.trackingNumber != '' && !!row.trackingLink && row.carrierService == 'Parcel Boxes':
               tracking = (
                 <div className='trackingNumber_container'>
                   <img
@@ -258,6 +269,22 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
                     style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
                     {row.trackingNumber}
                   </a>
+                </div>
+              )
+              break
+            case row.orderType == 'Wholesale' && row.trackingNumber != '':
+              tracking = (
+                <div className='trackingNumber_container'>
+                  <img
+                    src={row.carrierIcon}
+                    alt='carrier logo'
+                    style={{
+                      width: '16px',
+                      height: '16px',
+                      objectFit: 'contain',
+                    }}
+                  />
+                  <p style={{ margin: '0px' }}>{row.trackingNumber}</p>
                 </div>
               )
               break
