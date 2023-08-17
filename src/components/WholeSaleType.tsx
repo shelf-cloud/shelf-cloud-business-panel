@@ -192,10 +192,17 @@ const WholeSaleType = ({ data }: Props) => {
                       </tr>
                     ))}
                     <tr>
-                      <td className='text-start fs-5 fw-bold text-nowrap'>Total QTY</td>
                       <td></td>
+                      <td className='text-end fs-5 fw-bold text-nowrap'>Total QTY</td>
                       <td className='text-center fw-bold fs-5 text-primary'>{data.totalItems}</td>
                     </tr>
+                    {data.totalIndividualUnits! > 0 && (
+                      <tr>
+                        <td></td>
+                        <td className='text-end fs-6 fw-normal text-nowrap'>{data.isIndividualUnits ? 'Total Individual Units' : 'Total Individual Units in Kits'}</td>
+                        <td className='text-center fw-bold fs-6 text-primary'>{data.totalIndividualUnits}</td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>

@@ -279,6 +279,7 @@ export interface OrderRowType {
   extraComment: string
   individualUnitsPlan?: IndividualUnitsPlan
   isIndividualUnits?: boolean
+  totalIndividualUnits?: number
 }
 
 export interface ShipmentOrderItem {
@@ -375,6 +376,9 @@ export interface WholeSaleOrder {
   numberPallets: number
   numberBoxes: number
 }
+
+
+// KITS ORDERS
 
 export interface Children {
   available: number
