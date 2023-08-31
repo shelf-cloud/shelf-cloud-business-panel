@@ -131,7 +131,7 @@ const CreateOrder = ({ session }: Props) => {
     country: Yup.string().oneOf(validCountries, 'Must be a Valid Country Code').required('Required Country'),
     phoneNumber: state.currentRegion === 'us' ? Yup.string() : Yup.string().required('Required phone number'),
     email: state.currentRegion === 'us' ? Yup.string().email() : Yup.string().email().required('Required email'),
-    amount: Yup.number().min(0.1, 'Amount must be greater than or equal to 0.1').required('Required Amount'),
+    amount: Yup.number().min(0, 'Amount must be greater than or equal to 0').required('Required Amount'),
     shipping: Yup.number().min(0, 'Shipping must be greater than or equal to 0.1').required('Required Shipping'),
     tax: Yup.number().min(0, 'Tax must be greater than or equal to 0').required('Required Tax'),
     products: Yup.array()
