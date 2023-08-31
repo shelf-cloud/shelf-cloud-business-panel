@@ -120,7 +120,7 @@ const CreateOrder = ({ session }: Props) => {
   }
 
   const validationSchema = Yup.object({
-    name: Yup.string().max(100, 'Recipient text is to Long').required('Please Enter Your Recipient'),
+    name: Yup.string().min(10, 'Recipient text is to Short').max(100, 'Recipient text is to Long').required('Please Enter Your Recipient'),
     company: Yup.string().max(100, 'Company text is to Long'),
     orderNumber: Yup.string().max(50, 'Order Number is to Long').required('Required Order Number'),
     adress1: Yup.string().required('Required Adress'),
@@ -131,8 +131,8 @@ const CreateOrder = ({ session }: Props) => {
     country: Yup.string().oneOf(validCountries, 'Must be a Valid Country Code').required('Required Country'),
     phoneNumber: state.currentRegion === 'us' ? Yup.string() : Yup.string().required('Required phone number'),
     email: state.currentRegion === 'us' ? Yup.string().email() : Yup.string().email().required('Required email'),
-    amount: Yup.number().min(0, 'Amount must be greater than or equal to 0').required('Required Amount'),
-    shipping: Yup.number().min(0, 'Shipping must be greater than or equal to 0').required('Required Shipping'),
+    amount: Yup.number().min(0.1, 'Amount must be greater than or equal to 0.1').required('Required Amount'),
+    shipping: Yup.number().min(0, 'Shipping must be greater than or equal to 0.1').required('Required Shipping'),
     tax: Yup.number().min(0, 'Tax must be greater than or equal to 0').required('Required Tax'),
     products: Yup.array()
       .of(
