@@ -120,7 +120,7 @@ const CreateOrder = ({ session }: Props) => {
   }
 
   const validationSchema = Yup.object({
-    name: Yup.string().min(10, 'Recipient text is to Short').max(100, 'Recipient text is to Long').required('Please Enter Your Recipient'),
+    name: Yup.string().min(5, 'Recipient must have First and Last Name').max(100, 'Recipient text is to Long').required('Please Enter Your Recipient'),
     company: Yup.string().max(100, 'Company text is to Long'),
     orderNumber: Yup.string().max(50, 'Order Number is to Long').required('Required Order Number'),
     adress1: Yup.string().required('Required Adress'),
@@ -249,7 +249,7 @@ const CreateOrder = ({ session }: Props) => {
                                 type='text'
                                 className='form-control'
                                 style={{ padding: '0.2rem 0.9rem' }}
-                                placeholder='Recipient...'
+                                placeholder='First and Last Name...'
                                 id='name'
                                 name='name'
                                 onChange={handleChange}
