@@ -62,10 +62,7 @@ const CreateOrder = ({ session }: Props) => {
   }, [])
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(
-    state.user.businessId ? `/api/getSkus?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
-    fetcher
-  )
+  const { data } = useSWR(state.user.businessId ? `/api/getSkus?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher)
 
   useEffect(() => {
     if (data?.error) {
@@ -94,10 +91,10 @@ const CreateOrder = ({ session }: Props) => {
   }, [data])
 
   const initialValues = {
-    name: '',
+    firstName: '',
+    lastName: '',
     company: '',
-    orderNumber:
-      state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
+    orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
     adress1: '',
     adress2: '',
     city: '',
@@ -120,7 +117,8 @@ const CreateOrder = ({ session }: Props) => {
   }
 
   const validationSchema = Yup.object({
-    name: Yup.string().min(5, 'Recipient must have First and Last Name').max(100, 'Recipient text is to Long').required('Please Enter Your Recipient'),
+    firstName: Yup.string().min(3, 'First Name to short').max(100, 'First Name is to Long').required('Please Enter First Name'),
+    lastName: Yup.string().min(3, 'Last Name to short').max(100, 'Last Name is to Long').required('Please Enter Last Name'),
     company: Yup.string().max(100, 'Company text is to Long'),
     orderNumber: Yup.string().max(50, 'Order Number is to Long').required('Required Order Number'),
     adress1: Yup.string().required('Required Adress'),
@@ -147,12 +145,7 @@ const CreateOrder = ({ session }: Props) => {
             .integer('Qty must be an integer')
             .min(1, 'Quantity must be greater than 0')
             .when('sku', (sku, schema) =>
-              sku != ''
-                ? schema.max(
-                    skuQuantities[sku],
-                    `Current SKU Stock is ${skuQuantities[sku] ? skuQuantities[sku] : 'unavailable'}`
-                  )
-                : schema
+              sku != '' ? schema.max(skuQuantities[sku], `Current SKU Stock is ${skuQuantities[sku] ? skuQuantities[sku] : 'unavailable'}`) : schema
             )
             .required('Required Quantity'),
           price: Yup.number().min(0, 'Price must be greater than or equal to 0').required('Required Price'),
@@ -163,12 +156,9 @@ const CreateOrder = ({ session }: Props) => {
 
   const handleSubmit = async (values: any, { resetForm }: any) => {
     setCreatingOrder(true)
-    const response = await axios.post(
-      `api/createNewOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`,
-      {
-        orderInfo: values,
-      }
-    )
+    const response = await axios.post(`api/createNewOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      orderInfo: values,
+    })
 
     if (!response.data.error) {
       mutate('/api/getuser')
@@ -240,27 +230,73 @@ const CreateOrder = ({ session }: Props) => {
                           </div>
                         </Row>
                         <Row>
-                          <Col md={7}>
+                          <Col md={4}>
                             <FormGroup className='createOrder_inputs'>
                               <Label htmlFor='firstNameinput' className='form-label mb-0'>
-                                *Recipient
+                                *First Name
                               </Label>
                               <Input
                                 type='text'
                                 className='form-control'
                                 style={{ padding: '0.2rem 0.9rem' }}
-                                placeholder='First and Last Name...'
-                                id='name'
-                                name='name'
+                                placeholder='First Name...'
+                                id='firstName'
+                                name='firstName'
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                value={values.name || ''}
-                                invalid={touched.name && errors.name ? true : false}
+                                value={values.firstName || ''}
+                                invalid={touched.firstName && errors.firstName ? true : false}
                               />
-                              {touched.name && errors.name ? (
-                                <FormFeedback type='invalid'>{errors.name}</FormFeedback>
-                              ) : null}
+                              {touched.firstName && errors.firstName ? <FormFeedback type='invalid'>{errors.firstName}</FormFeedback> : null}
                             </FormGroup>
+                          </Col>
+                          <Col md={3}>
+                            <FormGroup className='createOrder_inputs'>
+                              <Label htmlFor='lastNameinput' className='form-label mb-0'>
+                                *Last Name
+                              </Label>
+                              <Input
+                                type='text'
+                                className='form-control'
+                                style={{ padding: '0.2rem 0.9rem' }}
+                                placeholder='Last Name...'
+                                id='lastName'
+                                name='lastName'
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.lastName || ''}
+                                invalid={touched.lastName && errors.lastName ? true : false}
+                              />
+                              {touched.lastName && errors.lastName ? <FormFeedback type='invalid'>{errors.lastName}</FormFeedback> : null}
+                            </FormGroup>
+                          </Col>
+                          <Col md={5}>
+                            <FormGroup className='createOrder_inputs'>
+                              <Label htmlFor='lastNameinput' className='form-label mb-0'>
+                                *Order Number
+                              </Label>
+                              <div className='input-group'>
+                                <span className='input-group-text fw-semibold fs-5' style={{ padding: '0.2rem 0.9rem' }} id='basic-addon1'>
+                                  {orderNumberStart}
+                                </span>
+                                <Input
+                                  type='text'
+                                  className='form-control'
+                                  style={{ padding: '0.2rem 0.9rem' }}
+                                  placeholder='Order Number...'
+                                  aria-describedby='basic-addon1'
+                                  id='orderNumber'
+                                  name='orderNumber'
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                  value={values.orderNumber || ''}
+                                  invalid={touched.orderNumber && errors.orderNumber ? true : false}
+                                />
+                                {touched.orderNumber && errors.orderNumber ? <FormFeedback type='invalid'>{errors.orderNumber}</FormFeedback> : null}
+                              </div>
+                            </FormGroup>
+                          </Col>
+                          <Col md={7}>
                             <FormGroup className='createOrder_inputs'>
                               <Label htmlFor='lastNameinput' className='form-label mb-0'>
                                 Company
@@ -277,40 +313,7 @@ const CreateOrder = ({ session }: Props) => {
                                 value={values.company || ''}
                                 invalid={touched.company && errors.company ? true : false}
                               />
-                              {touched.company && errors.company ? (
-                                <FormFeedback type='invalid'>{errors.company}</FormFeedback>
-                              ) : null}
-                            </FormGroup>
-                          </Col>
-                          <Col md={5}>
-                            <FormGroup className='createOrder_inputs'>
-                              <Label htmlFor='lastNameinput' className='form-label mb-0'>
-                                *Order Number
-                              </Label>
-                              <div className='input-group'>
-                                <span
-                                  className='input-group-text fw-semibold fs-5'
-                                  style={{ padding: '0.2rem 0.9rem' }}
-                                  id='basic-addon1'>
-                                  {orderNumberStart}
-                                </span>
-                                <Input
-                                  type='text'
-                                  className='form-control'
-                                  style={{ padding: '0.2rem 0.9rem' }}
-                                  placeholder='Order Number...'
-                                  aria-describedby='basic-addon1'
-                                  id='orderNumber'
-                                  name='orderNumber'
-                                  onChange={handleChange}
-                                  onBlur={handleBlur}
-                                  value={values.orderNumber || ''}
-                                  invalid={touched.orderNumber && errors.orderNumber ? true : false}
-                                />
-                                {touched.orderNumber && errors.orderNumber ? (
-                                  <FormFeedback type='invalid'>{errors.orderNumber}</FormFeedback>
-                                ) : null}
-                              </div>
+                              {touched.company && errors.company ? <FormFeedback type='invalid'>{errors.company}</FormFeedback> : null}
                             </FormGroup>
                           </Col>
                           <Col md={7}>
@@ -330,9 +333,7 @@ const CreateOrder = ({ session }: Props) => {
                                 value={values.adress1 || ''}
                                 invalid={touched.adress1 && errors.adress1 ? true : false}
                               />
-                              {touched.adress1 && errors.adress1 ? (
-                                <FormFeedback type='invalid'>{errors.adress1}</FormFeedback>
-                              ) : null}
+                              {touched.adress1 && errors.adress1 ? <FormFeedback type='invalid'>{errors.adress1}</FormFeedback> : null}
                             </FormGroup>
                             <FormGroup className='createOrder_inputs mt-1'>
                               <Input
@@ -347,9 +348,7 @@ const CreateOrder = ({ session }: Props) => {
                                 value={values.adress2 || ''}
                                 invalid={touched.adress2 && errors.adress2 ? true : false}
                               />
-                              {touched.adress2 && errors.adress2 ? (
-                                <FormFeedback type='invalid'>{errors.adress2}</FormFeedback>
-                              ) : null}
+                              {touched.adress2 && errors.adress2 ? <FormFeedback type='invalid'>{errors.adress2}</FormFeedback> : null}
                             </FormGroup>
                             <Col md={12} className='d-flex justify-content-between w-100 gap-1'>
                               <Col md={3}>
@@ -369,9 +368,7 @@ const CreateOrder = ({ session }: Props) => {
                                     value={values.city || ''}
                                     invalid={touched.city && errors.city ? true : false}
                                   />
-                                  {touched.city && errors.city ? (
-                                    <FormFeedback type='invalid'>{errors.city}</FormFeedback>
-                                  ) : null}
+                                  {touched.city && errors.city ? <FormFeedback type='invalid'>{errors.city}</FormFeedback> : null}
                                 </FormGroup>
                               </Col>
                               <Col md={3}>
@@ -391,9 +388,7 @@ const CreateOrder = ({ session }: Props) => {
                                     value={values.state || ''}
                                     invalid={touched.state && errors.state ? true : false}
                                   />
-                                  {touched.state && errors.state ? (
-                                    <FormFeedback type='invalid'>{errors.state}</FormFeedback>
-                                  ) : null}
+                                  {touched.state && errors.state ? <FormFeedback type='invalid'>{errors.state}</FormFeedback> : null}
                                 </FormGroup>
                               </Col>
                               <Col md={2}>
@@ -413,9 +408,7 @@ const CreateOrder = ({ session }: Props) => {
                                     value={values.zipCode || ''}
                                     invalid={touched.zipCode && errors.zipCode ? true : false}
                                   />
-                                  {touched.zipCode && errors.zipCode ? (
-                                    <FormFeedback type='invalid'>{errors.zipCode}</FormFeedback>
-                                  ) : null}
+                                  {touched.zipCode && errors.zipCode ? <FormFeedback type='invalid'>{errors.zipCode}</FormFeedback> : null}
                                 </FormGroup>
                               </Col>
                               <Col md={2}>
@@ -436,9 +429,7 @@ const CreateOrder = ({ session }: Props) => {
                                     value={values.country || ''}
                                     invalid={touched.country && errors.country ? true : false}
                                   />
-                                  {touched.country && errors.country ? (
-                                    <FormFeedback type='invalid'>{errors.country}</FormFeedback>
-                                  ) : null}
+                                  {touched.country && errors.country ? <FormFeedback type='invalid'>{errors.country}</FormFeedback> : null}
                                   <datalist id='countries'>
                                     {countries.map(
                                       (
@@ -473,9 +464,7 @@ const CreateOrder = ({ session }: Props) => {
                                 value={values.phoneNumber || ''}
                                 invalid={touched.phoneNumber && errors.phoneNumber ? true : false}
                               />
-                              {touched.phoneNumber && errors.phoneNumber ? (
-                                <FormFeedback type='invalid'>{errors.phoneNumber}</FormFeedback>
-                              ) : null}
+                              {touched.phoneNumber && errors.phoneNumber ? <FormFeedback type='invalid'>{errors.phoneNumber}</FormFeedback> : null}
                             </FormGroup>
                             <FormGroup className='createOrder_inputs'>
                               <Label htmlFor='lastNameinput' className='form-label mb-0'>
@@ -493,9 +482,7 @@ const CreateOrder = ({ session }: Props) => {
                                 value={values.email || ''}
                                 invalid={touched.email && errors.email ? true : false}
                               />
-                              {touched.email && errors.email ? (
-                                <FormFeedback type='invalid'>{errors.email}</FormFeedback>
-                              ) : null}
+                              {touched.email && errors.email ? <FormFeedback type='invalid'>{errors.email}</FormFeedback> : null}
                             </FormGroup>
                           </Col>
                           <Col md={5}>
@@ -515,9 +502,7 @@ const CreateOrder = ({ session }: Props) => {
                                 value={values.amount || ''}
                                 invalid={touched.amount && errors.amount ? true : false}
                               />
-                              {touched.amount && errors.amount ? (
-                                <FormFeedback type='invalid'>{errors.amount}</FormFeedback>
-                              ) : null}
+                              {touched.amount && errors.amount ? <FormFeedback type='invalid'>{errors.amount}</FormFeedback> : null}
                             </FormGroup>
                             <FormGroup className='createOrder_inputs'>
                               <Label htmlFor='lastNameinput' className='form-label'>
@@ -535,9 +520,7 @@ const CreateOrder = ({ session }: Props) => {
                                 value={values.shipping || ''}
                                 invalid={touched.shipping && errors.shipping ? true : false}
                               />
-                              {touched.shipping && errors.shipping ? (
-                                <FormFeedback type='invalid'>{errors.shipping}</FormFeedback>
-                              ) : null}
+                              {touched.shipping && errors.shipping ? <FormFeedback type='invalid'>{errors.shipping}</FormFeedback> : null}
                             </FormGroup>
                             <FormGroup className='createOrder_inputs'>
                               <Label htmlFor='lastNameinput' className='form-label'>
@@ -555,9 +538,7 @@ const CreateOrder = ({ session }: Props) => {
                                 value={values.tax || ''}
                                 invalid={touched.tax && errors.tax ? true : false}
                               />
-                              {touched.tax && errors.tax ? (
-                                <FormFeedback type='invalid'>{errors.tax}</FormFeedback>
-                              ) : null}
+                              {touched.tax && errors.tax ? <FormFeedback type='invalid'>{errors.tax}</FormFeedback> : null}
                             </FormGroup>
                           </Col>
                           {/* <div className="border mt-3 border-dashed" /> */}
@@ -571,13 +552,9 @@ const CreateOrder = ({ session }: Props) => {
                                   <tr>
                                     <th className='py-1 fs-6 m-0 fw-semibold text-center bg-primary text-white'></th>
                                     <th className='py-1 fs-6 m-0 fw-semibold text-center bg-primary text-white'>SKU</th>
-                                    <th className='py-1 fs-6 m-0 fw-semibold text-center bg-primary text-white'>
-                                      Title
-                                    </th>
+                                    <th className='py-1 fs-6 m-0 fw-semibold text-center bg-primary text-white'>Title</th>
                                     <th className='py-1 fs-6 m-0 fw-semibold text-center bg-primary text-white'>Qty</th>
-                                    <th className='py-1 fs-6 m-0 fw-semibold text-center bg-primary text-white'>
-                                      Price
-                                    </th>
+                                    <th className='py-1 fs-6 m-0 fw-semibold text-center bg-primary text-white'>Price</th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -602,10 +579,7 @@ const CreateOrder = ({ session }: Props) => {
                                                     }>
                                                     <i className='fs-2 las la-plus-circle' />
                                                   </Button>
-                                                  <Button
-                                                    type='button'
-                                                    className='btn-icon btn-danger'
-                                                    onClick={() => remove(index)}>
+                                                  <Button type='button' className='btn-icon btn-danger' onClick={() => remove(index)}>
                                                     <i className='fs-2 las la-minus-circle' />
                                                   </Button>
                                                 </Row>
@@ -651,9 +625,7 @@ const CreateOrder = ({ session }: Props) => {
                                                       value={values.products[index].sku || ''}
                                                       invalid={meta.touched && meta.error ? true : false}
                                                     />
-                                                    {meta.touched && meta.error ? (
-                                                      <FormFeedback type='invalid'>{meta.error}</FormFeedback>
-                                                    ) : null}
+                                                    {meta.touched && meta.error ? <FormFeedback type='invalid'>{meta.error}</FormFeedback> : null}
                                                   </FormGroup>
                                                 )}
                                               </Field>
@@ -691,9 +663,7 @@ const CreateOrder = ({ session }: Props) => {
                                                       value={values.products[index].title || ''}
                                                       invalid={meta.touched && meta.error ? true : false}
                                                     />
-                                                    {meta.touched && meta.error ? (
-                                                      <FormFeedback type='invalid'>{meta.error}</FormFeedback>
-                                                    ) : null}
+                                                    {meta.touched && meta.error ? <FormFeedback type='invalid'>{meta.error}</FormFeedback> : null}
                                                   </FormGroup>
                                                 )}
                                               </Field>
@@ -728,9 +698,7 @@ const CreateOrder = ({ session }: Props) => {
                                                       value={values.products[index].qty || ''}
                                                       invalid={meta.touched && meta.error ? true : false}
                                                     />
-                                                    {meta.touched && meta.error ? (
-                                                      <FormFeedback type='invalid'>{meta.error}</FormFeedback>
-                                                    ) : null}
+                                                    {meta.touched && meta.error ? <FormFeedback type='invalid'>{meta.error}</FormFeedback> : null}
                                                   </FormGroup>
                                                 )}
                                               </Field>
@@ -752,9 +720,7 @@ const CreateOrder = ({ session }: Props) => {
                                                       value={values.products[index].price || ''}
                                                       invalid={meta.touched && meta.error ? true : false}
                                                     />
-                                                    {meta.touched && meta.error ? (
-                                                      <FormFeedback type='invalid'>{meta.error}</FormFeedback>
-                                                    ) : null}
+                                                    {meta.touched && meta.error ? <FormFeedback type='invalid'>{meta.error}</FormFeedback> : null}
                                                   </FormGroup>
                                                 )}
                                               </Field>
