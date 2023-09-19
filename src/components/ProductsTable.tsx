@@ -89,7 +89,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
               position: 'relative',
             }}>
             <img
-              src={cell.Image ? cell.Image : 'https://electrostoregroup.com/Onix/img/no-image.png'}
+              src={cell.Image ? cell.Image : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'}
               alt='product Image'
               style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
             />

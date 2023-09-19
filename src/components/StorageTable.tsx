@@ -57,7 +57,7 @@ const StorageTable = ({ tableData, pending }: Props) => {
               position: 'relative',
             }}>
             <img
-              src={row.image ? row.image : 'https://electrostoregroup.com/Onix/img/no-image.png'}
+              src={row.image ? row.image : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'}
               alt='Product Image'
               style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
             />
