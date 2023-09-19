@@ -100,7 +100,7 @@ const Storage = ({ session }: Props) => {
                       </div>
                       <StorageWidgets
                         previousCharge={storageInvoices[storageInvoices.length - 1]}
-                        previousChargeDate={storageDates[storageDates.length - 2]}
+                        previousChargeDate={storageDates[storageDates.length - 1]}
                         currentBalance={data?.dailyStorageBalance}
                         binsUSed={data?.totalBinsUSed}
                       />
