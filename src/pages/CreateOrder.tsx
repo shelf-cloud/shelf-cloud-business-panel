@@ -120,7 +120,10 @@ const CreateOrder = ({ session }: Props) => {
     firstName: Yup.string().min(3, 'First Name to short').max(100, 'First Name is to Long').required('Please Enter First Name'),
     lastName: Yup.string().min(3, 'Last Name to short').max(100, 'Last Name is to Long').required('Please Enter Last Name'),
     company: Yup.string().max(100, 'Company text is to Long'),
-    orderNumber: Yup.string().max(50, 'Order Number is to Long').required('Required Order Number'),
+    orderNumber: Yup.string()
+      .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ...`)
+      .max(50, 'Order Number is to Long')
+      .required('Required Order Number'),
     adress1: Yup.string().required('Required Adress'),
     adress2: Yup.string(),
     city: Yup.string().required('Required City'),

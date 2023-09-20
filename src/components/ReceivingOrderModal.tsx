@@ -1,19 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // ALTER TABLE `dbpruebas` ADD `activeState` BOOLEAN NOT NULL DEFAULT TRUE AFTER `image`;
 import React, { useEffect, useContext } from 'react'
-import {
-  Button,
-  Col,
-  Form,
-  FormFeedback,
-  FormGroup,
-  Input,
-  Label,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  Row,
-} from 'reactstrap'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row } from 'reactstrap'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import * as Yup from 'yup'
@@ -43,36 +31,36 @@ const ReceivingOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
       orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
     },
     validationSchema: Yup.object({
-      orderNumber: Yup.string().max(100, 'Title is to Long').required('Please enter Order Number'),
+      orderNumber: Yup.string()
+        .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ...`)
+        .max(100, 'Title is to Long')
+        .required('Please enter Order Number'),
     }),
     onSubmit: async (values, { resetForm }) => {
-      const response = await axios.post(
-        `api/createReceivingOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`,
-        {
-          shippingProducts: orderProducts.map((product) => {
+      const response = await axios.post(`api/createReceivingOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+        shippingProducts: orderProducts.map((product) => {
+          return {
+            sku: product.sku,
+            qty: Number(product.orderQty),
+            storeId: product.quantity.businessId,
+            qtyPicked: 0,
+            pickedHistory: [],
+          }
+        }),
+        orderInfo: {
+          orderNumber: values.orderNumber,
+          orderProducts: orderProducts.map((product) => {
             return {
               sku: product.sku,
-              qty: Number(product.orderQty),
-              storeId: product.quantity.businessId,
-              qtyPicked: 0,
-              pickedHistory: [],
+              name: product.title,
+              boxQty: product.qtyBox,
+              quantity: Number(product.orderQty),
+              businessId: product.quantity.businessId,
+              qtyReceived: 0,
             }
           }),
-          orderInfo: {
-            orderNumber: values.orderNumber,
-            orderProducts: orderProducts.map((product) => {
-              return {
-                sku: product.sku,
-                name: product.title,
-                boxQty: product.qtyBox,
-                quantity: Number(product.orderQty),
-                businessId: product.quantity.businessId,
-                qtyReceived: 0,
-              }
-            }),
-          },
-        }
-      )
+        },
+      })
 
       if (!response.data.error) {
         toast.success(response.data.msg)

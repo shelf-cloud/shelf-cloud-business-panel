@@ -1,20 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from 'react'
-import {
-  Button,
-  Card,
-  Col,
-  Form,
-  FormFeedback,
-  FormGroup,
-  Input,
-  Label,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  Row,
-  Spinner,
-} from 'reactstrap'
+import { Button, Card, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import * as Yup from 'yup'
@@ -41,15 +27,9 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
   const [errorPalletFile, setErrorPalletFile] = useState(false)
   const [loading, setloading] = useState(false)
 
-  const TotalMasterBoxes = orderProducts.reduce(
-    (total: number, item: wholesaleProductRow) => total + Number(item.orderQty),
-    0
-  )
+  const TotalMasterBoxes = orderProducts.reduce((total: number, item: wholesaleProductRow) => total + Number(item.orderQty), 0)
 
-  const totalQuantityToShip = orderProducts.reduce(
-    (total: number, item: wholesaleProductRow) => total + Number(item.totalToShip),
-    0
-  )
+  const totalQuantityToShip = orderProducts.reduce((total: number, item: wholesaleProductRow) => total + Number(item.totalToShip), 0)
   useEffect(() => {
     return () => {
       validation.resetForm()
@@ -61,8 +41,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
     enableReinitialize: true,
 
     initialValues: {
-      orderNumber:
-        state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
+      orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
       type: 'Parcel Boxes',
       numberOfPallets: 1,
       isThird: '',
@@ -70,7 +49,10 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
       hasProducts: orderProducts.length,
     },
     validationSchema: Yup.object({
-      orderNumber: Yup.string().max(100, 'Title is to Long').required('Please enter Order Number'),
+      orderNumber: Yup.string()
+        .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ...`)
+        .max(100, 'Title is to Long')
+        .required('Please enter Order Number'),
       type: Yup.string().oneOf(['LTL', 'Parcel Boxes'], 'Please Choose a Type').required('Please Choose a Type'),
       numberOfPallets: Yup.number().when('type', {
         is: 'LTL',
@@ -100,80 +82,68 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
       const docTime = moment().format('DD-MM-YYYY-HH-mm-ss-a')
 
       if (values.isThird == 'false') {
-        const storageRef = ref(
-          storage,
-          `shelf-cloud/etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
-        )
+        const storageRef = ref(storage, `shelf-cloud/etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`)
         await uploadBytes(storageRef, selectedFiles[0]).then((_snapshot) => {
           toast.success('Successfully uploaded Shipping labels!')
         })
 
         if (values.type == 'LTL') {
-          const storageRef = ref(
-            storage,
-            `shelf-cloud/pallet-etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
-          )
+          const storageRef = ref(storage, `shelf-cloud/pallet-etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`)
           await uploadBytes(storageRef, palletSelectedFiles[0]).then((_snapshot) => {
             toast.success('Successfully uploaded Pallet labels!')
           })
         }
       }
 
-      const response = await axios.post(
-        `api/createWholesaleOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`,
-        {
-          shippingProducts: orderProducts.map((product) => {
-            return {
-              sku: product.sku,
-              qty: product.totalToShip,
-              storeId: product.quantity.businessId,
-              qtyPicked: 0,
-              pickedHistory: [],
-            }
-          }),
-          groovePackerProducts: orderProducts.map((product) => {
-            return {
-              sku: product.sku,
-              qty: product.totalToShip,
-              storeId: product.quantity.businessId,
-              qtyScanned: 0,
-              history: [
-                {
-                  sku: product.sku,
-                  status: 'Awaiting',
-                  user: state.user.name,
-                  date: moment().format('YYYY-MM-DD h:mm:ss'),
-                },
-              ],
-            }
-          }),
-          orderInfo: {
-            orderNumber: values.orderNumber,
-            carrierService: values.type,
-            isPallets: values.type == 'LTL' ? true : false,
-            numberOfPallets: values.type == 'LTL' ? values.numberOfPallets : 0,
-            isthird: values.isThird == 'true' ? true : false,
-            thirdInfo: values.isThird == 'true' ? values.thirdInfo : '',
-            labelsName:
-              values.isThird == 'false'
-                ? `etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
-                : '',
-            palletLabels:
-              values.isThird == 'false' && values.type == 'LTL'
-                ? `pallet-etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
-                : '',
-            orderProducts: orderProducts.map((product) => {
-              return {
+      const response = await axios.post(`api/createWholesaleOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+        shippingProducts: orderProducts.map((product) => {
+          return {
+            sku: product.sku,
+            qty: product.totalToShip,
+            storeId: product.quantity.businessId,
+            qtyPicked: 0,
+            pickedHistory: [],
+          }
+        }),
+        groovePackerProducts: orderProducts.map((product) => {
+          return {
+            sku: product.sku,
+            qty: product.totalToShip,
+            storeId: product.quantity.businessId,
+            qtyScanned: 0,
+            history: [
+              {
                 sku: product.sku,
-                name: product.title,
-                boxQty: product.qtyBox,
-                quantity: product.totalToShip,
-                businessId: product.quantity.businessId,
-              }
-            }),
-          },
-        }
-      )
+                status: 'Awaiting',
+                user: state.user.name,
+                date: moment().format('YYYY-MM-DD h:mm:ss'),
+              },
+            ],
+          }
+        }),
+        orderInfo: {
+          orderNumber: values.orderNumber,
+          carrierService: values.type,
+          isPallets: values.type == 'LTL' ? true : false,
+          numberOfPallets: values.type == 'LTL' ? values.numberOfPallets : 0,
+          isthird: values.isThird == 'true' ? true : false,
+          thirdInfo: values.isThird == 'true' ? values.thirdInfo : '',
+          labelsName: values.isThird == 'false' ? `etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf` : '',
+          palletLabels:
+            values.isThird == 'false' && values.type == 'LTL'
+              ? `pallet-etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
+              : '',
+          orderProducts: orderProducts.map((product) => {
+            return {
+              sku: product.sku,
+              name: product.title,
+              boxQty: product.qtyBox,
+              quantity: product.totalToShip,
+              businessId: product.quantity.businessId,
+            }
+          }),
+        },
+      })
 
       if (!response.data.error) {
         setWholeSaleOrderModal(false)
@@ -357,9 +327,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                   <div className='list-unstyled mb-0' id='file-previews'>
                     {selectedFiles.map((f: any, i) => {
                       return (
-                        <Card
-                          className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete'
-                          key={i + '-file'}>
+                        <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
                           <div className='p-2'>
                             <Row className='align-items-center'>
                               <Col className='d-flex justify-content-between align-items-center'>
@@ -405,9 +373,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                   <div className='list-unstyled mb-0' id='file-previews'>
                     {palletSelectedFiles.map((f: any, i) => {
                       return (
-                        <Card
-                          className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete'
-                          key={i + '-file'}>
+                        <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
                           <div className='p-2'>
                             <Row className='align-items-center'>
                               <Col className='d-flex justify-content-between align-items-center'>
@@ -429,9 +395,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                       )
                     })}
                   </div>
-                  {errorPalletFile && (
-                    <p className='text-danger m-0'>You must Upload the Pallet Labels to create order.</p>
-                  )}
+                  {errorPalletFile && <p className='text-danger m-0'>You must Upload the Pallet Labels to create order.</p>}
                 </Col>
               </Row>
             </Col>
