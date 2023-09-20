@@ -175,12 +175,16 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
               }}>
               {cell.Quantity.quantity}
             </Button>
-            <span className='text-muted' id={`reservedQty${cell.SKU}`}>
-              {cell.Quantity.reserved}
-            </span>
-            <UncontrolledTooltip placement='right' target={`reservedQty${cell.SKU}`}>
-              Reserved in Awating Orders.
-            </UncontrolledTooltip>
+            {cell.Quantity.reserved > 0 && (
+              <>
+                <span className='text-danger' id={`reservedQty${cell.SKU.replaceAll(' ', '')}`}>
+                  -{cell.Quantity.reserved}
+                </span>
+                <UncontrolledTooltip placement='right' target={`reservedQty${cell.SKU.replaceAll(' ', '')}`}>
+                  Reserved in Awating Orders.
+                </UncontrolledTooltip>
+              </>
+            )}
           </div>
         )
       },
