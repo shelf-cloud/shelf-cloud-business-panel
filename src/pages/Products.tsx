@@ -74,6 +74,7 @@ const Products = ({ session }: Props) => {
           Barcode: product.barcode,
           Quantity: {
             quantity: product.quantity,
+            reserved: product.reserved,
             inventoryId: product.inventoryId,
             businessId: product.businessId,
             sku: product.sku,

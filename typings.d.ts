@@ -130,6 +130,7 @@ export interface Product {
   asin: string
   fnSku: string
   quantity: number
+  reserved: number
   weight: number
   length: number
   width: number
@@ -303,6 +304,7 @@ export interface WholesaleProduct {
   asin: string
   fnSku: string
   quantity: number
+  reserved: number
   weight: number
   length: number
   width: number

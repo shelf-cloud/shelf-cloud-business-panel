@@ -3,7 +3,7 @@
 import { wholesaleProductRow } from '@typings'
 import React, { useContext } from 'react'
 import AppContext from '@context/AppContext'
-import { Button, FormFeedback, Input } from 'reactstrap'
+import { Button, FormFeedback, Input, UncontrolledTooltip } from 'reactstrap'
 import DataTable from 'react-data-table-component'
 
 type Props = {
@@ -118,7 +118,11 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError 
               position: 'relative',
             }}>
             <img
-              src={row.image ? row.image : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'}
+              src={
+                row.image
+                  ? row.image
+                  : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+              }
               alt='product Image'
               style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
             />
@@ -213,15 +217,21 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError 
           return cell.quantity.quantity
         } else {
           return (
-            <Button
-              color='info'
-              outline
-              className='btn btn-ghost-info'
-              onClick={() => {
-                setModalProductInfo(cell.quantity.inventoryId, state.user.businessId, cell.quantity.sku)
-              }}>
-              {cell.quantity.quantity}
-            </Button>
+            <>
+              <Button
+                color='info'
+                outline
+                className='btn btn-ghost-info'
+                id={`reservedQty${cell.sku}`}
+                onClick={() => {
+                  setModalProductInfo(cell.quantity.inventoryId, state.user.businessId, cell.quantity.sku)
+                }}>
+                {cell.quantity.quantity}
+              </Button>
+              <UncontrolledTooltip placement='right' target={`reservedQty${cell.sku}`}>
+                {`Reserved ${cell.quantity.reserved}`}
+              </UncontrolledTooltip>
+            </>
           )
         }
       },

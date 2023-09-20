@@ -4,7 +4,7 @@ import { ProductRowType } from '@typings'
 import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import AppContext from '@context/AppContext'
-import { Button, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from 'reactstrap'
+import { Button, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
 import TooltipComponent from './constants/Tooltip'
 
 type Props = {
@@ -89,7 +89,11 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
               position: 'relative',
             }}>
             <img
-              src={cell.Image ? cell.Image : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'}
+              src={
+                cell.Image
+                  ? cell.Image
+                  : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+              }
               alt='product Image'
               style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
             />
@@ -161,15 +165,23 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       name: <span className='font-weight-bold fs-13'>Quantity</span>,
       selector: (cell: any) => {
         return (
-          <Button
-            color='primary'
-            outline
-            className='btn btn-ghost-primary'
-            onClick={() => {
-              setModalProductInfo(cell.Quantity.inventoryId, state.user.businessId, cell.Quantity.sku)
-            }}>
-            {cell.Quantity.quantity}
-          </Button>
+          <div className='d-flex flex-column justify-content-center align-items-center'>
+            <Button
+              color='primary'
+              outline
+              className='btn btn-ghost-primary'
+              onClick={() => {
+                setModalProductInfo(cell.Quantity.inventoryId, state.user.businessId, cell.Quantity.sku)
+              }}>
+              {cell.Quantity.quantity}
+            </Button>
+            <span className='text-muted' id={`reservedQty${cell.SKU}`}>
+              {cell.Quantity.reserved}
+            </span>
+            <UncontrolledTooltip placement='right' target={`reservedQty${cell.SKU}`}>
+              Reserved in Awating Orders.
+            </UncontrolledTooltip>
+          </div>
         )
       },
       sortable: true,

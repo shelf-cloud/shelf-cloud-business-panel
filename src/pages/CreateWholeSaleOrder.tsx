@@ -66,6 +66,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
             isKit: product.isKit,
             quantity: {
               quantity: product.quantity,
+              reserved: product.reserved,
               inventoryId: product.inventoryId,
               businessId: product.businessId,
               sku: product.sku,
