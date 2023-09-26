@@ -143,6 +143,66 @@ export interface Product {
   activeState: boolean
 }
 
+export interface LatestOrders {
+  date: string
+  orderNumber: string
+  qty: number
+}
+export interface ProductDetails {
+  inventoryId: number
+  businessId: number
+  isKit: boolean
+  business: string
+  image: string
+  title: string
+  // general
+  description: string
+  brand: string
+  category: string
+  manufacturer: string
+  // old details
+  barcode: string
+  sku: string
+  note: string
+  asin: string
+  fnsku: string
+  weight: number
+  length: number
+  width: number
+  height: number
+  boxQty: number
+  boxWeight: number
+  boxLength: number
+  boxWidth: number
+  boxHeight: number
+  activeState: boolean
+  // sku
+  defaultCost: number
+  defaultPrice: number
+  msrp: number
+  map: number
+  floor: number
+  ceilling: number
+  // supplier
+  supplier: string
+  sellerCost: number
+  overSeasShippingCost: number
+  landedCost: number
+  productionTime: number
+  transitTime: number
+  leadTime: number
+  // summary
+  currentStorageBalance: number
+  binsUsed: number
+  inventoryValue: number
+  // inventory
+  onhand: number
+  available: number
+  reserved: number
+  receiving: number
+  latestOrders: LatestOrders[]
+}
+
 // STORAGE PRODUCTS
 export interface StorageBin {
   binName: string

@@ -6,6 +6,7 @@ import DataTable from 'react-data-table-component'
 import AppContext from '@context/AppContext'
 import { Button, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
 import TooltipComponent from './constants/Tooltip'
+import Link from 'next/link'
 
 type Props = {
   tableData: ProductRowType[]
@@ -280,6 +281,14 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
                 onClick={() => setModalProductDetails(row.btns.inventoryId, state.user.businessId, row.btns.sku)}>
                 <i className='ri-pencil-fill align-middle me-2 fs-5 text-muted'></i>
                 <span className='fs-6 fw-normal'>Edit</span>
+              </DropdownItem>
+              <DropdownItem className='edit-item-btn'>
+                <Link href={`/product/${row.inventoryId}/${row.SKU}`} passHref>
+                  <a className=''>
+                    <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
+                    <span className='fs-6 fw-normal text-dark'>View Details</span>
+                  </a>
+                </Link>
               </DropdownItem>
               {(row.Quantity.quantity == 0 || !row.btns.state) && (
                 <DropdownItem className={activeText} onClick={() => changeProductState(row.btns.inventoryId, state.user.businessId, row.btns.sku)}>

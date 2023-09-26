@@ -65,6 +65,7 @@ const Products = ({ session }: Props) => {
 
       data?.forEach((product: Product) => {
         const row = {
+          inventoryId: product.inventoryId,
           Image: product.image,
           Title: product.title,
           SKU: product.sku,
