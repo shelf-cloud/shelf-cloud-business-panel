@@ -1,6 +1,7 @@
 import { getSession } from '@auth/client'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import Activity_Product_Details from '@components/product_page/Activity_Product_Details'
+import Bins_Product_Details from '@components/product_page/Bins_Product_Details'
 import General_Product_Details from '@components/product_page/General_Product_Details'
 import Inventory_Product_Details from '@components/product_page/Inventory_Product_Details'
 import Measure_Product_Details from '@components/product_page/Measure_Product_Details'
@@ -106,7 +107,7 @@ const Product_Page_Layout = ({}: Props) => {
                         </h1>
                       </div>
                     </div>
-                    <ProductWidgets available={productDetails?.available ?? 0} currentStorageBalance={productDetails?.currentStorageBalance ?? 0} binsUsed={productDetails?.binsUsed ?? 0} inventoryValue={productDetails?.inventoryValue ?? 0} landedCost={productDetails?.landedCost}/>
+                    <ProductWidgets onhand={productDetails?.onhand ?? 0} currentStorageBalance={productDetails?.currentStorageBalance ?? 0} binsUsed={productDetails?.binsUsed ?? 0} inventoryValue={productDetails?.inventoryValue ?? 0} landedCost={productDetails?.landedCost}/>
                   </CardHeader>
                   <CardBody>
                     <Row>
@@ -211,6 +212,7 @@ const Product_Page_Layout = ({}: Props) => {
                       <Col xs='3' className='gap-4 d-flex flex-column'>
                         <Status_Product_Details active={productDetails?.activeState ?? true} isKit={productDetails?.isKit ?? false} inStock={true} />
                         <Activity_Product_Details latestOrders={productDetails?.latestOrders ?? []}/>
+                        <Bins_Product_Details bins={productDetails?.bins ?? []}/>
                       </Col>
                     </Row>
                   </CardBody>

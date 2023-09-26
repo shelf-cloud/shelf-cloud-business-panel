@@ -148,6 +148,13 @@ export interface LatestOrders {
   orderNumber: string
   qty: number
 }
+
+export interface ProductBins {
+  binName: string
+  quantity: number
+  binBalance: number
+}
+
 export interface ProductDetails {
   inventoryId: number
   businessId: number
@@ -201,6 +208,7 @@ export interface ProductDetails {
   reserved: number
   receiving: number
   latestOrders: LatestOrders[]
+  bins: ProductBins[]
 }
 
 // STORAGE PRODUCTS

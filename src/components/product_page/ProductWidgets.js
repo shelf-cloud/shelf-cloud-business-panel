@@ -5,7 +5,7 @@ import CountUp from 'react-countup'
 import Link from 'next/link'
 import moment from 'moment'
 
-const ProductWidgets = ({ available, currentStorageBalance, binsUsed, inventoryValue, landedCost }) => {
+const ProductWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValue, landedCost }) => {
   const { state } = useContext(AppContext)
   const currentMonthDays = moment().format('D') - 1
   return (
@@ -25,7 +25,7 @@ const ProductWidgets = ({ available, currentStorageBalance, binsUsed, inventoryV
                     <span className='counter-value'>
                       <CountUp
                         start={0}
-                        end={available}
+                        end={onhand}
                         decimals={0}
                         duration={1}
                       />
