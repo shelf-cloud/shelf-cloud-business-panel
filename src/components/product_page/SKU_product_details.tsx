@@ -24,8 +24,8 @@ const SKU_product_details = ({ sku, upc, asin, fnsku, defaultCost, defaultPrice,
           <tr className='text-center'>
             <th>SKU</th>
             <th>UPC</th>
-            <th>Asin</th>
-            <th>FNSKU</th>
+            {asin && <th>Asin</th>}
+            {fnsku && <th>FNSKU</th>}
             <th>Default Cost</th>
             <th>Default Price</th>
             <th>MSRP</th>
@@ -38,8 +38,8 @@ const SKU_product_details = ({ sku, upc, asin, fnsku, defaultCost, defaultPrice,
           <tr className='text-center'>
             <td>{sku}</td>
             <td>{upc}</td>
-            <td>{asin}</td>
-            <td>{fnsku}</td>
+            {asin && <td>{asin}</td>}
+            {fnsku && <td>{fnsku}</td>}
             <td>{FormatCurrency(state.currentRegion, defaultCost)}</td>
             <td>{FormatCurrency(state.currentRegion, defaultPrice)}</td>
             <td>{FormatCurrency(state.currentRegion, msrp)}</td>

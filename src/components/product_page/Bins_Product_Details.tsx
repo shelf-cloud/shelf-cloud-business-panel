@@ -16,7 +16,7 @@ const Bins_Product_Details = ({ bins }: Props) => {
         <thead>
           <tr className='text-center'>
             <th>Name</th>
-            <th>Est. Balance</th>
+            <th>Est. Cost</th>
             <th>Qty</th>
           </tr>
         </thead>

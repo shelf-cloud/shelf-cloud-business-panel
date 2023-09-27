@@ -57,6 +57,9 @@ function OrderDetailsFromInvoicesModal({}: Props) {
         <h3 className='modal-title' id='myModalLabel'>
           {`Order Details: ${data.orderNumber ? data.orderNumber : ''}`}
         </h3>
+        <p className='text-secondary fs-4 fw-normal my-0'>
+          {data.orderType}
+        </p>
       </ModalHeader>
       <ModalBody>
         {!loading ? (
@@ -67,7 +70,7 @@ function OrderDetailsFromInvoicesModal({}: Props) {
                   <Col xl={12}>
                     <Card>
                       <CardHeader className='py-3'>
-                        <h5 className='fw-semibold m-0'>Shipping</h5>
+                        <h5 className='fw-semibold m-0'>Wholesale Details</h5>
                       </CardHeader>
                       <CardBody>
                         <table className='table table-sm table-borderless'>
@@ -315,7 +318,7 @@ function OrderDetailsFromInvoicesModal({}: Props) {
                   <Col xl={12}>
                     <Card>
                       <CardHeader className='py-3'>
-                        <h5 className='fw-semibold m-0'>Shipping</h5>
+                        <h5 className='fw-semibold m-0'>Receiving Details</h5>
                       </CardHeader>
                       <CardBody>
                         <table className='table table-sm table-borderless'>

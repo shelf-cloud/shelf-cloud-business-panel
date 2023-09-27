@@ -1,9 +1,11 @@
 import { getSession } from '@auth/client'
 import BreadCrumb from '@components/Common/BreadCrumb'
+import OrderDetailsFromInvoicesModal from '@components/OrderDetailsFromInvoicesModal'
 import Activity_Product_Details from '@components/product_page/Activity_Product_Details'
 import Bins_Product_Details from '@components/product_page/Bins_Product_Details'
 import General_Product_Details from '@components/product_page/General_Product_Details'
 import Inventory_Product_Details from '@components/product_page/Inventory_Product_Details'
+import Listings_Product_Details from '@components/product_page/Listings_Product_Details'
 import Measure_Product_Details from '@components/product_page/Measure_Product_Details'
 import ProductWidgets from '@components/product_page/ProductWidgets'
 import SKU_product_details from '@components/product_page/SKU_product_details'
@@ -107,7 +109,12 @@ const Product_Page_Layout = ({}: Props) => {
                         </h1>
                       </div>
                     </div>
-                    <ProductWidgets onhand={productDetails?.onhand ?? 0} currentStorageBalance={productDetails?.currentStorageBalance ?? 0} binsUsed={productDetails?.binsUsed ?? 0} inventoryValue={productDetails?.inventoryValue ?? 0} landedCost={productDetails?.landedCost}/>
+                    <ProductWidgets
+                      onhand={productDetails?.onhand ?? 0}
+                      currentStorageBalance={productDetails?.currentStorageBalance ?? 0}
+                      binsUsed={productDetails?.binsUsed ?? 0}
+                      inventoryValue={productDetails?.inventoryValue ?? 0}
+                    />
                   </CardHeader>
                   <CardBody>
                     <Row>
@@ -118,7 +125,7 @@ const Product_Page_Layout = ({}: Props) => {
                           description={productDetails?.description}
                           brand={productDetails?.brand}
                           category={productDetails?.category}
-                          manufacturer={productDetails?.manufacturer}
+                          supplier={productDetails?.supplier}
                         />
                         <Nav className='pt-2 nav-tabs-custom rounded card-header-tabs border-bottom-0' role='tablist'>
                           <NavItem style={{ cursor: 'pointer' }}>
@@ -161,6 +168,20 @@ const Product_Page_Layout = ({}: Props) => {
                               </>
                             </NavLink>
                           </NavItem>
+                          <NavItem style={{ cursor: 'pointer' }}>
+                            <NavLink
+                              to='#'
+                              className={'fs-4 fw-semibold ' + (activeTab == '4' ? 'text-primary' : 'text-muted')}
+                              onClick={() => {
+                                tabChange('4')
+                              }}
+                              type='button'>
+                              <>
+                                <i className='far fa-user'></i>
+                                Listings
+                              </>
+                            </NavLink>
+                          </NavItem>
                         </Nav>
                         <TabContent activeTab={activeTab} className='pt-2 pb-4'>
                           <TabPane tabId='1'>
@@ -191,19 +212,22 @@ const Product_Page_Layout = ({}: Props) => {
                             />
                           </TabPane>
                           <TabPane tabId='3'>
-                            <Supplier_Product_Details 
-                              supplier={productDetails?.supplier}
-                              sellerCost={productDetails?.sellerCost}
-                              overSeasShippingCost={productDetails?.overSeasShippingCost}
-                              landedCost={productDetails?.landedCost}
-                              productionTime={productDetails?.productionTime}
-                              transitTime={productDetails?.transitTime}
-                              leadTime={productDetails?.leadTime}
+                            <Supplier_Product_Details
+                              sellerCost={productDetails?.sellerCost ?? 0}
+                              inboundShippingCost={productDetails?.inboundShippingCost ?? 0}
+                              otherCosts={productDetails?.otherCosts ?? 0}
+                              productionTime={productDetails?.productionTime ?? 0}
+                              transitTime={productDetails?.transitTime ?? 0}
+                              shippingToFBA={productDetails?.shippingToFBA}
                             />
                           </TabPane>
+                          <TabPane tabId='4'>
+                            <Listings_Product_Details listings={productDetails?.listings ?? []}/>
+                          </TabPane>
                         </TabContent>
-                        <Inventory_Product_Details 
+                        <Inventory_Product_Details
                           onhand={productDetails?.onhand ?? 0}
+                          buffer={productDetails?.buffer ?? 0}
                           available={productDetails?.available ?? 0}
                           reserved={productDetails?.reserved ?? 0}
                           receiving={productDetails?.receiving ?? 0}
@@ -211,8 +235,8 @@ const Product_Page_Layout = ({}: Props) => {
                       </Col>
                       <Col xs='3' className='gap-4 d-flex flex-column'>
                         <Status_Product_Details active={productDetails?.activeState ?? true} isKit={productDetails?.isKit ?? false} inStock={true} />
-                        <Activity_Product_Details latestOrders={productDetails?.latestOrders ?? []}/>
-                        <Bins_Product_Details bins={productDetails?.bins ?? []}/>
+                        <Activity_Product_Details latestOrders={productDetails?.latestOrders ?? []} />
+                        <Bins_Product_Details bins={productDetails?.bins ?? []} />
                       </Col>
                     </Row>
                   </CardBody>
@@ -226,6 +250,7 @@ const Product_Page_Layout = ({}: Props) => {
           </Container>
         </div>
       </React.Fragment>
+      {state.showOrderDetailsOfInvoiceModal && <OrderDetailsFromInvoicesModal />}
     </div>
   )
 }

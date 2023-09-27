@@ -2,12 +2,13 @@ import React from 'react'
 
 type Props = {
   onhand: number
+  buffer: number
   available: number
   reserved: number
   receiving: number
 }
 
-const Inventory_Product_Details = ({onhand, available, reserved, receiving}: Props) => {
+const Inventory_Product_Details = ({onhand, buffer, available, reserved, receiving}: Props) => {
   return (
     <div className='px-3 py-1 border-bottom w-100'>
       <p className='fs-4 text-primary fw-semibold'>Inventory</p>
@@ -16,6 +17,7 @@ const Inventory_Product_Details = ({onhand, available, reserved, receiving}: Pro
           <tr className='text-center'>
             <th>Warehouse</th>
             <th>On Hand</th>
+            <th>Buffer</th>
             <th>Available</th>
             <th>Reserved</th>
             <th>Receiving</th>
@@ -25,6 +27,7 @@ const Inventory_Product_Details = ({onhand, available, reserved, receiving}: Pro
           <tr className='text-center'>
             <td className='fw-semibold'>ShelfCloud</td>
             <td>{onhand}</td>
+            <td>{buffer}</td>
             <td className='text-success'>{available}</td>
             <td className='text-danger'>{reserved}</td>
             <td>{receiving}</td>

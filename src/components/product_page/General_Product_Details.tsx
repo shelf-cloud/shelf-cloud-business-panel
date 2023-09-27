@@ -7,10 +7,10 @@ type Props = {
   description?: string
   brand?: string
   category?: string
-  manufacturer?: string
+  supplier?: string
 }
 
-const General_Product_Details = ({ image, title, description, brand, category, manufacturer }: Props) => {
+const General_Product_Details = ({ image, title, description, brand, category, supplier }: Props) => {
   return (
     <div className='px-4 pt-2 pb-4 border-bottom'>
       <p className='fs-4 text-primary fw-semibold'>General</p>
@@ -54,8 +54,8 @@ const General_Product_Details = ({ image, title, description, brand, category, m
                 <td className={category ?? 'text-muted fw-light fst-italic'}>{category ?? 'No Category'}</td>
               </tr>
               <tr>
-                <td className='fw-bolder'>Manufacturer</td>
-                <td className={manufacturer ?? 'text-muted fw-light fst-italic'}>{manufacturer ?? 'No Manufacturer'}</td>
+                <td className='fw-bolder'>Supplier</td>
+                <td className={supplier ?? 'text-muted fw-light fst-italic'}>{supplier ?? 'No supplier'}</td>
               </tr>
             </body>
           </table>

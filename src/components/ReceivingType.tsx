@@ -58,7 +58,7 @@ const ReceivingType = ({ data }: Props) => {
           <Col xl={12}>
             <Card>
               <CardHeader className='py-3'>
-                <h5 className='fw-semibold m-0'>Shipping</h5>
+                <h5 className='fw-semibold m-0'>Receiving Details</h5>
               </CardHeader>
               <CardBody>
                 <table className='table table-sm table-borderless'>

@@ -5,7 +5,7 @@ import CountUp from 'react-countup'
 import Link from 'next/link'
 import moment from 'moment'
 
-const ProductWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValue, landedCost }) => {
+const ProductWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValue }) => {
   const { state } = useContext(AppContext)
   const currentMonthDays = moment().format('D') - 1
   return (
@@ -41,7 +41,7 @@ const ProductWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValu
             <div className='p-0'>
               <div className='d-flex align-items-center'>
                 <div className='flex-grow-1 overflow-hidden'>
-                  <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>Current Storage Balance</p>
+                  <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>Est. Storage Monthly Cost</p>
                 </div>
               </div>
               <div className='d-flex align-items-end justify-content-between mt-1'>
@@ -59,7 +59,6 @@ const ProductWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValu
                       />
                     </span>
                   </h4>
-                  <span className='text-muted'>{currentMonthDays} accumulated days</span>
                 </div>
               </div>
             </div>
@@ -103,7 +102,7 @@ const ProductWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValu
               </div>
               <div className='d-flex align-items-end justify-content-between mt-1'>
                 <div>
-                  {landedCost > 0 ? <h4 className='fs-22 fw-semibold ff-secondary'>
+                  {inventoryValue > 0 ? <h4 className='fs-22 fw-semibold ff-secondary'>
                     <span className='counter-value'>
                       <CountUp
                         start={0}

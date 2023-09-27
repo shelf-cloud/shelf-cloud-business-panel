@@ -144,15 +144,23 @@ export interface Product {
 }
 
 export interface LatestOrders {
+  orderId:number
   date: string
   orderNumber: string
   qty: number
+  isReceiving: boolean
 }
 
 export interface ProductBins {
   binName: string
   quantity: number
   binBalance: number
+}
+
+export interface Listings {
+  storeSku: string
+  channel: string
+  store: string
 }
 
 export interface ProductDetails {
@@ -166,7 +174,6 @@ export interface ProductDetails {
   description: string
   brand: string
   category: string
-  manufacturer: string
   // old details
   barcode: string
   sku: string
@@ -193,22 +200,24 @@ export interface ProductDetails {
   // supplier
   supplier: string
   sellerCost: number
-  overSeasShippingCost: number
-  landedCost: number
+  inboundShippingCost: number
+  otherCosts: number
   productionTime: number
   transitTime: number
-  leadTime: number
+  shippingToFBA: number
   // summary
   currentStorageBalance: number
   binsUsed: number
   inventoryValue: number
   // inventory
   onhand: number
+  buffer: number
   available: number
   reserved: number
   receiving: number
   latestOrders: LatestOrders[]
   bins: ProductBins[]
+  listings: Listings[]
 }
 
 // STORAGE PRODUCTS
