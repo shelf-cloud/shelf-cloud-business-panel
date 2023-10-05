@@ -8,8 +8,8 @@ type Props = {
 
 const Listings_Product_Details = ({ listings }: Props) => {
   return (
-    <div className='py-1 border-bottom w-100'>
-      <table className='table table-sm table-borderless'>
+    <div className='py-1 w-100'>
+      <table className='table table-sm'>
         <thead>
           <tr className='text-center'>
             <th>Store SKU</th>

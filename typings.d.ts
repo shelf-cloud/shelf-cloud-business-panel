@@ -143,8 +143,10 @@ export interface Product {
   activeState: boolean
 }
 
+// PRODUCT DETAILS PAGE
+
 export interface LatestOrders {
-  orderId:number
+  orderId: number
   date: string
   orderNumber: string
   qty: number
@@ -161,6 +163,11 @@ export interface Listings {
   storeSku: string
   channel: string
   store: string
+}
+
+export interface Identifier {
+  type: string
+  value: string
 }
 
 export interface ProductDetails {
@@ -218,6 +225,11 @@ export interface ProductDetails {
   latestOrders: LatestOrders[]
   bins: ProductBins[]
   listings: Listings[]
+  itemCondition: "New" | "Like New" | "Used"
+  identifiers: Identifier[]
+  brands: string[]
+  categories: string[]
+  suppliers: string[]
 }
 
 // STORAGE PRODUCTS

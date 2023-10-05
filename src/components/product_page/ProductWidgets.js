@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import AppContext from '@context/AppContext'
-import { Card, CardBody, Col, Row } from 'reactstrap'
+import { Card, CardBody, Col, Row, UncontrolledTooltip } from 'reactstrap'
 import CountUp from 'react-countup'
 import Link from 'next/link'
 import moment from 'moment'
@@ -23,12 +23,7 @@ const ProductWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValu
                 <div>
                   <h4 className='fs-22 fw-semibold ff-secondary'>
                     <span className='counter-value'>
-                      <CountUp
-                        start={0}
-                        end={onhand}
-                        decimals={0}
-                        duration={1}
-                      />
+                      <CountUp start={0} end={onhand} decimals={0} duration={1} />
                     </span>
                   </h4>
                 </div>
@@ -102,19 +97,26 @@ const ProductWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValu
               </div>
               <div className='d-flex align-items-end justify-content-between mt-1'>
                 <div>
-                  {inventoryValue > 0 ? <h4 className='fs-22 fw-semibold ff-secondary'>
-                    <span className='counter-value'>
-                      <CountUp
-                        start={0}
-                        prefix={state.currentRegion == 'us' ? '$ ' : ''}
-                        suffix={state.currentRegion == 'eu' ? ' €' : ''}
-                        separator={state.currentRegion == 'us' ? '.' : ','}
-                        end={inventoryValue}
-                        decimals={2}
-                        duration={1}
-                      />
-                    </span>
-                  </h4> : <span className='fs-4 text-muted fw-light'>No Cost</span>}
+                  {inventoryValue > 0 ? (
+                    <h4 className='fs-22 fw-semibold ff-secondary'>
+                      <span className='counter-value' id='inventoryValue'>
+                        <CountUp
+                          start={0}
+                          prefix={state.currentRegion == 'us' ? '$ ' : ''}
+                          suffix={state.currentRegion == 'eu' ? ' €' : ''}
+                          separator={state.currentRegion == 'us' ? '.' : ','}
+                          end={inventoryValue}
+                          decimals={2}
+                          duration={1}
+                        />
+                      </span>
+                      <UncontrolledTooltip placement='bottom' target='inventoryValue' innerClassName='bg-white text-primary shadow'>
+                        {`Landed Cost * On Hand Inventory`}
+                      </UncontrolledTooltip>
+                    </h4>
+                  ) : (
+                    <span className='fs-4 text-muted fw-light'>No Cost</span>
+                  )}
                 </div>
               </div>
             </div>

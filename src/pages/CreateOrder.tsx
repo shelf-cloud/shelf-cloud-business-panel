@@ -121,7 +121,7 @@ const CreateOrder = ({ session }: Props) => {
     lastName: Yup.string().min(3, 'Last Name to short').max(100, 'Last Name is to Long').required('Please Enter Last Name'),
     company: Yup.string().max(100, 'Company text is to Long'),
     orderNumber: Yup.string()
-      .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ...`)
+      .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ... Nor White Spaces`)
       .max(50, 'Order Number is to Long')
       .required('Required Order Number'),
     adress1: Yup.string().required('Required Adress'),
@@ -138,18 +138,13 @@ const CreateOrder = ({ session }: Props) => {
     products: Yup.array()
       .of(
         Yup.object({
-          sku: Yup.string()
-            .oneOf(validSkus, 'Invalid SKU or There`s No Stock Available')
-            .notOneOf(inValidSkus, 'There`s no Stock for this SKU')
-            .required('Required SKU'),
+          sku: Yup.string().oneOf(validSkus, 'Invalid SKU or There`s No Stock Available').notOneOf(inValidSkus, 'There`s no Stock for this SKU').required('Required SKU'),
           title: Yup.string().max(100, 'Name is to Long').required('Required Name'),
           qty: Yup.number()
             .positive()
             .integer('Qty must be an integer')
             .min(1, 'Quantity must be greater than 0')
-            .when('sku', (sku, schema) =>
-              sku != '' ? schema.max(skuQuantities[sku], `Current SKU Stock is ${skuQuantities[sku] ? skuQuantities[sku] : 'unavailable'}`) : schema
-            )
+            .when('sku', (sku, schema) => (sku != '' ? schema.max(skuQuantities[sku], `Current SKU Stock is ${skuQuantities[sku] ? skuQuantities[sku] : 'unavailable'}`) : schema))
             .required('Required Quantity'),
           price: Yup.number().min(0, 'Price must be greater than or equal to 0').required('Required Price'),
         })
@@ -206,10 +201,7 @@ const CreateOrder = ({ session }: Props) => {
             <Card className='fs-6'>
               <CardBody>
                 {ready ? (
-                  <Formik
-                    initialValues={initialValues}
-                    validationSchema={validationSchema}
-                    onSubmit={(values, { resetForm }) => handleSubmit(values, { resetForm })}>
+                  <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values, { resetForm }) => handleSubmit(values, { resetForm })}>
                     {({ values, errors, touched, handleChange, handleBlur }) => (
                       <Form>
                         <Row>
@@ -619,9 +611,7 @@ const CreateOrder = ({ session }: Props) => {
                                                       placeholder='Sku...'
                                                       onChange={(e: any) => {
                                                         handleChange(e)
-                                                        e.target.value == ''
-                                                          ? (values.products[index].title = '')
-                                                          : (values.products[index].title = skusTitles[e.target.value])
+                                                        e.target.value == '' ? (values.products[index].title = '') : (values.products[index].title = skusTitles[e.target.value])
                                                       }}
                                                       // onChange={(e) => handleChangeInSKU(e.target.value, values, index)}
                                                       onBlur={handleBlur}
@@ -737,9 +727,7 @@ const CreateOrder = ({ session }: Props) => {
                               </table>
                             </Col>
                           </Row>
-                          <h5 className='fs-14 mb-0 text-muted'>
-                            *You must complete all required fields or you will not be able to create your product.
-                          </h5>
+                          <h5 className='fs-14 mb-0 text-muted'>*You must complete all required fields or you will not be able to create your product.</h5>
                           <Col md={12}>
                             <div className='text-end'>
                               <Button type='submit' disabled={creatingOrder} className='fs-5 btn bg-primary'>

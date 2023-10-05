@@ -4,6 +4,7 @@ import OrderDetailsFromInvoicesModal from '@components/OrderDetailsFromInvoicesM
 import Activity_Product_Details from '@components/product_page/Activity_Product_Details'
 import Bins_Product_Details from '@components/product_page/Bins_Product_Details'
 import General_Product_Details from '@components/product_page/General_Product_Details'
+import Identifiers_Product_Details from '@components/product_page/Identifiers_Product_Details'
 import Inventory_Product_Details from '@components/product_page/Inventory_Product_Details'
 import Listings_Product_Details from '@components/product_page/Listings_Product_Details'
 import Measure_Product_Details from '@components/product_page/Measure_Product_Details'
@@ -56,10 +57,7 @@ const Product_Page_Layout = ({}: Props) => {
   const [productDetails, setProductDetails] = useState<ProductDetails | null>()
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(
-    info![0] ? `/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${info![0]}&businessId=${state.user.businessId}` : null,
-    fetcher
-  )
+  const { data } = useSWR(info![0] ? `/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${info![0]}&businessId=${state.user.businessId}` : null, fetcher)
 
   useEffect(() => {
     if (data?.error) {
@@ -120,12 +118,19 @@ const Product_Page_Layout = ({}: Props) => {
                     <Row>
                       <Col className='gap-2 d-flex flex-column'>
                         <General_Product_Details
+                          inventoryId={productDetails?.inventoryId}
+                          sku={productDetails?.sku}
                           image={productDetails?.image}
                           title={productDetails?.title}
                           description={productDetails?.description}
                           brand={productDetails?.brand}
                           category={productDetails?.category}
                           supplier={productDetails?.supplier}
+                          itemCondition={productDetails?.itemCondition}
+                          note={productDetails?.note}
+                          brands={productDetails?.brands ?? []}
+                          categories={productDetails?.categories ?? []}
+                          suppliers={productDetails?.suppliers ?? []}
                         />
                         <Nav className='pt-2 nav-tabs-custom rounded card-header-tabs border-bottom-0' role='tablist'>
                           <NavItem style={{ cursor: 'pointer' }}>
@@ -178,18 +183,31 @@ const Product_Page_Layout = ({}: Props) => {
                               type='button'>
                               <>
                                 <i className='far fa-user'></i>
+                                Identifiers
+                              </>
+                            </NavLink>
+                          </NavItem>
+                          <NavItem style={{ cursor: 'pointer' }}>
+                            <NavLink
+                              to='#'
+                              className={'fs-4 fw-semibold ' + (activeTab == '5' ? 'text-primary' : 'text-muted')}
+                              onClick={() => {
+                                tabChange('5')
+                              }}
+                              type='button'>
+                              <>
+                                <i className='far fa-user'></i>
                                 Listings
                               </>
                             </NavLink>
                           </NavItem>
                         </Nav>
-                        <TabContent activeTab={activeTab} className='pt-2 pb-4'>
+                        <TabContent activeTab={activeTab} className='pt-2 pb-4 border-bottom'>
                           <TabPane tabId='1'>
                             <SKU_product_details
+                              inventoryId={productDetails?.inventoryId}
                               sku={productDetails?.sku}
                               upc={productDetails?.barcode}
-                              asin={productDetails?.asin}
-                              fnsku={productDetails?.fnsku}
                               defaultCost={productDetails?.defaultCost ?? 0}
                               defaultPrice={productDetails?.defaultPrice ?? 0}
                               msrp={productDetails?.msrp ?? 0}
@@ -200,6 +218,8 @@ const Product_Page_Layout = ({}: Props) => {
                           </TabPane>
                           <TabPane tabId='2'>
                             <Measure_Product_Details
+                              inventoryId={productDetails?.inventoryId}
+                              sku={productDetails?.sku}
                               weight={productDetails?.weight ?? 0}
                               length={productDetails?.length ?? 0}
                               width={productDetails?.width ?? 0}
@@ -213,6 +233,8 @@ const Product_Page_Layout = ({}: Props) => {
                           </TabPane>
                           <TabPane tabId='3'>
                             <Supplier_Product_Details
+                              inventoryId={productDetails?.inventoryId}
+                              sku={productDetails?.sku}
                               sellerCost={productDetails?.sellerCost ?? 0}
                               inboundShippingCost={productDetails?.inboundShippingCost ?? 0}
                               otherCosts={productDetails?.otherCosts ?? 0}
@@ -222,10 +244,21 @@ const Product_Page_Layout = ({}: Props) => {
                             />
                           </TabPane>
                           <TabPane tabId='4'>
-                            <Listings_Product_Details listings={productDetails?.listings ?? []}/>
+                            <Identifiers_Product_Details
+                              inventoryId={productDetails?.inventoryId}
+                              sku={productDetails?.sku}
+                              asin={productDetails?.asin}
+                              fnsku={productDetails?.fnsku}
+                              identifiers={productDetails?.identifiers ?? []}
+                            />
+                          </TabPane>
+                          <TabPane tabId='5'>
+                            <Listings_Product_Details listings={productDetails?.listings ?? []} />
                           </TabPane>
                         </TabContent>
                         <Inventory_Product_Details
+                          inventoryId={productDetails?.inventoryId}
+                          sku={productDetails?.sku}
                           onhand={productDetails?.onhand ?? 0}
                           buffer={productDetails?.buffer ?? 0}
                           available={productDetails?.available ?? 0}
@@ -234,7 +267,11 @@ const Product_Page_Layout = ({}: Props) => {
                         />
                       </Col>
                       <Col xs='3' className='gap-4 d-flex flex-column'>
-                        <Status_Product_Details active={productDetails?.activeState ?? true} isKit={productDetails?.isKit ?? false} inStock={true} />
+                        <Status_Product_Details
+                          active={productDetails?.activeState ?? true}
+                          isKit={productDetails?.isKit ? true : false}
+                          inStock={productDetails?.onhand! > 0 ? true : false}
+                        />
                         <Activity_Product_Details latestOrders={productDetails?.latestOrders ?? []} />
                         <Bins_Product_Details bins={productDetails?.bins ?? []} />
                       </Col>
