@@ -218,8 +218,6 @@ const Product_Page_Layout = ({}: Props) => {
                           </TabPane>
                           <TabPane tabId='2'>
                             <Measure_Product_Details
-                              inventoryId={productDetails?.inventoryId}
-                              sku={productDetails?.sku}
                               weight={productDetails?.weight ?? 0}
                               length={productDetails?.length ?? 0}
                               width={productDetails?.width ?? 0}

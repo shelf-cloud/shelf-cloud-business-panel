@@ -8,24 +8,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useContext, useState } from 'react'
 import { signOut } from '@auth/client'
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Container,
-  Form,
-  FormFeedback,
-  FormGroup,
-  Input,
-  Label,
-  Nav,
-  NavItem,
-  NavLink,
-  Row,
-  TabContent,
-  TabPane,
-} from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, Container, Form, FormFeedback, FormGroup, Input, Label, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useSWRConfig } from 'swr'
@@ -68,12 +51,9 @@ const Profile = () => {
       email: Yup.string().email(),
     }),
     onSubmit: async (values) => {
-      const response = await axios.post(
-        `api/updateUserDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`,
-        {
-          userDetails: values,
-        }
-      )
+      const response = await axios.post(`api/updateUserDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+        userDetails: values,
+      })
       if (!response.data.error) {
         toast.success(response.data.msg)
         mutate('/api/getuser')
@@ -94,9 +74,7 @@ const Profile = () => {
     },
     validationSchema: Yup.object({
       currentPassword: Yup.string().required('Please Enter Your Current Password'),
-      newPassword1: Yup.string()
-        .min(8, 'Password must be at least 8 characters')
-        .required('Please Enter Your New Password'),
+      newPassword1: Yup.string().min(8, 'Password must be at least 8 characters').required('Please Enter Your New Password'),
       newPassword2: Yup.string()
         .min(8, 'Password must be at least 8 characters')
         .oneOf([Yup.ref('newPassword1'), null], "Passwords don't match!")
@@ -192,9 +170,7 @@ const Profile = () => {
                                   onChange={validation.handleChange}
                                   onBlur={validation.handleBlur}
                                   value={validation.values.companyName || ''}
-                                  invalid={
-                                    validation.touched.companyName && validation.errors.companyName ? true : false
-                                  }
+                                  invalid={validation.touched.companyName && validation.errors.companyName ? true : false}
                                 />
                                 {validation.touched.companyName && validation.errors.companyName ? (
                                   <FormFeedback type='invalid'>{validation.errors.companyName}</FormFeedback>
@@ -217,9 +193,7 @@ const Profile = () => {
                                   value={validation.values.email || ''}
                                   invalid={validation.touched.email && validation.errors.email ? true : false}
                                 />
-                                {validation.touched.email && validation.errors.email ? (
-                                  <FormFeedback type='invalid'>{validation.errors.email}</FormFeedback>
-                                ) : null}
+                                {validation.touched.email && validation.errors.email ? <FormFeedback type='invalid'>{validation.errors.email}</FormFeedback> : null}
                               </FormGroup>
                             </Col>
                             <Col lg={12}>
@@ -227,10 +201,7 @@ const Profile = () => {
                                 <button type='submit' className='btn btn-primary fs-5'>
                                   Updates
                                 </button>
-                                <button
-                                  type='button'
-                                  className='btn btn-soft-success fs-5'
-                                  onClick={() => router.push('/')}>
+                                <button type='button' className='btn btn-soft-success fs-5' onClick={() => router.push('/')}>
                                   Cancel
                                 </button>
                               </div>
@@ -256,18 +227,10 @@ const Profile = () => {
                                   onChange={validationChangePassword.handleChange}
                                   onBlur={validationChangePassword.handleBlur}
                                   value={validationChangePassword.values.currentPassword || ''}
-                                  invalid={
-                                    validationChangePassword.touched.currentPassword &&
-                                    validationChangePassword.errors.currentPassword
-                                      ? true
-                                      : false
-                                  }
+                                  invalid={validationChangePassword.touched.currentPassword && validationChangePassword.errors.currentPassword ? true : false}
                                 />
-                                {validationChangePassword.touched.currentPassword &&
-                                validationChangePassword.errors.currentPassword ? (
-                                  <FormFeedback type='invalid'>
-                                    {validationChangePassword.errors.currentPassword}
-                                  </FormFeedback>
+                                {validationChangePassword.touched.currentPassword && validationChangePassword.errors.currentPassword ? (
+                                  <FormFeedback type='invalid'>{validationChangePassword.errors.currentPassword}</FormFeedback>
                                 ) : null}
                               </FormGroup>
                             </Col>
@@ -286,18 +249,10 @@ const Profile = () => {
                                   onChange={validationChangePassword.handleChange}
                                   onBlur={validationChangePassword.handleBlur}
                                   value={validationChangePassword.values.newPassword1 || ''}
-                                  invalid={
-                                    validationChangePassword.touched.newPassword1 &&
-                                    validationChangePassword.errors.newPassword1
-                                      ? true
-                                      : false
-                                  }
+                                  invalid={validationChangePassword.touched.newPassword1 && validationChangePassword.errors.newPassword1 ? true : false}
                                 />
-                                {validationChangePassword.touched.newPassword1 &&
-                                validationChangePassword.errors.newPassword1 ? (
-                                  <FormFeedback type='invalid'>
-                                    {validationChangePassword.errors.newPassword1}
-                                  </FormFeedback>
+                                {validationChangePassword.touched.newPassword1 && validationChangePassword.errors.newPassword1 ? (
+                                  <FormFeedback type='invalid'>{validationChangePassword.errors.newPassword1}</FormFeedback>
                                 ) : null}
                               </FormGroup>
                             </Col>
@@ -316,18 +271,10 @@ const Profile = () => {
                                   onChange={validationChangePassword.handleChange}
                                   onBlur={validationChangePassword.handleBlur}
                                   value={validationChangePassword.values.newPassword2 || ''}
-                                  invalid={
-                                    validationChangePassword.touched.newPassword2 &&
-                                    validationChangePassword.errors.newPassword2
-                                      ? true
-                                      : false
-                                  }
+                                  invalid={validationChangePassword.touched.newPassword2 && validationChangePassword.errors.newPassword2 ? true : false}
                                 />
-                                {validationChangePassword.touched.newPassword2 &&
-                                validationChangePassword.errors.newPassword2 ? (
-                                  <FormFeedback type='invalid'>
-                                    {validationChangePassword.errors.newPassword2}
-                                  </FormFeedback>
+                                {validationChangePassword.touched.newPassword2 && validationChangePassword.errors.newPassword2 ? (
+                                  <FormFeedback type='invalid'>{validationChangePassword.errors.newPassword2}</FormFeedback>
                                 ) : null}
                               </FormGroup>
                             </Col>

@@ -84,7 +84,7 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
                 <div className='d-flex flex-row justify-content-center align-items-center gap-3'>
                   {buffer}
                   <div className='text-end' style={showEditButton}>
-                    <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 text-secondary' style={{ cursor: 'pointer' }}></i>
+                    <i onClick={handleShowEditFields} className='ri-pencil-fill fs-4 text-secondary' style={{ cursor: 'pointer' }}></i>
                   </div>
                 </div>
               ) : (
@@ -94,6 +94,7 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
                       <Input
                         type='number'
                         className='form-control fs-6 m-0'
+                        style={{maxWidth: '60px'}}
                         placeholder='Buffer...'
                         id='buffer'
                         name='buffer'
