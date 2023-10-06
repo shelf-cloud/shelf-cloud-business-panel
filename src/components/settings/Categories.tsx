@@ -111,6 +111,24 @@ const Categories = ({}: Props) => {
     setShowAddNewFields(false)
     setShowEditFields(true)
   }
+  const handleCancelEdit = () => {
+    validationEdit.setValues({
+      categoryId: 0,
+      name: '',
+    })
+    setShowEditFields(false)
+  }
+  
+  const handleDeleteCategory = async (categoryId: number) => {
+    const response = await axios.delete(`/api/settings/deleteCategory?region=${state.currentRegion}&businessId=${state.user.businessId}&categoryId=${categoryId}`)
+    if (!response.data.error) {
+      toast.success(response.data.msg)
+      setShowEditFields(false)
+      mutate(`/api/settings/getCategories?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+    } else {
+      toast.error(response.data.msg)
+    }
+  }
 
   const columns: any = [
     {
@@ -125,7 +143,7 @@ const Categories = ({}: Props) => {
         return (
           <div className='d-flex flex-row flex-nowrap justify-content-center align-items-center gap-4'>
             <i className='ri-pencil-fill fs-3 text-secondary' style={{ cursor: 'pointer' }} onClick={() => handleShowEditFields(row)} />
-            <i className='align-middle text-danger fs-2 las la-trash-alt' style={{ cursor: 'pointer' }} />
+            <i className='align-middle text-danger fs-2 las la-trash-alt' style={{ cursor: 'pointer' }} onClick={() => handleDeleteCategory(row.categoryId)}/>
           </div>
         )
       },
@@ -195,7 +213,10 @@ const Categories = ({}: Props) => {
             />
             {validationEdit.touched.name && validationEdit.errors.name ? <FormFeedback type='invalid'>{validationEdit.errors.name}</FormFeedback> : null}
           </FormGroup>
-          <div className='d-flex flex-row justify-content-end align-items-end'>
+          <div className='d-flex flex-row justify-content-end align-items-end gap-3'>
+            <Button type='button' color='light' className='btn btn-sm m-0' onClick={handleCancelEdit}>
+              Cancel
+            </Button>
             <Button type='submit' color='primary' className='btn btn-sm m-0'>
               Update
             </Button>

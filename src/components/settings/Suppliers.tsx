@@ -137,6 +137,28 @@ const Suppliers = ({}: Props) => {
     setShowAddNewFields(false)
     setShowEditFields(true)
   }
+  const handleCancelEdit = () => {
+    validationEdit.setValues({
+      suppliersId: 0,
+      name: '',
+      email: '',
+      phone: '',
+      address: '',
+      country: '',
+    })
+    setShowEditFields(false)
+  }
+
+  const handleDeleteSupplier = async (suppliersId: number) => {
+    const response = await axios.delete(`/api/settings/deleteSupplier?region=${state.currentRegion}&businessId=${state.user.businessId}&suppliersId=${suppliersId}`)
+    if (!response.data.error) {
+      toast.success(response.data.msg)
+      setShowEditFields(false)
+      mutate(`/api/settings/getSuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+    } else {
+      toast.error(response.data.msg)
+    }
+  }
 
   const columns: any = [
     {
@@ -175,7 +197,7 @@ const Suppliers = ({}: Props) => {
         return (
           <div className='d-flex flex-row flex-nowrap justify-content-center align-items-center gap-4'>
             <i className='ri-pencil-fill fs-3 text-secondary' style={{ cursor: 'pointer' }} onClick={() => handleShowEditFields(row)} />
-            <i className='align-middle text-danger fs-2 las la-trash-alt' style={{ cursor: 'pointer' }} />
+            <i className='align-middle text-danger fs-3 las la-trash-alt' style={{ cursor: 'pointer' }} onClick={() => handleDeleteSupplier(row.suppliersId)} />
           </div>
         )
       },
@@ -421,7 +443,10 @@ const Suppliers = ({}: Props) => {
               )}
             </datalist>
           </FormGroup>
-          <div className='d-flex flex-row justify-content-end align-items-end'>
+          <div className='d-flex flex-row justify-content-end align-items-end gap-3'>
+            <Button type='button' color='light' className='btn btn-sm m-0' onClick={handleCancelEdit}>
+              Cancel
+            </Button>
             <Button type='submit' color='primary' className='btn btn-sm m-0'>
               Update
             </Button>

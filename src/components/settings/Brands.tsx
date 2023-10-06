@@ -117,6 +117,25 @@ const Brands = ({}: Props) => {
     setShowAddNewFields(false)
     setShowEditFields(true)
   }
+  const handleCancelEdit = () => {
+    validationEdit.setValues({
+      brandId: 0,
+      name: '',
+      logo: '',
+    })
+    setShowEditFields(false)
+  }
+
+  const handleDeleteBrand = async (brandId: number) => {
+    const response = await axios.delete(`/api/settings/deleteBrand?region=${state.currentRegion}&businessId=${state.user.businessId}&brandId=${brandId}`)
+    if (!response.data.error) {
+      toast.success(response.data.msg)
+      setShowEditFields(false)
+      mutate(`/api/settings/getBrands?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+    } else {
+      toast.error(response.data.msg)
+    }
+  }
 
   const columns: any = [
     {
@@ -137,7 +156,7 @@ const Brands = ({}: Props) => {
         return (
           <div className='d-flex flex-row flex-nowrap justify-content-center align-items-center gap-4'>
             <i className='ri-pencil-fill fs-3 text-secondary' style={{ cursor: 'pointer' }} onClick={() => handleShowEditFields(row)} />
-            <i className='align-middle text-danger fs-2 las la-trash-alt' style={{ cursor: 'pointer' }} />
+            <i className='align-middle text-danger fs-3 las la-trash-alt' style={{ cursor: 'pointer' }} onClick={() => handleDeleteBrand(row.brandId)}/>
           </div>
         )
       },
@@ -243,7 +262,10 @@ const Brands = ({}: Props) => {
             />
             {validationEdit.touched.logo && validationEdit.errors.logo ? <FormFeedback type='invalid'>{validationEdit.errors.logo}</FormFeedback> : null}
           </FormGroup>
-          <div className='d-flex flex-row justify-content-end align-items-end'>
+          <div className='d-flex flex-row justify-content-end align-items-end gap-3'>
+            <Button type='button' color='light' className='btn btn-sm m-0' onClick={handleCancelEdit}>
+              Cancel
+            </Button>
             <Button type='submit' color='primary' className='btn btn-sm m-0'>
               Update
             </Button>
