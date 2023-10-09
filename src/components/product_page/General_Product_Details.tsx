@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 import { useSWRConfig } from 'swr'
 import axios from 'axios'
 import AppContext from '@context/AppContext'
+import Select_Product_Details from './Select_Product_Details'
 
 type Props = {
   inventoryId?: number
@@ -87,6 +88,11 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
     })
     setShowEditFields(true)
   }
+
+  const handleSelection = (type: string, value: string) => {
+    validation.setFieldValue(type, value)
+  }
+
   return (
     <div className='px-4 pt-2 pb-4 border-bottom' onMouseEnter={() => setShowEditButton({ display: 'block' })} onMouseLeave={() => setShowEditButton({ display: 'none' })}>
       <p className='fs-4 text-primary fw-semibold'>General</p>
@@ -187,82 +193,43 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
               </FormGroup>
             </Col>
             <Col md={6}>
-              <FormGroup className='mb-3'>
-                <Label htmlFor='brand' className='form-label'>
-                  Brand
-                </Label>
-                <Input
-                  type='text'
-                  className='form-control fs-6'
-                  placeholder='brand...'
-                  id='brand'
-                  name='brand'
-                  list='savedBrands'
-                  bsSize='sm'
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.brand || ''}
-                  invalid={validation.touched.brand && validation.errors.brand ? true : false}
-                />
-                {validation.touched.brand && validation.errors.brand ? <FormFeedback type='invalid'>{validation.errors.brand}</FormFeedback> : null}
-              </FormGroup>
-              <datalist id='savedBrands'>
-                {brands.map((brand) => (
-                  <option key={`brand${brand}`} value={brand} />
-                ))}
-              </datalist>
+              <Label htmlFor='brand' className='form-label'>
+                Brand
+              </Label>
+              <Select_Product_Details
+                inventoryId={inventoryId}
+                type={'brand'}
+                addEndpoint={'addNewBrand'}
+                selectionInfo={brands}
+                selected={validation.values.brand || ''}
+                handleSelection={handleSelection}
+              />
             </Col>
             <Col md={6}>
-              <FormGroup className='mb-3'>
-                <Label htmlFor='supplier' className='form-label'>
-                  Supplier
-                </Label>
-                <Input
-                  type='text'
-                  className='form-control fs-6'
-                  placeholder='supplier...'
-                  id='supplier'
-                  name='supplier'
-                  bsSize='sm'
-                  list='savedSuppliers'
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.supplier || ''}
-                  invalid={validation.touched.supplier && validation.errors.supplier ? true : false}
-                />
-                {validation.touched.supplier && validation.errors.supplier ? <FormFeedback type='invalid'>{validation.errors.supplier}</FormFeedback> : null}
-              </FormGroup>
-              <datalist id='savedBrands'>
-                {suppliers.map((supplier) => (
-                  <option key={`brand${supplier}`} value={supplier} />
-                ))}
-              </datalist>
+              <Label htmlFor='supplier' className='form-label'>
+                Supplier
+              </Label>
+              <Select_Product_Details
+                inventoryId={inventoryId}
+                type={'supplier'}
+                addEndpoint={'addNewSupplier'}
+                selectionInfo={suppliers}
+                selected={validation.values.supplier || ''}
+                handleSelection={handleSelection}
+              />
             </Col>
             <Col md={6}>
-              <FormGroup className='mb-3'>
-                <Label htmlFor='category' className='form-label'>
-                  Category
-                </Label>
-                <Input
-                  type='text'
-                  className='form-control fs-6'
-                  placeholder='category...'
-                  id='category'
-                  name='category'
-                  bsSize='sm'
-                  list='savedCategories'
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.category || ''}
-                  invalid={validation.touched.category && validation.errors.category ? true : false}
-                />
-                {validation.touched.category && validation.errors.category ? <FormFeedback type='invalid'>{validation.errors.category}</FormFeedback> : null}
-              </FormGroup>
-              <datalist id='savedCategories'>
-                {categories.map((category) => (
-                  <option key={`brand${category}`} value={category} />
-                ))}
-              </datalist>
+              <Label htmlFor='category' className='form-label'>
+                Category
+              </Label>
+              <Select_Product_Details
+                inventoryId={inventoryId}
+                type={'category'}
+                addEndpoint={'addNewCategory'}
+                selectionInfo={categories}
+                selected={validation.values.category || ''}
+                handleSelection={handleSelection}
+              />
             </Col>
             <Col md={6}>
               <FormGroup className='mb-3'>
