@@ -62,18 +62,18 @@ const Select_Product_Details = ({ inventoryId, type, addEndpoint, selectionInfo,
 
   return (
     <div ref={filterByDates} className='dropdown mb-3'>
-      <div className='btn-group w-100' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }}>
+      <div className='btn-group w-100' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5', cursor: 'pointer' }} onClick={() => setOpenDatesMenu(!openDatesMenu)}>
         <button type='button' disabled className='btn btn-light btn-sm form-control fs-6 w-100 text-start' style={{ backgroundColor: 'white' }}>
           {selected == '' ? `Select...` : selected}
         </button>
         <button
           type='button'
+          disabled
           className='btn btn-light btn-sm dropdown-toggle form-control fs-6dropdown-toggle dropdown-toggle-split'
           style={{ backgroundColor: 'white', maxWidth: '35px' }}
           data-bs-toggle='dropdown'
           data-bs-auto-close='outside'
-          aria-expanded='false'
-          onClick={() => setOpenDatesMenu(!openDatesMenu)}>
+          aria-expanded='false'>
           <span className='visually-hidden'>Toggle Dropdown</span>
         </button>
       </div>

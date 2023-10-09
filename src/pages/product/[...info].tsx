@@ -245,6 +245,7 @@ const Product_Page_Layout = ({}: Props) => {
                             <Identifiers_Product_Details
                               inventoryId={productDetails?.inventoryId}
                               sku={productDetails?.sku}
+                              upc={productDetails?.barcode}
                               asin={productDetails?.asin}
                               fnsku={productDetails?.fnsku}
                               identifiers={productDetails?.identifiers ?? []}

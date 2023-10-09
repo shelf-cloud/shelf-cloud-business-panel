@@ -23,7 +23,6 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [showEditFields, setShowEditFields] = useState(false)
-  const [showEditButton, setShowEditButton] = useState({ display: 'none' })
   const landedCost = sellerCost + inboundShippingCost + otherCosts ?? 0
   const totalLeadTime = productionTime + transitTime
 
@@ -81,7 +80,7 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
   }
 
   return (
-    <div className='py-1 w-100' onMouseEnter={() => setShowEditButton({ display: 'block' })} onMouseLeave={() => setShowEditButton({ display: 'none' })}>
+    <div className='py-1 w-100'>
       {!showEditFields ? (
         <div>
           <table className='table table-sm table-borderless'>
@@ -101,6 +100,7 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
                   {`Total Days from Production and Transit`}
                 </UncontrolledTooltip>
                 <th>Shipping To FBA Cost</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -115,12 +115,14 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
                 <td className={transitTime ? '' : 'text-muted fw-light fst-italic'}>{`${transitTime ?? 'No'} Days`}</td>
                 <td className={totalLeadTime ? '' : 'text-muted fw-light fst-italic'}>{`${totalLeadTime ?? 'No'} Days`}</td>
                 <td className={shippingToFBA ? '' : 'text-muted fw-light fst-italic'}>{shippingToFBA ? FormatCurrency(state.currentRegion, shippingToFBA) : 'No Cost'}</td>
+                <td>
+                  <div className='text-end'>
+                    <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </table>
-          <div className='text-end' style={showEditButton}>
-            <i onClick={handleShowEditFields} className='ri-pencil-fill fs-3 text-secondary' style={{ cursor: 'pointer' }}></i>
-          </div>
         </div>
       ) : (
         <Form onSubmit={HandleAddProduct}>

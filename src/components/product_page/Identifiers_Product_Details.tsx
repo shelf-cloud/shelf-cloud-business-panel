@@ -11,16 +11,16 @@ import { Button, Col, FormFeedback, FormGroup, Input } from 'reactstrap'
 type Props = {
   inventoryId?: number
   sku?: string
+  upc?: string
   asin?: string
   fnsku?: string
   identifiers: Identifier[]
 }
 
-const Identifiers_Product_Details = ({ inventoryId, sku, asin, fnsku, identifiers }: Props) => {
+const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, identifiers }: Props) => {
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [showEditFields, setShowEditFields] = useState(false)
-  const [showEditButton, setShowEditButton] = useState({ display: 'none' })
 
   const initialValues = {
     inventoryId,
@@ -62,9 +62,9 @@ const Identifiers_Product_Details = ({ inventoryId, sku, asin, fnsku, identifier
     setShowEditFields(true)
   }
   return (
-    <div className='py-1 w-75' onMouseEnter={() => setShowEditButton({ display: 'block' })} onMouseLeave={() => setShowEditButton({ display: 'none' })}>
+    <div className='py-1 w-75'>
       {!showEditFields ? (
-        <div>
+        <div className='d-flex flex-row justify-content-start align-items-top gap-4'>
           <table className='table table-sm'>
             <thead>
               <tr>
@@ -73,6 +73,12 @@ const Identifiers_Product_Details = ({ inventoryId, sku, asin, fnsku, identifier
               </tr>
             </thead>
             <tbody>
+              {upc && (
+                <tr>
+                  <td>UPC</td>
+                  <td>{upc}</td>
+                </tr>
+              )}
               {asin && (
                 <tr>
                   <td>ASIN</td>
@@ -94,8 +100,8 @@ const Identifiers_Product_Details = ({ inventoryId, sku, asin, fnsku, identifier
                 ))}
             </tbody>
           </table>
-          <div className='text-end' style={showEditButton}>
-            <i onClick={handleShowEditFields} className='ri-pencil-fill fs-3 text-secondary' style={{ cursor: 'pointer' }}></i>
+          <div className='text-end'>
+            <i onClick={handleShowEditFields} className='ri-pencil-fill fs-4 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i>
           </div>
         </div>
       ) : (
@@ -111,16 +117,35 @@ const Identifiers_Product_Details = ({ inventoryId, sku, asin, fnsku, identifier
                 </thead>
                 <tbody className='text-center'>
                   <tr>
+                    <td className='align-middle'>UPC</td>
+                    <td>
+                      <FormGroup className='createOrder_inputs'>
+                        <Input
+                          disabled
+                          type='text'
+                          className='form-control fs-6'
+                          style={{ padding: '0.2rem 0.9rem' }}
+                          placeholder='Upc...'
+                          id='upc'
+                          name='upc'
+                          bsSize='sm'
+                          value={upc || ''}
+                        />
+                      </FormGroup>
+                    </td>
+                  </tr>
+                  <tr>
                     <td className='align-middle'>ASIN</td>
                     <td>
                       <FormGroup className='createOrder_inputs'>
                         <Input
                           type='text'
-                          className='form-control'
+                          className='form-control fs-6'
                           style={{ padding: '0.2rem 0.9rem' }}
                           placeholder='Asin...'
                           id='asin'
                           name='asin'
+                          bsSize='sm'
                           onChange={handleChange}
                           onBlur={handleBlur}
                           value={values.asin || ''}
@@ -136,11 +161,12 @@ const Identifiers_Product_Details = ({ inventoryId, sku, asin, fnsku, identifier
                       <FormGroup className='createOrder_inputs'>
                         <Input
                           type='text'
-                          className='form-control'
+                          className='form-control fs-6'
                           style={{ padding: '0.2rem 0.9rem' }}
                           placeholder='FNSKU...'
                           id='fnsku'
                           name='fnsku'
+                          bsSize='sm'
                           onChange={handleChange}
                           onBlur={handleBlur}
                           value={values.fnsku || ''}
@@ -155,7 +181,7 @@ const Identifiers_Product_Details = ({ inventoryId, sku, asin, fnsku, identifier
                     {({ remove, push }) => (
                       <>
                         <tr>
-                          <td className='text-muted align-middle'>Add Additional Identifiers</td>
+                          <td className='text-muted align-middle'>Additional Identifiers</td>
                           <td></td>
                           <td className='align-middle'>
                             <div className='d-flex flex-row flex-nowrap justify-content-center align-items-center mb-0 h-100'>
@@ -171,20 +197,21 @@ const Identifiers_Product_Details = ({ inventoryId, sku, asin, fnsku, identifier
                                   <FormGroup className='createOrder_inputs'>
                                     <Input
                                       type='select'
-                                      className='form-select text-center align-middle'
+                                      className='form-select text-center align-middle fs-6'
                                       style={{
                                         padding: '0.2rem 0.9rem',
                                       }}
                                       name={`identifiers.${index}.type`}
+                                      bsSize='sm'
                                       placeholder='Type...'
                                       onChange={handleChange}
                                       onBlur={handleBlur}
                                       value={values.identifiers[index].type || ''}
                                       invalid={meta.touched && meta.error ? true : false}>
                                       <option value={''}>Select Type...</option>
-                                      <option value={'UPC'}>UPC</option>
                                       <option value={'EAN'}>EAN</option>
                                       <option value={'Barcode'}>Barcode</option>
+                                      <option value={'WalmartCode'}>Walmart Code</option>
                                       <option value={'Other'}>Other</option>
                                     </Input>
                                     {meta.touched && meta.error ? <FormFeedback type='invalid'>{meta.error}</FormFeedback> : null}
@@ -198,10 +225,11 @@ const Identifiers_Product_Details = ({ inventoryId, sku, asin, fnsku, identifier
                                   <FormGroup className='createOrder_inputs'>
                                     <Input
                                       type='text'
-                                      className='form-control align-middle'
+                                      className='form-control align-middle fs-6'
                                       style={{
                                         padding: '0.2rem 0.9rem',
                                       }}
+                                      bsSize='sm'
                                       name={`identifiers.${index}.value`}
                                       placeholder='Value...'
                                       onChange={handleChange}

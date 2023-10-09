@@ -24,7 +24,6 @@ const SKU_product_details = ({ inventoryId, sku, upc, defaultCost, defaultPrice,
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [showEditFields, setShowEditFields] = useState(false)
-  const [showEditButton, setShowEditButton] = useState({ display: 'none' })
 
   const validation = useFormik({
     enableReinitialize: true,
@@ -81,7 +80,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, defaultCost, defaultPrice,
     setShowEditFields(true)
   }
   return (
-    <div className='py-1 w-100' onMouseEnter={() => setShowEditButton({ display: 'block' })} onMouseLeave={() => setShowEditButton({ display: 'none' })}>
+    <div className='py-1 w-100'>
       {!showEditFields ? (
         <div>
           <table className='table table-sm table-borderless'>
@@ -107,6 +106,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, defaultCost, defaultPrice,
                 <UncontrolledTooltip placement='top' target='maxSalePriceHead' innerClassName='bg-white text-primary shadow'>
                   {`Maximum Sale Price`}
                 </UncontrolledTooltip>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -119,12 +119,14 @@ const SKU_product_details = ({ inventoryId, sku, upc, defaultCost, defaultPrice,
                 <td>{FormatCurrency(state.currentRegion, map)}</td>
                 <td>{FormatCurrency(state.currentRegion, floor)}</td>
                 <td>{FormatCurrency(state.currentRegion, ceilling)}</td>
+                <td>
+                  <div className='text-end'>
+                    <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 text-primary m-0 p-0' style={{ cursor: 'pointer' }}></i>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </table>
-          <div className='text-end' style={showEditButton}>
-            <i onClick={handleShowEditFields} className='ri-pencil-fill fs-3 text-secondary' style={{ cursor: 'pointer' }}></i>
-          </div>
         </div>
       ) : (
         <Form onSubmit={HandleAddProduct}>
