@@ -64,7 +64,7 @@ const Select_Product_Details = ({ inventoryId, type, addEndpoint, selectionInfo,
     <div ref={filterByDates} className='dropdown mb-3'>
       <div className='btn-group w-100' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }}>
         <button type='button' disabled className='btn btn-light btn-sm form-control fs-6 w-100 text-start' style={{ backgroundColor: 'white' }}>
-          {selected}
+          {selected == '' ? `Select...` : selected}
         </button>
         <button
           type='button'
