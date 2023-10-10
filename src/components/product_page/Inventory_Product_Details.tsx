@@ -81,10 +81,10 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
             <td>{onhand}</td>
             <td onMouseEnter={() => setShowEditButton({ display: 'block' })} onMouseLeave={() => setShowEditButton({ display: 'none' })}>
               {!showEditFields ? (
-                <div className='d-flex flex-row justify-content-center align-items-center gap-3'>
+                <div className='d-flex flex-row justify-content-center align-items-center gap-1'>
                   {buffer}
                   <div className='text-end' style={showEditButton}>
-                    <i onClick={handleShowEditFields} className='ri-pencil-fill fs-4 text-secondary' style={{ cursor: 'pointer' }}></i>
+                    <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i>
                   </div>
                 </div>
               ) : (

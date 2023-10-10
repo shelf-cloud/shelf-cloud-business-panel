@@ -8,6 +8,7 @@ import { useSWRConfig } from 'swr'
 import axios from 'axios'
 import AppContext from '@context/AppContext'
 import Select_Product_Details from './Select_Product_Details'
+import Select_Condition_Product_Details from './Select_Condition_Product_Details'
 
 type Props = {
   inventoryId?: number
@@ -29,7 +30,6 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [showEditFields, setShowEditFields] = useState(false)
-  const [showEditButton, setShowEditButton] = useState({ display: 'none' })
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -93,8 +93,12 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
     validation.setFieldValue(type, value)
   }
 
+  const handleConditionSelection = (value: string) => {
+    validation.setFieldValue('itemCondition', value)
+  }
+
   return (
-    <div className='px-4 pt-2 pb-4 border-bottom' onMouseEnter={() => setShowEditButton({ display: 'block' })} onMouseLeave={() => setShowEditButton({ display: 'none' })}>
+    <div className='px-4 pt-2 pb-4 border-bottom'>
       <p className='fs-4 text-primary fw-semibold'>General</p>
       {!showEditFields ? (
         <div className='w-full d-flex justify-content-start align-items-start gap-4'>
@@ -117,7 +121,7 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
           </div>
           <div className='w-100'>
             <table className='table table-sm table-borderless'>
-              <body className='fs-5 bg-transparent'>
+              <tbody className='fs-6 bg-transparent'>
                 <tr>
                   <td className='fw-bolder'>Name</td>
                   <td>{title}</td>
@@ -142,11 +146,17 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
                   <td className='fw-bolder'>Condition</td>
                   <td className={itemCondition ?? 'text-muted fw-light fst-italic'}>{itemCondition ?? 'No supplier'}</td>
                 </tr>
-              </body>
+                {note && (
+                  <tr>
+                    <td className='fw-bolder'>Note</td>
+                    <td className='text-muted fw-light fst-italic'>{note}</td>
+                  </tr>
+                )}
+              </tbody>
             </table>
           </div>
-          <div style={showEditButton}>
-            <i onClick={handleShowEditFields} className='ri-pencil-fill fs-3 text-secondary' style={{ cursor: 'pointer' }}></i>
+          <div>
+            <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i>
           </div>
         </div>
       ) : (
@@ -232,27 +242,10 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
               />
             </Col>
             <Col md={6}>
-              <FormGroup className='mb-3'>
-                <Label htmlFor='itemCondition' className='form-label'>
-                  Condition
-                </Label>
-                <Input
-                  type='select'
-                  className='form-control fs-6'
-                  placeholder='itemCondition...'
-                  id='itemCondition'
-                  name='itemCondition'
-                  bsSize='sm'
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.itemCondition || ''}
-                  invalid={validation.touched.itemCondition && validation.errors.itemCondition ? true : false}>
-                  <option value='New'>New</option>
-                  <option value='Like New'>Like New</option>
-                  <option value='Used'>Used</option>
-                </Input>
-                {validation.touched.itemCondition && validation.errors.itemCondition ? <FormFeedback type='invalid'>{validation.errors.itemCondition}</FormFeedback> : null}
-              </FormGroup>
+              <Label htmlFor='itemCondition' className='form-label'>
+                Condition
+              </Label>
+              <Select_Condition_Product_Details selected={validation.values.itemCondition || ''} handleSelection={handleConditionSelection} />
             </Col>
             <Col md={12}>
               <FormGroup className='mb-3'>
@@ -281,7 +274,7 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
                 </Label>
                 <Input
                   type='textarea'
-                  className='form-control'
+                  className='form-control fs-6'
                   placeholder=''
                   id='note'
                   name='note'

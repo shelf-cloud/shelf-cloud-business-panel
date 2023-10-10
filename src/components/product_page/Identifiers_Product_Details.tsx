@@ -101,7 +101,7 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
             </tbody>
           </table>
           <div className='text-end'>
-            <i onClick={handleShowEditFields} className='ri-pencil-fill fs-4 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i>
+            <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i>
           </div>
         </div>
       ) : (
@@ -134,49 +134,6 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
                       </FormGroup>
                     </td>
                   </tr>
-                  <tr>
-                    <td className='align-middle'>ASIN</td>
-                    <td>
-                      <FormGroup className='createOrder_inputs'>
-                        <Input
-                          type='text'
-                          className='form-control fs-6'
-                          style={{ padding: '0.2rem 0.9rem' }}
-                          placeholder='Asin...'
-                          id='asin'
-                          name='asin'
-                          bsSize='sm'
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.asin || ''}
-                          invalid={touched.asin && errors.asin ? true : false}
-                        />
-                        {touched.asin && errors.asin ? <FormFeedback type='invalid'>{errors.asin}</FormFeedback> : null}
-                      </FormGroup>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className='align-middle'>FNSKU</td>
-                    <td>
-                      <FormGroup className='createOrder_inputs'>
-                        <Input
-                          type='text'
-                          className='form-control fs-6'
-                          style={{ padding: '0.2rem 0.9rem' }}
-                          placeholder='FNSKU...'
-                          id='fnsku'
-                          name='fnsku'
-                          bsSize='sm'
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.fnsku || ''}
-                          invalid={touched.fnsku && errors.fnsku ? true : false}
-                        />
-                        {touched.fnsku && errors.fnsku ? <FormFeedback type='invalid'>{errors.fnsku}</FormFeedback> : null}
-                      </FormGroup>
-                    </td>
-                  </tr>
-
                   <FieldArray name='identifiers'>
                     {({ remove, push }) => (
                       <>
@@ -187,6 +144,48 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
                             <div className='d-flex flex-row flex-nowrap justify-content-center align-items-center mb-0 h-100'>
                               <i className='fs-2 text-success las la-plus-circle' style={{ cursor: 'pointer' }} onClick={() => push({ type: '', value: '' })} />
                             </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className='align-middle'>ASIN</td>
+                          <td>
+                            <FormGroup className='createOrder_inputs'>
+                              <Input
+                                type='text'
+                                className='form-control fs-6'
+                                style={{ padding: '0.2rem 0.9rem' }}
+                                placeholder='Asin...'
+                                id='asin'
+                                name='asin'
+                                bsSize='sm'
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.asin || ''}
+                                invalid={touched.asin && errors.asin ? true : false}
+                              />
+                              {touched.asin && errors.asin ? <FormFeedback type='invalid'>{errors.asin}</FormFeedback> : null}
+                            </FormGroup>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className='align-middle'>FNSKU</td>
+                          <td>
+                            <FormGroup className='createOrder_inputs'>
+                              <Input
+                                type='text'
+                                className='form-control fs-6'
+                                style={{ padding: '0.2rem 0.9rem' }}
+                                placeholder='FNSKU...'
+                                id='fnsku'
+                                name='fnsku'
+                                bsSize='sm'
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.fnsku || ''}
+                                invalid={touched.fnsku && errors.fnsku ? true : false}
+                              />
+                              {touched.fnsku && errors.fnsku ? <FormFeedback type='invalid'>{errors.fnsku}</FormFeedback> : null}
+                            </FormGroup>
                           </td>
                         </tr>
                         {values.identifiers.map((_identifiers, index) => (

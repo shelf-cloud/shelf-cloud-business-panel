@@ -63,7 +63,7 @@ const Select_Product_Details = ({ inventoryId, type, addEndpoint, selectionInfo,
   return (
     <div ref={filterByDates} className='dropdown mb-3'>
       <div className='btn-group w-100' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5', cursor: 'pointer' }} onClick={() => setOpenDatesMenu(!openDatesMenu)}>
-        <button type='button' disabled className='btn btn-light btn-sm form-control fs-6 w-100 text-start' style={{ backgroundColor: 'white' }}>
+        <button type='button' disabled className='btn btn-light btn-sm form-control fs-6 w-100 text-start' style={{ backgroundColor: 'white', opacity: '100%' }}>
           {selected == '' ? `Select...` : selected}
         </button>
         <button
@@ -77,12 +77,12 @@ const Select_Product_Details = ({ inventoryId, type, addEndpoint, selectionInfo,
           <span className='visually-hidden'>Toggle Dropdown</span>
         </button>
       </div>
-      <div className={'dropdown-menu w-100 px-4' + (openDatesMenu ? ' show' : '')}>
+      <div className={'dropdown-menu w-100 pt-3 px-4' + (openDatesMenu ? ' show' : '')}>
         <div className='d-flex flex-column justify-content-start'>
           {selectionInfo?.map((option) => (
             <p
               key={option}
-              className={'m-0 mb-2 ' + (selectedOption == `${option}` ? 'fw-bold' : '')}
+              className={'m-0 mb-3 ' + (selectedOption == `${option}` ? 'fw-bold' : '')}
               style={{ cursor: 'pointer' }}
               onClick={() => {
                 setSelectedOption(`${option}`)
