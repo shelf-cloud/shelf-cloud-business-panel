@@ -44,18 +44,17 @@ const SingleItems = ({ completeData, pending, orderNumberStart }: Props) => {
         <div>
           <h3 className='fs-3 fw-semibold text-primary'>Total SKUs in Order: {orderProducts.length}</h3>
           <h5 className='fs-5 fw-normal text-primary'>
-            Total Quantity to Ship in Order:{' '}
-            {orderProducts.reduce((total: number, item: wholesaleProductRow) => total + Number(item.totalToShip), 0)}
+            Total Quantity to Ship in Order: {orderProducts.reduce((total: number, item: wholesaleProductRow) => total + Number(item.totalToShip), 0)}
           </h5>
-          <span className='fs-5 fw-normal text-danger'>
-            *Minimum units in order: {state?.user?.[state.currentRegion]?.minQtyForIndividualUnitsOrder}
-          </span>
+          <span className='fs-5 fw-normal text-danger'>*Minimum units in order: {state?.user?.[state.currentRegion]?.minQtyForIndividualUnitsOrder}</span>
         </div>
         <div>
           <Button
             disabled={
               orderProducts.reduce((total: number, item: wholesaleProductRow) => total + Number(item.totalToShip), 0) <
-                state?.user?.[state.currentRegion]?.minQtyForIndividualUnitsOrder || error || orderProducts.some((item: wholesaleProductRow) => Number(item.orderQty) > Number(item.quantity.quantity))
+                state?.user?.[state.currentRegion]?.minQtyForIndividualUnitsOrder ||
+              error ||
+              orderProducts.some((item: wholesaleProductRow) => Number(item.orderQty) > Number(item.quantity.quantity))
                 ? true
                 : false
             }
@@ -75,28 +74,21 @@ const SingleItems = ({ completeData, pending, orderNumberStart }: Props) => {
             placeholder='Search...'
             id='search-options'
             value={serachValue}
-            onChange={(e) => setSerachValue(e.target.value)}
+            onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
+            onChange={(e) => {
+              e.preventDefault()
+              setSerachValue(e.target.value)
+            }}
           />
           <span className='mdi mdi-magnify search-widget-icon'></span>
-          <span
-            className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none'
-            id='search-close-options'></span>
+          <span className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none' id='search-close-options'></span>
         </div>
         <Button className='btn-soft-dark' onClick={() => setSerachValue('')}>
           Clear
         </Button>
       </form>
-      <WholeSaleTableSingleItem
-        allData={allData}
-        filteredItems={filteredItems}
-        setAllData={setAllData}
-        pending={pending}
-        error={error}
-        setError={setError}
-      />
-      {state.showSingleBoxesOrderModal && (
-        <SingleBoxesOrderModal orderNumberStart={orderNumberStart} orderProducts={orderProducts} />
-      )}
+      <WholeSaleTableSingleItem allData={allData} filteredItems={filteredItems} setAllData={setAllData} pending={pending} error={error} setError={setError} />
+      {state.showSingleBoxesOrderModal && <SingleBoxesOrderModal orderNumberStart={orderNumberStart} orderProducts={orderProducts} />}
     </>
   )
 }
