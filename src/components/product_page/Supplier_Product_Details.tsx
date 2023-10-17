@@ -269,7 +269,7 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
                         bsSize='sm'
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
-                        value={Number(validation.values.productionTime + validation.values.transitTime).toFixed(2) || 0}
+                        value={Number(validation.values.productionTime + validation.values.transitTime) || 0}
                       />
                     </FormGroup>
                   </td>

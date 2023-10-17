@@ -102,9 +102,9 @@ const Product_Page_Layout = ({}: Props) => {
                         </Button>
                       </Link>
                       <div className='mt-3'>
-                        <h1 className='fw-semibold'>
+                        <p className='fw-semibold fs-3'>
                           <span className='text-muted fw-normal'>Product:</span> {info![1]}
-                        </h1>
+                        </p>
                       </div>
                     </div>
                     <ProductWidgets

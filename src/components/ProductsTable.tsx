@@ -276,12 +276,12 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
               <i className='mdi mdi-dots-vertical align-middle fs-2 m-0 p-2' style={{ color: '#919FAF' }}></i>
             </DropdownToggle>
             <DropdownMenu className='dropdown-menu-end'>
-              <DropdownItem
+              {/* <DropdownItem
                 className='edit-item-btn'
                 onClick={() => setModalProductDetails(row.btns.inventoryId, state.user.businessId, row.btns.sku)}>
                 <i className='ri-pencil-fill align-middle me-2 fs-5 text-muted'></i>
                 <span className='fs-6 fw-normal'>Edit</span>
-              </DropdownItem>
+              </DropdownItem> */}
               <DropdownItem className='edit-item-btn'>
                 <Link href={`/product/${row.inventoryId}/${row.SKU}`} passHref>
                   <a className=''>
