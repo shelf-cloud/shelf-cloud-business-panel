@@ -18,19 +18,17 @@ type Props = {
 }
 
 const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, activeText }: Props) => {
-  const { setModalProductInfo, setModalProductDetails, state }: any = useContext(AppContext)
+  const { setModalProductInfo, state }: any = useContext(AppContext)
 
   const loadBarcode = (product: ProductRowType) => {
     var html = '<!DOCTYPE html><html><head>'
     html += '<style>@page{margin:0px;}'
     html += 'body{width:21cm;margin:0px;padding:0px;}'
     html += '.pageBreak{page-break-after:always;}'
-    html +=
-      '.barcodeSection{position:relative;float:left;top:0cm;left:0.9cm;width: 6.7cm;height: 2.5cm;margin-right:0.3cm;text-align: center;overflow:hidden;margin-bottom:2px;}'
+    html += '.barcodeSection{position:relative;float:left;top:0cm;left:0.9cm;width: 6.7cm;height: 2.5cm;margin-right:0.3cm;text-align: center;overflow:hidden;margin-bottom:2px;}'
     html += '.barcodeSection svg{transform: translate(0px, 0px) !important;}'
     html += '.barcodeSection svg text{font:12px monospace !important;}'
-    html +=
-      '.barcodeSection p{position:relative;float:left;left:5%;width:95%;text-align:left;margin-top:0px;margin-bottom:0px;font-size:14px;z-index:5;}'
+    html += '.barcodeSection p{position:relative;float:left;left:5%;width:95%;text-align:left;margin-top:0px;margin-bottom:0px;font-size:14px;z-index:5;}'
     html += '.barcodeSection svg{width:90%;transform: translate(0px, -10px) !important;}'
     html += '</style></head><body>'
     html +=
