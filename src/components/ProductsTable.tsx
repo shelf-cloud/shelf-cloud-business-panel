@@ -117,9 +117,9 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
           <div>
             <p style={{ margin: '0px', fontWeight: '800' }}>{row.Title}</p>
             <p style={{ margin: '0px' }} className='d-flex flex-row justify-content-start align-items-start'>
-              {row.SKU} {row.note != '' && <i className='ri-information-fill ms-2 fs-5 text-warning' id={`tooltip${row.SKU}`}></i>}
+              {row.SKU} {row.note != '' && <i className='ri-information-fill ms-2 fs-5 text-warning' id={`tooltip${row.inventoryId}`}></i>}
             </p>
-            {row.note != '' && <TooltipComponent target={`tooltip${row.SKU}`} text={row.note} />}
+            {row.note != '' && <TooltipComponent target={`tooltip${row.inventoryId}`} text={row.note} />}
           </div>
         )
       },
