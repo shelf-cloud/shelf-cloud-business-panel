@@ -1,19 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // ALTER TABLE `dbpruebas` ADD `activeState` BOOLEAN NOT NULL DEFAULT TRUE AFTER `image`;
 import React, { useState, useEffect, useContext } from 'react'
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-  Row,
-  Spinner,
-} from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from 'reactstrap'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { ShipmentOrderItem } from '@typings'
@@ -29,9 +17,7 @@ function OrderDetailsFromInvoicesModal({}: Props) {
   useEffect(() => {
     if (state.orderNumberfromInvoices) {
       const bringOrderDetails = async () => {
-        const response: any = await axios(
-          `/api/getShipmentOrder?region=${state.currentRegion}&businessId=${state.user.businessId}&orderId=${state.orderNumberfromInvoices}`
-        )
+        const response: any = await axios(`/api/getShipmentOrder?region=${state.currentRegion}&businessId=${state.user.businessId}&orderId=${state.orderNumberfromInvoices}`)
         await setOrderInfo(response.data)
         setLoading(false)
       }
@@ -57,9 +43,7 @@ function OrderDetailsFromInvoicesModal({}: Props) {
         <h3 className='modal-title' id='myModalLabel'>
           {`Order Details: ${data.orderNumber ? data.orderNumber : ''}`}
         </h3>
-        <p className='text-secondary fs-4 fw-normal my-0'>
-          {data.orderType}
-        </p>
+        <p className='text-secondary fs-4 fw-normal my-0'>{data.orderType}</p>
       </ModalHeader>
       <ModalBody>
         {!loading ? (
@@ -217,8 +201,7 @@ function OrderDetailsFromInvoicesModal({}: Props) {
                             <tr>
                               <td className='text-muted text-nowrap'>Address:</td>
                               <td className='fw-semibold w-100'>
-                                {data.shipStreet}, {data.shipCity}, {data.shipState}, {data.shipZipcode},{' '}
-                                {data.shipCountry}
+                                {data.shipStreet}, {data.shipCity}, {data.shipState}, {data.shipZipcode}, {data.shipCountry}
                               </td>
                             </tr>
                           </tbody>
@@ -423,19 +406,15 @@ function OrderDetailsFromInvoicesModal({}: Props) {
                               <tr key={key} className='border-bottom py-2'>
                                 <td className='w-50 fs-6 fw-semibold'>{product.name || ''}</td>
                                 <td className='fs-6 text-muted'>{product.sku}</td>
-                                <td className='text-center'>{FormatIntNumber.format(Number(product.quantity))}</td>
-                                <td className='text-center'>{FormatIntNumber.format(Number(product.qtyReceived))}</td>
+                                <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.quantity))}</td>
+                                <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.qtyReceived))}</td>
                               </tr>
                             ))}
                             <tr>
                               <td className='text-start fs-5 fw-bold text-nowrap'>Total QTY</td>
                               <td></td>
-                              <td className='text-center fw-semibold fs-5 text-primary'>
-                                {FormatIntNumber.format(Number(data.totalItems))}
-                              </td>
-                              <td className='text-center fw-semibold fs-5 text-primary'>
-                                {FormatIntNumber.format(Number(data.totalReceivedItems))}
-                              </td>
+                              <td className='text-center fw-semibold fs-5 text-primary'>{FormatIntNumber(state.currentRegion, Number(data.totalItems))}</td>
+                              <td className='text-center fw-semibold fs-5 text-primary'>{FormatIntNumber(state.currentRegion, Number(data.totalReceivedItems))}</td>
                             </tr>
                           </tbody>
                         </table>
@@ -472,8 +451,7 @@ function OrderDetailsFromInvoicesModal({}: Props) {
                             <tr>
                               <td className='text-muted text-nowrap'>Address:</td>
                               <td className='fw-semibold w-100'>
-                                {data.shipStreet}, {data.shipCity}, {data.shipState}, {data.shipZipcode},{' '}
-                                {data.shipCountry}
+                                {data.shipStreet}, {data.shipCity}, {data.shipState}, {data.shipZipcode}, {data.shipCountry}
                               </td>
                             </tr>
                           </tbody>

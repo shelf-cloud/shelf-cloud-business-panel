@@ -10,7 +10,6 @@ import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import AppContext from '@context/AppContext'
 import { toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.min.css'
 import useSWR from 'swr'
 import router from 'next/router'
 

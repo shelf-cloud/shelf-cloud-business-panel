@@ -29,6 +29,7 @@
       "@assets/*": ["assets/*"],
       "@images/*": ["assets/images/*"],
       "@auth/*": ["auth/*"],
+      "@typesTs/*": ["types/*"],
       "@typings": ["../typings.d.ts"],
       "@firebase": ["firebase.js"],
       "@lib/*": ["lib/*"]

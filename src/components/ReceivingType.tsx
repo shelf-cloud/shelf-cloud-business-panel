@@ -129,10 +129,7 @@ const ReceivingType = ({ data }: Props) => {
                         {data.chargesFees && (
                           <>
                             <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltipWrap${OrderId}`}></i>
-                            <TooltipComponent
-                              target={`tooltipWrap${OrderId}`}
-                              text={`${FormatCurrency(state.currentRegion, data.chargesFees.receivingWrapService!)} per wrap`}
-                            />
+                            <TooltipComponent target={`tooltipWrap${OrderId}`} text={`${FormatCurrency(state.currentRegion, data.chargesFees.receivingWrapService!)} per wrap`} />
                           </>
                         )}
                       </td>
@@ -144,10 +141,7 @@ const ReceivingType = ({ data }: Props) => {
                         {data.chargesFees && (
                           <>
                             <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltipHour${OrderId}`}></i>
-                            <TooltipComponent
-                              target={`tooltipHour${OrderId}`}
-                              text={`${FormatCurrency(state.currentRegion, data.chargesFees.receivingManHour!)} per hour`}
-                            />
+                            <TooltipComponent target={`tooltipHour${OrderId}`} text={`${FormatCurrency(state.currentRegion, data.chargesFees.receivingManHour!)} per hour`} />
                           </>
                         )}
                       </td>
@@ -204,15 +198,15 @@ const ReceivingType = ({ data }: Props) => {
                       <tr key={key} className='border-bottom py-2'>
                         <td className='w-50 fs-6 fw-semibold'>{product.name || ''}</td>
                         <td className='fs-6 text-muted'>{product.sku}</td>
-                        <td className='text-center'>{FormatIntNumber.format(Number(product.quantity))}</td>
-                        <td className='text-center'>{FormatIntNumber.format(Number(product.qtyReceived))}</td>
+                        <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.quantity))}</td>
+                        <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.qtyReceived))}</td>
                       </tr>
                     ))}
                     <tr>
                       <td className='text-start fs-5 fw-bold text-nowrap'>Total QTY</td>
                       <td></td>
-                      <td className='text-center fw-semibold fs-5 text-primary'>{FormatIntNumber.format(Number(data.totalItems))}</td>
-                      <td className='text-center fw-semibold fs-5 text-primary'>{FormatIntNumber.format(Number(data.totalReceivedItems))}</td>
+                      <td className='text-center fw-semibold fs-5 text-primary'>{FormatIntNumber(state.currentRegion, Number(data.totalItems))}</td>
+                      <td className='text-center fw-semibold fs-5 text-primary'>{FormatIntNumber(state.currentRegion, Number(data.totalReceivedItems))}</td>
                     </tr>
                   </tbody>
                 </table>

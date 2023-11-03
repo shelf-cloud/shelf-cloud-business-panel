@@ -28,24 +28,36 @@ const initialState = {
   leftSidebarImageType: leftSidebarImageTypes.NONE,
   currentRegion: '',
   user: {},
-  wholesaleOrderProducts: [],
   showInventoryBinsModal: false,
+  // MODAL - PRODUCT DETAILS
   modalProductInfo: {},
   showEditProductModal: false,
   modalProductDetails: {},
-
+  // MODAL - KIT DETAILS
   showEditKitModal: false,
   modalKitDetails: {},
-
+  // MODAL - WHOLESALE ORDERS
+  wholesaleOrderProducts: [],
   showWholeSaleOrderModal: false,
   showSingleBoxesOrderModal: false,
-  modalCreateReturnInfo: {},
-  showCreateReturnModal: false,
-  showUploadProductsModal: false,
-  orderNumberfromInvoices: null,
-  showOrderDetailsOfInvoiceModal: false,
   showIndividualUnitsPlan: false,
   showUploadIndividualUnitsLabelsModal: false,
+  // MDOAL - RETURN SHIPMENT
+  modalCreateReturnInfo: {},
+  showCreateReturnModal: false,
+  // MODAL - UPLOAD PRODUCTS
+  showUploadProductsModal: false,
+  // MODAL - ORDER DETAILS FROM INVOICE
+  orderNumberfromInvoices: null,
+  showOrderDetailsOfInvoiceModal: false,
+  // MODAL - PAYMENTS
+  receivingFromPo: {},
+  showCreateReceivingFromPo: false,
+  modalAddPaymentToPoDetails: {},
+  showAddPaymentToPo: false,
+  modalAddSkuToPurchaseOrder: {},
+  showAddSkuToPurchaseOrder: false,
+  showCreatePoFromFile: false,
 }
 
 const useInitialState = () => {
@@ -232,6 +244,64 @@ const useInitialState = () => {
     })
   }
 
+  const setReceivingFromPo = (payload) => {
+    setState({
+      ...state,
+      receivingFromPo: payload,
+    })
+  }
+
+  const setShowCreateReceivingFromPo = (payload) => {
+    setState({
+      ...state,
+      showCreateReceivingFromPo: payload,
+    })
+  }
+
+  const setShowAddPaymentToPo = (payload) => {
+    setState({
+      ...state,
+      showAddPaymentToPo: payload,
+    })
+  }
+
+  const setModalAddPaymentToPoDetails = (poId, orderNumber) => {
+    setState({
+      ...state,
+      modalAddPaymentToPoDetails: {
+        poId,
+        orderNumber,
+      },
+      showAddPaymentToPo: true,
+    })
+  }
+
+  const setModalAddSkuToPurchaseOrder = (poId, orderNumber, suppliersName) => {
+    setState({
+      ...state,
+      modalAddSkuToPurchaseOrder: {
+        poId,
+        orderNumber,
+        suppliersName,
+      },
+      showAddSkuToPurchaseOrder: true,
+    })
+  }
+
+  const setShowAddSkuToPurchaseOrder = (payload) => {
+    setState({
+      ...state,
+      showAddSkuToPurchaseOrder: payload,
+    })
+  }
+
+  const setShowCreatePoFromFile = (payload) => {
+    setState({
+      ...state,
+      showCreatePoFromFile: payload,
+    })
+  }
+
   return {
     state,
     setRegion,
@@ -252,6 +322,13 @@ const useInitialState = () => {
     setShowOrderDetailsOfInvoiceModal,
     setIndividualUnitsPlan,
     setUploadIndividualUnitsLabelsModal,
+    setReceivingFromPo,
+    setShowCreateReceivingFromPo,
+    setShowAddPaymentToPo,
+    setModalAddPaymentToPoDetails,
+    setModalAddSkuToPurchaseOrder,
+    setShowAddSkuToPurchaseOrder,
+    setShowCreatePoFromFile,
   }
 }
 

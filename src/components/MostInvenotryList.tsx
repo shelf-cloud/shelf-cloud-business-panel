@@ -1,29 +1,31 @@
 /* eslint-disable @next/next/no-img-element */
-import React from 'react'
+import React, { useContext } from 'react'
 import Link from 'next/link'
 import { Card, CardBody, CardHeader, Col } from 'reactstrap'
 import { ProductSummary } from '@typings'
 import { FormatIntNumber } from '@lib/FormatNumbers'
+import AppContext from '@context/AppContext'
 
 type Props = {
   products: ProductSummary[] | undefined
 }
 
 const MostInvenotryList = ({ products }: Props) => {
+  const { state }: any = useContext(AppContext)
   return (
     <React.Fragment>
       <Col>
         <Card>
-          <CardHeader className="align-items-center d-flex justify-content-between">
-            <h4 className="card-title mb-0 flex-grow-1">Stock Inventory</h4>
+          <CardHeader className='align-items-center d-flex justify-content-between'>
+            <h4 className='card-title mb-0 flex-grow-1'>Stock Inventory</h4>
             <Link href={'/Products'}>
-              <a className="fs-6 text-primary fw-normal">View All Products</a>
+              <a className='fs-6 text-primary fw-normal'>View All Products</a>
             </Link>
           </CardHeader>
 
           <CardBody>
-            <div className="table-responsive table-card">
-              <table className="table table-hover table-centered align-middle mb-0">
+            <div className='table-responsive table-card'>
+              <table className='table table-hover table-centered align-middle mb-0'>
                 <thead>
                   <tr className='fw-semibold'>
                     <td>Image</td>
@@ -36,25 +38,23 @@ const MostInvenotryList = ({ products }: Props) => {
                   {(products || []).map((item, key) => (
                     <tr key={key}>
                       <td>
-                        <div className="avatar-sm bg-light rounded p-1 me-2">
+                        <div className='avatar-sm bg-light rounded p-1 me-2'>
                           <img
                             src={item.image}
-                            alt="Product Img"
+                            alt='Product Img'
                             style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
-                            className="img-fluid d-block"
+                            className='img-fluid d-block'
                           />
                         </div>
                       </td>
                       <td>
-                        <span className="fs-6 mw-30">{item.title}</span>
+                        <span className='fs-6 mw-30'>{item.title}</span>
                       </td>
                       <td>
-                        <span className="text-muted">{item.sku}</span>
+                        <span className='text-muted'>{item.sku}</span>
                       </td>
                       <td>
-                        <h5 className="fs-14 my-1 fw-normal text-center">
-                          {FormatIntNumber.format(item.totalQty)}
-                        </h5>
+                        <h5 className='fs-14 my-1 fw-normal text-center'>{FormatIntNumber(state.currentRegion, item.totalQty)}</h5>
                       </td>
                     </tr>
                   ))}

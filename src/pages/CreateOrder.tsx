@@ -11,7 +11,6 @@ import { getSession } from '@auth/client'
 import AppContext from '@context/AppContext'
 import useSWR, { useSWRConfig } from 'swr'
 import { toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.min.css'
 import router, { useRouter } from 'next/router'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

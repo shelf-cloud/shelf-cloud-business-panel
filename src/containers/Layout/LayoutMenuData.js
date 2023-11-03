@@ -43,14 +43,7 @@ const Navdata = () => {
     if (iscurrentState !== 'Billing') {
       setIsBilling(false)
     }
-  }, [
-    iscurrentState,
-    isDashboard,
-    isWarehouse,
-    isShipments,
-    isReceiving,
-    isBilling,
-  ])
+  }, [iscurrentState, isDashboard, isWarehouse, isShipments, isReceiving, isBilling])
 
   useEffect(() => {}, [state.user])
 
@@ -196,7 +189,7 @@ const Navdata = () => {
       parentId: 'shipments',
     })
   }
-  
+
   if (state.user[state.currentRegion]?.showCreateOrder) {
     menuItems[2].subItems.unshift({
       id: 'createorder',
@@ -205,19 +198,22 @@ const Navdata = () => {
       parentId: 'shipments',
     })
   }
-  
+
   if (state.user[state.currentRegion]?.showKits) {
-    // menuItems[1].subItems.unshift({
-    //   id: 'addkit',
-    //   label: 'Add Kit',
-    //   link: '/AddKit',
-    //   parentId: 'warehouse',
-    // })
     menuItems[1].subItems.unshift({
       id: 'kits',
       label: 'Kits',
       link: '/Kits',
       parentId: 'warehouse',
+    })
+  }
+
+  if (state.user[state.currentRegion]?.showPurchaseOrders) {
+    menuItems[3].subItems.unshift({
+      id: 'purchaseorders',
+      label: 'Purchase Orders',
+      link: '/purchaseOrders?organizeBy=suppliers',
+      parentId: 'receiving',
     })
   }
 

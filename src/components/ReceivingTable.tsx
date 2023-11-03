@@ -15,13 +15,9 @@ const ReceivingTable = ({ tableData, pending }: Props) => {
   const { state }: any = useContext(AppContext)
   const columns: any = [
     {
-      name: <span className="fw-bolder fs-13">Order Number</span>,
+      name: <span className='fw-bolder fs-13'>Order Number</span>,
       selector: (row: OrderRowType) => {
-        return (
-          <div style={{ margin: '0px', fontWeight: '800' }}>
-            {row.orderNumber}
-          </div>
-        )
+        return <div style={{ margin: '0px', fontWeight: '800' }}>{row.orderNumber}</div>
       },
       sortable: true,
       wrap: true,
@@ -30,40 +26,22 @@ const ReceivingTable = ({ tableData, pending }: Props) => {
       //   compact: true,
     },
     {
-      name: <span className="fw-bolder fs-13">Status</span>,
+      name: <span className='fw-bolder fs-13'>Status</span>,
       selector: (row: OrderRowType) => {
         switch (row.orderStatus) {
           case 'shipped':
           case 'received':
-            return (
-              <span className="badge text-uppercase badge-soft-success p-2">
-                {' '}
-                {row.orderStatus}{' '}
-              </span>
-            )
+            return <span className='badge text-uppercase badge-soft-success p-2'> {row.orderStatus} </span>
             break
           case 'awaiting_shipment':
           case 'awating':
-            return (
-              <span className="badge text-uppercase badge-soft-secondary p-2">
-                {' awating '}
-              </span>
-            )
+            return <span className='badge text-uppercase badge-soft-secondary p-2'>{' awating '}</span>
             break
           case 'on_hold':
-            return (
-              <span className="badge text-uppercase badge-soft-warning p-2">
-                {' on hold '}
-              </span>
-            )
+            return <span className='badge text-uppercase badge-soft-warning p-2'>{' on hold '}</span>
             break
           case 'cancelled':
-            return (
-              <span className="badge text-uppercase badge-soft-danger p-2">
-                {' '}
-                {row.orderStatus}{' '}
-              </span>
-            )
+            return <span className='badge text-uppercase badge-soft-danger p-2'> {row.orderStatus} </span>
             break
           default:
             break
@@ -76,7 +54,7 @@ const ReceivingTable = ({ tableData, pending }: Props) => {
       //   compact: true,
     },
     {
-      name: <span className="fw-bolder fs-13">Type</span>,
+      name: <span className='fw-bolder fs-13'>Type</span>,
       selector: (row: OrderRowType) => row.orderType,
       sortable: true,
       wrap: true,
@@ -87,7 +65,7 @@ const ReceivingTable = ({ tableData, pending }: Props) => {
       },
     },
     {
-      name: <span className="fw-bolder fs-13">Order Date</span>,
+      name: <span className='fw-bolder fs-13'>Order Date</span>,
       selector: (row: OrderRowType) => row.orderDate,
       sortable: true,
       wrap: true,
@@ -96,7 +74,7 @@ const ReceivingTable = ({ tableData, pending }: Props) => {
       //   compact: true,
     },
     {
-      name: <span className="fw-bolder fs-13">Order Closed</span>,
+      name: <span className='fw-bolder fs-13'>Order Closed</span>,
       selector: (row: OrderRowType) => row.closedDate || '',
       sortable: true,
       wrap: true,
@@ -105,8 +83,8 @@ const ReceivingTable = ({ tableData, pending }: Props) => {
       //   compact: true,
     },
     {
-      name: <span className="fw-bolder fs-13"># of Items</span>,
-      selector: (row: OrderRowType) => FormatIntNumber.format(Number(row.totalItems)),
+      name: <span className='fw-bolder fs-13'># of Items</span>,
+      selector: (row: OrderRowType) => FormatIntNumber(state.currentRegion, Number(row.totalItems)),
       sortable: true,
       wrap: true,
       // grow: 1.5,
@@ -114,9 +92,8 @@ const ReceivingTable = ({ tableData, pending }: Props) => {
       //   compact: true,
     },
     {
-      name: <span className="fw-bolder fs-13">Total Charge</span>,
-      selector: (row: OrderRowType) =>
-        FormatCurrency(state.currentRegion, Number(row.totalCharge)),
+      name: <span className='fw-bolder fs-13'>Total Charge</span>,
+      selector: (row: OrderRowType) => FormatCurrency(state.currentRegion, Number(row.totalCharge)),
       sortable: true,
       wrap: true,
       // grow: 1.5,
@@ -126,7 +103,7 @@ const ReceivingTable = ({ tableData, pending }: Props) => {
       },
     },
     {
-      name: <span className="fw-bolder fs-13">Notes</span>,
+      name: <span className='fw-bolder fs-13'>Notes</span>,
       selector: (row: OrderRowType) => row.trackingNumber || '',
       sortable: true,
       wrap: true,
@@ -138,14 +115,7 @@ const ReceivingTable = ({ tableData, pending }: Props) => {
 
   return (
     <>
-      <DataTable
-        columns={columns}
-        data={tableData}
-        progressPending={pending}
-        expandableRows
-        expandableRowsComponent={ShipmentExpandedDetail}
-        striped={true}
-      />
+      <DataTable columns={columns} data={tableData} progressPending={pending} expandableRows expandableRowsComponent={ShipmentExpandedDetail} striped={true} />
     </>
   )
 }
