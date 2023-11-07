@@ -75,7 +75,7 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
   return (
     <div className='p-2'>
       <Card>
-        <DataTable columns={columns} data={data.orders} striped={true} expandableRows expandableRowsComponent={Expanded_By_Orders} defaultSortFieldId={3} />
+        <DataTable columns={columns} data={data.orders} striped={true} expandableRows expandableRowsComponent={Expanded_By_Orders} defaultSortFieldId={3} defaultSortAsc={false}/>
       </Card>
     </div>
   )

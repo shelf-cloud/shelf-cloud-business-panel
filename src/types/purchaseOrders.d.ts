@@ -5,6 +5,7 @@ export interface PoPaymentHistory {
 
 export interface PoItemArrivalHistory {
     date: string
+    receivingOrder: string
     quantity: number
 }
 

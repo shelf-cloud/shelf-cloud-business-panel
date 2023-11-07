@@ -119,7 +119,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                       </div>
                       <div>
                         <Button
-                          className='fs-5 btn'
+                          className='fs-6 btn'
                           color='primary'
                           onClick={() => setWholeSaleOrderModal(!state.showWholeSaleOrderModal)}>
                           Create Receiving

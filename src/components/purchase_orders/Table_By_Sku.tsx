@@ -14,6 +14,111 @@ type Props = {
 
 const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
   const { state }: any = useContext(AppContext)
+  const sortTitle = (rowA: PurchaseOrderBySkus, rowB: PurchaseOrderBySkus) => {
+    const a = rowA.title.toLowerCase()
+    const b = rowB.title.toLowerCase()
+    if (a > b) {
+      return 1
+    }
+    if (b > a) {
+      return -1
+    }
+    return 0
+  }
+  const sortOrdered = (rowA: PurchaseOrderBySkus, rowB: PurchaseOrderBySkus) => {
+    const totalSkuOrderedA = rowA.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
+      const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
+        if (item.sku == rowA.sku) {
+          return subtotal + item.orderQty
+        } else {
+          return subtotal
+        }
+      }, 0)
+      return totalSku + totalOrdered
+    }, 0)
+
+    const totalSkuOrderedB = rowB.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
+      const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
+        if (item.sku == rowB.sku) {
+          return subtotal + item.orderQty
+        } else {
+          return subtotal
+        }
+      }, 0)
+      return totalSku + totalOrdered
+    }, 0)
+
+    if (totalSkuOrderedA > totalSkuOrderedB) {
+      return 1
+    }
+    if (totalSkuOrderedB > totalSkuOrderedA) {
+      return -1
+    }
+    return 0
+  }
+  const sortInbound = (rowA: PurchaseOrderBySkus, rowB: PurchaseOrderBySkus) => {
+    const totalSkuOrderedA = rowA.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
+      const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
+        if (item.sku == rowA.sku) {
+          return subtotal + item.inboundQty
+        } else {
+          return subtotal
+        }
+      }, 0)
+      return totalSku + totalOrdered
+    }, 0)
+
+    const totalSkuOrderedB = rowB.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
+      const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
+        if (item.sku == rowB.sku) {
+          return subtotal + item.inboundQty
+        } else {
+          return subtotal
+        }
+      }, 0)
+      return totalSku + totalOrdered
+    }, 0)
+
+    if (totalSkuOrderedA > totalSkuOrderedB) {
+      return 1
+    }
+    if (totalSkuOrderedB > totalSkuOrderedA) {
+      return -1
+    }
+    return 0
+  }
+  const sortArrived = (rowA: PurchaseOrderBySkus, rowB: PurchaseOrderBySkus) => {
+    const totalSkuOrderedA = rowA.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
+      const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
+        if (item.sku == rowA.sku) {
+          return subtotal + item.receivedQty
+        } else {
+          return subtotal
+        }
+      }, 0)
+      return totalSku + totalOrdered
+    }, 0)
+
+    const totalSkuOrderedB = rowB.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
+      const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
+        if (item.sku == rowB.sku) {
+          return subtotal + item.receivedQty
+        } else {
+          return subtotal
+        }
+      }, 0)
+      return totalSku + totalOrdered
+    }, 0)
+
+    if (totalSkuOrderedA > totalSkuOrderedB) {
+      return 1
+    }
+    if (totalSkuOrderedB > totalSkuOrderedA) {
+      return -1
+    }
+    return 0
+  }
+
   const columns: any = [
     {
       name: <span className='fw-bolder fs-6'>Image</span>,
@@ -66,6 +171,7 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
       },
       sortable: true,
       compact: true,
+      sortFunction: sortTitle,
     },
     {
       name: <span className='fw-bolder fs-6'>SKU</span>,
@@ -79,7 +185,7 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
       selector: (row: PurchaseOrderBySkus) => {
         const totalSkuOrdered = row.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
           const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
-            if(item.sku == row.sku){
+            if (item.sku == row.sku) {
               return subtotal + item.orderQty
             } else {
               return subtotal
@@ -94,13 +200,14 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
       compact: true,
       center: true,
       grow: 0,
+      sortFunction: sortOrdered,
     },
     {
       name: <span className='fw-bolder fs-6'>Inbound</span>,
       selector: (row: PurchaseOrderBySkus) => {
         const totalSkuOrdered = row.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
           const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
-            if(item.sku == row.sku){
+            if (item.sku == row.sku) {
               return subtotal + item.inboundQty
             } else {
               return subtotal
@@ -115,13 +222,14 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
       compact: true,
       center: true,
       grow: 0,
+      sortFunction: sortInbound,
     },
     {
       name: <span className='fw-bolder fs-6'>Arrived</span>,
       selector: (row: PurchaseOrderBySkus) => {
         const totalSkuOrdered = row.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
           const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
-            if(item.sku == row.sku){
+            if (item.sku == row.sku) {
               return subtotal + item.receivedQty
             } else {
               return subtotal
@@ -136,6 +244,7 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
       compact: true,
       center: true,
       grow: 0,
+      sortFunction: sortArrived,
     },
     {
       name: <span className='fw-bolder fs-6'></span>,

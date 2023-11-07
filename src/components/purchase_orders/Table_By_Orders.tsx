@@ -13,6 +13,21 @@ type Props = {
 
 const Table_By_Orders = ({ filterDataTable, pending }: Props) => {
   const { state }: any = useContext(AppContext)
+
+  const sortOrderCost = (rowA: PurchaseOrder, rowB: PurchaseOrder) => {
+    const totalSkuOrderedA = rowA?.poItems?.reduce((total: number, product: PurchaseOrderItem) => total + Number(product.orderQty * product.sellerCost), 0)
+
+    const totalSkuOrderedB = rowB?.poItems?.reduce((total: number, product: PurchaseOrderItem) => total + Number(product.orderQty * product.sellerCost), 0)
+
+    if (totalSkuOrderedA > totalSkuOrderedB) {
+      return 1
+    }
+    if (totalSkuOrderedB > totalSkuOrderedA) {
+      return -1
+    }
+    return 0
+  }
+
   const columns: any = [
     {
       name: <span className='fw-bolder fs-6'>Order Number</span>,
@@ -43,6 +58,7 @@ const Table_By_Orders = ({ filterDataTable, pending }: Props) => {
       sortable: true,
       compact: true,
       center: true,
+      sortFunction: sortOrderCost,
     },
     {
       name: <span className='fw-bolder fs-6'>Status</span>,
@@ -82,6 +98,7 @@ const Table_By_Orders = ({ filterDataTable, pending }: Props) => {
         expandableRows
         expandableRowsComponent={Expanded_By_Orders}
         defaultSortFieldId={3}
+        defaultSortAsc={false}
       />
     </>
   )

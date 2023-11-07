@@ -12,7 +12,7 @@ type Props = {}
 
 const Add_Payment_Modal = ({}: Props) => {
   const router = useRouter()
-  const {organizeBy} = router.query
+  const { status, organizeBy } = router.query
   const { state, setShowAddPaymentToPo }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [loading, setloading] = useState(false)
@@ -39,12 +39,12 @@ const Add_Payment_Modal = ({}: Props) => {
         resetForm()
         toast.success(response.data.msg)
         setShowAddPaymentToPo(false)
-        if(organizeBy == 'suppliers'){
-          mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}`)
-        } else if(organizeBy == 'orders'){
-          mutate(`/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}`)
-        } else if(organizeBy == 'sku'){
-          mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+        if (organizeBy == 'suppliers') {
+          mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+        } else if (organizeBy == 'orders') {
+          mutate(`/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+        } else if (organizeBy == 'sku') {
+          mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
         }
       } else {
         toast.error(response.data.msg)

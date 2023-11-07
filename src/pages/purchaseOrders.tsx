@@ -41,7 +41,7 @@ type Props = {
 
 const PurchaseOrders = ({ session }: Props) => {
   const router = useRouter()
-  const { organizeBy }: any = router.query
+  const { status, organizeBy }: any = router.query
   const { state, setShowCreateReceivingFromPo, setReceivingFromPo, setShowCreatePoFromFile }: any = useContext(AppContext)
   const title = `Purchase Orders | ${session?.user?.name}`
   const orderNumberStart = `${session?.user?.name.substring(0, 3).toUpperCase()}-`
@@ -82,7 +82,7 @@ const PurchaseOrders = ({ session }: Props) => {
                             <NavLink
                               className={activeTab == 'suppliers' ? 'text-primary fw-semibold fs-5' : 'text-muted fs-5'}
                               onClick={() => {
-                                router.replace('/purchaseOrders?organizeBy=suppliers')
+                                router.replace(`/purchaseOrders?status=${status}&organizeBy=suppliers`)
                               }}>
                               <>
                                 <i className='fas fa-home'></i>
@@ -94,7 +94,7 @@ const PurchaseOrders = ({ session }: Props) => {
                             <NavLink
                               className={activeTab == 'orders' ? 'text-primary fw-semibold fs-5' : 'text-muted fs-5'}
                               onClick={() => {
-                                router.replace('/purchaseOrders?organizeBy=orders')
+                                router.replace(`/purchaseOrders?status=${status}&organizeBy=orders`)
                               }}
                               type='button'>
                               <>
@@ -107,7 +107,7 @@ const PurchaseOrders = ({ session }: Props) => {
                             <NavLink
                               className={activeTab == 'sku' ? 'text-primary fw-semibold fs-5' : 'text-muted fs-5'}
                               onClick={() => {
-                                router.replace('/purchaseOrders?organizeBy=sku')
+                                router.replace(`/purchaseOrders?status=${status}&organizeBy=sku`)
                               }}
                               type='button'>
                               <>
@@ -118,14 +118,35 @@ const PurchaseOrders = ({ session }: Props) => {
                           </NavItem>
                         </Nav>
                       </div>
-                      <div className='w-auto d-flex flex-row align-items-center justify-content-between gap-4'>
-                        <Button className='btn fs-5 py-1 px-3' color='primary' onClick={() => setShowCreatePoFromFile(true)}>
+                      <div className='w-auto d-flex flex-row align-items-center justify-content-between gap-3'>
+                        {status == 'pending' ? (
+                          <Button
+                            className='btn fs-6 py-1 px-3'
+                            color='info'
+                            onClick={() => {
+                              router.replace(`/purchaseOrders?status=all&organizeBy=${organizeBy}`)
+                            }}>
+                            <i className='mdi mdi-eye label-icon align-middle fs-5 me-2' />
+                            Show Completed
+                          </Button>
+                        ) : (
+                          <Button
+                            className='btn fs-6 py-1 px-3'
+                            color='info'
+                            onClick={() => {
+                              router.replace(`/purchaseOrders?status=pending&organizeBy=${organizeBy}`)
+                            }}>
+                            <i className='mdi mdi-eye-off label-icon align-middle fs-5 me-2' />
+                            Hide Completed
+                          </Button>
+                        )}
+                        <Button className='btn fs-6 py-1 px-3' color='primary' onClick={() => setShowCreatePoFromFile(true)}>
                           <i className='mdi mdi-plus-circle label-icon align-middle fs-5 me-2' />
                           Add Purchase Order
                         </Button>
                         <Button
                           color='primary'
-                          className='fs-5 py-1 px-3'
+                          className='fs-6 py-1 px-3'
                           onClick={() => {
                             setShowCreateReceivingFromPo(true)
                           }}>

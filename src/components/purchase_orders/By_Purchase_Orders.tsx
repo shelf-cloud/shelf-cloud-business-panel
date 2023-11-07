@@ -5,14 +5,20 @@ import { Col, Input, Row } from 'reactstrap'
 import useSWR from 'swr'
 import Table_By_Orders from './Table_By_Orders'
 import { PurchaseOrder, PurchaseOrderItem } from '@typesTs/purchaseOrders'
+import { useRouter } from 'next/router'
 
 type Props = {}
 
 const By_Purchase_Orders = ({}: Props) => {
   const { state }: any = useContext(AppContext)
+  const router = useRouter()
+  const { status }: any = router.query
   const [searchValue, setSearchValue] = useState<any>('')
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data }: { data?: PurchaseOrder[] } = useSWR(state.user.businessId ? `/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher)
+  const { data }: { data?: PurchaseOrder[] } = useSWR(
+    state.user.businessId ? `/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}` : null,
+    fetcher
+  )
 
   const filterDataTable = useMemo(() => {
     if (searchValue === '') {
@@ -71,11 +77,7 @@ const By_Purchase_Orders = ({}: Props) => {
                 </div>
               </div>
             </Row>
-            <Table_By_Orders
-              filterDataTable={filterDataTable || []}
-              pending={data ? false : true}
-              // apiMutateLink={`/api/purchaseOrders/getpurchaseOrders?region=${state.currentRegion}&businessId=${state.user.businessId}`}
-            />
+            <Table_By_Orders filterDataTable={filterDataTable || []} pending={data ? false : true} />
           </Col>
         </Row>
       </React.Fragment>

@@ -48,7 +48,7 @@ const MasterBoxes = ({ completeData, pending, orderNumberStart }: Props) => {
           </h5>
         </div>
         <div>
-          <Button disabled={error} className='fs-5 btn' color='primary' onClick={() => setWholeSaleOrderModal(!state.showWholeSaleOrderModal)}>
+          <Button disabled={error} className='fs-6 btn' color='primary' onClick={() => setWholeSaleOrderModal(!state.showWholeSaleOrderModal)}>
             Create Order
           </Button>
         </div>

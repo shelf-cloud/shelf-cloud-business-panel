@@ -212,7 +212,7 @@ const Navdata = () => {
     menuItems[3].subItems.unshift({
       id: 'purchaseorders',
       label: 'Purchase Orders',
-      link: '/purchaseOrders?organizeBy=suppliers',
+      link: '/purchaseOrders?status=pending&organizeBy=suppliers',
       parentId: 'receiving',
     })
   }

@@ -20,7 +20,7 @@ type Supplier = {
 }
 const Add_Po_With_File = ({ orderNumberStart }: Props) => {
   const router = useRouter()
-  const { organizeBy } = router.query
+  const { status, organizeBy } = router.query
   const { state, setShowCreatePoFromFile }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [selectedFiles, setselectedFiles] = useState([])
@@ -113,11 +113,11 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
             toast.success(response.data.msg)
             setShowCreatePoFromFile(false)
             if (organizeBy == 'suppliers') {
-              mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+              mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
             } else if (organizeBy == 'orders') {
-              mutate(`/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+              mutate(`/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
             } else if (organizeBy == 'sku') {
-              mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+              mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
             }
           } else {
             setErrorResponse(response.data.errorList)
@@ -158,7 +158,7 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
   return (
     <Modal
       fade={false}
-      size='xl'
+      size='lg'
       id='addPoFromFile'
       isOpen={state.showCreatePoFromFile}
       toggle={() => {

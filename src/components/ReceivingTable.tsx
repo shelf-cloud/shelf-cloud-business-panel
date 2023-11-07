@@ -92,7 +92,7 @@ const ReceivingTable = ({ tableData, pending }: Props) => {
       //   compact: true,
     },
     {
-      name: <span className='fw-bolder fs-13'>Total Charge</span>,
+      name: <span className='fw-bolder fs-13 text-center'>Total Charge</span>,
       selector: (row: OrderRowType) => FormatCurrency(state.currentRegion, Number(row.totalCharge)),
       sortable: true,
       wrap: true,

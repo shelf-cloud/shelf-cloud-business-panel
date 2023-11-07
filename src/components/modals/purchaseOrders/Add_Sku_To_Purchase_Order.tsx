@@ -17,7 +17,7 @@ interface SkuInListToAddToPo extends SkuToAddPo {
 
 const Add_Sku_To_Purchase_Order = ({}) => {
   const router = useRouter()
-  const { organizeBy } = router.query
+  const { status, organizeBy } = router.query
   const { mutate } = useSWRConfig()
   const { state, setShowAddSkuToPurchaseOrder }: any = useContext(AppContext)
   const [loading, setloading] = useState(false)
@@ -172,7 +172,7 @@ const Add_Sku_To_Purchase_Order = ({}) => {
             <DebounceInput
               type='number'
               minLength={1}
-              debounceTimeout={400}
+              debounceTimeout={300}
               className={'form-control fs-6 m-0 ' + (Number(row.addQty) <= 0 || row.addQty == '' ? 'border-danger' : '')}
               style={{ maxWidth: '80px' }}
               placeholder='Qty...'
@@ -233,11 +233,11 @@ const Add_Sku_To_Purchase_Order = ({}) => {
       setShowAddSkuToPurchaseOrder(false)
       toast.success(response.data.msg)
       if (organizeBy == 'suppliers') {
-        mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+        mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
       } else if (organizeBy == 'orders') {
-        mutate(`/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+        mutate(`/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
       } else if (organizeBy == 'sku') {
-        mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+        mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
       }
     } else {
       toast.error(response.data.msg)
@@ -275,12 +275,12 @@ const Add_Sku_To_Purchase_Order = ({}) => {
           <Col md={5} className='overflow-auto h-100'>
             <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-between align-items-md-center'>
               <span className='fs-2 fw-semibold text-muted flex-1'>SKU List</span>
-              <div className='col-sm-12 col-md-6'>
+              <div className='col-sm-12 col-md-7'>
                 <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
                   <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                     <DebounceInput
-                      minLength={2}
-                      debounceTimeout={500}
+                      minLength={3}
+                      debounceTimeout={400}
                       type='text'
                       className='form-control input_background_white'
                       placeholder='Search...'

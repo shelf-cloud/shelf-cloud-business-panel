@@ -729,7 +729,7 @@ const CreateOrder = ({ session }: Props) => {
                           <h5 className='fs-14 mb-0 text-muted'>*You must complete all required fields or you will not be able to create your product.</h5>
                           <Col md={12}>
                             <div className='text-end'>
-                              <Button type='submit' disabled={creatingOrder} className='fs-5 btn bg-primary'>
+                              <Button type='submit' disabled={creatingOrder} className='fs-6 btn bg-primary'>
                                 {creatingOrder ? <Spinner /> : 'Create Order'}
                               </Button>
                             </div>

@@ -5,15 +5,18 @@ import { Col, Input, Row } from 'reactstrap'
 import useSWR from 'swr'
 import { PurchaseOrder, PurchaseOrderBySkus } from '@typesTs/purchaseOrders'
 import Table_By_Sku from './Table_By_Sku'
+import { useRouter } from 'next/router'
 
 type Props = {}
 
 const By_Sku = ({}: Props) => {
   const { state }: any = useContext(AppContext)
+  const router = useRouter()
+  const { status }: any = router.query
   const [searchValue, setSearchValue] = useState<any>('')
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data }: { data?: PurchaseOrderBySkus[] } = useSWR(
-    state.user.businessId ? `/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
+    state.user.businessId ? `/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}` : null,
     fetcher
   )
 

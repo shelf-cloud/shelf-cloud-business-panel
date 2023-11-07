@@ -10,7 +10,7 @@ const getpurchaseOrdersBySku: NextApiHandler = async (request, response) => {
         return
     }
 
-    axios(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/purchaseOrders/getpurchaseOrdersBySku.php?businessId=${request.query.businessId}`)
+    axios(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/purchaseOrders/getpurchaseOrdersBySku.php?businessId=${request.query.businessId}&status=${request.query.status}`)
         .then(({ data }) => {
             response.json(data)
         })

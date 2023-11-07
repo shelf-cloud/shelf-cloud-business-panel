@@ -59,7 +59,7 @@ const SingleItems = ({ completeData, pending, orderNumberStart }: Props) => {
                 : false
             }
             // disabled={error}
-            className='fs-5 btn'
+            className='fs-6 btn'
             color='primary'
             onClick={() => setSingleBoxesOrderModal(!state.showSingleBoxesOrderModal)}>
             Create Order

@@ -1,25 +1,28 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useContext, useState } from 'react'
-import { Card, CardBody, CardHeader, Col, Input, Row } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, Input, Row, UncontrolledTooltip } from 'reactstrap'
 import { ExpanderComponentProps } from 'react-data-table-component'
-import { PoPaymentHistory, PurchaseOrder, PurchaseOrderItem } from '@typesTs/purchaseOrders'
+import { PoItemArrivalHistory, PoPaymentHistory, PurchaseOrder, PurchaseOrderItem } from '@typesTs/purchaseOrders'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import AppContext from '@context/AppContext'
-import axios from 'axios'
-import { useRouter } from 'next/router'
-import { toast } from 'react-toastify'
-import { useSWRConfig } from 'swr'
+import Confirm_Delete_Item_From_PO from '@components/modals/purchaseOrders/Confirm_Delete_Item_From_PO'
 
 type Props = {
   data: PurchaseOrder
 }
 
 const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ data }: Props) => {
-  const router = useRouter()
-  const { organizeBy } = router.query
-  const { mutate } = useSWRConfig()
   const { state, setReceivingFromPo, setModalAddPaymentToPoDetails, setModalAddSkuToPurchaseOrder }: any = useContext(AppContext)
   const [loading, setLoading] = useState(false)
+  const [showDeleteModal, setshowDeleteModal] = useState({
+    show: false,
+    poId: 0,
+    orderNumber: '',
+    inventoryId: 0,
+    sku: '',
+    title: '',
+    image: '',
+  })
 
   const handlereceivingOrderFromPo = (
     poId: number,
@@ -58,30 +61,6 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
     }
 
     setReceivingFromPo(newReceivingOrderFromPo)
-  }
-
-  const handleDeleteFromSkuList = async (poId: number, orderNumber: string, inventoryId: number, sku: string) => {
-    setLoading(true)
-    const response = await axios.post(`/api/purchaseOrders/deleteSkufromPo?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-      poId,
-      orderNumber,
-      inventoryId,
-      sku,
-    })
-
-    if (!response.data.error) {
-      toast.success(response.data.msg)
-      if (organizeBy == 'suppliers') {
-        mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}`)
-      } else if (organizeBy == 'orders') {
-        mutate(`/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}`)
-      } else if (organizeBy == 'sku') {
-        mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}`)
-      }
-    } else {
-      toast.error(response.data.msg)
-    }
-    setLoading(false)
   }
 
   return (
@@ -207,10 +186,15 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                               position: 'relative',
                             }}>
                             <img
+                              loading='lazy'
                               src={
                                 product.image
                                   ? product.image
                                   : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+                              }
+                              onError={(e) =>
+                                (e.currentTarget.src =
+                                  'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
                               }
                               alt='product Image'
                               style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
@@ -219,6 +203,36 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                         </td>
                         <td className='fs-6 fw-semibold'>
                           {product.title}
+                          {product.arrivalHistory.length > 0 && (
+                            <>
+                              <i className='ri-information-fill ms-2 fs-5 text-warning' id={`tooltipHistory${product.inventoryId}`}></i>
+                              <UncontrolledTooltip
+                                placement='right'
+                                target={`tooltipHistory${product.inventoryId}`}
+                                popperClassName='bg-white shadow px-3 pt-3 rounded-2'
+                                innerClassName='text-black bg-white p-0'>
+                                <p className='fs-5 text-primary m-0 p-0 fw-bold mb-2'>Arrival History</p>
+                                <table className='table table-striped table-bordered table-sm table-responsive text-nowrap'>
+                                  <thead>
+                                    <tr>
+                                      <th>Date</th>
+                                      <th>Order</th>
+                                      <th>Qty</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {product.arrivalHistory.map((received: PoItemArrivalHistory, index: number) => (
+                                      <tr key={index}>
+                                        <td>{received.date}</td>
+                                        <td>{received.receivingOrder}</td>
+                                        <td>{FormatIntNumber(state.currentRegion, received.quantity)}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </UncontrolledTooltip>
+                            </>
+                          )}
                           {product.asin && (
                             <>
                               <br />
@@ -241,26 +255,28 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                         <td className='fs-6 text-center text-nowrap'>{FormatIntNumber(state.currentRegion, product.orderQty - product.receivedQty - product.inboundQty)}</td>
                         <td className='fs-6 text-center text-nowrap'>
                           <Input
-                            disabled={product.orderQty - product.receivedQty - product.inboundQty <= 0}
+                            disabled={product.orderQty - product.receivedQty - product.inboundQty <= 0 || !data.isOpen}
                             type='number'
                             className='form-control fs-6 m-0'
                             style={{ maxWidth: '80px' }}
                             placeholder='--'
                             bsSize='sm'
                             value={state.receivingFromPo?.[data.poId]?.[product.inventoryId]?.receivingQty || ''}
-                            onChange={(e) =>
-                              handlereceivingOrderFromPo(
-                                data.poId,
-                                data.orderNumber,
-                                product.inventoryId,
-                                product.sku,
-                                product.title,
-                                product.image,
-                                data.businessId,
-                                data.suppliersName,
-                                Number(e.target.value)
-                              )
-                            }
+                            onChange={(e) => {
+                              if (Number(e.target.value) <= product.orderQty - product.receivedQty - product.inboundQty && Number(e.target.value) >= 0) {
+                                handlereceivingOrderFromPo(
+                                  data.poId,
+                                  data.orderNumber,
+                                  product.inventoryId,
+                                  product.sku,
+                                  product.title,
+                                  product.image,
+                                  data.businessId,
+                                  data.suppliersName,
+                                  Number(e.target.value)
+                                )
+                              }
+                            }}
                             // onBlur={validation.handleBlur}
                             invalid={
                               Number(state.receivingFromPo?.[data.poId]?.[product.inventoryId]?.receivingQty) > product.orderQty - product.receivedQty - product.inboundQty
@@ -270,15 +286,30 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                           />
                         </td>
                         <td>
-                          {loading ? (
-                            <i className='fs-4 text-muted las la-trash-alt ps-3' />
-                          ) : (
-                            <i
-                              className='fs-4 text-danger las la-trash-alt ps-3'
-                              style={{ cursor: 'pointer' }}
-                              onClick={() => handleDeleteFromSkuList(data.poId, data.orderNumber, product.inventoryId, product.sku)}
-                            />
-                          )}
+                          {data.isOpen &&
+                            (loading ? (
+                              <i className='fs-4 text-muted las la-trash-alt ps-3' />
+                            ) : (
+                              <i
+                                className='fs-4 text-danger las la-trash-alt ps-3'
+                                style={{ cursor: 'pointer' }}
+                                // onClick={() => handleDeleteFromSkuList(data.poId, data.orderNumber, product.inventoryId, product.sku)}
+                                onClick={() =>
+                                  setshowDeleteModal((prev) => {
+                                    return {
+                                      ...prev,
+                                      show: true,
+                                      poId: data.poId,
+                                      orderNumber: data.orderNumber,
+                                      inventoryId: product.inventoryId,
+                                      sku: product.sku,
+                                      title: product.title,
+                                      image: product.image,
+                                    }
+                                  })
+                                }
+                              />
+                            ))}
                         </td>
                       </tr>
                     ))}
@@ -348,6 +379,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
           </Card>
         </Col>
       </Row>
+      {showDeleteModal.show && <Confirm_Delete_Item_From_PO showDeleteModal={showDeleteModal} setshowDeleteModal={setshowDeleteModal} loading={loading} setLoading={setLoading} />}
     </div>
   )
 }
