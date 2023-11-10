@@ -21,7 +21,7 @@ type Props = {
 const ReturnType = ({ data, apiMutateLink }: Props) => {
   const { mutate } = useSWRConfig()
   const { state }: any = useContext(AppContext)
-  const OrderId = data.orderId?.replaceAll(' ', '')
+  const OrderId = data.orderId?.replace(/[\s\.]/g, '')
   const [loadingLabel, setLoadingLabel] = useState(false)
   const handlePrintingLabel = async () => {
     setLoadingLabel(true)

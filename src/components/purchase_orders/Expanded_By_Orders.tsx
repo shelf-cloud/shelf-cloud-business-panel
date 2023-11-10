@@ -1,19 +1,30 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useContext, useState } from 'react'
-import { Card, CardBody, CardHeader, Col, Input, Row, UncontrolledTooltip } from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col, Form, FormFeedback, FormGroup, Input, Label, Row, UncontrolledTooltip } from 'reactstrap'
 import { ExpanderComponentProps } from 'react-data-table-component'
 import { PoItemArrivalHistory, PoPaymentHistory, PurchaseOrder, PurchaseOrderItem } from '@typesTs/purchaseOrders'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import AppContext from '@context/AppContext'
 import Confirm_Delete_Item_From_PO from '@components/modals/purchaseOrders/Confirm_Delete_Item_From_PO'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import { useSWRConfig } from 'swr'
+import { useRouter } from 'next/router'
+import * as Yup from 'yup'
+import { useFormik } from 'formik'
+import Edit_PO_Ordered_Qty from '@components/modals/purchaseOrders/Edit_PO_Ordered_Qty'
 
 type Props = {
   data: PurchaseOrder
 }
 
 const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ data }: Props) => {
+  const router = useRouter()
+  const { status, organizeBy } = router.query
   const { state, setReceivingFromPo, setModalAddPaymentToPoDetails, setModalAddSkuToPurchaseOrder }: any = useContext(AppContext)
+  const { mutate } = useSWRConfig()
   const [loading, setLoading] = useState(false)
+  const [showEditNote, setShowEditNote] = useState(false)
   const [showDeleteModal, setshowDeleteModal] = useState({
     show: false,
     poId: 0,
@@ -22,6 +33,12 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
     sku: '',
     title: '',
     image: '',
+  })
+  const [showEditOrderQty, setshowEditOrderQty] = useState({
+    show: false,
+    poId: 0,
+    orderNumber: '',
+    poItems: [] as PurchaseOrderItem[],
   })
 
   const handlereceivingOrderFromPo = (
@@ -63,17 +80,79 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
     setReceivingFromPo(newReceivingOrderFromPo)
   }
 
+  const handlePoOpenState = async (poId: number, isOpen: boolean) => {
+    setLoading(true)
+
+    const response = await axios.post(`/api/purchaseOrders/changeOpenStatusToPO?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      poId,
+      isOpen,
+    })
+
+    if (!response.data.error) {
+      toast.success(response.data.msg)
+
+      if (organizeBy == 'suppliers') {
+        mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+      } else if (organizeBy == 'orders') {
+        mutate(`/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+      } else if (organizeBy == 'sku') {
+        mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+      }
+    } else {
+      toast.error(response.data.msg)
+    }
+    setLoading(false)
+  }
+
+  const validationNote = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      note: data.note || '',
+    },
+    validationSchema: Yup.object({
+      note: Yup.string().max(300, 'Title is to Long'),
+    }),
+    onSubmit: async (values) => {
+      setLoading(true)
+
+      const response = await axios.post(`/api/purchaseOrders/editNoteFromPO?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+        poId: data.poId,
+        note: values.note,
+      })
+
+      if (!response.data.error) {
+        toast.success(response.data.msg)
+
+        if (organizeBy == 'suppliers') {
+          mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+        } else if (organizeBy == 'orders') {
+          mutate(`/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+        } else if (organizeBy == 'sku') {
+          mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+        }
+        setShowEditNote(false)
+      } else {
+        toast.error(response.data.msg)
+      }
+      setLoading(false)
+    },
+  })
+
+  const HandleAddProduct = (event: any) => {
+    event.preventDefault()
+    validationNote.handleSubmit()
+  }
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
       <Row>
-        <Col xl={3}>
-          <Col xl={12}>
+        <Col sm={3}>
+          <Col sm={12}>
             <Card>
               <CardHeader className='py-3'>
                 <h5 className='fw-semibold m-0'>Details</h5>
               </CardHeader>
               <CardBody>
-                <table className='table table-sm table-borderless'>
+                <table className='table table-sm table-borderless mb-0'>
                   <tbody>
                     <tr>
                       <td className='text-muted text-nowrap'>Order Number:</td>
@@ -89,18 +168,56 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                     </tr>
                     <tr>
                       <td className='text-muted text-nowrap'>Note:</td>
-                      <td className='fw-semibold w-100'>{data.note}</td>
+                      <td></td>
                     </tr>
                   </tbody>
                 </table>
+                <p className='m-0 px-1 fs-7'>{data.note}</p>
+                <p className='text-end m-0 px-1'>
+                  <i className={'ri-pencil-fill fs-5 text-primary m-0 p-0 ' + (showEditNote && 'd-none')} style={{ cursor: 'pointer' }} onClick={() => setShowEditNote(true)}></i>
+                </p>
+                {showEditNote && (
+                  <Form onSubmit={HandleAddProduct}>
+                    <Col md={12}>
+                      <FormGroup className='m-0'>
+                        <Label htmlFor='note' className='form-label'>
+                          Edit Note
+                        </Label>
+                        <Input
+                          type='textarea'
+                          className='form-control fs-6'
+                          placeholder=''
+                          id='note'
+                          name='note'
+                          bsSize='sm'
+                          onChange={validationNote.handleChange}
+                          onBlur={validationNote.handleBlur}
+                          value={validationNote.values.note || ''}
+                          invalid={validationNote.touched.note && validationNote.errors.note ? true : false}
+                        />
+                        {validationNote.touched.note && validationNote.errors.note ? <FormFeedback type='invalid'>{validationNote.errors.note}</FormFeedback> : null}
+                      </FormGroup>
+                      <div className='d-flex flex-row justify-content-end align-items-center gap-3'>
+                        <Button type='button' disabled={loading} color='light' className='btn btn-sm' onClick={() => setShowEditNote(false)}>
+                          Cancel
+                        </Button>
+                        <Button type='submit' disabled={loading} color='primary' className='btn btn-sm'>
+                          Save Changes
+                        </Button>
+                      </div>
+                    </Col>
+                  </Form>
+                )}
               </CardBody>
             </Card>
           </Col>
-          <Col xl={12}>
+          <Col sm={12}>
             <Card>
               <CardHeader className='py-3 d-flex flex-row justify-content-between'>
                 <h5 className='fw-semibold m-0'>Payment History</h5>{' '}
-                <i className='fs-3 text-success las la-plus-circle' style={{ cursor: 'pointer' }} onClick={() => setModalAddPaymentToPoDetails(data.poId, data.orderNumber)} />
+                {data.isOpen && (
+                  <i className='fs-3 text-success las la-plus-circle' style={{ cursor: 'pointer' }} onClick={() => setModalAddPaymentToPoDetails(data.poId, data.orderNumber)} />
+                )}
               </CardHeader>
               <CardBody>
                 <table className='table table-sm table-borderless table-nowrap mb-0'>
@@ -115,27 +232,57 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                     </tr>
                   </thead>
                   <tbody>
-                    {data.poPayments.map((payment: PoPaymentHistory, key) => (
+                    {data.poPayments?.map((payment: PoPaymentHistory, key) => (
                       <tr key={`${key}-${payment.date}`}>
                         <td className='text-center'>{payment.date}</td>
                         <td className='text-center'>{FormatCurrency(state.currentRegion, payment.amount)}</td>
                       </tr>
                     ))}
+                    {data.poPayments?.length > 0 && (
+                      <tr className='border-top'>
+                        <td className='text-center fw-semibold'>Total</td>
+                        <td className='text-center fw-semibold'>
+                          {FormatCurrency(
+                            state.currentRegion,
+                            data.poPayments.reduce((total, payment: PoPaymentHistory) => total + Number(payment.amount), 0)
+                          )}
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </CardBody>
             </Card>
           </Col>
         </Col>
-        <Col xl={9}>
+        <Col sm={9}>
           <Card>
             <CardHeader className='py-3 d-flex flex-row justify-content-between'>
               <h5 className='fw-semibold m-0'>Products</h5>
-              <i
-                className='fs-3 text-success las la-plus-circle'
-                style={{ cursor: 'pointer' }}
-                onClick={() => setModalAddSkuToPurchaseOrder(data.poId, data.orderNumber, data.suppliersName)}
-              />
+              {data.isOpen && (
+                <div className='d-flex flex-row justify-content-end gap-4 align-items-center'>
+                  <i
+                    className='ri-pencil-fill fs-4 text-primary m-0 p-0'
+                    style={{ cursor: 'pointer' }}
+                    onClick={() =>
+                      setshowEditOrderQty((prev) => {
+                        return {
+                          ...prev,
+                          show: true,
+                          poId: data.poId,
+                          orderNumber: data.orderNumber,
+                          poItems: data.poItems,
+                        }
+                      })
+                    }
+                  />
+                  <i
+                    className='fs-3 text-success las la-plus-circle'
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setModalAddSkuToPurchaseOrder(data.poId, data.orderNumber, data.suppliersName)}
+                  />
+                </div>
+              )}
             </CardHeader>
             <CardBody>
               <div className='table-responsive'>
@@ -149,9 +296,6 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                       <th className='text-center' scope='col'>
                         SKU
                       </th>
-                      {/* <th className='text-center' scope='col'>
-                        Unit Cost
-                      </th> */}
                       <th className='text-center' scope='col'>
                         Cost
                       </th>
@@ -203,7 +347,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                         </td>
                         <td className='fs-6 fw-semibold'>
                           {product.title}
-                          {product.arrivalHistory.length > 0 && (
+                          {product.arrivalHistory?.length > 0 && (
                             <>
                               <i className='ri-information-fill ms-2 fs-5 text-warning' id={`tooltipHistory${product.inventoryId}`}></i>
                               <UncontrolledTooltip
@@ -247,7 +391,6 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                           )}
                         </td>
                         <td className='fs-6 text-center text-nowrap'>{product.sku}</td>
-                        {/* <td className='fs-6 text-center text-nowrap'>{FormatCurrency(state.currentRegion, product.sellerCost)}</td> */}
                         <td className='fs-6 text-center text-nowrap'>{FormatCurrency(state.currentRegion, product.orderQty * product.sellerCost)}</td>
                         <td className='fs-6 text-center text-nowrap'>{FormatIntNumber(state.currentRegion, product.orderQty)}</td>
                         <td className='fs-6 text-center text-nowrap'>{FormatIntNumber(state.currentRegion, product.inboundQty)}</td>
@@ -287,6 +430,8 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                         </td>
                         <td>
                           {data.isOpen &&
+                            Number(product.inboundQty) <= 0 &&
+                            Number(product.receivedQty) <= 0 &&
                             (loading ? (
                               <i className='fs-4 text-muted las la-trash-alt ps-3' />
                             ) : (
@@ -354,32 +499,27 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
               </div>
             </CardBody>
           </Card>
-        </Col>
-      </Row>
-      <Row>
-        <Col xl={12} className='d-flex justify-content-end align-items-end'>
-          <Card className='m-0'>
-            {/* {state.currentRegion == 'us'
-              ? data.orderStatus == 'shipped' &&
-                data.hasReturn == false &&
-                data.shipCountry == 'US' && (
-                  <Button color='warning' className='btn-label' onClick={() => setModalCreateReturnInfo(data.businessId, data.id)}>
-                    <i className='las la-reply label-icon align-middle fs-3 me-2' />
-                    Create Return
+          <Row>
+            <Col sm={12} className='d-flex justify-content-end align-items-end'>
+              <Card className='m-0'>
+                {data.isOpen ? (
+                  <Button color='success' disabled={loading} className='btn-label' onClick={() => handlePoOpenState(data.poId, !data.isOpen)}>
+                    <i className='las la-check-circle label-icon align-middle fs-3 me-2' />
+                    Mark as Complete
                   </Button>
-                )
-              : data.orderStatus == 'shipped' &&
-                data.hasReturn == false &&
-                data.shipCountry == 'ES' && (
-                  <Button color='warning' className='btn-label' onClick={() => setModalCreateReturnInfo(data.businessId, data.id)}>
-                    <i className='las la-reply label-icon align-middle fs-3 me-2' />
-                    Create Return
+                ) : (
+                  <Button color='info' disabled={loading} className='btn-label' onClick={() => handlePoOpenState(data.poId, !data.isOpen)}>
+                    <i className='las la-lock-open label-icon align-middle fs-3 me-2' />
+                    ReOpen PO
                   </Button>
-                )} */}
-          </Card>
+                )}
+              </Card>
+            </Col>
+          </Row>
         </Col>
       </Row>
       {showDeleteModal.show && <Confirm_Delete_Item_From_PO showDeleteModal={showDeleteModal} setshowDeleteModal={setshowDeleteModal} loading={loading} setLoading={setLoading} />}
+      {showEditOrderQty.show && <Edit_PO_Ordered_Qty showEditOrderQty={showEditOrderQty} setshowEditOrderQty={setshowEditOrderQty} loading={loading} setLoading={setLoading} />}
     </div>
   )
 }

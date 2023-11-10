@@ -284,7 +284,7 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
                   value={validation.values.note || ''}
                   invalid={validation.touched.note && validation.errors.note ? true : false}
                 />
-                {validation.touched.image && validation.errors.image ? <FormFeedback type='invalid'>{validation.errors.image}</FormFeedback> : null}
+                {validation.touched.note && validation.errors.note ? <FormFeedback type='invalid'>{validation.errors.note}</FormFeedback> : null}
               </FormGroup>
             </Col>
             <Col md={12}>
