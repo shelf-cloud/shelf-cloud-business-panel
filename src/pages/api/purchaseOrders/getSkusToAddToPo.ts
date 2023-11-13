@@ -10,7 +10,7 @@ const getSkusToAddToPo: NextApiHandler = async (request, response) => {
         return
     }
 
-    axios(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/purchaseOrders/getSkusToAddToPo.php?businessId=${request.query.businessId}`)
+    axios(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/purchaseOrders/getSkusToAddToPo.php?businessId=${request.query.businessId}&supplier=${request.query.supplier}`)
         .then(({ data }) => {
             response.json(data)
         })

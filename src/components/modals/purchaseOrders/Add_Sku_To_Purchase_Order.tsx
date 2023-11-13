@@ -26,7 +26,7 @@ const Add_Sku_To_Purchase_Order = ({}) => {
   const [skuToAddToPo, setSkuToAddToPo] = useState<SkuInListToAddToPo[]>([])
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data: skuList }: { data?: SkuToAddPo[] } = useSWR(
-    state.user.businessId ? `/api/purchaseOrders/getSkusToAddToPo?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
+    state.user.businessId ? `/api/purchaseOrders/getSkusToAddToPo?region=${state.currentRegion}&businessId=${state.user.businessId}&supplier=${state.modalAddSkuToPurchaseOrder?.suppliersName}` : null,
     fetcher
   )
 
@@ -262,11 +262,11 @@ const Add_Sku_To_Purchase_Order = ({}) => {
         className='modal-title pb-0'
         id='myModalLabel'>
         <p>Add Products to PO</p>
-        <span className='fs-4 mb-0 fw-semibold text-primary'>
+        <span className='fs-4 mb-0 fw-normal text-primary'>
           Purchase Order: <span className='fs-4 fw-bold text-black'>{state.modalAddSkuToPurchaseOrder?.orderNumber}</span>
         </span>
         <br />
-        <span className='fs-5 mb-0 fw-normal text-primary'>
+        <span className='fs-4 mb-0 fw-normal text-primary'>
           Supplier: <span className='fs-4 fw-bold text-black'>{state.modalAddSkuToPurchaseOrder?.suppliersName}</span>
         </span>
       </ModalHeader>
@@ -313,6 +313,7 @@ const Add_Sku_To_Purchase_Order = ({}) => {
                 dense={true}
                 fixedHeader={true}
                 fixedHeaderScrollHeight='60vh'
+                className='pb-4'
               />
             </Col>
           </Col>
