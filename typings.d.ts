@@ -370,6 +370,7 @@ export interface OrderRowType {
   individualUnitsPlan?: IndividualUnitsPlan
   isIndividualUnits?: boolean
   totalIndividualUnits?: number
+  isReceivingFromPo?: boolean
 }
 
 export interface ShipmentOrderItem {

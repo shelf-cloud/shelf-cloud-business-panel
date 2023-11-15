@@ -14,6 +14,8 @@ const createReceivingFromPo: NextApiHandler = async (request, response) => {
         shippingProducts: request.body.shippingProducts,
         orderInfo: request.body.orderInfo,
         poInfo: request.body.poInfo,
+        isNewReceiving: request.body.isNewReceiving,
+        receivingIdToAdd: request.body.receivingIdToAdd,
     })
         .then(({ data }) => {
             response.json(data)

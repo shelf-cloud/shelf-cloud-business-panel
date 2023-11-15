@@ -5,6 +5,7 @@ import { OrderRowType, ShipmentOrderItem } from '@typings'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import TooltipComponent from './constants/Tooltip'
 import AppContext from '@context/AppContext'
+import Confirm_Delete_Item_From_Receiving from './modals/receivings/Confirm_Delete_Item_From_Receiving'
 
 // import dynamic from 'next/dynamic';
 // const Animation = dynamic(() => import('@components/Common/Animation'), {
@@ -13,11 +14,21 @@ import AppContext from '@context/AppContext'
 
 type Props = {
   data: OrderRowType
+  apiMutateLink?: string
 }
 
-const ReceivingType = ({ data }: Props) => {
+const ReceivingType = ({ data, apiMutateLink }: Props) => {
   const { state }: any = useContext(AppContext)
   const [serviceFee, setServiceFee] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [showDeleteModal, setshowDeleteModal] = useState({
+    show: false,
+    orderId: 0,
+    orderNumber: '',
+    sku: '',
+    title: '',
+    quantity: 0,
+  })
 
   useEffect(() => {
     if (data.chargesFees) {
@@ -191,6 +202,7 @@ const ReceivingType = ({ data }: Props) => {
                       <th className='text-center' scope='col'>
                         Qty Received
                       </th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -200,6 +212,27 @@ const ReceivingType = ({ data }: Props) => {
                         <td className='fs-6 text-muted'>{product.sku}</td>
                         <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.quantity))}</td>
                         <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.qtyReceived))}</td>
+                        <td>
+                          {(data.orderStatus == 'awating' || data.orderStatus == 'awaiting_shipment') && product.qtyReceived! <= 0 && (
+                            <i
+                              className='fs-4 text-danger las la-trash-alt'
+                              style={{ cursor: 'pointer' }}
+                              onClick={() =>
+                                setshowDeleteModal((prev) => {
+                                  return {
+                                    ...prev,
+                                    show: true,
+                                    orderId: data.id,
+                                    orderNumber: data.orderNumber,
+                                    sku: product.sku,
+                                    title: product.name,
+                                    quantity: product.quantity,
+                                  }
+                                })
+                              }
+                            />
+                          )}
+                        </td>
                       </tr>
                     ))}
                     <tr>
@@ -229,6 +262,15 @@ const ReceivingType = ({ data }: Props) => {
           </Card>
         </Col>
       </Row>
+      {showDeleteModal.show && (
+        <Confirm_Delete_Item_From_Receiving
+          showDeleteModal={showDeleteModal}
+          setshowDeleteModal={setshowDeleteModal}
+          loading={loading}
+          setLoading={setLoading}
+          apiMutateLink={apiMutateLink}
+        />
+      )}
     </div>
   )
 }

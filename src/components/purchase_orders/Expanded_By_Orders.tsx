@@ -174,7 +174,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                 </table>
                 <p className='m-0 px-1 fs-7'>{data.note}</p>
                 <p className='text-end m-0 px-1'>
-                  <i className={'ri-pencil-fill fs-5 text-primary m-0 p-0 ' + (showEditNote && 'd-none')} style={{ cursor: 'pointer' }} onClick={() => setShowEditNote(true)}></i>
+                  <i className={'las la-edit fs-3 text-primary m-0 p-0 ' + (showEditNote && 'd-none')} style={{ cursor: 'pointer' }} onClick={() => setShowEditNote(true)}></i>
                 </p>
                 {showEditNote && (
                   <Form onSubmit={HandleAddProduct}>
@@ -260,9 +260,9 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
             <CardHeader className='py-3 d-flex flex-row justify-content-between'>
               <h5 className='fw-semibold m-0'>Products</h5>
               {data.isOpen && (
-                <div className='d-flex flex-row justify-content-end gap-4 align-items-center'>
+                <div className='d-flex flex-row justify-content-end gap-3 align-items-center'>
                   <i
-                    className='ri-pencil-fill fs-4 text-primary m-0 p-0'
+                    className='las la-edit fs-3 text-primary m-0 p-0'
                     style={{ cursor: 'pointer' }}
                     onClick={() =>
                       setshowEditOrderQty((prev) => {
@@ -438,7 +438,6 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                               <i
                                 className='fs-4 text-danger las la-trash-alt ps-3'
                                 style={{ cursor: 'pointer' }}
-                                // onClick={() => handleDeleteFromSkuList(data.poId, data.orderNumber, product.inventoryId, product.sku)}
                                 onClick={() =>
                                   setshowDeleteModal((prev) => {
                                     return {

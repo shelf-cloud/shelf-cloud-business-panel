@@ -1,18 +1,28 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
-import { OrderRowType } from '@typings'
-import React, { useContext } from 'react'
+import { OrderRowType, ShipmentOrderItem } from '@typings'
+import React, { useContext, useState } from 'react'
 import DataTable from 'react-data-table-component'
 import ShipmentExpandedDetail from './ShipmentExpandedDetail'
 import AppContext from '@context/AppContext'
+import { UncontrolledTooltip } from 'reactstrap'
+import Confirm_Delete_Receiving from './modals/receivings/Confirm_Delete_Receiving'
 
 type Props = {
   tableData: OrderRowType[]
   pending: boolean
+  apiMutateLink: string
 }
 
-const ReceivingTable = ({ tableData, pending }: Props) => {
+const ReceivingTable = ({ tableData, pending, apiMutateLink }: Props) => {
   const { state }: any = useContext(AppContext)
+  const [loading, setLoading] = useState(false)
+  const [showDeleteModal, setshowDeleteModal] = useState({
+    show: false,
+    orderId: 0,
+    orderNumber: '',
+  })
+
   const columns: any = [
     {
       name: <span className='fw-bolder fs-13'>Order Number</span>,
@@ -103,19 +113,67 @@ const ReceivingTable = ({ tableData, pending }: Props) => {
       },
     },
     {
-      name: <span className='fw-bolder fs-13'>Notes</span>,
-      selector: (row: OrderRowType) => row.trackingNumber || '',
-      sortable: true,
-      wrap: true,
-      grow: 2,
+      name: <span className='fw-bolder fs-13'></span>,
+      selector: (row: OrderRowType) => {
+        if (
+          (row.orderStatus == 'awating' || row.orderStatus == 'awaiting_shipment') &&
+          row.orderItems.reduce((totalReceived, item: ShipmentOrderItem) => totalReceived + item.qtyReceived!, 0) <= 0
+        ) {
+          return (
+            <>
+              <i
+                className='fs-3 text-danger las la-trash-alt'
+                style={{ cursor: 'pointer' }}
+                id={`deleteReceiving${row.orderId}`}
+                onClick={() =>
+                  setshowDeleteModal((prev) => {
+                    return {
+                      ...prev,
+                      show: true,
+                      orderId: row.id,
+                      orderNumber: row.orderNumber,
+                    }
+                  })
+                }
+              />
+              <UncontrolledTooltip
+                placement='top'
+                target={`deleteReceiving${row.orderId}`}
+                popperClassName='bg-white shadow px-1 pt-1 rounded-2'
+                innerClassName='text-black bg-white p-0'>
+                <p className='fs-6 text-danger m-0 p-0 mb-0'>Delete Receiving</p>
+              </UncontrolledTooltip>
+            </>
+          )
+        }
+      },
+      sortable: false,
+      wrap: false,
       center: true,
-      //   compact: true,
+      compact: true,
     },
   ]
 
   return (
     <>
-      <DataTable columns={columns} data={tableData} progressPending={pending} expandableRows expandableRowsComponent={ShipmentExpandedDetail} striped={true} />
+      <DataTable
+        columns={columns}
+        data={tableData}
+        progressPending={pending}
+        expandableRows
+        expandableRowsComponent={ShipmentExpandedDetail}
+        expandableRowsComponentProps={{ apiMutateLink: apiMutateLink }}
+        striped={true}
+      />
+      {showDeleteModal.show && (
+        <Confirm_Delete_Receiving
+          showDeleteModal={showDeleteModal}
+          setshowDeleteModal={setshowDeleteModal}
+          loading={loading}
+          setLoading={setLoading}
+          apiMutateLink={apiMutateLink}
+        />
+      )}
     </>
   )
 }

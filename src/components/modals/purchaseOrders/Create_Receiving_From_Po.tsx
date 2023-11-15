@@ -8,26 +8,47 @@ import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
 import router from 'next/router'
 import { FormatIntNumber } from '@lib/FormatNumbers'
+import useSWR from 'swr'
 
 type Props = {
   orderNumberStart: string
+}
+type OpenReceivings = {
+  id: number
+  businessId: number
+  orderId: string
+  orderNumber: string
+  orderDate: string
 }
 
 const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
   const { state, setShowCreateReceivingFromPo }: any = useContext(AppContext)
   const [loading, setloading] = useState(false)
 
+  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
+  const { data: OpenReceivings }: { data?: OpenReceivings[] } = useSWR(
+    state.user.businessId ? `/api/purchaseOrders/getOpenReceivings?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
+    fetcher
+  )
+
   const validation = useFormik({
     enableReinitialize: true,
 
     initialValues: {
       orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
+      isNewReceiving: '',
+      receivingIdToAdd: '',
     },
     validationSchema: Yup.object({
       orderNumber: Yup.string()
         .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ...`)
         .max(100, 'Title is to Long')
         .required('Please enter Order Number'),
+      isNewReceiving: Yup.string().required('Select a Receiving Type'),
+      receivingIdToAdd: Yup.string().when('isNewReceiving', {
+        is: 'false',
+        then: Yup.string().required('Must select a Receiving'),
+      }),
     }),
     onSubmit: async (values) => {
       setloading(true)
@@ -59,6 +80,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
           })
         })
       )
+
       const response = await axios.post(`/api/purchaseOrders/createReceivingFromPo?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
         shippingProducts,
         orderInfo: {
@@ -66,7 +88,10 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
           orderProducts,
         },
         poInfo: state.receivingFromPo,
+        isNewReceiving: values.isNewReceiving == 'true' ? true : false,
+        receivingIdToAdd: parseInt(values.receivingIdToAdd),
       })
+
       if (!response.data.error) {
         toast.success(response.data.msg)
         setShowCreateReceivingFromPo(false)
@@ -82,6 +107,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
     event.preventDefault()
     validation.handleSubmit()
   }
+
   return (
     <Modal
       fade={false}
@@ -108,14 +134,16 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                   *Transaction Number
                 </Label>
                 <div className='input-group'>
-                  <span className='input-group-text fw-semibold fs-5' id='basic-addon1'>
+                  <span className='input-group-text fw-semibold fs-5 m-0 px-2 py-0' id='basic-addon1'>
                     {orderNumberStart}
                   </span>
                   <Input
+                    disabled={validation.values.isNewReceiving == 'false'}
                     type='text'
                     className='form-control'
                     id='orderNumber'
                     name='orderNumber'
+                    bsSize='sm'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     value={validation.values.orderNumber || ''}
@@ -125,6 +153,54 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                 </div>
               </FormGroup>
             </Col>
+            <Col md={6}>
+              <FormGroup className='mb-3'>
+                <Label htmlFor='firstNameinput' className='form-label'>
+                  *Select Receiving Type
+                </Label>
+                <Input
+                  type='select'
+                  className='form-control'
+                  id='isNewReceiving'
+                  name='isNewReceiving'
+                  bsSize='sm'
+                  onChange={validation.handleChange}
+                  onBlur={validation.handleBlur}
+                  invalid={validation.touched.isNewReceiving && validation.errors.isNewReceiving ? true : false}>
+                  <option value=''>Choose a Type..</option>
+                  <option value='true'>Create New Receiving</option>
+                  <option value='false'>Add to Existing Receiving</option>
+                </Input>
+                {validation.touched.isNewReceiving && validation.errors.isNewReceiving ? <FormFeedback type='invalid'>{validation.errors.isNewReceiving}</FormFeedback> : null}
+              </FormGroup>
+              {validation.values.isNewReceiving == 'false' && (
+                <FormGroup className='mb-3'>
+                  <Label htmlFor='firstNameinput' className='form-label'>
+                    *Select Existing Receiving
+                  </Label>
+                  <Input
+                    type='select'
+                    className='form-control'
+                    id='receivingIdToAdd'
+                    name='receivingIdToAdd'
+                    bsSize='sm'
+                    onChange={validation.handleChange}
+                    onBlur={validation.handleBlur}
+                    invalid={validation.touched.receivingIdToAdd && validation.errors.receivingIdToAdd ? true : false}>
+                    <option value=''>Choose a Receiving..</option>
+                    {OpenReceivings?.map((receiving) => (
+                      <option key={receiving.id} value={receiving.id}>
+                        {receiving.orderNumber}
+                      </option>
+                    ))}
+                  </Input>
+                  {validation.touched.receivingIdToAdd && validation.errors.receivingIdToAdd ? (
+                    <FormFeedback type='invalid'>{validation.errors.receivingIdToAdd}</FormFeedback>
+                  ) : null}
+                </FormGroup>
+              )}
+            </Col>
+
             <Col md={12}>
               <table className='table table-sm align-middle table-responsive table-nowrap table-striped'>
                 <thead>

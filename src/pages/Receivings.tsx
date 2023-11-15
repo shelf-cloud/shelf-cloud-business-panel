@@ -89,6 +89,7 @@ const Receiving = ({ session }: Props) => {
       setTableData(allData)
     }
   }
+  
   const clearSearch = () => {
     setSerachValue('')
     setTableData(allData)
@@ -165,7 +166,7 @@ const Receiving = ({ session }: Props) => {
                 </Row>
                 <Card>
                   <CardBody>
-                    <ReceivingTable tableData={tableData} pending={pending} />
+                    <ReceivingTable tableData={tableData} pending={pending} apiMutateLink={`/api/getReceivingOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`}/>
                   </CardBody>
                 </Card>
               </Col>
