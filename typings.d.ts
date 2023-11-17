@@ -378,6 +378,7 @@ export interface ShipmentOrderItem {
   sku: string
   unitPrice: number
   quantity: number
+  poNumber?: string
   qtyReceived?: number
 }
 

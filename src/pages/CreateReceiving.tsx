@@ -101,7 +101,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <Container fluid>
-            <BreadCrumb title='Create Receiving Order' pageTitle='Receiving' />
+            <BreadCrumb title='Create Receiving Order' pageTitle='Inbound' />
             <Row>
               <Col lg={12}>
                 <Card>

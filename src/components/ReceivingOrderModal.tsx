@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // ALTER TABLE `dbpruebas` ADD `activeState` BOOLEAN NOT NULL DEFAULT TRUE AFTER `image`;
-import React, { useEffect, useContext } from 'react'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row } from 'reactstrap'
+import React, { useEffect, useContext, useState } from 'react'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import * as Yup from 'yup'
@@ -16,7 +16,7 @@ type Props = {
 }
 const ReceivingOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
   const { state, setWholeSaleOrderModal }: any = useContext(AppContext)
-
+  const [loading, setLoading] = useState(false)
   useEffect(() => {
     return () => {
       validation.resetForm()
@@ -37,6 +37,7 @@ const ReceivingOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
         .required('Please enter Order Number'),
     }),
     onSubmit: async (values, { resetForm }) => {
+      setLoading(true)
       const response = await axios.post(`api/createReceivingOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
         shippingProducts: orderProducts.map((product) => {
           return {
@@ -70,6 +71,7 @@ const ReceivingOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
       } else {
         toast.error(response.data.msg)
       }
+      setLoading(false)
     },
   })
 
@@ -118,9 +120,7 @@ const ReceivingOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     value={validation.values.orderNumber || ''}
                     invalid={validation.touched.orderNumber && validation.errors.orderNumber ? true : false}
                   />
-                  {validation.touched.orderNumber && validation.errors.orderNumber ? (
-                    <FormFeedback type='invalid'>{validation.errors.orderNumber}</FormFeedback>
-                  ) : null}
+                  {validation.touched.orderNumber && validation.errors.orderNumber ? <FormFeedback type='invalid'>{validation.errors.orderNumber}</FormFeedback> : null}
                 </div>
               </FormGroup>
             </Col>
@@ -144,8 +144,8 @@ const ReceivingOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
             </Col>
             <Col md={12}>
               <div className='text-end'>
-                <Button type='submit' color='success' className='btn'>
-                  Confirm Order
+                <Button disabled={loading} type='submit' color='success' className='btn'>
+                  {loading ? <Spinner color='#fff' /> : 'Confirm Order'}
                 </Button>
               </div>
             </Col>

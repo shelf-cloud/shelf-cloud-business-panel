@@ -1,10 +1,11 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { PurchaseOrder, PurchaseOrderItem } from '@typesTs/purchaseOrders'
 import DataTable from 'react-data-table-component'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import AppContext from '@context/AppContext'
 import Expanded_By_Orders from './Expanded_By_Orders'
-import { Badge } from 'reactstrap'
+import { Badge, UncontrolledTooltip } from 'reactstrap'
+import Confirm_Delete_Po from '@components/modals/purchaseOrders/Confirm_Delete_Po'
 
 type Props = {
   filterDataTable: PurchaseOrder[]
@@ -13,6 +14,12 @@ type Props = {
 
 const Table_By_Orders = ({ filterDataTable, pending }: Props) => {
   const { state }: any = useContext(AppContext)
+  const [loading, setLoading] = useState(false)
+  const [showDeleteModal, setshowDeleteModal] = useState({
+    show: false,
+    poId: 0,
+    orderNumber: '',
+  })
 
   const sortOrderCost = (rowA: PurchaseOrder, rowB: PurchaseOrder) => {
     const totalSkuOrderedA = rowA?.poItems?.reduce((total: number, product: PurchaseOrderItem) => total + Number(product.orderQty * product.sellerCost), 0)
@@ -87,7 +94,42 @@ const Table_By_Orders = ({ filterDataTable, pending }: Props) => {
       compact: true,
       grow: 0,
     },
+    {
+      name: <span className='fw-bolder fs-6'></span>,
+      selector: (row: PurchaseOrder) =>
+        row.isOpen &&
+        row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.inboundQty, 0) <= 0 &&
+        row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) <= 0 ? (
+          <>
+            <i
+              className='fs-3 text-danger las la-trash-alt'
+              style={{ cursor: 'pointer' }}
+              id={`deletePo${row.poId}`}
+              onClick={() =>
+                setshowDeleteModal((prev) => {
+                  return {
+                    ...prev,
+                    show: true,
+                    poId: row.poId,
+                    orderNumber: row.orderNumber,
+                  }
+                })
+              }
+            />
+            <UncontrolledTooltip placement='top' target={`deletePo${row.poId}`} popperClassName='bg-white shadow px-1 pt-1 rounded-2' innerClassName='text-black bg-white p-0'>
+              <p className='fs-6 text-danger m-0 p-0 mb-0'>Delete PO</p>
+            </UncontrolledTooltip>
+          </>
+        ) : (
+          <></>
+        ),
+      sortable: false,
+      center: true,
+      compact: true,
+      grow: 0,
+    },
   ]
+
   return (
     <>
       <DataTable
@@ -100,6 +142,7 @@ const Table_By_Orders = ({ filterDataTable, pending }: Props) => {
         defaultSortFieldId={3}
         defaultSortAsc={false}
       />
+      {showDeleteModal.show && <Confirm_Delete_Po showDeleteModal={showDeleteModal} setshowDeleteModal={setshowDeleteModal} loading={loading} setLoading={setLoading} />}
     </>
   )
 }

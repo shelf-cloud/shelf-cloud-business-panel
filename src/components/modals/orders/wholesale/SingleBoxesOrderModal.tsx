@@ -86,42 +86,6 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
     onSubmit: async (values, { resetForm }) => {
       setloading(true)
 
-      // if (values.isThird == 'false' && selectedFiles.length == 0) {
-      //   setErrorFile(true)
-      //   setloading(false)
-      //   return
-      // }
-      // setErrorFile(false)
-
-      // if (values.type == 'LTL' && palletSelectedFiles.length == 0) {
-      //   setErrorPalletFile(true)
-      //   setloading(false)
-      //   return
-      // }
-      // setErrorPalletFile(false)
-
-      // const docTime = moment().format('DD-MM-YYYY-HH-mm-ss-a')
-
-      // if (values.isThird == 'false') {
-      //   const storageRef = ref(
-      //     storage,
-      //     `shelf-cloud/etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
-      //   )
-      //   await uploadBytes(storageRef, selectedFiles[0]).then((_snapshot) => {
-      //     toast.success('Successfully uploaded Shipping labels!')
-      //   })
-
-      //   if (values.type == 'LTL') {
-      //     const storageRef = ref(
-      //       storage,
-      //       `shelf-cloud/pallet-etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
-      //     )
-      //     await uploadBytes(storageRef, palletSelectedFiles[0]).then((_snapshot) => {
-      //       toast.success('Successfully uploaded Pallet labels!')
-      //     })
-      //   }
-      // }
-
       const response = await axios.post(
         `api/createWholesaleOrderIndividualUnits?region=${state.currentRegion}&businessId=${state.user.businessId}`,
         {
@@ -188,36 +152,6 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
     event.preventDefault()
     validation.handleSubmit()
   }
-
-  // function handleAcceptedFiles(files: any) {
-  //   files.map((file: any) =>
-  //     Object.assign(file, {
-  //       preview: URL.createObjectURL(file),
-  //       formattedSize: formatBytes(file.size),
-  //     })
-  //   )
-  //   setselectedFiles(files)
-  // }
-
-  // function handlePalletAcceptedFiles(files: any) {
-  //   files.map((file: any) =>
-  //     Object.assign(file, {
-  //       preview: URL.createObjectURL(file),
-  //       formattedSize: formatBytes(file.size),
-  //     })
-  //   )
-  //   setPalletSelectedFiles(files)
-  // }
-
-  // function formatBytes(bytes: any, decimals = 2) {
-  //   if (bytes === 0) return '0 Bytes'
-  //   const k = 1024
-  //   const dm = decimals < 0 ? 0 : decimals
-  //   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-
-  //   const i = Math.floor(Math.log(bytes) / Math.log(k))
-  //   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
-  // }
 
   return (
     <Modal

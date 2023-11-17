@@ -13,6 +13,7 @@ import { useRouter } from 'next/router'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import Edit_PO_Ordered_Qty from '@components/modals/purchaseOrders/Edit_PO_Ordered_Qty'
+import Link from 'next/link'
 
 type Props = {
   data: PurchaseOrder
@@ -261,21 +262,23 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
               <h5 className='fw-semibold m-0'>Products</h5>
               {data.isOpen && (
                 <div className='d-flex flex-row justify-content-end gap-3 align-items-center'>
-                  <i
-                    className='las la-edit fs-3 text-primary m-0 p-0'
-                    style={{ cursor: 'pointer' }}
-                    onClick={() =>
-                      setshowEditOrderQty((prev) => {
-                        return {
-                          ...prev,
-                          show: true,
-                          poId: data.poId,
-                          orderNumber: data.orderNumber,
-                          poItems: data.poItems,
-                        }
-                      })
-                    }
-                  />
+                  {data.poItems.length > 0 && (
+                    <i
+                      className='las la-edit fs-3 text-primary m-0 p-0'
+                      style={{ cursor: 'pointer' }}
+                      onClick={() =>
+                        setshowEditOrderQty((prev) => {
+                          return {
+                            ...prev,
+                            show: true,
+                            poId: data.poId,
+                            orderNumber: data.orderNumber,
+                            poItems: data.poItems,
+                          }
+                        })
+                      }
+                    />
+                  )}
                   <i
                     className='fs-3 text-success las la-plus-circle'
                     style={{ cursor: 'pointer' }}
@@ -321,32 +324,40 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                     {data?.poItems?.map((product: PurchaseOrderItem, key) => (
                       <tr key={`${key}-${product.sku}`} className='border-bottom py-2'>
                         <td className='text-center'>
-                          <div
-                            style={{
-                              width: '100%',
-                              maxWidth: '80px',
-                              height: '50px',
-                              margin: '2px 0px',
-                              position: 'relative',
-                            }}>
-                            <img
-                              loading='lazy'
-                              src={
-                                product.image
-                                  ? product.image
-                                  : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-                              }
-                              onError={(e) =>
-                                (e.currentTarget.src =
-                                  'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
-                              }
-                              alt='product Image'
-                              style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
-                            />
-                          </div>
+                          <Link href={`/product/${product.inventoryId}/${product.sku}`} passHref>
+                            <a target='blank' className='text-black'>
+                              <div
+                                style={{
+                                  width: '100%',
+                                  maxWidth: '80px',
+                                  height: '50px',
+                                  margin: '2px 0px',
+                                  position: 'relative',
+                                }}>
+                                <img
+                                  loading='lazy'
+                                  src={
+                                    product.image
+                                      ? product.image
+                                      : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+                                  }
+                                  onError={(e) =>
+                                    (e.currentTarget.src =
+                                      'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
+                                  }
+                                  alt='product Image'
+                                  style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+                                />
+                              </div>
+                            </a>
+                          </Link>
                         </td>
                         <td className='fs-6 fw-semibold'>
-                          {product.title}
+                          <Link href={`/product/${product.inventoryId}/${product.sku}`} passHref>
+                            <a target='blank' className='text-black'>
+                              {product.title}
+                            </a>
+                          </Link>
                           {product.arrivalHistory?.length > 0 && (
                             <>
                               <i className='ri-information-fill ms-2 fs-5 text-warning' id={`tooltipHistory${product.inventoryId}`}></i>
@@ -380,7 +391,9 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                           {product.asin && (
                             <>
                               <br />
-                              <span className='text-muted fs-6 fw-normal'>{product.asin}</span>
+                              <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/exec/obidos/ASIN${product.asin}`} target='blank'>
+                                <span className='fs-6 fw-normal'>{product.asin}</span>
+                              </a>
                             </>
                           )}
                           {product.barcode && (
@@ -390,7 +403,13 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                             </>
                           )}
                         </td>
-                        <td className='fs-6 text-center text-nowrap'>{product.sku}</td>
+                        <td className='fs-6 text-center text-nowrap'>
+                          <Link href={`/product/${product.inventoryId}/${product.sku}`} passHref>
+                            <a target='blank' className='text-black'>
+                              {product.sku}
+                            </a>
+                          </Link>
+                        </td>
                         <td className='fs-6 text-center text-nowrap'>{FormatCurrency(state.currentRegion, product.orderQty * product.sellerCost)}</td>
                         <td className='fs-6 text-center text-nowrap'>{FormatIntNumber(state.currentRegion, product.orderQty)}</td>
                         <td className='fs-6 text-center text-nowrap'>{FormatIntNumber(state.currentRegion, product.inboundQty)}</td>

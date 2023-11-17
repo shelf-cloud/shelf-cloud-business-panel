@@ -58,6 +58,7 @@ const initialState = {
   modalAddSkuToPurchaseOrder: {},
   showAddSkuToPurchaseOrder: false,
   showCreatePoFromFile: false,
+  showCreatePoManually: false,
 }
 
 const useInitialState = () => {
@@ -301,6 +302,12 @@ const useInitialState = () => {
       showCreatePoFromFile: payload,
     })
   }
+  const setShowCreatePoManually = (payload) => {
+    setState({
+      ...state,
+      showCreatePoManually: payload,
+    })
+  }
 
   return {
     state,
@@ -329,6 +336,7 @@ const useInitialState = () => {
     setModalAddSkuToPurchaseOrder,
     setShowAddSkuToPurchaseOrder,
     setShowCreatePoFromFile,
+    setShowCreatePoManually,
   }
 }
 

@@ -2,7 +2,24 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
-import { Button, Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap'
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Container,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  Nav,
+  NavItem,
+  NavLink,
+  Row,
+  TabContent,
+  TabPane,
+  UncontrolledButtonDropdown,
+} from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import By_Suppliers from '@components/purchase_orders/By_Suppliers'
@@ -14,6 +31,7 @@ import Create_Receiving_From_Po from '@components/modals/purchaseOrders/Create_R
 import { useRouter } from 'next/router'
 import Add_Sku_To_Purchase_Order from '@components/modals/purchaseOrders/Add_Sku_To_Purchase_Order'
 import Add_Po_With_File from '@components/modals/purchaseOrders/Add_Po_With_File'
+import Add_Po_Manually from '@components/modals/purchaseOrders/Add_Po_Manually'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -42,7 +60,7 @@ type Props = {
 const PurchaseOrders = ({ session }: Props) => {
   const router = useRouter()
   const { status, organizeBy }: any = router.query
-  const { state, setShowCreateReceivingFromPo, setReceivingFromPo, setShowCreatePoFromFile }: any = useContext(AppContext)
+  const { state, setShowCreateReceivingFromPo, setReceivingFromPo, setShowCreatePoFromFile, setShowCreatePoManually }: any = useContext(AppContext)
   const title = `Purchase Orders | ${session?.user?.name}`
   const orderNumberStart = `${session?.user?.name.substring(0, 3).toUpperCase()}-`
   const [activeTab, setActiveTab] = useState(organizeBy)
@@ -69,7 +87,7 @@ const PurchaseOrders = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <Container fluid>
-            <BreadCrumb title='Create Receiving Order' pageTitle='Receiving' />
+            <BreadCrumb title='Purchase Orders' pageTitle='Inbound' />
             <Row>
               <Col lg={12}>
                 <Card>
@@ -140,10 +158,20 @@ const PurchaseOrders = ({ session }: Props) => {
                             Hide Completed
                           </Button>
                         )}
-                        <Button className='btn fs-6 py-1 px-3' color='primary' onClick={() => setShowCreatePoFromFile(true)}>
+                        <UncontrolledButtonDropdown>
+                          <DropdownToggle className='btn btn-primary fs-6 py-1 px-3' caret>
+                            <i className='mdi mdi-plus-circle label-icon align-middle fs-5 me-2' />
+                            Add Purchase Order
+                          </DropdownToggle>
+                          <DropdownMenu>
+                            <DropdownItem onClick={() => setShowCreatePoFromFile(true)}>From File</DropdownItem>
+                            <DropdownItem onClick={() => setShowCreatePoManually(true)}>Manually</DropdownItem>
+                          </DropdownMenu>
+                        </UncontrolledButtonDropdown>
+                        {/* <Button className='btn fs-6 py-1 px-3' color='primary' onClick={() => setShowCreatePoFromFile(true)}>
                           <i className='mdi mdi-plus-circle label-icon align-middle fs-5 me-2' />
                           Add Purchase Order
-                        </Button>
+                        </Button> */}
                         <Button
                           color='primary'
                           className='fs-6 py-1 px-3'
@@ -173,6 +201,7 @@ const PurchaseOrders = ({ session }: Props) => {
       {state.showAddPaymentToPo && <Add_Payment_Modal />}
       {state.showCreateReceivingFromPo && <Create_Receiving_From_Po orderNumberStart={orderNumberStart} />}
       {state.showCreatePoFromFile && <Add_Po_With_File orderNumberStart={orderNumberStart} />}
+      {state.showCreatePoManually && <Add_Po_Manually orderNumberStart={orderNumberStart} />}
     </div>
   )
 }

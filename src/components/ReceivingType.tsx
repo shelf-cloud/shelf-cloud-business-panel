@@ -65,8 +65,8 @@ const ReceivingType = ({ data, apiMutateLink }: Props) => {
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
       <Row>
-        <Col xl={4}>
-          <Col xl={12}>
+        <Col md={4}>
+          <Col md={12}>
             <Card>
               <CardHeader className='py-3'>
                 <h5 className='fw-semibold m-0'>Receiving Details</h5>
@@ -99,7 +99,7 @@ const ReceivingType = ({ data, apiMutateLink }: Props) => {
               </CardBody>
             </Card>
           </Col>
-          <Col xl={12}>
+          <Col md={12}>
             <Card>
               <CardHeader className='py-3'>
                 <h5 className='fw-semibold m-0'>Charge Details</h5>
@@ -172,7 +172,7 @@ const ReceivingType = ({ data, apiMutateLink }: Props) => {
             </Card>
           </Col>
           {data.extraComment != '' && (
-            <Col xl={12}>
+            <Col md={12}>
               <Card>
                 <CardHeader className='py-3'>
                   <h5 className='fw-semibold m-0'>Order Comment</h5>
@@ -184,7 +184,7 @@ const ReceivingType = ({ data, apiMutateLink }: Props) => {
             </Col>
           )}
         </Col>
-        <Col xl={8}>
+        <Col md={8}>
           <Card>
             <CardHeader className='py-3'>
               <h5 className='fw-semibold m-0'>Products</h5>
@@ -195,6 +195,7 @@ const ReceivingType = ({ data, apiMutateLink }: Props) => {
                   <thead className='table-light'>
                     <tr>
                       <th scope='col'>Title</th>
+                      {data.orderItems.some((product: ShipmentOrderItem) => (product.poNumber ? true : false)) && <th scope='col'>PO</th>}
                       <th scope='col'>Sku</th>
                       <th className='text-center' scope='col'>
                         Qty
@@ -207,9 +208,10 @@ const ReceivingType = ({ data, apiMutateLink }: Props) => {
                   </thead>
                   <tbody>
                     {data.orderItems.map((product: ShipmentOrderItem, key) => (
-                      <tr key={key} className='border-bottom py-2'>
-                        <td className='w-50 fs-6 fw-semibold'>{product.name || ''}</td>
-                        <td className='fs-6 text-muted'>{product.sku}</td>
+                      <tr key={key} className='border-bottom py-2 w-100 fs-6'>
+                        <td className='fw-semibold'>{product.name || ''}</td>
+                        {product.poNumber && <td className='fw-normal text-nowrap'>{product.poNumber}</td>}
+                        <td className='text-muted'>{product.sku}</td>
                         <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.quantity))}</td>
                         <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.qtyReceived))}</td>
                         <td>
@@ -237,6 +239,7 @@ const ReceivingType = ({ data, apiMutateLink }: Props) => {
                     ))}
                     <tr>
                       <td className='text-start fs-5 fw-bold text-nowrap'>Total QTY</td>
+                      {data.orderItems.some((product: ShipmentOrderItem) => (product.poNumber ? true : false)) && <td></td>}
                       <td></td>
                       <td className='text-center fw-semibold fs-5 text-primary'>{FormatIntNumber(state.currentRegion, Number(data.totalItems))}</td>
                       <td className='text-center fw-semibold fs-5 text-primary'>{FormatIntNumber(state.currentRegion, Number(data.totalReceivedItems))}</td>
@@ -249,7 +252,7 @@ const ReceivingType = ({ data, apiMutateLink }: Props) => {
         </Col>
       </Row>
       <Row>
-        <Col xl={12} className='d-flex justify-content-end align-items-end'>
+        <Col md={12} className='d-flex justify-content-end align-items-end'>
           <Card className='m-0'>
             {data.proofOfShipped != '' && data.proofOfShipped != null && (
               <a href={data.proofOfShipped} target='blank'>

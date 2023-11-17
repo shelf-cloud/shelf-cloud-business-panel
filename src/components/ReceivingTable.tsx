@@ -27,7 +27,7 @@ const ReceivingTable = ({ tableData, pending, apiMutateLink }: Props) => {
     {
       name: <span className='fw-bolder fs-13'>Order Number</span>,
       selector: (row: OrderRowType) => {
-        return <div style={{ margin: '0px', fontWeight: '800' }}>{row.orderNumber}</div>
+        return <div className='m-0 p-0 fw-bold'>{row.orderNumber}</div>
       },
       sortable: true,
       wrap: true,
@@ -64,15 +64,18 @@ const ReceivingTable = ({ tableData, pending, apiMutateLink }: Props) => {
       //   compact: true,
     },
     {
-      name: <span className='fw-bolder fs-13'>Type</span>,
-      selector: (row: OrderRowType) => row.orderType,
+      name: <span className='fw-bolder fs-13'>Origin</span>,
+      selector: (row: OrderRowType) => {
+        return (
+          <div className='text-center m-0 p-0 text-nowrap'>
+            {row.isReceivingFromPo ? <span className='text-primary'>Purchase Orders</span> : <span className='text-info'>Manual Receiving</span>}
+          </div>
+        )
+      },
       sortable: true,
       wrap: true,
       grow: 1.2,
       center: true,
-      style: {
-        color: '#727578',
-      },
     },
     {
       name: <span className='fw-bolder fs-13'>Order Date</span>,

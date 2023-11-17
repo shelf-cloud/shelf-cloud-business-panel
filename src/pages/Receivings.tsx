@@ -112,7 +112,7 @@ const Receiving = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <Container fluid>
-            <BreadCrumb title='Receivings' pageTitle='Receiving' />
+            <BreadCrumb title='Receivings' pageTitle='Inbound' />
             <Row>
               <Col lg={12}>
                 <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-3 flex-md-row justify-content-md-between align-items-md-center'>

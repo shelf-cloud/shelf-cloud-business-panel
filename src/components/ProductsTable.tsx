@@ -288,7 +288,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
               </DropdownItem> */}
               <DropdownItem className='edit-item-btn'>
                 <Link href={`/product/${row.inventoryId}/${row.SKU}`} passHref>
-                  <a className=''>
+                  <a>
                     <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
                     <span className='fs-6 fw-normal text-dark'>View Details</span>
                   </a>

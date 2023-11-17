@@ -3,8 +3,9 @@
 import { wholesaleProductRow } from '@typings'
 import React, { useContext } from 'react'
 import AppContext from '@context/AppContext'
-import { Button, FormFeedback, Input, UncontrolledTooltip } from 'reactstrap'
+import { Button, FormFeedback, UncontrolledTooltip } from 'reactstrap'
 import DataTable from 'react-data-table-component'
+import { DebounceInput } from 'react-debounce-input'
 
 type Props = {
   allData: wholesaleProductRow[]
@@ -249,8 +250,10 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
       selector: (row: wholesaleProductRow) => {
         return (
           <>
-            <Input
+            <DebounceInput
               type='number'
+              minLength={1}
+              debounceTimeout={300}
               disabled={(row?.quantity.quantity || 0) <= 0 ? true : false}
               className='form-control'
               placeholder={(row?.quantity.quantity || 0) <= 0 ? 'Not Enough Qty' : 'Order Qty...'}
@@ -295,14 +298,7 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
 
   return (
     <>
-      <DataTable
-        columns={columns}
-        data={filteredItems}
-        progressPending={pending}
-        striped={true}
-        defaultSortFieldId={2}
-        conditionalRowStyles={conditionalRowStyles}
-      />
+      <DataTable columns={columns} data={filteredItems} progressPending={pending} striped={true} defaultSortFieldId={2} conditionalRowStyles={conditionalRowStyles} />
     </>
   )
 }

@@ -55,6 +55,7 @@ export interface PurchaseOrderBySuppliers {
 }
 export interface PurchaseOrderBySkus {
     sku: string
+    inventoryId?: number
     title: string
     asin: string
     barcode: string

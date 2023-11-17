@@ -3,8 +3,9 @@
 import { wholesaleProductRow } from '@typings'
 import React, { useContext } from 'react'
 import AppContext from '@context/AppContext'
-import { Button, Input } from 'reactstrap'
+import { Button } from 'reactstrap'
 import DataTable from 'react-data-table-component'
+import { DebounceInput } from 'react-debounce-input'
 
 type Props = {
   allData: wholesaleProductRow[]
@@ -154,10 +155,12 @@ const ReceivingOrderTable = ({ allData, filteredItems, setAllData, pending }: Pr
       selector: (row: wholesaleProductRow) => {
         return (
           <>
-            <Input
+            <DebounceInput
               type='number'
+              minLength={1}
+              debounceTimeout={300}
               className='form-control'
-              placeholder={'Order Qty...'}
+              placeholder={'Receiving Qty...'}
               value={row.orderQty}
               onChange={(e) => {
                 if (Number(e.target.value) < 0) {
@@ -169,7 +172,6 @@ const ReceivingOrderTable = ({ allData, filteredItems, setAllData, pending }: Pr
                 }
               }}
               min={0}
-              max={row.maxOrderQty}
             />
             <span className='fs-6 fw-normal text-danger' id={`Error-${row.sku}`} style={{ display: 'none' }}>
               Quantity Error
