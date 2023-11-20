@@ -97,7 +97,7 @@ const Table_By_Orders = ({ filterDataTable, pending }: Props) => {
     {
       name: <span className='fw-bolder fs-6'></span>,
       selector: (row: PurchaseOrder) =>
-        row.isOpen &&
+        row.isOpen && row.poPayments.length <= 0 &&
         row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.inboundQty, 0) <= 0 &&
         row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) <= 0 ? (
           <>
