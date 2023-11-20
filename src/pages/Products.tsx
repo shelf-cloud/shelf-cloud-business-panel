@@ -6,7 +6,7 @@ import { ProductRowType, Product } from '@typings'
 import axios from 'axios'
 import Head from 'next/head'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Col, Container, Input, Row } from 'reactstrap'
+import { Button, Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Input, Row, UncontrolledButtonDropdown } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import useSWR, { useSWRConfig } from 'swr'
@@ -47,12 +47,11 @@ const Products = ({ session }: Props) => {
   const [allData, setAllData] = useState<ProductRowType[]>([])
   const [tableData, setTableData] = useState<ProductRowType[]>([])
   const [serachValue, setSerachValue] = useState('')
+  const [selectedRows, setSelectedRows] = useState<ProductRowType[]>([])
+  const [toggledClearRows, setToggleClearRows] = useState(false)
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(
-    state.user.businessId ? `/api/getBusinessInventory?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
-    fetcher
-  )
+  const { data } = useSWR(state.user.businessId ? `/api/getBusinessInventory?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher)
 
   useEffect(() => {
     if (data?.error) {
@@ -131,39 +130,50 @@ const Products = ({ session }: Props) => {
   }
 
   const changeProductState = async (inventoryId: number, businessId: number, sku: string) => {
-    confirm(`Are you sure you want to set Inactive: ${sku}`)
+    const confirmationResponse = confirm(`Are you sure you want to set Inactive: ${sku}`)
 
-    const response = await axios.post(`/api/setStateToProduct?region=${state.currentRegion}&businessId=${businessId}&inventoryId=${inventoryId}`, {
-      newState: 0,
-      sku,
-    })
-    if (!response.data.error) {
-      toast.success(response.data.msg)
-      mutate(`/api/getBusinessInventory?region=${state.currentRegion}&businessId=${state.user.businessId}`)
-    } else {
-      toast.error(response.data.msg)
+    if (confirmationResponse) {
+      const response = await axios.post(`/api/setStateToProduct?region=${state.currentRegion}&businessId=${businessId}&inventoryId=${inventoryId}`, {
+        newState: 0,
+        sku,
+      })
+      if (!response.data.error) {
+        toast.success(response.data.msg)
+        mutate(`/api/getBusinessInventory?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+      } else {
+        toast.error(response.data.msg)
+      }
     }
+  }
+
+  const changeSelectedProductsState = async () => {
+    if (selectedRows.length <= 0) return
+
+    const confirmationResponse = confirm(`Are you sure you want to set Inactive Selected Products?`)
+
+    if (confirmationResponse) {
+      const response = await axios.post(`/api/products/setStateToSelectedProducts?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+        newState: 0,
+        selectedRows,
+      })
+      if (!response.data.error) {
+        setToggleClearRows(!toggledClearRows)
+        setSelectedRows([])
+        toast.success(response.data.msg)
+        mutate(`/api/getBusinessInventory?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+      } else {
+        toast.error(response.data.msg)
+      }
+    }
+  }
+  const clearAllSelectedRows = () => {
+    setToggleClearRows(!toggledClearRows)
+    setSelectedRows([])
   }
 
   const csvData = useMemo(() => {
     const data: any[] = [
-      [
-        'Title',
-        'SKU',
-        'AISN',
-        'FNSKU',
-        'Barcode',
-        'Quantity',
-        'Weight',
-        'Length',
-        'Width',
-        'Height',
-        'Box Weight',
-        'Box Length',
-        'Box Width',
-        'Box Height',
-        'Box Quantity',
-      ],
+      ['Title', 'SKU', 'AISN', 'FNSKU', 'Barcode', 'Quantity', 'Weight', 'Length', 'Width', 'Height', 'Box Weight', 'Box Length', 'Box Width', 'Box Height', 'Box Quantity'],
     ]
 
     allData.forEach((item) =>
@@ -202,19 +212,35 @@ const Products = ({ session }: Props) => {
             <Row>
               <Col lg={12}>
                 <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-3 flex-md-row justify-content-md-between align-items-md-center'>
-                  <div className='w-auto d-flex flex-row align-items-center justify-content-between gap-4'>
+                  <div className='w-auto d-flex flex-row align-items-center justify-content-between gap-3'>
                     <Link href={'/AddProduct'} passHref>
-                      <Button color='primary' className='fs-6 py-1 p3-1'>
+                      <Button color='primary' className='fs-6 py-1'>
                         <i className='mdi mdi-plus-circle label-icon align-middle fs-5 me-2' />
                         Add Product
                       </Button>
                     </Link>
                     <CSVLink data={csvData} style={{ width: 'fit-content' }} filename={`${session?.user?.name.toUpperCase()}-Products.csv`}>
-                      <Button color='primary' className='fs-6 py-1 p3-1'>
+                      <Button color='primary' className='fs-6 py-1'>
                         <i className='mdi mdi-arrow-down-bold label-icon align-middle fs-5 me-2' />
                         Export
                       </Button>
                     </CSVLink>
+                    {selectedRows.length > 0 && (
+                      <UncontrolledButtonDropdown>
+                        <DropdownToggle className='btn btn-info fs-6 py-2' caret>
+                          {`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''} Selected`}
+                        </DropdownToggle>
+                        <DropdownMenu>
+                          <DropdownItem className='text-nowrap text-danger' onClick={changeSelectedProductsState}>
+                            <i className='mdi mdi-eye-off label-icon align-middle fs-5 me-2' />
+                            Set Inactive
+                          </DropdownItem>
+                          <DropdownItem className='text-nowrap text-muted' onClick={clearAllSelectedRows}>
+                            Clear Selection
+                          </DropdownItem>
+                        </DropdownMenu>
+                      </UncontrolledButtonDropdown>
+                    )}
                   </div>
                   <div className='col-sm-12 col-md-3'>
                     <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
@@ -228,10 +254,7 @@ const Products = ({ session }: Props) => {
                           onChange={filterByText}
                         />
                         <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
-                        <span
-                          className='d-flex align-items-center justify-content-center input_background_white'
-                          style={{ cursor: 'pointer' }}
-                          onClick={clearSearch}>
+                        <span className='d-flex align-items-center justify-content-center input_background_white' style={{ cursor: 'pointer' }} onClick={clearSearch}>
                           <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
                         </span>
                       </div>
@@ -249,6 +272,8 @@ const Products = ({ session }: Props) => {
                       setMsg={'Set Inactive'}
                       icon={'las la-eye-slash align-middle fs-5 me-2'}
                       activeText={'text-danger'}
+                      setSelectedRows={setSelectedRows}
+                      toggledClearRows={toggledClearRows}
                     />
                   </CardBody>
                 </Card>

@@ -15,9 +15,11 @@ type Props = {
   setMsg: string
   icon: string
   activeText: string
+  setSelectedRows: (selectedRows: ProductRowType[]) => void
+  toggledClearRows: boolean
 }
 
-const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, activeText }: Props) => {
+const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, activeText, setSelectedRows, toggledClearRows }: Props) => {
   const { setModalProductInfo, state }: any = useContext(AppContext)
 
   const loadBarcode = (product: ProductRowType) => {
@@ -75,6 +77,11 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
 
     return 0
   }
+
+  const handleSelectedRows = ({ selectedRows }: { selectedRows: ProductRowType[] }) => {
+    setSelectedRows(selectedRows)
+  }
+
   const columns: any = [
     {
       name: <span className='font-weight-bold fs-13'>Image</span>,
@@ -190,7 +197,6 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
               </>
             )}
           </div>
-          
         )
       },
       sortable: true,
@@ -308,7 +314,27 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
 
   return (
     <>
-      <DataTable columns={columns} data={tableData} progressPending={pending} striped={true} dense defaultSortFieldId={2} />
+      <DataTable
+        columns={columns}
+        data={tableData}
+        progressPending={pending}
+        striped={true}
+        dense
+        defaultSortFieldId={2}
+        selectableRows
+        onSelectedRowsChange={handleSelectedRows}
+        clearSelectedRows={toggledClearRows}
+        pagination={tableData.length > 100 ? true : false}
+        paginationPerPage={50}
+        paginationRowsPerPageOptions={[50, 100, 200, 500]}
+        paginationComponentOptions={{
+          rowsPerPageText: 'Products per page:',
+          rangeSeparatorText: 'of',
+          noRowsPerPage: false,
+          selectAllRowsItem: true,
+          selectAllRowsItemText: 'All',
+        }}
+      />
     </>
   )
 }
