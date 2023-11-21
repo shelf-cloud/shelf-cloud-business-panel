@@ -161,7 +161,7 @@ function CreateReturnModal({ apiMutateLink }: Props) {
                             <option key={0} value={0}>
                               {0}
                             </option>
-                            {Array(item.quantity)
+                            {Array(parseInt(item.quantity))
                               .fill(0)
                               .map((_item: any, index: number) => (
                                 <option key={index + 1} value={index + 1}>
