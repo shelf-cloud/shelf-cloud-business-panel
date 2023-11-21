@@ -12,6 +12,7 @@ import AppContext from '@context/AppContext'
 import useSWR, { useSWRConfig } from 'swr'
 import { toast } from 'react-toastify'
 import router, { useRouter } from 'next/router'
+import { DebounceInput } from 'react-debounce-input'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -37,6 +38,13 @@ type Props = {
   }
 }
 
+declare module 'yup' {
+  // tslint:disable-next-line
+  interface ArraySchema<T> {
+    unique(mapper: (a: T) => T, message?: any): ArraySchema<T>
+  }
+}
+
 const CreateOrder = ({ session }: Props) => {
   const { push } = useRouter()
   const { state }: any = useContext(AppContext)
@@ -53,6 +61,7 @@ const CreateOrder = ({ session }: Props) => {
   const [countries, setcountries] = useState([])
   const [validCountries, setValidCountries] = useState<string[]>([])
   const [creatingOrder, setCreatingOrder] = useState(false)
+  const [autoCompleteAddress, setAutoCompleteAddress] = useState([])
 
   useEffect(() => {
     if (!state.user[state.currentRegion]?.showCreateOrder) {
@@ -115,6 +124,12 @@ const CreateOrder = ({ session }: Props) => {
     ],
   }
 
+  Yup.addMethod(Yup.array, 'unique', function (mapper: any, message: any) {
+    return this.test('unique', message, function (list: any) {
+      return list.length === new Set(list.map(mapper)).size
+    })
+  })
+
   const validationSchema = Yup.object({
     firstName: Yup.string().min(3, 'First Name to short').max(100, 'First Name is to Long').required('Please Enter First Name'),
     lastName: Yup.string().min(3, 'Last Name to short').max(100, 'Last Name is to Long').required('Please Enter Last Name'),
@@ -148,6 +163,7 @@ const CreateOrder = ({ session }: Props) => {
           price: Yup.number().min(0, 'Price must be greater than or equal to 0').required('Required Price'),
         })
       )
+      .unique((values: any) => values.sku, 'Duplicate SKU')
       .required('Must have products'),
   })
 
@@ -188,6 +204,18 @@ const CreateOrder = ({ session }: Props) => {
     setIsPickUpOrder(isPickUpOrder)
   }
 
+  const handleAddressAutoComplete = async (searchText: string) => {
+    if (searchText == '') {
+      setAutoCompleteAddress([])
+      return
+    }
+    searchText = searchText.replace(/ /g, '%20')
+    await axios(
+      `https://api.geoapify.com/v1/geocode/autocomplete?text=${searchText}&apiKey=e7137de1f9144ed8a7d24f041bb6e725&limit=3&lang=${state.currentRegion == 'us' ? 'en' : 'es'}`
+    ).then((res) => {
+      setAutoCompleteAddress(res.data.features)
+    })
+  }
   return (
     <div>
       <Head>
@@ -311,23 +339,61 @@ const CreateOrder = ({ session }: Props) => {
                             </FormGroup>
                           </Col>
                           <Col md={7}>
-                            <FormGroup className='createOrder_inputs'>
+                            <FormGroup className='createOrder_inputs relative'>
                               <Label htmlFor='compnayNameinput' className='form-label mb-0'>
                                 *Address 1
                               </Label>
-                              <Input
+                              <DebounceInput
+                                minLength={1}
+                                debounceTimeout={300}
                                 type='text'
                                 className='form-control'
                                 style={{ padding: '0.2rem 0.9rem' }}
                                 placeholder='Address...'
                                 id='adress1'
                                 name='adress1'
-                                onChange={handleChange}
+                                onChange={(e) => {
+                                  handleChange(e)
+                                  handleAddressAutoComplete(e.target.value)
+                                }}
                                 onBlur={handleBlur}
                                 value={values.adress1 || ''}
                                 invalid={touched.adress1 && errors.adress1 ? true : false}
                               />
                               {touched.adress1 && errors.adress1 ? <FormFeedback type='invalid'>{errors.adress1}</FormFeedback> : null}
+                              {autoCompleteAddress?.length > 0 && (
+                                <div className='absolute'>
+                                  <Card>
+                                    <CardBody className='d-flex flex-column gap-3'>
+                                      {autoCompleteAddress?.map((address: any) => (
+                                        <div key={address.id} className='rounded-3'>
+                                          <div className='d-flex justify-content-between align-items-center border-bottom'>
+                                            <div className='d-flex flex-column'>
+                                              <span className='fs-6 fw-semibold'>{address.properties.formatted}</span>
+                                              <span className='fs-6 text-muted'>{`${address.properties.street ? address.properties.street + ', ' : ''}${address.properties.city ? address.properties.city + ', ' : ''}${address.properties.postcode ? address.properties.postcode + ', ' : ''}${address.properties.state ? address.properties.state + ', ' : ''}${address.properties.country ? address.properties.country : ''}`}</span>
+                                            </div>
+                                            <div className='d-flex justify-content-end align-items-center'>
+                                              <Button
+                                                className='btn btn-info btn-sm'
+                                                onClick={() => {
+                                                  values.adress1 = address.properties.address_line1
+                                                  values.adress2 = address.properties.address_line2
+                                                  values.city = address.properties.city
+                                                  values.state = address.properties.state_code ? String(address.properties.state_code).toUpperCase() : address.properties.county
+                                                  values.country = String(address.properties.country_code).toUpperCase()
+                                                  values.zipCode = address.properties.postcode
+                                                  setAutoCompleteAddress([])
+                                                }}>
+                                                Select
+                                              </Button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </CardBody>
+                                  </Card>
+                                </div>
+                              )}
                             </FormGroup>
                             <FormGroup className='createOrder_inputs mt-1'>
                               <Input
@@ -557,12 +623,12 @@ const CreateOrder = ({ session }: Props) => {
                                       <>
                                         {values.products.map((_product, index) => (
                                           <tr key={index}>
-                                            <td>
+                                            <td className='text-center'>
                                               {index > 0 ? (
                                                 <Row className='d-flex flex-row flex-nowrap justify-content-center gap-2 align-items-center mb-0'>
-                                                  <Button
-                                                    type='button'
-                                                    className='btn-icon btn-success'
+                                                  <i
+                                                    className='fs-2 text-success las la-plus-circle m-0 p-0 w-auto'
+                                                    style={{ cursor: 'pointer' }}
                                                     onClick={() =>
                                                       push({
                                                         sku: '',
@@ -570,16 +636,25 @@ const CreateOrder = ({ session }: Props) => {
                                                         qty: 1,
                                                         price: '0',
                                                       })
-                                                    }>
-                                                    <i className='fs-2 las la-plus-circle' />
-                                                  </Button>
-                                                  <Button type='button' className='btn-icon btn-danger' onClick={() => remove(index)}>
-                                                    <i className='fs-2 las la-minus-circle' />
-                                                  </Button>
+                                                    }
+                                                  />
+                                                  <i className='text-danger fs-2 las la-minus-circle m-0 p-0 w-auto' style={{ cursor: 'pointer' }} onClick={() => remove(index)} />
                                                 </Row>
                                               ) : (
-                                                <Row className='d-flex flex-row flex-nowrap justify-content-center align-items-center mb-0'>
-                                                  <Button
+                                                <Row className='d-flex flex-row flex-nowrap justify-content-center gap-0 align-items-center mb-0'>
+                                                  <i
+                                                    className='fs-2 text-success las la-plus-circle m-0 p-0 w-auto'
+                                                    style={{ cursor: 'pointer' }}
+                                                    onClick={() =>
+                                                      push({
+                                                        sku: '',
+                                                        name: '',
+                                                        qty: 1,
+                                                        price: '0',
+                                                      })
+                                                    }
+                                                  />
+                                                  {/* <Button
                                                     type='button'
                                                     className='btn-icon btn-success'
                                                     onClick={() =>
@@ -591,7 +666,7 @@ const CreateOrder = ({ session }: Props) => {
                                                       })
                                                     }>
                                                     <i className='fs-2 las la-plus-circle' />
-                                                  </Button>
+                                                  </Button> */}
                                                 </Row>
                                               )}
                                             </td>
@@ -726,6 +801,7 @@ const CreateOrder = ({ session }: Props) => {
                               </table>
                             </Col>
                           </Row>
+                          {errors.products === 'Duplicate SKU' && <span className='text-danger fs-5 fw-normal'>The list has Duplicate SKUs.</span>}
                           <h5 className='fs-14 mb-0 text-muted'>*You must complete all required fields or you will not be able to create your product.</h5>
                           <Col md={12}>
                             <div className='text-end'>
