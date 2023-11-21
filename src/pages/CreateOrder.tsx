@@ -377,7 +377,6 @@ const CreateOrder = ({ session }: Props) => {
                                                 className='btn btn-info btn-sm'
                                                 onClick={() => {
                                                   values.adress1 = address.properties.address_line1
-                                                  values.adress2 = address.properties.address_line2
                                                   values.city = address.properties.city
                                                   values.state = address.properties.state_code ? String(address.properties.state_code).toUpperCase() : address.properties.county
                                                   values.country = String(address.properties.country_code).toUpperCase()
