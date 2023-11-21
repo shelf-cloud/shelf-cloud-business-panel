@@ -345,7 +345,7 @@ const CreateOrder = ({ session }: Props) => {
                               </Label>
                               <DebounceInput
                                 minLength={1}
-                                debounceTimeout={300}
+                                debounceTimeout={500}
                                 type='text'
                                 className='form-control'
                                 style={{ padding: '0.2rem 0.9rem' }}
