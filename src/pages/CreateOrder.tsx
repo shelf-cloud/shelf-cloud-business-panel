@@ -213,6 +213,7 @@ const CreateOrder = ({ session }: Props) => {
     await axios(
       `https://api.geoapify.com/v1/geocode/autocomplete?text=${searchText}&apiKey=e7137de1f9144ed8a7d24f041bb6e725&limit=3&lang=${state.currentRegion == 'us' ? 'en' : 'es'}`
     ).then((res) => {
+      console.log(res.data.features)
       setAutoCompleteAddress(res.data.features)
     })
   }
@@ -365,12 +366,30 @@ const CreateOrder = ({ session }: Props) => {
                                 <div className='absolute'>
                                   <Card>
                                     <CardBody className='d-flex flex-column gap-3'>
+                                      <div className='rounded-3'>
+                                        <div className='d-flex justify-content-between align-items-center'>
+                                          <span className='fs-6 text-muted'></span>
+                                          <div className='d-flex justify-content-end align-items-center'>
+                                            <Button
+                                              className='btn btn-light btn-sm fs-7'
+                                              onClick={() => {
+                                                setAutoCompleteAddress([])
+                                              }}>
+                                              Ignore Autocomplete
+                                            </Button>
+                                          </div>
+                                        </div>
+                                      </div>
                                       {autoCompleteAddress?.map((address: any) => (
                                         <div key={address.id} className='rounded-3'>
                                           <div className='d-flex justify-content-between align-items-center border-bottom'>
                                             <div className='d-flex flex-column'>
                                               <span className='fs-6 fw-semibold'>{address.properties.formatted}</span>
-                                              <span className='fs-6 text-muted'>{`${address.properties.street ? address.properties.street + ', ' : ''}${address.properties.city ? address.properties.city + ', ' : ''}${address.properties.postcode ? address.properties.postcode + ', ' : ''}${address.properties.state ? address.properties.state + ', ' : ''}${address.properties.country ? address.properties.country : ''}`}</span>
+                                              <span className='fs-6 text-muted'>{`${address.properties.street ? address.properties.street + ', ' : ''}${
+                                                address.properties.city ? address.properties.city + ', ' : ''
+                                              }${address.properties.postcode ? address.properties.postcode + ', ' : ''}${
+                                                address.properties.state ? address.properties.state + ', ' : ''
+                                              }${address.properties.country ? address.properties.country : ''}`}</span>
                                             </div>
                                             <div className='d-flex justify-content-end align-items-center'>
                                               <Button
@@ -378,7 +397,7 @@ const CreateOrder = ({ session }: Props) => {
                                                 onClick={() => {
                                                   values.adress1 = address.properties.address_line1
                                                   values.city = address.properties.city
-                                                  values.state = address.properties.state_code ? String(address.properties.state_code).toUpperCase() : address.properties.county
+                                                  values.state = state.currentRegion == 'us' ? address.properties.state_code ? String(address.properties.state_code).toUpperCase() : address.properties.county : address.properties.state ? String(address.properties.state) : address.properties.county
                                                   values.country = String(address.properties.country_code).toUpperCase()
                                                   values.zipCode = address.properties.postcode
                                                   setAutoCompleteAddress([])
