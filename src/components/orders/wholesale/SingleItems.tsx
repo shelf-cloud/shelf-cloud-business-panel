@@ -15,7 +15,7 @@ const SingleItems = ({ completeData, pending, orderNumberStart }: Props) => {
   const { state, setSingleBoxesOrderModal }: any = useContext(AppContext)
   const [allData, setAllData] = useState<wholesaleProductRow[]>([])
   const [serachValue, setSerachValue] = useState('')
-  const [error, setError] = useState(false)
+  const [error, setError] = useState([])
 
   useEffect(() => {
     if (!pending) {
@@ -53,12 +53,11 @@ const SingleItems = ({ completeData, pending, orderNumberStart }: Props) => {
             disabled={
               orderProducts.reduce((total: number, item: wholesaleProductRow) => total + Number(item.totalToShip), 0) <
                 state?.user?.[state.currentRegion]?.minQtyForIndividualUnitsOrder ||
-              error ||
+              error.length > 0 ||
               orderProducts.some((item: wholesaleProductRow) => Number(item.orderQty) > Number(item.quantity.quantity))
                 ? true
                 : false
             }
-            // disabled={error}
             className='fs-6 btn'
             color='primary'
             onClick={() => setSingleBoxesOrderModal(!state.showSingleBoxesOrderModal)}>
@@ -87,7 +86,7 @@ const SingleItems = ({ completeData, pending, orderNumberStart }: Props) => {
           Clear
         </Button>
       </form>
-      <WholeSaleTableSingleItem allData={allData} filteredItems={filteredItems} setAllData={setAllData} pending={pending} error={error} setError={setError} />
+      <WholeSaleTableSingleItem allData={allData} filteredItems={filteredItems} setAllData={setAllData} pending={pending} setError={setError} />
       {state.showSingleBoxesOrderModal && <SingleBoxesOrderModal orderNumberStart={orderNumberStart} orderProducts={orderProducts} />}
     </>
   )

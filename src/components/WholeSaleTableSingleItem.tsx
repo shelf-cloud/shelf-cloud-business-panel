@@ -12,8 +12,7 @@ type Props = {
   filteredItems: wholesaleProductRow[]
   setAllData: (allData: wholesaleProductRow[]) => void
   pending: boolean
-  error: boolean
-  setError: (state: boolean) => void
+  setError: (skus: any) => void
 }
 
 const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending, setError }: Props) => {
@@ -101,7 +100,7 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
       classNames: ['bg-danger bg-opacity-25'],
     },
     {
-      when: (row: wholesaleProductRow) => Number(row.orderQty) > (row?.quantity.quantity || 0),
+      when: (row: wholesaleProductRow) => Number(row.orderQty) > (row?.quantity.quantity || 0) || parseInt(row.orderQty) > row.maxOrderQty!,
       classNames: ['bg-danger bg-opacity-25'],
     },
   ]
@@ -223,13 +222,13 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
                 color='info'
                 outline
                 className='btn btn-ghost-info'
-                id={`reservedQty${cell.sku.replace(/[\s\.]/g, '')}`}
+                id={`reservedSingleQty${cell.sku.replace(/[\s\.]/g, '')}`}
                 onClick={() => {
                   setModalProductInfo(cell.quantity.inventoryId, state.user.businessId, cell.quantity.sku)
                 }}>
                 {cell.quantity.quantity}
               </Button>
-              <UncontrolledTooltip placement='right' target={`reservedQty${cell.sku.replace(/[\s\.]/g, '')}`}>
+              <UncontrolledTooltip placement='right' target={`reservedSingleQty${cell.sku.replace(/[\s\.]/g, '')}`}>
                 {`Reserved ${cell.quantity.reserved}`}
               </UncontrolledTooltip>
             </>
@@ -259,13 +258,13 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
               placeholder={(row?.quantity.quantity || 0) <= 0 ? 'Not Enough Qty' : 'Order Qty...'}
               value={row.orderQty}
               onChange={(e) => {
-                if (Number(e.target.value) < 0 || !Number.isInteger(Number(e.target.value))) {
+                if (Number(e.target.value) < 0 || !Number.isInteger(Number(e.target.value)) || parseInt(e.target.value) > row.maxOrderQty!) {
                   document.getElementById(`ErrorSingle-${row.sku}`)!.style.display = 'block'
-                  setError(true)
+                  setError((prev: string[]) => [...prev, row.sku])
                   handleOrderQty(e.target.value, row.sku)
                 } else {
                   document.getElementById(`ErrorSingle-${row.sku}`)!.style.display = 'none'
-                  setError(false)
+                  setError((prev: string[]) => prev.filter((sku) => sku !== row.sku))
                   handleOrderQty(e.target.value, row.sku)
                 }
               }}

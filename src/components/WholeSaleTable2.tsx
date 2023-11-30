@@ -12,8 +12,7 @@ type Props = {
   filteredItems: wholesaleProductRow[]
   setAllData: (allData: wholesaleProductRow[]) => void
   pending: boolean
-  error: boolean
-  setError: (state: boolean) => void
+  setError: (skus: any) => void
 }
 
 const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError }: Props) => {
@@ -101,7 +100,7 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError 
       classNames: ['bg-success bg-opacity-25'],
     },
     {
-      when: (row: wholesaleProductRow) => Number(row.orderQty) < 0 || !Number.isInteger(Number(row.orderQty)),
+      when: (row: wholesaleProductRow) => Number(row.orderQty) < 0 || !Number.isInteger(Number(row.orderQty)) || parseInt(row.orderQty) > row.maxOrderQty!,
       classNames: ['bg-danger bg-opacity-25'],
     },
   ]
@@ -223,13 +222,13 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError 
                 color='info'
                 outline
                 className='btn btn-ghost-info'
-                id={`reservedQty${cell.sku.replace(/[\s\.]/g, '')}`}
+                id={`reservedMasterQty${cell.sku.replace(/[\s\.]/g, '')}`}
                 onClick={() => {
                   setModalProductInfo(cell.quantity.inventoryId, state.user.businessId, cell.quantity.sku)
                 }}>
                 {cell.quantity.quantity}
               </Button>
-              <UncontrolledTooltip placement='right' target={`reservedQty${cell.sku.replace(/[\s\.]/g, '')}`}>
+              <UncontrolledTooltip placement='right' target={`reservedMasterQty${cell.sku.replace(/[\s\.]/g, '')}`}>
                 {`Reserved ${cell.quantity.reserved}`}
               </UncontrolledTooltip>
             </>
@@ -261,25 +260,25 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError 
               type='number'
               minLength={1}
               debounceTimeout={300}
-              disabled={(row?.maxOrderQty || 0) <= 0 ? true : false}
+              disabled={row?.maxOrderQty! <= 0 ? true : false}
               className='form-control'
-              placeholder={(row?.maxOrderQty || 0) <= 0 ? 'Not Enough Qty' : 'Order Qty...'}
+              placeholder={row?.maxOrderQty! <= 0 ? 'Not Enough Qty' : 'Order Qty...'}
               value={row.orderQty}
               onChange={(e) => {
-                if (Number(e.target.value) < 0 || !Number.isInteger(Number(e.target.value))) {
+                if (Number(e.target.value) < 0 || !Number.isInteger(Number(e.target.value)) || parseInt(e.target.value) > row.maxOrderQty!) {
                   document.getElementById(`Error-${row.sku}`)!.style.display = 'block'
-                  setError(true)
+                  setError((prev: string[]) => [...prev, row.sku])
                   handleOrderQty(e.target.value, row.sku, row?.qtyBox || 0)
                 } else {
                   document.getElementById(`Error-${row.sku}`)!.style.display = 'none'
-                  setError(false)
+                  setError((prev: string[]) => prev.filter((sku) => sku !== row.sku))
                   handleOrderQty(e.target.value, row.sku, row?.qtyBox || 0)
                 }
               }}
               max={row.maxOrderQty}
-              invalid={Number(row.orderQty) > (row?.maxOrderQty || 0) ? true : false}
+              invalid={Number(row.orderQty) > row.maxOrderQty! ? true : false}
             />
-            {Number(row.orderQty) > (row?.maxOrderQty || 0) ? (
+            {Number(row.orderQty) > row.maxOrderQty! ? (
               <FormFeedback className='text-start' type='invalid'>
                 Not enough Master Boxes!
               </FormFeedback>
@@ -305,14 +304,7 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError 
 
   return (
     <>
-      <DataTable
-        columns={columns}
-        data={filteredItems}
-        progressPending={pending}
-        striped={true}
-        defaultSortFieldId={2}
-        conditionalRowStyles={conditionalRowStyles}
-      />
+      <DataTable columns={columns} data={filteredItems} progressPending={pending} striped={true} defaultSortFieldId={2} conditionalRowStyles={conditionalRowStyles} />
     </>
   )
 }
