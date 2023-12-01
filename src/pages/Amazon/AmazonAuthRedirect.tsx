@@ -27,7 +27,7 @@ type Props = {
   }
 }
 
-const AmazonAuthRedirect = () => {
+const AmazonAuthRedirect = ({}: Props) => {
   const router = useRouter()
   const { selling_partner_id, mws_auth_token, spapi_oauth_code } = router.query
   return (
