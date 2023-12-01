@@ -51,8 +51,8 @@ const ProfileDropdown = () => {
               <i className='mdi mdi-tools text-muted fs-16 align-middle me-1'></i>
               <span className='align-middle'>Account Settings</span>
             </DropdownItem>
-            <div className='dropdown-divider'></div>
-            <DropdownItem className='px-2 py-1'>
+            {/* <div className='dropdown-divider'></div> */}
+            {/* <DropdownItem className='px-2 py-1'>
               {state.currentRegion == 'us' ? (
                 <Link
                   href={`https://sellercentral.amazon.com/apps/authorize/consent?application_id=amzn1.sp.solution.aaa88ff9-b04b-4cc6-88d0-1029e4e271e0&version=beta&redirect_uri=http://localhost:3001/Amazon/AmazonAuthRedirect`}
@@ -80,8 +80,8 @@ const ProfileDropdown = () => {
                   </Link>
                 </div>
               )}
-            </DropdownItem>
-            {state.user.hasShelfCloudEu == true && state.user.hasShelfCloudUsa == true && (
+            </DropdownItem> */}
+            {/* {state.user.hasShelfCloudEu == true && state.user.hasShelfCloudUsa == true && (
               <DropdownItem className='d-flex justify-content-start align-items-center' onClick={state.currentRegion == 'us' ? () => setRegion('eu') : () => setRegion('us')}>
                 <div className=' align-middle me-1' style={{ width: '15px', height: '15px' }}>
                   {state.currentRegion == 'eu' ? (
@@ -92,7 +92,7 @@ const ProfileDropdown = () => {
                 </div>
                 <div className='align-middle'>Change Location</div>
               </DropdownItem>
-            )}
+            )} */}
             <div className='dropdown-divider'></div>
             <DropdownItem onClick={() => router.push('/ContactUs')}>
               <i className='mdi mdi-email-fast text-muted fs-16 align-middle me-1'></i>
