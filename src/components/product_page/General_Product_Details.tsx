@@ -70,7 +70,6 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
 
   const HandleAddProduct = (event: any) => {
     event.preventDefault()
-    console.log(validation.errors.category)
     validation.handleSubmit()
   }
 

@@ -1,10 +1,11 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
 // import Animation from '@components/Common/Animation'
 import { OrderRowType, ShipmentOrderItem } from '@typings'
 import AppContext from '@context/AppContext'
 import TooltipComponent from './constants/Tooltip'
 import { FormatCurrency } from '@lib/FormatNumbers'
+import CancelManualOrderConfirmationModal from './modals/orders/shipments/CancelManualOrderConfirmationModal'
 // import dynamic from 'next/dynamic';
 // const Animation = dynamic(() => import('@components/Common/Animation'), {
 //     ssr: false
@@ -12,10 +13,17 @@ import { FormatCurrency } from '@lib/FormatNumbers'
 
 type Props = {
   data: OrderRowType
+  apiMutateLink?: string
 }
 
-const ShipmentType = ({ data }: Props) => {
+const ShipmentType = ({ data, apiMutateLink }: Props) => {
   const { state, setModalCreateReturnInfo }: any = useContext(AppContext)
+  const [showDeleteModal, setshowDeleteModal] = useState({
+    show: false,
+    orderId: 0,
+    orderNumber: '',
+    goFlowOrderId: 0,
+  })
   const OrderId = data.orderId?.replace(/[\s\.]/g, '')
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
@@ -170,9 +178,26 @@ const ShipmentType = ({ data }: Props) => {
                     Create Return
                   </Button>
                 )}
+            {state.currentRegion == 'us' && data.orderStatus == 'awating' && data.goFlowOrderId != 0 && data.trackingNumber == '' && (
+              <Button
+                color='danger'
+                className='btn-label'
+                onClick={() =>
+                  setshowDeleteModal({
+                    show: true,
+                    orderId: data.id,
+                    orderNumber: data.orderNumber,
+                    goFlowOrderId: data.goFlowOrderId,
+                  })
+                }>
+                <i className='las la-trash-alt label-icon align-middle fs-3 me-2' />
+                Cancel Order
+              </Button>
+            )}
           </Card>
         </Col>
       </Row>
+      {showDeleteModal.show && <CancelManualOrderConfirmationModal showDeleteModal={showDeleteModal} setshowDeleteModal={setshowDeleteModal} apiMutateLink={apiMutateLink}/>}
     </div>
   )
 }
