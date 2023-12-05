@@ -232,7 +232,7 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
             </Col>
             <Col md={6}>
               <Label htmlFor='category' className='form-label'>
-                *Category
+                Category
               </Label>
               <Select_Product_Details
                 inventoryId={inventoryId}
