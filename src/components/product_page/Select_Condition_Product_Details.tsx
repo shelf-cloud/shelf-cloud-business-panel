@@ -3,9 +3,15 @@ import React, { useEffect, useRef, useState } from 'react'
 type Props = {
   selected: string
   handleSelection: (value: string) => void
+  errorMessage?: string
 }
 
-const Select_Condition_Product_Details = ({ selected, handleSelection }: Props) => {
+const styles = {
+  noError: { backgroundColor: 'white', border: '1px solid #E1E3E5', cursor: 'pointer' },
+  error: { backgroundColor: 'white', border: '1px solid #f06548', cursor: 'pointer' },
+}
+
+const Select_Condition_Product_Details = ({ selected, handleSelection, errorMessage }: Props) => {
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const [selectedOption, setSelectedOption] = useState(selected)
   const filterByDates = useRef<HTMLDivElement | null>(null)
@@ -24,7 +30,7 @@ const Select_Condition_Product_Details = ({ selected, handleSelection }: Props) 
 
   return (
     <div ref={filterByDates} className='dropdown mb-3'>
-      <div className='btn-group w-100' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5', cursor: 'pointer' }} onClick={() => setOpenDatesMenu(!openDatesMenu)}>
+      <div className='btn-group w-100' style={errorMessage ? styles.error : styles.noError} onClick={() => setOpenDatesMenu(!openDatesMenu)}>
         <button type='button' disabled className='btn btn-light btn-sm form-control fs-6 w-100 text-start' style={{ backgroundColor: 'white', opacity: '100%' }}>
           {selected == '' ? `Select...` : selected}
         </button>

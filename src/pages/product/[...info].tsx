@@ -56,8 +56,8 @@ const Product_Page_Layout = ({}: Props) => {
   const [loading, setloading] = useState(true)
   const [productDetails, setProductDetails] = useState<ProductDetails | null>()
 
-  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(info![0] ? `/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${info![0]}&businessId=${state.user.businessId}` : null, fetcher)
+  const fetcher = async (endPoint: string) => await axios(endPoint).then((res) => res.data)
+  const { data } = useSWR(info![0] && state.user.businessId ? `/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${info![0]}&businessId=${state.user.businessId}` : null, fetcher)
 
   useEffect(() => {
     if (data?.error) {
@@ -69,6 +69,7 @@ const Product_Page_Layout = ({}: Props) => {
       setloading(false)
     }
   }, [data])
+  
   const [activeTab, setActiveTab] = useState('1')
   const tabChange = (tab: any) => {
     if (activeTab !== tab) setActiveTab(tab)

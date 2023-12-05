@@ -14,9 +14,15 @@ type Props = {
   selectionInfo: string[]
   selected: string
   handleSelection: (type: string, value: string) => void
+  errorMessage?: string
 }
 
-const Select_Product_Details = ({ inventoryId, type, addEndpoint, selectionInfo, selected, handleSelection }: Props) => {
+const styles = {
+  noError: { backgroundColor: 'white', border: '1px solid #E1E3E5', cursor: 'pointer' },
+  error: { backgroundColor: 'white', border: '1px solid #f06548', cursor: 'pointer' },
+}
+
+const Select_Product_Details = ({ inventoryId, type, addEndpoint, selectionInfo, selected, handleSelection, errorMessage }: Props) => {
   const { mutate } = useSWRConfig()
   const { state }: any = useContext(AppContext)
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
@@ -62,7 +68,7 @@ const Select_Product_Details = ({ inventoryId, type, addEndpoint, selectionInfo,
 
   return (
     <div ref={filterByDates} className='dropdown mb-3'>
-      <div className='btn-group w-100' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5', cursor: 'pointer' }} onClick={() => setOpenDatesMenu(!openDatesMenu)}>
+      <div className='btn-group w-100' style={errorMessage ? styles.error : styles.noError} onClick={() => setOpenDatesMenu(!openDatesMenu)}>
         <button type='button' disabled className='btn btn-light btn-sm form-control fs-6 w-100 text-start' style={{ backgroundColor: 'white', opacity: '100%' }}>
           {selected == '' ? `Select...` : selected}
         </button>
@@ -77,20 +83,27 @@ const Select_Product_Details = ({ inventoryId, type, addEndpoint, selectionInfo,
           <span className='visually-hidden'>Toggle Dropdown</span>
         </button>
       </div>
+      {errorMessage ? (
+        <p className='text-danger p-0' style={{ fontSize: '0.875em', marginTop: '0.25rem' }}>
+          {errorMessage}
+        </p>
+      ) : null}
       <div className={'dropdown-menu w-100 pt-3 px-4' + (openDatesMenu ? ' show' : '')}>
         <div className='d-flex flex-column justify-content-start'>
-          {selectionInfo?.map((option) => (
-            <p
-              key={option}
-              className={'m-0 mb-3 ' + (selectedOption == `${option}` ? 'fw-bold' : '')}
-              style={{ cursor: 'pointer' }}
-              onClick={() => {
-                setSelectedOption(`${option}`)
-                handleSelection(type, `${option}`)
-              }}>
-              {option}
-            </p>
-          ))}
+          <div style={{maxHeight: '25vh', overflowY: 'scroll'}}>
+            {selectionInfo?.map((option) => (
+              <p
+                key={option}
+                className={'m-0 mb-2 ' + (selectedOption == `${option}` ? 'fw-bold' : '')}
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  setSelectedOption(`${option}`)
+                  handleSelection(type, `${option}`)
+                }}>
+                {`- ${option}`}
+              </p>
+            ))}
+          </div>
           <hr className='dropdown-divider' />
           <div className='d-flex flex-column justify-content-start'>
             <div>

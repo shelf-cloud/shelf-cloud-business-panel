@@ -37,10 +37,10 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
       sku,
       image,
       title,
-      description,
-      brand,
-      category,
-      supplier,
+      description: description ?? '',
+      brand: brand ?? '',
+      category: category ?? '',
+      supplier: supplier ?? '',
       itemCondition: itemCondition ?? 'New',
       note,
     },
@@ -49,7 +49,7 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
       image: Yup.string().url(),
       description: Yup.string().max(300, 'Title is to Long'),
       brand: Yup.string().max(200, 'Title is to Long').required('Please enter product brand'),
-      category: Yup.string().max(100, 'Title is to Long').required('Please enter product category'),
+      category: Yup.string().max(100, 'Title is to Long'),
       supplier: Yup.string().max(200, 'Title is to Long').required('Please enter product supplier'),
       itemCondition: Yup.string().max(10, 'Title is to Long').required('Please select product condition'),
       note: Yup.string().max(300, 'Title is to Long'),
@@ -70,6 +70,7 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
 
   const HandleAddProduct = (event: any) => {
     event.preventDefault()
+    console.log(validation.errors.category)
     validation.handleSubmit()
   }
 
@@ -79,10 +80,10 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
       sku,
       image,
       title,
-      description,
-      brand,
-      category,
-      supplier,
+      description: description ?? '',
+      brand: brand ?? '',
+      category: category ?? '',
+      supplier: supplier ?? '',
       itemCondition: itemCondition ?? 'New',
       note,
     })
@@ -196,7 +197,7 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
                   bsSize='sm'
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
-                  value={validation.values.description || ''}
+                  value={validation.values.description ?? ''}
                   invalid={validation.touched.description && validation.errors.description ? true : false}
                 />
                 {validation.touched.description && validation.errors.description ? <FormFeedback type='invalid'>{validation.errors.description}</FormFeedback> : null}
@@ -204,48 +205,55 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
             </Col>
             <Col md={6}>
               <Label htmlFor='brand' className='form-label'>
-                Brand
+                *Brand
               </Label>
               <Select_Product_Details
                 inventoryId={inventoryId}
                 type={'brand'}
                 addEndpoint={'addNewBrand'}
                 selectionInfo={brands}
-                selected={validation.values.brand || ''}
+                selected={validation.values.brand ?? ''}
                 handleSelection={handleSelection}
+                errorMessage={validation.errors.brand}
               />
             </Col>
             <Col md={6}>
               <Label htmlFor='supplier' className='form-label'>
-                Supplier
+                *Supplier
               </Label>
               <Select_Product_Details
                 inventoryId={inventoryId}
                 type={'supplier'}
                 addEndpoint={'addNewSupplier'}
                 selectionInfo={suppliers}
-                selected={validation.values.supplier || ''}
+                selected={validation.values.supplier ?? ''}
                 handleSelection={handleSelection}
+                errorMessage={validation.errors.supplier}
               />
             </Col>
             <Col md={6}>
               <Label htmlFor='category' className='form-label'>
-                Category
+                *Category
               </Label>
               <Select_Product_Details
                 inventoryId={inventoryId}
                 type={'category'}
                 addEndpoint={'addNewCategory'}
                 selectionInfo={categories}
-                selected={validation.values.category || ''}
+                selected={validation.values.category ?? ''}
                 handleSelection={handleSelection}
+                errorMessage={validation.errors.category}
               />
             </Col>
             <Col md={6}>
               <Label htmlFor='itemCondition' className='form-label'>
-                Condition
+                *Condition
               </Label>
-              <Select_Condition_Product_Details selected={validation.values.itemCondition || ''} handleSelection={handleConditionSelection} />
+              <Select_Condition_Product_Details
+                selected={validation.values.itemCondition ?? ''}
+                handleSelection={handleConditionSelection}
+                errorMessage={validation.errors.itemCondition}
+              />
             </Col>
             <Col md={12}>
               <FormGroup className='mb-3'>

@@ -64,7 +64,7 @@ const initialState = {
 const useInitialState = () => {
   const [state, setState] = useState(initialState)
 
-  const fetcher = (endPoint) => axios(endPoint).then((res) => res.data)
+  const fetcher = async (endPoint) => await axios(endPoint).then((res) => res.data)
   const { data, error } = useSWR('/api/getuser', fetcher)
 
   useEffect(() => {
