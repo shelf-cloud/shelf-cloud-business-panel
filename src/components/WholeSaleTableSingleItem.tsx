@@ -100,7 +100,7 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
       classNames: ['bg-danger bg-opacity-25'],
     },
     {
-      when: (row: wholesaleProductRow) => Number(row.orderQty) > (row?.quantity.quantity || 0) || parseInt(row.orderQty) > row.maxOrderQty!,
+      when: (row: wholesaleProductRow) => Number(row.orderQty) > (row?.quantity.quantity || 0),
       classNames: ['bg-danger bg-opacity-25'],
     },
   ]
@@ -258,7 +258,7 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
               placeholder={(row?.quantity.quantity || 0) <= 0 ? 'Not Enough Qty' : 'Order Qty...'}
               value={row.orderQty}
               onChange={(e) => {
-                if (Number(e.target.value) < 0 || !Number.isInteger(Number(e.target.value)) || parseInt(e.target.value) > row.maxOrderQty!) {
+                if (Number(e.target.value) < 0 || !Number.isInteger(Number(e.target.value)) || parseInt(e.target.value) > row?.quantity.quantity) {
                   document.getElementById(`ErrorSingle-${row.sku}`)!.style.display = 'block'
                   setError((prev: string[]) => [...prev, row.sku])
                   handleOrderQty(e.target.value, row.sku)
