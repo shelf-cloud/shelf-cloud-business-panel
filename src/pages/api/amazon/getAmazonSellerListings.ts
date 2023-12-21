@@ -2,16 +2,17 @@ import { NextApiHandler } from 'next'
 import { getSession } from '@auth/client'
 import axios from 'axios'
 
-const getProductDetails: NextApiHandler = async (request, response) => {
+const getAmazonSellerListings: NextApiHandler = async (request, response) => {
     const session = await getSession({ req: request })
-    if (session == null) {
-        response.status(401).end()
 
+    if (session == null) {
+        response.status(401).end('Session not found')
         return
     }
 
-    axios(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/getProductDetails.php?inventoryId=${request.query.inventoryId}&businessId=${request.query.businessId}`)
-        .then(({ data }) => {
+    axios
+        .get(`${process.env.SHELFCLOUD_SERVER_URL}/amazon/listings/getAmazonSellerListings/${request.query.region}/${request.query.businessId}`)
+        .then(async ({ data }) => {
             response.json(data)
         })
         .catch((error) => {
@@ -20,7 +21,7 @@ const getProductDetails: NextApiHandler = async (request, response) => {
                 // that falls out of the range of 2xx
                 response.json({
                     error: true,
-                    message: `Error API Integration, please try again later.`,
+                    message: `Error Amazon API Integration ${error.response.data.error_description}, please try again later.`,
                 })
             } else if (error.request) {
                 // The request was made but no response was received
@@ -35,7 +36,7 @@ const getProductDetails: NextApiHandler = async (request, response) => {
                     message: error.message,
                 })
             }
-        });
+        })
 }
 
-export default getProductDetails
+export default getAmazonSellerListings

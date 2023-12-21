@@ -17,6 +17,14 @@ type Props = {
   identifiers: Identifier[]
 }
 
+const IDENTIFIERS_TYPES = {
+  EAN: { value: 'EAN', label: 'EAN', options: { modified: true, delete: true } },
+  Barcode: { value: 'Barcode', label: 'Barcode', options: { modified: true, delete: true } },
+  WalmartCode: { value: 'WalmartCode', label: 'Walmart Code', options: { modified: true, delete: true } },
+  Other: { value: 'Other', label: 'Other', options: { modified: true, delete: true } },
+  'Amazon Mapped': { value: 'Amazon Mapped', label: 'Amazon Mapped', options: { modified: false, delete: false } },
+}
+
 const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, identifiers }: Props) => {
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
@@ -196,6 +204,7 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
                                   <FormGroup className='createOrder_inputs'>
                                     <Input
                                       type='select'
+                                      disabled={!IDENTIFIERS_TYPES[values.identifiers[index].type as keyof typeof IDENTIFIERS_TYPES].options.modified}
                                       className='form-select text-center align-middle fs-6'
                                       style={{
                                         padding: '0.2rem 0.9rem',
@@ -208,10 +217,15 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
                                       value={values.identifiers[index].type || ''}
                                       invalid={meta.touched && meta.error ? true : false}>
                                       <option value={''}>Select Type...</option>
-                                      <option value={'EAN'}>EAN</option>
+                                      {Object.entries(IDENTIFIERS_TYPES).map(([_type, option]) => (
+                                        <option key={option.value} value={option.value}>
+                                          {option.label}
+                                        </option>
+                                      ))}
+                                      {/* <option value={'EAN'}>EAN</option>
                                       <option value={'Barcode'}>Barcode</option>
                                       <option value={'WalmartCode'}>Walmart Code</option>
-                                      <option value={'Other'}>Other</option>
+                                      <option value={'Other'}>Other</option> */}
                                     </Input>
                                     {meta.touched && meta.error ? <FormFeedback type='invalid'>{meta.error}</FormFeedback> : null}
                                   </FormGroup>
@@ -225,6 +239,7 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
                                     <Input
                                       type='text'
                                       className='form-control align-middle fs-6'
+                                      disabled={!IDENTIFIERS_TYPES[values.identifiers[index].type as keyof typeof IDENTIFIERS_TYPES].options.modified}
                                       style={{
                                         padding: '0.2rem 0.9rem',
                                       }}
@@ -243,7 +258,9 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
                             </td>
                             <td className='align-middle'>
                               <div className='d-flex flex-row flex-nowrap justify-content-center gap-2 align-items-center mb-0 h-100'>
-                                <i className='align-middle text-danger fs-2 las la-trash-alt' style={{ cursor: 'pointer' }} onClick={() => remove(index)} />
+                                {IDENTIFIERS_TYPES[values.identifiers[index].type as keyof typeof IDENTIFIERS_TYPES].options.delete && (
+                                  <i className='align-middle text-danger fs-2 las la-trash-alt' style={{ cursor: 'pointer' }} onClick={() => remove(index)} />
+                                )}
                               </div>
                             </td>
                           </tr>

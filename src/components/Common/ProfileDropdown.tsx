@@ -8,6 +8,7 @@ import flag_of_europe from '@assets/images/flag_of_europe.png'
 import flag_of_usa from '@assets/images/flag_of_usa.png'
 import { useRouter } from 'next/router'
 import AppContext from '@context/AppContext'
+import AmazonAuthButton from '@components/amazon/AmazonAuthButton'
 
 const ProfileDropdown = () => {
   const { data: session } = useSession()
@@ -51,36 +52,11 @@ const ProfileDropdown = () => {
               <i className='mdi mdi-tools text-muted fs-16 align-middle me-1'></i>
               <span className='align-middle'>Account Settings</span>
             </DropdownItem>
-            {/* <div className='dropdown-divider'></div> */}
-            {/* <DropdownItem className='px-2 py-1'>
-              {state.currentRegion == 'us' ? (
-                <Link
-                  href={`https://sellercentral.amazon.com/apps/authorize/consent?application_id=amzn1.sp.solution.aaa88ff9-b04b-4cc6-88d0-1029e4e271e0&version=beta&redirect_uri=http://localhost:3001/Amazon/AmazonAuthRedirect`}
-                  passHref>
-                  <a target='blank'>Connect to Amazon</a>
-                </Link>
-              ) : (
-                <div className='bg-light px-2 py-2 rounded shadow'>
-                  <img
-                    src='https://onixventuregroup.goflow.com/images/channels/amazon.svg'
-                    alt='Amazon Image'
-                    style={{
-                      width: '20px',
-                      height: '20px',
-                      objectFit: 'contain',
-                    }}
-                    className='me-1'
-                  />
-                  <Link
-                    href={`https://sellercentral-europe.amazon.com/apps/authorize/consent?application_id=amzn1.sp.solution.aaa88ff9-b04b-4cc6-88d0-1029e4e271e0&version=beta&redirect_uri=http://localhost:3001/Amazon/AmazonAuthRedirect`}
-                    passHref>
-                    <a target='blank' className='text-black'>
-                      Connect Amazon
-                    </a>
-                  </Link>
-                </div>
-              )}
-            </DropdownItem> */}
+            {state.user[state.currentRegion]?.showAmazonTab && !state.user[state.currentRegion]?.amazonConnected &&(
+              <DropdownItem className='px-2 py-2'>
+                <AmazonAuthButton />
+              </DropdownItem>
+            )}
             {state.user.hasShelfCloudEu == true && state.user.hasShelfCloudUsa == true && (
               <DropdownItem className='d-flex justify-content-start align-items-center' onClick={state.currentRegion == 'us' ? () => setRegion('eu') : () => setRegion('us')}>
                 <div className=' align-middle me-1' style={{ width: '15px', height: '15px' }}>

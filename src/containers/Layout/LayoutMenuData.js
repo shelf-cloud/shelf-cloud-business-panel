@@ -8,6 +8,7 @@ const Navdata = () => {
   const [isShipments, setIsShipments] = useState(false)
   const [isReceiving, setIsReceiving] = useState(false)
   const [isBilling, setIsBilling] = useState(false)
+  const [isAmazon, setIsAmazon] = useState(false)
 
   const [iscurrentState, setIscurrentState] = useState('Dashboard')
 
@@ -43,15 +44,14 @@ const Navdata = () => {
     if (iscurrentState !== 'Billing') {
       setIsBilling(false)
     }
-  }, [iscurrentState, isDashboard, isWarehouse, isShipments, isReceiving, isBilling])
+    if (iscurrentState !== 'Amazon') {
+      setIsAmazon(false)
+    }
+  }, [iscurrentState, isDashboard, isWarehouse, isShipments, isReceiving, isBilling, isAmazon])
 
   useEffect(() => {}, [state.user])
 
   const menuItems = [
-    // {
-    //   label: 'Menu',
-    //   isHeader: true,
-    // },
     {
       id: 'dashboard',
       label: 'Dashboard',
@@ -214,6 +214,30 @@ const Navdata = () => {
       label: 'Purchase Orders',
       link: '/purchaseOrders?status=pending&organizeBy=suppliers',
       parentId: 'receiving',
+    })
+  }
+
+  if (state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected) {
+    menuItems.splice(3, 0, {
+      id: 'amazon',
+      label: 'Amazon',
+      icon: 'ri-amazon-fill',
+      link: '#',
+      stateVariables: isAmazon,
+      click: function (e) {
+        e.preventDefault()
+        setIsAmazon(!isAmazon)
+        setIscurrentState('Amazon')
+        updateIconSidebar(e)
+      },
+      subItems: [
+        {
+          id: 'listings',
+          label: 'Amazon Listings',
+          link: '/amazon/Listings',
+          parentId: 'amazon',
+        },
+      ],
     })
   }
 
