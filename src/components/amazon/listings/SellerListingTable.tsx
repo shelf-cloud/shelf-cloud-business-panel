@@ -37,6 +37,21 @@ const SellerListingTable = ({ tableData, pending }: Props) => {
     return 0
   }
 
+  const isMappedSort = (rowA: Listing, rowB: Listing) => {
+    const a = rowA.shelfcloud_sku ? 1 : 0
+    const b = rowB.shelfcloud_sku ? 1 : 0
+
+    if (a > b) {
+      return 1
+    }
+
+    if (b > a) {
+      return -1
+    }
+
+    return 0
+  }
+
   const columns: any = [
     {
       name: <span className='font-weight-bold fs-13'>Image</span>,
@@ -147,7 +162,7 @@ const SellerListingTable = ({ tableData, pending }: Props) => {
       name: <span className='font-weight-bold fs-13'>Amazon Qty</span>,
       selector: (row: Listing) => row.afn_warehouse_quantity,
       center: true,
-      sortable: false,
+      sortable: true,
       compact: true,
       grow: 0,
     },
@@ -155,7 +170,7 @@ const SellerListingTable = ({ tableData, pending }: Props) => {
       name: <span className='font-weight-bold fs-13'>Reserved</span>,
       selector: (row: Listing) => row.afn_reserved_quantity,
       center: true,
-      sortable: false,
+      sortable: true,
       compact: true,
       grow: 0,
     },
@@ -163,7 +178,7 @@ const SellerListingTable = ({ tableData, pending }: Props) => {
       name: <span className='font-weight-bold fs-13'>Unsellable</span>,
       selector: (row: Listing) => row.afn_unsellable_quantity,
       center: true,
-      sortable: false,
+      sortable: true,
       compact: true,
       grow: 0,
     },
@@ -171,7 +186,7 @@ const SellerListingTable = ({ tableData, pending }: Props) => {
       name: <span className='font-weight-bold fs-13'>Inbound</span>,
       selector: (row: Listing) => row.afn_inbound_receiving_quantity + row.afn_inbound_shipped_quantity + row.afn_inbound_working_quantity,
       center: true,
-      sortable: false,
+      sortable: true,
       compact: true,
       grow: 0,
     },
@@ -227,7 +242,8 @@ const SellerListingTable = ({ tableData, pending }: Props) => {
       },
       wrap: true,
       center: true,
-      sortable: false,
+      sortable: true,
+      sortFunction: isMappedSort,
       compact: false,
       grow: 2.2,
     },

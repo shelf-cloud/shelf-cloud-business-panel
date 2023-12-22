@@ -1,14 +1,16 @@
-import React, { useContext, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { GetServerSideProps } from 'next'
 import { getSession } from '@auth/client'
 import AppContext from '@context/AppContext'
 import Head from 'next/head'
-import { Card, CardBody, Container, Input, Row, Spinner } from 'reactstrap'
+import { Card, CardBody, Container, Row, Spinner } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import axios from 'axios'
 import useSWR from 'swr'
 import { ListingsResponse } from '@typesTs/amazon/listings'
 import SellerListingTable from '@components/amazon/listings/SellerListingTable'
+import { useRouter } from 'next/router'
+import { DebounceInput } from 'react-debounce-input'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -36,6 +38,7 @@ type Props = {
 
 const Listings = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
+  const router = useRouter()
   const title = `Amazon Listings | ${session?.user?.name}`
   const [searchValue, setSearchValue] = useState<any>('')
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
@@ -43,6 +46,14 @@ const Listings = ({ session }: Props) => {
     state.user.businessId ? `/api/amazon/getAmazonSellerListings?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
     fetcher
   )
+
+  useEffect(() => {
+    if (state.user) {
+      if (!state.user[state.currentRegion]?.showAmazonTab && !state.user[state.currentRegion]?.amazonConnected) {
+        router.push('/')
+      }
+    }
+  }, [router, state])
 
   const filterDataTable = useMemo(() => {
     if (!data || data?.error) {
@@ -53,9 +64,19 @@ const Listings = ({ session }: Props) => {
       return data?.listings
     }
 
-    // if (searchValue !== '') {
-    //   return newDataTable
-    // }
+    if (searchValue !== '') {
+      const newDataTable = data?.listings.filter(
+        (item) =>
+          item.sku.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item.asin.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item.product_name.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item.brand?.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item.fnsku.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item.condition.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item.shelfcloud_sku?.toLowerCase().includes(searchValue.toLowerCase())
+      )
+      return newDataTable
+    }
   }, [data, searchValue])
 
   return (
@@ -71,17 +92,16 @@ const Listings = ({ session }: Props) => {
               <div className='col-sm-12 col-md-3'>
                 <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
                   <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
-                    <Input
+                    <DebounceInput
                       type='text'
+                      minLength={3}
+                      debounceTimeout={300}
                       className='form-control input_background_white'
                       placeholder='Search...'
                       id='search-options'
                       value={searchValue}
                       onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
-                      onChange={(e) => {
-                        e.preventDefault()
-                        setSearchValue(e.target.value)
-                      }}
+                      onChange={(e) => setSearchValue(e.target.value)}
                     />
                     <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
                     <span
