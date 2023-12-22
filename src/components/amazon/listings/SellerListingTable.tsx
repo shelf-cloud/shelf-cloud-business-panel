@@ -122,7 +122,8 @@ const SellerListingTable = ({ tableData, pending }: Props) => {
         return (
           <div>
             <p className='m-0 fs-7'>
-              <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/exec/obidos/ASIN${row.asin}`} target='blank'>
+              {/* <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/exec/obidos/ASIN${row.asin}`} target='blank'> */}
+              <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank'>
                 {row.asin}
               </a>
             </p>

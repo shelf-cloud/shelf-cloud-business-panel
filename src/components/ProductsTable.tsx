@@ -155,7 +155,8 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
         return (
           <div>
             <p style={{ margin: '0px' }}>
-              <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/exec/obidos/ASIN${row.ASIN}`} target='blank'>
+              {/* <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/exec/obidos/ASIN${row.ASIN}`} target='blank'> */}
+              <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank'>
                 {row.ASIN}
               </a>
             </p>
