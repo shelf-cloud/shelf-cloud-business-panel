@@ -234,7 +234,7 @@ const Navdata = () => {
         {
           id: 'listings',
           label: 'Amazon Listings',
-          link: '/amazon/Listings',
+          link: '/amazon-sellers/listings',
           parentId: 'amazon',
         },
       ],
