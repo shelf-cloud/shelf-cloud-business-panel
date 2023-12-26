@@ -160,7 +160,7 @@ const SellerListingTable = ({ tableData, pending }: Props) => {
       grow: 0,
     },
     {
-      name: <span className='font-weight-bold fs-13'>Amazon Qty</span>,
+      name: <span className='font-weight-bold fs-13'>Fulfillable</span>,
       selector: (row: Listing) => row.afn_warehouse_quantity,
       center: true,
       sortable: true,
