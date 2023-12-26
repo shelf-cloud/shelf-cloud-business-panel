@@ -3,14 +3,17 @@ import { GetServerSideProps } from 'next'
 import { getSession } from '@auth/client'
 import AppContext from '@context/AppContext'
 import Head from 'next/head'
-import { Card, CardBody, Container, Row, Spinner } from 'reactstrap'
+import { Button, Card, CardBody, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, Spinner, UncontrolledButtonDropdown } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import axios from 'axios'
-import useSWR from 'swr'
-import { ListingsResponse } from '@typesTs/amazon/listings'
+import useSWR, { useSWRConfig } from 'swr'
+import { Listing, ListingsResponse } from '@typesTs/amazon/listings'
 import SellerListingTable from '@components/amazon/listings/SellerListingTable'
 import { useRouter } from 'next/router'
 import { DebounceInput } from 'react-debounce-input'
+import FilterListings from '@components/ui/filterListings'
+import { toast } from 'react-toastify'
+import { CSVLink } from 'react-csv'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -39,8 +42,16 @@ type Props = {
 const Listings = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
+  const { mutate } = useSWRConfig()
   const title = `Amazon Listings | ${session?.user?.name}`
   const [searchValue, setSearchValue] = useState<any>('')
+  const [selectedRows, setSelectedRows] = useState<Listing[]>([])
+  const [toggledClearRows, setToggleClearRows] = useState(false)
+  const [filters, setfilters] = useState({
+    showHidden: 0,
+    condition: 'All',
+    mapped: 'All',
+  })
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data }: { data?: ListingsResponse } = useSWR(
     state.user.businessId ? `/api/amazon/getAmazonSellerListings?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
@@ -61,23 +72,91 @@ const Listings = ({ session }: Props) => {
     }
 
     if (searchValue === '') {
-      return data?.listings
+      return data?.listings.filter(
+        (item) =>
+          (filters.showHidden === 0 ? item.show === 1 : true) &&
+          (filters.condition === 'All' ? true : item.condition.toLowerCase().includes(filters.condition.toLowerCase())) &&
+          (filters.mapped === 'All' ? true : filters.mapped === 'Mapped' ? item.shelfcloud_sku : !item.shelfcloud_sku)
+      )
     }
 
     if (searchValue !== '') {
       const newDataTable = data?.listings.filter(
         (item) =>
-          item.sku.toLowerCase().includes(searchValue.toLowerCase()) ||
-          item.asin.toLowerCase().includes(searchValue.toLowerCase()) ||
-          item.product_name.toLowerCase().includes(searchValue.toLowerCase()) ||
-          item.brand?.toLowerCase().includes(searchValue.toLowerCase()) ||
-          item.fnsku.toLowerCase().includes(searchValue.toLowerCase()) ||
-          item.condition.toLowerCase().includes(searchValue.toLowerCase()) ||
-          item.shelfcloud_sku?.toLowerCase().includes(searchValue.toLowerCase())
+          (filters.showHidden === 0 ? item.show === 1 : true) &&
+          (filters.condition === 'All' ? true : item.condition.toLowerCase().includes(filters.condition.toLowerCase())) &&
+          (item.sku.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.asin.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.product_name.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.brand?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.fnsku.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.shelfcloud_sku?.toLowerCase().includes(searchValue.toLowerCase()))
       )
       return newDataTable
     }
-  }, [data, searchValue])
+  }, [data, searchValue, filters])
+
+  const clearAllSelectedRows = () => {
+    setToggleClearRows(!toggledClearRows)
+    setSelectedRows([])
+  }
+
+  const setSelectedRowstoHidden = async () => {
+    if (selectedRows.length === 0) return
+
+    const response = await axios.post(`/api/amazon/setSelectedRowsHidden?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      Listings: selectedRows,
+    })
+
+    if (!response.data.error) {
+      clearAllSelectedRows()
+      toast.success(response.data.message)
+      mutate(`/api/amazon/getAmazonSellerListings?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+    } else {
+      toast.error(response.data.message)
+    }
+  }
+
+  const setSelectedRowstoVisible = async () => {
+    if (selectedRows.length === 0) return
+
+    const response = await axios.post(`/api/amazon/setSelectedRowsVisible?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      Listings: selectedRows,
+    })
+
+    if (!response.data.error) {
+      clearAllSelectedRows()
+      toast.success(response.data.message)
+      mutate(`/api/amazon/getAmazonSellerListings?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+    } else {
+      toast.error(response.data.message)
+    }
+  }
+
+  const csvData = useMemo(() => {
+    const fileData: any[] = [
+      ['Title', 'SKU', 'AISN', 'FNSKU', 'Brand', 'Condition', 'Fulfillment Channel', 'Fulfillable', 'Reserved', 'Unsellable', 'inbound', 'ShelfCloud Mapped'],
+    ]
+
+    data?.listings.forEach((item: Listing) =>
+      fileData.push([
+        item?.product_name,
+        item?.sku,
+        item?.asin,
+        item?.fnsku,
+        item?.brand,
+        item?.condition,
+        'Amazon FBA',
+        item?.afn_fulfillable_quantity,
+        item?.afn_reserved_quantity,
+        item?.afn_unsellable_quantity,
+        item?.afn_inbound_working_quantity + item?.afn_inbound_shipped_quantity + item?.afn_inbound_receiving_quantity,
+        item?.shelfcloud_sku,
+      ])
+    )
+
+    return fileData
+  }, [data])
 
   return (
     <div>
@@ -88,9 +167,58 @@ const Listings = ({ session }: Props) => {
         <div className='page-content'>
           <Container fluid>
             <BreadCrumb title='Amazon Listings' pageTitle='Amazon' />
-            <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-end align-items-md-center'>
-              <div className='col-sm-12 col-md-3'>
-                <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
+            <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-end align-items-md-center px-3'>
+              <div className='app-search d-flex flex-row justify-content-between align-items-center p-0'>
+                <div className='d-flex flex-row justify-content-start align-items-center gap-3'>
+                  <FilterListings filters={filters} setFilters={setfilters} />
+                  <Button
+                    size='sm'
+                    color='info'
+                    onClick={() =>
+                      setfilters((prev) => {
+                        return { ...prev, showHidden: filters.showHidden === 0 ? 1 : 0 }
+                      })
+                    }>
+                    {filters.showHidden === 0 ? (
+                      <>
+                        <i className='mdi mdi-eye label-icon align-middle fs-5 me-2' />
+                        <span className='fs-6'>Show All</span>
+                      </>
+                    ) : (
+                      <>
+                        <i className='mdi mdi-eye-off label-icon align-middle fs-5 me-2' />
+                        <span className='fs-6'>Hide</span>
+                      </>
+                    )}
+                  </Button>
+                  <CSVLink data={csvData} style={{ width: 'fit-content' }} filename={`${session?.user?.name.toUpperCase()}-Amazon-FBA-Listings.csv`}>
+                    <Button color='primary' className='fs-6 py-1'>
+                      <i className='mdi mdi-arrow-down-bold label-icon align-middle fs-5 me-2' />
+                      Export
+                    </Button>
+                  </CSVLink>
+                  {selectedRows.length > 0 && (
+                    <UncontrolledButtonDropdown>
+                      <DropdownToggle className='btn btn-info fs-6 py-2' caret>
+                        {`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''} Selected`}
+                      </DropdownToggle>
+                      <DropdownMenu>
+                        <DropdownItem className='text-nowrap text-primary' onClick={setSelectedRowstoVisible}>
+                          <i className='mdi mdi-eye label-icon align-middle fs-5 me-2' />
+                          Set as Visible
+                        </DropdownItem>
+                        <DropdownItem className='text-nowrap text-danger' onClick={setSelectedRowstoHidden}>
+                          <i className='mdi mdi-eye-off label-icon align-middle fs-5 me-2' />
+                          Set as Hidden
+                        </DropdownItem>
+                        <DropdownItem className='text-nowrap fs-6 text-end' onClick={clearAllSelectedRows}>
+                          Clear Selection
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </UncontrolledButtonDropdown>
+                  )}
+                </div>
+                <div className='col-sm-12 col-md-3'>
                   <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                     <DebounceInput
                       type='text'
@@ -128,7 +256,7 @@ const Listings = ({ session }: Props) => {
                 ) : (
                   <div>
                     <div>
-                      <SellerListingTable tableData={filterDataTable || []} pending={data ? false : true} />
+                      <SellerListingTable tableData={filterDataTable || []} pending={data ? false : true} setSelectedRows={setSelectedRows} toggledClearRows={toggledClearRows} />
                     </div>
                   </div>
                 )}

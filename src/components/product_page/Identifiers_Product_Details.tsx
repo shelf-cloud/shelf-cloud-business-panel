@@ -18,11 +18,12 @@ type Props = {
 }
 
 const IDENTIFIERS_TYPES = {
+  '': { value: '', label: 'Select Type', options: { modified: true, delete: true } },
   EAN: { value: 'EAN', label: 'EAN', options: { modified: true, delete: true } },
   Barcode: { value: 'Barcode', label: 'Barcode', options: { modified: true, delete: true } },
   WalmartCode: { value: 'WalmartCode', label: 'Walmart Code', options: { modified: true, delete: true } },
   Other: { value: 'Other', label: 'Other', options: { modified: true, delete: true } },
-  'Amazon Mapped': { value: 'Amazon Mapped', label: 'Amazon Mapped', options: { modified: false, delete: false } },
+  FBA: { value: 'FBA', label: 'FBA', options: { modified: false, delete: false } },
 }
 
 const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, identifiers }: Props) => {
@@ -216,16 +217,11 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
                                       onBlur={handleBlur}
                                       value={values.identifiers[index].type || ''}
                                       invalid={meta.touched && meta.error ? true : false}>
-                                      <option value={''}>Select Type...</option>
                                       {Object.entries(IDENTIFIERS_TYPES).map(([_type, option]) => (
                                         <option key={option.value} value={option.value}>
                                           {option.label}
                                         </option>
                                       ))}
-                                      {/* <option value={'EAN'}>EAN</option>
-                                      <option value={'Barcode'}>Barcode</option>
-                                      <option value={'WalmartCode'}>Walmart Code</option>
-                                      <option value={'Other'}>Other</option> */}
                                     </Input>
                                     {meta.touched && meta.error ? <FormFeedback type='invalid'>{meta.error}</FormFeedback> : null}
                                   </FormGroup>

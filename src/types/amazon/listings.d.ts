@@ -28,4 +28,5 @@ export interface Listing {
     shelfcloud_sku_id: null | number;
     image: null | string;
     brand: string | null;
+    show: number;
 }

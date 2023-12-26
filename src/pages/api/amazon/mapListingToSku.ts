@@ -37,7 +37,7 @@ const mapListingToSku: NextApiHandler = async (request, response) => {
                         // that falls out of the range of 2xx
                         response.json({
                             error: true,
-                            message: `Error Amazon API Integration, please try again later.`,
+                            message: `Error Mapping, please try again later.`,
                         })
                     } else if (error.request) {
                         // The request was made but no response was received

@@ -10,9 +10,11 @@ import Link from 'next/link'
 type Props = {
   tableData: Listing[]
   pending: boolean
+  setSelectedRows: (selectedRows: Listing[]) => void
+  toggledClearRows: boolean
 }
 
-const SellerListingTable = ({ tableData, pending }: Props) => {
+const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearRows }: Props) => {
   const { state }: any = useContext(AppContext)
   const [loading, setLoading] = useState(false)
   const [showMappedListingModal, setshowMappedListingModal] = useState({
@@ -50,6 +52,10 @@ const SellerListingTable = ({ tableData, pending }: Props) => {
     }
 
     return 0
+  }
+
+  const handleSelectedRows = ({ selectedRows }: { selectedRows: Listing[] }) => {
+    setSelectedRows(selectedRows)
   }
 
   const columns: any = [
@@ -127,7 +133,7 @@ const SellerListingTable = ({ tableData, pending }: Props) => {
                 {row.asin}
               </a>
             </p>
-            <p className='m-0 fs-7'>{row.fnsku}</p>
+            {row.fnsku && row.asin !== row.fnsku && <p className='m-0 fs-7'>{row.fnsku}</p>}
           </div>
         )
       },
@@ -138,7 +144,14 @@ const SellerListingTable = ({ tableData, pending }: Props) => {
     },
     {
       name: <span className='font-weight-bold fs-13'>Condition</span>,
-      selector: (row: Listing) => <p className='m-0 p-0 fs-7'>{row.condition}</p>,
+      selector: (row: Listing) => {
+        return (
+          <>
+            <p className='m-0 p-0 fs-7 text-center'>{row.condition}</p>
+            {row.show === 0 && <span className='text-info fs-7 text-center opacity-75'>Hidden</span>}
+          </>
+        )
+      },
       sortable: true,
       center: true,
       compact: true,
@@ -161,7 +174,7 @@ const SellerListingTable = ({ tableData, pending }: Props) => {
     },
     {
       name: <span className='font-weight-bold fs-13'>Fulfillable</span>,
-      selector: (row: Listing) => row.afn_warehouse_quantity,
+      selector: (row: Listing) => row.afn_fulfillable_quantity,
       center: true,
       sortable: true,
       compact: true,
@@ -257,6 +270,9 @@ const SellerListingTable = ({ tableData, pending }: Props) => {
         data={tableData}
         progressPending={pending}
         striped={true}
+        selectableRows
+        onSelectedRowsChange={handleSelectedRows}
+        clearSelectedRows={toggledClearRows}
         dense
         defaultSortFieldId={2}
         pagination={tableData.length > 100 ? true : false}

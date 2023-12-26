@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { Input } from 'reactstrap'
+import { DebounceInput } from 'react-debounce-input'
 
 type Props = {
   data: {
@@ -47,7 +47,7 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
     }
 
     if (searchValue !== '') {
-      const newDataTable = data.filter((option) => option.sku.toLowerCase().includes(searchValue.toLowerCase() || option.title.toLowerCase().includes(searchValue.toLowerCase())))
+      const newDataTable = data.filter((option) => option.sku.toLowerCase().includes(searchValue.toLowerCase()) || option.title.toLowerCase().includes(searchValue.toLowerCase()))
       return newDataTable
     }
   }, [data, searchValue])
@@ -73,7 +73,9 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
         <div className='w-100 mb-3'>
           <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
             <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
-              <Input
+              <DebounceInput
+                minLength={3}
+                debounceTimeout={400}
                 type='text'
                 className='form-control input_background_white fs-6 py-0'
                 placeholder='Search...'
@@ -82,7 +84,6 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
                 value={searchValue}
                 onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
                 onChange={(e) => {
-                  e.preventDefault()
                   setSearchValue(e.target.value)
                 }}
               />
