@@ -135,7 +135,7 @@ const Listings = ({ session }: Props) => {
       ['Title', 'SKU', 'AISN', 'FNSKU', 'Brand', 'Condition', 'Fulfillment Channel', 'Fulfillable', 'Reserved', 'Unsellable', 'inbound', 'ShelfCloud Mapped'],
     ]
 
-    data?.listings?.forEach((item: Listing) =>
+    filterDataTable?.forEach((item: Listing) =>
       fileData.push([
         item?.product_name,
         item?.sku,
@@ -153,7 +153,7 @@ const Listings = ({ session }: Props) => {
     )
 
     return fileData
-  }, [data])
+  }, [filterDataTable])
 
   return (
     <div>
