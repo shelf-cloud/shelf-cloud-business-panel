@@ -1,17 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
 import { Input } from 'reactstrap'
 
 type Props = {
-  filters: {
-    showHidden: number
-    condition: string
-    mapped: string
-  }
-  setFilters: (prev: any) => void
+  showHidden: string
+  condition: string
+  mapped: string
 }
 
-const FilterListings = ({ filters, setFilters }: Props) => {
+const FilterListings = ({ showHidden, condition, mapped }: Props) => {
+  const router = useRouter()
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const FilterListingsContainer = useRef<HTMLDivElement | null>(null)
 
@@ -53,12 +52,10 @@ const FilterListings = ({ filters, setFilters }: Props) => {
                 className='border-0 fs-6 w-100'
                 id='type'
                 name='type'
-                value={filters.condition}
+                value={condition}
                 onChange={(e) => {
-                  setFilters((prev: any) => {
-                    return { ...prev, condition: e.target.value }
-                  })
                   setOpenDatesMenu(false)
+                  router.replace(`/amazon-sellers/listings?showHidden=${parseInt(showHidden)}&condition=${e.target.value}&mapped=${mapped}`)
                 }}>
                 <option value='All'>All</option>
                 <option value='New'>New</option>
@@ -74,18 +71,25 @@ const FilterListings = ({ filters, setFilters }: Props) => {
                 className='border-0 fs-6 w-100'
                 id='type'
                 name='type'
-                value={filters.mapped}
+                value={mapped}
                 onChange={(e) => {
-                  setFilters((prev: any) => {
-                    return { ...prev, mapped: e.target.value }
-                  })
                   setOpenDatesMenu(false)
+                  router.replace(`/amazon-sellers/listings?showHidden=${parseInt(showHidden)}&condition=${condition}&mapped=${e.target.value}`)
                 }}>
                 <option value='All'>All</option>
                 <option value='Mapped'>Mapped</option>
                 <option value='Not Mapped'>Not Mapped</option>
               </Input>
             </div>
+            <span
+              style={{ width: '100%', cursor: 'pointer', textAlign: 'right' }}
+              onClick={() => {
+                router.replace(`/amazon-sellers/listings?showHidden=${parseInt(showHidden)}&condition=All&mapped=All`)
+                setOpenDatesMenu(false)
+              }}
+              className='fw-normal mt-2'>
+              Clear All
+            </span>
           </div>
         </div>
       </div>

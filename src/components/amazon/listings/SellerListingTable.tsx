@@ -23,6 +23,8 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
     listingId: 0,
     shelfCloudSku: '',
     shelfCloudSkuId: 0,
+    currentSkuMapped: '',
+    currentSkuIdMapped: 0,
   })
   const caseInsensitiveSort = (rowA: Listing, rowB: Listing) => {
     const a = rowA.sku.toLowerCase()
@@ -221,8 +223,8 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
                         show: true,
                         listingSku: row.sku,
                         listingId: row.id,
-                        shelfCloudSku: row.shelfcloud_sku || '',
-                        shelfCloudSkuId: row.shelfcloud_sku_id || 0,
+                        currentSkuMapped: row.shelfcloud_sku || '',
+                        currentSkuIdMapped: row.shelfcloud_sku_id || 0,
                       }
                     })
                   }

@@ -42,16 +42,12 @@ type Props = {
 const Listings = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
+  const { showHidden, condition, mapped }: any = router.query
   const { mutate } = useSWRConfig()
   const title = `Amazon Listings | ${session?.user?.name}`
   const [searchValue, setSearchValue] = useState<any>('')
   const [selectedRows, setSelectedRows] = useState<Listing[]>([])
   const [toggledClearRows, setToggleClearRows] = useState(false)
-  const [filters, setfilters] = useState({
-    showHidden: 0,
-    condition: 'All',
-    mapped: 'All',
-  })
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data }: { data?: ListingsResponse } = useSWR(
     state.user.businessId ? `/api/amazon/getAmazonSellerListings?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
@@ -74,17 +70,18 @@ const Listings = ({ session }: Props) => {
     if (searchValue === '') {
       return data?.listings.filter(
         (item) =>
-          (filters.showHidden === 0 ? item.show === 1 : true) &&
-          (filters.condition === 'All' ? true : item.condition.toLowerCase().includes(filters.condition.toLowerCase())) &&
-          (filters.mapped === 'All' ? true : filters.mapped === 'Mapped' ? item.shelfcloud_sku : !item.shelfcloud_sku)
+          (parseInt(showHidden) === 0 ? item.show === 1 : true) &&
+          (condition === 'All' ? true : item.condition.toLowerCase().includes(condition.toLowerCase())) &&
+          (mapped === 'All' ? true : mapped === 'Mapped' ? item.shelfcloud_sku : !item.shelfcloud_sku)
       )
     }
 
     if (searchValue !== '') {
       const newDataTable = data?.listings.filter(
         (item) =>
-          (filters.showHidden === 0 ? item.show === 1 : true) &&
-          (filters.condition === 'All' ? true : item.condition.toLowerCase().includes(filters.condition.toLowerCase())) &&
+          (parseInt(showHidden) === 0 ? item.show === 1 : true) &&
+          (condition === 'All' ? true : item.condition.toLowerCase().includes(condition.toLowerCase())) &&
+          (mapped === 'All' ? true : mapped === 'Mapped' ? item.shelfcloud_sku : !item.shelfcloud_sku) &&
           (item.sku.toLowerCase().includes(searchValue.toLowerCase()) ||
             item.asin.toLowerCase().includes(searchValue.toLowerCase()) ||
             item.product_name.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -94,7 +91,7 @@ const Listings = ({ session }: Props) => {
       )
       return newDataTable
     }
-  }, [data, searchValue, filters])
+  }, [data, searchValue, showHidden, condition, mapped])
 
   const clearAllSelectedRows = () => {
     setToggleClearRows(!toggledClearRows)
@@ -138,7 +135,7 @@ const Listings = ({ session }: Props) => {
       ['Title', 'SKU', 'AISN', 'FNSKU', 'Brand', 'Condition', 'Fulfillment Channel', 'Fulfillable', 'Reserved', 'Unsellable', 'inbound', 'ShelfCloud Mapped'],
     ]
 
-    data?.listings.forEach((item: Listing) =>
+    data?.listings?.forEach((item: Listing) =>
       fileData.push([
         item?.product_name,
         item?.sku,
@@ -170,16 +167,14 @@ const Listings = ({ session }: Props) => {
             <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-end align-items-md-center px-3'>
               <div className='app-search d-flex flex-row justify-content-between align-items-center p-0'>
                 <div className='d-flex flex-row justify-content-start align-items-center gap-3'>
-                  <FilterListings filters={filters} setFilters={setfilters} />
+                  <FilterListings showHidden={showHidden} condition={condition} mapped={mapped} />
                   <Button
                     size='sm'
                     color='info'
-                    onClick={() =>
-                      setfilters((prev) => {
-                        return { ...prev, showHidden: filters.showHidden === 0 ? 1 : 0 }
-                      })
-                    }>
-                    {filters.showHidden === 0 ? (
+                    onClick={() => {
+                      router.replace(`/amazon-sellers/listings?showHidden=${parseInt(showHidden) === 0 ? 1 : 0}&condition=${condition}&mapped=${mapped}`)
+                    }}>
+                    {parseInt(showHidden) === 0 ? (
                       <>
                         <i className='mdi mdi-eye label-icon align-middle fs-5 me-2' />
                         <span className='fs-6'>Show All</span>

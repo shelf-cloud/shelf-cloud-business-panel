@@ -16,6 +16,8 @@ type Props = {
     listingId: number
     shelfCloudSku: string
     shelfCloudSkuId: number
+    currentSkuMapped: string
+    currentSkuIdMapped: number
   }
   setshowMappedListingModal: (prev: any) => void
 }
@@ -54,38 +56,41 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
 
   return (
     <div ref={selectProductMappedDiv} className='dropdown mb-3'>
-      <div className='btn-group w-100' onClick={() => setOpenSelectionList(!openSelectionList)}>
-        <button type='button' disabled className='btn btn-light btn-sm form-control fs-6 w-100 text-start' style={{ backgroundColor: 'white', opacity: '100%' }}>
-          {showMappedListingModal.shelfCloudSku == '' ? `Select...` : showMappedListingModal.shelfCloudSku}
-        </button>
-        <button
-          type='button'
-          disabled
-          className='btn btn-light btn-sm dropdown-toggle form-control fs-6dropdown-toggle dropdown-toggle-split'
-          style={{ backgroundColor: 'white', maxWidth: '35px' }}
-          data-bs-toggle='dropdown'
-          data-bs-auto-close='outside'
-          aria-expanded='false'>
-          <span className='visually-hidden'>Toggle Dropdown</span>
-        </button>
-      </div>
+      {showMappedListingModal.currentSkuMapped !== '' ? (
+        <div className='w-100'>
+          <p className='px-3 m-0 py-0 fs-5 fw-semibold'>{showMappedListingModal.currentSkuMapped}</p>
+        </div>
+      ) : (
+        <div className='btn-group w-100' onClick={() => setOpenSelectionList(!openSelectionList)}>
+          <button type='button' disabled className='btn btn-light btn-sm form-control fs-6 w-100 text-start' style={{ backgroundColor: 'white', opacity: '100%' }}>
+            {showMappedListingModal.shelfCloudSku == '' ? `Select...` : showMappedListingModal.shelfCloudSku}
+          </button>
+          <button
+            type='button'
+            disabled
+            className='btn btn-light btn-sm dropdown-toggle form-control fs-6dropdown-toggle dropdown-toggle-split'
+            style={{ backgroundColor: 'white', maxWidth: '35px' }}
+            data-bs-toggle='dropdown'
+            data-bs-auto-close='outside'
+            aria-expanded='false'>
+            <span className='visually-hidden'>Toggle Dropdown</span>
+          </button>
+        </div>
+      )}
       <div className={'dropdown-menu w-100 py-3 px-3' + (openSelectionList ? ' show' : '')}>
         <div className='w-100 mb-3'>
           <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
             <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
               <DebounceInput
-                minLength={3}
-                debounceTimeout={400}
                 type='text'
+                minLength={3}
+                debounceTimeout={300}
                 className='form-control input_background_white fs-6 py-0'
                 placeholder='Search...'
-                id='search-options'
-                bsSize='sm'
+                id='search-options-mapped'
                 value={searchValue}
                 onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
-                onChange={(e) => {
-                  setSearchValue(e.target.value)
-                }}
+                onChange={(e) => setSearchValue(e.target.value)}
               />
               <span className='mdi mdi-magnify search-widget-icon fs-5'></span>
               <span
@@ -111,7 +116,6 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
                   setshowMappedListingModal((prev: any) => {
                     return {
                       ...prev,
-                      show: true,
                       shelfCloudSku: option.sku,
                       shelfCloudSkuId: option.inventoryId,
                     }

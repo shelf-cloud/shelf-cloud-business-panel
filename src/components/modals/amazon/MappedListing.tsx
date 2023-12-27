@@ -14,6 +14,8 @@ type Props = {
     listingId: number
     shelfCloudSku: string
     shelfCloudSkuId: number
+    currentSkuMapped: string
+    currentSkuIdMapped: number
   }
   setshowMappedListingModal: (prev: any) => void
   loading: boolean
@@ -56,6 +58,8 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
         listingId: 0,
         shelfCloudSku: '',
         shelfCloudSkuId: 0,
+        currentSkuMapped: '',
+        currentSkuIdMapped: 0,
       })
       toast.success(response.data.message)
       mutate(`/api/amazon/getAmazonSellerListings?region=${state.currentRegion}&businessId=${state.user.businessId}`)
@@ -66,7 +70,7 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
   }
 
   const handleUnMappedProduct = async () => {
-    if (showMappedListingModal.shelfCloudSkuId === 0 || showMappedListingModal.shelfCloudSku === '') {
+    if (showMappedListingModal.currentSkuIdMapped === 0 || showMappedListingModal.currentSkuMapped === '') {
       toast.error('Please select ShelfCloud Product to UnMap')
       return
     }
@@ -74,16 +78,18 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
     const response = await axios.post(`/api/amazon/unMapListingToSku?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
       listingId: showMappedListingModal.listingId,
       listingSku: showMappedListingModal.listingSku,
-      shelfCloudSku: showMappedListingModal.shelfCloudSku,
-      shelfCloudSkuId: showMappedListingModal.shelfCloudSkuId,
+      shelfCloudSku: showMappedListingModal.currentSkuMapped,
+      shelfCloudSkuId: showMappedListingModal.currentSkuIdMapped,
     })
     if (!response.data.error) {
-      setshowMappedListingModal({
-        show: false,
-        listingSku: '',
-        listingId: 0,
-        shelfCloudSku: '',
-        shelfCloudSkuId: 0,
+      setshowMappedListingModal((prev: any) => {
+        return {
+          ...prev,
+          shelfCloudSku: '',
+          shelfCloudSkuId: 0,
+          currentSkuMapped: '',
+          currentSkuIdMapped: 0,
+        }
       })
       toast.success(response.data.message)
       mutate(`/api/amazon/getAmazonSellerListings?region=${state.currentRegion}&businessId=${state.user.businessId}`)
@@ -106,6 +112,8 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
           listingId: 0,
           shelfCloudSku: '',
           shelfCloudSkuId: 0,
+          currentSkuMapped: '',
+          currentSkuIdMapped: 0,
         })
       }}>
       <ModalHeader
@@ -116,6 +124,8 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
             listingId: 0,
             shelfCloudSku: '',
             shelfCloudSkuId: 0,
+            currentSkuMapped: '',
+            currentSkuIdMapped: 0,
           })
         }}
         className='modal-title'
@@ -125,14 +135,14 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
       <ModalBody>
         <Row>
           <h5 className='fs-4 mb-0 fw-semibold text-primary'>Amazon Listing:</h5>
-          <p className='fs-4 fw-bold text-black'>{showMappedListingModal.listingSku}</p>
+          <p className='fs-4 fw-semibold text-black'>{showMappedListingModal.listingSku}</p>
           <Col md={12}>
-            <p className='fw-semibold fs-6'>Map to Product</p>
+            <p className='fw-semibold fs-6 m-0 mb-1'>Map to Product:</p>
             <Select_Product_Mapped data={data || []} showMappedListingModal={showMappedListingModal} setshowMappedListingModal={setshowMappedListingModal} />
           </Col>
           <Row md={12} className='mt-3'>
             <div className='text-end mt-2 d-flex flex-row gap-4 justify-content-between'>
-              <Button disabled={loading} type='button' color='danger' className='btn' onClick={handleUnMappedProduct}>
+              <Button disabled={loading || showMappedListingModal.currentSkuMapped === ''} type='button' color='danger' className='btn' onClick={handleUnMappedProduct}>
                 <i className='las la-unlink fs-5 text-white m-0 p-0 me-1' />
                 {loading ? <Spinner color='#fff' size={'sm'} /> : 'UnMap'}
               </Button>
@@ -149,11 +159,13 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
                       listingId: 0,
                       shelfCloudSku: '',
                       shelfCloudSkuId: 0,
+                      currentSkuMapped: '',
+                      currentSkuIdMapped: 0,
                     })
                   }}>
                   Cancel
                 </Button>
-                <Button disabled={loading} type='button' color='success' className='btn' onClick={handleSaveMappedProduct}>
+                <Button disabled={loading || showMappedListingModal.currentSkuMapped !== ''} type='button' color='success' className='btn' onClick={handleSaveMappedProduct}>
                   {loading ? <Spinner color='#fff' size={'sm'} /> : 'Save'}
                 </Button>
               </div>
