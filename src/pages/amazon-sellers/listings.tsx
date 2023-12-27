@@ -11,9 +11,9 @@ import { Listing, ListingsResponse } from '@typesTs/amazon/listings'
 import SellerListingTable from '@components/amazon/listings/SellerListingTable'
 import { useRouter } from 'next/router'
 import { DebounceInput } from 'react-debounce-input'
-import FilterListings from '@components/ui/filterListings'
 import { toast } from 'react-toastify'
 import { CSVLink } from 'react-csv'
+import FilterListings from '@components/ui/FilterListings'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
