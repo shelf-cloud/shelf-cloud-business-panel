@@ -98,6 +98,8 @@ export interface ProductRowType {
   ASIN?: string
   FNSKU?: string
   Barcode?: string
+  brand: string
+  supplier: string
   Quantity: {
     inventoryId: number
     businessId: number
@@ -141,6 +143,25 @@ export interface Product {
   boxWidth: number
   boxHeight: number
   activeState: boolean
+  defaultCost: number;
+  description: string;
+  brand: string;
+  category: string;
+  defaultPrice: number;
+  msrp: number;
+  map: number;
+  floor: number;
+  ceilling: number;
+  supplier: string;
+  sellerCost: number;
+  inboundShippingCost: number;
+  otherCosts: number;
+  productionTime: number;
+  transitTime: number;
+  shippingToFBA: number;
+  buffer: number;
+  itemCondition: string;
+  identifiers: Identifier[] | null;
 }
 
 // PRODUCT DETAILS PAGE

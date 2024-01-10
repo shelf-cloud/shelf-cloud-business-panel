@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ProductRowType } from '@typings'
+import { Product } from '@typings'
 import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import AppContext from '@context/AppContext'
@@ -9,20 +9,20 @@ import TooltipComponent from './constants/Tooltip'
 import Link from 'next/link'
 
 type Props = {
-  tableData: ProductRowType[]
+  tableData: Product[]
   pending: boolean
   changeProductState: (inventoryId: number, businessId: number, sku: string) => {}
   setMsg: string
   icon: string
   activeText: string
-  setSelectedRows: (selectedRows: ProductRowType[]) => void
+  setSelectedRows: (selectedRows: Product[]) => void
   toggledClearRows: boolean
 }
 
 const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, activeText, setSelectedRows, toggledClearRows }: Props) => {
   const { setModalProductInfo, state }: any = useContext(AppContext)
 
-  const loadBarcode = (product: ProductRowType) => {
+  const loadBarcode = (product: Product) => {
     var html = '<!DOCTYPE html><html><head>'
     html += '<style>@page{margin:0px;}'
     html += 'body{width:21cm;margin:0px;padding:0px;}'
@@ -35,37 +35,22 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
     html += '</style></head><body>'
     html +=
       '<div class="barcodeSection"><p style="text-align:center;">' +
-      product.SKU +
+      product.sku +
       '</p><p style="text-align:center;white-space: nowrap;overflow: hidden;">' +
-      product.Title +
+      product.title +
       '</p><svg id="barcode" width="100%" height="100%"></svg></div>'
     html +=
       '</body><script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/JsBarcode.all.min.js"></script><script>JsBarcode("#barcode", "' +
-      product.Barcode +
+      product.barcode +
       '", {text: "' +
-      product.Barcode +
+      product.barcode +
       '",fontSize: 12,textMargin: 0, height:31});</script></html>'
     var wnd = window.open('about:Barcode-Generated', '', '_blank')
     wnd?.document.write(html)
   }
-
-  const caseInsensitiveSort = (rowA: ProductRowType, rowB: ProductRowType) => {
-    const a = rowA.Title.toLowerCase()
-    const b = rowB.Title.toLowerCase()
-
-    if (a > b) {
-      return 1
-    }
-
-    if (b > a) {
-      return -1
-    }
-
-    return 0
-  }
-  const quantitySort = (rowA: ProductRowType, rowB: ProductRowType) => {
-    const a = Number(rowA.Quantity.quantity)
-    const b = Number(rowB.Quantity.quantity)
+  const caseInsensitiveSort = (rowA: Product, rowB: Product) => {
+    const a = rowA.title.toLowerCase()
+    const b = rowB.title.toLowerCase()
 
     if (a > b) {
       return 1
@@ -77,15 +62,28 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
 
     return 0
   }
+  const quantitySort = (rowA: Product, rowB: Product) => {
+    const a = Number(rowA.quantity)
+    const b = Number(rowB.quantity)
 
-  const handleSelectedRows = ({ selectedRows }: { selectedRows: ProductRowType[] }) => {
+    if (a > b) {
+      return 1
+    }
+
+    if (b > a) {
+      return -1
+    }
+
+    return 0
+  }
+  const handleSelectedRows = ({ selectedRows }: { selectedRows: Product[] }) => {
     setSelectedRows(selectedRows)
   }
 
   const columns: any = [
     {
       name: <span className='font-weight-bold fs-13'>Image</span>,
-      selector: (cell: { Image: any }) => {
+      selector: (row: Product) => {
         return (
           <div
             style={{
@@ -97,8 +95,8 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
             <img
               loading='lazy'
               src={
-                cell.Image
-                  ? cell.Image
+                row.image
+                  ? row.image
                   : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
               }
               onError={(e) =>
@@ -124,12 +122,12 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
           SKU
         </span>
       ),
-      selector: (row: any) => {
+      selector: (row: Product) => {
         return (
           <div>
-            <p style={{ margin: '0px', fontWeight: '800' }}>{row.Title}</p>
+            <p style={{ margin: '0px', fontWeight: '800' }}>{row.title}</p>
             <p style={{ margin: '0px' }} className='d-flex flex-row justify-content-start align-items-start'>
-              {row.SKU} {row.note != '' && <i className='ri-information-fill ms-2 fs-5 text-warning' id={`tooltip${row.inventoryId}`}></i>}
+              {row.sku} {row.note != '' && <i className='ri-information-fill ms-2 fs-5 text-warning' id={`tooltip${row.inventoryId}`}></i>}
             </p>
             {row.note != '' && <TooltipComponent target={`tooltip${row.inventoryId}`} text={row.note} />}
           </div>
@@ -151,19 +149,19 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
           Barcode
         </span>
       ),
-      selector: (row: any) => {
+      selector: (row: Product) => {
         return (
           <div>
             <p style={{ margin: '0px' }}>
               {/* <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/exec/obidos/ASIN${row.ASIN}`} target='blank'> */}
               <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank'>
-                {row.ASIN}
+                {row.asin}
               </a>
             </p>
-            <p style={{ margin: '0px' }}>{row.FNSKU}</p>
+            <p style={{ margin: '0px' }}>{row.fnSku}</p>
             <p style={{ margin: '0px' }}>
               <a href='#' onClick={() => loadBarcode(row)}>
-                {row.Barcode}
+                {row.barcode}
               </a>
             </p>
           </div>
@@ -174,8 +172,24 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       grow: 1.3,
     },
     {
+      name: <span className='font-weight-bold fs-13'>Brand</span>,
+      selector: (row: Product) => row.brand,
+      sortable: true,
+      center: false,
+      compact: true,
+      wrap: true,
+    },
+    {
+      name: <span className='font-weight-bold fs-13'>Supplier</span>,
+      selector: (row: Product) => row.supplier,
+      sortable: true,
+      center: true,
+      compact: true,
+      wrap: true,
+    },
+    {
       name: <span className='font-weight-bold fs-13'>Quantity</span>,
-      selector: (cell: any) => {
+      selector: (row: Product) => {
         return (
           <div className='d-flex flex-column justify-content-center align-items-center'>
             <Button
@@ -183,16 +197,16 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
               outline
               className='btn btn-ghost-primary'
               onClick={() => {
-                setModalProductInfo(cell.Quantity.inventoryId, state.user.businessId, cell.Quantity.sku)
+                setModalProductInfo(row.inventoryId, state.user.businessId, row.sku)
               }}>
-              {cell.Quantity.quantity}
+              {row.quantity}
             </Button>
-            {cell.Quantity.reserved > 0 && (
+            {row.reserved > 0 && (
               <>
-                <span className='text-danger' id={`reservedQty${cell.SKU.replace(/[\s\.]/g, '')}`}>
-                  -{cell.Quantity.reserved}
+                <span className='text-danger' id={`reservedQty${row.sku.replace(/[\s\.]/g, '')}`}>
+                  -{row.reserved}
                 </span>
-                <UncontrolledTooltip placement='right' target={`reservedQty${cell.SKU.replace(/[\s\.]/g, '')}`}>
+                <UncontrolledTooltip placement='right' target={`reservedQty${row.sku.replace(/[\s\.]/g, '')}`}>
                   Reserved in Awating Orders.
                 </UncontrolledTooltip>
               </>
@@ -210,27 +224,27 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       sortable: false,
       compact: true,
       grow: 1.4,
-      selector: (cell: any) => {
+      selector: (row: Product) => {
         return (
           <div style={{ padding: '7px 0px' }}>
             <Row>
               <span>
-                Weight: {cell.unitDimensions.weight} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'lb' : 'kg')}
+                Weight: {row.weight} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'lb' : 'kg')}
               </span>
             </Row>
             <Row>
               <span>
-                Length: {cell.unitDimensions.length} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
+                Length: {row.length} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
               </span>
             </Row>
             <Row>
               <span>
-                Width: {cell.unitDimensions.width} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
+                Width: {row.width} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
               </span>
             </Row>
             <Row>
               <span>
-                Height: {cell.unitDimensions.height} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
+                Height: {row.height} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
               </span>
             </Row>
           </div>
@@ -242,27 +256,27 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       sortable: false,
       compact: true,
       grow: 1.4,
-      selector: (cell: { boxDimensions: any }) => {
+      selector: (row: Product) => {
         return (
           <div style={{ padding: '7px 5px 7px 0px' }}>
             <Row>
               <span>
-                Weight: {cell.boxDimensions.weight} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'lb' : 'kg')}
+                Weight: {row.boxWeight} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'lb' : 'kg')}
               </span>
             </Row>
             <Row>
               <span>
-                Length: {cell.boxDimensions.length} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
+                Length: {row.boxLength} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
               </span>
             </Row>
             <Row>
               <span>
-                Width: {cell.boxDimensions.width} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
+                Width: {row.boxWidth} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
               </span>
             </Row>
             <Row>
               <span>
-                Height: {cell.boxDimensions.height} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
+                Height: {row.boxHeight} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
               </span>
             </Row>
           </div>
@@ -271,7 +285,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
     },
     {
       name: <span className='font-weight-bold fs-13'>Qty/Box</span>,
-      selector: (row: { qtyBox: any }) => row.qtyBox,
+      selector: (row: Product) => row.boxQty,
       sortable: true,
       center: true,
       compact: true,
@@ -280,7 +294,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       name: <span className='font-weight-bold fs-13'>Action</span>,
       sortable: false,
       compact: true,
-      cell: (row: any) => {
+      cell: (row: Product) => {
         return (
           <UncontrolledDropdown className='dropdown d-inline-block'>
             <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
@@ -294,15 +308,15 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
                 <span className='fs-6 fw-normal'>Edit</span>
               </DropdownItem> */}
               <DropdownItem className='edit-item-btn'>
-                <Link href={`/product/${row.inventoryId}/${row.SKU}`} passHref>
+                <Link href={`/product/${row.inventoryId}/${row.sku}`} passHref>
                   <a>
                     <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
                     <span className='fs-6 fw-normal text-dark'>View Details</span>
                   </a>
                 </Link>
               </DropdownItem>
-              {(row.Quantity.quantity == 0 || !row.btns.state) && (
-                <DropdownItem className={activeText} onClick={() => changeProductState(row.btns.inventoryId, state.user.businessId, row.btns.sku)}>
+              {(row.quantity == 0 || !row.activeState) && (
+                <DropdownItem className={activeText} onClick={() => changeProductState(row.inventoryId, state.user.businessId, row.sku)}>
                   <i className={icon}></i> {setMsg}
                 </DropdownItem>
               )}

@@ -8,7 +8,7 @@
     box-shadow: $page-title-box-shadow;
     border-bottom: 1px solid $page-title-border;
     border-top: 1px solid $page-title-border;
-    margin: -23px (-$grid-gutter-width) $grid-gutter-width (-$grid-gutter-width);
+    margin: -23px 0px 1rem 0px;
 
     .breadcrumb {
         background-color: transparent;

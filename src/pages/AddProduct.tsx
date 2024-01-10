@@ -10,7 +10,7 @@ import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import AppContext from '@context/AppContext'
 import { toast } from 'react-toastify'
-import UploadProductsModal from '@components/UploadProductsModal'
+// import UploadProductsModal from '@components/UploadProductsModal'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -37,7 +37,7 @@ type Props = {
 }
 
 const AddProducts = ({ session }: Props) => {
-  const { state, setUploadProductsModal }: any = useContext(AppContext)
+  const { state }: any = useContext(AppContext)
   const title = `Add Product | ${session?.user?.name}`
   const [useSameUnitDimensions, setUseSameUnitDimensions] = useState(false)
   const validation = useFormik({
@@ -82,18 +82,12 @@ const AddProducts = ({ session }: Props) => {
       boxwidth: Yup.number().required('Please Enter Your Box Width').positive('Value must be grater than 0'),
       boxlength: Yup.number().required('Please Enter Your Box Length').positive('Value must be grater than 0'),
       boxheight: Yup.number().required('Please Enter Your Box Height').positive('Value must be grater than 0'),
-      boxqty: Yup.number()
-        .required('Please Enter Your Box Qty')
-        .positive('Value must be grater than 0')
-        .integer('Only integers'),
+      boxqty: Yup.number().required('Please Enter Your Box Qty').positive('Value must be grater than 0').integer('Only integers'),
     }),
     onSubmit: async (values, { resetForm }) => {
-      const response = await axios.post(
-        `api/createNewProduct?region=${state.currentRegion}&businessId=${state.user.businessId}`,
-        {
-          productInfo: values,
-        }
-      )
+      const response = await axios.post(`api/createNewProduct?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+        productInfo: values,
+      })
       if (!response.data.error) {
         toast.success(response.data.msg)
         resetForm()
@@ -137,10 +131,10 @@ const AddProducts = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <Container fluid>
-            <BreadCrumb title='Add Products' pageTitle='Warehouse' />
+            <BreadCrumb title='Add Basic Product' pageTitle='Warehouse' />
             <Card>
               <CardBody>
-                <Col md={12}>
+                {/* <Col md={12}>
                   <div className='text-end'>
                     <Button
                       type='submit'
@@ -151,7 +145,7 @@ const AddProducts = ({ session }: Props) => {
                       Upload File
                     </Button>
                   </div>
-                </Col>
+                </Col> */}
                 <Form onSubmit={HandleAddProduct}>
                   <Row>
                     <h5 className='fs-5 m-3 fw-bolder'>Product Details</h5>
@@ -171,9 +165,7 @@ const AddProducts = ({ session }: Props) => {
                           value={validation.values.title || ''}
                           invalid={validation.touched.title && validation.errors.title ? true : false}
                         />
-                        {validation.touched.title && validation.errors.title ? (
-                          <FormFeedback type='invalid'>{validation.errors.title}</FormFeedback>
-                        ) : null}
+                        {validation.touched.title && validation.errors.title ? <FormFeedback type='invalid'>{validation.errors.title}</FormFeedback> : null}
                       </FormGroup>
                     </Col>
                     <Col md={6}>
@@ -192,9 +184,7 @@ const AddProducts = ({ session }: Props) => {
                           value={validation.values.sku || ''}
                           invalid={validation.touched.sku && validation.errors.sku ? true : false}
                         />
-                        {validation.touched.sku && validation.errors.sku ? (
-                          <FormFeedback type='invalid'>{validation.errors.sku}</FormFeedback>
-                        ) : null}
+                        {validation.touched.sku && validation.errors.sku ? <FormFeedback type='invalid'>{validation.errors.sku}</FormFeedback> : null}
                       </FormGroup>
                     </Col>
                     <Col md={4}>
@@ -213,9 +203,7 @@ const AddProducts = ({ session }: Props) => {
                           value={validation.values.asin || ''}
                           invalid={validation.touched.asin && validation.errors.asin ? true : false}
                         />
-                        {validation.touched.asin && validation.errors.asin ? (
-                          <FormFeedback type='invalid'>{validation.errors.asin}</FormFeedback>
-                        ) : null}
+                        {validation.touched.asin && validation.errors.asin ? <FormFeedback type='invalid'>{validation.errors.asin}</FormFeedback> : null}
                       </FormGroup>
                     </Col>
                     <Col md={4}>
@@ -234,9 +222,7 @@ const AddProducts = ({ session }: Props) => {
                           value={validation.values.fnsku || ''}
                           invalid={validation.touched.fnsku && validation.errors.fnsku ? true : false}
                         />
-                        {validation.touched.fnsku && validation.errors.fnsku ? (
-                          <FormFeedback type='invalid'>{validation.errors.fnsku}</FormFeedback>
-                        ) : null}
+                        {validation.touched.fnsku && validation.errors.fnsku ? <FormFeedback type='invalid'>{validation.errors.fnsku}</FormFeedback> : null}
                       </FormGroup>
                     </Col>
                     <Col md={4}>
@@ -255,9 +241,7 @@ const AddProducts = ({ session }: Props) => {
                           value={validation.values.barcode || ''}
                           invalid={validation.touched.barcode && validation.errors.barcode ? true : false}
                         />
-                        {validation.touched.barcode && validation.errors.barcode ? (
-                          <FormFeedback type='invalid'>{validation.errors.barcode}</FormFeedback>
-                        ) : null}
+                        {validation.touched.barcode && validation.errors.barcode ? <FormFeedback type='invalid'>{validation.errors.barcode}</FormFeedback> : null}
                       </FormGroup>
                     </Col>
                     <Col md={12}>
@@ -276,9 +260,7 @@ const AddProducts = ({ session }: Props) => {
                           value={validation.values.image || ''}
                           invalid={validation.touched.image && validation.errors.image ? true : false}
                         />
-                        {validation.touched.image && validation.errors.image ? (
-                          <FormFeedback type='invalid'>{validation.errors.image}</FormFeedback>
-                        ) : null}
+                        {validation.touched.image && validation.errors.image ? <FormFeedback type='invalid'>{validation.errors.image}</FormFeedback> : null}
                       </FormGroup>
                     </Col>
                     <div className='border mt-3 border-dashed'></div>
@@ -299,9 +281,7 @@ const AddProducts = ({ session }: Props) => {
                           value={validation.values.weight || ''}
                           invalid={validation.touched.weight && validation.errors.weight ? true : false}
                         />
-                        {validation.touched.weight && validation.errors.weight ? (
-                          <FormFeedback type='invalid'>{validation.errors.weight}</FormFeedback>
-                        ) : null}
+                        {validation.touched.weight && validation.errors.weight ? <FormFeedback type='invalid'>{validation.errors.weight}</FormFeedback> : null}
                       </FormGroup>
                     </Col>
                     <Col md={3}>
@@ -320,9 +300,7 @@ const AddProducts = ({ session }: Props) => {
                           value={validation.values.width || ''}
                           invalid={validation.touched.width && validation.errors.width ? true : false}
                         />
-                        {validation.touched.width && validation.errors.width ? (
-                          <FormFeedback type='invalid'>{validation.errors.width}</FormFeedback>
-                        ) : null}
+                        {validation.touched.width && validation.errors.width ? <FormFeedback type='invalid'>{validation.errors.width}</FormFeedback> : null}
                       </FormGroup>
                     </Col>
                     <Col md={3}>
@@ -341,9 +319,7 @@ const AddProducts = ({ session }: Props) => {
                           value={validation.values.length || ''}
                           invalid={validation.touched.length && validation.errors.length ? true : false}
                         />
-                        {validation.touched.length && validation.errors.length ? (
-                          <FormFeedback type='invalid'>{validation.errors.length}</FormFeedback>
-                        ) : null}
+                        {validation.touched.length && validation.errors.length ? <FormFeedback type='invalid'>{validation.errors.length}</FormFeedback> : null}
                       </FormGroup>
                     </Col>
                     <Col md={3}>
@@ -362,9 +338,7 @@ const AddProducts = ({ session }: Props) => {
                           value={validation.values.height || ''}
                           invalid={validation.touched.height && validation.errors.height ? true : false}
                         />
-                        {validation.touched.height && validation.errors.height ? (
-                          <FormFeedback type='invalid'>{validation.errors.height}</FormFeedback>
-                        ) : null}
+                        {validation.touched.height && validation.errors.height ? <FormFeedback type='invalid'>{validation.errors.height}</FormFeedback> : null}
                       </FormGroup>
                     </Col>
                     <div className='border mt-3 border-dashed'></div>
@@ -373,12 +347,7 @@ const AddProducts = ({ session }: Props) => {
                       <div className='flex-shrink-0'>
                         <div className='form-check form-switch form-switch-right form-switch-md'>
                           <Label className='form-label text-muted'>Same as unit dimensions</Label>
-                          <Input
-                            className='form-check-input code-switcher'
-                            type='checkbox'
-                            checked={useSameUnitDimensions}
-                            onChange={handleBoxDimensionsCheckbox}
-                          />
+                          <Input className='form-check-input code-switcher' type='checkbox' checked={useSameUnitDimensions} onChange={handleBoxDimensionsCheckbox} />
                         </div>
                       </div>
                     </div>
@@ -398,9 +367,7 @@ const AddProducts = ({ session }: Props) => {
                           value={validation.values.boxweight || ''}
                           invalid={validation.touched.boxweight && validation.errors.boxweight ? true : false}
                         />
-                        {validation.touched.boxweight && validation.errors.boxweight ? (
-                          <FormFeedback type='invalid'>{validation.errors.boxweight}</FormFeedback>
-                        ) : null}
+                        {validation.touched.boxweight && validation.errors.boxweight ? <FormFeedback type='invalid'>{validation.errors.boxweight}</FormFeedback> : null}
                       </FormGroup>
                     </Col>
                     <Col md={3}>
@@ -419,9 +386,7 @@ const AddProducts = ({ session }: Props) => {
                           value={validation.values.boxwidth || ''}
                           invalid={validation.touched.boxwidth && validation.errors.boxwidth ? true : false}
                         />
-                        {validation.touched.boxwidth && validation.errors.boxwidth ? (
-                          <FormFeedback type='invalid'>{validation.errors.boxwidth}</FormFeedback>
-                        ) : null}
+                        {validation.touched.boxwidth && validation.errors.boxwidth ? <FormFeedback type='invalid'>{validation.errors.boxwidth}</FormFeedback> : null}
                       </FormGroup>
                     </Col>
                     <Col md={3}>
@@ -440,9 +405,7 @@ const AddProducts = ({ session }: Props) => {
                           value={validation.values.boxlength || ''}
                           invalid={validation.touched.boxlength && validation.errors.boxlength ? true : false}
                         />
-                        {validation.touched.boxlength && validation.errors.boxlength ? (
-                          <FormFeedback type='invalid'>{validation.errors.boxlength}</FormFeedback>
-                        ) : null}
+                        {validation.touched.boxlength && validation.errors.boxlength ? <FormFeedback type='invalid'>{validation.errors.boxlength}</FormFeedback> : null}
                       </FormGroup>
                     </Col>
                     <Col md={3}>
@@ -461,9 +424,7 @@ const AddProducts = ({ session }: Props) => {
                           value={validation.values.boxheight || ''}
                           invalid={validation.touched.boxheight && validation.errors.boxheight ? true : false}
                         />
-                        {validation.touched.boxheight && validation.errors.boxheight ? (
-                          <FormFeedback type='invalid'>{validation.errors.boxheight}</FormFeedback>
-                        ) : null}
+                        {validation.touched.boxheight && validation.errors.boxheight ? <FormFeedback type='invalid'>{validation.errors.boxheight}</FormFeedback> : null}
                       </FormGroup>
                     </Col>
                     <Col md={3}>
@@ -482,14 +443,10 @@ const AddProducts = ({ session }: Props) => {
                           value={validation.values.boxqty || ''}
                           invalid={validation.touched.boxqty && validation.errors.boxqty ? true : false}
                         />
-                        {validation.touched.boxqty && validation.errors.boxqty ? (
-                          <FormFeedback type='invalid'>{validation.errors.boxqty}</FormFeedback>
-                        ) : null}
+                        {validation.touched.boxqty && validation.errors.boxqty ? <FormFeedback type='invalid'>{validation.errors.boxqty}</FormFeedback> : null}
                       </FormGroup>
                     </Col>
-                    <h5 className='fs-14 mb-3 text-muted'>
-                      *You must complete all required fields or you will not be able to create your product.
-                    </h5>
+                    <h5 className='fs-14 mb-3 text-muted'>*You must complete all required fields or you will not be able to create your product.</h5>
                     <Col md={12}>
                       <div className='text-end'>
                         <Button type='submit' className='btn btn-primary'>
@@ -504,7 +461,7 @@ const AddProducts = ({ session }: Props) => {
           </Container>
         </div>
       </React.Fragment>
-      {state.showUploadProductsModal && <UploadProductsModal />}
+      {/* {state.showUploadProductsModal && <UploadProductsModal />} */}
     </div>
   )
 }

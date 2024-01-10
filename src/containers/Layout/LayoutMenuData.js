@@ -81,7 +81,7 @@ const Navdata = () => {
         {
           id: 'products',
           label: 'Products',
-          link: '/Products',
+          link: '/Products?brand=All&supplier=All&category=All&condition=All',
           parentId: 'warehouse',
         },
         // {
@@ -93,7 +93,7 @@ const Navdata = () => {
         {
           id: 'inactive',
           label: 'Inactive Products',
-          link: '/InactiveProducts',
+          link: '/InactiveProducts?brand=All&supplier=All&category=All&condition=All',
           parentId: 'warehouse',
         },
         {

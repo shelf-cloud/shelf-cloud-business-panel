@@ -14,7 +14,7 @@ interface Props {
 const Layout = ({ children }: Props) => {
   const [headerClass, setHeaderClass] = useState('')
   const { pathname } = useRouter()
-  const noLayout = ['SignIn' , 'ContactForm', 'Forgotpassword']
+  const noLayout = ['SignIn' , 'ContactForm', 'Forgotpassword', 'ProductsBulkEdit']
 
   useEffect(() => {
     window.addEventListener('scroll', scrollNavigation, true)

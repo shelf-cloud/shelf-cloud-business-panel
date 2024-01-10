@@ -2,7 +2,7 @@ import { NextApiHandler } from 'next'
 import { getSession } from '@auth/client'
 import axios from 'axios'
 
-const getBusinessInventory: NextApiHandler = async (request, response) => {
+const uploadProductsTemplate: NextApiHandler = async (request, response) => {
     const session = await getSession({ req: request })
 
     if (session == null) {
@@ -11,7 +11,9 @@ const getBusinessInventory: NextApiHandler = async (request, response) => {
         return
     }
 
-    axios(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/getBusinessInventoryTest.php?businessId=${request.query.businessId}`)
+    axios.post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/productDetails/uploadProductsTemplate.php?businessId=${request.query.businessId}`, {
+        productsInfo: request.body.productsInfo
+    })
         .then(({ data }) => {
             response.json(data)
         })
@@ -22,7 +24,7 @@ const getBusinessInventory: NextApiHandler = async (request, response) => {
                 response.json({
                     error: true,
                     errorMessage: error.response.data.message,
-                    message: `Error Products Details, please try again later.`,
+                    message: `Error with file uploading, please try again later.`,
                 })
             } else if (error.request) {
                 // The request was made but no response was received
@@ -40,4 +42,4 @@ const getBusinessInventory: NextApiHandler = async (request, response) => {
         });
 }
 
-export default getBusinessInventory
+export default uploadProductsTemplate

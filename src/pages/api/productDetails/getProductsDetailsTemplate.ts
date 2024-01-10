@@ -2,7 +2,7 @@ import { NextApiHandler } from 'next'
 import { getSession } from '@auth/client'
 import axios from 'axios'
 
-const getBusinessInventory: NextApiHandler = async (request, response) => {
+const getProductsDetailsTemplate: NextApiHandler = async (request, response) => {
     const session = await getSession({ req: request })
 
     if (session == null) {
@@ -11,7 +11,7 @@ const getBusinessInventory: NextApiHandler = async (request, response) => {
         return
     }
 
-    axios(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/getBusinessInventoryTest.php?businessId=${request.query.businessId}`)
+    axios.get(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/productDetails/getProductsDetailsTemplate.php?businessId=${request.query.businessId}`)
         .then(({ data }) => {
             response.json(data)
         })
@@ -40,4 +40,4 @@ const getBusinessInventory: NextApiHandler = async (request, response) => {
         });
 }
 
-export default getBusinessInventory
+export default getProductsDetailsTemplate

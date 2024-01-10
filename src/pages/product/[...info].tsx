@@ -90,7 +90,7 @@ const Product_Page_Layout = ({}: Props) => {
                 <>
                   <CardHeader className='d-flex flex-row justify-content-between align-items-start'>
                     <div>
-                      <Link href={'/Products'}>
+                      <Link href={'/Products?brand=All&supplier=All&category=All&condition=All'}>
                         <Button
                           color='primary'
                           outline
