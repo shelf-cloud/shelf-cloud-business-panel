@@ -139,7 +139,7 @@ const FilterProducts = ({ brands, suppliers, categories, brand, supplier, catego
                 activeTab ? router.replace(`/Products?brand=All&supplier=All&category=All&condition=All`) : router.replace(`/InactiveProducts?brand=All&supplier=All&category=All&condition=All`)
                 setOpenDatesMenu(false)
               }}
-              className='fw-normal mt-2'>
+              className='fw-normal mt-2 text-muted'>
               Clear All
             </span>
           </div>

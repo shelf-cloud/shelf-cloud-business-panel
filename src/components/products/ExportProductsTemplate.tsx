@@ -9,9 +9,10 @@ type Props = {
   brands: string[]
   suppliers: string[]
   categories: string[]
+  selected: boolean
 }
 
-const ExportProductsTemplate = ({ products, brands, suppliers, categories }: Props) => {
+const ExportProductsTemplate = ({ products, brands, suppliers, categories, selected }: Props) => {
   const buildTemplate = async () => {
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('Product Details')
@@ -155,7 +156,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories }: Pro
         showErrorMessage: true,
         allowBlank: true,
         formulae: [0, 20],
-        errorTitle: 'Invalid input', 
+        errorTitle: 'Invalid input',
         error: 'Asin must be less than 20 characters',
       }
       cell.protection = { locked: false }
@@ -230,7 +231,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories }: Pro
         errorTitle: 'Invalid input',
         error: 'Weight must be greater than 0',
       }
-      cell.protection = { locked: false }
+      cell.protection = { locked: true }
     })
 
     worksheet.getColumn('length').eachCell((cell) => {
@@ -243,7 +244,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories }: Pro
         errorTitle: 'Invalid input',
         error: 'Length must be greater than 0',
       }
-      cell.protection = { locked: false }
+      cell.protection = { locked: true }
     })
 
     worksheet.getColumn('width').eachCell((cell) => {
@@ -257,7 +258,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories }: Pro
         errorTitle: 'Invalid input',
         error: 'Width must be greater than 0',
       }
-      cell.protection = { locked: false }
+      cell.protection = { locked: true }
     })
 
     worksheet.getColumn('height').eachCell((cell) => {
@@ -270,7 +271,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories }: Pro
         errorTitle: 'Invalid input',
         error: 'Height must be greater than 0',
       }
-      cell.protection = { locked: false }
+      cell.protection = { locked: true }
     })
 
     worksheet.getColumn('boxQty').eachCell((cell) => {
@@ -283,7 +284,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories }: Pro
         errorTitle: 'Invalid input',
         error: 'Box Quantity must be integer and greater than 0',
       }
-      cell.protection = { locked: false }
+      cell.protection = { locked: true }
     })
 
     worksheet.getColumn('boxWeight').eachCell((cell) => {
@@ -296,7 +297,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories }: Pro
         errorTitle: 'Invalid input',
         error: 'Box Weight must be greater than 0',
       }
-      cell.protection = { locked: false }
+      cell.protection = { locked: true }
     })
 
     worksheet.getColumn('boxLength').eachCell((cell) => {
@@ -309,7 +310,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories }: Pro
         errorTitle: 'Invalid input',
         error: 'Box Length must be greater than 0',
       }
-      cell.protection = { locked: false }
+      cell.protection = { locked: true }
     })
 
     worksheet.getColumn('boxWidth').eachCell((cell) => {
@@ -322,7 +323,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories }: Pro
         errorTitle: 'Invalid input',
         error: 'Box Width must be greater than 0',
       }
-      cell.protection = { locked: false }
+      cell.protection = { locked: true }
     })
 
     worksheet.getColumn('boxHeight').eachCell((cell) => {
@@ -335,7 +336,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories }: Pro
         errorTitle: 'Invalid input',
         error: 'Box Height must be greater than 0',
       }
-      cell.protection = { locked: false }
+      cell.protection = { locked: true }
     })
 
     worksheet.getColumn('activeState').eachCell((cell) => {
@@ -561,7 +562,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories }: Pro
   return (
     <DropdownItem className='text-nowrap text-info' onClick={exportExcelFile}>
       <i className='mdi mdi-arrow-down-bold label-icon align-middle fs-6 me-2' />
-      Export Existing Products Template
+      {selected ? 'Export Selected Products Template' : 'Export All Products Template'}
     </DropdownItem>
   )
 }

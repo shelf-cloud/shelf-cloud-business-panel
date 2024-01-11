@@ -1,8 +1,8 @@
 import React from 'react'
 import ExcelJS from 'exceljs'
 import { Product } from '@typings'
-import { Button, Spinner } from 'reactstrap'
-import { columns } from './TemplateInfo'
+import { DropdownItem, Spinner } from 'reactstrap'
+import { columnsProductsFile } from './TemplateInfo'
 
 type Props = {
   products: Product[]
@@ -15,13 +15,13 @@ const ExportProductsFile = ({ products, loadingCsv, setloadingCsv }: Props) => {
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('Product Details')
 
-    worksheet.columns = columns
+    worksheet.columns = columnsProductsFile
 
     for (const product of products) {
       worksheet.addRow({
-        sku: product.sku,
         title: product.title,
         description: product.description,
+        sku: product.sku,
         asin: product.asin,
         fnsku: product.fnSku,
         barcode: product.barcode,
@@ -37,8 +37,6 @@ const ExportProductsFile = ({ products, loadingCsv, setloadingCsv }: Props) => {
         boxLength: product.boxLength,
         boxWidth: product.boxWidth,
         boxHeight: product.boxHeight,
-        activeState: product.activeState,
-        note: product.note,
         defaultCost: product.defaultCost,
         defaultPrice: product.defaultPrice,
         msrp: product.msrp,
@@ -54,6 +52,7 @@ const ExportProductsFile = ({ products, loadingCsv, setloadingCsv }: Props) => {
         buffer: product.buffer,
         itemCondition: product.itemCondition,
         image: product.image,
+        note: product.note,
       })
     }
 
@@ -75,10 +74,10 @@ const ExportProductsFile = ({ products, loadingCsv, setloadingCsv }: Props) => {
   }
 
   return (
-    <Button type='button' color='primary' className='fs-6 py-1' onClick={exportExcelFile}>
+    <DropdownItem className='text-primary' onClick={exportExcelFile}>
       <i className='mdi mdi-arrow-down-bold label-icon align-middle fs-5 me-2' />
       {loadingCsv ? <Spinner color='light' size={'sm'} /> : 'Export Products'}
-    </Button>
+    </DropdownItem>
   )
 }
 

@@ -195,7 +195,13 @@ const Products = ({ session }: Props) => {
                       </DropdownToggle>
                       <DropdownMenu>
                         {filterDataTable!.length > 0 && (
-                          <ExportProductsTemplate products={filterDataTable || []} brands={data?.brands} suppliers={data?.suppliers} categories={data?.categories} />
+                          <ExportProductsTemplate
+                            products={selectedRows.length == 0 ? filterDataTable || [] : selectedRows}
+                            selected={selectedRows.length > 0 ? true : false}
+                            brands={data?.brands}
+                            suppliers={data?.suppliers}
+                            categories={data?.categories}
+                          />
                         )}
                         <ExportBlankTemplate brands={data?.brands} suppliers={data?.suppliers} categories={data?.categories} />
                         <DropdownItem
@@ -210,18 +216,18 @@ const Products = ({ session }: Props) => {
                         </DropdownItem>
                       </DropdownMenu>
                     </UncontrolledButtonDropdown>
-                    {filterDataTable!.length > 0 && <ExportProductsFile products={filterDataTable || []} loadingCsv={loadingCsv} setloadingCsv={setloadingCsv} />}
                     {selectedRows.length > 0 && (
                       <UncontrolledButtonDropdown>
-                        <DropdownToggle className='btn btn-info fs-6 py-2' caret>
-                          {`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''} Selected`}
+                        <DropdownToggle className='btn btn-primary fs-6 py-2' caret>
+                          <span className='fw-bold'>{`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''}`}</span> Selected
                         </DropdownToggle>
                         <DropdownMenu>
+                          <ExportProductsFile products={selectedRows || []} loadingCsv={loadingCsv} setloadingCsv={setloadingCsv} />
                           <DropdownItem className='text-nowrap text-danger' onClick={changeSelectedProductsState}>
-                            <i className='mdi mdi-eye-off label-icon align-middle fs-6 me-2' />
+                            <i className='mdi mdi-eye-off label-icon align-middle fs-5 me-2' />
                             Set Inactive
                           </DropdownItem>
-                          <DropdownItem className='text-nowrap text-end fs-6' onClick={clearAllSelectedRows}>
+                          <DropdownItem className='text-nowrap text-end fs-6 text-muted' onClick={clearAllSelectedRows}>
                             Clear All
                           </DropdownItem>
                         </DropdownMenu>
