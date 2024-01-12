@@ -12,7 +12,7 @@ type Props = {
 const ExportBlankTemplate = ({ brands, suppliers, categories }: Props) => {
   const buildTemplate = async () => {
     const workbook = new ExcelJS.Workbook()
-    const worksheet = workbook.addWorksheet('Product Details')
+    const worksheet = workbook.addWorksheet('Product Details Template')
     const worksheetInfo = workbook.addWorksheet('ReferenceData')
     const worksheetColumns = workbook.addWorksheet('Columns')
 
@@ -121,7 +121,7 @@ const ExportBlankTemplate = ({ brands, suppliers, categories }: Props) => {
     worksheet.getColumn('asin').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'textLength',
-        operator: 'lessThanOrEqual',
+        operator: 'between',
         showErrorMessage: true,
         allowBlank: true,
         formulae: [0, 20],
@@ -134,7 +134,7 @@ const ExportBlankTemplate = ({ brands, suppliers, categories }: Props) => {
     worksheet.getColumn('fnsku').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'textLength',
-        operator: 'lessThanOrEqual',
+        operator: 'between',
         showErrorMessage: true,
         allowBlank: true,
         formulae: [0, 20],
@@ -517,7 +517,7 @@ const ExportBlankTemplate = ({ brands, suppliers, categories }: Props) => {
       const url = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = 'Blank Template.xlsx'
+      a.download = 'Empty Template.xlsx'
       a.click()
     })
   }

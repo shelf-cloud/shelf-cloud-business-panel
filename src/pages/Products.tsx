@@ -6,7 +6,7 @@ import { Product } from '@typings'
 import axios from 'axios'
 import Head from 'next/head'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, Spinner, UncontrolledButtonDropdown } from 'reactstrap'
+import { Button, Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import useSWR, { useSWRConfig } from 'swr'
@@ -19,7 +19,6 @@ import { DebounceInput } from 'react-debounce-input'
 import FilterProducts from '@components/ui/FilterProducts'
 import { useRouter } from 'next/router'
 import ExportBlankTemplate from '@components/products/ExportBlankTemplate'
-import ExportProductsFile from '@components/products/ExportProductsFile'
 import ImportProductsFileModal from '@components/modals/products/ImportProductsFileModal'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -55,7 +54,6 @@ const Products = ({ session }: Props) => {
   const [allData, setAllData] = useState<Product[]>([])
   const [searchValue, setSearchValue] = useState<any>('')
   const [selectedRows, setSelectedRows] = useState<Product[]>([])
-  const [loadingCsv, setloadingCsv] = useState(false)
   const [toggledClearRows, setToggleClearRows] = useState(false)
   const [importModalDetails, setimportModalDetails] = useState({
     show: false,
@@ -222,9 +220,9 @@ const Products = ({ session }: Props) => {
                           <span className='fw-bold'>{`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''}`}</span> Selected
                         </DropdownToggle>
                         <DropdownMenu>
-                          <ExportProductsFile products={selectedRows || []} loadingCsv={loadingCsv} setloadingCsv={setloadingCsv} />
+                          {/* <ExportProductsFile products={selectedRows || []} loadingCsv={loadingCsv} setloadingCsv={setloadingCsv} /> */}
                           <DropdownItem className='text-nowrap text-danger' onClick={changeSelectedProductsState}>
-                            <i className='mdi mdi-eye-off label-icon align-middle fs-5 me-2' />
+                            <i className='mdi mdi-eye-off label-icon align-middle fs-6 me-2' />
                             Set Inactive
                           </DropdownItem>
                           <DropdownItem className='text-nowrap text-end fs-6 text-muted' onClick={clearAllSelectedRows}>
@@ -233,7 +231,6 @@ const Products = ({ session }: Props) => {
                         </DropdownMenu>
                       </UncontrolledButtonDropdown>
                     )}
-                    {loadingCsv && <Spinner color='primary' size={'md'} />}
                   </div>
                   <div className='col-sm-12 col-md-3'>
                     <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>

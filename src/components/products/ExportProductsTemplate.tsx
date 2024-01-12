@@ -15,7 +15,7 @@ type Props = {
 const ExportProductsTemplate = ({ products, brands, suppliers, categories, selected }: Props) => {
   const buildTemplate = async () => {
     const workbook = new ExcelJS.Workbook()
-    const worksheet = workbook.addWorksheet('Product Details')
+    const worksheet = workbook.addWorksheet('Product Details Template')
     const worksheetInfo = workbook.addWorksheet('ReferenceData')
     const worksheetColumns = workbook.addWorksheet('Columns')
 
@@ -152,7 +152,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
     worksheet.getColumn('asin').eachCell((cell) => {
       cell.dataValidation = {
         type: 'textLength',
-        operator: 'lessThanOrEqual',
+        operator: 'between',
         showErrorMessage: true,
         allowBlank: true,
         formulae: [0, 20],
@@ -165,7 +165,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
     worksheet.getColumn('fnsku').eachCell((cell) => {
       cell.dataValidation = {
         type: 'textLength',
-        operator: 'lessThanOrEqual',
+        operator: 'between',
         showErrorMessage: true,
         allowBlank: true,
         formulae: [0, 20],
@@ -222,6 +222,10 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
     })
 
     worksheet.getColumn('weight').eachCell((cell) => {
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'lightGray',
+      }
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThan',
@@ -235,6 +239,10 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
     })
 
     worksheet.getColumn('length').eachCell((cell) => {
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'lightGray',
+      }
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThan',
@@ -248,6 +256,10 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
     })
 
     worksheet.getColumn('width').eachCell((cell) => {
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'lightGray',
+      }
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThan',
@@ -262,6 +274,10 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
     })
 
     worksheet.getColumn('height').eachCell((cell) => {
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'lightGray',
+      }
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThan',
@@ -275,6 +291,10 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
     })
 
     worksheet.getColumn('boxQty').eachCell((cell) => {
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'lightGray',
+      }
       cell.dataValidation = {
         type: 'whole',
         operator: 'greaterThan',
@@ -288,6 +308,10 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
     })
 
     worksheet.getColumn('boxWeight').eachCell((cell) => {
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'lightGray',
+      }
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThan',
@@ -301,6 +325,10 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
     })
 
     worksheet.getColumn('boxLength').eachCell((cell) => {
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'lightGray',
+      }
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThan',
@@ -314,6 +342,10 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
     })
 
     worksheet.getColumn('boxWidth').eachCell((cell) => {
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'lightGray',
+      }
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThan',
@@ -327,6 +359,10 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
     })
 
     worksheet.getColumn('boxHeight').eachCell((cell) => {
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'lightGray',
+      }
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThan',
