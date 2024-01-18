@@ -196,12 +196,12 @@ const Products = ({ session }: Props) => {
                           <ExportProductsTemplate
                             products={selectedRows.length == 0 ? filterDataTable || [] : selectedRows}
                             selected={selectedRows.length > 0 ? true : false}
-                            brands={data?.brands}
-                            suppliers={data?.suppliers}
-                            categories={data?.categories}
+                            brands={data?.brands || []}
+                            suppliers={data?.suppliers || []}
+                            categories={data?.categories || []}
                           />
                         )}
-                        <ExportBlankTemplate brands={data?.brands} suppliers={data?.suppliers} categories={data?.categories} />
+                        <ExportBlankTemplate brands={data?.brands || []} suppliers={data?.suppliers || []} categories={data?.categories || []} />
                         <DropdownItem
                           className='text-nowrap text-primary'
                           onClick={() =>
