@@ -130,7 +130,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
             case 9:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const weightSchema = Yup.object().shape({
-                  weight: Yup.number().min(0.1).required('Weight is required'),
+                  weight: Yup.number().min(0.001).required('Weight is required'),
                 })
                 weightSchema.isValidSync({ weight: rowValues[v] })
                   ? () => {}
@@ -141,7 +141,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
             case 10:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const lengthSchema = Yup.object().shape({
-                  length: Yup.number().min(0.1).required('Length is required'),
+                  length: Yup.number().min(0.001).required('Length is required'),
                 })
                 lengthSchema.isValidSync({ length: rowValues[v] })
                   ? () => {}
@@ -152,7 +152,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
             case 11:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const widthSchema = Yup.object().shape({
-                  width: Yup.number().min(0.1).required('Width is required'),
+                  width: Yup.number().min(0.001).required('Width is required'),
                 })
                 widthSchema.isValidSync({ width: rowValues[v] })
                   ? () => {}
@@ -163,7 +163,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
             case 12:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const heightSchema = Yup.object().shape({
-                  height: Yup.number().min(0.1).required('Height is required'),
+                  height: Yup.number().min(0.001).required('Height is required'),
                 })
                 heightSchema.isValidSync({ height: rowValues[v] })
                   ? () => {}
@@ -185,7 +185,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
             case 14:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const boxWeightSchema = Yup.object().shape({
-                  boxWeight: Yup.number().min(0.1).required('Box Weight is required'),
+                  boxWeight: Yup.number().min(0.001).required('Box Weight is required'),
                 })
                 boxWeightSchema.isValidSync({ boxWeight: rowValues[v] })
                   ? () => {}
@@ -196,7 +196,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
             case 15:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const boxLengthSchema = Yup.object().shape({
-                  boxLength: Yup.number().min(0.1).required('Box Length is required'),
+                  boxLength: Yup.number().min(0.001).required('Box Length is required'),
                 })
                 boxLengthSchema.isValidSync({ boxLength: rowValues[v] })
                   ? () => {}
@@ -207,7 +207,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
             case 16:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const boxWidthSchema = Yup.object().shape({
-                  boxWidth: Yup.number().min(0.1).required('Box Width is required'),
+                  boxWidth: Yup.number().min(0.001).required('Box Width is required'),
                 })
                 boxWidthSchema.isValidSync({ boxWidth: rowValues[v] })
                   ? () => {}
@@ -218,7 +218,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
             case 17:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const boxHeightSchema = Yup.object().shape({
-                  boxHeight: Yup.number().min(0.1).required('Box Height is required'),
+                  boxHeight: Yup.number().min(0.001).required('Box Height is required'),
                 })
                 boxHeightSchema.isValidSync({ boxHeight: rowValues[v] })
                   ? () => {}

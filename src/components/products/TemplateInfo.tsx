@@ -177,7 +177,7 @@ export const columnsInfoData = [
     label: 'Barcode',
     description: '12 Digit product identifier. Barcode found in the product packaging.',
     example: '736983029218',
-    value: 'REQUIRED',
+    value: 'LOCKED',
   },
   {
     label: 'Supplier',

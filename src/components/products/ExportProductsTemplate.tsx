@@ -39,7 +39,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
         description: product.description,
         asin: product.asin,
         fnsku: product.fnSku,
-        barcode: product.barcode,
+        barcode: `'${product.barcode}`,
         supplier: product.supplier,
         brand: product.brand,
         category: product.category,
@@ -185,7 +185,11 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
         errorTitle: 'Invalid input',
         error: 'Barcode is required. Barcode must be 12 characters',
       }
-      cell.protection = { locked: false }
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'lightGray',
+      }
+      cell.protection = { locked: true }
     })
 
     worksheet.getColumn('supplier').eachCell((cell) => {

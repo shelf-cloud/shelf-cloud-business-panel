@@ -233,8 +233,14 @@ const Navdata = () => {
       subItems: [
         {
           id: 'listings',
-          label: 'Amazon Listings',
+          label: 'Listings',
           link: '/amazon-sellers/listings?showHidden=0&condition=All&mapped=All',
+          parentId: 'amazon',
+        },
+        {
+          id: 'orders',
+          label: 'FBA Orders',
+          link: '/amazon-sellers/orders',
           parentId: 'amazon',
         },
       ],
