@@ -50,40 +50,152 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                 <h5 className='fw-semibold m-0'>Charge Details</h5>
               </CardHeader>
               <CardBody>
-                {/* <table className='table table-sm table-borderless table-nowrap mb-0'>
+                <table className='table table-sm table-borderless table-nowrap mb-0'>
                   <tbody>
                     <tr className='border-bottom pb-2'>
-                      <td className='text-muted d-flex flex-row justify-content-start align-items-start'>
-                        Pick Pack Charge
-                        {data.chargesFees && (
-                          <>
-                            <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltip${OrderId}`}></i>
-                            <TooltipComponent
-                              target={`tooltip${OrderId}`}
-                              text={`${FormatCurrency(state.currentRegion, data.chargesFees.orderCost!)} first item + ${FormatCurrency(
-                                state.currentRegion,
-                                data.chargesFees.extraItemOrderCost!
-                              )} addt'l.`}
-                            />
-                          </>
+                      <td className='text-black d-flex flex-row justify-content-start align-items-start fw-semibold'>Order Total</td>
+                      <td className='fw-semibold text-end text-primary'>
+                        {FormatCurrency(
+                          state.currentRegion,
+                          data?.orderItems.reduce(
+                            (total, item: FBAOrderItem) =>
+                              total +
+                              (item.itemPrice +
+                                item.itemTax +
+                                item.shippingPrice +
+                                item.shippingTax +
+                                item.giftWrapPrice +
+                                item.giftWrapTax +
+                                item.itemPromotionDiscount +
+                                item.shippingPromotionDiscount -
+                                item.itemTax -
+                                item.shippingTax +
+                                item.ShippingChargeback),
+                            0
+                          )
                         )}
                       </td>
-                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.pickpackCharge)}</td>
                     </tr>
-                    <tr className='border-bottom pb-2'>
-                      <td className='text-muted'>Shipping Charge</td>
-                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.onixShipping)}</td>
-                    </tr>
-                    <tr className='border-bottom pb-2'>
-                      <td className='text-muted'>Extra Charge</td>
-                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.extraCharge)}</td>
-                    </tr>
+                    {data.orderItems.reduce((total, item: FBAOrderItem) => total + item.Commission, 0) < 0 && (
+                      <tr className='border-bottom pb-2'>
+                        <td className='text-muted d-flex flex-row justify-content-start align-items-start'>Commission</td>
+                        <td className='fw-normal text-end text-danger'>
+                          {FormatCurrency(
+                            state.currentRegion,
+                            data.orderItems.reduce((total, item: FBAOrderItem) => total + item.Commission, 0)
+                          )}
+                        </td>
+                      </tr>
+                    )}
+                    {data.orderItems.reduce((total, item: FBAOrderItem) => total + item.FBAPerOrderFulfillmentFee, 0) < 0 && (
+                      <tr className='border-bottom pb-2'>
+                        <td className='text-muted'>FBAPerOrderFulfillmentFee</td>
+                        <td className='fw-normal text-end text-danger'>
+                          {FormatCurrency(
+                            state.currentRegion,
+                            data.orderItems.reduce((total, item: FBAOrderItem) => total + item.FBAPerOrderFulfillmentFee, 0)
+                          )}
+                        </td>
+                      </tr>
+                    )}
+                    {data.orderItems.reduce((total, item: FBAOrderItem) => total + item.FBAPerUnitFulfillmentFee, 0) < 0 && (
+                      <tr className='border-bottom pb-2'>
+                        <td className='text-muted'>FBAPerUnitFulfillmentFee</td>
+                        <td className='fw-normal text-end text-danger'>
+                          {FormatCurrency(
+                            state.currentRegion,
+                            data.orderItems.reduce((total, item: FBAOrderItem) => total + item.FBAPerUnitFulfillmentFee, 0)
+                          )}
+                        </td>
+                      </tr>
+                    )}
+                    {data.orderItems.reduce((total, item: FBAOrderItem) => total + item.FBAWeightBasedFee, 0) < 0 && (
+                      <tr className='border-bottom pb-2'>
+                        <td className='text-muted'>FBAWeightBasedFee</td>
+                        <td className='fw-normal text-end text-danger'>
+                          {FormatCurrency(
+                            state.currentRegion,
+                            data.orderItems.reduce((total, item: FBAOrderItem) => total + item.FBAWeightBasedFee, 0)
+                          )}
+                        </td>
+                      </tr>
+                    )}
+                    {data.orderItems.reduce((total, item: FBAOrderItem) => total + item.FixedClosingFee, 0) < 0 && (
+                      <tr className='border-bottom pb-2'>
+                        <td className='text-muted'>FixedClosingFee</td>
+                        <td className='fw-normal text-end text-danger'>
+                          {FormatCurrency(
+                            state.currentRegion,
+                            data.orderItems.reduce((total, item: FBAOrderItem) => total + item.FixedClosingFee, 0)
+                          )}
+                        </td>
+                      </tr>
+                    )}
+                    {data.orderItems.reduce((total, item: FBAOrderItem) => total + item.GiftwrapChargeback, 0) < 0 && (
+                      <tr className='border-bottom pb-2'>
+                        <td className='text-muted'>GiftwrapChargeback</td>
+                        <td className='fw-normal text-end text-danger'>
+                          {FormatCurrency(
+                            state.currentRegion,
+                            data.orderItems.reduce((total, item: FBAOrderItem) => total + item.GiftwrapChargeback, 0)
+                          )}
+                        </td>
+                      </tr>
+                    )}
+                    {data.orderItems.reduce((total, item: FBAOrderItem) => total + item.SalesTaxCollectionFee, 0) < 0 && (
+                      <tr className='border-bottom pb-2'>
+                        <td className='text-muted'>SalesTaxCollectionFee</td>
+                        <td className='fw-normal text-end text-danger'>
+                          {FormatCurrency(
+                            state.currentRegion,
+                            data.orderItems.reduce((total, item: FBAOrderItem) => total + item.SalesTaxCollectionFee, 0)
+                          )}
+                        </td>
+                      </tr>
+                    )}
+                    {data.orderItems.reduce((total, item: FBAOrderItem) => total + item.VariableClosingFee, 0) < 0 && (
+                      <tr className='border-bottom pb-2'>
+                        <td className='text-muted'>VariableClosingFee</td>
+                        <td className='fw-normal text-end text-danger'>
+                          {FormatCurrency(
+                            state.currentRegion,
+                            data.orderItems.reduce((total, item: FBAOrderItem) => total + item.VariableClosingFee, 0)
+                          )}
+                        </td>
+                      </tr>
+                    )}
                     <tr>
                       <td className='fw-bold'>TOTAL</td>
-                      <td className='text-primary fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.totalCharge)}</td>
+                      <td className='text-primary fw-semibold text-end'>
+                        {FormatCurrency(
+                          state.currentRegion,
+                          data?.orderItems.reduce(
+                            (total, item: FBAOrderItem) =>
+                              total +
+                              (item.itemPrice +
+                                item.itemTax +
+                                item.shippingPrice +
+                                item.shippingTax +
+                                item.giftWrapPrice +
+                                item.giftWrapTax +
+                                item.itemPromotionDiscount +
+                                item.shippingPromotionDiscount -
+                                item.itemTax -
+                                item.shippingTax +
+                                item.ShippingChargeback +
+                                item.Commission +
+                                item.FBAPerOrderFulfillmentFee +
+                                item.FBAPerUnitFulfillmentFee +
+                                item.FBAWeightBasedFee +
+                                item.FixedClosingFee +
+                                item.GiftwrapChargeback),
+                            0
+                          )
+                        )}
+                      </td>
                     </tr>
                   </tbody>
-                </table> */}
+                </table>
               </CardBody>
             </Card>
           </Col>
@@ -120,36 +232,128 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                         <td className='fs-6 text-muted'>{product.shelfcloud_sku ? product.shelfcloud_sku : <span className='text-muted'>Not Mapped</span>}</td>
                         <td className='text-center'>{product.quantity}</td>
                         <td className='text-center'>
-                          {product.quantity === 0
-                            ? FormatCurrency(state.currentRegion, 0)
-                            : FormatCurrency(
-                                state.currentRegion,
-                                (product.itemPrice +
-                                  product.itemTax +
-                                  product.shippingPrice +
-                                  product.shippingTax +
-                                  product.giftWrapPrice +
-                                  product.giftWrapTax +
-                                  product.itemPromotionDiscount +
-                                  product.shippingPromotionDiscount) /
-                                  product.quantity
-                              )}
+                          {product.quantity === 0 ? FormatCurrency(state.currentRegion, 0) : FormatCurrency(state.currentRegion, product.itemPrice / product.quantity)}
                         </td>
-                        <td className='text-center'>
-                          {FormatCurrency(
-                            state.currentRegion,
-                            product.itemPrice +
-                              product.itemTax +
-                              product.shippingPrice +
-                              product.shippingTax +
-                              product.giftWrapPrice +
-                              product.giftWrapTax +
-                              product.itemPromotionDiscount +
-                              product.shippingPromotionDiscount
-                          )}
-                        </td>
+                        <td className='text-center'>{FormatCurrency(state.currentRegion, product.itemPrice)}</td>
                       </tr>
                     ))}
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td className='text-end fs-6 fw-semibold text-nowrap'>Items</td>
+                      <td className='text-center fw-normal fs-6 text-black'>
+                        {FormatCurrency(
+                          state.currentRegion,
+                          data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.itemPrice, 0)
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td className='text-end fs-6 fw-semibold text-nowrap'>Items Tax</td>
+                      <td className='text-center fw-normal fs-6 text-black'>
+                        {FormatCurrency(
+                          state.currentRegion,
+                          data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.itemTax, 0)
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td className='text-end fs-6 fw-semibold text-nowrap'>Shipping</td>
+                      <td className='text-center fw-normal fs-6 text-black'>
+                        {FormatCurrency(
+                          state.currentRegion,
+                          data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.shippingPrice, 0)
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td className='text-end fs-6 fw-semibold text-nowrap'>Shipping Tax</td>
+                      <td className='text-center fw-normal fs-6 text-black'>
+                        {FormatCurrency(
+                          state.currentRegion,
+                          data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.shippingTax, 0)
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td className='text-end fs-7 fw-normal text-nowrap'>Item Promotion</td>
+                      <td className='text-center fw-normal fs-7 text-muted'>
+                        {FormatCurrency(
+                          state.currentRegion,
+                          data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.itemPromotionDiscount * -1, 0)
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td className='text-end fs-7 fw-normal text-nowrap'>Shipping Promotion</td>
+                      <td className='text-center fw-normal fs-7 text-muted'>
+                        {FormatCurrency(
+                          state.currentRegion,
+                          data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.shippingPromotionDiscount * -1, 0)
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td className='text-end fs-7 fw-normal text-nowrap'>Shipping Rebate</td>
+                      <td className='text-center fw-normal fs-7 text-muted'>
+                        {FormatCurrency(
+                          state.currentRegion,
+                          data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.ShippingChargeback, 0)
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td className='text-end fs-7 fw-normal text-nowrap'>Item Tax WithHeld</td>
+                      <td className='text-center fw-normal fs-7 text-muted'>
+                        {FormatCurrency(
+                          state.currentRegion,
+                          data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.itemTax * -1, 0)
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td className='text-end fs-7 fw-normal text-nowrap'>Shipping Tax WithHeld</td>
+                      <td className='text-center fw-normal fs-7 text-muted'>
+                        {FormatCurrency(
+                          state.currentRegion,
+                          data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.shippingTax * -1, 0)
+                        )}
+                      </td>
+                    </tr>
                     <tr>
                       <td></td>
                       <td></td>
@@ -169,7 +373,10 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                                 item.giftWrapPrice +
                                 item.giftWrapTax +
                                 item.itemPromotionDiscount +
-                                item.shippingPromotionDiscount),
+                                item.shippingPromotionDiscount -
+                                item.itemTax -
+                                item.shippingTax +
+                                item.ShippingChargeback),
                             0
                           )
                         )}

@@ -34,4 +34,13 @@ export interface FBAOrderItem {
     shippingPromotionDiscount: number;
     shelfcloud_sku: null | string;
     shelfcloud_sku_id: number | null;
+    Commission: number
+    FBAPerOrderFulfillmentFee: number
+    FBAPerUnitFulfillmentFee: number
+    FBAWeightBasedFee: number
+    FixedClosingFee: number
+    GiftwrapChargeback: number
+    ShippingChargeback: number
+    SalesTaxCollectionFee: number
+    VariableClosingFee: number
 }

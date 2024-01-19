@@ -73,7 +73,7 @@ const Orders = ({ session }: Props) => {
             (orderItem) =>
               orderItem.sku.toLowerCase().includes(searchValue.toLowerCase()) ||
               orderItem.asin.toLowerCase().includes(searchValue.toLowerCase()) ||
-              orderItem?.shelfcloud_sku!.toLowerCase().includes(searchValue.toLowerCase())
+              orderItem?.shelfcloud_sku?.toLowerCase().includes(searchValue.toLowerCase())
           )
       )
       return newDataTable
