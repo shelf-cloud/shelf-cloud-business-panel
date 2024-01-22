@@ -43,4 +43,12 @@ export interface FBAOrderItem {
     ShippingChargeback: number
     SalesTaxCollectionFee: number
     VariableClosingFee: number
+    facilitatorTax_item: number
+    facilitatorTax_shipping: number
+    refund_item: number
+    refund_itemTax: number
+    refund_commission: number
+    refund_adminCommission: number
+    refund_facilitatorTax_item: number
+    return_FBACustomerReturnPerUnitFee: number
 }

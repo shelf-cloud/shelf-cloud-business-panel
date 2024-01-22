@@ -11,6 +11,62 @@ type Props = {
 
 const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ data }: Props) => {
   const { state }: any = useContext(AppContext)
+
+  const OrderTotalBeforeFeesWithRefund = data?.orderItems.reduce(
+    (total, item: FBAOrderItem) => total + (item.refund_item + item.refund_itemTax + item.refund_commission + item.refund_adminCommission + item.refund_facilitatorTax_item),
+    0
+  )
+
+  const OrderTotalBeforeFees = data?.orderItems.reduce(
+    (total, item: FBAOrderItem) =>
+      total +
+      (item.itemPrice +
+        item.itemTax +
+        item.shippingPrice +
+        item.shippingTax +
+        item.giftWrapPrice +
+        item.giftWrapTax +
+        item.itemPromotionDiscount +
+        item.shippingPromotionDiscount +
+        item.facilitatorTax_item +
+        item.facilitatorTax_shipping +
+        item.ShippingChargeback),
+    0
+  )
+
+  let OrderTotalAfterFees = 0
+  if (OrderTotalBeforeFeesWithRefund !== 0) {
+    OrderTotalAfterFees = data?.orderItems.reduce(
+      (total, item: FBAOrderItem) =>
+        total +
+        (OrderTotalBeforeFeesWithRefund + item.FBAPerOrderFulfillmentFee + item.FBAPerUnitFulfillmentFee + item.FBAWeightBasedFee + item.FixedClosingFee + item.GiftwrapChargeback),
+      0
+    )
+  } else {
+    OrderTotalAfterFees = data?.orderItems.reduce(
+      (total, item: FBAOrderItem) =>
+        total +
+        (item.itemPrice +
+          item.itemTax +
+          item.shippingPrice +
+          item.shippingTax +
+          item.giftWrapPrice +
+          item.giftWrapTax +
+          item.itemPromotionDiscount +
+          item.shippingPromotionDiscount +
+          item.facilitatorTax_item +
+          item.facilitatorTax_shipping +
+          item.ShippingChargeback +
+          item.Commission +
+          item.FBAPerOrderFulfillmentFee +
+          item.FBAPerUnitFulfillmentFee +
+          item.FBAWeightBasedFee +
+          item.FixedClosingFee +
+          item.GiftwrapChargeback),
+      0
+    )
+  }
+
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
       <Row>
@@ -54,29 +110,18 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                   <tbody>
                     <tr className='border-bottom pb-2'>
                       <td className='text-black d-flex flex-row justify-content-start align-items-start fw-semibold'>Order Total</td>
-                      <td className='fw-semibold text-end text-primary'>
+                      <td
+                        className={
+                          'fw-semibold text-end ' +
+                          (OrderTotalBeforeFeesWithRefund !== 0 && OrderTotalBeforeFeesWithRefund !== OrderTotalBeforeFees ? 'text-danger' : 'text-primary')
+                        }>
                         {FormatCurrency(
                           state.currentRegion,
-                          data?.orderItems.reduce(
-                            (total, item: FBAOrderItem) =>
-                              total +
-                              (item.itemPrice +
-                                item.itemTax +
-                                item.shippingPrice +
-                                item.shippingTax +
-                                item.giftWrapPrice +
-                                item.giftWrapTax +
-                                item.itemPromotionDiscount +
-                                item.shippingPromotionDiscount -
-                                item.itemTax -
-                                item.shippingTax +
-                                item.ShippingChargeback),
-                            0
-                          )
+                          OrderTotalBeforeFeesWithRefund !== 0 && OrderTotalBeforeFeesWithRefund !== OrderTotalBeforeFees ? OrderTotalBeforeFeesWithRefund : OrderTotalBeforeFees
                         )}
                       </td>
                     </tr>
-                    {data.orderItems.reduce((total, item: FBAOrderItem) => total + item.Commission, 0) < 0 && (
+                    {data.orderItems.reduce((total, item: FBAOrderItem) => total + item.Commission, 0) < 0 && OrderTotalBeforeFeesWithRefund === 0 && (
                       <tr className='border-bottom pb-2'>
                         <td className='text-muted d-flex flex-row justify-content-start align-items-start'>Commission</td>
                         <td className='fw-normal text-end text-danger'>
@@ -165,33 +210,9 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       </tr>
                     )}
                     <tr>
-                      <td className='fw-bold'>TOTAL</td>
-                      <td className='text-primary fw-semibold text-end'>
-                        {FormatCurrency(
-                          state.currentRegion,
-                          data?.orderItems.reduce(
-                            (total, item: FBAOrderItem) =>
-                              total +
-                              (item.itemPrice +
-                                item.itemTax +
-                                item.shippingPrice +
-                                item.shippingTax +
-                                item.giftWrapPrice +
-                                item.giftWrapTax +
-                                item.itemPromotionDiscount +
-                                item.shippingPromotionDiscount -
-                                item.itemTax -
-                                item.shippingTax +
-                                item.ShippingChargeback +
-                                item.Commission +
-                                item.FBAPerOrderFulfillmentFee +
-                                item.FBAPerUnitFulfillmentFee +
-                                item.FBAWeightBasedFee +
-                                item.FixedClosingFee +
-                                item.GiftwrapChargeback),
-                            0
-                          )
-                        )}
+                      <td className='fw-bold border-top border-dark'>TOTAL Seller Balance</td>
+                      <td className={'fw-semibold text-end border-top border-dark ' + (OrderTotalAfterFees >= 0 ? 'text-primary' : 'text-danger')}>
+                        {FormatCurrency(state.currentRegion, OrderTotalAfterFees)}
                       </td>
                     </tr>
                   </tbody>
@@ -281,8 +302,8 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td className='text-end fs-6 fw-semibold text-nowrap'>Shipping Tax</td>
-                      <td className='text-center fw-normal fs-6 text-black'>
+                      <td className='text-end fs-6 fw-semibold text-nowrap border-bottom'>Shipping Tax</td>
+                      <td className='text-center fw-normal fs-6 text-black border-bottom'>
                         {FormatCurrency(
                           state.currentRegion,
                           data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.shippingTax, 0)
@@ -307,8 +328,8 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td className='text-end fs-7 fw-normal text-nowrap'>Shipping Promotion</td>
-                      <td className='text-center fw-normal fs-7 text-muted'>
+                      <td className='text-end fs-7 fw-normal text-nowrap border-bottom'>Shipping Promotion</td>
+                      <td className='text-center fw-normal fs-7 text-muted border-bottom'>
                         {FormatCurrency(
                           state.currentRegion,
                           data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.shippingPromotionDiscount * -1, 0)
@@ -337,7 +358,7 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       <td className='text-center fw-normal fs-7 text-muted'>
                         {FormatCurrency(
                           state.currentRegion,
-                          data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.itemTax * -1, 0)
+                          data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.facilitatorTax_item, 0)
                         )}
                       </td>
                     </tr>
@@ -346,11 +367,11 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td className='text-end fs-7 fw-normal text-nowrap'>Shipping Tax WithHeld</td>
-                      <td className='text-center fw-normal fs-7 text-muted'>
+                      <td className='text-end fs-7 fw-normal text-nowrap border-bottom border-dark'>Shipping Tax WithHeld</td>
+                      <td className='text-center fw-normal fs-7 text-muted border-bottom border-dark'>
                         {FormatCurrency(
                           state.currentRegion,
-                          data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.shippingTax * -1, 0)
+                          data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.facilitatorTax_shipping, 0)
                         )}
                       </td>
                     </tr>
@@ -360,28 +381,93 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       <td></td>
                       <td></td>
                       <td className='text-end fs-5 fw-bold text-nowrap'>Total</td>
-                      <td className='text-center fw-semibold fs-5 text-primary'>
-                        {FormatCurrency(
-                          state.currentRegion,
-                          data?.orderItems.reduce(
-                            (total, item: FBAOrderItem) =>
-                              total +
-                              (item.itemPrice +
-                                item.itemTax +
-                                item.shippingPrice +
-                                item.shippingTax +
-                                item.giftWrapPrice +
-                                item.giftWrapTax +
-                                item.itemPromotionDiscount +
-                                item.shippingPromotionDiscount -
-                                item.itemTax -
-                                item.shippingTax +
-                                item.ShippingChargeback),
-                            0
-                          )
-                        )}
-                      </td>
+                      <td className='text-center fw-semibold fs-5 text-primary'>{FormatCurrency(state.currentRegion, OrderTotalBeforeFees)}</td>
                     </tr>
+                    {data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.refund_item, 0) < 0 && (
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td className='text-end fs-7 fw-normal text-nowrap border-top border-dark'>Refund Item</td>
+                        <td className='text-center fw-normal fs-7 text-danger border-top border-dark'>
+                          {FormatCurrency(
+                            state.currentRegion,
+                            data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.refund_item, 0)
+                          )}
+                        </td>
+                      </tr>
+                    )}
+                    {data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.refund_itemTax, 0) < 0 && (
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td className='text-end fs-7 fw-normal text-nowrap'>Refund Item Tax</td>
+                        <td className='text-center fw-normal fs-7 text-danger'>
+                          {FormatCurrency(
+                            state.currentRegion,
+                            data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.refund_itemTax, 0)
+                          )}
+                        </td>
+                      </tr>
+                    )}
+                    {data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.refund_commission, 0) > 0 && (
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td className='text-end fs-7 fw-normal text-nowrap'>Refund Commision</td>
+                        <td className='text-center fw-normal fs-7 text-danger'>
+                          {FormatCurrency(
+                            state.currentRegion,
+                            data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.refund_commission, 0)
+                          )}
+                        </td>
+                      </tr>
+                    )}
+                    {data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.refund_adminCommission, 0) < 0 && (
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td className='text-end fs-7 fw-normal text-nowrap'>Refund Admin Fee</td>
+                        <td className='text-center fw-normal fs-7 text-danger'>
+                          {FormatCurrency(
+                            state.currentRegion,
+                            data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.refund_adminCommission, 0)
+                          )}
+                        </td>
+                      </tr>
+                    )}
+                    {data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.refund_facilitatorTax_item, 0) < 0 && (
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td className='text-end fs-7 fw-normal text-nowrap'>Refund WithHeld Tax</td>
+                        <td className='text-center fw-normal fs-7 text-danger'>
+                          {FormatCurrency(
+                            state.currentRegion,
+                            data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.refund_facilitatorTax_item, 0)
+                          )}
+                        </td>
+                      </tr>
+                    )}
+                    {OrderTotalBeforeFeesWithRefund !== 0 && OrderTotalBeforeFeesWithRefund !== OrderTotalBeforeFees && (
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td className='text-end fs-5 fw-bold text-nowrap'>Total After Refund</td>
+                        <td className='text-center fw-semibold fs-5 text-danger'>{FormatCurrency(state.currentRegion, OrderTotalBeforeFeesWithRefund)}</td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
