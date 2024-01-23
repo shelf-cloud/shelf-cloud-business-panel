@@ -52,7 +52,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
         boxLength: product.boxLength,
         boxWidth: product.boxWidth,
         boxHeight: product.boxHeight,
-        activeState: product.activeState,
+        // activeState: product.activeState,
         note: product.note,
         defaultCost: product.defaultCost,
         defaultPrice: product.defaultPrice,
@@ -379,14 +379,14 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: true }
     })
 
-    worksheet.getColumn('activeState').eachCell((cell) => {
-      cell.dataValidation = {
-        type: 'list',
-        allowBlank: false,
-        formulae: ['"True,False"'],
-      }
-      cell.protection = { locked: false }
-    })
+    // worksheet.getColumn('activeState').eachCell((cell) => {
+    //   cell.dataValidation = {
+    //     type: 'list',
+    //     allowBlank: false,
+    //     formulae: ['"True,False"'],
+    //   }
+    //   cell.protection = { locked: false }
+    // })
 
     worksheet.getColumn('note').eachCell((cell) => {
       cell.dataValidation = {

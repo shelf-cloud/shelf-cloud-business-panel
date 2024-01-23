@@ -20,6 +20,7 @@ import FilterProducts from '@components/ui/FilterProducts'
 import { useRouter } from 'next/router'
 import ExportBlankTemplate from '@components/products/ExportBlankTemplate'
 import ImportProductsFileModal from '@components/modals/products/ImportProductsFileModal'
+import ExportProductsFile from '@components/products/ExportProductsFile'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -220,7 +221,7 @@ const Products = ({ session }: Props) => {
                           <span className='fw-bold'>{`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''}`}</span> Selected
                         </DropdownToggle>
                         <DropdownMenu>
-                          {/* <ExportProductsFile products={selectedRows || []} loadingCsv={loadingCsv} setloadingCsv={setloadingCsv} /> */}
+                          <ExportProductsFile products={selectedRows} />
                           <DropdownItem className='text-nowrap text-danger' onClick={changeSelectedProductsState}>
                             <i className='mdi mdi-eye-off label-icon align-middle fs-6 me-2' />
                             Set Inactive

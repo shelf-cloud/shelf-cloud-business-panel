@@ -226,23 +226,23 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
               }
               break
             // activestate
-            case 18:
-              const activestateSchema = Yup.object().shape({
-                activestate: Yup.string().oneOf(['TRUE', 'FALSE'], 'Invalid Active State'),
-              })
-              activestateSchema.isValidSync({ activestate: rowValues[v].toUpperCase() })
-                ? () => {}
-                : errorsList.push({ errorLine: i + 1, errorMessage: 'Active State: Valid values: TRUE or FALSE', value: rowValues[v] })
-              break
+            // case 18:
+            //   const activestateSchema = Yup.object().shape({
+            //     activestate: Yup.string().oneOf(['TRUE', 'FALSE'], 'Invalid Active State'),
+            //   })
+            //   activestateSchema.isValidSync({ activestate: rowValues[v].toUpperCase() })
+            //     ? () => {}
+            //     : errorsList.push({ errorLine: i + 1, errorMessage: 'Active State: Valid values: TRUE or FALSE', value: rowValues[v] })
+            //   break
             // note
-            case 19:
+            case 18:
               const noteSchema = Yup.object().shape({
                 note: Yup.string(),
               })
               noteSchema.isValidSync({ note: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Note', value: rowValues[v] })
               break
             // defaultCost
-            case 20:
+            case 19:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const defaultCostSchema = Yup.object().shape({
                   defaultCost: Yup.number().min(0),
@@ -251,7 +251,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
               }
               break
             // defaultPrice
-            case 21:
+            case 20:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const defaultPriceSchema = Yup.object().shape({
                   defaultPrice: Yup.number().min(0),
@@ -266,7 +266,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
               }
               break
             // msrp
-            case 22:
+            case 21:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const msrpSchema = Yup.object().shape({
                   msrp: Yup.number().min(0),
@@ -275,7 +275,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
               }
               break
             //map
-            case 23:
+            case 22:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const mapSchema = Yup.object().shape({
                   map: Yup.number().min(0),
@@ -284,7 +284,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
               }
               break
             // floor
-            case 24:
+            case 23:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const floorSchema = Yup.object().shape({
                   floor: Yup.number().min(0),
@@ -293,7 +293,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
               }
               break
             // ceiling
-            case 25:
+            case 24:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const ceilingSchema = Yup.object().shape({
                   ceiling: Yup.number().min(0),
@@ -302,7 +302,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
               }
               break
             // sellerCost
-            case 26:
+            case 25:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const sellerCostSchema = Yup.object().shape({
                   sellerCost: Yup.number().min(0),
@@ -313,7 +313,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
               }
               break
             // inboundShippingCost
-            case 27:
+            case 26:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const inboundShippingCostSchema = Yup.object().shape({
                   inboundShippingCost: Yup.number().min(0),
@@ -324,7 +324,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
               }
               break
             // otherCosts
-            case 28:
+            case 27:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const otherCostsSchema = Yup.object().shape({
                   otherCosts: Yup.number().min(0),
@@ -335,7 +335,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
               }
               break
             // productionTime
-            case 29:
+            case 28:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const productionTimeSchema = Yup.object().shape({
                   productionTime: Yup.number().min(0).integer(),
@@ -346,7 +346,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
               }
               break
             // transitTime
-            case 30:
+            case 29:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const transitTimeSchema = Yup.object().shape({
                   transitTime: Yup.number().min(0).integer(),
@@ -357,7 +357,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
               }
               break
             // shippingToFBACost
-            case 31:
+            case 30:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const shippingToFBACostSchema = Yup.object().shape({
                   shippingToFBACost: Yup.number().min(0),
@@ -368,7 +368,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
               }
               break
             // buffer
-            case 32:
+            case 31:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const bufferSchema = Yup.object().shape({
                   buffer: Yup.number().min(0),
@@ -377,7 +377,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
               }
               break
             // itemcondition
-            case 33:
+            case 32:
               const itemconditionSchema = Yup.object().shape({
                 itemcondition: Yup.string().oneOf(['New', 'Used'], 'Invalid Item Condition'),
               })
@@ -386,7 +386,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
                 : errorsList.push({ errorLine: i + 1, errorMessage: 'Item Condition Valid values: New or Used', value: rowValues[v] })
               break
             // image
-            case 34:
+            case 33:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const imageSchema = Yup.object().shape({
                   image: Yup.string().url(),

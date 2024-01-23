@@ -308,14 +308,14 @@ const ExportBlankTemplate = ({ brands, suppliers, categories }: Props) => {
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('activeState').eachCell({ includeEmpty: true }, (cell) => {
-      cell.dataValidation = {
-        type: 'list',
-        allowBlank: false,
-        formulae: ['"True,False"'],
-      }
-      cell.protection = { locked: false }
-    })
+    // worksheet.getColumn('activeState').eachCell({ includeEmpty: true }, (cell) => {
+    //   cell.dataValidation = {
+    //     type: 'list',
+    //     allowBlank: false,
+    //     formulae: ['"True,False"'],
+    //   }
+    //   cell.protection = { locked: false }
+    // })
 
     worksheet.getColumn('note').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {

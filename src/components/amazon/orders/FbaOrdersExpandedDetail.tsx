@@ -25,8 +25,8 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
         item.shippingPrice +
         item.shippingTax +
         item.giftWrapPrice +
-        item.giftWrapTax +
-        item.itemPromotionDiscount +
+        item.giftWrapTax -
+        item.itemPromotionDiscount -
         item.shippingPromotionDiscount +
         item.facilitatorTax_item +
         item.facilitatorTax_shipping +
@@ -34,38 +34,60 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
     0
   )
 
-  let OrderTotalAfterFees = 0
-  if (OrderTotalBeforeFeesWithRefund !== 0) {
-    OrderTotalAfterFees = data?.orderItems.reduce(
-      (total, item: FBAOrderItem) =>
-        total +
-        (OrderTotalBeforeFeesWithRefund + item.FBAPerOrderFulfillmentFee + item.FBAPerUnitFulfillmentFee + item.FBAWeightBasedFee + item.FixedClosingFee + item.GiftwrapChargeback),
-      0
-    )
-  } else {
-    OrderTotalAfterFees = data?.orderItems.reduce(
-      (total, item: FBAOrderItem) =>
-        total +
-        (item.itemPrice +
-          item.itemTax +
-          item.shippingPrice +
-          item.shippingTax +
-          item.giftWrapPrice +
-          item.giftWrapTax +
-          item.itemPromotionDiscount +
-          item.shippingPromotionDiscount +
-          item.facilitatorTax_item +
-          item.facilitatorTax_shipping +
-          item.ShippingChargeback +
-          item.Commission +
-          item.FBAPerOrderFulfillmentFee +
-          item.FBAPerUnitFulfillmentFee +
-          item.FBAWeightBasedFee +
-          item.FixedClosingFee +
-          item.GiftwrapChargeback),
-      0
-    )
-  }
+  const OrderTotalAfterFees = data?.orderItems.reduce(
+    (total, item: FBAOrderItem) =>
+      total +
+      (item.itemPrice +
+        item.itemTax +
+        item.shippingPrice +
+        item.shippingTax +
+        item.giftWrapPrice +
+        item.giftWrapTax -
+        item.itemPromotionDiscount -
+        item.shippingPromotionDiscount +
+        item.facilitatorTax_item +
+        item.facilitatorTax_shipping +
+        item.ShippingChargeback +
+        item.Commission +
+        item.FBAPerOrderFulfillmentFee +
+        item.FBAPerUnitFulfillmentFee +
+        item.FBAWeightBasedFee +
+        item.FixedClosingFee +
+        item.GiftwrapChargeback),
+    0
+  )
+  // let OrderTotalAfterFees = 0
+  // if (OrderTotalBeforeFeesWithRefund !== 0) {
+  //   OrderTotalAfterFees = data?.orderItems.reduce(
+  //     (total, item: FBAOrderItem) =>
+  //       total +
+  //       (OrderTotalBeforeFeesWithRefund + item.FBAPerOrderFulfillmentFee + item.FBAPerUnitFulfillmentFee + item.FBAWeightBasedFee + item.FixedClosingFee + item.GiftwrapChargeback),
+  //     0
+  //   )
+  // } else {
+  //   OrderTotalAfterFees = data?.orderItems.reduce(
+  //     (total, item: FBAOrderItem) =>
+  //       total +
+  //       (item.itemPrice +
+  //         item.itemTax +
+  //         item.shippingPrice +
+  //         item.shippingTax +
+  //         item.giftWrapPrice +
+  //         item.giftWrapTax -
+  //         item.itemPromotionDiscount -
+  //         item.shippingPromotionDiscount +
+  //         item.facilitatorTax_item +
+  //         item.facilitatorTax_shipping +
+  //         item.ShippingChargeback +
+  //         item.Commission +
+  //         item.FBAPerOrderFulfillmentFee +
+  //         item.FBAPerUnitFulfillmentFee +
+  //         item.FBAWeightBasedFee +
+  //         item.FixedClosingFee +
+  //         item.GiftwrapChargeback),
+  //     0
+  //   )
+  // }
 
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
@@ -110,18 +132,10 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                   <tbody>
                     <tr className='border-bottom pb-2'>
                       <td className='text-black d-flex flex-row justify-content-start align-items-start fw-semibold'>Order Total</td>
-                      <td
-                        className={
-                          'fw-semibold text-end ' +
-                          (OrderTotalBeforeFeesWithRefund !== 0 && OrderTotalBeforeFeesWithRefund !== OrderTotalBeforeFees ? 'text-danger' : 'text-primary')
-                        }>
-                        {FormatCurrency(
-                          state.currentRegion,
-                          OrderTotalBeforeFeesWithRefund !== 0 && OrderTotalBeforeFeesWithRefund !== OrderTotalBeforeFees ? OrderTotalBeforeFeesWithRefund : OrderTotalBeforeFees
-                        )}
-                      </td>
+                      <td className={'fw-semibold text-end text-primary'}>{FormatCurrency(state.currentRegion, OrderTotalBeforeFees)}</td>
                     </tr>
-                    {data.orderItems.reduce((total, item: FBAOrderItem) => total + item.Commission, 0) < 0 && OrderTotalBeforeFeesWithRefund === 0 && (
+
+                    {data.orderItems.reduce((total, item: FBAOrderItem) => total + item.Commission, 0) < 0 && (
                       <tr className='border-bottom pb-2'>
                         <td className='text-muted d-flex flex-row justify-content-start align-items-start'>Commission</td>
                         <td className='fw-normal text-end text-danger'>
@@ -210,11 +224,21 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       </tr>
                     )}
                     <tr>
-                      <td className='fw-bold border-top border-dark'>TOTAL Seller Balance</td>
-                      <td className={'fw-semibold text-end border-top border-dark ' + (OrderTotalAfterFees >= 0 ? 'text-primary' : 'text-danger')}>
-                        {FormatCurrency(state.currentRegion, OrderTotalAfterFees)}
-                      </td>
+                      <td className='fw-bold fs-5 border-top border-dark'>TOTAL Seller Balance</td>
+                      <td className='fw-semibold fs-5 text-end border-top border-dark text-primary'>{FormatCurrency(state.currentRegion, OrderTotalAfterFees)}</td>
                     </tr>
+                    {OrderTotalBeforeFeesWithRefund !== 0 && (
+                      <tr className='border-bottom pb-2'>
+                        <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Refund</td>
+                        <td className='fw-semibold text-end text-danger'>{FormatCurrency(state.currentRegion, OrderTotalBeforeFeesWithRefund)}</td>
+                      </tr>
+                    )}
+                    {OrderTotalBeforeFeesWithRefund !== 0 && (
+                      <tr className='border-bottom pb-2 fs-5'>
+                        <td className='text-black d-flex flex-row justify-content-start align-items-start fw-semibold'>Total</td>
+                        <td className='fw-semibold text-end text-danger'>{FormatCurrency(state.currentRegion, OrderTotalAfterFees + OrderTotalBeforeFeesWithRefund)}</td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </CardBody>
@@ -420,7 +444,7 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                         <td></td>
                         <td></td>
                         <td className='text-end fs-7 fw-normal text-nowrap'>Refund Commision</td>
-                        <td className='text-center fw-normal fs-7 text-danger'>
+                        <td className='text-center fw-normal fs-7'>
                           {FormatCurrency(
                             state.currentRegion,
                             data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.refund_commission, 0)
