@@ -91,24 +91,32 @@ const SellerFbaOrdersTable = ({ tableData, pending }: Props) => {
               row?.orderItems.reduce(
                 (total, item: FBAOrderItem) =>
                   total +
-                  Number(item.itemPrice +
-                    item.itemTax +
-                    item.shippingPrice +
-                    item.shippingTax +
-                    item.giftWrapPrice +
-                    item.giftWrapTax +
-                    item.itemPromotionDiscount +
-                    item.shippingPromotionDiscount),
+                  Number(
+                    item.itemPrice +
+                      item.itemTax +
+                      item.shippingPrice +
+                      item.shippingTax +
+                      item.giftWrapPrice +
+                      item.giftWrapTax +
+                      item.itemPromotionDiscount +
+                      item.shippingPromotionDiscount
+                  ),
                 0
               )
             )}
             <span className='text-muted'>{` ${row.currencyCode}`}</span>
+            {row?.orderItems.reduce(
+              (total, item: FBAOrderItem) =>
+                total + (item.refund_item + item.refund_itemTax + item.refund_commission + item.refund_adminCommission + item.refund_facilitatorTax_item),
+              0
+            ) !== 0 && <span className='text-danger fw-normal'> - Refund</span>}
           </>
         )
       },
       rigth: true,
       sortable: true,
       compact: true,
+      wrap: false,
     },
   ]
 

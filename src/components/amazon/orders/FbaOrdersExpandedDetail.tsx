@@ -224,7 +224,7 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       </tr>
                     )}
                     <tr>
-                      <td className='fw-bold fs-5 border-top border-dark'>TOTAL Seller Balance</td>
+                      <td className='fw-bold fs-5 border-top border-dark'>Total Seller Balance</td>
                       <td className='fw-semibold fs-5 text-end border-top border-dark text-primary'>{FormatCurrency(state.currentRegion, OrderTotalAfterFees)}</td>
                     </tr>
                     {OrderTotalBeforeFeesWithRefund !== 0 && (
@@ -234,9 +234,11 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       </tr>
                     )}
                     {OrderTotalBeforeFeesWithRefund !== 0 && (
-                      <tr className='border-bottom pb-2 fs-5'>
-                        <td className='text-black d-flex flex-row justify-content-start align-items-start fw-semibold'>Total</td>
-                        <td className='fw-semibold text-end text-danger'>{FormatCurrency(state.currentRegion, OrderTotalAfterFees + OrderTotalBeforeFeesWithRefund)}</td>
+                      <tr className='pb-2 fs-5'>
+                        <td className='fw-bold fs-5'>Total</td>
+                        <td className={'fw-semibold text-end ' + (OrderTotalAfterFees + OrderTotalBeforeFeesWithRefund > 0 ? 'text-primary' : 'text-danger')}>
+                          {FormatCurrency(state.currentRegion, OrderTotalAfterFees + OrderTotalBeforeFeesWithRefund)}
+                        </td>
                       </tr>
                     )}
                   </tbody>
