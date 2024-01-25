@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
 import { Collapse } from 'reactstrap'
-import navdata from './LayoutMenuData'
+// import navdata from './LayoutMenuData'
+import navdata from './LayoutMenuDataVideo'
 import { useRouter } from 'next/router'
 
 const VerticalLayout = () => {
@@ -62,8 +63,8 @@ const VerticalLayout = () => {
                                   {subItem.label}
                                 </a>
                               </Link>
-                              <Collapse className='menu-dropdown' isOpen={subItem.stateVariables} id='sidebarEcommerce'>
-                                <ul className='nav nav-sm flex-column'>
+                              <Collapse className='menu-dropdown' isOpen={subItem.stateVariables}>
+                                <ul className='nav nav-sm flex-column' style={{ borderLeft: '2px solid rgba(255, 255, 255, 0.1)' }}>
                                   {/* child subItms  */}
                                   {subItem.childItems &&
                                     (subItem.childItems || []).map((childItem: any, key: any) => (
@@ -71,7 +72,9 @@ const VerticalLayout = () => {
                                         {!childItem.childItems ? (
                                           <li className='nav-item'>
                                             <Link href={childItem.link ? childItem.link : '/#'} passHref>
-                                              <a className='nav-link'>{childItem.label}</a>
+                                              <a className={'nav-link menu-link w-auto ' + (pathname == `${childItem.link.split('?')[0]}` && 'subLinkActiveChildren')}>
+                                                {childItem.label}
+                                              </a>
                                             </Link>
                                           </li>
                                         ) : (
@@ -84,7 +87,7 @@ const VerticalLayout = () => {
                                                 </span>
                                               </a>
                                             </Link>
-                                            <Collapse className='menu-dropdown' isOpen={childItem.stateVariables} id='sidebaremailTemplates'>
+                                            <Collapse className='menu-dropdown' isOpen={childItem.stateVariables}>
                                               <ul className='nav nav-sm flex-column'>
                                                 {childItem.childItems.map((subChildItem: any, key: any) => (
                                                   <li className='nav-item' key={key}>

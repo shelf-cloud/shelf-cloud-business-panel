@@ -23,6 +23,13 @@
   width: 90% !important;
   background-color: rgba(255, 255, 255, 0.1);
 }
+.subLinkActiveChildren {
+  color: $vertical-menu-item-color-active !important;
+  font-weight: 500;
+  border-radius: 9px;
+  width: 100% !important;
+  background-color: rgba(255, 255, 255, 0.1);
+}
 
 .logout_container {
   position: absolute;
