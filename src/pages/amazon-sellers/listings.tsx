@@ -51,7 +51,10 @@ const Listings = ({ session }: Props) => {
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data }: { data?: ListingsResponse } = useSWR(
     state.user.businessId ? `/api/amazon/getAmazonSellerListings?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
-    fetcher
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
   )
 
   useEffect(() => {

@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import AppContext from '@context/AppContext'
+import moment from 'moment'
+
 const Navdata = () => {
   const { state } = useContext(AppContext)
   //state data
@@ -138,17 +140,29 @@ const Navdata = () => {
       },
       subItems: [
         {
-          id: 'shopify',
-          label: 'Shopify',
-          link: '/marketplaceShopify',
+          id: 'marketplaceDashboard',
+          label: 'Dashboard',
+          link: '/marketplaceDashboard',
           parentId: 'marketplaces',
         },
         {
-          id: 'wayfair',
-          label: 'Wayfair',
-          link: '/marketplaceWayfair',
+          id: 'productPerformance',
+          label: 'Product Performance',
+          link: '/marketplaces/productPerformance',
           parentId: 'marketplaces',
         },
+        // {
+        //   id: 'shopify',
+        //   label: 'Shopify',
+        //   link: '/marketplaceShopify',
+        //   parentId: 'marketplaces',
+        // },
+        // {
+        //   id: 'wayfair',
+        //   label: 'Wayfair',
+        //   link: '/marketplaceWayfair',
+        //   parentId: 'marketplaces',
+        // },
       ],
     },
     {
@@ -187,7 +201,7 @@ const Navdata = () => {
     {
       id: 'reports',
       label: 'Reports',
-      icon: ' ri-file-list-3-fill',
+      icon: 'ri-numbers-fill',
       link: '#',
       stateVariables: isReports,
       click: function (e) {
@@ -200,13 +214,13 @@ const Navdata = () => {
         {
           id: 'sales',
           label: 'Sales',
-          link: '/salesReport',
+          link: '/reports/sales',
           parentId: 'reports',
         },
         {
           id: 'inventory',
           label: 'Inventory',
-          link: '/inventoryReport',
+          link: '/reports/inventory',
           parentId: 'reports',
         },
       ],
@@ -286,7 +300,7 @@ const Navdata = () => {
   }
 
   if (state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected) {
-    menuItems[3].subItems?.unshift({
+    menuItems[3].subItems?.push({
       id: 'amazon',
       label: 'Amazon',
       // icon: 'ri-amazon-fill',

@@ -42,7 +42,7 @@ type Props = {
 
 const Shipments = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
-  const [shipmentsStartDate, setShipmentsStartDate] = useState(moment().subtract(2, 'months').format('YYYY-MM-DD'))
+  const [shipmentsStartDate, setShipmentsStartDate] = useState(moment().subtract(1, 'months').format('YYYY-MM-DD'))
   const [shipmentsEndDate, setShipmentsEndDate] = useState(moment().format('YYYY-MM-DD'))
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<OrderRowType[]>([])
@@ -56,7 +56,10 @@ const Shipments = ({ session }: Props) => {
     state.user.businessId
       ? `/api/getShipmentsOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`
       : null,
-    fetcher
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
   )
 
   useEffect(() => {
@@ -84,8 +87,7 @@ const Shipments = ({ session }: Props) => {
           order?.shipName?.toLowerCase().includes(searchValue.toLowerCase()) ||
           order?.trackingNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
           order?.orderItems?.some(
-            (item: ShipmentOrderItem) =>
-              item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
+            (item: ShipmentOrderItem) => item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
           )
       )
       if (searchType !== '') {
@@ -123,8 +125,7 @@ const Shipments = ({ session }: Props) => {
             order?.shipName?.toLowerCase().includes(searchValue.toLowerCase()) ||
             order?.trackingNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
             order?.orderItems?.some(
-              (item: ShipmentOrderItem) =>
-                item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
+              (item: ShipmentOrderItem) => item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
             )
         )
       }
@@ -138,7 +139,7 @@ const Shipments = ({ session }: Props) => {
       if (searchType !== '') {
         newDataTable = newDataTable.filter((order) => order?.orderType?.toLowerCase().includes(searchType.toLowerCase()))
       }
-      
+
       if (searchMarketplace !== '') {
         newDataTable = newDataTable.filter((order) => order?.channelName?.toLowerCase() == searchMarketplace.toLowerCase())
       }
@@ -152,15 +153,14 @@ const Shipments = ({ session }: Props) => {
             order?.shipName?.toLowerCase().includes(searchValue.toLowerCase()) ||
             order?.trackingNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
             order?.orderItems?.some(
-              (item: ShipmentOrderItem) =>
-                item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
+              (item: ShipmentOrderItem) => item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
             )
         )
       }
 
       return newDataTable
     }
-    
+
     if (searchMarketplace !== '') {
       let newDataTable = allData.filter((order) => order?.channelName?.toLowerCase() == searchMarketplace.toLowerCase())
 
@@ -181,15 +181,13 @@ const Shipments = ({ session }: Props) => {
             order?.shipName?.toLowerCase().includes(searchValue.toLowerCase()) ||
             order?.trackingNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
             order?.orderItems?.some(
-              (item: ShipmentOrderItem) =>
-                item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
+              (item: ShipmentOrderItem) => item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
             )
         )
       }
 
       return newDataTable
     }
-
   }, [allData, searchValue, searchType, searchStatus, searchMarketplace])
 
   const handleChangeDatesFromPicker = (dateStr: string) => {

@@ -17,7 +17,10 @@ const By_Sku = ({}: Props) => {
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data }: { data?: PurchaseOrderBySkus[] } = useSWR(
     state.user.businessId ? `/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}` : null,
-    fetcher
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
   )
 
   const filterDataTable = useMemo(() => {

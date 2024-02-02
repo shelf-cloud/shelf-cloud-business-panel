@@ -50,7 +50,10 @@ const Orders = ({ session }: Props) => {
   const fetcher = async (endPoint: string) => await axios(endPoint).then((res) => res.data)
   const { data }: { data?: FBAOrdersResponse } = useSWR(
     state.user.businessId ? `/api/amazon/orders/getSellerOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${startDate}&endDate=${endDate}` : null,
-    fetcher
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
   )
 
   const filterDataTable = useMemo(() => {

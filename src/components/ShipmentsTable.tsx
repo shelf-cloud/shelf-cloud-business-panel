@@ -165,7 +165,11 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
         return (
           <>
             <img
-              src={row.channelLogo ? row.channelLogo : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'}
+              src={
+                row.channelLogo
+                  ? row.channelLogo
+                  : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+              }
               alt='product Image'
               id={`ChannelLogo-${row.id}`}
               style={{
@@ -226,10 +230,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
                       objectFit: 'contain',
                     }}
                   />
-                  <a
-                    href={`${row.trackingLink}${row.trackingNumber}`}
-                    target='blank'
-                    style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
+                  <a href={`${row.trackingLink}${row.trackingNumber}`} target='blank' style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
                     {row.trackingNumber}
                   </a>
                 </div>
@@ -263,10 +264,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
                       objectFit: 'contain',
                     }}
                   />
-                  <a
-                    href={`${row.trackingLink}${row.trackingNumber}`}
-                    target='blank'
-                    style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
+                  <a href={`${row.trackingLink}${row.trackingNumber}`} target='blank' style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
                     {row.trackingNumber}
                   </a>
                 </div>
@@ -347,6 +345,16 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
         expandableRowsComponent={ShipmentExpandedDetail}
         expandableRowsComponentProps={{ apiMutateLink: apiMutateLink }}
         striped={true}
+        pagination={tableData.length > 100 ? true : false}
+        paginationPerPage={100}
+        paginationRowsPerPageOptions={[100, 200, 500]}
+        paginationComponentOptions={{
+          rowsPerPageText: 'Orders per page:',
+          rangeSeparatorText: 'of',
+          noRowsPerPage: false,
+          selectAllRowsItem: true,
+          selectAllRowsItemText: 'All',
+        }}
       />
     </>
   )

@@ -52,7 +52,10 @@ const Receiving = ({ session }: Props) => {
     state.user.businessId
       ? `/api/getReceivingOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`
       : null,
-    fetcher
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
   )
 
   useEffect(() => {
@@ -78,9 +81,7 @@ const Receiving = ({ session }: Props) => {
           order?.shipName?.toLowerCase().includes(e.target.value.toLowerCase()) ||
           order?.trackingNumber?.toLowerCase().includes(e.target.value.toLowerCase()) ||
           order?.orderItems?.some(
-            (item: ShipmentOrderItem) =>
-              item.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
-              item.sku.toLowerCase().includes(e.target.value.toLowerCase())
+            (item: ShipmentOrderItem) => item.name.toLowerCase().includes(e.target.value.toLowerCase()) || item.sku.toLowerCase().includes(e.target.value.toLowerCase())
           )
       )
       setTableData(filterTable)
@@ -89,7 +90,7 @@ const Receiving = ({ session }: Props) => {
       setTableData(allData)
     }
   }
-  
+
   const clearSearch = () => {
     setSerachValue('')
     setTableData(allData)
@@ -153,10 +154,7 @@ const Receiving = ({ session }: Props) => {
                         options={{
                           mode: 'range',
                           dateFormat: 'd M y',
-                          defaultDate: [
-                            moment(shipmentsStartDate, 'YYYY-MM-DD').format('DD MMM YY'),
-                            moment(shipmentsEndDate, 'YYYY-MM-DD').format('DD MMM YY'),
-                          ],
+                          defaultDate: [moment(shipmentsStartDate, 'YYYY-MM-DD').format('DD MMM YY'), moment(shipmentsEndDate, 'YYYY-MM-DD').format('DD MMM YY')],
                         }}
                         onChange={(_selectedDates, dateStr) => handleChangeDates(dateStr)}
                       />
@@ -166,7 +164,11 @@ const Receiving = ({ session }: Props) => {
                 </Row>
                 <Card>
                   <CardBody>
-                    <ReceivingTable tableData={tableData} pending={pending} apiMutateLink={`/api/getReceivingOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`}/>
+                    <ReceivingTable
+                      tableData={tableData}
+                      pending={pending}
+                      apiMutateLink={`/api/getReceivingOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`}
+                    />
                   </CardBody>
                 </Card>
               </Col>

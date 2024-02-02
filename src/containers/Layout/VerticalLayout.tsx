@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
 import { Collapse } from 'reactstrap'
@@ -9,6 +9,8 @@ import { useRouter } from 'next/router'
 const VerticalLayout = () => {
   const navData = navdata().props.children
   const { pathname } = useRouter()
+  const [actualCollapsed, setActualCollapsed] = useState('')
+  const [actualSubItemCollapsed, setActualSubItemCollapsed] = useState('')
 
   return (
     <React.Fragment>
@@ -25,9 +27,22 @@ const VerticalLayout = () => {
               <li className='nav-item'>
                 <Link href={item.link ? item.link : '/#'} passHref>
                   <a
-                    className={'nav-link menu-link ' + (item?.subItems?.some((item: any) => pathname == item.link.split('?')[0]) && 'linkActive')}
-                    onClick={item.click}
-                    data-bs-toggle='collapse'>
+                    className={
+                      'nav-link menu-link ' +
+                      (item?.subItems?.some(
+                        (subItem: any) => pathname == subItem?.link.split('?')[0] || subItem?.childItems?.some((subitemChild: any) => pathname == subitemChild.link.split('?')[0])
+                      ) && 'linkActive')
+                    }
+                    onClick={(e) => {
+                      item.click(e)
+                      if (actualCollapsed == item.label) {
+                        setActualCollapsed('')
+                      } else {
+                        setActualCollapsed(item.label)
+                      }
+                    }}
+                    data-bs-toggle='collapse'
+                    aria-expanded={actualCollapsed == item.label ? 'true' : 'false'}>
                     <i className={item.icon}></i>
                     <span data-key='t-apps'>{item.label}</span>
                     {item.badgeName ? (
@@ -46,7 +61,13 @@ const VerticalLayout = () => {
                           {!subItem.isChildItem ? (
                             <li className='nav-item w-100'>
                               <Link href={subItem.link ? subItem.link : '/#'} passHref>
-                                <a className={'nav-link menu-link w-auto ' + (pathname == `${subItem.link.split('?')[0]}` && 'subLinkActive')}>
+                                <a
+                                  className={
+                                    'nav-link menu-link w-100 ' +
+                                    ((pathname == `${subItem.link.split('?')[0]}` ||
+                                      subItem?.childItems?.some((subitemChild: any) => pathname == subitemChild.link.split('?')[0])) &&
+                                      'subLinkActive')
+                                  }>
                                   {subItem.label}
                                   {subItem.badgeName ? (
                                     <span className={'badge badge-pill bg-' + subItem.badgeColor} data-key='t-new'>
@@ -59,7 +80,23 @@ const VerticalLayout = () => {
                           ) : (
                             <li className='nav-item'>
                               <Link href={'/#'} passHref>
-                                <a onClick={subItem.click} className='nav-link' data-bs-toggle='collapse'>
+                                <a
+                                  onClick={(e) => {
+                                    subItem.click(e)
+                                    if (actualSubItemCollapsed == subItem.label) {
+                                      setActualSubItemCollapsed('')
+                                    } else {
+                                      setActualSubItemCollapsed(subItem.label)
+                                    }
+                                  }}
+                                  className={
+                                    'nav-link w-100 ' +
+                                    ((pathname == `${subItem.link.split('?')[0]}` ||
+                                      subItem?.childItems?.some((subitemChild: any) => pathname == subitemChild.link.split('?')[0])) &&
+                                      'linkActive')
+                                  }
+                                  data-bs-toggle='collapse'
+                                  aria-expanded={actualSubItemCollapsed == subItem.label ? 'true' : 'false'}>
                                   {subItem.label}
                                 </a>
                               </Link>
@@ -72,7 +109,7 @@ const VerticalLayout = () => {
                                         {!childItem.childItems ? (
                                           <li className='nav-item'>
                                             <Link href={childItem.link ? childItem.link : '/#'} passHref>
-                                              <a className={'nav-link menu-link w-auto ' + (pathname == `${childItem.link.split('?')[0]}` && 'subLinkActiveChildren')}>
+                                              <a className={'nav-link menu-link w-100 ' + (pathname == `${childItem.link.split('?')[0]}` && 'subLinkActiveChildren')}>
                                                 {childItem.label}
                                               </a>
                                             </Link>
@@ -80,7 +117,7 @@ const VerticalLayout = () => {
                                         ) : (
                                           <li className='nav-item'>
                                             <Link href={'/#'} passHref>
-                                              <a className='nav-link' onClick={childItem.click} data-bs-toggle='collapse'>
+                                              <a className='nav-link w-100' onClick={childItem.click} data-bs-toggle='collapse'>
                                                 {childItem.label}{' '}
                                                 <span className='badge badge-pill bg-danger' data-key='t-new'>
                                                   New
@@ -92,7 +129,7 @@ const VerticalLayout = () => {
                                                 {childItem.childItems.map((subChildItem: any, key: any) => (
                                                   <li className='nav-item' key={key}>
                                                     <Link href={subChildItem.link} passHref>
-                                                      <a className='nav-link' data-key='t-basic-action'>
+                                                      <a className='nav-link w-100' data-key='t-basic-action'>
                                                         {subChildItem.label}{' '}
                                                       </a>
                                                     </Link>

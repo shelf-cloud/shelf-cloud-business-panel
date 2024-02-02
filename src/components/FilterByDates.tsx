@@ -31,16 +31,17 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
   return (
     <div ref={filterByDates} className='dropdown'>
       <button
-        className='btn btn-light dropdown-toggle'
+        className='btn btn-light dropdown-toggle d-flex flex-row justify-content-start align-items-center gap-2'
         style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }}
         type='button'
         data-bs-toggle='dropdown'
         data-bs-auto-close='outside'
         aria-expanded='false'
         onClick={() => setOpenDatesMenu(!openDatesMenu)}>
-        Filter Dates: <span className='fw-semibold'>{`${shipmentsStartDate} -> ${shipmentsEndDate}`}</span>
+        <i className='las la-calendar fs-3 m-0 p-0 text-primary' />
+        <span className='fw-semibold m-0 p-0'>{`${shipmentsStartDate} -> ${shipmentsEndDate}`}</span>
       </button>
-      <div className={'dropdown-menu dropdown-menu-md px-4' + (openDatesMenu ? ' show' : '')}>
+      <div className={'dropdown-menu dropdown-menu-md px-4 py-3' + (openDatesMenu ? ' show' : '')}>
         <div className='d-flex flex-column justify-content-start'>
           <p
             className={selectedDateFilter == 'today' ? 'fw-bold' : ''}
@@ -49,6 +50,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
               setSelectedDateFilter('today')
               setShipmentsStartDate(moment().format('YYYY-MM-DD'))
               setShipmentsEndDate(moment().format('YYYY-MM-DD'))
+              setOpenDatesMenu(false)
             }}>
             Today
           </p>
@@ -59,6 +61,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
               setSelectedDateFilter('yesterday')
               setShipmentsStartDate(moment().subtract(1, 'days').format('YYYY-MM-DD'))
               setShipmentsEndDate(moment().subtract(1, 'days').format('YYYY-MM-DD'))
+              setOpenDatesMenu(false)
             }}>
             Yesterday
           </p>
@@ -69,6 +72,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
               setSelectedDateFilter('thisweek')
               setShipmentsStartDate(moment().startOf('week').format('YYYY-MM-DD'))
               setShipmentsEndDate(moment().endOf('week').format('YYYY-MM-DD'))
+              setOpenDatesMenu(false)
             }}>
             This Week
           </p>
@@ -79,6 +83,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
               setSelectedDateFilter('lastweek')
               setShipmentsStartDate(moment().subtract(1, 'weeks').startOf('week').format('YYYY-MM-DD'))
               setShipmentsEndDate(moment().subtract(1, 'weeks').endOf('week').format('YYYY-MM-DD'))
+              setOpenDatesMenu(false)
             }}>
             Last Week
           </p>
@@ -89,6 +94,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
               setSelectedDateFilter('past7days')
               setShipmentsStartDate(moment().subtract(7, 'days').format('YYYY-MM-DD'))
               setShipmentsEndDate(moment().format('YYYY-MM-DD'))
+              setOpenDatesMenu(false)
             }}>
             Past 7 Days
           </p>
@@ -99,6 +105,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
               setSelectedDateFilter('thismonth')
               setShipmentsStartDate(moment().startOf('month').format('YYYY-MM-DD'))
               setShipmentsEndDate(moment().endOf('month').format('YYYY-MM-DD'))
+              setOpenDatesMenu(false)
             }}>
             This Month
           </p>
@@ -109,6 +116,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
               setSelectedDateFilter('past3days')
               setShipmentsStartDate(moment().subtract(30, 'days').format('YYYY-MM-DD'))
               setShipmentsEndDate(moment().format('YYYY-MM-DD'))
+              setOpenDatesMenu(false)
             }}>
             Past 30 Days
           </p>
@@ -119,11 +127,22 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
               setSelectedDateFilter('yeartodate')
               setShipmentsStartDate(moment().startOf('year').format('YYYY-MM-DD'))
               setShipmentsEndDate(moment().format('YYYY-MM-DD'))
+              setOpenDatesMenu(false)
             }}>
             Year to Date
           </p>
-          {/* <hr className='dropdown-divider' /> */}
-          <span className='fw-semibold pb-2 border-top pt-1'>By Dates:</span>
+          <p
+            className={selectedDateFilter == 'lastyear' ? 'fw-bold' : ''}
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              setSelectedDateFilter('lastyear')
+              setShipmentsStartDate(moment().subtract(1, 'year').startOf('year').format('YYYY-MM-DD'))
+              setShipmentsEndDate(moment().subtract(1, 'year').endOf('year').format('YYYY-MM-DD'))
+              setOpenDatesMenu(false)
+            }}>
+            Last Year
+          </p>
+          <span className='fw-light text-muted fs-7 pb-1 border-top pt-1'>Select Range:</span>
           <Flatpickr
             className={'border-0 fs-6 w-100 py-2 px-2' + (selectedDateFilter == 'picker' ? ' fw-bold' : '')}
             options={{

@@ -60,7 +60,9 @@ const Products = ({ session }: Props) => {
     show: false,
   })
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(state.user.businessId ? `/api/getBusinessInventory?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher)
+  const { data } = useSWR(state.user.businessId ? `/api/getBusinessInventory?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher, {
+    revalidateOnFocus: false,
+  })
 
   useEffect(() => {
     if (data?.error) {
