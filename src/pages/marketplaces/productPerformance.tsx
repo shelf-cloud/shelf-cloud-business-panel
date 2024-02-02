@@ -16,7 +16,7 @@ import { ProductPerformance, ProductsPerformanceResponse } from '@typesTs/market
 import MarketplacesTable from '@components/marketplaces/marketplacesTable'
 import useSWR from 'swr'
 import SelectMarketplaceDropDown from '@components/ui/SelectMarketplaceDropDown'
-// import useSWR from 'swr'
+import { toast } from 'react-toastify'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -85,10 +85,15 @@ const Profits = ({ session }: Props) => {
   useEffect(() => {
     const getNewDateRange = async () => {
       setLoadingData(true)
-      const data: ProductsPerformanceResponse = await axios(
+      await axios(
         `/api/marketplaces/productPerformance?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${startDate}&endDate=${endDate}&storeId=${selectedMarketplace.storeId}`
-      ).then((res) => res.data)
-      setProductsData(data)
+      )
+        .then((res) => {
+          setProductsData(res.data as ProductsPerformanceResponse)
+        })
+        .catch(() => {
+          toast.error('Error Loading Products Performance!')
+        })
       setLoadingData(false)
     }
     if (session) getNewDateRange()
