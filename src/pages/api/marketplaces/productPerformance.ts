@@ -2,6 +2,12 @@ import { NextApiHandler } from 'next'
 import { getSession } from '@auth/client'
 import axios from 'axios'
 
+export const config = {
+    api: {
+        externalResolver: true,
+    },
+}
+
 const productPerformance: NextApiHandler = async (request, response) => {
     const session = await getSession({ req: request })
 
