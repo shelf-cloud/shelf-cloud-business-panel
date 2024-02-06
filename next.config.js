@@ -10,7 +10,6 @@ const nextConfig = {
       {
         source: '/api/marketplaces/productPerformance',
         destination: `${process.env.SHELFCLOUD_SERVER_URL}/marketplaces/products/getProductsPerformance`,
-        permanent: true,
       },
     ]
   },
