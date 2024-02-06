@@ -149,7 +149,7 @@ const Profits = ({ session }: Props) => {
     if (supplier || supplier !== '') filterString += `&supplier=${supplier}`
     router.push(filterString, undefined, { shallow: true })
   }
-  const title = `Profits Report | ${session?.user?.name}`
+  const title = `Product Performance | ${session?.user?.name}`
   return (
     <div>
       <Head>
@@ -158,7 +158,7 @@ const Profits = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <Container fluid>
-            <BreadCrumb title='Profits Report' pageTitle='Reports' />
+            <BreadCrumb title='Product Performance' pageTitle='Marketplaces' />
             <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-end align-items-md-center px-3'>
               <div className='app-search d-flex flex-row justify-content-between align-items-center p-0'>
                 <div className='d-flex flex-row justify-content-start align-items-center gap-3'>
@@ -228,7 +228,7 @@ const Profits = ({ session }: Props) => {
               <CardBody>
                 {loadingData ? (
                   <div>
-                    <p className='fw-bold fs-2'>Profits Report</p>
+                    <p className='fw-bold fs-2'>Product Performance</p>
                     <p className='fs-5 text-muted d-flex flex-row gap-3'>
                       {`Loading Profit Report from ${selectedMarketplace.name} please wait...`}
                       <Spinner color='primary' size={'sm'} />
