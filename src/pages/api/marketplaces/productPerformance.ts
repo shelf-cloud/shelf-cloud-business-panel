@@ -4,7 +4,6 @@ import axios from 'axios'
 
 export const config = {
     api: {
-        externalResolver: true,
         responseLimit: '8mb',
     },
 }
