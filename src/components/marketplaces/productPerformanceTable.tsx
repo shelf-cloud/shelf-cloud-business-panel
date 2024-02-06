@@ -4,13 +4,14 @@ import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { ProductPerformance } from '@typesTs/marketplaces/productPerformance'
 import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
+import ProductPerformanceExpandedDetails from './productPerformanceExpandedDetails'
 
 type Props = {
   tableData: ProductPerformance[]
   pending: boolean
 }
 
-const MarketplacesTable = ({ tableData, pending }: Props) => {
+const ProductPerformanceTable = ({ tableData, pending }: Props) => {
   const { state }: any = useContext(AppContext)
 
   const caseInsensitiveSort = (rowA: ProductPerformance, rowB: ProductPerformance) => {
@@ -117,6 +118,7 @@ const MarketplacesTable = ({ tableData, pending }: Props) => {
             <div
               style={{
                 width: '30px',
+                minWidth: '30px',
                 height: '30px',
                 margin: '0px',
                 position: 'relative',
@@ -138,6 +140,7 @@ const MarketplacesTable = ({ tableData, pending }: Props) => {
             </div>
             <div>
               <p className='m-0 p-0 text-primary fw-semibold fs-6'>{row.sku}</p>
+              <p className='m-0 p-0 text-black fw-semibold fs-7'>{row.title}</p>
               <p className='m-0 p-0 text-black fw-normal fs-7'>
                 {row.asin && (
                   <>
@@ -180,7 +183,7 @@ const MarketplacesTable = ({ tableData, pending }: Props) => {
     {
       name: <span className='fw-bolder fs-6'>Expenses</span>,
       selector: (row: ProductPerformance) => {
-        return <span>{FormatCurrency(state.currentRegion, row?.expenses + row?.productCost + row?.shippingCost)}</span>
+        return <span>{FormatCurrency(state.currentRegion, row?.expenses)}</span>
       },
       center: true,
       sortable: true,
@@ -191,9 +194,7 @@ const MarketplacesTable = ({ tableData, pending }: Props) => {
       name: <span className='fw-bolder fs-6'>Profit</span>,
       selector: (row: ProductPerformance) => {
         return (
-          <span className={row?.grossRevenue - (row?.expenses + row?.productCost + row?.shippingCost) >= 0 ? 'text-black' : 'text-danger'}>
-            {FormatCurrency(state.currentRegion, row?.grossRevenue - (row?.expenses + row?.productCost + row?.shippingCost))}
-          </span>
+          <span className={row?.grossRevenue - row?.expenses >= 0 ? 'text-black' : 'text-danger'}>{FormatCurrency(state.currentRegion, row?.grossRevenue - row?.expenses)}</span>
         )
       },
       center: true,
@@ -208,8 +209,8 @@ const MarketplacesTable = ({ tableData, pending }: Props) => {
           return <span>0%</span>
         } else {
           return (
-            <span className={((row?.grossRevenue - (row?.expenses + row?.productCost + row?.shippingCost)) / row?.grossRevenue) * 100 >= 0 ? 'text-black' : 'text-danger'}>
-              {FormatIntNumber(state.currentRegion, ((row?.grossRevenue - (row?.expenses + row?.productCost + row?.shippingCost)) / row?.grossRevenue) * 100)}%
+            <span className={((row?.grossRevenue - row?.expenses) / row?.grossRevenue) * 100 >= 0 ? 'text-black' : 'text-danger'}>
+              {FormatIntNumber(state.currentRegion, ((row?.grossRevenue - row?.expenses) / row?.grossRevenue) * 100)}%
             </span>
           )
         }
@@ -226,17 +227,8 @@ const MarketplacesTable = ({ tableData, pending }: Props) => {
           return <span>0%</span>
         } else {
           return (
-            <span
-              className={
-                ((row.grossRevenue - (row?.expenses + row?.productCost + row?.shippingCost)) / (row?.expenses + row?.productCost + row?.shippingCost)) * 100 >= 0
-                  ? 'text-black'
-                  : 'text-danger'
-              }>
-              {FormatIntNumber(
-                state.currentRegion,
-                ((row.grossRevenue - (row?.expenses + row?.productCost + row?.shippingCost)) / (row?.expenses + row?.productCost + row?.shippingCost)) * 100
-              )}
-              %
+            <span className={((row.grossRevenue - row?.expenses) / row?.expenses) * 100 >= 0 ? 'text-black' : 'text-danger'}>
+              {FormatIntNumber(state.currentRegion, ((row.grossRevenue - row?.expenses) / row?.expenses) * 100)}%
             </span>
           )
         }
@@ -278,7 +270,7 @@ const MarketplacesTable = ({ tableData, pending }: Props) => {
       // onSelectedRowsChange={handleSelectedRows}
       // clearSelectedRows={toggledClearRows}
       expandableRows
-      // expandableRowsComponent={ProductPerformancesExpandedDetail}
+      expandableRowsComponent={ProductPerformanceExpandedDetails}
       // expandableRowsComponentProps={{ apiMutateLink: apiMutateLink }}
       dense
       defaultSortFieldId={2}
@@ -297,4 +289,4 @@ const MarketplacesTable = ({ tableData, pending }: Props) => {
   )
 }
 
-export default MarketplacesTable
+export default ProductPerformanceTable

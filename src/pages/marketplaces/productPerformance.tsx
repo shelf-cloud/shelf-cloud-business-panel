@@ -13,10 +13,10 @@ import { useRouter } from 'next/router'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { ProductPerformance, ProductsPerformanceResponse } from '@typesTs/marketplaces/productPerformance'
-import MarketplacesTable from '@components/marketplaces/marketplacesTable'
 import useSWR from 'swr'
 import SelectMarketplaceDropDown from '@components/ui/SelectMarketplaceDropDown'
 import { toast } from 'react-toastify'
+import ProductPerformanceTable from '@components/marketplaces/productPerformanceTable'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -237,7 +237,7 @@ const Profits = ({ session }: Props) => {
                 ) : (
                   <div>
                     <div>
-                      <MarketplacesTable tableData={filterDataTable || []} pending={loadingData} />
+                      <ProductPerformanceTable tableData={filterDataTable || []} pending={loadingData} />
                     </div>
                   </div>
                 )}

@@ -17,7 +17,10 @@ export interface ProductPerformance {
     unitsSold: number;
     basePrice: number;
     totalTax: number;
+    taxCollected: number;
+    taxWithheld: number;
     totalShipping: number;
+    totalMarketpalcesFees: number;
     reimbursements: number;
     refunds: number;
     refundsQty: number;
@@ -27,21 +30,14 @@ export interface ProductPerformance {
     sponsoredProducts: number;
     displayAds: number;
     keywordAds: number;
-    defaultCost: number;
-    defaultPrice: number;
-    msrp: number;
-    map: number;
-    floor: number;
-    ceilling: number;
     brand: string;
     supplier: string;
     marketpalces: { [key: string]: Marketpalce };
     sellerCost: number;
     inboundShippingCost: number;
     otherCosts: number;
-    productionTime: number;
-    transitTime: number;
     shippingToFBA: number;
+    shelfCloudCost: number
     listings: Listing[];
 }
 
@@ -54,6 +50,7 @@ export interface Listing {
 export interface Marketpalce {
     marketplace: string;
     name: string;
+    storeId: number,
     comissionFee: number;
     fixedFee: number;
     fees: Fees;
@@ -63,6 +60,15 @@ export interface Fees {
     totalComission: number;
     totalFixedFee: number;
     totalShipping: number;
+    FBAPerOrderFulfillmentFee?: number
+    FBAPerUnitFulfillmentFee?: number
+    FBAWeightBasedFee?: number
+    Commission?: number
+    FixedClosingFee?: number
+    GiftwrapChargeback?: number
+    ShippingChargeback?: number
+    SalesTaxCollectionFee?: number
+    VariableClosingFee?: number
 }
 
 
