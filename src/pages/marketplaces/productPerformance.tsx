@@ -86,7 +86,7 @@ const Profits = ({ session }: Props) => {
     const getNewDateRange = async () => {
       setLoadingData(true)
       await axios(
-        `/api/marketplaces/productPerformance?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${startDate}&endDate=${endDate}&storeId=${selectedMarketplace.storeId}`
+        `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/marketplaces/products/getProductsPerformance?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${startDate}&endDate=${endDate}&storeId=${selectedMarketplace.storeId}`
       )
         .then((res) => {
           setProductsData(res.data as ProductsPerformanceResponse)
@@ -96,8 +96,8 @@ const Profits = ({ session }: Props) => {
         })
       setLoadingData(false)
     }
-    if (session) getNewDateRange()
-  }, [session, startDate, endDate, selectedMarketplace])
+    if (session && state.user.businessId) getNewDateRange()
+  }, [session, state.user.businessId, startDate, endDate, selectedMarketplace])
 
   const filterDataTable = useMemo(() => {
     if (!productsData || productsData?.error) {

@@ -45,19 +45,8 @@ const options: NextAuthOptions = {
     signIn: '/SignIn',
   },
   callbacks: {
-    // async session({ session }) {
-
-    //   const userInfo = await axios.post(`${process.env.API_LOGIN_SERVICE}/getUser.php`, {
-    //     username: session?.user?.name
-    //   }) as any
-
-    //   session.user.businessId = userInfo.data.businessId
-    //   session.user.showCreateOrder = userInfo.data.showCreateOrder
-    //   session.user.showWholeSale = userInfo.data.showWholeSale
-    //   session.user.hasShelfCloudUsa = userInfo.data.hasShelfCloudUsa
-    //   session.user.hasShelfCloudEu = userInfo.data.hasShelfCloudEu
-    //   session.user.defaultRegion = userInfo.data.defaultRegion
-
+    // async session({ session, token }) {
+    //   session.token = token
     //   return session
     // },
     async redirect() {
