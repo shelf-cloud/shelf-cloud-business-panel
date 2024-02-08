@@ -18,6 +18,9 @@ const productPerformance: NextApiHandler = async (request, response) => {
 
     axios
         .get(`${process.env.SHELFCLOUD_SERVER_URL}/marketplaces/products/getProductsPerformance`, {
+            headers: {
+                Origin: `${process.env.SHELFCLOUD_SERVER_ALLOW_ORIGIN}`,
+            },
             params: {
                 ...request.query
             },

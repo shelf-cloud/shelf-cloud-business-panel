@@ -11,7 +11,11 @@ const getAmazonSellerListings: NextApiHandler = async (request, response) => {
     }
 
     axios
-        .get(`${process.env.SHELFCLOUD_SERVER_URL}/amazon/listings/getAmazonSellerListings/${request.query.region}/${request.query.businessId}`)
+        .get(`${process.env.SHELFCLOUD_SERVER_URL}/amazon/listings/getAmazonSellerListings/${request.query.region}/${request.query.businessId}`, {
+            headers: {
+                Origin: `${process.env.SHELFCLOUD_SERVER_ALLOW_ORIGIN}`,
+            }
+        })
         .then(async ({ data }) => {
             response.json(data)
         })

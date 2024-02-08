@@ -13,6 +13,10 @@ const setSelectedRowsVisible: NextApiHandler = async (request, response) => {
     axios
         .patch(`${process.env.SHELFCLOUD_SERVER_URL}/amazon/listings/setSelectedRowsVisible/${request.query.region}/${request.query.businessId}`, {
             Listings: request.body.Listings,
+        }, {
+            headers: {
+                Origin: `${process.env.SHELFCLOUD_SERVER_ALLOW_ORIGIN}`,
+            }
         })
         .then(async ({ data }) => {
             response.json(data)

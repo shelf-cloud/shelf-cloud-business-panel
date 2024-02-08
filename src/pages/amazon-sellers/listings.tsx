@@ -254,7 +254,7 @@ const Listings = ({ session }: Props) => {
                 ) : (
                   <div>
                     <div>
-                      <SellerListingTable tableData={filterDataTable || []} pending={data ? false : true} setSelectedRows={setSelectedRows} toggledClearRows={toggledClearRows} />
+                      <SellerListingTable tableData={filterDataTable || []} pending={data || data!.listings.length == 0 ? false : true} setSelectedRows={setSelectedRows} toggledClearRows={toggledClearRows} />
                     </div>
                   </div>
                 )}

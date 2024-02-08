@@ -143,7 +143,7 @@ const Orders = ({ session }: Props) => {
                 </Row>
                 <Card>
                   <CardBody>
-                    <SellerFbaOrdersTable tableData={filterDataTable || []} pending={data ? false : true} />
+                    <SellerFbaOrdersTable tableData={filterDataTable || []} pending={data || data!.orders.length == 0 ? false : true} />
                   </CardBody>
                 </Card>
               </Col>

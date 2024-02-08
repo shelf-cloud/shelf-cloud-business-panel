@@ -94,6 +94,7 @@ const Profits = ({ session }: Props) => {
         })
         .catch(() => {
           toast.error('Error Loading Products Performance!')
+          setProductsData({})
         })
       setLoadingData(false)
     }
