@@ -50,6 +50,7 @@ type FilterProps = {
   unitsmin?: string
   unitsmax?: string
   supplier?: string
+  showWithSales?: string
 }
 
 type MarketpalcesInfo = {
@@ -64,7 +65,7 @@ type MarketpalcesInfo = {
 const Profits = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
-  const { filters, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier }: FilterProps = router.query
+  const { filters, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, showWithSales }: FilterProps = router.query
   const [searchValue, setSearchValue] = useState<any>('')
   const [filterOpen, setFilterOpen] = useState(false)
   const [loadingData, setLoadingData] = useState(false)
@@ -112,7 +113,8 @@ const Profits = ({ session }: Props) => {
           (profitmin !== undefined && profitmin !== '' ? item.grossRevenue - item.expenses >= parseFloat(profitmin!) : true) &&
           (profitmax !== undefined && profitmax !== '' ? item.grossRevenue - item.expenses <= parseFloat(profitmax!) : true) &&
           (unitsmin !== undefined && unitsmin !== '' ? item.unitsSold >= parseInt(unitsmin!) : true) &&
-          (unitsmax !== undefined && unitsmax !== '' ? item.unitsSold <= parseInt(unitsmax!) : true)
+          (unitsmax !== undefined && unitsmax !== '' ? item.unitsSold <= parseInt(unitsmax!) : true) &&
+          (showWithSales === undefined || showWithSales === '' ? item.unitsSold > 0 : showWithSales === 'false' ? item.unitsSold > 0 : true)
       )
     }
 
@@ -125,10 +127,13 @@ const Profits = ({ session }: Props) => {
           (profitmax !== undefined && profitmax !== '' ? item.grossRevenue - item.expenses <= parseFloat(profitmax!) : true) &&
           (unitsmin !== undefined && unitsmin !== '' ? item.unitsSold >= parseInt(unitsmin!) : true) &&
           (unitsmax !== undefined && unitsmax !== '' ? item.unitsSold <= parseInt(unitsmax!) : true) &&
-          (item.sku.toLowerCase().includes(searchValue.toLowerCase()) || item.asin.toLowerCase().includes(searchValue.toLowerCase()))
+          (showWithSales == undefined || showWithSales == '' ? item.unitsSold > 0 : showWithSales === 'false' ? item.unitsSold > 0 : true) &&
+          (item.sku.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.asin.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.title.toLowerCase().includes(searchValue.toLowerCase()))
       )
     }
-  }, [productsData, searchValue, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier])
+  }, [productsData, searchValue, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, showWithSales])
 
   const handleChangeDatesFromPicker = (dateStr: string) => {
     if (dateStr.includes(' to ')) {
@@ -138,7 +143,16 @@ const Profits = ({ session }: Props) => {
     }
   }
 
-  const handleApplyFilters = (grossmin: string, grossmax: string, profitmin: string, profitmax: string, unitsmin: string, unitsmax: string, supplier: string) => {
+  const handleApplyFilters = (
+    grossmin: string,
+    grossmax: string,
+    profitmin: string,
+    profitmax: string,
+    unitsmin: string,
+    unitsmax: string,
+    supplier: string,
+    showWithSales: string
+  ) => {
     let filterString = `/marketplaces/productPerformance?filters=true`
     if (grossmin || grossmin !== '') filterString += `&grossmin=${grossmin}`
     if (grossmax || grossmax !== '') filterString += `&grossmax=${grossmax}`
@@ -147,6 +161,7 @@ const Profits = ({ session }: Props) => {
     if (unitsmin || unitsmin !== '') filterString += `&unitsmin=${unitsmin}`
     if (unitsmax || unitsmax !== '') filterString += `&unitsmax=${unitsmax}`
     if (supplier || supplier !== '') filterString += `&supplier=${supplier}`
+    if (showWithSales || showWithSales !== '') filterString += `&showWithSales=${showWithSales}`
     router.push(filterString, undefined, { shallow: true })
   }
   const title = `Product Performance | ${session?.user?.name}`
@@ -217,8 +232,10 @@ const Profits = ({ session }: Props) => {
                       unitsmin={unitsmin !== undefined ? unitsmin : ''}
                       unitsmax={unitsmax !== undefined ? unitsmax : ''}
                       supplier={supplier !== undefined ? supplier : ''}
+                      showWithSales={showWithSales !== undefined || showWithSales === '' ? showWithSales : 'false'}
                       supplierOptions={data?.suppliers || []}
                       handleApplyFilters={handleApplyFilters}
+                      setFilterOpen={setFilterOpen}
                     />
                   </CardBody>
                 </Card>

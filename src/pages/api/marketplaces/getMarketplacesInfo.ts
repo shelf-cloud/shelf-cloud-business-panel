@@ -11,7 +11,23 @@ const getMarketplacesInfo: NextApiHandler = async (request, response) => {
     }
 
     axios(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/marketplaces/getMarketplacesInfo.php?businessId=${request.query.businessId}`)
-        .then(({ data }) => {
+        .then(async ({ data }) => {
+
+            const amazonMarketplaces = await axios(`${process.env.SHELFCLOUD_SERVER_URL}/amazon/sellers/getSellerMarketplaces/${request.query.region}/${request.query.businessId}`)
+
+            if (amazonMarketplaces.data.error || amazonMarketplaces.data.marketplaces.length === 0) {
+                response.json(data)
+                return
+            }
+
+            for (const marketplaces of amazonMarketplaces.data.marketplaces) {
+                data.marketplaces.unshift({
+                    logo: "https://onixventuregroup.goflow.com/images/channels/amazon.svg",
+                    storeId: marketplaces.marketplaceId,
+                    name: `FBA ${marketplaces.marketplaceName}`,
+                })
+            }
+
             response.json(data)
         })
         .catch((error) => {

@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import AppContext from '@context/AppContext'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+
+import React, { useEffect, useRef, useState } from 'react'
 
 type Props = {
   selectionInfo: {
@@ -17,7 +17,6 @@ type Props = {
 }
 
 const SelectMarketplaceDropDown = ({ selectionInfo, selected, handleSelection }: Props) => {
-  const { state }: any = useContext(AppContext)
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const filterByDates = useRef<HTMLDivElement | null>(null)
 
@@ -85,36 +84,6 @@ const SelectMarketplaceDropDown = ({ selectionInfo, selected, handleSelection }:
               <i className='las la-store-alt fs-4 m-0 p-0 text-primary' />
               <span className={'m-0 p-0 text-nowrap ' + (selected.storeId === 9999 ? 'fw-semibold' : '')}>All Marketplaces</span>
             </div>
-            {state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected && (
-              <div
-                key={8888}
-                className='d-flex flex-row justify-content-start gap-1 align-items-center'
-                style={{ cursor: 'pointer' }}
-                onClick={() => {
-                  handleSelection((prev: any) => ({ ...prev, storeId: 8888, name: 'Amazon FBA', logo: 'https://onixventuregroup.goflow.com/images/channels/amazon.svg' }))
-                  setOpenDatesMenu(false)
-                }}>
-                <div
-                  style={{
-                    width: '25px',
-                    height: '25px',
-                    margin: '0px',
-                    position: 'relative',
-                  }}>
-                  <img
-                    loading='lazy'
-                    src={'https://onixventuregroup.goflow.com/images/channels/amazon.svg'}
-                    onError={(e) =>
-                      (e.currentTarget.src =
-                        'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
-                    }
-                    alt='product Image'
-                    style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
-                  />
-                </div>
-                <span className={'m-0 p-0 text-nowrap ' + (selected.storeId === 8888 ? 'fw-semibold' : '')}>Amazon FBA</span>
-              </div>
-            )}
             {selectionInfo?.map((option) => (
               <div
                 key={option.storeId}

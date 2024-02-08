@@ -16,8 +16,27 @@ const getuser: NextApiHandler = async (request, response) => {
     })
         .then(({ data }) => response.json(data))
         .catch((error) => {
-            response.end(error)
-        });
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                response.json({
+                    error: true,
+                    message: `Error User API ${error.response.data.error_description}, please try again later.`,
+                })
+            } else if (error.request) {
+                // The request was made but no response was received
+                response.json({
+                    error: true,
+                    message: 'Error from server please try again later.',
+                })
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                response.json({
+                    error: true,
+                    message: error.message,
+                })
+            }
+        })
 }
 
 export default getuser

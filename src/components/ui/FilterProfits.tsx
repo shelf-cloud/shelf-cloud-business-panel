@@ -14,14 +14,25 @@ type Props = {
   unitsmin: string
   unitsmax: string
   supplier: string
+  showWithSales: string
   supplierOptions: string[]
-  handleApplyFilters: (grossmin: string, grossmax: string, profitmin: string, profitmax: string, unitsmin: string, unitsmax: string, supplier: string) => void
+  handleApplyFilters: (
+    grossmin: string,
+    grossmax: string,
+    profitmin: string,
+    profitmax: string,
+    unitsmin: string,
+    unitsmax: string,
+    supplier: string,
+    showWithSales: string
+  ) => void
+  setFilterOpen: (value: boolean) => void
 }
 
-const FilterProfits = ({ grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, supplierOptions, handleApplyFilters }: Props) => {
+const FilterProfits = ({ grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, showWithSales, supplierOptions, handleApplyFilters, setFilterOpen }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
-  
+
   const initialValues = {
     grossRevenueMin: grossmin,
     grossRevenueMax: grossmax,
@@ -30,6 +41,7 @@ const FilterProfits = ({ grossmin, grossmax, profitmin, profitmax, unitsmin, uni
     unitsSoldMin: unitsmin,
     unitsSoldMax: unitsmax,
     supplier: supplier,
+    showWithSales: showWithSales,
   }
 
   const validationSchema = Yup.object({
@@ -38,7 +50,17 @@ const FilterProfits = ({ grossmin, grossmax, profitmin, profitmax, unitsmin, uni
   })
 
   const handleSubmit = async (values: any) => {
-    handleApplyFilters(values.grossRevenueMin, values.grossRevenueMax, values.netProfitMin, values.netProfitMax, values.unitsSoldMin, values.unitsSoldMax, values.supplier)
+    console.log('values', values)
+    handleApplyFilters(
+      values.grossRevenueMin,
+      values.grossRevenueMax,
+      values.netProfitMin,
+      values.netProfitMax,
+      values.unitsSoldMin,
+      values.unitsSoldMax,
+      values.supplier,
+      values.showWithSales
+    )
   }
 
   const handleClearFilters = (setValues: any) => {
@@ -50,8 +72,10 @@ const FilterProfits = ({ grossmin, grossmax, profitmin, profitmax, unitsmin, uni
       unitsSoldMin: '',
       unitsSoldMax: '',
       supplier: '',
+      showWithSales: '',
     })
     router.push('/marketplaces/productPerformance', undefined, { shallow: true })
+    setFilterOpen(false)
   }
 
   return (
@@ -190,6 +214,25 @@ const FilterProfits = ({ grossmin, grossmax, profitmin, profitmax, unitsmin, uni
                   </Label>
                   <SelectDropDown selectionInfo={supplierOptions} selected={values.supplier} handleSelection={setFieldValue} />
                 </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={3}>
+                <div className='form-check form-switch form-switch-right form-switch-md'>
+                  <Label className='form-label'>Show products with NO Sales</Label>
+                  <Input
+                    className='form-check-input code-switcher'
+                    type='checkbox'
+                    id='showWithSales'
+                    name='showWithSales'
+                    checked={values.showWithSales === 'true' ? true : false}
+                    onChange={(e) => {
+                      setFieldValue('showWithSales', `${e.target.checked}`)
+                    }}
+                    onBlur={handleBlur}
+                    invalid={touched.showWithSales && errors.showWithSales ? true : false}
+                  />
+                </div>
               </Col>
             </Row>
             <Col md={12} className='mt-4'>

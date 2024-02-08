@@ -48,8 +48,8 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
     return 0
   }
   const sortProfit = (rowA: ProductPerformance, rowB: ProductPerformance) => {
-    const a = rowA?.grossRevenue - (rowA?.expenses + rowA?.productCost + rowA?.shippingCost)
-    const b = rowB?.grossRevenue - (rowB?.expenses + rowB?.productCost + rowB?.shippingCost)
+    const a = rowA?.grossRevenue - rowA?.expenses
+    const b = rowB?.grossRevenue - rowB?.expenses
     if (a > b) {
       return 1
     }
@@ -59,8 +59,8 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
     return 0
   }
   const sortMargin = (rowA: ProductPerformance, rowB: ProductPerformance) => {
-    const a = rowA?.grossRevenue === 0 ? 0 : ((rowA?.grossRevenue - (rowA?.expenses + rowA?.productCost + rowA?.shippingCost)) / rowA?.grossRevenue) * 100
-    const b = rowB?.grossRevenue === 0 ? 0 : ((rowB?.grossRevenue - (rowB?.expenses + rowB?.productCost + rowB?.shippingCost)) / rowB?.grossRevenue) * 100
+    const a = rowA?.grossRevenue === 0 ? 0 : ((rowA?.grossRevenue - rowA?.expenses) / rowA?.grossRevenue) * 100
+    const b = rowB?.grossRevenue === 0 ? 0 : ((rowB?.grossRevenue - rowB?.expenses) / rowB?.grossRevenue) * 100
     if (a > b) {
       return 1
     }
@@ -70,14 +70,8 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
     return 0
   }
   const sortRoi = (rowA: ProductPerformance, rowB: ProductPerformance) => {
-    const a =
-      rowA?.expenses + rowA?.productCost + rowA?.shippingCost === 0
-        ? 0
-        : ((rowA.grossRevenue - (rowA?.expenses + rowA?.productCost + rowA?.shippingCost)) / (rowA?.expenses + rowA?.productCost + rowA?.shippingCost)) * 100
-    const b =
-      rowB?.expenses + rowB?.productCost + rowB?.shippingCost === 0
-        ? 0
-        : ((rowB.grossRevenue - (rowB?.expenses + rowB?.productCost + rowB?.shippingCost)) / (rowB?.expenses + rowB?.productCost + rowB?.shippingCost)) * 100
+    const a = rowA?.expenses === 0 ? 0 : ((rowA.grossRevenue - rowA?.expenses) / rowA?.expenses) * 100
+    const b = rowB?.expenses === 0 ? 0 : ((rowB.grossRevenue - rowB?.expenses) / rowB?.expenses) * 100
     if (a > b) {
       return 1
     }
@@ -141,7 +135,7 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
             <div>
               <p className='m-0 p-0 text-primary fw-semibold fs-6'>{row.sku}</p>
               <p className='m-0 p-0 text-black fw-semibold fs-7'>{row.title}</p>
-              <p className='m-0 p-0 text-black fw-normal fs-7'>
+              <p className='m-0 p-0 text-black fw-normal fs-7 d-flex flex-row justify-content-start align-items-center'>
                 {row.asin && (
                   <>
                     {`ASIN: `}
@@ -152,11 +146,12 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
                       style={{ textDecoration: 'none' }}>
                       {row.asin}
                     </a>
+                    <i className='ri-file-copy-line fs-5 my-0 mx-2 p-0 text-muted' style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(row.asin)} />
                   </>
                 )}
                 {row.barcode && (
                   <>
-                    {` UPC:`} <span className='fw-light text-muted'>{row.barcode}</span>
+                    UPC:<span className='fw-light text-muted'>{row.barcode}</span>
                   </>
                 )}
               </p>

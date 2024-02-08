@@ -1,3 +1,4 @@
+import { AMAZON_MARKETPLACES_ID } from '@components/constants/shelfcloud'
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { Marketpalce, ProductPerformance } from '@typesTs/marketplaces/productPerformance'
@@ -75,13 +76,16 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                           {Object.values(data.marketpalces).map(
                             (market: Marketpalce) =>
                               market.fees.totalComission + market.fees.totalFixedFee !== 0 && (
-                                <>
+                                <div key={market.storeId}>
                                   <div
                                     key={market.name}
                                     className='border-bottom py-1 w-100 d-flex flex-row justify-content-between align-items-center'
-                                    onClick={() => market.storeId === 8888 && setShowAmazonFbaFees(!showAmazonFbaFees)}>
+                                    onClick={() => AMAZON_MARKETPLACES_ID.includes(market.storeId) && setShowAmazonFbaFees(!showAmazonFbaFees)}>
                                     <span
-                                      className={'text-black d-flex flex-row justify-content-start align-items-start fw-normal ' + (market.storeId === 8888 && 'dropdown-toggle')}>
+                                      className={
+                                        'text-black d-flex flex-row justify-content-start align-items-start fw-normal ' +
+                                        (AMAZON_MARKETPLACES_ID.includes(market.storeId) && 'dropdown-toggle')
+                                      }>
                                       {market.name}
                                     </span>
                                     <span className={'fw-normal text-end text-black'}>
@@ -89,7 +93,7 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                                     </span>
                                   </div>
                                   {/* AMAZON FBA FEES */}
-                                  {market.storeId === 8888 && (
+                                  {AMAZON_MARKETPLACES_ID.includes(market.storeId) && (
                                     <Collapse className='ps-4 pe-1 py-0 w-100' isOpen={showAmazonFbaFees}>
                                       {market.fees.FBAPerOrderFulfillmentFee! !== 0 && (
                                         <div className='border-bottom py-1 w-100 d-flex flex-row justify-content-between align-items-center'>
@@ -143,7 +147,7 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                                       )}
                                     </Collapse>
                                   )}
-                                </>
+                                </div>
                               )
                           )}
                         </Collapse>

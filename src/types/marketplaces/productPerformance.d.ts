@@ -50,7 +50,7 @@ export interface Listing {
 export interface Marketpalce {
     marketplace: string;
     name: string;
-    storeId: number,
+    storeId: string,
     comissionFee: number;
     fixedFee: number;
     fees: Fees;

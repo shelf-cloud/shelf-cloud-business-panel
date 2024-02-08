@@ -121,6 +121,17 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
             Past 30 Days
           </p>
           <p
+            className={selectedDateFilter == 'lastmonth' ? 'fw-bold' : ''}
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              setSelectedDateFilter('lastmonth')
+              setShipmentsStartDate(moment().subtract(1,'months').startOf('month').format('YYYY-MM-DD'))
+              setShipmentsEndDate(moment().subtract(1,'months').endOf('month').format('YYYY-MM-DD'))
+              setOpenDatesMenu(false)
+            }}>
+            Last Month
+          </p>
+          <p
             className={selectedDateFilter == 'yeartodate' ? 'fw-bold' : ''}
             style={{ cursor: 'pointer' }}
             onClick={() => {
