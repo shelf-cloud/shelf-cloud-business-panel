@@ -16,10 +16,6 @@ const unMapListingToSku: NextApiHandler = async (request, response) => {
             listingSku: request.body.listingSku,
             shelfCloudSku: request.body.shelfCloudSku,
             shelfCloudSkuId: request.body.shelfCloudSkuId,
-        }, {
-            headers: {
-                Origin: `${process.env.SHELFCLOUD_SERVER_ALLOW_ORIGIN}`,
-            }
         })
         .then(async ({ data }) => {
             if (data.error) {

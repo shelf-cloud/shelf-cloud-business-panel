@@ -37,10 +37,6 @@ const addAuthSeller: NextApiHandler = async (request, response) => {
           expires_in: data.expires_in,
           marketplace_Id: request.query.region === 'us' ? 'ATVPDKIKX0DER' : 'A1RKKUPIHCS9HS',
           spapi_endpoint: request.query.region === 'us' ? 'sellingpartnerapi-na.amazon.com' : 'sellingpartnerapi-eu.amazon.com',
-        }, {
-          headers: {
-            Origin: `${process.env.SHELFCLOUD_SERVER_ALLOW_ORIGIN}`,
-          }
         })
         .then(() => {
           axios

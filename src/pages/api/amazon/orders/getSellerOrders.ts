@@ -11,11 +11,7 @@ const getSellerOrders: NextApiHandler = async (request, response) => {
     }
 
     axios
-        .get(`${process.env.SHELFCLOUD_SERVER_URL}/amazon/orders/getSellerOrders/${request.query.region}/${request.query.businessId}/${request.query.startDate}/${request.query.endDate}`, {
-            headers: {
-                Origin: `${process.env.SHELFCLOUD_SERVER_ALLOW_ORIGIN}`,
-            }
-        })
+        .get(`${process.env.SHELFCLOUD_SERVER_URL}/amazon/orders/getSellerOrders/${request.query.region}/${request.query.businessId}/${request.query.startDate}/${request.query.endDate}`)
         .then(async ({ data }) => {
             response.json(data)
         })
