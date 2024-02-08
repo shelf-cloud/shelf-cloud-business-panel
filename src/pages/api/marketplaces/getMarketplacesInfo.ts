@@ -13,11 +13,7 @@ const getMarketplacesInfo: NextApiHandler = async (request, response) => {
     axios(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/marketplaces/getMarketplacesInfo.php?businessId=${request.query.businessId}`)
         .then(async ({ data }) => {
 
-            axios(`${process.env.SHELFCLOUD_SERVER_URL}/amazon/sellers/getSellerMarketplaces/${request.query.region}/${request.query.businessId}`, {
-                headers: {
-                    Origin: `${process.env.SHELFCLOUD_SERVER_ALLOW_ORIGIN}`,
-                }
-            })
+            axios(`${process.env.SHELFCLOUD_SERVER_URL}/amazon/sellers/getSellerMarketplaces/${request.query.region}/${request.query.businessId}`)
                 .then((amazonMarketplaces) => {
 
                     if (amazonMarketplaces.data.error || amazonMarketplaces.data.marketplaces.length === 0) {
