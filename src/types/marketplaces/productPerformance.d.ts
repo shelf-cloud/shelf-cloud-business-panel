@@ -31,6 +31,7 @@ export interface ProductPerformance {
     displayAds: number;
     keywordAds: number;
     brand: string;
+    category: string;
     supplier: string;
     marketpalces: { [key: string]: Marketpalce };
     sellerCost: number;

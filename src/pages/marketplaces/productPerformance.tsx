@@ -17,6 +17,7 @@ import useSWR from 'swr'
 import SelectMarketplaceDropDown from '@components/ui/SelectMarketplaceDropDown'
 import { toast } from 'react-toastify'
 import ProductPerformanceTable from '@components/marketplaces/productPerformanceTable'
+import ExportProductsPerformance from '@components/marketplaces/exportProductsPerformance'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -50,14 +51,18 @@ type FilterProps = {
   unitsmin?: string
   unitsmax?: string
   supplier?: string
+  brand?: string
+  category?: string
   showWithSales?: string
 }
 
 type MarketpalcesInfo = {
   error?: boolean
   suppliers: string[]
+  brands: string[]
+  categories: string[]
   marketplaces: {
-    storeId: number
+    storeId: string
     name: string
     logo: string
   }[]
@@ -65,7 +70,7 @@ type MarketpalcesInfo = {
 const Profits = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
-  const { filters, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, showWithSales }: FilterProps = router.query
+  const { filters, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, brand, category, showWithSales }: FilterProps = router.query
   const [searchValue, setSearchValue] = useState<any>('')
   const [filterOpen, setFilterOpen] = useState(false)
   const [loadingData, setLoadingData] = useState(false)
@@ -75,13 +80,9 @@ const Profits = ({ session }: Props) => {
   const [productsData, setProductsData] = useState<ProductsPerformanceResponse>({})
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data }: { data?: MarketpalcesInfo } = useSWR(
-    state.user.businessId ? `/api/marketplaces/getMarketplacesInfo?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  )
+  const { data }: { data?: MarketpalcesInfo } = useSWR(state.user.businessId ? `/api/marketplaces/getMarketplacesInfo?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher, {
+    revalidateOnFocus: false,
+  })
 
   useEffect(() => {
     const getNewDateRange = async () => {
@@ -115,6 +116,9 @@ const Profits = ({ session }: Props) => {
           (profitmax !== undefined && profitmax !== '' ? item.grossRevenue - item.expenses <= parseFloat(profitmax!) : true) &&
           (unitsmin !== undefined && unitsmin !== '' ? item.unitsSold >= parseInt(unitsmin!) : true) &&
           (unitsmax !== undefined && unitsmax !== '' ? item.unitsSold <= parseInt(unitsmax!) : true) &&
+          (supplier !== undefined && supplier !== '' ? item.supplier.toLowerCase().includes(supplier.toLowerCase()) : true) &&
+          (brand !== undefined && brand !== '' ? item.brand.toLowerCase().includes(brand.toLowerCase()) : true) &&
+          (category !== undefined && category !== '' ? item.category.toLowerCase().includes(category.toLowerCase()) : true) &&
           (showWithSales === undefined || showWithSales === '' ? item.unitsSold > 0 : showWithSales === 'false' ? item.unitsSold > 0 : true)
       )
     }
@@ -128,13 +132,14 @@ const Profits = ({ session }: Props) => {
           (profitmax !== undefined && profitmax !== '' ? item.grossRevenue - item.expenses <= parseFloat(profitmax!) : true) &&
           (unitsmin !== undefined && unitsmin !== '' ? item.unitsSold >= parseInt(unitsmin!) : true) &&
           (unitsmax !== undefined && unitsmax !== '' ? item.unitsSold <= parseInt(unitsmax!) : true) &&
+          (supplier !== undefined && supplier !== '' ? item.supplier.toLowerCase().includes(supplier.toLowerCase()) : true) &&
+          (brand !== undefined && brand !== '' ? item.brand.toLowerCase().includes(brand.toLowerCase()) : true) &&
+          (category !== undefined && category !== '' ? item.category.toLowerCase().includes(category.toLowerCase()) : true) &&
           (showWithSales == undefined || showWithSales == '' ? item.unitsSold > 0 : showWithSales === 'false' ? item.unitsSold > 0 : true) &&
-          (item.sku.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item.asin.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item.title.toLowerCase().includes(searchValue.toLowerCase()))
+          (item.sku.toLowerCase().includes(searchValue.toLowerCase()) || item.asin.toLowerCase().includes(searchValue.toLowerCase()) || item.title.toLowerCase().includes(searchValue.toLowerCase()))
       )
     }
-  }, [productsData, searchValue, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, showWithSales])
+  }, [productsData, searchValue, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, brand, category, showWithSales])
 
   const handleChangeDatesFromPicker = (dateStr: string) => {
     if (dateStr.includes(' to ')) {
@@ -144,16 +149,7 @@ const Profits = ({ session }: Props) => {
     }
   }
 
-  const handleApplyFilters = (
-    grossmin: string,
-    grossmax: string,
-    profitmin: string,
-    profitmax: string,
-    unitsmin: string,
-    unitsmax: string,
-    supplier: string,
-    showWithSales: string
-  ) => {
+  const handleApplyFilters = (grossmin: string, grossmax: string, profitmin: string, profitmax: string, unitsmin: string, unitsmax: string, supplier: string, brand: string, category: string, showWithSales: string) => {
     let filterString = `/marketplaces/productPerformance?filters=true`
     if (grossmin || grossmin !== '') filterString += `&grossmin=${grossmin}`
     if (grossmax || grossmax !== '') filterString += `&grossmax=${grossmax}`
@@ -162,6 +158,8 @@ const Profits = ({ session }: Props) => {
     if (unitsmin || unitsmin !== '') filterString += `&unitsmin=${unitsmin}`
     if (unitsmax || unitsmax !== '') filterString += `&unitsmax=${unitsmax}`
     if (supplier || supplier !== '') filterString += `&supplier=${supplier}`
+    if (brand || brand !== '') filterString += `&brand=${brand}`
+    if (category || category !== '') filterString += `&category=${category}`
     if (showWithSales || showWithSales !== '') filterString += `&showWithSales=${showWithSales}`
     router.push(filterString, undefined, { shallow: true })
   }
@@ -176,8 +174,8 @@ const Profits = ({ session }: Props) => {
           <Container fluid>
             <BreadCrumb title='Product Performance' pageTitle='Marketplaces' />
             <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-end align-items-md-center px-3'>
-              <div className='app-search d-flex flex-row justify-content-between align-items-center p-0'>
-                <div className='d-flex flex-row justify-content-start align-items-center gap-3'>
+              <div className='app-search d-flex flex-sm-column justify-content-between align-items-center p-0 flex-xl-row gap-sm-2 gap-xl-0'>
+                <div className='d-flex flex-wrap justify-content-start align-items-center gap-3 w-100'>
                   <button
                     className={'btn dropdown-toggle ' + (filters === 'true' ? 'btn-info' : 'btn-light')}
                     style={filters === 'true' ? {} : { backgroundColor: 'white', border: '1px solid #E1E3E5' }}
@@ -188,16 +186,11 @@ const Profits = ({ session }: Props) => {
                     onClick={() => setFilterOpen(!filterOpen)}>
                     Filters
                   </button>
-                  <FilterByDates
-                    shipmentsStartDate={startDate}
-                    setShipmentsStartDate={setStartDate}
-                    setShipmentsEndDate={setEndDate}
-                    shipmentsEndDate={endDate}
-                    handleChangeDatesFromPicker={handleChangeDatesFromPicker}
-                  />
+                  <FilterByDates shipmentsStartDate={startDate} setShipmentsStartDate={setStartDate} setShipmentsEndDate={setEndDate} shipmentsEndDate={endDate} handleChangeDatesFromPicker={handleChangeDatesFromPicker} />
                   <SelectMarketplaceDropDown selectionInfo={data?.marketplaces || []} selected={selectedMarketplace} handleSelection={setSelectedMarketplace} />
+                  <ExportProductsPerformance products={filterDataTable || []} marketpalces={data?.marketplaces || []} startDate={startDate} endDate={endDate}/>
                 </div>
-                <div className='col-sm-12 col-md-3'>
+                <div className='col-sm-12 col-xl-3'>
                   <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                     <DebounceInput
                       type='text'
@@ -233,8 +226,12 @@ const Profits = ({ session }: Props) => {
                       unitsmin={unitsmin !== undefined ? unitsmin : ''}
                       unitsmax={unitsmax !== undefined ? unitsmax : ''}
                       supplier={supplier !== undefined ? supplier : ''}
+                      brand={brand !== undefined ? brand : ''}
+                      category={category !== undefined ? category : ''}
                       showWithSales={showWithSales !== undefined || showWithSales === '' ? showWithSales : 'false'}
                       supplierOptions={data?.suppliers || []}
+                      brandOptions={data?.brands || []}
+                      categoryOptions={data?.categories || []}
                       handleApplyFilters={handleApplyFilters}
                       setFilterOpen={setFilterOpen}
                     />

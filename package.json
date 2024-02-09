@@ -12,7 +12,7 @@
     "semi": false,
     "singleQuote": true,
     "jsxSingleQuote": true,
-    "printWidth": 180,
+    "printWidth": 250,
     "tabWidth": 2,
     "useTabs": false,
     "trailingComma": "es5",

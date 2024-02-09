@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 
 type Props = {
+  formValue: string
   selectionInfo: string[]
   selected: string
   handleSelection: (field: string, value: any, shouldValidate?: boolean | undefined) => void
 }
 
-const SelectDropDown = ({ selectionInfo, selected, handleSelection }: Props) => {
+const SelectDropDown = ({ formValue, selectionInfo, selected, handleSelection }: Props) => {
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const filterByDates = useRef<HTMLDivElement | null>(null)
 
@@ -48,7 +49,7 @@ const SelectDropDown = ({ selectionInfo, selected, handleSelection }: Props) => 
                 className={'m-0 mb-2 ' + (selected == `${option}` ? 'fw-bold' : '')}
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
-                  handleSelection('supplier', `${option}`)
+                  handleSelection(formValue, `${option}`)
                   setOpenDatesMenu(false)
                 }}>
                 {`${option}`}
@@ -59,7 +60,7 @@ const SelectDropDown = ({ selectionInfo, selected, handleSelection }: Props) => 
             className={'mt-2 mb-0 text-muted text-end'}
             style={{ cursor: 'pointer' }}
             onClick={() => {
-              handleSelection('supplier', '')
+              handleSelection(formValue, '')
               setOpenDatesMenu(false)
             }}>
             Clear

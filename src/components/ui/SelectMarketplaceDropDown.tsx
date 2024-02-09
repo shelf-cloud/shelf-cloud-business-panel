@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 
 type Props = {
   selectionInfo: {
-    storeId: number
+    storeId: string
     name: string
     logo: string
   }[]
@@ -33,7 +33,7 @@ const SelectMarketplaceDropDown = ({ selectionInfo, selected, handleSelection }:
   }, [])
 
   return (
-    <div ref={filterByDates} className='dropdown' style={{ minWidth: '250px' }}>
+    <div ref={filterByDates} className='dropdown'>
       <button
         className='btn btn-light dropdown-toggle d-flex flex-row justify-content-start align-items-center gap-2'
         style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }}
@@ -54,15 +54,8 @@ const SelectMarketplaceDropDown = ({ selectionInfo, selected, handleSelection }:
             }}>
             <img
               loading='lazy'
-              src={
-                selected.logo
-                  ? selected.logo
-                  : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-              }
-              onError={(e) =>
-                (e.currentTarget.src =
-                  'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
-              }
+              src={selected.logo ? selected.logo : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'}
+              onError={(e) => (e.currentTarget.src = 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')}
               alt='product Image'
               style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
             />
@@ -70,7 +63,7 @@ const SelectMarketplaceDropDown = ({ selectionInfo, selected, handleSelection }:
         )}
         <span className='fw-semibold m-0 p-0'>{selected?.name}</span>
       </button>
-      <div className={'dropdown-menu w-100 py-3 px-3' + (openDatesMenu ? ' show' : '')}>
+      <div className={'dropdown-menu w-100 py-3 px-3' + (openDatesMenu ? ' show' : '')} style={{ minWidth: '280px' }}>
         <div className='d-flex flex-column justify-content-start'>
           <div className='d-flex flex-column justify-content-start gap-2 py-1' style={{ maxHeight: '25vh', overflowY: 'scroll' }}>
             <div
@@ -81,7 +74,7 @@ const SelectMarketplaceDropDown = ({ selectionInfo, selected, handleSelection }:
                 handleSelection((prev: any) => ({ ...prev, storeId: 9999, name: 'All Marketplaces', logo: '' }))
                 setOpenDatesMenu(false)
               }}>
-              <i className='las la-store-alt fs-4 m-0 p-0 text-primary' />
+              <i className='las la-store-alt fs-3 m-0 p-0 text-primary' />
               <span className={'m-0 p-0 text-nowrap ' + (selected.storeId === 9999 ? 'fw-semibold' : '')}>All Marketplaces</span>
             </div>
             {selectionInfo?.map((option) => (
@@ -103,21 +96,14 @@ const SelectMarketplaceDropDown = ({ selectionInfo, selected, handleSelection }:
                     }}>
                     <img
                       loading='lazy'
-                      src={
-                        option.logo
-                          ? option.logo
-                          : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-                      }
-                      onError={(e) =>
-                        (e.currentTarget.src =
-                          'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
-                      }
+                      src={option.logo ? option.logo : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'}
+                      onError={(e) => (e.currentTarget.src = 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')}
                       alt='product Image'
                       style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                     />
                   </div>
                 )}
-                <span className={'m-0 p-0 text-nowrap ' + (selected.storeId === option.storeId ? 'fw-semibold' : '')}>{option.name}</span>
+                <span className={'m-0 p-0 text-nowrap ' + (String(selected.storeId) === option.storeId ? 'fw-bold' : '')}>{option.name}</span>
               </div>
             ))}
           </div>

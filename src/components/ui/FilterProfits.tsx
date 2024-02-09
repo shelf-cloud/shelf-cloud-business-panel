@@ -14,22 +14,17 @@ type Props = {
   unitsmin: string
   unitsmax: string
   supplier: string
+  brand: string
+  category: string
   showWithSales: string
   supplierOptions: string[]
-  handleApplyFilters: (
-    grossmin: string,
-    grossmax: string,
-    profitmin: string,
-    profitmax: string,
-    unitsmin: string,
-    unitsmax: string,
-    supplier: string,
-    showWithSales: string
-  ) => void
+  brandOptions: string[]
+  categoryOptions: string[]
+  handleApplyFilters: (grossmin: string, grossmax: string, profitmin: string, profitmax: string, unitsmin: string, unitsmax: string, supplier: string, brand: string, category: string, showWithSales: string) => void
   setFilterOpen: (value: boolean) => void
 }
 
-const FilterProfits = ({ grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, showWithSales, supplierOptions, handleApplyFilters, setFilterOpen }: Props) => {
+const FilterProfits = ({ grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, brand, category, showWithSales, supplierOptions, brandOptions, categoryOptions, handleApplyFilters, setFilterOpen }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
 
@@ -41,6 +36,8 @@ const FilterProfits = ({ grossmin, grossmax, profitmin, profitmax, unitsmin, uni
     unitsSoldMin: unitsmin,
     unitsSoldMax: unitsmax,
     supplier: supplier,
+    brand: brand,
+    category: category,
     showWithSales: showWithSales,
   }
 
@@ -51,16 +48,7 @@ const FilterProfits = ({ grossmin, grossmax, profitmin, profitmax, unitsmin, uni
 
   const handleSubmit = async (values: any) => {
     console.log('values', values)
-    handleApplyFilters(
-      values.grossRevenueMin,
-      values.grossRevenueMax,
-      values.netProfitMin,
-      values.netProfitMax,
-      values.unitsSoldMin,
-      values.unitsSoldMax,
-      values.supplier,
-      values.showWithSales
-    )
+    handleApplyFilters(values.grossRevenueMin, values.grossRevenueMax, values.netProfitMin, values.netProfitMax, values.unitsSoldMin, values.unitsSoldMax, values.supplier, values.brand, values.category, values.showWithSales)
   }
 
   const handleClearFilters = (setValues: any) => {
@@ -72,6 +60,8 @@ const FilterProfits = ({ grossmin, grossmax, profitmin, profitmax, unitsmin, uni
       unitsSoldMin: '',
       unitsSoldMax: '',
       supplier: '',
+      brand: '',
+      category: '',
       showWithSales: '',
     })
     router.push('/marketplaces/productPerformance', undefined, { shallow: true })
@@ -207,18 +197,36 @@ const FilterProfits = ({ grossmin, grossmax, profitmin, profitmax, unitsmin, uni
                   </div>
                 </FormGroup>
               </Col>
+            </Row>
+            <Row className='mt-2'>
               <Col md={3}>
                 <FormGroup className='createOrder_inputs'>
                   <Label htmlFor='lastNameinput' className='form-label'>
                     Suppliers
                   </Label>
-                  <SelectDropDown selectionInfo={supplierOptions} selected={values.supplier} handleSelection={setFieldValue} />
+                  <SelectDropDown formValue={'supplier'} selectionInfo={supplierOptions} selected={values.supplier} handleSelection={setFieldValue} />
+                </FormGroup>
+              </Col>
+              <Col md={3}>
+                <FormGroup className='createOrder_inputs'>
+                  <Label htmlFor='lastNameinput' className='form-label'>
+                    Brands
+                  </Label>
+                  <SelectDropDown formValue={'brand'} selectionInfo={brandOptions} selected={values.brand} handleSelection={setFieldValue} />
+                </FormGroup>
+              </Col>
+              <Col md={3}>
+                <FormGroup className='createOrder_inputs'>
+                  <Label htmlFor='lastNameinput' className='form-label'>
+                    Categories
+                  </Label>
+                  <SelectDropDown formValue={'category'} selectionInfo={categoryOptions} selected={values.category} handleSelection={setFieldValue} />
                 </FormGroup>
               </Col>
             </Row>
-            <Row>
+            <Col md={12} className='d-flex flewx-row justify-content-between align-items-center'>
               <Col md={3}>
-                <div className='form-check form-switch form-switch-right form-switch-md'>
+                <div className='form-check form-switch form-switch-right form-switch-md d-flex flex-row justify-content-start align-items-center'>
                   <Label className='form-label'>Show products with NO Sales</Label>
                   <Input
                     className='form-check-input code-switcher'
@@ -234,8 +242,6 @@ const FilterProfits = ({ grossmin, grossmax, profitmin, profitmax, unitsmin, uni
                   />
                 </div>
               </Col>
-            </Row>
-            <Col md={12} className='mt-4'>
               <div className='d-flex flewx-row justify-content-end align-items-center gap-3'>
                 <Button type='button' color='light' className='fs-6 btn' onClick={() => handleClearFilters(setValues)}>
                   Clear

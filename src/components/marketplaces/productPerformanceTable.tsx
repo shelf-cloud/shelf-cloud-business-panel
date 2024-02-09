@@ -119,31 +119,20 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
               }}>
               <img
                 loading='lazy'
-                src={
-                  row.image
-                    ? row.image
-                    : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-                }
-                onError={(e) =>
-                  (e.currentTarget.src =
-                    'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
-                }
+                src={row.image ? row.image : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'}
+                onError={(e) => (e.currentTarget.src = 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')}
                 alt='product Image'
                 style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
               />
             </div>
             <div>
               <p className='m-0 p-0 text-primary fw-semibold fs-6'>{row.sku}</p>
-              <p className='m-0 p-0 text-black fw-semibold fs-7'>{row.title}</p>
+              <p className='m-0 p-0 text-black fw-semibold fs-7 text-wrap'>{row.title}</p>
               <p className='m-0 p-0 text-black fw-normal fs-7 d-flex flex-row justify-content-start align-items-center'>
                 {row.asin && (
                   <>
                     {`ASIN: `}
-                    <a
-                      href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`}
-                      target='blank'
-                      className='fw-light'
-                      style={{ textDecoration: 'none' }}>
+                    <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank' className='fw-light' style={{ textDecoration: 'none' }}>
                       {row.asin}
                     </a>
                     <i className='ri-file-copy-line fs-5 my-0 mx-2 p-0 text-muted' style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(row.asin)} />
@@ -164,6 +153,22 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
       compact: false,
       grow: 2,
       sortFunction: caseInsensitiveSort,
+    },
+    {
+      name: <span className='fw-bolder fs-6 text-center'>Supplier</span>,
+      selector: (row: ProductPerformance) => {
+        return (
+          <>
+            <p className='w-100 m-0 p-0 text-start fs-7 fw-bold'>{row.supplier}</p>
+            <p className='w-100 m-0 p-0 text-start fs-7'>{row.brand}</p>
+            <p className='w-100 m-0 p-0 text-start fs-7'>{row.category}</p>
+          </>
+        )
+      },
+      // center: true,
+      // sortable: true,
+      compact: true,
+      hide: 'md',
     },
     {
       name: <span className='fw-bolder fs-6 text-center'>Gross Revenue</span>,
@@ -188,9 +193,7 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
     {
       name: <span className='fw-bolder fs-6'>Profit</span>,
       selector: (row: ProductPerformance) => {
-        return (
-          <span className={row?.grossRevenue - row?.expenses >= 0 ? 'text-black' : 'text-danger'}>{FormatCurrency(state.currentRegion, row?.grossRevenue - row?.expenses)}</span>
-        )
+        return <span className={row?.grossRevenue - row?.expenses >= 0 ? 'text-black' : 'text-danger'}>{FormatCurrency(state.currentRegion, row?.grossRevenue - row?.expenses)}</span>
       },
       center: true,
       sortable: true,
@@ -203,11 +206,7 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
         if (row?.grossRevenue === 0) {
           return <span>0%</span>
         } else {
-          return (
-            <span className={((row?.grossRevenue - row?.expenses) / row?.grossRevenue) * 100 >= 0 ? 'text-black' : 'text-danger'}>
-              {FormatIntNumber(state.currentRegion, ((row?.grossRevenue - row?.expenses) / row?.grossRevenue) * 100)}%
-            </span>
-          )
+          return <span className={((row?.grossRevenue - row?.expenses) / row?.grossRevenue) * 100 >= 0 ? 'text-black' : 'text-danger'}>{FormatIntNumber(state.currentRegion, ((row?.grossRevenue - row?.expenses) / row?.grossRevenue) * 100)}%</span>
         }
       },
       center: true,
@@ -221,11 +220,7 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
         if (row?.expenses + row.productCost + row.shippingCost == 0) {
           return <span>0%</span>
         } else {
-          return (
-            <span className={((row.grossRevenue - row?.expenses) / row?.expenses) * 100 >= 0 ? 'text-black' : 'text-danger'}>
-              {FormatIntNumber(state.currentRegion, ((row.grossRevenue - row?.expenses) / row?.expenses) * 100)}%
-            </span>
-          )
+          return <span className={((row.grossRevenue - row?.expenses) / row?.expenses) * 100 >= 0 ? 'text-black' : 'text-danger'}>{FormatIntNumber(state.currentRegion, ((row.grossRevenue - row?.expenses) / row?.expenses) * 100)}%</span>
         }
       },
       center: true,
@@ -268,7 +263,7 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
       expandableRowsComponent={ProductPerformanceExpandedDetails}
       // expandableRowsComponentProps={{ apiMutateLink: apiMutateLink }}
       dense
-      defaultSortFieldId={2}
+      defaultSortFieldId={3}
       defaultSortAsc={false}
       pagination={tableData.length > 100 ? true : false}
       paginationPerPage={50}
