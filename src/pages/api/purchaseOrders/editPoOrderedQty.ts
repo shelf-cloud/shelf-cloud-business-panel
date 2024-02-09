@@ -1,9 +1,10 @@
 import { NextApiHandler } from 'next'
-import { getSession } from '@auth/client'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 
 const editPoOrderedQty: NextApiHandler = async (request, response) => {
-    const session = await getSession({ req: request })
+    const session = await getServerSession(request, response, authOptions)
     if (session == null) {
         response.status(401).end()
 

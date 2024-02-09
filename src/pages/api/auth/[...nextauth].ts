@@ -2,7 +2,7 @@ import NextAuth from 'next-auth'
 import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
-const options: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
   theme: {
     colorScheme: 'light', // "auto" | "dark" | "light"
     brandColor: '#458BC9', // Hex color code
@@ -55,4 +55,4 @@ const options: NextAuthOptions = {
   },
 }
 
-export default NextAuth(options)
+export default NextAuth(authOptions)

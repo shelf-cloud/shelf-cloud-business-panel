@@ -1,9 +1,10 @@
 import { NextApiHandler } from 'next'
-import { getSession } from '@auth/client'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 
 const unMapListingToSku: NextApiHandler = async (request, response) => {
-    const session = await getSession({ req: request })
+    const session = await getServerSession(request, response, authOptions)
 
     if (session == null) {
         response.status(401).end()
@@ -43,7 +44,7 @@ const unMapListingToSku: NextApiHandler = async (request, response) => {
                         // The request was made but no response was received
                         response.json({
                             error: true,
-                            message: 'Error from server please try again later.',
+                            message: 'Error from  SC server please try again later.',
                         })
                     } else {
                         // Something happened in setting up the request that triggered an Error
@@ -66,7 +67,7 @@ const unMapListingToSku: NextApiHandler = async (request, response) => {
                 // The request was made but no response was received
                 response.json({
                     error: true,
-                    message: 'Error from server please try again later.',
+                    message: 'Error from AMZ server please try again later.',
                 })
             } else {
                 // Something happened in setting up the request that triggered an Error
