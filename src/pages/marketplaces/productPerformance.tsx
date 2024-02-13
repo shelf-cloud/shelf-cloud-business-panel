@@ -20,7 +20,7 @@ import ProductPerformanceTable from '@components/marketplaces/productPerformance
 import ExportProductsPerformance from '@components/marketplaces/exportProductsPerformance'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
-  const sessionToken = context.req.cookies['next-auth.session-token']
+  const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
 
   const session = await getSession(context)
   if (session == null) {
