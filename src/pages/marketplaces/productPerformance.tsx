@@ -20,6 +20,8 @@ import ProductPerformanceTable from '@components/marketplaces/productPerformance
 import ExportProductsPerformance from '@components/marketplaces/exportProductsPerformance'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
+  const sessionToken = context.req.cookies['next-auth.session-token']
+
   const session = await getSession(context)
   if (session == null) {
     return {
@@ -30,11 +32,12 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
     }
   }
   return {
-    props: { session },
+    props: { session, sessionToken },
   }
 }
 
 type Props = {
+  sessionToken: string
   session: {
     user: {
       name: string
@@ -67,7 +70,7 @@ type MarketpalcesInfo = {
     logo: string
   }[]
 }
-const Profits = ({ session }: Props) => {
+const Profits = ({ session, sessionToken }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
   const { filters, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, brand, category, showWithSales }: FilterProps = router.query
@@ -88,13 +91,18 @@ const Profits = ({ session }: Props) => {
     const getNewDateRange = async () => {
       setLoadingData(true)
       await axios(
-        `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/marketplaces/products/getProductsPerformance?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${startDate}&endDate=${endDate}&storeId=${selectedMarketplace.storeId}`
+        `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/marketplaces/products/getProductsPerformance?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${startDate}&endDate=${endDate}&storeId=${selectedMarketplace.storeId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionToken}`,
+          },
+        }
       )
         .then((res) => {
           setProductsData(res.data as ProductsPerformanceResponse)
         })
-        .catch(() => {
-          toast.error('Error Loading Products Performance!')
+        .catch(({response }) => {
+          toast.error(response.data?.message || 'Error fetching product performance data')
           setProductsData({})
         })
       setLoadingData(false)
@@ -188,7 +196,7 @@ const Profits = ({ session }: Props) => {
                   </button>
                   <FilterByDates shipmentsStartDate={startDate} setShipmentsStartDate={setStartDate} setShipmentsEndDate={setEndDate} shipmentsEndDate={endDate} handleChangeDatesFromPicker={handleChangeDatesFromPicker} />
                   <SelectMarketplaceDropDown selectionInfo={data?.marketplaces || []} selected={selectedMarketplace} handleSelection={setSelectedMarketplace} />
-                  <ExportProductsPerformance products={filterDataTable || []} marketpalces={data?.marketplaces || []} startDate={startDate} endDate={endDate}/>
+                  <ExportProductsPerformance products={filterDataTable || []} marketpalces={data?.marketplaces || []} startDate={startDate} endDate={endDate} />
                 </div>
                 <div className='col-sm-12 col-xl-3'>
                   <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
