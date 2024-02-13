@@ -125,8 +125,8 @@ const Profits = ({ session, sessionToken }: Props) => {
           (unitsmin !== undefined && unitsmin !== '' ? item.unitsSold >= parseInt(unitsmin!) : true) &&
           (unitsmax !== undefined && unitsmax !== '' ? item.unitsSold <= parseInt(unitsmax!) : true) &&
           (supplier !== undefined && supplier !== '' ? item.supplier.toLowerCase().includes(supplier.toLowerCase()) : true) &&
-          (brand !== undefined && brand !== '' ? item.brand.toLowerCase().includes(brand.toLowerCase()) : true) &&
-          (category !== undefined && category !== '' ? item.category.toLowerCase().includes(category.toLowerCase()) : true) &&
+          (brand !== undefined && brand !== '' ? item.brand.toLowerCase() === brand.toLowerCase() : true) &&
+          (category !== undefined && category !== '' ? item.category.toLowerCase() === category.toLowerCase() : true) &&
           (showWithSales === undefined || showWithSales === '' ? item.unitsSold > 0 : showWithSales === 'false' ? item.unitsSold > 0 : true)
       )
     }
@@ -141,8 +141,8 @@ const Profits = ({ session, sessionToken }: Props) => {
           (unitsmin !== undefined && unitsmin !== '' ? item.unitsSold >= parseInt(unitsmin!) : true) &&
           (unitsmax !== undefined && unitsmax !== '' ? item.unitsSold <= parseInt(unitsmax!) : true) &&
           (supplier !== undefined && supplier !== '' ? item.supplier.toLowerCase().includes(supplier.toLowerCase()) : true) &&
-          (brand !== undefined && brand !== '' ? item.brand.toLowerCase().includes(brand.toLowerCase()) : true) &&
-          (category !== undefined && category !== '' ? item.category.toLowerCase().includes(category.toLowerCase()) : true) &&
+          (brand !== undefined && brand !== '' ? item.brand.toLowerCase() === brand.toLowerCase() : true) &&
+          (category !== undefined && category !== '' ? item.category.toLowerCase() === category.toLowerCase() : true) &&
           (showWithSales == undefined || showWithSales == '' ? item.unitsSold > 0 : showWithSales === 'false' ? item.unitsSold > 0 : true) &&
           (item.sku.toLowerCase().includes(searchValue.toLowerCase()) || item.asin.toLowerCase().includes(searchValue.toLowerCase()) || item.title.toLowerCase().includes(searchValue.toLowerCase()))
       )

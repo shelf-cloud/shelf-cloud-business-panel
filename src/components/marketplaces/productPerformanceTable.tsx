@@ -14,6 +14,12 @@ type Props = {
 const ProductPerformanceTable = ({ tableData, pending }: Props) => {
   const { state }: any = useContext(AppContext)
 
+  const totalGrossRevenue = tableData.reduce((total: number, product: ProductPerformance) => total + product.grossRevenue, 0)
+  const totalExpenses = tableData.reduce((total: number, product: ProductPerformance) => total + product.expenses, 0)
+  const totalProfit = tableData.reduce((total: number, product: ProductPerformance) => total + (product.grossRevenue - product.expenses), 0)
+  const totalMargin = ((totalGrossRevenue - totalExpenses) / totalGrossRevenue) * 100
+  const totalRoi = ((totalGrossRevenue - totalExpenses) / totalExpenses) * 100
+
   const caseInsensitiveSort = (rowA: ProductPerformance, rowB: ProductPerformance) => {
     const a = rowA.sku.toLowerCase()
     const b = rowB.sku.toLowerCase()
@@ -174,12 +180,7 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
       name: (
         <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
           <span className='fw-semibold fs-6'>Gross Revenue</span>
-          <span className={'fw-normal fs-5 ' + (tableData.reduce((total: number, product: ProductPerformance) => total + product.grossRevenue, 0) > 0 ? 'text-primary' : 'text-danger')}>
-            {FormatCurrency(
-              state.currentRegion,
-              tableData.reduce((total: number, product: ProductPerformance) => total + product.grossRevenue, 0)
-            )}
-          </span>
+          <span className={'fw-normal fs-5 ' + (totalGrossRevenue > 0 ? 'text-primary' : 'text-danger')}>{FormatCurrency(state.currentRegion, totalGrossRevenue)}</span>
         </div>
       ),
       selector: (row: ProductPerformance) => {
@@ -194,12 +195,7 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
       name: (
         <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
           <span className='fw-semibold fs-6'>Expenses</span>
-          <span className={'fw-normal fs-5 ' + (tableData.reduce((total: number, product: ProductPerformance) => total + product.expenses, 0) > 0 ? 'text-primary' : 'text-danger')}>
-            {FormatCurrency(
-              state.currentRegion,
-              tableData.reduce((total: number, product: ProductPerformance) => total + product.expenses, 0)
-            )}
-          </span>
+          <span className={'fw-normal fs-5 ' + (totalExpenses > 0 ? 'text-primary' : 'text-danger')}>{FormatCurrency(state.currentRegion, totalExpenses)}</span>
         </div>
       ),
       selector: (row: ProductPerformance) => {
@@ -214,12 +210,7 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
       name: (
         <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
           <span className='fw-semibold fs-6'>Profit</span>
-          <span className={'fw-normal fs-5 ' + (tableData.reduce((total: number, product: ProductPerformance) => total + (product.grossRevenue - product.expenses), 0) > 0 ? 'text-primary' : 'text-danger')}>
-            {FormatCurrency(
-              state.currentRegion,
-              tableData.reduce((total: number, product: ProductPerformance) => total + (product.grossRevenue - product.expenses), 0)
-            )}
-          </span>
+          <span className={'fw-normal fs-5 ' + (totalProfit > 0 ? 'text-primary' : 'text-danger')}>{FormatCurrency(state.currentRegion, totalProfit)}</span>
         </div>
       ),
       selector: (row: ProductPerformance) => {
@@ -234,27 +225,7 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
       name: (
         <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
           <span className='fw-semibold fs-6'>Margin</span>
-          <span
-            className={
-              'fw-normal fs-5 ' +
-              (tableData.reduce((total: number, product: ProductPerformance) => {
-                if (product?.grossRevenue === 0) return total
-                return total + ((product?.grossRevenue - product?.expenses) / product?.grossRevenue) * 100
-              }, 0) /
-                tableData.length >
-              0
-                ? 'text-primary'
-                : 'text-danger')
-            }>
-            {FormatIntNumber(
-              state.currentRegion,
-              tableData.reduce((total: number, product: ProductPerformance) => {
-                if (product?.grossRevenue === 0) return total
-                return total + ((product?.grossRevenue - product?.expenses) / product?.grossRevenue) * 100
-              }, 0) / tableData.length
-            )}
-            %
-          </span>
+          <span className={'fw-normal fs-5 ' + (totalMargin > 0 ? 'text-primary' : 'text-danger')}>{FormatIntNumber(state.currentRegion, totalMargin)}%</span>
         </div>
       ),
       selector: (row: ProductPerformance) => {
@@ -273,33 +244,7 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
       name: (
         <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
           <span className='fw-semibold fs-6'>ROI</span>
-          <span
-            className={
-              'fw-normal fs-5 ' +
-              (tableData.reduce((total: number, product: ProductPerformance) => {
-                if (product.expenses + product.productCost + product.shippingCost !== 0) {
-                  return total + ((product.grossRevenue - product?.expenses) / product?.expenses) * 100
-                } else {
-                  return total
-                }
-              }, 0) /
-                tableData.length >
-              0
-                ? 'text-primary'
-                : 'text-danger')
-            }>
-            {FormatIntNumber(
-              state.currentRegion,
-              tableData.reduce((total: number, product: ProductPerformance) => {
-                if (product.expenses + product.productCost + product.shippingCost !== 0) {
-                  return total + ((product.grossRevenue - product?.expenses) / product?.expenses) * 100
-                } else {
-                  return total
-                }
-              }, 0) / tableData.length
-            )}
-            %
-          </span>
+          <span className={'fw-normal fs-5 ' + (totalRoi > 0 ? 'text-primary' : 'text-danger')}>{FormatIntNumber(state.currentRegion, totalRoi)}%</span>
         </div>
       ),
       selector: (row: ProductPerformance) => {
