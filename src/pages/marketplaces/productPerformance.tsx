@@ -101,7 +101,7 @@ const Profits = ({ session, sessionToken }: Props) => {
         .then((res) => {
           setProductsData(res.data as ProductsPerformanceResponse)
         })
-        .catch(({response }) => {
+        .catch(({ response }) => {
           toast.error(response.data?.message || 'Error fetching product performance data')
           setProductsData({})
         })

@@ -38,6 +38,7 @@ export interface ProductPerformance {
     inboundShippingCost: number;
     otherCosts: number;
     shippingToFBA: number;
+    shippingToFbaCost: number;
     shelfCloudCost: number
     listings: Listing[];
 }

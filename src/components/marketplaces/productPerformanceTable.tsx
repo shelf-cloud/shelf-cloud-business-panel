@@ -105,7 +105,7 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
 
   const columns: any = [
     {
-      name: <span className='fw-bolder fs-6'>Product</span>,
+      name: <span className='fw-semibold fs-6'>Product</span>,
       selector: (row: ProductPerformance) => {
         return (
           <div className='my-1 d-flex justify-content-between align-items-center gap-2'>
@@ -155,7 +155,7 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
       sortFunction: caseInsensitiveSort,
     },
     {
-      name: <span className='fw-bolder fs-6 text-center'>Supplier</span>,
+      name: <span className='fw-semibold fs-6 text-center'>Supplier</span>,
       selector: (row: ProductPerformance) => {
         return (
           <>
@@ -171,7 +171,17 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
       hide: 'md',
     },
     {
-      name: <span className='fw-bolder fs-6 text-center'>Gross Revenue</span>,
+      name: (
+        <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
+          <span className='fw-semibold fs-6'>Gross Revenue</span>
+          <span className={'fw-normal fs-5 ' + (tableData.reduce((total: number, product: ProductPerformance) => total + product.grossRevenue, 0) > 0 ? 'text-primary' : 'text-danger')}>
+            {FormatCurrency(
+              state.currentRegion,
+              tableData.reduce((total: number, product: ProductPerformance) => total + product.grossRevenue, 0)
+            )}
+          </span>
+        </div>
+      ),
       selector: (row: ProductPerformance) => {
         return <span>{FormatCurrency(state.currentRegion, row?.grossRevenue)}</span>
       },
@@ -181,7 +191,17 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
       sortFunction: sortGrossRevenue,
     },
     {
-      name: <span className='fw-bolder fs-6'>Expenses</span>,
+      name: (
+        <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
+          <span className='fw-semibold fs-6'>Expenses</span>
+          <span className={'fw-normal fs-5 ' + (tableData.reduce((total: number, product: ProductPerformance) => total + product.expenses, 0) > 0 ? 'text-primary' : 'text-danger')}>
+            {FormatCurrency(
+              state.currentRegion,
+              tableData.reduce((total: number, product: ProductPerformance) => total + product.expenses, 0)
+            )}
+          </span>
+        </div>
+      ),
       selector: (row: ProductPerformance) => {
         return <span>{FormatCurrency(state.currentRegion, row?.expenses)}</span>
       },
@@ -191,7 +211,17 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
       sortFunction: sortExpenses,
     },
     {
-      name: <span className='fw-bolder fs-6'>Profit</span>,
+      name: (
+        <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
+          <span className='fw-semibold fs-6'>Profit</span>
+          <span className={'fw-normal fs-5 ' + (tableData.reduce((total: number, product: ProductPerformance) => total + (product.grossRevenue - product.expenses), 0) > 0 ? 'text-primary' : 'text-danger')}>
+            {FormatCurrency(
+              state.currentRegion,
+              tableData.reduce((total: number, product: ProductPerformance) => total + (product.grossRevenue - product.expenses), 0)
+            )}
+          </span>
+        </div>
+      ),
       selector: (row: ProductPerformance) => {
         return <span className={row?.grossRevenue - row?.expenses >= 0 ? 'text-black' : 'text-danger'}>{FormatCurrency(state.currentRegion, row?.grossRevenue - row?.expenses)}</span>
       },
@@ -201,7 +231,32 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
       sortFunction: sortProfit,
     },
     {
-      name: <span className='fw-bolder fs-6'>Margin</span>,
+      name: (
+        <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
+          <span className='fw-semibold fs-6'>Margin</span>
+          <span
+            className={
+              'fw-normal fs-5 ' +
+              (tableData.reduce((total: number, product: ProductPerformance) => {
+                if (product?.grossRevenue === 0) return total
+                return total + ((product?.grossRevenue - product?.expenses) / product?.grossRevenue) * 100
+              }, 0) /
+                tableData.length >
+              0
+                ? 'text-primary'
+                : 'text-danger')
+            }>
+            {FormatIntNumber(
+              state.currentRegion,
+              tableData.reduce((total: number, product: ProductPerformance) => {
+                if (product?.grossRevenue === 0) return total
+                return total + ((product?.grossRevenue - product?.expenses) / product?.grossRevenue) * 100
+              }, 0) / tableData.length
+            )}
+            %
+          </span>
+        </div>
+      ),
       selector: (row: ProductPerformance) => {
         if (row?.grossRevenue === 0) {
           return <span>0%</span>
@@ -215,7 +270,38 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
       sortFunction: sortMargin,
     },
     {
-      name: <span className='fw-bolder fs-6'>ROI</span>,
+      name: (
+        <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
+          <span className='fw-semibold fs-6'>ROI</span>
+          <span
+            className={
+              'fw-normal fs-5 ' +
+              (tableData.reduce((total: number, product: ProductPerformance) => {
+                if (product.expenses + product.productCost + product.shippingCost !== 0) {
+                  return total + ((product.grossRevenue - product?.expenses) / product?.expenses) * 100
+                } else {
+                  return total
+                }
+              }, 0) /
+                tableData.length >
+              0
+                ? 'text-primary'
+                : 'text-danger')
+            }>
+            {FormatIntNumber(
+              state.currentRegion,
+              tableData.reduce((total: number, product: ProductPerformance) => {
+                if (product.expenses + product.productCost + product.shippingCost !== 0) {
+                  return total + ((product.grossRevenue - product?.expenses) / product?.expenses) * 100
+                } else {
+                  return total
+                }
+              }, 0) / tableData.length
+            )}
+            %
+          </span>
+        </div>
+      ),
       selector: (row: ProductPerformance) => {
         if (row?.expenses + row.productCost + row.shippingCost == 0) {
           return <span>0%</span>
@@ -229,7 +315,17 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
       sortFunction: sortRoi,
     },
     {
-      name: <span className='fw-bolder fs-6'>Refunds</span>,
+      name: (
+        <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
+          <span className='fw-semibold fs-6'>Refunds</span>
+          <span className={'fw-normal fs-5 ' + (tableData.reduce((total: number, product: ProductPerformance) => total + product.refundsQty, 0) > 0 ? 'text-primary' : 'text-muted')}>
+            {FormatIntNumber(
+              state.currentRegion,
+              tableData.reduce((total: number, product: ProductPerformance) => total + product.refundsQty, 0)
+            )}
+          </span>
+        </div>
+      ),
       selector: (row: ProductPerformance) => {
         return <span>{FormatIntNumber(state.currentRegion, row?.refundsQty)}</span>
       },
@@ -239,7 +335,17 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
       sortFunction: sortRefunds,
     },
     {
-      name: <span className='fw-bolder fs-6'>Units Sold</span>,
+      name: (
+        <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
+          <span className='fw-semibold fs-6'>Units Sold</span>
+          <span className='fw-normal fs-5 text-primary'>
+            {FormatIntNumber(
+              state.currentRegion,
+              tableData.reduce((total: number, product: ProductPerformance) => total + product.unitsSold, 0)
+            )}
+          </span>
+        </div>
+      ),
       selector: (row: ProductPerformance) => {
         return <span>{FormatIntNumber(state.currentRegion, row?.unitsSold)}</span>
       },

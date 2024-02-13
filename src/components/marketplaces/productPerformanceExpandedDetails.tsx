@@ -161,9 +161,17 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                       <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Promos</td>
                       <td className={'fw-light text-end text-black'}>{FormatCurrency(state.currentRegion, data.promos)}</td>
                     </tr>
+                    <tr className='border-bottom pb-2'>
+                      <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Pick & Pack</td>
+                      <td className={'fw-light text-end text-black'}>{FormatCurrency(state.currentRegion, data.shelfCloudCost)}</td>
+                    </tr>
+                    <tr className='border-bottom pb-2'>
+                      <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Shipping Cost</td>
+                      <td className={'fw-light text-end text-black'}>{FormatCurrency(state.currentRegion, data.shippingCost)}</td>
+                    </tr>
                     <tr onClick={() => setShowCogs(!showCogs)} style={{ cursor: 'pointer' }}>
                       <td className='dropdown-toggle text-black d-flex flex-row justify-content-start align-items-start fw-normal'>COGS</td>
-                      <td className={'fw-normal text-end text-black'}>{FormatCurrency(state.currentRegion, data.productCost + data.shippingCost)}</td>
+                      <td className={'fw-normal text-end text-black'}>{FormatCurrency(state.currentRegion, data.productCost + data.shippingToFbaCost)}</td>
                     </tr>
                     <tr>
                       <td className='p-0' colSpan={2}>
@@ -173,8 +181,8 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                             <span className={'fw-light text-end text-muted fs-7'}>{FormatCurrency(state.currentRegion, data.productCost)}</span>
                           </div>
                           <div className='py-1 w-100 d-flex flex-row justify-content-between align-items-center'>
-                            <span className='text-muted d-flex flex-row justify-content-start align-items-start fs-7'>Shipping Cost</span>
-                            <span className='fw-light text-end text-muted fs-7'>{FormatCurrency(state.currentRegion, data.shippingCost)}</span>
+                            <span className='text-muted d-flex flex-row justify-content-start align-items-start fs-7'>Shipping To FBA Cost</span>
+                            <span className='fw-light text-end text-muted fs-7'>{FormatCurrency(state.currentRegion, data.shippingToFbaCost)}</span>
                           </div>
                         </Collapse>
                       </td>
