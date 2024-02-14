@@ -27,6 +27,7 @@ export interface ProductPerformance {
     promos: number;
     productCost: number;
     shippingCost: number;
+    storageCost: number;
     sponsoredProducts: number;
     displayAds: number;
     keywordAds: number;

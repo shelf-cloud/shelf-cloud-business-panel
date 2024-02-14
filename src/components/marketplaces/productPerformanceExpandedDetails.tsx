@@ -62,10 +62,12 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                     </tr>
 
                     {/* EXPENSES */}
-                    <tr className='border-bottom pb-2'>
-                      <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Reimbursements</td>
-                      <td className={'fw-normal text-end text-black'}>{FormatCurrency(state.currentRegion, 0)}</td>
-                    </tr>
+                    {data.reimbursements > 0 && (
+                      <tr className='border-bottom pb-2'>
+                        <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Reimbursements</td>
+                        <td className={'fw-normal text-end text-black'}>{FormatCurrency(state.currentRegion, data.reimbursements)}</td>
+                      </tr>
+                    )}
                     <tr className='pb-2' onClick={() => setShowMarketplacesFees(!showMarketplacesFees)} style={{ cursor: 'pointer' }}>
                       <td className='dropdown-toggle text-black d-flex flex-row justify-content-start align-items-start fw-semibold'>Marketplaces Fees</td>
                       <td className={'fw-normal text-end text-black'}>{FormatCurrency(state.currentRegion, data.totalMarketpalcesFees)}</td>
@@ -81,16 +83,8 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                                     key={market.name}
                                     className='border-bottom py-1 w-100 d-flex flex-row justify-content-between align-items-center'
                                     onClick={() => AMAZON_MARKETPLACES_ID.includes(market.storeId) && setShowAmazonFbaFees(!showAmazonFbaFees)}>
-                                    <span
-                                      className={
-                                        'text-black d-flex flex-row justify-content-start align-items-start fw-normal ' +
-                                        (AMAZON_MARKETPLACES_ID.includes(market.storeId) && 'dropdown-toggle')
-                                      }>
-                                      {market.name}
-                                    </span>
-                                    <span className={'fw-normal text-end text-black'}>
-                                      {FormatCurrency(state.currentRegion, market.fees.totalComission + market.fees.totalFixedFee)}
-                                    </span>
+                                    <span className={'text-black d-flex flex-row justify-content-start align-items-start fw-normal ' + (AMAZON_MARKETPLACES_ID.includes(market.storeId) && 'dropdown-toggle')}>{market.name}</span>
+                                    <span className={'fw-normal text-end text-black'}>{FormatCurrency(state.currentRegion, market.fees.totalComission + market.fees.totalFixedFee)}</span>
                                   </div>
                                   {/* AMAZON FBA FEES */}
                                   {AMAZON_MARKETPLACES_ID.includes(market.storeId) && (
@@ -98,9 +92,7 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                                       {market.fees.FBAPerOrderFulfillmentFee! !== 0 && (
                                         <div className='border-bottom py-1 w-100 d-flex flex-row justify-content-between align-items-center'>
                                           <span className='text-muted fw-normal fs-7'>FBA Per Order Fee</span>
-                                          <span className={'fw-normal text-end text-muted fs-7'}>
-                                            {FormatCurrency(state.currentRegion, market.fees.FBAPerOrderFulfillmentFee!)}
-                                          </span>
+                                          <span className={'fw-normal text-end text-muted fs-7'}>{FormatCurrency(state.currentRegion, market.fees.FBAPerOrderFulfillmentFee!)}</span>
                                         </div>
                                       )}
                                       {market.fees.FBAPerUnitFulfillmentFee! !== 0 && (
@@ -153,22 +145,36 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                         </Collapse>
                       </td>
                     </tr>
-                    <tr className='border-bottom pb-2'>
-                      <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Refunds</td>
-                      <td className={'fw-light text-end text-black'}>{FormatCurrency(state.currentRegion, data.refunds)}</td>
-                    </tr>
-                    <tr className='border-bottom pb-2'>
-                      <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Promos</td>
-                      <td className={'fw-light text-end text-black'}>{FormatCurrency(state.currentRegion, data.promos)}</td>
-                    </tr>
-                    <tr className='border-bottom pb-2'>
-                      <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Pick & Pack</td>
-                      <td className={'fw-light text-end text-black'}>{FormatCurrency(state.currentRegion, data.shelfCloudCost)}</td>
-                    </tr>
-                    <tr className='border-bottom pb-2'>
-                      <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Shipping Cost</td>
-                      <td className={'fw-light text-end text-black'}>{FormatCurrency(state.currentRegion, data.shippingCost)}</td>
-                    </tr>
+                    {data.refunds > 0 && (
+                      <tr className='border-bottom pb-2'>
+                        <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Refunds</td>
+                        <td className={'fw-light text-end text-black'}>{FormatCurrency(state.currentRegion, data.refunds)}</td>
+                      </tr>
+                    )}
+                    {data.promos > 0 && (
+                      <tr className='border-bottom pb-2'>
+                        <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Promos</td>
+                        <td className={'fw-light text-end text-black'}>{FormatCurrency(state.currentRegion, data.promos)}</td>
+                      </tr>
+                    )}
+                    {data.shelfCloudCost > 0 && (
+                      <tr className='border-bottom pb-2'>
+                        <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Pick & Pack</td>
+                        <td className={'fw-light text-end text-black'}>{FormatCurrency(state.currentRegion, data.shelfCloudCost)}</td>
+                      </tr>
+                    )}
+                    {data.storageCost > 0 && (
+                      <tr className='border-bottom pb-2'>
+                        <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Storage Cost</td>
+                        <td className={'fw-light text-end text-black'}>{FormatCurrency(state.currentRegion, data.storageCost)}</td>
+                      </tr>
+                    )}
+                    {data.shippingCost > 0 && (
+                      <tr className='border-bottom pb-2'>
+                        <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Shipping Cost</td>
+                        <td className={'fw-light text-end text-black'}>{FormatCurrency(state.currentRegion, data.shippingCost)}</td>
+                      </tr>
+                    )}
                     <tr onClick={() => setShowCogs(!showCogs)} style={{ cursor: 'pointer' }}>
                       <td className='dropdown-toggle text-black d-flex flex-row justify-content-start align-items-start fw-normal'>COGS</td>
                       <td className={'fw-normal text-end text-black'}>{FormatCurrency(state.currentRegion, data.productCost + data.shippingToFbaCost)}</td>
@@ -189,12 +195,11 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                     </tr>
                     <tr className='border-top pb-2'>
                       <td className='text-black d-flex flex-row justify-content-start align-items-start fw-bold fs-5'>Expenses</td>
-                      <td className={'fw-bold text-end text-danger fs-5'}>{FormatCurrency(state.currentRegion, data.expenses)}</td>
+                      <td className={'fw-bold text-end text-danger fs-5'}>{FormatCurrency(state.currentRegion, data.expenses + data.storageCost)}</td>
                     </tr>
-
-                    <tr>
-                      <td className='fw-bold fs-5 border-top border-dark'>Net Profit</td>
-                      <td className='fw-semibold fs-5 text-end border-top border-dark text-primary'>{FormatCurrency(state.currentRegion, data.grossRevenue - data.expenses)}</td>
+                    <tr className='border-top border-dark'>
+                      <td className='fw-bold fs-5'>Net Profit</td>
+                      <td className='fw-semibold fs-5 text-end text-primary'>{FormatCurrency(state.currentRegion, data.grossRevenue - (data.expenses + data.storageCost))}</td>
                     </tr>
                   </tbody>
                 </table>

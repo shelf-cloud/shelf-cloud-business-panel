@@ -15,8 +15,8 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
   const { state }: any = useContext(AppContext)
 
   const totalGrossRevenue = tableData.reduce((total: number, product: ProductPerformance) => total + product.grossRevenue, 0)
-  const totalExpenses = tableData.reduce((total: number, product: ProductPerformance) => total + product.expenses, 0)
-  const totalProfit = tableData.reduce((total: number, product: ProductPerformance) => total + (product.grossRevenue - product.expenses), 0)
+  const totalExpenses = tableData.reduce((total: number, product: ProductPerformance) => total + product.expenses + product.storageCost, 0)
+  const totalProfit = tableData.reduce((total: number, product: ProductPerformance) => total + (product.grossRevenue - (product.expenses + product.storageCost)), 0)
   const totalMargin = ((totalGrossRevenue - totalExpenses) / totalGrossRevenue) * 100
   const totalRoi = ((totalGrossRevenue - totalExpenses) / totalExpenses) * 100
 
@@ -199,7 +199,7 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
         </div>
       ),
       selector: (row: ProductPerformance) => {
-        return <span>{FormatCurrency(state.currentRegion, row?.expenses)}</span>
+        return <span>{FormatCurrency(state.currentRegion, (row?.expenses + row?.storageCost))}</span>
       },
       center: true,
       sortable: true,
@@ -214,7 +214,7 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
         </div>
       ),
       selector: (row: ProductPerformance) => {
-        return <span className={row?.grossRevenue - row?.expenses >= 0 ? 'text-black' : 'text-danger'}>{FormatCurrency(state.currentRegion, row?.grossRevenue - row?.expenses)}</span>
+        return <span className={row?.grossRevenue - (row?.expenses + row?.storageCost) >= 0 ? 'text-black' : 'text-danger'}>{FormatCurrency(state.currentRegion, row?.grossRevenue - (row?.expenses + row?.storageCost))}</span>
       },
       center: true,
       sortable: true,
