@@ -42,6 +42,13 @@ export interface ProductPerformance {
     shippingToFbaCost: number;
     shelfCloudCost: number
     listings: Listing[];
+    datesArray: { [key: string]: ProductDatesArray };
+}
+
+export interface ProductDatesArray {
+    grossRevenue: number
+    expenses: number
+    unitsSold: number
 }
 
 export interface Listing {

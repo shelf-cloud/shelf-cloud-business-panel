@@ -5,6 +5,7 @@ import { Marketpalce, ProductPerformance } from '@typesTs/marketplaces/productPe
 import React, { useContext, useState } from 'react'
 import { ExpanderComponentProps } from 'react-data-table-component'
 import { Card, CardBody, CardHeader, Col, Collapse, Row } from 'reactstrap'
+import ProductPerformanceTimeline from './productPerformanceTimeline'
 
 type Props = {
   data: ProductPerformance
@@ -206,6 +207,16 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
               </CardBody>
             </Card>
           </Col>
+        </Col>
+        <Col xs={8} xl={9}>
+          <Card>
+            <CardHeader className='py-3'>
+              <h5 className='fw-semibold m-0'>Performance Timeline</h5>
+            </CardHeader>
+            <CardBody>
+              <ProductPerformanceTimeline productTimeLine={data.datesArray}/>
+            </CardBody>
+          </Card>
         </Col>
       </Row>
     </div>

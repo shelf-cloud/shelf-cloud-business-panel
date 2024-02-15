@@ -88,11 +88,15 @@ const Profits = ({ session, sessionToken }: Props) => {
   })
 
   useEffect(() => {
+    const controller = new AbortController()
+    const signal = controller.signal
+
     const getNewDateRange = async () => {
       setLoadingData(true)
       await axios(
         `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/marketplaces/products/getProductsPerformance?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${startDate}&endDate=${endDate}&storeId=${selectedMarketplace.storeId}`,
         {
+          signal,
           headers: {
             Authorization: `Bearer ${sessionToken}`,
           },
@@ -101,14 +105,21 @@ const Profits = ({ session, sessionToken }: Props) => {
         .then((res) => {
           setProductsData(res.data as ProductsPerformanceResponse)
         })
-        .catch(({ response }) => {
-          toast.error(response.data?.message || 'Error fetching product performance data')
-          setProductsData({})
+        .catch(({ error }) => {
+          console.log(axios.isCancel(error))
+          if (axios.isCancel(error)) {
+            toast.error(error?.data?.message || 'Error fetching product performance data')
+            setProductsData({})
+          }
         })
       setLoadingData(false)
     }
     if (session && state.user.businessId) getNewDateRange()
-  }, [session, state.user.businessId, startDate, endDate, selectedMarketplace])
+
+    return () => {
+      controller.abort()
+    }
+  }, [session, state.user.businessId, endDate, selectedMarketplace])
 
   const filterDataTable = useMemo(() => {
     if (!productsData || productsData?.error) {
@@ -150,10 +161,16 @@ const Profits = ({ session, sessionToken }: Props) => {
   }, [productsData, searchValue, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, brand, category, showWithSales])
 
   const handleChangeDatesFromPicker = (dateStr: string) => {
+    setStartDate(moment(dateStr, 'DD MMM YY').format('YYYY-MM-DD'))
     if (dateStr.includes(' to ')) {
       const dates = dateStr.split(' to ')
       setStartDate(moment(dates[0], 'DD MMM YY').format('YYYY-MM-DD'))
       setEndDate(moment(dates[1], 'DD MMM YY').format('YYYY-MM-DD'))
+      return
+    }
+    if (startDate === moment(dateStr, 'DD MMM YY').format('YYYY-MM-DD')) {
+      setEndDate(moment(dateStr, 'DD MMM YY').format('YYYY-MM-DD'))
+      return
     }
   }
 
