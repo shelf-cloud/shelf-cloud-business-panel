@@ -35,10 +35,10 @@ const ProductPerformanceTimeline = ({ productTimeLine }) => {
   const options = {
     chart: {
       zoom: {
-        enabled: false,
+        enabled: true,
       },
       toolbar: {
-        show: false,
+        show: true,
       },
     },
     stroke: {
@@ -46,7 +46,7 @@ const ProductPerformanceTimeline = ({ productTimeLine }) => {
       curve: 'smooth',
     },
     markers: {
-      size: 3,
+      size: 0,
     },
     // plotOptions: {
     //   bar: {
@@ -100,10 +100,11 @@ const ProductPerformanceTimeline = ({ productTimeLine }) => {
       },
     },
     xaxis: {
-      categories: Object.keys(timeLineSorted).map((item) => moment(item).format('DD-MM-YYYY')),
-      //   max: Number(Math.max(...series[0].data) + 10),
+      type: 'datetime',
+      // tickAmount: Object.keys(timeLineSorted).length / 8,
+      categories: Object.keys(timeLineSorted).map((item) => new Date(item).getTime()),
       labels: {
-        show: false,
+        show: true,
       },
     },
     yaxis: [

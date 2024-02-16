@@ -43,7 +43,7 @@ const ProfileDropdown = () => {
             </span>
           </DropdownToggle>
           <DropdownMenu className='dropdown-menu-end'>
-            <h6 className='dropdown-header text-capitalize'>Welcome {session?.user?.name}!</h6>
+            <h6 className='dropdown-header text-capitalize'>Welcome {session?.user?.name}</h6>
             <DropdownItem onClick={() => router.push('/Profile')}>
               <i className='mdi mdi-account-circle text-muted fs-16 align-middle me-1'></i>
               <span className='align-middle'>Profile</span>
@@ -51,6 +51,10 @@ const ProfileDropdown = () => {
             <DropdownItem onClick={() => router.push('/Settings')}>
               <i className='mdi mdi-tools text-muted fs-16 align-middle me-1'></i>
               <span className='align-middle'>Account Settings</span>
+            </DropdownItem>
+            <DropdownItem onClick={() => router.push('/marketplaceManager')}>
+              <i className='mdi mdi-store text-muted fs-16 align-middle me-1'></i>
+              <span className='align-middle'>Marketplace Manager</span>
             </DropdownItem>
             {state.user[state.currentRegion]?.showAmazonTab && !state.user[state.currentRegion]?.amazonConnected &&(
               <DropdownItem className='px-2 py-2'>
