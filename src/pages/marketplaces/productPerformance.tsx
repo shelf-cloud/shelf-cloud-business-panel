@@ -76,7 +76,7 @@ const Profits = ({ session, sessionToken }: Props) => {
   const { filters, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, brand, category, showWithSales }: FilterProps = router.query
   const [searchValue, setSearchValue] = useState<any>('')
   const [filterOpen, setFilterOpen] = useState(false)
-  const [loadingData, setLoadingData] = useState(false)
+  const [loadingData, setLoadingData] = useState(true)
   const [startDate, setStartDate] = useState(moment().subtract(15, 'days').format('YYYY-MM-DD'))
   const [endDate, setEndDate] = useState(moment().format('YYYY-MM-DD'))
   const [selectedMarketplace, setSelectedMarketplace] = useState({ storeId: 9999, name: 'All Marketplaces', logo: '' })
@@ -104,15 +104,14 @@ const Profits = ({ session, sessionToken }: Props) => {
       )
         .then((res) => {
           setProductsData(res.data as ProductsPerformanceResponse)
+          setLoadingData(false)
         })
         .catch(({ error }) => {
-          console.log(axios.isCancel(error))
           if (axios.isCancel(error)) {
             toast.error(error?.data?.message || 'Error fetching product performance data')
             setProductsData({})
           }
         })
-      setLoadingData(false)
     }
     if (session && state.user.businessId) getNewDateRange()
 
