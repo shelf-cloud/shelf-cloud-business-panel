@@ -8,7 +8,6 @@ import flag_of_europe from '@assets/images/flag_of_europe.png'
 import flag_of_usa from '@assets/images/flag_of_usa.png'
 import { useRouter } from 'next/router'
 import AppContext from '@context/AppContext'
-import AmazonAuthButton from '@components/amazon/AmazonAuthButton'
 
 const ProfileDropdown = () => {
   const { data: session } = useSession()
@@ -56,11 +55,6 @@ const ProfileDropdown = () => {
               <i className='mdi mdi-store text-muted fs-16 align-middle me-1'></i>
               <span className='align-middle'>Marketplace Manager</span>
             </DropdownItem>
-            {state.user[state.currentRegion]?.showAmazonTab && !state.user[state.currentRegion]?.amazonConnected &&(
-              <DropdownItem className='px-2 py-2'>
-                <AmazonAuthButton />
-              </DropdownItem>
-            )}
             {state.user.hasShelfCloudEu == true && state.user.hasShelfCloudUsa == true && (
               <DropdownItem className='d-flex justify-content-start align-items-center' onClick={state.currentRegion == 'us' ? () => setRegion('eu') : () => setRegion('us')}>
                 <div className=' align-middle me-1' style={{ width: '15px', height: '15px' }}>

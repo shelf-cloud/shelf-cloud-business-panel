@@ -1,4 +1,5 @@
 import BreadCrumb from '@components/Common/BreadCrumb'
+import Integrations from '@components/integrations/integrations'
 import MarketplacesFees from '@components/marketplaceManager/MarketplaceFees'
 import Head from 'next/head'
 import React, { useState } from 'react'
@@ -52,20 +53,6 @@ const MarketplaceManager = ({}: Props) => {
                           </>
                         </NavLink>
                       </NavItem>
-                      {/* <NavItem style={{ cursor: 'pointer' }}>
-                        <NavLink
-                          to='#'
-                          className={activeTab == '3' ? 'text-primary fs-5' : 'text-muted fs-5'}
-                          onClick={() => {
-                            tabChange('3')
-                          }}
-                          type='button'>
-                          <>
-                            <i className='far fa-user'></i>
-                            Categories
-                          </>
-                        </NavLink>
-                      </NavItem> */}
                     </Nav>
                   </CardHeader>
                   <CardBody className='p-4'>
@@ -73,10 +60,9 @@ const MarketplaceManager = ({}: Props) => {
                       <TabPane tabId='1'>
                         <MarketplacesFees />
                       </TabPane>
-                      <TabPane tabId='2'>{/* <Brands /> */}</TabPane>
-                      {/* <TabPane tabId='3'>
-                        <Categories />
-                      </TabPane> */}
+                      <TabPane tabId='2'>
+                        <Integrations />
+                      </TabPane>
                     </TabContent>
                   </CardBody>
                 </Card>

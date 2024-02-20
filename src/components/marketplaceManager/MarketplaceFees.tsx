@@ -6,17 +6,20 @@ import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
-import { Button } from 'reactstrap'
-import useSWR from 'swr'
+import { Button, Spinner } from 'reactstrap'
+import useSWR, { useSWRConfig } from 'swr'
+import { toast } from 'react-toastify'
 
 type Props = {}
 
 const MarketplacesFees = ({}: Props) => {
   const { state }: any = useContext(AppContext)
+  const { mutate } = useSWRConfig()
   const [showEditFields, setshowEditFields] = useState(false)
   const [marketplaceFees, setmarketplaceFees] = useState<{ [key: string]: MarketplaceFees }>({})
   const [isLoaded, setisLoaded] = useState(false)
   const [hasError, setHasError] = useState(false)
+  const [updatingFees, setUpdatingFees] = useState(false)
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data }: { data?: MarketplaceFeesResponse } = useSWR(state.user.businessId ? `/api/marketplaces/getMarketplacesFees?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher, {
     revalidateOnFocus: false,
@@ -29,6 +32,23 @@ const MarketplacesFees = ({}: Props) => {
       setisLoaded(false)
     }
   }, [data])
+
+  const handleUpdateMarketplaceFees = async () => {
+    setUpdatingFees(true)
+
+    const response = await axios.post(`/api/marketplaces/updateMarketplacesFees?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      marketplaceFees: Object.values(marketplaceFees),
+    })
+
+    if (!response.data.error) {
+      setshowEditFields(false)
+      toast.success(response.data.message)
+      mutate(`/api/marketplaces/getMarketplacesFees?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+    } else {
+      toast.error(response.data.message)
+    }
+    setUpdatingFees(false)
+  }
 
   const columns: any = [
     {
@@ -72,7 +92,7 @@ const MarketplacesFees = ({}: Props) => {
     {
       name: <span className='fw-bold fs-6'>Comission Fee</span>,
       selector: (row: MarketplaceFees) => {
-        if (!showEditFields) return <span className={row.comissionFee === 0 ? 'text-muted fw-light' : 'text-dark'}>{`${row.comissionFee} %`}</span>
+        if (!showEditFields) return <span className={row.comissionFee === 0 ? 'text-muted fw-light' : row.comissionFee < 0 || row.comissionFee > 100 ? 'text-danger fw-bold' : 'text-dark'}>{`${row.comissionFee} %`}</span>
         return (
           <div className='d-flex flex-row justify-content-center align-items-center gap-2'>
             <DebounceInput
@@ -106,11 +126,11 @@ const MarketplacesFees = ({}: Props) => {
             minLength={1}
             debounceTimeout={200}
             type='number'
-            className={'form-control fs-6 ' + ((row.fixedFee < 0 || row.fixedFee > 100) && 'is-invalid')}
+            className={'form-control fs-6 ' + (row.fixedFee < 0 && 'is-invalid')}
             style={{ padding: '0.2rem 0.9rem', minWidth: '80px' }}
             min={0}
             onChange={(e) => {
-              parseFloat(e.target.value) < 0 || parseFloat(e.target.value) > 100 ? setHasError(true) : setHasError(false)
+              parseFloat(e.target.value) < 0 ? setHasError(true) : setHasError(false)
               setmarketplaceFees((prev) => ({ ...prev, [row.storeId]: { ...row, fixedFee: parseFloat(e.target.value) } }))
             }}
             value={row.fixedFee || 0}
@@ -131,12 +151,12 @@ const MarketplacesFees = ({}: Props) => {
             Edit
           </Button>
         ) : (
-          <div className='d-flex flex-row justify-content-end align-items-center gap-2'>
+          <div className='d-flex flex-row justify-content-end align-items-center gap-3'>
             <Button color='light' onClick={() => setshowEditFields(false)}>
               cancel
             </Button>
-            <Button color='success' disabled={hasError} onClick={() => setshowEditFields(false)}>
-              Save
+            <Button color='success' disabled={hasError} onClick={handleUpdateMarketplaceFees}>
+              {updatingFees ? <Spinner size={'sm'} color='white' /> : 'Save'}
             </Button>
           </div>
         )}
