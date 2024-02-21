@@ -45,7 +45,6 @@ const addAdsAuthSeller: NextApiHandler = async (request, response) => {
             .catch((error) => {
               response.json({
                 error: true,
-                amazonAuthUrl,
                 errorMsg: error,
                 message: 'Error in ShelfCloud Server, Please try again later.',
               })
@@ -65,6 +64,7 @@ const addAdsAuthSeller: NextApiHandler = async (request, response) => {
         // that falls out of the range of 2xx
         response.json({
           error: true,
+          amazonAuthUrl,
           amazonError: error.response.data,
           message: `Error Amazon Ads API Integration, please try again later.`,
         })
