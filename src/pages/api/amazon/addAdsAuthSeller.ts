@@ -60,7 +60,7 @@ const addAdsAuthSeller: NextApiHandler = async (request, response) => {
         // that falls out of the range of 2xx
         response.json({
           error: true,
-          message: `Error Amazon API Integration ${error.response.data.error_description}, please try again later.`,
+          message: `Error Amazon Ads API Integration ${error.response.data.error_description}, please try again later.`,
         })
       } else if (error.request) {
         // The request was made but no response was received

@@ -54,7 +54,7 @@ const AmazonAdsAuthRedirect = ({}: Props) => {
     setloading(true)
 
     const response = await axios.get(
-      `/api/amazon/addAuthSeller?code=${code}&region=${state.currentRegion}&businessId=${state.user.businessId}`
+      `/api/amazon/addAdsAuthSeller?code=${code}&region=${state.currentRegion}&businessId=${state.user.businessId}`
     )
 
     if (!response.data.error) {
