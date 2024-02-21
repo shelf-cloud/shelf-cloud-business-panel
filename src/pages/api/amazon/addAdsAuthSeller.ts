@@ -15,10 +15,10 @@ const addAdsAuthSeller: NextApiHandler = async (request, response) => {
   const code = request.query.code
   const businessId = request.query.businessId
 
-  // if (!amazonAuthUrl || typeof code !== 'string') {
-  //   response.status(400).end('Invalid request parameters')
-  //   return
-  // }
+  if (!amazonAuthUrl || typeof code !== 'string') {
+    response.status(400).end('Invalid request parameters')
+    return
+  }
 
   const url = `${amazonAuthUrl}&code=${code}`
 
