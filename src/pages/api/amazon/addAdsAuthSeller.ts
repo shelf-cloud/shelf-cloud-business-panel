@@ -15,10 +15,10 @@ const addAdsAuthSeller: NextApiHandler = async (request, response) => {
   const code = request.query.code
   const businessId = request.query.businessId
 
-  if (!amazonAuthUrl || typeof code !== 'string') {
-    response.status(400).end('Invalid request parameters')
-    return
-  }
+  // if (!amazonAuthUrl || typeof code !== 'string') {
+  //   response.status(400).end('Invalid request parameters')
+  //   return
+  // }
 
   const url = `${amazonAuthUrl}&code=${code}`
 
@@ -50,8 +50,12 @@ const addAdsAuthSeller: NextApiHandler = async (request, response) => {
               })
             })
         })
-        .catch((err) => {
-          response.json(err)
+        .catch((error) => {
+          response.json({
+            error: true,
+            errorMsg: error,
+            message: 'Error in ShelfCloud Server, Please try again later.',
+          })
         })
     })
     .catch((error) => {
