@@ -45,6 +45,7 @@ const addAdsAuthSeller: NextApiHandler = async (request, response) => {
             .catch((error) => {
               response.json({
                 error: true,
+                amazonAuthUrl,
                 errorMsg: error,
                 message: 'Error in ShelfCloud Server, Please try again later.',
               })
