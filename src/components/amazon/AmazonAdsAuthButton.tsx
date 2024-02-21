@@ -12,7 +12,7 @@ const AmazonAdsAuthButton = ({}: Props) => {
     <div className='px-2'>
       {state.currentRegion == 'us' ? (
         <Link
-          href={`https://www.amazon.com/ap/oa?scope=advertising::campaign_management&response_type=code&client_id=amzn1.application-oa2-client.fe75e469490f408baf6ccfbde82fe836&state=ShelfCloudStateAmazonAdsSellers&redirect_uri=https://www.panel.shelf-cloud.com/amazon-sellers/amazonAdsAuthRedirect`}
+          href={`https://www.amazon.com/ap/oa?scope=advertising::campaign_management&response_type=code&client_id=amzn1.application-oa2-client.fe75e469490f408baf6ccfbde82fe836&state=ShelfCloudStateAmazonAdsSellers&redirect_uri=https://shelf-cloud-development.vercel.app/amazon-sellers/amazonAdsAuthRedirect`}
           passHref>
           <a target='blank'>
             <Button outline color='info'>
