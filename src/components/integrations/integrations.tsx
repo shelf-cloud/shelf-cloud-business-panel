@@ -75,7 +75,7 @@ const Integrations = ({}: Props) => {
                       </Button>
                     ))}
                   {integration.store === 'AmazonAds' &&
-                    (true ? (
+                    (!state.user[state.currentRegion]?.showAmazonAdsTab && !state.user[state.currentRegion]?.amazonAdsConnected ? (
                       <AmazonAdsAuthButton />
                     ) : (
                       <Button outline color='success' className='fw-semibold'>
