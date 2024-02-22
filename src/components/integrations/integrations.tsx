@@ -1,94 +1,96 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import AppContext from '@context/AppContext'
-import { Integration, IntegrationsResponse } from '@typesTs/integrations'
-import axios from 'axios'
-import useSWR from 'swr'
 import { Button, Card, CardBody, Col, Row } from 'reactstrap'
 import AmazonAuthButton from '@components/amazon/AmazonAuthButton'
 import AmazonAdsAuthButton from '@components/amazon/AmazonAdsAuthButton'
 
-type Props = {}
+type Props = {
+  env: string
+}
 
-const Integrations = ({}: Props) => {
+const Integrations = ({ env }: Props) => {
   const { state }: any = useContext(AppContext)
 
-  const [integrations, setIntegrations] = useState<{ [key: string]: Integration }>({})
-  const [isLoaded, setisLoaded] = useState(false)
-
-  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data }: { data?: IntegrationsResponse } = useSWR(
-    state.user.businessId ? `/api/integrations/getAllActiveIntegrations?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  )
-
-  useEffect(() => {
-    setisLoaded(true)
-    if (data?.integrations) {
-      setIntegrations(data?.integrations!)
-      setisLoaded(false)
-    }
-  }, [data])
   return (
     <Row>
-      {!isLoaded ? (
-        Object.values(integrations).map((integration: Integration) => (
-          <Col sm={6} xl={4} key={integration.integrationId}>
-            <Card>
-              <CardBody>
-                <div className='d-flex flex-row justify-content-start align-items-center gap-3'>
-                  <div
-                    style={{
-                      width: '40px',
-                      height: '40px',
-                      margin: '0px',
-                      position: 'relative',
-                    }}>
-                    <img
-                      loading='lazy'
-                      src={
-                        integration.logoLink
-                          ? integration.logoLink
-                          : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-                      }
-                      onError={(e) =>
-                        (e.currentTarget.src =
-                          'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
-                      }
-                      alt='product Image'
-                      style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
-                    />
-                  </div>
-                  <span className='fs-3 fw-bold'>{integration.name}</span>
+      {state.user[state.currentRegion]?.showAmazonTab && (
+        <Col sm={6} xl={4}>
+          <Card>
+            <CardBody>
+              <div className='d-flex flex-row justify-content-start align-items-center gap-3'>
+                <div
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    margin: '0px',
+                    position: 'relative',
+                  }}>
+                  <img
+                    loading='lazy'
+                    src={'https://onixventuregroup.goflow.com/images/channels/amazon.svg'}
+                    onError={(e) =>
+                      (e.currentTarget.src =
+                        'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
+                    }
+                    alt='product Image'
+                    style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+                  />
                 </div>
-                <p className='text-muted fs-6'>{integration.description}</p>
-                <div className='text-end'>
-                  {integration.store === 'AmazonFBA' &&
-                    (state.user[state.currentRegion]?.showAmazonTab && !state.user[state.currentRegion]?.amazonConnected ? (
-                      <AmazonAuthButton />
-                    ) : (
-                      <Button outline color='success' className='fw-semibold'>
-                        Active
-                      </Button>
-                    ))}
-                  {integration.store === 'AmazonAds' &&
-                    (!state.user[state.currentRegion]?.showAmazonAdsTab && !state.user[state.currentRegion]?.amazonAdsConnected ? (
-                      <AmazonAdsAuthButton />
-                    ) : (
-                      <Button outline color='success' className='fw-semibold'>
-                        Active
-                      </Button>
-                    ))}
+                <span className='fs-3 fw-bold'>Amazon Seller FBA</span>
+              </div>
+              <p className='text-muted fs-6'>Connect to Amazon FBA through Seller Central. You will be able to manage listings, product performance, orders and more...</p>
+              <div className='text-end'>
+                {!state.user[state.currentRegion]?.amazonConnected ? (
+                  <AmazonAuthButton />
+                ) : (
+                  <Button outline color='success' className='fw-semibold'>
+                    Active
+                  </Button>
+                )}
+              </div>
+            </CardBody>
+          </Card>
+        </Col>
+      )}
+      {state.user[state.currentRegion]?.showAmazonAdsTab && (
+        <Col sm={6} xl={4}>
+          <Card>
+            <CardBody>
+              <div className='d-flex flex-row justify-content-start align-items-center gap-3'>
+                <div
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    margin: '0px',
+                    position: 'relative',
+                  }}>
+                  <img
+                    loading='lazy'
+                    src={'https://onixventuregroup.goflow.com/images/channels/amazon.svg'}
+                    onError={(e) =>
+                      (e.currentTarget.src =
+                        'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
+                    }
+                    alt='product Image'
+                    style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+                  />
                 </div>
-              </CardBody>
-            </Card>
-          </Col>
-        ))
-      ) : (
-        <p>Loading</p>
+                <span className='fs-3 fw-bold'>Amazon Ads</span>
+              </div>
+              <p className='text-muted fs-6'>Connect to Amazon Ads. You will be able to get PPC costs and display cost for accurate product performance more...</p>
+              <div className='text-end'>
+                {!state.user[state.currentRegion]?.amazonAdsConnected ? (
+                  <AmazonAdsAuthButton env={env} />
+                ) : (
+                  <Button outline color='success' className='fw-semibold'>
+                    Active
+                  </Button>
+                )}
+              </div>
+            </CardBody>
+          </Card>
+        </Col>
       )}
     </Row>
   )

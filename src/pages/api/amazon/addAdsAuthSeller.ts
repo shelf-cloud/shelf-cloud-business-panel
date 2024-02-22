@@ -23,7 +23,7 @@ const addAdsAuthSeller: NextApiHandler = async (request, response) => {
   const url = `${amazonAuthUrl}&code=${code}`
 
   axios
-    .post(url, {}, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
+    .post(url)
     .then(async ({ data }) => {
       axios
         .post(`${process.env.SHELFCLOUD_SERVER_URL}/amazon/ads/addAdsSeller`, {

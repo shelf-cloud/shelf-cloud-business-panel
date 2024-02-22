@@ -1,21 +1,48 @@
 import BreadCrumb from '@components/Common/BreadCrumb'
 import Integrations from '@components/integrations/integrations'
 import MarketplacesFees from '@components/marketplaceManager/MarketplaceFees'
+import { GetServerSideProps } from 'next'
+import { getSession } from 'next-auth/react'
 import Head from 'next/head'
 import React, { useState } from 'react'
 import { Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap'
 
-type Props = {}
+export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
+  const session = await getSession(context)
+  const env = process.env.AMAZON_ENV_AUTH
+  if (session == null) {
+    return {
+      redirect: {
+        destination: '/api/auth/signin',
+        permanent: false,
+      },
+    }
+  }
+  return {
+    props: { session, env },
+  }
+}
 
-const MarketplaceManager = ({}: Props) => {
+type Props = {
+  env: string
+  session: {
+    user: {
+      name: string
+    }
+  }
+}
+
+const MarketplaceManager = ({ session, env }: Props) => {
   const [activeTab, setActiveTab] = useState('1')
   const tabChange = (tab: any) => {
     if (activeTab !== tab) setActiveTab(tab)
   }
+
+  const title = `Marketplace Manager | ${session?.user?.name}`
   return (
     <div>
       <Head>
-        <title>Marketpalce Manager</title>
+        <title>{title}</title>
       </Head>
 
       <React.Fragment>
@@ -61,7 +88,7 @@ const MarketplaceManager = ({}: Props) => {
                         <MarketplacesFees />
                       </TabPane>
                       <TabPane tabId='2'>
-                        <Integrations />
+                        <Integrations env={env} />
                       </TabPane>
                     </TabContent>
                   </CardBody>
