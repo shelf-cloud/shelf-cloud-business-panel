@@ -8,7 +8,6 @@ import Head from 'next/head'
 import { Card, CardBody, Col, Container, Input, Row } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
-import useSWR from 'swr'
 import moment from 'moment'
 import ShipmentsTable from '@components/ShipmentsTable'
 import CreateReturnModal from '@components/CreateReturnModal'
@@ -17,6 +16,8 @@ import FilterByDates from '@components/FilterByDates'
 import FilterByOthers from '@components/FilterByOthers'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
+  const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
+
   const session = await getSession(context)
 
   if (session == null) {
@@ -28,11 +29,12 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
     }
   }
   return {
-    props: { session },
+    props: { session, sessionToken },
   }
 }
 
 type Props = {
+  sessionToken: string
   session: {
     user: {
       name: string
@@ -40,7 +42,7 @@ type Props = {
   }
 }
 
-const Shipments = ({ session }: Props) => {
+const Shipments = ({ session, sessionToken }: Props) => {
   const { state }: any = useContext(AppContext)
   const [shipmentsStartDate, setShipmentsStartDate] = useState(moment().subtract(1, 'months').format('YYYY-MM-DD'))
   const [shipmentsEndDate, setShipmentsEndDate] = useState(moment().format('YYYY-MM-DD'))
@@ -51,27 +53,40 @@ const Shipments = ({ session }: Props) => {
   const [searchStatus, setSearchStatus] = useState<any>('')
   const [searchMarketplace, setSearchMarketplace] = useState<any>('')
 
-  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(
-    state.user.businessId
-      ? `/api/getShipmentsOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`
-      : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  )
-
   useEffect(() => {
-    if (data?.error) {
-      setAllData([])
-      setPending(false)
-      toast.error(data?.message)
-    } else if (data) {
-      setAllData(data)
-      setPending(false)
+    const controller = new AbortController()
+    const signal = controller.signal
+
+    const getNewDateRange = async () => {
+      setPending(true)
+
+      await axios(
+        `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/shipments/getShipmentsOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`,
+        {
+          signal,
+          headers: {
+            Authorization: `Bearer ${sessionToken}`,
+          },
+        }
+      )
+        .then((res) => {
+          setAllData(res.data)
+          setPending(false)
+        })
+        .catch(({ error }) => {
+          if (axios.isCancel(error)) {
+            toast.error(error?.data?.message || 'Error fetching shipment Log data')
+            setAllData([])
+            setPending(false)
+          }
+        })
     }
-  }, [data])
+    if (session && state.user.businessId) getNewDateRange()
+
+    return () => {
+      controller.abort()
+    }
+  }, [session, state.user.businessId, shipmentsStartDate, shipmentsEndDate])
 
   const filterDataTable = useMemo(() => {
     if (searchValue === '' && searchType === '' && searchStatus === '' && searchMarketplace === '') {
