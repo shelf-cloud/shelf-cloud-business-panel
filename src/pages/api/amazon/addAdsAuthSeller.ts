@@ -11,7 +11,7 @@ const addAdsAuthSeller: NextApiHandler = async (request, response) => {
     return
   }
 
-  const amazonAuthUrl = request.query.region === 'us' ? process.env.AMAZON_ADS_LWA_AUTH_US : process.env.AMAZON_ADS_LWA_AUTH_EU
+  const amazonAuthUrl = request.query.region === 'us' ? process.env.AMAZON_ADS_LWA_AUTH_URL_US : process.env.AMAZON_ADS_LWA_AUTH_URL_EU
   const code = request.query.code
   const businessId = request.query.businessId
 
@@ -20,10 +20,16 @@ const addAdsAuthSeller: NextApiHandler = async (request, response) => {
     return
   }
 
-  const url = `${amazonAuthUrl}&code=${code}`
+  // const url = `${amazonAuthUrl}&code=${code}`
 
   axios
-    .post(url)
+    .post(amazonAuthUrl, {
+      grant_type: 'authorization_code',
+      code,
+      client_id: process.env.AMAZON_ADS_LWA_AUTH_CLIENT_ID,
+      client_secret: process.env.AMAZON_ADS_LWA_AUTH_CLIENT_SECRET,
+      redirect_uri: process.env.AMAZON_ADS_LWA_AUTH_REDIRECT_URI,
+    }, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
     .then(async ({ data }) => {
       axios
         .post(`${process.env.SHELFCLOUD_SERVER_URL}/amazon/ads/addAdsSeller`, {
@@ -64,7 +70,6 @@ const addAdsAuthSeller: NextApiHandler = async (request, response) => {
         // that falls out of the range of 2xx
         response.json({
           error: true,
-          amazonAuthUrl,
           amazonError: error.response.data,
           message: `Error Amazon Ads API Integration, please try again later.`,
         })
