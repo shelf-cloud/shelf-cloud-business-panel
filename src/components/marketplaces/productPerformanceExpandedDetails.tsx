@@ -17,9 +17,12 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
   const [showMarketplacesFees, setShowMarketplacesFees] = useState(false)
   const [showAmazonFbaFees, setShowAmazonFbaFees] = useState(false)
   const [showCogs, setShowCogs] = useState(false)
+  const [showPPCCosts, setShowPPCCosts] = useState(false)
 
-  const totalExpenses = data.expenses + data.storageCost - data.reimbursements
+  const totalExpenses = data.expenses + data.storageCost
   const totalCogs = data.productCost + data.shippingToFbaCost
+  const totalPPCCosts = data.sponsoredProducts + data.displayAds
+
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
       <Row>
@@ -87,8 +90,16 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                                     key={market.name}
                                     className='border-bottom py-1 w-100 d-flex flex-row justify-content-between align-items-center'
                                     onClick={() => AMAZON_MARKETPLACES_ID.includes(market.storeId) && setShowAmazonFbaFees(!showAmazonFbaFees)}>
-                                    <span className={'text-black d-flex flex-row justify-content-start align-items-start fw-normal ' + (AMAZON_MARKETPLACES_ID.includes(market.storeId) && 'dropdown-toggle')}>{market.name}</span>
-                                    <span className={'fw-normal text-end text-black'}>{FormatCurrency(state.currentRegion, market.fees.totalComission + market.fees.totalFixedFee)}</span>
+                                    <span
+                                      className={
+                                        'text-black d-flex flex-row justify-content-start align-items-start fw-normal ' +
+                                        (AMAZON_MARKETPLACES_ID.includes(market.storeId) && 'dropdown-toggle')
+                                      }>
+                                      {market.name}
+                                    </span>
+                                    <span className={'fw-normal text-end text-black'}>
+                                      {FormatCurrency(state.currentRegion, market.fees.totalComission + market.fees.totalFixedFee)}
+                                    </span>
                                   </div>
                                   {/* AMAZON FBA FEES */}
                                   {AMAZON_MARKETPLACES_ID.includes(market.storeId) && (
@@ -96,7 +107,9 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                                       {market.fees.FBAPerOrderFulfillmentFee! !== 0 && (
                                         <div className='border-bottom py-1 w-100 d-flex flex-row justify-content-between align-items-center'>
                                           <span className='text-muted fw-normal fs-7'>FBA Per Order Fee</span>
-                                          <span className={'fw-normal text-end text-muted fs-7'}>{FormatCurrency(state.currentRegion, market.fees.FBAPerOrderFulfillmentFee!)}</span>
+                                          <span className={'fw-normal text-end text-muted fs-7'}>
+                                            {FormatCurrency(state.currentRegion, market.fees.FBAPerOrderFulfillmentFee!)}
+                                          </span>
                                         </div>
                                       )}
                                       {market.fees.FBAPerUnitFulfillmentFee! !== 0 && (
@@ -193,6 +206,24 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                           <div className='py-1 w-100 d-flex flex-row justify-content-between align-items-center'>
                             <span className='text-muted d-flex flex-row justify-content-start align-items-start fs-7'>Shipping To FBA Cost</span>
                             <span className='fw-light text-end text-muted fs-7'>{FormatCurrency(state.currentRegion, data.shippingToFbaCost)}</span>
+                          </div>
+                        </Collapse>
+                      </td>
+                    </tr>
+                    <tr onClick={() => setShowPPCCosts(!showPPCCosts)} style={{ cursor: 'pointer' }}>
+                      <td className='dropdown-toggle text-black d-flex flex-row justify-content-start align-items-start fw-normal'>PPC Costs</td>
+                      <td className={'fw-normal text-end text-black'}>-{FormatCurrency(state.currentRegion, totalPPCCosts)}</td>
+                    </tr>
+                    <tr>
+                      <td className='p-0' colSpan={2}>
+                        <Collapse className='ps-3 pe-1 py-0 w-100' isOpen={showPPCCosts}>
+                          <div className='py-1 w-100 d-flex flex-row justify-content-between align-items-center'>
+                            <span className='text-muted d-flex flex-row justify-content-start align-items-start fs-7'>Sponsored Products</span>
+                            <span className={'fw-light text-end text-muted fs-7'}>{FormatCurrency(state.currentRegion, data.sponsoredProducts)}</span>
+                          </div>
+                          <div className='py-1 w-100 d-flex flex-row justify-content-between align-items-center'>
+                            <span className='text-muted d-flex flex-row justify-content-start align-items-start fs-7'>Sponsored Displays</span>
+                            <span className='fw-light text-end text-muted fs-7'>{FormatCurrency(state.currentRegion, data.displayAds)}</span>
                           </div>
                         </Collapse>
                       </td>

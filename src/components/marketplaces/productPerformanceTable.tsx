@@ -15,7 +15,7 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
   const { state }: any = useContext(AppContext)
 
   const totalGrossRevenue = tableData.reduce((total: number, product: ProductPerformance) => total + product.grossRevenue, 0)
-  const totalExpenses = tableData.reduce((total: number, product: ProductPerformance) => total + product.expenses + product.storageCost - product.reimbursements, 0)
+  const totalExpenses = tableData.reduce((total: number, product: ProductPerformance) => total + product.expenses + product.storageCost, 0)
   const totalProfit = tableData.reduce((total: number, product: ProductPerformance) => total + (product.grossRevenue - (product.expenses + product.storageCost)), 0)
   const totalMargin = ((totalGrossRevenue - totalExpenses) / totalGrossRevenue) * 100
   const totalRoi = ((totalGrossRevenue - totalExpenses) / totalExpenses) * 100
