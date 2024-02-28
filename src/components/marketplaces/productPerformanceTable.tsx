@@ -1,22 +1,39 @@
 /* eslint-disable @next/next/no-img-element */
 import AppContext from '@context/AppContext'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
-import { ProductPerformance } from '@typesTs/marketplaces/productPerformance'
-import React, { useContext } from 'react'
+import { ProductPerformance, Marketplace } from '@typesTs/marketplaces/productPerformance'
+import React, { useContext, useState } from 'react'
 import DataTable from 'react-data-table-component'
 import ProductPerformanceExpandedDetails from './productPerformanceExpandedDetails'
+import UnitsSoldDetailsModal from '@components/modals/marketplaces/unitsSoldDetailsModal'
+import { Button } from 'reactstrap'
 
 type Props = {
   tableData: ProductPerformance[]
   pending: boolean
+  selectedMarketplace: {
+    storeId: number
+    name: string
+    logo: string
+  }
 }
 
-const ProductPerformanceTable = ({ tableData, pending }: Props) => {
+const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Props) => {
   const { state }: any = useContext(AppContext)
-
+  const [showUnitsSoldDetailsModal, setshowUnitsSoldDetailsModal] = useState({
+    showUnitsSoldDetailsModal: false,
+    marketplacesData: {} as { [key: string]: Marketplace },
+  })
   const totalGrossRevenue = tableData.reduce((total: number, product: ProductPerformance) => total + product.grossRevenue, 0)
-  const totalExpenses = tableData.reduce((total: number, product: ProductPerformance) => total + product.expenses + product.storageCost, 0)
-  const totalProfit = tableData.reduce((total: number, product: ProductPerformance) => total + (product.grossRevenue - (product.expenses + product.storageCost)), 0)
+  const totalExpenses =
+    selectedMarketplace.storeId === 9999
+      ? tableData.reduce((total: number, product: ProductPerformance) => total + product.expenses + product.storageCost, 0)
+      : tableData.reduce((total: number, product: ProductPerformance) => total + product.expenses, 0)
+
+  const totalProfit =
+    selectedMarketplace.storeId === 9999
+      ? tableData.reduce((total: number, product: ProductPerformance) => total + (product.grossRevenue - (product.expenses + product.storageCost)), 0)
+      : tableData.reduce((total: number, product: ProductPerformance) => total + (product.grossRevenue - product.expenses), 0)
   const totalMargin = ((totalGrossRevenue - totalExpenses) / totalGrossRevenue) * 100
   const totalRoi = ((totalGrossRevenue - totalExpenses) / totalExpenses) * 100
 
@@ -125,8 +142,15 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
               }}>
               <img
                 loading='lazy'
-                src={row.image ? row.image : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'}
-                onError={(e) => (e.currentTarget.src = 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')}
+                src={
+                  row.image
+                    ? row.image
+                    : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+                }
+                onError={(e) =>
+                  (e.currentTarget.src =
+                    'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
+                }
                 alt='product Image'
                 style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
               />
@@ -138,7 +162,11 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
                 {row.asin && (
                   <>
                     {`ASIN: `}
-                    <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank' className='fw-light' style={{ textDecoration: 'none' }}>
+                    <a
+                      href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`}
+                      target='blank'
+                      className='fw-light'
+                      style={{ textDecoration: 'none' }}>
                       {row.asin}
                     </a>
                     <i className='ri-file-copy-line fs-5 my-0 mx-2 p-0 text-muted' style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(row.asin)} />
@@ -199,7 +227,7 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
         </div>
       ),
       selector: (row: ProductPerformance) => {
-        return <span>{FormatCurrency(state.currentRegion, (row?.expenses + row?.storageCost))}</span>
+        return <span>{FormatCurrency(state.currentRegion, row?.expenses + row?.storageCost)}</span>
       },
       center: true,
       sortable: true,
@@ -214,7 +242,11 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
         </div>
       ),
       selector: (row: ProductPerformance) => {
-        return <span className={row?.grossRevenue - (row?.expenses + row?.storageCost) >= 0 ? 'text-black' : 'text-danger'}>{FormatCurrency(state.currentRegion, row?.grossRevenue - (row?.expenses + row?.storageCost))}</span>
+        return (
+          <span className={row?.grossRevenue - (row?.expenses + row?.storageCost) >= 0 ? 'text-black' : 'text-danger'}>
+            {FormatCurrency(state.currentRegion, row?.grossRevenue - (row?.expenses + row?.storageCost))}
+          </span>
+        )
       },
       center: true,
       sortable: true,
@@ -232,7 +264,11 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
         if (row?.grossRevenue === 0) {
           return <span>0%</span>
         } else {
-          return <span className={((row?.grossRevenue - row?.expenses) / row?.grossRevenue) * 100 >= 0 ? 'text-black' : 'text-danger'}>{FormatIntNumber(state.currentRegion, ((row?.grossRevenue - row?.expenses) / row?.grossRevenue) * 100)}%</span>
+          return (
+            <span className={((row?.grossRevenue - row?.expenses) / row?.grossRevenue) * 100 >= 0 ? 'text-black' : 'text-danger'}>
+              {FormatIntNumber(state.currentRegion, ((row?.grossRevenue - row?.expenses) / row?.grossRevenue) * 100)}%
+            </span>
+          )
         }
       },
       center: true,
@@ -251,7 +287,11 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
         if (row?.expenses + row.productCost + row.shippingCost == 0) {
           return <span>0%</span>
         } else {
-          return <span className={((row.grossRevenue - row?.expenses) / row?.expenses) * 100 >= 0 ? 'text-black' : 'text-danger'}>{FormatIntNumber(state.currentRegion, ((row.grossRevenue - row?.expenses) / row?.expenses) * 100)}%</span>
+          return (
+            <span className={((row.grossRevenue - row?.expenses) / row?.expenses) * 100 >= 0 ? 'text-black' : 'text-danger'}>
+              {FormatIntNumber(state.currentRegion, ((row.grossRevenue - row?.expenses) / row?.expenses) * 100)}%
+            </span>
+          )
         }
       },
       center: true,
@@ -263,7 +303,8 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
       name: (
         <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
           <span className='fw-semibold fs-6'>Refunds</span>
-          <span className={'fw-normal fs-5 ' + (tableData.reduce((total: number, product: ProductPerformance) => total + product.refundsQty, 0) > 0 ? 'text-primary' : 'text-muted')}>
+          <span
+            className={'fw-normal fs-5 ' + (tableData.reduce((total: number, product: ProductPerformance) => total + product.refundsQty, 0) > 0 ? 'text-primary' : 'text-muted')}>
             {FormatIntNumber(
               state.currentRegion,
               tableData.reduce((total: number, product: ProductPerformance) => total + product.refundsQty, 0)
@@ -292,7 +333,20 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
         </div>
       ),
       selector: (row: ProductPerformance) => {
-        return <span>{FormatIntNumber(state.currentRegion, row?.unitsSold)}</span>
+        return (
+          <Button
+            color='info'
+            outline
+            className='btn btn-ghost-info'
+            onClick={() =>
+              setshowUnitsSoldDetailsModal({
+                showUnitsSoldDetailsModal: true,
+                marketplacesData: row?.marketplaces,
+              })
+            }>
+            {FormatIntNumber(state.currentRegion, row?.unitsSold)}
+          </Button>
+        )
       },
       center: true,
       sortable: true,
@@ -302,31 +356,36 @@ const ProductPerformanceTable = ({ tableData, pending }: Props) => {
   ]
 
   return (
-    <DataTable
-      columns={columns}
-      data={tableData}
-      progressPending={pending}
-      striped={true}
-      // selectableRows
-      // onSelectedRowsChange={handleSelectedRows}
-      // clearSelectedRows={toggledClearRows}
-      expandableRows
-      expandableRowsComponent={ProductPerformanceExpandedDetails}
-      // expandableRowsComponentProps={{ apiMutateLink: apiMutateLink }}
-      dense
-      defaultSortFieldId={3}
-      defaultSortAsc={false}
-      pagination={tableData.length > 100 ? true : false}
-      paginationPerPage={50}
-      paginationRowsPerPageOptions={[50, 100, 200, 500]}
-      paginationComponentOptions={{
-        rowsPerPageText: 'Products per page:',
-        rangeSeparatorText: 'of',
-        noRowsPerPage: false,
-        selectAllRowsItem: true,
-        selectAllRowsItemText: 'All',
-      }}
-    />
+    <>
+      <DataTable
+        columns={columns}
+        data={tableData}
+        progressPending={pending}
+        striped={true}
+        // selectableRows
+        // onSelectedRowsChange={handleSelectedRows}
+        // clearSelectedRows={toggledClearRows}
+        expandableRows
+        expandableRowsComponent={ProductPerformanceExpandedDetails}
+        expandableRowsComponentProps={{ selectedMarketplaceStoreId: selectedMarketplace.storeId }}
+        dense
+        defaultSortFieldId={3}
+        defaultSortAsc={false}
+        pagination={tableData.length > 100 ? true : false}
+        paginationPerPage={50}
+        paginationRowsPerPageOptions={[50, 100, 200, 500]}
+        paginationComponentOptions={{
+          rowsPerPageText: 'Products per page:',
+          rangeSeparatorText: 'of',
+          noRowsPerPage: false,
+          selectAllRowsItem: true,
+          selectAllRowsItemText: 'All',
+        }}
+      />
+      {showUnitsSoldDetailsModal.showUnitsSoldDetailsModal && (
+        <UnitsSoldDetailsModal showUnitsSoldDetailsModal={showUnitsSoldDetailsModal} setshowUnitsSoldDetailsModal={setshowUnitsSoldDetailsModal} />
+      )}
+    </>
   )
 }
 

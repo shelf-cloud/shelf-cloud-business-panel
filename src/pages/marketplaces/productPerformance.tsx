@@ -83,9 +83,13 @@ const Profits = ({ session, sessionToken }: Props) => {
   const [productsData, setProductsData] = useState<ProductsPerformanceResponse>({})
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data }: { data?: MarketpalcesInfo } = useSWR(state.user.businessId ? `/api/marketplaces/getMarketplacesInfo?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher, {
-    revalidateOnFocus: false,
-  })
+  const { data }: { data?: MarketpalcesInfo } = useSWR(
+    state.user.businessId ? `/api/marketplaces/getMarketplacesInfo?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  )
 
   useEffect(() => {
     const controller = new AbortController()
@@ -154,7 +158,9 @@ const Profits = ({ session, sessionToken }: Props) => {
           (brand !== undefined && brand !== '' ? item.brand.toLowerCase() === brand.toLowerCase() : true) &&
           (category !== undefined && category !== '' ? item.category.toLowerCase() === category.toLowerCase() : true) &&
           (showWithSales == undefined || showWithSales == '' ? item.unitsSold > 0 : showWithSales === 'false' ? item.unitsSold > 0 : true) &&
-          (item.sku.toLowerCase().includes(searchValue.toLowerCase()) || item.asin.toLowerCase().includes(searchValue.toLowerCase()) || item.title.toLowerCase().includes(searchValue.toLowerCase()))
+          (item.sku.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.asin.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.title.toLowerCase().includes(searchValue.toLowerCase()))
       )
     }
   }, [productsData, searchValue, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, brand, category, showWithSales])
@@ -173,7 +179,18 @@ const Profits = ({ session, sessionToken }: Props) => {
     }
   }
 
-  const handleApplyFilters = (grossmin: string, grossmax: string, profitmin: string, profitmax: string, unitsmin: string, unitsmax: string, supplier: string, brand: string, category: string, showWithSales: string) => {
+  const handleApplyFilters = (
+    grossmin: string,
+    grossmax: string,
+    profitmin: string,
+    profitmax: string,
+    unitsmin: string,
+    unitsmax: string,
+    supplier: string,
+    brand: string,
+    category: string,
+    showWithSales: string
+  ) => {
     let filterString = `/marketplaces/productPerformance?filters=true`
     if (grossmin || grossmin !== '') filterString += `&grossmin=${grossmin}`
     if (grossmax || grossmax !== '') filterString += `&grossmax=${grossmax}`
@@ -210,7 +227,13 @@ const Profits = ({ session, sessionToken }: Props) => {
                     onClick={() => setFilterOpen(!filterOpen)}>
                     Filters
                   </button>
-                  <FilterByDates shipmentsStartDate={startDate} setShipmentsStartDate={setStartDate} setShipmentsEndDate={setEndDate} shipmentsEndDate={endDate} handleChangeDatesFromPicker={handleChangeDatesFromPicker} />
+                  <FilterByDates
+                    shipmentsStartDate={startDate}
+                    setShipmentsStartDate={setStartDate}
+                    setShipmentsEndDate={setEndDate}
+                    shipmentsEndDate={endDate}
+                    handleChangeDatesFromPicker={handleChangeDatesFromPicker}
+                  />
                   <SelectMarketplaceDropDown selectionInfo={data?.marketplaces || []} selected={selectedMarketplace} handleSelection={setSelectedMarketplace} />
                   <ExportProductsPerformance products={filterDataTable || []} marketpalces={data?.marketplaces || []} startDate={startDate} endDate={endDate} />
                 </div>
@@ -270,13 +293,15 @@ const Profits = ({ session, sessionToken }: Props) => {
                     <p className='fw-bold fs-2'>Product Performance</p>
                     <p className='fs-5 text-muted d-flex flex-row gap-3'>
                       {`Loading Profit Report from ${selectedMarketplace.name} please wait...`}
-                      <Spinner color='primary' size={'sm'} />
+                      <>
+                        <Spinner color='primary' size={'sm'} />
+                      </>
                     </p>
                   </div>
                 ) : (
                   <div>
                     <div>
-                      <ProductPerformanceTable tableData={filterDataTable || []} pending={loadingData} />
+                      <ProductPerformanceTable tableData={filterDataTable || []} pending={loadingData} selectedMarketplace={selectedMarketplace} />
                     </div>
                   </div>
                 )}

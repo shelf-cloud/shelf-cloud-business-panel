@@ -1,7 +1,7 @@
 import { AMAZON_MARKETPLACES_ID } from '@components/constants/shelfcloud'
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
-import { Marketpalce, ProductPerformance } from '@typesTs/marketplaces/productPerformance'
+import { Marketplace, ProductPerformance } from '@typesTs/marketplaces/productPerformance'
 import React, { useContext, useState } from 'react'
 import { ExpanderComponentProps } from 'react-data-table-component'
 import { Card, CardBody, CardHeader, Col, Collapse, Row } from 'reactstrap'
@@ -9,9 +9,10 @@ import ProductPerformanceTimeline from './productPerformanceTimeline'
 
 type Props = {
   data: ProductPerformance
+  selectedMarketplaceStoreId?: number
 }
 
-const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<ProductPerformance>> = ({ data }: Props) => {
+const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<ProductPerformance>> = ({ data, selectedMarketplaceStoreId }: Props) => {
   const { state }: any = useContext(AppContext)
   const [showTaxes, setShowTaxes] = useState(false)
   const [showMarketplacesFees, setShowMarketplacesFees] = useState(false)
@@ -19,7 +20,7 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
   const [showCogs, setShowCogs] = useState(false)
   const [showPPCCosts, setShowPPCCosts] = useState(false)
 
-  const totalExpenses = data.expenses + data.storageCost
+  const totalExpenses = selectedMarketplaceStoreId === 9999 ? data.expenses + data.storageCost : data.expenses
   const totalCogs = data.productCost + data.shippingToFbaCost
   const totalPPCCosts = data.sponsoredProducts + data.displayAds
 
@@ -77,13 +78,13 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                     )}
                     <tr className='pb-2' onClick={() => setShowMarketplacesFees(!showMarketplacesFees)} style={{ cursor: 'pointer' }}>
                       <td className='dropdown-toggle text-black d-flex flex-row justify-content-start align-items-start fw-semibold'>Marketplaces Fees</td>
-                      <td className={'fw-normal text-end text-black'}>-{FormatCurrency(state.currentRegion, data.totalMarketpalcesFees)}</td>
+                      <td className={'fw-normal text-end text-black'}>-{FormatCurrency(state.currentRegion, data.totalMarketplacesFees)}</td>
                     </tr>
                     <tr>
                       <td className='p-0' colSpan={2}>
                         <Collapse className='ps-3 pe-1 py-0 w-100' isOpen={showMarketplacesFees}>
-                          {Object.values(data.marketpalces).map(
-                            (market: Marketpalce) =>
+                          {Object.values(data.marketplaces).map(
+                            (market: Marketplace) =>
                               market.fees.totalComission + market.fees.totalFixedFee !== 0 && (
                                 <div key={market.storeId}>
                                   <div
@@ -180,7 +181,7 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                         <td className={'fw-light text-end text-black'}>-{FormatCurrency(state.currentRegion, data.shelfCloudCost)}</td>
                       </tr>
                     )}
-                    {data.storageCost > 0 && (
+                    {data.storageCost > 0 && selectedMarketplaceStoreId === 9999 && (
                       <tr className='border-bottom pb-2'>
                         <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Storage Cost</td>
                         <td className={'fw-light text-end text-black'}>-{FormatCurrency(state.currentRegion, data.storageCost)}</td>

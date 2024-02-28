@@ -20,7 +20,7 @@ export interface ProductPerformance {
     taxCollected: number;
     taxWithheld: number;
     totalShipping: number;
-    totalMarketpalcesFees: number;
+    totalMarketplacesFees: number;
     reimbursements: number;
     refunds: number;
     refundsQty: number;
@@ -34,7 +34,7 @@ export interface ProductPerformance {
     brand: string;
     category: string;
     supplier: string;
-    marketpalces: { [key: string]: Marketpalce };
+    marketplaces: { [key: string]: Marketplace };
     sellerCost: number;
     inboundShippingCost: number;
     otherCosts: number;
@@ -57,10 +57,11 @@ export interface Listing {
     storeSku: string;
 }
 
-export interface Marketpalce {
+export interface Marketplace {
     marketplace: string;
     name: string;
     storeId: string,
+    totalUnitsSold: number;
     comissionFee: number;
     fixedFee: number;
     fees: Fees;

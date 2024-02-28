@@ -57,7 +57,7 @@ const ExportProductsPerformance = ({ products, startDate, endDate, marketpalces 
 
     const marketplaces = {} as any
     for (const product of products) {
-      for (const market of Object.values(product.marketpalces)) {
+      for (const market of Object.values(product.marketplaces)) {
         if (!marketplaces[product.sku]) marketplaces[product.sku] = {}
         if (!marketplaces[product.sku][market.name]) marketplaces[product.sku][market.name] = 0
         marketplaces[product.sku][market.name] = market.fees.totalComission + market.fees.totalFixedFee
@@ -88,7 +88,7 @@ const ExportProductsPerformance = ({ products, startDate, endDate, marketpalces 
         promos: product.promos,
         productCost: product.productCost,
         shippingCost: product.shippingCost,
-        marketplacesFee: product.totalMarketpalcesFees,
+        marketplacesFee: product.totalMarketplacesFees,
         ...marketplaces[product.sku],
       })
     }

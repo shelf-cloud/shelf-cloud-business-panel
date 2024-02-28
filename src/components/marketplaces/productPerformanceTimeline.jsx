@@ -1,18 +1,64 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import AppContext from '@context/AppContext'
 import dynamic from 'next/dynamic'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import moment from 'moment'
+import { Button } from 'reactstrap'
 const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 const ProductPerformanceTimeline = ({ productTimeLine }) => {
   const { state } = useContext(AppContext)
-  const timeLineSorted = Object.keys(productTimeLine)
+  const [grouping, setGrouping] = useState('daily')
+
+  useEffect(() => {
+  }, [grouping])
+
+  const dailytimeLineSorted = Object.keys(productTimeLine)
     .sort()
     .reduce(function (result, key) {
       result[key] = productTimeLine[key]
       return result
     }, {})
+
+  const weeklyTimeLineSorted = Object.keys(productTimeLine)
+    .sort()
+    .reduce(function (result, key) {
+      // const weekYear = `${moment(key).year()}-${moment(key).format('MM')}`
+      const weekYear = `${moment(key).startOf('week').format('YYYY-MM-DD')}`
+      if (result[weekYear] === undefined) {
+        result[weekYear] = {
+          grossRevenue: productTimeLine[key].grossRevenue,
+          expenses: productTimeLine[key].expenses,
+          unitsSold: productTimeLine[key].unitsSold,
+        }
+      } else {
+        result[weekYear].grossRevenue += productTimeLine[key].grossRevenue
+        result[weekYear].expenses += productTimeLine[key].expenses
+        result[weekYear].unitsSold += productTimeLine[key].unitsSold
+      }
+      return result
+    }, {})
+
+  const monthlyTimeLineSorted = Object.keys(productTimeLine)
+    .sort()
+    .reduce(function (result, key) {
+      const weekYear = `${moment(key).year()}-${moment(key).format('MM')}`
+      if (result[weekYear] === undefined) {
+        result[weekYear] = {
+          grossRevenue: productTimeLine[key].grossRevenue,
+          expenses: productTimeLine[key].expenses,
+          unitsSold: productTimeLine[key].unitsSold,
+        }
+      } else {
+        result[weekYear].grossRevenue += productTimeLine[key].grossRevenue
+        result[weekYear].expenses += productTimeLine[key].expenses
+        result[weekYear].unitsSold += productTimeLine[key].unitsSold
+      }
+      return result
+    }, {})
+
+  const timeLineSorted = grouping === 'daily' ? dailytimeLineSorted : grouping === 'weekly' ? weeklyTimeLineSorted : monthlyTimeLineSorted
+
   const series = [
     {
       name: 'Gross Revenue',
@@ -94,7 +140,6 @@ const ProductPerformanceTimeline = ({ productTimeLine }) => {
       },
       y: {
         // formatter: function (value, { series, seriesIndex, dataPointIndex, w }) {
-        //   // console.log('value', series, seriesIndex, dataPointIndex, w)
         //   return FormatCurrency(state.currentRegion, value)
         // },
       },
@@ -179,7 +224,22 @@ const ProductPerformanceTimeline = ({ productTimeLine }) => {
       },
     ],
   }
-  return <ApexCharts options={options} series={series} type='line' height={330} />
+  return (
+    <>
+      <div className='px-4 m-0 d-flex flex-row justify-content-start align-items-center gap-2'>
+        <Button size='sm' color={grouping === 'daily' ? 'primary' : 'light'} onClick={() => setGrouping('daily')}>
+          Daily
+        </Button>
+        <Button size='sm' color={grouping === 'weekly' ? 'primary' : 'light'} onClick={() => setGrouping('weekly')}>
+          Weekly
+        </Button>
+        <Button size='sm' color={grouping === 'monthly' ? 'primary' : 'light'} onClick={() => setGrouping('monthly')}>
+          Monthly
+        </Button>
+      </div>
+      <ApexCharts options={options} series={series} type='line' height={330} />
+    </>
+  )
 }
 
 export default ProductPerformanceTimeline
