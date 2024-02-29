@@ -72,7 +72,7 @@ function UnitsSoldDetailsModal({ showUnitsSoldDetailsModal, setshowUnitsSoldDeta
             marketplacesData: [],
           })
         }}>
-        <p className='m-0 p-0 fw-bold fs-5'>Unist Solds by Marketplace</p>
+        <p className='m-0 p-0 fw-bold fs-5'>Units Sold by Marketplace</p>
         <p className='m-0 p-0 fw-normal fs-5'>{showUnitsSoldDetailsModal.title}</p>
         <p className='m-0 p-0 fw-light fs-5'>{showUnitsSoldDetailsModal.sku}</p>
       </ModalHeader>
