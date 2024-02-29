@@ -47,7 +47,6 @@ const FilterProfits = ({ grossmin, grossmax, profitmin, profitmax, unitsmin, uni
   })
 
   const handleSubmit = async (values: any) => {
-    console.log('values', values)
     handleApplyFilters(values.grossRevenueMin, values.grossRevenueMax, values.netProfitMin, values.netProfitMax, values.unitsSoldMin, values.unitsSoldMax, values.supplier, values.brand, values.category, values.showWithSales)
   }
 

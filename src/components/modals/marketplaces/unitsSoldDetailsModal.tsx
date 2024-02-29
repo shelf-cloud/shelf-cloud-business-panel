@@ -6,12 +6,27 @@ import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap'
 type Props = {
   showUnitsSoldDetailsModal: {
     showUnitsSoldDetailsModal: boolean
+    totalUnitsSold: number
+    sku: string
+    title: string
     marketplacesData: { [key: string]: Marketplace }
   }
   setshowUnitsSoldDetailsModal: (prev: any) => void
 }
 
 function UnitsSoldDetailsModal({ showUnitsSoldDetailsModal, setshowUnitsSoldDetailsModal }: Props) {
+  const sortedTableData = Object.values(showUnitsSoldDetailsModal.marketplacesData)
+    .filter((market) => market.totalUnitsSold > 0)
+    .sort((a, b) => {
+      if (a.totalUnitsSold > b.totalUnitsSold) {
+        return -1
+      }
+      if (a.totalUnitsSold < b.totalUnitsSold) {
+        return 1
+      }
+      return 0
+    })
+
   const columns: any = [
     {
       name: <span className='fw-semibold fs-5'>Marketplace</span>,
@@ -25,6 +40,12 @@ function UnitsSoldDetailsModal({ showUnitsSoldDetailsModal, setshowUnitsSoldDeta
       sortable: true,
       center: true,
     },
+    {
+      name: <span className='fw-semibold fs-5'></span>,
+      selector: (row: Marketplace) => `${((row.totalUnitsSold / showUnitsSoldDetailsModal.totalUnitsSold) * 100).toFixed(2)} %`,
+      sortable: true,
+      center: true,
+    },
   ]
   return (
     <Modal
@@ -35,6 +56,9 @@ function UnitsSoldDetailsModal({ showUnitsSoldDetailsModal, setshowUnitsSoldDeta
       toggle={() => {
         setshowUnitsSoldDetailsModal({
           showUnitsSoldDetailsModal: false,
+          totalUnitsSold: 0,
+          sku: '',
+          title: '',
           marketplacesData: [],
         })
       }}>
@@ -42,21 +66,18 @@ function UnitsSoldDetailsModal({ showUnitsSoldDetailsModal, setshowUnitsSoldDeta
         toggle={() => {
           setshowUnitsSoldDetailsModal({
             showUnitsSoldDetailsModal: false,
+            totalUnitsSold: 0,
+            sku: '',
+            title: '',
             marketplacesData: [],
           })
         }}>
-        <p className='modal-title fs-3' id='myModalLabel'>
-          Unist Solds By Marketplace
-        </p>
+        <p className='m-0 p-0 fw-bold fs-5'>Unist Solds by Marketplace</p>
+        <p className='m-0 p-0 fw-normal fs-5'>{showUnitsSoldDetailsModal.title}</p>
+        <p className='m-0 p-0 fw-light fs-5'>{showUnitsSoldDetailsModal.sku}</p>
       </ModalHeader>
       <ModalBody>
-        <DataTable
-          columns={columns}
-          data={Object.values(showUnitsSoldDetailsModal.marketplacesData).filter((market) => market.totalUnitsSold > 0)}
-          striped={true}
-          highlightOnHover={true}
-          dense
-        />
+        <DataTable columns={columns} data={sortedTableData} striped={true} highlightOnHover={true} dense />
       </ModalBody>
       <ModalFooter>
         <Button

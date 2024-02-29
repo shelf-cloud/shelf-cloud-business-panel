@@ -7,6 +7,7 @@ import DataTable from 'react-data-table-component'
 import ProductPerformanceExpandedDetails from './productPerformanceExpandedDetails'
 import UnitsSoldDetailsModal from '@components/modals/marketplaces/unitsSoldDetailsModal'
 import { Button } from 'reactstrap'
+import Link from 'next/link'
 
 type Props = {
   tableData: ProductPerformance[]
@@ -22,6 +23,9 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
   const { state }: any = useContext(AppContext)
   const [showUnitsSoldDetailsModal, setshowUnitsSoldDetailsModal] = useState({
     showUnitsSoldDetailsModal: false,
+    sku: '',
+    title: '',
+    totalUnitsSold: 0,
     marketplacesData: {} as { [key: string]: Marketplace },
   })
   const totalGrossRevenue = tableData.reduce((total: number, product: ProductPerformance) => total + product.grossRevenue, 0)
@@ -156,7 +160,11 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
               />
             </div>
             <div>
-              <p className='m-0 p-0 text-primary fw-semibold fs-6'>{row.sku}</p>
+              <Link href={`/product/${row.inventoryId}/${row.sku}`} passHref>
+                <a>
+                  <p className='m-0 p-0 text-primary fw-semibold fs-6'>{row.sku}</p>
+                </a>
+              </Link>
               <p className='m-0 p-0 text-black fw-semibold fs-7 text-wrap'>{row.title}</p>
               <p className='m-0 p-0 text-black fw-normal fs-7 d-flex flex-row justify-content-start align-items-center'>
                 {row.asin && (
@@ -341,6 +349,9 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
             onClick={() =>
               setshowUnitsSoldDetailsModal({
                 showUnitsSoldDetailsModal: true,
+                totalUnitsSold: row?.unitsSold,
+                sku: row?.sku,
+                title: row?.title,
                 marketplacesData: row?.marketplaces,
               })
             }>

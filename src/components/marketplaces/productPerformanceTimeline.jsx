@@ -92,7 +92,7 @@ const ProductPerformanceTimeline = ({ productTimeLine }) => {
       curve: 'smooth',
     },
     markers: {
-      size: 0,
+      size: grouping === 'daily' ? 0 : 4,
     },
     // plotOptions: {
     //   bar: {
