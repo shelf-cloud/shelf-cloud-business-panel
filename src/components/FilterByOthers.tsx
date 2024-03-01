@@ -105,7 +105,7 @@ const FilterByOthers = ({ searchType, setSearchType, searchStatus, setSearchStat
                   setOpenDatesMenu(false)
                 }}>
                 <option value=''>All Marketplaces</option>
-                {state?.user?.[`${state.currentRegion}`]?.marketplaces?.map((market: string, index: number) => (
+                {state?.user?.[`${state.currentRegion}`]?.marketplaces?.sort().map((market: string, index: number) => (
                   <option key={`${market}-id${index}`} value={market}>
                     {market}
                   </option>

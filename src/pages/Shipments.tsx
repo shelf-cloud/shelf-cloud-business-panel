@@ -114,7 +114,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
       }
 
       if (searchMarketplace !== '') {
-        newDataTable = newDataTable.filter((order) => order?.channelName?.toLowerCase() == searchMarketplace.toLowerCase())
+        newDataTable = newDataTable.filter((order) => order?.storeName?.toLowerCase() == searchMarketplace.toLowerCase())
       }
 
       return newDataTable
@@ -128,7 +128,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
       }
 
       if (searchMarketplace !== '') {
-        newDataTable = newDataTable.filter((order) => order?.channelName?.toLowerCase() == searchMarketplace.toLowerCase())
+        newDataTable = newDataTable.filter((order) => order?.storeName?.toLowerCase() == searchMarketplace.toLowerCase())
       }
 
       if (searchValue !== '') {
@@ -156,7 +156,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
       }
 
       if (searchMarketplace !== '') {
-        newDataTable = newDataTable.filter((order) => order?.channelName?.toLowerCase() == searchMarketplace.toLowerCase())
+        newDataTable = newDataTable.filter((order) => order?.storeName?.toLowerCase() == searchMarketplace.toLowerCase())
       }
 
       if (searchValue !== '') {
@@ -177,7 +177,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
     }
 
     if (searchMarketplace !== '') {
-      let newDataTable = allData.filter((order) => order?.channelName?.toLowerCase() == searchMarketplace.toLowerCase())
+      let newDataTable = allData.filter((order) => order?.storeName?.toLowerCase() == searchMarketplace.toLowerCase())
 
       if (searchType !== '') {
         newDataTable = newDataTable.filter((order) => order?.orderType?.toLowerCase().includes(searchType.toLowerCase()))

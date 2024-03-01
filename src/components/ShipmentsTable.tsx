@@ -179,7 +179,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
               }}
             />
             <UncontrolledTooltip placement='right' target={`ChannelLogo-${row.id}`}>
-              {row.channelName}
+              {row.storeName}
             </UncontrolledTooltip>
           </>
         )

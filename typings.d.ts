@@ -370,6 +370,7 @@ export interface OrderRowType {
   onixShipping: number
   storeId: string
   channelName: string
+  storeName: string
   channelLogo: string
   orderItems: []
   totalItems: number
