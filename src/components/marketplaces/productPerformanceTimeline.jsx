@@ -94,6 +94,11 @@ const ProductPerformanceTimeline = ({ productTimeLine }) => {
     markers: {
       size: grouping === 'daily' ? 0 : 4,
     },
+    legend: {
+      onItemClick: {
+        toggleDataSeries: true
+      }
+    },
     // plotOptions: {
     //   bar: {
     //     horizontal: true,
@@ -156,6 +161,7 @@ const ProductPerformanceTimeline = ({ productTimeLine }) => {
       {
         seriesName: 'Gross Revenue',
         show: true,
+        showAlways: true,
         labels: {
           show: true,
           align: 'left',
@@ -173,6 +179,7 @@ const ProductPerformanceTimeline = ({ productTimeLine }) => {
       {
         seriesName: 'Gross Revenue',
         show: true,
+        showAlways: true,
         labels: {
           show: false,
           align: 'left',
@@ -190,6 +197,7 @@ const ProductPerformanceTimeline = ({ productTimeLine }) => {
       {
         seriesName: 'Gross Revenue',
         show: true,
+        showAlways: true,
         labels: {
           show: false,
           align: 'left',
@@ -208,6 +216,7 @@ const ProductPerformanceTimeline = ({ productTimeLine }) => {
         opposite: true,
         seriesName: 'Units',
         show: true,
+        showAlways: true,
         labels: {
           show: true,
           align: 'left',
