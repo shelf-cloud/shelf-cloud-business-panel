@@ -236,7 +236,9 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                     </tr>
                     <tr className='border-top border-dark'>
                       <td className='fw-bold fs-5'>Net Profit</td>
-                      <td className='fw-semibold fs-5 text-end text-primary'>{FormatCurrency(state.currentRegion, data.grossRevenue - totalExpenses)}</td>
+                      <td className={'fw-bold fs-5 text-end ' + (data.grossRevenue - totalExpenses >= 0 ? 'text-primary' : 'text-danger')}>
+                        {FormatCurrency(state.currentRegion, data.grossRevenue - totalExpenses)}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
