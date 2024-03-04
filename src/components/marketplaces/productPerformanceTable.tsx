@@ -310,7 +310,7 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
     {
       name: (
         <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
-          <span className='fw-semibold fs-6'>Refunds</span>
+          <span className='fw-semibold fs-6'>Returns</span>
           <span
             className={'fw-normal fs-5 ' + (tableData.reduce((total: number, product: ProductPerformance) => total + product.refundsQty, 0) > 0 ? 'text-primary' : 'text-muted')}>
             {FormatIntNumber(

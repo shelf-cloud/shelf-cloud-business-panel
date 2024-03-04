@@ -92,6 +92,7 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                                     className='border-bottom py-1 w-100 d-flex flex-row justify-content-between align-items-center'
                                     onClick={() => AMAZON_MARKETPLACES_ID.includes(market.storeId) && setShowAmazonFbaFees(!showAmazonFbaFees)}>
                                     <span
+                                      style={AMAZON_MARKETPLACES_ID.includes(market.storeId) ? { cursor: 'pointer' } : undefined}
                                       className={
                                         'text-black d-flex flex-row justify-content-start align-items-start fw-normal ' +
                                         (AMAZON_MARKETPLACES_ID.includes(market.storeId) && 'dropdown-toggle')
