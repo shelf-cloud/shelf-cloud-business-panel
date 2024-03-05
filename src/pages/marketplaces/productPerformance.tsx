@@ -160,7 +160,9 @@ const Profits = ({ session, sessionToken }: Props) => {
           (showWithSales == undefined || showWithSales == '' ? item.unitsSold > 0 : showWithSales === 'false' ? item.unitsSold > 0 : true) &&
           (item.sku.toLowerCase().includes(searchValue.toLowerCase()) ||
             item.asin.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item.title.toLowerCase().includes(searchValue.toLowerCase()))
+            item.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.supplier.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.brand.toLowerCase().includes(searchValue.toLowerCase()))
       )
     }
   }, [productsData, searchValue, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, brand, category, showWithSales])
