@@ -242,7 +242,7 @@ const Profits = ({ session, sessionToken }: Props) => {
                     <DebounceInput
                       type='text'
                       minLength={3}
-                      debounceTimeout={300}
+                      debounceTimeout={500}
                       className='form-control input_background_white'
                       placeholder='Search...'
                       id='search-options'
@@ -291,12 +291,12 @@ const Profits = ({ session, sessionToken }: Props) => {
                 {loadingData ? (
                   <div>
                     <p className='fw-bold fs-2'>Product Performance</p>
-                    <p className='fs-5 text-muted d-flex flex-row gap-3'>
+                    <div className='fs-5 text-muted d-flex flex-row gap-3'>
                       {`Loading Profit Report from ${selectedMarketplace.name} please wait...`}
                       <>
                         <Spinner color='primary' size={'sm'} />
                       </>
-                    </p>
+                    </div>
                   </div>
                 ) : (
                   <div>
