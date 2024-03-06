@@ -1,4 +1,5 @@
-import React, { useContext, useMemo, useState } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
 import { getSession } from '@auth/client'
@@ -7,15 +8,15 @@ import BreadCrumb from '@components/Common/BreadCrumb'
 import { Card, CardBody, Col, Container, Row } from 'reactstrap'
 import moment from 'moment'
 import FilterByDates from '@components/FilterByDates'
-import useSWR from 'swr'
 import axios from 'axios'
 import { DebounceInput } from 'react-debounce-input'
-import { FBAOrdersResponse } from '@typesTs/amazon/orders'
+import { FBAOrder } from '@typesTs/amazon/orders'
 import SellerFbaOrdersTable from '@components/amazon/orders/sellerFbaOrdersTable'
 import FilterFBAOrders from '@components/ui/FilterFBAOrders'
-// import { useRouter } from 'next/router'
+import { toast } from 'react-toastify'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
+  const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
   const session = await getSession(context)
 
   if (session == null) {
@@ -27,11 +28,12 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
     }
   }
   return {
-    props: { session },
+    props: { session, sessionToken },
   }
 }
 
 type Props = {
+  sessionToken: string
   session: {
     user: {
       name: string
@@ -39,34 +41,59 @@ type Props = {
   }
 }
 
-const Orders = ({ session }: Props) => {
+const Orders = ({ session, sessionToken }: Props) => {
   const { state }: any = useContext(AppContext)
-  //   const router = useRouter()
-  //   const {  }: any = router.query
   const [startDate, setStartDate] = useState(moment().subtract(1, 'months').format('YYYY-MM-DD'))
   const [endDate, setEndDate] = useState(moment().format('YYYY-MM-DD'))
+  const [loadingData, setLoadingData] = useState(true)
   const [searchValue, setSearchValue] = useState<any>('')
   const [orderStatus, setOrderStatus] = useState<string>('All')
-  const fetcher = async (endPoint: string) => await axios(endPoint).then((res) => res.data)
-  const { data }: { data?: FBAOrdersResponse } = useSWR(
-    state.user.businessId ? `/api/amazon/orders/getSellerOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${startDate}&endDate=${endDate}` : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
+  const [ordersData, setOrdersData] = useState<FBAOrder[]>([])
+
+  useEffect(() => {
+    const controller = new AbortController()
+    const signal = controller.signal
+
+    const getNewDateRange = async () => {
+      setLoadingData(true)
+      await axios(
+        `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amazon/getSellerOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${startDate}&endDate=${endDate}`,
+        {
+          signal,
+          headers: {
+            Authorization: `Bearer ${sessionToken}`,
+          },
+        }
+      )
+        .then((res) => {
+          res.data.error ? setOrdersData([]) : setOrdersData(res.data.orders as FBAOrder[])
+          setLoadingData(false)
+        })
+        .catch(({ error }) => {
+          if (axios.isCancel(error)) {
+            toast.error(error?.data?.message || 'Error fetching product performance data')
+            setOrdersData([])
+          }
+        })
     }
-  )
+    if (session && state.user.businessId) getNewDateRange()
+
+    return () => {
+      controller.abort()
+    }
+  }, [session, state.user.businessId, endDate])
 
   const filterDataTable = useMemo(() => {
-    if (!data || data?.error) {
-      return []
-    }
+    // if (!ordersData || ordersData?.error) {
+    //   return []
+    // }
 
     if (searchValue === '') {
-      return data?.orders.filter((item) => (orderStatus === 'All' ? true : item.orderStatus === orderStatus))
+      return ordersData?.filter((item) => (orderStatus === 'All' ? true : item.orderStatus === orderStatus))
     }
 
     if (searchValue !== '') {
-      const newDataTable = data?.orders.filter(
+      const newDataTable = ordersData?.filter(
         (item) =>
           ((orderStatus === 'All' ? true : item.orderStatus === orderStatus) &&
             (item.amazonOrderId.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -81,7 +108,7 @@ const Orders = ({ session }: Props) => {
       )
       return newDataTable
     }
-  }, [data, searchValue, orderStatus])
+  }, [ordersData, searchValue, orderStatus])
 
   const handleChangeDatesFromPicker = (dateStr: string) => {
     if (dateStr.includes(' to ')) {
@@ -143,7 +170,7 @@ const Orders = ({ session }: Props) => {
                 </Row>
                 <Card>
                   <CardBody>
-                    <SellerFbaOrdersTable tableData={filterDataTable || []} pending={data ? false : true} />
+                    <SellerFbaOrdersTable tableData={filterDataTable || []} pending={loadingData} />
                   </CardBody>
                 </Card>
               </Col>
