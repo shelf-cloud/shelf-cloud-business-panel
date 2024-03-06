@@ -71,13 +71,7 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                     </tr>
 
                     {/* EXPENSES */}
-                    {data.reimbursements !== 0 && (
-                      <tr className='border-bottom pb-2'>
-                        <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Reimbursements</td>
-                        <td className={'fw-normal text-end text-black'}>{FormatCurrency(state.currentRegion, data.reimbursements)}</td>
-                      </tr>
-                    )}
-                    <tr className='pb-2' onClick={() => setShowMarketplacesFees(!showMarketplacesFees)} style={{ cursor: 'pointer' }}>
+                    <tr className='border-bottom pb-2' onClick={() => setShowMarketplacesFees(!showMarketplacesFees)} style={{ cursor: 'pointer' }}>
                       <td className='dropdown-toggle text-black d-flex flex-row justify-content-start align-items-start fw-semibold'>Marketplaces Fees</td>
                       <td className={'fw-normal text-end text-black'}>-{FormatCurrency(state.currentRegion, data.totalMarketplacesFees)}</td>
                     </tr>
@@ -195,43 +189,7 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                         <td className={'fw-light text-end text-black'}>-{FormatCurrency(state.currentRegion, data.shippingCost)}</td>
                       </tr>
                     )}
-                    <tr onClick={() => setShowCogs(!showCogs)} style={{ cursor: 'pointer' }}>
-                      <td className='dropdown-toggle text-black d-flex flex-row justify-content-start align-items-start fw-normal'>COGS</td>
-                      <td className={'fw-normal text-end text-black'}>-{FormatCurrency(state.currentRegion, totalCogs)}</td>
-                    </tr>
-                    <tr>
-                      <td className='p-0' colSpan={2}>
-                        <Collapse className='ps-3 pe-1 py-0 w-100' isOpen={showCogs}>
-                          <div className='py-1 w-100 d-flex flex-row justify-content-between align-items-center'>
-                            <span className='text-muted d-flex flex-row justify-content-start align-items-start fs-7'>Product Cost (Landed)</span>
-                            <span className={'fw-light text-end text-muted fs-7'}>{FormatCurrency(state.currentRegion, data.productCost)}</span>
-                          </div>
-                          <div className='py-1 w-100 d-flex flex-row justify-content-between align-items-center'>
-                            <span className='text-muted d-flex flex-row justify-content-start align-items-start fs-7'>Shipping To FBA Cost</span>
-                            <span className='fw-light text-end text-muted fs-7'>{FormatCurrency(state.currentRegion, data.shippingToFbaCost)}</span>
-                          </div>
-                        </Collapse>
-                      </td>
-                    </tr>
-                    <tr onClick={() => setShowRefundCogs(!showRefundCogs)} style={{ cursor: 'pointer' }}>
-                      <td className='dropdown-toggle text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Refund COGS</td>
-                      <td className={'fw-normal text-end text-black'}>{FormatCurrency(state.currentRegion, data.productCostOfRefunds)}</td>
-                    </tr>
-                    <tr>
-                      <td className='p-0' colSpan={2}>
-                        <Collapse className='ps-3 pe-1 py-0 w-100' isOpen={showRefundCogs}>
-                          <div className='py-1 w-100 d-flex flex-row justify-content-between align-items-center'>
-                            <span className='text-muted d-flex flex-row justify-content-start align-items-start fs-7'>Product Cost (Landed)</span>
-                            <span className={'fw-light text-end text-muted fs-7'}>{FormatCurrency(state.currentRegion, data.productCostOfRefunds)}</span>
-                          </div>
-                          {/* <div className='py-1 w-100 d-flex flex-row justify-content-between align-items-center'>
-                            <span className='text-muted d-flex flex-row justify-content-start align-items-start fs-7'>Shipping To FBA Cost</span>
-                            <span className='fw-light text-end text-muted fs-7'>{FormatCurrency(state.currentRegion, data.shippingToFbaCostOfRefunds)}</span>
-                          </div> */}
-                        </Collapse>
-                      </td>
-                    </tr>
-                    <tr onClick={() => setShowPPCCosts(!showPPCCosts)} style={{ cursor: 'pointer' }}>
+                    <tr className='border-bottom' onClick={() => setShowPPCCosts(!showPPCCosts)} style={{ cursor: 'pointer' }}>
                       <td className='dropdown-toggle text-black d-flex flex-row justify-content-start align-items-start fw-normal'>PPC Costs</td>
                       <td className={'fw-normal text-end text-black'}>-{FormatCurrency(state.currentRegion, totalPPCCosts)}</td>
                     </tr>
@@ -249,7 +207,49 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                         </Collapse>
                       </td>
                     </tr>
-                    <tr className='border-top pb-2'>
+                    <tr className='border-bottom' onClick={() => setShowCogs(!showCogs)} style={{ cursor: 'pointer' }}>
+                      <td className='dropdown-toggle text-black d-flex flex-row justify-content-start align-items-start fw-normal'>COGS</td>
+                      <td className={'fw-normal text-end text-black'}>-{FormatCurrency(state.currentRegion, totalCogs)}</td>
+                    </tr>
+                    <tr>
+                      <td className='p-0' colSpan={2}>
+                        <Collapse className='ps-3 pe-1 py-0 w-100' isOpen={showCogs}>
+                          <div className='py-1 w-100 d-flex flex-row justify-content-between align-items-center'>
+                            <span className='text-muted d-flex flex-row justify-content-start align-items-start fs-7'>Product Cost (Landed)</span>
+                            <span className={'fw-light text-end text-muted fs-7'}>{FormatCurrency(state.currentRegion, data.productCost)}</span>
+                          </div>
+                          <div className='py-1 w-100 d-flex flex-row justify-content-between align-items-center'>
+                            <span className='text-muted d-flex flex-row justify-content-start align-items-start fs-7'>Shipping To FBA Cost</span>
+                            <span className='fw-light text-end text-muted fs-7'>{FormatCurrency(state.currentRegion, data.shippingToFbaCost)}</span>
+                          </div>
+                        </Collapse>
+                      </td>
+                    </tr>
+                    <tr className='border-bottom' onClick={() => setShowRefundCogs(!showRefundCogs)} style={{ cursor: 'pointer' }}>
+                      <td className='dropdown-toggle text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Returned COGS</td>
+                      <td className={'fw-normal text-end text-black'}>{FormatCurrency(state.currentRegion, data.productCostOfRefunds)}</td>
+                    </tr>
+                    <tr>
+                      <td className='p-0' colSpan={2}>
+                        <Collapse className='ps-3 pe-1 py-0 w-100' isOpen={showRefundCogs}>
+                          <div className='py-1 w-100 d-flex flex-row justify-content-between align-items-center'>
+                            <span className='text-muted d-flex flex-row justify-content-start align-items-start fs-7'>Product Cost (Landed)</span>
+                            <span className={'fw-light text-end text-muted fs-7'}>{FormatCurrency(state.currentRegion, data.productCostOfRefunds)}</span>
+                          </div>
+                          {/* <div className='py-1 w-100 d-flex flex-row justify-content-between align-items-center'>
+                            <span className='text-muted d-flex flex-row justify-content-start align-items-start fs-7'>Shipping To FBA Cost</span>
+                            <span className='fw-light text-end text-muted fs-7'>{FormatCurrency(state.currentRegion, data.shippingToFbaCostOfRefunds)}</span>
+                          </div> */}
+                        </Collapse>
+                      </td>
+                    </tr>
+                    {data.reimbursements !== 0 && (
+                      <tr className='border-bottom pb-2'>
+                        <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Reimbursements</td>
+                        <td className={'fw-normal text-end text-black'}>{FormatCurrency(state.currentRegion, data.reimbursements)}</td>
+                      </tr>
+                    )}
+                    <tr>
                       <td className='text-black d-flex flex-row justify-content-start align-items-start fw-bold fs-5'>Expenses</td>
                       <td className={'fw-bold text-end text-danger fs-5'}>-{FormatCurrency(state.currentRegion, totalExpenses)}</td>
                     </tr>
