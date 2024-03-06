@@ -18,6 +18,7 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
   const [showMarketplacesFees, setShowMarketplacesFees] = useState(false)
   const [showAmazonFbaFees, setShowAmazonFbaFees] = useState(false)
   const [showCogs, setShowCogs] = useState(false)
+  const [showRefundCogs, setShowRefundCogs] = useState(false)
   const [showPPCCosts, setShowPPCCosts] = useState(false)
 
   const totalExpenses = selectedMarketplaceStoreId === 9999 ? data.expenses + data.storageCost : data.expenses
@@ -209,6 +210,24 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                             <span className='text-muted d-flex flex-row justify-content-start align-items-start fs-7'>Shipping To FBA Cost</span>
                             <span className='fw-light text-end text-muted fs-7'>{FormatCurrency(state.currentRegion, data.shippingToFbaCost)}</span>
                           </div>
+                        </Collapse>
+                      </td>
+                    </tr>
+                    <tr onClick={() => setShowRefundCogs(!showRefundCogs)} style={{ cursor: 'pointer' }}>
+                      <td className='dropdown-toggle text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Refund COGS</td>
+                      <td className={'fw-normal text-end text-black'}>{FormatCurrency(state.currentRegion, data.productCostOfRefunds)}</td>
+                    </tr>
+                    <tr>
+                      <td className='p-0' colSpan={2}>
+                        <Collapse className='ps-3 pe-1 py-0 w-100' isOpen={showRefundCogs}>
+                          <div className='py-1 w-100 d-flex flex-row justify-content-between align-items-center'>
+                            <span className='text-muted d-flex flex-row justify-content-start align-items-start fs-7'>Product Cost (Landed)</span>
+                            <span className={'fw-light text-end text-muted fs-7'}>{FormatCurrency(state.currentRegion, data.productCostOfRefunds)}</span>
+                          </div>
+                          {/* <div className='py-1 w-100 d-flex flex-row justify-content-between align-items-center'>
+                            <span className='text-muted d-flex flex-row justify-content-start align-items-start fs-7'>Shipping To FBA Cost</span>
+                            <span className='fw-light text-end text-muted fs-7'>{FormatCurrency(state.currentRegion, data.shippingToFbaCostOfRefunds)}</span>
+                          </div> */}
                         </Collapse>
                       </td>
                     </tr>

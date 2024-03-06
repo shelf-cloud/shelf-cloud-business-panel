@@ -24,8 +24,10 @@ export interface ProductPerformance {
     reimbursements: number;
     refunds: number;
     refundsQty: number;
+    returns: number;
     promos: number;
     productCost: number;
+    productCostOfRefunds: number;
     shippingCost: number;
     storageCost: number;
     sponsoredProducts: number;
@@ -40,6 +42,7 @@ export interface ProductPerformance {
     otherCosts: number;
     shippingToFBA: number;
     shippingToFbaCost: number;
+    shippingToFbaCostOfRefunds: number;
     shelfCloudCost: number
     listings: Listing[];
     datesArray: { [key: string]: ProductDatesArray };
