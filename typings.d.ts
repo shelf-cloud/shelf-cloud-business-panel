@@ -436,7 +436,7 @@ export interface WholesaleProduct {
     idInventory: number
     maxKits: number
     qty: number
-    sku: number
+    sku: string
     title: string
   }[]
 }
@@ -463,7 +463,7 @@ export interface wholesaleProductRow {
     idInventory: number
     maxKits: number
     qty: number
-    sku: number
+    sku: string
     title: string
   }[]
 }

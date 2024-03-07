@@ -15,6 +15,7 @@ const SingleItems = ({ completeData, pending, orderNumberStart }: Props) => {
   const { state, setSingleBoxesOrderModal }: any = useContext(AppContext)
   const [allData, setAllData] = useState<wholesaleProductRow[]>([])
   const [serachValue, setSerachValue] = useState('')
+  const [hasQtyError, setHasQtyError] = useState(false)
   const [error, setError] = useState([])
 
   useEffect(() => {
@@ -56,7 +57,7 @@ const SingleItems = ({ completeData, pending, orderNumberStart }: Props) => {
               error.length > 0 ||
               orderProducts.some((item: wholesaleProductRow) => Number(item.orderQty) > Number(item.quantity.quantity))
                 ? true
-                : false
+                : false || hasQtyError
             }
             className='fs-6 btn'
             color='primary'
@@ -86,7 +87,7 @@ const SingleItems = ({ completeData, pending, orderNumberStart }: Props) => {
           Clear
         </Button>
       </form>
-      <WholeSaleTableSingleItem allData={allData} filteredItems={filteredItems} setAllData={setAllData} pending={pending} setError={setError} />
+      <WholeSaleTableSingleItem allData={allData} filteredItems={filteredItems} setAllData={setAllData} pending={pending} setError={setError} setHasQtyError={setHasQtyError}/>
       {state.showSingleBoxesOrderModal && <SingleBoxesOrderModal orderNumberStart={orderNumberStart} orderProducts={orderProducts} />}
     </>
   )

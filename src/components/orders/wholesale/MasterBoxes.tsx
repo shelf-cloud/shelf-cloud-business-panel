@@ -15,6 +15,7 @@ const MasterBoxes = ({ completeData, pending, orderNumberStart }: Props) => {
   const { state, setWholeSaleOrderModal }: any = useContext(AppContext)
   const [allData, setAllData] = useState<wholesaleProductRow[]>([])
   const [serachValue, setSerachValue] = useState('')
+  const [hasQtyError, setHasQtyError] = useState(false)
   const [error, setError] = useState([])
 
   useEffect(() => {
@@ -48,7 +49,7 @@ const MasterBoxes = ({ completeData, pending, orderNumberStart }: Props) => {
           </h5>
         </div>
         <div>
-          <Button disabled={error.length > 0} className='fs-6 btn' color='primary' onClick={() => setWholeSaleOrderModal(!state.showWholeSaleOrderModal)}>
+          <Button disabled={error.length > 0 || hasQtyError} className='fs-6 btn' color='primary' onClick={() => setWholeSaleOrderModal(!state.showWholeSaleOrderModal)}>
             Create Order
           </Button>
         </div>
@@ -74,7 +75,7 @@ const MasterBoxes = ({ completeData, pending, orderNumberStart }: Props) => {
           Clear
         </Button>
       </form>
-      <WholeSaleTable2 allData={allData} filteredItems={filteredItems} setAllData={setAllData} pending={pending} setError={setError} />
+      <WholeSaleTable2 allData={allData} filteredItems={filteredItems} setAllData={setAllData} pending={pending} setError={setError} setHasQtyError={setHasQtyError}/>
       {state.showWholeSaleOrderModal && <WholeSaleOrderModal orderNumberStart={orderNumberStart} orderProducts={orderProducts} />}
     </>
   )

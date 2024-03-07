@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { wholesaleProductRow } from '@typings'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import AppContext from '@context/AppContext'
 import { Button, FormFeedback, UncontrolledTooltip } from 'reactstrap'
 import DataTable from 'react-data-table-component'
@@ -13,10 +13,20 @@ type Props = {
   setAllData: (allData: wholesaleProductRow[]) => void
   pending: boolean
   setError: (skus: any) => void
+  setHasQtyError: (hasQtyError: boolean) => void
 }
 
-const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError }: Props) => {
+const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError, setHasQtyError }: Props) => {
   const { state, setModalProductInfo }: any = useContext(AppContext)
+  const [skusWithError, setSkusWithError] = useState<{ [key: string]: boolean }>({})
+
+  useEffect(() => {
+    Object.keys(skusWithError).length > 0 && setHasQtyError(true)
+    return () => {
+      setHasQtyError(false)
+    }
+  }, [skusWithError])
+
   const handleOrderQty = (value: string, sku: string, qtyBox: number) => {
     if (Number(value) == 0 || value == '') {
       const newData: any = allData.map((item) => {
@@ -43,6 +53,60 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError 
       }
     })
     setAllData(newData)
+  }
+
+  const checkQtyError = async (sku: string, addingQtyisKit: boolean) => {
+    let currentQtyInOrder = {} as { [key: string]: number }
+    let maxOrderQty = {} as { [key: string]: number }
+
+    if (addingQtyisKit) {
+      for await (const item of allData) {
+        if (item.sku === sku) {
+          for await (const child of item.children!) {
+            if (!currentQtyInOrder[child.sku]) currentQtyInOrder[child.sku] = 0
+            currentQtyInOrder[child.sku] += parseInt(item.orderQty) > 0 ? child.qty * parseInt(item.orderQty) * item.qtyBox! : 0
+
+            for await (const item of allData) {
+              if (!item.isKit) {
+                if (item.sku === child.sku) {
+                  currentQtyInOrder[child.sku] += parseInt(item.orderQty) > 0 ? parseInt(item.orderQty) * item.qtyBox! : 0
+                  maxOrderQty[child.sku] = item.quantity.quantity!
+                }
+              }
+            }
+          }
+        }
+      }
+    } else {
+      currentQtyInOrder[sku] = 0
+      maxOrderQty[sku] = 0
+
+      for await (const item of allData) {
+        if (item.isKit) {
+          for await (const child of item.children!) {
+            if (child.sku === sku) {
+              currentQtyInOrder[sku] += parseInt(item.orderQty) > 0 ? child.qty * parseInt(item.orderQty) * item.qtyBox! : 0
+            }
+          }
+        } else {
+          if (item.sku === sku) {
+            currentQtyInOrder[sku] += parseInt(item.orderQty) > 0 ? parseInt(item.orderQty) * item.qtyBox! : 0
+            maxOrderQty[sku] = item.quantity.quantity!
+          }
+        }
+      }
+    }
+
+    for (const [currentSku, qty] of Object.entries(currentQtyInOrder)) {
+      if (qty > maxOrderQty[currentSku]) {
+        setSkusWithError((prev: any) => ({ ...prev, [currentSku]: true }))
+      } else {
+        setSkusWithError((prev: any) => {
+          const { [currentSku]: x, ...rest } = prev
+          return rest
+        })
+      }
+    }
   }
 
   const caseInsensitiveSort = (rowA: wholesaleProductRow, rowB: wholesaleProductRow) => {
@@ -100,7 +164,12 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError 
       classNames: ['bg-success bg-opacity-25'],
     },
     {
-      when: (row: wholesaleProductRow) => Number(row.orderQty) < 0 || !Number.isInteger(Number(row.orderQty)) || parseInt(row.orderQty) > row.maxOrderQty!,
+      when: (row: wholesaleProductRow) =>
+        Number(row.orderQty) < 0 ||
+        !Number.isInteger(Number(row.orderQty)) ||
+        parseInt(row.orderQty) > row.maxOrderQty! ||
+        skusWithError[row.sku] === true ||
+        row.children?.some((child) => skusWithError[child.sku] === true) === true,
       classNames: ['bg-danger bg-opacity-25'],
     },
   ]
@@ -264,15 +333,17 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError 
               className='form-control'
               placeholder={row?.maxOrderQty! <= 0 ? 'Not Enough Qty' : 'Order Qty...'}
               value={row.orderQty}
-              onChange={(e) => {
+              onChange={async (e) => {
                 if (Number(e.target.value) < 0 || !Number.isInteger(Number(e.target.value)) || parseInt(e.target.value) > row.maxOrderQty!) {
                   document.getElementById(`Error-${row.sku}`)!.style.display = 'block'
                   setError((prev: string[]) => [...prev, row.sku])
                   handleOrderQty(e.target.value, row.sku, row?.qtyBox || 0)
+                  await checkQtyError(row.sku, row.isKit!)
                 } else {
                   document.getElementById(`Error-${row.sku}`)!.style.display = 'none'
                   setError((prev: string[]) => prev.filter((sku) => sku !== row.sku))
                   handleOrderQty(e.target.value, row.sku, row?.qtyBox || 0)
+                  await checkQtyError(row.sku, row.isKit!)
                 }
               }}
               max={row.maxOrderQty}
@@ -285,6 +356,12 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError 
             ) : null}
             <span className='fs-6 fw-normal text-danger' id={`Error-${row.sku}`} style={{ display: 'none' }}>
               Quantity Error
+            </span>
+            <span
+              className='fs-6 fw-normal text-danger'
+              id={`ErrorQty-${row.sku}`}
+              style={skusWithError[row.sku] === true || row.children?.some((child) => skusWithError[child.sku] === true) === true ? {} : { display: 'none' }}>
+              Available Quantity Exceeded
             </span>
           </>
         )
