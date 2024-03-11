@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import AppContext from '@context/AppContext'
-import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
+import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
 import { ProductPerformance, Marketplace } from '@typesTs/marketplaces/productPerformance'
 import React, { useContext, useState } from 'react'
 import DataTable from 'react-data-table-component'
@@ -38,6 +38,7 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
     selectedMarketplace.storeId === 9999
       ? tableData.reduce((total: number, product: ProductPerformance) => total + (product.grossRevenue - (product.expenses + product.storageCost)), 0)
       : tableData.reduce((total: number, product: ProductPerformance) => total + (product.grossRevenue - product.expenses), 0)
+      
   const totalMargin = ((totalGrossRevenue - totalExpenses) / totalGrossRevenue) * 100
   const totalRoi = ((totalGrossRevenue - totalExpenses) / totalExpenses) * 100
 
@@ -235,7 +236,7 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
         </div>
       ),
       selector: (row: ProductPerformance) => {
-        return <span>{FormatCurrency(state.currentRegion, row?.expenses + row?.storageCost)}</span>
+        return <span>{FormatCurrency(state.currentRegion, selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)}</span>
       },
       center: true,
       sortable: true,
@@ -251,8 +252,8 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
       ),
       selector: (row: ProductPerformance) => {
         return (
-          <span className={row?.grossRevenue - (row?.expenses + row?.storageCost) >= 0 ? 'text-black' : 'text-danger'}>
-            {FormatCurrency(state.currentRegion, row?.grossRevenue - (row?.expenses + row?.storageCost))}
+          <span className={row?.grossRevenue - (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses) >= 0 ? 'text-black' : 'text-danger'}>
+            {FormatCurrency(state.currentRegion, row?.grossRevenue - (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses))}
           </span>
         )
       },
@@ -265,7 +266,7 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
       name: (
         <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
           <span className='fw-semibold fs-6'>Margin</span>
-          <span className={'fw-normal fs-5 ' + (totalMargin > 0 ? 'text-primary' : 'text-danger')}>{FormatIntNumber(state.currentRegion, totalMargin)}%</span>
+          <span className={'fw-normal fs-5 ' + (totalMargin > 0 ? 'text-primary' : 'text-danger')}>{FormatIntPercentage(state.currentRegion, totalMargin)}%</span>
         </div>
       ),
       selector: (row: ProductPerformance) => {
@@ -273,8 +274,8 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
           return <span>0%</span>
         } else {
           return (
-            <span className={((row?.grossRevenue - row?.expenses) / row?.grossRevenue) * 100 >= 0 ? 'text-black' : 'text-danger'}>
-              {FormatIntNumber(state.currentRegion, ((row?.grossRevenue - row?.expenses) / row?.grossRevenue) * 100)}%
+            <span className={((row?.grossRevenue - (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) / row?.grossRevenue) * 100 >= 0 ? 'text-black' : 'text-danger'}>
+              {FormatIntPercentage(state.currentRegion, ((row?.grossRevenue - (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) / row?.grossRevenue) * 100)}%
             </span>
           )
         }
@@ -288,7 +289,7 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
       name: (
         <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
           <span className='fw-semibold fs-6'>ROI</span>
-          <span className={'fw-normal fs-5 ' + (totalRoi > 0 ? 'text-primary' : 'text-danger')}>{FormatIntNumber(state.currentRegion, totalRoi)}%</span>
+          <span className={'fw-normal fs-5 ' + (totalRoi > 0 ? 'text-primary' : 'text-danger')}>{FormatIntPercentage(state.currentRegion, totalRoi)}%</span>
         </div>
       ),
       selector: (row: ProductPerformance) => {
@@ -296,8 +297,8 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
           return <span>0%</span>
         } else {
           return (
-            <span className={((row.grossRevenue - row?.expenses) / row?.expenses) * 100 >= 0 ? 'text-black' : 'text-danger'}>
-              {FormatIntNumber(state.currentRegion, ((row.grossRevenue - row?.expenses) / row?.expenses) * 100)}%
+            <span className={((row.grossRevenue - (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) / (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) * 100 >= 0 ? 'text-black' : 'text-danger'}>
+              {FormatIntPercentage(state.currentRegion, ((row.grossRevenue - (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) / (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) * 100)}%
             </span>
           )
         }

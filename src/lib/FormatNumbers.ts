@@ -20,7 +20,16 @@ const optionsInt = {
     maximumFractionDigits: 0,
 }
 
+const optionsIntPercantage = {
+    maximumFractionDigits: 2,
+}
+
 export const FormatIntNumber = (route: string, value: number) => {
     const Format = new Intl.NumberFormat(route == 'us' ? localUS : localEU, route == 'us' ? optionsInt : optionsInt)
+    return Format.format(value)
+}
+
+export const FormatIntPercentage = (route: string, value: number) => {
+    const Format = new Intl.NumberFormat(route == 'us' ? localUS : localEU, route == 'us' ? optionsIntPercantage : optionsIntPercantage)
     return Format.format(value)
 }
