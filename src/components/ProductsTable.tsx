@@ -85,28 +85,32 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       name: <span className='font-weight-bold fs-13'>Image</span>,
       selector: (row: Product) => {
         return (
-          <div
-            style={{
-              width: '70px',
-              height: '60px',
-              margin: '2px 0px',
-              position: 'relative',
-            }}>
-            <img
-              loading='lazy'
-              src={
-                row.image
-                  ? row.image
-                  : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-              }
-              onError={(e) =>
-                (e.currentTarget.src =
-                  'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
-              }
-              alt='product Image'
-              style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
-            />
-          </div>
+          <Link href={`/product/${row.inventoryId}/${row.sku}`} passHref>
+            <a>
+              <div
+                style={{
+                  width: '70px',
+                  height: '60px',
+                  margin: '2px 0px',
+                  position: 'relative',
+                }}>
+                <img
+                  loading='lazy'
+                  src={
+                    row.image
+                      ? row.image
+                      : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+                  }
+                  onError={(e) =>
+                    (e.currentTarget.src =
+                      'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
+                  }
+                  alt='product Image'
+                  style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+                />
+              </div>
+            </a>
+          </Link>
         )
       },
       sortable: false,
@@ -125,7 +129,13 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       selector: (row: Product) => {
         return (
           <div>
-            <p style={{ margin: '0px', fontWeight: '800' }}>{row.title}</p>
+            <Link href={`/product/${row.inventoryId}/${row.sku}`} passHref>
+              <a>
+                <p className='text-black' style={{ margin: '0px', fontWeight: '600' }}>
+                  {row.title}
+                </p>
+              </a>
+            </Link>
             <p style={{ margin: '0px' }} className='d-flex flex-row justify-content-start align-items-start'>
               {row.sku} {row.note != '' && <i className='ri-information-fill ms-2 fs-5 text-warning' id={`tooltip${row.inventoryId}`}></i>}
             </p>

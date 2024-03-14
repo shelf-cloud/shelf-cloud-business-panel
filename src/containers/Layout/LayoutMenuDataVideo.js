@@ -184,12 +184,12 @@ const Navdata = () => {
           link: '/CreateReceiving',
           parentId: 'receiving',
         },
-        {
-          id: 'reorderingPoints',
-          label: 'Reordering Points',
-          link: '/reorderingPoints',
-          parentId: 'receiving',
-        },
+        // {
+        //   id: 'reorderingPoints',
+        //   label: 'Reordering Points',
+        //   link: '/reorderingPoints',
+        //   parentId: 'receiving',
+        // },
         {
           id: 'receiving',
           label: 'Receiving Log',
@@ -254,14 +254,14 @@ const Navdata = () => {
     },
   ]
 
-  if (state.user[state.currentRegion]?.showWholeSale) {
-    menuItems[2].subItems.unshift({
-      id: 'returns',
-      label: 'Returns',
-      link: '/returns',
-      parentId: 'shipments',
-    })
-  }
+  // if (state.user[state.currentRegion]?.showWholeSale) {
+  //   menuItems[2].subItems.unshift({
+  //     id: 'returns',
+  //     label: 'Returns',
+  //     link: '/returns',
+  //     parentId: 'shipments',
+  //   })
+  // }
 
   if (state.user[state.currentRegion]?.showWholeSale) {
     menuItems[2].subItems.unshift({
@@ -325,18 +325,18 @@ const Navdata = () => {
           link: '/amazon-sellers/orders',
           parentId: 'marketplaces',
         },
-        {
-          id: 'repricer',
-          label: 'Repricer',
-          link: '/repricer',
-          parentId: 'marketplaces',
-        },
-        {
-          id: 'sendtofba',
-          label: 'Send to FBA',
-          link: '/sendtofba',
-          parentId: 'marketplaces',
-        },
+        // {
+        //   id: 'repricer',
+        //   label: 'Repricer',
+        //   link: '/repricer',
+        //   parentId: 'marketplaces',
+        // },
+        // {
+        //   id: 'sendtofba',
+        //   label: 'Send to FBA',
+        //   link: '/sendtofba',
+        //   parentId: 'marketplaces',
+        // },
       ],
     })
   }

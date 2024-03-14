@@ -117,6 +117,9 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
           case 'awating':
             return <span className='badge text-uppercase badge-soft-warning p-2'>{' awating '}</span>
             break
+          case 'awating pickup':
+            return <span className='badge text-uppercase badge-soft-secondary p-2'>{' awating pickup '}</span>
+            break
           case 'on_hold':
             return <span className='badge text-uppercase badge-soft-danger p-2'>{' on hold '}</span>
             break
