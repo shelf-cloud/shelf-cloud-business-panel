@@ -6,7 +6,7 @@ import { ApexOptions } from 'apexcharts'
 import moment from 'moment'
 const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false })
 
-const TimeLine = [
+const TIMELINE = [
   '12 AM',
   '1 AM',
   '2 AM',
@@ -33,22 +33,26 @@ const TimeLine = [
   '11 PM',
 ]
 
+const CUURENTHOUR = moment().format('H A')
+
 type Props = {
   salesOverTime: { [key: string]: { [key: string]: number } }
 }
 const SalesOverTimeTimeline = ({ salesOverTime }: Props) => {
   const { state }: any = useContext(AppContext)
-
+  const currentHourIndex = TIMELINE.indexOf(CUURENTHOUR)
   const YESTERDAY = moment().subtract(1, 'days').format('YYYY-MM-DD')
   const TODAY = moment().format('YYYY-MM-DD')
-
+  console.log(currentHourIndex)
   const series = [
     {
       name: 'Today',
-      data: Object?.values(salesOverTime[TODAY]),
+      type: 'line',
+      data: Object?.values(salesOverTime[TODAY]).slice(0, currentHourIndex + 1),
     },
     {
       name: 'Yesterday',
+      type: 'area',
       data: Object?.values(salesOverTime[YESTERDAY]),
     },
   ]
@@ -56,16 +60,21 @@ const SalesOverTimeTimeline = ({ salesOverTime }: Props) => {
   const options = {
     chart: {
       zoom: {
-        enabled: true,
+        enabled: false,
       },
       toolbar: {
         show: false,
       },
     },
     stroke: {
-      width: 2,
+      width: [2, 1],
       curve: 'smooth',
       lineCap: 'round',
+      dashArray: [0, 5],
+    },
+    fill: {
+      type: 'solid',
+      opacity: [1, 0.05],
     },
     markers: {
       size: 3,
@@ -129,7 +138,7 @@ const SalesOverTimeTimeline = ({ salesOverTime }: Props) => {
     xaxis: {
       type: 'category',
       // tickAmount: Object.keys(timeLineSorted).length / 8,
-      categories: TimeLine,
+      categories: TIMELINE,
       labels: {
         show: true,
       },

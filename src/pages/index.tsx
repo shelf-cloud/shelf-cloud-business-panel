@@ -136,7 +136,7 @@ const Home = ({ session, sessionToken }: Props) => {
                   </Row>
                   <Row>
                     <Col md={7}>
-                      {loadingData ? null : <SalesOverTime salesOverTime={salesOverTime} loadingData={loadingData} />}
+                      {loadingData ? null : <SalesOverTime salesOverTime={salesOverTime} />}
                       <MostInvenotryList products={summary?.mostInventory} />
                     </Col>
                     <Col md={5}>

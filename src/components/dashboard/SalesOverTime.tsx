@@ -8,10 +8,9 @@ import SalesOverTimeTimeline from './SalesOverTimeTimeline'
 
 type Props = {
   salesOverTime: { [key: string]: { [key: string]: number } }
-  loadingData: boolean
 }
 
-const SalesOverTime = ({ salesOverTime, loadingData }: Props) => {
+const SalesOverTime = ({ salesOverTime }: Props) => {
   const { state }: any = useContext(AppContext)
   const totalToday = Object.values(salesOverTime[moment().format('YYYY-MM-DD')]).reduce((a, b) => a + b, 0)
   const totalYesterday = Object.values(salesOverTime[moment().subtract(1, 'days').format('YYYY-MM-DD')]).reduce((a, b) => a + b, 0)
@@ -26,14 +25,17 @@ const SalesOverTime = ({ salesOverTime, loadingData }: Props) => {
         <Card>
           <CardHeader className='align-items-center d-flex justify-content-between'>
             <h4 className='card-title mb-0 flex-grow-1'>Sales Over Time</h4>
-            <a className='fs-6 text-muted fw-normal'>{moment().format('h:mm a')}</a>
+            <a className='fs-6 text-muted fw-normal'>
+              <i className='las la-clock fs-5 me-1'></i>
+              {moment().format('h:mm a')}
+              </a>
           </CardHeader>
 
           <CardBody className='pb-0'>
             <div className='d-flex flex-row justify-content-start align-items-base gap-4'>
               <div>
                 <p className='m-0 p-0 fw-medium'>
-                  Today <span className={'fw-bold fs-6 ' + (salesDiff > 0 ? 'text-success' : 'text-danger')}>{salesDiff.toFixed(2)}%</span>
+                  Today <span className={'fw-semibold fs-7 ms-2 ' + (salesDiff > 0 ? 'text-success' : 'text-danger')}>{salesDiff.toFixed(2)}%</span>
                 </p>
                 <p className='m-0 p-0 fw-semibold fs-5'>
                   <span className='counter-value'>
@@ -66,7 +68,7 @@ const SalesOverTime = ({ salesOverTime, loadingData }: Props) => {
                 </p>
               </div>
             </div>
-            <div>{loadingData ? 'Loading...' : <SalesOverTimeTimeline salesOverTime={salesOverTime} />}</div>
+            <SalesOverTimeTimeline salesOverTime={salesOverTime} />
           </CardBody>
         </Card>
       </Col>
