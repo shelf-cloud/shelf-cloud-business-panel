@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
 // import Animation from '@components/Common/Animation'
-import { OrderRowType, ShipmentOrderItem } from '@typings'
+import { KitChildren, OrderRowType, ShipmentOrderItem } from '@typings'
 import AppContext from '@context/AppContext'
 import TooltipComponent from './constants/Tooltip'
 import { FormatCurrency } from '@lib/FormatNumbers'
@@ -139,7 +139,16 @@ const ShipmentType = ({ data, apiMutateLink }: Props) => {
                   <tbody>
                     {data.orderItems.map((product: ShipmentOrderItem, key) => (
                       <tr key={key} className='border-bottom py-2'>
-                        <td className='w-50 fs-6 fw-semibold'>{product.name || ''}</td>
+                        <td className='w-50 fs-6 fw-semibold'>
+                          {product.title === undefined ? product.name : product.title}
+                          {product.isKit === true &&
+                            product.children.length > 0 &&
+                            product.children.map((child: KitChildren) => (
+                              <p className='m-0 p-0 fs-7 text-muted fw-light' key={child.orderChildrenId}>
+                                {`- ${child.title === undefined ? child.name : child.title} Qty: ${child.quantity}`}
+                              </p>
+                            ))}
+                        </td>
                         <td className='fs-6 text-muted'>{product.sku}</td>
                         <td className='text-center'>{FormatCurrency(state.currentRegion, product.unitPrice)}</td>
                         <td className='text-center'>{product.quantity}</td>
@@ -197,7 +206,7 @@ const ShipmentType = ({ data, apiMutateLink }: Props) => {
           </Card>
         </Col>
       </Row>
-      {showDeleteModal.show && <CancelManualOrderConfirmationModal showDeleteModal={showDeleteModal} setshowDeleteModal={setshowDeleteModal} apiMutateLink={apiMutateLink}/>}
+      {showDeleteModal.show && <CancelManualOrderConfirmationModal showDeleteModal={showDeleteModal} setshowDeleteModal={setshowDeleteModal} apiMutateLink={apiMutateLink} />}
     </div>
   )
 }

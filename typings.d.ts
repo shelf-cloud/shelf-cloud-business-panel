@@ -397,12 +397,32 @@ export interface OrderRowType {
 }
 
 export interface ShipmentOrderItem {
-  name: string
   sku: string
-  unitPrice: number
+  upc: string
+  name: string
+  isKit: boolean
+  title: string
+  children: KitChildren[]
   quantity: number
+  productId: string
+  unitPrice: number
+  businessId: number
+  orderItemId: string
+  fulfillmentSku: string
+  warehouseLocation: string
   poNumber?: string
   qtyReceived?: number
+}
+
+export interface KitChildren {
+  sku: string
+  name: string
+  title: string
+  quantity: number
+  businessId: number
+  fulfillmentSku: string
+  orderChildrenId: string
+  warehouseLocation: string
 }
 
 // WHOLESALE ORDERS
