@@ -43,7 +43,6 @@ const SalesOverTimeTimeline = ({ salesOverTime }: Props) => {
   const currentHourIndex = TIMELINE.indexOf(CUURENTHOUR)
   const YESTERDAY = moment().subtract(1, 'days').format('YYYY-MM-DD')
   const TODAY = moment().format('YYYY-MM-DD')
-  console.log(currentHourIndex)
   const series = [
     {
       name: 'Today',
