@@ -241,13 +241,13 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
               })
               noteSchema.isValidSync({ note: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Note', value: rowValues[v] })
               break
-            // defaultCost
+            // htsCode
             case 19:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const defaultCostSchema = Yup.object().shape({
-                  defaultCost: Yup.number().min(0),
+                const htsCodeSchema = Yup.object().shape({
+                  htsCode: Yup.string(),
                 })
-                defaultCostSchema.isValidSync({ defaultCost: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Default Cost', value: rowValues[v] })
+                htsCodeSchema.isValidSync({ htsCode: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'HTS Code', value: rowValues[v] })
               }
               break
             // defaultPrice

@@ -330,15 +330,15 @@ const ExportBlankTemplate = ({ brands, suppliers, categories }: Props) => {
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('defaultCost').eachCell({ includeEmpty: true }, (cell) => {
+    worksheet.getColumn('htsCode').eachCell((cell) => {
       cell.dataValidation = {
-        type: 'decimal',
-        operator: 'greaterThanOrEqual',
-        allowBlank: true,
+        type: 'textLength',
+        operator: 'between',
         showErrorMessage: true,
-        formulae: [0],
+        allowBlank: true,
+        formulae: [0, 40],
         errorTitle: 'Invalid input',
-        error: 'Default Cost must be greater than 0',
+        error: 'Note must be between 0 and 40 characters',
       }
       cell.protection = { locked: false }
     })

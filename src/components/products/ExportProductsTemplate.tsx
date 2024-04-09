@@ -54,7 +54,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
         boxHeight: product.boxHeight,
         // activeState: product.activeState,
         note: product.note,
-        defaultCost: product.defaultCost,
+        htsCode: product.htsCode,
         defaultPrice: product.defaultPrice,
         msrp: product.msrp,
         map: product.map,
@@ -401,15 +401,15 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('defaultCost').eachCell((cell) => {
+    worksheet.getColumn('htsCode').eachCell((cell) => {
       cell.dataValidation = {
-        type: 'decimal',
-        operator: 'greaterThanOrEqual',
-        allowBlank: true,
+        type: 'textLength',
+        operator: 'between',
         showErrorMessage: true,
-        formulae: [0],
+        allowBlank: true,
+        formulae: [0, 40],
         errorTitle: 'Invalid input',
-        error: 'Default Cost must be greater than 0',
+        error: 'Note must be between 0 and 40 characters',
       }
       cell.protection = { locked: false }
     })

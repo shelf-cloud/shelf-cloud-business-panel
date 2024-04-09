@@ -12,7 +12,7 @@ type Props = {
   inventoryId?: number
   sku?: string
   upc?: string
-  defaultCost: number
+  htsCode: string
   defaultPrice: number
   msrp: number
   map: number
@@ -20,7 +20,7 @@ type Props = {
   ceilling: number
 }
 
-const SKU_product_details = ({ inventoryId, sku, upc, defaultCost, defaultPrice, msrp, map, floor, ceilling }: Props) => {
+const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msrp, map, floor, ceilling }: Props) => {
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [showEditFields, setShowEditFields] = useState(false)
@@ -31,7 +31,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, defaultCost, defaultPrice,
       inventoryId,
       sku,
       upc,
-      defaultCost,
+      htsCode,
       defaultPrice,
       msrp,
       map,
@@ -39,7 +39,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, defaultCost, defaultPrice,
       ceilling,
     },
     validationSchema: Yup.object({
-      defaultCost: Yup.number().min(0, 'Minimum of 0').required('Enter Cost'),
+      htsCode: Yup.string(),
       defaultPrice: Yup.number().min(0, 'Minimum of 0').required('Enter Price'),
       msrp: Yup.number().min(0, 'Minimum of 0').required('Enter MSRP'),
       map: Yup.number().min(0, 'Minimum of 0').required('Enter MAP'),
@@ -70,7 +70,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, defaultCost, defaultPrice,
       inventoryId,
       sku,
       upc,
-      defaultCost,
+      htsCode,
       defaultPrice,
       msrp,
       map,
@@ -88,7 +88,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, defaultCost, defaultPrice,
               <tr className='text-center'>
                 <th>SKU</th>
                 <th>UPC</th>
-                <th>Default Cost</th>
+                <th>HTS Code</th>
                 <th>Default Price</th>
                 <th id='msrpHead'>MSRP</th>
                 <UncontrolledTooltip placement='top' target='msrpHead' innerClassName='bg-white text-primary shadow'>
@@ -113,7 +113,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, defaultCost, defaultPrice,
               <tr className='text-center'>
                 <td>{sku}</td>
                 <td>{upc}</td>
-                <td>{FormatCurrency(state.currentRegion, defaultCost)}</td>
+                <td>{htsCode}</td>
                 <td>{FormatCurrency(state.currentRegion, defaultPrice)}</td>
                 <td>{FormatCurrency(state.currentRegion, msrp)}</td>
                 <td>{FormatCurrency(state.currentRegion, map)}</td>
@@ -136,7 +136,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, defaultCost, defaultPrice,
                 <tr className='text-center'>
                   <th>SKU</th>
                   <th>UPC</th>
-                  <th>Default Cost</th>
+                  <th>HTS Code</th>
                   <th>Default Price</th>
                   <th id='msrpHead'>MSRP</th>
                   <UncontrolledTooltip placement='top' target='msrpHead' innerClassName='bg-white text-primary shadow'>
@@ -197,19 +197,18 @@ const SKU_product_details = ({ inventoryId, sku, upc, defaultCost, defaultPrice,
                   <td>
                     <FormGroup>
                       <Input
-                        type='number'
+                        type='text'
                         className='form-control fs-6'
-                        placeholder='defaultCost...'
-                        id='defaultCost'
-                        name='defaultCost'
+                        placeholder='HTS Code...'
+                        id='htsCode'
+                        name='htsCode'
                         bsSize='sm'
-                        step={0.01}
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
-                        value={validation.values.defaultCost || 0}
-                        invalid={validation.touched.defaultCost && validation.errors.defaultCost ? true : false}
+                        value={validation.values.htsCode || ''}
+                        invalid={validation.touched.htsCode && validation.errors.htsCode ? true : false}
                       />
-                      {validation.touched.defaultCost && validation.errors.defaultCost ? <FormFeedback type='invalid'>{validation.errors.defaultCost}</FormFeedback> : null}
+                      {validation.touched.htsCode && validation.errors.htsCode ? <FormFeedback type='invalid'>{validation.errors.htsCode}</FormFeedback> : null}
                     </FormGroup>
                   </td>
                   <td>

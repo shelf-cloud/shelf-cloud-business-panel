@@ -143,7 +143,7 @@ export interface Product {
   boxWidth: number
   boxHeight: number
   activeState: boolean
-  defaultCost: number;
+  htsCode: string;
   description: string;
   brand: string;
   category: string;
@@ -219,7 +219,7 @@ export interface ProductDetails {
   boxHeight: number
   activeState: boolean
   // sku
-  defaultCost: number
+  htsCode: string
   defaultPrice: number
   msrp: number
   map: number

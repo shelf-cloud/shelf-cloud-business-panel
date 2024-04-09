@@ -23,7 +23,7 @@ export interface ProductsDetails {
     boxHeight: number;
     activeState: boolean;
     note: string;
-    defaultCost: number;
+    htsCode: string;
     defaultPrice: number;
     msrp: number;
     map: number;

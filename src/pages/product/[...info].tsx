@@ -209,7 +209,7 @@ const Product_Page_Layout = ({}: Props) => {
                               inventoryId={productDetails?.inventoryId}
                               sku={productDetails?.sku}
                               upc={productDetails?.barcode}
-                              defaultCost={productDetails?.defaultCost ?? 0}
+                              htsCode={productDetails?.htsCode ?? ''}
                               defaultPrice={productDetails?.defaultPrice ?? 0}
                               msrp={productDetails?.msrp ?? 0}
                               map={productDetails?.map ?? 0}
