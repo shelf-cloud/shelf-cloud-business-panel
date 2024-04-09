@@ -98,8 +98,8 @@ const InvoiceDetails = () => {
                           <h2 className='fs-1 fw-bold' style={{ color: '#458BC9' }}>
                             {invoiceDetails?.invoice.invoiceNumber}
                           </h2>
-                          <p className='m-0 fw-semibold'>Invoice Date: {moment(invoiceDetails?.invoice.createdDate).format('DD/MM/YYYY')}</p>
-                          <p className='m-0 fw-normal'>Expire Date: {moment(invoiceDetails?.invoice.expireDate).format('DD/MM/YYYY')}</p>
+                          <p className='m-0 fw-semibold'>Invoice Date: {moment(invoiceDetails?.invoice.createdDate).format('LL')}</p>
+                          <p className='m-0 fw-normal'>Expire Date: {moment(invoiceDetails?.invoice.expireDate).format('LL')}</p>
                           <h4 className={invoiceDetails?.invoice?.paid ? 'm-0 fw-bold text-success' : 'm-0 fw-bold text-danger'}>
                             {invoiceDetails?.invoice?.paid ? 'Paid' : 'Due'}
                           </h4>
@@ -125,7 +125,7 @@ const InvoiceDetails = () => {
                                   {order.orderNumber}
                                 </td>
                                 <td>{order.orderType}</td>
-                                <td>{moment(order.closedDate).format('DD/MM/YYYY')}</td>
+                                <td>{moment(order.closedDate).format('LL')}</td>
                                 <td>{FormatCurrency(state.currentRegion, order.totalCharge)}</td>
                               </tr>
                             ))}

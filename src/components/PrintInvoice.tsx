@@ -101,7 +101,10 @@ function PrintInvoice({ invoiceDetails }: Props) {
                           ${invoiceDetails.invoice.invoiceNumber}
                       </h3>
                       <h5 style="font-size: 16px;font-weight: 500;">
-                          Invoice Date ${moment(invoiceDetails.invoice.createdDate).format('DD/MM/YYYY')}
+                          Invoice Date: ${moment(invoiceDetails.invoice.createdDate).format('LL')}
+                      </h5>
+                      <h5 style="font-size: 16px;font-weight: 300;">
+                          Expire Date: ${moment(invoiceDetails.invoice.expireDate).format('LL')}
                       </h5>
                       </div><!--End Right-->
                   </div><!--End Zone-->
