@@ -33,7 +33,7 @@ const TIMELINE = [
   '11 PM',
 ]
 
-const CUURENTHOUR = moment().format('H A')
+const CUURENTHOUR = moment().format('h A')
 
 type Props = {
   salesOverTime: { [key: string]: { [key: string]: number } }
