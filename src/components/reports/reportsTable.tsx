@@ -18,7 +18,7 @@ const ReportsTable = ({ reportList, pending, handleDownloadReport }: Props) => {
       selector: (row: ShelfCloudReportList) => row.reportName,
       sortable: true,
       wrap: true,
-      grow: 1,
+      grow: 1.5,
     },
     {
       name: <span className='fw-bold fs-5'>Report Type</span>,
@@ -32,7 +32,7 @@ const ReportsTable = ({ reportList, pending, handleDownloadReport }: Props) => {
       selector: (row: ShelfCloudReportList) => {
         return (
           <div>
-            <p className='m-0 p-0'>{moment(row.dateCreated).format('LL')} {moment(row.timeCreated, 'HH:mm:ss').format('HH:mm A')}</p>
+            <p className='m-0 p-0'>{moment.utc(row.dateCreated).local().format('LL')} {moment.utc(row.timeCreated, 'HH:mm:ss').local().format('HH:mm A')}</p>
             <p className='text-muted fs-7 m-0 p-0'>Expires: {moment(row.dateCreated).add(10, 'days').format('LL')}</p>
           </div>
         )
