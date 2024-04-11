@@ -19,6 +19,30 @@ const SalesOverTime = ({ salesOverTime }: Props) => {
   const totalToday = Object.values(salesOverTime.orders[currentDate]).reduce((a, b) => a + b, 0)
   const totalYesterday = Object.values(salesOverTime.orders[previousDate]).reduce((a, b) => a + b, 0)
 
+  const currentSortedMarketplaces = Object.values(salesOverTime.marketplaces)
+    .sort((a, b) => {
+      if (a.salesOverTime[currentDate] > b.salesOverTime[currentDate]) {
+        return -1
+      }
+      if (a.salesOverTime[currentDate] < b.salesOverTime[currentDate]) {
+        return 1
+      }
+      return 0
+    })
+    .filter((marketplace: SalesOverTimeMarketplace) => marketplace.salesOverTime[currentDate] > 0)
+
+  const previousSortedMarketplaces = Object.values(salesOverTime.marketplaces)
+    .sort((a, b) => {
+      if (a.salesOverTime[previousDate] > b.salesOverTime[previousDate]) {
+        return -1
+      }
+      if (a.salesOverTime[previousDate] < b.salesOverTime[previousDate]) {
+        return 1
+      }
+      return 0
+    })
+    .filter((marketplace: SalesOverTimeMarketplace) => marketplace.salesOverTime[previousDate] > 0)
+
   let salesDiff = 0
   if (totalToday > 0 && totalYesterday > 0) {
     salesDiff = ((totalToday - totalYesterday) / totalYesterday) * 100
@@ -73,7 +97,7 @@ const SalesOverTime = ({ salesOverTime }: Props) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {Object.values(salesOverTime.marketplaces).map((marketplace: SalesOverTimeMarketplace, index: number) => (
+                    {currentSortedMarketplaces.map((marketplace: SalesOverTimeMarketplace, index: number) => (
                       <tr key={index}>
                         <td className='text-start'>{marketplace.name}</td>
                         <td className='text-end'>{FormatCurrency(state.currentRegion, marketplace.salesOverTime[currentDate])}</td>
@@ -116,7 +140,7 @@ const SalesOverTime = ({ salesOverTime }: Props) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {Object.values(salesOverTime.marketplaces).map((marketplace: SalesOverTimeMarketplace, index: number) => (
+                    {previousSortedMarketplaces.map((marketplace: SalesOverTimeMarketplace, index: number) => (
                       <tr key={index}>
                         <td className='text-start'>{marketplace.name}</td>
                         <td className='text-end'>{FormatCurrency(state.currentRegion, marketplace.salesOverTime[previousDate])}</td>
