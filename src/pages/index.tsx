@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
@@ -12,7 +12,7 @@ import useSWR from 'swr'
 import DashboardHeader from '@components/DashboardHeader'
 import moment from 'moment'
 import MostInvenotryList from '@components/MostInvenotryList'
-import { Summary } from '@typings'
+// import { Summary } from '@typings'
 import TotalChagesList from '@components/TotalChagesList'
 import InvoicesList from '@components/InvoicesList'
 import { toast } from 'react-toastify'
@@ -47,54 +47,39 @@ type Props = {
 
 const Home = ({ session, sessionToken }: Props) => {
   const { state }: any = useContext(AppContext)
-  const [loading, setLoading] = useState(true)
-  const [summary, setSummary] = useState<Summary | null>()
   const [dashboardStartDate, setDashboardStartDate] = useState(moment().subtract(30, 'days').format('YYYY-MM-DD'))
   const [dashboardEndDate, setDashboardEndDate] = useState(moment().format('YYYY-MM-DD'))
-  // const [selectedMarketplace, setSelectedMarketplace] = useState({ storeId: 9999, name: 'All Marketplaces', logo: '' })
-  const [salesOverTime, setSalesOverTime] = useState<{ [key: string]: { [key: string]: number } }>({})
-  const [loadingData, setLoadingData] = useState(true)
 
-  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(
+  const fetcherSummary = (endPoint: string) =>
+    axios(endPoint)
+      .then((res) => res.data)
+      .catch(({ error }) => {
+        toast.error(error?.data?.message || 'Error fetching Summary data')
+      })
+  const { data: summary } = useSWR(
     state.user.businessId
       ? `/api/getBusinessSummary?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${dashboardStartDate}&endDate=${dashboardEndDate}`
       : null,
-    fetcher
+    fetcherSummary,
+    { revalidateOnFocus: false }
   )
 
-  useEffect(() => {
-    const controller = new AbortController()
-    const signal = controller.signal
-
-    const getNewDateRange = async () => {
-      setLoadingData(true)
-      await axios(
-        `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/orders/getSalesOverTime?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${dashboardStartDate}&endDate=${dashboardEndDate}&storeId=9999`,
-        {
-          signal,
-          headers: {
-            Authorization: `Bearer ${sessionToken}`,
-          },
-        }
-      )
-        .then((res) => {
-          setSalesOverTime(res.data as { [key: string]: { [key: string]: number } })
-          setLoadingData(false)
-        })
-        .catch(({ error }) => {
-          if (axios.isCancel(error)) {
-            toast.error(error?.data?.message || 'Error fetching product performance data')
-            setSalesOverTime({})
-          }
-        })
-    }
-    if (session && state.user.businessId) getNewDateRange()
-
-    return () => {
-      controller.abort()
-    }
-  }, [session, state.user.businessId, dashboardEndDate])
+  const fetcherSalesOverTime = (endPoint: string) =>
+    axios(endPoint, {
+      headers: {
+        Authorization: `Bearer ${sessionToken}`,
+      },
+    })
+      .then((res) => res.data)
+      .catch(({ error }) => {
+        toast.error(error?.data?.message || 'Error fetching Sales Over Time data')
+      })
+  const { data: salesOverTime } = useSWR(
+    session && state.user.businessId
+      ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/orders/getSalesOverTime?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${dashboardStartDate}&endDate=${dashboardEndDate}&storeId=9999`
+      : null,
+    fetcherSalesOverTime
+  )
 
   const handleChangeDates = (dateStr: string) => {
     if (dateStr.includes(' to ')) {
@@ -103,17 +88,6 @@ const Home = ({ session, sessionToken }: Props) => {
       setDashboardEndDate(moment(dates[1], 'DD MMM YY').format('YYYY-MM-DD'))
     }
   }
-
-  useEffect(() => {
-    if (data?.error) {
-      setSummary(null)
-      setLoading(false)
-      toast.error(data?.message)
-    } else if (data) {
-      setSummary(data)
-      setLoading(false)
-    }
-  }, [data])
 
   return (
     <div>
@@ -129,14 +103,14 @@ const Home = ({ session, sessionToken }: Props) => {
           <Row>
             <Col>
               <DashboardHeader user={state.user.name} handleChangeDates={handleChangeDates} startDate={dashboardStartDate} endDate={dashboardEndDate} />
-              {!loading ? (
+              {summary ? (
                 <>
                   <Row>
                     <Widget summary={summary} />
                   </Row>
                   <Row>
                     <Col md={7}>
-                      {loadingData ? null : <SalesOverTime salesOverTime={salesOverTime} />}
+                      {salesOverTime ? <SalesOverTime salesOverTime={salesOverTime} /> : null}
                       <MostInvenotryList products={summary?.mostInventory} />
                     </Col>
                     <Col md={5}>
