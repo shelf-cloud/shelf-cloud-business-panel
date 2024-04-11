@@ -42,7 +42,7 @@ const Invoices = ({ session }: Props) => {
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState([])
   const [billingStatus, setBillingStatus] = useState([])
-  const [serachValue, setSerachValue] = useState('')
+  const [searchValue, setSearchValue] = useState<any>('')
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data } = useSWR(
@@ -53,8 +53,8 @@ const Invoices = ({ session }: Props) => {
   )
 
   const filteredItems = useMemo(() => {
-    return allData.filter((item: InvoiceList) => item?.invoiceNumber?.toLowerCase().includes(serachValue.toLowerCase()))
-  }, [allData, serachValue])
+    return allData.filter((item: InvoiceList) => item?.invoiceNumber?.toLowerCase().includes(searchValue.toLowerCase()))
+  }, [allData, searchValue])
 
   useEffect(() => {
     if (data?.error) {
@@ -96,15 +96,15 @@ const Invoices = ({ session }: Props) => {
                               className='form-control'
                               placeholder='Search...'
                               id='search-options'
-                              value={serachValue}
-                              onChange={(e) => setSerachValue(e.target.value)}
+                              value={searchValue}
+                              onChange={(e) => setSearchValue(e.target.value)}
                             />
                             <span className='mdi mdi-magnify search-widget-icon'></span>
                             <span
                               className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none'
                               id='search-close-options'></span>
                           </div>
-                          <Button className='btn-soft-dark' onClick={() => setSerachValue('')}>
+                          <Button className='btn-soft-dark' onClick={() => setSearchValue('')}>
                             Clear
                           </Button>
                         </div>

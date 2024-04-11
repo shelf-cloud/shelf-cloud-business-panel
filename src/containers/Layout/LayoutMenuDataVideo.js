@@ -198,33 +198,27 @@ const Navdata = () => {
         },
       ],
     },
-    // {
-    //   id: 'reports',
-    //   label: 'Reports',
-    //   icon: 'ri-numbers-fill',
-    //   link: '#',
-    //   stateVariables: isReports,
-    //   click: function (e) {
-    //     e.preventDefault()
-    //     setIsReports(!isReports)
-    //     setIscurrentState('Reports')
-    //     updateIconSidebar(e)
-    //   },
-    //   subItems: [
-    //     {
-    //       id: 'sales',
-    //       label: 'Sales',
-    //       link: '/reports/sales',
-    //       parentId: 'reports',
-    //     },
-    //     {
-    //       id: 'inventory',
-    //       label: 'Inventory',
-    //       link: '/reports/inventory',
-    //       parentId: 'reports',
-    //     },
-    //   ],
-    // },
+    {
+      id: 'reports',
+      label: 'Reports',
+      icon: 'ri-numbers-fill',
+      link: '#',
+      stateVariables: isReports,
+      click: function (e) {
+        e.preventDefault()
+        setIsReports(!isReports)
+        setIscurrentState('Reports')
+        updateIconSidebar(e)
+      },
+      subItems: [
+        {
+          id: 'reports',
+          label: 'Reports List',
+          link: '/reports/list',
+          parentId: 'reports',
+        },
+      ],
+    },
     {
       id: 'billing',
       label: 'Billing',
