@@ -38,7 +38,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
         data-bs-auto-close='outside'
         aria-expanded='false'
         onClick={() => setOpenDatesMenu(!openDatesMenu)}>
-        <i className='las la-calendar fs-3 m-0 p-0 text-primary' />
+        <i className='las la-calendar fs-4 m-0 p-0 text-primary' />
         <span className='fw-semibold m-0 p-0'>{`${shipmentsStartDate} -> ${shipmentsEndDate}`}</span>
       </button>
       <div className={'dropdown-menu dropdown-menu-md px-4 py-3' + (openDatesMenu ? ' show' : '')}>
@@ -114,7 +114,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
             style={{ cursor: 'pointer' }}
             onClick={() => {
               setSelectedDateFilter('past3days')
-              setShipmentsStartDate(moment().subtract(30, 'days').format('YYYY-MM-DD'))
+              setShipmentsStartDate(moment().subtract(1,'months').format('YYYY-MM-DD'))
               setShipmentsEndDate(moment().format('YYYY-MM-DD'))
               setOpenDatesMenu(false)
             }}>

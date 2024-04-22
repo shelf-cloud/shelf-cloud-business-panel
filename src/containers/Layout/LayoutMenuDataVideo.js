@@ -184,12 +184,12 @@ const Navdata = () => {
           link: '/CreateReceiving',
           parentId: 'receiving',
         },
-        // {
-        //   id: 'reorderingPoints',
-        //   label: 'Reordering Points',
-        //   link: '/reorderingPoints',
-        //   parentId: 'receiving',
-        // },
+        {
+          id: 'reorderingPoints',
+          label: 'Reordering Points',
+          link: '/reorderingPoints',
+          parentId: 'receiving',
+        },
         {
           id: 'receiving',
           label: 'Receiving Log',
