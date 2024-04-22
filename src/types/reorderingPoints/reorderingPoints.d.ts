@@ -79,6 +79,8 @@ export interface ReorderingPointsSales {
 }
 
 interface RPSalesMarketplace {
+    name: string;
+    storeId: number;
     grossRevenue: number;
     expenses: number;
     totalUnitsSold: number;

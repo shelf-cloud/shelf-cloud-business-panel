@@ -153,11 +153,19 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
                   newProductsData[product.sku].grossRevenue = product.grossRevenue
                   newProductsData[product.sku].expenses = product.expenses
                   for (const [storeId, values] of Object.entries(product.marketplaces)) {
-                    if (newProductsData[product.sku].marketplaces[storeId] !== undefined) {
-                      newProductsData[product.sku].marketplaces[storeId].totalUnitsSold = values.totalUnitsSold
-                      newProductsData[product.sku].marketplaces[storeId].grossRevenue = values.grossRevenue
-                      newProductsData[product.sku].marketplaces[storeId].expenses = values.expenses
+                    if (newProductsData[product.sku].marketplaces[storeId] === undefined) {
+                      newProductsData[product.sku].marketplaces[storeId] = {
+                        name: values.name,
+                        storeId: values.storeId,
+                        grossRevenue: values.grossRevenue,
+                        expenses: values.expenses,
+                        totalUnitsSold: values.totalUnitsSold,
+                        unitsSold: {},
+                      }
                     }
+                    newProductsData[product.sku].marketplaces[storeId].grossRevenue = values.grossRevenue
+                    newProductsData[product.sku].marketplaces[storeId].expenses = values.expenses
+                    newProductsData[product.sku].marketplaces[storeId].totalUnitsSold = values.totalUnitsSold
                   }
                 }
                 return newProductsData
