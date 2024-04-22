@@ -500,7 +500,9 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
                     </tr>
                     <tr className='border-bottom pb-2'>
                       <td className='text-muted'>Total Volume</td>
-                      <td className='fw-semibold text-end'>{FormatIntNumber(state.currentRegion, reorderingPointsOrder.totalVolume)}</td>
+                      <td className='fw-semibold text-end'>{`${FormatIntNumber(state.currentRegion, reorderingPointsOrder.totalVolume)} ${
+                        state.currentRegion === 'us' ? 'in' : 'cm'
+                      }`}</td>
                     </tr>
                   </tbody>
                 </table>

@@ -52,7 +52,7 @@ const SelectMultipleDropDown = ({ formValue, selectionInfo, selected, handleSele
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                   const newSelected = selectedParsed.includes(parseInt(value))
-                    ? selectedParsed.splice(selectedParsed.indexOf(parseInt(value)), 1)
+                    ? selectedParsed.filter((item) => item !== parseInt(value))
                     : [...selectedParsed, parseInt(value)]
                   handleSelection(formValue, `[${newSelected.toString()}]`)
                   setOpenDatesMenu(false)

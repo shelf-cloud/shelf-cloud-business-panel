@@ -22,11 +22,11 @@ const ReorderingPointsExpandedDetails: React.FC<ExpanderComponentProps<Reorderin
               <div className='mt-2 d-flex flex-column justify-content-start align-items-start gap-1'>
                 <span className='fs-7'>
                   <span className='fw-semibold'>{`Unit Volume: `}</span>
-                  {`${data.itemVolume} ${state.currentRegion === 'us' ? 'in' : 'cm'}`}
+                  {`${FormatIntNumber(state.currentRegion, data.itemVolume)} ${state.currentRegion === 'us' ? 'in' : 'cm'}`}
                 </span>
                 <span className='fs-7'>
                   <span className='fw-semibold'>{`Box Volume: `}</span>
-                  {`${data.itemBoxVolume} ${state.currentRegion === 'us' ? 'in' : 'cm'}`}
+                  {`${FormatIntNumber(state.currentRegion, data.itemBoxVolume)} ${state.currentRegion === 'us' ? 'in' : 'cm'}`}
                 </span>
               </div>
             </CardHeader>
