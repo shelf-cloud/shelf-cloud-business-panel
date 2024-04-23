@@ -20,6 +20,7 @@ type Props = {
   selectedSupplier: string
   setSelectedSupplier: (selectedSupplier: string) => void
   setError: (skus: any) => void
+  setSalesModal: (prev: any) => void
 }
 
 const ReorderingPointsTable = ({
@@ -33,6 +34,7 @@ const ReorderingPointsTable = ({
   selectedSupplier,
   setSelectedSupplier,
   setError,
+  setSalesModal,
 }: Props) => {
   const { state }: any = useContext(AppContext)
   const [sortedList, setsortedList] = useState<ReorderingPointsProduct[]>([])
@@ -349,36 +351,47 @@ const ReorderingPointsTable = ({
       ),
       selector: (row: ReorderingPointsProduct) => {
         return (
-          <div className='d-flex flex-row justify-content-start align-items-center gap-2 my-2 fs-7'>
-            <div className='d-flex flex-column justify-content-start align-items-center gap-2' style={{ overflow: 'unset', textOverflow: 'unset' }}>
-              <div>
-                <span className='fw-semibold'>30D: </span>
-                <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['30D'])}</span>
+          <>
+            <div className='d-flex flex-row justify-content-start align-items-center gap-2 mt-2 fs-7'>
+              <div className='d-flex flex-column justify-content-start align-items-center gap-2' style={{ overflow: 'unset', textOverflow: 'unset' }}>
+                <div>
+                  <span className='fw-semibold'>30D: </span>
+                  <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['30D'])}</span>
+                </div>
+                <div>
+                  <span className='fw-semibold'>60D: </span>
+                  <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['60D'])}</span>
+                </div>
+                <div>
+                  <span className='fw-semibold'>90D: </span>
+                  <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['90D'])}</span>
+                </div>
               </div>
-              <div>
-                <span className='fw-semibold'>60D: </span>
-                <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['60D'])}</span>
-              </div>
-              <div>
-                <span className='fw-semibold'>90D: </span>
-                <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['90D'])}</span>
+              <div className='d-flex flex-column justify-content-center align-items-center gap-2' style={{ overflow: 'unset', textOverflow: 'unset' }}>
+                <div>
+                  <span className='fw-semibold'>120D: </span>
+                  <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['120D'])}</span>
+                </div>
+                <div>
+                  <span className='fw-semibold'>180D: </span>
+                  <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['180D'])}</span>
+                </div>
+                <div>
+                  <span className='fw-semibold'>365D: </span>
+                  <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['365D'])}</span>
+                </div>
               </div>
             </div>
-            <div className='d-flex flex-column justify-content-center align-items-center gap-2' style={{ overflow: 'unset', textOverflow: 'unset' }}>
-              <div>
-                <span className='fw-semibold'>120D: </span>
-                <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['120D'])}</span>
-              </div>
-              <div>
-                <span className='fw-semibold'>180D: </span>
-                <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['180D'])}</span>
-              </div>
-              <div>
-                <span className='fw-semibold'>365D: </span>
-                <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['365D'])}</span>
-              </div>
-            </div>
-          </div>
+            <p className='text-end m-0 p-0 mb-2'>
+              <i
+                className='ri-search-eye-line fs-5 text-muted'
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  setSalesModal({ showSalesModal: true, sku: row.sku, title: row.title, totalUnitsSold: row.totalUnitsSold, marketplaces: row.marketplaces })
+                }}
+              />
+            </p>
+          </>
         )
       },
       sortable: false,

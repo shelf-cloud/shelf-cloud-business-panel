@@ -58,6 +58,8 @@ export interface ReorderingPointsMarketplace {
 
 export interface ReorderingPointsSalesResponse {
     [key: string]: ReorderingPointsSales;
+    error?: string;
+    message?: string;
 }
 
 export interface ReorderingPointsSales {

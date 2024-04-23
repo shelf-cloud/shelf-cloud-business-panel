@@ -17,6 +17,7 @@ import { toast } from 'react-toastify'
 import { ReorderingPointsProduct, ReorderingPointsResponse, ReorderingPointsSalesResponse } from '@typesTs/reorderingPoints/reorderingPoints'
 import ReorderingPointsTable from '@components/reorderingPoints/ReorderingPointsTable'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
+import ReorderingPointsSalesModal from '@components/modals/reorderingPoints/ReorderingPointsSalesModal'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -86,6 +87,13 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
   const [selectedRows, setSelectedRows] = useState<ReorderingPointsProduct[]>([])
   const [loadingSales, setLoadingSales] = useState(true)
   const [error, setError] = useState<string[]>([])
+  const [salesModal, setSalesModal] = useState({
+    showSalesModal: false,
+    sku: '',
+    title: '',
+    totalUnitsSold: {},
+    marketplaces: {},
+  })
 
   const fetcherMarketplaces = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data: marketplacesInfo }: { data?: MarketpalcesInfo } = useSWR(
@@ -145,6 +153,9 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
         }
       )
         .then(async ({ data }: { data: ReorderingPointsSalesResponse }) => {
+          if (data.error) {
+            toast.error(data.message || 'Error fetching Products Sales Data')
+          }
           if (Object.keys(data).length > 0) {
             for await (const product of Object.values(data)) {
               setProductsData((prevData) => {
@@ -238,17 +249,17 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
 
   // FILTER FUNCTIONS
   const handleChangeDatesFromPicker = (dateStr: string) => {
-    setStartDate(moment(dateStr, 'DD MMM YY').format('YYYY-MM-DD'))
+    // setStartDate(moment(dateStr, 'DD MMM YY').format('YYYY-MM-DD'))
     if (dateStr.includes(' to ')) {
       const dates = dateStr.split(' to ')
       setStartDate(moment(dates[0], 'DD MMM YY').format('YYYY-MM-DD'))
       setEndDate(moment(dates[1], 'DD MMM YY').format('YYYY-MM-DD'))
       return
     }
-    if (startDate === moment(dateStr, 'DD MMM YY').format('YYYY-MM-DD')) {
-      setEndDate(moment(dateStr, 'DD MMM YY').format('YYYY-MM-DD'))
-      return
-    }
+    // if (startDate === moment(dateStr, 'DD MMM YY').format('YYYY-MM-DD')) {
+    //   setEndDate(moment(dateStr, 'DD MMM YY').format('YYYY-MM-DD'))
+    //   return
+    // }
   }
   const handleApplyFilters = (
     urgency: string,
@@ -482,6 +493,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
                   selectedSupplier={selectedSupplier}
                   setSelectedSupplier={setSelectedSupplier}
                   setError={setError}
+                  setSalesModal={setSalesModal}
                 />
               </CardBody>
             </Card>
@@ -524,6 +536,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
             </Card>
           </div>
         )}
+        {salesModal.showSalesModal && <ReorderingPointsSalesModal salesModal={salesModal} setSalesModal={setSalesModal} />}
       </React.Fragment>
     </div>
   )
