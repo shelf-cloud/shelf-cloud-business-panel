@@ -7,7 +7,7 @@ import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import AppContext from '@context/AppContext'
 import { DebounceInput } from 'react-debounce-input'
 import ReorderingPointsExpandedDetails from './ReorderingPointsExpandedDetails'
-import { Badge } from 'reactstrap'
+import { Badge, UncontrolledTooltip } from 'reactstrap'
 
 type Props = {
   filterDataTable: ReorderingPointsProduct[]
@@ -21,6 +21,7 @@ type Props = {
   setSelectedSupplier: (selectedSupplier: string) => void
   setError: (skus: any) => void
   setSalesModal: (prev: any) => void
+  handleDaysOfStockQty: (sku: string, daysOfStockQty: number, inventoryId: number) => void
 }
 
 const ReorderingPointsTable = ({
@@ -35,6 +36,7 @@ const ReorderingPointsTable = ({
   setSelectedSupplier,
   setError,
   setSalesModal,
+  handleDaysOfStockQty,
 }: Props) => {
   const { state }: any = useContext(AppContext)
   const [sortedList, setsortedList] = useState<ReorderingPointsProduct[]>([])
@@ -384,7 +386,7 @@ const ReorderingPointsTable = ({
             </div>
             <p className='text-end m-0 p-0 mb-2'>
               <i
-                className='ri-search-eye-line fs-5 text-muted'
+                className='ri-search-eye-line fs-6 text-primary'
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                   setSalesModal({ showSalesModal: true, sku: row.sku, title: row.title, totalUnitsSold: row.totalUnitsSold, marketplaces: row.marketplaces })
@@ -408,9 +410,6 @@ const ReorderingPointsTable = ({
           <span className={'fs-7 ' + (setField === 'sellerCost' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('sellerCost')}>
             Supplier Cost
           </span>
-          <span className={'fs-7 ' + (setField === 'leadTime' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('leadTime')}>
-            Lead Time
-          </span>
           <span className={'fs-7 ' + (setField === 'boxQty' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('boxQty')}>
             Box Qty
           </span>
@@ -420,8 +419,43 @@ const ReorderingPointsTable = ({
         return (
           <div className='fs-7'>
             <p className='m-0 p-0 text-center'>{FormatCurrency(state.currentRegion, row.sellerCost)}</p>
-            <p className='m-0 p-0 text-center'>{`${row.leadTime} days`}</p>
             <p className='m-0 p-0 text-center'>{row.boxQty}</p>
+          </div>
+        )
+      },
+      sortable: false,
+      center: true,
+      compact: true,
+    },
+    {
+      name: (
+        <div className='w-100 text-center d-flex flex-column justify-content-center align-items-center'>
+          <span className={'fs-7 ' + (setField === 'leadTime' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('leadTime')}>
+            Lead Time
+          </span>
+          <span className={'fs-7 ' + (setField === 'boxQty' ? 'fw-bold' : 'text-muted')}>Days of Stock</span>
+        </div>
+      ),
+      selector: (row: ReorderingPointsProduct) => {
+        return (
+          <div className='fs-7 d-flex flex-column justify-content-center align-items-center gap-2'>
+            <p className='m-0 p-0 text-center'>{`${row.leadTime} days`}</p>
+            <div className='w-100 d-flex flex-row justify-content-center align-items-center'>
+              <DebounceInput
+                type='number'
+                debounceTimeout={300}
+                className='form-control form-control-sm fs-7 m-0 w-75 py-0 text-center'
+                placeholder='Days of Stock'
+                min={0}
+                id={`recommendedDaysOfStock-${row.sku}`}
+                value={row.recommendedDaysOfStock}
+                onChange={(e) => handleDaysOfStockQty(row.sku, parseInt(e.target.value), row.inventoryId)}
+              />
+              <i className='fs-5 text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={'DaysOfStockInfo'} />
+              <UncontrolledTooltip placement='top' target={'DaysOfStockInfo'} popperClassName='bg-white px-1 pt-1 rounded-2' innerClassName='shadow bg-white p-0'>
+                <p className='fs-7 text-primary m-0 p-0 mb-0'>The number of days you want to have stock in addition to the lead time.</p>
+              </UncontrolledTooltip>
+            </div>
           </div>
         )
       },
@@ -449,7 +483,18 @@ const ReorderingPointsTable = ({
       selector: (row: ReorderingPointsProduct) => {
         return (
           <div className='fs-7'>
-            <p className='m-0 p-0 text-center'>{FormatIntNumber(state.currentRegion, row.recommendedQty)}</p>
+            <p className='m-0 p-0 text-center'>
+              {FormatIntNumber(
+                state.currentRegion,
+                Math.ceil(
+                  (row.leadTime + row.recommendedDaysOfStock) * (row.totalUnitsSold['30D'] / 30) - (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving) < 0
+                    ? 0
+                    : Math.ceil(
+                        (row.leadTime + row.recommendedDaysOfStock) * (row.totalUnitsSold['30D'] / 30) - (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
+                      )
+                )
+              )}
+            </p>
             <p className='m-0 p-0 text-center'>{FormatIntNumber(state.currentRegion, row.forecast)}</p>
             <p className='m-0 p-0 text-center'>{FormatIntNumber(state.currentRegion, row.adjustedForecast)}</p>
           </div>
@@ -474,7 +519,7 @@ const ReorderingPointsTable = ({
                 type='number'
                 // minLength={1}
                 disabled={selectedSupplier !== '' && selectedSupplier !== row.supplier}
-                debounceTimeout={300}
+                debounceTimeout={400}
                 className='form-control form-control-sm fs-7 m-0 py-0 w-75 text-center'
                 placeholder='Order Qty...'
                 min={0}

@@ -88,7 +88,7 @@ const ReorderingPointsExpandedDetails: React.FC<ExpanderComponentProps<Reorderin
               <h5 className='fw-semibold m-0'>Performance Timeline</h5>
             </CardHeader>
             <CardBody>
-              <ReorderingPointsTimeLine productTimeLine={data.dateList} leadtime={data.leadTime} />
+              <ReorderingPointsTimeLine productTimeLine={data.dateList} leadtime={data.leadTime} daysRemaining={data.daysRemaining}/>
             </CardBody>
           </Card>
         </Col>

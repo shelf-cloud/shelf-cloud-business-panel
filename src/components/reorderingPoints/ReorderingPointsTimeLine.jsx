@@ -6,12 +6,13 @@ import moment from 'moment'
 import { Button } from 'reactstrap'
 const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false })
 
-const ReorderingPointsTimeLine = ({ productTimeLine, leadtime }) => {
+const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining }) => {
     const { state } = useContext(AppContext)
     const [grouping, setGrouping] = useState('daily')
 
-    const today = moment().format('YYYY-MM-DD')
-    const dateAfterLeadTime = moment().add(leadtime, 'days').format('YYYY-MM-DD')
+    const today = moment().startOf('day').format('YYYY-MM-DD')
+    const dateAfterLeadTime = moment().startOf('day').add(leadtime, 'days').format('YYYY-MM-DD')
+    const OutOfStockDate = moment().startOf('day').add(daysRemaining, 'days').format('YYYY-MM-DD')
 
     useEffect(() => {
     }, [grouping])
@@ -93,12 +94,12 @@ const ReorderingPointsTimeLine = ({ productTimeLine, leadtime }) => {
             xaxis: [
                 {
                     x: new Date(today).getTime(),
-                    borderColor: '#f7b84b',
+                    borderColor: '#0ab39c',
                     label: {
-                        borderColor: '#f7b84b',
+                        borderColor: '#0ab39c',
                         style: {
                             color: "#fff",
-                            background: "#f7b84b"
+                            background: "#0ab39c"
                         },
                         orientation: 'horizontal',
                         text: 'Today'
@@ -115,6 +116,19 @@ const ReorderingPointsTimeLine = ({ productTimeLine, leadtime }) => {
                         },
                         orientation: 'horizontal',
                         text: 'Lead Time'
+                    }
+                },
+                {
+                    x: new Date(OutOfStockDate).getTime(),
+                    borderColor: '#E74C3C',
+                    label: {
+                        borderColor: '#E74C3C',
+                        style: {
+                            color: "#fff",
+                            background: "#E74C3C"
+                        },
+                        orientation: 'horizontal',
+                        text: 'Out Of Sotck'
                     }
                 }
             ]
@@ -142,7 +156,7 @@ const ReorderingPointsTimeLine = ({ productTimeLine, leadtime }) => {
         //     colors: ['#000'],
         //   },
         // },
-        colors: ['#3577f1', '#f06548', '#0ab39c', '#f7b84b'],
+        colors: ['#3577f1', '#f7b84b', '#0ab39c', '#f7b84b'],
         // grid: {
         //   show: true,
         //   borderColor: '#000',

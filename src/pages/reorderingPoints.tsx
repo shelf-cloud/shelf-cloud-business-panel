@@ -336,6 +336,26 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
       return newProductsData
     })
   }
+  const handleDaysOfStockQty = async (sku: string, daysOfStockQty: number, inventoryId: number) => {
+    setProductsData((prevData) => {
+      const newProductsData = { ...prevData }
+      if (daysOfStockQty <= 0 || daysOfStockQty === null || daysOfStockQty === undefined || isNaN(daysOfStockQty)) {
+        newProductsData[sku].recommendedDaysOfStock = 0
+        return newProductsData
+      }
+
+      newProductsData[sku].recommendedDaysOfStock = daysOfStockQty
+      return newProductsData
+    })
+
+    const response = await axios.post(`/api/reorderingPoints/setNewRecommendedDaysOfSotck?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      daysOfStockQty,
+      inventoryId,
+    })
+    if (response.data.error) {
+      toast.error(response.data.msg)
+    }
+  }
 
   // ACTIONS
   const changeSelectedProductsState = async (newState: boolean) => {
@@ -494,6 +514,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
                   setSelectedSupplier={setSelectedSupplier}
                   setError={setError}
                   setSalesModal={setSalesModal}
+                  handleDaysOfStockQty={handleDaysOfStockQty}
                 />
               </CardBody>
             </Card>

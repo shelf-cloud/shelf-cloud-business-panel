@@ -17,6 +17,7 @@ export interface ReorderingPointsProduct {
     grossRevenue: number;
     expenses: number;
     unitsSold: number;
+    recommendedDaysOfStock: number;
     hideReorderingPoints: boolean;
     warehouseQty: number;
     fbaQty: number;
@@ -30,7 +31,6 @@ export interface ReorderingPointsProduct {
     show: number;
     daysRemaining: number;
     urgency: number;
-    recommendedQty: number;
     forecast: number;
     adjustedForecast: number;
     order: number;
