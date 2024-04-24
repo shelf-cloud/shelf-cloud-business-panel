@@ -6,7 +6,7 @@ import moment from 'moment'
 import { Button } from 'reactstrap'
 const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false })
 
-const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining }) => {
+const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, poDates }) => {
     const { state } = useContext(AppContext)
     const [grouping, setGrouping] = useState('daily')
 
@@ -130,7 +130,24 @@ const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining }) 
                         orientation: 'horizontal',
                         text: 'Out Of Sotck'
                     }
-                }
+                },
+                ...Object.entries(poDates).map(([date, value]) => {
+                    const arrivalDate = moment(date).startOf('day').add(leadtime, 'days').format('YYYY-MM-DD')
+                    return {
+                        x: new Date(arrivalDate).getTime(),
+                        borderColor: '#A569BD',
+                        label: {
+                            borderColor: '#A569BD',
+                            style: {
+                                color: "#fff",
+                                background: "#A569BD"
+                            },
+                            orientation: 'vertical',
+                            text: 'PO Arrival'
+                        }
+                    }
+                })
+
             ]
         },
         // plotOptions: {

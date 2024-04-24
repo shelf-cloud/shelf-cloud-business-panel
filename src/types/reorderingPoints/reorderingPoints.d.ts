@@ -22,6 +22,7 @@ export interface ReorderingPointsProduct {
     warehouseQty: number;
     fbaQty: number;
     productionQty: number;
+    poDates: { [key: string]: number };
     receiving: number;
     sellerCost: number;
     leadTime: number;
