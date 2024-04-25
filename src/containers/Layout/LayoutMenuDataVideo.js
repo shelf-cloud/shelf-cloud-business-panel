@@ -187,7 +187,7 @@ const Navdata = () => {
         {
           id: 'reorderingPoints',
           label: 'Reordering Points',
-          link: '/reorderingPoints',
+          link: '/reorderingPoints?filters=true&urgency=[2,3]',
           parentId: 'receiving',
         },
         {

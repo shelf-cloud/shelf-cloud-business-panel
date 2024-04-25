@@ -58,24 +58,9 @@ const ReorderingPointsExpandedDetails: React.FC<ExpanderComponentProps<Reorderin
                 <tfoot>
                   <tr>
                     <td className='fw-bold text-end'>Total</td>
-                    <td className='text-end'>
-                      {FormatCurrency(
-                        state.currentRegion,
-                        Object.values(data.marketplaces).reduce((total, marketplace) => total + marketplace.grossRevenue, 0)
-                      )}
-                    </td>
-                    <td className='text-end'>
-                      {FormatCurrency(
-                        state.currentRegion,
-                        Object.values(data.marketplaces).reduce((total, marketplace) => total + (marketplace.grossRevenue - marketplace.expenses), 0)
-                      )}
-                    </td>
-                    <td className='text-end'>
-                      {FormatIntNumber(
-                        state.currentRegion,
-                        Object.values(data.marketplaces).reduce((total, marketplace) => total + marketplace.totalUnitsSold, 0)
-                      )}
-                    </td>
+                    <td className='text-end'>{FormatCurrency(state.currentRegion, data.grossRevenue)}</td>
+                    <td className='text-end'>{FormatCurrency(state.currentRegion, data.grossRevenue - data.expenses)}</td>
+                    <td className='text-end'>{FormatIntNumber(state.currentRegion, data.unitsSold)}</td>
                   </tr>
                 </tfoot>
               </table>
@@ -88,7 +73,7 @@ const ReorderingPointsExpandedDetails: React.FC<ExpanderComponentProps<Reorderin
               <h5 className='fw-semibold m-0'>Performance Timeline</h5>
             </CardHeader>
             <CardBody>
-              <ReorderingPointsTimeLine productTimeLine={data.dateList} leadtime={data.leadTime} daysRemaining={data.daysRemaining} poDates={data.poDates}/>
+              <ReorderingPointsTimeLine productTimeLine={data.dateList} leadtime={data.leadTime} daysRemaining={data.daysRemaining} poDates={data.poDates} />
             </CardBody>
           </Card>
         </Col>

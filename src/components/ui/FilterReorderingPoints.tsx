@@ -19,6 +19,7 @@ type Props = {
   brand: string
   category: string
   showHidden: string
+  show0Days: string
   supplierOptions: string[]
   brandOptions: string[]
   categoryOptions: string[]
@@ -33,12 +34,18 @@ type Props = {
     supplier: string,
     brand: string,
     category: string,
-    showHidden: string
+    showHidden: string,
+    show0Days: string
   ) => void
   setFilterOpen: (value: boolean) => void
 }
 
-const URGENCY_STATES = {'3': 'High Alert', '2': 'Medium Alert', '1': 'Low Alert', '0': 'No Alert'}
+const URGENCY_STATES = {
+  '3': { label: 'High Alert', icon: 'mdi mdi-alert-octagon', color: 'text-danger' },
+  '2': { label: 'Medium Alert', icon: 'mdi mdi-alert-octagon', color: 'text-warning' },
+  '1': { label: 'Low Alert', icon: 'mdi mdi-alert-octagon', color: 'text-info' },
+  '0': { label: 'No Alert', icon: 'mdi mdi-alert-octagon', color: 'text-success' },
+}
 
 const FilterReorderingPoints = ({
   urgency,
@@ -52,6 +59,7 @@ const FilterReorderingPoints = ({
   brand,
   category,
   showHidden,
+  show0Days,
   supplierOptions,
   brandOptions,
   categoryOptions,
@@ -73,6 +81,7 @@ const FilterReorderingPoints = ({
     brand: brand,
     category: category,
     showHidden: showHidden,
+    show0Days: show0Days,
   }
 
   const validationSchema = Yup.object({
@@ -92,7 +101,8 @@ const FilterReorderingPoints = ({
       values.supplier,
       values.brand,
       values.category,
-      values.showHidden
+      values.showHidden,
+      values.show0Days
     )
   }
 
@@ -109,6 +119,7 @@ const FilterReorderingPoints = ({
       brand: '',
       category: '',
       showHidden: '',
+      show0Days: '',
     })
     router.push('/reorderingPoints', undefined, { shallow: true })
     setFilterOpen(false)
@@ -125,12 +136,7 @@ const FilterReorderingPoints = ({
                   <Label htmlFor='lastNameinput' className='form-label'>
                     Urgency
                   </Label>
-                  <SelectMultipleDropDown
-                    formValue={'urgency'}
-                    selectionInfo={URGENCY_STATES}
-                    selected={values.urgency}
-                    handleSelection={setFieldValue}
-                  />
+                  <SelectMultipleDropDown formValue={'urgency'} selectionInfo={URGENCY_STATES} selected={values.urgency} handleSelection={setFieldValue} />
                 </FormGroup>
               </Col>
               <Col xs={12} md={3}>
@@ -283,8 +289,8 @@ const FilterReorderingPoints = ({
                 </FormGroup>
               </Col>
             </Row>
-            <Col md={12} className='d-flex flewx-row justify-content-between align-items-center'>
-              <Col md={3}>
+            <Col md={12} className='d-flex flex-row flex-wrap justify-content-between align-items-center gap-3'>
+              <Col xs={12} md={7} className='d-flex flex-row flex-wrap justify-content-start align-items-center gap-4'>
                 <div className='form-check form-switch form-switch-right form-switch-md d-flex flex-row justify-content-start align-items-center'>
                   <Label className='form-label'>Show hidden products</Label>
                   <Input
@@ -300,15 +306,32 @@ const FilterReorderingPoints = ({
                     invalid={touched.showHidden && errors.showHidden ? true : false}
                   />
                 </div>
+                <div className='form-check form-switch form-switch-right form-switch-md d-flex flex-row justify-content-start align-items-center'>
+                  <Label className='form-label'>Show 0 days Remaining</Label>
+                  <Input
+                    className='form-check-input code-switcher'
+                    type='checkbox'
+                    id='show0Days'
+                    name='show0Days'
+                    checked={values.show0Days === 'true' ? true : false}
+                    onChange={(e) => {
+                      setFieldValue('show0Days', `${e.target.checked}`)
+                    }}
+                    onBlur={handleBlur}
+                    invalid={touched.show0Days && errors.show0Days ? true : false}
+                  />
+                </div>
               </Col>
-              <div className='d-flex flewx-row justify-content-end align-items-center gap-3'>
-                <Button type='button' color='light' className='fs-6 btn' onClick={() => handleClearFilters(setValues)}>
-                  Clear
-                </Button>
-                <Button type='submit' className='fs-6 btn bg-primary'>
-                  Apply Filters
-                </Button>
-              </div>
+              <Col xs={12} md={4}>
+                <div className='d-flex flewx-row justify-content-end align-items-center gap-3'>
+                  <Button type='button' color='light' className='fs-6 btn' onClick={() => handleClearFilters(setValues)}>
+                    Clear
+                  </Button>
+                  <Button type='submit' className='fs-6 btn bg-primary'>
+                    Apply Filters
+                  </Button>
+                </div>
+              </Col>
             </Col>
           </Form>
         )}

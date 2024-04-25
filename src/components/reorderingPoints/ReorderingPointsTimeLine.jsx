@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useState, useEffect } from 'react'
 import AppContext from '@context/AppContext'
 import dynamic from 'next/dynamic'
@@ -9,12 +10,22 @@ const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false })
 const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, poDates }) => {
     const { state } = useContext(AppContext)
     const [grouping, setGrouping] = useState('daily')
+    const [currentDateIndex, setcurrentDateIndex] = useState(0)
 
     const today = moment().startOf('day').format('YYYY-MM-DD')
+    const currentStartOfWeek = moment().startOf('week').format('YYYY-MM-DD')
+    const currentMonth = moment().format('YYYY-MM')
     const dateAfterLeadTime = moment().startOf('day').add(leadtime, 'days').format('YYYY-MM-DD')
     const OutOfStockDate = moment().startOf('day').add(daysRemaining, 'days').format('YYYY-MM-DD')
 
     useEffect(() => {
+        if (grouping === 'daily') {
+            setcurrentDateIndex(Object.keys(timeLineSorted).indexOf(today))
+        } else if (grouping === 'weekly') {
+            setcurrentDateIndex(Object.keys(timeLineSorted).indexOf(currentStartOfWeek))
+        } else if (grouping === 'monthly') {
+            setcurrentDateIndex(Object.keys(timeLineSorted).indexOf(currentMonth))
+        }
     }, [grouping])
 
     const dailytimeLineSorted = Object.keys(productTimeLine)
@@ -32,10 +43,12 @@ const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, po
                 result[weekYear] = {
                     unitsSold: productTimeLine[key].unitsSold,
                     dailyStock: productTimeLine[key].dailyStock,
+                    dailyStockFBA: productTimeLine[key].dailyStockFBA,
                 }
             } else {
                 result[weekYear].unitsSold += productTimeLine[key].unitsSold
                 result[weekYear].dailyStock += productTimeLine[key].dailyStock
+                result[weekYear].dailyStockFBA += productTimeLine[key].dailyStockFBA
             }
             return result
         }, {})
@@ -48,10 +61,12 @@ const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, po
                 result[weekYear] = {
                     unitsSold: productTimeLine[key].unitsSold,
                     dailyStock: productTimeLine[key].dailyStock,
+                    dailyStockFBA: productTimeLine[key].dailyStockFBA,
                 }
             } else {
                 result[weekYear].unitsSold += productTimeLine[key].unitsSold
                 result[weekYear].dailyStock += productTimeLine[key].dailyStock
+                result[weekYear].dailyStockFBA += productTimeLine[key].dailyStockFBA
             }
             return result
         }, {})
@@ -61,11 +76,11 @@ const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, po
     const series = [
         {
             name: 'Units Sold',
-            data: Object.values(timeLineSorted).map((item) => item.unitsSold),
+            data: Object.values(timeLineSorted).map((item) => item.unitsSold).slice(0, currentDateIndex + 1),
         },
         {
             name: 'Daily Stock',
-            data: Object.values(timeLineSorted).map((item) => item.dailyStock + item.dailyStockFBA),
+            data: Object.values(timeLineSorted).map((item) => item.dailyStock + item.dailyStockFBA).slice(0, currentDateIndex + 1),
         },
     ]
 
@@ -101,7 +116,7 @@ const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, po
                             color: "#fff",
                             background: "#0ab39c"
                         },
-                        orientation: 'horizontal',
+                        orientation: 'vertical',
                         text: 'Today'
                     }
                 },
@@ -114,7 +129,7 @@ const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, po
                             color: "#fff",
                             background: "#2980B9"
                         },
-                        orientation: 'horizontal',
+                        orientation: 'vertical',
                         text: 'Lead Time'
                     }
                 },
@@ -127,7 +142,7 @@ const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, po
                             color: "#fff",
                             background: "#E74C3C"
                         },
-                        orientation: 'horizontal',
+                        orientation: 'vertical',
                         text: 'Out Of Sotck'
                     }
                 },

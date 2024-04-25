@@ -2,7 +2,13 @@ import React, { useEffect, useRef, useState } from 'react'
 
 type Props = {
   formValue: string
-  selectionInfo: { [key: string]: string }
+  selectionInfo: {
+    [key: string]: {
+      label: string
+      icon: string
+      color: string
+    }
+  }
   selected: string
   handleSelection: (field: string, value: any, shouldValidate?: boolean | undefined) => void
 }
@@ -29,7 +35,7 @@ const SelectMultipleDropDown = ({ formValue, selectionInfo, selected, handleSele
     <div ref={filterByDates} className='dropdown mb-3'>
       <div className='btn-group w-100 form-control form-control-sm p-0' onClick={() => setOpenDatesMenu(!openDatesMenu)}>
         <button type='button' disabled className='btn btn-light btn-sm py-0 fs-6 w-100 text-start' style={{ backgroundColor: 'white', opacity: '100%' }}>
-          {selectedParsed.length === 0 ? <span className='text-muted'>Select</span> : selectedParsed.map((value) => `${selectionInfo[value]}, `)}
+          {selectedParsed.length === 0 ? <span className='text-muted'>Select</span> : selectedParsed.map((value) => `${selectionInfo[value].label}, `)}
         </button>
         <button
           type='button'
@@ -45,19 +51,17 @@ const SelectMultipleDropDown = ({ formValue, selectionInfo, selected, handleSele
       <div className={'dropdown-menu w-100 py-3 px-4' + (openDatesMenu ? ' show' : '')}>
         <div className='d-flex flex-column justify-content-start'>
           <div style={{ maxHeight: '25vh', overflowY: 'scroll', scrollbarWidth: 'thin' }}>
-            {Object.entries(selectionInfo)?.map(([value, label]) => (
+            {Object.entries(selectionInfo)?.map(([value, option]) => (
               <p
                 key={value}
                 className={'m-0 mb-2 ' + (selectedParsed.includes(parseInt(value)) ? 'fw-bold' : '')}
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
-                  const newSelected = selectedParsed.includes(parseInt(value))
-                    ? selectedParsed.filter((item) => item !== parseInt(value))
-                    : [...selectedParsed, parseInt(value)]
+                  const newSelected = selectedParsed.includes(parseInt(value)) ? selectedParsed.filter((item) => item !== parseInt(value)) : [...selectedParsed, parseInt(value)]
                   handleSelection(formValue, `[${newSelected.toString()}]`)
-                  setOpenDatesMenu(false)
                 }}>
-                {`${label}`}
+                {option.icon && <i className={`${option.icon} ${option.color}`} />}
+                {`${option.label}`}
               </p>
             ))}
           </div>

@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import Link from 'next/link'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
@@ -22,6 +22,8 @@ type Props = {
   setError: (skus: any) => void
   setSalesModal: (prev: any) => void
   handleDaysOfStockQty: (sku: string, daysOfStockQty: number, inventoryId: number) => void
+  setField: string
+  handleSetSorting: (field: string) => void
 }
 
 const ReorderingPointsTable = ({
@@ -37,94 +39,14 @@ const ReorderingPointsTable = ({
   setError,
   setSalesModal,
   handleDaysOfStockQty,
+  setField,
+  handleSetSorting,
 }: Props) => {
   const { state }: any = useContext(AppContext)
-  const [sortedList, setsortedList] = useState<ReorderingPointsProduct[]>([])
-  const [setField, setsetField] = useState('urgency')
-  const [sortingDirectionAsc, setsortingDirectionAsc] = useState(false)
 
   const handleSelectedRows = ({ selectedRows }: { selectedRows: ReorderingPointsProduct[] }) => {
     setSelectedRows(selectedRows)
   }
-  const handleSetSorting = (field: string) => {
-    setsetField(field)
-    setsortingDirectionAsc(!sortingDirectionAsc)
-  }
-  const handleSortingList = (rows: ReorderingPointsProduct[], field: string, direction: boolean) => {
-    if (['30D', '60D', '90D', '120D', '180D', '365D'].includes(field)) {
-      return rows.sort((a, b) => {
-        if (a.totalUnitsSold[field] > b.totalUnitsSold[field]) {
-          return direction ? 1 : -1
-        } else if (a.totalUnitsSold[field] < b.totalUnitsSold[field]) {
-          return direction ? -1 : 1
-        } else {
-          return 0
-        }
-      })
-    }
-
-    if (['sku', 'supplier', 'brand'].includes(field)) {
-      return rows.sort((a, b) => {
-        const aField = a[field as keyof ReorderingPointsProduct].toLocaleString().toLowerCase()
-        const bField = b[field as keyof ReorderingPointsProduct].toLocaleString().toLowerCase()
-        if (aField > bField) {
-          return direction ? 1 : -1
-        } else if (aField < bField) {
-          return direction ? -1 : 1
-        } else {
-          return 0
-        }
-      })
-    }
-
-    if (
-      ['daysRemaining', 'warehouseQty', 'fbaQty', 'productionQty', 'receiving', 'sellerCost', 'leadTime', 'boxQty', 'recommendedQty', 'forecast', 'adjustedForecast'].includes(
-        field
-      )
-    ) {
-      return rows.sort((a, b) => {
-        const aField = a[field as keyof ReorderingPointsProduct]
-        const bField = b[field as keyof ReorderingPointsProduct]
-        if (aField > bField) {
-          return direction ? 1 : -1
-        } else if (aField < bField) {
-          return direction ? -1 : 1
-        } else {
-          return 0
-        }
-      })
-    }
-
-    if (['totalInventory'].includes(field)) {
-      return rows.sort((a, b) => {
-        const aField = a.warehouseQty + a.fbaQty + a.productionQty + a.receiving
-        const bField = b.warehouseQty + b.fbaQty + b.productionQty + b.receiving
-        if (aField > bField) {
-          return direction ? 1 : -1
-        } else if (aField < bField) {
-          return direction ? -1 : 1
-        } else {
-          return 0
-        }
-      })
-    }
-
-    return rows.sort((a, b) => {
-      if (a.urgency > b.urgency) {
-        return direction ? 1 : -1
-      } else if (a.urgency < b.urgency) {
-        return direction ? -1 : 1
-      } else {
-        return 0
-      }
-    })
-  }
-
-  useEffect(() => {
-    if (filterDataTable.length > 0) {
-      setsortedList(handleSortingList([...filterDataTable], setField, sortingDirectionAsc))
-    }
-  }, [filterDataTable, setField, sortingDirectionAsc])
 
   const conditionalRowStyles = [
     {
@@ -159,10 +81,10 @@ const ReorderingPointsTable = ({
             color = 'text-warning'
             break
           case 1:
-            color = 'text-secondary'
+            color = 'text-info'
             break
           default:
-            color = 'text-primary'
+            color = 'text-success'
             break
         }
         return (
@@ -439,7 +361,7 @@ const ReorderingPointsTable = ({
       selector: (row: ReorderingPointsProduct) => {
         return (
           <div className='fs-7 d-flex flex-column justify-content-center align-items-center gap-2'>
-            <p className='m-0 p-0 text-center'>{`${row.leadTime} days`}</p>
+            <p className={'m-0 p-0 text-center' + (row.leadTime <= 0 ? ' fw-semibold text-danger' : '')}>{`${row.leadTime} days`}</p>
             <div className='w-100 d-flex flex-row justify-content-center align-items-center'>
               <DebounceInput
                 type='number'
@@ -483,7 +405,7 @@ const ReorderingPointsTable = ({
       selector: (row: ReorderingPointsProduct) => {
         return (
           <div className='fs-7'>
-            <p className='m-0 p-0 text-center'>
+            <p className='m-0 p-0 text-center' id={'Recommended_Qty'}>
               {FormatIntNumber(
                 state.currentRegion,
                 Math.ceil(
@@ -495,6 +417,9 @@ const ReorderingPointsTable = ({
                 )
               )}
             </p>
+            <UncontrolledTooltip placement='top' target={'Recommended_Qty'} popperClassName='bg-white px-1 pt-1 rounded-2' innerClassName='shadow bg-white p-0'>
+              <p className='fs-7 text-primary m-0 p-0 mb-0'>Lead Time + Days of Stock x Daily Sales Last 30 Days - Total Inventory</p>
+            </UncontrolledTooltip>
             <p className='m-0 p-0 text-center'>{FormatIntNumber(state.currentRegion, row.forecast)}</p>
             <p className='m-0 p-0 text-center'>{FormatIntNumber(state.currentRegion, row.adjustedForecast)}</p>
           </div>
@@ -570,7 +495,7 @@ const ReorderingPointsTable = ({
     <>
       <DataTable
         columns={columns}
-        data={sortedList}
+        data={filterDataTable}
         progressPending={pending}
         dense
         striped
