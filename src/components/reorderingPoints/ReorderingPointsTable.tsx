@@ -433,7 +433,7 @@ const ReorderingPointsTable = ({
       name: (
         <div className='text-center d-flex flex-column justify-content-center align-items-center'>
           <span className='fw-semibold fs-7'>Order Qty</span>
-          <span className='fw-semibold fs-7'>Adjusted Complete Boxes</span>
+          <span className='fw-semibold fs-7'>Adjusted Master Boxes</span>
         </div>
       ),
       selector: (row: ReorderingPointsProduct) => {

@@ -19,6 +19,7 @@ import ReorderingPointsTable from '@components/reorderingPoints/ReorderingPoints
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import ReorderingPointsSalesModal from '@components/modals/reorderingPoints/ReorderingPointsSalesModal'
 import ReorderingPointsSettings from '@components/reorderingPoints/ReorderingPointsSettings'
+import ReorderingPointsCreatePOModal from '@components/modals/reorderingPoints/ReorderingPointsCreatePOModal'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -98,6 +99,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
   })
   const [setField, setsetField] = useState('urgency')
   const [sortingDirectionAsc, setsortingDirectionAsc] = useState(false)
+  const [showPOModal, setshowPOModal] = useState(false)
 
   const fetcherMarketplaces = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data: marketplacesInfo }: { data?: MarketpalcesInfo } = useSWR(
@@ -526,20 +528,26 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
 
   // REORDERING POINTS ORDER SUMMARY
   const reorderingPointsOrder = useMemo(() => {
-    const orderSummary = { totalQty: 0, totalCost: 0, totalVolume: 0 }
+    const orderSummary = { totalQty: 0, totalCost: 0, totalVolume: 0, products: {} } as {
+      totalQty: number
+      totalCost: number
+      totalVolume: number
+      products: { [key: string]: ReorderingPointsProduct }
+    }
     if (!productsData || Object.values(productsData).length === 0) {
       setSelectedSupplier('')
       return orderSummary
     }
 
     for (const item of Object.values(productsData)) {
+      if(item.order <= 0) continue
       orderSummary.totalQty += item.useOrderAdjusted ? item.orderAdjusted : item.order
       orderSummary.totalCost += item.useOrderAdjusted ? item.orderAdjusted * item.sellerCost : item.order * item.sellerCost
       orderSummary.totalVolume += item.useOrderAdjusted ? item.orderAdjusted * item.itemVolume : item.order * item.itemVolume
+      orderSummary.products[item.sku] = item
     }
 
     if (orderSummary.totalQty <= 0) setSelectedSupplier('')
-
     return orderSummary
   }, [productsData])
 
@@ -709,7 +717,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
                   </tbody>
                 </table>
                 <div className='mt-2 text-end'>
-                  <Button disabled={error.length > 0} className='fs-7 btn btn-sm' color='primary'>
+                  <Button disabled={error.length > 0 || Object.keys(reorderingPointsOrder.products).length === 0} className='fs-7 btn btn-sm' color='primary' onClick={() => setshowPOModal(true)}>
                     Create Order
                   </Button>
                   {error.length > 0 && <p className='fs-7 text-danger m-0 p-0'>Error in some Products</p>}
@@ -719,6 +727,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
           </div>
         )}
         {salesModal.showSalesModal && <ReorderingPointsSalesModal salesModal={salesModal} setSalesModal={setSalesModal} />}
+        {showPOModal && <ReorderingPointsCreatePOModal reorderingPointsOrder={reorderingPointsOrder} selectedSupplier={selectedSupplier} showPOModal={showPOModal} setshowPOModal={setshowPOModal} username={session?.user?.name}/>}
       </React.Fragment>
     </div>
   )
