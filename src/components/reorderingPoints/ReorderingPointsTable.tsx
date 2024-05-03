@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import dynamic from 'next/dynamic'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
@@ -6,8 +7,11 @@ import Link from 'next/link'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import AppContext from '@context/AppContext'
 import { DebounceInput } from 'react-debounce-input'
-import ReorderingPointsExpandedDetails from './ReorderingPointsExpandedDetails'
 import { Badge, UncontrolledTooltip } from 'reactstrap'
+const ReorderingPointsExpandedDetails = dynamic(() => import('./ReorderingPointsExpandedDetails'), {
+  ssr: false,
+})
+// import ReorderingPointsExpandedDetails from './ReorderingPointsExpandedDetails'
 
 type Props = {
   filterDataTable: ReorderingPointsProduct[]
@@ -420,7 +424,17 @@ const ReorderingPointsTable = ({
             <UncontrolledTooltip placement='top' target={'Recommended_Qty'} popperClassName='bg-white px-1 pt-1 rounded-2' innerClassName='shadow bg-white p-0'>
               <p className='fs-7 text-primary m-0 p-0 mb-0'>Lead Time + Days of Stock x Daily Sales Last 30 Days - Total Inventory</p>
             </UncontrolledTooltip>
-            <p className='m-0 p-0 text-center'>{FormatIntNumber(state.currentRegion, row.forecast)}</p>
+            <p className='m-0 p-0 text-center' id={`forecast_${row.sku}`}>
+              {FormatIntNumber(
+                state.currentRegion,
+                Object.values(row.forecast).reduce((total, unitsSold) => total + unitsSold, 0) - (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving) < 0
+                  ? 0
+                  : Object.values(row.forecast).reduce((total, unitsSold) => total + unitsSold, 0) - (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
+              )}
+            </p>
+            <UncontrolledTooltip placement='top' target={`forecast_${row.sku}`} popperClassName='bg-white px-1 pt-1 rounded-2' innerClassName='shadow bg-white p-0'>
+              <p className='fs-7 text-primary m-0 p-0 mb-0'>{`Forecast Model: ${row.forecastModel} - Total Inventory`}</p>
+            </UncontrolledTooltip>
             <p className='m-0 p-0 text-center'>{FormatIntNumber(state.currentRegion, row.adjustedForecast)}</p>
           </div>
         )

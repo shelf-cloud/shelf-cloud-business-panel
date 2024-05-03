@@ -3,11 +3,11 @@ import React, { useContext, useState, useEffect } from 'react'
 import AppContext from '@context/AppContext'
 import dynamic from 'next/dynamic'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
-import moment from 'moment'
+import moment, { min } from 'moment'
 import { Button } from 'reactstrap'
 const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false })
 
-const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, poDates }) => {
+const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, poDates, forecast }) => {
     const { state } = useContext(AppContext)
     const [grouping, setGrouping] = useState('daily')
     const [currentDateIndex, setcurrentDateIndex] = useState(0)
@@ -71,16 +71,52 @@ const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, po
             return result
         }, {})
 
+    const dailytimeForecast = Object.keys(forecast)
+        .sort()
+        .reduce(function (result, key) {
+            result[moment(key).startOf('day').format("YYYY-MM-DD")] = Math.floor(forecast[key])
+            return result
+        }, {})
+
+    const weeklyForecast = Object.keys(forecast)
+        .sort()
+        .reduce(function (result, key) {
+            const weekYear = `${moment(key).startOf('week').format('YYYY-MM-DD')}`
+            if (result[weekYear] === undefined) {
+                result[weekYear] = Math.floor(forecast[key])
+            } else {
+                result[weekYear] += Math.floor(forecast[key])
+            }
+            return result
+        }, {})
+
+    const monthlyForecast = Object.keys(forecast)
+        .sort()
+        .reduce(function (result, key) {
+            const weekYear = `${moment(key).year()}-${moment(key).format('MM')}`
+            if (result[weekYear] === undefined) {
+                result[weekYear] = Math.floor(forecast[key])
+            } else {
+                result[weekYear] += Math.floor(forecast[key])
+            }
+            return result
+        }, {})
+
     const timeLineSorted = grouping === 'daily' ? dailytimeLineSorted : grouping === 'weekly' ? weeklyTimeLineSorted : monthlyTimeLineSorted
+    const forecastSorted = grouping === 'daily' ? dailytimeForecast : grouping === 'weekly' ? weeklyForecast : monthlyForecast
 
     const series = [
         {
             name: 'Units Sold',
-            data: Object.values(timeLineSorted).map((item) => item.unitsSold).slice(0, currentDateIndex + 1),
+            data: Object.entries(timeLineSorted).slice(0, currentDateIndex + 1).map(([date, item]) => { return { x: date, y: item.unitsSold } }),
+        },
+        {
+            name: 'Forecast',
+            data: Object.entries(forecastSorted).map(([date, item]) => { return { x: date, y: item } }),
         },
         {
             name: 'Daily Stock',
-            data: Object.values(timeLineSorted).map((item) => item.dailyStock + item.dailyStockFBA).slice(0, currentDateIndex + 1),
+            data: Object.entries(timeLineSorted).slice(0, currentDateIndex + 1).map(([date, item]) => { return { x: date, y: item.dailyStock + item.dailyStockFBA } }),
         },
     ]
 
@@ -94,7 +130,7 @@ const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, po
             },
         },
         stroke: {
-            width: 2,
+            width: [2,2,3],
             curve: 'smooth',
         },
         markers: {
@@ -188,7 +224,7 @@ const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, po
         //     colors: ['#000'],
         //   },
         // },
-        colors: ['#3577f1', '#f7b84b', '#0ab39c', '#f7b84b'],
+        colors: ['#3577f1', '#0ab39c', '#f7b84b'],
         // grid: {
         //   show: true,
         //   borderColor: '#000',
@@ -218,7 +254,9 @@ const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, po
         xaxis: {
             type: 'datetime',
             // tickAmount: Object.keys(timeLineSorted).length / 8,
-            categories: Object.keys(timeLineSorted).map((item) => new Date(item).getTime()),
+            // categories: Object.keys(timeLineSorted).map((item) => new Date(item).getTime()),
+            min: new Date(Object.keys(timeLineSorted)[0]).getTime(),
+            max: new Date(Object.keys(timeLineSorted)[Object.keys(timeLineSorted).length - 1]).getTime(),
             labels: {
                 show: true,
             },
@@ -230,6 +268,24 @@ const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, po
                 showAlways: true,
                 labels: {
                     show: true,
+                    align: 'left',
+                    trim: false,
+                    formatter: function (val) {
+                        return FormatIntNumber(state.currentRegion, val)
+                    },
+                    style: {
+                        fontSize: '12px',
+                        fontWeight: 300,
+                        cssClass: 'chargesTitles',
+                    },
+                },
+            },
+            {
+                seriesName: 'Units Sold',
+                show: true,
+                showAlways: true,
+                labels: {
+                    show: false,
                     align: 'left',
                     trim: false,
                     formatter: function (val) {
@@ -261,6 +317,7 @@ const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, po
                     },
                 },
             },
+
         ],
     }
     return (

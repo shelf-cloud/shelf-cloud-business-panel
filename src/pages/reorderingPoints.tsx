@@ -349,7 +349,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
       })
     }
 
-    if (['daysRemaining', 'warehouseQty', 'fbaQty', 'productionQty', 'receiving', 'sellerCost', 'leadTime', 'boxQty', 'forecast', 'adjustedForecast'].includes(field)) {
+    if (['daysRemaining', 'warehouseQty', 'fbaQty', 'productionQty', 'receiving', 'sellerCost', 'leadTime', 'boxQty', 'adjustedForecast'].includes(field)) {
       return rows.sort((a, b) => {
         const aField = a[field as keyof ReorderingPointsProduct]
         const bField = b[field as keyof ReorderingPointsProduct]
@@ -367,6 +367,20 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
       return rows.sort((a, b) => {
         const aField = (a.leadTime + a.recommendedDaysOfStock) * (a.totalUnitsSold['30D'] / 30) - (a.warehouseQty + a.fbaQty + a.productionQty + a.receiving)
         const bField = (b.leadTime + b.recommendedDaysOfStock) * (b.totalUnitsSold['30D'] / 30) - (b.warehouseQty + b.fbaQty + b.productionQty + b.receiving)
+        if (aField > bField) {
+          return direction ? 1 : -1
+        } else if (aField < bField) {
+          return direction ? -1 : 1
+        } else {
+          return 0
+        }
+      })
+    }
+    
+    if (['forecast'].includes(field)) {
+      return rows.sort((a, b) => {
+        const aField = Object.values(a.forecast).reduce((total, unitsSold) => total + unitsSold, 0) - (a.warehouseQty + a.fbaQty + a.productionQty + a.receiving)
+        const bField = Object.values(b.forecast).reduce((total, unitsSold) => total + unitsSold, 0) - (b.warehouseQty + b.fbaQty + b.productionQty + b.receiving)
         if (aField > bField) {
           return direction ? 1 : -1
         } else if (aField < bField) {

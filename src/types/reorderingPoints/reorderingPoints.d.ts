@@ -32,14 +32,15 @@ export interface ReorderingPointsProduct {
     show: number;
     daysRemaining: number;
     urgency: number;
-    forecast: number;
     adjustedForecast: number;
     order: number;
     orderAdjusted: number;
     useOrderAdjusted: boolean;
     marketplaces: { [key: string]: ReorderingPointsMarketplace };
-    totalUnitsSold: { [key: string]: number };
     dateList: { [key: string]: DateList };
+    totalUnitsSold: { [key: string]: number };
+    forecastModel: string;
+    forecast: { [key: string]: number }
 }
 
 export interface DateList {

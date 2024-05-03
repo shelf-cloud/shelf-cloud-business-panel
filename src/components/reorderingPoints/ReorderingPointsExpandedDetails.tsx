@@ -34,7 +34,7 @@ const ReorderingPointsExpandedDetails: React.FC<ExpanderComponentProps<Reorderin
               <table className='table table-sm table-border table-nowrap mb-0 fs-7'>
                 <thead>
                   <tr>
-                    <th className='w-25 text-wrap'>Marketplace</th>
+                    <th className='w-fit text-wrap'>Marketplace</th>
                     <th className='w-fit text-end'>Gross Revenue</th>
                     <th className='w-fit text-end'>Net Profit</th>
                     <th className='w-fit text-end'>Units Sold</th>
@@ -47,10 +47,10 @@ const ReorderingPointsExpandedDetails: React.FC<ExpanderComponentProps<Reorderin
                       (marketplace, index) =>
                         marketplace.totalUnitsSold > 0 && (
                           <tr key={index}>
-                            <td className='w-25 text-wrap'>{marketplace.name}</td>
+                            <td className='w-50 text-wrap'>{marketplace.name}</td>
                             <td className='text-end align-bottom'>{FormatCurrency(state.currentRegion, marketplace.grossRevenue)}</td>
                             <td className='text-end align-bottom'>{FormatCurrency(state.currentRegion, marketplace.grossRevenue - marketplace.expenses)}</td>
-                            <td className='text-end align-bottom'>{FormatIntNumber(state.currentRegion, marketplace.totalUnitsSold)}</td>
+                            <td className='text-center align-bottom'>{FormatIntNumber(state.currentRegion, marketplace.totalUnitsSold)}</td>
                           </tr>
                         )
                     )}
@@ -60,7 +60,7 @@ const ReorderingPointsExpandedDetails: React.FC<ExpanderComponentProps<Reorderin
                     <td className='fw-bold text-end'>Total</td>
                     <td className='text-end'>{FormatCurrency(state.currentRegion, data.grossRevenue)}</td>
                     <td className='text-end'>{FormatCurrency(state.currentRegion, data.grossRevenue - data.expenses)}</td>
-                    <td className='text-end'>{FormatIntNumber(state.currentRegion, data.unitsSold)}</td>
+                    <td className='text-center'>{FormatIntNumber(state.currentRegion, data.unitsSold)}</td>
                   </tr>
                 </tfoot>
               </table>
@@ -73,7 +73,7 @@ const ReorderingPointsExpandedDetails: React.FC<ExpanderComponentProps<Reorderin
               <h5 className='fw-semibold m-0'>Performance Timeline</h5>
             </CardHeader>
             <CardBody>
-              <ReorderingPointsTimeLine productTimeLine={data.dateList} leadtime={data.leadTime} daysRemaining={data.daysRemaining} poDates={data.poDates} />
+              <ReorderingPointsTimeLine productTimeLine={data.dateList} leadtime={data.leadTime} daysRemaining={data.daysRemaining} poDates={data.poDates} forecast={data.forecast}/>
             </CardBody>
           </Card>
         </Col>
