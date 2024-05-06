@@ -16,7 +16,7 @@ import useSWR from 'swr'
 import { toast } from 'react-toastify'
 import { ReorderingPointsProduct, ReorderingPointsResponse, ReorderingPointsSalesResponse } from '@typesTs/reorderingPoints/reorderingPoints'
 import ReorderingPointsTable from '@components/reorderingPoints/ReorderingPointsTable'
-import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
+import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
 import ReorderingPointsSalesModal from '@components/modals/reorderingPoints/ReorderingPointsSalesModal'
 import ReorderingPointsSettings from '@components/reorderingPoints/ReorderingPointsSettings'
 import ReorderingPointsCreatePOModal from '@components/modals/reorderingPoints/ReorderingPointsCreatePOModal'
@@ -98,7 +98,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
     marketplaces: {},
   })
   const [setField, setsetField] = useState('urgency')
-  const [sortingDirectionAsc, setsortingDirectionAsc] = useState(false)
+  const [sortingDirectionAsc, setsortingDirectionAsc] = useState(true)
   const [showPOModal, setshowPOModal] = useState(false)
 
   const fetcherMarketplaces = (endPoint: string) => axios(endPoint).then((res) => res.data)
@@ -376,7 +376,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
         }
       })
     }
-    
+
     if (['forecast'].includes(field)) {
       return rows.sort((a, b) => {
         const aField = Object.values(a.forecast).reduce((total, unitsSold) => total + unitsSold, 0) - (a.warehouseQty + a.fbaQty + a.productionQty + a.receiving)
@@ -406,9 +406,9 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
     }
 
     return rows.sort((a, b) => {
-      if (a.urgency > b.urgency) {
+      if (a.daysToOrder > b.daysToOrder) {
         return direction ? 1 : -1
-      } else if (a.urgency < b.urgency) {
+      } else if (a.daysToOrder < b.daysToOrder) {
         return direction ? -1 : 1
       } else {
         return 0
@@ -420,13 +420,13 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
       const newProductsData = { ...prevData }
       for (const product of Object.values(newProductsData)) {
         switch (true) {
-          case product.daysRemaining <= product.leadTime + highAlertMax:
+          case product.daysToOrder <= highAlertMax:
             product.urgency = 3
             break
-          case product.daysRemaining <= product.leadTime + mediumAlertMax && product.daysRemaining >= product.leadTime + highAlertMax + 1:
+          case product.daysToOrder <= mediumAlertMax && product.daysToOrder >= highAlertMax + 1:
             product.urgency = 2
             break
-          case product.daysRemaining <= product.leadTime + lowAlertMax && product.daysRemaining >= product.leadTime + mediumAlertMax + 1:
+          case product.daysToOrder <= lowAlertMax && product.daysToOrder >= mediumAlertMax + 1:
             product.urgency = 1
             break
           default:
@@ -554,7 +554,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
     }
 
     for (const item of Object.values(productsData)) {
-      if(item.order <= 0) continue
+      if (item.order <= 0) continue
       orderSummary.totalQty += item.useOrderAdjusted ? item.orderAdjusted : item.order
       orderSummary.totalCost += item.useOrderAdjusted ? item.orderAdjusted * item.sellerCost : item.order * item.sellerCost
       orderSummary.totalVolume += item.useOrderAdjusted ? item.orderAdjusted * item.itemVolume : item.order * item.itemVolume
@@ -724,14 +724,19 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
                     </tr>
                     <tr className='border-bottom pb-2'>
                       <td className='text-muted'>Total Volume</td>
-                      <td className='fw-semibold text-end'>{`${FormatIntNumber(state.currentRegion, reorderingPointsOrder.totalVolume)} ${
-                        state.currentRegion === 'us' ? 'in' : 'cm'
-                      }`}</td>
+                      <td className='fw-semibold text-end'>{`${FormatIntPercentage(
+                        state.currentRegion,
+                        state.currentRegion === 'us' ? reorderingPointsOrder.totalVolume / 1728 : reorderingPointsOrder.totalVolume / 1000000
+                      )} ${state.currentRegion === 'us' ? 'ft³' : 'm³'}`}</td>
                     </tr>
                   </tbody>
                 </table>
                 <div className='mt-2 text-end'>
-                  <Button disabled={error.length > 0 || Object.keys(reorderingPointsOrder.products).length === 0} className='fs-7 btn btn-sm' color='primary' onClick={() => setshowPOModal(true)}>
+                  <Button
+                    disabled={error.length > 0 || Object.keys(reorderingPointsOrder.products).length === 0}
+                    className='fs-7 btn btn-sm'
+                    color='primary'
+                    onClick={() => setshowPOModal(true)}>
                     Create Order
                   </Button>
                   {error.length > 0 && <p className='fs-7 text-danger m-0 p-0'>Error in some Products</p>}
@@ -741,7 +746,15 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
           </div>
         )}
         {salesModal.showSalesModal && <ReorderingPointsSalesModal salesModal={salesModal} setSalesModal={setSalesModal} />}
-        {showPOModal && <ReorderingPointsCreatePOModal reorderingPointsOrder={reorderingPointsOrder} selectedSupplier={selectedSupplier} showPOModal={showPOModal} setshowPOModal={setshowPOModal} username={session?.user?.name}/>}
+        {showPOModal && (
+          <ReorderingPointsCreatePOModal
+            reorderingPointsOrder={reorderingPointsOrder}
+            selectedSupplier={selectedSupplier}
+            showPOModal={showPOModal}
+            setshowPOModal={setshowPOModal}
+            username={session?.user?.name}
+          />
+        )}
       </React.Fragment>
     </div>
   )

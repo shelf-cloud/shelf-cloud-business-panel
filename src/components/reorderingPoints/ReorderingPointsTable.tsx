@@ -94,14 +94,34 @@ const ReorderingPointsTable = ({
         return (
           <div className='d-flex flex-column justify-content-center align-items-center gap-1'>
             <i className={`mdi mdi-alert-octagon fs-3 m-0 p-0 ${color}`} />
-            <span className='m-0 p-0 text-center fs-7'>{`${FormatIntNumber(state.currentRegion, row.daysRemaining)} days`}</span>
+
+            <div className='d-flex flex-row justify-content-center align-items-center gap-1'>
+              <span className={'m-0 p-0 text-center fs-7' + (row.daysToOrder <= 0 ? ' text-danger fw-semibold' : '')}>{`${FormatIntNumber(state.currentRegion, row.daysToOrder)} ${
+                row.daysToOrder == 1 ? 'day' : 'days'
+              }`}</span>
+              <i className='fs-5 text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={'DaysToOrderIcon'} />
+              <UncontrolledTooltip placement='top' target={'DaysToOrderIcon'} innerClassName='bg-white border border-info border-opacity-50 p-2'>
+                <p className='fs-7 text-primary m-0 p-0 mb-0'>Remaining days to place order.</p>
+              </UncontrolledTooltip>
+            </div>
+
+            <div className='d-flex flex-row justify-content-center align-items-center gap-1'>
+              <span className={'m-0 p-0 text-center fs-7' + (row.daysRemaining <= 0 ? ' text-danger fw-semibold' : '')}>{`${FormatIntNumber(
+                state.currentRegion,
+                row.daysRemaining
+              )} ${row.daysRemaining == 1 ? 'day' : 'days'}`}</span>
+              <i className='fs-5 text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={'DaysRemaining'} />
+              <UncontrolledTooltip placement='top' target={'DaysRemaining'} innerClassName='bg-white border border-info border-opacity-50 p-2'>
+                <p className='fs-7 text-primary m-0 p-0 mb-0'>Remaining days of stock.</p>
+              </UncontrolledTooltip>
+            </div>
           </div>
         )
       },
       sortable: false,
       center: true,
       compact: true,
-      grow: 0,
+      // grow: 0,
       // sortFunction: urgencySort,
     },
     {
@@ -378,7 +398,7 @@ const ReorderingPointsTable = ({
                 onChange={(e) => handleDaysOfStockQty(row.sku, parseInt(e.target.value), row.inventoryId)}
               />
               <i className='fs-5 text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={'DaysOfStockInfo'} />
-              <UncontrolledTooltip placement='top' target={'DaysOfStockInfo'} popperClassName='bg-white px-1 pt-1 rounded-2' innerClassName='shadow bg-white p-0'>
+              <UncontrolledTooltip placement='top' target={'DaysOfStockInfo'} innerClassName='bg-white border border-info border-opacity-50 p-2'>
                 <p className='fs-7 text-primary m-0 p-0 mb-0'>The number of days you want to have stock in addition to the lead time.</p>
               </UncontrolledTooltip>
             </div>
@@ -421,7 +441,7 @@ const ReorderingPointsTable = ({
                 )
               )}
             </p>
-            <UncontrolledTooltip placement='top' target={'Recommended_Qty'} popperClassName='bg-white px-1 pt-1 rounded-2' innerClassName='shadow bg-white p-0'>
+            <UncontrolledTooltip placement='top' target={'Recommended_Qty'} innerClassName='bg-white border border-info border-opacity-50 p-2'>
               <p className='fs-7 text-primary m-0 p-0 mb-0'>Lead Time + Days of Stock x Daily Sales Last 30 Days - Total Inventory</p>
             </UncontrolledTooltip>
             <p className='m-0 p-0 text-center' id={`forecast_${row.sku}`}>
@@ -432,7 +452,7 @@ const ReorderingPointsTable = ({
                   : Object.values(row.forecast).reduce((total, unitsSold) => total + unitsSold, 0) - (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
               )}
             </p>
-            <UncontrolledTooltip placement='top' target={`forecast_${row.sku}`} popperClassName='bg-white px-1 pt-1 rounded-2' innerClassName='shadow bg-white p-0'>
+            <UncontrolledTooltip placement='top' target={`forecast_${row.sku}`} innerClassName='bg-white border border-info border-opacity-50 p-2'>
               <p className='fs-7 text-primary m-0 p-0 mb-0'>{`Forecast Model: ${row.forecastModel} - Total Inventory`}</p>
             </UncontrolledTooltip>
             <p className='m-0 p-0 text-center'>{FormatIntNumber(state.currentRegion, row.adjustedForecast)}</p>

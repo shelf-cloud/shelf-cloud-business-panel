@@ -47,8 +47,8 @@ const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, po
                 }
             } else {
                 result[weekYear].unitsSold += productTimeLine[key].unitsSold
-                result[weekYear].dailyStock += productTimeLine[key].dailyStock
-                result[weekYear].dailyStockFBA += productTimeLine[key].dailyStockFBA
+                // result[weekYear].dailyStock += productTimeLine[key].dailyStock
+                // result[weekYear].dailyStockFBA += productTimeLine[key].dailyStockFBA
             }
             return result
         }, {})
@@ -65,8 +65,8 @@ const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, po
                 }
             } else {
                 result[weekYear].unitsSold += productTimeLine[key].unitsSold
-                result[weekYear].dailyStock += productTimeLine[key].dailyStock
-                result[weekYear].dailyStockFBA += productTimeLine[key].dailyStockFBA
+                // result[weekYear].dailyStock += productTimeLine[key].dailyStock
+                // result[weekYear].dailyStockFBA += productTimeLine[key].dailyStockFBA
             }
             return result
         }, {})

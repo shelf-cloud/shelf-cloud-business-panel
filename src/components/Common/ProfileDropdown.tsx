@@ -6,6 +6,7 @@ import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap
 import Link from 'next/link'
 import flag_of_europe from '@assets/images/flag_of_europe.png'
 import flag_of_usa from '@assets/images/flag_of_usa.png'
+import flag_of_SC from '@assets/images/avatar-shelfcloud.png'
 import { useRouter } from 'next/router'
 import AppContext from '@context/AppContext'
 
@@ -33,11 +34,14 @@ const ProfileDropdown = () => {
                 <span className='d-inline-block fs-5 m-0 fw-medium user-name-text text-capitalize'>{session?.user?.name}</span>
                 <span className='inline-block fs-6 m-0 text-muted user-name-sub-text'>{state.currentRegion !== '' && (state.currentRegion == 'us' ? 'USA' : 'EUROPE')}</span>
               </span>
-              {state.currentRegion !== '' &&
+              {state &&
+                state.currentRegion !== '' &&
                 (state.currentRegion == 'us' ? (
                   <Image className='rounded-circle header-profile-user' src={flag_of_usa} width={35} height={35} alt='Header Avatar' />
-                ) : (
+                ) : state.currentRegion == 'eu' ? (
                   <Image className='rounded-circle header-profile-user' src={flag_of_europe} width={35} height={35} alt='Header Avatar' />
+                ) : (
+                  <Image className='rounded-circle header-profile-user' src={flag_of_SC} width={35} height={35} alt='Header Avatar' />
                 ))}
             </span>
           </DropdownToggle>

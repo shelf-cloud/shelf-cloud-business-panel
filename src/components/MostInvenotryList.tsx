@@ -18,7 +18,7 @@ const MostInvenotryList = ({ products }: Props) => {
         <Card>
           <CardHeader className='align-items-center d-flex justify-content-between'>
             <h4 className='card-title mb-0 flex-grow-1'>Stock Inventory</h4>
-            <Link href={'/Products'}>
+            <Link href={'/Products?brand=All&supplier=All&category=All&condition=All'}>
               <a className='fs-6 text-primary fw-normal'>View All Products</a>
             </Link>
           </CardHeader>

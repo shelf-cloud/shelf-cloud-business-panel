@@ -69,7 +69,8 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
       <div className={'dropdown-menu dropdown-menu-xl px-2 pt-3 pb-1' + (openDatesMenu ? ' show' : '')}>
         <div className='d-flex flex-column justify-content-start px-2'>
           <p className='fs-6 m-0 p-0 fw-semibold'>Urgency Time Range</p>
-          <p className='fs-7 m-0 p-0 text-muted fw-light'>Urgency is based on days remaining, lead time and time Range.</p>
+          <p className='fs-7 m-0 p-0 text-muted fw-light'>A product&apos;s urgency depends on how many days of stock remain after lead time. The remaining days to place an order to avoid being out of stock during lead time.</p>
+          <p className='fs-7 m-0 p-0 text-muted fw-light'></p>
           <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => handleSubmit(values)}>
             {({ values, errors, touched, handleChange, handleBlur }) => (
               <Form className='my-2'>
@@ -232,9 +233,6 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
                     </InputGroup>
                   </div>
                 </Col>
-                <p className='fs-7 m-0 p-0 text-muted fw-light'>
-                  Example: Medium Alert are products with remaining days between lead time + {`${values.highAlertMax + 1}`} and lead time + {`${values.mediumAlertMax}`}
-                </p>
                 <Col xs={12} className='mt-3'>
                   <div className='d-flex flewx-row justify-content-end align-items-center gap-3'>
                     <Button type='submit' className='fs-6 btn bg-primary' size='sm'>

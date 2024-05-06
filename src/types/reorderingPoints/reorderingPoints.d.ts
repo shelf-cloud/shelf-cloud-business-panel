@@ -31,6 +31,7 @@ export interface ReorderingPointsProduct {
     supplier: string;
     show: number;
     daysRemaining: number;
+    daysToOrder: number;
     urgency: number;
     adjustedForecast: number;
     order: number;
