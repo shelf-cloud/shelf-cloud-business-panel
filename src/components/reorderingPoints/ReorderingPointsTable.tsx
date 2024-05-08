@@ -427,6 +427,11 @@ const ReorderingPointsTable = ({
         </div>
       ),
       selector: (row: ReorderingPointsProduct) => {
+        const forecast =
+          Object.values(row.forecast).reduce((total, unitsSold) => total + unitsSold, 0) - (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving) < 0
+            ? 0
+            : Object.values(row.forecast).reduce((total, unitsSold) => total + unitsSold, 0) - (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
+
         return (
           <div className='fs-7'>
             <p className='m-0 p-0 text-center' id={'Recommended_Qty'}>
@@ -444,18 +449,24 @@ const ReorderingPointsTable = ({
             <UncontrolledTooltip placement='top' target={'Recommended_Qty'} innerClassName='bg-white border border-info border-opacity-50 p-2'>
               <p className='fs-7 text-primary m-0 p-0 mb-0'>Lead Time + Days of Stock x Daily Sales Last 30 Days - Total Inventory</p>
             </UncontrolledTooltip>
+
             <p className='m-0 p-0 text-center' id={`forecast_${row.sku}`}>
-              {FormatIntNumber(
-                state.currentRegion,
-                Object.values(row.forecast).reduce((total, unitsSold) => total + unitsSold, 0) - (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving) < 0
-                  ? 0
-                  : Object.values(row.forecast).reduce((total, unitsSold) => total + unitsSold, 0) - (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
-              )}
+              {FormatIntNumber(state.currentRegion, forecast)}
             </p>
             <UncontrolledTooltip placement='top' target={`forecast_${row.sku}`} innerClassName='bg-white border border-info border-opacity-50 p-2'>
               <p className='fs-7 text-primary m-0 p-0 mb-0'>{`Forecast Model: ${row.forecastModel} - Total Inventory`}</p>
             </UncontrolledTooltip>
-            <p className='m-0 p-0 text-center'>{FormatIntNumber(state.currentRegion, row.adjustedForecast)}</p>
+
+            <p className='m-0 p-0 text-center' id={`Adjustedforecast_${row.sku}`}>
+              {FormatIntNumber(state.currentRegion, row.adjustedForecast)}
+            </p>
+            <UncontrolledTooltip placement='top' target={`Adjustedforecast_${row.sku}`} innerClassName='bg-white border border-info border-opacity-50 p-2'>
+              <p className='fs-7 text-primary m-0 p-0 mb-0'>
+                {row.adjustedForecast !== 0
+                  ? `Sales variation adjustment comparing same previous months.`
+                  : 'It is not possible to calculate variation based on the information available.'}
+              </p>
+            </UncontrolledTooltip>
           </div>
         )
       },
