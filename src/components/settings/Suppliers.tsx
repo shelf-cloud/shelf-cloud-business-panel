@@ -72,11 +72,11 @@ const Suppliers = ({}: Props) => {
         productInfo: values,
       })
       if (!response.data.error) {
-        toast.success(response.data.msg)
+        toast.success(response.data.message)
         resetForm()
         mutate(`/api/settings/getSuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}`)
       } else {
-        toast.error(response.data.msg)
+        toast.error(response.data.message)
       }
     },
   })

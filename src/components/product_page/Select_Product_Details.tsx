@@ -57,11 +57,11 @@ const Select_Product_Details = ({ inventoryId, type, addEndpoint, selectionInfo,
         productInfo: values,
       })
       if (!response.data.error) {
-        toast.success(response.data.msg)
+        toast.success(response.data.message)
         resetForm()
         mutate(`/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${inventoryId}&businessId=${state.user.businessId}`)
       } else {
-        toast.error(response.data.msg)
+        toast.error(response.data.message)
       }
     },
   })
