@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import SelectDropDown from '@components/ui/SelectDropDown'
 import AppContext from '@context/AppContext'
 import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
@@ -152,6 +153,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                   <thead>
                     <tr>
                       <th>SKU</th>
+                      <th>Image</th>
                       <th>Product Name</th>
                       <th className='text-center'>Volume</th>
                       <th className='text-center'>Order Qty</th>
@@ -165,6 +167,31 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                       return (
                         <tr key={product.sku}>
                           <td>{product.sku}</td>
+                          <td>
+                            <div
+                              style={{
+                                width: '30px',
+                                minWidth: '30px',
+                                height: '30px',
+                                margin: '0px',
+                                position: 'relative',
+                              }}>
+                              <img
+                                loading='lazy'
+                                src={
+                                  product.image
+                                    ? product.image
+                                    : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+                                }
+                                onError={(e) =>
+                                  (e.currentTarget.src =
+                                    'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
+                                }
+                                alt='product Image'
+                                style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+                              />
+                            </div>
+                          </td>
                           <td>{product.title}</td>
                           <td className='text-center'>
                             {`${FormatIntPercentage(state.currentRegion, state.currentRegion === 'us' ? productVolume / 1728 : productVolume / 1000000)} ${
@@ -181,6 +208,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                   </tbody>
                   <tfoot>
                     <tr className='fw-semibold'>
+                      <td></td>
                       <td></td>
                       <td className='text-end'>TOTAL</td>
                       <td className='text-center'>{`${FormatIntPercentage(

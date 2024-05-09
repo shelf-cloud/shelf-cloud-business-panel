@@ -1,5 +1,5 @@
 import AppContext from '@context/AppContext'
-import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
+import { FormatIntNumber } from '@lib/FormatNumbers'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import moment from 'moment'
 import React, { useContext } from 'react'
@@ -63,7 +63,6 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                   }
                   #left1 p {
                       margin: 0px;
-                      font-size: 16px;
                   }#left1 img {
                       width: 280px;
                       object-fit: contain;
@@ -81,13 +80,20 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                   }
                   </style>
               </head>
-              <body>
+              <body contentEditable="true">
                   <div id="container">
                   <div class="zone">
                       <div id="left1">
-                      <h1 class="my-0" style="font-size: 30px;text-transform: uppercase;">Purchase Order</h1>
-                      <p class="my-1 text-capitalize" style="font-size: 16px;font-weight: 900;">Business: <span class="text-uppercase">${username}</span></p>
-                      <p class="my-0 text-capitalize" style="font-size: 16px;font-weight: 600;">Supplier: ${selectedSupplier}</p>`
+                      <h1 class="my-0 text-uppercase fw-bold fs-3">Purchase Order</h1>
+
+                      <p class="text-capitalize mb-0 pb-0 fw-semibold">${state.user[state.currentRegion].name}</p>
+                      <p class="mb-0 pb-0">${state.user[state.currentRegion].address}</p>
+                      <p class="mb-0 pb-0">${state.user[state.currentRegion].city}, ${state.user[state.currentRegion].state} ${state.user[state.currentRegion].zipcode} ${
+                        state.user[state.currentRegion].country
+                      }</p>
+                      <a href="mailto:${state.user[state.currentRegion].email}" class="mb-0 pb-0">${state.user[state.currentRegion].email}</a>
+                      <a class="mb-0 pb-0">${state.user[state.currentRegion].website}</a>
+                      <p class="my-0 text-capitalize fw-semibold">Supplier: ${selectedSupplier}</p>`
 
     invoice += `</div><!--End Left-->
                       <div id="right1">
@@ -100,30 +106,66 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                       </div><!--End Right-->
                   </div><!--End Zone-->
                   
+                  <div class="d-flex flex-row justify-content-between align-items-center gap-4 mb-3">
+                    <div class="w-100">
+                      <p class="fw-bold fs-4">Bill Info:</p>
+                      <div class="border border-2 border-black px-3 py-2">
+                      <p class="mb-0 pb-0">${state.user[state.currentRegion].name}</p>
+                      <p class="mb-0 pb-0">${state.user[state.currentRegion].contactName}</p>
+                      <p class="mb-0 pb-0">${state.user[state.currentRegion].address}</p>
+                      <p class="mb-0 pb-0">${state.user[state.currentRegion].city}, ${state.user[state.currentRegion].state} ${state.user[state.currentRegion].zipcode} ${
+      state.user[state.currentRegion].country
+    }</p>
+                      <p class="mb-0 pb-0">Phone: ${state.user[state.currentRegion].phone}</p>
+                      </div>
+                    </div>
+                    <div class="w-100">
+                      <p class="fw-bold fs-4">Ship To:</p>
+                      <div class="border border-2 border-black px-3 py-2">
+                        <p class="mb-0 pb-0">${state.user[state.currentRegion].name}</p>
+                        <p class="mb-0 pb-0">${state.user[state.currentRegion].contactName}</p>
+                        <p class="mb-0 pb-0">${state.user[state.currentRegion].address}</p>
+                        <p class="mb-0 pb-0">${state.user[state.currentRegion].city}, ${state.user[state.currentRegion].state} ${state.user[state.currentRegion].zipcode} ${
+      state.user[state.currentRegion].country
+    }</p>
+                        <p class="mb-0 pb-0">Phone: ${state.user[state.currentRegion].phone}</p>
+                        </div>
+                    </div>
+                  </div>
+
                   <table class='table table-bordered align-middle'>
                   <thead class="table-light">
                     <tr>
                       <th>SKU</th>
+                      <th class='text-center'>Image</th>
                       <th>Product Name</th>
-                      <th class='text-center'>Volume</th>
+                      <th class='text-center'>UPC</th>
+                      <th class='text-center'>Qty Per Box</th>
                       <th class='text-center'>Order Qty</th>
-                      <th class='text-center'>Cost</th>
                     </tr>
                   </thead>
                   <tbody class="table-group-divider">`
 
     for await (const product of Object.values(reorderingPointsOrder.products)) {
       invoice += `<tr key=${product.sku}>
-                    <td>${product.sku}</td>
-                    <td>${product.title}</td>
-                    <td class='text-center'>${FormatIntNumber(
-                      state.currentRegion,
-                      product.useOrderAdjusted ? product.orderAdjusted * product.itemVolume : product.order * product.itemVolume
-                    )} ${state.currentRegion === 'us' ? 'in' : 'cm'}</td>
-                    <td class='text-center'>${FormatIntNumber(state.currentRegion, product.useOrderAdjusted ? product.orderAdjusted : product.order)}</td>
-                    <td class='text-center'>
-                      ${FormatCurrency(state.currentRegion, product.useOrderAdjusted ? product.orderAdjusted * product.sellerCost : product.order * product.sellerCost)}
+                    <td class="text-nowrap">${product.sku}</td>
+                    <td class="text-center w-fit">
+                      <div style="width: 60px;min-width: 30px;height: 50px;margin: 0px;position: relative;">
+                      <img loading='lazy'
+                          style="object-fit: contain;object-position: center;width: 100%;height: 100%;"
+                          src=${
+                            product.image
+                              ? product.image
+                              : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+                          }
+                          alt='product Image'
+                        />
+                      </div>
                     </td>
+                    <td>${product.title}</td>
+                    <td class='text-center'>${product.barcode}</td>
+                    <td class='text-center'>${product.boxQty}</td>
+                    <td class='text-center'>${FormatIntNumber(state.currentRegion, product.useOrderAdjusted ? product.orderAdjusted : product.order)}</td>
                   </tr>`
     }
 
@@ -131,10 +173,11 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                 <tfoot>
                 <tr class='fw-semibold'>
                     <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td class='text-end'>TOTAL</td>
-                    <td class='text-center'>${FormatIntNumber(state.currentRegion, reorderingPointsOrder.totalVolume)} ${state.currentRegion === 'us' ? 'in' : 'cm'}</td>
                     <td class='text-center'>${FormatIntNumber(state.currentRegion, reorderingPointsOrder.totalQty)}</td>
-                    <td class='text-center'>${FormatCurrency(state.currentRegion, reorderingPointsOrder.totalCost)}</td>
                 </tr>
                 </tfoot>
                 </table>

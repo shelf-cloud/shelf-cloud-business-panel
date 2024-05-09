@@ -262,17 +262,17 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
       }
       if (orderQty < 0) {
         newProductsData[sku].order = orderQty
-        newProductsData[sku].orderAdjusted = newProductsData[sku].boxQty
+        newProductsData[sku].orderAdjusted = newProductsData[sku].boxQty === 0 ? orderQty : newProductsData[sku].boxQty
         return newProductsData
       }
       if (orderQty <= newProductsData[sku].boxQty) {
         newProductsData[sku].order = orderQty
-        newProductsData[sku].orderAdjusted = newProductsData[sku].boxQty
+        newProductsData[sku].orderAdjusted = newProductsData[sku].boxQty === 0 ? orderQty : newProductsData[sku].boxQty
         return newProductsData
       }
       if (orderQty > newProductsData[sku].boxQty) {
         newProductsData[sku].order = orderQty
-        newProductsData[sku].orderAdjusted = newProductsData[sku].boxQty * Math.ceil(orderQty / newProductsData[sku].boxQty)
+        newProductsData[sku].orderAdjusted = newProductsData[sku].boxQty === 0 ? orderQty : newProductsData[sku].boxQty * Math.ceil(orderQty / newProductsData[sku].boxQty)
         return newProductsData
       }
       return newProductsData
@@ -349,7 +349,9 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
       })
     }
 
-    if (['daysRemaining', 'warehouseQty', 'fbaQty', 'productionQty', 'receiving', 'sellerCost', 'leadTime', 'boxQty', 'adjustedForecast', 'order', 'orderAdjusted'].includes(field)) {
+    if (
+      ['daysRemaining', 'warehouseQty', 'fbaQty', 'productionQty', 'receiving', 'sellerCost', 'leadTime', 'boxQty', 'adjustedForecast', 'order', 'orderAdjusted'].includes(field)
+    ) {
       return rows.sort((a, b) => {
         const aField = a[field as keyof ReorderingPointsProduct]
         const bField = b[field as keyof ReorderingPointsProduct]

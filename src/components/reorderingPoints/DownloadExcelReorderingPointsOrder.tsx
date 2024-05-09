@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import ExcelJS from 'exceljs'
 import { DropdownItem } from 'reactstrap'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
+import AppContext from '@context/AppContext'
 
 type Props = {
   reorderingPointsOrder: {
@@ -19,6 +20,7 @@ type Props = {
 }
 
 const DownloadExcelReorderingPointsOrder = ({ reorderingPointsOrder, orderDetails, selectedSupplier, username }: Props) => {
+  const { state }: any = useContext(AppContext)
   const buildTemplate = async () => {
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet(`PO - ${username.substring(0, 3).toUpperCase()}-${orderDetails.orderNumber}`)
@@ -26,7 +28,9 @@ const DownloadExcelReorderingPointsOrder = ({ reorderingPointsOrder, orderDetail
     const columnsProductPerformance = [
       { key: 'sku', header: 'Sku' },
       { key: 'title', header: 'Title' },
-      { key: 'volume', header: 'Volume' },
+      { key: 'upc', header: 'UPC' },
+      { key: 'qtyPerBox', header: 'Qty Per Box' },
+      { key: 'volume', header: state.currentRegion === 'us' ? 'Volume ft³' : 'Volume m³' },
       { key: 'orderQty', header: 'Order Qty' },
       { key: 'cost', header: 'Cost' },
     ]
@@ -37,7 +41,15 @@ const DownloadExcelReorderingPointsOrder = ({ reorderingPointsOrder, orderDetail
       worksheet.addRow({
         sku: product.sku,
         title: product.title,
-        volume: product.useOrderAdjusted ? product.orderAdjusted * product.itemVolume : product.order * product.itemVolume,
+        upc: product.barcode,
+        qtyPerBox: product.boxQty,
+        volume: product.useOrderAdjusted
+          ? state.currentRegion === 'us'
+            ? (product.itemVolume / 1728) * product.orderAdjusted
+            : (product.itemVolume / 1000000) * product.orderAdjusted
+          : state.currentRegion === 'us'
+          ? (product.itemVolume / 1728) * product.order
+          : (product.itemVolume / 1000000) * product.order,
         orderQty: product.useOrderAdjusted ? product.orderAdjusted : product.order,
         cost: product.useOrderAdjusted ? product.orderAdjusted * product.sellerCost : product.order * product.sellerCost,
       })
@@ -45,8 +57,10 @@ const DownloadExcelReorderingPointsOrder = ({ reorderingPointsOrder, orderDetail
 
     worksheet.addRow({
       sku: '',
-      title: 'TOTAL',
-      volume: reorderingPointsOrder.totalVolume,
+      title: '',
+      upc: '',
+      qtyPerBox: 'TOTAL',
+      volume: state.currentRegion === 'us' ? reorderingPointsOrder.totalVolume / 1728 : reorderingPointsOrder.totalVolume / 1000000,
       orderQty: reorderingPointsOrder.totalQty,
       cost: reorderingPointsOrder.totalCost,
     })
@@ -58,8 +72,58 @@ const DownloadExcelReorderingPointsOrder = ({ reorderingPointsOrder, orderDetail
       title: `${username.substring(0, 3).toUpperCase()}-${orderDetails.orderNumber}`,
     })
     worksheet.addRow({
+      sku: state.user[state.currentRegion].name,
+    })
+    worksheet.addRow({
+      sku: state.user[state.currentRegion].address,
+    })
+    worksheet.addRow({
+      sku: `${state.user[state.currentRegion].city}, ${state.user[state.currentRegion].state} ${state.user[state.currentRegion].zipcode} ${
+        state.user[state.currentRegion].country
+      }`,
+    })
+    worksheet.addRow({
+      sku: state.user[state.currentRegion].email,
+    })
+    worksheet.addRow({
+      sku: state.user[state.currentRegion].website,
+    })
+    worksheet.addRow({
       sku: 'Supplier',
       title: selectedSupplier,
+    })
+
+    Array(2)
+      .fill(0)
+      .forEach(() => worksheet.addRow({}))
+
+    worksheet.addRow({
+      sku: 'Bill Info:',
+      title: 'Ship To:',
+    })
+    worksheet.addRow({
+      sku: state.user[state.currentRegion].name,
+      title: state.user[state.currentRegion].name,
+    })
+    worksheet.addRow({
+      sku: state.user[state.currentRegion].address,
+      title: state.user[state.currentRegion].address,
+    })
+    worksheet.addRow({
+      sku: `${state.user[state.currentRegion].city}, ${state.user[state.currentRegion].state} ${state.user[state.currentRegion].zipcode} ${
+        state.user[state.currentRegion].country
+      }`,
+      title: `${state.user[state.currentRegion].city}, ${state.user[state.currentRegion].state} ${state.user[state.currentRegion].zipcode} ${
+        state.user[state.currentRegion].country
+      }`,
+    })
+    worksheet.addRow({
+      sku: state.user[state.currentRegion].email,
+      title: state.user[state.currentRegion].email,
+    })
+    worksheet.addRow({
+      sku: state.user[state.currentRegion].website,
+      title: state.user[state.currentRegion].website,
     })
 
     workbook.xlsx.writeBuffer().then((buffer) => {
