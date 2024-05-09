@@ -55,7 +55,6 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
     ),
   })
   const handleSubmit = async (values: any) => {
-    console.log(values)
     const response = await axios.post(`/api/productDetails/identifiersProductDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
       productInfo: values,
     })

@@ -36,12 +36,6 @@ const CancelManualOrderConfirmationModal = ({ showDeleteModal, setshowDeleteModa
     }),
     onSubmit: async (values) => {
       setLoading(true)
-      console.log({
-        orderId: showDeleteModal.orderId,
-        orderNumber: showDeleteModal.orderNumber,
-        notify: values.notify,
-        reason: values.reason,
-      })
       const response = await axios.post(`/api/shipments/cancelManualOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
         orderId: showDeleteModal.orderId,
         orderNumber: showDeleteModal.orderNumber,

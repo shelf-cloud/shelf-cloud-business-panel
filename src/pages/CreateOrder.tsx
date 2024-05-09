@@ -213,7 +213,6 @@ const CreateOrder = ({ session }: Props) => {
     await axios(
       `https://api.geoapify.com/v1/geocode/autocomplete?text=${searchText}&apiKey=e7137de1f9144ed8a7d24f041bb6e725&limit=3&lang=${state.currentRegion == 'us' ? 'en' : 'es'}`
     ).then((res) => {
-      console.log(res.data.features)
       setAutoCompleteAddress(res.data.features)
     })
   }

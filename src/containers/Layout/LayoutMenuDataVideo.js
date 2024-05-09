@@ -185,12 +185,6 @@ const Navdata = () => {
           parentId: 'receiving',
         },
         {
-          id: 'reorderingPoints',
-          label: 'Reordering Points',
-          link: '/reorderingPoints?filters=true&urgency=[2,3]',
-          parentId: 'receiving',
-        },
-        {
           id: 'receiving',
           label: 'Receiving Log',
           link: '/Receivings',
@@ -281,6 +275,15 @@ const Navdata = () => {
       label: 'Kits',
       link: '/Kits',
       parentId: 'warehouse',
+    })
+  }
+
+  if (state.user[state.currentRegion]?.showReorderingPoints) {
+    menuItems[4].subItems.unshift({
+      id: 'reorderingPoints',
+      label: 'Reordering Points',
+      link: '/reorderingPoints?filters=true&urgency=[2,3]',
+      parentId: 'receiving',
     })
   }
 

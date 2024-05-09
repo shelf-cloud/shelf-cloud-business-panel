@@ -349,7 +349,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
       })
     }
 
-    if (['daysRemaining', 'warehouseQty', 'fbaQty', 'productionQty', 'receiving', 'sellerCost', 'leadTime', 'boxQty', 'adjustedForecast'].includes(field)) {
+    if (['daysRemaining', 'warehouseQty', 'fbaQty', 'productionQty', 'receiving', 'sellerCost', 'leadTime', 'boxQty', 'adjustedForecast', 'order', 'orderAdjusted'].includes(field)) {
       return rows.sort((a, b) => {
         const aField = a[field as keyof ReorderingPointsProduct]
         const bField = b[field as keyof ReorderingPointsProduct]
@@ -698,6 +698,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
                   handleDaysOfStockQty={handleDaysOfStockQty}
                   setField={setField}
                   handleSetSorting={handleSetSorting}
+                  sortingDirectionAsc={sortingDirectionAsc}
                 />
               </CardBody>
             </Card>

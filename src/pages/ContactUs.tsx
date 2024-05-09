@@ -52,7 +52,6 @@ function ContactUs() {
       const response = await axios.post(`api/sendMail?region=${state.currentRegion}`, {
         message: values,
       })
-      console.log(response)
       if (!response.data.error) {
         toast.success(response.data.message)
       } else {

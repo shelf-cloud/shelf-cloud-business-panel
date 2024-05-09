@@ -1,8 +1,8 @@
 import SelectDropDown from '@components/ui/SelectDropDown'
 import AppContext from '@context/AppContext'
-import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
+import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import {
   Button,
   Col,
@@ -17,12 +17,17 @@ import {
   ModalFooter,
   ModalHeader,
   Row,
+  Spinner,
   UncontrolledButtonDropdown,
 } from 'reactstrap'
 import * as Yup from 'yup'
 import { Formik, Form } from 'formik'
 import PrintReorderingPointsOrder from '@components/reorderingPoints/PrintReorderingPointsOrder'
 import DownloadExcelReorderingPointsOrder from '@components/reorderingPoints/DownloadExcelReorderingPointsOrder'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import { useSWRConfig } from 'swr'
+import router from 'next/router'
 
 type Props = {
   reorderingPointsOrder: {
@@ -41,6 +46,8 @@ const DESTINATION_OPTIONS = ['ShelfCloud Warehouse', 'Direct to Marketplace']
 
 function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier, showPOModal, setshowPOModal, username }: Props) {
   const { state }: any = useContext(AppContext)
+  const { mutate } = useSWRConfig()
+  const [loading, setLoading] = useState(false)
   const orderNumberStart = `${username.substring(0, 3).toUpperCase()}-`
 
   const initialValues = {
@@ -57,7 +64,37 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
   })
 
   const handleSubmit = async (values: any) => {
-    console.log(values)
+    setLoading(true)
+
+    const poItems = []
+    for await (const product of Object.values(reorderingPointsOrder.products)) {
+      poItems.push({
+        sku: product.sku,
+        orderQty: product.useOrderAdjusted ? product.orderAdjusted : product.order,
+        inboundQty: 0,
+        sellerCost: product.sellerCost,
+        inventoryId: product.inventoryId,
+        receivedQty: 0,
+        arrivalHistory: [],
+      })
+    }
+
+    const response = await axios.post(`/api/reorderingPoints/createNewPurchaseOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      orderNumber: values.orderNumber,
+      destinationSC: values.destinationSC === 'ShelfCloud Warehouse' ? 1 : 0,
+      poItems: poItems,
+      selectedSupplier: selectedSupplier,
+    })
+    if (!response.data.error) {
+      setshowPOModal(false)
+      toast.success(response.data.message)
+      mutate('/api/getuser')
+      router.push('/purchaseOrders?status=pending&organizeBy=suppliers')
+    } else {
+      toast.error(response.data.message ?? 'Error creating Purchase Order')
+    }
+
+    setLoading(false)
   }
 
   return (
@@ -70,7 +107,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
               <p className='m-0 p-0 fw-normal fs-6'>Supplier: {selectedSupplier}</p>
             </ModalHeader>
             <ModalBody>
-              <Row>
+              <Row className='mb-3'>
                 <Col xs={12} md={5}>
                   <FormGroup className='createOrder_inputs'>
                     <Label htmlFor='lastNameinput' className='form-label mb-0'>
@@ -99,7 +136,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                   </FormGroup>
                 </Col>
                 <Col xs={12} md={5}>
-                  <Label className='form-label mb-0'>*Select Order Destination</Label>
+                  <Label className='form-label mb-0'>*Select Destination</Label>
                   <SelectDropDown
                     formValue={'destinationSC'}
                     selectionInfo={DESTINATION_OPTIONS}
@@ -123,16 +160,19 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                   </thead>
                   <tbody>
                     {Object.values(reorderingPointsOrder.products).map((product) => {
+                      const productVolume = product.useOrderAdjusted ? product.orderAdjusted * product.itemVolume : product.order * product.itemVolume
+
                       return (
                         <tr key={product.sku}>
                           <td>{product.sku}</td>
                           <td>{product.title}</td>
-                          <td className='text-center'>{`${FormatIntNumber(
-                            state.currentRegion,
-                            product.useOrderAdjusted ? product.orderAdjusted * product.itemVolume : product.order * product.itemVolume
-                          )} ${state.currentRegion === 'us' ? 'in' : 'cm'}`}</td>
+                          <td className='text-center'>
+                            {`${FormatIntPercentage(state.currentRegion, state.currentRegion === 'us' ? productVolume / 1728 : productVolume / 1000000)} ${
+                              state.currentRegion === 'us' ? 'ft³' : 'm³'
+                            }`}
+                          </td>
                           <td className='text-center'>{FormatIntNumber(state.currentRegion, product.useOrderAdjusted ? product.orderAdjusted : product.order)}</td>
-                          <td className='text-end'>
+                          <td className='text-center'>
                             {FormatCurrency(state.currentRegion, product.useOrderAdjusted ? product.orderAdjusted * product.sellerCost : product.order * product.sellerCost)}
                           </td>
                         </tr>
@@ -143,9 +183,12 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                     <tr className='fw-semibold'>
                       <td></td>
                       <td className='text-end'>TOTAL</td>
-                      <td className='text-center'>{`${FormatIntNumber(state.currentRegion, reorderingPointsOrder.totalVolume)} ${state.currentRegion === 'us' ? 'in' : 'cm'}`}</td>
+                      <td className='text-center'>{`${FormatIntPercentage(
+                        state.currentRegion,
+                        state.currentRegion === 'us' ? reorderingPointsOrder.totalVolume / 1728 : reorderingPointsOrder.totalVolume / 1000000
+                      )} ${state.currentRegion === 'us' ? 'ft³' : 'm³'}`}</td>
                       <td className='text-center'>{FormatIntNumber(state.currentRegion, reorderingPointsOrder.totalQty)}</td>
-                      <td className='text-end'>{FormatCurrency(state.currentRegion, reorderingPointsOrder.totalCost)}</td>
+                      <td className='text-center'>{FormatCurrency(state.currentRegion, reorderingPointsOrder.totalCost)}</td>
                     </tr>
                   </tfoot>
                 </table>
@@ -165,8 +208,8 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                 <Button color='light' onClick={() => setshowPOModal(false)}>
                   Close
                 </Button>
-                <Button type='submit' color='success'>
-                  Create
+                <Button disabled={loading} type='submit' color='success'>
+                  {loading ? <Spinner color='white' size={'sm'} /> : 'Create'}
                 </Button>
               </div>
             </ModalFooter>
