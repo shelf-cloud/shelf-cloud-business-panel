@@ -29,6 +29,7 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useSWRConfig } from 'swr'
 import router from 'next/router'
+import { DebounceInput } from 'react-debounce-input'
 
 type Props = {
   reorderingPointsOrder: {
@@ -49,6 +50,13 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [loading, setLoading] = useState(false)
+  const [orderComment, setorderComment] = useState('')
+  const [printColumns, setprintColumns] = useState({
+    comments: true,
+    qtyPerBox: true,
+    volume: true,
+    cost: true,
+  })
   const orderNumberStart = `${username.substring(0, 3).toUpperCase()}-`
 
   const initialValues = {
@@ -98,8 +106,13 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
     setLoading(false)
   }
 
+  const handleAddComment = (comment: string, sku: string) => {
+    if (comment === '') reorderingPointsOrder.products[sku].comment = ''
+    else reorderingPointsOrder.products[sku].comment = comment
+  }
+
   return (
-    <Modal fade={false} size='lg' id='unitsSoldDetailsModal' isOpen={showPOModal} toggle={() => setshowPOModal(false)}>
+    <Modal fade={false} size='xl' id='unitsSoldDetailsModal' isOpen={showPOModal} toggle={() => setshowPOModal(false)}>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => handleSubmit(values)}>
         {({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => (
           <Form>
@@ -111,7 +124,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
               <Row className='mb-3'>
                 <Col xs={12} md={5}>
                   <FormGroup className='createOrder_inputs'>
-                    <Label htmlFor='lastNameinput' className='form-label mb-0'>
+                    <Label htmlFor='lastNameinput' className='form-label mb-0 fs-7'>
                       *Purchase Order Number
                     </Label>
                     <div className='input-group'>
@@ -137,7 +150,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                   </FormGroup>
                 </Col>
                 <Col xs={12} md={5}>
-                  <Label className='form-label mb-0'>*Select Destination</Label>
+                  <Label className='form-label mb-0 fs-7'>*Select Destination</Label>
                   <SelectDropDown
                     formValue={'destinationSC'}
                     selectionInfo={DESTINATION_OPTIONS}
@@ -148,6 +161,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                   {errors.destinationSC && touched.destinationSC ? <div className='m-0 p-0 text-danger fs-7'>*{errors.destinationSC}</div> : null}
                 </Col>
               </Row>
+              <span className='fs-7 text-muted'>*Select the columns you wish to print.</span>
               <div className='d-flex flex-row justify-content-evenly align-items-start'>
                 <table className='table table-bordered table-hover table-striped table-sm mb-0'>
                   <thead>
@@ -155,9 +169,61 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                       <th>SKU</th>
                       <th>Image</th>
                       <th>Product Name</th>
-                      <th className='text-center'>Volume</th>
-                      <th className='text-center'>Order Qty</th>
-                      <th className='text-center'>Cost</th>
+                      <th>
+                        Product Comment{' '}
+                        <Input
+                          type='checkbox'
+                          className='fs-7'
+                          checked={printColumns.comments}
+                          onChange={() =>
+                            setprintColumns((prev) => {
+                              return { ...prev, comments: !printColumns.comments }
+                            })
+                          }
+                        />
+                      </th>
+                      <th className='text-center'>
+                        Qty Per Box{' '}
+                        <Input
+                          type='checkbox'
+                          className='fs-7'
+                          checked={printColumns.qtyPerBox}
+                          onChange={() =>
+                            setprintColumns((prev) => {
+                              return { ...prev, qtyPerBox: !printColumns.qtyPerBox }
+                            })
+                          }
+                        />
+                      </th>
+                      <th className='text-center'>
+                        Order Qty
+                      </th>
+                      <th className='text-center'>
+                        Volume{' '}
+                        <Input
+                          type='checkbox'
+                          className='fs-7'
+                          checked={printColumns.volume}
+                          onChange={() =>
+                            setprintColumns((prev) => {
+                              return { ...prev, volume: !printColumns.volume }
+                            })
+                          }
+                        />
+                      </th>
+                      <th className='text-center'>
+                        Cost{' '}
+                        <Input
+                          type='checkbox'
+                          className='fs-7'
+                          checked={printColumns.cost}
+                          onChange={() =>
+                            setprintColumns((prev) => {
+                              return { ...prev, cost: !printColumns.cost }
+                            })
+                          }
+                        />
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -166,13 +232,13 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
 
                       return (
                         <tr key={product.sku}>
-                          <td>{product.sku}</td>
+                          <td className='text-nowrap'>{product.sku}</td>
                           <td>
                             <div
                               style={{
-                                width: '30px',
+                                width: '40px',
                                 minWidth: '30px',
-                                height: '30px',
+                                height: '40px',
                                 margin: '0px',
                                 position: 'relative',
                               }}>
@@ -192,14 +258,30 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                               />
                             </div>
                           </td>
-                          <td>{product.title}</td>
-                          <td className='text-center'>
+                          <td className='w-25 fs-7'>{product.title}<br/><span className='fs-7 text-muted'>{`UPC: ${product.barcode}`}</span></td>
+                          <td>
+                            <DebounceInput
+                              element='textarea'
+                              minLength={5}
+                              debounceTimeout={800}
+                              className='form-control fs-7'
+                              rows={1}
+                              placeholder='Add comment...'
+                              id='search-options'
+                              // value={searchValue}
+                              onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
+                              onChange={(e) => handleAddComment(e.target.value, product.sku)}
+                            />
+                          </td>
+                          <td className='text-center align-middle'>{product.boxQty}</td>
+                          <td className='text-center align-middle'>{FormatIntNumber(state.currentRegion, product.useOrderAdjusted ? product.orderAdjusted : product.order)}</td>
+                          <td className='text-center align-middle'>
                             {`${FormatIntPercentage(state.currentRegion, state.currentRegion === 'us' ? productVolume / 1728 : productVolume / 1000000)} ${
                               state.currentRegion === 'us' ? 'ft³' : 'm³'
                             }`}
                           </td>
-                          <td className='text-center'>{FormatIntNumber(state.currentRegion, product.useOrderAdjusted ? product.orderAdjusted : product.order)}</td>
-                          <td className='text-center'>
+
+                          <td className='text-center align-middle'>
                             {FormatCurrency(state.currentRegion, product.useOrderAdjusted ? product.orderAdjusted * product.sellerCost : product.order * product.sellerCost)}
                           </td>
                         </tr>
@@ -210,17 +292,36 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                     <tr className='fw-semibold'>
                       <td></td>
                       <td></td>
+                      <td></td>
+                      <td></td>
                       <td className='text-end'>TOTAL</td>
+                      <td className='text-center'>{FormatIntNumber(state.currentRegion, reorderingPointsOrder.totalQty)}</td>
                       <td className='text-center'>{`${FormatIntPercentage(
                         state.currentRegion,
                         state.currentRegion === 'us' ? reorderingPointsOrder.totalVolume / 1728 : reorderingPointsOrder.totalVolume / 1000000
                       )} ${state.currentRegion === 'us' ? 'ft³' : 'm³'}`}</td>
-                      <td className='text-center'>{FormatIntNumber(state.currentRegion, reorderingPointsOrder.totalQty)}</td>
                       <td className='text-center'>{FormatCurrency(state.currentRegion, reorderingPointsOrder.totalCost)}</td>
                     </tr>
                   </tfoot>
                 </table>
               </div>
+              <Row className='my-1'>
+                <Col xs={12} md={6}>
+                  <Label className='form-label mb-0 fs-7'>Order Comment</Label>
+                  <DebounceInput
+                    element='textarea'
+                    minLength={5}
+                    debounceTimeout={800}
+                    className='form-control fs-7'
+                    rows={1}
+                    placeholder='Add comment...'
+                    id='order-comment'
+                    // value={searchValue}
+                    onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
+                    onChange={(e) => setorderComment(e.target.value)}
+                  />
+                </Col>
+              </Row>
             </ModalBody>
             <ModalFooter className='d-flex flex-row justify-content-between align-items-center'>
               <UncontrolledButtonDropdown>
@@ -228,8 +329,21 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                   Actions
                 </DropdownToggle>
                 <DropdownMenu>
-                  <PrintReorderingPointsOrder reorderingPointsOrder={reorderingPointsOrder} orderDetails={values} selectedSupplier={selectedSupplier} username={username} />
-                  <DownloadExcelReorderingPointsOrder reorderingPointsOrder={reorderingPointsOrder} orderDetails={values} selectedSupplier={selectedSupplier} username={username} />
+                  <PrintReorderingPointsOrder
+                    reorderingPointsOrder={reorderingPointsOrder}
+                    orderDetails={values}
+                    selectedSupplier={selectedSupplier}
+                    username={username}
+                    orderComment={orderComment}
+                    printColumns={printColumns}
+                  />
+                  <DownloadExcelReorderingPointsOrder
+                    reorderingPointsOrder={reorderingPointsOrder}
+                    orderDetails={values}
+                    selectedSupplier={selectedSupplier}
+                    username={username}
+                    orderComment={orderComment}
+                  />
                 </DropdownMenu>
               </UncontrolledButtonDropdown>
               <div className='d-flex flex-row justify-content-end align-items-center gap-3'>

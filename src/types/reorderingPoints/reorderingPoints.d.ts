@@ -42,6 +42,7 @@ export interface ReorderingPointsProduct {
     totalUnitsSold: { [key: string]: number };
     forecastModel: string;
     forecast: { [key: string]: number }
+    comment?: string
 }
 
 export interface DateList {

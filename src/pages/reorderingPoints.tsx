@@ -337,8 +337,8 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
 
     if (['sku', 'supplier', 'brand'].includes(field)) {
       return rows.sort((a, b) => {
-        const aField = a[field as keyof ReorderingPointsProduct].toLocaleString().toLowerCase()
-        const bField = b[field as keyof ReorderingPointsProduct].toLocaleString().toLowerCase()
+        const aField = a[field as keyof ReorderingPointsProduct]!.toLocaleString().toLowerCase()
+        const bField = b[field as keyof ReorderingPointsProduct]!.toLocaleString().toLowerCase()
         if (aField > bField) {
           return direction ? 1 : -1
         } else if (aField < bField) {
@@ -353,8 +353,8 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
       ['daysRemaining', 'warehouseQty', 'fbaQty', 'productionQty', 'receiving', 'sellerCost', 'leadTime', 'boxQty', 'adjustedForecast', 'order', 'orderAdjusted'].includes(field)
     ) {
       return rows.sort((a, b) => {
-        const aField = a[field as keyof ReorderingPointsProduct]
-        const bField = b[field as keyof ReorderingPointsProduct]
+        const aField = a[field as keyof ReorderingPointsProduct]!
+        const bField = b[field as keyof ReorderingPointsProduct]!
         if (aField > bField) {
           return direction ? 1 : -1
         } else if (aField < bField) {

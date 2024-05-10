@@ -17,9 +17,10 @@ type Props = {
   }
   selectedSupplier: string
   username: string
+  orderComment: string
 }
 
-const DownloadExcelReorderingPointsOrder = ({ reorderingPointsOrder, orderDetails, selectedSupplier, username }: Props) => {
+const DownloadExcelReorderingPointsOrder = ({ reorderingPointsOrder, orderDetails, selectedSupplier, username, orderComment }: Props) => {
   const { state }: any = useContext(AppContext)
   const buildTemplate = async () => {
     const workbook = new ExcelJS.Workbook()
@@ -29,9 +30,10 @@ const DownloadExcelReorderingPointsOrder = ({ reorderingPointsOrder, orderDetail
       { key: 'sku', header: 'Sku' },
       { key: 'title', header: 'Title' },
       { key: 'upc', header: 'UPC' },
+      { key: 'comment', header: 'Comment' },
       { key: 'qtyPerBox', header: 'Qty Per Box' },
-      { key: 'volume', header: state.currentRegion === 'us' ? 'Volume ft³' : 'Volume m³' },
       { key: 'orderQty', header: 'Order Qty' },
+      { key: 'volume', header: state.currentRegion === 'us' ? 'Volume ft³' : 'Volume m³' },
       { key: 'cost', header: 'Cost' },
     ]
 
@@ -42,7 +44,9 @@ const DownloadExcelReorderingPointsOrder = ({ reorderingPointsOrder, orderDetail
         sku: product.sku,
         title: product.title,
         upc: product.barcode,
+        comment: product.comment,
         qtyPerBox: product.boxQty,
+        orderQty: product.useOrderAdjusted ? product.orderAdjusted : product.order,
         volume: product.useOrderAdjusted
           ? state.currentRegion === 'us'
             ? (product.itemVolume / 1728) * product.orderAdjusted
@@ -50,7 +54,6 @@ const DownloadExcelReorderingPointsOrder = ({ reorderingPointsOrder, orderDetail
           : state.currentRegion === 'us'
           ? (product.itemVolume / 1728) * product.order
           : (product.itemVolume / 1000000) * product.order,
-        orderQty: product.useOrderAdjusted ? product.orderAdjusted : product.order,
         cost: product.useOrderAdjusted ? product.orderAdjusted * product.sellerCost : product.order * product.sellerCost,
       })
     }
@@ -125,6 +128,16 @@ const DownloadExcelReorderingPointsOrder = ({ reorderingPointsOrder, orderDetail
       sku: state.user[state.currentRegion].website,
       title: state.user[state.currentRegion].website,
     })
+
+    {
+      orderComment !== '' &&
+        Array(2)
+          .fill(0)
+          .forEach(() => worksheet.addRow({}))
+    }
+    {
+      orderComment !== '' && worksheet.addRow({ sku: 'Order Comment:', title: orderComment })
+    }
 
     workbook.xlsx.writeBuffer().then((buffer) => {
       const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })

@@ -1,5 +1,5 @@
 import AppContext from '@context/AppContext'
-import { FormatIntNumber } from '@lib/FormatNumbers'
+import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import moment from 'moment'
 import React, { useContext } from 'react'
@@ -18,9 +18,16 @@ type Props = {
   }
   selectedSupplier: string
   username: string
+  orderComment: string
+  printColumns: {
+    comments: boolean
+    qtyPerBox: boolean
+    volume: boolean
+    cost: boolean
+  }
 }
 
-function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selectedSupplier, username }: Props) {
+function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selectedSupplier, username, orderComment, printColumns }: Props) {
   const { state }: any = useContext(AppContext)
   const printInvoice = async () => {
     let invoice = `<!DOCTYPE html>
@@ -89,8 +96,8 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                       <p class="text-capitalize mb-0 pb-0 fw-semibold">${state.user[state.currentRegion].name}</p>
                       <p class="mb-0 pb-0">${state.user[state.currentRegion].address}</p>
                       <p class="mb-0 pb-0">${state.user[state.currentRegion].city}, ${state.user[state.currentRegion].state} ${state.user[state.currentRegion].zipcode} ${
-                        state.user[state.currentRegion].country
-                      }</p>
+      state.user[state.currentRegion].country
+    }</p>
                       <a href="mailto:${state.user[state.currentRegion].email}" class="mb-0 pb-0">${state.user[state.currentRegion].email}</a>
                       <a class="mb-0 pb-0">${state.user[state.currentRegion].website}</a>
                       <p class="my-0 text-capitalize fw-semibold">Supplier: ${selectedSupplier}</p>`
@@ -139,17 +146,33 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                       <th>SKU</th>
                       <th class='text-center'>Image</th>
                       <th>Product Name</th>
-                      <th class='text-center'>UPC</th>
-                      <th class='text-center'>Qty Per Box</th>
-                      <th class='text-center'>Order Qty</th>
-                    </tr>
-                  </thead>
-                  <tbody class="table-group-divider">`
+                      <th class='text-center'>UPC</th>`
 
+    {
+      printColumns.comments ? (invoice += `<th>Product Comment</th>`) : ''
+    }
+
+    {
+      printColumns.qtyPerBox ? (invoice += `<th class='text-center'>Qty Per Box</th>`) : ''
+    }
+
+    invoice += `<th class='text-center'>Order Qty</th>`
+
+    {
+      printColumns.volume ? (invoice += `<th class='text-center'>Volume</th>`) : ''
+    }
+
+    {
+      printColumns.cost ? (invoice += `<th class='text-center'>Cost</th>`) : ''
+    }
+
+    invoice += `</tr>
+                </thead>
+                <tbody class="table-group-divider">`
     for await (const product of Object.values(reorderingPointsOrder.products)) {
       invoice += `<tr key=${product.sku}>
                     <td class="text-nowrap">${product.sku}</td>
-                    <td class="text-center w-fit">
+                    <td class="text-center">
                       <div style="width: 60px;min-width: 30px;height: 50px;margin: 0px;position: relative;">
                       <img loading='lazy'
                           style="object-fit: contain;object-position: center;width: 100%;height: 100%;"
@@ -164,8 +187,31 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                     </td>
                     <td>${product.title}</td>
                     <td class='text-center'>${product.barcode}</td>
-                    <td class='text-center'>${product.boxQty}</td>
-                    <td class='text-center'>${FormatIntNumber(state.currentRegion, product.useOrderAdjusted ? product.orderAdjusted : product.order)}</td>
+                    ${printColumns.comments ? `<td>${product.comment ?? ''}</td>` : ''}
+                    ${printColumns.qtyPerBox ? `<td class='text-center'>${product.boxQty}</td>` : ''}
+                    <td class='text-center text-nowrap'>${FormatIntNumber(state.currentRegion, product.useOrderAdjusted ? product.orderAdjusted : product.order)}</td>
+                    ${
+                      printColumns.volume
+                        ? `<td class='text-center text-nowrap'>${FormatIntPercentage(
+                            state.currentRegion,
+                            state.currentRegion === 'us'
+                              ? product.useOrderAdjusted
+                                ? product.orderAdjusted * product.itemVolume
+                                : (product.order * product.itemVolume) / 1728
+                              : product.useOrderAdjusted
+                              ? product.orderAdjusted * product.itemVolume
+                              : (product.order * product.itemVolume) / 1000000
+                          )} ${state.currentRegion === 'us' ? 'ft³' : 'm³'}</td>`
+                        : ''
+                    }
+                    ${
+                      printColumns.cost
+                        ? `<td class='text-center text-nowrap'>${FormatCurrency(
+                            state.currentRegion,
+                            product.useOrderAdjusted ? product.orderAdjusted * product.sellerCost : product.order * product.sellerCost
+                          )}</td>`
+                        : ''
+                    }
                   </tr>`
     }
 
@@ -175,12 +221,23 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
+                    ${printColumns.comments ? `<td></td>` : ''}
+                    ${printColumns.qtyPerBox ? `<td></td>` : ''}
                     <td class='text-end'>TOTAL</td>
-                    <td class='text-center'>${FormatIntNumber(state.currentRegion, reorderingPointsOrder.totalQty)}</td>
+                    <td class='text-center text-nowrap'>${FormatIntNumber(state.currentRegion, reorderingPointsOrder.totalQty)}</td>
+                    ${
+                      printColumns.volume
+                        ? `<td class='text-center text-nowrap'>${FormatIntPercentage(
+                            state.currentRegion,
+                            state.currentRegion === 'us' ? reorderingPointsOrder.totalVolume / 1728 : reorderingPointsOrder.totalVolume / 1000000
+                          )} ${state.currentRegion === 'us' ? 'ft³' : 'm³'}</td>`
+                        : ''
+                    }
+                    ${printColumns.cost ? `<td class='text-center text-nowrap'>${FormatCurrency(state.currentRegion, reorderingPointsOrder.totalCost)}</td>` : ''}
                 </tr>
                 </tfoot>
                 </table>
+                ${orderComment !== '' ? `<div><p class="fw-bold my-0 py-0">Order Comment:</p><p class="my-0 py-0">${orderComment}</p></div>` : ''}
                 </div><!--End Container-->
                 </body>
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
