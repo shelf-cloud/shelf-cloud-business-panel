@@ -44,7 +44,7 @@ const DownloadExcelReorderingPointsOrder = ({ reorderingPointsOrder, orderDetail
         sku: product.sku,
         title: product.title,
         upc: product.barcode,
-        comment: product.comment,
+        comment: product.note,
         qtyPerBox: product.boxQty,
         orderQty: product.useOrderAdjusted ? product.orderAdjusted : product.order,
         volume: product.useOrderAdjusted

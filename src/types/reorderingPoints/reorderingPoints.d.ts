@@ -26,6 +26,7 @@ export interface ReorderingPointsProduct {
     receiving: number;
     sellerCost: number;
     leadTime: number;
+    note: string;
     brand: string;
     category: string;
     supplier: string;

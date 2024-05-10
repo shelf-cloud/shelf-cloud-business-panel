@@ -19,7 +19,7 @@ type Props = {
   brand: string
   category: string
   showHidden: string
-  show0Days: string
+  // show0Days: string
   supplierOptions: string[]
   brandOptions: string[]
   categoryOptions: string[]
@@ -35,7 +35,7 @@ type Props = {
     brand: string,
     category: string,
     showHidden: string,
-    show0Days: string
+    // show0Days: string
   ) => void
   setFilterOpen: (value: boolean) => void
 }
@@ -59,7 +59,7 @@ const FilterReorderingPoints = ({
   brand,
   category,
   showHidden,
-  show0Days,
+  // show0Days,
   supplierOptions,
   brandOptions,
   categoryOptions,
@@ -81,7 +81,7 @@ const FilterReorderingPoints = ({
     brand: brand,
     category: category,
     showHidden: showHidden,
-    show0Days: show0Days,
+    // show0Days: show0Days,
   }
 
   const validationSchema = Yup.object({
@@ -102,7 +102,7 @@ const FilterReorderingPoints = ({
       values.brand,
       values.category,
       values.showHidden,
-      values.show0Days
+      // values.show0Days
     )
   }
 
@@ -119,7 +119,7 @@ const FilterReorderingPoints = ({
       brand: '',
       category: '',
       showHidden: '',
-      show0Days: '',
+      // show0Days: '',
     })
     router.push('/reorderingPoints', undefined, { shallow: true })
     setFilterOpen(false)
@@ -306,7 +306,7 @@ const FilterReorderingPoints = ({
                     invalid={touched.showHidden && errors.showHidden ? true : false}
                   />
                 </div>
-                <div className='form-check form-switch form-switch-right form-switch-md d-flex flex-row justify-content-start align-items-center'>
+                {/* <div className='form-check form-switch form-switch-right form-switch-md d-flex flex-row justify-content-start align-items-center'>
                   <Label className='form-label'>Show 0 days Remaining</Label>
                   <Input
                     className='form-check-input code-switcher'
@@ -320,7 +320,7 @@ const FilterReorderingPoints = ({
                     onBlur={handleBlur}
                     invalid={touched.show0Days && errors.show0Days ? true : false}
                   />
-                </div>
+                </div> */}
               </Col>
               <Col xs={12} md={4}>
                 <div className='d-flex flewx-row justify-content-end align-items-center gap-3'>

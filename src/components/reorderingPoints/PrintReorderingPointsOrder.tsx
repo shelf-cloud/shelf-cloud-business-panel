@@ -187,7 +187,7 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                     </td>
                     <td>${product.title}</td>
                     <td class='text-center'>${product.barcode}</td>
-                    ${printColumns.comments ? `<td>${product.comment ?? ''}</td>` : ''}
+                    ${printColumns.comments ? `<td>${product.note ?? ''}</td>` : ''}
                     ${printColumns.qtyPerBox ? `<td class='text-center'>${product.boxQty}</td>` : ''}
                     <td class='text-center text-nowrap'>${FormatIntNumber(state.currentRegion, product.useOrderAdjusted ? product.orderAdjusted : product.order)}</td>
                     ${

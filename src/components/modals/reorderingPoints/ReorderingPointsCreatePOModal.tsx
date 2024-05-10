@@ -108,7 +108,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
 
   const handleAddComment = (comment: string, sku: string) => {
     if (comment === '') reorderingPointsOrder.products[sku].comment = ''
-    else reorderingPointsOrder.products[sku].comment = comment
+    else reorderingPointsOrder.products[sku].note = comment
   }
 
   return (
@@ -265,10 +265,10 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                               minLength={5}
                               debounceTimeout={800}
                               className='form-control fs-7'
-                              rows={1}
+                              rows={product.note === "" ? 1 : 2}
                               placeholder='Add comment...'
                               id='search-options'
-                              // value={searchValue}
+                              value={product.note}
                               onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
                               onChange={(e) => handleAddComment(e.target.value, product.sku)}
                             />

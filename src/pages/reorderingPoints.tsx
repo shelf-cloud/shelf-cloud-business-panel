@@ -60,7 +60,7 @@ type FilterProps = {
   brand?: string
   category?: string
   showHidden?: string
-  show0Days?: string
+  // show0Days?: string
 }
 
 type MarketpalcesInfo = {
@@ -78,7 +78,7 @@ type MarketpalcesInfo = {
 const ReorderingPoints = ({ session, sessionToken }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
-  const { filters, urgency, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, brand, category, showHidden, show0Days }: FilterProps = router.query
+  const { filters, urgency, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, brand, category, showHidden }: FilterProps = router.query
   const [searchValue, setSearchValue] = useState<any>('')
   const [selectedSupplier, setSelectedSupplier] = useState<string>('')
   const [filterOpen, setFilterOpen] = useState(false)
@@ -232,7 +232,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
     brand: string,
     category: string,
     showHidden: string,
-    show0Days: string
+    // show0Days: string
   ) => {
     let filterString = `/reorderingPoints?filters=true`
     if (urgency || urgency !== '') filterString += `&urgency=${urgency}`
@@ -246,7 +246,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
     if (brand || brand !== '') filterString += `&brand=${brand}`
     if (category || category !== '') filterString += `&category=${category}`
     if (showHidden || showHidden !== '') filterString += `&showHidden=${showHidden}`
-    if (show0Days || show0Days !== '') filterString += `&show0Days=${show0Days}`
+    // if (show0Days || show0Days !== '') filterString += `&show0Days=${show0Days}`
     router.push(filterString, undefined, { shallow: true })
     setFilterOpen(false)
   }
@@ -494,8 +494,8 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
           (supplier !== undefined && supplier !== '' ? item.supplier.toLowerCase() === supplier.toLowerCase() : true) &&
           (brand !== undefined && brand !== '' ? item.brand.toLowerCase() === brand.toLowerCase() : true) &&
           (category !== undefined && category !== '' ? item.category.toLowerCase() === category.toLowerCase() : true) &&
-          (showHidden === undefined || showHidden === '' ? !item.hideReorderingPoints : showHidden === 'false' ? !item.hideReorderingPoints : true) &&
-          (show0Days === undefined || show0Days === '' ? item.daysRemaining > 0 : show0Days === 'false' ? item.daysRemaining > 0 : true)
+          (showHidden === undefined || showHidden === '' ? !item.hideReorderingPoints : showHidden === 'false' ? !item.hideReorderingPoints : true)
+          // (show0Days === undefined || show0Days === '' ? item.daysRemaining > 0 : show0Days === 'false' ? item.daysRemaining > 0 : true)
       )
     }
 
@@ -513,7 +513,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
           (brand !== undefined && brand !== '' ? item.brand.toLowerCase() === brand.toLowerCase() : true) &&
           (category !== undefined && category !== '' ? item.category.toLowerCase() === category.toLowerCase() : true) &&
           (showHidden === undefined || showHidden === '' ? !item.hideReorderingPoints : showHidden === 'false' ? !item.hideReorderingPoints : true) &&
-          (show0Days === undefined || show0Days === '' ? item.daysRemaining > 0 : show0Days === 'false' ? item.daysRemaining > 0 : true) &&
+          // (show0Days === undefined || show0Days === '' ? item.daysRemaining > 0 : show0Days === 'false' ? item.daysRemaining > 0 : true) &&
           (item.sku.toLowerCase().includes(searchValue.toLowerCase()) ||
             item.asin.toLowerCase().includes(searchValue.toLowerCase()) ||
             item.title.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -537,7 +537,6 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
     brand,
     category,
     showHidden,
-    show0Days,
     setField,
     sortingDirectionAsc,
   ])
@@ -667,7 +666,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
                       brand={brand !== undefined ? brand : ''}
                       category={category !== undefined ? category : ''}
                       showHidden={showHidden !== undefined || showHidden === '' ? showHidden : 'false'}
-                      show0Days={show0Days !== undefined || show0Days === '' ? show0Days : 'false'}
+                      // show0Days={show0Days !== undefined || show0Days === '' ? show0Days : 'false'}
                       supplierOptions={marketplacesInfo?.suppliers || []}
                       brandOptions={marketplacesInfo?.brands || []}
                       categoryOptions={marketplacesInfo?.categories || []}
