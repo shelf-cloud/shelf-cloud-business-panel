@@ -70,7 +70,6 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
         Object.entries(inventoryId).map(([_inventoryId, item]: any) => {
           orderProducts.push({
             poId: item.poId,
-            poNumber: item.orderNumber,
             sku: item.sku,
             inventoryId: item.inventoryId,
             name: item.title,

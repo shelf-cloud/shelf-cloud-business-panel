@@ -24,8 +24,10 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
   const { status, organizeBy } = router.query
   const { state, setReceivingFromPo, setModalAddPaymentToPoDetails, setModalAddSkuToPurchaseOrder }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
+  const orderNumberStart = `${state?.user?.name.substring(0, 3).toUpperCase()}-`
   const [loading, setLoading] = useState(false)
   const [showEditNote, setShowEditNote] = useState(false)
+  const [editPONumber, seteditPONumber] = useState(false)
   const [showDeleteModal, setshowDeleteModal] = useState({
     show: false,
     poId: 0,
@@ -105,6 +107,43 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
     setLoading(false)
   }
 
+  const validationPONumber = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      orderNumber: data.orderNumber.slice(4),
+    },
+    validationSchema: Yup.object({
+      orderNumber: Yup.string()
+        .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ...`)
+        .max(100, 'Title is to Long')
+        .required('Please enter Order Number'),
+    }),
+    onSubmit: async (values) => {
+      setLoading(true)
+
+      const response = await axios.post(`/api/purchaseOrders/editNewPONumber?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+        poId: data.poId,
+        orderNumber: values.orderNumber,
+      })
+
+      if (!response.data.error) {
+        toast.success(response.data.message)
+
+        if (organizeBy == 'suppliers') {
+          mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+        } else if (organizeBy == 'orders') {
+          mutate(`/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+        } else if (organizeBy == 'sku') {
+          mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+        }
+        seteditPONumber(false)
+      } else {
+        toast.error(response.data.message)
+      }
+      setLoading(false)
+    },
+  })
+
   const validationNote = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -139,6 +178,11 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
     },
   })
 
+  const HandleChangePONumber = (event: any) => {
+    event.preventDefault()
+    validationPONumber.handleSubmit()
+  }
+
   const HandleAddProduct = (event: any) => {
     event.preventDefault()
     validationNote.handleSubmit()
@@ -155,10 +199,62 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
               <CardBody>
                 <table className='table table-sm table-borderless mb-0'>
                   <tbody>
-                    <tr>
-                      <td className='text-muted text-nowrap'>Order Number:</td>
-                      <td className='fw-semibold w-100'>{data.orderNumber}</td>
-                    </tr>
+                    {!editPONumber && (
+                      <tr>
+                        <td className='text-muted text-nowrap'>PO Number:</td>
+                        <td className='fw-semibold w-100'>
+                          {data.orderNumber}{' '}
+                          <i
+                            className={'las la-edit fs-5 text-primary m-0 p-0 ' + (editPONumber && 'd-none')}
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => seteditPONumber(true)}
+                          />
+                        </td>
+                      </tr>
+                    )}
+                    {editPONumber && (
+                      <tr>
+                        <td colSpan={2}>
+                          <Form onSubmit={HandleChangePONumber}>
+                            <Col md={12}>
+                              <FormGroup className='m-0'>
+                                <Label htmlFor='note' className='form-label'>
+                                  New PO Number:
+                                </Label>
+                                <div className='input-group'>
+                                  <span className='input-group-text fw-semibold fs-6 m-0 px-2 py-0' id='basic-addon1'>
+                                    {orderNumberStart}
+                                  </span>
+                                  <Input
+                                    type='text'
+                                    className='form-control fs-6'
+                                    id='orderNumber'
+                                    name='orderNumber'
+                                    bsSize='sm'
+                                    onChange={validationPONumber.handleChange}
+                                    onBlur={validationPONumber.handleBlur}
+                                    value={validationPONumber.values.orderNumber || ''}
+                                    invalid={validationPONumber.touched.orderNumber && validationPONumber.errors.orderNumber ? true : false}
+                                  />
+                                  {validationPONumber.touched.orderNumber && validationPONumber.errors.orderNumber ? (
+                                    <FormFeedback type='invalid'>{validationPONumber.errors.orderNumber}</FormFeedback>
+                                  ) : null}
+                                </div>
+                              </FormGroup>
+                              <div className='d-flex flex-row justify-content-end align-items-center gap-3'>
+                                <Button type='button' disabled={loading} color='light' className='btn btn-sm' onClick={() => seteditPONumber(false)}>
+                                  Cancel
+                                </Button>
+                                <Button type='submit' disabled={loading} color='primary' className='btn btn-sm'>
+                                  Save Changes
+                                </Button>
+                              </div>
+                            </Col>
+                          </Form>
+                        </td>
+                      </tr>
+                    )}
+
                     <tr>
                       <td className='text-muted text-nowrap'>Supplier:</td>
                       <td className='fw-semibold w-100'>{data.suppliersName}</td>
