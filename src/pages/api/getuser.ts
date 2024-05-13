@@ -1,14 +1,12 @@
-import { NextApiHandler } from 'next'
+import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 
-const getuser: NextApiHandler = async (request, response) => {
+const getuser: NextApiHandler = async (request: NextApiRequest, response: NextApiResponse) => {
     const session = await getServerSession(request, response, authOptions)
-
     if (session == null) {
-        response.status(401).end()
-
+        response.json({ error: true, message: 'Session Expired!' })
         return
     }
 

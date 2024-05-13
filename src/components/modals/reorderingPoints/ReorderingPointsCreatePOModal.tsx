@@ -51,6 +51,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
   const { mutate } = useSWRConfig()
   const [loading, setLoading] = useState(false)
   const [orderComment, setorderComment] = useState('')
+  const [savingComment, setsavingComment] = useState(false)
   const [printColumns, setprintColumns] = useState({
     comments: true,
     qtyPerBox: true,
@@ -106,9 +107,19 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
     setLoading(false)
   }
 
-  const handleAddComment = (comment: string, sku: string) => {
-    if (comment === '') reorderingPointsOrder.products[sku].comment = ''
+  const handleAddComment = async (comment: string, sku: string, inventoryId: number) => {
+    setsavingComment(true)
+    if (comment === '') reorderingPointsOrder.products[sku].note = ''
     else reorderingPointsOrder.products[sku].note = comment
+
+    await axios
+      .post(`/api/reorderingPoints/setNewComment?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+        note: comment,
+        inventoryId: inventoryId,
+      })
+      .then(() => {
+        setsavingComment(false)
+      })
   }
 
   return (
@@ -195,9 +206,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                           }
                         />
                       </th>
-                      <th className='text-center'>
-                        Order Qty
-                      </th>
+                      <th className='text-center'>Order Qty</th>
                       <th className='text-center'>
                         Volume{' '}
                         <Input
@@ -258,20 +267,26 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                               />
                             </div>
                           </td>
-                          <td className='w-25 fs-7'>{product.title}<br/><span className='fs-7 text-muted'>{`UPC: ${product.barcode}`}</span></td>
-                          <td>
+                          <td className='w-25 fs-7'>
+                            {product.title}
+                            <br />
+                            <span className='fs-7 text-muted'>{`UPC: ${product.barcode}`}</span>
+                          </td>
+                          <td className='d-flex flex-row justify-content-center align-items-end gap-1'>
                             <DebounceInput
                               element='textarea'
-                              minLength={5}
-                              debounceTimeout={800}
+                              minLength={6}
+                              debounceTimeout={1000}
                               className='form-control fs-7'
-                              rows={product.note === "" ? 1 : 2}
+                              style={{ scrollbarWidth: 'none' }}
+                              rows={product.note === '' ? 1 : 2}
                               placeholder='Add comment...'
                               id='search-options'
                               value={product.note}
                               onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
-                              onChange={(e) => handleAddComment(e.target.value, product.sku)}
+                              onChange={(e) => handleAddComment(e.target.value, product.sku, product.inventoryId)}
                             />
+                            {savingComment ? <Spinner color='success' size={'sm'} /> : <i className={`mdi mdi-check-all fs-5 m-0 p-0 text-success`} />}
                           </td>
                           <td className='text-center align-middle'>{product.boxQty}</td>
                           <td className='text-center align-middle'>{FormatIntNumber(state.currentRegion, product.useOrderAdjusted ? product.orderAdjusted : product.order)}</td>
@@ -351,7 +366,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                   Close
                 </Button>
                 <Button disabled={loading} type='submit' color='success'>
-                  {loading ? <Spinner color='white' size={'sm'} /> : 'Create'}
+                  {loading || savingComment ? <Spinner color='white' size={'sm'} /> : 'Create'}
                 </Button>
               </div>
             </ModalFooter>

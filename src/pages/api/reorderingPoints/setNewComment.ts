@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 
-const setNewUrgencyRange: NextApiHandler = async (request, response) => {
+const setNewComment: NextApiHandler = async (request, response) => {
     const session = await getServerSession(request, response, authOptions)
 
     if (session == null) {
@@ -12,10 +12,9 @@ const setNewUrgencyRange: NextApiHandler = async (request, response) => {
         return
     }
 
-    axios.post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/reorderingPoints/setNewUrgencyRange.php?businessId=${request.query.businessId}`, {
-        highAlertMax: request.body.highAlertMax,
-        mediumAlertMax: request.body.mediumAlertMax,
-        lowAlertMax: request.body.lowAlertMax,
+    axios.post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/reorderingPoints/setNewComment.php?businessId=${request.query.businessId}`, {
+        note: request.body.note,
+        inventoryId: request.body.inventoryId
     })
         .then(({ data }) => {
             response.json(data)
@@ -44,4 +43,4 @@ const setNewUrgencyRange: NextApiHandler = async (request, response) => {
         });
 }
 
-export default setNewUrgencyRange
+export default setNewComment

@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import useSWR from 'swr'
+import { useRouter } from 'next/router'
 
 //constants
 import {
@@ -63,17 +64,22 @@ const initialState = {
 
 const useInitialState = () => {
   const [state, setState] = useState(initialState)
-
+  const router = useRouter()
   const fetcher = async (endPoint) => await axios(endPoint).then((res) => res.data)
   const { data, error } = useSWR('/api/getuser', fetcher)
 
   useEffect(() => {
     if (data) {
-      setState({
-        ...state,
-        user: data,
-        currentRegion: data.defaultRegion,
-      })
+      if (data.error) {
+        setState(initialState)
+        router.push('/SignIn')
+      } else {
+        setState({
+          ...state,
+          user: data,
+          currentRegion: data.defaultRegion,
+        })
+      }
     }
   }, [data])
 
