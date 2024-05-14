@@ -1,19 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from 'react'
-import {
-  Button,
-  Col,
-  Form,
-  FormFeedback,
-  FormGroup,
-  Input,
-  Label,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  Row,
-  Spinner,
-} from 'reactstrap'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import * as Yup from 'yup'
@@ -40,15 +27,9 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
   // const [errorPalletFile, setErrorPalletFile] = useState(false)
   const [loading, setloading] = useState(false)
 
-  const TotalMasterBoxes = orderProducts.reduce(
-    (total: number, item: wholesaleProductRow) => total + Number(item.orderQty),
-    0
-  )
+  const TotalMasterBoxes = orderProducts.reduce((total: number, item: wholesaleProductRow) => total + Number(item.orderQty), 0)
 
-  const totalQuantityToShip = orderProducts.reduce(
-    (total: number, item: wholesaleProductRow) => total + Number(item.totalToShip),
-    0
-  )
+  const totalQuantityToShip = orderProducts.reduce((total: number, item: wholesaleProductRow) => total + Number(item.totalToShip), 0)
 
   useEffect(() => {
     return () => {
@@ -61,8 +42,7 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
     enableReinitialize: true,
 
     initialValues: {
-      orderNumber:
-        state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
+      orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
       type: 'Parcel Boxes',
       numberOfPallets: 1,
       isThird: '',
@@ -86,55 +66,64 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
     onSubmit: async (values, { resetForm }) => {
       setloading(true)
 
-      const response = await axios.post(
-        `api/createWholesaleOrderIndividualUnits?region=${state.currentRegion}&businessId=${state.user.businessId}`,
-        {
-          shippingProducts: orderProducts.map((product) => {
-            return {
-              sku: product.sku,
-              qty: product.totalToShip,
-              storeId: product.quantity.businessId,
-              qtyPicked: 0,
-              pickedHistory: [],
-            }
-          }),
-          groovePackerProducts: orderProducts.map((product) => {
-            return {
-              sku: product.sku,
-              qty: product.totalToShip,
-              storeId: product.quantity.businessId,
-              qtyScanned: 0,
-              history: [
-                {
-                  sku: product.sku,
-                  status: 'Awaiting',
-                  user: state.user.name,
-                  date: moment().format('YYYY-MM-DD h:mm:ss'),
-                },
-              ],
-            }
-          }),
-          orderInfo: {
-            orderNumber: values.orderNumber,
-            carrierService: values.type,
-            isPallets: values.type == 'LTL' ? true : false,
-            numberOfPallets: values.type == 'LTL' ? values.numberOfPallets : 0,
-            isthird: values.isThird == 'true' ? true : false,
-            thirdInfo: values.isThird == 'true' ? values.thirdInfo : '',
-            labelsName: '',
-            palletLabels: '',
-            orderProducts: orderProducts.map((product) => {
-              return {
+      const response = await axios.post(`api/createWholesaleOrderIndividualUnits?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+        shippingProducts: orderProducts.map((product) => {
+          return {
+            sku: product.sku,
+            qty: product.totalToShip,
+            storeId: product.quantity.businessId,
+            qtyPicked: 0,
+            pickedHistory: [],
+          }
+        }),
+        groovePackerProducts: orderProducts.map((product) => {
+          return {
+            sku: product.sku,
+            qty: product.totalToShip,
+            storeId: product.quantity.businessId,
+            qtyScanned: 0,
+            history: [
+              {
                 sku: product.sku,
-                name: product.title,
-                boxQty: product.qtyBox,
-                quantity: product.totalToShip,
-                businessId: product.quantity.businessId,
-              }
-            }),
-          },
-        }
-      )
+                status: 'Awaiting',
+                user: state.user.name,
+                date: moment().format('YYYY-MM-DD h:mm:ss'),
+              },
+            ],
+          }
+        }),
+        orderInfo: {
+          orderNumber: values.orderNumber,
+          carrierService: values.type,
+          isPallets: values.type == 'LTL' ? true : false,
+          numberOfPallets: values.type == 'LTL' ? values.numberOfPallets : 0,
+          isthird: values.isThird == 'true' ? true : false,
+          thirdInfo: values.isThird == 'true' ? values.thirdInfo : '',
+          labelsName: '',
+          palletLabels: '',
+          orderProducts: orderProducts.map((product) => {
+            return {
+              sku: product.sku,
+              name: product.title,
+              boxQty: product.qtyBox,
+              quantity: product.totalToShip,
+              businessId: product.quantity.businessId,
+              isKit: product.isKit,
+              children: product.children?.map((child) => {
+                return {
+                  inventoryId: child.idInventory,
+                  sku: child.sku,
+                  name: child.title,
+                  title: child.title,
+                  qtyUsed: child.qty,
+                  quantity: child.qty * product.totalToShip!,
+                  businessId: product.quantity.businessId,
+                }
+              }),
+            }
+          }),
+        },
+      })
 
       if (!response.data.error) {
         setSingleBoxesOrderModal(false)
@@ -194,9 +183,7 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                       value={validation.values.orderNumber || ''}
                       invalid={validation.touched.orderNumber && validation.errors.orderNumber ? true : false}
                     />
-                    {validation.touched.orderNumber && validation.errors.orderNumber ? (
-                      <FormFeedback type='invalid'>{validation.errors.orderNumber}</FormFeedback>
-                    ) : null}
+                    {validation.touched.orderNumber && validation.errors.orderNumber ? <FormFeedback type='invalid'>{validation.errors.orderNumber}</FormFeedback> : null}
                   </div>
                 </FormGroup>
               </Col>
@@ -260,9 +247,7 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     <option value='false'>Prepaid Shipping Label</option>
                     <option value='true'>Shelf-Cloud Preferred Carrier</option>
                   </Input>
-                  {validation.touched.isThird && validation.errors.isThird ? (
-                    <FormFeedback type='invalid'>{validation.errors.isThird}</FormFeedback>
-                  ) : null}
+                  {validation.touched.isThird && validation.errors.isThird ? <FormFeedback type='invalid'>{validation.errors.isThird}</FormFeedback> : null}
                 </FormGroup>
               </Col>
             </Col>
@@ -379,9 +364,7 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     onBlur={validation.handleBlur}
                     invalid={validation.touched.thirdInfo && validation.errors.thirdInfo ? true : false}
                   />
-                  {validation.touched.thirdInfo && validation.errors.thirdInfo ? (
-                    <FormFeedback type='invalid'>{validation.errors.thirdInfo}</FormFeedback>
-                  ) : null}
+                  {validation.touched.thirdInfo && validation.errors.thirdInfo ? <FormFeedback type='invalid'>{validation.errors.thirdInfo}</FormFeedback> : null}
                   <h5 className='fs-12 mb-3 text-muted'>*Additional shipping costs apply to this type of shipping.</h5>
                 </>
               )}
@@ -389,9 +372,7 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
             <Col md={12}>
               <h5>Total SKUs in Order: {validation.values.hasProducts}</h5>
               <span className='text-info fs-6 fw-light'>The distribution plan for boxes and items will be available after picking.</span>
-              {validation.touched.hasProducts && validation.errors.hasProducts ? (
-                <p className='text-light'>{validation.errors.hasProducts}</p>
-              ) : null}
+              {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='text-light'>{validation.errors.hasProducts}</p> : null}
               <table className='table align-middle table-responsive table-nowrap table-striped-columns'>
                 <thead>
                   <tr>

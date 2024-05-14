@@ -129,17 +129,27 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
           isthird: values.isThird == 'true' ? true : false,
           thirdInfo: values.isThird == 'true' ? values.thirdInfo : '',
           labelsName: values.isThird == 'false' ? `etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf` : '',
-          palletLabels:
-            values.isThird == 'false' && values.type == 'LTL'
-              ? `pallet-etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
-              : '',
+          palletLabels: values.isThird == 'false' && values.type == 'LTL' ? `pallet-etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf` : '',
           orderProducts: orderProducts.map((product) => {
             return {
               sku: product.sku,
+              inventoryId: product.quantity.inventoryId,
               name: product.title,
               boxQty: product.qtyBox,
               quantity: product.totalToShip,
               businessId: product.quantity.businessId,
+              isKit: product.isKit,
+              children: product.children?.map((child) => {
+                return {
+                  inventoryId: child.idInventory,
+                  sku: child.sku,
+                  name: child.title,
+                  title: child.title,
+                  qtyUsed: child.qty,
+                  quantity: child.qty * product.totalToShip!,
+                  businessId: product.quantity.businessId,
+                }
+              }),
             }
           }),
         },
@@ -233,9 +243,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                       value={validation.values.orderNumber || ''}
                       invalid={validation.touched.orderNumber && validation.errors.orderNumber ? true : false}
                     />
-                    {validation.touched.orderNumber && validation.errors.orderNumber ? (
-                      <FormFeedback type='invalid'>{validation.errors.orderNumber}</FormFeedback>
-                    ) : null}
+                    {validation.touched.orderNumber && validation.errors.orderNumber ? <FormFeedback type='invalid'>{validation.errors.orderNumber}</FormFeedback> : null}
                   </div>
                 </FormGroup>
               </Col>
@@ -299,9 +307,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     <option value='false'>Prepaid Shipping Label</option>
                     <option value='true'>Shelf-Cloud Preferred Carrier</option>
                   </Input>
-                  {validation.touched.isThird && validation.errors.isThird ? (
-                    <FormFeedback type='invalid'>{validation.errors.isThird}</FormFeedback>
-                  ) : null}
+                  {validation.touched.isThird && validation.errors.isThird ? <FormFeedback type='invalid'>{validation.errors.isThird}</FormFeedback> : null}
                 </FormGroup>
               </Col>
             </Col>
@@ -412,18 +418,14 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     onBlur={validation.handleBlur}
                     invalid={validation.touched.thirdInfo && validation.errors.thirdInfo ? true : false}
                   />
-                  {validation.touched.thirdInfo && validation.errors.thirdInfo ? (
-                    <FormFeedback type='invalid'>{validation.errors.thirdInfo}</FormFeedback>
-                  ) : null}
+                  {validation.touched.thirdInfo && validation.errors.thirdInfo ? <FormFeedback type='invalid'>{validation.errors.thirdInfo}</FormFeedback> : null}
                   <h5 className='fs-12 mb-3 text-muted'>*Additional shipping costs apply to this type of shipping.</h5>
                 </>
               )}
             </Col>
             <Col md={12}>
               <h5>Total SKUs in Order: {validation.values.hasProducts}</h5>
-              {validation.touched.hasProducts && validation.errors.hasProducts ? (
-                <p className='text-danger'>{validation.errors.hasProducts}</p>
-              ) : null}
+              {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='text-danger'>{validation.errors.hasProducts}</p> : null}
               <table className='table align-middle table-responsive table-nowrap table-striped-columns'>
                 <thead>
                   <tr>

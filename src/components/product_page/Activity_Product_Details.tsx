@@ -1,5 +1,6 @@
 import AppContext from '@context/AppContext'
 import { LatestOrders } from '@typings'
+import moment from 'moment'
 import React, { useContext } from 'react'
 
 type Props = {
@@ -21,17 +22,17 @@ const Activity_Product_Details = ({ latestOrders }: Props) => {
         </thead>
         <tbody>
           {latestOrders?.length > 0 ? (
-            latestOrders?.map((order) => (
-              <tr key={order.orderNumber}>
-                <td>{order.date}</td>
-                <td className='text-primary' style={{ cursor: 'pointer' }} onClick={() => setShowOrderDetailsOfInvoiceModal(true, order.orderId)}>
-                  {order.orderNumber}
-                </td>
-                <td className={'text-center ' + (order.isReceiving ? 'text-success' : 'text-danger')}>
-                  {order.isReceiving ? `+${order.qty}` : `-${order.qty}`}
-                </td>
-              </tr>
-            ))
+            latestOrders
+              ?.sort((a, b) => (moment(a.date) > moment(b.date) ? -1 : 1))
+              .map((order) => (
+                <tr key={order.orderNumber}>
+                  <td>{order.date}</td>
+                  <td className='text-primary' style={{ cursor: 'pointer' }} onClick={() => setShowOrderDetailsOfInvoiceModal(true, order.orderId)}>
+                    {order.orderNumber}
+                  </td>
+                  <td className={'text-center ' + (order.isReceiving ? 'text-success' : 'text-danger')}>{order.isReceiving ? `+${order.qty}` : `-${order.qty}`}</td>
+                </tr>
+              ))
           ) : (
             <tr>
               <td className='text-muted fw-light fst-italic text-center' colSpan={3}>
