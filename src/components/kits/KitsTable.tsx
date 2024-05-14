@@ -4,7 +4,7 @@ import { KitRow } from '@typings'
 import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import AppContext from '@context/AppContext'
-import { DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from 'reactstrap'
+import { DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
 // import TooltipComponent from '../constants/Tooltip'
 import KitExpandedDetails from './KitExpandedDetails'
 
@@ -25,12 +25,10 @@ const KitsTable = ({ tableData, pending }: Props) => {
     html += '<style>@page{margin:0px;}'
     html += 'body{width:21cm;margin:0px;padding:0px;}'
     html += '.pageBreak{page-break-after:always;}'
-    html +=
-      '.barcodeSection{position:relative;float:left;top:0cm;left:0.9cm;width: 6.7cm;height: 2.5cm;margin-right:0.3cm;text-align: center;overflow:hidden;margin-bottom:2px;}'
+    html += '.barcodeSection{position:relative;float:left;top:0cm;left:0.9cm;width: 6.7cm;height: 2.5cm;margin-right:0.3cm;text-align: center;overflow:hidden;margin-bottom:2px;}'
     html += '.barcodeSection svg{transform: translate(0px, 0px) !important;}'
     html += '.barcodeSection svg text{font:12px monospace !important;}'
-    html +=
-      '.barcodeSection p{position:relative;float:left;left:5%;width:95%;text-align:left;margin-top:0px;margin-bottom:0px;font-size:14px;z-index:5;}'
+    html += '.barcodeSection p{position:relative;float:left;left:5%;width:95%;text-align:left;margin-top:0px;margin-bottom:0px;font-size:14px;z-index:5;}'
     html += '.barcodeSection svg{width:90%;transform: translate(0px, -10px) !important;}'
     html += '</style></head><body>'
     html +=
@@ -90,7 +88,11 @@ const KitsTable = ({ tableData, pending }: Props) => {
               position: 'relative',
             }}>
             <img
-              src={cell.image ? cell.image : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'}
+              src={
+                cell.image
+                  ? cell.image
+                  : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+              }
               alt='product Image'
               style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
             />
@@ -115,9 +117,13 @@ const KitsTable = ({ tableData, pending }: Props) => {
           <div>
             <p style={{ margin: '0px', fontWeight: '800' }}>{row.title}</p>
             <p style={{ margin: '0px' }} className='d-flex flex-row justify-content-start align-items-start'>
-              {row.sku} {row.note != '' && <i className='ri-information-fill ms-2 fs-5 text-warning' id={`tooltip${row.sku}`}></i>}
+              {row.sku} {row.note && row.note != '' && <i className='ri-information-fill ms-2 fs-5 text-warning' id={`tooltip${row.sku}`}></i>}
             </p>
-            {/* {row.note != '' && <TooltipComponent target={`tooltip${row.sku}`} text={row.note} />} */}
+            {row.note != '' && (
+              <UncontrolledTooltip placement='top' target={`tooltip${row.sku}`} innerClassName='bg-white border border-info border-opacity-50 p-2'>
+                <p className='fs-7 text-primary m-0 p-0 mb-0'>{row.note}</p>
+              </UncontrolledTooltip>
+            )}
           </div>
         )
       },

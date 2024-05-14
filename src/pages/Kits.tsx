@@ -56,10 +56,7 @@ const Kits = ({ session }: Props) => {
   }, [])
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(
-    state.user.businessId ? `/api/getBusinessKitsInventory?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
-    fetcher
-  )
+  const { data } = useSWR(state.user.businessId ? `/api/getBusinessKitsInventory?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher)
 
   useEffect(() => {
     if (data?.error) {
@@ -111,50 +108,6 @@ const Kits = ({ session }: Props) => {
     }
   }
 
-  // const csvData = useMemo(() => {
-  //   const data: any[] = [
-  //     [
-  //       'Title',
-  //       'SKU',
-  //       'AISN',
-  //       'FNSKU',
-  //       'Barcode',
-  //       'Quantity',
-  //       'Weight',
-  //       'Length',
-  //       'Width',
-  //       'Height',
-  //       'Box Weight',
-  //       'Box Length',
-  //       'Box Width',
-  //       'Box Height',
-  //       'Box Quantity',
-  //     ],
-  //   ]
-
-  //   allData.forEach((item) =>
-  //     data.push([
-  //       item?.Title,
-  //       item?.SKU,
-  //       item?.ASIN,
-  //       item?.FNSKU,
-  //       item?.Barcode,
-  //       item?.Quantity?.quantity,
-  //       item?.unitDimensions?.weight,
-  //       item?.unitDimensions?.length,
-  //       item?.unitDimensions?.width,
-  //       item?.unitDimensions?.height,
-  //       item?.boxDimensions?.weight,
-  //       item?.boxDimensions?.length,
-  //       item?.boxDimensions?.width,
-  //       item?.boxDimensions?.height,
-  //       item?.qtyBox,
-  //     ])
-  //   )
-
-  //   return data
-  // }, [allData])
-
   const title = `Kits | ${session?.user?.name}`
   return (
     <div>
@@ -175,12 +128,6 @@ const Kits = ({ session }: Props) => {
                         Add Kit
                       </Button>
                     </Link>
-                    {/* <CSVLink data={csvData} style={{ width: 'fit-content' }} filename={`${session?.user?.name.toUpperCase()}-Products.csv`}>
-                      <Button color='primary' className='fs-5 py-1 p3-1'>
-                        <i className='mdi mdi-arrow-down-bold label-icon align-middle fs-5 me-2' />
-                        Export
-                      </Button>
-                    </CSVLink> */}
                   </div>
                   <div className='col-sm-12 col-md-3'>
                     <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
@@ -194,10 +141,7 @@ const Kits = ({ session }: Props) => {
                           onChange={filterByText}
                         />
                         <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
-                        <span
-                          className='d-flex align-items-center justify-content-center input_background_white'
-                          style={{ cursor: 'pointer' }}
-                          onClick={clearSearch}>
+                        <span className='d-flex align-items-center justify-content-center input_background_white' style={{ cursor: 'pointer' }} onClick={clearSearch}>
                           <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
                         </span>
                       </div>
@@ -205,8 +149,6 @@ const Kits = ({ session }: Props) => {
                   </div>
                 </Row>
                 <Card>
-                  {/* <CardHeader>
-                  </CardHeader> */}
                   <CardBody>
                     <KitsTable
                       tableData={tableData}

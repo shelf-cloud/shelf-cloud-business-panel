@@ -243,6 +243,7 @@ export interface ProductDetails {
   available: number
   reserved: number
   receiving: number
+  ordered: number
   latestOrders: LatestOrders[]
   bins: ProductBins[]
   listings: Listings[]
@@ -251,6 +252,19 @@ export interface ProductDetails {
   brands: string[]
   categories: string[]
   suppliers: string[]
+  // Amazon FBA
+  amazonFBA: AmazonFBA[]
+}
+
+export interface AmazonFBA {
+  afn_fulfillable_quantity: number
+  afn_inbound_receiving_quantity: number
+  afn_inbound_shipped_quantity: number
+  afn_inbound_working_quantity: number
+  afn_reserved_quantity: number
+  afn_total_quantity: number
+  afn_unsellable_quantity: number
+  afn_warehouse_quantity: number
 }
 
 // STORAGE PRODUCTS

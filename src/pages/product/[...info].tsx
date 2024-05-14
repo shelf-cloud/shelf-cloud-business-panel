@@ -57,7 +57,10 @@ const Product_Page_Layout = ({}: Props) => {
   const [productDetails, setProductDetails] = useState<ProductDetails | null>()
 
   const fetcher = async (endPoint: string) => await axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(info![0] && state.user.businessId ? `/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${info![0]}&businessId=${state.user.businessId}` : null, fetcher)
+  const { data } = useSWR(
+    info![0] && state.user.businessId ? `/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${info![0]}&businessId=${state.user.businessId}` : null,
+    fetcher
+  )
 
   useEffect(() => {
     if (data?.error) {
@@ -69,7 +72,7 @@ const Product_Page_Layout = ({}: Props) => {
       setloading(false)
     }
   }, [data])
-  
+
   const [activeTab, setActiveTab] = useState('1')
   const tabChange = (tab: any) => {
     if (activeTab !== tab) setActiveTab(tab)
@@ -264,6 +267,8 @@ const Product_Page_Layout = ({}: Props) => {
                           available={productDetails?.available ?? 0}
                           reserved={productDetails?.reserved ?? 0}
                           receiving={productDetails?.receiving ?? 0}
+                          ordered={productDetails?.ordered ?? 0}
+                          amazonFBA={productDetails?.amazonFBA ?? []}
                         />
                       </Col>
                       <Col xs='3' className='gap-4 d-flex flex-column'>

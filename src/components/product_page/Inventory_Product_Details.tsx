@@ -6,6 +6,7 @@ import { toast } from 'react-toastify'
 import { useSWRConfig } from 'swr'
 import axios from 'axios'
 import AppContext from '@context/AppContext'
+import { AmazonFBA } from '@typings'
 
 type Props = {
   inventoryId?: number
@@ -15,9 +16,11 @@ type Props = {
   available: number
   reserved: number
   receiving: number
+  ordered: number
+  amazonFBA: AmazonFBA[]
 }
 
-const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available, reserved, receiving }: Props) => {
+const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available, reserved, receiving, ordered, amazonFBA }: Props) => {
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [showEditFields, setShowEditFields] = useState(false)
@@ -63,16 +66,17 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
 
   return (
     <div className='px-3 py-1 border-bottom w-100'>
-      <p className='fs-4 text-primary fw-semibold'>Inventory</p>
-      <table className='table table-sm'>
-        <thead>
+      <p className='fs-4 text-primary fw-semibold mb-1'>Inventory</p>
+      <table className='table table-sm table-striped align-middle'>
+        <thead className='table-light'>
           <tr className='text-center'>
-            <th>Warehouse</th>
+            <th></th>
             <th>On Hand</th>
             <th>Buffer</th>
             <th>Available</th>
             <th>Reserved</th>
-            <th>Receiving</th>
+            <th>Ordered</th>
+            <th>Inbound</th>
           </tr>
         </thead>
         <tbody>
@@ -94,7 +98,7 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
                       <Input
                         type='number'
                         className='form-control fs-6 m-0'
-                        style={{maxWidth: '60px'}}
+                        style={{ maxWidth: '60px' }}
                         placeholder='Buffer...'
                         id='buffer'
                         name='buffer'
@@ -108,7 +112,7 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
                     </div>
                     <i className='fs-3 text-muted mdi mdi-close-circle' style={{ cursor: 'pointer' }} onClick={() => setShowEditFields(false)} />
                     <Button type='submit' color='muted' className='btn btn-sm m-0 p-0'>
-                    <i className='fs-3 text-success ri-checkbox-circle-fill' />
+                      <i className='fs-3 text-success ri-checkbox-circle-fill' />
                     </Button>
                   </div>
                 </Form>
@@ -116,10 +120,41 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
             </td>
             <td className='text-success'>{available}</td>
             <td className='text-danger'>{reserved}</td>
+            <td>{ordered}</td>
             <td>{receiving}</td>
           </tr>
         </tbody>
       </table>
+      {amazonFBA.length > 0 && (
+        <table className='table table-sm table-striped align-middle'>
+          <thead className='table-light'>
+            <tr className='text-center'>
+              <th></th>
+              <th>Total</th>
+              <th>Fulfillable</th>
+              <th>Reserved</th>
+              <th>Unsellable</th>
+              <th>Inbound</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className='text-center'>
+              <td className='fw-semibold'>Amazon FBA</td>
+              <td>{amazonFBA.reduce((total: number, listing: AmazonFBA) => total + listing.afn_total_quantity, 0)}</td>
+              <td>{amazonFBA.reduce((total: number, listing: AmazonFBA) => total + listing.afn_fulfillable_quantity, 0)}</td>
+              <td>{amazonFBA.reduce((total: number, listing: AmazonFBA) => total + listing.afn_reserved_quantity, 0)}</td>
+              <td>{amazonFBA.reduce((total: number, listing: AmazonFBA) => total + listing.afn_unsellable_quantity, 0)}</td>
+              <td>
+                {amazonFBA.reduce(
+                  (total: number, listing: AmazonFBA) =>
+                    total + listing.afn_inbound_receiving_quantity + listing.afn_inbound_shipped_quantity + listing.afn_inbound_working_quantity,
+                  0
+                )}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      )}
     </div>
   )
 }
