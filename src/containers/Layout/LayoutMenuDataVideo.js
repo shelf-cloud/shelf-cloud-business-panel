@@ -124,6 +124,12 @@ const Navdata = () => {
           link: '/Shipments',
           parentId: 'shipments',
         },
+        {
+          id: 'returns',
+          label: 'Return Log',
+          link: '/Returns',
+          parentId: 'shipments',
+        },
       ],
     },
     {

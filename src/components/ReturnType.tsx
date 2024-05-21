@@ -65,7 +65,7 @@ const ReturnType = ({ data, apiMutateLink }: Props) => {
                     <tr>
                       <td className='text-muted text-nowrap'>Address:</td>
                       <td className='fw-semibold w-100'>
-                        {data.shipStreet}, {data.shipCity}, {data.shipState}, {data.shipZipcode}, {data.shipCountry}
+                        {data.shipStreet !== '' && data.shipCity !== '' && `${data.shipStreet}, ${data.shipCity}, ${data.shipState}, ${data.shipZipcode}, ${data.shipCountry}`}
                       </td>
                     </tr>
                   </tbody>
@@ -141,11 +141,12 @@ const ReturnType = ({ data, apiMutateLink }: Props) => {
                     <tr>
                       <th scope='col'>Title</th>
                       <th scope='col'>Sku</th>
-                      <th className='text-center' scope='col'>
-                        Unit Price
-                      </th>
+                      <th scope='col'>Condition</th>
                       <th className='text-center' scope='col'>
                         Qty
+                      </th>
+                      <th className='text-center' scope='col'>
+                        Qty Received
                       </th>
                     </tr>
                   </thead>
@@ -154,15 +155,19 @@ const ReturnType = ({ data, apiMutateLink }: Props) => {
                       <tr key={key} className='border-bottom py-2'>
                         <td className='w-50 fs-6 fw-semibold'>{product.name || ''}</td>
                         <td className='fs-6 text-muted'>{product.sku}</td>
-                        <td className='text-center'>{FormatCurrency(state.currentRegion, product.unitPrice!)}</td>
+                        <td className='fs-6 text-muted text-capitalize'>{product.state}</td>
                         <td className='text-center'>{product.quantity}</td>
+                        <td className='text-center'>{product.qtyReceived ? product.qtyReceived : product.quantity}</td>
                       </tr>
                     ))}
                     <tr>
                       <td className='text-start fs-5 fw-bold text-nowrap'>Total QTY</td>
                       <td></td>
                       <td></td>
-                      <td className='text-center fs-5 text-primary'>{data.totalItems}</td>
+                      <td className='text-center fs-5 text-primary'>{data.orderItems.reduce((total, item: ShipmentOrderItem) => total + item.quantity, 0)}</td>
+                      <td className='text-center fs-5 text-primary'>
+                        {data.orderItems.reduce((total, item: ShipmentOrderItem) => total + (item.qtyReceived ? item.qtyReceived : item.quantity), 0)}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -173,19 +178,21 @@ const ReturnType = ({ data, apiMutateLink }: Props) => {
       </Row>
       <Row>
         <Col xl={12} className='d-flex justify-content-end align-items-end'>
-          <Card className='m-0'>
-            {loadingLabel ? (
-              <Button color='secondary' className='btn-label'>
-                <i className='las la-toilet-paper label-icon align-middle fs-3 me-2' />
-                <Spinner color='light' />
-              </Button>
-            ) : (
-              <Button color='secondary' className='btn-label' onClick={() => handlePrintingLabel()}>
-                <i className='las la-toilet-paper label-icon align-middle fs-3 me-2' />
-                Print Label
-              </Button>
-            )}
-          </Card>
+          {data.returnOrigin === 'shipment' && (
+            <Card className='m-0'>
+              {loadingLabel ? (
+                <Button color='secondary' className='btn-label'>
+                  <i className='las la-toilet-paper label-icon align-middle fs-3 me-2' />
+                  <Spinner color='light' />
+                </Button>
+              ) : (
+                <Button color='secondary' className='btn-label' onClick={() => handlePrintingLabel()}>
+                  <i className='las la-toilet-paper label-icon align-middle fs-3 me-2' />
+                  Print Label
+                </Button>
+              )}
+            </Card>
+          )}
         </Col>
       </Row>
     </div>

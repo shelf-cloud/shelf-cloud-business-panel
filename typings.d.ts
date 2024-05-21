@@ -403,6 +403,10 @@ export interface OrderRowType {
   labelsName: string
   palletLabelsName?: string
   hasReturn: boolean
+  returnRMA?: string
+  returnId: number
+  returnState?: 'pending' | 'complete' | 'partial refund' | 'refund' | 'cancelled' | 'on hold'
+  returnOrigin?: "shipment" | "return"
   extraComment: string
   individualUnitsPlan?: IndividualUnitsPlan
   isIndividualUnits?: boolean
@@ -426,6 +430,7 @@ export interface ShipmentOrderItem {
   warehouseLocation: string
   poNumber?: string
   qtyReceived?: number
+  state?: string
 }
 
 export interface KitChildren {

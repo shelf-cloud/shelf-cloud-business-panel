@@ -9,11 +9,11 @@ import { Card, CardBody, Col, Container, Input, Row } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import moment from 'moment'
-import ShipmentsTable from '@components/ShipmentsTable'
 import CreateReturnModal from '@components/CreateReturnModal'
 import { toast } from 'react-toastify'
 import FilterByDates from '@components/FilterByDates'
-import FilterByOthers from '@components/FilterByOthers'
+import FilterReturns from '@components/returns/FilterReturns'
+import ReturnsTable from '@components/returns/ReturnsTable'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -42,14 +42,13 @@ type Props = {
   }
 }
 
-const Shipments = ({ session, sessionToken }: Props) => {
+const Returns = ({ session, sessionToken }: Props) => {
   const { state }: any = useContext(AppContext)
-  const [shipmentsStartDate, setShipmentsStartDate] = useState(moment().subtract(1, 'months').format('YYYY-MM-DD'))
+  const [shipmentsStartDate, setShipmentsStartDate] = useState(moment().subtract(3, 'months').format('YYYY-MM-DD'))
   const [shipmentsEndDate, setShipmentsEndDate] = useState(moment().format('YYYY-MM-DD'))
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<OrderRowType[]>([])
   const [searchValue, setSearchValue] = useState<any>('')
-  const [searchType, setSearchType] = useState<any>('')
   const [searchStatus, setSearchStatus] = useState<any>('')
   const [searchMarketplace, setSearchMarketplace] = useState<any>('')
 
@@ -61,7 +60,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
       setPending(true)
 
       await axios(
-        `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/shipments/getShipmentsOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`,
+        `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/shipments/getReturnOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`,
         {
           signal,
           headers: {
@@ -89,7 +88,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
   }, [session, state.user.businessId, shipmentsStartDate, shipmentsEndDate])
 
   const filterDataTable = useMemo(() => {
-    if (searchValue === '' && searchType === '' && searchStatus === '' && searchMarketplace === '') {
+    if (searchValue === '' && searchStatus === '' && searchMarketplace === '') {
       return allData
     }
 
@@ -105,9 +104,6 @@ const Shipments = ({ session, sessionToken }: Props) => {
             (item: ShipmentOrderItem) => item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
           )
       )
-      if (searchType !== '') {
-        newDataTable = newDataTable.filter((order) => order?.orderType?.toLowerCase().includes(searchType.toLowerCase()))
-      }
 
       if (searchStatus !== '') {
         newDataTable = newDataTable.filter((order) => order?.orderStatus?.toLowerCase().includes(searchStatus.toLowerCase()))
@@ -115,34 +111,6 @@ const Shipments = ({ session, sessionToken }: Props) => {
 
       if (searchMarketplace !== '') {
         newDataTable = newDataTable.filter((order) => order?.storeName?.toLowerCase() == searchMarketplace.toLowerCase())
-      }
-
-      return newDataTable
-    }
-
-    if (searchType !== '') {
-      let newDataTable = allData.filter((order) => order?.orderType?.toLowerCase().includes(searchType.toLowerCase()))
-
-      if (searchStatus !== '') {
-        newDataTable = newDataTable.filter((order) => order?.orderStatus?.toLowerCase().includes(searchStatus.toLowerCase()))
-      }
-
-      if (searchMarketplace !== '') {
-        newDataTable = newDataTable.filter((order) => order?.storeName?.toLowerCase() == searchMarketplace.toLowerCase())
-      }
-
-      if (searchValue !== '') {
-        newDataTable = newDataTable.filter(
-          (order) =>
-            order?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.orderStatus?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.orderType?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.shipName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.trackingNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.orderItems?.some(
-              (item: ShipmentOrderItem) => item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
-            )
-        )
       }
 
       return newDataTable
@@ -150,10 +118,6 @@ const Shipments = ({ session, sessionToken }: Props) => {
 
     if (searchStatus !== '') {
       let newDataTable = allData.filter((order) => order?.orderStatus?.toLowerCase().includes(searchStatus.toLowerCase()))
-
-      if (searchType !== '') {
-        newDataTable = newDataTable.filter((order) => order?.orderType?.toLowerCase().includes(searchType.toLowerCase()))
-      }
 
       if (searchMarketplace !== '') {
         newDataTable = newDataTable.filter((order) => order?.storeName?.toLowerCase() == searchMarketplace.toLowerCase())
@@ -179,10 +143,6 @@ const Shipments = ({ session, sessionToken }: Props) => {
     if (searchMarketplace !== '') {
       let newDataTable = allData.filter((order) => order?.storeName?.toLowerCase() == searchMarketplace.toLowerCase())
 
-      if (searchType !== '') {
-        newDataTable = newDataTable.filter((order) => order?.orderType?.toLowerCase().includes(searchType.toLowerCase()))
-      }
-
       if (searchStatus !== '') {
         newDataTable = newDataTable.filter((order) => order?.orderStatus?.toLowerCase().includes(searchStatus.toLowerCase()))
       }
@@ -203,7 +163,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
 
       return newDataTable
     }
-  }, [allData, searchValue, searchType, searchStatus, searchMarketplace])
+  }, [allData, searchValue, searchStatus, searchMarketplace])
 
   const handleChangeDatesFromPicker = (dateStr: string) => {
     if (dateStr.includes(' to ')) {
@@ -213,7 +173,20 @@ const Shipments = ({ session, sessionToken }: Props) => {
     }
   }
 
-  const title = `Shipments | ${session?.user?.name}`
+  const handleReturnStateChange = async (newState: string, orderId: number) => {
+    const response = await axios.post(`api/returns/changeReturnState?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      newState,
+      orderId,
+    })
+
+    if (!response.data.error) {
+      toast.success(response.data.message)
+    } else {
+      toast.error(response.data.message)
+    }
+  }
+
+  const title = `Returns | ${session?.user?.name}`
   return (
     <div>
       <Head>
@@ -222,7 +195,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <Container fluid>
-            <BreadCrumb title='Shipments' pageTitle='Orders' />
+            <BreadCrumb title='Returns' pageTitle='Orders' />
             <Row>
               <Col lg={12}>
                 <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-3 flex-md-row justify-content-md-between align-items-md-center'>
@@ -234,9 +207,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
                       shipmentsEndDate={shipmentsEndDate}
                       handleChangeDatesFromPicker={handleChangeDatesFromPicker}
                     />
-                    <FilterByOthers
-                      searchType={searchType}
-                      setSearchType={setSearchType}
+                    <FilterReturns
                       searchStatus={searchStatus}
                       setSearchStatus={setSearchStatus}
                       searchMarketplace={searchMarketplace}
@@ -269,10 +240,11 @@ const Shipments = ({ session, sessionToken }: Props) => {
                 </Row>
                 <Card>
                   <CardBody>
-                    <ShipmentsTable
+                    <ReturnsTable
                       tableData={filterDataTable || []}
                       pending={pending}
                       apiMutateLink={`/api/getShipmentsOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`}
+                      handleReturnStateChange={handleReturnStateChange}
                     />
                   </CardBody>
                 </Card>
@@ -290,4 +262,4 @@ const Shipments = ({ session, sessionToken }: Props) => {
   )
 }
 
-export default Shipments
+export default Returns
