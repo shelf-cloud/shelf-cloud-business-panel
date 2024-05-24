@@ -88,7 +88,7 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending }: Props) => {
       //   compact: true,
     },
     {
-      name: <span className='fw-bolder fs-6'>Order</span>,
+      name: <span className='fw-bolder fs-6'>RMA</span>,
       selector: (row: UnsellablesType) => row.returnRMA,
       sortable: true,
       wrap: true,

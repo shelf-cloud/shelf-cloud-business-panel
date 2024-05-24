@@ -82,7 +82,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
             <p className='fw-semibold fs-6 m-0 p-0'>{row.shipmentOrderNumber}</p>
             <p className='text-muted fs-7 m-0 p-0'>
               {Object.values(row.returns)[0].orderNumber}
-              {Object.values(row.returns).length > 1 && <span className='fs-7 text-danger'>{` +${Object.values(row.returns).length - 1 }`}</span>}
+              {Object.values(row.returns).length > 1 && <span className='fs-7 text-danger'>{` +${Object.values(row.returns).length - 1}`}</span>}
             </p>
           </>
         )
@@ -302,8 +302,19 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
       compact: true,
     },
     {
-      name: <span className='fw-bolder text-center fs-6'># of Items</span>,
-      selector: (row: ReturnsType) => Object.values(row.returns).reduce((total: number, returnOrder: ReturnOrder) => total + returnOrder.totalItems, 0),
+      name: <span className='fw-bolder text-center fs-6'>Items Received</span>,
+      selector: (row: ReturnsType) => (
+        <>
+          <span
+            className={
+              'fw-semibold fs-5' + (Object.values(row.returns).reduce((total: number, returnOrder: ReturnOrder) => total + returnOrder.totalItems, 0) !== row.totalOrderItems ? ' text-danger' : '')
+            }>
+            {Object.values(row.returns).reduce((total: number, returnOrder: ReturnOrder) => total + returnOrder.totalItems, 0)}
+          </span>
+          {` / `}
+          <span>{row.totalOrderItems}</span>
+        </>
+      ),
       sortable: true,
       wrap: true,
       // grow: 1.5,

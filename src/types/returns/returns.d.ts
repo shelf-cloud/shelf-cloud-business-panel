@@ -4,6 +4,7 @@ export interface ReturnList {
 
 export interface ReturnsType {
     shipmentOrderNumber: string;
+    totalOrderItems: number;
     returns: { [key: string]: ReturnOrder };
 }
 
