@@ -403,6 +403,7 @@ export interface OrderRowType {
   labelsName: string
   palletLabelsName?: string
   hasReturn: boolean
+  returns: string[]
   returnRMA?: string
   returnId: number
   returnState?: 'pending' | 'complete' | 'partial refund' | 'refund' | 'cancelled' | 'on hold'

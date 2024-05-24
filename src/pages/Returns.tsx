@@ -1,19 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useContext, useMemo } from 'react'
+import React, { useState, useContext, useMemo } from 'react'
 import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
-import { OrderRowType, ShipmentOrderItem } from '@typings'
 import axios from 'axios'
 import Head from 'next/head'
-import { Card, CardBody, Col, Container, Input, Row } from 'reactstrap'
+import { Button, Card, CardBody, Col, Container, Input, Row } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import moment from 'moment'
-import CreateReturnModal from '@components/CreateReturnModal'
 import { toast } from 'react-toastify'
 import FilterByDates from '@components/FilterByDates'
 import FilterReturns from '@components/returns/FilterReturns'
-import ReturnsTable from '@components/returns/ReturnsTable'
+import { ReturnList, ReturnOrder, ReturnsType } from '@typesTs/returns/returns'
+import ReturnRMATable from '@components/returns/ReturnRMATable'
+import useSWR, { useSWRConfig } from 'swr'
+import Link from 'next/link'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -44,124 +45,80 @@ type Props = {
 
 const Returns = ({ session, sessionToken }: Props) => {
   const { state }: any = useContext(AppContext)
+  const { mutate } = useSWRConfig()
   const [shipmentsStartDate, setShipmentsStartDate] = useState(moment().subtract(3, 'months').format('YYYY-MM-DD'))
   const [shipmentsEndDate, setShipmentsEndDate] = useState(moment().format('YYYY-MM-DD'))
   const [pending, setPending] = useState(true)
-  const [allData, setAllData] = useState<OrderRowType[]>([])
+  const [allData, setAllData] = useState<ReturnList>({})
   const [searchValue, setSearchValue] = useState<any>('')
   const [searchStatus, setSearchStatus] = useState<any>('')
   const [searchMarketplace, setSearchMarketplace] = useState<any>('')
 
-  useEffect(() => {
-    const controller = new AbortController()
-    const signal = controller.signal
-
-    const getNewDateRange = async () => {
-      setPending(true)
-
-      await axios(
-        `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/shipments/getReturnOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`,
-        {
-          signal,
-          headers: {
-            Authorization: `Bearer ${sessionToken}`,
-          },
-        }
-      )
-        .then((res) => {
-          setAllData(res.data)
+  const controller = new AbortController()
+  const signal = controller.signal
+  const fetcher = (endPoint: string) => {
+    setPending(true)
+    axios(endPoint, {
+      signal,
+      headers: {
+        Authorization: `Bearer ${sessionToken}`,
+      },
+    })
+      .then((res) => {
+        setAllData(res.data)
+        setPending(false)
+      })
+      .catch(({ error }) => {
+        if (axios.isCancel(error)) {
+          toast.error(error?.data?.message || 'Error fetching shipment Log data')
+          setAllData({})
           setPending(false)
-        })
-        .catch(({ error }) => {
-          if (axios.isCancel(error)) {
-            toast.error(error?.data?.message || 'Error fetching shipment Log data')
-            setAllData([])
-            setPending(false)
-          }
-        })
+        }
+      })
+  }
+  useSWR(
+    session && state.user.businessId
+      ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/shipments/getReturnOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`
+      : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
     }
-    if (session && state.user.businessId) getNewDateRange()
-
-    return () => {
-      controller.abort()
-    }
-  }, [session, state.user.businessId, shipmentsStartDate, shipmentsEndDate])
+  )
 
   const filterDataTable = useMemo(() => {
     if (searchValue === '' && searchStatus === '' && searchMarketplace === '') {
-      return allData
+      return Object.values(allData)
+    }
+
+    if (searchValue === '') {
+      return Object.values(allData).filter((order: ReturnsType) =>
+        Object.values(order?.returns).some(
+          (returnOrder: ReturnOrder) =>
+            (searchStatus !== '' ? returnOrder?.orderStatus?.toLowerCase().includes(searchStatus.toLowerCase()) : true) &&
+            (searchMarketplace !== '' ? returnOrder?.storeName?.toLowerCase() === searchMarketplace.toLowerCase() : true)
+        )
+      )
     }
 
     if (searchValue !== '') {
-      let newDataTable = allData.filter(
-        (order) =>
-          order?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
-          order?.orderStatus?.toLowerCase().includes(searchValue.toLowerCase()) ||
-          order?.orderType?.toLowerCase().includes(searchValue.toLowerCase()) ||
-          order?.shipName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-          order?.trackingNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
-          order?.orderItems?.some(
-            (item: ShipmentOrderItem) => item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
+      return Object.values(allData).filter(
+        (order: ReturnsType) =>
+          order.shipmentOrderNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
+          Object.values(order?.returns).some(
+            (returnOrder: ReturnOrder) =>
+              (searchStatus !== '' ? returnOrder?.orderStatus?.toLowerCase().includes(searchStatus.toLowerCase()) : true) &&
+              (searchMarketplace !== '' ? returnOrder?.storeName?.toLowerCase() === searchMarketplace.toLowerCase() : true) &&
+              (returnOrder?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                returnOrder?.orderStatus?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                returnOrder?.orderType?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                returnOrder?.shipName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                returnOrder?.trackingNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                returnOrder?.orderItems?.some(
+                  (item) => item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
+                ))
           )
       )
-
-      if (searchStatus !== '') {
-        newDataTable = newDataTable.filter((order) => order?.orderStatus?.toLowerCase().includes(searchStatus.toLowerCase()))
-      }
-
-      if (searchMarketplace !== '') {
-        newDataTable = newDataTable.filter((order) => order?.storeName?.toLowerCase() == searchMarketplace.toLowerCase())
-      }
-
-      return newDataTable
-    }
-
-    if (searchStatus !== '') {
-      let newDataTable = allData.filter((order) => order?.orderStatus?.toLowerCase().includes(searchStatus.toLowerCase()))
-
-      if (searchMarketplace !== '') {
-        newDataTable = newDataTable.filter((order) => order?.storeName?.toLowerCase() == searchMarketplace.toLowerCase())
-      }
-
-      if (searchValue !== '') {
-        newDataTable = newDataTable.filter(
-          (order) =>
-            order?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.orderStatus?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.orderType?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.shipName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.trackingNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.orderItems?.some(
-              (item: ShipmentOrderItem) => item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
-            )
-        )
-      }
-
-      return newDataTable
-    }
-
-    if (searchMarketplace !== '') {
-      let newDataTable = allData.filter((order) => order?.storeName?.toLowerCase() == searchMarketplace.toLowerCase())
-
-      if (searchStatus !== '') {
-        newDataTable = newDataTable.filter((order) => order?.orderStatus?.toLowerCase().includes(searchStatus.toLowerCase()))
-      }
-
-      if (searchValue !== '') {
-        newDataTable = newDataTable.filter(
-          (order) =>
-            order?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.orderStatus?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.orderType?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.shipName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.trackingNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.orderItems?.some(
-              (item: ShipmentOrderItem) => item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
-            )
-        )
-      }
-
-      return newDataTable
     }
   }, [allData, searchValue, searchStatus, searchMarketplace])
 
@@ -181,6 +138,9 @@ const Returns = ({ session, sessionToken }: Props) => {
 
     if (!response.data.error) {
       toast.success(response.data.message)
+      mutate(
+        `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/shipments/getReturnOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`
+      )
     } else {
       toast.error(response.data.message)
     }
@@ -213,6 +173,9 @@ const Returns = ({ session, sessionToken }: Props) => {
                       searchMarketplace={searchMarketplace}
                       setSearchMarketplace={setSearchMarketplace}
                     />
+                    <Link href='/returns/Unsellables'>
+                      <Button className='btn btn-primary'>Unsellables</Button>
+                    </Link>
                   </div>
                   <div className='col-sm-12 col-md-3'>
                     <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
@@ -240,10 +203,10 @@ const Returns = ({ session, sessionToken }: Props) => {
                 </Row>
                 <Card>
                   <CardBody>
-                    <ReturnsTable
-                      tableData={filterDataTable || []}
+                    <ReturnRMATable
+                      filterDataTable={filterDataTable || []}
                       pending={pending}
-                      apiMutateLink={`/api/getShipmentsOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`}
+                      apiMutateLink={`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/shipments/getReturnOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`}
                       handleReturnStateChange={handleReturnStateChange}
                     />
                   </CardBody>
@@ -253,11 +216,6 @@ const Returns = ({ session, sessionToken }: Props) => {
           </Container>
         </div>
       </React.Fragment>
-      {state.showCreateReturnModal && (
-        <CreateReturnModal
-          apiMutateLink={`/api/getShipmentsOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`}
-        />
-      )}
     </div>
   )
 }

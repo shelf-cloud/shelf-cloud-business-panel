@@ -82,7 +82,8 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
             <div style={{ margin: '0px', fontWeight: '600' }}>{row.orderNumber}</div>
             {row.hasReturn && (
               <span className='text-danger' style={{ opacity: '80%' }}>
-                Return: {row.orderNumber}-RT
+                Return: {row.returns[0]}
+                {row.returns.length > 1 && <span className='fs-7 text-danger'>{` +${row.returns.length - 1}`}</span>}
               </span>
             )}
             {row.isIndividualUnits && (

@@ -1,23 +1,22 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { OrderRowType } from '@typings'
 import React, { useContext } from 'react'
-import DataTable from 'react-data-table-component'
-import { ButtonGroup, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledButtonDropdown, UncontrolledTooltip } from 'reactstrap'
+import DataTable, { ExpanderComponentProps } from 'react-data-table-component'
+import { ButtonGroup, Card, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledButtonDropdown, UncontrolledTooltip } from 'reactstrap'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import AppContext from '@context/AppContext'
-import ShipmentExpandedDetail from '@components/ShipmentExpandedDetail'
+import { ReturnOrder, ReturnsType } from '@typesTs/returns/returns'
+import ReturnExpandedType from './ReturnExpandedType'
 
 type Props = {
-  tableData: OrderRowType[]
-  pending: boolean
-  apiMutateLink: string
-  handleReturnStateChange: (newState: string, orderId: number) => void
+  data: ReturnsType
+  apiMutateLink?: string
+  handleReturnStateChange?: (newState: string, orderId: number) => void
 }
 
-const ReturnsTable = ({ tableData, pending, apiMutateLink, handleReturnStateChange }: Props) => {
+const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, apiMutateLink, handleReturnStateChange }: Props) => {
   const { state }: any = useContext(AppContext)
-  const orderNumber = (rowA: OrderRowType, rowB: OrderRowType) => {
+  const orderNumber = (rowA: ReturnOrder, rowB: ReturnOrder) => {
     const a = rowA.orderNumber.toLowerCase()
     const b = rowB.orderNumber.toLowerCase()
 
@@ -31,7 +30,7 @@ const ReturnsTable = ({ tableData, pending, apiMutateLink, handleReturnStateChan
 
     return 0
   }
-  const orderStatus = (rowA: OrderRowType, rowB: OrderRowType) => {
+  const orderStatus = (rowA: ReturnOrder, rowB: ReturnOrder) => {
     const a = rowA.orderStatus.toLowerCase()
     const b = rowB.orderStatus.toLowerCase()
 
@@ -45,7 +44,7 @@ const ReturnsTable = ({ tableData, pending, apiMutateLink, handleReturnStateChan
 
     return 0
   }
-  const orderMarketplace = (rowA: OrderRowType, rowB: OrderRowType) => {
+  const orderMarketplace = (rowA: ReturnOrder, rowB: ReturnOrder) => {
     const a = rowA.channelName.toLowerCase()
     const b = rowB.channelName.toLowerCase()
 
@@ -59,7 +58,7 @@ const ReturnsTable = ({ tableData, pending, apiMutateLink, handleReturnStateChan
 
     return 0
   }
-  const orderReturnState = (rowA: OrderRowType, rowB: OrderRowType) => {
+  const orderReturnState = (rowA: ReturnOrder, rowB: ReturnOrder) => {
     const a = rowA.returnState!.toLowerCase()
     const b = rowB.returnState!.toLowerCase()
 
@@ -76,12 +75,12 @@ const ReturnsTable = ({ tableData, pending, apiMutateLink, handleReturnStateChan
 
   const columns: any = [
     {
-      name: <span className='fw-bolder fs-13'>Order Number</span>,
-      selector: (row: OrderRowType) => {
+      name: <span className='fw-semibold fs-7 text-muted'>Returns Received</span>,
+      selector: (row: ReturnOrder) => {
         return (
           <>
             <div style={{ margin: '0px', fontWeight: '600' }}>{row.orderNumber}</div>
-            {row.returnRMA && row.returnRMA !== '' && <span className='text-muted fs-7'>RMA: {row.returnRMA}</span>}
+            {/* {row.returnRMA && row.returnRMA !== '' && <span className='text-muted fs-7'>RMA: {row.returnRMA}</span>} */}
           </>
         )
       },
@@ -90,33 +89,30 @@ const ReturnsTable = ({ tableData, pending, apiMutateLink, handleReturnStateChan
       grow: 1.7,
       left: true,
       sortFunction: orderNumber,
-      style: {
-        padding: '8px 0px',
-      },
     },
     {
-      name: <span className='fw-bolder fs-13'>Status</span>,
-      selector: (row: OrderRowType) => {
+      name: <span className='fw-semibold fs-7 text-muted'>Status</span>,
+      selector: (row: ReturnOrder) => {
         switch (row.orderStatus) {
           case 'shipped':
           case 'received':
-            return <span className='badge text-uppercase badge-soft-success p-2'>{` ${row.orderStatus} `}</span>
+            return <span className='badge text-uppercase text-center badge-soft-success p-2'>{` ${row.orderStatus} `}</span>
             break
           case 'Processed':
-            return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${row.orderStatus} `}</span>
+            return <span className='badge text-uppercase text-center badge-soft-secondary p-2'>{` ${row.orderStatus} `}</span>
             break
           case 'awaiting_shipment':
           case 'awating':
-            return <span className='badge text-uppercase badge-soft-warning p-2'>{' awating '}</span>
+            return <span className='badge text-uppercase text-center badge-soft-warning p-2'>{' awating '}</span>
             break
           case 'awating pickup':
-            return <span className='badge text-uppercase badge-soft-secondary p-2'>{' awating pickup '}</span>
+            return <span className='badge text-uppercase text-center badge-soft-secondary p-2'>{' awating pickup '}</span>
             break
           case 'on_hold':
-            return <span className='badge text-uppercase badge-soft-danger p-2'>{' on hold '}</span>
+            return <span className='badge text-uppercase text-center badge-soft-danger p-2'>{' on hold '}</span>
             break
           case 'cancelled':
-            return <span className='badge text-uppercase badge-soft-dark p-2'> {row.orderStatus} </span>
+            return <span className='badge text-uppercase text-center badge-soft-dark p-2'> {row.orderStatus} </span>
             break
           default:
             break
@@ -125,12 +121,23 @@ const ReturnsTable = ({ tableData, pending, apiMutateLink, handleReturnStateChan
       sortable: true,
       wrap: true,
       // grow: 2,
-      center: true,
+      left: true,
       sortFunction: orderStatus,
     },
     {
-      name: <span className='fw-bolder fs-13'>Marketplace</span>,
-      selector: (row: OrderRowType) => {
+      name: <span className='fw-semibold fs-7 text-muted'>Reason</span>,
+      selector: (row: ReturnOrder) => row.returnReason,
+      sortable: true,
+      wrap: true,
+      center: false,
+      compact: true,
+      style: {
+        fontSize: '0.7rem',
+      },
+    },
+    {
+      name: <span className='fw-semibold fs-7 text-muted'>Marketplace</span>,
+      selector: (row: ReturnOrder) => {
         return (
           <>
             <img
@@ -161,8 +168,8 @@ const ReturnsTable = ({ tableData, pending, apiMutateLink, handleReturnStateChan
       sortFunction: orderMarketplace,
     },
     {
-      name: <span className='fw-bolder fs-13'>Order Date</span>,
-      selector: (row: OrderRowType) => row.orderDate,
+      name: <span className='fw-semibold text-center fs-7 text-muted'>Order Date</span>,
+      selector: (row: ReturnOrder) => row.orderDate,
       sortable: true,
       wrap: true,
       grow: 1.2,
@@ -170,8 +177,8 @@ const ReturnsTable = ({ tableData, pending, apiMutateLink, handleReturnStateChan
       compact: true,
     },
     {
-      name: <span className='fw-bolder fs-13'>Order Closed</span>,
-      selector: (row: OrderRowType) => row.closedDate || '',
+      name: <span className='fw-semibold text-center fs-7 text-muted'>Order Closed</span>,
+      selector: (row: ReturnOrder) => row.closedDate || '',
       sortable: true,
       wrap: true,
       grow: 1.2,
@@ -179,8 +186,8 @@ const ReturnsTable = ({ tableData, pending, apiMutateLink, handleReturnStateChan
       compact: true,
     },
     {
-      name: <span className='fw-bolder fs-13'>Tracking Number</span>,
-      selector: (row: OrderRowType) => {
+      name: <span className='fw-semibold fs-7 text-muted'>Tracking Number</span>,
+      selector: (row: ReturnOrder) => {
         let tracking
         {
           switch (true) {
@@ -271,8 +278,8 @@ const ReturnsTable = ({ tableData, pending, apiMutateLink, handleReturnStateChan
       compact: true,
     },
     {
-      name: <span className='fw-bolder fs-13'># of Items</span>,
-      selector: (row: OrderRowType) => row.totalItems || '',
+      name: <span className='fw-semibold text-center fs-7 text-muted'># of Items</span>,
+      selector: (row: ReturnOrder) => row.totalItems || '',
       sortable: true,
       wrap: true,
       // grow: 1.5,
@@ -280,20 +287,8 @@ const ReturnsTable = ({ tableData, pending, apiMutateLink, handleReturnStateChan
       compact: true,
     },
     {
-      name: <span className='fw-bolder fs-13'>Total Charge</span>,
-      selector: (row: OrderRowType) => {
-        let totalCharge
-        {
-          switch (true) {
-            case row.isIndividualUnits && row.individualUnitsPlan?.state == 'Pending':
-              totalCharge = 'Wating Box Plan'
-              break
-            default:
-              totalCharge = FormatCurrency(state.currentRegion, row.totalCharge)
-          }
-        }
-        return totalCharge
-      },
+      name: <span className='fw-semibold text-center fs-7 text-muted'>Total Charge</span>,
+      selector: (row: ReturnOrder) => FormatCurrency(state.currentRegion, row.totalCharge),
       sortable: true,
       wrap: true,
       // grow: 1.5,
@@ -303,25 +298,15 @@ const ReturnsTable = ({ tableData, pending, apiMutateLink, handleReturnStateChan
       },
     },
     {
-      name: <span className='fw-bolder fs-13'>Return State</span>,
-      cell: (row: OrderRowType) => {
+      name: <span className='fw-semibold text-center fs-7 text-muted'>Return State</span>,
+      cell: (row: ReturnOrder) => {
         var returnStateBtn
         switch (row.returnState) {
           case 'complete':
             returnStateBtn = <span className='text-capitalize text-nowrap text-success p-2'>{` ${row.returnState} `}</span>
             break
-          case 'partial refund':
-          case 'refund':
-            returnStateBtn = <span className='text-capitalize text-nowrap text-info p-2'>{` ${row.returnState} `}</span>
-            break
           case 'pending':
             returnStateBtn = <span className='text-capitalize text-nowrap text-warning p-2'>{` ${row.returnState} `}</span>
-            break
-          case 'on hold':
-            returnStateBtn = <span className='text-capitalize text-nowrap text-danger p-2'>{` ${row.returnState} `}</span>
-            break
-          case 'cancelled':
-            returnStateBtn = <span className='text-capitalize text-nowrap text-dark p-2'>{` ${row.returnState} `}</span>
             break
           default:
             break
@@ -333,33 +318,13 @@ const ReturnsTable = ({ tableData, pending, apiMutateLink, handleReturnStateChan
               <DropdownToggle tag='button' className='btn btn-light btn-sm' split></DropdownToggle>
               <DropdownMenu end={true}>
                 {row.returnState !== 'pending' && (
-                  <DropdownItem className='text-capitalize' onClick={() => handleReturnStateChange('pending', row.id)}>
+                  <DropdownItem className='text-capitalize' onClick={() => handleReturnStateChange!('pending', row.id)}>
                     pending
                   </DropdownItem>
                 )}
                 {row.returnState !== 'complete' && (
-                  <DropdownItem className='text-capitalize' onClick={() => handleReturnStateChange('complete', row.id)}>
+                  <DropdownItem className='text-capitalize' onClick={() => handleReturnStateChange!('complete', row.id)}>
                     complete
-                  </DropdownItem>
-                )}
-                {row.returnState !== 'partial refund' && (
-                  <DropdownItem className='text-capitalize' onClick={() => handleReturnStateChange('partial refund', row.id)}>
-                    partial refund
-                  </DropdownItem>
-                )}
-                {row.returnState !== 'refund' && (
-                  <DropdownItem className='text-capitalize' onClick={() => handleReturnStateChange('refund', row.id)}>
-                    refund
-                  </DropdownItem>
-                )}
-                {row.returnState !== 'cancelled' && (
-                  <DropdownItem className='text-capitalize' onClick={() => handleReturnStateChange('cancelled', row.id)}>
-                    cancelled
-                  </DropdownItem>
-                )}
-                {row.returnState !== 'on hold' && (
-                  <DropdownItem className='text-capitalize' onClick={() => handleReturnStateChange('on hold', row.id)}>
-                    on hold
                   </DropdownItem>
                 )}
               </DropdownMenu>
@@ -376,27 +341,18 @@ const ReturnsTable = ({ tableData, pending, apiMutateLink, handleReturnStateChan
   ]
 
   return (
-    <>
-      <DataTable
-        columns={columns}
-        data={tableData}
-        progressPending={pending}
-        expandableRows
-        expandableRowsComponent={ShipmentExpandedDetail}
-        expandableRowsComponentProps={{ apiMutateLink: apiMutateLink }}
-        striped={true}
-        pagination={tableData.length > 100 ? true : false}
-        paginationPerPage={100}
-        paginationRowsPerPageOptions={[100, 200, 500]}
-        paginationComponentOptions={{
-          rowsPerPageText: 'Orders per page:',
-          rangeSeparatorText: 'of',
-          noRowsPerPage: false,
-          selectAllRowsItem: true,
-          selectAllRowsItemText: 'All',
-        }}
-      />
-    </>
+    <div className='p-2 bg-light'>
+      <Card>
+        <DataTable
+          columns={columns}
+          data={Object.values(data.returns)}
+          dense
+          expandableRows
+          expandableRowsComponent={ReturnExpandedType}
+          expandableRowsComponentProps={{ apiMutateLink: apiMutateLink }}
+        />
+      </Card>
+    </div>
   )
 }
 

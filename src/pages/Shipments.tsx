@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useContext, useMemo } from 'react'
+import React, { useState, useContext, useMemo } from 'react'
 import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
 import { OrderRowType, ShipmentOrderItem } from '@typings'
@@ -14,6 +14,7 @@ import CreateReturnModal from '@components/CreateReturnModal'
 import { toast } from 'react-toastify'
 import FilterByDates from '@components/FilterByDates'
 import FilterByOthers from '@components/FilterByOthers'
+import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -53,40 +54,37 @@ const Shipments = ({ session, sessionToken }: Props) => {
   const [searchStatus, setSearchStatus] = useState<any>('')
   const [searchMarketplace, setSearchMarketplace] = useState<any>('')
 
-  useEffect(() => {
-    const controller = new AbortController()
-    const signal = controller.signal
-
-    const getNewDateRange = async () => {
-      setPending(true)
-
-      await axios(
-        `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/shipments/getShipmentsOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`,
-        {
-          signal,
-          headers: {
-            Authorization: `Bearer ${sessionToken}`,
-          },
-        }
-      )
-        .then((res) => {
-          setAllData(res.data)
+  const controller = new AbortController()
+  const signal = controller.signal
+  const fetcher = (endPoint: string) => {
+    setPending(true)
+    axios(endPoint, {
+      signal,
+      headers: {
+        Authorization: `Bearer ${sessionToken}`,
+      },
+    })
+      .then((res) => {
+        setAllData(res.data)
+        setPending(false)
+      })
+      .catch(({ error }) => {
+        if (axios.isCancel(error)) {
+          toast.error(error?.data?.message || 'Error fetching shipment Log data')
+          setAllData([])
           setPending(false)
-        })
-        .catch(({ error }) => {
-          if (axios.isCancel(error)) {
-            toast.error(error?.data?.message || 'Error fetching shipment Log data')
-            setAllData([])
-            setPending(false)
-          }
-        })
+        }
+      })
+  }
+  useSWR(
+    session && state.user.businessId
+      ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/shipments/getShipmentsOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`
+      : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
     }
-    if (session && state.user.businessId) getNewDateRange()
-
-    return () => {
-      controller.abort()
-    }
-  }, [session, state.user.businessId, shipmentsStartDate, shipmentsEndDate])
+  )
 
   const filterDataTable = useMemo(() => {
     if (searchValue === '' && searchType === '' && searchStatus === '' && searchMarketplace === '') {
