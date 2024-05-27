@@ -6,11 +6,13 @@ import { Input } from 'reactstrap'
 type Props = {
   searchStatus: string
   setSearchStatus: (searchValue: string) => void
+  searchReason: string
+  setSearchReason: (searchValue: string) => void
   searchMarketplace: string
   setSearchMarketplace: (searchValue: string) => void
 }
 
-const FilterReturns = ({ searchStatus, setSearchStatus, searchMarketplace, setSearchMarketplace }: Props) => {
+const FilterReturns = ({ searchStatus, setSearchStatus, searchReason, setSearchReason, searchMarketplace, setSearchMarketplace }: Props) => {
   const { state }: any = useContext(AppContext)
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const filterByOthersContainer = useRef<HTMLDivElement | null>(null)
@@ -64,13 +66,13 @@ const FilterReturns = ({ searchStatus, setSearchStatus, searchMarketplace, setSe
                 <option value='Return'>Return</option>
               </Input>
             </div> */}
-            <span className='fw-semibold'>Status:</span>
+            <span className='fw-semibold fs-7'>Status:</span>
             <div
-              className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto px-3 py-0 rounded-3'
+              className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto ps-1 pe-0 py-0 rounded-3'
               style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
               <Input
                 type='select'
-                className='border-0 fs-6 w-100'
+                className='border-0 fs-7 w-100'
                 id='type'
                 name='type'
                 value={searchStatus}
@@ -83,13 +85,36 @@ const FilterReturns = ({ searchStatus, setSearchStatus, searchMarketplace, setSe
                 <option value='received'>Received</option>
               </Input>
             </div>
-            <span className='fw-semibold'>Marketplace:</span>
+            <span className='fw-semibold fs-7'>Reason:</span>
             <div
-              className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto px-3 py-0 rounded-3'
+              className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto ps-1 pe-0 py-0 rounded-3'
               style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
               <Input
                 type='select'
-                className='border-0 fs-6 w-100'
+                className='border-0 fs-7 w-100'
+                id='type'
+                name='type'
+                value={searchReason}
+                onChange={(e) => {
+                  setSearchReason(e.target.value)
+                  setOpenDatesMenu(false)
+                }}>
+                <option value=''>All Reasons</option>
+                <option value='Damaged'>Damaged</option>
+                <option value='Wrong Address'>Wrong Address</option>
+                <option value='Missing Information'>Missing Information</option>
+                <option value='Return'>Return</option>
+                <option value='Undeliverable'>Undeliverable</option>
+                <option value='Other'>Other</option>
+              </Input>
+            </div>
+            <span className='fw-semibold fs-7'>Marketplace:</span>
+            <div
+              className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto ps-1 pe-0 py-0 rounded-3'
+              style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
+              <Input
+                type='select'
+                className='border-0 fs-7 w-100'
                 id='type'
                 name='type'
                 value={searchMarketplace}
@@ -111,9 +136,10 @@ const FilterReturns = ({ searchStatus, setSearchStatus, searchMarketplace, setSe
                 // setSearchType('')
                 setSearchStatus('')
                 setSearchMarketplace('')
+                setSearchReason('')
                 setOpenDatesMenu(false)
               }}
-              className='fw-normal mt-2'>
+              className='fw-normal fs-7 mt-2'>
               Clear All
             </span>
           </div>

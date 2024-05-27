@@ -14,6 +14,21 @@ type Props = {
 const SellerFbaOrdersTable = ({ tableData, pending }: Props) => {
   const { state }: any = useContext(AppContext)
 
+  const orderStatus = (rowA: FBAOrder, rowB: FBAOrder) => {
+    const a = rowA.orderStatus.toLowerCase()
+    const b = rowB.orderStatus.toLowerCase()
+
+    if (a > b) {
+      return 1
+    }
+
+    if (b > a) {
+      return -1
+    }
+
+    return 0
+  }
+
   const columns: any = [
     {
       name: <span className='fw-bolder fs-6'>Order Id</span>,
@@ -67,12 +82,13 @@ const SellerFbaOrdersTable = ({ tableData, pending }: Props) => {
             return <span className='badge text-uppercase badge-soft-dark p-2 my-2'>{` ${row.orderStatus} `}</span>
             break
           default:
-            break
+            return <span className='badge text-uppercase text-info bg-light p-2 my-2'>{` ${row.orderStatus} `}</span>
         }
       },
       center: true,
       sortable: true,
       compact: true,
+      sortFunction: orderStatus,
     },
     {
       name: <span className='fw-bolder fs-6'>Item Qty</span>,
@@ -104,7 +120,7 @@ const SellerFbaOrdersTable = ({ tableData, pending }: Props) => {
                 0
               )
             )}
-            <span className='text-muted'>{` ${row.currencyCode}`}</span>
+            <span className='text-muted fs-7'>{` USD`}</span>
             {row?.orderItems.reduce(
               (total, item: FBAOrderItem) =>
                 total + (item.refund_item + item.refund_itemTax + item.refund_commission + item.refund_adminCommission + item.refund_facilitatorTax_item),

@@ -46,14 +46,14 @@ const FilterByOthers = ({ searchType, setSearchType, searchStatus, setSearchStat
         </button>
         <div className={'dropdown-menu dropdown-menu-md px-4 py-3' + (openDatesMenu ? ' show' : '')}>
           <div className='d-flex flex-column justify-content-start gap-2'>
-            <span className='fw-semibold'>Type:</span>
+            <span className='fw-semibold fs-7'>Type:</span>
             <div
-              className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto px-3 py-0 rounded-3'
+              className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto ps-1 pe-0 py-0 rounded-3'
               style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
               {/* <i className='ri-truck-line fs-5' /> */}
               <Input
                 type='select'
-                className='border-0 fs-6 w-100'
+                className='border-0 fs-7 w-100'
                 id='type'
                 name='type'
                 value={searchType}
@@ -67,14 +67,14 @@ const FilterByOthers = ({ searchType, setSearchType, searchStatus, setSearchStat
                 <option value='Return'>Return</option>
               </Input>
             </div>
-            <span className='fw-semibold'>Status:</span>
+            <span className='fw-semibold fs-7'>Status:</span>
             <div
-              className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto px-3 py-0 rounded-3'
+              className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto ps-1 pe-0 py-0 rounded-3'
               style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
               {/* <i className='ri-truck-line fs-5' /> */}
               <Input
                 type='select'
-                className='border-0 fs-6 w-100'
+                className='border-0 fs-7 w-100'
                 id='type'
                 name='type'
                 value={searchStatus}
@@ -89,14 +89,14 @@ const FilterByOthers = ({ searchType, setSearchType, searchStatus, setSearchStat
                 <option value='cancelled'>Cancelled</option>
               </Input>
             </div>
-            <span className='fw-semibold'>Marketplace:</span>
+            <span className='fw-semibold fs-7'>Marketplace:</span>
             <div
-              className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto px-3 py-0 rounded-3'
+              className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto ps-1 pe-0 py-0 rounded-3'
               style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
               {/* <i className='ri-truck-line fs-5' /> */}
               <Input
                 type='select'
-                className='border-0 fs-6 w-100'
+                className='border-0 fs-7 w-100'
                 id='type'
                 name='type'
                 value={searchMarketplace}
@@ -120,7 +120,7 @@ const FilterByOthers = ({ searchType, setSearchType, searchStatus, setSearchStat
                 setSearchMarketplace('')
                 setOpenDatesMenu(false)
               }}
-              className='fw-normal mt-2'>
+              className='fw-normal mt-2 fs-7'>
               Clear All
             </span>
           </div>

@@ -167,7 +167,7 @@ const Listings = ({ session }: Props) => {
         <div className='page-content'>
           <Container fluid>
             <BreadCrumb title='Amazon Listings' pageTitle='Amazon' />
-            <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-end align-items-md-center px-3'>
+            <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-1 flex-md-row justify-content-md-end align-items-md-center px-3'>
               <div className='app-search d-flex flex-row justify-content-between align-items-center p-0'>
                 <div className='d-flex flex-row justify-content-start align-items-center gap-3'>
                   <FilterListings showHidden={showHidden} condition={condition} mapped={mapped} />

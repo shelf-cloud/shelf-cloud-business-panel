@@ -143,7 +143,7 @@ const List = ({ session, sessionToken }: Props) => {
             <BreadCrumb title='Report List' pageTitle='Reports' />
             <Row>
               <Col lg={12}>
-                <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-3 flex-md-row justify-content-md-between align-items-md-center'>
+                <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-1 flex-md-row justify-content-md-between align-items-md-center'>
                   <div className='d-flex flex-column justify-content-center align-items-end gap-2 flex-md-row justify-content-md-between align-items-md-center w-auto'>
                     <Button
                       color='primary'

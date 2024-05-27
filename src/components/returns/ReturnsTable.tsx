@@ -168,7 +168,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
       sortFunction: orderMarketplace,
     },
     {
-      name: <span className='fw-semibold text-center fs-7 text-muted'>Order Date</span>,
+      name: <span className='fw-semibold text-center fs-7 text-muted'>Return Date</span>,
       selector: (row: ReturnOrder) => row.orderDate,
       sortable: true,
       wrap: true,
@@ -177,7 +177,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
       compact: true,
     },
     {
-      name: <span className='fw-semibold text-center fs-7 text-muted'>Order Closed</span>,
+      name: <span className='fw-semibold text-center fs-7 text-muted'>Return Closed</span>,
       selector: (row: ReturnOrder) => row.closedDate || '',
       sortable: true,
       wrap: true,
@@ -287,11 +287,11 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
       compact: true,
     },
     {
-      name: <span className='fw-semibold text-center fs-7 text-muted'>Total Charge</span>,
+      name: <span className='fw-semibold text-center fs-7 text-muted'>Return Charge</span>,
       selector: (row: ReturnOrder) => FormatCurrency(state.currentRegion, row.totalCharge),
       sortable: true,
       wrap: true,
-      // grow: 1.5,
+      compact: true,
       center: true,
       style: {
         color: '#4481FD',
@@ -315,16 +315,16 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
           <ButtonGroup>
             <UncontrolledButtonDropdown>
               {returnStateBtn}
-              <DropdownToggle tag='button' className='btn btn-light btn-sm' split></DropdownToggle>
-              <DropdownMenu end={true}>
+              <DropdownToggle tag='button' className='btn btn-sm p-0 m-0' split></DropdownToggle>
+              <DropdownMenu end={true} className='shadow-md p-0 rounded'>
                 {row.returnState !== 'pending' && (
                   <DropdownItem className='text-capitalize' onClick={() => handleReturnStateChange!('pending', row.id)}>
-                    pending
+                    <i className='mdi mdi-backup-restore fs-5 text-warning align-middle m-0 p-0' /> pending
                   </DropdownItem>
                 )}
                 {row.returnState !== 'complete' && (
                   <DropdownItem className='text-capitalize' onClick={() => handleReturnStateChange!('complete', row.id)}>
-                    complete
+                    <i className='mdi mdi-check-circle-outline fs-5 text-success align-middle m-0 p-0' /> complete
                   </DropdownItem>
                 )}
               </DropdownMenu>
@@ -333,7 +333,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
         )
       },
       sortable: true,
-      wrap: true,
+      wrap: false,
       // grow: 2,
       center: true,
       sortFunction: orderReturnState,
@@ -342,8 +342,9 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
 
   return (
     <div className='p-2 bg-light'>
-      <Card>
+      <Card className='py-2'>
         <DataTable
+          className='overflow-visible'
           columns={columns}
           data={Object.values(data.returns)}
           dense

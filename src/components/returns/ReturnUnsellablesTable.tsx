@@ -10,82 +10,72 @@ type Props = {
 }
 
 const ReturnUnsellablesTable = ({ filterDataTable, pending }: Props) => {
-  const caseInsensitiveSort = (rowA: UnsellablesType, rowB: UnsellablesType) => {
-    const a = rowA.title.toLowerCase()
-    const b = rowB.title.toLowerCase()
+  // const caseInsensitiveSort = (rowA: UnsellablesType, rowB: UnsellablesType) => {
+  //   const a = rowA.title.toLowerCase()
+  //   const b = rowB.title.toLowerCase()
 
-    if (a > b) {
-      return 1
-    }
+  //   if (a > b) {
+  //     return 1
+  //   }
 
-    if (b > a) {
-      return -1
-    }
+  //   if (b > a) {
+  //     return -1
+  //   }
 
-    return 0
-  }
+  //   return 0
+  // }
 
   const columns: any = [
+    // {
+    //   name: <span className='font-weight-bold fs-13'>Image</span>,
+    //   selector: (row: UnsellablesType) => {
+    //     return (
+    //       <div
+    //         style={{
+    //           width: '70px',
+    //           height: '60px',
+    //           margin: '2px 0px',
+    //           position: 'relative',
+    //         }}>
+    //         <img
+    //           loading='lazy'
+    //           src={
+    //             row.image
+    //               ? row.image
+    //               : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+    //           }
+    //           onError={(e) =>
+    //             (e.currentTarget.src =
+    //               'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
+    //           }
+    //           alt='product Image'
+    //           style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+    //         />
+    //       </div>
+    //     )
+    //   },
+    //   sortable: false,
+    //   center: true,
+    //   compact: true,
+    //   width: '80px',
+    // },
     {
-      name: <span className='font-weight-bold fs-13'>Image</span>,
-      selector: (row: UnsellablesType) => {
-        return (
-          <div
-            style={{
-              width: '70px',
-              height: '60px',
-              margin: '2px 0px',
-              position: 'relative',
-            }}>
-            <img
-              loading='lazy'
-              src={
-                row.image
-                  ? row.image
-                  : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-              }
-              onError={(e) =>
-                (e.currentTarget.src =
-                  'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
-              }
-              alt='product Image'
-              style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
-            />
-          </div>
-        )
-      },
-      sortable: false,
-      center: true,
-      compact: true,
-      width: '80px',
+      name: <span className='fw-bolder fs-6'>SKU</span>,
+      selector: (row: UnsellablesType) => row.sku,
+      sortable: true,
+      wrap: false,
+      //   grow: 1.5,
+      // sortFunction: caseInsensitiveSort,
+      // compact: true,
     },
     {
-      name: (
-        <span className='font-weight-bold fs-13'>
-          Title
-          <br />
-          SKU
-        </span>
-      ),
-      selector: (row: UnsellablesType) => {
-        return (
-          <div>
-            <a>
-              <p className='text-black' style={{ margin: '0px', fontWeight: '600' }}>
-                {row.title}
-              </p>
-            </a>
-            <p style={{ margin: '0px' }} className='d-flex flex-row justify-content-start align-items-start'>
-              {row.sku}
-            </p>
-          </div>
-        )
-      },
+      name: <span className='fw-bolder fs-6'>Title</span>,
+      selector: (row: UnsellablesType) => row.title,
       sortable: true,
       wrap: true,
-      //   grow: 1.5,
-      sortFunction: caseInsensitiveSort,
-      //   compact: true,
+      grow: 1.5,
+      // sortFunction: caseInsensitiveSort,
+      compact: true,
     },
     {
       name: <span className='fw-bolder fs-6'>RMA</span>,

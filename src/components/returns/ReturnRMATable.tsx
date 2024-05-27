@@ -172,7 +172,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
       sortFunction: orderMarketplace,
     },
     {
-      name: <span className='fw-bolder text-center fs-6'>Order Date</span>,
+      name: <span className='fw-bolder text-center fs-6'>Return Date</span>,
       selector: (row: ReturnsType) => Object.values(row.returns)[0].orderDate,
       sortable: true,
       wrap: true,
@@ -180,15 +180,15 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
       center: true,
       compact: true,
     },
-    {
-      name: <span className='fw-bolder text-center fs-6'>Order Closed</span>,
-      selector: (row: ReturnsType) => Object.values(row.returns)[0].closedDate || '',
-      sortable: true,
-      wrap: true,
-      //   grow: 1.2,
-      center: true,
-      compact: true,
-    },
+    // {
+    //   name: <span className='fw-bolder text-center fs-6'>Order Closed</span>,
+    //   selector: (row: ReturnsType) => Object.values(row.returns)[0].closedDate || '',
+    //   sortable: true,
+    //   wrap: true,
+    //   //   grow: 1.2,
+    //   center: true,
+    //   compact: true,
+    // },
     {
       name: <span className='fw-bolder fs-6'>Tracking Number</span>,
       selector: (row: ReturnsType) => {

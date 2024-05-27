@@ -10,9 +10,9 @@ import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import useSWR from 'swr'
 import moment from 'moment'
-import Flatpickr from 'react-flatpickr'
 import ReceivingTable from '@components/ReceivingTable'
 import { toast } from 'react-toastify'
+import FilterByDates from '@components/FilterByDates'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -96,7 +96,7 @@ const Receiving = ({ session }: Props) => {
     setTableData(allData)
   }
 
-  const handleChangeDates = (dateStr: string) => {
+  const handleChangeDatesFromPicker = (dateStr: string) => {
     if (dateStr.includes(' to ')) {
       const dates = dateStr.split(' to ')
       setShipmentsStartDate(moment(dates[0], 'DD MMM YY').format('YYYY-MM-DD'))
@@ -116,7 +116,17 @@ const Receiving = ({ session }: Props) => {
             <BreadCrumb title='Receivings' pageTitle='Inbound' />
             <Row>
               <Col lg={12}>
-                <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-3 flex-md-row justify-content-md-between align-items-md-center'>
+                <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-1 flex-md-row justify-content-md-between align-items-md-center'>
+                  <div className='d-flex flex-column justify-content-center align-items-end gap-2 flex-md-row justify-content-md-between align-items-md-center w-auto'>
+                    <FilterByDates
+                      shipmentsStartDate={shipmentsStartDate}
+                      setShipmentsStartDate={setShipmentsStartDate}
+                      setShipmentsEndDate={setShipmentsEndDate}
+                      shipmentsEndDate={shipmentsEndDate}
+                      handleChangeDatesFromPicker={handleChangeDatesFromPicker}
+                    />
+                  </div>
+
                   <div className='col-sm-12 col-md-3'>
                     <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
                       <div className='position-relative d-flex rounded-3 w-100 overflow-hidden input_background_white'>
@@ -138,27 +148,6 @@ const Receiving = ({ session }: Props) => {
                           <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
                         </span>
                       </div>
-                    </div>
-                  </div>
-                  <div className='w-auto'>
-                    <div
-                      className='d-flex flex-row align-items-center justify-content-between w-auto px-3 rounded-3'
-                      style={{
-                        backgroundColor: 'white',
-                        minWidth: '220px',
-                        border: '1px solid #E1E3E5',
-                      }}>
-                      <i className='ri-calendar-2-line fs-5 me-2' />
-                      <Flatpickr
-                        className='border-0 fs-6 w-100 py-2'
-                        options={{
-                          mode: 'range',
-                          dateFormat: 'd M y',
-                          defaultDate: [moment(shipmentsStartDate, 'YYYY-MM-DD').format('DD MMM YY'), moment(shipmentsEndDate, 'YYYY-MM-DD').format('DD MMM YY')],
-                        }}
-                        onChange={(_selectedDates, dateStr) => handleChangeDates(dateStr)}
-                      />
-                      <i className='ri-arrow-down-s-line' />
                     </div>
                   </div>
                 </Row>

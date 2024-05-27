@@ -50,9 +50,10 @@ const Returns = ({ session, sessionToken }: Props) => {
   const [shipmentsEndDate, setShipmentsEndDate] = useState(moment().format('YYYY-MM-DD'))
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<ReturnList>({})
-  const [searchValue, setSearchValue] = useState<any>('')
-  const [searchStatus, setSearchStatus] = useState<any>('')
-  const [searchMarketplace, setSearchMarketplace] = useState<any>('')
+  const [searchValue, setSearchValue] = useState<string>('')
+  const [searchStatus, setSearchStatus] = useState<string>('')
+  const [searchReason, setSearchReason] = useState<string>('')
+  const [searchMarketplace, setSearchMarketplace] = useState<string>('')
 
   const controller = new AbortController()
   const signal = controller.signal
@@ -87,7 +88,7 @@ const Returns = ({ session, sessionToken }: Props) => {
   )
 
   const filterDataTable = useMemo(() => {
-    if (searchValue === '' && searchStatus === '' && searchMarketplace === '') {
+    if (searchValue === '' && searchStatus === '' && searchReason === '' && searchMarketplace === '') {
       return Object.values(allData)
     }
 
@@ -96,6 +97,7 @@ const Returns = ({ session, sessionToken }: Props) => {
         Object.values(order?.returns).some(
           (returnOrder: ReturnOrder) =>
             (searchStatus !== '' ? returnOrder?.orderStatus?.toLowerCase().includes(searchStatus.toLowerCase()) : true) &&
+            (searchReason !== '' ? returnOrder?.returnReason?.toLowerCase() === searchReason.toLowerCase() : true) &&
             (searchMarketplace !== '' ? returnOrder?.storeName?.toLowerCase() === searchMarketplace.toLowerCase() : true)
         )
       )
@@ -108,6 +110,7 @@ const Returns = ({ session, sessionToken }: Props) => {
           Object.values(order?.returns).some(
             (returnOrder: ReturnOrder) =>
               (searchStatus !== '' ? returnOrder?.orderStatus?.toLowerCase().includes(searchStatus.toLowerCase()) : true) &&
+              (searchReason !== '' ? returnOrder?.returnReason?.toLowerCase() === searchReason.toLowerCase() : true) &&
               (searchMarketplace !== '' ? returnOrder?.storeName?.toLowerCase() === searchMarketplace.toLowerCase() : true) &&
               (returnOrder?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
                 returnOrder?.orderStatus?.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -120,7 +123,7 @@ const Returns = ({ session, sessionToken }: Props) => {
           )
       )
     }
-  }, [allData, searchValue, searchStatus, searchMarketplace])
+  }, [allData, searchValue, searchStatus, searchReason, searchMarketplace])
 
   const handleChangeDatesFromPicker = (dateStr: string) => {
     if (dateStr.includes(' to ')) {
@@ -158,7 +161,7 @@ const Returns = ({ session, sessionToken }: Props) => {
             <BreadCrumb title='Returns' pageTitle='Orders' />
             <Row>
               <Col lg={12}>
-                <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-3 flex-md-row justify-content-md-between align-items-md-center'>
+                <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-1 flex-md-row justify-content-md-between align-items-md-center'>
                   <div className='d-flex flex-column justify-content-center align-items-end gap-2 flex-md-row justify-content-md-between align-items-md-center w-auto'>
                     <FilterByDates
                       shipmentsStartDate={shipmentsStartDate}
@@ -170,6 +173,8 @@ const Returns = ({ session, sessionToken }: Props) => {
                     <FilterReturns
                       searchStatus={searchStatus}
                       setSearchStatus={setSearchStatus}
+                      searchReason={searchReason}
+                      setSearchReason={setSearchReason}
                       searchMarketplace={searchMarketplace}
                       setSearchMarketplace={setSearchMarketplace}
                     />
