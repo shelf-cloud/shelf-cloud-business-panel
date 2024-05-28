@@ -25,6 +25,17 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending }: Props) => {
   //   return 0
   // }
 
+  const conditionalRowStyles = [
+    {
+      when: (row: UnsellablesType) => row.converted && !row.dispose,
+      classNames: ['text-muted'],
+    },
+    {
+      when: (row: UnsellablesType) => !row.converted && row.dispose,
+      classNames: ['text-danger'],
+    },
+  ]
+
   const columns: any = [
     // {
     //   name: <span className='font-weight-bold fs-13'>Image</span>,
@@ -93,6 +104,17 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending }: Props) => {
       },
     },
     {
+      name: <span className='fw-bolder fs-6'>Date</span>,
+      selector: (row: UnsellablesType) => row.date,
+      sortable: true,
+      wrap: true,
+      left: true,
+      compact: true,
+      style: {
+        fontSize: '0.7rem',
+      },
+    },
+    {
       name: <span className='fw-bolder text-start fs-6'>Return</span>,
       selector: (row: UnsellablesType) => row.orderNumber,
       sortable: true,
@@ -106,6 +128,17 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending }: Props) => {
     {
       name: <span className='fw-bolder text-start fs-6'>Reason</span>,
       selector: (row: UnsellablesType) => row.returnReason,
+      sortable: true,
+      wrap: true,
+      left: true,
+      compact: true,
+      style: {
+        fontSize: '0.7rem',
+      },
+    },
+    {
+      name: <span className='fw-bolder text-start fs-6'>Status</span>,
+      selector: (row: UnsellablesType) => row.dispose ? 'Disposed' : row.converted ? 'Converted Sellable' : 'Unsellable',
       sortable: true,
       wrap: true,
       left: true,
@@ -134,6 +167,8 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending }: Props) => {
         progressPending={pending}
         striped={true}
         dense
+        defaultSortAsc={false}
+        defaultSortFieldId={4}
         pagination={filterDataTable.length > 100 ? true : false}
         paginationPerPage={100}
         paginationRowsPerPageOptions={[100, 200, 500]}
@@ -144,6 +179,7 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending }: Props) => {
           selectAllRowsItem: true,
           selectAllRowsItemText: 'All',
         }}
+        conditionalRowStyles={conditionalRowStyles}
       />
     </>
   )

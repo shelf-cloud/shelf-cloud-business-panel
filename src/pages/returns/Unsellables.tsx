@@ -11,6 +11,8 @@ import useSWR from 'swr'
 import ReturnUnsellablesTable from '@components/returns/ReturnUnsellablesTable'
 import { UnsellablesType } from '@typesTs/returns/unsellables'
 import Link from 'next/link'
+import FilterUnsellables from '@components/returns/FilterUnsellables'
+import ExportUnsellables from '@components/returns/ExportUnsellables'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -41,9 +43,11 @@ type Props = {
 
 const Unsellables = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
-  const [searchValue, setSearchValue] = useState<any>('')
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<UnsellablesType[]>([])
+  const [searchValue, setSearchValue] = useState<any>('')
+  const [searchStatus, setSearchStatus] = useState<string>('')
+  const [searchReason, setSearchReason] = useState<string>('')
 
   const fetcher = (endPoint: string) => {
     setPending(true)
@@ -66,10 +70,32 @@ const Unsellables = ({ session }: Props) => {
   })
 
   const filterDataTable = useMemo(() => {
-    if (searchValue === '') {
+    if (searchValue === '' && searchStatus === '' && searchReason === '') {
       return allData
     }
-  }, [allData, searchValue])
+
+    if (searchValue === '') {
+      return allData.filter(
+        (item) =>
+          (searchStatus !== '' ? (searchStatus === 'dispose' ? item?.dispose : searchStatus === 'unsellable' ? !item?.converted && !item.dispose : item?.converted) : true) &&
+          (searchReason !== '' ? item?.returnReason?.toLowerCase() === searchReason.toLowerCase() : true)
+      )
+    }
+
+    if (searchValue !== '') {
+      return allData.filter(
+        (item) =>
+          (searchStatus !== '' ? (searchStatus === 'dispose' ? item?.dispose : searchStatus === 'unsellable' ? !item?.converted && !item.dispose : item?.converted) : true) &&
+          (searchReason !== '' ? item?.returnReason?.toLowerCase() === searchReason.toLowerCase() : true) &&
+          (item.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.sku.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.barcode.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.orderNumber.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.returnRMA.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.returnReason.toLowerCase().includes(searchValue.toLowerCase()))
+      )
+    }
+  }, [allData, searchValue, searchStatus, searchReason])
 
   const title = `Return Unsellables | ${session?.user?.name}`
   return (
@@ -87,9 +113,7 @@ const Unsellables = ({ session }: Props) => {
                   <div className='d-flex flex-column justify-content-center align-items-end gap-2 flex-md-row justify-content-md-between align-items-md-center w-auto'>
                     <div>
                       <Link href={'/Returns'}>
-                        <Button
-                          color='primary'
-                          style={{ cursor: 'pointer' }}>
+                        <Button color='primary' style={{ cursor: 'pointer' }}>
                           <span className='icon-on'>
                             <i className='ri-arrow-left-line align-bottom me-1' />
                             Returns
@@ -97,6 +121,8 @@ const Unsellables = ({ session }: Props) => {
                         </Button>
                       </Link>
                     </div>
+                    <FilterUnsellables searchStatus={searchStatus} setSearchStatus={setSearchStatus} searchReason={searchReason} setSearchReason={setSearchReason} />
+                    <ExportUnsellables unsellables={filterDataTable || allData} />
                   </div>
                   <div className='col-sm-12 col-md-3'>
                     <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>

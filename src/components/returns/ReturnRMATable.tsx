@@ -386,6 +386,8 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
         data={filterDataTable}
         progressPending={pending}
         striped={true}
+        defaultSortFieldId={5}
+        defaultSortAsc={false}
         expandableRows
         expandableRowsComponent={ReturnsTable}
         expandableRowsComponentProps={{ apiMutateLink: apiMutateLink, handleReturnStateChange: handleReturnStateChange }}

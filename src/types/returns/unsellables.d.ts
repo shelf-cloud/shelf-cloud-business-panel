@@ -8,4 +8,7 @@ export interface UnsellablesType {
     sku: string
     title: string
     image: string
+    converted: boolean
+    dispose: boolean
+    date: string
 }

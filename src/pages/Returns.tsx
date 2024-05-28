@@ -58,7 +58,6 @@ const Returns = ({ session, sessionToken }: Props) => {
   const controller = new AbortController()
   const signal = controller.signal
   const fetcher = (endPoint: string) => {
-    setPending(true)
     axios(endPoint, {
       signal,
       headers: {

@@ -183,7 +183,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
     validationPONumber.handleSubmit()
   }
 
-  const HandleAddProduct = (event: any) => {
+  const HandleAddComment = (event: any) => {
     event.preventDefault()
     validationNote.handleSubmit()
   }
@@ -274,7 +274,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                   <i className={'las la-edit fs-3 text-primary m-0 p-0 ' + (showEditNote && 'd-none')} style={{ cursor: 'pointer' }} onClick={() => setShowEditNote(true)}></i>
                 </p>
                 {showEditNote && (
-                  <Form onSubmit={HandleAddProduct}>
+                  <Form onSubmit={HandleAddComment}>
                     <Col md={12}>
                       <FormGroup className='m-0'>
                         <Label htmlFor='note' className='form-label'>

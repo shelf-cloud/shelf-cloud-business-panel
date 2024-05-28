@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Button, Card, CardBody, CardHeader, Col, Row, Spinner } from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col, Form, FormFeedback, FormGroup, Input, Label, Row, Spinner } from 'reactstrap'
 // import Animation from '@components/Common/Animation'
 import axios from 'axios'
 import AppContext from '@context/AppContext'
@@ -8,6 +8,9 @@ import { FormatCurrency } from '@lib/FormatNumbers'
 import { ExpanderComponentProps } from 'react-data-table-component'
 import { OrderItem, ReturnOrder } from '@typesTs/returns/returns'
 import TooltipComponent from '@components/constants/Tooltip'
+import { toast } from 'react-toastify'
+import * as Yup from 'yup'
+import { useFormik } from 'formik'
 
 type Props = {
   data: ReturnOrder
@@ -17,6 +20,8 @@ type Props = {
 const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ data, apiMutateLink }: Props) => {
   const { mutate } = useSWRConfig()
   const { state }: any = useContext(AppContext)
+  const [loading, setLoading] = useState(false)
+  const [showEditNote, setShowEditNote] = useState(false)
   const OrderId = data.orderId?.replace(/[\s\.]/g, '')
   const [loadingLabel, setLoadingLabel] = useState(false)
   const handlePrintingLabel = async () => {
@@ -32,6 +37,39 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
     downloadLink.click()
     mutate(apiMutateLink)
     setLoadingLabel(false)
+  }
+
+  const validationNote = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      comment: data.extraComment || '',
+    },
+    validationSchema: Yup.object({
+      comment: Yup.string().max(300, 'Title is to Long'),
+    }),
+    onSubmit: async (values) => {
+      setLoading(true)
+
+      const response = await axios.post(`/api/returns/editReturnComment?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+        returnId: data.id,
+        comment: values.comment,
+      })
+
+      if (!response.data.error) {
+        toast.success(response.data.msg)
+
+        mutate(apiMutateLink)
+        setShowEditNote(false)
+      } else {
+        toast.error(response.data.msg)
+      }
+      setLoading(false)
+    },
+  })
+
+  const HandleAddComment = (event: any) => {
+    event.preventDefault()
+    validationNote.handleSubmit()
   }
 
   return (
@@ -112,18 +150,50 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
               </CardBody>
             </Card>
           </Col>
-          {data.extraComment != '' && (
-            <Col xl={12}>
-              <Card>
-                <CardHeader className='py-3'>
-                  <h5 className='fw-semibold m-0'>Order Comment</h5>
-                </CardHeader>
-                <CardBody>
+          <Col xl={12}>
+            <Card>
+              <CardHeader className='py-3 d-flex justify-content-between align-items-center'>
+                <h5 className='fw-semibold m-0'>Order Comment</h5>
+                <i className={'las la-edit fs-3 text-primary m-0 p-0 ' + (showEditNote && 'd-none')} style={{ cursor: 'pointer' }} onClick={() => setShowEditNote(true)}></i>
+              </CardHeader>
+              <CardBody>
+                {showEditNote ? (
+                  <Form onSubmit={HandleAddComment}>
+                    <Col md={12}>
+                      <FormGroup className='m-0'>
+                        <Label htmlFor='comment' className='form-label'>
+                          Edit Comment
+                        </Label>
+                        <Input
+                          type='textarea'
+                          className='form-control fs-6'
+                          placeholder=''
+                          id='comment'
+                          name='comment'
+                          bsSize='sm'
+                          onChange={validationNote.handleChange}
+                          onBlur={validationNote.handleBlur}
+                          value={validationNote.values.comment || ''}
+                          invalid={validationNote.touched.comment && validationNote.errors.comment ? true : false}
+                        />
+                        {validationNote.touched.comment && validationNote.errors.comment ? <FormFeedback type='invalid'>{validationNote.errors.comment}</FormFeedback> : null}
+                      </FormGroup>
+                      <div className='d-flex flex-row justify-content-end align-items-center gap-3'>
+                        <Button type='button' disabled={loading} color='light' className='btn btn-sm' onClick={() => setShowEditNote(false)}>
+                          Cancel
+                        </Button>
+                        <Button type='submit' disabled={loading} color='primary' className='btn btn-sm'>
+                          {loading ? <Spinner size={'sm'} color='light'/> : 'Save Changes'}
+                        </Button>
+                      </div>
+                    </Col>
+                  </Form>
+                ) : (
                   <p>{data.extraComment}</p>
-                </CardBody>
-              </Card>
-            </Col>
-          )}
+                )}
+              </CardBody>
+            </Card>
+          </Col>
         </Col>
         <Col xl={8}>
           <Card>
