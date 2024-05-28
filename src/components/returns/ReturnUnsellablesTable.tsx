@@ -63,10 +63,11 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending }: Props) => {
       name: <span className='fw-bolder fs-6'>SKU</span>,
       selector: (row: UnsellablesType) => row.sku,
       sortable: true,
-      wrap: false,
-      //   grow: 1.5,
-      // sortFunction: caseInsensitiveSort,
-      // compact: true,
+      wrap: true,
+      grow: 0.6,
+      style: {
+        fontSize: '0.7rem',
+      },
     },
     {
       name: <span className='fw-bolder fs-6'>Title</span>,
@@ -74,8 +75,11 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending }: Props) => {
       sortable: true,
       wrap: true,
       grow: 1.5,
-      // sortFunction: caseInsensitiveSort,
+      left: true,
       compact: true,
+      style: {
+        fontSize: '0.7rem',
+      },
     },
     {
       name: <span className='fw-bolder fs-6'>RMA</span>,
@@ -84,6 +88,9 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending }: Props) => {
       wrap: true,
       left: true,
       compact: true,
+      style: {
+        fontSize: '0.7rem',
+      },
     },
     {
       name: <span className='fw-bolder text-start fs-6'>Return</span>,
@@ -92,6 +99,9 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending }: Props) => {
       wrap: true,
       left: true,
       compact: true,
+      style: {
+        fontSize: '0.7rem',
+      },
     },
     {
       name: <span className='fw-bolder text-start fs-6'>Reason</span>,
@@ -100,6 +110,9 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending }: Props) => {
       wrap: true,
       left: true,
       compact: true,
+      style: {
+        fontSize: '0.7rem',
+      },
     },
     {
       name: <span className='fw-bolder text-center fs-6'>Unsellable Barcode</span>,
@@ -107,6 +120,9 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending }: Props) => {
       sortable: true,
       wrap: true,
       center: true,
+      style: {
+        fontSize: '0.7rem',
+      },
     },
   ]
   return (
@@ -117,6 +133,7 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending }: Props) => {
         data={filterDataTable}
         progressPending={pending}
         striped={true}
+        dense
         pagination={filterDataTable.length > 100 ? true : false}
         paginationPerPage={100}
         paginationRowsPerPageOptions={[100, 200, 500]}

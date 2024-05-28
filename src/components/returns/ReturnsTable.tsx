@@ -172,19 +172,19 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
       selector: (row: ReturnOrder) => row.orderDate,
       sortable: true,
       wrap: true,
-      grow: 1.2,
-      center: true,
+      // grow: 1.2,
+      left: true,
       compact: true,
     },
-    {
-      name: <span className='fw-semibold text-center fs-7 text-muted'>Return Closed</span>,
-      selector: (row: ReturnOrder) => row.closedDate || '',
-      sortable: true,
-      wrap: true,
-      grow: 1.2,
-      center: true,
-      compact: true,
-    },
+    // {
+    //   name: <span className='fw-semibold text-center fs-7 text-muted'>Return Closed</span>,
+    //   selector: (row: ReturnOrder) => row.closedDate || '',
+    //   sortable: true,
+    //   wrap: true,
+    //   grow: 1.2,
+    //   center: true,
+    //   compact: true,
+    // },
     {
       name: <span className='fw-semibold fs-7 text-muted'>Tracking Number</span>,
       selector: (row: ReturnOrder) => {
@@ -206,7 +206,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
                       objectFit: 'contain',
                     }}
                   />
-                  <a href={`${row.trackingLink}${row.trackingNumber}`} target='blank' style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
+                  <a href={`${row.trackingLink}${row.trackingNumber}`} target='blank' style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }} className='fs-7'>
                     {row.trackingNumber}
                   </a>
                 </div>
@@ -224,7 +224,9 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
                       objectFit: 'contain',
                     }}
                   />
-                  <p style={{ margin: '0px' }}>{row.trackingNumber}</p>
+                  <p style={{ margin: '0px' }} className='fs-7'>
+                    {row.trackingNumber}
+                  </p>
                 </div>
               )
               break
@@ -240,7 +242,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
                       objectFit: 'contain',
                     }}
                   />
-                  <a href={`${row.trackingLink}${row.trackingNumber}`} target='blank' style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
+                  <a href={`${row.trackingLink}${row.trackingNumber}`} target='blank' style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }} className='fs-7'>
                     {row.trackingNumber}
                   </a>
                 </div>
@@ -258,7 +260,9 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
                       objectFit: 'contain',
                     }}
                   />
-                  <p style={{ margin: '0px' }}>{row.trackingNumber}</p>
+                  <p style={{ margin: '0px' }} className='fs-7'>
+                    {row.trackingNumber}
+                  </p>
                 </div>
               )
               break
@@ -273,7 +277,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
       },
       sortable: true,
       wrap: true,
-      grow: 1.7,
+      grow: 2,
       center: false,
       compact: true,
     },

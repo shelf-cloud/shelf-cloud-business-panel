@@ -177,7 +177,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
       sortable: true,
       wrap: true,
       //   grow: 1.2,
-      center: true,
+      left: true,
       compact: true,
     },
     // {
@@ -215,6 +215,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
                   <a
                     href={`${Object.values(row.returns)[0].trackingLink}${Object.values(row.returns)[0].trackingNumber}`}
                     target='blank'
+                    className='fs-7'
                     style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
                     {Object.values(row.returns)[0].trackingNumber}
                     {Object.values(row.returns).length > 1 && <span className='fs-7 text-danger'>{` +${Object.values(row.returns).length}`}</span>}
@@ -235,7 +236,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
                       objectFit: 'contain',
                     }}
                   />
-                  <p style={{ margin: '0px' }}>
+                  <p style={{ margin: '0px' }} className='fs-7'>
                     {Object.values(row.returns)[0].trackingNumber}
                     {Object.values(row.returns).length > 1 && <span className='fs-7 text-danger'>{` +${Object.values(row.returns).length}`}</span>}
                   </p>
@@ -260,6 +261,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
                   <a
                     href={`${Object.values(row.returns)[0].trackingLink}${Object.values(row.returns)[0].trackingNumber}`}
                     target='blank'
+                    className='fs-7'
                     style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
                     {Object.values(row.returns)[0].trackingNumber}
                     {Object.values(row.returns).length > 1 && <span className='fs-7 text-danger'>{` +${Object.values(row.returns).length}`}</span>}
@@ -279,7 +281,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
                       objectFit: 'contain',
                     }}
                   />
-                  <p style={{ margin: '0px' }}>
+                  <p style={{ margin: '0px' }} className='fs-7'>
                     {Object.values(row.returns)[0].trackingNumber}
                     {Object.values(row.returns).length > 1 && <span className='fs-7 text-danger'>{` +${Object.values(row.returns).length}`}</span>}
                   </p>
@@ -303,18 +305,24 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
     },
     {
       name: <span className='fw-bolder text-center fs-6'>Items Received</span>,
-      selector: (row: ReturnsType) => (
-        <>
-          <span
-            className={
-              'fw-semibold fs-5' + (Object.values(row.returns).reduce((total: number, returnOrder: ReturnOrder) => total + returnOrder.totalItems, 0) !== row.totalOrderItems ? ' text-danger' : '')
-            }>
-            {Object.values(row.returns).reduce((total: number, returnOrder: ReturnOrder) => total + returnOrder.totalItems, 0)}
-          </span>
-          {` / `}
-          <span>{row.totalOrderItems}</span>
-        </>
-      ),
+      selector: (row: ReturnsType) =>
+        row.totalOrderItems === 0 ? (
+          <>
+            <span>{Object.values(row.returns).reduce((total: number, returnOrder: ReturnOrder) => total + returnOrder.totalItems, 0)}</span>
+          </>
+        ) : (
+          <>
+            <span
+              className={
+                'fw-semibold fs-5' +
+                (Object.values(row.returns).reduce((total: number, returnOrder: ReturnOrder) => total + returnOrder.totalItems, 0) !== row.totalOrderItems ? ' text-danger' : '')
+              }>
+              {Object.values(row.returns).reduce((total: number, returnOrder: ReturnOrder) => total + returnOrder.totalItems, 0)}
+            </span>
+            {` / `}
+            <span>{row.totalOrderItems}</span>
+          </>
+        ),
       sortable: true,
       wrap: true,
       // grow: 1.5,
