@@ -447,7 +447,7 @@ const ExportBlankTemplate = ({ brands, suppliers, categories }: Props) => {
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('productionTime(Days)').eachCell({ includeEmpty: true }, (cell) => {
+    worksheet.getColumn('productionTime').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'whole',
         operator: 'greaterThanOrEqual',
@@ -460,7 +460,7 @@ const ExportBlankTemplate = ({ brands, suppliers, categories }: Props) => {
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('transitTime(Days)').eachCell({ includeEmpty: true }, (cell) => {
+    worksheet.getColumn('transitTime').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'whole',
         operator: 'greaterThanOrEqual',

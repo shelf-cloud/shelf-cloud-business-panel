@@ -231,7 +231,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
     supplier: string,
     brand: string,
     category: string,
-    showHidden: string,
+    showHidden: string
     // show0Days: string
   ) => {
     let filterString = `/reorderingPoints?filters=true`
@@ -381,8 +381,12 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
 
     if (['forecast'].includes(field)) {
       return rows.sort((a, b) => {
-        const aField = Object.values(a.forecast).reduce((total, unitsSold) => total + unitsSold, 0) - (a.warehouseQty + a.fbaQty + a.productionQty + a.receiving)
-        const bField = Object.values(b.forecast).reduce((total, unitsSold) => total + unitsSold, 0) - (b.warehouseQty + b.fbaQty + b.productionQty + b.receiving)
+        const aField =
+          Object.values(a.forecast[a.forecastModel]!).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
+          (a.warehouseQty + a.fbaQty + a.productionQty + a.receiving)
+        const bField =
+          Object.values(b.forecast[b.forecastModel]!).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
+          (b.warehouseQty + b.fbaQty + b.productionQty + b.receiving)
         if (aField > bField) {
           return direction ? 1 : -1
         } else if (aField < bField) {
@@ -397,6 +401,24 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
       return rows.sort((a, b) => {
         const aField = a.warehouseQty + a.fbaQty + a.productionQty + a.receiving
         const bField = b.warehouseQty + b.fbaQty + b.productionQty + b.receiving
+        if (aField > bField) {
+          return direction ? 1 : -1
+        } else if (aField < bField) {
+          return direction ? -1 : 1
+        } else {
+          return 0
+        }
+      })
+    }
+
+    if (['ExponentialSmoothing', 'AutoREG', 'VAR', 'Naive', 'ARDL', 'ARDL_seasonal'].includes(field)) {
+      return rows.sort((a, b) => {
+        const aField =
+          Object.values(a.forecast[field as keyof ReorderingPointsProduct]!).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
+          (a.warehouseQty + a.fbaQty + a.productionQty + a.receiving)
+        const bField =
+          Object.values(b.forecast[field as keyof ReorderingPointsProduct]!).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
+          (b.warehouseQty + b.fbaQty + b.productionQty + b.receiving)
         if (aField > bField) {
           return direction ? 1 : -1
         } else if (aField < bField) {
@@ -495,7 +517,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
           (brand !== undefined && brand !== '' ? item.brand.toLowerCase() === brand.toLowerCase() : true) &&
           (category !== undefined && category !== '' ? item.category.toLowerCase() === category.toLowerCase() : true) &&
           (showHidden === undefined || showHidden === '' ? !item.hideReorderingPoints : showHidden === 'false' ? !item.hideReorderingPoints : true)
-          // (show0Days === undefined || show0Days === '' ? item.daysRemaining > 0 : show0Days === 'false' ? item.daysRemaining > 0 : true)
+        // (show0Days === undefined || show0Days === '' ? item.daysRemaining > 0 : show0Days === 'false' ? item.daysRemaining > 0 : true)
       )
     }
 
@@ -523,23 +545,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
     }
 
     return []
-  }, [
-    productsData,
-    searchValue,
-    urgency,
-    grossmin,
-    grossmax,
-    profitmin,
-    profitmax,
-    unitsmin,
-    unitsmax,
-    supplier,
-    brand,
-    category,
-    showHidden,
-    setField,
-    sortingDirectionAsc,
-  ])
+  }, [productsData, searchValue, urgency, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, brand, category, showHidden, setField, sortingDirectionAsc])
 
   // REORDERING POINTS ORDER SUMMARY
   const reorderingPointsOrder = useMemo(() => {

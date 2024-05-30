@@ -482,10 +482,18 @@ const ReorderingPointsTable = ({
         </div>
       ),
       selector: (row: ReorderingPointsProduct) => {
-        const forecast =
-          Object.values(row.forecast).reduce((total, unitsSold) => total + unitsSold, 0) - (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving) < 0
-            ? 0
-            : Object.values(row.forecast).reduce((total, unitsSold) => total + unitsSold, 0) - (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
+        var forecast = 0
+        Object.entries(row.forecast).map(([model, date]) => {
+          if (model === row.forecastModel) {
+            forecast =
+              Object.values(date).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
+                (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving) <
+              0
+                ? 0
+                : Object.values(date).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
+                  (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
+          }
+        })
 
         return (
           <div className='fs-7'>
@@ -508,8 +516,30 @@ const ReorderingPointsTable = ({
             <p className='m-0 p-0 text-center' id={`forecast_${row.sku}`}>
               {FormatIntNumber(state.currentRegion, forecast)}
             </p>
-            <UncontrolledTooltip placement='top' target={`forecast_${row.sku}`} innerClassName='bg-white border border-info border-opacity-50 p-2'>
+            <UncontrolledTooltip placement='bottom' target={`forecast_${row.sku}`} innerClassName='bg-white border border-info border-opacity-50 p-2'>
               <p className='fs-7 text-primary m-0 p-0 mb-0'>{`Forecast Model: ${row.forecastModel} - Total Inventory`}</p>
+              <table className='table table-sm'>
+                <thead>
+                  <tr>
+                    <th className='fs-7 text-primary'>Model</th>
+                    <th className='fs-7 text-primary'>Forecast</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.entries(row.forecast).map(([model, date], index) => (
+                    <tr key={index}>
+                      <td className='fs-7'>{model.substring(0, 5)}</td>
+                      <td className='fs-7'>
+                        {FormatIntNumber(
+                          state.currentRegion,
+                          Object.values(date).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
+                            (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </UncontrolledTooltip>
 
             <p className='m-0 p-0 text-center' id={`Adjustedforecast_${row.sku}`}>
@@ -518,7 +548,7 @@ const ReorderingPointsTable = ({
             <UncontrolledTooltip placement='top' target={`Adjustedforecast_${row.sku}`} innerClassName='bg-white border border-info border-opacity-50 p-2'>
               <p className='fs-7 text-primary m-0 p-0 mb-0'>
                 {row.adjustedForecast !== 0
-                  ? `Sales variation adjustment comparing same previous months.`
+                  ? `Sales variation adjustment comparing same previous months. Variation: ${(row.variation * 100).toFixed(1)}%`
                   : 'It is not possible to calculate variation based on the information available.'}
               </p>
             </UncontrolledTooltip>
@@ -528,6 +558,144 @@ const ReorderingPointsTable = ({
       sortable: false,
       center: true,
       compact: true,
+    },
+    {
+      name: (
+        <span
+          className={'w-fit fs-7 text-wrap text-center ' + (setField === 'ExponentialSmoothing' ? 'fw-bold' : 'text-muted')}
+          style={{ cursor: 'pointer' }}
+          onClick={() => handleSetSorting('ExponentialSmoothing')}>
+          ExpoSm{' '}
+          {setField === 'ExponentialSmoothing' ? (
+            sortingDirectionAsc ? (
+              <i className='ri-arrow-down-fill fs-7 text-primary' />
+            ) : (
+              <i className='ri-arrow-up-fill fs-7 text-primary' />
+            )
+          ) : null}
+        </span>
+      ),
+      selector: (row: ReorderingPointsProduct) => {
+        const forecast =
+          Object.values(row.forecast['ExponentialSmoothing']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
+          (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
+
+        return FormatIntNumber(state.currentRegion, forecast)
+      },
+      // wrap: true,
+      sortable: false,
+      center: true,
+      compact: true,
+      // grow: 0,
+    },
+    {
+      name: (
+        <span
+          className={'fs-7 text-wrap text-center ' + (setField === 'AutoREG' ? 'fw-bold' : 'text-muted')}
+          style={{ cursor: 'pointer' }}
+          onClick={() => handleSetSorting('AutoREG')}>
+          AutoREG{' '}
+          {setField === 'AutoREG' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
+      selector: (row: ReorderingPointsProduct) => {
+        const forecast =
+          Object.values(row.forecast['AutoREG']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
+          (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
+
+        return FormatIntNumber(state.currentRegion, forecast)
+      },
+      wrap: true,
+      sortable: false,
+      center: true,
+      compact: true,
+      // grow: 0,
+    },
+    {
+      name: (
+        <span className={'fs-7 text-wrap text-center ' + (setField === 'VAR' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('VAR')}>
+          VAR {setField === 'VAR' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
+      selector: (row: ReorderingPointsProduct) => {
+        const forecast =
+          Object.values(row.forecast['VAR']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
+          (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
+
+        return FormatIntNumber(state.currentRegion, forecast)
+      },
+      // wrap: true,
+      sortable: false,
+      center: true,
+      compact: true,
+      // grow: 0,
+    },
+    {
+      name: (
+        <span className={'fs-7 text-wrap text-center ' + (setField === 'Naive' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('Naive')}>
+          Naive {setField === 'Naive' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
+      selector: (row: ReorderingPointsProduct) => {
+        const forecast =
+          Object.values(row.forecast['Naive']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
+          (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
+
+        return FormatIntNumber(state.currentRegion, forecast)
+      },
+      // wrap: true,
+      sortable: false,
+      center: true,
+      compact: true,
+      // grow: 0,
+    },
+    {
+      name: (
+        <span className={'fs-7 text-wrap text-center ' + (setField === 'ARDL' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('ARDL')}>
+          ARDL {setField === 'ARDL' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
+      selector: (row: ReorderingPointsProduct) => {
+        const forecast =
+          Object.values(row.forecast['ARDL']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
+          (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
+
+        return FormatIntNumber(state.currentRegion, forecast)
+      },
+      // wrap: true,
+      sortable: false,
+      center: true,
+      compact: true,
+      // grow: 0,
+    },
+    {
+      name: (
+        <span
+          className={'fs-7 text-wrap text-center ' + (setField === 'ARDL_seasonal' ? 'fw-bold' : 'text-muted')}
+          style={{ cursor: 'pointer' }}
+          onClick={() => handleSetSorting('ARDL_seasonal')}>
+          ARDL_S{' '}
+          {setField === 'ARDL_seasonal' ? (
+            sortingDirectionAsc ? (
+              <i className='ri-arrow-down-fill fs-7 text-primary' />
+            ) : (
+              <i className='ri-arrow-up-fill fs-7 text-primary' />
+            )
+          ) : null}
+        </span>
+      ),
+      selector: (row: ReorderingPointsProduct) => {
+        const forecast =
+          Object.values(row.forecast['ARDL_seasonal']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
+          (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
+
+        return FormatIntNumber(state.currentRegion, forecast)
+      },
+      wrap: true,
+      sortable: false,
+      center: true,
+      compact: true,
+      // grow: 0,
     },
     {
       name: (
@@ -614,6 +782,7 @@ const ReorderingPointsTable = ({
         columns={columns}
         data={filterDataTable}
         progressPending={pending}
+        fixedHeader
         dense
         striped
         selectableRows
@@ -625,8 +794,8 @@ const ReorderingPointsTable = ({
         // defaultSortAsc={false}
         // expandableRowsComponentProps={{ selectedMarketplaceStoreId: selectedMarketplace.storeId }}
         pagination={filterDataTable.length > 100 ? true : false}
-        paginationPerPage={50}
-        paginationRowsPerPageOptions={[50, 100, 200, 500]}
+        paginationPerPage={20}
+        paginationRowsPerPageOptions={[20, 100, 200, 500]}
         paginationComponentOptions={{
           rowsPerPageText: 'Products per page:',
           rangeSeparatorText: 'of',

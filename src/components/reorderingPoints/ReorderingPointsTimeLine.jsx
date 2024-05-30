@@ -7,7 +7,7 @@ import moment, { min } from 'moment'
 import { Button } from 'reactstrap'
 const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false })
 
-const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, poDates, forecast }) => {
+const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, poDates, forecast, bestModel }) => {
     const { state } = useContext(AppContext)
     const [grouping, setGrouping] = useState('daily')
     const [currentDateIndex, setcurrentDateIndex] = useState(0)
@@ -71,33 +71,34 @@ const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, po
             return result
         }, {})
 
-    const dailytimeForecast = Object.keys(forecast)
-        .sort()
-        .reduce(function (result, key) {
-            result[moment(key).startOf('day').format("YYYY-MM-DD")] = Math.floor(forecast[key])
+    // console.log(Object.entries(forecast[bestModel]))
+    const dailytimeForecast = Object.entries(forecast[bestModel])
+        // .sort()
+        .reduce(function (result, [date, unitsSold]) {
+            result[moment(date).startOf('day').format("YYYY-MM-DD")] = Math.ceil(unitsSold)
             return result
         }, {})
 
-    const weeklyForecast = Object.keys(forecast)
-        .sort()
-        .reduce(function (result, key) {
-            const weekYear = `${moment(key).startOf('week').format('YYYY-MM-DD')}`
+    const weeklyForecast = Object.entries(forecast[bestModel])
+        // .sort()
+        .reduce(function (result, [date, unitsSold]) {
+            const weekYear = `${moment(date).startOf('week').format('YYYY-MM-DD')}`
             if (result[weekYear] === undefined) {
-                result[weekYear] = Math.floor(forecast[key])
+                result[weekYear] = Math.ceil(unitsSold)
             } else {
-                result[weekYear] += Math.floor(forecast[key])
+                result[weekYear] += Math.ceil(unitsSold)
             }
             return result
         }, {})
 
-    const monthlyForecast = Object.keys(forecast)
-        .sort()
-        .reduce(function (result, key) {
-            const weekYear = `${moment(key).year()}-${moment(key).format('MM')}`
+    const monthlyForecast = Object.entries(forecast[bestModel])
+        // .sort()
+        .reduce(function (result, [date, unitsSold]) {
+            const weekYear = `${moment(date).year()}-${moment(date).format('MM')}`
             if (result[weekYear] === undefined) {
-                result[weekYear] = Math.floor(forecast[key])
+                result[weekYear] = Math.ceil(unitsSold)
             } else {
-                result[weekYear] += Math.floor(forecast[key])
+                result[weekYear] += Math.ceil(unitsSold)
             }
             return result
         }, {})
@@ -130,7 +131,7 @@ const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, po
             },
         },
         stroke: {
-            width: [2,2,3],
+            width: [2, 2, 3],
             curve: 'smooth',
         },
         markers: {

@@ -35,6 +35,7 @@ export interface ReorderingPointsProduct {
     daysToOrder: number;
     urgency: number;
     adjustedForecast: number;
+    variation: number;
     order: number;
     orderAdjusted: number;
     useOrderAdjusted: boolean;
@@ -42,7 +43,7 @@ export interface ReorderingPointsProduct {
     dateList: { [key: string]: DateList };
     totalUnitsSold: { [key: string]: number };
     forecastModel: string;
-    forecast: { [key: string]: number }
+    forecast: { [model: string]: { [date: string]: number } }
     comment?: string
 }
 
