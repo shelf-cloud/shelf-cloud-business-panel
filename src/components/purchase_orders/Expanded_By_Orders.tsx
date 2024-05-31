@@ -14,6 +14,7 @@ import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import Edit_PO_Ordered_Qty from '@components/modals/purchaseOrders/Edit_PO_Ordered_Qty'
 import Link from 'next/link'
+import DownloadExcelPurchaseOrderDesign from './DownloadExcelPurchaseOrderDesign'
 
 type Props = {
   data: PurchaseOrder
@@ -614,8 +615,10 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
             </CardBody>
           </Card>
           <Row>
-            <Col sm={12} className='d-flex justify-content-end align-items-end'>
-              <Card className='m-0'>
+            <Col sm={12} className='d-flex flex-row justify-content-end align-items-end'>
+              <div className='m-0 d-flex flex-row justify-content-end align-items-end gap-4'>
+                {/* <DownloadExcelPurchaseOrder purchaseOrder={data}/> */}
+                <DownloadExcelPurchaseOrderDesign purchaseOrder={data}/>
                 {data.isOpen ? (
                   <Button color='success' disabled={loading} className='btn-label' onClick={() => handlePoOpenState(data.poId, !data.isOpen)}>
                     <i className='las la-check-circle label-icon align-middle fs-3 me-2' />
@@ -627,7 +630,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                     ReOpen PO
                   </Button>
                 )}
-              </Card>
+              </div>
             </Col>
           </Row>
         </Col>
