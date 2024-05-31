@@ -7,7 +7,8 @@ import Link from 'next/link'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import AppContext from '@context/AppContext'
 import { DebounceInput } from 'react-debounce-input'
-import { Badge, UncontrolledTooltip } from 'reactstrap'
+import { Badge, Spinner, UncontrolledTooltip } from 'reactstrap'
+
 const ReorderingPointsExpandedDetails = dynamic(() => import('./ReorderingPointsExpandedDetails'), {
   ssr: false,
 })
@@ -29,6 +30,7 @@ type Props = {
   setField: string
   handleSetSorting: (field: string) => void
   sortingDirectionAsc: boolean
+  loadingForecast: boolean
 }
 
 const ReorderingPointsTable = ({
@@ -47,11 +49,21 @@ const ReorderingPointsTable = ({
   setField,
   handleSetSorting,
   sortingDirectionAsc,
+  loadingForecast,
 }: Props) => {
   const { state }: any = useContext(AppContext)
 
   const handleSelectedRows = ({ selectedRows }: { selectedRows: ReorderingPointsProduct[] }) => {
     setSelectedRows(selectedRows)
+  }
+
+  const customStyles = {
+    responsiveWrapper: {
+      style: {
+        height: '74dvh',
+        scrollbarWidth: 'thin !important',
+      },
+    },
   }
 
   const conditionalRowStyles = [
@@ -205,8 +217,9 @@ const ReorderingPointsTable = ({
       },
       sortable: false,
       center: false,
-      compact: true,
-      grow: 2,
+      compact: false,
+      minWidth: 'fit-content',
+      width: '280px',
     },
     {
       name: (
@@ -233,7 +246,8 @@ const ReorderingPointsTable = ({
       wrap: true,
       center: false,
       compact: true,
-      grow: 0,
+      width: '50px',
+      minWidth: 'fit-content',
     },
     {
       name: (
@@ -280,7 +294,7 @@ const ReorderingPointsTable = ({
       sortable: false,
       center: true,
       compact: true,
-      grow: 0,
+      // grow: 0,
     },
     {
       name: (
@@ -302,8 +316,8 @@ const ReorderingPointsTable = ({
       wrap: true,
       sortable: false,
       center: true,
-      compact: false,
-      grow: 0,
+      compact: true,
+      // grow: 0,
     },
     {
       name: (
@@ -379,13 +393,12 @@ const ReorderingPointsTable = ({
           </>
         )
       },
+      wrap: false,
       sortable: false,
       center: true,
       compact: true,
-      grow: 0,
-      style: {
-        minWidth: 'fit-content',
-      },
+      minWidth: 'fit-content',
+      width: '180px',
     },
     {
       name: (
@@ -429,7 +442,8 @@ const ReorderingPointsTable = ({
             <div className='w-100 d-flex flex-row justify-content-center align-items-center'>
               <DebounceInput
                 type='number'
-                debounceTimeout={300}
+                disabled={loadingForecast}
+                debounceTimeout={1000}
                 className='form-control form-control-sm fs-7 m-0 w-75 py-0 text-center'
                 placeholder='Days of Stock'
                 min={0}
@@ -437,6 +451,7 @@ const ReorderingPointsTable = ({
                 value={row.recommendedDaysOfStock}
                 onChange={(e) => handleDaysOfStockQty(row.sku, parseInt(e.target.value), row.inventoryId)}
               />
+              {loadingForecast && <Spinner size={'sm'} color='primary' />}
               <i className='fs-5 text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={'DaysOfStockInfo'} />
               <UncontrolledTooltip placement='top' target={'DaysOfStockInfo'} innerClassName='bg-white border border-info border-opacity-50 p-2'>
                 <p className='fs-7 text-primary m-0 p-0 mb-0'>The number of days you want to have stock in addition to the lead time.</p>
@@ -446,7 +461,7 @@ const ReorderingPointsTable = ({
         )
       },
       sortable: false,
-      center: true,
+      left: true,
       compact: true,
     },
     {
@@ -586,7 +601,8 @@ const ReorderingPointsTable = ({
       sortable: false,
       center: true,
       compact: true,
-      // grow: 0,
+      width: '80px',
+      minWidth: 'fit-content',
     },
     {
       name: (
@@ -605,11 +621,11 @@ const ReorderingPointsTable = ({
 
         return FormatIntNumber(state.currentRegion, forecast)
       },
-      wrap: true,
       sortable: false,
       center: true,
       compact: true,
-      // grow: 0,
+      width: '80px',
+      minWidth: 'fit-content',
     },
     {
       name: (
@@ -624,11 +640,11 @@ const ReorderingPointsTable = ({
 
         return FormatIntNumber(state.currentRegion, forecast)
       },
-      // wrap: true,
       sortable: false,
       center: true,
       compact: true,
-      // grow: 0,
+      width: '80px',
+      minWidth: 'fit-content',
     },
     {
       name: (
@@ -662,11 +678,11 @@ const ReorderingPointsTable = ({
 
         return FormatIntNumber(state.currentRegion, forecast)
       },
-      // wrap: true,
       sortable: false,
       center: true,
       compact: true,
-      // grow: 0,
+      width: '80px',
+      minWidth: 'fit-content',
     },
     {
       name: (
@@ -691,11 +707,11 @@ const ReorderingPointsTable = ({
 
         return FormatIntNumber(state.currentRegion, forecast)
       },
-      wrap: true,
       sortable: false,
       center: true,
       compact: true,
-      // grow: 0,
+      width: '80px',
+      minWidth: 'fit-content',
     },
     {
       name: (
@@ -771,8 +787,9 @@ const ReorderingPointsTable = ({
       },
       sortable: false,
       center: true,
-      compact: true,
-      grow: 1,
+      compact: false,
+      width: '150px',
+      minWidth: 'fit-content',
     },
   ]
 
@@ -782,6 +799,7 @@ const ReorderingPointsTable = ({
         columns={columns}
         data={filterDataTable}
         progressPending={pending}
+        responsive
         fixedHeader
         dense
         striped
@@ -794,8 +812,8 @@ const ReorderingPointsTable = ({
         // defaultSortAsc={false}
         // expandableRowsComponentProps={{ selectedMarketplaceStoreId: selectedMarketplace.storeId }}
         pagination={filterDataTable.length > 100 ? true : false}
-        paginationPerPage={20}
-        paginationRowsPerPageOptions={[20, 100, 200, 500]}
+        paginationPerPage={50}
+        paginationRowsPerPageOptions={[50, 100, 200, 500]}
         paginationComponentOptions={{
           rowsPerPageText: 'Products per page:',
           rangeSeparatorText: 'of',
@@ -804,6 +822,7 @@ const ReorderingPointsTable = ({
           selectAllRowsItemText: 'All',
         }}
         conditionalRowStyles={conditionalRowStyles}
+        customStyles={customStyles}
       />
     </>
   )

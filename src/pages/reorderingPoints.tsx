@@ -20,6 +20,7 @@ import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/Forma
 import ReorderingPointsSalesModal from '@components/modals/reorderingPoints/ReorderingPointsSalesModal'
 import ReorderingPointsSettings from '@components/reorderingPoints/ReorderingPointsSettings'
 import ReorderingPointsCreatePOModal from '@components/modals/reorderingPoints/ReorderingPointsCreatePOModal'
+import { SingleForecastResponse } from '@typesTs/reorderingPoints/singleForecast'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -89,6 +90,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
   const [toggledClearRows, setToggleClearRows] = useState(false)
   const [selectedRows, setSelectedRows] = useState<ReorderingPointsProduct[]>([])
   const [loadingSales, setLoadingSales] = useState(false)
+  const [loadingForecast, setloadingForecast] = useState(false)
   const [error, setError] = useState<string[]>([])
   const [salesModal, setSalesModal] = useState({
     showSalesModal: false,
@@ -299,24 +301,64 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
     })
   }
   const handleDaysOfStockQty = async (sku: string, daysOfStockQty: number, inventoryId: number) => {
-    setProductsData((prevData) => {
-      const newProductsData = { ...prevData }
-      if (daysOfStockQty <= 0 || daysOfStockQty === null || daysOfStockQty === undefined || isNaN(daysOfStockQty)) {
-        newProductsData[sku].recommendedDaysOfStock = 0
-        return newProductsData
-      }
+    setloadingForecast(true)
 
-      newProductsData[sku].recommendedDaysOfStock = daysOfStockQty
-      return newProductsData
-    })
+    const newForecast = await axios
+      .put(
+        `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reorderingPoints/getForecastSingle`,
+        {
+          region: state.currentRegion,
+          businessId: state.user.businessId,
+          inventoryId: inventoryId,
+          sku: sku,
+          recommendedDaysOfStock: daysOfStockQty,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${sessionToken}`,
+          },
+        }
+      )
+      .then(({ data }: { data: SingleForecastResponse }) => {
+        setProductsData((prevData) => {
+          const newProductsData = { ...prevData }
+          if (daysOfStockQty <= 0 || daysOfStockQty === null || daysOfStockQty === undefined || isNaN(daysOfStockQty)) {
+            newProductsData[sku].recommendedDaysOfStock = 0
+            newProductsData[sku].forecastModel = data[sku].best_model
+            newProductsData[sku].forecast = data[sku].unitsSold
+            newProductsData[sku].adjustedForecast =
+              Object.values(data[sku].unitsSold[data[sku].best_model]).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) *
+              newProductsData[sku].variation
+            return newProductsData
+          }
 
-    const response = await axios.post(`/api/reorderingPoints/setNewRecommendedDaysOfSotck?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-      daysOfStockQty: daysOfStockQty <= 0 || daysOfStockQty === null || daysOfStockQty === undefined || isNaN(daysOfStockQty) ? 0 : daysOfStockQty,
-      inventoryId,
-    })
-    if (response.data.error) {
-      toast.error(response.data.msg)
+          newProductsData[sku].recommendedDaysOfStock = daysOfStockQty
+          newProductsData[sku].forecastModel = data[sku].best_model
+          newProductsData[sku].forecast = data[sku].unitsSold
+          newProductsData[sku].adjustedForecast =
+            Object.values(data[sku].unitsSold[data[sku].best_model]).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) *
+            newProductsData[sku].variation
+          return newProductsData
+        })
+      })
+      .then(async () => {
+        const response = await axios.post(`/api/reorderingPoints/setNewRecommendedDaysOfSotck?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+          daysOfStockQty: daysOfStockQty <= 0 || daysOfStockQty === null || daysOfStockQty === undefined || isNaN(daysOfStockQty) ? 0 : daysOfStockQty,
+          inventoryId,
+        })
+
+        return response
+      })
+      .catch((error) => {
+        return error
+      })
+
+    if (newForecast.data.error) {
+      toast.error(newForecast.data.message)
+    } else {
+      toast.success(`SKU ${sku}: Forecast Updated`)
     }
+    setloadingForecast(false)
   }
   const handleSetSorting = (field: string) => {
     setsetField(field)
@@ -683,8 +725,8 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
                 </Card>
               </Collapse>
             </Row>
-            <Card style={{ marginBottom: '160px' }}>
-              <CardBody>
+            <Card>
+              <CardBody style={{ height: '82dvh', scrollbarWidth: 'thin' }}>
                 {!loadingData && loadingSales && (
                   <div className='text-left fs-6 text-primary m-0 p-0'>
                     Loading Sales Data... <Spinner size={'sm'} color='primary' />
@@ -706,13 +748,14 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
                   setField={setField}
                   handleSetSorting={handleSetSorting}
                   sortingDirectionAsc={sortingDirectionAsc}
+                  loadingForecast={loadingForecast}
                 />
               </CardBody>
             </Card>
           </Container>
         </div>
         {!loadingData && filterDataTable.length > 0 && (
-          <div className='position-fixed shadow-lg' style={{ right: '20px', bottom: '40px' }}>
+          <div className='position-fixed shadow-lg' style={{ left: '40px', bottom: '150px', zIndex: '99999' }}>
             <Card className='mb-0 bg-body-tertiary border border-primary border-opacity-25 rounded' style={{ zIndex: '999' }}>
               <CardBody>
                 <p className='fw-semibold fs-6 m-0 p-0'>Reordering Points Order</p>
