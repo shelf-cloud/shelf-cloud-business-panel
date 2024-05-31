@@ -593,7 +593,11 @@ const ReorderingPointsTable = ({
       selector: (row: ReorderingPointsProduct) => {
         const forecast =
           Object.values(row.forecast['ExponentialSmoothing']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-          (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
+            (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving) <
+          0
+            ? 0
+            : Object.values(row.forecast['ExponentialSmoothing']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
+              (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
 
         return FormatIntNumber(state.currentRegion, forecast)
       },
@@ -617,7 +621,11 @@ const ReorderingPointsTable = ({
       selector: (row: ReorderingPointsProduct) => {
         const forecast =
           Object.values(row.forecast['AutoREG']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-          (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
+            (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving) <
+          0
+            ? 0
+            : Object.values(row.forecast['AutoREG']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
+              (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
 
         return FormatIntNumber(state.currentRegion, forecast)
       },
@@ -636,7 +644,11 @@ const ReorderingPointsTable = ({
       selector: (row: ReorderingPointsProduct) => {
         const forecast =
           Object.values(row.forecast['VAR']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-          (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
+            (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving) <
+          0
+            ? 0
+            : Object.values(row.forecast['VAR']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
+              (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
 
         return FormatIntNumber(state.currentRegion, forecast)
       },
@@ -655,7 +667,11 @@ const ReorderingPointsTable = ({
       selector: (row: ReorderingPointsProduct) => {
         const forecast =
           Object.values(row.forecast['Naive']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-          (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
+            (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving) <
+          0
+            ? 0
+            : Object.values(row.forecast['Naive']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
+              (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
 
         return FormatIntNumber(state.currentRegion, forecast)
       },
@@ -674,7 +690,11 @@ const ReorderingPointsTable = ({
       selector: (row: ReorderingPointsProduct) => {
         const forecast =
           Object.values(row.forecast['ARDL']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-          (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
+            (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving) <
+          0
+            ? 0
+            : Object.values(row.forecast['ARDL']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
+              (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
 
         return FormatIntNumber(state.currentRegion, forecast)
       },
@@ -703,7 +723,11 @@ const ReorderingPointsTable = ({
       selector: (row: ReorderingPointsProduct) => {
         const forecast =
           Object.values(row.forecast['ARDL_seasonal']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-          (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
+            (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving) <
+          0
+            ? 0
+            : Object.values(row.forecast['ARDL_seasonal']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
+              (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
 
         return FormatIntNumber(state.currentRegion, forecast)
       },
