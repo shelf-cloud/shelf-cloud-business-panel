@@ -4,7 +4,7 @@ import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
 import axios from 'axios'
 import Head from 'next/head'
-import { Button, Card, CardBody, Col, Container, Input, Row } from 'reactstrap'
+import { Button, Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Input, Row, UncontrolledButtonDropdown } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import moment from 'moment'
@@ -54,6 +54,8 @@ const Returns = ({ session, sessionToken }: Props) => {
   const [searchStatus, setSearchStatus] = useState<string>('')
   const [searchReason, setSearchReason] = useState<string>('')
   const [searchMarketplace, setSearchMarketplace] = useState<string>('')
+  const [selectedRows, setSelectedRows] = useState<ReturnsType[]>([])
+  const [toggledClearRows, setToggleClearRows] = useState(false)
 
   const controller = new AbortController()
   const signal = controller.signal
@@ -148,6 +150,39 @@ const Returns = ({ session, sessionToken }: Props) => {
     }
   }
 
+  const changeSelectedProductsState = async (newState: string) => {
+    if (selectedRows.length <= 0) return
+
+    const confirmationResponse = confirm(`Are you sure you want to set ${newState} selected Returned Orders?`)
+
+    if (confirmationResponse) {
+      const response = await axios.post(`api/returns/changeBulkReturnState?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+        newState,
+        selectedOrders: selectedRows.map((order) => {
+          for (const ret of Object.values(order.returns)) {
+            return ret.id
+          }
+        }),
+      })
+
+      if (!response.data.error) {
+        setToggleClearRows(!toggledClearRows)
+        setSelectedRows([])
+        toast.success(response.data.message)
+        mutate(
+          `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/shipments/getReturnOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`
+        )
+      } else {
+        toast.error(response.data.message)
+      }
+    }
+  }
+
+  const clearAllSelectedRows = () => {
+    setToggleClearRows(!toggledClearRows)
+    setSelectedRows([])
+  }
+
   const title = `Returns | ${session?.user?.name}`
   return (
     <div>
@@ -180,6 +215,24 @@ const Returns = ({ session, sessionToken }: Props) => {
                     <Link href='/returns/Unsellables'>
                       <Button className='btn btn-primary'>Unsellables</Button>
                     </Link>
+                    {selectedRows.length > 0 && (
+                      <UncontrolledButtonDropdown>
+                        <DropdownToggle className='btn btn-primary fs-6 py-2' caret>
+                          <span className='fw-bold'>{`${selectedRows.length} Order${selectedRows.length > 1 ? 's' : ''}`}</span> Selected
+                        </DropdownToggle>
+                        <DropdownMenu>
+                          <DropdownItem className='text-nowrap text-capitalize' onClick={() => changeSelectedProductsState('complete')}>
+                            <i className='mdi mdi-check-circle-outline fs-5 text-success align-middle m-0 p-0' /> set complete
+                          </DropdownItem>
+                          <DropdownItem className='text-nowrap text-capitalize' onClick={() => changeSelectedProductsState('pending')}>
+                            <i className='mdi mdi-backup-restore fs-5 text-warning align-middle m-0 p-0' /> set pending
+                          </DropdownItem>
+                          <DropdownItem className='text-nowrap text-end fs-7 text-muted' onClick={clearAllSelectedRows}>
+                            Clear All
+                          </DropdownItem>
+                        </DropdownMenu>
+                      </UncontrolledButtonDropdown>
+                    )}
                   </div>
                   <div className='col-sm-12 col-md-3'>
                     <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
@@ -212,6 +265,8 @@ const Returns = ({ session, sessionToken }: Props) => {
                       pending={pending}
                       apiMutateLink={`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/shipments/getReturnOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`}
                       handleReturnStateChange={handleReturnStateChange}
+                      setSelectedRows={setSelectedRows}
+                      toggledClearRows={toggledClearRows}
                     />
                   </CardBody>
                 </Card>

@@ -512,6 +512,19 @@ const ExportBlankTemplate = ({ brands, suppliers, categories }: Props) => {
       cell.protection = { locked: false }
     })
 
+    worksheet.getColumn('recommendedDaysOfStock').eachCell((cell) => {
+      cell.dataValidation = {
+        type: 'whole',
+        operator: 'greaterThanOrEqual',
+        allowBlank: true,
+        showErrorMessage: true,
+        formulae: [0],
+        errorTitle: 'Invalid input',
+        error: 'Days Of Stock must be integer and greater or equal than 0',
+      }
+      cell.protection = { locked: false }
+    })
+
     workbook.xlsx.writeBuffer().then((buffer) => {
       const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
       const url = window.URL.createObjectURL(blob)

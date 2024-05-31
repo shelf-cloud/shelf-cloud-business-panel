@@ -35,6 +35,7 @@ export const columns = [
   { key: 'buffer', header: 'Buffer' },
   { key: 'itemCondition', header: 'Itemcondition' },
   { key: 'image', header: 'Image' },
+  { key: 'recommendedDaysOfStock', header: 'Days Of Stock' },
 ]
 
 export const columnsProductsFile = [
@@ -111,6 +112,7 @@ export const blankProducts = Array(30).fill({
   buffer: '',
   itemCondition: '',
   image: '',
+  recommendedDaysOfStock: '',
 })
 
 // REFERENCE DATA TEMPLATE
@@ -355,6 +357,12 @@ export const columnsInfoData = [
     example: '',
     value: 'REQUIRED',
   },
+  {
+    label: 'Days Of Stock',
+    description: 'Days of Stock after lead time.',
+    example: '',
+    value: 'RECOMMENDED',
+  },
 ]
 
 export const columnsInfoBlankData = [
@@ -593,5 +601,11 @@ export const columnsInfoBlankData = [
     description: 'Product image URL.',
     example: '',
     value: 'REQUIRED',
+  },
+  {
+    label: 'Days Of Stock',
+    description: 'Days of Stock after lead time.',
+    example: '',
+    value: 'RECOMMENDED',
   },
 ]

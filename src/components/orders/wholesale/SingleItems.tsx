@@ -25,6 +25,8 @@ const SingleItems = ({ completeData, pending, orderNumberStart }: Props) => {
   }, [pending, completeData])
 
   const filteredItems = useMemo(() => {
+    if (serachValue === '') return allData
+
     return allData.filter(
       (item: wholesaleProductRow) =>
         item?.title?.toLowerCase().includes(serachValue.toLowerCase()) ||
@@ -87,7 +89,7 @@ const SingleItems = ({ completeData, pending, orderNumberStart }: Props) => {
           Clear
         </Button>
       </form>
-      <WholeSaleTableSingleItem allData={allData} filteredItems={filteredItems} setAllData={setAllData} pending={pending} setError={setError} setHasQtyError={setHasQtyError}/>
+      <WholeSaleTableSingleItem allData={allData} filteredItems={filteredItems} setAllData={setAllData} pending={pending} setError={setError} setHasQtyError={setHasQtyError} />
       {state.showSingleBoxesOrderModal && <SingleBoxesOrderModal orderNumberStart={orderNumberStart} orderProducts={orderProducts} />}
     </>
   )

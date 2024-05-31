@@ -69,12 +69,14 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
       setloading(true)
       if (values.isThird == 'false' && selectedFiles.length == 0) {
         setErrorFile(true)
+        setloading(false)
         return
       }
       setErrorFile(false)
 
       if (values.type == 'LTL' && palletSelectedFiles.length == 0) {
         setErrorPalletFile(true)
+        setloading(false)
         return
       }
       setErrorPalletFile(false)

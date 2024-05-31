@@ -158,6 +158,7 @@ export interface Product {
   otherCosts: number;
   productionTime: number;
   transitTime: number;
+  recommendedDaysOfStock: number;
   shippingToFBA: number;
   buffer: number;
   itemCondition: string;

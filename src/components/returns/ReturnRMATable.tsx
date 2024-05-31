@@ -12,9 +12,11 @@ type Props = {
   pending: boolean
   apiMutateLink: string
   handleReturnStateChange: (newState: string, orderId: number) => void
+  setSelectedRows: (selectedRows: ReturnsType[]) => void
+  toggledClearRows: boolean
 }
 
-const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnStateChange }: Props) => {
+const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnStateChange, setSelectedRows, toggledClearRows }: Props) => {
   const { state }: any = useContext(AppContext)
 
   const orderNumber = (rowA: ReturnsType, rowB: ReturnsType) => {
@@ -73,6 +75,11 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
 
     return 0
   }
+
+  const handleSelectedRows = ({ selectedRows }: { selectedRows: ReturnsType[] }) => {
+    setSelectedRows(selectedRows)
+  }
+
   const columns: any = [
     {
       name: <span className='fw-bolder fs-6'>Orders Returned</span>,
@@ -388,9 +395,15 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
         striped={true}
         defaultSortFieldId={5}
         defaultSortAsc={false}
+        selectableRows
+        onSelectedRowsChange={handleSelectedRows}
+        clearSelectedRows={toggledClearRows}
         expandableRows
         expandableRowsComponent={ReturnsTable}
-        expandableRowsComponentProps={{ apiMutateLink: apiMutateLink, handleReturnStateChange: handleReturnStateChange }}
+        expandableRowsComponentProps={{
+          apiMutateLink: apiMutateLink,
+          handleReturnStateChange: handleReturnStateChange,
+        }}
         pagination={filterDataTable.length > 100 ? true : false}
         paginationPerPage={100}
         paginationRowsPerPageOptions={[100, 200, 500]}

@@ -394,6 +394,17 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
                 imageSchema.isValidSync({ image: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Image: invalid URL', value: rowValues[v] })
               }
               break
+            // recommendedDaysOfStock
+            case 34:
+              if (rowValues[v] != null && rowValues[v] !== '') {
+                const recommendedDaysOfStockSchema = Yup.object().shape({
+                  recommendedDaysOfStock: Yup.number().min(0).integer(),
+                })
+                recommendedDaysOfStockSchema.isValidSync({ recommendedDaysOfStock: parseInt(rowValues[v]) })
+                  ? () => {}
+                  : errorsList.push({ errorLine: i + 1, errorMessage: 'Days of Stock', value: rowValues[v] })
+              }
+              break
             default:
             // code block
           }

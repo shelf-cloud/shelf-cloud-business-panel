@@ -25,6 +25,8 @@ const MasterBoxes = ({ completeData, pending, orderNumberStart }: Props) => {
   }, [pending, completeData])
 
   const filteredItems = useMemo(() => {
+    if(serachValue === '') return allData
+    
     return allData.filter(
       (item: wholesaleProductRow) =>
         item?.title?.toLowerCase().includes(serachValue.toLowerCase()) ||

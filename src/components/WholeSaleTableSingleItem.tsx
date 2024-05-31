@@ -183,6 +183,7 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
               position: 'relative',
             }}>
             <img
+              loading='lazy'
               src={
                 row.image
                   ? row.image

@@ -69,6 +69,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
         buffer: product.buffer,
         itemCondition: product.itemCondition,
         image: product.image,
+        recommendedDaysOfStock: product.recommendedDaysOfStock,
       })
     }
 
@@ -580,6 +581,19 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
     })
 
     worksheet.getColumn('image').eachCell((cell) => {
+      cell.protection = { locked: false }
+    })
+
+    worksheet.getColumn('recommendedDaysOfStock').eachCell((cell) => {
+      cell.dataValidation = {
+        type: 'whole',
+        operator: 'greaterThanOrEqual',
+        allowBlank: true,
+        showErrorMessage: true,
+        formulae: [0],
+        errorTitle: 'Invalid input',
+        error: 'Days Of Stock must be integer and greater or equal than 0',
+      }
       cell.protection = { locked: false }
     })
 

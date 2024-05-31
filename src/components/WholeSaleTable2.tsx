@@ -187,6 +187,7 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError,
               position: 'relative',
             }}>
             <img
+              loading='lazy'
               src={
                 row.image
                   ? row.image
