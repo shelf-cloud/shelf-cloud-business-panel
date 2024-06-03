@@ -59,6 +59,14 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
       compact: true,
     },
     {
+      name: <span className='fw-bolder fs-6'>Destination</span>,
+      selector: (row: PurchaseOrder) => (row.destinationSC ? 'ShelfCloud Warehouse' : 'Direct to Marketplace'),
+      sortable: true,
+      center: true,
+      compact: true,
+      wrap: true,
+    },
+    {
       name: <span className='fw-bolder fs-6'></span>,
       selector: (row: PurchaseOrder) =>
         state.receivingFromPo[row.poId] ? (
@@ -81,7 +89,8 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
     {
       name: <span className='fw-bolder fs-6'></span>,
       selector: (row: PurchaseOrder) =>
-        row.isOpen && row.poPayments.length <= 0 &&
+        row.isOpen &&
+        row.poPayments.length <= 0 &&
         row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.inboundQty, 0) <= 0 &&
         row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) <= 0 ? (
           <>
@@ -116,7 +125,7 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
   return (
     <div className='p-2'>
       <Card>
-        <DataTable columns={columns} data={data.orders} striped={true} expandableRows expandableRowsComponent={Expanded_By_Orders} defaultSortFieldId={3} defaultSortAsc={false}/>
+        <DataTable columns={columns} data={data.orders} striped={true} expandableRows expandableRowsComponent={Expanded_By_Orders} defaultSortFieldId={3} defaultSortAsc={false} />
       </Card>
       {showDeleteModal.show && <Confirm_Delete_Po showDeleteModal={showDeleteModal} setshowDeleteModal={setshowDeleteModal} loading={loading} setLoading={setLoading} />}
     </div>

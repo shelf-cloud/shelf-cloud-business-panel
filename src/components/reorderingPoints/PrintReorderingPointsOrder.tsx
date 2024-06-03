@@ -250,7 +250,7 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
   return (
     <DropdownItem className='text-nowrap text-primary fs-6 py-0' onClick={() => printInvoice()}>
       <i className='mdi mdi-file-pdf-box label-icon align-middle fs-4 me-2' />
-      Print PDF
+      Generate PDF
     </DropdownItem>
   )
 }

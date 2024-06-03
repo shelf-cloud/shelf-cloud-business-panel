@@ -777,8 +777,8 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
                       <td className='text-muted'>Total Volume</td>
                       <td className='fw-semibold text-end'>{`${FormatIntPercentage(
                         state.currentRegion,
-                        state.currentRegion === 'us' ? reorderingPointsOrder.totalVolume / 1728 : reorderingPointsOrder.totalVolume / 1000000
-                      )} ${state.currentRegion === 'us' ? 'ft³' : 'm³'}`}</td>
+                        state.currentRegion === 'us' ? reorderingPointsOrder.totalVolume / 61020 : reorderingPointsOrder.totalVolume / 1000000
+                      )} m³`}</td>
                     </tr>
                   </tbody>
                 </table>

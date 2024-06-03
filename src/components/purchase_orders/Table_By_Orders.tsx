@@ -75,6 +75,14 @@ const Table_By_Orders = ({ filterDataTable, pending }: Props) => {
       compact: true,
     },
     {
+      name: <span className='fw-bolder fs-6'>Destination</span>,
+      selector: (row: PurchaseOrder) => (row.destinationSC ? 'ShelfCloud Warehouse' : 'Direct to Marketplace'),
+      sortable: true,
+      center: true,
+      compact: true,
+      wrap: true,
+    },
+    {
       name: <span className='fw-bolder fs-6'></span>,
       selector: (row: PurchaseOrder) =>
         state.receivingFromPo[row.poId] ? (
@@ -97,7 +105,8 @@ const Table_By_Orders = ({ filterDataTable, pending }: Props) => {
     {
       name: <span className='fw-bolder fs-6'></span>,
       selector: (row: PurchaseOrder) =>
-        row.isOpen && row.poPayments.length <= 0 &&
+        row.isOpen &&
+        row.poPayments.length <= 0 &&
         row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.inboundQty, 0) <= 0 &&
         row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) <= 0 ? (
           <>

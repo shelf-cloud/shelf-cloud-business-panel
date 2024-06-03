@@ -291,9 +291,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                           <td className='text-center align-middle'>{product.boxQty}</td>
                           <td className='text-center align-middle'>{FormatIntNumber(state.currentRegion, product.useOrderAdjusted ? product.orderAdjusted : product.order)}</td>
                           <td className='text-center align-middle'>
-                            {`${FormatIntPercentage(state.currentRegion, state.currentRegion === 'us' ? productVolume / 1728 : productVolume / 1000000)} ${
-                              state.currentRegion === 'us' ? 'ft³' : 'm³'
-                            }`}
+                            {`${FormatIntPercentage(state.currentRegion, state.currentRegion === 'us' ? productVolume / 61020 : productVolume / 1000000)} m³`}
                           </td>
 
                           <td className='text-center align-middle'>
@@ -309,12 +307,12 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td className='text-end'>TOTAL</td>
+                      <td className='text-center'>TOTAL</td>
                       <td className='text-center'>{FormatIntNumber(state.currentRegion, reorderingPointsOrder.totalQty)}</td>
                       <td className='text-center'>{`${FormatIntPercentage(
                         state.currentRegion,
-                        state.currentRegion === 'us' ? reorderingPointsOrder.totalVolume / 1728 : reorderingPointsOrder.totalVolume / 1000000
-                      )} ${state.currentRegion === 'us' ? 'ft³' : 'm³'}`}</td>
+                        state.currentRegion === 'us' ? reorderingPointsOrder.totalVolume / 61020 : reorderingPointsOrder.totalVolume / 1000000
+                      )} m³`}</td>
                       <td className='text-center'>{FormatCurrency(state.currentRegion, reorderingPointsOrder.totalCost)}</td>
                     </tr>
                   </tfoot>
@@ -338,7 +336,10 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                 </Col>
               </Row>
             </ModalBody>
-            <ModalFooter className='d-flex flex-row justify-content-between align-items-center'>
+            <ModalFooter className='d-flex flex-row justify-content-end align-items-center gap-2'>
+              <Button color='light' onClick={() => setshowPOModal(false)}>
+                Close
+              </Button>
               <UncontrolledButtonDropdown>
                 <DropdownToggle className='btn btn-primary fs-6 py-2' caret>
                   Actions
@@ -361,14 +362,9 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                   />
                 </DropdownMenu>
               </UncontrolledButtonDropdown>
-              <div className='d-flex flex-row justify-content-end align-items-center gap-3'>
-                <Button color='light' onClick={() => setshowPOModal(false)}>
-                  Close
-                </Button>
-                <Button disabled={loading} type='submit' color='success'>
-                  {loading || savingComment ? <Spinner color='white' size={'sm'} /> : 'Create'}
-                </Button>
-              </div>
+              <Button disabled={loading} type='submit' color='success'>
+                {loading || savingComment ? <Spinner color='white' size={'sm'} /> : 'Create'}
+              </Button>
             </ModalFooter>
           </Form>
         )}

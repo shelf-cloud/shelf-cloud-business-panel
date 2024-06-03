@@ -39,6 +39,7 @@ export interface PurchaseOrder {
     note: string
     poPayments: PoPaymentHistory[],
     poItems: PurchaseOrderItem[]
+    destinationSC: boolean
 }
 
 export interface PoItemForCreateReceiving {
