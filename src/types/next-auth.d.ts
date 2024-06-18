@@ -8,7 +8,7 @@ declare module "next-auth" {
     interface Session {
         // token: JWT,
         user: {
-            /** The user's postal address. */
+            role: string
             businessId: string
             showCreateOrder: string
             showWholeSale: string

@@ -51,6 +51,12 @@ const ProfileDropdown = () => {
               <i className='mdi mdi-account-circle text-muted fs-16 align-middle me-1'></i>
               <span className='align-middle'>Profile</span>
             </DropdownItem>
+            {session?.user?.role === 'admin' && (
+              <DropdownItem onClick={() => router.push('/settings/teamMembers')}>
+                <i className='ri-team-fill text-muted fs-16 align-middle me-1'></i>
+                <span className='align-middle'>Team Members</span>
+              </DropdownItem>
+            )}
             <DropdownItem onClick={() => router.push('/Settings')}>
               <i className='mdi mdi-tools text-muted fs-16 align-middle me-1'></i>
               <span className='align-middle'>Account Settings</span>

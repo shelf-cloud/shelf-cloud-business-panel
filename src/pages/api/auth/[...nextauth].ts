@@ -1,3 +1,4 @@
+import axios from 'axios'
 import NextAuth from 'next-auth'
 import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
@@ -45,10 +46,15 @@ export const authOptions: NextAuthOptions = {
     signIn: '/SignIn',
   },
   callbacks: {
-    // async session({ session, token }) {
-    //   session.token = token
-    //   return session
-    // },
+    async session({ session }) {
+      await axios.post(`${process.env.API_LOGIN_SERVICE}/getUserRole.php`, {
+        username: session?.user?.name
+      }).then((res) => {
+        session.user.role = res.data.role
+        session.user.businessId = res.data.businessId
+      }).catch((err) => console.log(err.message))
+      return session
+    },
     async redirect() {
       return '/'
     },
