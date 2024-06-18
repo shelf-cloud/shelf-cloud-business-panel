@@ -7,9 +7,10 @@ import { Button } from 'reactstrap'
 type Props = {
     teamMembers: TeamMember[]
     handleManageUser: (user: TeamMember) => void
+    pending: boolean
 }
 
-const TeamMembersTable = ({teamMembers, handleManageUser}: Props) => {
+const TeamMembersTable = ({teamMembers, handleManageUser, pending}: Props) => {
   const columns: any = [
     {
       name: <span className='font-weight-bold fs-13'>Name</span>,
@@ -61,7 +62,7 @@ const TeamMembersTable = ({teamMembers, handleManageUser}: Props) => {
 
   return (
     <>
-      <DataTable columns={columns} data={teamMembers} progressPending={teamMembers ? false : true} defaultSortFieldId={1} />
+      <DataTable columns={columns} data={teamMembers} progressPending={pending} defaultSortFieldId={1} />
     </>
   )
 }

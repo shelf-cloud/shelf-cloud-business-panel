@@ -119,7 +119,7 @@ const TeamMembers = ({}: Props) => {
                     </div>
                   </div>
                 </div>
-                <TeamMembersTable teamMembers={filterTeamMembers} handleManageUser={handleManageUser} />
+                <TeamMembersTable teamMembers={filterTeamMembers} handleManageUser={handleManageUser} pending={Members ? false : true}/>
               </CardBody>
             </Card>
           </Container>
