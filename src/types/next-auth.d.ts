@@ -10,6 +10,9 @@ declare module "next-auth" {
         user: {
             role: string
             businessId: string
+            businessName: string
+            businessOrderStart: string
+            profileName: string
             showCreateOrder: string
             showWholeSale: string
             hasShelfCloudUsa: string

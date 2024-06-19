@@ -38,7 +38,7 @@ type Props = {
   sessionToken: string
   session: {
     user: {
-      name: string
+      businessName: string
     }
   }
 }
@@ -183,7 +183,7 @@ const Returns = ({ session, sessionToken }: Props) => {
     setSelectedRows([])
   }
 
-  const title = `Returns | ${session?.user?.name}`
+  const title = `Returns | ${session?.user?.businessName}`
   return (
     <div>
       <Head>

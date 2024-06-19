@@ -22,7 +22,7 @@ const ProfileDropdown = () => {
 
   return (
     <React.Fragment>
-      {session?.user?.name ? (
+      {session?.user?.businessName ? (
         <Dropdown
           isOpen={isProfileDropdown}
           toggle={toggleProfileDropdown}
@@ -31,7 +31,7 @@ const ProfileDropdown = () => {
           <DropdownToggle tag='button' type='button' className='btn'>
             <span className='d-flex align-items-center justify-content-between gap-2'>
               <span className='text-end d-flex flex-column'>
-                <span className='d-inline-block fs-5 m-0 fw-medium user-name-text text-capitalize'>{session?.user?.name}</span>
+                <span className='d-inline-block fs-5 m-0 fw-medium user-name-text text-capitalize'>{session?.user?.businessName}</span>
                 <span className='inline-block fs-6 m-0 text-muted user-name-sub-text'>{state.currentRegion !== '' && (state.currentRegion == 'us' ? 'USA' : 'EUROPE')}</span>
               </span>
               {state &&
@@ -46,25 +46,31 @@ const ProfileDropdown = () => {
             </span>
           </DropdownToggle>
           <DropdownMenu className='dropdown-menu-end'>
-            <h6 className='dropdown-header text-capitalize'>Welcome {session?.user?.name}</h6>
-            <DropdownItem onClick={() => router.push('/Profile')}>
-              <i className='mdi mdi-account-circle text-muted fs-16 align-middle me-1'></i>
-              <span className='align-middle'>Profile</span>
-            </DropdownItem>
+            <h6 className='dropdown-header text-capitalize'>Welcome {session?.user?.profileName}</h6>
+            {session?.user?.role === 'admin' && (
+              <DropdownItem onClick={() => router.push('/Profile')}>
+                <i className='mdi mdi-account-circle text-muted fs-16 align-middle me-1'></i>
+                <span className='align-middle'>Profile</span>
+              </DropdownItem>
+            )}
             {session?.user?.role === 'admin' && (
               <DropdownItem onClick={() => router.push('/settings/teamMembers')}>
                 <i className='ri-team-fill text-muted fs-16 align-middle me-1'></i>
                 <span className='align-middle'>Team Members</span>
               </DropdownItem>
             )}
-            <DropdownItem onClick={() => router.push('/Settings')}>
-              <i className='mdi mdi-tools text-muted fs-16 align-middle me-1'></i>
-              <span className='align-middle'>Account Settings</span>
-            </DropdownItem>
-            <DropdownItem onClick={() => router.push('/marketplaceManager')}>
-              <i className='mdi mdi-store text-muted fs-16 align-middle me-1'></i>
-              <span className='align-middle'>Marketplace Manager</span>
-            </DropdownItem>
+            {session?.user?.role === 'admin' && (
+              <DropdownItem onClick={() => router.push('/Settings')}>
+                <i className='mdi mdi-tools text-muted fs-16 align-middle me-1'></i>
+                <span className='align-middle'>Account Settings</span>
+              </DropdownItem>
+            )}
+            {session?.user?.role === 'admin' && (
+              <DropdownItem onClick={() => router.push('/marketplaceManager')}>
+                <i className='mdi mdi-store text-muted fs-16 align-middle me-1'></i>
+                <span className='align-middle'>Marketplace Manager</span>
+              </DropdownItem>
+            )}
             {state.user.hasShelfCloudEu == true && state.user.hasShelfCloudUsa == true && (
               <DropdownItem className='d-flex justify-content-start align-items-center' onClick={state.currentRegion == 'us' ? () => setRegion('eu') : () => setRegion('us')}>
                 <div className=' align-middle me-1' style={{ width: '15px', height: '15px' }}>

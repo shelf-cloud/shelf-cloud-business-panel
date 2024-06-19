@@ -10,7 +10,7 @@ const getuser: NextApiHandler = async (request: NextApiRequest, response: NextAp
         return
     }
 
-    axios.post(`${process.env.API_LOGIN_SERVICE}/getUser.php`, {
+    axios.post(`${process.env.API_LOGIN_SERVICE}/newGetUser.php`, {
         username: session?.user?.name
     })
         .then(({ data }) => response.json(data))

@@ -32,14 +32,14 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 type Props = {
   session: {
     user: {
-      name: string
+      businessName: string
     }
   }
 }
 
 const AddKit = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
-  const title = `Add Product | ${session?.user?.name}`
+  const title = `Add Product | ${session?.user?.businessName}`
   const [ready, setReady] = useState(false)
   const [creatingKit, setCreatingKit] = useState(false)
   const [skus, setSkus] = useState([])

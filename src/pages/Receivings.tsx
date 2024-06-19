@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 type Props = {
   session: {
     user: {
-      name: string
+      businessName: string
     }
   }
 }
@@ -104,7 +104,7 @@ const Receiving = ({ session }: Props) => {
     }
   }
 
-  const title = `Receivings | ${session?.user?.name}`
+  const title = `Receivings | ${session?.user?.businessName}`
   return (
     <div>
       <Head>

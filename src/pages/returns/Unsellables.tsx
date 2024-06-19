@@ -36,7 +36,7 @@ type Props = {
   sessionToken: string
   session: {
     user: {
-      name: string
+      businessName: string
     }
   }
 }
@@ -97,7 +97,7 @@ const Unsellables = ({ session }: Props) => {
     }
   }, [allData, searchValue, searchStatus, searchReason])
 
-  const title = `Return Unsellables | ${session?.user?.name}`
+  const title = `Return Unsellables | ${session?.user?.businessName}`
   return (
     <div>
       <Head>

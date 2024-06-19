@@ -36,7 +36,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 type Props = {
   session: {
     user: {
-      name: string
+      businessName: string
     }
   }
 }
@@ -143,7 +143,7 @@ const InactiveProducts = ({ session }: Props) => {
     setSelectedRows([])
   }
 
-  const title = `Inactive Products | ${session?.user?.name}`
+  const title = `Inactive Products | ${session?.user?.businessName}`
   return (
     <div>
       <Head>

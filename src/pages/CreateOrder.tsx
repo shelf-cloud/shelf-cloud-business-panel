@@ -33,7 +33,8 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 type Props = {
   session: {
     user: {
-      name: string
+      businessName: string
+      businessOrderStart: string
     }
   }
 }
@@ -49,8 +50,8 @@ const CreateOrder = ({ session }: Props) => {
   const { push } = useRouter()
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
-  const title = `Add Product | ${session?.user?.name}`
-  const orderNumberStart = `${session?.user?.name.substring(0, 3).toUpperCase()}-`
+  const title = `Create Order | ${session?.user?.businessName}`
+  const orderNumberStart = `${session?.user?.businessOrderStart.substring(0, 3).toUpperCase()}-`
   const [ready, setReady] = useState(false)
   const [isPickUpOrder, setIsPickUpOrder] = useState(false)
   const [skus, setSkus] = useState([])

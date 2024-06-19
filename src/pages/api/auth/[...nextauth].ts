@@ -52,6 +52,9 @@ export const authOptions: NextAuthOptions = {
       }).then((res) => {
         session.user.role = res.data.role
         session.user.businessId = res.data.businessId
+        session.user.businessName = res.data.businessName
+        session.user.businessOrderStart = res.data.businessOrderStart
+        session.user.profileName = res.data.profileName
       }).catch((err) => console.log(err.message))
       return session
     },

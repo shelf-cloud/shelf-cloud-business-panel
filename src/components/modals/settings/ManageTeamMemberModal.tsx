@@ -82,6 +82,7 @@ function ManageTeamMemberModal({ manageUser, setManageUser, showModal, setShowMo
 
     const response = await axios.post(`/api/settings/teamMembers/resetPasswordTeamMember?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
       userId: manageUser.userId,
+      email: manageUser.email,
     })
 
     if (!response.data.error) {
@@ -178,12 +179,12 @@ function ManageTeamMemberModal({ manageUser, setManageUser, showModal, setShowMo
               <CategoryTeamMembersHeader
                 title={module}
                 icon={moduleInfo.icon}
-                checked={manageUser.permissions[module].view}
+                checked={manageUser.permissions[module].view ?? false}
                 manageUser={manageUser}
                 setManageUser={setManageUser}
               />
               <Row className='px-4 py-3 gap-3'>
-                {moduleInfo.modules.map((subModule) => (
+                {moduleInfo.modules?.map((subModule) => (
                   <Col key={subModule}>
                     <div className='d-flex flex-row justify-content-start align-items-end w-fit gap-2'>
                       <Label className='form-check-label text-nowrap fw-normal'>{subModule}</Label>
@@ -191,7 +192,7 @@ function ManageTeamMemberModal({ manageUser, setManageUser, showModal, setShowMo
                         <Input
                           className='form-check-input'
                           type='checkbox'
-                          checked={manageUser.permissions[module].modules[subModule].view}
+                          checked={manageUser.permissions[module].modules[subModule].view ?? false}
                           onChange={() => handleChangePermissions(module, subModule)}
                         />
                       </div>
@@ -239,7 +240,7 @@ function ManageTeamMemberModal({ manageUser, setManageUser, showModal, setShowMo
               Close
             </Button>
             <Button disabled={loading} type='submit' color='success' onClick={saveManageUserChanges}>
-              {loading ? <Spinner color='white' size={'sm'} /> : 'Save Changes'}
+              {loading ? <Spinner color='light' size={'sm'} /> : 'Save Changes'}
             </Button>
           </div>
         </ModalFooter>

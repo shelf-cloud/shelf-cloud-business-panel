@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 type Props = {
   session: {
     user: {
-      name: string
+      businessName: string
     }
   }
 }
@@ -69,7 +69,7 @@ const Invoices = ({ session }: Props) => {
     }
   }, [data])
 
-  const title = `Invoices | ${session?.user?.name}`
+  const title = `Invoices | ${session?.user?.businessName}`
   return (
     <div>
       <Head>

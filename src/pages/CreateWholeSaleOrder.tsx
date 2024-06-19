@@ -32,7 +32,8 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 type Props = {
   session: {
     user: {
-      name: string
+      businessName: string
+      businessOrderStart: string
     }
   }
 }
@@ -40,7 +41,8 @@ type Props = {
 const CreateWholeSaleOrder = ({ session }: Props) => {
   const { push } = useRouter()
   const { state }: any = useContext(AppContext)
-  const orderNumberStart = `${session?.user?.name.substring(0, 3).toUpperCase()}-`
+  const title = `Create WholeSale Order | ${session?.user?.businessName}`
+  const orderNumberStart = `${session?.user?.businessOrderStart.substring(0, 3).toUpperCase()}-`
   const [pending, setPending] = useState(true)
   const [completeData, setCompleteData] = useState<wholesaleProductRow[]>([])
 
@@ -94,7 +96,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
     if (activeTab !== tab) setActiveTab(tab)
   }
 
-  const title = `Create WholeSale Order | ${session?.user?.name}`
+  
   return (
     <div>
       <Head>

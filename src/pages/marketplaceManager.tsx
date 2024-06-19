@@ -27,7 +27,7 @@ type Props = {
   env: string
   session: {
     user: {
-      name: string
+      businessName: string
     }
   }
 }
@@ -38,7 +38,7 @@ const MarketplaceManager = ({ session, env }: Props) => {
     if (activeTab !== tab) setActiveTab(tab)
   }
 
-  const title = `Marketplace Manager | ${session?.user?.name}`
+  const title = `Marketplace Manager | ${session?.user?.businessName}`
   return (
     <div>
       <Head>

@@ -33,14 +33,16 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 type Props = {
   session: {
     user: {
-      name: string
+      businessName: string
+      businessOrderStart: string
     }
   }
 }
 
 const CreateWholeSaleOrder = ({ session }: Props) => {
   const { state, setWholeSaleOrderModal }: any = useContext(AppContext)
-  const orderNumberStart = `${session?.user?.name.substring(0, 3).toUpperCase()}-`
+  const title = `Create Receiving Order | ${session?.user?.businessName}`
+  const orderNumberStart = `${session?.user?.businessOrderStart.substring(0, 3).toUpperCase()}-`
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<wholesaleProductRow[]>([])
   const [serachValue, setSerachValue] = useState('')
@@ -92,7 +94,6 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
     return allData.filter((item: wholesaleProductRow) => Number(item?.orderQty) > 0)
   }, [allData])
 
-  const title = `Create Receiving Order | ${session?.user?.name}`
   return (
     <div>
       <Head>

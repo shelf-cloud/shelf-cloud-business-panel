@@ -81,7 +81,7 @@ const TeamMembers = ({}: Props) => {
   return (
     <div>
       <Head>
-        <title>Account Settings</title>
+        <title>Team Members</title>
       </Head>
 
       <React.Fragment>

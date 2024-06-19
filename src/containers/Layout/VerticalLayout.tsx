@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import Link from 'next/link'
 import { Collapse } from 'reactstrap'
 // import navdata from './LayoutMenuData'
-import navdata from './LayoutMenuDataVideo'
+// import navdata from './LayoutMenuDataVideo'
+import navdata from './RoleBaseLayoutMenu'
 import { useRouter } from 'next/router'
 
 const VerticalLayout = () => {

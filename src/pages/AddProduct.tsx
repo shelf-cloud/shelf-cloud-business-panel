@@ -31,14 +31,14 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 type Props = {
   session: {
     user: {
-      name: string
+      businessName: string
     }
   }
 }
 
 const AddProducts = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
-  const title = `Add Product | ${session?.user?.name}`
+  const title = `Add Product | ${session?.user?.businessName}`
   const [useSameUnitDimensions, setUseSameUnitDimensions] = useState(false)
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed

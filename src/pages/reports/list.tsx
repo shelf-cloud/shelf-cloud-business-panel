@@ -36,7 +36,8 @@ type Props = {
   sessionToken: string
   session: {
     user: {
-      name: string
+      businessName: string
+      businessOrderStart: string
     }
   }
 }
@@ -52,7 +53,7 @@ const List = ({ session, sessionToken }: Props) => {
     startDate: moment().subtract(30, 'days').format('YYYY-MM-DD'),
     endDate: moment().format('YYYY-MM-DD'),
   })
-  const title = `Report List | ${session?.user?.name}`
+  const title = `Report List | ${session?.user?.businessName}`
 
   const fetcher = (endPoint: string) =>
     axios(endPoint, {
@@ -96,7 +97,7 @@ const List = ({ session, sessionToken }: Props) => {
       }
     })
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reports/createReport/${showMappedCreateReport.reportType}?region=${state.currentRegion}&businessId=${state.user.businessId}&businessName=${session?.user?.name}&startDate=${showMappedCreateReport.startDate}&endDate=${showMappedCreateReport.endDate}`,
+      `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reports/createReport/${showMappedCreateReport.reportType}?region=${state.currentRegion}&businessId=${state.user.businessId}&businessName=${session?.user?.businessOrderStart}&startDate=${showMappedCreateReport.startDate}&endDate=${showMappedCreateReport.endDate}`,
       {},
       {
         headers: {

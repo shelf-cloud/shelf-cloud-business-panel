@@ -43,7 +43,8 @@ type Props = {
   sessionToken: string
   session: {
     user: {
-      name: string
+      businessName: string
+      businessOrderStart: string
     }
   }
 }
@@ -614,7 +615,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
     return orderSummary
   }, [productsData])
 
-  const title = `Reordering Points | ${session?.user?.name}`
+  const title = `Reordering Points | ${session?.user?.businessName}`
 
   return (
     <div>
@@ -803,7 +804,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
             selectedSupplier={selectedSupplier}
             showPOModal={showPOModal}
             setshowPOModal={setshowPOModal}
-            username={session?.user?.name}
+            username={session?.user?.businessOrderStart}
           />
         )}
       </React.Fragment>

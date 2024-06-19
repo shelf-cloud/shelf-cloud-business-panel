@@ -34,7 +34,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 type Props = {
   session: {
     user: {
-      name: string
+      businessName: string
     }
   }
 }
@@ -44,7 +44,7 @@ const Listings = ({ session }: Props) => {
   const router = useRouter()
   const { showHidden, condition, mapped }: any = router.query
   const { mutate } = useSWRConfig()
-  const title = `Amazon Listings | ${session?.user?.name}`
+  const title = `Amazon Listings | ${session?.user?.businessName}`
   const [searchValue, setSearchValue] = useState<any>('')
   const [selectedRows, setSelectedRows] = useState<Listing[]>([])
   const [toggledClearRows, setToggleClearRows] = useState(false)
@@ -189,7 +189,7 @@ const Listings = ({ session }: Props) => {
                       </>
                     )}
                   </Button>
-                  <CSVLink data={csvData} style={{ width: 'fit-content' }} filename={`${session?.user?.name.toUpperCase()}-Amazon-FBA-Listings.csv`}>
+                  <CSVLink data={csvData} style={{ width: 'fit-content' }} filename={`${session?.user?.businessName.toUpperCase()}-Amazon-FBA-Listings.csv`}>
                     <Button color='primary' className='fs-6 py-1'>
                       <i className='mdi mdi-arrow-down-bold label-icon align-middle fs-5 me-2' />
                       Export

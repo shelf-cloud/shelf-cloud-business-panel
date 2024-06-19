@@ -40,7 +40,7 @@ type Props = {
   sessionToken: string
   session: {
     user: {
-      name: string
+      businessName: string
     }
   }
 }
@@ -206,7 +206,7 @@ const Profits = ({ session, sessionToken }: Props) => {
     if (showWithSales || showWithSales !== '') filterString += `&showWithSales=${showWithSales}`
     router.push(filterString, undefined, { shallow: true })
   }
-  const title = `Product Performance | ${session?.user?.name}`
+  const title = `Product Performance | ${session?.user?.businessName}`
   return (
     <div>
       <Head>

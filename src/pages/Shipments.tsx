@@ -38,7 +38,7 @@ type Props = {
   sessionToken: string
   session: {
     user: {
-      name: string
+      businessName: string
     }
   }
 }
@@ -210,7 +210,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
     }
   }
 
-  const title = `Shipments | ${session?.user?.name}`
+  const title = `Shipments | ${session?.user?.businessName}`
   return (
     <div>
       <Head>

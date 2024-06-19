@@ -13,7 +13,8 @@ const resetPasswordTeamMember: NextApiHandler = async (request, response) => {
     }
 
     axios.post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/settings/teamMembers/resetPasswordTeamMember.php?businessId=${request.query.businessId}`, {
-        userId: request.body.userId
+        userId: request.body.userId,
+        email: request.body.email
     })
         .then(({ data }) => {
             response.json(data)

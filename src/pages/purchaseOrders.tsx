@@ -52,7 +52,8 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 type Props = {
   session: {
     user: {
-      name: string
+      businessName: string
+      businessOrderStart: string
     }
   }
 }
@@ -61,8 +62,8 @@ const PurchaseOrders = ({ session }: Props) => {
   const router = useRouter()
   const { status, organizeBy }: any = router.query
   const { state, setShowCreateReceivingFromPo, setReceivingFromPo, setShowCreatePoFromFile, setShowCreatePoManually }: any = useContext(AppContext)
-  const title = `Purchase Orders | ${session?.user?.name}`
-  const orderNumberStart = `${session?.user?.name.substring(0, 3).toUpperCase()}-`
+  const title = `Purchase Orders | ${session?.user?.businessName}`
+  const orderNumberStart = `${session?.user?.businessOrderStart.substring(0, 3).toUpperCase()}-`
   const [activeTab, setActiveTab] = useState(organizeBy)
   const tabChange = (tab: any) => {
     if (activeTab !== tab) setActiveTab(tab)

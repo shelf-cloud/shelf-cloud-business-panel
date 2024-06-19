@@ -117,7 +117,7 @@ const CreateNewTeamMemberModal = ({ showModal, setShowModal }: Props) => {
                     <Input
                       type='text'
                       className='form-control'
-                      placeholder='Company Name...'
+                      placeholder='User Name'
                       id='name'
                       name='name'
                       bsSize='sm'
@@ -137,7 +137,7 @@ const CreateNewTeamMemberModal = ({ showModal, setShowModal }: Props) => {
                     <Input
                       type='text'
                       className='form-control'
-                      placeholder='Email Address...'
+                      placeholder='Email Address'
                       id='email'
                       name='email'
                       bsSize='sm'

@@ -32,14 +32,14 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 type Props = {
   session: {
     user: {
-      name: string
+      businessName: string
     }
   }
 }
 
 const Storage = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
-  const title = `Inventory Log | ${session?.user?.name}`
+  const title = `Inventory Log | ${session?.user?.businessName}`
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<StorageRowProduct[]>([])
   const [storageInvoices, setStorageInvoices] = useState<any[]>([])

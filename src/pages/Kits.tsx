@@ -35,7 +35,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 type Props = {
   session: {
     user: {
-      name: string
+      businessName: string
     }
   }
 }
@@ -108,7 +108,7 @@ const Kits = ({ session }: Props) => {
     }
   }
 
-  const title = `Kits | ${session?.user?.name}`
+  const title = `Kits | ${session?.user?.businessName}`
   return (
     <div>
       <Head>

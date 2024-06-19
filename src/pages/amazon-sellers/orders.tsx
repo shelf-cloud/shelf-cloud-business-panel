@@ -36,7 +36,7 @@ type Props = {
   sessionToken: string
   session: {
     user: {
-      name: string
+      businessName: string
     }
   }
 }
@@ -118,7 +118,7 @@ const Orders = ({ session, sessionToken }: Props) => {
     }
   }
 
-  const title = `FBA Orders | ${session?.user?.name}`
+  const title = `FBA Orders | ${session?.user?.businessName}`
   return (
     <div>
       <Head>

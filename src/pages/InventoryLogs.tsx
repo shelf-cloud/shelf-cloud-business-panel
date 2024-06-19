@@ -41,7 +41,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 type Props = {
   session: {
     user: {
-      name: string
+      businessName: string
     }
   }
 }
@@ -51,7 +51,7 @@ const InventoryLogs = ({ session }: Props) => {
   const [pending, setPending] = useState(true)
   const [logData, setLogData] = useState<LogRowType[]>([])
   const [serachValue, setSerachValue] = useState('')
-  const title = `Inventory Log | ${session?.user?.name}`
+  const title = `Inventory Log | ${session?.user?.businessName}`
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data } = useSWR(
