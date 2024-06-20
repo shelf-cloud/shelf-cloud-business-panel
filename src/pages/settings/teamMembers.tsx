@@ -92,7 +92,7 @@ const TeamMembers = ({}: Props) => {
               <CardBody className='p-4'>
                 <div className='d-flex flex-sm-column justify-content-between align-items-center p-0 flex-xl-row gap-sm-2 gap-xl-0'>
                   <div className='d-flex flex-wrap justify-content-start align-items-center gap-3 w-100'>
-                    {Members?.length! < 2 && <Button onClick={() => setShowNewMemberModal(true)}>+ Add Member</Button>}
+                    {Members?.length! < 3 && <Button onClick={() => setShowNewMemberModal(true)}>+ Add Member</Button>}
                   </div>
                   <div className='app-search col-sm-12 col-xl-3 p-0'>
                     <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>

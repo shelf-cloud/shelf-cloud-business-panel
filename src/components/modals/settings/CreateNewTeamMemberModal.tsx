@@ -112,12 +112,12 @@ const CreateNewTeamMemberModal = ({ showModal, setShowModal }: Props) => {
                 <Col lg={6}>
                   <FormGroup className='mb-3'>
                     <Label htmlFor='name' className='form-label'>
-                      *User Name
+                      *Name
                     </Label>
                     <Input
                       type='text'
                       className='form-control'
-                      placeholder='User Name'
+                      placeholder='Name'
                       id='name'
                       name='name'
                       bsSize='sm'
