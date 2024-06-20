@@ -40,6 +40,7 @@ const MostInvenotryList = ({ products }: Props) => {
                       <td>
                         <div className='avatar-sm bg-light rounded p-1 me-2'>
                           <img
+                            loading='lazy'
                             src={item.image}
                             alt='Product Img'
                             style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
@@ -61,12 +62,6 @@ const MostInvenotryList = ({ products }: Props) => {
                 </tbody>
               </table>
             </div>
-
-            {/* <div className="align-items-center mt-4 pt-2 justify-content-between d-flex">
-                            <div className="flex-shrink-0">
-                                <Link href={'/Products'}>View All Products</Link>
-                            </div>
-                        </div> */}
           </CardBody>
         </Card>
       </Col>

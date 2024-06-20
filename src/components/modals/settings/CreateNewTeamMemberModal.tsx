@@ -111,7 +111,7 @@ const CreateNewTeamMemberModal = ({ showModal, setShowModal }: Props) => {
               <Row>
                 <Col lg={6}>
                   <FormGroup className='mb-3'>
-                    <Label htmlFor='firstNameinput' className='form-label'>
+                    <Label htmlFor='name' className='form-label'>
                       *User Name
                     </Label>
                     <Input
@@ -131,7 +131,7 @@ const CreateNewTeamMemberModal = ({ showModal, setShowModal }: Props) => {
                 </Col>
                 <Col lg={6}>
                   <FormGroup className='mb-3'>
-                    <Label htmlFor='firstNameinput' className='form-label'>
+                    <Label htmlFor='email' className='form-label'>
                       *Email Address
                     </Label>
                     <Input
@@ -171,9 +171,8 @@ const CreateNewTeamMemberModal = ({ showModal, setShowModal }: Props) => {
             </>
           ) : (
             <>
-              <p className='fw-normal fs-5'>
-                Loading Modules... <Spinner color='primary' size='sm' />
-              </p>
+              <span className='fw-normal fs-5 me-3'>Loading Modules...</span>
+              <Spinner color='primary' size='sm' />
             </>
           )}
         </ModalBody>
@@ -182,7 +181,7 @@ const CreateNewTeamMemberModal = ({ showModal, setShowModal }: Props) => {
             Close
           </Button>
           <Button disabled={loading} type='submit' color='success'>
-            {loading ? <Spinner color='white' size='sm' /> : 'Send Invite'}
+            {loading ? <Spinner color='light' size='sm' /> : 'Send Invite'}
           </Button>
         </ModalFooter>
       </Form>

@@ -204,9 +204,8 @@ function ManageTeamMemberModal({ manageUser, setManageUser, showModal, setShowMo
           ))
         ) : (
           <>
-            <p className='fw-normal fs-5'>
-              Loading Modules... <Spinner color='primary' size='sm' />
-            </p>
+            <span className='fw-normal fs-5 me-3'>Loading Modules...</span>
+            <Spinner color='primary' size='sm' />
           </>
         )}
       </ModalBody>

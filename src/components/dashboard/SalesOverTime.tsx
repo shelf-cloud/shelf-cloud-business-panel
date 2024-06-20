@@ -16,8 +16,8 @@ const SalesOverTime = ({ salesOverTime }: Props) => {
   const { state }: any = useContext(AppContext)
   const currentDate = moment().format('YYYY-MM-DD')
   const previousDate = moment().subtract(1, 'days').format('YYYY-MM-DD')
-  const totalToday = Object.values(salesOverTime.orders[currentDate]).reduce((a, b) => a + b, 0)
-  const totalYesterday = Object.values(salesOverTime.orders[previousDate]).reduce((a, b) => a + b, 0)
+  const totalToday = Object.values(salesOverTime?.orders[currentDate]).reduce((a, b) => a + b, 0)
+  const totalYesterday = Object.values(salesOverTime?.orders[previousDate]).reduce((a, b) => a + b, 0)
 
   const currentSortedMarketplaces = Object.values(salesOverTime.marketplaces)
     .sort((a, b) => {
@@ -53,10 +53,10 @@ const SalesOverTime = ({ salesOverTime }: Props) => {
         <Card>
           <CardHeader className='align-items-center d-flex justify-content-between'>
             <h4 className='card-title mb-0 flex-grow-1'>Sales Over Time</h4>
-            <a className='fs-6 text-muted fw-normal'>
+            <span className='fs-6 text-muted fw-normal'>
               <i className='las la-clock fs-5 me-1'></i>
               {moment().format('h:mm a')}
-            </a>
+            </span>
           </CardHeader>
 
           <CardBody className='pb-0'>
