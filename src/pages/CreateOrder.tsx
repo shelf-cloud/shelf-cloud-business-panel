@@ -154,7 +154,7 @@ const CreateOrder = ({ session }: Props) => {
       .of(
         Yup.object({
           sku: Yup.string().oneOf(validSkus, 'Invalid SKU or There`s No Stock Available').notOneOf(inValidSkus, 'There`s no Stock for this SKU').required('Required SKU'),
-          title: Yup.string().max(100, 'Name is to Long').required('Required Name'),
+          title: Yup.string().max(150, 'Name is to Long').required('Required Name'),
           qty: Yup.number()
             .positive()
             .integer('Qty must be an integer')
@@ -170,6 +170,11 @@ const CreateOrder = ({ session }: Props) => {
 
   const handleSubmit = async (values: any, { resetForm }: any) => {
     setCreatingOrder(true)
+    values.products.map((product: any) => {
+      if (product.title.includes(' -||- ')) {
+        product.title = product.title.split(' -||- ')[0]
+      }
+    })
     const response = await axios.post(`api/createNewOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
       orderInfo: values,
     })
@@ -397,7 +402,14 @@ const CreateOrder = ({ session }: Props) => {
                                                 onClick={() => {
                                                   values.adress1 = address.properties.address_line1
                                                   values.city = address.properties.city
-                                                  values.state = state.currentRegion == 'us' ? address.properties.state_code ? String(address.properties.state_code).toUpperCase() : address.properties.county : address.properties.state ? String(address.properties.state) : address.properties.county
+                                                  values.state =
+                                                    state.currentRegion == 'us'
+                                                      ? address.properties.state_code
+                                                        ? String(address.properties.state_code).toUpperCase()
+                                                        : address.properties.county
+                                                      : address.properties.state
+                                                      ? String(address.properties.state)
+                                                      : address.properties.county
                                                   values.country = String(address.properties.country_code).toUpperCase()
                                                   values.zipCode = address.properties.postcode
                                                   setAutoCompleteAddress([])
@@ -743,9 +755,18 @@ const CreateOrder = ({ session }: Props) => {
                                                       name={`products.${index}.title`}
                                                       placeholder='Title...'
                                                       list='skuNames'
-                                                      onChange={handleChange}
+                                                      // onChange={handleChange}
+                                                      onChange={(e: any) => {
+                                                        handleChange(e)
+                                                        if (e.target.value == '') {
+                                                          values.products[index].sku = ''
+                                                        } else {
+                                                          values.products[index].title = e.target.value.split(' -||- ')[0]
+                                                          values.products[index].sku = e.target.value.split(' -||- ')[1]
+                                                        }
+                                                      }}
                                                       onBlur={handleBlur}
-                                                      value={values.products[index].title || ''}
+                                                      value={values.products[index].title?.split(' -||- ')[0] || ''}
                                                       invalid={meta.touched && meta.error ? true : false}
                                                     />
                                                     {meta.touched && meta.error ? <FormFeedback type='invalid'>{meta.error}</FormFeedback> : null}
@@ -756,11 +777,14 @@ const CreateOrder = ({ session }: Props) => {
                                                 {skus.map(
                                                   (
                                                     skus: {
+                                                      sku: string
                                                       name: string
                                                     },
                                                     index
                                                   ) => (
-                                                    <option key={`skuName${index}`} value={skus.name} />
+                                                    <option key={`skuName${index}`} value={`${skus.name} -||- ${skus.sku}`}>
+                                                      {skus.sku} / {skus.name}
+                                                    </option>
                                                   )
                                                 )}
                                               </datalist>

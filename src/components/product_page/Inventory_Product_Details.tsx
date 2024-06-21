@@ -7,6 +7,7 @@ import { useSWRConfig } from 'swr'
 import axios from 'axios'
 import AppContext from '@context/AppContext'
 import { AmazonFBA } from '@typings'
+import ProductOrderedModals from '@components/modals/productPage/ProductOrderedModals'
 
 type Props = {
   inventoryId?: number
@@ -25,6 +26,10 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
   const { mutate } = useSWRConfig()
   const [showEditFields, setShowEditFields] = useState(false)
   const [showEditButton, setShowEditButton] = useState({ display: 'none' })
+  const [showOrderedModal, setshowOrderedModal] = useState({
+    show: false,
+    sku: '',
+  })
 
   const validation = useFormik({
     enableReinitialize: true,
@@ -120,7 +125,9 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
             </td>
             <td className='text-success'>{available}</td>
             <td className='text-danger'>{reserved}</td>
-            <td>{ordered}</td>
+            <td style={{ cursor: 'pointer' }} className='text-primary' onClick={() => setshowOrderedModal({ show: true, sku: sku! })}>
+              {ordered}
+            </td>
             <td>{receiving}</td>
           </tr>
         </tbody>
@@ -140,7 +147,18 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
           <tbody>
             <tr className='text-center'>
               <td className='fw-semibold'>Amazon FBA</td>
-              <td>{amazonFBA.reduce((total: number, listing: AmazonFBA) => total + listing.afn_total_quantity, 0)}</td>
+              <td>
+                {amazonFBA.reduce(
+                  (total: number, listing: AmazonFBA) =>
+                    total +
+                    (listing.afn_fulfillable_quantity +
+                      listing.afn_reserved_quantity +
+                      listing.afn_inbound_receiving_quantity +
+                      listing.afn_inbound_shipped_quantity +
+                      listing.afn_inbound_working_quantity),
+                  0
+                )}
+              </td>
               <td>{amazonFBA.reduce((total: number, listing: AmazonFBA) => total + listing.afn_fulfillable_quantity, 0)}</td>
               <td>{amazonFBA.reduce((total: number, listing: AmazonFBA) => total + listing.afn_reserved_quantity, 0)}</td>
               <td>{amazonFBA.reduce((total: number, listing: AmazonFBA) => total + listing.afn_unsellable_quantity, 0)}</td>
@@ -155,6 +173,7 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
           </tbody>
         </table>
       )}
+      {showOrderedModal.show && <ProductOrderedModals showOrderedModal={showOrderedModal} setshowOrderedModal={setshowOrderedModal} />}
     </div>
   )
 }
