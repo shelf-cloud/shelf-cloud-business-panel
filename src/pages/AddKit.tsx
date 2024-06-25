@@ -39,7 +39,7 @@ type Props = {
 
 const AddKit = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
-  const title = `Add Product | ${session?.user?.businessName}`
+  const title = `Add Kit | ${session?.user?.businessName}`
   const [ready, setReady] = useState(false)
   const [creatingKit, setCreatingKit] = useState(false)
   const [skus, setSkus] = useState([])
@@ -171,7 +171,7 @@ const AddKit = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <Container fluid>
-            <BreadCrumb title='Add Products' pageTitle='Warehouse' />
+            <BreadCrumb title='Add Kit' pageTitle='Inventory' />
             <Card>
               <CardBody>
                 <Col md={12}>

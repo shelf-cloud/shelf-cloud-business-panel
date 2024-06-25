@@ -127,6 +127,11 @@ const Products = ({ session }: Props) => {
   const changeSelectedProductsState = async () => {
     if (selectedRows.length <= 0) return
 
+    if (selectedRows.some((item) => item?.quantity > 0)) {
+      toast.warning('Only products with 0 stock can be set as Inactive.')
+      return
+    }
+
     const confirmationResponse = confirm(`Are you sure you want to set Inactive Selected Products?`)
 
     if (confirmationResponse) {
@@ -173,7 +178,7 @@ const Products = ({ session }: Props) => {
                       condition={condition}
                       activeTab={true}
                     />
-                    <Link href={'/AddProduct'} passHref>
+                    <Link href={'/AddProduct'}>
                       <Button color='primary' className='fs-6 py-1'>
                         <i className='mdi mdi-plus-circle label-icon align-middle fs-5 me-2' />
                         Basic Product
