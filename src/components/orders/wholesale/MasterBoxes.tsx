@@ -14,7 +14,7 @@ type Props = {
 const MasterBoxes = ({ completeData, pending, orderNumberStart }: Props) => {
   const { state, setWholeSaleOrderModal }: any = useContext(AppContext)
   const [allData, setAllData] = useState<wholesaleProductRow[]>([])
-  const [serachValue, setSerachValue] = useState('')
+  const [serachValue, setSerachValue] = useState<string>('')
   const [hasQtyError, setHasQtyError] = useState(false)
   const [error, setError] = useState([])
 
@@ -25,11 +25,12 @@ const MasterBoxes = ({ completeData, pending, orderNumberStart }: Props) => {
   }, [pending, completeData])
 
   const filteredItems = useMemo(() => {
-    if(serachValue === '') return allData
-    
+    if (serachValue === '') return allData
+
     return allData.filter(
       (item: wholesaleProductRow) =>
         item?.title?.toLowerCase().includes(serachValue.toLowerCase()) ||
+        serachValue.split(' ').every((word) => item?.title?.toLowerCase().includes(word.toLowerCase())) ||
         item?.sku?.toLowerCase().includes(serachValue.toLowerCase()) ||
         item?.asin?.toLowerCase().includes(serachValue.toLowerCase()) ||
         item?.barcode?.toLowerCase().includes(serachValue.toLowerCase()) ||
@@ -64,7 +65,7 @@ const MasterBoxes = ({ completeData, pending, orderNumberStart }: Props) => {
             placeholder='Search...'
             id='search-options'
             value={serachValue}
-            onKeyDown={(e) => e.key == 'Enter' ? e.preventDefault() : null}
+            onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
             onChange={(e) => {
               e.preventDefault()
               setSerachValue(e.target.value)
@@ -77,7 +78,7 @@ const MasterBoxes = ({ completeData, pending, orderNumberStart }: Props) => {
           Clear
         </Button>
       </form>
-      <WholeSaleTable2 allData={allData} filteredItems={filteredItems} setAllData={setAllData} pending={pending} setError={setError} setHasQtyError={setHasQtyError}/>
+      <WholeSaleTable2 allData={allData} filteredItems={filteredItems} setAllData={setAllData} pending={pending} setError={setError} setHasQtyError={setHasQtyError} />
       {state.showWholeSaleOrderModal && <WholeSaleOrderModal orderNumberStart={orderNumberStart} orderProducts={orderProducts} />}
     </>
   )

@@ -45,23 +45,19 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
   const orderNumberStart = `${session?.user?.businessOrderStart.substring(0, 3).toUpperCase()}-`
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<wholesaleProductRow[]>([])
-  const [serachValue, setSerachValue] = useState('')
+  const [searchValue, setSearchValue] = useState<string>('')
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(
-    state.user.businessId
-      ? `/api/getReceivingInventory?region=${state.currentRegion}&businessId=${state.user.businessId}`
-      : null,
-    fetcher
-  )
+  const { data } = useSWR(state.user.businessId ? `/api/getReceivingInventory?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher)
 
   const filteredItems = useMemo(() => {
     return allData.filter(
       (item: wholesaleProductRow) =>
-        item?.title?.toLowerCase().includes(serachValue.toLowerCase()) ||
-        item?.sku?.toLowerCase().includes(serachValue.toLowerCase())
+        item?.title?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        searchValue.split(' ').every((word) => item?.title?.toLowerCase().includes(word.toLowerCase())) ||
+        item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
     )
-  }, [allData, serachValue])
+  }, [allData, searchValue])
 
   useEffect(() => {
     if (data?.error) {
@@ -111,18 +107,11 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                       <div>
                         <h3 className='fs-3 fw-semibold text-primary'>Total SKUs in Order: {orderProducts.length}</h3>
                         <h5 className='fs-5 fw-normal text-primary'>
-                          Total Qty to Receive in Order:{' '}
-                          {orderProducts.reduce(
-                            (total: number, item: wholesaleProductRow) => total + Number(item.orderQty),
-                            0
-                          )}
+                          Total Qty to Receive in Order: {orderProducts.reduce((total: number, item: wholesaleProductRow) => total + Number(item.orderQty), 0)}
                         </h5>
                       </div>
                       <div>
-                        <Button
-                          className='fs-6 btn'
-                          color='primary'
-                          onClick={() => setWholeSaleOrderModal(!state.showWholeSaleOrderModal)}>
+                        <Button className='fs-6 btn' color='primary' onClick={() => setWholeSaleOrderModal(!state.showWholeSaleOrderModal)}>
                           Create Receiving
                         </Button>
                       </div>
@@ -134,26 +123,19 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                           className='form-control'
                           placeholder='Search...'
                           id='search-options'
-                          value={serachValue}
-                          onChange={(e) => setSerachValue(e.target.value)}
+                          value={searchValue}
+                          onChange={(e) => setSearchValue(e.target.value)}
                         />
                         <span className='mdi mdi-magnify search-widget-icon'></span>
-                        <span
-                          className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none'
-                          id='search-close-options'></span>
+                        <span className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none' id='search-close-options'></span>
                       </div>
-                      <Button className='btn-soft-dark' onClick={() => setSerachValue('')}>
+                      <Button className='btn-soft-dark' onClick={() => setSearchValue('')}>
                         Clear
                       </Button>
                     </form>
                   </CardHeader>
                   <CardBody>
-                    <ReceivingOrderTable
-                      allData={allData}
-                      filteredItems={filteredItems}
-                      setAllData={setAllData}
-                      pending={pending}
-                    />
+                    <ReceivingOrderTable allData={allData} filteredItems={filteredItems} setAllData={setAllData} pending={pending} />
                   </CardBody>
                 </Card>
               </Col>
@@ -162,9 +144,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
         </div>
       </React.Fragment>
       {state.showInventoryBinsModal && <InventoryBinsModal />}
-      {state.showWholeSaleOrderModal && (
-        <ReceivingOrderModal orderNumberStart={orderNumberStart} orderProducts={orderProducts} />
-      )}
+      {state.showWholeSaleOrderModal && <ReceivingOrderModal orderNumberStart={orderNumberStart} orderProducts={orderProducts} />}
     </div>
   )
 }

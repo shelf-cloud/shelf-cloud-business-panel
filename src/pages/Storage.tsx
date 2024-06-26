@@ -44,24 +44,20 @@ const Storage = ({ session }: Props) => {
   const [allData, setAllData] = useState<StorageRowProduct[]>([])
   const [storageInvoices, setStorageInvoices] = useState<any[]>([])
   const [storageDates, setStorageDates] = useState<any[]>([])
-  const [serachValue, setSerachValue] = useState('')
+  const [searchValue, setSearchValue] = useState<string>('')
 
   const filteredItems = useMemo(() => {
     return allData.filter(
       (item: StorageRowProduct) =>
-        item?.title?.toLowerCase().includes(serachValue.toLowerCase()) ||
-        item?.sku?.toLowerCase().includes(serachValue.toLowerCase()) ||
-        item?.bins?.some((bin) => bin.binName.toLowerCase().includes(serachValue.toLowerCase()))
+        item?.title?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        searchValue.split(' ').every((word: string) => item?.title?.toLowerCase().includes(word.toLowerCase())) ||
+        item?.sku?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item?.bins?.some((bin) => bin.binName.toLowerCase().includes(searchValue.toLowerCase()))
     )
-  }, [allData, serachValue])
+  }, [allData, searchValue])
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(
-    state.user.businessId
-      ? `/api/getStorageInventory?region=${state.currentRegion}&businessId=${state.user.businessId}`
-      : null,
-    fetcher
-  )
+  const { data } = useSWR(state.user.businessId ? `/api/getStorageInventory?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher)
 
   useEffect(() => {
     if (data?.error) {
@@ -93,9 +89,7 @@ const Storage = ({ session }: Props) => {
                   <CardHeader>
                     <div className='d-flex flex-column flex-md-row justify-content-start gap-0 gap-md-4 mb-2'>
                       <div className='col-xs-12 col-sm-6 col-lg-5 col-xl-4 col-xxl-3'>
-                        <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>
-                          Monthly Storage Fees
-                        </p>
+                        <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>Monthly Storage Fees</p>
                         <StorageChart storageInvoices={storageInvoices} storageDates={storageDates} />
                       </div>
                       <StorageWidgets
@@ -107,9 +101,7 @@ const Storage = ({ session }: Props) => {
                     </div>
                     <div className='d-flex flex-row justify-content-between'>
                       <div>
-                        <p className='text-uppercase fw-semibold text-muted text-truncate mb-0'>
-                          *Estimated Total Monthly Cost
-                        </p>
+                        <p className='text-uppercase fw-semibold text-muted text-truncate mb-0'>*Estimated Total Monthly Cost</p>
                         <h4 className='fs-18 fw-normal text-muted'>
                           <span className='counter-value'>
                             <CountUp
@@ -124,25 +116,23 @@ const Storage = ({ session }: Props) => {
                           </span>
                         </h4>
                       </div>
-                    <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
-                      <div className='position-relative'>
-                        <Input
-                          type='text'
-                          className='form-control'
-                          placeholder='Search...'
-                          id='search-options'
-                          value={serachValue}
-                          onChange={(e) => setSerachValue(e.target.value)}
-                        />
-                        <span className='mdi mdi-magnify search-widget-icon'></span>
-                        <span
-                          className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none'
-                          id='search-close-options'></span>
+                      <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
+                        <div className='position-relative'>
+                          <Input
+                            type='text'
+                            className='form-control'
+                            placeholder='Search...'
+                            id='search-options'
+                            value={searchValue}
+                            onChange={(e) => setSearchValue(e.target.value)}
+                          />
+                          <span className='mdi mdi-magnify search-widget-icon'></span>
+                          <span className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none' id='search-close-options'></span>
+                        </div>
+                        <Button className='btn-soft-dark' onClick={() => setSearchValue('')}>
+                          Clear
+                        </Button>
                       </div>
-                      <Button className='btn-soft-dark' onClick={() => setSerachValue('')}>
-                        Clear
-                      </Button>
-                    </div>
                     </div>
                   </CardHeader>
                   <CardBody>

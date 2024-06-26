@@ -14,7 +14,7 @@ type Props = {
 const SingleItems = ({ completeData, pending, orderNumberStart }: Props) => {
   const { state, setSingleBoxesOrderModal }: any = useContext(AppContext)
   const [allData, setAllData] = useState<wholesaleProductRow[]>([])
-  const [serachValue, setSerachValue] = useState('')
+  const [serachValue, setSerachValue] = useState<string>('')
   const [hasQtyError, setHasQtyError] = useState(false)
   const [error, setError] = useState([])
 

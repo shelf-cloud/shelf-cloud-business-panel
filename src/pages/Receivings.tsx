@@ -45,7 +45,7 @@ const Receiving = ({ session }: Props) => {
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<OrderRowType[]>([])
   const [tableData, setTableData] = useState<OrderRowType[]>([])
-  const [serachValue, setSerachValue] = useState('')
+  const [searchValue, setSearchValue] = useState<string>('')
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data } = useSWR(
@@ -72,7 +72,7 @@ const Receiving = ({ session }: Props) => {
 
   const filterByText = (e: any) => {
     if (e.target.value !== '') {
-      setSerachValue(e.target.value)
+      setSearchValue(e.target.value)
       const filterTable: OrderRowType[] = allData.filter(
         (order) =>
           order?.orderNumber?.toLowerCase().includes(e.target.value.toLowerCase()) ||
@@ -81,18 +81,21 @@ const Receiving = ({ session }: Props) => {
           order?.shipName?.toLowerCase().includes(e.target.value.toLowerCase()) ||
           order?.trackingNumber?.toLowerCase().includes(e.target.value.toLowerCase()) ||
           order?.orderItems?.some(
-            (item: ShipmentOrderItem) => item.name.toLowerCase().includes(e.target.value.toLowerCase()) || item.sku.toLowerCase().includes(e.target.value.toLowerCase())
+            (item: ShipmentOrderItem) =>
+              item.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
+              searchValue.split(' ').every((word) => item?.name?.toLowerCase().includes(word.toLowerCase())) ||
+              item.sku.toLowerCase().includes(e.target.value.toLowerCase())
           )
       )
       setTableData(filterTable)
     } else {
-      setSerachValue(e.target.value)
+      setSearchValue(e.target.value)
       setTableData(allData)
     }
   }
 
   const clearSearch = () => {
-    setSerachValue('')
+    setSearchValue('')
     setTableData(allData)
   }
 
@@ -135,7 +138,7 @@ const Receiving = ({ session }: Props) => {
                           className='form-control input_background_white'
                           placeholder='Search...'
                           id='search-options'
-                          value={serachValue}
+                          value={searchValue}
                           onChange={filterByText}
                         />
                         <span className='mdi mdi-magnify search-widget-icon fs-4'></span>

@@ -99,7 +99,10 @@ const Shipments = ({ session, sessionToken }: Props) => {
           order?.shipName?.toLowerCase().includes(searchValue.toLowerCase()) ||
           order?.trackingNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
           order?.orderItems?.some(
-            (item: ShipmentOrderItem) => item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
+            (item: ShipmentOrderItem) =>
+              item?.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
+              searchValue.split(' ').every((word: string) => item?.name?.toLowerCase().includes(word.toLowerCase())) ||
+              item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
           )
       )
       if (searchType !== '') {
@@ -137,7 +140,10 @@ const Shipments = ({ session, sessionToken }: Props) => {
             order?.shipName?.toLowerCase().includes(searchValue.toLowerCase()) ||
             order?.trackingNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
             order?.orderItems?.some(
-              (item: ShipmentOrderItem) => item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
+              (item: ShipmentOrderItem) =>
+                item?.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                searchValue.split(' ').every((word: string) => item?.name?.toLowerCase().includes(word.toLowerCase())) ||
+                item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
             )
         )
       }
@@ -165,7 +171,10 @@ const Shipments = ({ session, sessionToken }: Props) => {
             order?.shipName?.toLowerCase().includes(searchValue.toLowerCase()) ||
             order?.trackingNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
             order?.orderItems?.some(
-              (item: ShipmentOrderItem) => item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
+              (item: ShipmentOrderItem) =>
+                item?.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                searchValue.split(' ').every((word: string) => item?.name?.toLowerCase().includes(word.toLowerCase())) ||
+                item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
             )
         )
       }
@@ -193,7 +202,10 @@ const Shipments = ({ session, sessionToken }: Props) => {
             order?.shipName?.toLowerCase().includes(searchValue.toLowerCase()) ||
             order?.trackingNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
             order?.orderItems?.some(
-              (item: ShipmentOrderItem) => item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
+              (item: ShipmentOrderItem) =>
+                item?.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                searchValue.split(' ').every((word: string) => item?.name?.toLowerCase().includes(word.toLowerCase())) ||
+                item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
             )
         )
       }

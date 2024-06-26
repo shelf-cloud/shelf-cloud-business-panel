@@ -13,7 +13,7 @@ const By_Sku = ({}: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
   const { status }: any = router.query
-  const [searchValue, setSearchValue] = useState<any>('')
+  const [searchValue, setSearchValue] = useState<string>('')
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data }: { data?: PurchaseOrderBySkus[] } = useSWR(
     state.user.businessId ? `/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}` : null,
@@ -34,6 +34,7 @@ const By_Sku = ({}: Props) => {
         if (
           po?.sku?.toLowerCase().includes(searchValue.toLowerCase()) ||
           po?.title?.toLowerCase().includes(searchValue.toLowerCase()) ||
+          searchValue.split(' ').every((word) => po?.title?.toLowerCase().includes(word.toLowerCase())) ||
           po?.asin?.toLowerCase().includes(searchValue.toLowerCase()) ||
           po?.barcode?.toLowerCase().includes(searchValue.toLowerCase())
         ) {

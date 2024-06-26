@@ -13,7 +13,7 @@ const By_Suppliers = ({}: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
   const { status }: any = router.query
-  const [searchValue, setSearchValue] = useState<any>('')
+  const [searchValue, setSearchValue] = useState<string>('')
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data }: { data?: PurchaseOrderBySuppliers[] } = useSWR(
     state.user.businessId ? `/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}` : null,
@@ -41,6 +41,7 @@ const By_Suppliers = ({}: Props) => {
               poInfo?.poItems?.some(
                 (item: PurchaseOrderItem) =>
                   item?.title?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                  searchValue.split(' ').every((word) => item?.title?.toLowerCase().includes(word.toLowerCase())) ||
                   item?.sku?.toLowerCase().includes(searchValue.toLowerCase()) ||
                   item?.asin?.toLowerCase().includes(searchValue.toLowerCase()) ||
                   item?.barcode?.toLowerCase().includes(searchValue.toLowerCase())
@@ -53,6 +54,7 @@ const By_Suppliers = ({}: Props) => {
               poInfo?.poItems?.some(
                 (item: PurchaseOrderItem) =>
                   item?.title?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                  searchValue.split(' ').every((word) => item?.title?.toLowerCase().includes(word.toLowerCase())) ||
                   item?.sku?.toLowerCase().includes(searchValue.toLowerCase()) ||
                   item?.asin?.toLowerCase().includes(searchValue.toLowerCase()) ||
                   item?.barcode?.toLowerCase().includes(searchValue.toLowerCase())

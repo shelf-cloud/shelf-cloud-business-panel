@@ -53,7 +53,7 @@ const Products = ({ session }: Props) => {
   const { mutate } = useSWRConfig()
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<Product[]>([])
-  const [searchValue, setSearchValue] = useState<any>('')
+  const [searchValue, setSearchValue] = useState<string>('')
   const [selectedRows, setSelectedRows] = useState<Product[]>([])
   const [toggledClearRows, setToggleClearRows] = useState(false)
   const [importModalDetails, setimportModalDetails] = useState({
@@ -99,6 +99,7 @@ const Products = ({ session }: Props) => {
           (category === 'All' ? true : item.category?.toLowerCase() === category?.toLowerCase()) &&
           (condition === 'All' ? true : item.itemCondition?.toLowerCase() === condition?.toLowerCase()) &&
           (item?.title?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            searchValue.split(' ').every((word) => item?.title?.toLowerCase().includes(word.toLowerCase())) ||
             item?.sku?.toLowerCase().includes(searchValue.toLowerCase()) ||
             item?.asin?.toLowerCase().includes(searchValue.toLowerCase()) ||
             item?.fnSku?.toLowerCase().includes(searchValue.toLowerCase()) ||

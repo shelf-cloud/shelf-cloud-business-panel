@@ -119,7 +119,10 @@ const Returns = ({ session, sessionToken }: Props) => {
                 returnOrder?.shipName?.toLowerCase().includes(searchValue.toLowerCase()) ||
                 returnOrder?.trackingNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
                 returnOrder?.orderItems?.some(
-                  (item) => item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
+                  (item) =>
+                    item?.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                    searchValue.split(' ').every((word) => item?.name?.toLowerCase().includes(word.toLowerCase())) ||
+                    item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
                 ))
           )
       )
