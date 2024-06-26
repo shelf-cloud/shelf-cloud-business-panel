@@ -45,7 +45,7 @@ const Unsellables = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<UnsellablesType[]>([])
-  const [searchValue, setSearchValue] = useState<any>('')
+  const [searchValue, setSearchValue] = useState<string>('')
   const [searchStatus, setSearchStatus] = useState<string>('')
   const [searchReason, setSearchReason] = useState<string>('')
 
@@ -88,6 +88,7 @@ const Unsellables = ({ session }: Props) => {
           (searchStatus !== '' ? (searchStatus === 'dispose' ? item?.dispose : searchStatus === 'unsellable' ? !item?.converted && !item.dispose : item?.converted) : true) &&
           (searchReason !== '' ? item?.returnReason?.toLowerCase() === searchReason.toLowerCase() : true) &&
           (item.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+            searchValue.split(' ').every((word) => item?.title?.toLowerCase().includes(word.toLowerCase())) ||
             item.sku.toLowerCase().includes(searchValue.toLowerCase()) ||
             item.barcode.toLowerCase().includes(searchValue.toLowerCase()) ||
             item.orderNumber.toLowerCase().includes(searchValue.toLowerCase()) ||

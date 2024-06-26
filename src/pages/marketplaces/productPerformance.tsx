@@ -74,7 +74,7 @@ const Profits = ({ session, sessionToken }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
   const { filters, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, brand, category, showWithSales }: FilterProps = router.query
-  const [searchValue, setSearchValue] = useState<any>('')
+  const [searchValue, setSearchValue] = useState<string>('')
   const [filterOpen, setFilterOpen] = useState(false)
   const [loadingData, setLoadingData] = useState(true)
   const [startDate, setStartDate] = useState(moment().subtract(15, 'days').format('YYYY-MM-DD'))
@@ -161,6 +161,7 @@ const Profits = ({ session, sessionToken }: Props) => {
           (item.sku.toLowerCase().includes(searchValue.toLowerCase()) ||
             item.asin.toLowerCase().includes(searchValue.toLowerCase()) ||
             item.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+            searchValue.split(' ').every((word) => item?.title?.toLowerCase().includes(word.toLowerCase())) ||
             item.supplier.toLowerCase().includes(searchValue.toLowerCase()) ||
             item.brand.toLowerCase().includes(searchValue.toLowerCase()))
       )
