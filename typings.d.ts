@@ -387,7 +387,7 @@ export interface OrderRowType {
   channelName: string
   storeName: string
   channelLogo: string
-  orderItems: []
+  orderItems: ShipmentOrderItem[]
   totalItems: number
   numberPallets: number
   numberBoxes: number

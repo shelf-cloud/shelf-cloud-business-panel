@@ -99,11 +99,11 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
                   src={
                     row.image
                       ? row.image
-                      : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+                      : 'https://firebasestorage.googleapis.com/v0/b/shelf-cloud-bucket.appspot.com/o/operations%2Fno-image.png?alt=media&token=a4dc1fc9-fa29-40d8-9afc-fe7e09486d75'
                   }
                   onError={(e) =>
                     (e.currentTarget.src =
-                      'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
+                      'https://firebasestorage.googleapis.com/v0/b/shelf-cloud-bucket.appspot.com/o/operations%2Fno-image.png?alt=media&token=a4dc1fc9-fa29-40d8-9afc-fe7e09486d75')
                   }
                   alt='product Image'
                   style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}

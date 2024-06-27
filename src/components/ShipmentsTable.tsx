@@ -4,9 +4,10 @@ import { OrderRowType } from '@typings'
 import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import ShipmentExpandedDetail from './ShipmentExpandedDetail'
-import { UncontrolledTooltip } from 'reactstrap'
+import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import AppContext from '@context/AppContext'
+import DownloadPackingSlip from './shipments/wholesale/DownloadPackingSlip'
 
 type Props = {
   tableData: OrderRowType[]
@@ -15,7 +16,7 @@ type Props = {
 }
 
 const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
-  const { state }: any = useContext(AppContext)
+  const { state, setModalCreateReturnInfo }: any = useContext(AppContext)
   const orderNumber = (rowA: OrderRowType, rowB: OrderRowType) => {
     const a = rowA.orderNumber.toLowerCase()
     const b = rowB.orderNumber.toLowerCase()
@@ -331,10 +332,95 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
       },
       sortable: true,
       wrap: true,
-      // grow: 1.5,
-      right: true,
+      center: true,
       style: {
         color: '#4481FD',
+      },
+    },
+    {
+      name: <span className='fw-bolder fs-6'>Action</span>,
+      sortable: false,
+      compact: false,
+      center: true,
+      cell: (row: OrderRowType) => {
+        switch (row.orderType) {
+          case 'Shipment':
+            return (
+              <UncontrolledDropdown className='dropdown d-inline-block'>
+                <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
+                  <i className='mdi mdi-dots-vertical align-middle fs-2 m-0 p-2' style={{ color: '#919FAF' }}></i>
+                </DropdownToggle>
+                <DropdownMenu className='dropdown-menu-end'>
+                  <DropdownItem header>Shipment Details</DropdownItem>
+                  {state.currentRegion == 'us' && row.orderStatus == 'shipped' && row.hasReturn == false && row.shipCountry == 'US' && (
+                    <DropdownItem className='edit-item-btn' onClick={() => setModalCreateReturnInfo(row.businessId, row.id)}>
+                      <i className='las la-reply label-icon align-middle fs-3 me-2' />
+                      Create Return
+                    </DropdownItem>
+                  )}
+                </DropdownMenu>
+              </UncontrolledDropdown>
+            )
+            break
+          // case 'Return':
+          //   return (
+          //     <UncontrolledDropdown className='dropdown d-inline-block'>
+          //       <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
+          //         <i className='mdi mdi-dots-vertical align-middle fs-2 m-0 p-2' style={{ color: '#919FAF' }}></i>
+          //       </DropdownToggle>
+          //       <DropdownMenu className='dropdown-menu-end'>
+          //         <DropdownItem header>Return Details</DropdownItem>
+          //       </DropdownMenu>
+          //     </UncontrolledDropdown>
+          //   )
+          //   break
+          case 'Wholesale':
+            return (
+              <UncontrolledDropdown className='dropdown d-inline-block'>
+                <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
+                  <i className='mdi mdi-dots-vertical align-middle fs-2 m-0 p-2' style={{ color: '#919FAF' }}></i>
+                </DropdownToggle>
+                <DropdownMenu className='dropdown-menu-end'>
+                  <DropdownItem header>Documents</DropdownItem>
+                  {row.proofOfShipped != '' && row.proofOfShipped != null && (
+                    <DropdownItem className='edit-item-btn'>
+                      <a className='text-black' href={row.proofOfShipped} target='blank'>
+                        <i className='las la-truck label-icon align-middle fs-3 me-2' />
+                        Proof Of Shipped
+                      </a>
+                    </DropdownItem>
+                  )}
+                  {row.labelsName != '' && (
+                    <DropdownItem className='edit-item-btn'>
+                      <a
+                        className='text-black'
+                        href={`https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/shelf-cloud%2F${row.labelsName}?alt=media&token=837cdbcf-11ab-4555-9697-50f1c6a3d0e3`}
+                        target='blank'>
+                        <i className='las la-toilet-paper label-icon align-middle fs-3 me-2' />
+                        FBA Labels
+                      </a>
+                    </DropdownItem>
+                  )}
+                  {row.palletLabelsName != '' && (
+                    <DropdownItem className='edit-item-btn'>
+                      <a
+                        className='text-black'
+                        href={`https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/shelf-cloud%2F${row.palletLabelsName}?alt=media&token=837cdbcf-11ab-4555-9697-50f1c6a3d0e3`}
+                        target='blank'>
+                        <i className='las la-toilet-paper label-icon align-middle fs-3 me-2' />
+                        Pallet Labels
+                      </a>
+                    </DropdownItem>
+                  )}
+                  {row.orderStatus === 'shipped' && <DownloadPackingSlip order={row} />}
+                </DropdownMenu>
+              </UncontrolledDropdown>
+            )
+            break
+          default:
+            return <></>
+            break
+        }
       },
     },
   ]
