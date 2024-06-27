@@ -61,7 +61,7 @@ const ReceivingType = ({ data, apiMutateLink }: Props) => {
     }
   }, [data, state.currentRegion])
 
-  const OrderId = data.orderId?.replace(/[\s\.]/g, '')
+  const OrderId = data.orderId?.replace(/[\-\,\(\)\/\s\.\:\;]/g, '')
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
       <Row>

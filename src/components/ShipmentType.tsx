@@ -24,7 +24,7 @@ const ShipmentType = ({ data, apiMutateLink }: Props) => {
     orderNumber: '',
     goFlowOrderId: 0,
   })
-  const OrderId = data.orderId?.replace(/[\s\.]/g, '')
+  const OrderId = data.orderId?.replace(/[\-\,\(\)\/\s\.\:\;]/g, '')
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
       <Row>

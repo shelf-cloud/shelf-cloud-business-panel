@@ -22,7 +22,7 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
   const { state }: any = useContext(AppContext)
   const [loading, setLoading] = useState(false)
   const [showEditNote, setShowEditNote] = useState(false)
-  const OrderId = data.orderId?.replace(/[\s\.]/g, '')
+  const OrderId = data.orderId?.replace(/[\-\,\(\)\/\s\.\:\;]/g, '')
   const [loadingLabel, setLoadingLabel] = useState(false)
   const handlePrintingLabel = async () => {
     setLoadingLabel(true)

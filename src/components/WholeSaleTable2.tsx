@@ -292,13 +292,13 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError,
                 color='info'
                 outline
                 className='btn btn-ghost-info'
-                id={`reservedMasterQty${cell.sku.replace(/[\s\.]/g, '')}`}
+                id={`reservedMasterQty${cell.sku.replace(/[\-\,\(\)\/\s\.\:\;]/g, '')}`}
                 onClick={() => {
                   setModalProductInfo(cell.quantity.inventoryId, state.user.businessId, cell.quantity.sku)
                 }}>
                 {cell.quantity.quantity}
               </Button>
-              <UncontrolledTooltip placement='right' target={`reservedMasterQty${cell.sku.replace(/[\s\.]/g, '')}`}>
+              <UncontrolledTooltip placement='right' target={`reservedMasterQty${cell.sku.replace(/[\-\,\(\)\/\s\.\:\;]/g, '')}`}>
                 {`Reserved ${cell.quantity.reserved}`}
               </UncontrolledTooltip>
             </>

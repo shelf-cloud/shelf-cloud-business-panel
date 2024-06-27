@@ -48,7 +48,8 @@ const WholeSaleType = ({ data }: Props) => {
       setServiceFee('')
     }
   }, [data, state.currentRegion])
-  const OrderId = data.orderId?.replace(/[\s\.]/g, '')
+  const OrderId = data.orderId?.replace(/[\-\,\(\)\/\s\.\:\;]/g, '')
+
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
       <Row>
@@ -143,9 +144,7 @@ const WholeSaleType = ({ data }: Props) => {
                     <tr>
                       <td className='fw-bold'>TOTAL</td>
                       <td className='text-primary fw-semibold text-end'>
-                        {data.isIndividualUnits && data.individualUnitsPlan?.state == 'Pending'
-                          ? 'Pending'
-                          : `${FormatCurrency(state.currentRegion, data.totalCharge!)}`}
+                        {data.isIndividualUnits && data.individualUnitsPlan?.state == 'Pending' ? 'Pending' : `${FormatCurrency(state.currentRegion, data.totalCharge!)}`}
                       </td>
                     </tr>
                   </tbody>

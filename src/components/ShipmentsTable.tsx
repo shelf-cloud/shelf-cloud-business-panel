@@ -345,7 +345,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
       cell: (row: OrderRowType) => {
         switch (row.orderType) {
           case 'Shipment':
-            return (
+            return row.orderStatus === 'shipped' ? (
               <UncontrolledDropdown className='dropdown d-inline-block'>
                 <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
                   <i className='mdi mdi-dots-vertical align-middle fs-2 m-0 p-2' style={{ color: '#919FAF' }}></i>
@@ -360,6 +360,8 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
                   )}
                 </DropdownMenu>
               </UncontrolledDropdown>
+            ) : (
+              <></>
             )
             break
           // case 'Return':

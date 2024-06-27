@@ -213,10 +213,10 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
             </Button>
             {row.reserved > 0 && (
               <>
-                <span className='text-danger' id={`reservedQty${row.sku.replace(/[\s\.]/g, '')}`}>
+                <span className='text-danger' id={`reservedQty${row.sku.replace(/[\-\,\(\)\/\s\.\:\;]/g, '')}`}>
                   -{row.reserved}
                 </span>
-                <UncontrolledTooltip placement='right' target={`reservedQty${row.sku.replace(/[\s\.]/g, '')}`}>
+                <UncontrolledTooltip placement='right' target={`reservedQty${row.sku.replace(/[\-\,\(\)\/\s\.\:\;]/g, '')}`}>
                   Reserved in Awating Orders.
                 </UncontrolledTooltip>
               </>
