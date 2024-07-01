@@ -4,6 +4,7 @@ import AppContext from '@context/AppContext'
 import { Button, Card, CardBody, Col, Row } from 'reactstrap'
 import AmazonAuthButton from '@components/amazon/AmazonAuthButton'
 import AmazonAdsAuthButton from '@components/amazon/AmazonAdsAuthButton'
+import AmazonReconnectButton from '@components/amazon/AmazonReconnectButton'
 
 type Props = {
   env: string
@@ -43,6 +44,8 @@ const Integrations = ({ env }: Props) => {
               <div className='text-end'>
                 {!state.user[state.currentRegion]?.amazonConnected ? (
                   <AmazonAuthButton />
+                ) : state.user[state.currentRegion]?.amazonNeedsUpdate ? (
+                  <AmazonReconnectButton />
                 ) : (
                   <Button outline color='success' className='fw-semibold'>
                     Active

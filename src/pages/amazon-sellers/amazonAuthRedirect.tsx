@@ -42,7 +42,7 @@ const AmazonAuthRedirect = ({}: Props) => {
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const router = useRouter()
-  const { spapi_oauth_code, selling_partner_id } = router.query
+  const { spapi_oauth_code, selling_partner_id, state: amzState } = router.query
   const [loading, setloading] = useState(false)
   const [expire, setexpire] = useState('')
 
@@ -55,6 +55,23 @@ const AmazonAuthRedirect = ({}: Props) => {
 
     const response = await axios.get(
       `/api/amazon/addAuthSeller?code=${spapi_oauth_code}&region=${state.currentRegion}&businessId=${state.user.businessId}&sellerId=${selling_partner_id}`
+    )
+
+    if (!response.data.error) {
+      toast.success(response.data.message)
+      mutate('/api/getuser')
+      router.push('/')
+    } else {
+      toast.error(response.data.message)
+    }
+    setloading(false)
+  }
+
+  const reauthorizeSeller = async () => {
+    setloading(true)
+
+    const response = await axios.get(
+      `/api/amazon/reAuthSeller?code=${spapi_oauth_code}&region=${state.currentRegion}&businessId=${state.user.businessId}&sellerId=${selling_partner_id}`
     )
 
     if (!response.data.error) {
@@ -106,9 +123,15 @@ const AmazonAuthRedirect = ({}: Props) => {
                 </div>
 
                 <div className='d-flex flex-column justify-content-center align-items-center gap-5'>
-                  <Button className='mt-2 fs-5 btn btn-primary' onClick={() => authorizeSeller()}>
-                    {loading ? <Spinner color='#fff' /> : 'Authorize ShelfCloud'}
-                  </Button>
+                  {amzState === 'ShelcloudNewAmazonSeller' ? (
+                    <Button className='mt-2 fs-5 btn btn-primary' onClick={() => authorizeSeller()}>
+                      {loading ? <Spinner color='#fff' /> : 'Authorize ShelfCloud'}
+                    </Button>
+                  ) : (
+                    <Button className='mt-2 fs-5 btn btn-primary' onClick={() => reauthorizeSeller()}>
+                      {loading ? <Spinner color='#fff' /> : 'Reauthorize ShelfCloud'}
+                    </Button>
+                  )}
                   <Button className='mt-2 fs-6 btn btn-light' onClick={() => router.push('/')}>
                     Cancel
                   </Button>
