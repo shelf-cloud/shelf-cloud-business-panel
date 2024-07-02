@@ -525,7 +525,12 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
     if (confirmationResponse) {
       const response = await axios.post(`/api/reorderingPoints/setNewShowingStatusReorderingPoints?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
         newState,
-        selectedRows,
+        selectedRows: selectedRows.map((item) => {
+          return {
+            inventoryId: item.inventoryId,
+            sku: item.sku,
+          }
+        }),
       })
       if (!response.data.error) {
         setToggleClearRows(!toggledClearRows)

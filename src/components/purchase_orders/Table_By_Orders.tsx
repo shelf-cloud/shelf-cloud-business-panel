@@ -69,10 +69,46 @@ const Table_By_Orders = ({ filterDataTable, pending }: Props) => {
     },
     {
       name: <span className='fw-bolder fs-6'>Status</span>,
-      selector: (row: PurchaseOrder) => (row.isOpen ? 'Pending' : 'Complete'),
+      selector: (row: PurchaseOrder) => {
+        switch (true) {
+          case row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) === 0:
+            return 'Pending'
+            break
+          case row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) <
+            row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0):
+            return 'Partial Received'
+            break
+          case row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) ===
+            row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0):
+            return 'Total Received'
+            break
+          default:
+            return 'Pending'
+            break
+        }
+      },
       sortable: true,
       center: true,
       compact: true,
+      conditionalCellStyles: [
+        {
+          when: (row: PurchaseOrder) => row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) === 0,
+          classNames: ['text-primary'],
+        },
+        {
+          when: (row: PurchaseOrder) =>
+            row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) > 0 &&
+            row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) < row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0),
+          classNames: ['text-info'],
+        },
+        {
+          when: (row: PurchaseOrder) =>
+            row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) ===
+            row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0),
+
+          classNames: ['text-danger'],
+        },
+      ],
     },
     {
       name: <span className='fw-bolder fs-6'>Destination</span>,
