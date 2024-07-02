@@ -62,9 +62,15 @@ const Table_By_Suppliers_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBy
             row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0):
             return 'Partial Received'
             break
-          case row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) ===
-            row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0):
+          case row.isOpen &&
+            row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) ===
+              row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0):
             return 'Total Received'
+            break
+          case !row.isOpen &&
+            row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) ===
+              row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0):
+            return 'Completed'
             break
           default:
             return 'Pending'
@@ -87,10 +93,19 @@ const Table_By_Suppliers_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBy
         },
         {
           when: (row: PurchaseOrder) =>
+            row.isOpen &&
             row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) ===
-            row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0),
+              row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0),
 
           classNames: ['text-danger'],
+        },
+        {
+          when: (row: PurchaseOrder) =>
+            !row.isOpen &&
+            row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) ===
+              row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0),
+
+          classNames: ['text-success'],
         },
       ],
     },
