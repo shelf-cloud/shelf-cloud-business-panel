@@ -1,7 +1,7 @@
 import React, { FormEventHandler, useState } from 'react'
 import Image from 'next/image'
 import ShelfCloudLogo from '@images/shelfcloud-blue-h.png'
-import { Button, Label } from 'reactstrap'
+import { Button, Label, Spinner } from 'reactstrap'
 import { useRouter } from 'next/router'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
@@ -12,7 +12,7 @@ type Props = {}
 const ResetPasswordPage = ({}: Props) => {
   const router = useRouter()
   const { resetcode } = router.query
-
+  const [loading, setloading] = useState(false)
   const [show, setShow] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
 
@@ -25,16 +25,15 @@ const ResetPasswordPage = ({}: Props) => {
       confirmPassword: '',
     },
     validationSchema: Yup.object({
-      newPassword: Yup.string()
-        .min(8, 'Password must be at least 8 characters')
-        .required('Please Enter Your New Password'),
+      newPassword: Yup.string().min(8, 'Password must be at least 8 characters').required('Please Enter Your New Password'),
       confirmPassword: Yup.string()
         .min(8, 'Password must be at least 8 characters')
         .oneOf([Yup.ref('newPassword'), null], "Passwords don't match!")
         .required('Please Enter Your Confirmation Password'),
     }),
     onSubmit: async (values) => {
-      const response = await axios.post(`../api/resetPassword`, {
+      setloading(true)
+      const response = await axios.post(`/api/resetPassword`, {
         resetPasswordInfo: {
           newPassword: values.newPassword,
           confirmPassword: values.confirmPassword,
@@ -47,6 +46,7 @@ const ResetPasswordPage = ({}: Props) => {
       } else {
         toast.error(response.data.msg)
       }
+      setloading(false)
     },
   })
 
@@ -81,10 +81,7 @@ const ResetPasswordPage = ({}: Props) => {
                   onBlur={validationChangePassword.handleBlur}
                   value={validationChangePassword.values.newPassword || ''}
                 />
-                <button
-                  className='btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted'
-                  type='button'
-                  onClick={() => setShow(!show)}>
+                <button className='btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted' type='button' onClick={() => setShow(!show)}>
                   <i className='ri-eye-fill align-middle fs-5'></i>
                 </button>
               </div>
@@ -107,10 +104,7 @@ const ResetPasswordPage = ({}: Props) => {
                   onBlur={validationChangePassword.handleBlur}
                   value={validationChangePassword.values.confirmPassword || ''}
                 />
-                <button
-                  className='btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted'
-                  type='button'
-                  onClick={() => setShowConfirm(!showConfirm)}>
+                <button className='btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted' type='button' onClick={() => setShowConfirm(!showConfirm)}>
                   <i className='ri-eye-fill align-middle fs-5'></i>
                 </button>
               </div>
@@ -120,7 +114,7 @@ const ResetPasswordPage = ({}: Props) => {
             </div>
             <div className='mt-4 w-100'>
               <Button color='primary' className='btn btn-primary w-100 fw-semibold fs-5' type='submit'>
-                Set new password
+                {loading ? <Spinner size='sm' color='light' role='status' aria-hidden='true' animation='border' /> : 'Set New Password'}
               </Button>
             </div>
           </form>
