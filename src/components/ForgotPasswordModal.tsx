@@ -65,7 +65,7 @@ const ForgotPasswordModal = ({ OpenForgotPassword, setOpenForgotPassword }: Prop
             <Button color='primary' disabled={loading} className='btn btn-primary fs-5' type='submit'>
               {loading ? (
                 <>
-                  <Spinner size="sm" color='white' role='status' aria-hidden='true' animation="border"/>
+                  <Spinner size="sm" color='light' role='status' aria-hidden='true' animation="border"/>
                   <span className='ms-2'>Loading...</span>
                 </>
               ) : (
