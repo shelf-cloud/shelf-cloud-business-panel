@@ -140,7 +140,7 @@ const ShipmentType = ({ data, apiMutateLink }: Props) => {
                     {data.orderItems.map((product: ShipmentOrderItem, key) => (
                       <tr key={key} className='border-bottom py-2'>
                         <td className='w-50 fs-6 fw-semibold'>
-                          {product.title === undefined ? product.name : product.title}
+                          {product.title || product.name}
                           {product.isKit === true &&
                             product.children.length > 0 &&
                             product.children.map((child: KitChildren) => (
