@@ -154,7 +154,7 @@ const ReturnType = ({ data, apiMutateLink }: Props) => {
                   <tbody>
                     {data.orderItems.map((product: ShipmentOrderItem, key) => (
                       <tr key={key} className='border-bottom py-2'>
-                        <td className='w-50 fs-6 fw-semibold'>{product.name || ''}</td>
+                        <td className='w-50 fs-6 fw-semibold'>{product.name || product.title}</td>
                         <td className='fs-6 text-muted'>{product.sku}</td>
                         <td className='fs-6 text-muted text-capitalize'>{product.state}</td>
                         <td className='text-center'>{product.quantity}</td>

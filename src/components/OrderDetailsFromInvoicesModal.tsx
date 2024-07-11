@@ -466,6 +466,144 @@ function OrderDetailsFromInvoicesModal({}: Props) {
             </Row>
           </div>
         )
+      case 'Return':
+        return (
+          <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
+            <Row>
+              <Col xl={4}>
+                <Col xl={12}>
+                  <Card>
+                    <CardHeader className='py-3'>
+                      <h5 className='fw-semibold m-0'>Order</h5>
+                    </CardHeader>
+                    <CardBody>
+                      <table className='table table-sm table-borderless'>
+                        <tbody>
+                          <tr>
+                            <td className='text-muted text-nowrap'>Service Requested:</td>
+                            <td className='fw-semibold w-100'>{data.carrierService}</td>
+                          </tr>
+                          <tr>
+                            <td className='text-muted text-nowrap'>Service Used:</td>
+                            <td className='fw-semibold w-100'>{data.carrierType}</td>
+                          </tr>
+                          <tr>
+                            <td className='text-muted text-nowrap'>Customer Name:</td>
+                            <td className='fw-semibold w-100'>{data.shipName}</td>
+                          </tr>
+                          <tr>
+                            <td className='text-muted text-nowrap'>Address:</td>
+                            <td className='fw-semibold w-100'>
+                              {data.shipStreet}, {data.shipCity}, {data.shipState}, {data.shipZipcode}, {data.shipCountry}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </CardBody>
+                  </Card>
+                </Col>
+                <Col xl={12}>
+                  <Card>
+                    <CardHeader className='py-3'>
+                      <h5 className='fw-semibold m-0'>Charge Details</h5>
+                    </CardHeader>
+                    <CardBody>
+                      <table className='table table-sm table-borderless table-nowrap mb-0'>
+                        <tbody>
+                          <tr className='border-bottom pb-2'>
+                            <td className='text-muted'>Pick Pack Charge</td>
+                            <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.pickpackCharge)}</td>
+                          </tr>
+                          <tr className='border-bottom pb-2'>
+                            <td className='text-muted'>Shipping Charge</td>
+                            <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.onixShipping)}</td>
+                          </tr>
+                          <tr className='border-bottom pb-2'>
+                            <td className='text-muted'>Extra Charge</td>
+                            <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.extraCharge)}</td>
+                          </tr>
+                          <tr>
+                            <td className='fw-bold'>TOTAL</td>
+                            <td className='text-primary fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.totalCharge)}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </CardBody>
+                  </Card>
+                </Col>
+                {data.extraComment != '' && (
+                  <Col xl={12}>
+                    <Card>
+                      <CardHeader className='py-3'>
+                        <h5 className='fw-semibold m-0'>Order Comment</h5>
+                      </CardHeader>
+                      <CardBody>
+                        <p>{data.extraComment}</p>
+                      </CardBody>
+                    </Card>
+                  </Col>
+                )}
+              </Col>
+              <Col xl={8}>
+                <Card>
+                  <CardHeader className='py-3'>
+                    <h5 className='fw-semibold m-0'>Products</h5>
+                  </CardHeader>
+                  <CardBody>
+                    <div className='table-responsive'>
+                      <table className='table table-sm align-middle table-borderless mb-0'>
+                        <thead className='table-light'>
+                          <tr>
+                            <th scope='col'>Title</th>
+                            <th scope='col'>Sku</th>
+                            <th scope='col'>Condition</th>
+                            <th className='text-center' scope='col'>
+                              Qty
+                            </th>
+                            <th className='text-center' scope='col'>
+                              Qty Received
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {data.orderItems?.map((product: ShipmentOrderItem, key: any) => (
+                            <tr key={key} className='border-bottom py-2'>
+                              <td className='w-50 fs-6 fw-semibold'>
+                                {product.title || product.name}
+                                {product.isKit === true &&
+                                  product.children.length > 0 &&
+                                  product.children.map((child: KitChildren) => (
+                                    <p className='m-0 p-0 fs-7 text-muted fw-light' key={child.orderChildrenId}>
+                                      {`- ${child.title || child.name} - ${child.sku} - Qty: ${child.quantity}`}
+                                    </p>
+                                  ))}
+                              </td>
+                              <td className='fs-6 text-muted'>{product.sku}</td>
+                              <td className='fs-6 text-muted text-capitalize'>{product.state}</td>
+                              <td className='text-center'>{product.quantity ?? product.qtyReceived}</td>
+                              <td className='text-center'>{product.qtyReceived ?? product.quantity}</td>
+                            </tr>
+                          ))}
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <td className='text-start fs-5 fw-bold text-nowrap'>Total QTY</td>
+                            <td className='text-center fs-5 text-primary'>
+                              {data.orderItems.reduce((total: number, item: ShipmentOrderItem) => total + (item.quantity ?? item.qtyReceived), 0)}
+                            </td>
+                            <td className='text-center fs-5 text-primary'>
+                              {data.orderItems.reduce((total: number, item: ShipmentOrderItem) => total + (item.qtyReceived ?? item.quantity), 0)}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </CardBody>
+                </Card>
+              </Col>
+            </Row>
+          </div>
+        )
       default:
         return (
           <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
