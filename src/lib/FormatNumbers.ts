@@ -3,13 +3,13 @@ const optionsUS = {
     style: 'currency',
     currency: 'USD',
     maximumFractionDigits: 2,
-}
+} as any
 const localEU = 'es-ES'
 const optionsEU = {
     style: 'currency',
     currency: 'EUR',
     maximumFractionDigits: 2,
-}
+} as any
 
 export const FormatCurrency = (route: string, value: number) => {
     const Format = new Intl.NumberFormat(route == 'us' ? localUS : localEU, route == 'us' ? optionsUS : optionsEU)

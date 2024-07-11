@@ -16,6 +16,7 @@ export interface ReorderingPointsProduct {
     itemBoxVolume: number;
     grossRevenue: number;
     expenses: number;
+    storageCost: number;
     unitsSold: number;
     recommendedDaysOfStock: number;
     hideReorderingPoints: boolean;

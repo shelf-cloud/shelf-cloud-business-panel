@@ -2,9 +2,10 @@ import AppContext from '@context/AppContext'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import React, { useContext } from 'react'
 import { ExpanderComponentProps } from 'react-data-table-component'
-import { Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, Row, UncontrolledTooltip } from 'reactstrap'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import ReorderingPointsTimeLine from './ReorderingPointsTimeLine'
+import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 
 type Props = {
   data: ReorderingPointsProduct
@@ -31,6 +32,7 @@ const ReorderingPointsExpandedDetails: React.FC<ExpanderComponentProps<Reorderin
               </div>
             </CardHeader>
             <CardBody style={{ overflowX: 'scroll', scrollbarWidth: 'none' }}>
+              <p className='m-0 p-0 fw-bold'>Sales By Marketplaces</p>
               <table className='table table-sm table-border table-nowrap mb-0 fs-7'>
                 <thead>
                   <tr>
@@ -59,7 +61,16 @@ const ReorderingPointsExpandedDetails: React.FC<ExpanderComponentProps<Reorderin
                   <tr>
                     <td className='fw-bold text-end'>Total</td>
                     <td className='text-end'>{FormatCurrency(state.currentRegion, data.grossRevenue)}</td>
-                    <td className='text-end'>{FormatCurrency(state.currentRegion, data.grossRevenue - data.expenses)}</td>
+                    <td className='text-end'>
+                      <i className='fs-6 me-1 text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={`salesTotalMsj${CleanSpecialCharacters(data.sku)}`} />
+                      <UncontrolledTooltip
+                        placement='top'
+                        target={`salesTotalMsj${CleanSpecialCharacters(data.sku)}`}
+                        innerClassName='bg-white border border-info border-opacity-50 p-2'>
+                        <p className='fs-7 text-primary m-0 p-0 mb-0'>{`Storage Cost: ${FormatCurrency(state.currentRegion, data.storageCost)}`}</p>
+                      </UncontrolledTooltip>
+                      {FormatCurrency(state.currentRegion, data.grossRevenue - data.expenses - data.storageCost)}
+                    </td>
                     <td className='text-center'>{FormatIntNumber(state.currentRegion, data.unitsSold)}</td>
                   </tr>
                 </tfoot>
@@ -73,7 +84,14 @@ const ReorderingPointsExpandedDetails: React.FC<ExpanderComponentProps<Reorderin
               <h5 className='fw-semibold m-0'>Performance Timeline</h5>
             </CardHeader>
             <CardBody>
-              <ReorderingPointsTimeLine productTimeLine={data.dateList} leadtime={data.leadTime} daysRemaining={data.daysRemaining} poDates={data.poDates} forecast={data.forecast} bestModel={data.forecastModel}/>
+              <ReorderingPointsTimeLine
+                productTimeLine={data.dateList}
+                leadtime={data.leadTime}
+                daysRemaining={data.daysRemaining}
+                poDates={data.poDates}
+                forecast={data.forecast}
+                bestModel={data.forecastModel}
+              />
             </CardBody>
           </Card>
         </Col>

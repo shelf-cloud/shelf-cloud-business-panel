@@ -6,6 +6,7 @@ import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import TooltipComponent from './constants/Tooltip'
 import AppContext from '@context/AppContext'
 import Confirm_Delete_Item_From_Receiving from './modals/receivings/Confirm_Delete_Item_From_Receiving'
+import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 
 // import dynamic from 'next/dynamic';
 // const Animation = dynamic(() => import('@components/Common/Animation'), {
@@ -61,7 +62,7 @@ const ReceivingType = ({ data, apiMutateLink }: Props) => {
     }
   }, [data, state.currentRegion])
 
-  const OrderId = data.orderId?.replace(/[\-\,\(\)\/\s\.\:\;]/g, '')
+  const OrderId = CleanSpecialCharacters(data.orderId!)
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
       <Row>

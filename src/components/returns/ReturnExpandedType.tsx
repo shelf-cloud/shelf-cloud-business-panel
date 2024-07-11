@@ -11,6 +11,7 @@ import TooltipComponent from '@components/constants/Tooltip'
 import { toast } from 'react-toastify'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
+import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 
 type Props = {
   data: ReturnOrder
@@ -22,7 +23,7 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
   const { state }: any = useContext(AppContext)
   const [loading, setLoading] = useState(false)
   const [showEditNote, setShowEditNote] = useState(false)
-  const OrderId = data.orderId?.replace(/[\-\,\(\)\/\s\.\:\;]/g, '')
+  const OrderId = CleanSpecialCharacters(data.orderId!)
   const [loadingLabel, setLoadingLabel] = useState(false)
   const handlePrintingLabel = async () => {
     setLoadingLabel(true)

@@ -7,6 +7,7 @@ import AppContext from '@context/AppContext'
 import { useSWRConfig } from 'swr'
 import TooltipComponent from './constants/Tooltip'
 import { FormatCurrency } from '@lib/FormatNumbers'
+import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 
 // import dynamic from 'next/dynamic';
 // const Animation = dynamic(() => import('@components/Common/Animation'), {
@@ -21,7 +22,7 @@ type Props = {
 const ReturnType = ({ data, apiMutateLink }: Props) => {
   const { mutate } = useSWRConfig()
   const { state }: any = useContext(AppContext)
-  const OrderId = data.orderId?.replace(/[\-\,\(\)\/\s\.\:\;]/g, '')
+  const OrderId = CleanSpecialCharacters(data.orderId)
   const [loadingLabel, setLoadingLabel] = useState(false)
   const handlePrintingLabel = async () => {
     setLoadingLabel(true)

@@ -6,6 +6,7 @@ import AppContext from '@context/AppContext'
 import TooltipComponent from './constants/Tooltip'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import CancelManualOrderConfirmationModal from './modals/orders/shipments/CancelManualOrderConfirmationModal'
+import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 // import dynamic from 'next/dynamic';
 // const Animation = dynamic(() => import('@components/Common/Animation'), {
 //     ssr: false
@@ -24,7 +25,7 @@ const ShipmentType = ({ data, apiMutateLink }: Props) => {
     orderNumber: '',
     goFlowOrderId: 0,
   })
-  const OrderId = data.orderId?.replace(/[\-\,\(\)\/\s\.\:\;]/g, '')
+  const OrderId = CleanSpecialCharacters(data.orderId)
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
       <Row>

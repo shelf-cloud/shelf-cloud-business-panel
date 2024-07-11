@@ -6,6 +6,7 @@ import AppContext from '@context/AppContext'
 import { Button, FormFeedback, UncontrolledTooltip } from 'reactstrap'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
+import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 
 type Props = {
   allData: wholesaleProductRow[]
@@ -288,13 +289,13 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
                 color='info'
                 outline
                 className='btn btn-ghost-info'
-                id={`reservedSingleQty${cell.sku.replace(/[\-\,\(\)\/\s\.\:\;]/g, '')}`}
+                id={`reservedSingleQty${CleanSpecialCharacters(cell.sku)}`}
                 onClick={() => {
                   setModalProductInfo(cell.quantity.inventoryId, state.user.businessId, cell.quantity.sku)
                 }}>
                 {cell.quantity.quantity}
               </Button>
-              <UncontrolledTooltip placement='right' target={`reservedSingleQty${cell.sku.replace(/[\-\,\(\)\/\s\.\:\;]/g, '')}`}>
+              <UncontrolledTooltip placement='right' target={`reservedSingleQty${CleanSpecialCharacters(cell.sku)}`}>
                 {`Reserved ${cell.quantity.reserved}`}
               </UncontrolledTooltip>
             </>

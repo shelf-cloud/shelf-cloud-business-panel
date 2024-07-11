@@ -7,6 +7,7 @@ import IndividualUnitsPlanModal from './modals/orders/shipments/IndividualUnitsP
 import AppContext from '@context/AppContext'
 import UploadIndividualUnitsLabelsModal from './modals/orders/shipments/UploadIndividualUnitsLabelsModal'
 import { FormatCurrency } from '@lib/FormatNumbers'
+import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 
 // import dynamic from 'next/dynamic';
 // const Animation = dynamic(() => import('@components/Common/Animation'), {
@@ -48,7 +49,8 @@ const WholeSaleType = ({ data }: Props) => {
       setServiceFee('')
     }
   }, [data, state.currentRegion])
-  const OrderId = data.orderId?.replace(/[\-\,\(\)\/\s\.\:\;]/g, '')
+  
+  const OrderId = CleanSpecialCharacters(data.orderId!)
 
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>

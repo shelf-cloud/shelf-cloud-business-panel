@@ -4,7 +4,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Button, Card, CardBody, CardHeader, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from 'reactstrap'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
-import { ShipmentOrderItem } from '@typings'
+import { KitChildren, ShipmentOrderItem } from '@typings'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 
 type Props = {}
@@ -140,7 +140,7 @@ function OrderDetailsFromInvoicesModal({}: Props) {
                         <tbody>
                           {data.orderItems.map((product: ShipmentOrderItem, key: any) => (
                             <tr key={key} className='border-bottom py-2'>
-                              <td className='w-75 fs-6 fw-semibold'>{product.name || ''}</td>
+                              <td className='w-75 fs-6 fw-semibold'>{product.title || product.name}</td>
                               <td className='fs-6 text-muted'>{product.sku}</td>
                               <td className='text-center'>{product.quantity}</td>
                             </tr>
@@ -260,7 +260,16 @@ function OrderDetailsFromInvoicesModal({}: Props) {
                         <tbody>
                           {data.orderItems?.map((product: ShipmentOrderItem, key: any) => (
                             <tr key={key} className='border-bottom py-2'>
-                              <td className='w-50 fs-6 fw-semibold'>{product.name || ''}</td>
+                              <td className='w-50 fs-6 fw-semibold'>
+                                {product.title || product.name}
+                                {product.isKit === true &&
+                                  product.children.length > 0 &&
+                                  product.children.map((child: KitChildren) => (
+                                    <p className='m-0 p-0 fs-7 text-muted fw-light' key={child.orderChildrenId}>
+                                      {`- ${child.title || child.name} - ${child.sku} - Qty: ${child.quantity}`}
+                                    </p>
+                                  ))}
+                              </td>
                               <td className='fs-6 text-muted'>{product.sku}</td>
                               <td className='text-center'>{FormatCurrency(state.currentRegion, product.unitPrice)}</td>
                               <td className='text-center'>{product.quantity}</td>
@@ -392,7 +401,7 @@ function OrderDetailsFromInvoicesModal({}: Props) {
                         <tbody>
                           {data.orderItems?.map((product: ShipmentOrderItem, key: any) => (
                             <tr key={key} className='border-bottom py-2'>
-                              <td className='w-50 fs-6 fw-semibold'>{product.name || ''}</td>
+                              <td className='w-50 fs-6 fw-semibold'>{product.title || product.name}</td>
                               <td className='fs-6 text-muted'>{product.sku}</td>
                               <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.quantity))}</td>
                               <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.qtyReceived))}</td>
@@ -465,7 +474,7 @@ function OrderDetailsFromInvoicesModal({}: Props) {
                 <Col xl={12}>
                   <Card>
                     <CardHeader className='py-3'>
-                      <h5 className='fw-semibold m-0'>Shipping</h5>
+                      <h5 className='fw-semibold m-0'>Order</h5>
                     </CardHeader>
                     <CardBody>
                       <table className='table table-sm table-borderless'>
@@ -558,7 +567,16 @@ function OrderDetailsFromInvoicesModal({}: Props) {
                         <tbody>
                           {data.orderItems?.map((product: ShipmentOrderItem, key: any) => (
                             <tr key={key} className='border-bottom py-2'>
-                              <td className='w-50 fs-6 fw-semibold'>{product.name || ''}</td>
+                              <td className='w-50 fs-6 fw-semibold'>
+                                {product.title || product.name}
+                                {product.isKit === true &&
+                                  product.children.length > 0 &&
+                                  product.children.map((child: KitChildren) => (
+                                    <p className='m-0 p-0 fs-7 text-muted fw-light' key={child.orderChildrenId}>
+                                      {`- ${child.title || child.name} - ${child.sku} - Qty: ${child.quantity}`}
+                                    </p>
+                                  ))}
+                              </td>
                               <td className='fs-6 text-muted'>{product.sku}</td>
                               <td className='text-center'>{FormatCurrency(state.currentRegion, product.unitPrice)}</td>
                               <td className='text-center'>{product.quantity}</td>
@@ -599,13 +617,7 @@ function OrderDetailsFromInvoicesModal({}: Props) {
         </h3>
         <p className='text-secondary fs-4 fw-normal my-0'>{data.orderType}</p>
       </ModalHeader>
-      <ModalBody>
-        {!loading ? (
-          renderOrderType(data.orderType)
-        ) : (
-          <Spinner />
-        )}
-      </ModalBody>
+      <ModalBody>{!loading ? renderOrderType(data.orderType) : <Spinner />}</ModalBody>
       <ModalFooter>
         <div className='d-flex justify-content-end align-items-center'>
           <Button

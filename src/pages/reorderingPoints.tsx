@@ -173,6 +173,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
                   newProductsData[product.sku].grossRevenue = product.grossRevenue
                   newProductsData[product.sku].expenses = product.expenses
                   newProductsData[product.sku].unitsSold = product.unitsSold
+                  newProductsData[product.sku].storageCost = product.storageCost
                   for (const [storeId, values] of Object.entries(product.marketplaces)) {
                     if (newProductsData[product.sku].marketplaces[storeId] === undefined) {
                       newProductsData[product.sku].marketplaces[storeId] = {

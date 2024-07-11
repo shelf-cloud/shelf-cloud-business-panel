@@ -7,6 +7,7 @@ import AppContext from '@context/AppContext'
 import { Button, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
 import TooltipComponent from './constants/Tooltip'
 import Link from 'next/link'
+import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 
 type Props = {
   tableData: Product[]
@@ -213,10 +214,10 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
             </Button>
             {row.reserved > 0 && (
               <>
-                <span className='text-danger' id={`reservedQty${row.sku.replace(/[\-\,\(\)\/\s\.\:\;]/g, '')}`}>
+                <span className='text-danger' id={`reservedQty${CleanSpecialCharacters(row.sku)}`}>
                   -{row.reserved}
                 </span>
-                <UncontrolledTooltip placement='right' target={`reservedQty${row.sku.replace(/[\-\,\(\)\/\s\.\:\;]/g, '')}`}>
+                <UncontrolledTooltip placement='right' target={`reservedQty${CleanSpecialCharacters(row.sku)}`}>
                   Reserved in Awating Orders.
                 </UncontrolledTooltip>
               </>

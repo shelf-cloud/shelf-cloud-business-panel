@@ -71,37 +71,30 @@ const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, po
             return result
         }, {})
 
-    // console.log(Object.entries(forecast[bestModel]))
-    const dailytimeForecast = Object.entries(forecast[bestModel])
-        // .sort()
-        .reduce(function (result, [date, unitsSold]) {
-            result[moment(date).startOf('day').format("YYYY-MM-DD")] = Math.ceil(unitsSold)
-            return result
-        }, {})
+    const dailytimeForecast = forecast[bestModel] ? Object.entries(forecast[bestModel])?.reduce(function (result, [date, unitsSold]) {
+        result[moment(date).startOf('day').format("YYYY-MM-DD")] = Math.ceil(unitsSold)
+        return result
+    }, {}) : []
 
-    const weeklyForecast = Object.entries(forecast[bestModel])
-        // .sort()
-        .reduce(function (result, [date, unitsSold]) {
-            const weekYear = `${moment(date).startOf('week').format('YYYY-MM-DD')}`
-            if (result[weekYear] === undefined) {
-                result[weekYear] = Math.ceil(unitsSold)
-            } else {
-                result[weekYear] += Math.ceil(unitsSold)
-            }
-            return result
-        }, {})
+    const weeklyForecast = forecast[bestModel] ? Object.entries(forecast[bestModel])?.reduce(function (result, [date, unitsSold]) {
+        const weekYear = `${moment(date).startOf('week').format('YYYY-MM-DD')}`
+        if (result[weekYear] === undefined) {
+            result[weekYear] = Math.ceil(unitsSold)
+        } else {
+            result[weekYear] += Math.ceil(unitsSold)
+        }
+        return result
+    }, {}) : []
 
-    const monthlyForecast = Object.entries(forecast[bestModel])
-        // .sort()
-        .reduce(function (result, [date, unitsSold]) {
-            const weekYear = `${moment(date).year()}-${moment(date).format('MM')}`
-            if (result[weekYear] === undefined) {
-                result[weekYear] = Math.ceil(unitsSold)
-            } else {
-                result[weekYear] += Math.ceil(unitsSold)
-            }
-            return result
-        }, {})
+    const monthlyForecast = forecast[bestModel] ? Object.entries(forecast[bestModel])?.reduce(function (result, [date, unitsSold]) {
+        const weekYear = `${moment(date).year()}-${moment(date).format('MM')}`
+        if (result[weekYear] === undefined) {
+            result[weekYear] = Math.ceil(unitsSold)
+        } else {
+            result[weekYear] += Math.ceil(unitsSold)
+        }
+        return result
+    }, {}) : []
 
     const timeLineSorted = grouping === 'daily' ? dailytimeLineSorted : grouping === 'weekly' ? weeklyTimeLineSorted : monthlyTimeLineSorted
     const forecastSorted = grouping === 'daily' ? dailytimeForecast : grouping === 'weekly' ? weeklyForecast : monthlyForecast
