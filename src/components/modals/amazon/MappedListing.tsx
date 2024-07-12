@@ -14,8 +14,10 @@ type Props = {
     listingId: number
     shelfCloudSku: string
     shelfCloudSkuId: number
+    shelfCloudSkuIsKit: boolean
     currentSkuMapped: string
     currentSkuIdMapped: number
+    currentSkuIsKitMapped: boolean
   }
   setshowMappedListingModal: (prev: any) => void
   loading: boolean
@@ -28,6 +30,7 @@ type Product = {
   image: string
   title: string
   sku: string
+  isKit: boolean
 }
 const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, loading, setLoading }: Props) => {
   const { state }: any = useContext(AppContext)
@@ -36,7 +39,10 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
   const fetcher = async (endPoint: string) => await axios(endPoint).then((res) => res.data)
   const { data }: { data?: Product[] } = useSWR(
     state.user.businessId ? `/api/products/getProductsSku?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
-    fetcher
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
   )
 
   const handleSaveMappedProduct = async () => {
@@ -50,6 +56,7 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
       listingSku: showMappedListingModal.listingSku,
       shelfCloudSku: showMappedListingModal.shelfCloudSku,
       shelfCloudSkuId: showMappedListingModal.shelfCloudSkuId,
+      shelfCloudSkuIsKit: showMappedListingModal.shelfCloudSkuIsKit,
     })
     if (!response.data.error) {
       setshowMappedListingModal({
@@ -58,8 +65,10 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
         listingId: 0,
         shelfCloudSku: '',
         shelfCloudSkuId: 0,
+        shelfCloudSkuIsKit: false,
         currentSkuMapped: '',
         currentSkuIdMapped: 0,
+        currentSkuIsKitMapped: false,
       })
       toast.success(response.data.message)
       mutate(`/api/amazon/getAmazonSellerListings?region=${state.currentRegion}&businessId=${state.user.businessId}`)
@@ -80,6 +89,7 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
       listingSku: showMappedListingModal.listingSku,
       shelfCloudSku: showMappedListingModal.currentSkuMapped,
       shelfCloudSkuId: showMappedListingModal.currentSkuIdMapped,
+      shelfCloudSkuIsKit: showMappedListingModal.currentSkuIsKitMapped,
     })
     if (!response.data.error) {
       setshowMappedListingModal((prev: any) => {
@@ -87,8 +97,10 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
           ...prev,
           shelfCloudSku: '',
           shelfCloudSkuId: 0,
+          shelfCloudSkuIsKit: false,
           currentSkuMapped: '',
           currentSkuIdMapped: 0,
+          currentSkuIsKitMapped: false,
         }
       })
       toast.success(response.data.message)
@@ -112,8 +124,10 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
           listingId: 0,
           shelfCloudSku: '',
           shelfCloudSkuId: 0,
+          shelfCloudSkuIsKit: false,
           currentSkuMapped: '',
           currentSkuIdMapped: 0,
+          currentSkuIsKitMapped: false,
         })
       }}>
       <ModalHeader
@@ -124,8 +138,10 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
             listingId: 0,
             shelfCloudSku: '',
             shelfCloudSkuId: 0,
+            shelfCloudSkuIsKit: false,
             currentSkuMapped: '',
             currentSkuIdMapped: 0,
+            currentSkuIsKitMapped: false,
           })
         }}
         className='modal-title'
@@ -137,7 +153,7 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
           <h5 className='fs-4 mb-0 fw-semibold text-primary'>Amazon Listing:</h5>
           <p className='fs-4 fw-semibold text-black'>{showMappedListingModal.listingSku}</p>
           <Col md={12}>
-            <p className='fw-semibold fs-6 m-0 mb-1'>Map to Product:</p>
+            <p className='fw-semibold fs-6 m-0 mb-1'>Map to Product or Kit:</p>
             <Select_Product_Mapped data={data || []} showMappedListingModal={showMappedListingModal} setshowMappedListingModal={setshowMappedListingModal} />
           </Col>
           <Row md={12} className='mt-3'>
@@ -159,8 +175,10 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
                       listingId: 0,
                       shelfCloudSku: '',
                       shelfCloudSkuId: 0,
+                      shelfCloudSkuIsKit: false,
                       currentSkuMapped: '',
                       currentSkuIdMapped: 0,
+                      currentSkuIsKitMapped: false,
                     })
                   }}>
                   Cancel

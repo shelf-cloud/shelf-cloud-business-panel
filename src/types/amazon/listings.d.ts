@@ -26,6 +26,7 @@ export interface Listing {
     afn_inbound_receiving_quantity: number;
     shelfcloud_sku: null | string;
     shelfcloud_sku_id: null | number;
+    shelfcloud_isKit: boolean;
     image: null | string;
     brand: string | null;
     show: number;

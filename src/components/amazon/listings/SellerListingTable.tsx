@@ -23,8 +23,10 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
     listingId: 0,
     shelfCloudSku: '',
     shelfCloudSkuId: 0,
+    shelfCloudSkuIsKit: false,
     currentSkuMapped: '',
     currentSkuIdMapped: 0,
+    currentSkuIsKitMapped: false,
   })
   const caseInsensitiveSort = (rowA: Listing, rowB: Listing) => {
     const a = rowA.sku.toLowerCase()
@@ -225,12 +227,13 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
                         listingId: row.id,
                         currentSkuMapped: row.shelfcloud_sku || '',
                         currentSkuIdMapped: row.shelfcloud_sku_id || 0,
+                        currentSkuIsKitMapped: row.shelfcloud_isKit || false,
                       }
                     })
                   }
                 />
-                <Link href={`/product/${row.shelfcloud_sku_id}/${row.shelfcloud_sku}`} passHref>
-                  <a>
+                <Link href={row.shelfcloud_isKit ? `/kit/${row.shelfcloud_sku_id}/${row.shelfcloud_sku}` : `/product/${row.shelfcloud_sku_id}/${row.shelfcloud_sku}`} passHref>
+                  <a target='blank'>
                     <span className='fs-7'>{row.shelfcloud_sku}</span>
                   </a>
                 </Link>

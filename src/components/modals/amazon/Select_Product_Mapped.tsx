@@ -9,6 +9,7 @@ type Props = {
     image: string
     title: string
     sku: string
+    isKit: boolean
   }[]
   showMappedListingModal: {
     show: boolean
@@ -16,8 +17,10 @@ type Props = {
     listingId: number
     shelfCloudSku: string
     shelfCloudSkuId: number
+    shelfCloudSkuIsKit: boolean
     currentSkuMapped: string
     currentSkuIdMapped: number
+    currentSkuIsKitMapped: boolean
   }
   setshowMappedListingModal: (prev: any) => void
 }
@@ -49,8 +52,13 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
     }
 
     if (searchValue !== '') {
-      const newDataTable = data.filter((option) => option.sku.toLowerCase().includes(searchValue.toLowerCase()) || option.title.toLowerCase().includes(searchValue.toLowerCase()))
-      return newDataTable
+      return data.filter(
+        (option) =>
+          option.sku.toLowerCase().includes(searchValue.toLowerCase()) ||
+          (searchValue.toLowerCase().includes('kit') && option.isKit) ||
+          searchValue.split(' ').every((word: string) => option?.title?.toLowerCase().includes(word.toLowerCase())) ||
+          option.title.toLowerCase().includes(searchValue.toLowerCase())
+      )
     }
   }, [data, searchValue])
 
@@ -109,7 +117,7 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
           <div style={{ maxHeight: '30vh', overflowY: 'scroll' }}>
             {filterSelectionList?.map((option) => (
               <div
-                key={option.inventoryId}
+                key={`${option.sku}-${option.inventoryId}`}
                 className={'m-0 py-2 px-1 d-flex flex-row gap-2 ' + (showMappedListingModal.shelfCloudSku == `${option.sku}` ? 'bg-light' : '')}
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
@@ -118,6 +126,7 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
                       ...prev,
                       shelfCloudSku: option.sku,
                       shelfCloudSkuId: option.inventoryId,
+                      shelfCloudSkuIsKit: option.isKit,
                     }
                   })
                   setOpenSelectionList(false)
@@ -146,6 +155,7 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
                 </div>
                 <div>
                   <p className='fs-7 m-0 p-0 fw-bold'>{option.sku}</p>
+                  <p className='fs-7 fw-semibold text-primary m-0 p-0'>{option.isKit ? 'Kit' : 'Product'}</p>
                   <p className='fs-7 text-muted m-0 p-0'>{option.title}</p>
                 </div>
               </div>

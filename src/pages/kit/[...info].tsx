@@ -1,17 +1,16 @@
 import { getSession } from '@auth/client'
 import BreadCrumb from '@components/Common/BreadCrumb'
+import Activity_Kit_Details from '@components/kit_page/Activity_Kit_Details'
+import Children_Kit_Details from '@components/kit_page/Children_Kit_Details'
+import KitWidgets from '@components/kit_page/KitWidgets'
+import SKU_Kit_details from '@components/kit_page/SKU_Kit_details'
+import Status_Kit_Details from '@components/kit_page/Status_Kit_Details'
 import OrderDetailsFromInvoicesModal from '@components/OrderDetailsFromInvoicesModal'
-import Activity_Product_Details from '@components/product_page/Activity_Product_Details'
-import Bins_Product_Details from '@components/product_page/Bins_Product_Details'
 import General_Product_Details from '@components/product_page/General_Product_Details'
 import Identifiers_Product_Details from '@components/product_page/Identifiers_Product_Details'
 import Inventory_Product_Details from '@components/product_page/Inventory_Product_Details'
 import Listings_Product_Details from '@components/product_page/Listings_Product_Details'
 import Measure_Product_Details from '@components/product_page/Measure_Product_Details'
-import ProductWidgets from '@components/product_page/ProductWidgets'
-import SKU_product_details from '@components/product_page/SKU_product_details'
-import Status_Product_Details from '@components/product_page/Status_Product_Details'
-import Supplier_Product_Details from '@components/product_page/Supplier_Product_Details'
 import AppContext from '@context/AppContext'
 import { ProductDetails } from '@typings'
 import axios from 'axios'
@@ -48,7 +47,7 @@ type Props = {
   }
 }
 
-const Product_Page_Layout = ({}: Props) => {
+const Kit_Page_Layout = ({}: Props) => {
   const router = useRouter()
   const { state }: any = useContext(AppContext)
   const { info } = router.query
@@ -58,7 +57,7 @@ const Product_Page_Layout = ({}: Props) => {
 
   const fetcher = async (endPoint: string) => await axios(endPoint).then((res) => res.data)
   const { data } = useSWR(
-    info![0] && state.user.businessId ? `/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${info![0]}&businessId=${state.user.businessId}` : null,
+    info![0] && state.user.businessId ? `/api/getKitPageDetails?region=${state.currentRegion}&inventoryId=${info![0]}&businessId=${state.user.businessId}` : null,
     fetcher
   )
 
@@ -119,7 +118,7 @@ const Product_Page_Layout = ({}: Props) => {
                         </p>
                       </div>
                     </div>
-                    <ProductWidgets
+                    <KitWidgets
                       onhand={productDetails?.onhand ?? 0}
                       currentStorageBalance={productDetails?.currentStorageBalance ?? 0}
                       binsUsed={productDetails?.binsUsed ?? 0}
@@ -147,27 +146,27 @@ const Product_Page_Layout = ({}: Props) => {
                         <Nav className='pt-2 nav-tabs-custom rounded card-header-tabs border-bottom-0' role='tablist'>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
+                              to='#'
                               className={'fs-4 fw-semibold ' + (activeTab == '1' ? 'text-primary' : 'text-muted')}
                               onClick={() => {
                                 tabChange('1')
-                              }}>
+                              }}
+                              type='button'>
                               <>
-                                <i className='fas fa-home'></i>
-                                SKU Details
+                                <i className='far fa-user'></i>
+                                Kit Children
                               </>
                             </NavLink>
                           </NavItem>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
-                              to='#'
                               className={'fs-4 fw-semibold ' + (activeTab == '2' ? 'text-primary' : 'text-muted')}
                               onClick={() => {
                                 tabChange('2')
-                              }}
-                              type='button'>
+                              }}>
                               <>
-                                <i className='far fa-user'></i>
-                                Units of Measure
+                                <i className='fas fa-home'></i>
+                                SKU Details
                               </>
                             </NavLink>
                           </NavItem>
@@ -181,7 +180,7 @@ const Product_Page_Layout = ({}: Props) => {
                               type='button'>
                               <>
                                 <i className='far fa-user'></i>
-                                Supplier Info
+                                Units of Measure
                               </>
                             </NavLink>
                           </NavItem>
@@ -216,11 +215,13 @@ const Product_Page_Layout = ({}: Props) => {
                         </Nav>
                         <TabContent activeTab={activeTab} className='pt-2 pb-4 border-bottom'>
                           <TabPane tabId='1'>
-                            <SKU_product_details
+                            <Children_Kit_Details kitChildren={productDetails?.children ?? []} />
+                          </TabPane>
+                          <TabPane tabId='2'>
+                            <SKU_Kit_details
                               inventoryId={productDetails?.inventoryId}
                               sku={productDetails?.sku}
                               upc={productDetails?.barcode}
-                              htsCode={productDetails?.htsCode ?? ''}
                               defaultPrice={productDetails?.defaultPrice ?? 0}
                               msrp={productDetails?.msrp ?? 0}
                               map={productDetails?.map ?? 0}
@@ -228,7 +229,7 @@ const Product_Page_Layout = ({}: Props) => {
                               ceilling={productDetails?.ceilling ?? 0}
                             />
                           </TabPane>
-                          <TabPane tabId='2'>
+                          <TabPane tabId='3'>
                             <Measure_Product_Details
                               weight={productDetails?.weight ?? 0}
                               length={productDetails?.length ?? 0}
@@ -241,18 +242,7 @@ const Product_Page_Layout = ({}: Props) => {
                               boxHeight={productDetails?.boxHeight ?? 0}
                             />
                           </TabPane>
-                          <TabPane tabId='3'>
-                            <Supplier_Product_Details
-                              inventoryId={productDetails?.inventoryId}
-                              sku={productDetails?.sku}
-                              sellerCost={productDetails?.sellerCost ?? 0}
-                              inboundShippingCost={productDetails?.inboundShippingCost ?? 0}
-                              otherCosts={productDetails?.otherCosts ?? 0}
-                              productionTime={productDetails?.productionTime ?? 0}
-                              transitTime={productDetails?.transitTime ?? 0}
-                              shippingToFBA={productDetails?.shippingToFBA}
-                            />
-                          </TabPane>
+
                           <TabPane tabId='4'>
                             <Identifiers_Product_Details
                               inventoryId={productDetails?.inventoryId}
@@ -280,13 +270,12 @@ const Product_Page_Layout = ({}: Props) => {
                         />
                       </Col>
                       <Col xs='3' className='gap-4 d-flex flex-column'>
-                        <Status_Product_Details
+                        <Status_Kit_Details
                           active={productDetails?.activeState ?? true}
                           isKit={productDetails?.isKit ? true : false}
                           inStock={productDetails?.onhand! > 0 ? true : false}
                         />
-                        <Activity_Product_Details latestOrders={productDetails?.latestOrders ?? []} />
-                        <Bins_Product_Details bins={productDetails?.bins ?? []} />
+                        <Activity_Kit_Details latestOrders={productDetails?.latestOrders ?? []} />
                       </Col>
                     </Row>
                   </CardBody>
@@ -305,4 +294,4 @@ const Product_Page_Layout = ({}: Props) => {
   )
 }
 
-export default Product_Page_Layout
+export default Kit_Page_Layout

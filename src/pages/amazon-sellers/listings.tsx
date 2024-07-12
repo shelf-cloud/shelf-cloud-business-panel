@@ -189,7 +189,7 @@ const Listings = ({ session }: Props) => {
                       </>
                     )}
                   </Button>
-                  <CSVLink data={csvData} style={{ width: 'fit-content' }} filename={`${session?.user?.businessName.toUpperCase()}-Amazon-FBA-Listings.csv`}>
+                  <CSVLink data={csvData} style={{ width: 'fit-content' }} filename={`${session?.user?.businessName?.toUpperCase()}-Amazon-FBA-Listings.csv`}>
                     <Button color='primary' className='fs-6 py-1'>
                       <i className='mdi mdi-arrow-down-bold label-icon align-middle fs-5 me-2' />
                       Export

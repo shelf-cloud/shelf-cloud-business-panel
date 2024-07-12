@@ -255,6 +255,7 @@ export interface ProductDetails {
   suppliers: string[]
   // Amazon FBA
   amazonFBA: AmazonFBA[]
+  children?: ChildrenPage[]
 }
 
 export interface AmazonFBA {
@@ -266,6 +267,15 @@ export interface AmazonFBA {
   afn_total_quantity: number
   afn_unsellable_quantity: number
   afn_warehouse_quantity: number
+}
+
+export interface ChildrenPage {
+  qty: string
+  sku: string
+  title: string
+  idInventory: number
+  available: string
+  maxKits: number
 }
 
 // STORAGE PRODUCTS
