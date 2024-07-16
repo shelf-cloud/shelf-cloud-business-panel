@@ -19,7 +19,7 @@ type Props = {
   shippingToFBA?: number
 }
 
-const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippingCost, otherCosts, productionTime, transitTime, shippingToFBA }: Props) => {
+const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCost, otherCosts, productionTime, transitTime, shippingToFBA }: Props) => {
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [showEditFields, setShowEditFields] = useState(false)
@@ -311,4 +311,4 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
   )
 }
 
-export default Supplier_Product_Details
+export default Supplier_Kit_Details

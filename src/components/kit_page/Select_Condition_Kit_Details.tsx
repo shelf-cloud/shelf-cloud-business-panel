@@ -11,7 +11,7 @@ const styles = {
   error: { backgroundColor: 'white', border: '1px solid #f06548', cursor: 'pointer' },
 }
 
-const Select_Condition_Product_Details = ({ selected, handleSelection, errorMessage }: Props) => {
+const Select_Condition_Kit_Details = ({ selected, handleSelection, errorMessage }: Props) => {
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const [selectedOption, setSelectedOption] = useState(selected)
   const filterByDates = useRef<HTMLDivElement | null>(null)
@@ -83,4 +83,4 @@ const Select_Condition_Product_Details = ({ selected, handleSelection, errorMess
   )
 }
 
-export default Select_Condition_Product_Details
+export default Select_Condition_Kit_Details

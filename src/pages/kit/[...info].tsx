@@ -2,15 +2,15 @@ import { getSession } from '@auth/client'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import Activity_Kit_Details from '@components/kit_page/Activity_Kit_Details'
 import Children_Kit_Details from '@components/kit_page/Children_Kit_Details'
+import General_Kit_Details from '@components/kit_page/General_Kit_Details'
+import Identifiers_Kit_Details from '@components/kit_page/Identifiers_Kit_Details'
+import Inventory_Kit_Details from '@components/kit_page/Inventory_Kit_Details'
 import KitWidgets from '@components/kit_page/KitWidgets'
+import Listings_Kit_Details from '@components/kit_page/Listings_Kit_Details'
+import Measure_Kit_Details from '@components/kit_page/Measure_Kit_Details'
 import SKU_Kit_details from '@components/kit_page/SKU_Kit_details'
 import Status_Kit_Details from '@components/kit_page/Status_Kit_Details'
 import OrderDetailsFromInvoicesModal from '@components/OrderDetailsFromInvoicesModal'
-import General_Product_Details from '@components/product_page/General_Product_Details'
-import Identifiers_Product_Details from '@components/product_page/Identifiers_Product_Details'
-import Inventory_Product_Details from '@components/product_page/Inventory_Product_Details'
-import Listings_Product_Details from '@components/product_page/Listings_Product_Details'
-import Measure_Product_Details from '@components/product_page/Measure_Product_Details'
 import AppContext from '@context/AppContext'
 import { ProductDetails } from '@typings'
 import axios from 'axios'
@@ -92,7 +92,7 @@ const Kit_Page_Layout = ({}: Props) => {
                 <>
                   <CardHeader className='d-flex flex-row justify-content-between align-items-start'>
                     <div>
-                      <Link href={'/Products?brand=All&supplier=All&category=All&condition=All'}>
+                      <Link href={'/Kits'}>
                         <Button
                           color='primary'
                           outline
@@ -100,7 +100,7 @@ const Kit_Page_Layout = ({}: Props) => {
                           style={{ cursor: 'pointer' }}>
                           <span className='icon-on'>
                             <i className='ri-arrow-left-line align-bottom me-1' />
-                            Products
+                            Kits
                           </span>
                         </Button>
                       </Link>
@@ -128,7 +128,7 @@ const Kit_Page_Layout = ({}: Props) => {
                   <CardBody>
                     <Row>
                       <Col className='gap-2 d-flex flex-column'>
-                        <General_Product_Details
+                        <General_Kit_Details
                           inventoryId={productDetails?.inventoryId}
                           sku={productDetails?.sku}
                           image={productDetails?.image}
@@ -230,7 +230,7 @@ const Kit_Page_Layout = ({}: Props) => {
                             />
                           </TabPane>
                           <TabPane tabId='3'>
-                            <Measure_Product_Details
+                            <Measure_Kit_Details
                               weight={productDetails?.weight ?? 0}
                               length={productDetails?.length ?? 0}
                               width={productDetails?.width ?? 0}
@@ -244,7 +244,7 @@ const Kit_Page_Layout = ({}: Props) => {
                           </TabPane>
 
                           <TabPane tabId='4'>
-                            <Identifiers_Product_Details
+                            <Identifiers_Kit_Details
                               inventoryId={productDetails?.inventoryId}
                               sku={productDetails?.sku}
                               upc={productDetails?.barcode}
@@ -254,10 +254,10 @@ const Kit_Page_Layout = ({}: Props) => {
                             />
                           </TabPane>
                           <TabPane tabId='5'>
-                            <Listings_Product_Details listings={productDetails?.listings ?? []} />
+                            <Listings_Kit_Details listings={productDetails?.listings ?? []} />
                           </TabPane>
                         </TabContent>
-                        <Inventory_Product_Details
+                        <Inventory_Kit_Details
                           inventoryId={productDetails?.inventoryId}
                           sku={productDetails?.sku}
                           onhand={productDetails?.onhand ?? 0}

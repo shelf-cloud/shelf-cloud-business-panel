@@ -7,8 +7,8 @@ import { toast } from 'react-toastify'
 import { useSWRConfig } from 'swr'
 import axios from 'axios'
 import AppContext from '@context/AppContext'
-import Select_Product_Details from './Select_Product_Details'
-import Select_Condition_Product_Details from './Select_Condition_Product_Details'
+import Select_Condition_Kit_Details from './Select_Condition_Kit_Details'
+import Select_Kit_Details from './Select_Kit_Details'
 
 type Props = {
   inventoryId?: number
@@ -26,7 +26,7 @@ type Props = {
   suppliers: string[]
 }
 
-const General_Product_Details = ({ inventoryId, sku, image, title, description, brand, category, supplier, itemCondition, note, brands, categories, suppliers }: Props) => {
+const General_Kit_Details = ({ inventoryId, sku, image, title, description, brand, category, supplier, itemCondition, note, brands, categories, suppliers }: Props) => {
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [showEditFields, setShowEditFields] = useState(false)
@@ -73,21 +73,21 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
     validation.handleSubmit()
   }
 
-  const handleShowEditFields = () => {
-    validation.setValues({
-      inventoryId,
-      sku,
-      image,
-      title,
-      description: description ?? '',
-      brand: brand ?? '',
-      category: category ?? '',
-      supplier: supplier ?? '',
-      itemCondition: itemCondition ?? 'New',
-      note,
-    })
-    setShowEditFields(true)
-  }
+  // const handleShowEditFields = () => {
+  //   validation.setValues({
+  //     inventoryId,
+  //     sku,
+  //     image,
+  //     title,
+  //     description: description ?? '',
+  //     brand: brand ?? '',
+  //     category: category ?? '',
+  //     supplier: supplier ?? '',
+  //     itemCondition: itemCondition ?? 'New',
+  //     note,
+  //   })
+  //   setShowEditFields(true)
+  // }
 
   const handleSelection = (type: string, value: string) => {
     validation.setFieldValue(type, value)
@@ -156,7 +156,7 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
             </table>
           </div>
           <div>
-            <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i>
+            {/* <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i> */}
           </div>
         </div>
       ) : (
@@ -206,7 +206,7 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
               <Label htmlFor='brand' className='form-label'>
                 *Brand
               </Label>
-              <Select_Product_Details
+              <Select_Kit_Details
                 inventoryId={inventoryId}
                 type={'brand'}
                 addEndpoint={'addNewBrand'}
@@ -220,7 +220,7 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
               <Label htmlFor='supplier' className='form-label'>
                 *Supplier
               </Label>
-              <Select_Product_Details
+              <Select_Kit_Details
                 inventoryId={inventoryId}
                 type={'supplier'}
                 addEndpoint={'addNewSupplier'}
@@ -234,7 +234,7 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
               <Label htmlFor='category' className='form-label'>
                 Category
               </Label>
-              <Select_Product_Details
+              <Select_Kit_Details
                 inventoryId={inventoryId}
                 type={'category'}
                 addEndpoint={'addNewCategory'}
@@ -248,7 +248,7 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
               <Label htmlFor='itemCondition' className='form-label'>
                 *Condition
               </Label>
-              <Select_Condition_Product_Details
+              <Select_Condition_Kit_Details
                 selected={validation.values.itemCondition ?? ''}
                 handleSelection={handleConditionSelection}
                 errorMessage={validation.errors.itemCondition}
@@ -311,4 +311,4 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
   )
 }
 
-export default General_Product_Details
+export default General_Kit_Details

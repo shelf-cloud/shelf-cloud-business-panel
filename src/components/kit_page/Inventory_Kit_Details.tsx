@@ -21,7 +21,7 @@ type Props = {
   amazonFBA: AmazonFBA[]
 }
 
-const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available, reserved, receiving, ordered, amazonFBA }: Props) => {
+const Inventory_Kit_Details = ({ inventoryId, sku, onhand, buffer, available, reserved, receiving, ordered, amazonFBA }: Props) => {
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [showEditFields, setShowEditFields] = useState(false)
@@ -60,14 +60,14 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
     validation.handleSubmit()
   }
 
-  const handleShowEditFields = () => {
-    validation.setValues({
-      inventoryId,
-      sku,
-      buffer,
-    })
-    setShowEditFields(true)
-  }
+  // const handleShowEditFields = () => {
+  //   validation.setValues({
+  //     inventoryId,
+  //     sku,
+  //     buffer,
+  //   })
+  //   setShowEditFields(true)
+  // }
 
   return (
     <div className='px-3 py-1 border-bottom w-100'>
@@ -93,7 +93,7 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
                 <div className='d-flex flex-row justify-content-center align-items-center gap-1'>
                   {buffer}
                   <div className='text-end' style={showEditButton}>
-                    <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i>
+                    {/* <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i> */}
                   </div>
                 </div>
               ) : (
@@ -178,4 +178,4 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
   )
 }
 
-export default Inventory_Product_Details
+export default Inventory_Kit_Details

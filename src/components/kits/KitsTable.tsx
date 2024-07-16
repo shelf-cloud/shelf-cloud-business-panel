@@ -7,6 +7,7 @@ import AppContext from '@context/AppContext'
 import { DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
 // import TooltipComponent from '../constants/Tooltip'
 import KitExpandedDetails from './KitExpandedDetails'
+import Link from 'next/link'
 
 type Props = {
   tableData: KitRow[]
@@ -258,11 +259,14 @@ const KitsTable = ({ tableData, pending }: Props) => {
                 <i className='ri-pencil-fill align-middle me-2 fs-5 text-muted'></i>
                 <span className='fs-6 fw-normal'>Edit</span>
               </DropdownItem>
-              {/* {(row.quantity == 0 || !row.activeState) && (
-                <DropdownItem className={activeText} onClick={() => changeProductState(row.btns.inventoryId, state.user.businessId, row.btns.sku)}>
-                  <i className={icon}></i> {setMsg}
-                </DropdownItem>
-              )} */}
+              <DropdownItem className='edit-item-btn'>
+                <Link href={`/kit/${row.kitId}/${row.sku}`} passHref>
+                  <a>
+                    <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
+                    <span className='fs-6 fw-normal text-dark'>View Details</span>
+                  </a>
+                </Link>
+              </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
         )

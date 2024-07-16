@@ -13,7 +13,7 @@ type Props = {
   boxHeight: number
 }
 
-const Measure_Product_Details = ({ weight, length, width, height, boxQty, boxWeight, boxLength, boxWidth, boxHeight }: Props) => {
+const Measure_Kit_Details = ({ weight, length, width, height, boxQty, boxWeight, boxLength, boxWidth, boxHeight }: Props) => {
   const { state }: any = useContext(AppContext)
 
   return (
@@ -68,4 +68,4 @@ const Measure_Product_Details = ({ weight, length, width, height, boxQty, boxWei
   )
 }
 
-export default Measure_Product_Details
+export default Measure_Kit_Details

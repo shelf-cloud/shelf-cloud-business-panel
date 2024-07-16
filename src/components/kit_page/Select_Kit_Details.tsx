@@ -22,7 +22,7 @@ const styles = {
   error: { backgroundColor: 'white', border: '1px solid #f06548', cursor: 'pointer' },
 }
 
-const Select_Product_Details = ({ inventoryId, type, addEndpoint, selectionInfo, selected, handleSelection, errorMessage }: Props) => {
+const Select_Kit_Details = ({ inventoryId, type, addEndpoint, selectionInfo, selected, handleSelection, errorMessage }: Props) => {
   const { mutate } = useSWRConfig()
   const { state }: any = useContext(AppContext)
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
@@ -148,4 +148,4 @@ const Select_Product_Details = ({ inventoryId, type, addEndpoint, selectionInfo,
   )
 }
 
-export default Select_Product_Details
+export default Select_Kit_Details

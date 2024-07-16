@@ -63,19 +63,19 @@ const SKU_Kit_details = ({ inventoryId, sku, upc, defaultPrice, msrp, map, floor
     validation.handleSubmit()
   }
 
-  const handleShowEditFields = () => {
-    validation.setValues({
-      inventoryId,
-      sku,
-      upc,
-      defaultPrice,
-      msrp,
-      map,
-      floor,
-      ceilling,
-    })
-    setShowEditFields(true)
-  }
+  // const handleShowEditFields = () => {
+  //   validation.setValues({
+  //     inventoryId,
+  //     sku,
+  //     upc,
+  //     defaultPrice,
+  //     msrp,
+  //     map,
+  //     floor,
+  //     ceilling,
+  //   })
+  //   setShowEditFields(true)
+  // }
   return (
     <div className='py-1 w-100'>
       {!showEditFields ? (
@@ -116,7 +116,7 @@ const SKU_Kit_details = ({ inventoryId, sku, upc, defaultPrice, msrp, map, floor
                 <td>{FormatCurrency(state.currentRegion, ceilling)}</td>
                 <td>
                   <div className='text-end'>
-                    <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 text-primary m-0 p-0' style={{ cursor: 'pointer' }}></i>
+                    {/* <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 text-primary m-0 p-0' style={{ cursor: 'pointer' }}></i> */}
                   </div>
                 </td>
               </tr>

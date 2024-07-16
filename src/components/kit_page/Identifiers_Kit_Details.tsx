@@ -26,7 +26,7 @@ const IDENTIFIERS_TYPES = {
   FBA: { value: 'FBA', label: 'FBA', options: { modified: false, delete: false } },
 }
 
-const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, identifiers }: Props) => {
+const Identifiers_Kit_Details = ({ inventoryId, sku, upc, asin, fnsku, identifiers }: Props) => {
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [showEditFields, setShowEditFields] = useState(false)
@@ -66,9 +66,9 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
       toast.error(response.data.msg)
     }
   }
-  const handleShowEditFields = () => {
-    setShowEditFields(true)
-  }
+  // const handleShowEditFields = () => {
+  //   setShowEditFields(true)
+  // }
   return (
     <div className='py-1 w-75'>
       {!showEditFields ? (
@@ -109,7 +109,7 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
             </tbody>
           </table>
           <div className='text-end'>
-            <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i>
+            {/* <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i> */}
           </div>
         </div>
       ) : (
@@ -283,4 +283,4 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
   )
 }
 
-export default Identifiers_Product_Details
+export default Identifiers_Kit_Details

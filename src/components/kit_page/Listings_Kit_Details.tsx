@@ -6,7 +6,7 @@ type Props = {
   listings: Listings[]
 }
 
-const Listings_Product_Details = ({ listings }: Props) => {
+const Listings_Kit_Details = ({ listings }: Props) => {
   return (
     <div className='py-1 w-100'>
       <table className='table table-sm'>
@@ -51,4 +51,4 @@ const Listings_Product_Details = ({ listings }: Props) => {
   )
 }
 
-export default Listings_Product_Details
+export default Listings_Kit_Details
