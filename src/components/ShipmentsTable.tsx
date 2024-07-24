@@ -149,20 +149,6 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
       style: {
         color: '#727578',
       },
-      // conditionalCellStyles: [
-      //   {
-      //     when: (row: OrderRowType) => row.orderType == 'Return',
-      //     style: {
-      //       color: '#f06548',
-      //     },
-      //   },
-      //   {
-      //     when: (row: OrderRowType) => row.orderType != 'Return',
-      //     style: {
-      //       color: '#727578',
-      //     },
-      //   },
-      // ],
     },
     {
       name: <span className='fw-bolder fs-13'>Marketplace</span>,
@@ -364,18 +350,6 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
               <></>
             )
             break
-          // case 'Return':
-          //   return (
-          //     <UncontrolledDropdown className='dropdown d-inline-block'>
-          //       <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
-          //         <i className='mdi mdi-dots-vertical align-middle fs-2 m-0 p-2' style={{ color: '#919FAF' }}></i>
-          //       </DropdownToggle>
-          //       <DropdownMenu className='dropdown-menu-end'>
-          //         <DropdownItem header>Return Details</DropdownItem>
-          //       </DropdownMenu>
-          //     </UncontrolledDropdown>
-          //   )
-          //   break
           case 'Wholesale':
             return (
               <UncontrolledDropdown className='dropdown d-inline-block'>

@@ -63,7 +63,7 @@ const PurchaseOrders = ({ session }: Props) => {
   const { status, organizeBy }: any = router.query
   const { state, setShowCreateReceivingFromPo, setReceivingFromPo, setShowCreatePoFromFile, setShowCreatePoManually }: any = useContext(AppContext)
   const title = `Purchase Orders | ${session?.user?.businessName}`
-  const orderNumberStart = `${session?.user?.businessOrderStart.substring(0, 3).toUpperCase()}-`
+  const orderNumberStart = `${session?.user?.businessOrderStart?.substring(0, 3).toUpperCase()}-`
   const [activeTab, setActiveTab] = useState(organizeBy)
   const tabChange = (tab: any) => {
     if (activeTab !== tab) setActiveTab(tab)

@@ -56,7 +56,9 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
       Object.entries(state.receivingFromPo).forEach(([_poId, inventoryId]: any) =>
         Object.entries(inventoryId).map(([_inventoryId, item]: any) => {
           shippingProducts.push({
+            poId: item.poId,
             sku: item.sku,
+            inventoryId: item.inventoryId,
             qty: Number(item.receivingQty),
             storeId: item.businessId,
             qtyPicked: 0,
@@ -205,7 +207,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
               <table className='table table-sm align-middle table-responsive table-nowrap table-striped'>
                 <thead>
                   <tr>
-                    <th scope='col'>Order Number</th>
+                    <th scope='col'>PO Number</th>
                     <th scope='col'>Supplier</th>
                     <th scope='col'>Title / SKU</th>
                     <th scope='col' className='text-center'>
