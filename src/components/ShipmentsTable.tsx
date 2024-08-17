@@ -143,7 +143,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
       selector: (row: OrderRowType) => row.orderType,
       sortable: true,
       wrap: true,
-      grow: 1.2,
+      // grow: 1.2,
       center: true,
       sortFunction: orderType,
       style: {

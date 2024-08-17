@@ -64,7 +64,7 @@ const FilterByOthers = ({ searchType, setSearchType, searchStatus, setSearchStat
                 <option value=''>All Types</option>
                 <option value='Wholesale'>Wholesale</option>
                 <option value='Shipment'>Shipment</option>
-                <option value='Return'>Return</option>
+                <option value='FBA Shipment'>FBA Shipment</option>
               </Input>
             </div>
             <span className='fw-semibold fs-7'>Status:</span>

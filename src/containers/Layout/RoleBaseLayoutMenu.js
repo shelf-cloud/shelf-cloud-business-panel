@@ -159,6 +159,12 @@ const Navdata = () => {
               link: '/amazon-sellers/orders',
               parentId: 'marketplaces',
             },
+            {
+              id: 'fulfillments',
+              label: 'Fulfillments',
+              link: '/amazon-sellers/fulfillments',
+              parentId: 'marketplaces',
+            },
           ],
         },
       },
@@ -564,22 +570,27 @@ const Navdata = () => {
             link: '/amazon-sellers/orders',
             parentId: 'marketplaces',
           },
+          {
+            id: 'shipments',
+            label: 'FBA Shipments',
+            link: '/amazon-sellers/shipments',
+            parentId: 'marketplaces',
+          },
+          {
+            id: 'fulfillments',
+            label: 'Send To Amazon',
+            link: '/amazon-sellers/fulfillments',
+            parentId: 'marketplaces',
+          },
           // {
           //   id: 'repricer',
           //   label: 'Repricer',
           //   link: '/repricer',
           //   parentId: 'marketplaces',
           // },
-          // {
-          //   id: 'sendtofba',
-          //   label: 'Send to FBA',
-          //   link: '/sendtofba',
-          //   parentId: 'marketplaces',
-          // },
         ],
       })
     }
-    
   } else {
     menuItems = [modules.Dashboard]
     if (state.user?.permissions) {

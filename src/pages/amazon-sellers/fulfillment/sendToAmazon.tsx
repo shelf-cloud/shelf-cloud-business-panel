@@ -1,0 +1,142 @@
+import React, { useState, useContext } from 'react'
+import AppContext from '@context/AppContext'
+import { GetServerSideProps } from 'next'
+import axios from 'axios'
+import Head from 'next/head'
+import { Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap'
+import BreadCrumb from '@components/Common/BreadCrumb'
+import { getSession } from '@auth/client'
+import InventoryBinsModal from '@components/InventoryBinsModal'
+import useSWR from 'swr'
+import { toast } from 'react-toastify'
+import { AmazonFulfillmentSku } from '@typesTs/amazon/fulfillments'
+import MasterBoxesFulfillment from '@components/amazon/fulfillment/MasterBoxesFulfillment'
+
+export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
+  const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
+  const session = await getSession(context)
+
+  if (session == null) {
+    return {
+      redirect: {
+        destination: '/api/auth/signin',
+        permanent: false,
+      },
+    }
+  }
+  return {
+    props: { session, sessionToken },
+  }
+}
+
+type Props = {
+  sessionToken: string
+  session: {
+    user: {
+      businessName: string
+      businessOrderStart: string
+    }
+  }
+}
+
+const SendToAmazon = ({ session, sessionToken }: Props) => {
+  const { state }: any = useContext(AppContext)
+  const title = `Send To Amazon | ${session?.user?.businessName}`
+  const [pending, setPending] = useState(true)
+  const [allData, setAllData] = useState<AmazonFulfillmentSku[]>([])
+
+  const controller = new AbortController()
+  const signal = controller.signal
+  const fetcher = (endPoint: string) => {
+    allData.length === 0 && setPending(true)
+    axios(endPoint, {
+      signal,
+      headers: {
+        Authorization: `Bearer ${sessionToken}`,
+      },
+    })
+      .then((res) => {
+        setAllData(res.data)
+        setPending(false)
+      })
+      .catch(({ error }) => {
+        if (axios.isCancel(error)) {
+          toast.error(error?.data?.message || 'Error fetching shipment Log data')
+          setAllData([])
+          setPending(false)
+        }
+      })
+  }
+  useSWR(
+    session && state.user.businessId ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/getAmazonFbaSkus/${state.currentRegion}/${state.user.businessId}` : null,
+    fetcher
+  )
+
+  const [activeTab, setActiveTab] = useState('1')
+  const tabChange = (tab: any) => {
+    if (activeTab !== tab) setActiveTab(tab)
+  }
+
+  return (
+    <div>
+      <Head>
+        <title>{title}</title>
+      </Head>
+      <React.Fragment>
+        <div className='page-content'>
+          <Container fluid>
+            <BreadCrumb title='Send To Amazon' pageTitle='Amazon' />
+            <Row>
+              <Col lg={12}>
+                <Card>
+                  <CardHeader>
+                    <Nav className='nav-tabs-custom rounded card-header-tabs border-bottom-0' role='tablist'>
+                      <NavItem style={{ cursor: 'pointer' }}>
+                        <NavLink
+                          className={activeTab == '1' ? 'text-primary fw-semibold fs-5' : 'text-muted fs-5'}
+                          onClick={() => {
+                            tabChange('1')
+                          }}>
+                          <>
+                            <i className='fas fa-home'></i>
+                            Master Boxes
+                          </>
+                        </NavLink>
+                      </NavItem>
+                      <NavItem style={{ cursor: 'pointer' }}>
+                        <NavLink
+                          to='#'
+                          className={activeTab == '2' ? 'text-primary fw-semibold fs-5' : 'text-muted fs-5'}
+                          onClick={() => {
+                            tabChange('2')
+                          }}
+                          type='button'>
+                          <>
+                            <i className='far fa-user'></i>
+                            Individual Units
+                          </>
+                        </NavLink>
+                      </NavItem>
+                    </Nav>
+                  </CardHeader>
+                  <CardBody>
+                    <TabContent activeTab={activeTab}>
+                      <TabPane tabId='1'>
+                        <MasterBoxesFulfillment lisiting={allData} pending={pending} />
+                      </TabPane>
+
+                      <TabPane tabId='2'>{/* <SingleItems completeData={completeData} pending={pending} orderNumberStart={orderNumberStart} /> */}</TabPane>
+                    </TabContent>
+                  </CardBody>
+                </Card>
+              </Col>
+            </Row>
+          </Container>
+        </div>
+      </React.Fragment>
+      {state.showInventoryBinsModal && <InventoryBinsModal />}
+    </div>
+  )
+}
+
+export default SendToAmazon

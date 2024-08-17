@@ -62,7 +62,7 @@ const ProductOrderedModals = ({ showOrderedModal, setshowOrderedModal }: Props) 
       center: true,
     },
     {
-      name: <span className='fw-bolder fs-6'>Receivied</span>,
+      name: <span className='fw-bolder fs-6'>Received</span>,
       selector: (row: ProductPO) =>
         FormatIntNumber(
           state.currentRegion,
