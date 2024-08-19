@@ -4,7 +4,7 @@ import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { getSession } from '@auth/client'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, Spinner, TabContent, TabPane } from 'reactstrap'
+import { Badge, Button, Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, Spinner, TabContent, TabPane } from 'reactstrap'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import axios from 'axios'
@@ -15,6 +15,7 @@ import InventoryToSend from '@components/amazon/fulfillment/fulfillment_page/Inv
 import Shipping from '@components/amazon/fulfillment/fulfillment_page/Shipping'
 import BoxLabels from '@components/amazon/fulfillment/fulfillment_page/BoxLabels'
 import TrackingDetails from '@components/amazon/fulfillment/fulfillment_page/TrackingDetails'
+import MasterBoxHelp from '@components/amazon/offcanvas/MasterBoxHelp'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -50,6 +51,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
   const { mutate } = useSWRConfig()
   const [inboundPlanDetails, setinboundPlanDetails] = useState<InboundPlan | null>()
   const [loading, setloading] = useState(true)
+  const [helpOffCanvasIsOpen, setHelpOffCanvasIsOpen] = useState(false)
   const [watingRepsonse, setWatingRepsonse] = useState<WaitingReponses>({
     inventoryToSend: false,
     shipping: false,
@@ -328,12 +330,12 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <Container fluid>
-            <BreadCrumb title='Product Details' pageTitle='Inventory' />
+            <BreadCrumb title='Fulfillment Workdflow' pageTitle='Send to Amazon' />
             <Card className='fs-6'>
               {!loading && inboundPlanDetails ? (
                 <>
-                  <CardHeader className='d-flex flex-row justify-content-between align-items-start'>
-                    <div>
+                  <CardHeader>
+                    <div className='d-flex flex-row justify-content-between align-items-start'>
                       <Button
                         color='primary'
                         outline
@@ -347,24 +349,29 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           </span>
                         </Link>
                       </Button>
-                      <div className='mt-3'>
-                        <p className='fw-semibold fs-4 m-0 p-0'>
-                          <span className='text-muted fw-normal'>Name: </span>
-                          {inboundPlanDetails.name}
-                        </p>
-                        <p className='fw-normal fs-6 m-0 p-0'>
-                          <span className='text-muted'>Inbound ID: </span>
-                          {inboundPlanId}
-                          <i
-                            className='ri-file-copy-line fs-6 my-0 mx-1 p-0 text-muted'
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => {
-                              navigator.clipboard.writeText(`${inboundPlanId}`)
-                              toast('Inbound ID copied!')
-                            }}
-                          />
-                        </p>
-                      </div>
+                      <Button color='info' className='d-flex align-items-center' onClick={() => setHelpOffCanvasIsOpen(true)}>
+                      <i className='ri-question-line fs-14 p-0 m-0 me-lg-1' />
+                      <span className='d-none d-lg-block'>Need help</span>
+                    </Button>
+                    </div>
+                    <div className='mt-3'>
+                      <p className='fw-semibold fs-4 m-0 p-0'>
+                        <span className='text-muted fw-normal'>Name: </span>
+                        {inboundPlanDetails.name}
+                        <Badge color='info' className='ms-2 fs-6'>{inboundPlanDetails.fulfillmentType}</Badge>
+                      </p>
+                      <p className='fw-normal fs-6 m-0 p-0'>
+                        <span className='text-muted'>Inbound ID: </span>
+                        {inboundPlanId}
+                        <i
+                          className='ri-file-copy-line fs-6 my-0 mx-1 p-0 text-muted'
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => {
+                            navigator.clipboard.writeText(`${inboundPlanId}`)
+                            toast('Inbound ID copied!')
+                          }}
+                        />
+                      </p>
                     </div>
                   </CardHeader>
                   <CardBody>
@@ -488,6 +495,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
           </Container>
         </div>
       </React.Fragment>
+      <MasterBoxHelp isOpen={helpOffCanvasIsOpen} setHelpOffCanvasIsOpen={setHelpOffCanvasIsOpen} />
     </div>
   )
 }

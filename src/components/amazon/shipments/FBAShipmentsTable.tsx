@@ -46,8 +46,8 @@ const FBAShipmentsTable = ({ filteredItems, pending }: Props) => {
       selector: (row: FBAShipment) => {
         return (
           <div className='my-2'>
-            <p className='m-0 p-0 fw-semibold'>{row.shipment.name}</p>
-            <p className='m-0 p-0 text-muted'>{row.shipment.shipmentConfirmationId}</p>
+            <p className='m-0 p-0 fw-semibold'>{row.shipment.shipmentConfirmationId}</p>
+            <p className='m-0 p-0 text-muted'>{row.shipment.name}</p>
           </div>
         )
       },

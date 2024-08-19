@@ -243,7 +243,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
                 </div>
               )
               break
-            case row.orderType == 'Wholesale' && row.trackingNumber != '' && !!row.trackingLink && row.carrierService == 'Parcel Boxes':
+            case (row.orderType == 'Wholesale' || row.orderType == 'FBA Shipment') && row.trackingNumber != '' && !!row.trackingLink && row.carrierService == 'Parcel Boxes':
               tracking = (
                 <div className='trackingNumber_container'>
                   <img

@@ -3,7 +3,7 @@ import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
 import axios from 'axios'
 import Head from 'next/head'
-import { Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import InventoryBinsModal from '@components/InventoryBinsModal'
@@ -11,6 +11,7 @@ import useSWR from 'swr'
 import { toast } from 'react-toastify'
 import { AmazonFulfillmentSku } from '@typesTs/amazon/fulfillments'
 import MasterBoxesFulfillment from '@components/amazon/fulfillment/MasterBoxesFulfillment'
+import MasterBoxHelp from '@components/amazon/offcanvas/MasterBoxHelp'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -44,6 +45,7 @@ const SendToAmazon = ({ session, sessionToken }: Props) => {
   const title = `Send To Amazon | ${session?.user?.businessName}`
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<AmazonFulfillmentSku[]>([])
+  const [helpOffCanvasIsOpen, setHelpOffCanvasIsOpen] = useState(false)
 
   const controller = new AbortController()
   const signal = controller.signal
@@ -85,11 +87,11 @@ const SendToAmazon = ({ session, sessionToken }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <Container fluid>
-            <BreadCrumb title='Send To Amazon' pageTitle='Amazon' />
+            <BreadCrumb title='New Fulfillment' pageTitle='Send To Amazon' />
             <Row>
               <Col lg={12}>
                 <Card>
-                  <CardHeader>
+                  <CardHeader className='d-flex justify-content-between align-items-center'>
                     <Nav className='nav-tabs-custom rounded card-header-tabs border-bottom-0' role='tablist'>
                       <NavItem style={{ cursor: 'pointer' }}>
                         <NavLink
@@ -118,13 +120,16 @@ const SendToAmazon = ({ session, sessionToken }: Props) => {
                         </NavLink>
                       </NavItem>
                     </Nav>
+                    <Button color='info' className='d-flex align-items-center' onClick={() => setHelpOffCanvasIsOpen(true)}>
+                      <i className='ri-question-line fs-14 p-0 m-0 me-lg-1' />
+                      <span className='d-none d-lg-block'>Need help</span>
+                    </Button>
                   </CardHeader>
                   <CardBody>
                     <TabContent activeTab={activeTab}>
                       <TabPane tabId='1'>
                         <MasterBoxesFulfillment lisiting={allData} pending={pending} />
                       </TabPane>
-
                       <TabPane tabId='2'>{/* <SingleItems completeData={completeData} pending={pending} orderNumberStart={orderNumberStart} /> */}</TabPane>
                     </TabContent>
                   </CardBody>
@@ -135,6 +140,7 @@ const SendToAmazon = ({ session, sessionToken }: Props) => {
         </div>
       </React.Fragment>
       {state.showInventoryBinsModal && <InventoryBinsModal />}
+      <MasterBoxHelp isOpen={helpOffCanvasIsOpen} setHelpOffCanvasIsOpen={setHelpOffCanvasIsOpen} />
     </div>
   )
 }

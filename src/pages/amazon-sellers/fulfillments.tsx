@@ -2,7 +2,7 @@ import React, { useContext, useMemo, useState } from 'react'
 import Head from 'next/head'
 import { GetServerSideProps } from 'next'
 import { getSession } from '@auth/client'
-import { Button, Card, CardBody, Container, Row } from 'reactstrap'
+import { Button, Card, CardBody, Col, Container, Row } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { DebounceInput } from 'react-debounce-input'
 import AppContext from '@context/AppContext'
@@ -13,6 +13,7 @@ import { toast } from 'react-toastify'
 import { ListInboundPlan } from '@typesTs/amazon/fulfillments/listInboundPlans'
 import FulfillmentsTable from '@components/amazon/fulfillment/FulfillmentsTable'
 import AssignWorkflowId from '@components/modals/amazon/AssignWorkflowId'
+import MasterBoxHelp from '@components/amazon/offcanvas/MasterBoxHelp'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -47,6 +48,7 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
   const [searchValue, setSearchValue] = useState<any>('')
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<ListInboundPlan[]>([])
+  const [helpOffCanvasIsOpen, setHelpOffCanvasIsOpen] = useState(false)
   const [assignWorkflowIdModal, setassignWorkflowIdModal] = useState({
     show: false,
     id: 0,
@@ -142,38 +144,45 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
         <div className='page-content'>
           <Container fluid>
             <BreadCrumb title='Send To Amazon' pageTitle='Amazon' />
-            <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-1 flex-md-row justify-content-md-end align-items-md-center px-3'>
-              <div className='app-search d-flex flex-row justify-content-between align-items-center p-0'>
-                <div className='d-flex flex-row justify-content-start align-items-center gap-3'>
-                  <Link href={'/amazon-sellers/fulfillment/sendToAmazon'}>
-                    <Button color='primary'>Start New</Button>
-                  </Link>
-                </div>
-                <div className='col-sm-12 col-md-3'>
-                  <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
-                    <DebounceInput
-                      type='text'
-                      minLength={3}
-                      debounceTimeout={300}
-                      className='form-control input_background_white'
-                      placeholder='Search...'
-                      id='search-options'
-                      value={searchValue}
-                      onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
-                      onChange={(e) => setSearchValue(e.target.value)}
-                    />
-                    <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
-                    <span
-                      className='d-flex align-items-center justify-content-center input_background_white'
-                      style={{
-                        cursor: 'pointer',
-                      }}
-                      onClick={() => setSearchValue('')}>
-                      <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
-                    </span>
+            {/* <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-1 flex-md-row justify-content-md-end align-items-md-center px-3'> */}
+            <Row className='justify-content-between gap-2 mb-1'>
+              <Col xs='12' lg='6' className='d-flex justify-content-start align-items-center gap-3'>
+                <Link href={'/amazon-sellers/fulfillment/sendToAmazon'}>
+                  <Button color='primary'>Start New</Button>
+                </Link>
+                <Button color='info' className='d-flex align-items-center' onClick={() => setHelpOffCanvasIsOpen(true)}>
+                  <i className='ri-question-line fs-14 p-0 m-0 me-lg-1' />
+                  <span className='d-none d-lg-block'>Need help</span>
+                </Button>
+              </Col>
+              <Col xs='12' lg='4' className='d-flex justify-content-end align-items-center'>
+                <div className='flex-1'>
+                  <div className='app-search d-flex flex-row justify-content-between align-items-center p-0'>
+                    <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+                      <DebounceInput
+                        type='text'
+                        minLength={3}
+                        debounceTimeout={300}
+                        className='form-control input_background_white'
+                        placeholder='Search...'
+                        id='search-options'
+                        value={searchValue}
+                        onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
+                        onChange={(e) => setSearchValue(e.target.value)}
+                      />
+                      <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
+                      <span
+                        className='d-flex align-items-center justify-content-center input_background_white'
+                        style={{
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => setSearchValue('')}>
+                        <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Col>
             </Row>
             <Card>
               <CardBody>
@@ -191,6 +200,7 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
       {assignWorkflowIdModal.show && (
         <AssignWorkflowId assignWorkflowIdModal={assignWorkflowIdModal} setassignWorkflowIdModal={setassignWorkflowIdModal} sessionToken={sessionToken} />
       )}
+      <MasterBoxHelp isOpen={helpOffCanvasIsOpen} setHelpOffCanvasIsOpen={setHelpOffCanvasIsOpen} />
     </div>
   )
 }

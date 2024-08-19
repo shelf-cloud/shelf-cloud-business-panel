@@ -1,7 +1,7 @@
 import { AmazonFulfillmentSku, FilterProps } from '@typesTs/amazon/fulfillments'
 import React, { useEffect, useMemo, useState } from 'react'
 import { DebounceInput } from 'react-debounce-input'
-import { Button } from 'reactstrap'
+import { Button, Col, Row } from 'reactstrap'
 import MasterBoxesTable from './MasterBoxesTable'
 import FilterListings from './FilterListings'
 import { useRouter } from 'next/router'
@@ -78,52 +78,54 @@ const MasterBoxesFulfillment = ({ lisiting, pending }: Props) => {
 
   return (
     <>
-      <div className='d-flex justify-content-between align-center mt-0 mb-1'>
-        <div>
-          <p className='m-0 p-0 fs-5 fw-semibold text-primary'>Total SKUs in Order: {orderProducts.length}</p>
-          <p className='m-0 p-0 fs-6 fw-normal text-primary'>
-            Total Quantity to Ship in Order: {orderProducts.reduce((total: number, item: AmazonFulfillmentSku) => total + Number(item.totalSendToAmazon), 0)}
-          </p>
-        </div>
-        <div>
+      <Row className='justify-content-between gap-2'>
+        <Col xs='12' lg='6' className='d-flex justify-content-start align-items-center gap-3'>
           <Button disabled={error.length > 0 || hasQtyError} className='fs-6 btn' color='primary' onClick={() => setShowCreateInboundPlanModal(true)}>
             Create Inbound Plan
           </Button>
-        </div>
-      </div>
-      <div className='d-flex justify-content-between align-items-center mt-0 mb-1'>
-        <FilterListings
-          filters={filters !== undefined || filters === '' ? filters : 'false'}
-          showHidden={showHidden !== undefined || showHidden === '' ? showHidden : 'false'}
-          showNotEnough={showNotEnough !== undefined || showNotEnough === '' ? showNotEnough : 'false'}
-          ShowNoShipDate={ShowNoShipDate !== undefined || ShowNoShipDate === '' ? ShowNoShipDate : 'false'}
-        />
-        <div className='col-sm-12 col-md-3'>
-          <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
-            <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
-              <DebounceInput
-                type='text'
-                minLength={3}
-                debounceTimeout={300}
-                className='form-control fs-6 bg-light pe-1'
-                placeholder='Search...'
-                id='search-options'
-                value={searchValue}
-                onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
-                onChange={(e) => setSearchValue(e.target.value)}
-              />
-              <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
-              <span
-                className='d-flex align-items-center justify-content-center bg-light'
-                style={{
-                  cursor: 'pointer',
-                }}
-                onClick={() => setSearchValue('')}>
-                <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
-              </span>
+          <FilterListings
+            filters={filters !== undefined || filters === '' ? filters : 'false'}
+            showHidden={showHidden !== undefined || showHidden === '' ? showHidden : 'false'}
+            showNotEnough={showNotEnough !== undefined || showNotEnough === '' ? showNotEnough : 'false'}
+            ShowNoShipDate={ShowNoShipDate !== undefined || ShowNoShipDate === '' ? ShowNoShipDate : 'false'}
+          />
+        </Col>
+        <Col xs='12' lg='4' className='d-flex justify-content-end align-items-center'>
+          <div className='flex-1'>
+            <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
+              <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+                <DebounceInput
+                  type='text'
+                  minLength={3}
+                  debounceTimeout={300}
+                  className='form-control fs-6 bg-light pe-1'
+                  placeholder='Search...'
+                  id='search-options'
+                  value={searchValue}
+                  onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                />
+                <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
+                <span
+                  className='d-flex align-items-center justify-content-center bg-light'
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => setSearchValue('')}>
+                  <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
+                </span>
+              </div>
             </div>
           </div>
-        </div>
+        </Col>
+      </Row>
+      <div className='d-flex justify-content-start align-items-center gap-3 mt-3'>
+        <p className='m-0 p-0 text-primary text-uppercase'>
+          Total SKUs: <span className='fw-bold'>{orderProducts.length}</span>
+        </p>
+        <p className='m-0 p-0 text-primary text-uppercase'>
+          Total Item Quantities: <span className='fw-bold'>{orderProducts.reduce((total: number, item: AmazonFulfillmentSku) => total + Number(item.totalSendToAmazon), 0)}</span>
+        </p>
       </div>
       <MasterBoxesTable allData={allData} filteredItems={filteredItems} setAllData={setAllData} pending={pending} setError={setError} setHasQtyError={setHasQtyError} />
       {showCreateInboundPlanModal && (

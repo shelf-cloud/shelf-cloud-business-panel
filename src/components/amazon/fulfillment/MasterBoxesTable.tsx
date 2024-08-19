@@ -416,7 +416,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       name: <span className='fw-bold fs-6'>Amazon</span>,
       selector: (row: AmazonFulfillmentSku) => {
         return (
-          <div className='d-flex flex-column justify-content-center align-items-center my-1'>
+          <div className='d-flex flex-column justify-content-center align-items-end my-1'>
             <span className='m-0 p-0 fw-semibold'>
               <span className='text-muted fw-light'>Fulfillable: </span>
               {row.afn_fulfillable_quantity}
