@@ -77,11 +77,34 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
 
     return 0
   }
+  const AddedOrderSort = (rowA: Product, rowB: Product) => {
+    const a = Number(rowA.inventoryId)
+    const b = Number(rowB.inventoryId)
+
+    if (a > b) {
+      return 1
+    }
+
+    if (b > a) {
+      return -1
+    }
+
+    return 0
+  }
   const handleSelectedRows = ({ selectedRows }: { selectedRows: Product[] }) => {
     setSelectedRows(selectedRows)
   }
 
   const columns: any = [
+    {
+      name: <span className='font-weight-bold fs-13'></span>,
+      selector: () => <></>,
+      sortable: true,
+      center: true,
+      compact: true,
+      width: 'fit-content',
+      sortFunction: AddedOrderSort,
+    },
     {
       name: <span className='font-weight-bold fs-13'>Image</span>,
       selector: (row: Product) => {
@@ -346,7 +369,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
         progressPending={pending}
         striped={true}
         dense
-        defaultSortFieldId={2}
+        defaultSortFieldId={3}
         selectableRows
         onSelectedRowsChange={handleSelectedRows}
         clearSelectedRows={toggledClearRows}
