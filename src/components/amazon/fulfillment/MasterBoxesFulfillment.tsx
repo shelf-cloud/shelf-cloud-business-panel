@@ -1,4 +1,4 @@
-import { AmazonFulfillmentSku, FilterProps } from '@typesTs/amazon/fulfillments'
+import { AmazonFulfillmentSku, AmzDimensions, Dimensions, FilterProps } from '@typesTs/amazon/fulfillments'
 import React, { useEffect, useMemo, useState } from 'react'
 import { DebounceInput } from 'react-debounce-input'
 import { Button, Col, Row } from 'reactstrap'
@@ -6,6 +6,7 @@ import MasterBoxesTable from './MasterBoxesTable'
 import FilterListings from './FilterListings'
 import { useRouter } from 'next/router'
 import CreateInboundPlanModal from '@components/modals/amazon/CreateInboundPlanModal'
+import AmazonFulfillmentDimensions from '@components/modals/amazon/AmazonFulfillmentDimensions'
 
 type Props = {
   lisiting: AmazonFulfillmentSku[]
@@ -20,6 +21,17 @@ const MasterBoxesFulfillment = ({ lisiting, pending }: Props) => {
   const [hasQtyError, setHasQtyError] = useState(false)
   const [error, setError] = useState([])
   const [showCreateInboundPlanModal, setShowCreateInboundPlanModal] = useState<boolean>(false)
+  const [dimensionsModal, setdimensionsModal] = useState({
+    show: false,
+    inventoryId: 0,
+    isKit: false,
+    msku: '',
+    asin: '',
+    scSKU: '',
+    boxQty: 0,
+    shelfCloudDimensions: {} as AmzDimensions,
+    amazonDimensions: {} as Dimensions,
+  })
 
   useEffect(() => {
     if (!pending) {
@@ -80,7 +92,7 @@ const MasterBoxesFulfillment = ({ lisiting, pending }: Props) => {
     <>
       <Row className='justify-content-between gap-2'>
         <Col xs='12' lg='6' className='d-flex justify-content-start align-items-center gap-3'>
-          <Button disabled={error.length > 0 || hasQtyError} className='fs-6 btn' color='primary' onClick={() => setShowCreateInboundPlanModal(true)}>
+          <Button disabled={error.length > 0 || hasQtyError} className='fs-6 btn' color='success' onClick={() => setShowCreateInboundPlanModal(true)}>
             Create Inbound Plan
           </Button>
           <FilterListings
@@ -127,7 +139,15 @@ const MasterBoxesFulfillment = ({ lisiting, pending }: Props) => {
           Total Item Quantities: <span className='fw-bold'>{orderProducts.reduce((total: number, item: AmazonFulfillmentSku) => total + Number(item.totalSendToAmazon), 0)}</span>
         </p>
       </div>
-      <MasterBoxesTable allData={allData} filteredItems={filteredItems} setAllData={setAllData} pending={pending} setError={setError} setHasQtyError={setHasQtyError} />
+      <MasterBoxesTable
+        allData={allData}
+        filteredItems={filteredItems}
+        setAllData={setAllData}
+        pending={pending}
+        setError={setError}
+        setHasQtyError={setHasQtyError}
+        setdimensionsModal={setdimensionsModal}
+      />
       {showCreateInboundPlanModal && (
         <CreateInboundPlanModal
           orderProducts={orderProducts}
@@ -135,6 +155,7 @@ const MasterBoxesFulfillment = ({ lisiting, pending }: Props) => {
           setShowCreateInboundPlanModal={setShowCreateInboundPlanModal}
         />
       )}
+      {dimensionsModal.show && <AmazonFulfillmentDimensions dimensionsModal={dimensionsModal} setdimensionsModal={setdimensionsModal} />}
     </>
   )
 }

@@ -39,6 +39,7 @@ export interface AmazonFulfillmentSku {
     boxLength: number;
     boxWidth: number;
     boxHeight: number;
+    amzDimensions: AmzDimensions | null;
     maxOrderQty: number;
     orderQty: string;
     totalSendToAmazon: number;
@@ -56,6 +57,13 @@ export interface AmazonFulfillmentSku {
     };
     hasError: boolean;
     hasDimensionsError: boolean;
+}
+
+interface AmzDimensions {
+    boxWidth: number
+    boxHeight: number
+    boxLength: number
+    boxWeight: number
 }
 
 interface Dimensions {

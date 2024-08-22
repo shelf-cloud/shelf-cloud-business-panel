@@ -579,7 +579,7 @@ const Navdata = () => {
           {
             id: 'fulfillments',
             label: 'Send To Amazon',
-            link: '/amazon-sellers/fulfillments',
+            link: '/amazon-sellers/fulfillment/sendToAmazon',
             parentId: 'marketplaces',
           },
           // {

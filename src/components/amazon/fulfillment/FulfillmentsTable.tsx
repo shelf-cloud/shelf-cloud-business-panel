@@ -40,6 +40,7 @@ const FulfillmentsTable = ({ filteredItems, pending, handleCancelInboundPlan, se
       sortable: true,
       center: false,
       compact: false,
+      grow: 2,
     },
     {
       name: <span className='fw-bold fs-6'>Marketpalce</span>,
@@ -59,10 +60,8 @@ const FulfillmentsTable = ({ filteredItems, pending, handleCancelInboundPlan, se
       name: <span className='fw-bolder fs-13'>Status</span>,
       selector: (row: ListInboundPlan) => {
         switch (row.status.toLowerCase()) {
-          case 'in transit':
-          case 'shipped':
-          case 'cheched in':
-          case 'receiving':
+          case 'complete':
+          case 'completed':
             return <span className='badge text-uppercase badge-soft-success p-2'>{` ${row.status} `}</span>
             break
           case 'delivered':
@@ -118,49 +117,96 @@ const FulfillmentsTable = ({ filteredItems, pending, handleCancelInboundPlan, se
       compact: true,
       center: true,
       cell: (row: ListInboundPlan) => {
-        if (row.status.toLowerCase() !== 'cancelled') {
-          return (
-            <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
-              <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
-                <i className='mdi mdi-dots-vertical align-middle fs-3 m-0 px-2 py-0' style={{ color: '#919FAF' }}></i>
-              </DropdownToggle>
-              {row.inboundPlanId ? (
-                <DropdownMenu className='dropdown-menu-end'>
-                  <DropdownItem onClick={() => router.push(`/amazon-sellers/fulfillment/${row.inboundPlanId}`)}>
-                    <div>
-                      <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
-                      <span className='fs-6 fw-normal text-dark'>Manage</span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem className='text-danger' onClick={() => handleCancelInboundPlan(row.inboundPlanId)}>
-                    <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
-                  </DropdownItem>
-                </DropdownMenu>
-              ) : (
-                <DropdownMenu className='dropdown-menu-end'>
-                  <DropdownItem
-                    onClick={() =>
-                      setassignWorkflowIdModal({
-                        show: true,
-                        id: row.id,
-                        inboundPlanName: row.name,
-                        marketplace: row.destinationMarketplaces,
-                        dateCreated: moment.utc(row.createdAt).local().format('LL hh:mm A'),
-                        skus: row.items.length,
-                        units: row.items.reduce((total, item) => total + item.quantity, 0),
-                      })
-                    }>
-                    <div>
-                      <i className='ri-file-list-line align-middle me-2 fs-5 text-info'></i>
-                      <span className='fs-6 fw-normal text-dark'>Assign Workflow</span>
-                    </div>
-                  </DropdownItem>
-                </DropdownMenu>
-              )}
-            </UncontrolledDropdown>
-          )
-        } else {
-          return <></>
+        switch (row.status.toLowerCase()) {
+          case 'active':
+          case 'working':
+            return (
+              <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
+                <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
+                  <i className='mdi mdi-dots-vertical align-middle fs-3 m-0 px-2 py-0' style={{ color: '#919FAF' }}></i>
+                </DropdownToggle>
+                {row.inboundPlanId ? (
+                  <DropdownMenu className='dropdown-menu-end'>
+                    <DropdownItem onClick={() => router.push(`/amazon-sellers/fulfillment/${row.inboundPlanId}`)}>
+                      <div>
+                        <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
+                        <span className='fs-6 fw-normal text-dark'>Manage</span>
+                      </div>
+                    </DropdownItem>
+                    <DropdownItem className='text-danger' onClick={() => handleCancelInboundPlan(row.inboundPlanId)}>
+                      <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
+                    </DropdownItem>
+                  </DropdownMenu>
+                ) : (
+                  <DropdownMenu className='dropdown-menu-end'>
+                    <DropdownItem
+                      onClick={() =>
+                        setassignWorkflowIdModal({
+                          show: true,
+                          id: row.id,
+                          inboundPlanName: row.name,
+                          marketplace: row.destinationMarketplaces,
+                          dateCreated: moment.utc(row.createdAt).local().format('LL hh:mm A'),
+                          skus: row.items.length,
+                          units: row.items.reduce((total, item) => total + item.quantity, 0),
+                        })
+                      }>
+                      <div>
+                        <i className='ri-file-list-line align-middle me-2 fs-5 text-info'></i>
+                        <span className='fs-6 fw-normal text-dark'>Assign Workflow</span>
+                      </div>
+                    </DropdownItem>
+                  </DropdownMenu>
+                )}
+              </UncontrolledDropdown>
+            )
+            break
+          case 'completed':
+          case 'complete':
+            return (
+              <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
+                <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
+                  <i className='mdi mdi-dots-vertical align-middle fs-3 m-0 px-2 py-0' style={{ color: '#919FAF' }}></i>
+                </DropdownToggle>
+                {row.inboundPlanId ? (
+                  <DropdownMenu className='dropdown-menu-end'>
+                    <DropdownItem onClick={() => router.push(`/amazon-sellers/fulfillment/${row.inboundPlanId}`)}>
+                      <div>
+                        <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
+                        <span className='fs-6 fw-normal text-dark'>View Details</span>
+                      </div>
+                    </DropdownItem>
+                    <DropdownItem className='text-danger' onClick={() => handleCancelInboundPlan(row.inboundPlanId)}>
+                      <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
+                    </DropdownItem>
+                  </DropdownMenu>
+                ) : (
+                  <DropdownMenu className='dropdown-menu-end'>
+                    <DropdownItem
+                      onClick={() =>
+                        setassignWorkflowIdModal({
+                          show: true,
+                          id: row.id,
+                          inboundPlanName: row.name,
+                          marketplace: row.destinationMarketplaces,
+                          dateCreated: moment.utc(row.createdAt).local().format('LL hh:mm A'),
+                          skus: row.items.length,
+                          units: row.items.reduce((total, item) => total + item.quantity, 0),
+                        })
+                      }>
+                      <div>
+                        <i className='ri-file-list-line align-middle me-2 fs-5 text-info'></i>
+                        <span className='fs-6 fw-normal text-dark'>Assign Workflow</span>
+                      </div>
+                    </DropdownItem>
+                  </DropdownMenu>
+                )}
+              </UncontrolledDropdown>
+            )
+            break
+          default:
+            return <></>
+            break
         }
       },
     },

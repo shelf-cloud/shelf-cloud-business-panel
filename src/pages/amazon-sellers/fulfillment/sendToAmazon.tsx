@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react'
 import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
 import axios from 'axios'
+import Link from 'next/link'
 import Head from 'next/head'
 import { Button, Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
@@ -71,7 +72,10 @@ const SendToAmazon = ({ session, sessionToken }: Props) => {
   }
   useSWR(
     session && state.user.businessId ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/getAmazonFbaSkus/${state.currentRegion}/${state.user.businessId}` : null,
-    fetcher
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
   )
 
   const [activeTab, setActiveTab] = useState('1')
@@ -87,7 +91,7 @@ const SendToAmazon = ({ session, sessionToken }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <Container fluid>
-            <BreadCrumb title='New Fulfillment' pageTitle='Send To Amazon' />
+            <BreadCrumb title='Send To Amazon' pageTitle='Amazon' />
             <Row>
               <Col lg={12}>
                 <Card>
@@ -120,10 +124,22 @@ const SendToAmazon = ({ session, sessionToken }: Props) => {
                         </NavLink>
                       </NavItem>
                     </Nav>
-                    <Button color='info' className='d-flex align-items-center' onClick={() => setHelpOffCanvasIsOpen(true)}>
-                      <i className='ri-question-line fs-14 p-0 m-0 me-lg-1' />
-                      <span className='d-none d-lg-block'>Need help</span>
-                    </Button>
+                    <div className='d-flex justify-content-end align-items-center gap-3'>
+                      <Link href={'/amazon-sellers/fulfillments'} passHref>
+                        <a>
+                          <Button color='info'>
+                            <span className='icon-on'>
+                              <i className='ri-file-list-line align-bottom me-1' />
+                              Fulfillments
+                            </span>
+                          </Button>
+                        </a>
+                      </Link>
+                      <Button color='info' className='d-flex align-items-center' onClick={() => setHelpOffCanvasIsOpen(true)}>
+                        <i className='ri-question-line fs-14 p-0 m-0 me-lg-1' />
+                        <span className='d-none d-lg-block'>Need help</span>
+                      </Button>
+                    </div>
                   </CardHeader>
                   <CardBody>
                     <TabContent activeTab={activeTab}>

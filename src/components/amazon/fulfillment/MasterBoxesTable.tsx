@@ -19,9 +19,10 @@ type Props = {
   pending: boolean
   setError: (skus: any) => void
   setHasQtyError: (hasQtyError: boolean) => void
+  setdimensionsModal: (dimensionsModal: any) => void
 }
 
-const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setError, setHasQtyError }: Props) => {
+const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setError, setHasQtyError, setdimensionsModal }: Props) => {
   const { state, setModalProductInfo }: any = useContext(AppContext)
   const [skusWithError, setSkusWithError] = useState<{ [key: string]: boolean }>({})
 
@@ -184,7 +185,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       selector: (row: AmazonFulfillmentSku) => {
         return (
           <Link href={row.isKit ? `/kit/${row.inventoryId}/${row.sku}` : `/product/${row.inventoryId}/${row.sku}`} passHref>
-            <a target='blank'>
+            <a target='blank' tabIndex={-1}>
               <div
                 className='my-2'
                 style={{
@@ -220,7 +221,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
           return (
             <div className='d-flex flex-column justify-content-start align-items-start my-2'>
               <Link href={`/kit/${row.inventoryId}/${row.sku}`} passHref style={{ cursor: 'pointer' }}>
-                <a target='blank'>
+                <a target='blank' tabIndex={-1}>
                   <p className='m-0 p-0 fs-7 fw-semibold text-black'>{row.title || `${row.product_name.substring(0, 80)}...`}</p>
                 </a>
               </Link>
@@ -261,7 +262,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
           return (
             <div className='d-flex flex-column justify-content-start align-items-start'>
               <Link href={`/product/${row.inventoryId}/${row.sku}`} passHref style={{ cursor: 'pointer' }}>
-                <a target='blank'>
+                <a target='blank' tabIndex={-1}>
                   <p className='m-0 p-0 fs-7 fw-semibold text-black'>{row.title || `${row.product_name.substring(0, 80)}...`}</p>
                 </a>
               </Link>
@@ -305,91 +306,112 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       name: <span className='fw-bold fs-6'>SC SKU</span>,
       selector: (row: AmazonFulfillmentSku) => {
         return (
-          <p className='m-0 p-0 d-inline-flex flex-row justify-content-center align-items-center gap-1'>
-            {row.shelfcloud_sku}
-            {row.hasError && (
-              <>
-                <i className='ri-information-fill m-0 p-0 fs-5 text-danger' id={`tooltipFBABoxesErrors${row.inventoryId}`}></i>
-                <UncontrolledTooltip
-                  placement='right'
-                  target={`tooltipFBABoxesErrors${row.inventoryId}`}
-                  popperClassName='bg-white shadow p-3 rounded-2'
-                  style={{ display: 'inline-table' }}
-                  innerClassName='text-black bg-white p-0 position-relative'>
-                  <p className='fs-6 text-primary m-0 p-0 fw-bold text-start mb-2'>SKU Errors</p>
-                  <table className='table table-striped table-bordered table-sm table-responsive px-2 m-0'>
-                    <tbody className='fs-7 text-start'>
-                      {row.maxOrderQty <= 0 ? (
-                        <tr>
-                          <td>{`There's not enough stock to fill a master box`}</td>
-                        </tr>
-                      ) : null}
-                      {row.boxLength === 0 ? (
-                        <tr>
-                          <td>Box Length has to be greater than 0</td>
-                        </tr>
-                      ) : null}
-                      {row.boxWidth === 0 ? (
-                        <tr>
-                          <td>Box Width has to be greater than 0</td>
-                        </tr>
-                      ) : null}
-                      {row.boxHeight === 0 ? (
-                        <tr>
-                          <td>Box Height has to be greater than 0</td>
-                        </tr>
-                      ) : null}
-                      {row.boxWeight === 0 ? (
-                        <tr>
-                          <td>Box Weight is 0</td>
-                        </tr>
-                      ) : null}
-                      {row.boxWeight > 50 && row.boxQty > 1 ? (
-                        <tr>
-                          <td>Box Weight must not exceed 50 lb</td>
-                        </tr>
-                      ) : null}
-                      {row.boxQty === 0 ? (
-                        <tr>
-                          <td>Box Quantity is 0</td>
-                        </tr>
-                      ) : null}
-                      {row.hasDimensionsError && (
-                        <tr>
-                          <td>
-                            {(() => {
-                              const amzItemVolume = row.dimensions.package.length.value * row.dimensions.package.width.value * row.dimensions.package.height.value
-                              const amzBoxVolume = amzItemVolume * row.boxQty
-                              const amzBoxTenPercent = amzBoxVolume * 0.1
-                              const scboxVolume = row.boxLength * row.boxWidth * row.boxHeight
-                              if (scboxVolume < amzBoxVolume - amzBoxTenPercent) {
-                                return (
-                                  <>
-                                    <p className='m-0 p-0'>{`ShelfCloud Box dimensions do not meet the expected minimum volume ${FormatIntPercentage(
-                                      state.currentRegion,
-                                      amzBoxVolume
-                                    )} - 10%:`}</p>
-                                    <p className='m-0 p-0 text-muted text-nowrap'>
-                                      Amazon Box Volume: <span className='text-black fw-semibold'>{FormatIntPercentage(state.currentRegion, amzBoxVolume)} inch3</span>
-                                    </p>
-                                    <p className='m-0 p-0 text-muted text-nowrap'>
-                                      ShelfCloud Box Volume: <span className='text-black fw-semibold'>{FormatIntPercentage(state.currentRegion, scboxVolume)} inch3</span>
-                                    </p>
-                                  </>
-                                )
-                              } else {
-                                return null
-                              }
-                            })()}
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </UncontrolledTooltip>
-              </>
-            )}
-          </p>
+          <div className='text-center'>
+            <p className='m-0 p-0'>{row.shelfcloud_sku}</p>
+            <p className='m-0 p-0 d-inline-flex flex-row justify-content-center align-items-center gap-1'>
+              <span
+                className='text-primary fs-7'
+                style={{ cursor: 'pointer' }}
+                onClick={() =>
+                  setdimensionsModal({
+                    show: true,
+                    inventoryId: row.inventoryId,
+                    isKit: row.isKit,
+                    msku: row.msku,
+                    asin: row.asin,
+                    scSKU: row.shelfcloud_sku,
+                    boxQty: row.boxQty,
+                    shelfCloudDimensions: row.amzDimensions ?? { boxLength: row.boxLength, boxWidth: row.boxWidth, boxHeight: row.boxHeight, boxWeight: row.boxWeight },
+                    amazonDimensions: row.dimensions.package,
+                  })
+                }>
+                Dimensions
+              </span>
+              {row.hasError && (
+                <>
+                  <i className='ri-information-fill m-0 p-0 fs-5 text-danger' id={`tooltipFBABoxesErrors${row.inventoryId}`}></i>
+                  <UncontrolledTooltip
+                    placement='right'
+                    target={`tooltipFBABoxesErrors${row.inventoryId}`}
+                    popperClassName='bg-white shadow p-3 rounded-2'
+                    style={{ display: 'inline-table' }}
+                    innerClassName='text-black bg-white p-0 position-relative'>
+                    <p className='fs-6 text-primary m-0 p-0 fw-bold text-start mb-2'>SKU Errors</p>
+                    <table className='table table-striped table-bordered table-sm table-responsive px-2 m-0'>
+                      <tbody className='fs-7 text-start'>
+                        {row.maxOrderQty <= 0 ? (
+                          <tr>
+                            <td>{`There's not enough stock to fill a master box`}</td>
+                          </tr>
+                        ) : null}
+                        {!row.amzDimensions || row.amzDimensions.boxLength === 0 ? (
+                          <tr>
+                            <td>Box Length has to be greater than 0</td>
+                          </tr>
+                        ) : null}
+                        {!row.amzDimensions || row.amzDimensions.boxWidth === 0 ? (
+                          <tr>
+                            <td>Box Width has to be greater than 0</td>
+                          </tr>
+                        ) : null}
+                        {!row.amzDimensions || row.amzDimensions.boxHeight === 0 ? (
+                          <tr>
+                            <td>Box Height has to be greater than 0</td>
+                          </tr>
+                        ) : null}
+                        {!row.amzDimensions || row.amzDimensions.boxWeight === 0 ? (
+                          <tr>
+                            <td>Box Weight is 0</td>
+                          </tr>
+                        ) : null}
+                        {!row.amzDimensions || (row.boxWeight > 50 && row.boxQty > 1) ? (
+                          <tr>
+                            <td>Box Weight must not exceed 50 lb</td>
+                          </tr>
+                        ) : null}
+                        {row.boxQty === 0 ? (
+                          <tr>
+                            <td>Box Quantity is 0</td>
+                          </tr>
+                        ) : null}
+                        {row.hasDimensionsError && (
+                          <tr>
+                            <td>
+                              {(() => {
+                                const amzItemVolume = row.dimensions.package.length.value * row.dimensions.package.width.value * row.dimensions.package.height.value
+                                const amzBoxVolume = amzItemVolume * row.boxQty
+                                const amzBoxTenPercent = amzBoxVolume * 0.1
+                                const scboxVolume = row.amzDimensions ? row.amzDimensions.boxLength * row.amzDimensions.boxWidth * row.amzDimensions.boxHeight : 0
+                                if (scboxVolume < amzBoxVolume - amzBoxTenPercent) {
+                                  return (
+                                    <>
+                                      <p className='m-0 p-0'>{`ShelfCloud Box dimensions do not meet the expected minimum volume ${FormatIntPercentage(
+                                        state.currentRegion,
+                                        amzBoxVolume
+                                      )} - 10%:`}</p>
+                                      <p className='m-0 p-0 text-muted text-nowrap'>
+                                        Amazon Box Volume:{' '}
+                                        <span className='text-black fw-semibold'>{FormatIntPercentage(state.currentRegion, amzBoxVolume - amzBoxTenPercent)} inch3</span>
+                                      </p>
+                                      <p className='m-0 p-0 text-muted text-nowrap'>
+                                        ShelfCloud Box Volume: <span className='text-black fw-semibold'>{FormatIntPercentage(state.currentRegion, scboxVolume)} inch3</span>
+                                      </p>
+                                    </>
+                                  )
+                                } else {
+                                  return null
+                                }
+                              })()}
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </UncontrolledTooltip>
+                </>
+              )}
+            </p>
+          </div>
         )
       },
       sortable: true,
@@ -513,7 +535,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
     },
     {
       name: <span className='fw-bold fs-6 text-center'>Recommended Ship Date</span>,
-      selector: (row: AmazonFulfillmentSku) => (row.recommendedShipDate ? moment(row.recommendedShipDate).format('MMM DD') : 'N/A'),
+      selector: (row: AmazonFulfillmentSku) => (row.recommendedShipDate ? moment.utc(row.recommendedShipDate).local().format('MMM DD') : 'N/A'),
       sortable: true,
       center: true,
       compact: true,
@@ -521,7 +543,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       minWidth: 'fit-content',
       conditionalCellStyles: [
         {
-          when: (row: AmazonFulfillmentSku) => moment(row.recommendedShipDate).isBefore(moment().add(3, 'days'), 'day'),
+          when: (row: AmazonFulfillmentSku) => moment(row.recommendedShipDate).isBefore(moment().add(1, 'days'), 'day'),
           style: {
             backgroundColor: 'rgba(240, 101, 72, 0.25)',
             // color: 'white',
@@ -531,7 +553,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
           },
         },
         {
-          when: (row: AmazonFulfillmentSku) => moment(row.recommendedShipDate).isBetween(moment().add(3, 'days'), moment().add(7, 'days'), 'day'),
+          when: (row: AmazonFulfillmentSku) => moment(row.recommendedShipDate).isBetween(moment().add(1, 'days'), moment().add(7, 'days'), 'day'),
           style: {
             backgroundColor: 'rgba(247, 184, 75, 0.25)',
             // color: 'white',
@@ -568,6 +590,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
               className='form-control fs-6'
               placeholder={row?.maxOrderQty! <= 0 ? 'Not Enough Qty' : 'Order Qty...'}
               value={row.orderQty}
+              onClick={(e: any) => e.target.select()}
               onChange={async (e) => {
                 if (Number(e.target.value) < 0 || !Number.isInteger(Number(e.target.value)) || parseInt(e.target.value) > row.maxOrderQty!) {
                   document.getElementById(`Error-${row.msku}`)!.style.display = 'block'

@@ -10,8 +10,10 @@ import moment from 'moment'
 import { useRouter } from 'next/router'
 import { AMAZON_MARKETPLACES } from '@lib/AmzConstants'
 import { FormatIntNumber } from '@lib/FormatNumbers'
+import { ListInboundPlan } from '@typesTs/amazon/fulfillments/listInboundPlans'
 
 type Props = {
+  allData: ListInboundPlan[]
   assignWorkflowIdModal: {
     show: boolean
     id: number
@@ -25,7 +27,7 @@ type Props = {
   sessionToken: string
 }
 
-const AssignWorkflowId = ({ assignWorkflowIdModal, setassignWorkflowIdModal, sessionToken }: Props) => {
+const AssignWorkflowId = ({ assignWorkflowIdModal, setassignWorkflowIdModal, sessionToken, allData }: Props) => {
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const router = useRouter()
@@ -193,7 +195,7 @@ const AssignWorkflowId = ({ assignWorkflowIdModal, setassignWorkflowIdModal, ses
               Marketpalce: <span className='fw-semibold text-black'>{AMAZON_MARKETPLACES[assignWorkflowIdModal.marketplace].domain}</span>
             </p>
             <p className='fs-6 m-0 text-muted'>
-              Date Created: <span className='fw-semibold text-black'>{assignWorkflowIdModal.dateCreated}</span>
+              Date Created: <span className='fw-semibold text-black'>{moment(assignWorkflowIdModal.dateCreated).local().format('LL hh:mm A')}</span>
             </p>
             <p className='fs-6 m-0 text-muted'>
               SKUs: <span className='fw-semibold text-black'>{assignWorkflowIdModal.skus}</span> Units:{' '}
@@ -219,29 +221,32 @@ const AssignWorkflowId = ({ assignWorkflowIdModal, setassignWorkflowIdModal, ses
                 </thead>
                 <tbody>
                   {activeWorkFlows &&
-                    Object.values(activeWorkFlows).map((workflow) => (
-                      <tr key={workflow.inboundPlanId} className='text-center'>
-                        <td>{moment.utc(workflow.createdAt).local().format('LL hh:mm A')}</td>
-                        <td>{AMAZON_MARKETPLACES[workflow.marketplaceIds[0]].domain}</td>
-                        <td>{FormatIntNumber(state.currentRegion, workflow.items.length)}</td>
-                        <td>
-                          {FormatIntNumber(
-                            state.currentRegion,
-                            workflow.items.reduce((total, item) => total + item.quantity, 0)
-                          )}
-                        </td>
-                        <td>
-                          <Button
-                            disabled={loadingWorflows || loadingAssignment}
-                            size='sm'
-                            type='button'
-                            color='success'
-                            onClick={() => handleAssignWorkflowId(workflow.inboundPlanId)}>
-                            {loadingWorflows ? <Spinner color='light' size={'sm'} /> : 'Assing'}
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
+                    Object.values(activeWorkFlows).map(
+                      (workflow) =>
+                        allData.find((fulfillment) => fulfillment.inboundPlanId === workflow.inboundPlanId) === undefined && (
+                          <tr key={workflow.inboundPlanId} className='text-center'>
+                            <td>{moment.utc(workflow.createdAt).local().format('LL hh:mm A')}</td>
+                            <td>{AMAZON_MARKETPLACES[workflow.marketplaceIds[0]].domain}</td>
+                            <td>{FormatIntNumber(state.currentRegion, workflow.items.length)}</td>
+                            <td>
+                              {FormatIntNumber(
+                                state.currentRegion,
+                                workflow.items.reduce((total, item) => total + item.quantity, 0)
+                              )}
+                            </td>
+                            <td>
+                              <Button
+                                disabled={loadingWorflows || loadingAssignment}
+                                size='sm'
+                                type='button'
+                                color='success'
+                                onClick={() => handleAssignWorkflowId(workflow.inboundPlanId)}>
+                                {loadingWorflows ? <Spinner color='light' size={'sm'} /> : 'Assing'}
+                              </Button>
+                            </td>
+                          </tr>
+                        )
+                    )}
                 </tbody>
               </table>
               <Row md={12} className=''>

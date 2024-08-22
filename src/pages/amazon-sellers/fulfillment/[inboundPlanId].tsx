@@ -56,7 +56,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
     inventoryToSend: false,
     shipping: false,
     shippingExpired: false,
-    generationTransportationOptions: false,
+    transportationOptions: false,
     boxLabels: false,
     printingLabel: false,
     CarrierPalletInfo: false,
@@ -137,13 +137,9 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
   // }
 
   const handleNextShipping = async (inboundPlanId: string) => {
-    if (inboundPlanDetails!.placementOptions?.length > 0) {
-      tabChange('2')
-      return
-    }
-    setWatingRepsonse((prev: any) => ({ ...prev, shipping: true }))
+    setWatingRepsonse((prev: any) => ({ ...prev, shipping: true, transportationOptions: true }))
 
-    const cancelInboundPlanToast = toast.loading('Generating Placement Options...')
+    const generatePlacementOptions = toast.loading('Generating Placement Options...')
     try {
       const controller = new AbortController()
       const signal = controller.signal
@@ -157,29 +153,33 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
         .then(({ data }) => data)
         .catch(({ error }) => {
           if (axios.isCancel(error)) {
-            toast.error(error?.data?.message || 'Error fetching shipment Log data')
+            toast.error(error?.data?.message || 'Error generating Placement Options')
           }
         })
 
       if (!response.error) {
-        toast.update(cancelInboundPlanToast, {
+        toast.update(generatePlacementOptions, {
           render: response.message,
           type: 'success',
           isLoading: false,
           autoClose: 3000,
         })
-        await mutate(`/api/amazon/fullfilments/getSellerInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`).then(() => {
-          tabChange('2')
-        })
+        setWatingRepsonse((prev: any) => ({ ...prev, shipping: false }))
+        await mutate(`/api/amazon/fullfilments/getSellerInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`).then(
+          async () => {
+            tabChange('2')
+            await handleTransportationOptions(inboundPlanId)
+          }
+        )
       } else {
-        toast.update(cancelInboundPlanToast, {
+        setWatingRepsonse((prev: any) => ({ ...prev, shipping: false }))
+        toast.update(generatePlacementOptions, {
           render: response.message,
           type: 'error',
           isLoading: false,
           autoClose: 3000,
         })
       }
-      setWatingRepsonse((prev: any) => ({ ...prev, shipping: false }))
     } catch (error) {
       setWatingRepsonse((prev: any) => ({ ...prev, shipping: false }))
       console.error(error)
@@ -187,8 +187,8 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
   }
 
   const handlePlacementExpired = async (inboundPlanId: string) => {
-    setWatingRepsonse((prev: any) => ({ ...prev, shippingExpired: true }))
-    const cancelInboundPlanToast = toast.loading('Generating Placement Options...')
+    setWatingRepsonse((prev: any) => ({ ...prev, shippingExpired: true, transportationOptions: true }))
+    const generatePlacementOptions = toast.loading('Generating Placement Options...')
     try {
       const controller = new AbortController()
       const signal = controller.signal
@@ -202,31 +202,82 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
         .then(({ data }) => data)
         .catch(({ error }) => {
           if (axios.isCancel(error)) {
-            toast.error(error?.data?.message || 'Error fetching shipment Log data')
+            toast.error(error?.data?.message || 'Error generating Placement Options')
           }
         })
 
       if (!response.error) {
-        toast.update(cancelInboundPlanToast, {
+        toast.update(generatePlacementOptions, {
           render: response.message,
           type: 'success',
           isLoading: false,
           autoClose: 3000,
         })
-        await mutate(`/api/amazon/fullfilments/getSellerInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`).then(() => {
-          tabChange('2')
-        })
+        setWatingRepsonse((prev: any) => ({ ...prev, shippingExpired: false }))
+        await mutate(`/api/amazon/fullfilments/getSellerInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`).then(
+          async () => {
+            tabChange('2')
+            await handleTransportationOptions(inboundPlanId)
+          }
+        )
       } else {
-        toast.update(cancelInboundPlanToast, {
+        setWatingRepsonse((prev: any) => ({ ...prev, shippingExpired: false }))
+        toast.update(generatePlacementOptions, {
           render: response.message,
           type: 'error',
           isLoading: false,
           autoClose: 3000,
         })
       }
-      setWatingRepsonse((prev: any) => ({ ...prev, shippingExpired: false }))
     } catch (error) {
       setWatingRepsonse((prev: any) => ({ ...prev, shippingExpired: false }))
+      console.error(error)
+    }
+  }
+
+  const handleTransportationOptions = async (inboundPlanId: string) => {
+    // setWatingRepsonse((prev: any) => ({ ...prev, transportationOptions: true }))
+    const generateTransportationOptions = toast.loading('Generating Transportation Options...')
+
+    try {
+      const controller = new AbortController()
+      const signal = controller.signal
+      const response = await axios
+        .get(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/getShipmentsCosts/${state.currentRegion}/${state.user.businessId}/${inboundPlanId}`, {
+          signal,
+          headers: {
+            Authorization: `Bearer ${sessionToken}`,
+          },
+        })
+        .then(({ data }) => data)
+        .catch(({ error }) => {
+          if (axios.isCancel(error)) {
+            toast.error(error?.data?.message || 'Error generating Transportation Options')
+          }
+        })
+
+      if (!response.error) {
+        toast.update(generateTransportationOptions, {
+          render: response.message,
+          type: 'success',
+          isLoading: false,
+          autoClose: 3000,
+        })
+        await mutate(`/api/amazon/fullfilments/getSellerInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`).then(() => {
+          setWatingRepsonse((prev: any) => ({ ...prev, transportationOptions: false }))
+        })
+      } else {
+        tabChange('1')
+        setWatingRepsonse((prev: any) => ({ ...prev, transportationOptions: false }))
+        toast.update(generateTransportationOptions, {
+          render: response.message,
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+        })
+      }
+    } catch (error) {
+      setWatingRepsonse((prev: any) => ({ ...prev, transportationOptions: false }))
       console.error(error)
     }
   }
@@ -262,7 +313,6 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
           isLoading: false,
           autoClose: 3000,
         })
-        await mutate(`/api/amazon/fullfilments/getSellerInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`)
       } else {
         toast.update(cancelInboundPlanToast, {
           render: response.message,
@@ -271,6 +321,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
           autoClose: 3000,
         })
       }
+      await mutate(`/api/amazon/fullfilments/getSellerInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`)
       setWatingRepsonse((prev: any) => ({ ...prev, boxLabels: false }))
     } catch (error) {
       setWatingRepsonse((prev: any) => ({ ...prev, boxLabels: false }))
@@ -336,29 +387,28 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                 <>
                   <CardHeader>
                     <div className='d-flex flex-row justify-content-between align-items-start'>
-                      <Button
-                        color='primary'
-                        outline
-                        aschild={true}
-                        // className="d-flex flex-row gap-1 text-decoration-none text-primary"
-                        style={{ cursor: 'pointer' }}>
-                        <Link href={'/amazon-sellers/fulfillments'}>
-                          <span className='icon-on'>
-                            <i className='ri-arrow-left-line align-bottom me-1' />
-                            Fulfillments
-                          </span>
-                        </Link>
-                      </Button>
+                      <Link href={'/amazon-sellers/fulfillments'} passHref>
+                        <a>
+                          <Button outline>
+                            <span className='icon-on'>
+                              <i className='ri-arrow-left-line align-bottom me-1' />
+                              Fulfillments
+                            </span>
+                          </Button>
+                        </a>
+                      </Link>
                       <Button color='info' className='d-flex align-items-center' onClick={() => setHelpOffCanvasIsOpen(true)}>
-                      <i className='ri-question-line fs-14 p-0 m-0 me-lg-1' />
-                      <span className='d-none d-lg-block'>Need help</span>
-                    </Button>
+                        <i className='ri-question-line fs-14 p-0 m-0 me-lg-1' />
+                        <span className='d-none d-lg-block'>Need help</span>
+                      </Button>
                     </div>
                     <div className='mt-3'>
                       <p className='fw-semibold fs-4 m-0 p-0'>
                         <span className='text-muted fw-normal'>Name: </span>
                         {inboundPlanDetails.name}
-                        <Badge color='info' className='ms-2 fs-6'>{inboundPlanDetails.fulfillmentType}</Badge>
+                        <Badge color='info' className='ms-2 fs-6'>
+                          {inboundPlanDetails.fulfillmentType}
+                        </Badge>
                       </p>
                       <p className='fw-normal fs-6 m-0 p-0'>
                         <span className='text-muted'>Inbound ID: </span>
@@ -466,7 +516,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                               <Shipping
                                 sessionToken={sessionToken}
                                 inboundPlan={inboundPlanDetails}
-                                setinboundPlanDetails={setinboundPlanDetails}
+                                // setinboundPlanDetails={setinboundPlanDetails}
                                 handleNextStep={handleNextConfirmChargesFees}
                                 watingRepsonse={watingRepsonse}
                                 handlePlacementExpired={handlePlacementExpired}

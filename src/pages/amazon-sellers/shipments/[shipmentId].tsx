@@ -99,19 +99,16 @@ const FBAShipmentDetails = ({ session }: Props) => {
                 <>
                   <CardHeader className='d-flex flex-row justify-content-between align-items-start'>
                     <div>
-                      <Button
-                        color='primary'
-                        outline
-                        aschild={true}
-                        // className="d-flex flex-row gap-1 text-decoration-none text-primary"
-                        style={{ cursor: 'pointer' }}>
-                        <Link href={'/amazon-sellers/shipments'}>
-                          <span className='icon-on'>
-                            <i className='ri-arrow-left-line align-bottom me-1' />
-                            FBA Shipments
-                          </span>
-                        </Link>
-                      </Button>
+                      <Link href={'/amazon-sellers/shipments'} passHref>
+                        <a>
+                          <Button outline>
+                            <span className='icon-on'>
+                              <i className='ri-arrow-left-line align-bottom me-1' />
+                              FBA Shipments
+                            </span>
+                          </Button>
+                        </a>
+                      </Link>
                       <div className='mt-3'>
                         <p className='fw-semibold fs-4 m-0 p-0'>
                           <span className='text-muted fw-normal'>Name: </span>

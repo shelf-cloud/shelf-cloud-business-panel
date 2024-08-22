@@ -442,7 +442,7 @@ export interface WaitingReponses {
     inventoryToSend: boolean
     shipping: boolean
     shippingExpired: boolean
-    generationTransportationOptions: boolean
+    transportationOptions: boolean
     boxLabels: boolean
     printingLabel: boolean
     CarrierPalletInfo: boolean

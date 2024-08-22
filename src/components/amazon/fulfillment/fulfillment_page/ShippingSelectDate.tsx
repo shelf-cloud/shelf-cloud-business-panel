@@ -5,10 +5,11 @@ import Flatpickr from 'react-flatpickr'
 type Props = {
   id: string
   selectedDate: string
+  minDate: string
   setnewDate: (dateStr: string) => void
 }
 
-const ShippingSelectDate = ({ id, selectedDate, setnewDate }: Props) => {
+const ShippingSelectDate = ({ id, selectedDate, minDate, setnewDate }: Props) => {
   return (
     <div key={id} className={'btn btn-sm m-0 rounded border border-2 ' + (selectedDate !== '' ? 'border-primary': 'border-danger')} style={{ backgroundColor: 'white' }}>
       <div className='d-flex justify-content-start align-items-center gap-2'>
@@ -21,7 +22,7 @@ const ShippingSelectDate = ({ id, selectedDate, setnewDate }: Props) => {
             position: 'auto',
             dateFormat: 'm/d/Y',
             defaultDate: selectedDate !== '' ? moment(selectedDate, 'MM/DD/YYYY').format('MM/DD/YYYY') : undefined,
-            minDate: moment().add(1, 'day').format('MM/DD/YYYY'),
+            minDate: minDate,
             maxDate: moment().add(19, 'day').format('MM/DD/YYYY'),
           }}
           onChange={(_selectedDates, dateStr) => {

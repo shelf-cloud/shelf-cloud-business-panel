@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
@@ -10,6 +10,7 @@ import router from 'next/router'
 import { AmazonFulfillmentSku, AmazonMarketplace } from '@typesTs/amazon/fulfillments'
 import useSWR from 'swr'
 import { FormatIntNumber } from '@lib/FormatNumbers'
+import moment from 'moment'
 
 type Props = {
   orderProducts: AmazonFulfillmentSku[]
@@ -35,12 +36,6 @@ const CreateInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, set
     }
   )
 
-  useEffect(() => {
-    return () => {
-      validation.resetForm()
-    }
-  }, [state.wholesaleOrderProducts])
-
   const generateTabDelimitedFile = async (orderProducts: AmazonFulfillmentSku[], inboundPlanName: string) => {
     const prepOwner = 'Seller'
     const labelOwner = 'Seller'
@@ -64,14 +59,14 @@ const CreateInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, set
     enableReinitialize: true,
 
     initialValues: {
-      inboundPlanName: '',
+      inboundPlanName: `${state?.user?.name.substring(0, 3).toUpperCase()}-FBA-${moment().format('MM_DD_YYYY-hh_mma')}`,
       marketplace: '',
       shipFrom: '',
       hasProducts: orderProducts.length,
     },
     validationSchema: Yup.object({
       inboundPlanName: Yup.string()
-        .matches(/^[a-zA-Z0-9-\s]+$/, `Invalid special characters: % & # " ' @ ~ , ...`)
+        .matches(/^[a-zA-Z0-9-._\\s]+$/, `Valid special characters: - . _ NO spaces`)
         .max(150, 'Title is to Long')
         .required('Please enter Inbound Plan Name'),
       marketplace: Yup.string().required('Select a Marketplace where your inventory will be shipped.'),
@@ -100,6 +95,7 @@ const CreateInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, set
           boxLength: product.boxLength,
           boxWidth: product.boxWidth,
           boxHeight: product.boxHeight,
+          amzDimensions: product.amzDimensions,
           boxes: parseInt(product.orderQty),
           children: product.children ?? [],
         }

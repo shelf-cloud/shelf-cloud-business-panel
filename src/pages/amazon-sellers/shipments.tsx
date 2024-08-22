@@ -90,8 +90,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
     if (searchValue !== '') {
       return allData.filter(
         (item: FBAShipment) =>
-          item.shipment.shipmentConfirmationId.toLowerCase().includes(searchValue.toLowerCase()) ||
-          item.shipment.name.toLowerCase().includes(searchValue.toLowerCase())
+          item.shipment.shipmentConfirmationId.toLowerCase().includes(searchValue.toLowerCase()) || item.shipment.name.toLowerCase().includes(searchValue.toLowerCase())
       )
     }
 
@@ -110,8 +109,15 @@ const Shipments = ({ session, sessionToken }: Props) => {
             <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-1 flex-md-row justify-content-md-end align-items-md-center px-3'>
               <div className='app-search d-flex flex-row justify-content-between align-items-center p-0'>
                 <div className='d-flex flex-row justify-content-start align-items-center gap-3'>
-                  <Link href={'/amazon-sellers/fulfillments'}>
-                    <Button color='primary'>Send to Amazon</Button>
+                  <Link href={'/amazon-sellers/fulfillments'} passHref>
+                    <a>
+                      <Button>
+                        <span className='icon-on'>
+                          <i className='ri-file-list-line align-bottom me-1' />
+                          Fulfillments
+                        </span>
+                      </Button>
+                    </a>
                   </Link>
                 </div>
                 <div className='col-sm-12 col-md-3'>
