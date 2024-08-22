@@ -2,6 +2,7 @@ export interface InboundPlan {
     id: number
     businessUniqId: string
     fulfillmentType: string
+    amzFinished: boolean
     region: string
     inboundPlanId: string
     operationId: string
@@ -409,7 +410,9 @@ export interface TrackingDetails {
     spdTrackingDetail: SpdTrackingDetail
 }
 
-export interface LtlTrackingDetail { }
+export interface LtlTrackingDetail {
+    billOfLadingNumber: string
+}
 
 export interface SpdTrackingDetail {
     spdTrackingItems: SpdTrackingItem[]

@@ -1,9 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
-import AppContext from '@context/AppContext'
-import { FormatCurrency, FormatIntPercentage } from '@lib/FormatNumbers'
-import { InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
 import React, { useContext } from 'react'
-import { Button, Card, CardBody, CardFooter, CardHeader, Col, Row, Spinner } from 'reactstrap'
+import AppContext from '@context/AppContext'
+import { FormatIntPercentage } from '@lib/FormatNumbers'
+import { InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
+import { Button, Card, CardBody, CardFooter, CardHeader, Spinner } from 'reactstrap'
+import Image from 'next/image'
+import boxIcon from '@assets/fulfillments/outbound_box.png'
+import palletIcon from '@assets/fulfillments/outbound_pallet.png'
 
 type Props = {
   inboundPlan: InboundPlan
@@ -11,14 +14,13 @@ type Props = {
   watingRepsonse: WaitingReponses
 }
 
-const BoxLabels = ({ inboundPlan, handleNextStep, watingRepsonse }: Props) => {
+const CarrierPalletInfo = ({ inboundPlan, handleNextStep, watingRepsonse }: Props) => {
   const { state }: any = useContext(AppContext)
-
   return (
     <>
       {!watingRepsonse.boxLabels && inboundPlan.confirmedShipments && Object.values(inboundPlan.confirmedShipments)?.length > 0 ? (
         <div className='w-100 px-3'>
-          <p className='my-1 p-0 fs-6'>
+          {/* <p className='my-1 p-0 fs-6'>
             From:{' '}
             <span className='fw-semibold'>
               {inboundPlan.sourceAddress.companyName}, {inboundPlan.sourceAddress.addressLine1}, {inboundPlan.sourceAddress.addressLine2}, {inboundPlan.sourceAddress.city},{' '}
@@ -27,7 +29,7 @@ const BoxLabels = ({ inboundPlan, handleNextStep, watingRepsonse }: Props) => {
           </p>
           <p className='p-0 fs-6'>
             Ship Date: <span className='fw-semibold'>09/15/2024</span>
-          </p>
+          </p> */}
           <div className='d-flex flex-row flex-wrap justify-content-start align-items-start gap-3'>
             {Object.values(inboundPlan.confirmedShipments).map((shipment, shipmentIndex) => (
               <Card
@@ -117,62 +119,61 @@ const BoxLabels = ({ inboundPlan, handleNextStep, watingRepsonse }: Props) => {
                       {shipment.shipmentItems.items.length > 3 && <p>+{shipment.shipmentItems.items.length - 3}</p>}
                     </div>
                   </div>
+                  <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
+                    <span className='fw-semibold fs-7'>Shipping Mode:</span>
+                    {shipment.shipment.trackingDetails.spdTrackingDetail.spdTrackingItems.length > 0 ? (
+                      <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
+                        <div
+                          className='my-0'
+                          style={{
+                            width: '50px',
+                            height: 'auto',
+                            margin: '0px',
+                            position: 'relative',
+                          }}>
+                          <Image src={boxIcon} alt='box_icon' className='object-contain' />
+                        </div>
+                        <span className='fs-7 fw-semibold'>Small Parcel Delivery (SPD)</span>
+                      </div>
+                    ) : (
+                      <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
+                        <div
+                          className='my-0'
+                          style={{
+                            width: '50px',
+                            height: 'auto',
+                            margin: '0px',
+                            position: 'relative',
+                          }}>
+                          <Image src={palletIcon} alt='box_icon' className='object-contain' />
+                        </div>
+                        <span className='fs-7 fw-semibold'>Less than and full truckload (LTL/FTL)</span>
+                      </div>
+                    )}
+                  </div>
                 </CardBody>
                 <CardFooter>
-                  <div className='d-flex justify-content-between align-items-center'>
-                    <p className='m-0 p-0 fw-semibold'>Print Box and Shipping Lables</p>
-                    <Button
-                      disabled={watingRepsonse.printingLabel}
-                      color='success'
-                      id='btn_handleNextShipping'
-                      onClick={() =>
-                        handleNextStep(
-                          shipment.shipment.shipmentConfirmationId,
-                          shipment.shipmentBoxes.boxes.reduce((total, item) => total + item.quantity, 0)
-                        )
-                      }>
-                      {watingRepsonse.printingLabel ? <Spinner color='light' size={'sm'} /> : 'Print'}
-                    </Button>
-                  </div>
+                  {shipment.shipment.trackingDetails.ltlTrackingDetail.billOfLadingNumber && (
+                    <div className='d-flex justify-content-between align-items-center'>
+                      <p className='m-0 p-0 fw-semibold'>Print Pallet Lables</p>
+                      <Button
+                        disabled={watingRepsonse.printingLabel}
+                        color='success'
+                        id='btn_handleNextShipping'
+                        onClick={() =>
+                          handleNextStep(
+                            shipment.shipment.shipmentConfirmationId,
+                            shipment.shipmentPallets.pallets.reduce((total, pallet) => total + pallet.quantity, 0)
+                          )
+                        }>
+                        {watingRepsonse.printingLabel ? <Spinner color='light' size={'sm'} /> : 'Print'}
+                      </Button>
+                    </div>
+                  )}
                 </CardFooter>
               </Card>
             ))}
           </div>
-          {/* TOTAL ESTIMATED FEES */}
-          <Row className='mt-5 mb-3'>
-            <Col xs='12' lg='8'>
-              <p className='fs-6 fw-bold'>Your shipment or shipments are now complete.</p>
-              <p className='fs-7'>The Fulfillment has been created successfully, ShelfCloud has received the information and will begin to prepare the Shipments.</p>
-            </Col>
-            <Col xs='12' lg='4'>
-              <table className='table table-sm fs-7'>
-                <tbody>
-                  <tr>
-                    <td>Total prep and labeling fees:</td>
-                    <td>{FormatCurrency(state.currentRegion, inboundPlan.totalPrepFees)}</td>
-                  </tr>
-                  <tr>
-                    <td>Total placement fees:</td>
-                    <td>{FormatCurrency(state.currentRegion, inboundPlan.totalPlacementFees)}</td>
-                  </tr>
-                  <tr>
-                    <td>{inboundPlan.totalLtlFees > 0 ? 'SPD shipping fees:' : 'Total estimated shipping fees:'}</td>
-                    <td>{FormatCurrency(state.currentRegion, inboundPlan.totalSpdFees)}</td>
-                  </tr>
-                  {inboundPlan.totalLtlFees > 0 && (
-                    <tr>
-                      <td>LTL shipping fees:</td>
-                      <td>{FormatCurrency(state.currentRegion, inboundPlan.totalLtlFees)}</td>
-                    </tr>
-                  )}
-                  <tr className='fw-bold'>
-                    <td>Total estimated prep, labeling, placement, and shipping fees (other fees may apply):</td>
-                    <td>{FormatCurrency(state.currentRegion, inboundPlan.totalFees)}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </Col>
-          </Row>
         </div>
       ) : (
         <div className='w-100 px-3'>
@@ -186,4 +187,4 @@ const BoxLabels = ({ inboundPlan, handleNextStep, watingRepsonse }: Props) => {
   )
 }
 
-export default BoxLabels
+export default CarrierPalletInfo

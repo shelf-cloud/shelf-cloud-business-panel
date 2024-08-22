@@ -1,15 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useContext, useState } from 'react'
 import AppContext from '@context/AppContext'
-import { FormatCurrency, FormatIntPercentage } from '@lib/FormatNumbers'
+import { FormatIntPercentage } from '@lib/FormatNumbers'
 import { InboundPlan } from '@typesTs/amazon/fulfillments/fulfillment'
-import { Card, CardBody, Col, Row, Spinner } from 'reactstrap'
+import { Button, Card, CardBody, Col, Spinner } from 'reactstrap'
 
 type Props = {
   inboundPlan: InboundPlan
+  handlePrintShipmentBillOfLading: (shipmentId: string) => void
 }
 
-const TrackingDetails = ({ inboundPlan }: Props) => {
+const TrackingDetails = ({ inboundPlan, handlePrintShipmentBillOfLading }: Props) => {
   const { state }: any = useContext(AppContext)
   const [selectedShipment, setselectedShipment] = useState(Object.values(inboundPlan.confirmedShipments)[0])
   return (
@@ -34,45 +35,61 @@ const TrackingDetails = ({ inboundPlan }: Props) => {
                 </Card>
               ))}
             </div>
-            <div className='my-3 '>
-              <Col sm='12' lg='8'>
-                <table className='table table-bordered'>
-                  <thead className='table-light'>
-                    <tr>
-                      <th>Box #</th>
-                      <th>FBA Box Label #</th>
-                      <th>thacking ID #</th>
-                      <th>Status</th>
-                      <th>Weight (lb)</th>
-                      <th>Dimensions (in)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {selectedShipment.shipment.trackingDetails?.spdTrackingDetail?.spdTrackingItems?.map((tracking, boxIndex) => (
-                      <tr key={tracking.boxId}>
-                        <td>{boxIndex + 1}</td>
-                        <td>{tracking.boxId}</td>
-                        <td>{tracking.trackingId}</td>
-                        <td className='text-success fw-semibold'>Confirmed</td>
-                        <td>
-                          {selectedShipment.shipmentBoxes.boxes[boxIndex]?.weight.value
-                            ? FormatIntPercentage(state.currentRegion, selectedShipment.shipmentBoxes.boxes[boxIndex]?.weight.value)
-                            : 'N/A'}
-                        </td>
-                        <td>
-                          {selectedShipment.shipmentBoxes.boxes[boxIndex]?.dimensions.height
-                            ? `${selectedShipment.shipmentBoxes.boxes[boxIndex]?.dimensions.height} x ${selectedShipment.shipmentBoxes.boxes[boxIndex]?.dimensions.width} x ${selectedShipment.shipmentBoxes.boxes[boxIndex]?.dimensions.length}`
-                            : 'N/A'}
-                        </td>
+            {selectedShipment.shipment.trackingDetails?.spdTrackingDetail?.spdTrackingItems.length > 0 && (
+              <div className='my-3 px-2'>
+                <Col sm='12' lg='8'>
+                  <table className='table table-bordered'>
+                    <thead className='table-light'>
+                      <tr>
+                        <th>Box #</th>
+                        <th>FBA Box Label #</th>
+                        <th>thacking ID #</th>
+                        <th>Status</th>
+                        <th>Weight (lb)</th>
+                        <th>Dimensions (in)</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </Col>
-            </div>
+                    </thead>
+                    <tbody>
+                      {selectedShipment.shipment.trackingDetails?.spdTrackingDetail?.spdTrackingItems?.map((tracking, boxIndex) => (
+                        <tr key={tracking.boxId}>
+                          <td>{boxIndex + 1}</td>
+                          <td>{tracking.boxId}</td>
+                          <td>{tracking.trackingId}</td>
+                          <td className='text-success fw-semibold'>Confirmed</td>
+                          <td>
+                            {selectedShipment.shipmentBoxes.boxes[boxIndex]?.weight.value
+                              ? FormatIntPercentage(state.currentRegion, selectedShipment.shipmentBoxes.boxes[boxIndex]?.weight.value)
+                              : 'N/A'}
+                          </td>
+                          <td>
+                            {selectedShipment.shipmentBoxes.boxes[boxIndex]?.dimensions.height
+                              ? `${selectedShipment.shipmentBoxes.boxes[boxIndex]?.dimensions.height} x ${selectedShipment.shipmentBoxes.boxes[boxIndex]?.dimensions.width} x ${selectedShipment.shipmentBoxes.boxes[boxIndex]?.dimensions.length}`
+                              : 'N/A'}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </Col>
+              </div>
+            )}
+            {selectedShipment.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber && (
+              <div className='my-3 px-2'>
+                <Col sm='12' lg='8'>
+                  <p className='fs-5 fw-bold'>Bill of Lading (BOL)</p>
+                  <p>
+                    Amazon Reference ID: <span className='fw-semibold'>{selectedShipment.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber}</span>
+                  </p>
+                  <Button color='primary' onClick={() => handlePrintShipmentBillOfLading(selectedShipment.shipmentId)}>
+                    Download Bill Of Lading
+                  </Button>
+                  <p className=' mt-3 fs-7 text-muted'>The BOL will be generated no later than 8 a.m. the morning of pickup.</p>
+                </Col>
+              </div>
+            )}
           </div>
           {/* TOTAL ESTIMATED FEES */}
-          <Row className='mt-5 mb-3'>
+          {/* <Row className='mt-5 mb-3'>
             <Col xs='12' lg='8'>
               <p className='fs-6 fw-bold'>Your shipment or shipments are now complete.</p>
               <p className='fs-7'>The Fulfillment has been created successfully, ShelfCloud has received the information and will begin to prepare the Shipments.</p>
@@ -105,7 +122,7 @@ const TrackingDetails = ({ inboundPlan }: Props) => {
                 </tbody>
               </table>
             </Col>
-          </Row>
+          </Row> */}
         </div>
       ) : (
         <div className='w-100 px-3'>

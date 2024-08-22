@@ -1,5 +1,6 @@
 import AppContext from '@context/AppContext'
 import { FormatIntNumber } from '@lib/FormatNumbers'
+import { CleanStatus } from '@lib/SkuFormatting'
 import { FBAShipment } from '@typesTs/amazon/fbaShipments'
 import moment from 'moment'
 import { useRouter } from 'next/router'
@@ -115,27 +116,26 @@ const FBAShipmentsTable = ({ filteredItems, pending }: Props) => {
       name: <span className='fw-bolder fs-13'>Status</span>,
       selector: (row: FBAShipment) => {
         switch (row.shipment.status.toLowerCase()) {
-          case 'in_transit':
           case 'shipped':
-          case 'cheched in':
-          case 'receiving':
-          case 'ready to ship':
+          case 'ready_to_ship':
           case 'working':
-            return <span className='badge text-uppercase badge-soft-success p-2'>{` ${row.shipment.status.replace('_', ' ')} `}</span>
+            return <span className='badge text-uppercase badge-soft-success p-2'>{` ${CleanStatus(row.shipment.status)} `}</span>
             break
           case 'delivered':
-            return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${row.shipment.status.replace('_', ' ')} `}</span>
+            return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${CleanStatus(row.shipment.status)} `}</span>
             break
           case 'awating':
           case 'active':
           case 'unconfirmed':
-            return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${row.shipment.status.replace('_', ' ')} `}</span>
+            return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${CleanStatus(row.shipment.status)} `}</span>
             break
-          case 'ready to ship':
-            return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${row.shipment.status.replace('_', ' ')} `}</span>
+          case 'in_transit':
+          case 'cheched_in':
+          case 'receiving':
+            return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${CleanStatus(row.shipment.status)} `}</span>
             break
           case 'error':
-            return <span className='badge text-uppercase badge-soft-danger p-2'>{` ${row.shipment.status.replace('_', ' ')} `}</span>
+            return <span className='badge text-uppercase badge-soft-danger p-2'>{` ${CleanStatus(row.shipment.status)} `}</span>
             break
           case 'cancelled':
           case 'closed':

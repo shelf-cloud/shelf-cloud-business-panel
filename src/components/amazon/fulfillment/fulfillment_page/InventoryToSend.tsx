@@ -5,7 +5,7 @@ import { Button, Col, Spinner } from 'reactstrap'
 
 type Props = {
   inboundPlan: InboundPlan
-  handleNextStep: (inboundPlanId: string) => void
+  handleNextStep?: (inboundPlanId: string) => void
   watingRepsonse: WaitingReponses
 }
 
@@ -31,6 +31,7 @@ const InventoryToSend = ({ inboundPlan, handleNextStep, watingRepsonse }: Props)
                       className='my-2 d-none d-lg-block'
                       style={{
                         width: '60px',
+                        minWidth: '60px',
                         height: '50px',
                         margin: '2px 0px',
                         position: 'relative',
@@ -67,7 +68,8 @@ const InventoryToSend = ({ inboundPlan, handleNextStep, watingRepsonse }: Props)
                     </div>
                     <div>
                       <p className='m-0 p-0 text-primary'>{inboundPlan.skus_details[item.msku].title}</p>
-                      <p className='m-0 p-0'>{`SKU: ${item.msku}`}</p>
+                      <p className='m-0 p-0 fw-semibold'>{`SC SKU: ${inboundPlan.skus_details[item.msku].shelfcloud_sku}`}</p>
+                      <p className='m-0 p-0'>{`MSKU: ${item.msku}`}</p>
                       <p className='m-0 p-0'>{`ASIN: ${inboundPlan.skus_details[item.msku].asin}`}</p>
                     </div>
                   </div>
@@ -146,15 +148,17 @@ const InventoryToSend = ({ inboundPlan, handleNextStep, watingRepsonse }: Props)
           </tbody>
         </table>
       </Col>
-      <Col xs='12' className='d-flex justify-content-end'>
-        <Button
-          disabled={watingRepsonse.shipping || inboundPlan.steps[1].complete}
-          color='success'
-          id='btn_handleNextStepPacking'
-          onClick={() => handleNextStep(inboundPlan.inboundPlanId)}>
-          {watingRepsonse.shipping ? <Spinner color='light' size={'sm'} /> : 'Confirm and Continue'}
-        </Button>
-      </Col>
+      {handleNextStep && (
+        <Col xs='12' className='d-flex justify-content-end'>
+          <Button
+            disabled={watingRepsonse.shipping || inboundPlan.steps[1].complete}
+            color='success'
+            id='btn_handleNextStepPacking'
+            onClick={() => handleNextStep(inboundPlan.inboundPlanId)}>
+            {watingRepsonse.shipping ? <Spinner color='light' size={'sm'} /> : 'Confirm and Continue'}
+          </Button>
+        </Col>
+      )}
     </div>
   )
 }

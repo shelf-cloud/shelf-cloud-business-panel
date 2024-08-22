@@ -170,7 +170,7 @@ const FulfillmentsTable = ({ filteredItems, pending, handleCancelInboundPlan, se
                 </DropdownToggle>
                 {row.inboundPlanId ? (
                   <DropdownMenu className='dropdown-menu-end'>
-                    <DropdownItem onClick={() => router.push(`/amazon-sellers/fulfillment/${row.inboundPlanId}`)}>
+                    <DropdownItem onClick={() => row.amzFinished ? router.push(`/amazon-sellers/fulfillment/sellerPortal/${row.inboundPlanId}`) : router.push(`/amazon-sellers/fulfillment/${row.inboundPlanId}`)}>
                       <div>
                         <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
                         <span className='fs-6 fw-normal text-dark'>View Details</span>

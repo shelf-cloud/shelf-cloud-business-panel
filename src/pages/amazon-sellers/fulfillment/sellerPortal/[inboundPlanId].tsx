@@ -8,11 +8,10 @@ import { Badge, Button, Card, CardBody, CardHeader, Col, Container, Nav, NavItem
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import axios from 'axios'
-import useSWR, { useSWRConfig } from 'swr'
+import useSWR from 'swr'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { GetLabelsResponse, InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
 import InventoryToSend from '@components/amazon/fulfillment/fulfillment_page/InventoryToSend'
-import Shipping from '@components/amazon/fulfillment/fulfillment_page/Shipping'
 import BoxLabels from '@components/amazon/fulfillment/fulfillment_page/BoxLabels'
 import TrackingDetails from '@components/amazon/fulfillment/fulfillment_page/TrackingDetails'
 import MasterBoxHelp from '@components/amazon/offcanvas/MasterBoxHelp'
@@ -49,7 +48,6 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
   const router = useRouter()
   const { inboundPlanId } = router.query
   const { state }: any = useContext(AppContext)
-  const { mutate } = useSWRConfig()
   const [inboundPlanDetails, setinboundPlanDetails] = useState<InboundPlan | null>()
   const [loading, setloading] = useState(true)
   const [helpOffCanvasIsOpen, setHelpOffCanvasIsOpen] = useState(false)
@@ -100,233 +98,9 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
     }
   )
 
-  const [activeTab, setActiveTab] = useState('1')
+  const [activeTab, setActiveTab] = useState('5')
   const tabChange = (tab: any) => {
     if (activeTab !== tab) setActiveTab(tab)
-  }
-
-  // const handleNextStepPacking = async (inboundPlanId: string) => {
-  //   setWatingRepsonse(true)
-  //   const cancelInboundPlanToast = toast.loading('Generating Packing Options...')
-  //   try {
-  //     const response = await axios.get(
-  //       `/api/amazon/fullfilments/generatePackingOptions?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`
-  //     )
-
-  //     if (!response.data.error) {
-  //       toast.update(cancelInboundPlanToast, {
-  //         render: response.data.message,
-  //         type: 'success',
-  //         isLoading: false,
-  //         autoClose: 3000,
-  //       })
-  //       mutate(`/api/amazon/fullfilments/getSellerInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`)
-  //       tabChange('2')
-  //     } else {
-  //       toast.update(cancelInboundPlanToast, {
-  //         render: response.data.message,
-  //         type: 'error',
-  //         isLoading: false,
-  //         autoClose: 3000,
-  //       })
-  //     }
-  //     setWatingRepsonse(false)
-  //   } catch (error) {
-  //     setWatingRepsonse(false)
-  //     console.error(error)
-  //   }
-  // }
-
-  const handleNextShipping = async (inboundPlanId: string) => {
-    setWatingRepsonse((prev: any) => ({ ...prev, shipping: true, transportationOptions: true }))
-
-    const generatePlacementOptions = toast.loading('Generating Placement Options...')
-    try {
-      const controller = new AbortController()
-      const signal = controller.signal
-      const response = await axios
-        .get(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/stepShipping/${state.currentRegion}/${state.user.businessId}/${inboundPlanId}`, {
-          signal,
-          headers: {
-            Authorization: `Bearer ${sessionToken}`,
-          },
-        })
-        .then(({ data }) => data)
-        .catch(({ error }) => {
-          if (axios.isCancel(error)) {
-            toast.error(error?.data?.message || 'Error generating Placement Options')
-          }
-        })
-
-      if (!response.error) {
-        toast.update(generatePlacementOptions, {
-          render: response.message,
-          type: 'success',
-          isLoading: false,
-          autoClose: 3000,
-        })
-        setWatingRepsonse((prev: any) => ({ ...prev, shipping: false }))
-        await mutate(`/api/amazon/fullfilments/getSellerInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`).then(
-          async () => {
-            tabChange('2')
-            await handleTransportationOptions(inboundPlanId)
-          }
-        )
-      } else {
-        setWatingRepsonse((prev: any) => ({ ...prev, shipping: false }))
-        toast.update(generatePlacementOptions, {
-          render: response.message,
-          type: 'error',
-          isLoading: false,
-          autoClose: 3000,
-        })
-      }
-    } catch (error) {
-      setWatingRepsonse((prev: any) => ({ ...prev, shipping: false }))
-      console.error(error)
-    }
-  }
-
-  const handlePlacementExpired = async (inboundPlanId: string) => {
-    setWatingRepsonse((prev: any) => ({ ...prev, shippingExpired: true, transportationOptions: true }))
-    const generatePlacementOptions = toast.loading('Generating Placement Options...')
-    try {
-      const controller = new AbortController()
-      const signal = controller.signal
-      const response = await axios
-        .get(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/stepShipping/${state.currentRegion}/${state.user.businessId}/${inboundPlanId}`, {
-          signal,
-          headers: {
-            Authorization: `Bearer ${sessionToken}`,
-          },
-        })
-        .then(({ data }) => data)
-        .catch(({ error }) => {
-          if (axios.isCancel(error)) {
-            toast.error(error?.data?.message || 'Error generating Placement Options')
-          }
-        })
-
-      if (!response.error) {
-        toast.update(generatePlacementOptions, {
-          render: response.message,
-          type: 'success',
-          isLoading: false,
-          autoClose: 3000,
-        })
-        setWatingRepsonse((prev: any) => ({ ...prev, shippingExpired: false }))
-        await mutate(`/api/amazon/fullfilments/getSellerInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`).then(
-          async () => {
-            tabChange('2')
-            await handleTransportationOptions(inboundPlanId)
-          }
-        )
-      } else {
-        setWatingRepsonse((prev: any) => ({ ...prev, shippingExpired: false }))
-        toast.update(generatePlacementOptions, {
-          render: response.message,
-          type: 'error',
-          isLoading: false,
-          autoClose: 3000,
-        })
-      }
-    } catch (error) {
-      setWatingRepsonse((prev: any) => ({ ...prev, shippingExpired: false }))
-      console.error(error)
-    }
-  }
-
-  const handleTransportationOptions = async (inboundPlanId: string) => {
-    // setWatingRepsonse((prev: any) => ({ ...prev, transportationOptions: true }))
-    const generateTransportationOptions = toast.loading('Generating Transportation Options...')
-
-    try {
-      const controller = new AbortController()
-      const signal = controller.signal
-      const response = await axios
-        .get(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/getShipmentsCosts/${state.currentRegion}/${state.user.businessId}/${inboundPlanId}`, {
-          signal,
-          headers: {
-            Authorization: `Bearer ${sessionToken}`,
-          },
-        })
-        .then(({ data }) => data)
-        .catch(({ error }) => {
-          if (axios.isCancel(error)) {
-            toast.error(error?.data?.message || 'Error generating Transportation Options')
-          }
-        })
-
-      if (!response.error) {
-        toast.update(generateTransportationOptions, {
-          render: response.message,
-          type: 'success',
-          isLoading: false,
-          autoClose: 3000,
-        })
-        await mutate(`/api/amazon/fullfilments/getSellerInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`).then(() => {
-          setWatingRepsonse((prev: any) => ({ ...prev, transportationOptions: false }))
-        })
-      } else {
-        tabChange('1')
-        setWatingRepsonse((prev: any) => ({ ...prev, transportationOptions: false }))
-        toast.update(generateTransportationOptions, {
-          render: response.message,
-          type: 'error',
-          isLoading: false,
-          autoClose: 3000,
-        })
-      }
-    } catch (error) {
-      setWatingRepsonse((prev: any) => ({ ...prev, transportationOptions: false }))
-      console.error(error)
-    }
-  }
-
-  const handleNextConfirmChargesFees = async (confirmChargesInfo: string) => {
-    setWatingRepsonse((prev: any) => ({ ...prev, boxLabels: true }))
-    const cancelInboundPlanToast = toast.loading('Confirming Charges and Fees...')
-    try {
-      const controller = new AbortController()
-      const signal = controller.signal
-      const response = await axios
-        .post(
-          `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/confirmCharges/${state.currentRegion}/${state.user.businessId}/${inboundPlanId}`,
-          confirmChargesInfo,
-          {
-            signal,
-            headers: {
-              Authorization: `Bearer ${sessionToken}`,
-            },
-          }
-        )
-        .then(({ data }) => data)
-        .catch(({ error }) => {
-          if (axios.isCancel(error)) {
-            toast.error(error?.data?.message || 'Error Confirming Charges and Fees')
-          }
-        })
-
-      if (!response.error) {
-        toast.update(cancelInboundPlanToast, {
-          render: response.message,
-          type: 'success',
-          isLoading: false,
-          autoClose: 3000,
-        })
-      } else {
-        toast.update(cancelInboundPlanToast, {
-          render: response.message,
-          type: 'error',
-          isLoading: false,
-          autoClose: 3000,
-        })
-      }
-      await mutate(`/api/amazon/fullfilments/getSellerInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`)
-      setWatingRepsonse((prev: any) => ({ ...prev, boxLabels: false }))
-    } catch (error) {
-      setWatingRepsonse((prev: any) => ({ ...prev, boxLabels: false }))
-    }
   }
 
   const handlePrintShipmentBoxesLabel = async (shipmentId: string, boxes: number) => {
@@ -537,20 +311,6 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           </NavItem>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
-                              className={
-                                'fs-5 fw-semibold ' + (activeTab == '2' ? 'text-primary' : inboundPlanDetails.steps[2].complete ? 'text-success opacity-50' : 'text-muted')
-                              }
-                              onClick={() => {
-                                inboundPlanDetails?.steps[1]?.complete ? tabChange('2') : document.getElementById('btn_handleNextStepPacking')?.focus()
-                              }}>
-                              <>
-                                <i className='fas fa-home'></i>
-                                Shipping
-                              </>
-                            </NavLink>
-                          </NavItem>
-                          <NavItem style={{ cursor: 'pointer' }}>
-                            <NavLink
                               to='#'
                               className={
                                 'fs-5 fw-semibold ' + (activeTab == '3' ? 'text-primary' : inboundPlanDetails.steps[3].complete ? 'text-success opacity-50' : 'text-muted')
@@ -600,19 +360,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                         </Nav>
                         <TabContent activeTab={activeTab} className='pt-2 pb-4 border-bottom'>
                           <TabPane tabId='1'>
-                            <InventoryToSend inboundPlan={inboundPlanDetails} handleNextStep={handleNextShipping} watingRepsonse={watingRepsonse} />
-                          </TabPane>
-                          <TabPane tabId='2'>
-                            {inboundPlanDetails.steps[1].complete && (
-                              <Shipping
-                                sessionToken={sessionToken}
-                                inboundPlan={inboundPlanDetails}
-                                // setinboundPlanDetails={setinboundPlanDetails}
-                                handleNextStep={handleNextConfirmChargesFees}
-                                watingRepsonse={watingRepsonse}
-                                handlePlacementExpired={handlePlacementExpired}
-                              />
-                            )}
+                            <InventoryToSend inboundPlan={inboundPlanDetails} watingRepsonse={watingRepsonse} />
                           </TabPane>
                           <TabPane tabId='3'>
                             {inboundPlanDetails.steps[2].complete && (

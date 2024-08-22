@@ -9,6 +9,8 @@ export interface ListInboundPlan {
     businessUniqId: string;
     region: string;
     inboundPlanId: string;
+    fulfillmentType: string
+    amzFinished: boolean
     operationId: string;
     createdAt: string;
     status: string;
