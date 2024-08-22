@@ -41,18 +41,18 @@ type Props = {
 const SalesOverTimeTimeline = ({ salesOverTime }: Props) => {
   const { state }: any = useContext(AppContext)
   const currentHourIndex = TIMELINE.indexOf(CUURENTHOUR)
-  const YESTERDAY = moment().subtract(1, 'days').format('YYYY-MM-DD')
-  const TODAY = moment().format('YYYY-MM-DD')
+  const YESTERDAY = moment.utc().local().subtract(1, 'days').format('YYYY-MM-DD')
+  const TODAY = moment.utc().local().format('YYYY-MM-DD')
   const series = [
     {
       name: 'Today',
       type: 'line',
-      data: Object?.values(salesOverTime[TODAY]).slice(0, currentHourIndex + 1),
+      data: salesOverTime[TODAY] ? Object?.values(salesOverTime[TODAY]).slice(0, currentHourIndex + 1) : [],
     },
     {
       name: 'Yesterday',
       type: 'area',
-      data: Object?.values(salesOverTime[YESTERDAY]),
+      data: salesOverTime[YESTERDAY] ? Object?.values(salesOverTime[YESTERDAY]) : [],
     },
   ]
 
