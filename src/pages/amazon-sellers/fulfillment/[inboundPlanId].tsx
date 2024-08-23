@@ -626,7 +626,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           </TabPane>
                           <TabPane tabId='5'>
                             {inboundPlanDetails.steps[4].complete && (
-                              <TrackingDetails inboundPlan={inboundPlanDetails} handlePrintShipmentBillOfLading={handlePrintShipmentBillOfLading} />
+                              <TrackingDetails inboundPlan={inboundPlanDetails} handlePrintShipmentBillOfLading={handlePrintShipmentBillOfLading} watingRepsonse={watingRepsonse} />
                             )}
                           </TabPane>
                         </TabContent>

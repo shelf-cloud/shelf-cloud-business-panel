@@ -158,6 +158,7 @@ const CarrierPalletInfo = ({ inboundPlan, handleNextStep, watingRepsonse }: Prop
                       <p className='m-0 p-0 fw-semibold'>Print Pallet Lables</p>
                       <Button
                         disabled={watingRepsonse.printingLabel}
+                        size='sm'
                         color='success'
                         id='btn_handleNextShipping'
                         onClick={() =>
@@ -166,7 +167,13 @@ const CarrierPalletInfo = ({ inboundPlan, handleNextStep, watingRepsonse }: Prop
                             shipment.shipmentPallets.pallets.reduce((total, pallet) => total + pallet.quantity, 0)
                           )
                         }>
-                        {watingRepsonse.printingLabel ? <Spinner color='light' size={'sm'} /> : 'Print'}
+                        {watingRepsonse.printingLabel ? (
+                          <span>
+                            <Spinner color='light' size={'sm'} className='me-1' /> Downloading Pallet Labels
+                          </span>
+                        ) : (
+                          'Print Pallet Lables'
+                        )}
                       </Button>
                     </div>
                   )}

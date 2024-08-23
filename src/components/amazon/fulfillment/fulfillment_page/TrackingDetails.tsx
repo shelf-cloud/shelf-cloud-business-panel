@@ -2,15 +2,16 @@
 import React, { useContext, useState } from 'react'
 import AppContext from '@context/AppContext'
 import { FormatIntPercentage } from '@lib/FormatNumbers'
-import { InboundPlan } from '@typesTs/amazon/fulfillments/fulfillment'
+import { InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
 import { Button, Card, CardBody, Col, Spinner } from 'reactstrap'
 
 type Props = {
   inboundPlan: InboundPlan
   handlePrintShipmentBillOfLading: (shipmentId: string) => void
+  watingRepsonse: WaitingReponses
 }
 
-const TrackingDetails = ({ inboundPlan, handlePrintShipmentBillOfLading }: Props) => {
+const TrackingDetails = ({ inboundPlan, handlePrintShipmentBillOfLading, watingRepsonse }: Props) => {
   const { state }: any = useContext(AppContext)
   const [selectedShipment, setselectedShipment] = useState(Object.values(inboundPlan.confirmedShipments)[0])
   return (
@@ -80,8 +81,14 @@ const TrackingDetails = ({ inboundPlan, handlePrintShipmentBillOfLading }: Props
                   <p>
                     Amazon Reference ID: <span className='fw-semibold'>{selectedShipment.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber}</span>
                   </p>
-                  <Button color='primary' onClick={() => handlePrintShipmentBillOfLading(selectedShipment.shipmentId)}>
-                    Download Bill Of Lading
+                  <Button disabled={watingRepsonse.printingLabel} color='primary' onClick={() => handlePrintShipmentBillOfLading(selectedShipment.shipmentId)}>
+                    {watingRepsonse.printingLabel ? (
+                      <span>
+                        <Spinner color='light' size={'sm'} className='me-1' /> Downloading BOL...
+                      </span>
+                    ) : (
+                      'Download Bill Of Lading'
+                    )}
                   </Button>
                   <p className=' mt-3 fs-7 text-muted'>The BOL will be generated no later than 8 a.m. the morning of pickup.</p>
                 </Col>

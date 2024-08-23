@@ -15,6 +15,10 @@ import TrackShipment from '@components/amazon/shipments/shipment_page/TrackShipm
 import moment from 'moment'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import Contents from '@components/amazon/shipments/shipment_page/Contents'
+import { CleanStatus } from '@lib/SkuFormatting'
+import { GetLabelsResponse, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
+import TrackingEvents from '@components/amazon/shipments/shipment_page/TrackingEvents'
+import Pallets from '@components/amazon/shipments/shipment_page/Pallets'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -43,13 +47,22 @@ type Props = {
   }
 }
 
-const FBAShipmentDetails = ({ session }: Props) => {
+const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
   const router = useRouter()
   const { shipmentId } = router.query
   const { state }: any = useContext(AppContext)
   const [shipmentDetails, setshipmentDetails] = useState<FBAShipment | null>()
   const [loading, setloading] = useState(true)
-
+  const [watingRepsonse, setWatingRepsonse] = useState<WaitingReponses>({
+    inventoryToSend: false,
+    shipping: false,
+    shippingExpired: false,
+    transportationOptions: false,
+    boxLabels: false,
+    printingLabel: false,
+    CarrierPalletInfo: false,
+    trackingDetails: false,
+  })
   const title = `Shipment Summary | ${session?.user?.businessName}`
 
   const controller = new AbortController()
@@ -85,6 +98,52 @@ const FBAShipmentDetails = ({ session }: Props) => {
   const tabChange = (tab: any) => {
     if (activeTab !== tab) setActiveTab(tab)
   }
+
+  const handlePrintShipmentBillOfLading = async (shipmentId: string) => {
+    setWatingRepsonse((prev: any) => ({ ...prev, printingLabel: true }))
+    const cancelInboundPlanToast = toast.loading('Generating Bill Of Lading...')
+    try {
+      const controller = new AbortController()
+      const signal = controller.signal
+      const response = (await axios
+        .get(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/getBillOfLading/${state.currentRegion}/${state.user.businessId}/${shipmentId}`, {
+          signal,
+          headers: {
+            Authorization: `Bearer ${sessionToken}`,
+          },
+        })
+        .then(({ data }) => data)
+        .catch(({ error }) => {
+          if (axios.isCancel(error)) {
+            toast.error(error?.data?.message || 'Error Generating Bill Of Lading')
+          }
+        })) as GetLabelsResponse
+
+      if (!response.error) {
+        toast.update(cancelInboundPlanToast, {
+          render: response.message,
+          type: 'success',
+          isLoading: false,
+          autoClose: 3000,
+        })
+        const a = document.createElement('a')
+        a.href = response.labels.payload.DownloadURL
+        a.download = shipmentId
+        a.click()
+      } else {
+        toast.update(cancelInboundPlanToast, {
+          render: response.message,
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+        })
+      }
+      setWatingRepsonse((prev: any) => ({ ...prev, printingLabel: false }))
+    } catch (error) {
+      setWatingRepsonse((prev: any) => ({ ...prev, printingLabel: false }))
+    }
+  }
+
   return (
     <div>
       <Head>
@@ -130,7 +189,7 @@ const FBAShipmentDetails = ({ session }: Props) => {
                           <p className='m-0 p-0 text-muted'>
                             Status:{' '}
                             <Badge color='success' className='fs-6'>
-                              {shipmentDetails.shipment.status}
+                              {CleanStatus(shipmentDetails.shipment.status)}
                             </Badge>
                           </p>
                           <p className='m-0 p-0 text-muted'>
@@ -208,10 +267,18 @@ const FBAShipmentDetails = ({ session }: Props) => {
                         </Nav>
                         <TabContent activeTab={activeTab} className='pt-2 pb-4'>
                           <TabPane tabId='1'>
-                            <TrackShipment shipmentDetails={shipmentDetails} />
+                            {shipmentDetails.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber ? (
+                              <TrackingEvents shipmentDetails={shipmentDetails} handlePrintShipmentBillOfLading={handlePrintShipmentBillOfLading} watingRepsonse={watingRepsonse} />
+                            ) : (
+                              <TrackShipment shipmentDetails={shipmentDetails} />
+                            )}
                           </TabPane>
                           <TabPane tabId='2'>
-                            <Contents shipmentDetails={shipmentDetails} />
+                            {shipmentDetails.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber ? (
+                              <Pallets shipmentDetails={shipmentDetails} handlePrintShipmentBillOfLading={handlePrintShipmentBillOfLading} watingRepsonse={watingRepsonse} />
+                            ) : (
+                              <Contents shipmentDetails={shipmentDetails} />
+                            )}
                           </TabPane>
                           <TabPane tabId='3'></TabPane>
                         </TabContent>

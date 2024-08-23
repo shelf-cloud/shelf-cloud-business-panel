@@ -78,11 +78,12 @@ export interface Source {
 }
 
 export interface TrackingDetails {
-    ltlTrackingDetail: Pagination;
+    ltlTrackingDetail: LtlTrackingDetail;
     spdTrackingDetail: SpdTrackingDetail;
 }
 
-export interface Pagination {
+export interface LtlTrackingDetail {
+    billOfLadingNumber: string
 }
 
 export interface SpdTrackingDetail {

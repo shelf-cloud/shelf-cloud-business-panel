@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import AppContext from '@context/AppContext'
-import { FormatCurrency, FormatIntPercentage } from '@lib/FormatNumbers'
+import { FormatIntPercentage } from '@lib/FormatNumbers'
 import { InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
 import React, { useContext } from 'react'
-import { Button, Card, CardBody, CardFooter, CardHeader, Col, Row, Spinner } from 'reactstrap'
+import { Button, Card, CardBody, CardFooter, CardHeader, Spinner } from 'reactstrap'
 
 type Props = {
   inboundPlan: InboundPlan
@@ -123,15 +123,22 @@ const BoxLabels = ({ inboundPlan, handleNextStep, watingRepsonse }: Props) => {
                     <p className='m-0 p-0 fw-semibold'>Print Box and Shipping Lables</p>
                     <Button
                       disabled={watingRepsonse.printingLabel}
+                      size='sm'
                       color='success'
-                      id='btn_handleNextShipping'
+                      id={shipment.shipment.shipmentConfirmationId}
                       onClick={() =>
                         handleNextStep(
                           shipment.shipment.shipmentConfirmationId,
                           shipment.shipmentBoxes.boxes.reduce((total, item) => total + item.quantity, 0)
                         )
                       }>
-                      {watingRepsonse.printingLabel ? <Spinner color='light' size={'sm'} /> : 'Print'}
+                      {watingRepsonse.printingLabel ? (
+                        <span className='text-nowrap'>
+                          <Spinner color='light' size={'sm'} className='me-1' /> Downloading Labels
+                        </span>
+                      ) : (
+                        'Print Box Labels'
+                      )}
                     </Button>
                   </div>
                 </CardFooter>
@@ -139,7 +146,7 @@ const BoxLabels = ({ inboundPlan, handleNextStep, watingRepsonse }: Props) => {
             ))}
           </div>
           {/* TOTAL ESTIMATED FEES */}
-          <Row className='mt-5 mb-3'>
+          {/* <Row className='mt-5 mb-3'>
             <Col xs='12' lg='8'>
               <p className='fs-6 fw-bold'>Your shipment or shipments are now complete.</p>
               <p className='fs-7'>The Fulfillment has been created successfully, ShelfCloud has received the information and will begin to prepare the Shipments.</p>
@@ -172,7 +179,7 @@ const BoxLabels = ({ inboundPlan, handleNextStep, watingRepsonse }: Props) => {
                 </tbody>
               </table>
             </Col>
-          </Row>
+          </Row> */}
         </div>
       ) : (
         <div className='w-100 px-3'>
