@@ -14,6 +14,7 @@ import { ListInboundPlan } from '@typesTs/amazon/fulfillments/listInboundPlans'
 import FulfillmentsTable from '@components/amazon/fulfillment/FulfillmentsTable'
 import AssignWorkflowId from '@components/modals/amazon/AssignWorkflowId'
 import MasterBoxHelp from '@components/amazon/offcanvas/MasterBoxHelp'
+import AssignFinishedWorkflowId from '@components/modals/amazon/AssignFinishedWorkflowId'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -50,6 +51,15 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
   const [allData, setAllData] = useState<ListInboundPlan[]>([])
   const [helpOffCanvasIsOpen, setHelpOffCanvasIsOpen] = useState(false)
   const [assignWorkflowIdModal, setassignWorkflowIdModal] = useState({
+    show: false,
+    id: 0,
+    inboundPlanName: '',
+    marketplace: '',
+    dateCreated: '',
+    skus: 0,
+    units: 0,
+  })
+  const [assignFinishedWorkflowIdModal, setassignFinishedWorkflowIdModal] = useState({
     show: false,
     id: 0,
     inboundPlanName: '',
@@ -193,6 +203,7 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
                   pending={pending}
                   handleCancelInboundPlan={handleCancelInboundPlan}
                   setassignWorkflowIdModal={setassignWorkflowIdModal}
+                  setassignFinishedWorkflowIdModal={setassignFinishedWorkflowIdModal}
                 />
               </CardBody>
             </Card>
@@ -201,6 +212,9 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
       </React.Fragment>
       {assignWorkflowIdModal.show && (
         <AssignWorkflowId allData={allData} assignWorkflowIdModal={assignWorkflowIdModal} setassignWorkflowIdModal={setassignWorkflowIdModal} sessionToken={sessionToken} />
+      )}
+      {assignFinishedWorkflowIdModal.show && (
+        <AssignFinishedWorkflowId allData={allData} assignFinishedWorkflowIdModal={assignFinishedWorkflowIdModal} setassignFinishedWorkflowIdModal={setassignFinishedWorkflowIdModal} sessionToken={sessionToken} />
       )}
       <MasterBoxHelp isOpen={helpOffCanvasIsOpen} setHelpOffCanvasIsOpen={setHelpOffCanvasIsOpen} />
     </div>

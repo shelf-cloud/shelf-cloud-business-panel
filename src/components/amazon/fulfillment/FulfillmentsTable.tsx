@@ -13,9 +13,10 @@ type Props = {
   pending: boolean
   handleCancelInboundPlan: (inboundPlanId: string) => void
   setassignWorkflowIdModal: (prev: any) => void
+  setassignFinishedWorkflowIdModal: (prev: any) => void
 }
 
-const FulfillmentsTable = ({ filteredItems, pending, handleCancelInboundPlan, setassignWorkflowIdModal }: Props) => {
+const FulfillmentsTable = ({ filteredItems, pending, handleCancelInboundPlan, setassignWorkflowIdModal, setassignFinishedWorkflowIdModal }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
   const orderStatus = (rowA: ListInboundPlan, rowB: ListInboundPlan) => {
@@ -152,8 +153,25 @@ const FulfillmentsTable = ({ filteredItems, pending, handleCancelInboundPlan, se
                         })
                       }>
                       <div>
+                        <i className='ri-file-list-2-line align-middle me-2 fs-5 text-primary'></i>
+                        <span className='fs-6 fw-normal text-dark'>Assign New Workflow</span>
+                      </div>
+                    </DropdownItem>
+                    <DropdownItem
+                      onClick={() =>
+                        setassignFinishedWorkflowIdModal({
+                          show: true,
+                          id: row.id,
+                          inboundPlanName: row.name,
+                          marketplace: row.destinationMarketplaces,
+                          dateCreated: moment.utc(row.createdAt).local().format('LL hh:mm A'),
+                          skus: row.items.length,
+                          units: row.items.reduce((total, item) => total + item.quantity, 0),
+                        })
+                      }>
+                      <div>
                         <i className='ri-file-list-line align-middle me-2 fs-5 text-info'></i>
-                        <span className='fs-6 fw-normal text-dark'>Assign Workflow</span>
+                        <span className='fs-6 fw-normal text-dark'>Assign Finished Workflow</span>
                       </div>
                     </DropdownItem>
                   </DropdownMenu>
@@ -168,39 +186,22 @@ const FulfillmentsTable = ({ filteredItems, pending, handleCancelInboundPlan, se
                 <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
                   <i className='mdi mdi-dots-vertical align-middle fs-3 m-0 px-2 py-0' style={{ color: '#919FAF' }}></i>
                 </DropdownToggle>
-                {row.inboundPlanId ? (
-                  <DropdownMenu className='dropdown-menu-end'>
-                    <DropdownItem onClick={() => row.amzFinished ? router.push(`/amazon-sellers/fulfillment/sellerPortal/${row.inboundPlanId}`) : router.push(`/amazon-sellers/fulfillment/${row.inboundPlanId}`)}>
-                      <div>
-                        <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
-                        <span className='fs-6 fw-normal text-dark'>View Details</span>
-                      </div>
-                    </DropdownItem>
-                    <DropdownItem className='text-danger' onClick={() => handleCancelInboundPlan(row.inboundPlanId)}>
-                      <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
-                    </DropdownItem>
-                  </DropdownMenu>
-                ) : (
-                  <DropdownMenu className='dropdown-menu-end'>
-                    <DropdownItem
-                      onClick={() =>
-                        setassignWorkflowIdModal({
-                          show: true,
-                          id: row.id,
-                          inboundPlanName: row.name,
-                          marketplace: row.destinationMarketplaces,
-                          dateCreated: moment.utc(row.createdAt).local().format('LL hh:mm A'),
-                          skus: row.items.length,
-                          units: row.items.reduce((total, item) => total + item.quantity, 0),
-                        })
-                      }>
-                      <div>
-                        <i className='ri-file-list-line align-middle me-2 fs-5 text-info'></i>
-                        <span className='fs-6 fw-normal text-dark'>Assign Workflow</span>
-                      </div>
-                    </DropdownItem>
-                  </DropdownMenu>
-                )}
+                <DropdownMenu className='dropdown-menu-end'>
+                  <DropdownItem
+                    onClick={() =>
+                      row.amzFinished
+                        ? router.push(`/amazon-sellers/fulfillment/sellerPortal/${row.inboundPlanId}`)
+                        : router.push(`/amazon-sellers/fulfillment/${row.inboundPlanId}`)
+                    }>
+                    <div>
+                      <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
+                      <span className='fs-6 fw-normal text-dark'>View Details</span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem className='text-danger' onClick={() => handleCancelInboundPlan(row.inboundPlanId)}>
+                    <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
+                  </DropdownItem>
+                </DropdownMenu>
               </UncontrolledDropdown>
             )
             break
