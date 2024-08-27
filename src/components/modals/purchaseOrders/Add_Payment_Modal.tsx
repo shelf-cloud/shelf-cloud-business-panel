@@ -104,6 +104,7 @@ const Add_Payment_Modal = ({}: Props) => {
                   </Label>
                   <Input
                     type='number'
+                    onWheel={(e: any) => e.currentTarget.blur()}
                     className='form-control'
                     id='amount'
                     name='amount'

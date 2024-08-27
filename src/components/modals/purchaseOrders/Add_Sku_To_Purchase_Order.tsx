@@ -26,7 +26,9 @@ const Add_Sku_To_Purchase_Order = ({}) => {
   const [skuToAddToPo, setSkuToAddToPo] = useState<SkuInListToAddToPo[]>([])
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data: skuList }: { data?: SkuToAddPo[] } = useSWR(
-    state.user.businessId ? `/api/purchaseOrders/getSkusToAddToPo?region=${state.currentRegion}&businessId=${state.user.businessId}&supplier=${state.modalAddSkuToPurchaseOrder?.suppliersName}` : null,
+    state.user.businessId
+      ? `/api/purchaseOrders/getSkusToAddToPo?region=${state.currentRegion}&businessId=${state.user.businessId}&supplier=${state.modalAddSkuToPurchaseOrder?.suppliersName}`
+      : null,
     fetcher
   )
 
@@ -171,6 +173,7 @@ const Add_Sku_To_Purchase_Order = ({}) => {
           <>
             <DebounceInput
               type='number'
+              onWheel={(e: any) => e.currentTarget.blur()}
               minLength={1}
               debounceTimeout={300}
               className={'form-control fs-6 m-0 ' + (Number(row.addQty) <= 0 || row.addQty == '' ? 'border-danger' : '')}
@@ -244,7 +247,7 @@ const Add_Sku_To_Purchase_Order = ({}) => {
     }
     setloading(false)
   }
-  
+
   return (
     <Modal
       fade={false}

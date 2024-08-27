@@ -16,7 +16,6 @@ const SalesOverTime = ({ salesOverTime }: Props) => {
   const { state }: any = useContext(AppContext)
   const currentDate = moment.utc().local().format('YYYY-MM-DD')
   const previousDate = moment.utc().local().subtract(1, 'days').format('YYYY-MM-DD')
-  console.log(currentDate, previousDate)
   const totalToday = salesOverTime?.orders[currentDate] ? Object.values(salesOverTime?.orders[currentDate]).reduce((a, b) => a + b, 0) : 0
   const totalYesterday = salesOverTime?.orders[previousDate] ? Object.values(salesOverTime?.orders[previousDate]).reduce((a, b) => a + b, 0) : 0
 

@@ -164,6 +164,7 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
                     <td className='fs-6 text-center text-nowrap'>
                       <Input
                         type='number'
+                        onWheel={(e) => e.currentTarget.blur()}
                         className='form-control fs-6 m-0 shadow-sm'
                         style={{ maxWidth: '60px' }}
                         placeholder='Qty'

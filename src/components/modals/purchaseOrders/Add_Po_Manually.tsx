@@ -58,6 +58,7 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
       } else if (organizeBy == 'sku') {
         mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
       }
+      mutate('/api/getuser')
       toast.success(response.data.msg)
     } else {
       toast.error('There were some errors creating Purchase Order.')

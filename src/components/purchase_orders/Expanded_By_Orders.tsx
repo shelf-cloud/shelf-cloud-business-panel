@@ -516,6 +516,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                           <Input
                             disabled={product.orderQty - product.receivedQty - product.inboundQty <= 0 || !data.isOpen}
                             type='number'
+                            onWheel={(e) => e.currentTarget.blur()}
                             className='form-control fs-6 m-0'
                             style={{ maxWidth: '80px' }}
                             placeholder='--'
