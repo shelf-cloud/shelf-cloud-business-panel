@@ -32,6 +32,14 @@ const TrackingDetails = ({ inboundPlan, handlePrintShipmentBillOfLading, watingR
                       <span className='text-primary'>Shipment ID: </span>
                       {shipment.shipment.shipmentConfirmationId}
                     </p>
+                    <p className='m-0 fs-7'>
+                      <span className='text-primary'>Method: </span>
+                      {selectedShipment.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber ? 'Less than and full truckload (LTL/FTL)' : 'Small parcel delivery (SPD)'}
+                    </p>
+                    <p className='m-0 fs-7'>
+                      <span className='text-primary'>Carrier: </span>
+                      {''}
+                    </p>
                   </CardBody>
                 </Card>
               ))}
@@ -81,7 +89,7 @@ const TrackingDetails = ({ inboundPlan, handlePrintShipmentBillOfLading, watingR
                   <p>
                     Amazon Reference ID: <span className='fw-semibold'>{selectedShipment.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber}</span>
                   </p>
-                  <Button disabled={watingRepsonse.printingLabel} color='primary' onClick={() => handlePrintShipmentBillOfLading(selectedShipment.shipmentId)}>
+                  <Button disabled={watingRepsonse.printingLabel} color='primary' onClick={() => handlePrintShipmentBillOfLading(selectedShipment.shipment.shipmentConfirmationId)}>
                     {watingRepsonse.printingLabel ? (
                       <span>
                         <Spinner color='light' size={'sm'} className='me-1' /> Downloading BOL...

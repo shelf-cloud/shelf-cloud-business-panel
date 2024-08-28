@@ -464,6 +464,53 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       width: '100px',
       minWidth: 'fit-content',
     },
+    {
+      name: (
+        <div>
+          <p className='m-0 mb-1 fw-bold fs-6 text-center'>FBA Sales</p>
+        </div>
+      ),
+      selector: (row: AmazonFulfillmentSku) => {
+        return (
+          <div className='d-flex flex-row justify-content-start align-items-center gap-2 my-2 fs-6'>
+            <div className='d-flex flex-column justify-content-start align-items-center gap-2' style={{ overflow: 'unset', textOverflow: 'unset' }}>
+              <div>
+                <span className='fw-semibold'>1D: </span>
+                <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['1D'])}</span>
+              </div>
+              <div>
+                <span className='fw-semibold'>3D: </span>
+                <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['3D'])}</span>
+              </div>
+              <div>
+                <span className='fw-semibold'>7D: </span>
+                <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['7D'])}</span>
+              </div>
+            </div>
+            <div className='d-flex flex-column justify-content-center align-items-center gap-2' style={{ overflow: 'unset', textOverflow: 'unset' }}>
+              <div>
+                <span className='fw-semibold'>15D: </span>
+                <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['15D'])}</span>
+              </div>
+              <div>
+                <span className='fw-semibold'>30D: </span>
+                <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['30D'])}</span>
+              </div>
+              <div>
+                <span className='fw-semibold'>60D: </span>
+                <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['60D'])}</span>
+              </div>
+            </div>
+          </div>
+        )
+      },
+      wrap: false,
+      sortable: false,
+      center: true,
+      compact: true,
+      minWidth: 'fit-content',
+      width: '140px',
+    },
     // {
     //   name: <span className='fw-bold fs-6'>Reserved</span>,
     //   selector: (row: AmazonFulfillmentSku) => row.afn_reserved_quantity,
@@ -643,7 +690,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
         data={filteredItems}
         progressPending={pending}
         striped={true}
-        defaultSortFieldId={8}
+        defaultSortFieldId={9}
         defaultSortAsc={true}
         conditionalRowStyles={conditionalRowStyles}
         pagination={filteredItems.length > 100 ? true : false}

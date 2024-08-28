@@ -96,7 +96,7 @@ const AssignFinishedWorkflowId = ({ assignFinishedWorkflowIdModal, setassignFini
       toast.error('Chosen Workflow Marketplace does not match the ShelfCloud Fulfillment Marketplace')
       return
     }
-    if (workflow.items.length !== assignFinishedWorkflowIdModal.skus) {
+    if (new Set(workflow.items.map((item) => item.msku)).size !== assignFinishedWorkflowIdModal.skus) {
       setloadingAssignment(false)
       toast.error('Chosen Workflow SKUs does not match the ShelfCloud Fulfillment SKUs')
       return
@@ -227,9 +227,12 @@ const AssignFinishedWorkflowId = ({ assignFinishedWorkflowIdModal, setassignFini
                       (workflow) =>
                         allData.find((fulfillment) => fulfillment.inboundPlanId === workflow.inboundPlanId) === undefined && (
                           <tr key={workflow.inboundPlanId} className='text-center'>
-                            <td>{moment.utc(workflow.createdAt).local().format('LL hh:mm A')}</td>
+                            <td>
+                              <p className='m-0 '>{moment.utc(workflow.createdAt).local().format('LL hh:mm A')}</p>
+                              <p className=' m-0 text-muted fs-7'>{workflow.inboundPlanId}</p>
+                            </td>
                             <td>{AMAZON_MARKETPLACES[workflow.marketplaceIds[0]].domain}</td>
-                            <td>{FormatIntNumber(state.currentRegion, workflow.items.length)}</td>
+                            <td>{FormatIntNumber(state.currentRegion, new Set(workflow.items.map((item) => item.msku)).size)}</td>
                             <td>
                               {FormatIntNumber(
                                 state.currentRegion,

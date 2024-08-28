@@ -119,10 +119,10 @@ const FBAShipmentsTable = ({ filteredItems, pending }: Props) => {
           case 'shipped':
           case 'ready_to_ship':
           case 'working':
-            return <span className='badge text-uppercase badge-soft-success p-2'>{` ${CleanStatus(row.shipment.status)} `}</span>
+            return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${CleanStatus(row.shipment.status)} `}</span>
             break
           case 'delivered':
-            return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${CleanStatus(row.shipment.status)} `}</span>
+            return <span className='badge text-uppercase badge-soft-success p-2'>{` ${CleanStatus(row.shipment.status)} `}</span>
             break
           case 'awating':
           case 'active':

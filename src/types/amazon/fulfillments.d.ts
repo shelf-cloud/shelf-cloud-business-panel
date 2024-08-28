@@ -57,6 +57,7 @@ export interface AmazonFulfillmentSku {
     };
     hasError: boolean;
     hasDimensionsError: boolean;
+    totalUnitsSold: { [key: string]: number };
 }
 
 interface AmzDimensions {
