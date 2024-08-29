@@ -34,12 +34,12 @@ const TrackingDetails = ({ inboundPlan, handlePrintShipmentBillOfLading, watingR
                     </p>
                     <p className='m-0 fs-7'>
                       <span className='text-primary'>Method: </span>
-                      {selectedShipment.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber ? 'Less than and full truckload (LTL/FTL)' : 'Small parcel delivery (SPD)'}
+                      {shipment.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber ? 'Less than and full truckload (LTL/FTL)' : 'Small parcel delivery (SPD)'}
                     </p>
-                    <p className='m-0 fs-7'>
+                    {/* <p className='m-0 fs-7'>
                       <span className='text-primary'>Carrier: </span>
                       {''}
-                    </p>
+                    </p> */}
                   </CardBody>
                 </Card>
               ))}

@@ -215,7 +215,7 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
   useEffectAfterMount(() => {
     if (inboundPlan.placementOptions.length > 0) {
       const placementOptionsExpired = inboundPlan.placementOptions.some((placementOption) => moment(placementOption.expiration).isBefore(moment()))
-      if (placementOptionsExpired && !watingRepsonse.shippingExpired) {
+      if (placementOptionsExpired && !watingRepsonse.shippingExpired && !inboundPlan.steps[2].complete) {
         handlePlacementExpired(inboundPlan.inboundPlanId)
       }
     }
