@@ -41,6 +41,21 @@ const FBAShipmentsTable = ({ filteredItems, pending }: Props) => {
     }
   }
 
+  const sortUnits = (rowA: FBAShipment, rowB: FBAShipment) => {
+    const a = rowA.shipmentItems.items.reduce((total, item) => total + item.quantity, 0)
+    const b = rowB.shipmentItems.items.reduce((total, item) => total + item.quantity, 0)
+
+    if (a > b) {
+      return 1
+    }
+
+    if (b > a) {
+      return -1
+    }
+
+    return 0
+  }
+
   const columns: any = [
     {
       name: <span className='fw-bold fs-6'>Shipment Name</span>,
@@ -62,15 +77,15 @@ const FBAShipmentsTable = ({ filteredItems, pending }: Props) => {
       selector: (row: FBAShipment) => {
         return (
           <>
-            <p className='m-0 p-0'>{moment.utc(row.createdAt).local().format('LL')}</p>
-            <p className='m-0 p-0 text-muted'>{moment.utc(row.createdAt).local().format('hh:mm A')}</p>
+            <p className='m-0 p-0'>{moment(row.createdAt).local().format('LL')}</p>
+            <p className='m-0 p-0 text-muted'>{moment(row.createdAt).local().format('hh:mm A')}</p>
           </>
         )
       },
       sortable: true,
       center: true,
       compact: true,
-      sortFunction: (rowA: FBAShipment, rowB: FBAShipment) => sortDates(rowA.lastUpdated, rowB.lastUpdated),
+      sortFunction: (rowA: FBAShipment, rowB: FBAShipment) => sortDates(rowA.createdAt, rowB.createdAt),
     },
     {
       name: <span className='fw-bold fs-6'>Last Updated</span>,
@@ -111,6 +126,7 @@ const FBAShipmentsTable = ({ filteredItems, pending }: Props) => {
       sortable: true,
       center: true,
       compact: true,
+      sortFunction: sortUnits,
     },
     {
       name: <span className='fw-bolder fs-13'>Status</span>,

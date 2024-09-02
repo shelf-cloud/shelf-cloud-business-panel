@@ -11,19 +11,26 @@ import { AmazonFulfillmentSku, AmazonMarketplace } from '@typesTs/amazon/fulfill
 import useSWR from 'swr'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import moment from 'moment'
+import { Label_Prep_Owner_Options, notSupportedMarketplacesForFBA } from '@lib/AmzConstants'
+import SimpleSelect from '@components/Common/SimpleSelect'
 
 type Props = {
   orderProducts: AmazonFulfillmentSku[]
   showCreateInboundPlanModal: boolean
   setShowCreateInboundPlanModal: (showCreateInboundPlanModal: boolean) => void
+  setAllData: (cb: (prev: AmazonFulfillmentSku[]) => AmazonFulfillmentSku[]) => void
 }
 
-const notSupportedMarketplaces = ['A1AM78C64UM0Y8', 'A2Q3Y263D00KWC', 'A1C3SOZRARQ6R3', 'ARBP9OOSHTCHU', 'A33AVAJ2PDY3EV', 'A17E79C6D8DWNP', 'A2VIGQ35RCS4UG', 'A21TJRUUN4KGV']
+type CreatingErros = {
+  code: string
+  message: string
+  details: string
+}
 
-const CreateInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, setShowCreateInboundPlanModal }: Props) => {
+const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, setShowCreateInboundPlanModal, setAllData }: Props) => {
   const { state }: any = useContext(AppContext)
   const [loading, setloading] = useState(false)
-
+  const [creatingErros, setcreatingErros] = useState<CreatingErros[]>([])
   const TotalMasterBoxes = orderProducts.reduce((total: number, item: AmazonFulfillmentSku) => total + Number(item.orderQty), 0)
   const totalQuantityToShip = orderProducts.reduce((total: number, item: AmazonFulfillmentSku) => total + Number(item.totalSendToAmazon), 0)
 
@@ -36,27 +43,8 @@ const CreateInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, set
     }
   )
 
-  const generateTabDelimitedFile = async (orderProducts: AmazonFulfillmentSku[], inboundPlanName: string) => {
-    const prepOwner = 'Seller'
-    const labelOwner = 'Seller'
-
-    let fileContent = `Please review the Example tab before you complete this sheet\n\nDefault prep owner\t${prepOwner}\nDefault labeling owner\t${labelOwner}\n\n\t\tOptional\t\tOptional: Use only for case-packed SKUs\nMerchant SKU\tQuantity\tPrep owner\tLabeling owner\tUnits per box\tNumber of boxes\tBox length (in)\tBox width (in)\tBox height (in)\tBox weight (lb)\n`
-
-    for await (const product of orderProducts) {
-      const sortedDimensions = [product.boxLength, product.boxWidth, product.boxHeight].sort((a, b) => b - a)
-      fileContent += `${product.msku}\t${product.totalSendToAmazon}\t\t\t${product.boxQty}\t${product.orderQty}\t${sortedDimensions[0]}\t${sortedDimensions[1]}\t${sortedDimensions[2]}\t${product.boxWeight}\n`
-    }
-
-    const blob = new Blob([fileContent], { type: 'text/plain' })
-    const url = window.URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = inboundPlanName
-    a.click()
-  }
-
   const validation = useFormik({
-    enableReinitialize: true,
+    // enableReinitialize: true,
 
     initialValues: {
       inboundPlanName: `${state?.user?.name.substring(0, 3).toUpperCase()}-FBA-${moment().format('MM_DD_YYYY-hh_mma')}`,
@@ -101,8 +89,8 @@ const CreateInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, set
         }
       }
 
-      const response = await axios.post(`/api/amazon/fullfilments/masterBoxes/createInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        fulfillmentType: 'Master Boxes',
+      const response = await axios.post(`/api/amazon/fullfilments/individualUnits/createIndUnitsInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+        fulfillmentType: 'Individual Units',
         inboundPlan: {
           contactInformation: {
             email: 'info@shelf-cloud.com',
@@ -112,9 +100,9 @@ const CreateInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, set
           destinationMarketplaces: [values.marketplace],
           items: orderProducts.map((product) => {
             return {
-              labelOwner: 'SELLER',
+              labelOwner: product.labelOwner,
               msku: product.msku,
-              prepOwner: 'NONE',
+              prepOwner: product.prepOwner,
               quantity: product.totalSendToAmazon,
             }
           }),
@@ -139,18 +127,22 @@ const CreateInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, set
             complete: false,
           },
           2: {
-            step: 'Shipping',
+            step: 'Packing Info',
             complete: false,
           },
           3: {
-            step: 'Box Labels',
+            step: 'Shipping',
             complete: false,
           },
           4: {
-            step: 'Carrier and Pallet Info',
+            step: 'Box Labels',
             complete: false,
           },
           5: {
+            step: 'Carrier and Pallet Info',
+            complete: false,
+          },
+          6: {
             step: 'Tracking Details',
             complete: false,
           },
@@ -158,21 +150,78 @@ const CreateInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, set
       })
 
       if (!response.data.error) {
-        generateTabDelimitedFile(orderProducts, values.inboundPlanName)
         setShowCreateInboundPlanModal(false)
         toast.success(response.data.message)
         resetForm()
         router.push(`/amazon-sellers/fulfillments`)
       } else {
         toast.error(response.data.message)
+        setcreatingErros(response.data.apiMessage.errors)
       }
       setloading(false)
     },
   })
 
-  const HandleAddProduct = (event: any) => {
+  const handleCreateInboundPlan = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
+  }
+
+  const handleSelectLabelOwner = async (selected: any, typeOwner: string, id: number) => {
+    setloading(true)
+    const changeLabelPrepOwner = toast.loading(`Saving ${typeOwner}...`)
+    if (typeOwner === 'labelOwner') {
+      setAllData((prev) => {
+        return prev.map((product) => {
+          if (product.id === id) {
+            return { ...product, labelOwner: selected.value }
+          }
+          return product
+        })
+      })
+    } else {
+      setAllData((prev) => {
+        return prev.map((product) => {
+          if (product.id === id) {
+            return { ...product, prepOwner: selected.value }
+          }
+          return product
+        })
+      })
+    }
+
+    const response = await axios
+      .post(`/api/amazon/fullfilments/changeLabelPrepOwner?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+        typeOwner,
+        selected: selected.value,
+        productId: id,
+      })
+      .then(({ data }) => data)
+      .catch(() => {
+        toast.update(changeLabelPrepOwner, {
+          render: 'Error saving Owner',
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+        })
+      })
+
+    if (!response.error) {
+      toast.update(changeLabelPrepOwner, {
+        render: response.message,
+        type: 'success',
+        isLoading: false,
+        autoClose: 3000,
+      })
+    } else {
+      toast.update(changeLabelPrepOwner, {
+        render: response.message,
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
+    }
+    setloading(false)
   }
 
   return (
@@ -190,10 +239,10 @@ const CreateInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, set
         }}
         className='modal-title'
         id='myModalLabel'>
-        Create Fulfillment - Send To Amazon
+        Create Individual Units Fulfillment - Send To Amazon
       </ModalHeader>
       <ModalBody>
-        <Form onSubmit={HandleAddProduct}>
+        <Form onSubmit={handleCreateInboundPlan}>
           <Row>
             <h5 className='fs-5 fw-bolder text-primary'>Fulfillment Details</h5>
             <Row xs={12} className='my-0'>
@@ -237,7 +286,7 @@ const CreateInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, set
                     <option value=''>Choose Marketplace..</option>
                     {amazonMarketplaces?.map(
                       (marketplace) =>
-                        !notSupportedMarketplaces.includes(marketplace.marketplaceId) && (
+                        !notSupportedMarketplacesForFBA.includes(marketplace.marketplaceId) && (
                           <option key={marketplace.marketplaceId} value={marketplace.marketplaceId}>
                             {marketplace.marketplaceName}
                           </option>
@@ -270,15 +319,17 @@ const CreateInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, set
                 </FormGroup>
               </Col>
             </Row>
-            <Col md={12}>
-              <p className='fs-5 mb-0 p-0'>SKUs ready to send: {validation.values.hasProducts}</p>
+            <Col md={12} style={{ overflowX: 'auto', overflowY: 'hidden', position: 'relative' }}>
+              <p className='fw-semibold mb-0'>SKUs ready to send: {validation.values.hasProducts}</p>
               {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='text-danger'>{validation.errors.hasProducts}</p> : null}
               <table className='table align-middle table-sm table-responsive table-nowrap table-striped-columns'>
                 <thead>
                   <tr>
                     <th>SKU</th>
+                    <th className='text-center'>Label Owner</th>
+                    <th className='text-center'>Prep Owner</th>
                     <th className='text-center'>Type</th>
-                    <th className='text-center'>Master Boxes</th>
+                    <th className='text-center'>Individual Units</th>
                     <th className='text-center'>Quantity To Send</th>
                   </tr>
                 </thead>
@@ -290,12 +341,32 @@ const CreateInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, set
                         <br />
                         <span className='text-primary fs-7 m-0 p-0'>{product.asin}</span>
                       </td>
+                      <td className='px-3' style={{ minWidth: '150px', position: 'relative' }}>
+                        <SimpleSelect
+                          selected={{ value: product.labelOwner, label: product.labelOwner }}
+                          handleSelect={(selected) => {
+                            handleSelectLabelOwner(selected, 'labelOwner', product.id)
+                          }}
+                          options={Label_Prep_Owner_Options}
+                        />
+                      </td>
+                      <td className='px-3' style={{ minWidth: '150px', position: 'relative' }}>
+                        <SimpleSelect
+                          selected={{ value: product.prepOwner, label: product.prepOwner }}
+                          handleSelect={(selected) => {
+                            handleSelectLabelOwner(selected, 'prepOwner', product.id)
+                          }}
+                          options={Label_Prep_Owner_Options}
+                        />
+                      </td>
                       <td className='text-center'>{product.isKit ? 'Kit' : 'Product'}</td>
                       <td className='text-center'>{FormatIntNumber(state.currentRegion, parseInt(product.orderQty))}</td>
                       <td className='text-center'>{FormatIntNumber(state.currentRegion, product.totalSendToAmazon)}</td>
                     </tr>
                   ))}
                   <tr key={'totalMasterBoxes'} style={{ backgroundColor: '#e5e5e5' }}>
+                    <td className='fw-bold text-end'></td>
+                    <td className='fw-bold text-end'></td>
                     <td className='fw-bold text-end'></td>
                     <td className='fw-bold text-end'>TOTAL</td>
                     <td className='fw-bold text-center'>{FormatIntNumber(state.currentRegion, TotalMasterBoxes)}</td>
@@ -304,10 +375,21 @@ const CreateInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, set
                 </tbody>
               </table>
             </Col>
+            <Row xs={12}>
+              <Col>
+                <ul>
+                  {creatingErros.map((error, index: number) => (
+                    <li key={index} className='text-danger'>
+                      {error.message}
+                    </li>
+                  ))}
+                </ul>
+              </Col>
+            </Row>
             <Col md={12}>
               <div className='text-end'>
-                <Button disabled={loading} type='submit' color='success' className='btn'>
-                  {loading ? <Spinner color='light' /> : 'Confirm Plan'}
+                <Button disabled={true} type='submit' color='success' className='btn'>
+                  {loading ? <span><Spinner color='light' size={'sm'}/> Loading...</span> : 'Confirm Plan'}
                 </Button>
               </div>
             </Col>
@@ -318,4 +400,4 @@ const CreateInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, set
   )
 }
 
-export default CreateInboundPlanModal
+export default CreateIndvUnitsInboundPlanModal

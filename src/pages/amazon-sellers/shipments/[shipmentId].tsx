@@ -248,8 +248,18 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                               </>
                             </NavLink>
                           </NavItem>
+                          {shipmentDetails.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber && (
+                            <NavItem style={{ cursor: 'pointer' }}>
+                              <NavLink className={'fs-5 fw-semibold ' + (activeTab == '2' ? 'text-primary' : 'text-muted')} onClick={() => tabChange('2')}>
+                                <>
+                                  <i className='fas fa-home'></i>
+                                  Pallets
+                                </>
+                              </NavLink>
+                            </NavItem>
+                          )}
                           <NavItem style={{ cursor: 'pointer' }}>
-                            <NavLink className={'fs-5 fw-semibold ' + (activeTab == '2' ? 'text-primary' : 'text-muted')} onClick={() => tabChange('2')}>
+                            <NavLink className={'fs-5 fw-semibold ' + (activeTab == '3' ? 'text-primary' : 'text-muted')} onClick={() => tabChange('3')}>
                               <>
                                 <i className='fas fa-home'></i>
                                 Contents
@@ -257,7 +267,7 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                             </NavLink>
                           </NavItem>
                           <NavItem style={{ cursor: 'pointer' }}>
-                            <NavLink to='#' className={'fs-5 fw-semibold ' + (activeTab == '3' ? 'text-primary' : 'text-muted')} onClick={() => tabChange('3')} type='button'>
+                            <NavLink to='#' className={'fs-5 fw-semibold ' + (activeTab == '4' ? 'text-primary' : 'text-muted')} onClick={() => tabChange('4')} type='button'>
                               <>
                                 <i className='far fa-user'></i>
                                 Problems
@@ -273,14 +283,15 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                               <TrackShipment shipmentDetails={shipmentDetails} />
                             )}
                           </TabPane>
-                          <TabPane tabId='2'>
-                            {shipmentDetails.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber ? (
+                          {shipmentDetails.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber && (
+                            <TabPane tabId='2'>
                               <Pallets shipmentDetails={shipmentDetails} handlePrintShipmentBillOfLading={handlePrintShipmentBillOfLading} watingRepsonse={watingRepsonse} />
-                            ) : (
-                              <Contents shipmentDetails={shipmentDetails} />
-                            )}
+                            </TabPane>
+                          )}
+                          <TabPane tabId='3'>
+                            <Contents shipmentDetails={shipmentDetails} />
                           </TabPane>
-                          <TabPane tabId='3'></TabPane>
+                          <TabPane tabId='4'></TabPane>
                         </TabContent>
                       </Col>
                     </Row>

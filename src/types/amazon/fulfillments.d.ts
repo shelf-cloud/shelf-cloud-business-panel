@@ -50,6 +50,8 @@ export interface AmazonFulfillmentSku {
     totalDaysOfSupply: number;
     salesLast30Days: number;
     unitsSoldLast30Days: number;
+    labelOwner: 'NONE' | 'SELLER' | 'AMAZON';
+    prepOwner: 'NONE' | 'SELLER' | 'AMAZON';
     dimensions: {
         marketplaceId: string,
         item: Dimensions
@@ -57,6 +59,7 @@ export interface AmazonFulfillmentSku {
     };
     hasError: boolean;
     hasDimensionsError: boolean;
+    hasIndividualUnitsDimensionsError: boolean;
     totalUnitsSold: { [key: string]: number };
 }
 

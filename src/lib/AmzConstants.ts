@@ -10,6 +10,13 @@ type AmazonMarketplace = {
         currency: string
     }
 }
+export const notSupportedMarketplacesForFBA = ['A1AM78C64UM0Y8', 'A2Q3Y263D00KWC', 'A1C3SOZRARQ6R3', 'ARBP9OOSHTCHU', 'A33AVAJ2PDY3EV', 'A17E79C6D8DWNP', 'A2VIGQ35RCS4UG', 'A21TJRUUN4KGV']
+
+export const Label_Prep_Owner_Options = [
+    { value: 'NONE', label: 'NONE' },
+    { value: 'SELLER', label: 'SELLER' },
+    { value: 'AMAZON', label: 'AMAZON' }
+];
 
 export const AMAZON_MARKETPLACES = {
     'A2EUQ1WTGCTBG2': {

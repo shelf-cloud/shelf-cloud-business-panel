@@ -3,10 +3,10 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { DebounceInput } from 'react-debounce-input'
 import { Button, Col, Row } from 'reactstrap'
 import MasterBoxesTable from './MasterBoxesTable'
-import FilterListings from './FilterListings'
+import FilterListings from '../FilterListings'
 import { useRouter } from 'next/router'
-import CreateInboundPlanModal from '@components/modals/amazon/CreateInboundPlanModal'
 import AmazonFulfillmentDimensions from '@components/modals/amazon/AmazonFulfillmentDimensions'
+import CreateMastBoxesInboundPlanModal from '@components/modals/amazon/CreateMastBoxesInboundPlanModal'
 
 type Props = {
   lisiting: AmazonFulfillmentSku[]
@@ -45,11 +45,11 @@ const MasterBoxesFulfillment = ({ lisiting, pending }: Props) => {
         (item: AmazonFulfillmentSku) =>
           (showHidden === undefined || showHidden === '' ? Boolean(item.show) : showHidden === 'false' ? Boolean(item.show) : true) &&
           (showNotEnough === undefined || showNotEnough === ''
-            ? item.maxOrderQty === 0
+            ? item.maxOrderQty <= 0
               ? false
               : true
             : showNotEnough === 'false'
-            ? item.maxOrderQty === 0
+            ? item.maxOrderQty <= 0
               ? false
               : true
             : true) &&
@@ -62,11 +62,11 @@ const MasterBoxesFulfillment = ({ lisiting, pending }: Props) => {
         (item: AmazonFulfillmentSku) =>
           (showHidden === undefined || showHidden === '' ? Boolean(item.show) : showHidden === 'false' ? Boolean(item.show) : true) &&
           (showNotEnough === undefined || showNotEnough === ''
-            ? item.maxOrderQty === 0
+            ? item.maxOrderQty <= 0
               ? false
               : true
             : showNotEnough === 'false'
-            ? item.maxOrderQty === 0
+            ? item.maxOrderQty <= 0
               ? false
               : true
             : true) &&
@@ -149,7 +149,7 @@ const MasterBoxesFulfillment = ({ lisiting, pending }: Props) => {
         setdimensionsModal={setdimensionsModal}
       />
       {showCreateInboundPlanModal && (
-        <CreateInboundPlanModal
+        <CreateMastBoxesInboundPlanModal
           orderProducts={orderProducts}
           showCreateInboundPlanModal={showCreateInboundPlanModal}
           setShowCreateInboundPlanModal={setShowCreateInboundPlanModal}

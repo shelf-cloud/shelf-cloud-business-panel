@@ -421,8 +421,8 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                     {data?.poItems?.map((product: PurchaseOrderItem, key) => (
                       <tr key={`${key}-${product.sku}`} className='border-bottom py-2'>
                         <td className='text-center'>
-                          <Link href={`/product/${product.inventoryId}/${product.sku}`} passHref>
-                            <a target='blank' className='text-black'>
+                          <Link href={`/product/${product.inventoryId}/${product.sku}`} passHref tabIndex={-1}>
+                            <a target='blank' className='text-black' tabIndex={-1}>
                               <div
                                 style={{
                                   width: '100%',
@@ -450,14 +450,14 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                           </Link>
                         </td>
                         <td className='fs-6 fw-semibold'>
-                          <Link href={`/product/${product.inventoryId}/${product.sku}`} passHref>
-                            <a target='blank' className='text-black'>
+                          <Link href={`/product/${product.inventoryId}/${product.sku}`} passHref tabIndex={-1}>
+                            <a target='blank' className='text-black' tabIndex={-1}>
                               {product.title}
                             </a>
                           </Link>
                           {product.arrivalHistory?.length > 0 && (
                             <>
-                              <i className='ri-information-fill ms-2 fs-5 text-warning' id={`tooltipHistory${product.inventoryId}`}></i>
+                              <i className='ri-information-fill ms-2 fs-5 text-warning' id={`tooltipHistory${product.inventoryId}`} />
                               <UncontrolledTooltip
                                 placement='right'
                                 target={`tooltipHistory${product.inventoryId}`}
@@ -488,7 +488,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                           {product.asin && (
                             <>
                               <br />
-                              <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/exec/obidos/ASIN${product.asin}`} target='blank'>
+                              <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/exec/obidos/ASIN${product.asin}`} target='blank' tabIndex={-1}>
                                 <span className='fs-6 fw-normal'>{product.asin}</span>
                               </a>
                             </>
@@ -501,8 +501,8 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                           )}
                         </td>
                         <td className='fs-6 text-center text-nowrap'>
-                          <Link href={`/product/${product.inventoryId}/${product.sku}`} passHref>
-                            <a target='blank' className='text-black'>
+                          <Link href={`/product/${product.inventoryId}/${product.sku}`} passHref tabIndex={-1}>
+                            <a target='blank' className='text-black' tabIndex={-1}>
                               {product.sku}
                             </a>
                           </Link>

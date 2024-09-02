@@ -11,8 +11,9 @@ import InventoryBinsModal from '@components/InventoryBinsModal'
 import useSWR from 'swr'
 import { toast } from 'react-toastify'
 import { AmazonFulfillmentSku } from '@typesTs/amazon/fulfillments'
-import MasterBoxesFulfillment from '@components/amazon/fulfillment/MasterBoxesFulfillment'
+import MasterBoxesFulfillment from '@components/amazon/fulfillment/masterBoxes/MasterBoxesFulfillment'
 import MasterBoxHelp from '@components/amazon/offcanvas/MasterBoxHelp'
+import IndividualUnits from '@components/amazon/fulfillment/individualUnits/IndividualUnitsFulfillment'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -146,7 +147,7 @@ const SendToAmazon = ({ session, sessionToken }: Props) => {
                       <TabPane tabId='1'>
                         <MasterBoxesFulfillment lisiting={allData} pending={pending} />
                       </TabPane>
-                      <TabPane tabId='2'>{/* <SingleItems completeData={completeData} pending={pending} orderNumberStart={orderNumberStart} /> */}</TabPane>
+                      <TabPane tabId='2'><IndividualUnits lisiting={allData} pending={pending} /></TabPane>
                     </TabContent>
                   </CardBody>
                 </Card>
