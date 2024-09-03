@@ -128,15 +128,28 @@ const FulfillmentsTable = ({ filteredItems, pending, handleCancelInboundPlan, se
                 </DropdownToggle>
                 {row.inboundPlanId ? (
                   <DropdownMenu className='dropdown-menu-end'>
-                    <DropdownItem onClick={() => router.push(`/amazon-sellers/fulfillment/${row.inboundPlanId}`)}>
+                    <DropdownItem
+                      onClick={() =>
+                        row.amzFinished
+                          ? router.push(`/amazon-sellers/fulfillment/sellerPortal/${row.inboundPlanId}`)
+                          : row.fulfillmentType === 'Master Boxes'
+                          ? router.push(`/amazon-sellers/fulfillment/masterBoxes/${row.inboundPlanId}`)
+                          : router.push(`/amazon-sellers/fulfillment/individualUnits/${row.inboundPlanId}`)
+                      }>
                       <div>
                         <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
                         <span className='fs-6 fw-normal text-dark'>Manage</span>
                       </div>
                     </DropdownItem>
-                    <DropdownItem className='text-danger' onClick={() => handleCancelInboundPlan(row.inboundPlanId)}>
-                      <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
-                    </DropdownItem>
+                    {!row.amzFinished && moment.duration(moment.utc().diff(moment.utc(row.createdAt))).asHours() < 24 && (
+                      <DropdownItem className='text-danger' onClick={() => handleCancelInboundPlan(row.inboundPlanId)}>
+                        <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
+                        <span className='ms-2'>{`${FormatIntNumber(
+                          state.currentRegion,
+                          1380 - moment.duration(moment.utc().diff(moment.utc(row.createdAt))).asMinutes()
+                        )} min left`}</span>
+                      </DropdownItem>
+                    )}
                   </DropdownMenu>
                 ) : (
                   <DropdownMenu className='dropdown-menu-end'>
@@ -191,16 +204,34 @@ const FulfillmentsTable = ({ filteredItems, pending, handleCancelInboundPlan, se
                     onClick={() =>
                       row.amzFinished
                         ? router.push(`/amazon-sellers/fulfillment/sellerPortal/${row.inboundPlanId}`)
-                        : router.push(`/amazon-sellers/fulfillment/${row.inboundPlanId}`)
+                        : row.fulfillmentType === 'Master Boxes'
+                        ? router.push(`/amazon-sellers/fulfillment/masterBoxes/${row.inboundPlanId}`)
+                        : router.push(`/amazon-sellers/fulfillment/individualUnits/${row.inboundPlanId}`)
                     }>
                     <div>
                       <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
                       <span className='fs-6 fw-normal text-dark'>View Details</span>
                     </div>
                   </DropdownItem>
-                  <DropdownItem className='text-danger' onClick={() => handleCancelInboundPlan(row.inboundPlanId)}>
-                    <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
-                  </DropdownItem>
+                  {Object.values(row.confirmedShipments).some((shipment) => shipment.shipment.trackingDetails.ltlTrackingDetail.billOfLadingNumber)
+                    ? moment.duration(moment.utc().diff(moment.utc(row.createdAt))).asHours() < 1 && (
+                        <DropdownItem className='text-danger' onClick={() => handleCancelInboundPlan(row.inboundPlanId)}>
+                          <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
+                          <span className='ms-2'>{`${FormatIntNumber(
+                            state.currentRegion,
+                            45 - moment.duration(moment.utc().diff(moment.utc(row.createdAt))).asMinutes()
+                          )} min left`}</span>
+                        </DropdownItem>
+                      )
+                    : moment.duration(moment.utc().diff(moment.utc(row.createdAt))).asHours() < 24 && (
+                        <DropdownItem className='text-danger' onClick={() => handleCancelInboundPlan(row.inboundPlanId)}>
+                          <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
+                          <span className='ms-2'>{`${FormatIntNumber(
+                            state.currentRegion,
+                            1380 - moment.duration(moment.utc().diff(moment.utc(row.createdAt))).asMinutes()
+                          )} min left`}</span>
+                        </DropdownItem>
+                      )}
                 </DropdownMenu>
               </UncontrolledDropdown>
             )

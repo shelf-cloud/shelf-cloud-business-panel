@@ -63,6 +63,12 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
     CarrierPalletInfo: false,
     trackingDetails: false,
   })
+
+  const [activeTab, setActiveTab] = useState('1')
+  const tabChange = (tab: any) => {
+    if (activeTab !== tab) setActiveTab(tab)
+  }
+
   const title = `Inbound Plan Details | ${session?.user?.businessName}`
 
   const controller = new AbortController()
@@ -100,45 +106,8 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
     }
   )
 
-  const [activeTab, setActiveTab] = useState('1')
-  const tabChange = (tab: any) => {
-    if (activeTab !== tab) setActiveTab(tab)
-  }
-
-  // const handleNextStepPacking = async (inboundPlanId: string) => {
-  //   setWatingRepsonse(true)
-  //   const cancelInboundPlanToast = toast.loading('Generating Packing Options...')
-  //   try {
-  //     const response = await axios.get(
-  //       `/api/amazon/fullfilments/generatePackingOptions?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`
-  //     )
-
-  //     if (!response.data.error) {
-  //       toast.update(cancelInboundPlanToast, {
-  //         render: response.data.message,
-  //         type: 'success',
-  //         isLoading: false,
-  //         autoClose: 3000,
-  //       })
-  //       mutate(`/api/amazon/fullfilments/getSellerInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`)
-  //       tabChange('2')
-  //     } else {
-  //       toast.update(cancelInboundPlanToast, {
-  //         render: response.data.message,
-  //         type: 'error',
-  //         isLoading: false,
-  //         autoClose: 3000,
-  //       })
-  //     }
-  //     setWatingRepsonse(false)
-  //   } catch (error) {
-  //     setWatingRepsonse(false)
-  //     console.error(error)
-  //   }
-  // }
-
   const handleNextShipping = async (inboundPlanId: string) => {
-    setWatingRepsonse((prev: any) => ({ ...prev, shipping: true, transportationOptions: true }))
+    setWatingRepsonse((prev: any) => ({ ...prev, inventoryToSend: true, shipping: true, transportationOptions: true }))
 
     const generatePlacementOptions = toast.loading('Generating Placement Options...')
     try {
@@ -165,15 +134,15 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
           isLoading: false,
           autoClose: 3000,
         })
-        setWatingRepsonse((prev: any) => ({ ...prev, shipping: false }))
+        setWatingRepsonse((prev: any) => ({ ...prev, inventoryToSend: false, shipping: false }))
         await mutate(`/api/amazon/fullfilments/getSellerInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`).then(
           async () => {
-            tabChange('2')
+            tabChange('3')
             await handleTransportationOptions(inboundPlanId)
           }
         )
       } else {
-        setWatingRepsonse((prev: any) => ({ ...prev, shipping: false }))
+        setWatingRepsonse((prev: any) => ({ ...prev, inventoryToSend: false, shipping: false }))
         toast.update(generatePlacementOptions, {
           render: response.message,
           type: 'error',
@@ -182,7 +151,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
         })
       }
     } catch (error) {
-      setWatingRepsonse((prev: any) => ({ ...prev, shipping: false }))
+      setWatingRepsonse((prev: any) => ({ ...prev, inventoryToSend: false, shipping: false }))
       console.error(error)
     }
   }
@@ -217,7 +186,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
         setWatingRepsonse((prev: any) => ({ ...prev, shippingExpired: false }))
         await mutate(`/api/amazon/fullfilments/getSellerInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`).then(
           async () => {
-            tabChange('2')
+            tabChange('3')
             await handleTransportationOptions(inboundPlanId)
           }
         )
@@ -538,30 +507,14 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               className={
-                                'fs-5 fw-semibold ' + (activeTab == '2' ? 'text-primary' : inboundPlanDetails.steps[2].complete ? 'text-success opacity-50' : 'text-muted')
+                                'fs-5 fw-semibold ' + (activeTab == '3' ? 'text-primary' : inboundPlanDetails.steps[3].complete ? 'text-success opacity-50' : 'text-muted')
                               }
                               onClick={() => {
-                                inboundPlanDetails?.steps[1]?.complete ? tabChange('2') : document.getElementById('btn_handleNextStepPacking')?.focus()
+                                inboundPlanDetails?.steps[1]?.complete ? tabChange('3') : document.getElementById('btn_handleNextStepPacking')?.focus()
                               }}>
                               <>
                                 <i className='fas fa-home'></i>
                                 Shipping
-                              </>
-                            </NavLink>
-                          </NavItem>
-                          <NavItem style={{ cursor: 'pointer' }}>
-                            <NavLink
-                              to='#'
-                              className={
-                                'fs-5 fw-semibold ' + (activeTab == '3' ? 'text-primary' : inboundPlanDetails.steps[3].complete ? 'text-success opacity-50' : 'text-muted')
-                              }
-                              onClick={() => {
-                                inboundPlanDetails?.steps[2]?.complete ? tabChange('3') : document.getElementById('btn_handleNextShipping')?.focus()
-                              }}
-                              type='button'>
-                              <>
-                                <i className='far fa-user'></i>
-                                Box Labels
                               </>
                             </NavLink>
                           </NavItem>
@@ -577,7 +530,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                               type='button'>
                               <>
                                 <i className='far fa-user'></i>
-                                Carrier and Pallet Info
+                                Box Labels
                               </>
                             </NavLink>
                           </NavItem>
@@ -593,6 +546,22 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                               type='button'>
                               <>
                                 <i className='far fa-user'></i>
+                                Carrier and Pallet Info
+                              </>
+                            </NavLink>
+                          </NavItem>
+                          <NavItem style={{ cursor: 'pointer' }}>
+                            <NavLink
+                              to='#'
+                              className={
+                                'fs-5 fw-semibold ' + (activeTab == '6' ? 'text-primary' : inboundPlanDetails.steps[6].complete ? 'text-success opacity-50' : 'text-muted')
+                              }
+                              onClick={() => {
+                                inboundPlanDetails?.steps[5]?.complete ? tabChange('6') : document.getElementById('btn_handleNextShipping')?.focus()
+                              }}
+                              type='button'>
+                              <>
+                                <i className='far fa-user'></i>
                                 Tracking Details
                               </>
                             </NavLink>
@@ -602,7 +571,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           <TabPane tabId='1'>
                             <InventoryToSend inboundPlan={inboundPlanDetails} handleNextStep={handleNextShipping} watingRepsonse={watingRepsonse} />
                           </TabPane>
-                          <TabPane tabId='2'>
+                          <TabPane tabId='3'>
                             {inboundPlanDetails.steps[1].complete && (
                               <Shipping
                                 sessionToken={sessionToken}
@@ -614,18 +583,18 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                               />
                             )}
                           </TabPane>
-                          <TabPane tabId='3'>
-                            {inboundPlanDetails.steps[2].complete && (
-                              <BoxLabels inboundPlan={inboundPlanDetails} handleNextStep={handlePrintShipmentBoxesLabel} watingRepsonse={watingRepsonse} />
-                            )}
-                          </TabPane>
                           <TabPane tabId='4'>
                             {inboundPlanDetails.steps[3].complete && (
-                              <CarrierPalletInfo inboundPlan={inboundPlanDetails} handleNextStep={handlePrintShipmentPalletLabel} watingRepsonse={watingRepsonse} />
+                              <BoxLabels inboundPlan={inboundPlanDetails} handleNextStep={handlePrintShipmentBoxesLabel} watingRepsonse={watingRepsonse} />
                             )}
                           </TabPane>
                           <TabPane tabId='5'>
                             {inboundPlanDetails.steps[4].complete && (
+                              <CarrierPalletInfo inboundPlan={inboundPlanDetails} handleNextStep={handlePrintShipmentPalletLabel} watingRepsonse={watingRepsonse} />
+                            )}
+                          </TabPane>
+                          <TabPane tabId='6'>
+                            {inboundPlanDetails.steps[5].complete && (
                               <TrackingDetails inboundPlan={inboundPlanDetails} handlePrintShipmentBillOfLading={handlePrintShipmentBillOfLading} watingRepsonse={watingRepsonse} />
                             )}
                           </TabPane>

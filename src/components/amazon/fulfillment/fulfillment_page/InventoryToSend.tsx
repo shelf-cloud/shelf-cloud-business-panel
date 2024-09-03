@@ -148,14 +148,14 @@ const InventoryToSend = ({ inboundPlan, handleNextStep, watingRepsonse }: Props)
           </tbody>
         </table>
       </Col>
-      {handleNextStep && (
+      {handleNextStep && inboundPlan.fulfillmentType === 'Master Boxes' && (
         <Col xs='12' className='d-flex justify-content-end'>
           <Button
-            disabled={watingRepsonse.shipping || inboundPlan.steps[1].complete}
+            disabled={watingRepsonse.inventoryToSend || inboundPlan.steps[1].complete}
             color='success'
             id='btn_handleNextStepPacking'
             onClick={() => handleNextStep(inboundPlan.inboundPlanId)}>
-            {watingRepsonse.shipping ? <Spinner color='light' size={'sm'} /> : 'Confirm and Continue'}
+            {watingRepsonse.inventoryToSend ? <Spinner color='light' size={'sm'} /> : 'Confirm and Continue'}
           </Button>
         </Col>
       )}

@@ -145,47 +145,12 @@ const BoxLabels = ({ inboundPlan, handleNextStep, watingRepsonse }: Props) => {
               </Card>
             ))}
           </div>
-          {/* TOTAL ESTIMATED FEES */}
-          {/* <Row className='mt-5 mb-3'>
-            <Col xs='12' lg='8'>
-              <p className='fs-6 fw-bold'>Your shipment or shipments are now complete.</p>
-              <p className='fs-7'>The Fulfillment has been created successfully, ShelfCloud has received the information and will begin to prepare the Shipments.</p>
-            </Col>
-            <Col xs='12' lg='4'>
-              <table className='table table-sm fs-7'>
-                <tbody>
-                  <tr>
-                    <td>Total prep and labeling fees:</td>
-                    <td>{FormatCurrency(state.currentRegion, inboundPlan.totalPrepFees)}</td>
-                  </tr>
-                  <tr>
-                    <td>Total placement fees:</td>
-                    <td>{FormatCurrency(state.currentRegion, inboundPlan.totalPlacementFees)}</td>
-                  </tr>
-                  <tr>
-                    <td>{inboundPlan.totalLtlFees > 0 ? 'SPD shipping fees:' : 'Total estimated shipping fees:'}</td>
-                    <td>{FormatCurrency(state.currentRegion, inboundPlan.totalSpdFees)}</td>
-                  </tr>
-                  {inboundPlan.totalLtlFees > 0 && (
-                    <tr>
-                      <td>LTL shipping fees:</td>
-                      <td>{FormatCurrency(state.currentRegion, inboundPlan.totalLtlFees)}</td>
-                    </tr>
-                  )}
-                  <tr className='fw-bold'>
-                    <td>Total estimated prep, labeling, placement, and shipping fees (other fees may apply):</td>
-                    <td>{FormatCurrency(state.currentRegion, inboundPlan.totalFees)}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </Col>
-          </Row> */}
         </div>
       ) : (
         <div className='w-100 px-3'>
           <div className='my-3 d-flex justify-content-start align-items-center gap-3'>
             <Spinner color='primary' />
-            <p className='m-0 p-0 fw-normal fs-5'>Confirming Charges and Fees, this may take a few minutes...</p>
+            <p className='m-0 p-0 fw-normal fs-5'>Confirm charges and fees first for Box labels to be available.</p>
           </div>
         </div>
       )}

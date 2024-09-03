@@ -215,7 +215,7 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
   useEffectAfterMount(() => {
     if (inboundPlan.placementOptions.length > 0) {
       const placementOptionsExpired = inboundPlan.placementOptions.some((placementOption) => moment(placementOption.expiration).isBefore(moment()))
-      if (placementOptionsExpired && !watingRepsonse.shippingExpired && !inboundPlan.steps[2].complete) {
+      if (placementOptionsExpired && !watingRepsonse.shippingExpired && !inboundPlan.steps[3].complete) {
         handlePlacementExpired(inboundPlan.inboundPlanId)
       }
     }
@@ -563,7 +563,7 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                         <Card
                           key={placementOption.placementOptionId}
                           onClick={() => {
-                            !inboundPlan.steps[2].complete && !inboundPlan.placementOptionId && setplacementOptionSelected(placementOption)
+                            !inboundPlan.steps[3].complete && !inboundPlan.placementOptionId && setplacementOptionSelected(placementOption)
                             setfinalShippingCharges((prev) => {
                               return {
                                 ...prev,
@@ -634,7 +634,7 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                     role='switch'
                     id='showShippingMode'
                     name='showShippingMode'
-                    disabled={inboundPlan.steps[2].complete}
+                    disabled={inboundPlan.steps[3].complete}
                     checked={finalShippingCharges.sameShippingMode}
                     onChange={() => {
                       setfinalShippingCharges((prev) => {
@@ -667,7 +667,7 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                   <div className='d-flex justify-content-start align-items-start gap-3'>
                     <Card
                       onClick={() =>
-                        !inboundPlan.steps[2].complete &&
+                        !inboundPlan.steps[3].complete &&
                         setfinalShippingCharges((prev) => {
                           return { ...prev, shippingMode: 'SPD', sameShippingCarrier: 'amazon', nonAmazonCarrier: '', nonAmazonAlphaCode: '' }
                         })
@@ -706,7 +706,7 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                     </Card>
                     <Card
                       onClick={() =>
-                        !inboundPlan.steps[2].complete &&
+                        !inboundPlan.steps[3].complete &&
                         Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]).every((shipment) => {
                           return shipment.some((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'FREIGHT_LTL')
                         }) &&
@@ -1452,24 +1452,26 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                       </tr>
                     </tbody>
                   </table>
-                  <div className='d-flex justify-content-end align-items-center'>
-                    {!inboundPlan.steps[2].complete ? (
-                      <Button disabled={shippingHasErrors || watingRepsonse.boxLabels} color='success' id='btn_handleNextShipping' onClick={handleConfirmChargesFees}>
-                        {watingRepsonse.boxLabels ? (
-                          <div className='d-flex gap-3'>
-                            <Spinner color='light' size={'sm'} />
-                            <span>Confirming Charges and Shipping...</span>
-                          </div>
-                        ) : (
-                          'Accept Charges and Confirm Shipping'
-                        )}
-                      </Button>
-                    ) : (
-                      <Button disabled={true} color='success' id='btn_handleNextShipping'>
-                        Charges Already Confirmed
-                      </Button>
-                    )}
-                  </div>
+                  {inboundPlan.fulfillmentType === 'Master Boxes' && (
+                    <div className='d-flex justify-content-end align-items-center'>
+                      {!inboundPlan.steps[3].complete ? (
+                        <Button disabled={shippingHasErrors || watingRepsonse.boxLabels} color='success' id='btn_handleNextShipping' onClick={handleConfirmChargesFees}>
+                          {watingRepsonse.boxLabels ? (
+                            <div className='d-flex gap-3'>
+                              <Spinner color='light' size={'sm'} />
+                              <span>Confirming Charges and Shipping...</span>
+                            </div>
+                          ) : (
+                            'Accept Charges and Confirm Shipping'
+                          )}
+                        </Button>
+                      ) : (
+                        <Button disabled={true} color='success' id='btn_handleNextShipping'>
+                          Charges Already Confirmed
+                        </Button>
+                      )}
+                    </div>
+                  )}
                 </Col>
               </Row>
             </>

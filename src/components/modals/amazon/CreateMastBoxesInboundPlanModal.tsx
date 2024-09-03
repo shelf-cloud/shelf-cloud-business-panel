@@ -138,18 +138,22 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
             complete: false,
           },
           2: {
-            step: 'Shipping',
+            step: 'Packing Info',
             complete: false,
           },
           3: {
-            step: 'Box Labels',
+            step: 'Shipping',
             complete: false,
           },
           4: {
-            step: 'Carrier and Pallet Info',
+            step: 'Box Labels',
             complete: false,
           },
           5: {
+            step: 'Carrier and Pallet Info',
+            complete: false,
+          },
+          6: {
             step: 'Tracking Details',
             complete: false,
           },

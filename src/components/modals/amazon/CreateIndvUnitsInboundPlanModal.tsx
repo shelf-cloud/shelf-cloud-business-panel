@@ -388,7 +388,7 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
             </Row>
             <Col md={12}>
               <div className='text-end'>
-                <Button disabled={true} type='submit' color='success' className='btn'>
+                <Button disabled={loading} type='submit' color='success' className='btn'>
                   {loading ? <span><Spinner color='light' size={'sm'}/> Loading...</span> : 'Confirm Plan'}
                 </Button>
               </div>

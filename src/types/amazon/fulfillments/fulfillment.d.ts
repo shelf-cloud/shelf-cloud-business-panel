@@ -15,11 +15,10 @@ export interface InboundPlan {
     items: Item[]
     skus_details: { [sku: string]: SkuDetails }
     steps: { [step: number]: Step }
-    operationSatus: any
-    operationProblems: any
     packingOptions: PackingOption[]
-    packingInformation: any
     placementOptions: PlacementOption[]
+    packingGroups: { [packingGroupId: string]: PackingGroup }
+    packingInformation: PackingInformation | null
     placementOptionId: string
     shipments: { [shipmentId: string]: ShipmentDetail }
     generateTransportationOptions: { [placementOptionId: string]: { [shipmentId: string]: ShipmentTransportationConfiguration } }
@@ -100,15 +99,20 @@ export interface Step {
 // PACKING
 export interface PackingOption {
     packingGroups: string[];
-    packingItems: { [packingGroupId: string]: PackingItem[] }
-    fees: Fee[];
-    discounts: Fee[];
+    fees: PackingOptionFee[];
+    discounts: PackingOptionFee[];
     packingOptionId: string;
     supportedShippingConfigurations: any[];
     status: string;
 }
 
-export interface Fee {
+export interface PackingGroup {
+    packingGroupId: string
+    packingBoxes: any[]
+    packingItems: PackingItem[]
+}
+
+export interface PackingOptionFee {
     description: string;
     type: string;
     value: Currency;
@@ -126,21 +130,69 @@ export interface PackingItem {
     quantity: number;
     fnsku: string;
     asin: string;
-    prepInstructions: any[];
+    prepInstructions: PrepInstruction[];
+}
+
+export interface PrepInstruction {
+    prepType: string
+    fee: PrepInstructionFee
+    prepOwner: string
+}
+
+export interface PrepInstructionFee {
+    amount: number
+    code: string
+}
+
+// PACKING INFORMATION
+
+export interface PackingInformation {
+    packingGroupId: string
+    boxes: PackingBox[]
+}
+
+export interface PackingBox {
+    weight: PackingWeight
+    dimensions: PackingDimensions
+    quantity: number
+    boxId: string
+    items: PackingItem[]
+    contentInformationSource: string
+}
+
+export interface PackingWeight {
+    unit: string
+    value: number
+}
+
+export interface PackingDimensions {
+    unitOfMeasurement: string
+    length: number
+    width: number
+    height: number
+}
+
+export interface PackingItem {
+    msku: string
+    quantity: number
+    expiration: string
+    prepOwner: string
+    labelOwner: string
+    manufacturingLotCode: string
 }
 
 // PLACEMENT OPTIONS
 
 export interface PlacementOption {
-    fees: Fee[];
+    fees: PlacementOptionFee[];
     shipmentIds: string[];
-    discounts: Fee[];
+    discounts: PlacementOptionFee[];
     expiration: string;
     placementOptionId: string;
     status: string;
 }
 
-export interface Fee {
+export interface PlacementOptionFee {
     description: string;
     type: string;
     value: Value;
