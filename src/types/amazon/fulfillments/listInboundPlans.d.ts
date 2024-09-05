@@ -19,11 +19,10 @@ export interface ListInboundPlan {
     sourceAddress: SourceAddress;
     contactInformation: ContactInformation;
     items: Item[];
-    operationSatus: null;
-    operationProblems: null;
     packingInformation: null;
     shipments: null;
     placementOptionId: null;
+    confirmedDate: string | null
     confirmedShipments: { [shipmentId: string]: ConfirmedShipments }
 }
 

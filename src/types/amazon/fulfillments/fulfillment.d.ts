@@ -24,6 +24,7 @@ export interface InboundPlan {
     generateTransportationOptions: { [placementOptionId: string]: { [shipmentId: string]: ShipmentTransportationConfiguration } }
     transportationOptionsGenerated: boolean
     transportationOptions: TransportationOptions
+    confirmedDate: string | null
     confirmedShipments: { [shipmentId: string]: ConfirmedShipments }
     shipDate: string
     totalPrepFees: number

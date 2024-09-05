@@ -61,8 +61,10 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
       shipFrom: Yup.string().required('Select from where your inventory will be shipped'),
       hasProducts: Yup.number().min(1, 'To create an order, you must add at least one product'),
     }),
+
     onSubmit: async (values, { resetForm }) => {
       setloading(true)
+      const creatingIndvUnitsPlan = toast.loading('Generating New Inbound Plan...')
 
       let skus_details = {} as { [msku: string]: any }
       for await (const product of orderProducts) {
@@ -151,11 +153,21 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
 
       if (!response.data.error) {
         setShowCreateInboundPlanModal(false)
-        toast.success(response.data.message)
+        toast.update(creatingIndvUnitsPlan, {
+          render: response.data.message,
+          type: 'success',
+          isLoading: false,
+          autoClose: 3000,
+        })
         resetForm()
-        router.push(`/amazon-sellers/fulfillments`)
+        router.push(`/amazon-sellers/fulfillment/individualUnits/${response.data.inboundPlanId}`)
       } else {
-        toast.error(response.data.message)
+        toast.update(creatingIndvUnitsPlan, {
+          render: response.data.message,
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+        })
         setcreatingErros(response.data.apiMessage.errors)
       }
       setloading(false)
@@ -389,7 +401,13 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
             <Col md={12}>
               <div className='text-end'>
                 <Button disabled={loading} type='submit' color='success' className='btn'>
-                  {loading ? <span><Spinner color='light' size={'sm'}/> Loading...</span> : 'Confirm Plan'}
+                  {loading ? (
+                    <span>
+                      <Spinner color='light' size={'sm'} /> Loading...
+                    </span>
+                  ) : (
+                    'Confirm Plan'
+                  )}
                 </Button>
               </div>
             </Col>
