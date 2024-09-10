@@ -80,6 +80,7 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
         skus_details[product.msku] = {
           title: product.product_name,
           asin: product.asin,
+          upc: product.barcode,
           shelfcloud_sku: product.shelfcloud_sku,
           shelfcloud_id: product.shelfcloud_sku_id,
           image: product.image,

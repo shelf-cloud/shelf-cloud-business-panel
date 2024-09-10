@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useContext, useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import { Button, Card, CardBody, CardHeader, Col, Form, FormFeedback, FormGroup, Input, Label, Row, UncontrolledTooltip } from 'reactstrap'
 import { ExpanderComponentProps } from 'react-data-table-component'
 import { PoItemArrivalHistory, PoPaymentHistory, PurchaseOrder, PurchaseOrderItem } from '@typesTs/purchaseOrders'
@@ -29,6 +29,15 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
   const [loading, setLoading] = useState(false)
   const [showEditNote, setShowEditNote] = useState(false)
   const [editPONumber, seteditPONumber] = useState(false)
+  const [orderAsc, setOrderAsc] = useState(true)
+
+  const orderPoItems = useMemo(() => {
+    if (orderAsc) {
+      return data.poItems.sort((a, b) => a.sku.localeCompare(b.sku))
+    } else {
+      return data.poItems.sort((a, b) => b.sku.localeCompare(a.sku))
+    }
+  }, [data, orderAsc])
   const [showDeleteModal, setshowDeleteModal] = useState({
     show: false,
     poId: 0,
@@ -393,8 +402,8 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                         Image
                       </th>
                       <th scope='col'>Title</th>
-                      <th className='text-center' scope='col'>
-                        SKU
+                      <th className='text-center' scope='col' onClick={() => setOrderAsc(!orderAsc)} style={{ cursor: 'pointer' }}>
+                        SKU {orderAsc ? <i className='las la-sort-amount-down-alt ms-1 fs-5' /> : <i className='las la-sort-amount-up ms-1 fs-5' />}
                       </th>
                       <th className='text-center' scope='col'>
                         Cost
@@ -418,7 +427,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                     </tr>
                   </thead>
                   <tbody>
-                    {data?.poItems?.map((product: PurchaseOrderItem, key) => (
+                    {orderPoItems.map((product: PurchaseOrderItem, key) => (
                       <tr key={`${key}-${product.sku}`} className='border-bottom py-2'>
                         <td className='text-center'>
                           <Link href={`/product/${product.inventoryId}/${product.sku}`} passHref tabIndex={-1}>
