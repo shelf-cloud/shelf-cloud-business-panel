@@ -505,10 +505,10 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
       <ModalBody>
         <Row>
           <p className='fs-6 fw-normal m-0 mb-1'>
-            You can <span className='fw-bold'>Update</span> existing products in bulk by uploading a CSV file using the <span className='text-info'>Products Template</span> file.
+            You can <span className='fw-bold'>Update</span> existing products in bulk by uploading a CSV file using the <span className='fw-bold'>Products Template</span> file.
           </p>
           <p className='fs-6 fw-normal m-0 mb-3'>
-            You can <span className='fw-bold'>Add</span> new products in bulk by uploading a CSV file using the <span className='text-info'>Empty Template</span> file.
+            You can <span className='fw-bold'>Add</span> new products in bulk by uploading a CSV file using the <span className='fw-bold'>Empty Template</span> file.
           </p>
           <Col md={6}>
             <Dropzone

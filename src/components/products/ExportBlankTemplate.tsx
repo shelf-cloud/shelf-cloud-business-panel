@@ -154,6 +154,7 @@ const ExportBlankTemplate = ({ brands, suppliers, categories }: Props) => {
         errorTitle: 'Invalid input',
         error: 'Barcode is required. Barcode must be 12 characters',
       }
+      cell.numFmt = "'000000000000"
       cell.protection = { locked: false }
     })
 

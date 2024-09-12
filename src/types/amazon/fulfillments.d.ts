@@ -50,6 +50,7 @@ export interface AmazonFulfillmentSku {
     totalDaysOfSupply: number;
     salesLast30Days: number;
     unitsSoldLast30Days: number;
+    expiration: string;
     labelOwner: 'NONE' | 'SELLER' | 'AMAZON';
     prepOwner: 'NONE' | 'SELLER' | 'AMAZON';
     dimensions: {

@@ -24,7 +24,7 @@ const uploadProductsTemplate: NextApiHandler = async (request, response) => {
                 // that falls out of the range of 2xx
                 response.json({
                     error: true,
-                    errorMessage: error.response.data.message,
+                    errorMessage: error,
                     message: `Error with file uploading, please try again later.`,
                 })
             } else if (error.request) {
