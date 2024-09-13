@@ -140,7 +140,7 @@ const AssignWorkflowId = ({ assignWorkflowIdModal, setassignWorkflowIdModal, ses
         autoClose: 3000,
       })
       mutate(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/listSellerInboundPlans/${state.currentRegion}/${state.user.businessId}`)
-      router.push(`/amazon-sellers/fulfillment/${workflow.inboundPlanId}`)
+      router.push(`/amazon-sellers/fulfillment/masterBoxes/${workflow.inboundPlanId}`)
     } else {
       toast.update(assigningWorkflowToFulfillment, {
         render: response.data.message,
