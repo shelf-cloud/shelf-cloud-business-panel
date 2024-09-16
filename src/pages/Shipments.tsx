@@ -56,8 +56,9 @@ const Shipments = ({ session, sessionToken }: Props) => {
 
   const controller = new AbortController()
   const signal = controller.signal
-  const fetcher = (endPoint: string) => {
-    axios(endPoint, {
+  const fetcher = async (endPoint: string) => {
+    const getShipmentOrders = toast.loading('Getting Shipments...')
+    await axios(endPoint, {
       signal,
       headers: {
         Authorization: `Bearer ${sessionToken}`,
@@ -74,6 +75,12 @@ const Shipments = ({ session, sessionToken }: Props) => {
           setPending(false)
         }
       })
+    toast.update(getShipmentOrders, {
+      render: 'Completed',
+      type: 'success',
+      isLoading: false,
+      autoClose: 3000,
+    })
   }
   useSWR(
     session && state.user.businessId

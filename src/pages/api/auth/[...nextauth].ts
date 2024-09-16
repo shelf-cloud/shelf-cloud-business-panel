@@ -9,7 +9,7 @@ export const authOptions: NextAuthOptions = {
     brandColor: '#458BC9', // Hex color code
     logo: `${process.env.API_DOMAIN}/assets/shelfcloud-logo-v.jpg`, // Absolute URL to image
   },
-  debug: true,
+  debug: false,
   session: { maxAge: 3600 },
   jwt: {},
   secret: process.env.AUTH_SHIPNOVO_SECRET,
