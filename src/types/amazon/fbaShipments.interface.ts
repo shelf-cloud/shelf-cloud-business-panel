@@ -1,12 +1,12 @@
 export interface FBAShipmentsRepsonse {
     error: boolean;
-    shipments: ShipmentElement[];
+    shipments: FBAShipment[];
     message: string;
 }
 
 export interface FBAShipmentsDetailsRepsonse {
     error: boolean;
-    shipment: ShipmentElement;
+    shipment: FBAShipment;
     message: string;
 }
 
@@ -22,7 +22,7 @@ export interface FBAShipment {
     createdAt: string;
     lastUpdated: string;
     destinationMarketplaces: string;
-    skus_details: SkusDetails;
+    skus_details: { [sku: string]: SkuDetails }
     shipment: ShipmentShipment;
     shipmentBoxes: ShipmentBoxes;
     shipmentItems: ShipmentItems;
@@ -31,6 +31,36 @@ export interface FBAShipment {
     totalPlacementFees: number;
     totalSpdFees: number;
     totalLtlFees: number;
+}
+
+export interface SkuDetails {
+    asin: string
+    boxes: string
+    image: string
+    isKit: boolean
+    title: string
+    width: number
+    boxQty: number
+    height: number
+    length: number
+    weight: number
+    boxWidth: number
+    children: Child[]
+    boxHeight: number
+    boxLength: number
+    boxWeight: number
+    inventoryId: number
+    shelfcloud_id: number
+    shelfcloud_sku: string
+}
+
+export interface Child {
+    qty: number;
+    sku: string;
+    title: string;
+    idInventory: number;
+    available: number;
+    maxKits: number;
 }
 
 export interface ShipmentShipment {
@@ -62,14 +92,10 @@ export interface Address {
     city: string;
     name: string;
     postalCode: string;
-    countryCode: CountryCode;
+    countryCode: string;
     addressLine1: string;
     stateOrProvinceCode: string;
     phoneNumber?: string;
-}
-
-export enum CountryCode {
-    Us = "US",
 }
 
 export interface Source {
@@ -114,41 +140,21 @@ export interface Dimensions {
     width: number;
     height: number;
     length: number;
-    unitOfMeasurement: UnitOfMeasurement;
-}
-
-export enum UnitOfMeasurement {
-    In = "IN",
+    unitOfMeasurement: string;
 }
 
 export interface Item {
-    asin: Asin;
-    msku: Msku;
-    fnsku: Asin;
+    asin: string;
+    msku: string;
+    fnsku: string;
     quantity: number;
-    labelOwner: LabelOwner;
+    labelOwner: string;
     prepInstructions: any[];
 }
 
-export enum Asin {
-    B071Hxdrgv = "B071HXDRGV",
-}
-
-export enum LabelOwner {
-    None = "NONE",
-}
-
-export enum Msku {
-    FBADogBedPillowLarge2017 = "FBA-Dog-Bed-Pillow-Large-2017",
-}
-
 export interface Weight {
-    unit: Unit;
+    unit: string;
     value: number;
-}
-
-export enum Unit {
-    LB = "LB",
 }
 
 export interface ShipmentItems {
@@ -169,27 +175,6 @@ export interface Pallet {
     stackability: string;
 }
 
-export interface SkusDetails {
-    "FBA-Dog-Bed-Pillow-Large-2017": FBADogBedPillowLarge2017;
-}
-
-export interface FBADogBedPillowLarge2017 {
-    asin: Asin;
-    boxes: number;
-    image: string;
-    isKit: boolean;
-    title: string;
-    width: number;
-    boxQty: number;
-    height: number;
-    length: number;
-    weight: number;
-    boxWidth: number;
-    children: any[];
-    boxHeight: number;
-    boxLength: number;
-    boxWeight: number;
-    inventoryId: number;
-    shelfcloud_id: number;
-    shelfcloud_sku: string;
+export interface Pagination {
+    nextToken: string;
 }

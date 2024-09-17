@@ -1,7 +1,7 @@
 import AppContext from '@context/AppContext'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { CleanStatus } from '@lib/SkuFormatting'
-import { FBAShipment } from '@typesTs/amazon/fbaShipments'
+import { FBAShipment } from '@typesTs/amazon/fbaShipments.interface'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import React, { useContext } from 'react'

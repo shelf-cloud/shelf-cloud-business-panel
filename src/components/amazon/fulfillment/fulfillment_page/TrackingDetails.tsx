@@ -52,7 +52,7 @@ const TrackingDetails = ({ inboundPlan, handlePrintShipmentBillOfLading, watingR
                       <tr>
                         <th>Box #</th>
                         <th>FBA Box Label #</th>
-                        <th>thacking ID #</th>
+                        <th>Tracking ID #</th>
                         <th>Status</th>
                         <th>Weight (lb)</th>
                         <th>Dimensions (in)</th>

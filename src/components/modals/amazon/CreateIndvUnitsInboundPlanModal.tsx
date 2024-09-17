@@ -164,7 +164,7 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
           autoClose: 3000,
         })
         resetForm()
-        router.push(`/amazon-sellers/fulfillment/individualUnits/${response.data.inboundPlanId}`)
+        router.push(`/amazon-sellers/fulfillments`)
       } else {
         toast.update(creatingIndvUnitsPlan, {
           render: response.data.message,

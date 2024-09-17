@@ -10,7 +10,6 @@ import Link from 'next/link'
 import axios from 'axios'
 import useSWR from 'swr'
 import BreadCrumb from '@components/Common/BreadCrumb'
-import { FBAShipment, FBAShipmentsDetailsRepsonse } from '@typesTs/amazon/fbaShipments'
 import TrackShipment from '@components/amazon/shipments/shipment_page/TrackShipment'
 import moment from 'moment'
 import { FormatCurrency } from '@lib/FormatNumbers'
@@ -19,6 +18,7 @@ import { CleanStatus } from '@lib/SkuFormatting'
 import { GetLabelsResponse, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
 import TrackingEvents from '@components/amazon/shipments/shipment_page/TrackingEvents'
 import Pallets from '@components/amazon/shipments/shipment_page/Pallets'
+import { FBAShipment, FBAShipmentsDetailsRepsonse } from '@typesTs/amazon/fbaShipments.interface'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']

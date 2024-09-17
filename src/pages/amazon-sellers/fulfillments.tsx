@@ -8,13 +8,14 @@ import { DebounceInput } from 'react-debounce-input'
 import AppContext from '@context/AppContext'
 import Link from 'next/link'
 import axios from 'axios'
-import useSWR, { useSWRConfig } from 'swr'
+import useSWR from 'swr'
 import { toast } from 'react-toastify'
 import { ListInboundPlan } from '@typesTs/amazon/fulfillments/listInboundPlans'
 import FulfillmentsTable from '@components/amazon/fulfillment/FulfillmentsTable'
 import AssignWorkflowId from '@components/modals/amazon/AssignWorkflowId'
 import MasterBoxHelp from '@components/amazon/offcanvas/MasterBoxHelp'
 import AssignFinishedWorkflowId from '@components/modals/amazon/AssignFinishedWorkflowId'
+import ConfirmCancelInboundPlan from '@components/modals/amazon/ConfirmCancelInboundPlan'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -45,11 +46,15 @@ type Props = {
 
 const Fulfillments = ({ session, sessionToken }: Props) => {
   const { state }: any = useContext(AppContext)
-  const { mutate } = useSWRConfig()
   const [searchValue, setSearchValue] = useState<any>('')
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<ListInboundPlan[]>([])
   const [helpOffCanvasIsOpen, setHelpOffCanvasIsOpen] = useState(false)
+  const [cancelInboundPlanModal, setcancelInboundPlanModal] = useState({
+    show: false,
+    inboundPlanId: '',
+    inboundPlanName: '',
+  })
   const [assignWorkflowIdModal, setassignWorkflowIdModal] = useState({
     show: false,
     id: 0,
@@ -117,34 +122,6 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
     return []
   }, [allData, searchValue])
 
-  const handleCancelInboundPlan = async (inboundPlanId: string) => {
-    const cancelInboundPlanToast = toast.loading('Canceling Inbound Plan...')
-    try {
-      const response = await axios.get(
-        `/api/amazon/fullfilments/cancelInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`
-      )
-
-      if (!response.data.error) {
-        toast.update(cancelInboundPlanToast, {
-          render: response.data.message,
-          type: 'success',
-          isLoading: false,
-          autoClose: 3000,
-        })
-        mutate(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/listSellerInboundPlans/${state.currentRegion}/${state.user.businessId}`)
-      } else {
-        toast.update(cancelInboundPlanToast, {
-          render: response.data.message,
-          type: 'error',
-          isLoading: false,
-          autoClose: 3000,
-        })
-      }
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
   return (
     <div>
       <Head>
@@ -201,7 +178,7 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
                 <FulfillmentsTable
                   filteredItems={filteredItems}
                   pending={pending}
-                  handleCancelInboundPlan={handleCancelInboundPlan}
+                  setcancelInboundPlanModal={setcancelInboundPlanModal}
                   setassignWorkflowIdModal={setassignWorkflowIdModal}
                   setassignFinishedWorkflowIdModal={setassignFinishedWorkflowIdModal}
                 />
@@ -210,11 +187,17 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
           </Container>
         </div>
       </React.Fragment>
+      {cancelInboundPlanModal.show && <ConfirmCancelInboundPlan cancelInboundPlanModal={cancelInboundPlanModal} setcancelInboundPlanModal={setcancelInboundPlanModal} />}
       {assignWorkflowIdModal.show && (
         <AssignWorkflowId allData={allData} assignWorkflowIdModal={assignWorkflowIdModal} setassignWorkflowIdModal={setassignWorkflowIdModal} sessionToken={sessionToken} />
       )}
       {assignFinishedWorkflowIdModal.show && (
-        <AssignFinishedWorkflowId allData={allData} assignFinishedWorkflowIdModal={assignFinishedWorkflowIdModal} setassignFinishedWorkflowIdModal={setassignFinishedWorkflowIdModal} sessionToken={sessionToken} />
+        <AssignFinishedWorkflowId
+          allData={allData}
+          assignFinishedWorkflowIdModal={assignFinishedWorkflowIdModal}
+          setassignFinishedWorkflowIdModal={setassignFinishedWorkflowIdModal}
+          sessionToken={sessionToken}
+        />
       )}
       <MasterBoxHelp isOpen={helpOffCanvasIsOpen} setHelpOffCanvasIsOpen={setHelpOffCanvasIsOpen} />
     </div>

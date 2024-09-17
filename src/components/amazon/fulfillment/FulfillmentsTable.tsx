@@ -11,12 +11,12 @@ import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from
 type Props = {
   filteredItems: ListInboundPlan[]
   pending: boolean
-  handleCancelInboundPlan: (inboundPlanId: string) => void
+  setcancelInboundPlanModal: (prev: any) => void
   setassignWorkflowIdModal: (prev: any) => void
   setassignFinishedWorkflowIdModal: (prev: any) => void
 }
 
-const FulfillmentsTable = ({ filteredItems, pending, handleCancelInboundPlan, setassignWorkflowIdModal, setassignFinishedWorkflowIdModal }: Props) => {
+const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, setassignWorkflowIdModal, setassignFinishedWorkflowIdModal }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
   const orderStatus = (rowA: ListInboundPlan, rowB: ListInboundPlan) => {
@@ -66,6 +66,7 @@ const FulfillmentsTable = ({ filteredItems, pending, handleCancelInboundPlan, se
             return <span className='badge text-uppercase badge-soft-success p-2'>{` ${row.status} `}</span>
             break
           case 'delivered':
+          case 'creating':
             return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${row.status} `}</span>
             break
           case 'working':
@@ -119,8 +120,89 @@ const FulfillmentsTable = ({ filteredItems, pending, handleCancelInboundPlan, se
       center: true,
       cell: (row: ListInboundPlan) => {
         switch (row.status.toLowerCase()) {
+          case 'creating':
+            return (
+              <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
+                <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
+                  <i className='mdi mdi-dots-vertical align-middle fs-3 m-0 px-2 py-0' style={{ color: '#919FAF' }}></i>
+                </DropdownToggle>
+                {row.inboundPlanId ? (
+                  <DropdownMenu className='dropdown-menu-end'>
+                    {!row.confirmedDate && (
+                      <DropdownItem className='text-danger' onClick={() => setcancelInboundPlanModal({ show: true, inboundPlanId: row.inboundPlanId, inboundPlanName: row.name })}>
+                        <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
+                      </DropdownItem>
+                    )}
+                    {row.confirmedDate &&
+                    row.confirmedShipments &&
+                    Object.values(row.confirmedShipments).some((shipment) => shipment.shipment.trackingDetails.ltlTrackingDetail.billOfLadingNumber)
+                      ? moment.duration(moment.utc().diff(moment.utc(row.confirmedDate))).asHours() < 1 && (
+                          <DropdownItem
+                            className='text-danger'
+                            onClick={() => setcancelInboundPlanModal({ show: true, inboundPlanId: row.inboundPlanId, inboundPlanName: row.name })}>
+                            <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
+                            <span className='ms-2'>{`${FormatIntNumber(
+                              state.currentRegion,
+                              45 - moment.duration(moment.utc().diff(moment.utc(row.confirmedDate))).asMinutes()
+                            )} min left`}</span>
+                          </DropdownItem>
+                        )
+                      : moment.duration(moment.utc().diff(moment.utc(row.confirmedDate))).asHours() < 24 && (
+                          <DropdownItem
+                            className='text-danger'
+                            onClick={() => setcancelInboundPlanModal({ show: true, inboundPlanId: row.inboundPlanId, inboundPlanName: row.name })}>
+                            <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
+                            <span className='ms-2'>{`${FormatIntNumber(
+                              state.currentRegion,
+                              1380 - moment.duration(moment.utc().diff(moment.utc(row.confirmedDate))).asMinutes()
+                            )} min left`}</span>
+                          </DropdownItem>
+                        )}
+                  </DropdownMenu>
+                ) : (
+                  <DropdownMenu className='dropdown-menu-end'>
+                    <DropdownItem
+                      onClick={() =>
+                        setassignWorkflowIdModal({
+                          show: true,
+                          id: row.id,
+                          inboundPlanName: row.name,
+                          marketplace: row.destinationMarketplaces,
+                          dateCreated: moment.utc(row.createdAt).local().format('LL hh:mm A'),
+                          skus: row.items.length,
+                          units: row.items.reduce((total, item) => total + item.quantity, 0),
+                        })
+                      }>
+                      <div>
+                        <i className='ri-file-list-2-line align-middle me-2 fs-5 text-primary'></i>
+                        <span className='fs-6 fw-normal text-dark'>Assign New Workflow</span>
+                      </div>
+                    </DropdownItem>
+                    <DropdownItem
+                      onClick={() =>
+                        setassignFinishedWorkflowIdModal({
+                          show: true,
+                          id: row.id,
+                          inboundPlanName: row.name,
+                          marketplace: row.destinationMarketplaces,
+                          dateCreated: moment.utc(row.createdAt).local().format('LL hh:mm A'),
+                          skus: row.items.length,
+                          units: row.items.reduce((total, item) => total + item.quantity, 0),
+                        })
+                      }>
+                      <div>
+                        <i className='ri-file-list-line align-middle me-2 fs-5 text-info'></i>
+                        <span className='fs-6 fw-normal text-dark'>Assign Finished Workflow</span>
+                      </div>
+                    </DropdownItem>
+                  </DropdownMenu>
+                )}
+              </UncontrolledDropdown>
+            )
+            break
           case 'active':
           case 'working':
+          case 'creating':
             return (
               <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
                 <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
@@ -142,13 +224,17 @@ const FulfillmentsTable = ({ filteredItems, pending, handleCancelInboundPlan, se
                       </div>
                     </DropdownItem>
                     {!row.confirmedDate && (
-                      <DropdownItem className='text-danger' onClick={() => handleCancelInboundPlan(row.inboundPlanId)}>
+                      <DropdownItem className='text-danger' onClick={() => setcancelInboundPlanModal({ show: true, inboundPlanId: row.inboundPlanId, inboundPlanName: row.name })}>
                         <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
                       </DropdownItem>
                     )}
-                    {row.confirmedDate && row.confirmedShipments && Object.values(row.confirmedShipments).some((shipment) => shipment.shipment.trackingDetails.ltlTrackingDetail.billOfLadingNumber)
+                    {row.confirmedDate &&
+                    row.confirmedShipments &&
+                    Object.values(row.confirmedShipments).some((shipment) => shipment.shipment.trackingDetails.ltlTrackingDetail.billOfLadingNumber)
                       ? moment.duration(moment.utc().diff(moment.utc(row.confirmedDate))).asHours() < 1 && (
-                          <DropdownItem className='text-danger' onClick={() => handleCancelInboundPlan(row.inboundPlanId)}>
+                          <DropdownItem
+                            className='text-danger'
+                            onClick={() => setcancelInboundPlanModal({ show: true, inboundPlanId: row.inboundPlanId, inboundPlanName: row.name })}>
                             <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
                             <span className='ms-2'>{`${FormatIntNumber(
                               state.currentRegion,
@@ -157,7 +243,9 @@ const FulfillmentsTable = ({ filteredItems, pending, handleCancelInboundPlan, se
                           </DropdownItem>
                         )
                       : moment.duration(moment.utc().diff(moment.utc(row.confirmedDate))).asHours() < 24 && (
-                          <DropdownItem className='text-danger' onClick={() => handleCancelInboundPlan(row.inboundPlanId)}>
+                          <DropdownItem
+                            className='text-danger'
+                            onClick={() => setcancelInboundPlanModal({ show: true, inboundPlanId: row.inboundPlanId, inboundPlanName: row.name })}>
                             <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
                             <span className='ms-2'>{`${FormatIntNumber(
                               state.currentRegion,
@@ -230,7 +318,9 @@ const FulfillmentsTable = ({ filteredItems, pending, handleCancelInboundPlan, se
                   </DropdownItem>
                   {Object.values(row.confirmedShipments).some((shipment) => shipment.shipment.trackingDetails.ltlTrackingDetail.billOfLadingNumber)
                     ? moment.duration(moment.utc().diff(moment.utc(row.createdAt))).asHours() < 1 && (
-                        <DropdownItem className='text-danger' onClick={() => handleCancelInboundPlan(row.inboundPlanId)}>
+                        <DropdownItem
+                          className='text-danger'
+                          onClick={() => setcancelInboundPlanModal({ show: true, inboundPlanId: row.inboundPlanId, inboundPlanName: row.name })}>
                           <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
                           <span className='ms-2'>{`${FormatIntNumber(
                             state.currentRegion,
@@ -239,7 +329,9 @@ const FulfillmentsTable = ({ filteredItems, pending, handleCancelInboundPlan, se
                         </DropdownItem>
                       )
                     : moment.duration(moment.utc().diff(moment.utc(row.createdAt))).asHours() < 24 && (
-                        <DropdownItem className='text-danger' onClick={() => handleCancelInboundPlan(row.inboundPlanId)}>
+                        <DropdownItem
+                          className='text-danger'
+                          onClick={() => setcancelInboundPlanModal({ show: true, inboundPlanId: row.inboundPlanId, inboundPlanName: row.name })}>
                           <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
                           <span className='ms-2'>{`${FormatIntNumber(
                             state.currentRegion,

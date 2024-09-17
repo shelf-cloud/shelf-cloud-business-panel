@@ -10,8 +10,8 @@ import Link from 'next/link'
 import axios from 'axios'
 import useSWR from 'swr'
 import { toast } from 'react-toastify'
-import { FBAShipment, FBAShipmentsRepsonse } from '@typesTs/amazon/fbaShipments'
 import FBAShipmentsTable from '@components/amazon/shipments/FBAShipmentsTable'
+import { FBAShipment, FBAShipmentsRepsonse } from '@typesTs/amazon/fbaShipments.interface'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']

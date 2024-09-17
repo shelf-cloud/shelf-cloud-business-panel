@@ -1,6 +1,6 @@
 import AppContext from '@context/AppContext'
 import { FormatIntPercentage } from '@lib/FormatNumbers'
-import { FBAShipment } from '@typesTs/amazon/fbaShipments'
+import { FBAShipment } from '@typesTs/amazon/fbaShipments.interface'
 import React, { useContext } from 'react'
 import { Col } from 'reactstrap'
 
