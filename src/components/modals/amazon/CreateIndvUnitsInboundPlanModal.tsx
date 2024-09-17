@@ -396,7 +396,7 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                 <ul>
                   {creatingErros.map((error, index: number) => (
                     <li key={index} className='text-danger'>
-                      {error.message}
+                      {`${error.message} -//- ${error.details}`}
                     </li>
                   ))}
                 </ul>
