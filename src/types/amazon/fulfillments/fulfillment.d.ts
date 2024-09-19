@@ -241,6 +241,7 @@ export interface Address {
     city: string;
     countryCode: string;
     postalCode: string;
+    companyName: string;
     name: string;
     addressLine1: string;
     stateOrProvinceCode: string;

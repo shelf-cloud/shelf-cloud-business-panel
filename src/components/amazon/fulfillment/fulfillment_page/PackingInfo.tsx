@@ -74,7 +74,7 @@ const PackingInfo = ({ inboundPlan, handleNextStep, watingRepsonse }: Props) => 
       {handleNextStep && inboundPlan.fulfillmentType === 'Master Boxes' && (
         <Col xs='12' className='d-flex justify-content-end'>
           <Button
-            disabled={watingRepsonse.inventoryToSend || !inboundPlan.packingInformation}
+            disabled={watingRepsonse.inventoryToSend || !inboundPlan.packingInformation || inboundPlan.steps[3].complete}
             color='success'
             id='btn_handleNextStepPacking'
             onClick={() => handleNextStep(inboundPlan.inboundPlanId)}>

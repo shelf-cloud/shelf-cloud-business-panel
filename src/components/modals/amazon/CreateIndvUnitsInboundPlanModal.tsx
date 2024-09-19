@@ -128,10 +128,10 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
             addressLine1: '9631 Premier Parkway',
             addressLine2: '',
             city: 'Miramar',
-            companyName: `${state.user.name} / Onix Venture Group`,
+            companyName: `Shelf-Cloud / ${state.user.name}`,
             countryCode: 'US',
             email: 'info@shelf-cloud.com',
-            name: 'Jose Sanchez',
+            name: `Shelf-Cloud / ${state.user.name}`,
             phoneNumber: '7542432244',
             postalCode: '33025',
             stateOrProvinceCode: 'FL',
@@ -290,7 +290,7 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
         }}
         className='modal-title'
         id='myModalLabel'>
-        Create Individual Units Fulfillment - Send To Amazon
+        <p className='fs-4 m-0'>Create Individual Units Fulfillment - Send To Amazon</p>
       </ModalHeader>
       <ModalBody>
         <Form onSubmit={handleCreateInboundPlan}>
@@ -428,6 +428,7 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                     </tr>
                   ))}
                   <tr key={'totalMasterBoxes'} style={{ backgroundColor: '#e5e5e5' }}>
+                    <td className='fw-bold text-end'></td>
                     <td className='fw-bold text-end'></td>
                     <td className='fw-bold text-end'></td>
                     <td className='fw-bold text-end'></td>

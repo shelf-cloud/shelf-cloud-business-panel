@@ -146,7 +146,7 @@ const FBAShipmentsTable = ({ filteredItems, pending }: Props) => {
             return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${CleanStatus(row.shipment.status)} `}</span>
             break
           case 'in_transit':
-          case 'cheched_in':
+          case 'checked_in':
           case 'receiving':
             return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${CleanStatus(row.shipment.status)} `}</span>
             break
@@ -156,9 +156,10 @@ const FBAShipmentsTable = ({ filteredItems, pending }: Props) => {
           case 'cancelled':
           case 'closed':
           case 'deleted':
-            return <span className='badge text-uppercase badge-soft-dark p-2'> {row.shipment.status} </span>
+            return <span className='badge text-uppercase badge-soft-dark p-2'>{` ${CleanStatus(row.shipment.status)} `}</span>
             break
           default:
+            return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${CleanStatus(row.shipment.status)} `}</span>
             break
         }
       },

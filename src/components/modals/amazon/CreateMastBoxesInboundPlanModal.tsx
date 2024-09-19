@@ -128,10 +128,10 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
             addressLine1: '9631 Premier Parkway',
             addressLine2: '',
             city: 'Miramar',
-            companyName: `${state.user.name} / Onix Venture Group`,
+            companyName: `Shelf-Cloud / ${state.user.name}`,
             countryCode: 'US',
             email: 'info@shelf-cloud.com',
-            name: 'Jose Sanchez',
+            name: `Shelf-Cloud / ${state.user.name}`,
             phoneNumber: '7542432244',
             postalCode: '33025',
             stateOrProvinceCode: 'FL',
@@ -290,7 +290,7 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
         }}
         className='modal-title'
         id='myModalLabel'>
-        Create Fulfillment - Send To Amazon
+        <p className='fs-4 m-0'>Create Master Boxes Fulfillment - Send To Amazon</p>
       </ModalHeader>
       <ModalBody>
         <Form onSubmit={handleCreateInboundPlan}>
