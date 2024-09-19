@@ -17,6 +17,7 @@ import BoxLabels from '@components/amazon/fulfillment/fulfillment_page/BoxLabels
 import TrackingDetails from '@components/amazon/fulfillment/fulfillment_page/TrackingDetails'
 import MasterBoxHelp from '@components/amazon/offcanvas/MasterBoxHelp'
 import CarrierPalletInfo from '@components/amazon/fulfillment/fulfillment_page/CarrierPalletInfo'
+import PackingInfo from '@components/amazon/fulfillment/fulfillment_page/PackingInfo'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -507,10 +508,24 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               className={
+                                'fs-5 fw-semibold ' + (activeTab == '2' ? 'text-primary' : inboundPlanDetails.steps[2].complete ? 'text-success opacity-50' : 'text-muted')
+                              }
+                              onClick={() => {
+                                inboundPlanDetails?.steps[1]?.complete ? tabChange('2') : document.getElementById('btn_handleNextStepPacking')?.focus()
+                              }}>
+                              <>
+                                <i className='fas fa-home'></i>
+                                Packing Info
+                              </>
+                            </NavLink>
+                          </NavItem>
+                          <NavItem style={{ cursor: 'pointer' }}>
+                            <NavLink
+                              className={
                                 'fs-5 fw-semibold ' + (activeTab == '3' ? 'text-primary' : inboundPlanDetails.steps[3].complete ? 'text-success opacity-50' : 'text-muted')
                               }
                               onClick={() => {
-                                inboundPlanDetails?.steps[1]?.complete ? tabChange('3') : document.getElementById('btn_handleNextStepPacking')?.focus()
+                                inboundPlanDetails?.steps[2]?.complete ? tabChange('3') : document.getElementById('btn_handleNextStepPacking')?.focus()
                               }}>
                               <>
                                 <i className='fas fa-home'></i>
@@ -569,10 +584,15 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                         </Nav>
                         <TabContent activeTab={activeTab} className='pt-2 pb-4 border-bottom'>
                           <TabPane tabId='1'>
-                            <InventoryToSend inboundPlan={inboundPlanDetails} handleNextStep={handleNextShipping} watingRepsonse={watingRepsonse} />
+                            <InventoryToSend inboundPlan={inboundPlanDetails} watingRepsonse={watingRepsonse} />
+                          </TabPane>
+                          <TabPane tabId='2'>
+                            {inboundPlanDetails.steps[1].complete && (
+                              <PackingInfo inboundPlan={inboundPlanDetails} handleNextStep={handleNextShipping} watingRepsonse={watingRepsonse} />
+                            )}
                           </TabPane>
                           <TabPane tabId='3'>
-                            {inboundPlanDetails.steps[1].complete && (
+                            {inboundPlanDetails.steps[2].complete && (
                               <Shipping
                                 sessionToken={sessionToken}
                                 inboundPlan={inboundPlanDetails}

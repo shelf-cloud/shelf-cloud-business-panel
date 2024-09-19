@@ -11,18 +11,27 @@ import { AmazonFulfillmentSku, AmazonMarketplace } from '@typesTs/amazon/fulfill
 import useSWR from 'swr'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import moment from 'moment'
-import { notSupportedMarketplacesForFBA } from '@lib/AmzConstants'
+import { Label_Prep_Owner_Options, notSupportedMarketplacesForFBA } from '@lib/AmzConstants'
+import SimpleSelect from '@components/Common/SimpleSelect'
+import ShippingSelectDate from '@components/amazon/fulfillment/fulfillment_page/ShippingSelectDate'
 
 type Props = {
   orderProducts: AmazonFulfillmentSku[]
   showCreateInboundPlanModal: boolean
   setShowCreateInboundPlanModal: (showCreateInboundPlanModal: boolean) => void
+  setAllData: (cb: (prev: AmazonFulfillmentSku[]) => AmazonFulfillmentSku[]) => void
 }
 
-const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, setShowCreateInboundPlanModal }: Props) => {
+type CreatingErros = {
+  code: string
+  message: string
+  details: string
+}
+
+const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, setShowCreateInboundPlanModal, setAllData }: Props) => {
   const { state }: any = useContext(AppContext)
   const [loading, setloading] = useState(false)
-
+  const [creatingErros, setcreatingErros] = useState<CreatingErros[]>([])
   const TotalMasterBoxes = orderProducts.reduce((total: number, item: AmazonFulfillmentSku) => total + Number(item.orderQty), 0)
   const totalQuantityToShip = orderProducts.reduce((total: number, item: AmazonFulfillmentSku) => total + Number(item.totalSendToAmazon), 0)
 
@@ -34,25 +43,6 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
       revalidateOnFocus: false,
     }
   )
-
-  const generateTabDelimitedFile = async (orderProducts: AmazonFulfillmentSku[], inboundPlanName: string) => {
-    const prepOwner = 'Seller'
-    const labelOwner = 'Seller'
-
-    let fileContent = `Please review the Example tab before you complete this sheet\n\nDefault prep owner\t${prepOwner}\nDefault labeling owner\t${labelOwner}\n\n\t\tOptional\t\tOptional: Use only for case-packed SKUs\nMerchant SKU\tQuantity\tPrep owner\tLabeling owner\tUnits per box\tNumber of boxes\tBox length (in)\tBox width (in)\tBox height (in)\tBox weight (lb)\n`
-
-    for await (const product of orderProducts) {
-      const sortedDimensions = [product.boxLength, product.boxWidth, product.boxHeight].sort((a, b) => b - a)
-      fileContent += `${product.msku}\t${product.totalSendToAmazon}\t\t\t${product.boxQty}\t${product.orderQty}\t${sortedDimensions[0]}\t${sortedDimensions[1]}\t${sortedDimensions[2]}\t${product.boxWeight}\n`
-    }
-
-    const blob = new Blob([fileContent], { type: 'text/plain' })
-    const url = window.URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = inboundPlanName
-    a.click()
-  }
 
   const validation = useFormik({
     enableReinitialize: true,
@@ -73,7 +63,9 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
       hasProducts: Yup.number().min(1, 'To create an order, you must add at least one product'),
     }),
     onSubmit: async (values, { resetForm }) => {
+      setcreatingErros([])
       setloading(true)
+      const creatingIndvUnitsPlan = toast.loading('Generating New Inbound Plan...')
 
       let skus_details = {} as { [msku: string]: any }
       for await (const product of orderProducts) {
@@ -81,7 +73,7 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
           title: product.product_name,
           asin: product.asin,
           upc: product.barcode,
-          expiration: '',
+          expiration: product.expiration && product.expiration !== '' ? moment(product.expiration, 'MM/DD/YYYY').format('YYYY-MM-DD') : '',
           labelOwner: product.labelOwner,
           prepOwner: product.prepOwner,
           shelfcloud_sku: product.shelfcloud_sku,
@@ -114,11 +106,21 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
           },
           destinationMarketplaces: [values.marketplace],
           items: orderProducts.map((product) => {
-            return {
-              labelOwner: 'SELLER',
-              msku: product.msku,
-              prepOwner: 'NONE',
-              quantity: product.totalSendToAmazon,
+            if (product.expiration === '' || product.expiration === undefined) {
+              return {
+                labelOwner: product.labelOwner,
+                msku: product.msku,
+                prepOwner: product.prepOwner,
+                quantity: product.totalSendToAmazon,
+              }
+            } else {
+              return {
+                expiration: moment(product.expiration, 'MM/DD/YYYY').format('YYYY-MM-DD'),
+                labelOwner: product.labelOwner,
+                msku: product.msku,
+                prepOwner: product.prepOwner,
+                quantity: product.totalSendToAmazon,
+              }
             }
           }),
           name: values.inboundPlanName,
@@ -165,13 +167,23 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
       })
 
       if (!response.data.error) {
-        generateTabDelimitedFile(orderProducts, values.inboundPlanName)
         setShowCreateInboundPlanModal(false)
-        toast.success(response.data.message)
+        toast.update(creatingIndvUnitsPlan, {
+          render: response.data.message,
+          type: 'success',
+          isLoading: false,
+          autoClose: 3000,
+        })
         resetForm()
         router.push(`/amazon-sellers/fulfillments`)
       } else {
-        toast.error(response.data.message)
+        toast.update(creatingIndvUnitsPlan, {
+          render: response.data.message,
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+        })
+        setcreatingErros(response.data.apiMessage.errors)
       }
       setloading(false)
     },
@@ -180,6 +192,87 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
   const handleCreateInboundPlan = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
+  }
+
+  const handleSelectLabelOwner = async (selected: any, typeOwner: string, id: number) => {
+    setloading(true)
+
+    if (typeOwner === 'expiration') {
+      setAllData((prev) => {
+        return prev.map((product) => {
+          if (product.id === id) {
+            return { ...product, expiration: selected.value }
+          }
+          return product
+        })
+      })
+      toast.success('Expiration Date changed', {
+        autoClose: 1000,
+      })
+      setloading(false)
+      return
+    }
+
+    const changeLabelPrepOwner = toast.loading(`Saving ${typeOwner}...`)
+
+    switch (typeOwner) {
+      case 'labelOwner':
+        setAllData((prev) => {
+          return prev.map((product) => {
+            if (product.id === id) {
+              return { ...product, labelOwner: selected.value }
+            }
+            return product
+          })
+        })
+        break
+      case 'prepOwner':
+        setAllData((prev) => {
+          return prev.map((product) => {
+            if (product.id === id) {
+              return { ...product, prepOwner: selected.value }
+            }
+            return product
+          })
+        })
+        break
+      default:
+        break
+    }
+
+    const response = await axios
+      .post(`/api/amazon/fullfilments/changeLabelPrepOwner?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+        typeOwner,
+        selected: selected.value,
+        productId: id,
+      })
+      .then(({ data }) => data)
+      .catch(() => {
+        toast.update(changeLabelPrepOwner, {
+          render: 'Error saving Owner',
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+        })
+      })
+
+    if (!response.error) {
+      toast.update(changeLabelPrepOwner, {
+        render: response.message,
+        type: 'success',
+        isLoading: false,
+        autoClose: 3000,
+      })
+    } else {
+      toast.update(changeLabelPrepOwner, {
+        render: response.message,
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
+    }
+
+    setloading(false)
   }
 
   return (
@@ -284,6 +377,9 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                 <thead>
                   <tr>
                     <th>SKU</th>
+                    <th className='text-center'>Expiration Date</th>
+                    <th className='text-center'>Label Owner</th>
+                    <th className='text-center'>Prep Owner</th>
                     <th className='text-center'>Type</th>
                     <th className='text-center'>Master Boxes</th>
                     <th className='text-center'>Quantity To Send</th>
@@ -297,12 +393,44 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                         <br />
                         <span className='text-primary fs-7 m-0 p-0'>{product.asin}</span>
                       </td>
+                      <td className='w-fit px-0 d-flex flex-row justify-content-center align-items-center'>
+                        <ShippingSelectDate
+                          id={product.msku}
+                          selectedDate={product.expiration}
+                          minDate={moment().format('MM/DD/YYYY')}
+                          setnewDate={(selected) => {
+                            handleSelectLabelOwner(selected, 'expiration', product.id)
+                          }}
+                          clearDate={true}
+                        />
+                      </td>
+                      <td className='px-3' style={{ minWidth: '150px', position: 'relative' }}>
+                        <SimpleSelect
+                          selected={{ value: product.labelOwner, label: product.labelOwner }}
+                          handleSelect={(selected) => {
+                            handleSelectLabelOwner(selected, 'labelOwner', product.id)
+                          }}
+                          options={Label_Prep_Owner_Options}
+                        />
+                      </td>
+                      <td className='px-3' style={{ minWidth: '150px', position: 'relative' }}>
+                        <SimpleSelect
+                          selected={{ value: product.prepOwner, label: product.prepOwner }}
+                          handleSelect={(selected) => {
+                            handleSelectLabelOwner(selected, 'prepOwner', product.id)
+                          }}
+                          options={Label_Prep_Owner_Options}
+                        />
+                      </td>
                       <td className='text-center'>{product.isKit ? 'Kit' : 'Product'}</td>
                       <td className='text-center'>{FormatIntNumber(state.currentRegion, parseInt(product.orderQty))}</td>
                       <td className='text-center'>{FormatIntNumber(state.currentRegion, product.totalSendToAmazon)}</td>
                     </tr>
                   ))}
                   <tr key={'totalMasterBoxes'} style={{ backgroundColor: '#e5e5e5' }}>
+                    <td className='fw-bold text-end'></td>
+                    <td className='fw-bold text-end'></td>
+                    <td className='fw-bold text-end'></td>
                     <td className='fw-bold text-end'></td>
                     <td className='fw-bold text-end'>TOTAL</td>
                     <td className='fw-bold text-center'>{FormatIntNumber(state.currentRegion, TotalMasterBoxes)}</td>
@@ -311,6 +439,17 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                 </tbody>
               </table>
             </Col>
+            <Row xs={12}>
+              <Col>
+                <ul>
+                  {creatingErros.map((error, index: number) => (
+                    <li key={index} className='text-danger'>
+                      {`${error.message} -//- ${error.details}`}
+                    </li>
+                  ))}
+                </ul>
+              </Col>
+            </Row>
             <Col md={12}>
               <div className='text-end'>
                 <Button disabled={loading} type='submit' color='success' className='btn'>

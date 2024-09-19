@@ -7,6 +7,7 @@ import FilterListings from '../FilterListings'
 import { useRouter } from 'next/router'
 import AmazonFulfillmentDimensions from '@components/modals/amazon/AmazonFulfillmentDimensions'
 import CreateMastBoxesInboundPlanModal from '@components/modals/amazon/CreateMastBoxesInboundPlanModal'
+import CreateMastBoxesInboundPlanModalManual from '@components/modals/amazon/CreateMastBoxesInboundPlanModalManual'
 
 type Props = {
   lisiting: AmazonFulfillmentSku[]
@@ -21,6 +22,7 @@ const MasterBoxesFulfillment = ({ lisiting, pending }: Props) => {
   const [hasQtyError, setHasQtyError] = useState(false)
   const [error, setError] = useState([])
   const [showCreateInboundPlanModal, setShowCreateInboundPlanModal] = useState<boolean>(false)
+  const [showCreateManualInboundPlanModal, setShowCreateManualInboundPlanModal] = useState<boolean>(false)
   const [dimensionsModal, setdimensionsModal] = useState({
     show: false,
     inventoryId: 0,
@@ -95,6 +97,9 @@ const MasterBoxesFulfillment = ({ lisiting, pending }: Props) => {
           <Button disabled={error.length > 0 || hasQtyError} className='fs-6 btn' color='success' onClick={() => setShowCreateInboundPlanModal(true)}>
             Create Inbound Plan
           </Button>
+          <Button disabled={error.length > 0 || hasQtyError} className='fs-6 btn' color='secondary' onClick={() => setShowCreateManualInboundPlanModal(true)}>
+            Create Manual Inbound Plan
+          </Button>
           <FilterListings
             filters={filters !== undefined || filters === '' ? filters : 'false'}
             showHidden={showHidden !== undefined || showHidden === '' ? showHidden : 'false'}
@@ -153,6 +158,14 @@ const MasterBoxesFulfillment = ({ lisiting, pending }: Props) => {
           orderProducts={orderProducts}
           showCreateInboundPlanModal={showCreateInboundPlanModal}
           setShowCreateInboundPlanModal={setShowCreateInboundPlanModal}
+          setAllData={setAllData}
+        />
+      )}
+      {showCreateManualInboundPlanModal && (
+        <CreateMastBoxesInboundPlanModalManual
+          orderProducts={orderProducts}
+          showCreateInboundPlanModal={showCreateManualInboundPlanModal}
+          setShowCreateInboundPlanModal={setShowCreateManualInboundPlanModal}
         />
       )}
       {dimensionsModal.show && <AmazonFulfillmentDimensions dimensionsModal={dimensionsModal} setdimensionsModal={setdimensionsModal} />}

@@ -20,12 +20,12 @@ const ConfirmCancelInboundPlan = ({ cancelInboundPlanModal, setcancelInboundPlan
   const { mutate } = useSWRConfig()
   const [isLoading, setisLoading] = useState(false)
 
-  const handleCancelInboundPlan = async (inboundPlanId: string) => {
+  const handleCancelInboundPlan = async (inboundPlanId: string, inboundPlanName: string) => {
     setisLoading(true)
     const cancelInboundPlanToast = toast.loading('Canceling Inbound Plan...')
     try {
       const response = await axios.get(
-        `/api/amazon/fullfilments/cancelInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`
+        `/api/amazon/fullfilments/cancelInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}&inboundPlanName=${inboundPlanName}`
       )
 
       if (!response.data.error) {
@@ -102,7 +102,12 @@ const ConfirmCancelInboundPlan = ({ cancelInboundPlanModal, setcancelInboundPlan
                 }}>
                 Cancel
               </Button>
-              <Button disabled={isLoading} type='button' color='danger' className='btn' onClick={() => handleCancelInboundPlan(cancelInboundPlanModal.inboundPlanId)}>
+              <Button
+                disabled={isLoading}
+                type='button'
+                color='danger'
+                className='btn'
+                onClick={() => handleCancelInboundPlan(cancelInboundPlanModal.inboundPlanId, cancelInboundPlanModal.inboundPlanName)}>
                 {isLoading ? <Spinner color='#fff' size={'sm'} /> : 'Cancel Inbound Plan'}
               </Button>
             </div>

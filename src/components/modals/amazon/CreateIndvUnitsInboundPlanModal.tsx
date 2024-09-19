@@ -13,6 +13,7 @@ import { FormatIntNumber } from '@lib/FormatNumbers'
 import moment from 'moment'
 import { Label_Prep_Owner_Options, notSupportedMarketplacesForFBA } from '@lib/AmzConstants'
 import SimpleSelect from '@components/Common/SimpleSelect'
+import ShippingSelectDate from '@components/amazon/fulfillment/fulfillment_page/ShippingSelectDate'
 
 type Props = {
   orderProducts: AmazonFulfillmentSku[]
@@ -72,7 +73,7 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
           title: product.product_name,
           asin: product.asin,
           upc: product.barcode,
-          expiration: '',
+          expiration: product.expiration && product.expiration !== '' ? moment(product.expiration, 'MM/DD/YYYY').format('YYYY-MM-DD') : '',
           labelOwner: product.labelOwner,
           prepOwner: product.prepOwner,
           shelfcloud_sku: product.shelfcloud_sku,
@@ -105,11 +106,21 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
           },
           destinationMarketplaces: [values.marketplace],
           items: orderProducts.map((product) => {
-            return {
-              labelOwner: product.labelOwner,
-              msku: product.msku,
-              prepOwner: product.prepOwner,
-              quantity: product.totalSendToAmazon,
+            if (product.expiration === '' || product.expiration === undefined) {
+              return {
+                labelOwner: product.labelOwner,
+                msku: product.msku,
+                prepOwner: product.prepOwner,
+                quantity: product.totalSendToAmazon,
+              }
+            } else {
+              return {
+                expiration: moment(product.expiration, 'MM/DD/YYYY').format('YYYY-MM-DD'),
+                labelOwner: product.labelOwner,
+                msku: product.msku,
+                prepOwner: product.prepOwner,
+                quantity: product.totalSendToAmazon,
+              }
             }
           }),
           name: values.inboundPlanName,
@@ -185,25 +196,48 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
 
   const handleSelectLabelOwner = async (selected: any, typeOwner: string, id: number) => {
     setloading(true)
+
+    if (typeOwner === 'expiration') {
+      setAllData((prev) => {
+        return prev.map((product) => {
+          if (product.id === id) {
+            return { ...product, expiration: selected.value }
+          }
+          return product
+        })
+      })
+      toast.success('Expiration Date changed', {
+        autoClose: 1000,
+      })
+      setloading(false)
+      return
+    }
+
     const changeLabelPrepOwner = toast.loading(`Saving ${typeOwner}...`)
-    if (typeOwner === 'labelOwner') {
-      setAllData((prev) => {
-        return prev.map((product) => {
-          if (product.id === id) {
-            return { ...product, labelOwner: selected.value }
-          }
-          return product
+
+    switch (typeOwner) {
+      case 'labelOwner':
+        setAllData((prev) => {
+          return prev.map((product) => {
+            if (product.id === id) {
+              return { ...product, labelOwner: selected.value }
+            }
+            return product
+          })
         })
-      })
-    } else {
-      setAllData((prev) => {
-        return prev.map((product) => {
-          if (product.id === id) {
-            return { ...product, prepOwner: selected.value }
-          }
-          return product
+        break
+      case 'prepOwner':
+        setAllData((prev) => {
+          return prev.map((product) => {
+            if (product.id === id) {
+              return { ...product, prepOwner: selected.value }
+            }
+            return product
+          })
         })
-      })
+        break
+      default:
+        break
     }
 
     const response = await axios
@@ -237,6 +271,7 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
         autoClose: 3000,
       })
     }
+
     setloading(false)
   }
 
@@ -342,6 +377,7 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                 <thead>
                   <tr>
                     <th>SKU</th>
+                    <th className='text-center'>Expiration Date</th>
                     <th className='text-center'>Label Owner</th>
                     <th className='text-center'>Prep Owner</th>
                     <th className='text-center'>Type</th>
@@ -356,6 +392,17 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                         <span className='fs-6 m-0 p-0'>{product.sku}</span>
                         <br />
                         <span className='text-primary fs-7 m-0 p-0'>{product.asin}</span>
+                      </td>
+                      <td className='w-fit px-0 d-flex flex-row justify-content-center align-items-center'>
+                        <ShippingSelectDate
+                          id={product.msku}
+                          selectedDate={product.expiration}
+                          minDate={moment().format('MM/DD/YYYY')}
+                          setnewDate={(selected) => {
+                            handleSelectLabelOwner(selected, 'expiration', product.id)
+                          }}
+                          clearDate={true}
+                        />
                       </td>
                       <td className='px-3' style={{ minWidth: '150px', position: 'relative' }}>
                         <SimpleSelect

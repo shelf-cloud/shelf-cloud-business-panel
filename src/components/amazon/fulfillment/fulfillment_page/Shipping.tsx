@@ -529,6 +529,7 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                 id={`deliveryWindowSelect-shipDate`}
                 selectedDate={finalShippingCharges.shipDate}
                 minDate={moment().format('MM/DD/YYYY')}
+                maxDate={moment().add(19, 'day').format('MM/DD/YYYY')}
                 setnewDate={(newdate) =>
                   setfinalShippingCharges((prev) => {
                     return { ...prev, shipDate: newdate }
@@ -1309,6 +1310,7 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                                 id={`deliveryWindowSelect-${shipmentId}`}
                                 selectedDate={finalShippingCharges.shipments[shipmentId].deliveryWindow}
                                 minDate={moment().add(1, 'day').format('MM/DD/YYYY')}
+                                maxDate={moment().add(19, 'day').format('MM/DD/YYYY')}
                                 setnewDate={(newdate) => {
                                   handleGetDeliveryWindowOptions(placementOptionSelected.placementOptionId, shipmentId)
                                   setfinalShippingCharges((prev) => {
@@ -1359,6 +1361,7 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                                   id={`deliveryWindowSelect-${shipmentId}`}
                                   selectedDate={finalShippingCharges.shipments[shipmentId].deliveryWindow}
                                   minDate={moment().add(1, 'day').format('MM/DD/YYYY')}
+                                  maxDate={moment().add(19, 'day').format('MM/DD/YYYY')}
                                   setnewDate={(newdate) => {
                                     handleGetDeliveryWindowOptions(placementOptionSelected.placementOptionId, shipmentId)
                                     setfinalShippingCharges((prev) => {

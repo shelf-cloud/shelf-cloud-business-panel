@@ -10,7 +10,7 @@ export const authOptions: NextAuthOptions = {
     logo: `${process.env.API_DOMAIN}/assets/shelfcloud-logo-v.jpg`, // Absolute URL to image
   },
   debug: false,
-  session: { maxAge: 3600 },
+  session: { maxAge: 28_800 }, // 8 hours
   jwt: {},
   secret: process.env.AUTH_SHIPNOVO_SECRET,
   providers: [

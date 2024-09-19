@@ -10,7 +10,7 @@ const cancelInboundPlan: NextApiHandler = async (request, response) => {
         return
     }
 
-    axios(`${process.env.SHELFCLOUD_SERVER_URL}/api/amz_workflow/cancelInboundPlan/${request.query.region}/${request.query.businessId}/${request.query.inboundPlanId}`)
+    axios(`${process.env.SHELFCLOUD_SERVER_URL}/api/amz_workflow/cancelInboundPlan/${request.query.region}/${request.query.businessId}/${request.query.inboundPlanId}/${request.query.inboundPlanName}`)
         .then(({ data }) => {
 
             response.json(data)
