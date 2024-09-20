@@ -45,7 +45,7 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
   )
 
   const validation = useFormik({
-    enableReinitialize: true,
+    // enableReinitialize: true,
 
     initialValues: {
       inboundPlanName: `${state?.user?.name.substring(0, 3).toUpperCase()}-FBA-${moment().format('MM_DD_YYYY-hh_mma')}`,
@@ -201,7 +201,7 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
       setAllData((prev) => {
         return prev.map((product) => {
           if (product.id === id) {
-            return { ...product, expiration: selected.value }
+            return { ...product, expiration: selected }
           }
           return product
         })

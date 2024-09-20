@@ -110,6 +110,25 @@ const FBAShipmentsTable = ({ filteredItems, pending }: Props) => {
       compact: true,
     },
     {
+      name: <span className='fw-bold fs-6'>Type</span>,
+      selector: (row: FBAShipment) => {
+        switch (row.fulfillmentType) {
+          case 'Master Boxes':
+            return <span className='fs-6 text-primary fw-semibold'>{CleanStatus(row.fulfillmentType)}</span>
+            break
+          case 'Individual Units':
+            return <span className='fs-6 text-info fw-semibold'>{CleanStatus(row.fulfillmentType)}</span>
+            break
+          default:
+            return <></>
+            break
+        }
+      },
+      sortable: true,
+      center: true,
+      compact: true,
+    },
+    {
       name: <span className='fw-bold fs-6'>SKU</span>,
       selector: (row: FBAShipment) => row.shipmentItems.items.length,
       sortable: true,

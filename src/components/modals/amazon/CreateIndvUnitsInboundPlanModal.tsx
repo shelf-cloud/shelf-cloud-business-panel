@@ -64,6 +64,7 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
     }),
 
     onSubmit: async (values, { resetForm }) => {
+      setcreatingErros([])
       setloading(true)
       const creatingIndvUnitsPlan = toast.loading('Generating New Inbound Plan...')
 
@@ -201,7 +202,7 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
       setAllData((prev) => {
         return prev.map((product) => {
           if (product.id === id) {
-            return { ...product, expiration: selected.value }
+            return { ...product, expiration: selected }
           }
           return product
         })
