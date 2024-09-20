@@ -31,6 +31,15 @@ export interface FBAShipment {
     totalPlacementFees: number;
     totalSpdFees: number;
     totalLtlFees: number;
+    receipts?: { [msku: string]: Receipt }
+}
+
+export interface Receipt {
+    reason: string
+    quantity: number
+    reconciled: number
+    shipmentId: string
+    unreconciled: number
 }
 
 export interface SkuDetails {

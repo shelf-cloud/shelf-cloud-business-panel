@@ -16,8 +16,8 @@ const Contents = ({ shipmentDetails }: Props) => {
             <tr>
               <th>MSKU</th>
               <th>Title</th>
-              <th>Additional Information</th>
-              <th className='text-center'>Units Expected</th>
+              <th className='text-nowrap'>Additional Information</th>
+              <th className='text-center text-nowrap'>Units Expected <p className='m-0 fs-7 text-muted'>Units Located</p></th>
               <th className='text-center'>Status</th>
             </tr>
           </thead>
@@ -30,7 +30,10 @@ const Contents = ({ shipmentDetails }: Props) => {
                   <p className='m-0 p-0'>ASIN: {item.asin}</p>
                   <p className='m-0 p-0'>FNSKU: {item.fnsku}</p>
                 </td>
-                <td className='text-center'>{item.quantity}</td>
+                <td className='text-center'>
+                  <p className='m-0 fw-semibold'>{item.quantity}</p>
+                  <p className='m-0 text-primary'>{shipmentDetails.receipts ? shipmentDetails.receipts[item.msku].quantity : 0}</p>
+                </td>
                 <td className='text-nowrap'>{CleanStatus(shipmentDetails.shipment.status)}</td>
               </tr>
             ))}

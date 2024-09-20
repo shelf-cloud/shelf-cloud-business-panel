@@ -56,6 +56,14 @@ const FBAShipmentsTable = ({ filteredItems, pending }: Props) => {
     return 0
   }
 
+  const sortStrings = (rowA: string, rowB: string) => {
+    if (rowA.localeCompare(rowB)) {
+      return 1
+    } else {
+      return -1
+    }
+  }
+
   const columns: any = [
     {
       name: <span className='fw-bold fs-6'>Shipment Name</span>,
@@ -127,6 +135,14 @@ const FBAShipmentsTable = ({ filteredItems, pending }: Props) => {
       sortable: true,
       center: true,
       compact: true,
+      sortFunction: (rowA: FBAShipment, rowB: FBAShipment) => sortStrings(rowA.fulfillmentType, rowB.fulfillmentType),
+    },
+    {
+      name: <span className='fw-bold fs-6'>Shipping Mode</span>,
+      selector: (row: FBAShipment) => row.shippingMode,
+      sortable: true,
+      center: true,
+      compact: true,
     },
     {
       name: <span className='fw-bold fs-6'>SKU</span>,
@@ -136,12 +152,32 @@ const FBAShipmentsTable = ({ filteredItems, pending }: Props) => {
       compact: true,
     },
     {
-      name: <span className='fw-bold fs-6'>Units</span>,
-      selector: (row: FBAShipment) =>
-        FormatIntNumber(
-          state.currentRegion,
-          row.shipmentItems.items.reduce((total, item) => total + item.quantity, 0)
-        ),
+      name: (
+        <div className='text-center'>
+          <p className='m-0 fw-bold fs-6 '>Units Expected</p>
+          <p className='m-0 fs-7 text-muted'>Units Located</p>
+        </div>
+      ),
+      selector: (row: FBAShipment) => {
+        return (
+          <>
+            <p className='m-0 fw-semibold text-center'>
+              {FormatIntNumber(
+                state.currentRegion,
+                row.shipmentItems.items.reduce((total, item) => total + item.quantity, 0)
+              )}
+            </p>
+            <p className='m-0 text-primary text-center'>
+              {row.receipts
+                ? FormatIntNumber(
+                    state.currentRegion,
+                    Object.values(row.receipts).reduce((total, item) => total + item.quantity, 0)
+                  )
+                : 0}
+            </p>
+          </>
+        )
+      },
       sortable: true,
       center: true,
       compact: true,
