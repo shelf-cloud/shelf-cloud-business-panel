@@ -157,6 +157,16 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
     return 0
   }
 
+  const sortDates = (Adate: string, Bdate: string) => {
+    const a = moment(Adate)
+    const b = moment(Bdate)
+    if (a.isBefore(b)) {
+      return -1
+    } else {
+      return 1
+    }
+  }
+
   const conditionalRowStyles = [
     {
       when: (row: AmazonFulfillmentSku) => Number(row.quantity) <= 0,
@@ -475,6 +485,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
           },
         },
       ],
+      sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => sortDates(rowA.recommendedShipDate, rowB.recommendedShipDate),
     },
     {
       name: <span className='fw-bold fs-6 text-center'>Recommended Replenishment</span>,

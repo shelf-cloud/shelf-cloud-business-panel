@@ -12,9 +12,10 @@ import CreateMastBoxesInboundPlanModalManual from '@components/modals/amazon/Cre
 type Props = {
   lisiting: AmazonFulfillmentSku[]
   pending: boolean
+  sessionToken: string
 }
 
-const MasterBoxesFulfillment = ({ lisiting, pending }: Props) => {
+const MasterBoxesFulfillment = ({ lisiting, pending, sessionToken }: Props) => {
   const router = useRouter()
   const { filters, showHidden, showNotEnough, ShowNoShipDate }: FilterProps = router.query
   const [allData, setAllData] = useState<AmazonFulfillmentSku[]>([])
@@ -159,6 +160,7 @@ const MasterBoxesFulfillment = ({ lisiting, pending }: Props) => {
           showCreateInboundPlanModal={showCreateInboundPlanModal}
           setShowCreateInboundPlanModal={setShowCreateInboundPlanModal}
           setAllData={setAllData}
+          sessionToken={sessionToken}
         />
       )}
       {showCreateManualInboundPlanModal && (
@@ -166,6 +168,7 @@ const MasterBoxesFulfillment = ({ lisiting, pending }: Props) => {
           orderProducts={orderProducts}
           showCreateInboundPlanModal={showCreateManualInboundPlanModal}
           setShowCreateInboundPlanModal={setShowCreateManualInboundPlanModal}
+          sessionToken={sessionToken}
         />
       )}
       {dimensionsModal.show && <AmazonFulfillmentDimensions dimensionsModal={dimensionsModal} setdimensionsModal={setdimensionsModal} />}

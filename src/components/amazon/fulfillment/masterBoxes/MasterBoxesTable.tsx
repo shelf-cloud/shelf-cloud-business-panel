@@ -158,6 +158,16 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
     return 0
   }
 
+  const sortDates = (Adate: string, Bdate: string) => {
+    const a = moment(Adate)
+    const b = moment(Bdate)
+    if (a.isBefore(b)) {
+      return -1
+    } else {
+      return 1
+    }
+  }
+
   const conditionalRowStyles = [
     {
       when: (row: AmazonFulfillmentSku) => Number(row.maxOrderQty) == 0,
@@ -517,33 +527,6 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       minWidth: 'fit-content',
       width: '140px',
     },
-    // {
-    //   name: <span className='fw-bold fs-6'>Reserved</span>,
-    //   selector: (row: AmazonFulfillmentSku) => row.afn_reserved_quantity,
-    //   sortable: true,
-    //   center: true,
-    //   compact: true,
-    //   width: '80px',
-    //   minWidth: 'fit-content',
-    // },
-    // {
-    //   name: <span className='fw-bold fs-6'>Unsellable</span>,
-    //   selector: (row: AmazonFulfillmentSku) => row.afn_unsellable_quantity,
-    //   sortable: true,
-    //   center: true,
-    //   compact: true,
-    //   width: '90px',
-    //   minWidth: 'fit-content',
-    // },
-    // {
-    //   name: <span className='fw-bold fs-6'>Inbound</span>,
-    //   selector: (row: AmazonFulfillmentSku) => row.afn_inbound_receiving_quantity + row.afn_inbound_shipped_quantity + row.afn_inbound_working_quantity,
-    //   sortable: true,
-    //   center: true,
-    //   compact: true,
-    //   width: '80px',
-    //   minWidth: 'fit-content',
-    // },
     {
       name: <span className='fw-bold fs-6 text-center'>Warehouse Qty</span>,
       selector: (cell: AmazonFulfillmentSku) => {
@@ -616,6 +599,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
           },
         },
       ],
+      sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => sortDates(rowA.recommendedShipDate, rowB.recommendedShipDate),
     },
     {
       name: <span className='fw-bold fs-6 text-center'>Recommended Replenishment</span>,

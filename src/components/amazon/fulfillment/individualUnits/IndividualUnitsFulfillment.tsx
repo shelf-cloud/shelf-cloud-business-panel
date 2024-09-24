@@ -11,9 +11,10 @@ import CreateIndvUnitsInboundPlanModal from '@components/modals/amazon/CreateInd
 type Props = {
   lisiting: AmazonFulfillmentSku[]
   pending: boolean
+  sessionToken: string
 }
 
-const IndividualUnitsFulfillment = ({ lisiting, pending }: Props) => {
+const IndividualUnitsFulfillment = ({ lisiting, pending, sessionToken }: Props) => {
   const router = useRouter()
   const { filters, showHidden, showNotEnough, ShowNoShipDate }: FilterProps = router.query
   const [allData, setAllData] = useState<AmazonFulfillmentSku[]>([])
@@ -44,15 +45,7 @@ const IndividualUnitsFulfillment = ({ lisiting, pending }: Props) => {
       return allData.filter(
         (item: AmazonFulfillmentSku) =>
           (showHidden === undefined || showHidden === '' ? Boolean(item.show) : showHidden === 'false' ? Boolean(item.show) : true) &&
-          (showNotEnough === undefined || showNotEnough === ''
-            ? item.quantity <= 0
-              ? false
-              : true
-            : showNotEnough === 'false'
-            ? item.quantity <= 0
-              ? false
-              : true
-            : true) &&
+          (showNotEnough === undefined || showNotEnough === '' ? (item.quantity <= 0 ? false : true) : showNotEnough === 'false' ? (item.quantity <= 0 ? false : true) : true) &&
           (ShowNoShipDate === undefined || ShowNoShipDate === '' ? Boolean(item.recommendedShipDate) : ShowNoShipDate === 'false' ? Boolean(item.recommendedShipDate) : true)
       )
     }
@@ -61,15 +54,7 @@ const IndividualUnitsFulfillment = ({ lisiting, pending }: Props) => {
       return allData.filter(
         (item: AmazonFulfillmentSku) =>
           (showHidden === undefined || showHidden === '' ? Boolean(item.show) : showHidden === 'false' ? Boolean(item.show) : true) &&
-          (showNotEnough === undefined || showNotEnough === ''
-            ? item.quantity <= 0
-              ? false
-              : true
-            : showNotEnough === 'false'
-            ? item.quantity <= 0
-              ? false
-              : true
-            : true) &&
+          (showNotEnough === undefined || showNotEnough === '' ? (item.quantity <= 0 ? false : true) : showNotEnough === 'false' ? (item.quantity <= 0 ? false : true) : true) &&
           (ShowNoShipDate === undefined || ShowNoShipDate === '' ? Boolean(item.recommendedShipDate) : ShowNoShipDate === 'false' ? Boolean(item.recommendedShipDate) : true) &&
           (item?.product_name?.toLowerCase().includes(searchValue.toLowerCase()) ||
             searchValue.split(' ').every((word) => item?.product_name?.toLowerCase().includes(word.toLowerCase())) ||
@@ -146,6 +131,7 @@ const IndividualUnitsFulfillment = ({ lisiting, pending }: Props) => {
           showCreateInboundPlanModal={showCreateInboundPlanModal}
           setShowCreateInboundPlanModal={setShowCreateInboundPlanModal}
           setAllData={setAllData}
+          sessionToken={sessionToken}
         />
       )}
       {dimensionsModal.show && <AmazonFulfillmentDimensions dimensionsModal={dimensionsModal} setdimensionsModal={setdimensionsModal} />}

@@ -17,6 +17,7 @@ type Props = {
   orderProducts: AmazonFulfillmentSku[]
   showCreateInboundPlanModal: boolean
   setShowCreateInboundPlanModal: (showCreateInboundPlanModal: boolean) => void
+  sessionToken: string
 }
 
 const CreateMastBoxesInboundPlanModalManual = ({ orderProducts, showCreateInboundPlanModal, setShowCreateInboundPlanModal }: Props) => {

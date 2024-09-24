@@ -145,9 +145,9 @@ const SendToAmazon = ({ session, sessionToken }: Props) => {
                   <CardBody>
                     <TabContent activeTab={activeTab}>
                       <TabPane tabId='1'>
-                        <MasterBoxesFulfillment lisiting={allData} pending={pending} />
+                        <MasterBoxesFulfillment lisiting={allData} pending={pending} sessionToken={sessionToken}/>
                       </TabPane>
-                      <TabPane tabId='2'><IndividualUnits lisiting={allData} pending={pending} /></TabPane>
+                      <TabPane tabId='2'><IndividualUnits lisiting={allData} pending={pending} sessionToken={sessionToken}/></TabPane>
                     </TabContent>
                   </CardBody>
                 </Card>

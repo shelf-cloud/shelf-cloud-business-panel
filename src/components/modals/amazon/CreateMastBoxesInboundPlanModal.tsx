@@ -20,6 +20,7 @@ type Props = {
   showCreateInboundPlanModal: boolean
   setShowCreateInboundPlanModal: (showCreateInboundPlanModal: boolean) => void
   setAllData: (cb: (prev: AmazonFulfillmentSku[]) => AmazonFulfillmentSku[]) => void
+  sessionToken: string
 }
 
 type CreatingErros = {
@@ -28,7 +29,7 @@ type CreatingErros = {
   details: string
 }
 
-const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, setShowCreateInboundPlanModal, setAllData }: Props) => {
+const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, setShowCreateInboundPlanModal, setAllData, sessionToken }: Props) => {
   const { state }: any = useContext(AppContext)
   const [loading, setloading] = useState(false)
   const [creatingErros, setcreatingErros] = useState<CreatingErros[]>([])
@@ -168,7 +169,9 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
           },
         },
         {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${sessionToken}`,
+          },
         }
       )
 
