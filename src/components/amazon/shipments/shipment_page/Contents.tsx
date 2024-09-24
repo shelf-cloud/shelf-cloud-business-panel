@@ -32,7 +32,7 @@ const Contents = ({ shipmentDetails }: Props) => {
                 </td>
                 <td className='text-center'>
                   <p className='m-0 fw-semibold'>{item.quantity}</p>
-                  <p className='m-0 text-primary'>{shipmentDetails.receipts ? shipmentDetails.receipts[item.msku].quantity : 0}</p>
+                  <p className='m-0 text-primary'>{shipmentDetails.receipts && shipmentDetails.receipts[item.asin] ? shipmentDetails.receipts[item.asin].quantity : 0}</p>
                 </td>
                 <td className='text-nowrap'>{CleanStatus(shipmentDetails.shipment.status)}</td>
               </tr>
