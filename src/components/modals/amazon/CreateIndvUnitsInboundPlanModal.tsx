@@ -97,78 +97,83 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
         }
       }
 
-      const response = await axios.post(`/api/amazon/fullfilments/individualUnits/createIndUnitsInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        fulfillmentType: 'Individual Units',
-        inboundPlan: {
-          contactInformation: {
-            email: 'info@shelf-cloud.com',
-            name: 'Jose Sanchez',
-            phoneNumber: '7542432244',
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/createIndUnitsInboundPlan/${state.currentRegion}/${state.user.businessId}`,
+        {
+          fulfillmentType: 'Individual Units',
+          inboundPlan: {
+            contactInformation: {
+              email: 'info@shelf-cloud.com',
+              name: 'Jose Sanchez',
+              phoneNumber: '7542432244',
+            },
+            destinationMarketplaces: [values.marketplace],
+            items: orderProducts.map((product) => {
+              if (product.expiration === '' || product.expiration === undefined) {
+                return {
+                  labelOwner: product.labelOwner,
+                  msku: product.msku,
+                  prepOwner: product.prepOwner,
+                  quantity: product.totalSendToAmazon,
+                }
+              } else {
+                return {
+                  expiration: moment(product.expiration, 'MM/DD/YYYY').format('YYYY-MM-DD'),
+                  labelOwner: product.labelOwner,
+                  msku: product.msku,
+                  prepOwner: product.prepOwner,
+                  quantity: product.totalSendToAmazon,
+                }
+              }
+            }),
+            name: values.inboundPlanName,
+            sourceAddress: {
+              addressLine1: '9631 Premier Parkway',
+              addressLine2: '',
+              city: 'Miramar',
+              companyName: `Shelf-Cloud / ${state.user.name}`,
+              countryCode: 'US',
+              email: 'info@shelf-cloud.com',
+              name: `Shelf-Cloud / ${state.user.name}`,
+              phoneNumber: '7542432244',
+              postalCode: '33025',
+              stateOrProvinceCode: 'FL',
+            },
           },
-          destinationMarketplaces: [values.marketplace],
-          items: orderProducts.map((product) => {
-            if (product.expiration === '' || product.expiration === undefined) {
-              return {
-                labelOwner: product.labelOwner,
-                msku: product.msku,
-                prepOwner: product.prepOwner,
-                quantity: product.totalSendToAmazon,
-              }
-            } else {
-              return {
-                expiration: moment(product.expiration, 'MM/DD/YYYY').format('YYYY-MM-DD'),
-                labelOwner: product.labelOwner,
-                msku: product.msku,
-                prepOwner: product.prepOwner,
-                quantity: product.totalSendToAmazon,
-              }
-            }
-          }),
-          name: values.inboundPlanName,
-          sourceAddress: {
-            addressLine1: '9631 Premier Parkway',
-            addressLine2: '',
-            city: 'Miramar',
-            companyName: `Shelf-Cloud / ${state.user.name}`,
-            countryCode: 'US',
-            email: 'info@shelf-cloud.com',
-            name: `Shelf-Cloud / ${state.user.name}`,
-            phoneNumber: '7542432244',
-            postalCode: '33025',
-            stateOrProvinceCode: 'FL',
+          skus_details,
+          steps: {
+            1: {
+              step: 'Inventory to Send',
+              complete: false,
+            },
+            2: {
+              step: 'Packing Info',
+              complete: false,
+            },
+            3: {
+              step: 'Shipping',
+              complete: false,
+            },
+            4: {
+              step: 'Box Labels',
+              complete: false,
+            },
+            5: {
+              step: 'Carrier and Pallet Info',
+              complete: false,
+            },
+            6: {
+              step: 'Tracking Details',
+              complete: false,
+            },
           },
         },
-        skus_details,
-        steps: {
-          1: {
-            step: 'Inventory to Send',
-            complete: false,
-          },
-          2: {
-            step: 'Packing Info',
-            complete: false,
-          },
-          3: {
-            step: 'Shipping',
-            complete: false,
-          },
-          4: {
-            step: 'Box Labels',
-            complete: false,
-          },
-          5: {
-            step: 'Carrier and Pallet Info',
-            complete: false,
-          },
-          6: {
-            step: 'Tracking Details',
-            complete: false,
-          },
-        },
-      })
+        {
+          withCredentials: true,
+        }
+      )
 
       if (!response.data.error) {
-        setShowCreateInboundPlanModal(false)
         toast.update(creatingIndvUnitsPlan, {
           render: response.data.message,
           type: 'success',
@@ -176,6 +181,7 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
           autoClose: 3000,
         })
         resetForm()
+        setShowCreateInboundPlanModal(false)
         router.push(`/amazon-sellers/fulfillments`)
       } else {
         toast.update(creatingIndvUnitsPlan, {
