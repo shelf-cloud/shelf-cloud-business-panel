@@ -120,6 +120,8 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
     return 0
   }
 
+  const sortString = (a: string, b: string) => a.localeCompare(b)
+
   const columns: any = [
     {
       name: <span className='fw-bolder fs-6'>Image</span>,
@@ -198,6 +200,7 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
       sortable: true,
       compact: true,
       grow: 0,
+      sortFunction: (rowA: PurchaseOrderBySkus, rowB: PurchaseOrderBySkus) => sortString(rowA.sku, rowB.sku),
     },
     {
       name: <span className='fw-bolder fs-6'>Ordered</span>,

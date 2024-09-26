@@ -7,13 +7,15 @@ import { useRouter } from 'next/router'
 import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from 'reactstrap'
+import FBAShipmentPackingSlip from './FBAShipmentPackingSlip'
 
 type Props = {
   filteredItems: FBAShipment[]
   pending: boolean
+  handlePrintShipmentBillOfLading: (shipmentId: string) => void
 }
 
-const FBAShipmentsTable = ({ filteredItems, pending }: Props) => {
+const FBAShipmentsTable = ({ filteredItems, pending, handlePrintShipmentBillOfLading }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
   const orderStatus = (rowA: FBAShipment, rowB: FBAShipment) => {
@@ -239,13 +241,19 @@ const FBAShipmentsTable = ({ filteredItems, pending }: Props) => {
               <DropdownMenu className='dropdown-menu-end'>
                 <DropdownItem onClick={() => router.push(`/amazon-sellers/shipments/${row.shipmentId}`)}>
                   <div>
-                    <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
+                    <i className='ri-file-list-line align-middle me-2 fs-5 text-muted' />
                     <span className='fs-6 fw-normal text-dark'>View Shipment</span>
                   </div>
                 </DropdownItem>
-                {/* <DropdownItem className='text-danger' onClick={() => handleCancelInboundPlan(row.inboundPlanId)}>
-                  <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
-                </DropdownItem> */}
+                <FBAShipmentPackingSlip order={row} />
+                {row.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber && (
+                  <DropdownItem onClick={() => handlePrintShipmentBillOfLading(row.shipment.shipmentConfirmationId)}>
+                    <div>
+                      <i className='ri-file-text-fill align-middle me-2 fs-5 text-muted' />
+                      <span className='fs-6 fw-normal text-dark'>Download BOL</span>
+                    </div>
+                  </DropdownItem>
+                )}
               </DropdownMenu>
             </UncontrolledDropdown>
           )

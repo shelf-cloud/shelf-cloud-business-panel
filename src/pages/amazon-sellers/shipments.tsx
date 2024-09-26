@@ -12,6 +12,7 @@ import useSWR from 'swr'
 import { toast } from 'react-toastify'
 import FBAShipmentsTable from '@components/amazon/shipments/FBAShipmentsTable'
 import { FBAShipment, FBAShipmentsRepsonse } from '@typesTs/amazon/fbaShipments.interface'
+import { GetLabelsResponse } from '@typesTs/amazon/fulfillments/fulfillment'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -97,6 +98,55 @@ const Shipments = ({ session, sessionToken }: Props) => {
     return []
   }, [allData, searchValue])
 
+  const handlePrintShipmentBillOfLading = async (shipmentId: string) => {
+    const cancelInboundPlanToast = toast.loading('Generating Bill Of Lading...')
+
+    try {
+      const controller = new AbortController()
+      const signal = controller.signal
+      const response = (await axios
+        .get(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/getBillOfLading/${state.currentRegion}/${state.user.businessId}/${shipmentId}`, {
+          signal,
+          headers: {
+            Authorization: `Bearer ${sessionToken}`,
+          },
+        })
+        .then(({ data }) => data)
+        .catch(({ error }) => {
+          if (axios.isCancel(error)) {
+            toast.error(error?.data?.message || 'Error Generating Bill Of Lading')
+          }
+        })) as GetLabelsResponse
+
+      if (!response.error) {
+        toast.update(cancelInboundPlanToast, {
+          render: response.message,
+          type: 'success',
+          isLoading: false,
+          autoClose: 3000,
+        })
+        const a = document.createElement('a')
+        a.href = response.labels.payload.DownloadURL
+        a.download = shipmentId
+        a.click()
+      } else {
+        toast.update(cancelInboundPlanToast, {
+          render: response.message,
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+        })
+      }
+    } catch (error) {
+      toast.update(cancelInboundPlanToast, {
+        render: 'Error Generating Bill Of Lading',
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
+    }
+  }
+
   return (
     <div>
       <Head>
@@ -148,7 +198,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
             </Row>
             <Card>
               <CardBody>
-                <FBAShipmentsTable filteredItems={filteredItems} pending={pending} />
+                <FBAShipmentsTable filteredItems={filteredItems} pending={pending} handlePrintShipmentBillOfLading={handlePrintShipmentBillOfLading} />
               </CardBody>
             </Card>
           </Container>

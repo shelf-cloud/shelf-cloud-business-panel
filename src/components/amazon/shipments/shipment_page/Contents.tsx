@@ -14,21 +14,25 @@ const Contents = ({ shipmentDetails }: Props) => {
         <table className='table table-bordered'>
           <thead className='table-light'>
             <tr>
+              <th>SKU</th>
               <th>MSKU</th>
               <th>Title</th>
               <th className='text-nowrap'>Additional Information</th>
-              <th className='text-center text-nowrap'>Units Expected <p className='m-0 fs-7 text-muted'>Units Located</p></th>
+              <th className='text-center text-nowrap'>
+                Units Expected <p className='m-0 fs-7 text-muted'>Units Located</p>
+              </th>
               <th className='text-center'>Status</th>
             </tr>
           </thead>
           <tbody>
             {shipmentDetails.shipmentItems.items.map((item) => (
               <tr key={item.msku}>
+                <td className='text-nowrap fw-bold'>{shipmentDetails.skus_details[item.msku].shelfcloud_sku}</td>
                 <td className='text-nowrap'>{item.msku}</td>
                 <td>{shipmentDetails.skus_details[item.msku].title}</td>
                 <td className='text-nowrap'>
                   <p className='m-0 p-0'>ASIN: {item.asin}</p>
-                  <p className='m-0 p-0'>FNSKU: {item.fnsku}</p>
+                  {item.asin !== item.fnsku && <p className='m-0 p-0'>FNSKU: {item.fnsku}</p>}
                 </td>
                 <td className='text-center'>
                   <p className='m-0 fw-semibold'>{item.quantity}</p>
