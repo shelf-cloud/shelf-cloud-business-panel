@@ -422,6 +422,7 @@ function OrderDetailsFromInvoicesModal({}: Props) {
             </Row>
           </div>
         )
+      case 'Adjustment':
       case 'Service':
         return (
           <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>

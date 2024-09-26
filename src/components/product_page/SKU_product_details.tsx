@@ -24,6 +24,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [showEditFields, setShowEditFields] = useState(false)
+  const [isLoading, setisLoading] = useState(false)
 
   const validation = useFormik({
     enableReinitialize: true,
@@ -47,6 +48,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
       ceilling: Yup.number().min(0, 'Minimum of 0').required('Enter Ceilling'),
     }),
     onSubmit: async (values) => {
+      setisLoading(true)
       const response = await axios.post(`/api/productDetails/skuProductDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
         productInfo: values,
       })
@@ -57,6 +59,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
       } else {
         toast.error(response.data.msg)
       }
+      setisLoading(false)
     },
   })
 
@@ -306,11 +309,11 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
             </table>
             <Col md={12}>
               <div className='d-flex flex-row justify-content-end align-items-center gap-3'>
-                <Button type='button' color='light' className='btn' onClick={() => setShowEditFields(false)}>
+                <Button disabled={isLoading} type='button' color='light' className='btn' onClick={() => setShowEditFields(false)}>
                   Cancel
                 </Button>
-                <Button type='submit' color='primary' className='btn'>
-                  Save Changes
+                <Button disabled={isLoading} type='submit' color='primary' className='btn'>
+                {isLoading ? 'Saving...' : 'Save Changes'}
                 </Button>
               </div>
             </Col>

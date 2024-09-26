@@ -23,6 +23,8 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [showEditFields, setShowEditFields] = useState(false)
+  const [isLoading, setisLoading] = useState(false)
+
   const landedCost = sellerCost + inboundShippingCost + otherCosts ?? 0
   const totalLeadTime = productionTime + transitTime
 
@@ -41,12 +43,13 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
     validationSchema: Yup.object({
       sellerCost: Yup.number().min(0, 'Minimum of 0').required('Enter Cost'),
       inboundShippingCost: Yup.number().min(0, 'Minimum of 0').required('Enter Cost'),
-      otherCosts: Yup.number().min(0, 'Minimum of 0').required('Enter Cost'),
+      otherCosts: Yup.number().min(0, 'Minimum of 0'),
       productionTime: Yup.number().min(0, 'Minimum of 0').required('Enter Time'),
-      transitTime: Yup.number().min(0, 'Minimum of 0').required('Enter Time'),
+      transitTime: Yup.number().min(0, 'Minimum of 0'),
       shippingToFBA: Yup.number().min(0, 'Minimum of 0').required('Enter Time'),
     }),
     onSubmit: async (values) => {
+      setisLoading(true)
       const response = await axios.post(`/api/productDetails/supplierProductDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
         productInfo: values,
       })
@@ -57,6 +60,7 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
       } else {
         toast.error(response.data.msg)
       }
+      setisLoading(false)
     },
   })
 
@@ -296,11 +300,11 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
             </table>
             <Col md={12}>
               <div className='d-flex flex-row justify-content-end align-items-center gap-3'>
-                <Button type='button' color='light' className='btn' onClick={() => setShowEditFields(false)}>
+                <Button disabled={isLoading} type='button' color='light' className='btn' onClick={() => setShowEditFields(false)}>
                   Cancel
                 </Button>
-                <Button type='submit' color='primary' className='btn'>
-                  Save Changes
+                <Button disabled={isLoading} type='submit' color='primary' className='btn'>
+                {isLoading ? 'Saving...' : 'Save Changes'}
                 </Button>
               </div>
             </Col>

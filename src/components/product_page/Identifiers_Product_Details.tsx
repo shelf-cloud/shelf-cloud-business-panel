@@ -30,6 +30,7 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [showEditFields, setShowEditFields] = useState(false)
+  const [isLoading, setisLoading] = useState(false)
 
   const initialValues = {
     inventoryId,
@@ -38,6 +39,7 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
     fnsku,
     identifiers: identifiers.length > 0 ? identifiers : [],
   }
+
   const validationSchema = Yup.object({
     asin: Yup.string()
       .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ... Nor White Spaces`)
@@ -49,12 +51,14 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
       Yup.object({
         type: Yup.string().required('Select Type'),
         value: Yup.string()
-          .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ... Nor White Spaces`)
+          .matches(/^[a-zA-Z0-9-\s]+$/, `Invalid special characters: % & # " ' @ ~ , ... Nor White Spaces`)
           .required('Insert Value'),
       })
     ),
   })
+
   const handleSubmit = async (values: any) => {
+    setisLoading(true)
     const response = await axios.post(`/api/productDetails/identifiersProductDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
       productInfo: values,
     })
@@ -65,7 +69,9 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
     } else {
       toast.error(response.data.msg)
     }
+    setisLoading(false)
   }
+
   const handleShowEditFields = () => {
     setShowEditFields(true)
   }
@@ -267,11 +273,11 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
               </table>
               <Col md={12}>
                 <div className='d-flex flex-row justify-content-end align-items-center gap-3'>
-                  <Button type='button' color='light' className='btn' onClick={() => setShowEditFields(false)}>
+                  <Button disabled={isLoading} type='button' color='light' className='btn' onClick={() => setShowEditFields(false)}>
                     Cancel
                   </Button>
-                  <Button type='submit' color='primary' className='btn'>
-                    Save Changes
+                  <Button disabled={isLoading} type='submit' color='primary' className='btn'>
+                    {isLoading ? 'Saving...' : 'Save Changes'}
                   </Button>
                 </div>
               </Col>

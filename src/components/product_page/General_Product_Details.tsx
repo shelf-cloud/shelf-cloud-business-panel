@@ -30,6 +30,7 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [showEditFields, setShowEditFields] = useState(false)
+  const [isLoading, setisLoading] = useState(false)
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -55,6 +56,7 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
       note: Yup.string().max(300, 'Title is to Long'),
     }),
     onSubmit: async (values) => {
+      setisLoading(true)
       const response = await axios.post(`/api/productDetails/generalProductDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
         productInfo: values,
       })
@@ -65,6 +67,7 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
       } else {
         toast.error(response.data.msg)
       }
+      setisLoading(false)
     },
   })
 
@@ -296,11 +299,11 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
             </Col>
             <Col md={12}>
               <div className='d-flex flex-row justify-content-end align-items-center gap-3'>
-                <Button type='button' color='light' className='btn' onClick={() => setShowEditFields(false)}>
+                <Button disabled={isLoading} type='button' color='light' className='btn' onClick={() => setShowEditFields(false)}>
                   Cancel
                 </Button>
-                <Button type='submit' color='primary' className='btn'>
-                  Save Changes
+                <Button disabled={isLoading} type='submit' color='primary' className='btn'>
+                {isLoading ? 'Saving...' : 'Save Changes'}
                 </Button>
               </div>
             </Col>
