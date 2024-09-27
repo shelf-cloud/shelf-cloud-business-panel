@@ -45,7 +45,7 @@ const ProfileDropdown = () => {
                 ))}
             </span>
           </DropdownToggle>
-          <DropdownMenu className='dropdown-menu-end'>
+          <DropdownMenu className='dropdown-menu-end' container={'body'}>
             <h6 className='dropdown-header text-capitalize'>Welcome {session?.user?.profileName}</h6>
             {session?.user?.role === 'admin' && (
               <DropdownItem onClick={() => router.push('/Profile')}>

@@ -14,6 +14,7 @@ import { AmazonFulfillmentSku } from '@typesTs/amazon/fulfillments'
 import MasterBoxesFulfillment from '@components/amazon/fulfillment/masterBoxes/MasterBoxesFulfillment'
 import MasterBoxHelp from '@components/amazon/offcanvas/MasterBoxHelp'
 import IndividualUnits from '@components/amazon/fulfillment/individualUnits/IndividualUnitsFulfillment'
+import { useRouter } from 'next/router'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -44,6 +45,7 @@ type Props = {
 
 const SendToAmazon = ({ session, sessionToken }: Props) => {
   const { state }: any = useContext(AppContext)
+  const router = useRouter()
   const title = `Send To Amazon | ${session?.user?.businessName}`
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<AmazonFulfillmentSku[]>([])
@@ -102,6 +104,7 @@ const SendToAmazon = ({ session, sessionToken }: Props) => {
                         <NavLink
                           className={activeTab == '1' ? 'text-primary fw-semibold fs-5' : 'text-muted fs-5'}
                           onClick={() => {
+                            router.push(`/amazon-sellers/fulfillment/sendToAmazon`, undefined, { shallow: true })
                             tabChange('1')
                           }}>
                           <>
@@ -115,6 +118,7 @@ const SendToAmazon = ({ session, sessionToken }: Props) => {
                           to='#'
                           className={activeTab == '2' ? 'text-primary fw-semibold fs-5' : 'text-muted fs-5'}
                           onClick={() => {
+                            router.push(`/amazon-sellers/fulfillment/sendToAmazon`, undefined, { shallow: true })
                             tabChange('2')
                           }}
                           type='button'>
@@ -136,18 +140,25 @@ const SendToAmazon = ({ session, sessionToken }: Props) => {
                           </Button>
                         </a>
                       </Link>
-                      <Button color='info' className='d-flex align-items-center' onClick={() => setHelpOffCanvasIsOpen(true)}>
+                      {/* <Button color='info' className='d-flex align-items-center' onClick={() => setHelpOffCanvasIsOpen(true)}>
                         <i className='ri-question-line fs-14 p-0 m-0 me-lg-1' />
                         <span className='d-none d-lg-block'>Need help</span>
-                      </Button>
+                      </Button> */}
                     </div>
                   </CardHeader>
                   <CardBody>
                     <TabContent activeTab={activeTab}>
                       <TabPane tabId='1'>
-                        <MasterBoxesFulfillment lisiting={allData} pending={pending} sessionToken={sessionToken}/>
+                        <MasterBoxesFulfillment
+                          lisiting={allData}
+                          pending={pending}
+                          sessionToken={sessionToken}
+                          mutateLink={`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/getAmazonFbaSkus/${state.currentRegion}/${state.user.businessId}`}
+                        />
                       </TabPane>
-                      <TabPane tabId='2'><IndividualUnits lisiting={allData} pending={pending} sessionToken={sessionToken}/></TabPane>
+                      <TabPane tabId='2'>
+                        <IndividualUnits lisiting={allData} pending={pending} sessionToken={sessionToken} />
+                      </TabPane>
                     </TabContent>
                   </CardBody>
                 </Card>

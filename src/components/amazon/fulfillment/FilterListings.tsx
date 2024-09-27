@@ -9,9 +9,10 @@ type Props = {
   showHidden: string
   showNotEnough: string
   ShowNoShipDate: string
+  masterBoxVisibility?: string
 }
 
-const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate }: Props) => {
+const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, masterBoxVisibility }: Props) => {
   const router = useRouter()
   const [OpenFilters, setOpenFilters] = useState(false)
   const filterByOthersContainer = useRef<HTMLDivElement | null>(null)
@@ -21,6 +22,7 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate }: 
     showHidden: showHidden,
     showNotEnough: showNotEnough,
     ShowNoShipDate: ShowNoShipDate,
+    masterBoxVisibility: masterBoxVisibility,
   }
 
   useEffect(() => {
@@ -35,16 +37,17 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate }: 
     }
   }, [])
 
-  const handleApplyFilters = (showHidden: string, showNotEnough: string, ShowNoShipDate: string) => {
+  const handleApplyFilters = (showHidden: string, showNotEnough: string, ShowNoShipDate: string, masterBoxVisibility: string) => {
     let filterString = `/amazon-sellers/fulfillment/sendToAmazon?filters=true`
     if (showHidden || showHidden !== '') filterString += `&showHidden=${showHidden}`
     if (showNotEnough || showNotEnough !== '') filterString += `&showNotEnough=${showNotEnough}`
     if (ShowNoShipDate || ShowNoShipDate !== '') filterString += `&ShowNoShipDate=${ShowNoShipDate}`
+    if (masterBoxVisibility || masterBoxVisibility !== '') filterString += `&masterBoxVisibility=${masterBoxVisibility}`
     router.push(filterString, undefined, { shallow: true })
   }
 
   const handleSubmit = async (values: any) => {
-    handleApplyFilters(values.showHidden, values.showNotEnough, values.ShowNoShipDate)
+    handleApplyFilters(values.showHidden, values.showNotEnough, values.ShowNoShipDate, values.masterBoxVisibility)
     setOpenFilters(false)
   }
 
@@ -53,6 +56,7 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate }: 
       showHidden: '',
       showNotEnough: '',
       ShowNoShipDate: '',
+      masterBoxVisibility: '',
     })
     router.push(`/amazon-sellers/fulfillment/sendToAmazon`, undefined, { shallow: true })
     setOpenFilters(false)
@@ -78,8 +82,8 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate }: 
             {({ values, errors, touched, handleBlur, setFieldValue, setValues }) => (
               <Form>
                 <div className='d-flex flex-column justify-content-start gap-3'>
-                  <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-center'>
-                    <Label className='form-label fs-7'>Show hidden products</Label>
+                  <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-end'>
+                    <Label className='fw-normal fs-7 w-75'>Show hidden products</Label>
                     <Input
                       className='form-check-input code-switcher'
                       type='checkbox'
@@ -93,8 +97,25 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate }: 
                       invalid={touched.showHidden && errors.showHidden ? true : false}
                     />
                   </div>
-                  <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-center'>
-                    <Label className='form-label fs-7'>Show With Not Enough Qty</Label>
+                  {masterBoxVisibility && (
+                    <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-end'>
+                      <Label className='fw-normal fs-7 w-75'>Show hidden visibility in Master Boxes</Label>
+                      <Input
+                        className='form-check-input code-switcher'
+                        type='checkbox'
+                        id='masterBoxVisibility'
+                        name='masterBoxVisibility'
+                        checked={values.masterBoxVisibility === 'true' ? true : false}
+                        onChange={(e) => {
+                          setFieldValue('masterBoxVisibility', `${e.target.checked}`)
+                        }}
+                        onBlur={handleBlur}
+                        invalid={touched.masterBoxVisibility && errors.masterBoxVisibility ? true : false}
+                      />
+                    </div>
+                  )}
+                  <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-end'>
+                    <Label className='fw-normal fs-7 w-75'>Show With Not Enough Qty</Label>
                     <Input
                       className='form-check-input code-switcher'
                       type='checkbox'
@@ -108,8 +129,8 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate }: 
                       invalid={touched.showNotEnough && errors.showNotEnough ? true : false}
                     />
                   </div>
-                  <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-center'>
-                    <Label className='form-label fs-7'>Show With No Recommended Ship Date</Label>
+                  <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-end'>
+                    <Label className='fw-normal fs-7 w-75'>Show With No Recommended Ship Date</Label>
                     <Input
                       className='form-check-input code-switcher'
                       type='checkbox'

@@ -553,7 +553,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
     },
     {
       name: <span className='fw-bold fs-6 text-center'>Total To Amazon</span>,
-      selector: (row: AmazonFulfillmentSku) => FormatIntNumber(state.currentRegion, row.totalSendToAmazon),
+      selector: (row: AmazonFulfillmentSku) => row.totalSendToAmazon > 0 ? <p className='m-0 fs-5 text-center fw-semibold'>{FormatIntNumber(state.currentRegion, row.totalSendToAmazon)} <span className='fs-7 fw-normal'>{row.totalSendToAmazon > 1 ? 'Units' : 'Unit'}</span></p> : 0,
       sortable: true,
       center: true,
       compact: true,

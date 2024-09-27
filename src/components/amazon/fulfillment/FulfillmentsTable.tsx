@@ -144,7 +144,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
                   <i className='mdi mdi-dots-vertical align-middle fs-3 m-0 px-2 py-0' style={{ color: '#919FAF' }}></i>
                 </DropdownToggle>
                 {row.inboundPlanId ? (
-                  <DropdownMenu className='dropdown-menu-end'>
+                  <DropdownMenu className='dropdown-menu-end' container={'body'}>
                     <DropdownItem
                       onClick={() =>
                         row.amzFinished
@@ -190,7 +190,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
                         )} */}
                   </DropdownMenu>
                 ) : (
-                  <DropdownMenu className='dropdown-menu-end'>
+                  <DropdownMenu className='dropdown-menu-end' container={'body'}>
                     <DropdownItem
                       onClick={() =>
                         setassignFinishedWorkflowIdModal({
@@ -223,7 +223,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
                 <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
                   <i className='mdi mdi-dots-vertical align-middle fs-3 m-0 px-2 py-0' style={{ color: '#919FAF' }}></i>
                 </DropdownToggle>
-                <DropdownMenu className='dropdown-menu-end'>
+                <DropdownMenu className='dropdown-menu-end' container={'body'}>
                   <DropdownItem
                     onClick={() =>
                       row.amzFinished

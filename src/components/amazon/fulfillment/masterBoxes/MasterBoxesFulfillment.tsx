@@ -1,25 +1,34 @@
 import { AmazonFulfillmentSku, AmzDimensions, Dimensions, FilterProps } from '@typesTs/amazon/fulfillments'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { DebounceInput } from 'react-debounce-input'
-import { Button, Col, Row } from 'reactstrap'
+import { Button, Col, Row, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledButtonDropdown } from 'reactstrap'
 import MasterBoxesTable from './MasterBoxesTable'
 import FilterListings from '../FilterListings'
 import { useRouter } from 'next/router'
 import AmazonFulfillmentDimensions from '@components/modals/amazon/AmazonFulfillmentDimensions'
 import CreateMastBoxesInboundPlanModal from '@components/modals/amazon/CreateMastBoxesInboundPlanModal'
 import CreateMastBoxesInboundPlanModalManual from '@components/modals/amazon/CreateMastBoxesInboundPlanModalManual'
+import { toast } from 'react-toastify'
+import { useSWRConfig } from 'swr'
+import axios from 'axios'
+import AppContext from '@context/AppContext'
 
 type Props = {
   lisiting: AmazonFulfillmentSku[]
   pending: boolean
   sessionToken: string
+  mutateLink: string
 }
 
-const MasterBoxesFulfillment = ({ lisiting, pending, sessionToken }: Props) => {
+const MasterBoxesFulfillment = ({ lisiting, pending, sessionToken, mutateLink }: Props) => {
+  const { state }: any = useContext(AppContext)
   const router = useRouter()
-  const { filters, showHidden, showNotEnough, ShowNoShipDate }: FilterProps = router.query
+  const { mutate } = useSWRConfig()
+  const { filters, showHidden, showNotEnough, ShowNoShipDate, masterBoxVisibility }: FilterProps = router.query
   const [allData, setAllData] = useState<AmazonFulfillmentSku[]>([])
   const [searchValue, setSearchValue] = useState<string>('')
+  const [selectedRows, setSelectedRows] = useState<AmazonFulfillmentSku[]>([])
+  const [toggledClearRows, setToggleClearRows] = useState(false)
   const [hasQtyError, setHasQtyError] = useState(false)
   const [error, setError] = useState([])
   const [showCreateInboundPlanModal, setShowCreateInboundPlanModal] = useState<boolean>(false)
@@ -56,7 +65,8 @@ const MasterBoxesFulfillment = ({ lisiting, pending, sessionToken }: Props) => {
               ? false
               : true
             : true) &&
-          (ShowNoShipDate === undefined || ShowNoShipDate === '' ? Boolean(item.recommendedShipDate) : ShowNoShipDate === 'false' ? Boolean(item.recommendedShipDate) : true)
+          (ShowNoShipDate === undefined || ShowNoShipDate === '' ? Boolean(item.recommendedShipDate) : ShowNoShipDate === 'false' ? Boolean(item.recommendedShipDate) : true) &&
+          (masterBoxVisibility === undefined || masterBoxVisibility === '' ? item.showForMasterBoxes : masterBoxVisibility === 'false' ? item.showForMasterBoxes : true)
       )
     }
 
@@ -74,6 +84,7 @@ const MasterBoxesFulfillment = ({ lisiting, pending, sessionToken }: Props) => {
               : true
             : true) &&
           (ShowNoShipDate === undefined || ShowNoShipDate === '' ? Boolean(item.recommendedShipDate) : ShowNoShipDate === 'false' ? Boolean(item.recommendedShipDate) : true) &&
+          (masterBoxVisibility === undefined || masterBoxVisibility === '' ? item.showForMasterBoxes : masterBoxVisibility === 'false' ? item.showForMasterBoxes : true) &&
           (item?.product_name?.toLowerCase().includes(searchValue.toLowerCase()) ||
             searchValue.split(' ').every((word) => item?.product_name?.toLowerCase().includes(word.toLowerCase())) ||
             item?.sku?.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -85,11 +96,47 @@ const MasterBoxesFulfillment = ({ lisiting, pending, sessionToken }: Props) => {
     }
 
     return []
-  }, [allData, searchValue, showHidden, showNotEnough, ShowNoShipDate])
+  }, [allData, searchValue, showHidden, showNotEnough, ShowNoShipDate, masterBoxVisibility])
 
   const orderProducts = useMemo(() => {
     return allData.filter((item: AmazonFulfillmentSku) => Number(item?.orderQty) > 0)
   }, [allData])
+
+  const changeSelectedMasterBoxVisibility = async (visibility: boolean) => {
+    if (selectedRows.length <= 0) return
+
+    const changeMasterBoxVisibility = toast.loading('Changing visibility...')
+
+    const response = await axios.post(`/api/amazon/fullfilments/masterBoxes/changeMasterBoxVisibility?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      visibility,
+      selectedRows: selectedRows.map((row) => {
+        return { inventoryId: row.inventoryId, isKit: row.isKit }
+      }),
+    })
+    if (!response.data.error) {
+      setToggleClearRows(!toggledClearRows)
+      setSelectedRows([])
+      toast.update(changeMasterBoxVisibility, {
+        render: response.data.message,
+        type: 'success',
+        isLoading: false,
+        autoClose: 3000,
+      })
+      mutate(mutateLink)
+    } else {
+      toast.update(changeMasterBoxVisibility, {
+        render: response.data.message,
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
+    }
+  }
+
+  const clearAllSelectedRows = () => {
+    setToggleClearRows(!toggledClearRows)
+    setSelectedRows([])
+  }
 
   return (
     <>
@@ -106,7 +153,27 @@ const MasterBoxesFulfillment = ({ lisiting, pending, sessionToken }: Props) => {
             showHidden={showHidden !== undefined || showHidden === '' ? showHidden : 'false'}
             showNotEnough={showNotEnough !== undefined || showNotEnough === '' ? showNotEnough : 'false'}
             ShowNoShipDate={ShowNoShipDate !== undefined || ShowNoShipDate === '' ? ShowNoShipDate : 'false'}
+            masterBoxVisibility={masterBoxVisibility !== undefined || masterBoxVisibility === '' ? masterBoxVisibility : 'false'}
           />
+          <UncontrolledButtonDropdown>
+            <DropdownToggle className='btn btn-info fs-6 py-2' caret>
+              Bulk Actions
+            </DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem header>Master Box Visibility</DropdownItem>
+              <DropdownItem className='text-nowrap fs-7' onClick={() => changeSelectedMasterBoxVisibility(false)}>
+                <i className='mdi mdi-eye-off label-icon align-middle fs-5 me-2' />
+                Hide Selected
+              </DropdownItem>
+              <DropdownItem className='text-nowrap fs-7' onClick={() => changeSelectedMasterBoxVisibility(true)}>
+                <i className='mdi mdi-eye label-icon align-middle fs-5 me-2' />
+                Show Selected
+              </DropdownItem>
+              <DropdownItem className='text-nowrap text-end fs-7 text-muted' onClick={clearAllSelectedRows}>
+                Clear All
+              </DropdownItem>
+            </DropdownMenu>
+          </UncontrolledButtonDropdown>
         </Col>
         <Col xs='12' lg='4' className='d-flex justify-content-end align-items-center'>
           <div className='flex-1'>
@@ -153,6 +220,8 @@ const MasterBoxesFulfillment = ({ lisiting, pending, sessionToken }: Props) => {
         setError={setError}
         setHasQtyError={setHasQtyError}
         setdimensionsModal={setdimensionsModal}
+        setSelectedRows={setSelectedRows}
+        toggledClearRows={toggledClearRows}
       />
       {showCreateInboundPlanModal && (
         <CreateMastBoxesInboundPlanModal

@@ -13,9 +13,10 @@ type Props = {
   tableData: OrderRowType[]
   pending: boolean
   apiMutateLink: string
+  handleGetShipmentBOL: (orderNumber: string, orderId: string) => Promise<void>
 }
 
-const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
+const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBOL }: Props) => {
   const { state, setModalCreateReturnInfo }: any = useContext(AppContext)
   const orderNumber = (rowA: OrderRowType, rowB: OrderRowType) => {
     const a = rowA.orderNumber.toLowerCase()
@@ -332,17 +333,26 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
         switch (row.orderType) {
           case 'Shipment':
             return row.orderStatus === 'shipped' ? (
-              <UncontrolledDropdown className='dropdown d-inline-block'>
+              <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
                 <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
-                  <i className='mdi mdi-dots-vertical align-middle fs-2 m-0 p-2' style={{ color: '#919FAF' }}></i>
+                  <i className='mdi mdi-dots-vertical align-middle fs-3 m-0 px-2 py-0' style={{ color: '#919FAF' }} />
                 </DropdownToggle>
-                <DropdownMenu className='dropdown-menu-end'>
-                  <DropdownItem header>Shipment Details</DropdownItem>
+                <DropdownMenu className='dropdown-menu-end' container={'body'}>
+                  <DropdownItem header>Actions</DropdownItem>
                   {state.currentRegion == 'us' && row.orderStatus == 'shipped' && row.hasReturn == false && row.shipCountry == 'US' && (
                     <DropdownItem className='edit-item-btn' onClick={() => setModalCreateReturnInfo(row.businessId, row.id)}>
-                      <i className='las la-reply label-icon align-middle fs-3 me-2' />
+                      <i className='las la-reply label-icon align-middle fs-5 me-2' />
                       Create Return
                     </DropdownItem>
+                  )}
+                  {row.carrierService.toLowerCase() === 'ltl' && (
+                    <>
+                      <DropdownItem header>Documents</DropdownItem>
+                      <DropdownItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId)}>
+                        <i className='ri-file-text-fill align-middle me-2 fs-5 text-muted' />
+                        <span className='fs-6 fw-normal text-dark'>Download BOL</span>
+                      </DropdownItem>
+                    </>
                   )}
                 </DropdownMenu>
               </UncontrolledDropdown>
@@ -352,11 +362,11 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink }: Props) => {
             break
           case 'Wholesale':
             return (
-              <UncontrolledDropdown className='dropdown d-inline-block'>
+              <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
                 <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
-                  <i className='mdi mdi-dots-vertical align-middle fs-2 m-0 p-2' style={{ color: '#919FAF' }}></i>
+                  <i className='mdi mdi-dots-vertical align-middle fs-3 m-0 px-2 py-0' style={{ color: '#919FAF' }} />
                 </DropdownToggle>
-                <DropdownMenu className='dropdown-menu-end'>
+                <DropdownMenu className='dropdown-menu-end' container={'body'}>
                   <DropdownItem header>Documents</DropdownItem>
                   {row.proofOfShipped != '' && row.proofOfShipped != null && (
                     <DropdownItem className='edit-item-btn'>

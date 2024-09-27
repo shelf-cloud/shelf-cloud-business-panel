@@ -254,7 +254,7 @@ const KitsTable = ({ tableData, pending }: Props) => {
             <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
               <i className='mdi mdi-dots-vertical align-middle fs-2 m-0 p-2' style={{ color: '#919FAF' }}></i>
             </DropdownToggle>
-            <DropdownMenu className='dropdown-menu-end'>
+            <DropdownMenu className='dropdown-menu-end' container={'body'}>
               <DropdownItem className='edit-item-btn' onClick={() => setModalKitDetails(row.kitId, state.user.businessId, row.sku)}>
                 <i className='ri-pencil-fill align-middle me-2 fs-5 text-muted'></i>
                 <span className='fs-6 fw-normal'>Edit</span>

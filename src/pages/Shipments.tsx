@@ -229,6 +229,39 @@ const Shipments = ({ session, sessionToken }: Props) => {
     }
   }
 
+  const handleGetShipmentBOL = async (orderNumber: string, orderId: string) => {
+    const getShipmentBOL = toast.loading('Getting Shipment BOL...')
+
+    const response = await axios
+      .get(`/api/shipments/getShipmentBOLGoFlow?region=${state.currentRegion}&businessId=${state.user.businessId}&orderId=${orderId}`)
+      .then(({ data }) => data)
+      .catch(({ error }) => {
+        if (axios.isCancel(error)) {
+          toast.error(error?.data?.message || 'Error getting BOL')
+        }
+      })
+
+    if (!response.error && response.shipment.bill_of_lading.url) {
+      toast.update(getShipmentBOL, {
+        render: response.message,
+        type: 'success',
+        isLoading: false,
+        autoClose: 3000,
+      })
+      const a = document.createElement('a')
+      a.href = response.shipment.bill_of_lading.url
+      a.download = orderNumber
+      a.click()
+    } else {
+      toast.update(getShipmentBOL, {
+        render: 'BOL not available',
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
+    }
+  }
+
   const title = `Shipments | ${session?.user?.businessName}`
   return (
     <div>
@@ -289,6 +322,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
                       tableData={filterDataTable || []}
                       pending={pending}
                       apiMutateLink={`/api/getShipmentsOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`}
+                      handleGetShipmentBOL={handleGetShipmentBOL}
                     />
                   </CardBody>
                 </Card>

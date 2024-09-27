@@ -40,6 +40,7 @@ export interface AmazonFulfillmentSku {
     boxWidth: number;
     boxHeight: number;
     amzDimensions: AmzDimensions | null;
+    showForMasterBoxes: boolean;
     maxOrderQty: number;
     orderQty: string;
     totalSendToAmazon: number;
@@ -108,6 +109,7 @@ type FilterProps = {
     show0Days?: string
     showNotEnough?: string
     ShowNoShipDate?: string
+    masterBoxVisibility?: string
 }
 
 export interface AmazonMarketplace {

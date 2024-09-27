@@ -8,7 +8,7 @@ import { DebounceInput } from 'react-debounce-input'
 import { AmazonFulfillmentSku } from '@typesTs/amazon/fulfillments'
 import { toast } from 'react-toastify'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
-import { FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
+import { FormatIntNumber } from '@lib/FormatNumbers'
 import Link from 'next/link'
 import moment from 'moment'
 
@@ -20,9 +20,11 @@ type Props = {
   setError: (skus: any) => void
   setHasQtyError: (hasQtyError: boolean) => void
   setdimensionsModal: (dimensionsModal: any) => void
+  setSelectedRows: (selectedRows: AmazonFulfillmentSku[]) => void
+  toggledClearRows: boolean
 }
 
-const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setError, setHasQtyError, setdimensionsModal }: Props) => {
+const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setError, setHasQtyError, setSelectedRows, toggledClearRows }: Props) => {
   const { state, setModalProductInfo }: any = useContext(AppContext)
   const [skusWithError, setSkusWithError] = useState<{ [key: string]: boolean }>({})
 
@@ -168,6 +170,10 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
     }
   }
 
+  const handleSelectedRows = ({ selectedRows }: { selectedRows: AmazonFulfillmentSku[] }) => {
+    setSelectedRows(selectedRows)
+  }
+
   const conditionalRowStyles = [
     {
       when: (row: AmazonFulfillmentSku) => Number(row.maxOrderQty) == 0,
@@ -183,8 +189,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
         !Number.isInteger(Number(row.orderQty)) ||
         parseInt(row.orderQty) > row.maxOrderQty! ||
         skusWithError[row.shelfcloud_sku] === true ||
-        row.hasError ||
-        row.hasDimensionsError,
+        row.hasError,
       classNames: ['bg-danger bg-opacity-25'],
     },
   ]
@@ -324,7 +329,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
         return (
           <div className='text-center'>
             <p className='m-0 p-0'>{row.shelfcloud_sku}</p>
-            <p className='m-0 p-0 d-inline-flex flex-row justify-content-center align-items-center gap-1'>
+            {/* <p className='m-0 p-0 d-inline-flex flex-row justify-content-center align-items-center gap-1'>
               <span
                 className='text-primary fs-7'
                 style={{ cursor: 'pointer' }}
@@ -426,7 +431,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
                   </UncontrolledTooltip>
                 </>
               )}
-            </p>
+            </p> */}
           </div>
         )
       },
@@ -666,7 +671,11 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
     },
     {
       name: <span className='fw-bold fs-6 text-center'>Total To Amazon</span>,
-      selector: (row: AmazonFulfillmentSku) => FormatIntNumber(state.currentRegion, row.totalSendToAmazon),
+      selector: (row: AmazonFulfillmentSku) => row.totalSendToAmazon > 0 ? <div>
+        <p className='m-0 fs-5 text-center fw-semibold'>{FormatIntNumber(state.currentRegion, parseInt(row.orderQty))} <span className='fs-7 fw-normal'>{parseInt(row.orderQty) > 1 ? 'Boxes' : 'Box'}</span></p>
+        <p className='m-0 fs-5 text-center fw-semibold'>{FormatIntNumber(state.currentRegion, row.totalSendToAmazon)} <span className='fs-7 fw-normal'>{row.totalSendToAmazon > 1 ? 'Units' : 'Unit'}</span></p>
+        </div>
+      : 0,
       sortable: true,
       center: true,
       compact: true,
@@ -683,6 +692,9 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
         defaultSortFieldId={9}
         defaultSortAsc={true}
         conditionalRowStyles={conditionalRowStyles}
+        selectableRows
+        onSelectedRowsChange={handleSelectedRows}
+        clearSelectedRows={toggledClearRows}
         pagination={filteredItems.length > 100 ? true : false}
         paginationPerPage={100}
         paginationRowsPerPageOptions={[100, 200, 500]}
