@@ -18,6 +18,7 @@ const unMapListingToSku: NextApiHandler = async (request, response) => {
             shelfCloudSku: request.body.shelfCloudSku,
             shelfCloudSkuId: request.body.shelfCloudSkuId,
             shelfCloudSkuIsKit: request.body.shelfCloudSkuIsKit,
+            fnSku: request.body.fnSku,
         })
         .then(async ({ data }) => {
             if (data.error) {
@@ -30,6 +31,7 @@ const unMapListingToSku: NextApiHandler = async (request, response) => {
                 shelfCloudSku: request.body.shelfCloudSku,
                 shelfCloudSkuId: request.body.shelfCloudSkuId,
                 shelfCloudSkuIsKit: request.body.shelfCloudSkuIsKit,
+                fnSku: request.body.fnSku,
             })
                 .then(({ data }) => {
                     response.json(data)

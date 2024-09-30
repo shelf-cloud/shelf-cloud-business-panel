@@ -20,6 +20,7 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
   const [showMappedListingModal, setshowMappedListingModal] = useState({
     show: false,
     listingSku: '',
+    listingFnsku: '',
     listingId: 0,
     shelfCloudSku: '',
     shelfCloudSkuId: 0,
@@ -224,6 +225,7 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
                         ...prev,
                         show: true,
                         listingSku: row.sku,
+                        listingFnsku: row.fnsku.toLowerCase() === row.asin.toLowerCase() ? '' : row.fnsku,
                         listingId: row.id,
                         currentSkuMapped: row.shelfcloud_sku || '',
                         currentSkuIdMapped: row.shelfcloud_sku_id || 0,
@@ -248,6 +250,7 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
                       ...prev,
                       show: true,
                       listingSku: row.sku,
+                      listingFnsku: row.fnsku.toLowerCase() === row.asin.toLowerCase() ? '' : row.fnsku,
                       listingId: row.id,
                     }
                   })

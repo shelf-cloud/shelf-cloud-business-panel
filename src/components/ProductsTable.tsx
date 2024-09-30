@@ -185,19 +185,18 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       ),
       selector: (row: Product) => {
         return (
-          <div>
-            <p style={{ margin: '0px' }}>
-              {/* <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/exec/obidos/ASIN${row.ASIN}`} target='blank'> */}
-              <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank'>
+          <div className='d-flex flex-column justify-item-start gap-0'>
+            {row.asin !== '' && (
+              <a className='m-0' href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank'>
                 {row.asin}
               </a>
-            </p>
-            <p style={{ margin: '0px' }}>{row.fnSku}</p>
-            <p style={{ margin: '0px' }}>
-              <a href='#' onClick={() => loadBarcode(row)}>
+            )}
+            {row.fnSku !== '' && <p className='m-0'>{row.fnSku}</p>}
+            {row.barcode !== '' && (
+              <a className='m-0 text-info' href='#' onClick={() => loadBarcode(row)}>
                 {row.barcode}
               </a>
-            </p>
+            )}
           </div>
         )
       },
@@ -332,7 +331,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
         return (
           <UncontrolledDropdown className='dropdown d-inline-block'>
             <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
-              <i className='mdi mdi-dots-vertical align-middle fs-2 m-0 p-2' style={{ color: '#919FAF' }}></i>
+              <i className='mdi mdi-dots-vertical align-middle fs-3 m-0 px-2 py-0' style={{ color: '#919FAF' }} />
             </DropdownToggle>
             <DropdownMenu className='dropdown-menu-end' container={'body'}>
               {/* <DropdownItem

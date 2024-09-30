@@ -11,6 +11,7 @@ type Props = {
   showMappedListingModal: {
     show: boolean
     listingSku: string
+    listingFnsku: string
     listingId: number
     shelfCloudSku: string
     shelfCloudSkuId: number
@@ -57,11 +58,13 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
       shelfCloudSku: showMappedListingModal.shelfCloudSku,
       shelfCloudSkuId: showMappedListingModal.shelfCloudSkuId,
       shelfCloudSkuIsKit: showMappedListingModal.shelfCloudSkuIsKit,
+      fnSku: showMappedListingModal.listingFnsku,
     })
     if (!response.data.error) {
       setshowMappedListingModal({
         show: false,
         listingSku: '',
+        listingFnsku: '',
         listingId: 0,
         shelfCloudSku: '',
         shelfCloudSkuId: 0,
@@ -90,6 +93,7 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
       shelfCloudSku: showMappedListingModal.currentSkuMapped,
       shelfCloudSkuId: showMappedListingModal.currentSkuIdMapped,
       shelfCloudSkuIsKit: showMappedListingModal.currentSkuIsKitMapped,
+      fnSku: showMappedListingModal.listingFnsku,
     })
     if (!response.data.error) {
       setshowMappedListingModal((prev: any) => {
@@ -121,6 +125,7 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
         setshowMappedListingModal({
           show: false,
           listingSku: '',
+          listingFnsku: '',
           listingId: 0,
           shelfCloudSku: '',
           shelfCloudSkuId: 0,
@@ -135,6 +140,7 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
           setshowMappedListingModal({
             show: false,
             listingSku: '',
+            listingFnsku: '',
             listingId: 0,
             shelfCloudSku: '',
             shelfCloudSkuId: 0,
@@ -172,6 +178,7 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
                     setshowMappedListingModal({
                       show: false,
                       listingSku: '',
+                      listingFnsku: '',
                       listingId: 0,
                       shelfCloudSku: '',
                       shelfCloudSkuId: 0,
