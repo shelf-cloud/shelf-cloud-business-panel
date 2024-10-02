@@ -12,10 +12,10 @@ import FBAShipmentPackingSlip from './FBAShipmentPackingSlip'
 type Props = {
   filteredItems: FBAShipment[]
   pending: boolean
-  handlePrintShipmentBillOfLading: (shipmentId: string) => void
+  getFBAShipmentProofOfShipped: (shipmentId: string) => void
 }
 
-const FBAShipmentsTable = ({ filteredItems, pending, handlePrintShipmentBillOfLading }: Props) => {
+const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShipped }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
   const orderStatus = (rowA: FBAShipment, rowB: FBAShipment) => {
@@ -241,16 +241,16 @@ const FBAShipmentsTable = ({ filteredItems, pending, handlePrintShipmentBillOfLa
               <DropdownMenu className='dropdown-menu-end' container={'body'}>
                 <DropdownItem onClick={() => router.push(`/amazon-sellers/shipments/${row.shipmentId}`)}>
                   <div>
-                    <i className='ri-file-list-line align-middle me-2 fs-5 text-muted' />
+                    <i className='ri-file-list-line label-icon align-middle me-2 fs-4 text-muted' />
                     <span className='fs-6 fw-normal text-dark'>View Shipment</span>
                   </div>
                 </DropdownItem>
                 <FBAShipmentPackingSlip order={row} />
                 {row.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber && (
-                  <DropdownItem onClick={() => handlePrintShipmentBillOfLading(row.shipment.shipmentConfirmationId)}>
+                  <DropdownItem onClick={() => getFBAShipmentProofOfShipped(row.shipment.shipmentConfirmationId)}>
                     <div>
-                      <i className='ri-file-text-fill align-middle me-2 fs-5 text-muted' />
-                      <span className='fs-6 fw-normal text-dark'>Download BOL</span>
+                      <i className='las la-truck label-icon align-middle fs-4 me-2' />
+                      <span className='fs-6 fw-normal text-dark'>Proof Of Shipped</span>
                     </div>
                   </DropdownItem>
                 )}

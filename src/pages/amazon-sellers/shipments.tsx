@@ -12,7 +12,6 @@ import useSWR from 'swr'
 import { toast } from 'react-toastify'
 import FBAShipmentsTable from '@components/amazon/shipments/FBAShipmentsTable'
 import { FBAShipment, FBAShipmentsRepsonse } from '@typesTs/amazon/fbaShipments.interface'
-import { GetLabelsResponse } from '@typesTs/amazon/fulfillments/fulfillment'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -98,48 +97,32 @@ const Shipments = ({ session, sessionToken }: Props) => {
     return []
   }, [allData, searchValue])
 
-  const handlePrintShipmentBillOfLading = async (shipmentId: string) => {
-    const cancelInboundPlanToast = toast.loading('Generating Bill Of Lading...')
+  const getFBAShipmentProofOfShipped = async (shipmentId: string) => {
+    const downloadingProofOfShipped = toast.loading('Searching Proof Of Shipped...')
 
-    try {
-      const controller = new AbortController()
-      const signal = controller.signal
-      const response = (await axios
-        .get(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/getBillOfLading/${state.currentRegion}/${state.user.businessId}/${shipmentId}`, {
-          signal,
-          headers: {
-            Authorization: `Bearer ${sessionToken}`,
-          },
-        })
-        .then(({ data }) => data)
-        .catch(({ error }) => {
-          if (axios.isCancel(error)) {
-            toast.error(error?.data?.message || 'Error Generating Bill Of Lading')
-          }
-        })) as GetLabelsResponse
+    const response = await axios
+      .get(`/api/amazon/shipments/getFBAShipmentProofOfShipped?region=${state.currentRegion}&businessId=${state.user.businessId}&shipmentId=${shipmentId}`)
+      .then(({ data }) => data)
+      .catch(({ error }) => {
+        if (axios.isCancel(error)) {
+          toast.error(error?.data?.message || 'Error Generating Bill Of Lading')
+        }
+      })
 
-      if (!response.error) {
-        toast.update(cancelInboundPlanToast, {
-          render: response.message,
-          type: 'success',
-          isLoading: false,
-          autoClose: 3000,
-        })
-        const a = document.createElement('a')
-        a.href = response.labels.payload.DownloadURL
-        a.download = shipmentId
-        a.click()
-      } else {
-        toast.update(cancelInboundPlanToast, {
-          render: response.message,
-          type: 'error',
-          isLoading: false,
-          autoClose: 3000,
-        })
-      }
-    } catch (error) {
-      toast.update(cancelInboundPlanToast, {
-        render: 'Error Generating Bill Of Lading',
+    if (!response.error) {
+      toast.update(downloadingProofOfShipped, {
+        render: response.message,
+        type: 'success',
+        isLoading: false,
+        autoClose: 3000,
+      })
+      const a = document.createElement('a')
+      a.href = response.url
+      a.target = '_blank'
+      a.click()
+    } else {
+      toast.update(downloadingProofOfShipped, {
+        render: response.message,
         type: 'error',
         isLoading: false,
         autoClose: 3000,
@@ -198,7 +181,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
             </Row>
             <Card>
               <CardBody>
-                <FBAShipmentsTable filteredItems={filteredItems} pending={pending} handlePrintShipmentBillOfLading={handlePrintShipmentBillOfLading} />
+                <FBAShipmentsTable filteredItems={filteredItems} pending={pending} getFBAShipmentProofOfShipped={getFBAShipmentProofOfShipped} />
               </CardBody>
             </Card>
           </Container>

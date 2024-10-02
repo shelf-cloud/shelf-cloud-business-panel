@@ -11,7 +11,7 @@ import { AmazonFulfillmentSku, AmazonMarketplace } from '@typesTs/amazon/fulfill
 import useSWR from 'swr'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import moment from 'moment'
-import { Label_Prep_Owner_Options, notSupportedMarketplacesForFBA } from '@lib/AmzConstants'
+import { Label_Prep_Owner_Options } from '@lib/AmzConstants'
 import SimpleSelect from '@components/Common/SimpleSelect'
 import ShippingSelectDate from '@components/amazon/fulfillment/fulfillment_page/ShippingSelectDate'
 
@@ -346,7 +346,7 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                     <option value=''>Choose Marketplace..</option>
                     {amazonMarketplaces?.map(
                       (marketplace) =>
-                        !notSupportedMarketplacesForFBA.includes(marketplace.marketplaceId) && (
+                        marketplace.marketplaceId === 'ATVPDKIKX0DER' && (
                           <option key={marketplace.marketplaceId} value={marketplace.marketplaceId}>
                             {marketplace.marketplaceName}
                           </option>

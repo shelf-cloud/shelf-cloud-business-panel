@@ -11,7 +11,6 @@ import { AmazonFulfillmentSku, AmazonMarketplace } from '@typesTs/amazon/fulfill
 import useSWR from 'swr'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import moment from 'moment'
-import { notSupportedMarketplacesForFBA } from '@lib/AmzConstants'
 
 type Props = {
   orderProducts: AmazonFulfillmentSku[]
@@ -270,7 +269,7 @@ const CreateMastBoxesInboundPlanModalManual = ({ orderProducts, showCreateInboun
                     <option value=''>Choose Marketplace..</option>
                     {amazonMarketplaces?.map(
                       (marketplace) =>
-                        !notSupportedMarketplacesForFBA.includes(marketplace.marketplaceId) && (
+                        marketplace.marketplaceId === 'ATVPDKIKX0DER' && (
                           <option key={marketplace.marketplaceId} value={marketplace.marketplaceId}>
                             {marketplace.marketplaceName}
                           </option>
