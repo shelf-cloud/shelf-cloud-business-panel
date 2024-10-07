@@ -15,6 +15,7 @@ const Navdata = () => {
   const [isBilling, setIsBilling] = useState(false)
   const [isReports, setIsReports] = useState(false)
   const [isAmazon, setIsAmazon] = useState(false)
+  const [isCommerceHub, setIsCommerceHub] = useState(false)
   const [iscurrentState, setIscurrentState] = useState('Dashboard')
 
   const modules = {
@@ -160,11 +161,50 @@ const Navdata = () => {
               parentId: 'marketplaces',
             },
             {
-              id: 'fulfillments',
-              label: 'Fulfillments',
-              link: '/amazon-sellers/fulfillments',
+              id: 'shipments',
+              label: 'FBA Shipments',
+              link: '/amazon-sellers/shipments',
               parentId: 'marketplaces',
             },
+            {
+              id: 'fulfillments',
+              label: 'Send To Amazon',
+              link: '/amazon-sellers/fulfillment/sendToAmazon',
+              parentId: 'marketplaces',
+            },
+          ],
+        },
+        CommerceHub: {
+          id: 'commercehub',
+          label: 'Commerce Hub',
+          // icon: 'ri-amazon-fill',
+          link: '/#',
+          parentId: 'marketplaces',
+          isChildItem: true,
+          click: function (e) {
+            e.preventDefault()
+            setIsCommerceHub(!isCommerceHub)
+          },
+          stateVariables: isCommerceHub,
+          childItems: [
+            {
+              id: 'dashboard',
+              label: 'Dashboard',
+              link: '/commercehub/',
+              parentId: 'marketplaces',
+            },
+            {
+              id: 'invoices',
+              label: 'Invoices',
+              link: '/commercehub/Invoices',
+              parentId: 'marketplaces',
+            },
+            // {
+            //   id: 'returns',
+            //   label: 'Returns',
+            //   link: '/#',
+            //   parentId: 'marketplaces',
+            // },
           ],
         },
       },
@@ -545,51 +585,11 @@ const Navdata = () => {
     }
 
     if (state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected) {
-      menuItems[3].subItems?.push({
-        id: 'amazon',
-        label: 'Amazon',
-        // icon: 'ri-amazon-fill',
-        link: '/#',
-        parentId: 'marketplaces',
-        isChildItem: true,
-        click: function (e) {
-          e.preventDefault()
-          setIsAmazon(!isAmazon)
-        },
-        stateVariables: isAmazon,
-        childItems: [
-          {
-            id: 'listings',
-            label: 'Listings',
-            link: '/amazon-sellers/listings?showHidden=0&condition=All&mapped=All',
-            parentId: 'marketplaces',
-          },
-          {
-            id: 'orders',
-            label: 'FBA Orders',
-            link: '/amazon-sellers/orders',
-            parentId: 'marketplaces',
-          },
-          {
-            id: 'shipments',
-            label: 'FBA Shipments',
-            link: '/amazon-sellers/shipments',
-            parentId: 'marketplaces',
-          },
-          {
-            id: 'fulfillments',
-            label: 'Send To Amazon',
-            link: '/amazon-sellers/fulfillment/sendToAmazon',
-            parentId: 'marketplaces',
-          },
-          // {
-          //   id: 'repricer',
-          //   label: 'Repricer',
-          //   link: '/repricer',
-          //   parentId: 'marketplaces',
-          // },
-        ],
-      })
+      menuItems[3].subItems?.push(modules.Marketplaces.subItems.Amazon)
+    }
+
+    if (state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected) {
+      menuItems[3].subItems?.push(modules.Marketplaces.subItems.CommerceHub)
     }
   } else {
     menuItems = [modules.Dashboard]

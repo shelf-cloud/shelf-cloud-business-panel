@@ -27,13 +27,13 @@ const Select_Product_Details = ({ inventoryId, type, addEndpoint, selectionInfo,
   const { state }: any = useContext(AppContext)
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const [selectedOption, setSelectedOption] = useState(selected)
-  const filterByDates = useRef<HTMLDivElement | null>(null)
+  const selectProduct = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     if (document) {
       document.addEventListener('click', (e: any) => {
-        if (filterByDates.current) {
-          if (!filterByDates.current.contains(e.target)) {
+        if (selectProduct.current) {
+          if (!selectProduct.current.contains(e.target)) {
             setOpenDatesMenu(false)
           }
         }
@@ -67,7 +67,7 @@ const Select_Product_Details = ({ inventoryId, type, addEndpoint, selectionInfo,
   })
 
   return (
-    <div ref={filterByDates} className='dropdown mb-3'>
+    <div ref={selectProduct} className='dropdown mb-3'>
       <div className='btn-group w-100' style={errorMessage ? styles.error : styles.noError} onClick={() => setOpenDatesMenu(!openDatesMenu)}>
         <button type='button' disabled className='btn btn-light btn-sm form-control fs-6 w-100 text-start' style={{ backgroundColor: 'white', opacity: '100%' }}>
           {selected == '' ? `Select...` : selected}

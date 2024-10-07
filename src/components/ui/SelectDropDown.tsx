@@ -10,13 +10,13 @@ type Props = {
 
 const SelectDropDown = ({ formValue, selectionInfo, selected, handleSelection, error }: Props) => {
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
-  const filterByDates = useRef<HTMLDivElement | null>(null)
+  const selectDropDownElement = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     if (document) {
       document.addEventListener('click', (e: any) => {
-        if (filterByDates.current) {
-          if (!filterByDates.current.contains(e.target)) {
+        if (selectDropDownElement.current) {
+          if (!selectDropDownElement.current.contains(e.target)) {
             setOpenDatesMenu(false)
           }
         }
@@ -25,7 +25,7 @@ const SelectDropDown = ({ formValue, selectionInfo, selected, handleSelection, e
   }, [])
 
   return (
-    <div ref={filterByDates} className='dropdown mb-0'>
+    <div ref={selectDropDownElement} className='dropdown mb-0'>
       <div className={'btn-group w-100 form-control form-control-sm p-0' + (error ? ' border border-danger' : '')} onClick={() => setOpenDatesMenu(!openDatesMenu)}>
         <button type='button' disabled className='btn btn-light btn-sm py-0 fs-6 w-100 text-start' style={{ backgroundColor: 'white', opacity: '100%' }}>
           {selected == '' ? <span className='text-muted'>Select</span> : selected}

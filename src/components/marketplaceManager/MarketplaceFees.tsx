@@ -21,9 +21,13 @@ const MarketplacesFees = ({}: Props) => {
   const [hasError, setHasError] = useState(false)
   const [updatingFees, setUpdatingFees] = useState(false)
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data }: { data?: MarketplaceFeesResponse } = useSWR(state.user.businessId ? `/api/marketplaces/getMarketplacesFees?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher, {
-    revalidateOnFocus: false,
-  })
+  const { data }: { data?: MarketplaceFeesResponse } = useSWR(
+    state.user.businessId ? `/api/marketplaces/getMarketplacesFees?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  )
 
   useEffect(() => {
     setisLoaded(true)
@@ -50,6 +54,14 @@ const MarketplacesFees = ({}: Props) => {
     setUpdatingFees(false)
   }
 
+  const sortStrings = (rowA: string, rowB: string) => {
+    if (rowA.localeCompare(rowB)) {
+      return 1
+    } else {
+      return -1
+    }
+  }
+
   const columns: any = [
     {
       name: <span className='fw-bold fs-6'>Logo</span>,
@@ -64,8 +76,15 @@ const MarketplacesFees = ({}: Props) => {
             }}>
             <img
               loading='lazy'
-              src={row.logoLink ? row.logoLink : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'}
-              onError={(e) => (e.currentTarget.src = 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')}
+              src={
+                row.logoLink
+                  ? row.logoLink
+                  : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+              }
+              onError={(e) =>
+                (e.currentTarget.src =
+                  'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
+              }
               alt='product Image'
               style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
             />
@@ -75,6 +94,7 @@ const MarketplacesFees = ({}: Props) => {
       sortable: true,
       center: true,
       compact: true,
+      sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortStrings(rowA.storeName, rowB.storeName),
     },
     {
       name: <span className='fw-bold fs-6'>Marketplace</span>,
@@ -82,17 +102,25 @@ const MarketplacesFees = ({}: Props) => {
       sortable: true,
       center: false,
       grow: 1.5,
+      sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortStrings(rowA.name, rowB.name),
     },
     {
       name: <span className='fw-bold fs-6'>Sales Channel</span>,
       selector: (row: MarketplaceFees) => row.storeName,
       sortable: true,
       center: true,
+      sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortStrings(rowA.storeName, rowB.storeName),
     },
     {
       name: <span className='fw-bold fs-6'>Comission Fee</span>,
       selector: (row: MarketplaceFees) => {
-        if (!showEditFields) return <span className={row.comissionFee === 0 ? 'text-muted fw-light' : row.comissionFee < 0 || row.comissionFee > 100 ? 'text-danger fw-bold' : 'text-dark'}>{`${row.comissionFee} %`}</span>
+        if (!showEditFields)
+          return (
+            <span
+              className={
+                row.comissionFee === 0 ? 'text-muted fw-light' : row.comissionFee < 0 || row.comissionFee > 100 ? 'text-danger fw-bold' : 'text-dark'
+              }>{`${row.comissionFee} %`}</span>
+          )
         return (
           <div className='d-flex flex-row justify-content-center align-items-center gap-2'>
             <DebounceInput
@@ -116,6 +144,7 @@ const MarketplacesFees = ({}: Props) => {
       sortable: true,
       center: true,
       compact: true,
+      sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => (rowA.comissionFee > rowB.comissionFee ? 1 : -1),
     },
     {
       name: <span className='fw-bold fs-6'>Fixed Fee</span>,
@@ -140,6 +169,50 @@ const MarketplacesFees = ({}: Props) => {
       sortable: true,
       center: true,
       compact: true,
+      sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => (rowA.fixedFee > rowB.fixedFee ? 1 : -1),
+    },
+    {
+      name: <span className='fw-bold fs-6'>Commerce Hub</span>,
+      selector: (row: MarketplaceFees) => {
+        if (!showEditFields) return row.isCommerceHub && 'Active'
+        return (
+          <div className='d-flex flex-row justify-content-center align-items-center gap-2'>
+            <input
+              type='checkbox'
+              className='form-check-input'
+              onChange={(e) => setmarketplaceFees((prev) => ({ ...prev, [row.storeId]: { ...row, isCommerceHub: e.target.checked } }))}
+              checked={row.isCommerceHub}
+            />
+          </div>
+        )
+      },
+      sortable: true,
+      center: true,
+      sortFunction: (rowA: MarketplaceFees) => (rowA.isCommerceHub ? 1 : -1),
+    },
+    {
+      name: <span className='fw-bold fs-6'>Pay Terms</span>,
+      selector: (row: MarketplaceFees) => {
+        if (!showEditFields) return <span className={row.payTerms === 0 ? 'text-muted fw-light' : 'text-dark'}>{row.payTerms}</span>
+        return (
+          <DebounceInput
+            minLength={1}
+            debounceTimeout={200}
+            type='number'
+            className={'form-control fs-6 ' + (row.payTerms < 0 && 'is-invalid')}
+            style={{ padding: '0.2rem 0.9rem', minWidth: '80px' }}
+            min={0}
+            onChange={(e) => {
+              parseInt(e.target.value) < 0 ? setHasError(true) : setHasError(false)
+              setmarketplaceFees((prev) => ({ ...prev, [row.storeId]: { ...row, payTerms: parseInt(e.target.value) } }))
+            }}
+            value={row.payTerms || 0}
+          />
+        )
+      },
+      sortable: true,
+      center: true,
+      sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => (rowA.payTerms > rowB.payTerms ? 1 : -1),
     },
   ]
 

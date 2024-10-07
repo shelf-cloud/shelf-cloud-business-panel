@@ -11,13 +11,13 @@ type Props = {
 
 const SelectShippingCarrier = ({ id, selectionInfo, disabled, selected, handleSelection }: Props) => {
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
-  const filterByDates = useRef<HTMLDivElement | null>(null)
+  const selectCarrier = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     if (document) {
       document.addEventListener('click', (e: any) => {
-        if (filterByDates.current) {
-          if (!filterByDates.current.contains(e.target)) {
+        if (selectCarrier.current) {
+          if (!selectCarrier.current.contains(e.target)) {
             setOpenDatesMenu(false)
           }
         }
@@ -26,7 +26,7 @@ const SelectShippingCarrier = ({ id, selectionInfo, disabled, selected, handleSe
   }, [])
 
   return (
-    <div id={id} ref={filterByDates} className='dropdown mb-0 w-100'>
+    <div id={id} ref={selectCarrier} className='dropdown mb-0 w-100'>
       <div
         className={'btn-group w-100 form-control form-control-sm p-0 border border-2 ' + (!disabled && selected == '' ? 'border-danger' : 'border-primary')}
         onClick={() => (disabled ? null : setOpenDatesMenu(!openDatesMenu))}

@@ -14,13 +14,13 @@ const styles = {
 const Select_Condition_Kit_Details = ({ selected, handleSelection, errorMessage }: Props) => {
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const [selectedOption, setSelectedOption] = useState(selected)
-  const filterByDates = useRef<HTMLDivElement | null>(null)
+  const selectCondition = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     if (document) {
       document.addEventListener('click', (e: any) => {
-        if (filterByDates.current) {
-          if (!filterByDates.current.contains(e.target)) {
+        if (selectCondition.current) {
+          if (!selectCondition.current.contains(e.target)) {
             setOpenDatesMenu(false)
           }
         }
@@ -29,7 +29,7 @@ const Select_Condition_Kit_Details = ({ selected, handleSelection, errorMessage 
   }, [])
 
   return (
-    <div ref={filterByDates} className='dropdown mb-3'>
+    <div ref={selectCondition} className='dropdown mb-3'>
       <div className='btn-group w-100' style={errorMessage ? styles.error : styles.noError} onClick={() => setOpenDatesMenu(!openDatesMenu)}>
         <button type='button' disabled className='btn btn-light btn-sm form-control fs-6 w-100 text-start' style={{ backgroundColor: 'white', opacity: '100%' }}>
           {selected == '' ? `Select...` : selected}

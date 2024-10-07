@@ -11,4 +11,6 @@ export interface MarketplaceFees {
     logoLink: string
     comissionFee: number
     fixedFee: number
+    isCommerceHub: boolean
+    payTerms: number
 }

@@ -39,7 +39,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
         aria-expanded='false'
         onClick={() => setOpenDatesMenu(!openDatesMenu)}>
         <i className='las la-calendar fs-4 m-0 p-0 text-primary' />
-        <span className='fw-semibold m-0 p-0'>{`${shipmentsStartDate} -> ${shipmentsEndDate}`}</span>
+        <span className='fw-semibold m-0 p-0'>{shipmentsStartDate !== '' || shipmentsEndDate !== '' ? `${shipmentsStartDate} -> ${shipmentsEndDate}` : 'Select Dates'}</span>
       </button>
       <div className={'dropdown-menu dropdown-menu-md px-4 py-3' + (openDatesMenu ? ' show' : '')}>
         <div className='d-flex flex-column justify-content-start'>
@@ -114,7 +114,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
             style={{ cursor: 'pointer' }}
             onClick={() => {
               setSelectedDateFilter('past3days')
-              setShipmentsStartDate(moment().subtract(1,'months').format('YYYY-MM-DD'))
+              setShipmentsStartDate(moment().subtract(1, 'months').format('YYYY-MM-DD'))
               setShipmentsEndDate(moment().format('YYYY-MM-DD'))
               setOpenDatesMenu(false)
             }}>
@@ -125,8 +125,8 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
             style={{ cursor: 'pointer' }}
             onClick={() => {
               setSelectedDateFilter('lastmonth')
-              setShipmentsStartDate(moment().subtract(1,'months').startOf('month').format('YYYY-MM-DD'))
-              setShipmentsEndDate(moment().subtract(1,'months').endOf('month').format('YYYY-MM-DD'))
+              setShipmentsStartDate(moment().subtract(1, 'months').startOf('month').format('YYYY-MM-DD'))
+              setShipmentsEndDate(moment().subtract(1, 'months').endOf('month').format('YYYY-MM-DD'))
               setOpenDatesMenu(false)
             }}>
             Last Month
@@ -155,7 +155,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
           </p>
           <span className='fw-light text-muted fs-7 pb-1 border-top pt-1'>Select Range:</span>
           <Flatpickr
-            className={'border-0 fs-6 w-100 py-2 px-2' + (selectedDateFilter == 'picker' ? ' fw-bold' : '')}
+            className={'border-1 border-muted fs-6 w-100 p-2' + (selectedDateFilter == 'picker' ? ' fw-bold' : '')}
             options={{
               mode: 'range',
               dateFormat: 'd M y',

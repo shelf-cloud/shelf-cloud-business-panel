@@ -15,15 +15,15 @@ type Props = {
 
 const SelectMultipleDropDown = ({ formValue, selectionInfo, selected, handleSelection }: Props) => {
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
-  const filterByDates = useRef<HTMLDivElement | null>(null)
+  const selectMultiple = useRef<HTMLDivElement | null>(null)
 
   const selectedParsed: number[] = selected !== undefined ? JSON.parse(selected) : []
 
   useEffect(() => {
     if (document) {
       document.addEventListener('click', (e: any) => {
-        if (filterByDates.current) {
-          if (!filterByDates.current.contains(e.target)) {
+        if (selectMultiple.current) {
+          if (!selectMultiple.current.contains(e.target)) {
             setOpenDatesMenu(false)
           }
         }
@@ -32,7 +32,7 @@ const SelectMultipleDropDown = ({ formValue, selectionInfo, selected, handleSele
   }, [])
 
   return (
-    <div ref={filterByDates} className='dropdown mb-3'>
+    <div ref={selectMultiple} className='dropdown mb-3'>
       <div className='btn-group w-100 form-control form-control-sm p-0' onClick={() => setOpenDatesMenu(!openDatesMenu)}>
         <button type='button' disabled className='btn btn-light btn-sm py-0 fs-6 w-100 text-start' style={{ backgroundColor: 'white', opacity: '100%' }}>
           {selectedParsed.length === 0 ? <span className='text-muted'>Select</span> : selectedParsed.map((value) => `${selectionInfo[value].label}, `)}

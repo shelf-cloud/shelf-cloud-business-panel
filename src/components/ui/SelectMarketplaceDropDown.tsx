@@ -18,13 +18,13 @@ type Props = {
 
 const SelectMarketplaceDropDown = ({ selectionInfo, selected, handleSelection }: Props) => {
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
-  const filterByDates = useRef<HTMLDivElement | null>(null)
+  const selectMarketplace = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     if (document) {
       document.addEventListener('click', (e: any) => {
-        if (filterByDates.current) {
-          if (!filterByDates.current.contains(e.target)) {
+        if (selectMarketplace.current) {
+          if (!selectMarketplace.current.contains(e.target)) {
             setOpenDatesMenu(false)
           }
         }
@@ -33,7 +33,7 @@ const SelectMarketplaceDropDown = ({ selectionInfo, selected, handleSelection }:
   }, [])
 
   return (
-    <div ref={filterByDates} className='dropdown'>
+    <div ref={selectMarketplace} className='dropdown'>
       <button
         className='btn btn-light dropdown-toggle d-flex flex-row justify-content-start align-items-center gap-2'
         style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }}
