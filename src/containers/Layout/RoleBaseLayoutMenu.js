@@ -588,9 +588,10 @@ const Navdata = () => {
       menuItems[3].subItems?.push(modules.Marketplaces.subItems.Amazon)
     }
 
-    if (state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected) {
+    if (state.user[state.currentRegion]?.showCommerceHub) {
       menuItems[3].subItems?.push(modules.Marketplaces.subItems.CommerceHub)
     }
+    
   } else {
     menuItems = [modules.Dashboard]
     if (state.user?.permissions) {
