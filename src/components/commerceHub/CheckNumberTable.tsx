@@ -5,6 +5,7 @@ import { Card, CardBody, CardHeader, Col } from 'reactstrap'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import AppContext from '@context/AppContext'
 import { DashboardResponse } from '@typesTs/commercehub/dashboard'
+import moment from 'moment'
 
 type Props = {
   summary: DashboardResponse
@@ -17,7 +18,7 @@ const CheckNumberTable = ({ summary }: Props) => {
       <Col>
         <Card>
           <CardHeader className='align-items-center d-flex justify-content-between'>
-            <h4 className='card-title mb-0 flex-grow-1'>Stores Summary</h4>
+            <h4 className='card-title mb-0 flex-grow-1'>Checks Summary</h4>
           </CardHeader>
 
           <CardBody>
@@ -27,14 +28,15 @@ const CheckNumberTable = ({ summary }: Props) => {
                   <tr className='fw-semibold'>
                     <td>Store</td>
                     <td>Check Number</td>
-                    <td>Orders</td>
-                    <td>Paid</td>
-                    <td>Pending</td>
+                    <td>Check Date</td>
+                    <td>Check Paid</td>
+                    <td>Deductions</td>
                   </tr>
                 </thead>
                 <tbody>
                   {summary.invoices.map((item, key) => {
-                    const pendingValue = item.invoiceTotal - item.checkTotal > 0.1 ? item.invoiceTotal - item.checkTotal : 0
+                    const pendingValue = item.checkTotal + item.cashDiscountTotal
+                    const deductions = item.deductions
                     return (
                       <tr key={key}>
                         <td>
@@ -64,31 +66,13 @@ const CheckNumberTable = ({ summary }: Props) => {
                             <span className='fs-6 mw-30 text-muted fw-light fst-italic'>Pending</span>
                           )}
                         </td>
-                        <td>{FormatCurrency(state.currentRegion, item.invoiceTotal)}</td>
-                        <td>{FormatCurrency(state.currentRegion, item.checkTotal)}</td>
-                        <td className={'' + (pendingValue == 0 && 'text-muted')}>{FormatCurrency(state.currentRegion, pendingValue)}</td>
+                        <td className={'' + (pendingValue == 0 && 'text-muted')}>{moment.utc(item.checkDate).local().format('LL')}</td>
+                        <td>{FormatCurrency(state.currentRegion, pendingValue)}</td>
+                        <td className='text-danger'>{FormatCurrency(state.currentRegion, deductions)}</td>
                       </tr>
                     )
                   })}
                 </tbody>
-                <tfoot>
-                  <tr className='fw-bold'>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>TOTAL</td>
-                    <td>
-                      {FormatCurrency(
-                        state.currentRegion,
-                        summary.invoices.reduce((acc, invoice) => {
-                          const pendingValue = parseFloat((invoice.invoiceTotal - invoice.checkTotal).toFixed(2))
-                          if (pendingValue > 0.1) acc += pendingValue
-                          return acc
-                        }, 0)
-                      )}
-                    </td>
-                  </tr>
-                </tfoot>
               </table>
             </div>
           </CardBody>

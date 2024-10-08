@@ -17,6 +17,7 @@ export interface Invoice {
     checkDate: string | null
     invoiceTotal: number
     checkTotal: number
+    cashDiscountTotal: number
     checkNumber: string | null
     comments: string | null
     channelName: string

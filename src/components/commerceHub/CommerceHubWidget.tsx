@@ -1,8 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useContext, useMemo } from 'react'
 import AppContext from '@context/AppContext'
 import { Card, CardBody, Col } from 'reactstrap'
 import CountUp from 'react-countup'
 import { DashboardResponse } from '@typesTs/commercehub/dashboard'
+import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 
 type Props = {
   summary: DashboardResponse
@@ -20,15 +22,15 @@ const CommerceHubWidget = ({ summary }: Props) => {
   const pendingInfo = useMemo(() => {
     if (!summary) return { totalPending: 0, marketplaces: {}, totalInvoices: 0 }
 
-    return summary.invoices.reduce(
-      (pendingInfo: PendingInfo, invoice) => {
-        const pendingValue = parseFloat((invoice.invoiceTotal - invoice.checkTotal).toFixed(2))
+    return summary.summary.reduce(
+      (pendingInfo: PendingInfo, store) => {
+        const pendingValue = store.orderTotal
         if (pendingValue > 0.1) {
           pendingInfo.totalPending += pendingValue
-          pendingInfo.totalInvoices += invoice.totalInvoices
+          pendingInfo.totalInvoices += store.totalInvoices
         }
-        if (!pendingInfo.marketplaces[invoice.storeName]) pendingInfo.marketplaces[invoice.storeName] = 0
-        pendingInfo.marketplaces[invoice.storeName] += pendingValue
+        if (!pendingInfo.marketplaces[store.storeName]) pendingInfo.marketplaces[store.storeName] = 0
+        pendingInfo.marketplaces[store.storeName] += pendingValue
         return pendingInfo
       },
       { totalPending: 0, marketplaces: {}, totalInvoices: 0 }
@@ -94,6 +96,51 @@ const CommerceHubWidget = ({ summary }: Props) => {
                   <CountUp start={0} separator={','} end={pendingInfo.totalInvoices} decimals={0} duration={1} />
                 </span>
               </h4>
+            </div>
+          </CardBody>
+        </Card>
+      </Col>
+      <Col xs={12}>
+        <Card>
+          <CardBody>
+            <div className='table-responsive table-card'>
+              <table className='table table-hover table-centered align-middle mb-0'>
+                <thead>
+                  <tr className='fw-semibold'>
+                    <td>Store</td>
+                    <td>No. Invoices</td>
+                    <td>Pending</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {summary.summary.map((item, key) => {
+                    return (
+                      <tr key={key}>
+                        <td>
+                          <img
+                            loading='lazy'
+                            src={
+                              item.channelLogo
+                                ? item.channelLogo
+                                : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+                            }
+                            alt='Channel Logo'
+                            className='m-0 p-0 me-1 '
+                            style={{
+                              width: '20px',
+                              height: '20px',
+                              objectFit: 'contain',
+                            }}
+                          />
+                          {item.storeName}
+                        </td>
+                        <td>{FormatIntNumber(state.currentRegion, item.totalInvoices)}</td>
+                        <td>{FormatCurrency(state.currentRegion, item.orderTotal)}</td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
             </div>
           </CardBody>
         </Card>

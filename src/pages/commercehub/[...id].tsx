@@ -104,7 +104,7 @@ const CheckNumberDetails = ({ session }: Props) => {
     if (!data?.invoices || data.invoices.length == 0) return { totalPending: 0, totalInvoices: 0 }
     return data.invoices.reduce(
       (pendingInfo: PendingInfo, invoice) => {
-        pendingInfo.totalPending += invoice.checkTotal
+        pendingInfo.totalPending += invoice.checkTotal + invoice.cashDiscountTotal
         if (invoice.checkTotal > 0) pendingInfo.totalInvoices += 1
         return pendingInfo
       },
@@ -221,7 +221,7 @@ const CheckNumberDetails = ({ session }: Props) => {
             <span className='fw-semibold'>
               {FormatCurrency(
                 state.currentRegion,
-                filterInvoices.reduce((acc, curr) => acc + curr.checkTotal, 0)
+                filterInvoices.reduce((acc, invoice) => acc + invoice.checkTotal + invoice.cashDiscountTotal, 0)
               )}
             </span>
           </p>
