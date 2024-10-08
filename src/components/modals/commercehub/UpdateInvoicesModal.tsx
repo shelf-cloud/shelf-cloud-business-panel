@@ -76,6 +76,7 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
             return
           }
 
+          let hasError = false
           const uploadingFile = toast.loading('Uploading file...')
           const chunkSize = 100
           const totalChunks = Math.ceil(results.data.length / chunkSize)
@@ -98,6 +99,7 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
                   isLoading: false,
                   autoClose: 3000,
                 })
+                hasError = true
                 break // Optionally stop further uploads if one fails
               }
 
@@ -123,17 +125,19 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
               break
             }
           }
-          setShowErrorResponse(false)
-          setErrorResponse([])
-          toast.update(uploadingFile, {
-            render: 'File uploaded successfully.',
-            type: 'success',
-            isLoading: false,
-            autoClose: 3000,
-          })
-          resetForm()
-          setshowUpdateInvoices({ show: false })
-          clearFilters()
+          if (!hasError) {
+            setShowErrorResponse(false)
+            setErrorResponse([])
+            toast.update(uploadingFile, {
+              render: 'File uploaded successfully.',
+              type: 'success',
+              isLoading: false,
+              autoClose: 3000,
+            })
+            resetForm()
+            setshowUpdateInvoices({ show: false })
+            clearFilters()
+          }
           setLoading(false)
         },
       })

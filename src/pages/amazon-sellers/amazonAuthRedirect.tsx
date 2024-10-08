@@ -111,6 +111,7 @@ const AmazonAuthRedirect = ({}: Props) => {
                   <i className='las la-sync-alt text-muted fs-1'></i>
                   <div>
                     <img
+                      loading='lazy'
                       src='https://onixventuregroup.goflow.com/images/channels/amazon.svg'
                       alt='Amazon Image'
                       style={{

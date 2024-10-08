@@ -89,6 +89,7 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
         return (
           <>
             <img
+              loading='lazy'
               src={
                 row.channelLogo
                   ? row.channelLogo

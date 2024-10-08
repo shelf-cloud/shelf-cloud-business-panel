@@ -37,7 +37,7 @@ const ShipmentType = ({ data, apiMutateLink }: Props) => {
               </CardHeader>
               <CardBody>
                 <table className='table table-sm table-borderless'>
-                  <tbody>
+                  <tbody className='fs-7'>
                     <tr>
                       <td className='text-muted text-nowrap'>Service Requested:</td>
                       <td className='fw-semibold w-100'>{data.carrierService}</td>
@@ -68,7 +68,7 @@ const ShipmentType = ({ data, apiMutateLink }: Props) => {
               </CardHeader>
               <CardBody>
                 <table className='table table-sm table-borderless table-nowrap mb-0'>
-                  <tbody>
+                  <tbody className='fs-7'>
                     <tr className='border-bottom pb-2'>
                       <td className='text-muted d-flex flex-row justify-content-start align-items-start'>
                         Pick Pack Charge
@@ -140,7 +140,7 @@ const ShipmentType = ({ data, apiMutateLink }: Props) => {
                   <tbody>
                     {data.orderItems.map((product: ShipmentOrderItem, key) => (
                       <tr key={key} className='border-bottom py-2'>
-                        <td className='w-50 fs-6 fw-semibold'>
+                        <td className='w-50 fs-7 fw-semibold'>
                           {product.title || product.name}
                           {product.isKit === true &&
                             product.children.length > 0 &&
@@ -150,16 +150,16 @@ const ShipmentType = ({ data, apiMutateLink }: Props) => {
                               </p>
                             ))}
                         </td>
-                        <td className='fs-6 text-muted'>{product.sku}</td>
+                        <td className='fs-7 text-muted'>{product.sku}</td>
                         <td className='text-center'>{FormatCurrency(state.currentRegion, product.unitPrice)}</td>
                         <td className='text-center'>{product.quantity}</td>
                       </tr>
                     ))}
                     <tr>
-                      <td className='text-start fs-5 fw-bold text-nowrap'>Total QTY</td>
                       <td></td>
                       <td></td>
-                      <td className='text-center fs-5 text-primary'>{data.totalItems}</td>
+                      <td className='text-end fw-bold text-nowrap'>Total QTY</td>
+                      <td className='text-center text-primary'>{data.totalItems}</td>
                     </tr>
                   </tbody>
                 </table>

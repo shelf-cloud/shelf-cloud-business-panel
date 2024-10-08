@@ -135,6 +135,7 @@ const Add_Sku_To_Purchase_Order = ({}) => {
               position: 'relative',
             }}>
             <img
+              loading='lazy'
               src={
                 row.image
                   ? row.image

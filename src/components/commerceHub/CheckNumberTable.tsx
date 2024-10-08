@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useContext } from 'react'
 import Link from 'next/link'
 import { Card, CardBody, CardHeader, Col } from 'reactstrap'
@@ -16,7 +17,7 @@ const CheckNumberTable = ({ summary }: Props) => {
       <Col>
         <Card>
           <CardHeader className='align-items-center d-flex justify-content-between'>
-            <h4 className='card-title mb-0 flex-grow-1'>Stock Inventory</h4>
+            <h4 className='card-title mb-0 flex-grow-1'>Stores Summary</h4>
           </CardHeader>
 
           <CardBody>
@@ -32,23 +33,43 @@ const CheckNumberTable = ({ summary }: Props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {summary.invoices.map((item, key) => (
-                    <tr key={key}>
-                      <td>{item.storeName}</td>
-                      <td>
-                        {item.checkNumber ? (
-                          <Link href={`/commercehub/${item.storeName}/${item.checkNumber}`}>
-                            <a className='fs-6 text-primary fw-normal'>{item.checkNumber}</a>
-                          </Link>
-                        ) : (
-                          <span className='fs-6 mw-30 text-muted fw-light fst-italic'>Pending</span>
-                        )}
-                      </td>
-                      <td>{FormatCurrency(state.currentRegion, item.invoiceTotal)}</td>
-                      <td>{FormatCurrency(state.currentRegion, item.checkTotal)}</td>
-                      <td>{FormatCurrency(state.currentRegion, item.invoiceTotal - item.checkTotal > 0.1 ? item.invoiceTotal - item.checkTotal : 0)}</td>
-                    </tr>
-                  ))}
+                  {summary.invoices.map((item, key) => {
+                    const pendingValue = item.invoiceTotal - item.checkTotal > 0.1 ? item.invoiceTotal - item.checkTotal : 0
+                    return (
+                      <tr key={key}>
+                        <td>
+                          <img
+                            loading='lazy'
+                            src={
+                              item.channelLogo
+                                ? item.channelLogo
+                                : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+                            }
+                            alt='Channel Logo'
+                            className='m-0 p-0 me-1 '
+                            style={{
+                              width: '20px',
+                              height: '20px',
+                              objectFit: 'contain',
+                            }}
+                          />
+                          {item.storeName}
+                        </td>
+                        <td>
+                          {item.checkNumber ? (
+                            <Link href={`/commercehub/${item.storeName}/${item.checkNumber}`}>
+                              <a className='fs-6 text-primary fw-normal'>{item.checkNumber}</a>
+                            </Link>
+                          ) : (
+                            <span className='fs-6 mw-30 text-muted fw-light fst-italic'>Pending</span>
+                          )}
+                        </td>
+                        <td>{FormatCurrency(state.currentRegion, item.invoiceTotal)}</td>
+                        <td>{FormatCurrency(state.currentRegion, item.checkTotal)}</td>
+                        <td className={'' + (pendingValue == 0 && 'text-muted')}>{FormatCurrency(state.currentRegion, pendingValue)}</td>
+                      </tr>
+                    )
+                  })}
                 </tbody>
                 <tfoot>
                   <tr className='fw-bold'>

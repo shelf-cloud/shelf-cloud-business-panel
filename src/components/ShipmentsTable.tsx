@@ -77,11 +77,13 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
 
   const columns: any = [
     {
-      name: <span className='fw-bolder fs-13'>Order Number</span>,
+      name: <span className='fw-bold fs-6'>Order Number</span>,
       selector: (row: OrderRowType) => {
         return (
           <>
-            <div style={{ margin: '0px', fontWeight: '600' }}>{row.orderNumber}</div>
+            <div className='fs-7' style={{ margin: '0px', fontWeight: '600' }}>
+              {row.orderNumber}
+            </div>
             {row.hasReturn && (
               <span className='text-danger' style={{ opacity: '80%' }}>
                 Return: {row.returns[0]}
@@ -101,12 +103,9 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
       grow: 1.7,
       left: true,
       sortFunction: orderNumber,
-      style: {
-        padding: '8px 0px',
-      },
     },
     {
-      name: <span className='fw-bolder fs-13'>Status</span>,
+      name: <span className='fw-bold fs-6'>Status</span>,
       selector: (row: OrderRowType) => {
         switch (row.orderStatus) {
           case 'shipped':
@@ -133,30 +132,27 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
             break
         }
       },
+      compact: true,
       sortable: true,
-      wrap: true,
-      // grow: 2,
+      wrap: false,
       center: true,
       sortFunction: orderStatus,
     },
     {
-      name: <span className='fw-bolder fs-13'>Type</span>,
-      selector: (row: OrderRowType) => row.orderType,
+      name: <span className='fw-bold fs-6'>Type</span>,
+      selector: (row: OrderRowType) => <span className='fs-7 text-muted'>{row.orderType}</span>,
       sortable: true,
-      wrap: true,
-      // grow: 1.2,
+      wrap: false,
       center: true,
       sortFunction: orderType,
-      style: {
-        color: '#727578',
-      },
     },
     {
-      name: <span className='fw-bolder fs-13'>Marketplace</span>,
+      name: <span className='fw-bold fs-6'>Marketplace</span>,
       selector: (row: OrderRowType) => {
         return (
           <>
             <img
+              loading='lazy'
               src={
                 row.channelLogo
                   ? row.channelLogo
@@ -165,8 +161,8 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
               alt='product Image'
               id={`ChannelLogo-${row.id}`}
               style={{
-                width: '25px',
-                height: '25px',
+                width: '20px',
+                height: '20px',
                 objectFit: 'contain',
               }}
             />
@@ -177,15 +173,22 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
         )
       },
       sortable: true,
-      wrap: true,
-      grow: 1.2,
+      wrap: false,
       center: true,
       compact: true,
       sortFunction: orderMarketplace,
     },
     {
-      name: <span className='fw-bolder fs-13'>Order Date</span>,
-      selector: (row: OrderRowType) => row.orderDate,
+      name: <span className='fw-bold fs-6'>Order Date</span>,
+      selector: (row: OrderRowType) => <span className='fs-7'>{row.orderDate}</span>,
+      sortable: true,
+      wrap: false,
+      center: true,
+      compact: true,
+    },
+    {
+      name: <span className='fw-bold fs-6'>Order Closed</span>,
+      selector: (row: OrderRowType) => row.closedDate && <span className='fs-7'>{row.closedDate}</span>,
       sortable: true,
       wrap: true,
       grow: 1.2,
@@ -193,16 +196,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
       compact: true,
     },
     {
-      name: <span className='fw-bolder fs-13'>Order Closed</span>,
-      selector: (row: OrderRowType) => row.closedDate || '',
-      sortable: true,
-      wrap: true,
-      grow: 1.2,
-      center: true,
-      compact: true,
-    },
-    {
-      name: <span className='fw-bolder fs-13'>Tracking Number</span>,
+      name: <span className='fw-bold fs-6'>Tracking No.</span>,
       selector: (row: OrderRowType) => {
         let tracking
         {
@@ -214,6 +208,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
               tracking = (
                 <div className='trackingNumber_container'>
                   <img
+                    loading='lazy'
                     src={row.carrierIcon}
                     alt='carrier logo'
                     style={{
@@ -222,7 +217,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
                       objectFit: 'contain',
                     }}
                   />
-                  <a href={`${row.trackingLink}${row.trackingNumber}`} target='blank' style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
+                  <a className='fs-7' href={`${row.trackingLink}${row.trackingNumber}`} target='blank' style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
                     {row.trackingNumber}
                   </a>
                 </div>
@@ -232,6 +227,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
               tracking = (
                 <div className='trackingNumber_container'>
                   <img
+                    loading='lazy'
                     src={row.carrierIcon}
                     alt='carrier logo'
                     style={{
@@ -240,7 +236,9 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
                       objectFit: 'contain',
                     }}
                   />
-                  <p style={{ margin: '0px' }}>{row.trackingNumber}</p>
+                  <p className='fs-7' style={{ margin: '0px' }}>
+                    {row.trackingNumber}
+                  </p>
                 </div>
               )
               break
@@ -248,6 +246,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
               tracking = (
                 <div className='trackingNumber_container'>
                   <img
+                    loading='lazy'
                     src={row.carrierIcon}
                     alt='carrier logo'
                     style={{
@@ -256,7 +255,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
                       objectFit: 'contain',
                     }}
                   />
-                  <a href={`${row.trackingLink}${row.trackingNumber}`} target='blank' style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
+                  <a className='fs-7' href={`${row.trackingLink}${row.trackingNumber}`} target='blank' style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
                     {row.trackingNumber}
                   </a>
                 </div>
@@ -266,6 +265,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
               tracking = (
                 <div className='trackingNumber_container'>
                   <img
+                    loading='lazy'
                     src={row.carrierIcon}
                     alt='carrier logo'
                     style={{
@@ -274,15 +274,17 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
                       objectFit: 'contain',
                     }}
                   />
-                  <p style={{ margin: '0px' }}>{row.trackingNumber}</p>
+                  <p className='fs-7' style={{ margin: '0px' }}>
+                    {row.trackingNumber}
+                  </p>
                 </div>
               )
               break
             case row.trackingNumber == '':
-              tracking = row.trackingNumber
+              tracking = <span className='fs-7'>{row.trackingNumber}</span>
               break
             default:
-              tracking = row.trackingNumber
+              tracking = <span className='fs-7'>{row.trackingNumber}</span>
           }
         }
         return tracking
@@ -290,12 +292,12 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
       sortable: true,
       wrap: true,
       grow: 1.7,
-      center: false,
+      left: true,
       compact: true,
     },
     {
-      name: <span className='fw-bolder fs-13'># of Items</span>,
-      selector: (row: OrderRowType) => row.totalItems || '',
+      name: <span className='fw-bold fs-6'># of Items</span>,
+      selector: (row: OrderRowType) => row.totalItems && <span className='fs-7'>{row.totalItems}</span>,
       sortable: true,
       wrap: true,
       // grow: 1.5,
@@ -303,7 +305,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
       compact: true,
     },
     {
-      name: <span className='fw-bolder fs-13'>Total Charge</span>,
+      name: <span className='fw-bold fs-6'>Total Charge</span>,
       selector: (row: OrderRowType) => {
         let totalCharge
         {
@@ -315,19 +317,16 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
               totalCharge = FormatCurrency(state.currentRegion, row.totalCharge)
           }
         }
-        return totalCharge
+        return <span className='fs-7 text-primary'>{totalCharge}</span>
       },
       sortable: true,
       wrap: true,
       center: true,
-      style: {
-        color: '#4481FD',
-      },
     },
     {
       name: <span className='fw-bolder fs-6'>Action</span>,
       sortable: false,
-      compact: false,
+      compact: true,
       center: true,
       cell: (row: OrderRowType) => {
         switch (row.orderType) {
@@ -335,7 +334,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
             return row.orderStatus === 'shipped' ? (
               <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
                 <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
-                  <i className='mdi mdi-dots-vertical align-middle fs-3 m-0 px-2 py-0' style={{ color: '#919FAF' }} />
+                  <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-2 py-0' style={{ color: '#919FAF' }} />
                 </DropdownToggle>
                 <DropdownMenu className='dropdown-menu-end' container={'body'}>
                   <DropdownItem header>Actions</DropdownItem>
@@ -364,7 +363,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
             return (
               <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
                 <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
-                  <i className='mdi mdi-dots-vertical align-middle fs-3 m-0 px-2 py-0' style={{ color: '#919FAF' }} />
+                  <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-2 py-0' style={{ color: '#919FAF' }} />
                 </DropdownToggle>
                 <DropdownMenu className='dropdown-menu-end' container={'body'}>
                   <DropdownItem header>Documents</DropdownItem>

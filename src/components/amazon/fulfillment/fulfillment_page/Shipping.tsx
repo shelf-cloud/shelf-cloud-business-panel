@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 import AppContext from '@context/AppContext'
 import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
-import { DeliveryWindowsOptions, DeliveryWindowsResponse, InboundPlan, TransportationOption, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
+import { DeliveryWindowsOptions, DeliveryWindowsResponse, InboundPlan, PlacementOption, TransportationOption, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
 import moment from 'moment'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { Alert, Button, Card, CardBody, CardHeader, Col, Input, Label, Row, Spinner } from 'reactstrap'
@@ -127,7 +127,11 @@ const nonAmazonCarrierOptions = [
 
 const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNextStep, watingRepsonse }: Props) => {
   const { state }: any = useContext(AppContext)
-  const [placementOptionSelected, setplacementOptionSelected] = useState(inboundPlan.placementOptions[0])
+  const [placementOptionSelected, setplacementOptionSelected] = useState<PlacementOption>(
+    !inboundPlan.placementOptionId
+      ? inboundPlan.placementOptions[0]
+      : inboundPlan.placementOptions.find((placementOption) => inboundPlan.placementOptionId === placementOption.placementOptionId)!
+  )
   const [deliveryWindowOptions, setdeliveryWindowOptions] = useState<DeliveryWindowsOptions>({})
   const [shippingHasErrors, setshippingHasErrors] = useState(true)
   const [finalShippingCharges, setfinalShippingCharges] = useState({
@@ -139,16 +143,28 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
     sameShippingCarrier: 'amazon',
     nonAmazonCarrier: '',
     nonAmazonAlphaCode: '',
-    placementOptionIdSelected: inboundPlan.placementOptions[0].placementOptionId,
-    shipments: inboundPlan.placementOptions[0].shipmentIds.reduce((acc: { [shipmentId: string]: FinalShipment }, shipmentId) => {
-      acc[shipmentId] = {
-        shipmentId: shipmentId,
-        shippingMode: 'SPD',
-        deliveryWindow: '',
-        loadingDeliveryWindowOptions: false,
-      }
-      return acc
-    }, {}),
+    placementOptionIdSelected: !inboundPlan.placementOptionId ? inboundPlan.placementOptions[0].placementOptionId : inboundPlan.placementOptionId,
+    shipments: !inboundPlan.placementOptionId
+      ? inboundPlan.placementOptions[0].shipmentIds.reduce((acc: { [shipmentId: string]: FinalShipment }, shipmentId) => {
+          acc[shipmentId] = {
+            shipmentId: shipmentId,
+            shippingMode: 'SPD',
+            deliveryWindow: '',
+            loadingDeliveryWindowOptions: false,
+          }
+          return acc
+        }, {})
+      : (inboundPlan.placementOptions
+          .find((placementOption) => inboundPlan.placementOptionId === placementOption.placementOptionId)
+          ?.shipmentIds.reduce((acc: { [shipmentId: string]: FinalShipment }, shipmentId) => {
+            acc[shipmentId] = {
+              shipmentId: shipmentId,
+              shippingMode: 'SPD',
+              deliveryWindow: '',
+              loadingDeliveryWindowOptions: false,
+            }
+            return acc
+          }, {}) as { [shipmentId: string]: FinalShipment }),
   })
 
   useEffectAfterMount(() => {
@@ -564,26 +580,28 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                         <Card
                           key={placementOption.placementOptionId}
                           onClick={() => {
-                            !inboundPlan.steps[3].complete && !inboundPlan.placementOptionId && setplacementOptionSelected(placementOption)
-                            setfinalShippingCharges((prev) => {
-                              return {
-                                ...prev,
-                                sameShippingMode: true,
-                                sameShippingCarrier: 'amazon',
-                                nonAmazonCarrier: '',
-                                nonAmazonAlphaCode: '',
-                                placementOptionIdSelected: placementOption.placementOptionId,
-                                shipments: placementOption.shipmentIds.reduce((acc: { [shipmentId: string]: FinalShipment }, shipmentId) => {
-                                  acc[shipmentId] = {
-                                    shipmentId: shipmentId,
-                                    shippingMode: 'SPD',
-                                    deliveryWindow: '',
-                                    loadingDeliveryWindowOptions: false,
-                                  }
-                                  return acc
-                                }, {}),
-                              }
-                            })
+                            if (!inboundPlan.steps[3].complete && !inboundPlan.placementOptionId) {
+                              setplacementOptionSelected(placementOption)
+                              setfinalShippingCharges((prev) => {
+                                return {
+                                  ...prev,
+                                  sameShippingMode: true,
+                                  sameShippingCarrier: 'amazon',
+                                  nonAmazonCarrier: '',
+                                  nonAmazonAlphaCode: '',
+                                  placementOptionIdSelected: placementOption.placementOptionId,
+                                  shipments: placementOption.shipmentIds.reduce((acc: { [shipmentId: string]: FinalShipment }, shipmentId) => {
+                                    acc[shipmentId] = {
+                                      shipmentId: shipmentId,
+                                      shippingMode: 'SPD',
+                                      deliveryWindow: '',
+                                      loadingDeliveryWindowOptions: false,
+                                    }
+                                    return acc
+                                  }, {}),
+                                }
+                              })
+                            }
                           }}
                           className={
                             'mw-100 px-2 py-0 my-0 shadow-sm ' +
@@ -593,7 +611,6 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                           }
                           style={{ cursor: 'pointer' }}>
                           <CardBody>
-                            {/* <p>{placementOption.placementOptionId}</p> */}
                             <p className='mt-2 mb-1 p-0 fw-semibold fs-4'>
                               <span>{placementOption.shipmentIds.length}</span> {placementOption.shipmentIds.length > 1 ? 'Shipments' : 'Shipment'}
                               {placementOptionSelected.placementOptionId === placementOption.placementOptionId && (
@@ -618,6 +635,7 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                                 {discount.target} <span className='fw-semibold'>{FormatCurrency(state.currentRegion, discount.value.amount)}</span> {discount.value.code}
                               </p>
                             ))}
+                            <p className='m-0 fs-7 text-muted fw-light'>ID: {placementOption.placementOptionId}</p>
                           </CardBody>
                         </Card>
                       )

@@ -138,6 +138,7 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
                   position: 'relative',
                 }}>
                 <img
+                  loading='lazy'
                   src={
                     row.image
                       ? row.image

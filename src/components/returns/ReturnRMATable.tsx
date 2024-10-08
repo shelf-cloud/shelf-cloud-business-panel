@@ -153,6 +153,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
         return (
           <>
             <img
+              loading='lazy'
               src={
                 Object.values(row.returns)[0].channelLogo
                   ? Object.values(row.returns)[0].channelLogo
@@ -211,6 +212,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
               tracking = (
                 <div className='trackingNumber_container'>
                   <img
+                    loading='lazy'
                     src={Object.values(row.returns)[0].carrierIcon}
                     alt='carrier logo'
                     style={{
@@ -235,6 +237,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
               tracking = (
                 <div className='trackingNumber_container'>
                   <img
+                    loading='lazy'
                     src={Object.values(row.returns)[0].carrierIcon}
                     alt='carrier logo'
                     style={{
@@ -257,6 +260,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
               tracking = (
                 <div className='trackingNumber_container'>
                   <img
+                    loading='lazy'
                     src={Object.values(row.returns)[0].carrierIcon}
                     alt='carrier logo'
                     style={{
@@ -280,6 +284,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
               tracking = (
                 <div className='trackingNumber_container'>
                   <img
+                    loading='lazy'
                     src={Object.values(row.returns)[0].carrierIcon}
                     alt='carrier logo'
                     style={{

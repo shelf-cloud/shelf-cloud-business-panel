@@ -53,9 +53,7 @@ const AmazonAdsAuthRedirect = ({}: Props) => {
   const authorizeSeller = async () => {
     setloading(true)
 
-    const response = await axios.get(
-      `/api/amazon/addAdsAuthSeller?code=${code}&region=${state.currentRegion}&businessId=${state.user.businessId}`
-    )
+    const response = await axios.get(`/api/amazon/addAdsAuthSeller?code=${code}&region=${state.currentRegion}&businessId=${state.user.businessId}`)
 
     if (!response.data.error) {
       toast.success(response.data.message)
@@ -94,6 +92,7 @@ const AmazonAdsAuthRedirect = ({}: Props) => {
                   <i className='las la-sync-alt text-muted fs-1'></i>
                   <div>
                     <img
+                      loading='lazy'
                       src='https://onixventuregroup.goflow.com/images/channels/amazon.svg'
                       alt='Amazon Image'
                       style={{

@@ -24,6 +24,7 @@ const Listings_Product_Details = ({ listings }: Props) => {
                 <td>{store.storeSku}</td>
                 <td>
                   <img
+                    loading='lazy'
                     src={
                       store.channel
                         ? store.channel

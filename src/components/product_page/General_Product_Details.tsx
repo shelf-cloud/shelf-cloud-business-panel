@@ -115,6 +115,7 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
               maxWidth: '200px',
             }}>
             <img
+              loading='lazy'
               src={
                 image ? image : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
               }
@@ -303,7 +304,7 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
                   Cancel
                 </Button>
                 <Button disabled={isLoading} type='submit' color='primary' className='btn'>
-                {isLoading ? 'Saving...' : 'Save Changes'}
+                  {isLoading ? 'Saving...' : 'Save Changes'}
                 </Button>
               </div>
             </Col>

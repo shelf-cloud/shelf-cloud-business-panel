@@ -89,6 +89,7 @@ const KitsTable = ({ tableData, pending }: Props) => {
               position: 'relative',
             }}>
             <img
+              loading='lazy'
               src={
                 cell.image
                   ? cell.image

@@ -109,6 +109,7 @@ const Confirm_Delete_Item_From_PO = ({ showDeleteModal, setshowDeleteModal, load
                 position: 'relative',
               }}>
               <img
+                loading='lazy'
                 src={
                   showDeleteModal.image
                     ? showDeleteModal.image

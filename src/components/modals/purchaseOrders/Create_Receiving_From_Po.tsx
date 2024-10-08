@@ -244,6 +244,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                                   position: 'relative',
                                 }}>
                                 <img
+                                  loading='lazy'
                                   src={
                                     item.image
                                       ? item.image

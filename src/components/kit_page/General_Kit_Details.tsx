@@ -112,6 +112,7 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
               maxWidth: '200px',
             }}>
             <img
+              loading='lazy'
               src={
                 image ? image : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
               }
@@ -155,9 +156,7 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
               </tbody>
             </table>
           </div>
-          <div>
-            {/* <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i> */}
-          </div>
+          <div>{/* <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i> */}</div>
         </div>
       ) : (
         <Form onSubmit={HandleAddProduct}>

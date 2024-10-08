@@ -55,7 +55,7 @@ const FBAShipment = ({ data }: Props) => {
               </CardHeader>
               <CardBody>
                 <table className='table table-sm table-borderless'>
-                  <tbody>
+                  <tbody className='fs-7'>
                     <tr>
                       <td className='text-muted text-nowrap'>Service Requested:</td>
                       <td className='fw-semibold w-100'>{data.carrierService}</td>
@@ -90,7 +90,7 @@ const FBAShipment = ({ data }: Props) => {
               </CardHeader>
               <CardBody>
                 <table className='table table-sm table-borderless table-nowrap mb-0'>
-                  <tbody>
+                  <tbody className='fs-7'>
                     <tr className='border-bottom pb-2'>
                       <td className='text-muted d-flex flex-row justify-content-start align-items-start'>
                         Pick Pack Charge
@@ -179,21 +179,21 @@ const FBAShipment = ({ data }: Props) => {
                   <tbody>
                     {data.orderItems.map((product: ShipmentOrderItem, key) => (
                       <tr key={key} className='border-bottom py-2'>
-                        <td className='w-75 fs-6 fw-semibold'>{product.name || ''}</td>
-                        <td className='fs-6 text-muted'>{product.sku}</td>
+                        <td className='w-75 fs-7 fw-semibold'>{product.name || ''}</td>
+                        <td className='fs-7 text-muted'>{product.sku}</td>
                         <td className='text-center'>{product.quantity}</td>
                       </tr>
                     ))}
                     <tr>
                       <td></td>
-                      <td className='text-end fs-5 fw-bold text-nowrap'>Total QTY</td>
-                      <td className='text-center fw-bold fs-5 text-primary'>{data.totalItems}</td>
+                      <td className='text-end fw-bold text-nowrap'>Total QTY</td>
+                      <td className='text-center fw-bold text-primary'>{data.totalItems}</td>
                     </tr>
                     {data.totalIndividualUnits! > 0 && (
                       <tr>
                         <td></td>
-                        <td className='text-end fs-6 fw-normal text-nowrap'>{data.isIndividualUnits ? 'Total Individual Units' : 'Total Individual Units in Kits'}</td>
-                        <td className='text-center fw-bold fs-6 text-primary'>{data.totalIndividualUnits}</td>
+                        <td className='text-end fw-normal text-nowrap'>{data.isIndividualUnits ? 'Total Individual Units' : 'Total Individual Units in Kits'}</td>
+                        <td className='text-center fw-bold text-primary'>{data.totalIndividualUnits}</td>
                       </tr>
                     )}
                   </tbody>

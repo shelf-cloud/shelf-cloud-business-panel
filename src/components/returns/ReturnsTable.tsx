@@ -141,6 +141,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
         return (
           <>
             <img
+              loading='lazy'
               src={
                 row.channelLogo
                   ? row.channelLogo
@@ -198,6 +199,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
               tracking = (
                 <div className='trackingNumber_container'>
                   <img
+                    loading='lazy'
                     src={row.carrierIcon}
                     alt='carrier logo'
                     style={{
@@ -216,6 +218,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
               tracking = (
                 <div className='trackingNumber_container'>
                   <img
+                    loading='lazy'
                     src={row.carrierIcon}
                     alt='carrier logo'
                     style={{
@@ -234,6 +237,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
               tracking = (
                 <div className='trackingNumber_container'>
                   <img
+                    loading='lazy'
                     src={row.carrierIcon}
                     alt='carrier logo'
                     style={{
@@ -252,6 +256,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
               tracking = (
                 <div className='trackingNumber_container'>
                   <img
+                    loading='lazy'
                     src={row.carrierIcon}
                     alt='carrier logo'
                     style={{

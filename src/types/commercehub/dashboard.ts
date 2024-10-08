@@ -9,5 +9,6 @@ export interface Invoice {
     checkTotal: number
     checkNumber?: string
     storeName: string
+    channelLogo: string
     payterms: string
 }

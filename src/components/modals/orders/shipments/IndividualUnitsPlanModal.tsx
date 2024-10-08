@@ -133,7 +133,12 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
                           position: 'relative',
                         }}>
                         <img
-                          src={item.image ? item.image : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'}
+                          loading='lazy'
+                          src={
+                            item.image
+                              ? item.image
+                              : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+                          }
                           alt='product Image'
                           style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                         />
@@ -165,9 +170,7 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
               ))}
               <tr style={{ backgroundColor: '#E5E7E9' }}>
                 <td className='fw-bold'>Total SKUs: {individualUnitsPlan.plan.items.length}</td>
-                <td className='fw-bold text-center'>
-                  {individualUnitsPlan.plan.items.reduce((total: number, item) => total + Number(item.qtyToShip), 0)}
-                </td>
+                <td className='fw-bold text-center'>{individualUnitsPlan.plan.items.reduce((total: number, item) => total + Number(item.qtyToShip), 0)}</td>
                 {individualUnitsPlan.plan.cartons.map((box) => (
                   <td key={box.boxId} className='fw-bold text-center'>
                     {box.skus.reduce((total: number, item) => total + Number(item.qtyInBox), 0)}
@@ -204,9 +207,7 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
                 <td></td>
                 <td></td>
                 <td className='text-center fw-bold'>
-                  Total:{' '}
-                  {individualUnitsPlan.plan.cartons.reduce((total: number, box) => total + Number(box.box.weight), 0)}{' '}
-                  {state.currentRegion == 'us' ? 'lb' : 'kg'}
+                  Total: {individualUnitsPlan.plan.cartons.reduce((total: number, box) => total + Number(box.box.weight), 0)} {state.currentRegion == 'us' ? 'lb' : 'kg'}
                 </td>
               </tr>
             </tbody>
