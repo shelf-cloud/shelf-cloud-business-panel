@@ -22,13 +22,11 @@ const ChangeFBAShipmentName = ({ editShipmentName, seteditShipmentName }: Props)
   const [shipmentName, setshipmentName] = useState(editShipmentName.shipmentName)
   const [isLoading, setisLoading] = useState(false)
 
-  const handleCancelInboundPlan = async (inboundPlanId: string, inboundPlanName: string) => {
+  const hanldeEditFBAShipmentName = async () => {
     setisLoading(true)
     const cancelInboundPlanToast = toast.loading('Canceling Inbound Plan...')
     try {
-      const response = await axios.get(
-        `/api/amazon/fullfilments/cancelInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}&inboundPlanName=${inboundPlanName}`
-      )
+      const response = await axios.get(``)
 
       if (!response.data.error) {
         toast.update(cancelInboundPlanToast, {
@@ -114,7 +112,7 @@ const ChangeFBAShipmentName = ({ editShipmentName, seteditShipmentName }: Props)
               }}>
               Cancel
             </Button>
-            <Button disabled={isLoading} type='button' color='success' className='btn'>
+            <Button disabled={true || isLoading} type='button' color='success' className='btn' hanldeEditFBAShipmentName={hanldeEditFBAShipmentName}>
               {isLoading ? <Spinner color='#fff' size={'sm'} /> : 'Confirm'}
             </Button>
           </div>
