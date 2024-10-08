@@ -319,7 +319,7 @@ const CheckNumberDetails = ({ session }: Props) => {
                       Marketplace <span className='fw-semibold'>{id![0]}</span>
                     </p>
                     <p className='m-0 p-0 fs-6'>
-                      Check Date <span className='fw-semibold'>{moment.utc(data?.invoices[0].checkDate).local().format('LL')}</span>
+                      Check Date <span className='fw-semibold'>{data ? moment.utc(data?.invoices[0].checkDate).local().format('LL') : 'loading...'}</span>
                     </p>
                   </div>
                   <div className='d-flex flex-column justify-content-start align-items-end'>

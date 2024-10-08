@@ -12,6 +12,7 @@ import useSWR from 'swr'
 import { toast } from 'react-toastify'
 import FBAShipmentsTable from '@components/amazon/shipments/FBAShipmentsTable'
 import { FBAShipment, FBAShipmentsRepsonse } from '@typesTs/amazon/fbaShipments.interface'
+import ChangeFBAShipmentName from '@components/modals/amazon/ChangeFBAShipmentName'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -42,10 +43,15 @@ type Props = {
 
 const Shipments = ({ session, sessionToken }: Props) => {
   const { state }: any = useContext(AppContext)
+  const title = `Amazon FBA Shipments | ${session?.user?.businessName}`
   const [searchValue, setSearchValue] = useState<any>('')
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<FBAShipment[]>([])
-  const title = `Amazon FBA Shipments | ${session?.user?.businessName}`
+  const [editShipmentName, seteditShipmentName] = useState({
+    show: false,
+    shipmentId: '',
+    shipmentName: '',
+  })
 
   const controller = new AbortController()
   const signal = controller.signal
@@ -181,11 +187,12 @@ const Shipments = ({ session, sessionToken }: Props) => {
             </Row>
             <Card>
               <CardBody>
-                <FBAShipmentsTable filteredItems={filteredItems} pending={pending} getFBAShipmentProofOfShipped={getFBAShipmentProofOfShipped} />
+                <FBAShipmentsTable filteredItems={filteredItems} pending={pending} getFBAShipmentProofOfShipped={getFBAShipmentProofOfShipped} seteditShipmentName={seteditShipmentName}/>
               </CardBody>
             </Card>
           </Container>
         </div>
+        {editShipmentName.show && <ChangeFBAShipmentName editShipmentName={editShipmentName} seteditShipmentName={seteditShipmentName}/>}
       </React.Fragment>
     </div>
   )

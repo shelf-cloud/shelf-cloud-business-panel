@@ -13,9 +13,10 @@ type Props = {
   filteredItems: FBAShipment[]
   pending: boolean
   getFBAShipmentProofOfShipped: (shipmentId: string) => void
+  seteditShipmentName: (prev: any) => void
 }
 
-const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShipped }: Props) => {
+const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShipped, seteditShipmentName }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
   const orderStatus = (rowA: FBAShipment, rowB: FBAShipment) => {
@@ -73,7 +74,20 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
         return (
           <div className='my-2'>
             <p className='m-0 p-0 fw-semibold'>{row.shipment.shipmentConfirmationId}</p>
-            <p className='m-0 p-0 text-muted'>{row.shipment.name}</p>
+            <p className='m-0 p-0 text-muted'>
+              {row.shipment.name}{' '}
+              <i
+                onClick={() => {
+                  seteditShipmentName({
+                    show: true,
+                    shipmentId: row.shipmentId,
+                    shipmentName: row.shipment.name,
+                  })
+                }}
+                className='ri-pencil-fill fs-6 m-0 p-0 text-primary'
+                style={{ cursor: 'pointer' }}
+              />
+            </p>
           </div>
         )
       },
