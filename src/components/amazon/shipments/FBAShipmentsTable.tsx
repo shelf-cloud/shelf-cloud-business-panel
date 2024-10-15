@@ -16,6 +16,8 @@ type Props = {
   seteditShipmentName: (prev: any) => void
 }
 
+const UpdateShipmentNameStatus = ['shipped', 'ready_to_ship', 'working', 'awating', 'active', 'in_transit']
+
 const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShipped, seteditShipmentName }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
@@ -76,17 +78,19 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
             <p className='m-0 p-0 fw-semibold'>{row.shipment.shipmentConfirmationId}</p>
             <p className='m-0 p-0 text-muted'>
               {row.shipment.name}{' '}
-              <i
-                onClick={() => {
-                  seteditShipmentName({
-                    show: true,
-                    shipmentId: row.shipmentId,
-                    shipmentName: row.shipment.name,
-                  })
-                }}
-                className='ri-pencil-fill fs-6 m-0 p-0 text-primary'
-                style={{ cursor: 'pointer' }}
-              />
+              {UpdateShipmentNameStatus.includes(row.shipment.status.toLowerCase()) && row.totalPlacementFees > 0 && (
+                <i
+                  onClick={() => {
+                    seteditShipmentName({
+                      show: true,
+                      shipmentId: row.shipmentId,
+                      shipmentName: row.shipment.name,
+                    })
+                  }}
+                  className='ri-pencil-fill fs-6 m-0 p-0 text-primary'
+                  style={{ cursor: 'pointer' }}
+                />
+              )}
             </p>
           </div>
         )

@@ -2,10 +2,10 @@
 import React, { useContext, useState } from 'react'
 import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
 import { toast } from 'react-toastify'
-import { useSWRConfig } from 'swr'
 import axios from 'axios'
 import AppContext from '@context/AppContext'
 import { DebounceInput } from 'react-debounce-input'
+import { useSWRConfig } from 'swr'
 
 type Props = {
   editShipmentName: {
@@ -24,12 +24,15 @@ const ChangeFBAShipmentName = ({ editShipmentName, seteditShipmentName }: Props)
 
   const hanldeEditFBAShipmentName = async () => {
     setisLoading(true)
-    const cancelInboundPlanToast = toast.loading('Canceling Inbound Plan...')
+    const updateShipmentName = toast.loading('Updating Shipment Name...')
     try {
-      const response = await axios.get(``)
+      const response = await axios.post(`/api/amazon/shipments/changeFBAShipmentName?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+        shipmentName: shipmentName,
+        shipmentId: editShipmentName.shipmentId,
+      })
 
       if (!response.data.error) {
-        toast.update(cancelInboundPlanToast, {
+        toast.update(updateShipmentName, {
           render: response.data.message,
           type: 'success',
           isLoading: false,
@@ -40,9 +43,9 @@ const ChangeFBAShipmentName = ({ editShipmentName, seteditShipmentName }: Props)
           shipmentId: '',
           shipmentName: '',
         })
-        mutate(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/listSellerInboundPlans/${state.currentRegion}/${state.user.businessId}`)
+        mutate(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/listSellerFbaShipments/${state.currentRegion}/${state.user.businessId}`)
       } else {
-        toast.update(cancelInboundPlanToast, {
+        toast.update(updateShipmentName, {
           render: response.data.message,
           type: 'error',
           isLoading: false,
@@ -50,6 +53,12 @@ const ChangeFBAShipmentName = ({ editShipmentName, seteditShipmentName }: Props)
         })
       }
     } catch (error) {
+      toast.update(updateShipmentName, {
+        render: 'Error updating Shipment Name',
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
       console.error(error)
     }
     setisLoading(false)
@@ -112,8 +121,8 @@ const ChangeFBAShipmentName = ({ editShipmentName, seteditShipmentName }: Props)
               }}>
               Cancel
             </Button>
-            <Button disabled={true || isLoading} type='button' color='success' className='btn' hanldeEditFBAShipmentName={hanldeEditFBAShipmentName}>
-              {isLoading ? <Spinner color='#fff' size={'sm'} /> : 'Confirm'}
+            <Button disabled={isLoading} type='button' color='success' className='btn' onClick={hanldeEditFBAShipmentName}>
+              {isLoading ? <Spinner color='light' size={'sm'} /> : 'Confirm'}
             </Button>
           </div>
         </Row>
