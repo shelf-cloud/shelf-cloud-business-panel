@@ -41,7 +41,7 @@ type Props = {
   }
 }
 
-const Shipments = ({ session, sessionToken }: Props) => {
+const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
   const { state }: any = useContext(AppContext)
   const title = `Amazon FBA Shipments | ${session?.user?.businessName}`
   const [searchValue, setSearchValue] = useState<any>('')
@@ -82,7 +82,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
   }
   useSWR(
     session && sessionToken && state.user.businessId
-      ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/listSellerFbaShipments/${state.currentRegion}/${state.user.businessId}`
+      ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/listSellerFbaShipmentsCompleted/${state.currentRegion}/${state.user.businessId}`
       : null,
     fetcher,
     {
@@ -158,11 +158,11 @@ const Shipments = ({ session, sessionToken }: Props) => {
                       </Button>
                     </a>
                   </Link>
-                  <Link href={'/amazon-sellers/shipmentsCompleted'}>
+                  <Link href={'/amazon-sellers/shipments'}>
                     <Button color='info'>
                       <span className='icon-on'>
                         <i className='ri-file-list-line align-bottom me-1' />
-                        Completed
+                        Shipments
                       </span>
                     </Button>
                   </Link>
@@ -211,4 +211,4 @@ const Shipments = ({ session, sessionToken }: Props) => {
   )
 }
 
-export default Shipments
+export default ShipmentsCompleted
