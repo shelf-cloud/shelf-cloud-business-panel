@@ -229,36 +229,69 @@ const Shipments = ({ session, sessionToken }: Props) => {
     }
   }
 
-  const handleGetShipmentBOL = async (orderNumber: string, orderId: string) => {
-    const getShipmentBOL = toast.loading('Getting Shipment BOL...')
+  const handleGetShipmentBOL = async (orderNumber: string, orderId: string, documentType: string) => {
+    const getShipmentBOL = toast.loading('Getting Shipment Document...')
 
     const response = await axios
       .get(`/api/shipments/getShipmentBOLGoFlow?region=${state.currentRegion}&businessId=${state.user.businessId}&orderId=${orderId}`)
       .then(({ data }) => data)
       .catch(({ error }) => {
         if (axios.isCancel(error)) {
-          toast.error(error?.data?.message || 'Error getting BOL')
+          toast.error(error?.data?.message || 'Error getting Document')
         }
       })
 
-    if (!response.error && response.shipment.bill_of_lading.url) {
-      toast.update(getShipmentBOL, {
-        render: response.message,
-        type: 'success',
-        isLoading: false,
-        autoClose: 3000,
-      })
-      const a = document.createElement('a')
-      a.href = response.shipment.bill_of_lading.url
-      a.download = orderNumber
-      a.click()
-    } else {
-      toast.update(getShipmentBOL, {
-        render: 'BOL not available',
-        type: 'error',
-        isLoading: false,
-        autoClose: 3000,
-      })
+    switch (documentType) {
+      case 'bill_of_lading':
+        if (!response.error && response.shipment[documentType].url) {
+          toast.update(getShipmentBOL, {
+            render: response.message,
+            type: 'success',
+            isLoading: false,
+            autoClose: 3000,
+          })
+          const a = document.createElement('a')
+          a.href = response.shipment[documentType].url
+          a.download = orderNumber
+          a.click()
+        } else {
+          toast.update(getShipmentBOL, {
+            render: 'Document not available',
+            type: 'error',
+            isLoading: false,
+            autoClose: 3000,
+          })
+        }
+        break
+      case 'carton_labels':
+        if (!response.error && response.shipment[documentType].all.url) {
+          toast.update(getShipmentBOL, {
+            render: response.message,
+            type: 'success',
+            isLoading: false,
+            autoClose: 3000,
+          })
+          const a = document.createElement('a')
+          a.href = response.shipment[documentType].all.url
+          a.download = orderNumber
+          a.click()
+        } else {
+          toast.update(getShipmentBOL, {
+            render: 'Document not available',
+            type: 'error',
+            isLoading: false,
+            autoClose: 3000,
+          })
+        }
+        break
+      default:
+        toast.update(getShipmentBOL, {
+          render: 'Document not available',
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+        })
+        break
     }
   }
 

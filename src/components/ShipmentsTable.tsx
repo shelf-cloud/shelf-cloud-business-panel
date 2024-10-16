@@ -13,7 +13,7 @@ type Props = {
   tableData: OrderRowType[]
   pending: boolean
   apiMutateLink: string
-  handleGetShipmentBOL: (orderNumber: string, orderId: string) => Promise<void>
+  handleGetShipmentBOL: (orderNumber: string, orderId: string, documentType: string) => Promise<void>
 }
 
 const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBOL }: Props) => {
@@ -347,9 +347,13 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
                   {row.carrierService.toLowerCase() === 'ltl' && (
                     <>
                       <DropdownItem header>Documents</DropdownItem>
-                      <DropdownItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId)}>
+                      <DropdownItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'bill_of_lading')}>
                         <i className='ri-file-text-fill align-middle me-2 fs-5 text-muted' />
                         <span className='fs-6 fw-normal text-dark'>Download BOL</span>
+                      </DropdownItem>
+                      <DropdownItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'carton_labels')}>
+                        <i className='ri-file-text-fill align-middle me-2 fs-5 text-muted' />
+                        <span className='fs-6 fw-normal text-dark'>Carton Label</span>
                       </DropdownItem>
                     </>
                   )}
@@ -362,9 +366,13 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
                 </DropdownToggle>
                 <DropdownMenu className='dropdown-menu-end' container={'body'}>
                   <DropdownItem header>Documents</DropdownItem>
-                  <DropdownItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId)}>
+                  <DropdownItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'bill_of_lading')}>
                     <i className='ri-file-text-fill align-middle me-2 fs-5 text-muted' />
                     <span className='fs-6 fw-normal text-dark'>Download BOL</span>
+                  </DropdownItem>
+                  <DropdownItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'carton_labels')}>
+                    <i className='ri-file-text-fill align-middle me-2 fs-5 text-muted' />
+                    <span className='fs-6 fw-normal text-dark'>Carton Label</span>
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
