@@ -108,6 +108,7 @@ const Add_Payment_Modal = ({}: Props) => {
                     className='form-control'
                     id='amount'
                     name='amount'
+                    step=".01"
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     invalid={validation.touched.amount && validation.errors.amount ? true : false}
