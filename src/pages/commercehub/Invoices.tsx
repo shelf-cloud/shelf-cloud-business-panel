@@ -7,12 +7,14 @@ import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import axios from 'axios'
 import useSWRInfinite from 'swr/infinite'
-import { Invoice, InvoicesResponse } from '@typesTs/commercehub/invoices'
+import { CommerceHubStoresResponse, Invoice, InvoicesResponse } from '@typesTs/commercehub/invoices'
 import InvoicesTable from '@components/commerceHub/InvoicesTable'
 import { DebounceInput } from 'react-debounce-input'
 import FilterByDates from '@components/FilterByDates'
 import moment from 'moment'
 import UpdateInvoicesModal from '@components/modals/commercehub/UpdateInvoicesModal'
+import FilterCommerceHubInvoices from '@components/commerceHub/FilterCommerceHubInvoices'
+import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -48,14 +50,24 @@ const fetcher = async (url: string) => {
   return data.invoices
 }
 
+const fetcherStores = async (endPoint: string) => await axios.get<CommerceHubStoresResponse>(endPoint).then((res) => res.data)
+
 const Invoices = ({ session }: Props) => {
   const title = `Commerce HUB Invoices | ${session?.user?.businessName}`
   const { state }: any = useContext(AppContext)
   const [searchValue, setSearchValue] = useState<string>('')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
+  const [filters, setfilters] = useState({
+    onlyOverdue: false,
+    store: { value: 'all', label: 'All' },
+  })
   const [showUpdateInvoices, setshowUpdateInvoices] = useState({
     show: false,
+  })
+
+  const { data: stores } = useSWR(state.user.businessId ? `/api/commerceHub/getStores?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcherStores, {
+    revalidateOnFocus: false,
   })
 
   const getKey = (pageIndex: number, previousPageData: Invoice[]) => {
@@ -69,6 +81,8 @@ const Invoices = ({ session }: Props) => {
     if (searchValue) url += `&search=${encodeURIComponent(searchValue)}`
     if (startDate) url += `&startDate=${startDate}`
     if (endDate) url += `&endDate=${endDate}`
+    if(filters.onlyOverdue) url += `&onlyOverdue=${filters.onlyOverdue}`
+    if(filters.store.value !== 'all') url += `&store=${filters.store.value}`
 
     return url
   }
@@ -107,6 +121,7 @@ const Invoices = ({ session }: Props) => {
     setSearchValue('')
     setStartDate('')
     setEndDate('')
+    setfilters(() => ({ onlyOverdue: false, store: { value: 'all', label: 'All' } }))
     setSize(1) // Reset to page 1
     mutate() // Refetch the initial data set
   }
@@ -119,22 +134,7 @@ const Invoices = ({ session }: Props) => {
     }
   }
 
-  // type PendingInfo = {
-  //   totalPending: number
-  //   marketplaces: { [marketplace: string]: number}
-  //   totalInvoices: number
-  // }
-  // const pendingInfo = useMemo(() => {
-  //   if(!invoices || invoices.length == 0) return { totalPending: 0, marketplaces: {}, totalInvoices: 0 }
-  //   return invoices.reduce((pendingInfo: PendingInfo, invoice) => {
-  //     const pendingValue = parseFloat((invoice.invoiceTotal - invoice.checkTotal).toFixed(2))
-  //     pendingInfo.totalPending += pendingValue
-  //     if(pendingValue > 0) pendingInfo.totalInvoices += 1
-  //     if(!pendingInfo.marketplaces[invoice.storeName]) pendingInfo.marketplaces[invoice.storeName] = 0
-  //     pendingInfo.marketplaces[invoice.storeName] += pendingValue
-  //     return pendingInfo
-  //   }, { totalPending: 0, marketplaces: {}, totalInvoices: 0 })
-  // }, [invoices])
+  const hasActiveFilters = useMemo(() => searchValue !== '' || startDate !== '' || endDate !== '' || filters.onlyOverdue || filters.store.value !== 'all', [searchValue, startDate, endDate, filters])
 
   return (
     <div>
@@ -188,9 +188,10 @@ const Invoices = ({ session }: Props) => {
                   shipmentsEndDate={endDate}
                   handleChangeDatesFromPicker={handleChangeDatesFromPicker}
                 />
+                <FilterCommerceHubInvoices filters={filters} setfilters={setfilters} stores={stores?.stores ?? []}/>
                 <Button
-                  disabled={searchValue == '' && startDate == ''}
-                  color={searchValue !== '' || startDate !== '' ? 'primary' : 'light'}
+                  disabled={!hasActiveFilters}
+                  color={hasActiveFilters ? 'primary' : 'light'}
                   className='text-nowrap'
                   onClick={clearFilters}>
                   Clear Filters
@@ -198,22 +199,6 @@ const Invoices = ({ session }: Props) => {
               </div>
             </div>
             <Card>
-              {/* <CardHeader>
-                <div className='d-flex flex-wrap justify-content-between align-items-start'>
-                  <h4 className='card-title'>Invoices</h4>
-                  <div className='d-flex flex-column justify-content-start align-items-end'>
-                    {pendingInfo.totalInvoices > 0 && <p className='m-0 p-0 text-muted fs-6'>Total Invoices: {pendingInfo.totalInvoices}</p>}
-                    {Object.keys(pendingInfo.marketplaces).map((marketplace) => {
-                      return (
-                        <p key={marketplace} className='m-0 p-0 text-muted fs-6'>
-                          {marketplace}: {FormatCurrency(state.currentRegion, pendingInfo.marketplaces[marketplace])}
-                        </p>
-                      )
-                    })}
-                    <p className='m-0 p-0 text-muted fs-6'>Total Pending: {FormatCurrency(state.currentRegion, pendingInfo.totalPending)}</p>
-                  </div>
-                </div>
-              </CardHeader> */}
               <CardBody>
                 <InvoicesTable filteredItems={invoices} pending={isValidating && size === 1} />
                 <div ref={lastInvoiceElementRef} style={{ height: '20px', marginTop: '10px' }}>

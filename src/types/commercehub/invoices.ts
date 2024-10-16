@@ -25,3 +25,14 @@ export interface Invoice {
     channelLogo: string
     payterms: number
 }
+
+export interface CommerceHubStoresResponse {
+    stores: CommerceHubStore[]
+}
+
+export interface CommerceHubStore {
+    value: string
+    label: string
+    logoLink: string
+    payterms: string
+}

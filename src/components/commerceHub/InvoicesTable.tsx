@@ -136,9 +136,11 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
       sortable: true,
       center: true,
       compact: true,
-      sortFunction: (rowA: Invoice, rowB: Invoice) => {
-        if (rowA.dueDate && rowB.dueDate) sortDates(rowA.dueDate, rowB.dueDate)
-      },
+      sortFunction: (rowA: Invoice, rowB: Invoice) =>
+        sortDates(
+          moment.utc(rowA.closedDate).local().add(rowA.payterms, 'days').format('YYYY-MM-DD'),
+          moment.utc(rowB.closedDate).local().add(rowB.payterms, 'days').format('YYYY-MM-DD')
+        ),
     },
     {
       name: <span className='fw-bold fs-6'>Check Date</span>,

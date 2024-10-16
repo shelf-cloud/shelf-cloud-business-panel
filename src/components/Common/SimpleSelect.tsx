@@ -3,7 +3,7 @@ import Select from 'react-select'
 
 type Props = {
   selected: any
-  handleSelect: (selected: string) => void
+  handleSelect: (selected: any) => void
   options: any[]
 }
 
