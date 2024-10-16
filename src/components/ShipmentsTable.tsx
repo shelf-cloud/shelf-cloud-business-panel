@@ -84,6 +84,11 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
             <div className='fs-7' style={{ margin: '0px', fontWeight: '600' }}>
               {row.orderNumber}
             </div>
+            {row.poNumber && row.poNumber !== row.orderNumber && (
+              <span className='m-0 fs-7 text-muted' style={{ opacity: '80%' }}>
+                PO: {row.poNumber}
+              </span>
+            )}
             {row.hasReturn && (
               <span className='text-danger' style={{ opacity: '80%' }}>
                 Return: {row.returns[0]}
@@ -355,29 +360,31 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
                         <i className='ri-file-text-fill align-middle me-2 fs-5 text-muted' />
                         <span className='fs-6 fw-normal text-dark'>Carton Label</span>
                       </DropdownItem>
+                      <DownloadPackingSlip order={row} />
                     </>
                   )}
                 </DropdownMenu>
               </UncontrolledDropdown>
-            ) : row.carrierService.toLowerCase() === 'ltl' ? (
+            ) : (
               <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
                 <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
                   <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-2 py-0' style={{ color: '#919FAF' }} />
                 </DropdownToggle>
                 <DropdownMenu className='dropdown-menu-end' container={'body'}>
                   <DropdownItem header>Documents</DropdownItem>
-                  <DropdownItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'bill_of_lading')}>
-                    <i className='ri-file-text-fill align-middle me-2 fs-5 text-muted' />
-                    <span className='fs-6 fw-normal text-dark'>Download BOL</span>
-                  </DropdownItem>
+                  {row.carrierService.toLowerCase() === 'ltl' && (
+                    <DropdownItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'bill_of_lading')}>
+                      <i className='ri-file-text-fill align-middle me-2 fs-5 text-muted' />
+                      <span className='fs-6 fw-normal text-dark'>Download BOL</span>
+                    </DropdownItem>
+                  )}
                   <DropdownItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'carton_labels')}>
                     <i className='ri-file-text-fill align-middle me-2 fs-5 text-muted' />
                     <span className='fs-6 fw-normal text-dark'>Carton Label</span>
                   </DropdownItem>
+                  <DownloadPackingSlip order={row} />
                 </DropdownMenu>
               </UncontrolledDropdown>
-            ) : (
-              <></>
             )
             break
           case 'Wholesale':

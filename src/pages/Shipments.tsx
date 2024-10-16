@@ -101,6 +101,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
       let newDataTable = allData.filter(
         (order) =>
           order?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
+          order?.poNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
           order?.orderStatus?.toLowerCase().includes(searchValue.toLowerCase()) ||
           order?.orderType?.toLowerCase().includes(searchValue.toLowerCase()) ||
           order?.shipName?.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -142,6 +143,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
         newDataTable = newDataTable.filter(
           (order) =>
             order?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            order?.poNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
             order?.orderStatus?.toLowerCase().includes(searchValue.toLowerCase()) ||
             order?.orderType?.toLowerCase().includes(searchValue.toLowerCase()) ||
             order?.shipName?.toLowerCase().includes(searchValue.toLowerCase()) ||

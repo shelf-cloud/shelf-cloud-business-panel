@@ -96,7 +96,7 @@ const DownloadPackingSlip = ({ order }: Props) => {
     }
     worksheet.mergeCells('D7', 'E7')
 
-    const closedDate = new Date(order.closedDate)
+    const closedDate = order.closedDate ? new Date(order.closedDate) : new Date()
 
     worksheet.getCell('D8').value = closedDate.toLocaleDateString('en-GB')
     worksheet.getCell('D8').alignment = { vertical: 'middle', horizontal: 'center' }

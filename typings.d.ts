@@ -364,6 +364,7 @@ export interface OrderRowType {
   businessId: string
   orderId: string
   orderNumber: string
+  poNumber: string | null
   goFlowOrderId: number
   orderDate: string
   closedDate: string
