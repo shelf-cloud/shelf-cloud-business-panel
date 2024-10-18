@@ -74,6 +74,9 @@ const CheckNumberTable = ({ summary }: Props) => {
                   })}
                 </tbody>
               </table>
+              <div className='d-flex justify-content-end align-item-center px-3 py-2'>
+                <Link href={`/commercehub/checkSummary`} className='text-primary fs-7'>View More</Link>
+              </div>
             </div>
           </CardBody>
         </Card>

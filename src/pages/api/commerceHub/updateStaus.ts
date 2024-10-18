@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 
-const getInvoices: NextApiHandler = async (request, response) => {
+const updateStaus: NextApiHandler = async (request, response) => {
     const session = await getServerSession(request, response, authOptions)
 
     if (session == null) {
@@ -11,17 +11,11 @@ const getInvoices: NextApiHandler = async (request, response) => {
         return
     }
 
-    let url = `${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/commerceHub/getInvoices.php?businessId=${request.query.businessId}&offset=${request.query.offset}&limit=${request.query.limit}`
-
-    if (request.query.search) url += `&search=${encodeURIComponent(request.query.search as string)}`
-    if (request.query.startDate) url += `&startDate=${request.query.startDate}`
-    if (request.query.endDate) url += `&endDate=${request.query.endDate}`
-    if (request.query.onlyOverdue) url += `&onlyOverdue=${request.query.onlyOverdue}`
-    if (request.query.store) url += `&store=${request.query.store}`
-    if (request.query.status) url += `&status=${request.query.status}`
-    
     axios
-        .get(url)
+        .post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/commerceHub/updateStaus.php?businessId=${request.query.businessId}`, {
+            newStatus: request.body.newStatus,
+            selectedRows: request.body.selectedRows,
+        })
         .then(({ data }) => {
             response.json(data)
         })
@@ -49,4 +43,4 @@ const getInvoices: NextApiHandler = async (request, response) => {
         })
 }
 
-export default getInvoices
+export default updateStaus

@@ -199,12 +199,12 @@ const Navdata = () => {
               link: '/commercehub/Invoices',
               parentId: 'marketplaces',
             },
-            // {
-            //   id: 'returns',
-            //   label: 'Returns',
-            //   link: '/#',
-            //   parentId: 'marketplaces',
-            // },
+            {
+              id: 'invoices',
+              label: 'Deductions',
+              link: '/commercehub/deductions',
+              parentId: 'marketplaces',
+            },
           ],
         },
       },
@@ -436,30 +436,12 @@ const Navdata = () => {
           updateIconSidebar(e)
         },
         subItems: [
-          // {
-          //   id: 'marketplaceDashboard',
-          //   label: 'Dashboard',
-          //   link: '/marketplaceDashboard',
-          //   parentId: 'marketplaces',
-          // },
           {
             id: 'productPerformance',
             label: 'Product Performance',
             link: '/marketplaces/productPerformance',
             parentId: 'marketplaces',
           },
-          // {
-          //   id: 'shopify',
-          //   label: 'Shopify',
-          //   link: '/marketplaceShopify',
-          //   parentId: 'marketplaces',
-          // },
-          // {
-          //   id: 'wayfair',
-          //   label: 'Wayfair',
-          //   link: '/marketplaceWayfair',
-          //   parentId: 'marketplaces',
-          // },
         ],
       },
       {
@@ -591,7 +573,6 @@ const Navdata = () => {
     if (state.user[state.currentRegion]?.showCommerceHub) {
       menuItems[3].subItems?.push(modules.Marketplaces.subItems.CommerceHub)
     }
-    
   } else {
     menuItems = [modules.Dashboard]
     if (state.user?.permissions) {

@@ -6,16 +6,20 @@ import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle, Input, Label } fro
 
 type Filters = {
   onlyOverdue: boolean
+  showOverdue: boolean
   store: { value: string; label: string }
+  status: { value: string; label: string }
+  showStaus: boolean
 }
 
 type Props = {
   filters: Filters
-  stores: CommerceHubStore[]
   setfilters: (cb: (prev: Filters) => Filters) => void
+  stores: CommerceHubStore[]
+  statusOptions?: { value: string; label: string }[]
 }
 
-const FilterCommerceHubInvoices = ({ filters, setfilters, stores }: Props) => {
+const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions }: Props) => {
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const FilterCommerceHubInvoicesContainer = useRef<HTMLDivElement | null>(null)
 
@@ -37,7 +41,7 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores }: Props) => {
         <DropdownToggle caret style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }} color='light'>
           Filters
         </DropdownToggle>
-        <DropdownMenu style={{ backgroundColor: 'white', minWidth: '230px', border: '1px solid #E1E3E5' }}>
+        <DropdownMenu style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
           <div className={'px-4 py-3'}>
             <div className='d-flex flex-column justify-content-start gap-2'>
               <span className='fs-7 fw-normal'>Filter By Store:</span>
@@ -49,24 +53,45 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores }: Props) => {
                 }}
                 options={[{ value: 'all', label: 'All' }, ...stores]}
               />
-              <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-end'>
-                <Label className='fw-normal fs-7 w-75'>Show Only Overdue</Label>
-                <Input
-                  className='form-check-input code-switcher'
-                  type='checkbox'
-                  id='showOnlyOverdue'
-                  name='showOnlyOverdue'
-                  checked={filters.onlyOverdue}
-                  onChange={(e) => {
-                    setfilters((prev: Filters) => ({ ...prev, onlyOverdue: e.target.checked }))
-                    setOpenDatesMenu(false)
-                  }}
-                />
-              </div>
+              {filters.showStaus && (
+                <>
+                  <span className='fs-7 fw-normal'>Filter By Status:</span>
+                  <SimpleSelect
+                    selected={filters.status}
+                    handleSelect={(option) => {
+                      setfilters((prev: Filters) => ({ ...prev, status: option }))
+                      setOpenDatesMenu(false)
+                    }}
+                    options={[{ value: 'all', label: 'All' }, ...statusOptions!]}
+                  />
+                </>
+              )}
+              {filters.showOverdue && (
+                <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-end'>
+                  <Label className='fw-normal fs-7 w-75'>Show Only Overdue</Label>
+                  <Input
+                    className='form-check-input code-switcher'
+                    type='checkbox'
+                    id='showOnlyOverdue'
+                    name='showOnlyOverdue'
+                    checked={filters.onlyOverdue}
+                    onChange={(e) => {
+                      setfilters((prev: Filters) => ({ ...prev, onlyOverdue: e.target.checked }))
+                      setOpenDatesMenu(false)
+                    }}
+                  />
+                </div>
+              )}
               <span
                 style={{ width: '100%', cursor: 'pointer', textAlign: 'right' }}
                 onClick={() => {
-                  setfilters(() => ({ onlyOverdue: false, store: { value: 'all', label: 'All' } }))
+                  setfilters(() => ({
+                    onlyOverdue: false,
+                    showOverdue: filters.showOverdue,
+                    store: { value: 'all', label: 'All' },
+                    status: { value: 'all', label: 'All' },
+                    showStaus: true,
+                  }))
                   setOpenDatesMenu(false)
                 }}
                 className='text-muted mt-2 fs-7'>

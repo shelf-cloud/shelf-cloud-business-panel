@@ -5,7 +5,7 @@ import Head from 'next/head'
 import { getSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import DataTable from 'react-data-table-component'
 import { Invoice, InvoicesResponse } from '@typesTs/commercehub/invoices'
 import { Card, CardBody, CardHeader, Container } from 'reactstrap'
@@ -15,6 +15,7 @@ import moment from 'moment'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { DebounceInput } from 'react-debounce-input'
 import FilterCheckNumber from '@components/commerceHub/FilterCheckNumber'
+import BulkActionsForSelected from '@components/commerceHub/BulkActionsForSelected'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -46,12 +47,20 @@ type PendingInfo = {
   totalInvoices: number
 }
 
+const STATUS_OPTIONS = [
+  { value: 'reviewing', label: 'Reviewing' },
+  { value: 'resolved', label: 'Resolved' },
+  { value: 'closed', label: 'Closed' },
+]
+
 const CheckNumberDetails = ({ session }: Props) => {
   const router = useRouter()
   const { id } = router.query
   const { state }: any = useContext(AppContext)
   const [searchValue, setSearchValue] = useState<string>('')
   const [invoiceType, setInvoiceType] = useState('all')
+  const [selectedRows, setSelectedRows] = useState<Invoice[]>([])
+  const [toggledClearRows, setToggleClearRows] = useState(false)
   const title = `Check No. ${id![1]} | ${session?.user?.businessName}`
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
@@ -74,6 +83,13 @@ const CheckNumberDetails = ({ session }: Props) => {
   }
   const sortStrings = (rowA: string, rowB: string) => {
     if (rowA.localeCompare(rowB)) {
+      return 1
+    } else {
+      return -1
+    }
+  }
+  const sortNumbers = (rowA: number, rowB: number) => {
+    if (rowA > rowB) {
       return 1
     } else {
       return -1
@@ -112,6 +128,39 @@ const CheckNumberDetails = ({ session }: Props) => {
     )
   }, [data?.invoices])
 
+  const handleSelectedRows = ({ selectedRows }: { selectedRows: Invoice[] }) => {
+    setSelectedRows(selectedRows)
+  }
+
+  const changeSelectedStatus = async (status: string) => {
+    if (selectedRows.length <= 0) return
+
+    const cleanSelectedRows = selectedRows.map((row) => row.id)
+
+    const response = await axios
+      .post(`/api/commerceHub/updateStaus?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+        newStatus: status,
+        selectedRows: cleanSelectedRows,
+      })
+      .then((res) => res.data)
+
+    if (!response.error) {
+      setToggleClearRows(!toggledClearRows)
+      setSelectedRows([])
+      toast.success(response.message)
+      mutate(`/api/commerceHub/getCheckNumberInfo?region=${state.currentRegion}&businessId=${state.user.businessId}&checkNumber=${id![1]}`)
+    } else {
+      toast.error(response.message)
+    }
+  }
+
+  const clearAllSelectedRows = () => {
+    setToggleClearRows(!toggledClearRows)
+    setSelectedRows([])
+  }
+
+  const rowDisabledCriteria = (row: Invoice) => !row.id
+
   const columns: any = [
     {
       name: <span className='fw-bold fs-6'>Invoice No.</span>,
@@ -134,13 +183,6 @@ const CheckNumberDetails = ({ session }: Props) => {
       center: false,
       compact: false,
       sortFunction: (rowA: Invoice, rowB: Invoice) => sortStrings(rowA.invoiceNumber, rowB.invoiceNumber),
-    },
-    {
-      name: <span className='fw-bold fs-6'>Order No.</span>,
-      selector: (row: Invoice) => row.checkTotal > 0 && <p className='m-0 p-0 text-muted fs-7'>{row.orderNumber}</p>,
-      sortable: false,
-      left: true,
-      compact: true,
     },
     {
       name: <span className='fw-bold fs-6'>PO No.</span>,
@@ -168,7 +210,7 @@ const CheckNumberDetails = ({ session }: Props) => {
       name: <span className='fw-bold fs-6'>Comments</span>,
       selector: (row: Invoice) => <span className='fs-7 text-muted'>{row.comments}</span>,
       sortable: false,
-      center: true,
+      left: true,
       compact: true,
     },
     {
@@ -182,9 +224,10 @@ const CheckNumberDetails = ({ session }: Props) => {
     {
       name: <span className='fw-bold fs-6'>Invoice Total</span>,
       selector: (row: Invoice) => row.checkTotal > 0 && <span className='fs-7'>{row.checkTotal ? FormatCurrency(state.currentRegion, row.checkTotal) : ''}</span>,
-      sortable: false,
+      sortable: true,
       center: true,
       compact: true,
+      sortFunction: (rowA: Invoice, rowB: Invoice) => sortNumbers(rowA.checkTotal, rowB.checkTotal),
     },
     {
       name: <span className='fw-bold fs-6'>Due Date</span>,
@@ -196,23 +239,6 @@ const CheckNumberDetails = ({ session }: Props) => {
         if (rowA.dueDate && rowB.dueDate) sortDates(rowA.dueDate, rowB.dueDate)
       },
     },
-    // {
-    //   name: <span className='fw-bold fs-6'>Check Date</span>,
-    //   selector: (row: Invoice) => <span className='fs-7'>{row.checkDate ? moment.utc(row.checkDate).local().format('D MMM YYYY') : ''}</span>,
-    //   sortable: false,
-    //   center: true,
-    //   compact: true,
-    //   sortFunction: (rowA: Invoice, rowB: Invoice) => {
-    //     if (rowA.checkDate && rowB.checkDate) sortDates(rowA.checkDate, rowB.checkDate)
-    //   },
-    // },
-    // {
-    //   name: <span className='fw-bold fs-6'>Check Number</span>,
-    //   selector: (row: Invoice) => <span className='fs-7'>{row.checkNumber}</span>,
-    //   sortable: false,
-    //   center: true,
-    //   compact: true,
-    // },
     {
       name: (
         <div className='d-flex flex-column justify-content-center align-items-center'>
@@ -234,38 +260,47 @@ const CheckNumberDetails = ({ session }: Props) => {
           return <span className='text-danger text-center fs-7'>{FormatCurrency(state.currentRegion, row.checkTotal)}</span>
         }
       },
-      sortable: false,
+      sortable: true,
       center: true,
       compact: true,
+      sortFunction: (rowA: Invoice, rowB: Invoice) => sortNumbers(rowA.checkTotal, rowB.checkTotal),
     },
-    // {
-    //   name: <span className='fw-bold fs-6'>Pending</span>,
-    //   selector: (row: Invoice) => {
-    //     const pending = parseFloat((row.invoiceTotal - row.checkTotal).toFixed(2))
-    //     if (pending > 0) {
-    //       return <span className='text-danger text-center fs-7'>{FormatCurrency(state.currentRegion, pending)}</span>
-    //     } else {
-    //       return <span className='text-success text-center fs-7'>{FormatCurrency(state.currentRegion, 0)}</span>
-    //     }
-    //   },
-    //   sortable: false,
-    //   center: true,
-    //   compact: true,
-    // },
-    // {
-    //   name: <span className='fw-bolder fs-6'>Status</span>,
-    //   selector: (row: Invoice) => {
-    //     if (row.checkNumber) {
-    //       return <span className='badge text-uppercase badge-soft-success p-2'>{` Paid `}</span>
-    //     } else {
-    //       return <span className='badge text-uppercase badge-soft-warning p-2'>{` Unpaid `}</span>
-    //     }
-    //   },
-    //   sortable: false,
-    //   wrap: true,
-    //   center: true,
-    //   compact: true,
-    // },
+    {
+      name: <span className='fw-bolder fs-6'>Status</span>,
+      selector: (row: Invoice) => {
+        switch (row.status) {
+          case 'paid':
+            return <span className='badge text-uppercase badge-soft-success p-2'>{` ${row.status} `}</span>
+            break
+          case 'unpaid':
+            return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${row.status} `}</span>
+            break
+          case 'closed':
+          case 'resolved':
+            return <span className='badge text-uppercase badge-soft-dark p-2'>{` ${row.status} `}</span>
+            break
+          case 'reviewing':
+            return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${row.status} `}</span>
+            break
+          case 'pending':
+            return <span className='badge text-uppercase badge-soft-info p-2'>{` ${row.status} `}</span>
+            break
+          default:
+            if (row.checkTotal > 0) {
+              return <span className='badge text-uppercase badge-soft-success p-2'>{` Paid `}</span>
+            } else {
+              return <span className='badge text-uppercase badge-soft-info p-2'>{` pending `}</span>
+            }
+            break
+        }
+      },
+      sortable: true,
+      wrap: true,
+      center: true,
+      compact: true,
+      sortFunction: (rowA: Invoice, rowB: Invoice) =>
+        sortStrings(rowA.status ? rowA.status : rowA.checkTotal > 0 ? 'paid' : 'pending', rowB.status ? rowB.status : rowB.checkTotal > 0 ? 'paid' : 'pending'),
+    },
   ]
 
   return (
@@ -280,6 +315,14 @@ const CheckNumberDetails = ({ session }: Props) => {
             <div className='d-flex flex-column justify-content-center align-items-end gap-2 mb-1 flex-lg-row justify-content-md-between align-items-md-center px-1'>
               <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'>
                 <FilterCheckNumber type={invoiceType} setInvoiceType={setInvoiceType} />
+                {selectedRows.length > 0 && (
+                  <BulkActionsForSelected
+                    selectedRows={selectedRows}
+                    statusOptions={STATUS_OPTIONS}
+                    clearSelected={clearAllSelectedRows}
+                    changeSelectedStatus={changeSelectedStatus}
+                  />
+                )}
               </div>
               <div className='w-100 d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-end align-items-lg-center px-0'>
                 <div className='app-search p-0 col-sm-12 col-lg-5'>
@@ -329,7 +372,17 @@ const CheckNumberDetails = ({ session }: Props) => {
                 </div>
               </CardHeader>
               <CardBody>
-                <DataTable columns={columns} data={filterInvoices} progressPending={data ? false : true} striped={true} dense={true} />
+                <DataTable
+                  columns={columns}
+                  data={filterInvoices}
+                  progressPending={data ? false : true}
+                  striped={true}
+                  dense={true}
+                  selectableRows
+                  onSelectedRowsChange={handleSelectedRows}
+                  selectableRowDisabled={rowDisabledCriteria}
+                  clearSelectedRows={toggledClearRows}
+                />
               </CardBody>
             </Card>
           </Container>

@@ -7,14 +7,15 @@ import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import axios from 'axios'
 import useSWRInfinite from 'swr/infinite'
-import { CommerceHubStoresResponse, Invoice, InvoicesResponse } from '@typesTs/commercehub/invoices'
-import InvoicesTable from '@components/commerceHub/InvoicesTable'
+import { CommerceHubStoresResponse } from '@typesTs/commercehub/invoices'
 import { DebounceInput } from 'react-debounce-input'
 import FilterByDates from '@components/FilterByDates'
 import moment from 'moment'
 import UpdateInvoicesModal from '@components/modals/commercehub/UpdateInvoicesModal'
-import FilterCommerceHubInvoices from '@components/commerceHub/FilterCommerceHubInvoices'
 import useSWR from 'swr'
+import DeductionsTable from '@components/commerceHub/DeductionsTable'
+import { DeductionsResponse, DeductionType } from '@typesTs/commercehub/deductions'
+import FilterCommerceHubInvoices from '@components/commerceHub/FilterCommerceHubInvoices'
 import { toast } from 'react-toastify'
 import BulkActionsForSelected from '@components/commerceHub/BulkActionsForSelected'
 
@@ -47,30 +48,28 @@ type Props = {
 
 const ITEMS_PER_PAGE = 50
 const STATUS_OPTIONS = [
-  { value: 'paid', label: 'Paid' },
-  { value: 'unpaid', label: 'Unpaid' },
-  // { value: 'overdue', label: 'Overdue' },
+  { value: 'pending', label: 'Pending' },
   { value: 'reviewing', label: 'Reviewing' },
   { value: 'resolved', label: 'Resolved' },
   { value: 'closed', label: 'Closed' },
 ]
 
 const fetcher = async (url: string) => {
-  const data = await axios.get<InvoicesResponse>(url).then((res) => res.data)
+  const data = await axios.get<DeductionsResponse>(url).then((res) => res.data)
   return data.invoices
 }
 
 const fetcherStores = async (endPoint: string) => await axios.get<CommerceHubStoresResponse>(endPoint).then((res) => res.data)
 
-const Invoices = ({ session }: Props) => {
-  const title = `Commerce HUB Invoices | ${session?.user?.businessName}`
+const Deductions = ({ session }: Props) => {
+  const title = `Commerce HUB Deductions | ${session?.user?.businessName}`
   const { state }: any = useContext(AppContext)
   const [searchValue, setSearchValue] = useState<string>('')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
   const [filters, setfilters] = useState({
     onlyOverdue: false,
-    showOverdue: true,
+    showOverdue: false,
     store: { value: 'all', label: 'All' },
     status: { value: 'all', label: 'All' },
     showStaus: true,
@@ -78,26 +77,24 @@ const Invoices = ({ session }: Props) => {
   const [showUpdateInvoices, setshowUpdateInvoices] = useState({
     show: false,
   })
-
-  const [selectedRows, setSelectedRows] = useState<Invoice[]>([])
+  const [selectedRows, setSelectedRows] = useState<DeductionType[]>([])
   const [toggledClearRows, setToggleClearRows] = useState(false)
 
   const { data: stores } = useSWR(state.user.businessId ? `/api/commerceHub/getStores?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcherStores, {
     revalidateOnFocus: false,
   })
 
-  const getKey = (pageIndex: number, previousPageData: Invoice[]) => {
+  const getKey = (pageIndex: number, previousPageData: DeductionType[]) => {
     if (!state.currentRegion || !state.user.businessId) return null // No region or business
 
     if (previousPageData && !previousPageData.length) return null // No more data to fetch
 
-    let url = `/api/commerceHub/getInvoices?region=${state.currentRegion}&businessId=${state.user.businessId}&offset=${pageIndex * ITEMS_PER_PAGE}&limit=${ITEMS_PER_PAGE}`
+    let url = `/api/commerceHub/getDeductions?region=${state.currentRegion}&businessId=${state.user.businessId}&offset=${pageIndex * ITEMS_PER_PAGE}&limit=${ITEMS_PER_PAGE}`
 
     // Append filters if they exist
     if (searchValue) url += `&search=${encodeURIComponent(searchValue)}`
     if (startDate) url += `&startDate=${startDate}`
     if (endDate) url += `&endDate=${endDate}`
-    if (filters.onlyOverdue) url += `&onlyOverdue=${filters.onlyOverdue}`
     if (filters.store.value !== 'all') url += `&store=${filters.store.value}`
     if (filters.status.value !== 'all') url += `&status=${filters.status.value}`
 
@@ -110,7 +107,7 @@ const Invoices = ({ session }: Props) => {
   })
 
   // Flatten invoices data
-  const invoices: Invoice[] = useMemo(() => (data ? ([] as Invoice[]).concat(...data) : []), [data])
+  const invoices: DeductionType[] = useMemo(() => (data ? ([] as DeductionType[]).concat(...data) : []), [data])
 
   // Observer for infinite scroll
   const observer = useRef<IntersectionObserver | null>(null)
@@ -130,15 +127,11 @@ const Invoices = ({ session }: Props) => {
     [isValidating, setSize, data, size]
   )
 
-  // const applyFilters = () => {
-  //   mutate() // Refetch data with updated filters
-  // }
-
   const clearFilters = () => {
     setSearchValue('')
     setStartDate('')
     setEndDate('')
-    setfilters(() => ({ onlyOverdue: false, showOverdue: true, store: { value: 'all', label: 'All' }, status: { value: 'all', label: 'All' }, showStaus: true }))
+    setfilters(() => ({ onlyOverdue: false, showOverdue: false, store: { value: 'all', label: 'All' }, status: { value: 'all', label: 'All' }, showStaus: true }))
     setSize(1) // Reset to page 1
     mutate() // Refetch the initial data set
   }
@@ -194,14 +187,6 @@ const Invoices = ({ session }: Props) => {
             <BreadCrumb title='Commerce HUB Invoices' pageTitle='Marketplaces' />
             <div className='d-flex flex-column justify-content-center align-items-end gap-2 mb-1 flex-lg-row justify-content-md-between align-items-md-center px-1'>
               <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'>
-                <Button
-                  color='primary'
-                  className='text-nowrap'
-                  onClick={() => {
-                    setshowUpdateInvoices({ show: true })
-                  }}>
-                  Update Invoices
-                </Button>
                 {selectedRows.length > 0 && (
                   <BulkActionsForSelected
                     selectedRows={selectedRows}
@@ -243,7 +228,7 @@ const Invoices = ({ session }: Props) => {
                   shipmentsEndDate={endDate}
                   handleChangeDatesFromPicker={handleChangeDatesFromPicker}
                 />
-                <FilterCommerceHubInvoices filters={filters} setfilters={setfilters} stores={stores?.stores ?? []} statusOptions={STATUS_OPTIONS}/>
+                <FilterCommerceHubInvoices filters={filters} setfilters={setfilters} stores={stores?.stores ?? []} statusOptions={STATUS_OPTIONS} />
                 <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='text-nowrap' onClick={clearFilters}>
                   Clear Filters
                 </Button>
@@ -251,7 +236,7 @@ const Invoices = ({ session }: Props) => {
             </div>
             <Card>
               <CardBody>
-                <InvoicesTable filteredItems={invoices} pending={isValidating && size === 1} setSelectedRows={setSelectedRows} toggledClearRows={toggledClearRows} />
+                <DeductionsTable filteredItems={invoices} pending={isValidating && size === 1} setSelectedRows={setSelectedRows} toggledClearRows={toggledClearRows} />
                 <div ref={lastInvoiceElementRef} style={{ height: '20px', marginTop: '10px' }}>
                   {isValidating && size > 1 && (
                     <p className='text-center'>
@@ -269,4 +254,4 @@ const Invoices = ({ session }: Props) => {
   )
 }
 
-export default Invoices
+export default Deductions

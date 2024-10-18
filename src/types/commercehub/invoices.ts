@@ -6,6 +6,7 @@ export interface InvoicesResponse {
 }
 
 export interface Invoice {
+    id: number
     invoicePoId: string
     orderNumber: string
     closedDate: string
@@ -20,6 +21,7 @@ export interface Invoice {
     cashDiscountTotal: number
     checkNumber: string | null
     comments: string | null
+    status: string | null
     channelName: string
     storeName: string
     channelLogo: string
