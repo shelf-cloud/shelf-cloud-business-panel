@@ -62,7 +62,7 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions 
                       setfilters((prev: Filters) => ({ ...prev, status: option }))
                       setOpenDatesMenu(false)
                     }}
-                    options={[{ value: 'all', label: 'All' }, ...statusOptions!]}
+                    options={statusOptions ? [{ value: 'all', label: 'All' }, ...statusOptions] : []}
                   />
                 </>
               )}
