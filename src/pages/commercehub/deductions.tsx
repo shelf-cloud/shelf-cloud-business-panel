@@ -11,13 +11,13 @@ import { CommerceHubStoresResponse } from '@typesTs/commercehub/invoices'
 import { DebounceInput } from 'react-debounce-input'
 import FilterByDates from '@components/FilterByDates'
 import moment from 'moment'
-import UpdateInvoicesModal from '@components/modals/commercehub/UpdateInvoicesModal'
 import useSWR from 'swr'
 import DeductionsTable from '@components/commerceHub/DeductionsTable'
 import { DeductionsResponse, DeductionType } from '@typesTs/commercehub/deductions'
 import FilterCommerceHubInvoices from '@components/commerceHub/FilterCommerceHubInvoices'
 import { toast } from 'react-toastify'
 import BulkActionsForSelected from '@components/commerceHub/BulkActionsForSelected'
+import EditCommerceHubCommentModal from '@components/commerceHub/EditCommerceHubComment'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -74,8 +74,10 @@ const Deductions = ({ session }: Props) => {
     status: { value: 'all', label: 'All' },
     showStaus: true,
   })
-  const [showUpdateInvoices, setshowUpdateInvoices] = useState({
+  const [editCommentModal, setEditCommentModal] = useState({
     show: false,
+    id: 0,
+    comment: '',
   })
   const [selectedRows, setSelectedRows] = useState<DeductionType[]>([])
   const [toggledClearRows, setToggleClearRows] = useState(false)
@@ -236,7 +238,7 @@ const Deductions = ({ session }: Props) => {
             </div>
             <Card>
               <CardBody>
-                <DeductionsTable filteredItems={invoices} pending={isValidating && size === 1} setSelectedRows={setSelectedRows} toggledClearRows={toggledClearRows} />
+                <DeductionsTable filteredItems={invoices} pending={isValidating && size === 1} setSelectedRows={setSelectedRows} toggledClearRows={toggledClearRows} setEditCommentModal={setEditCommentModal}/>
                 <div ref={lastInvoiceElementRef} style={{ height: '20px', marginTop: '10px' }}>
                   {isValidating && size > 1 && (
                     <p className='text-center'>
@@ -248,7 +250,7 @@ const Deductions = ({ session }: Props) => {
             </Card>
           </Container>
         </div>
-        {showUpdateInvoices.show && <UpdateInvoicesModal showUpdateInvoices={showUpdateInvoices} setshowUpdateInvoices={setshowUpdateInvoices} clearFilters={clearFilters} />}
+        {editCommentModal.show && <EditCommerceHubCommentModal editCommentModal={editCommentModal} setEditCommentModal={setEditCommentModal} mutate={mutate} />}
       </React.Fragment>
     </div>
   )

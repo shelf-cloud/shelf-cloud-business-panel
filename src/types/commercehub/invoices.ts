@@ -36,5 +36,5 @@ export interface CommerceHubStore {
     value: string
     label: string
     logoLink: string
-    payterms: string
+    payTerms: number
 }

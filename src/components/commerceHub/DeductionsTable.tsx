@@ -8,14 +8,21 @@ import DataTable from 'react-data-table-component'
 import { toast } from 'react-toastify'
 import { UncontrolledTooltip } from 'reactstrap'
 
+type EditComment = {
+  show: boolean
+  id: number
+  comment: string
+}
+
 type Props = {
   filteredItems: DeductionType[]
   pending: boolean
   setSelectedRows: (selectedRows: DeductionType[]) => void
   toggledClearRows: boolean
+  setEditCommentModal: (prev: EditComment) => void
 }
 
-const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClearRows }: Props) => {
+const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClearRows, setEditCommentModal }: Props) => {
   const { state }: any = useContext(AppContext)
 
   const sortDates = (Adate: string, Bdate: string) => {
@@ -108,12 +115,17 @@ const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClear
     },
     {
       name: <span className='fw-bold fs-6'>Comments</span>,
-      selector: (row: DeductionType) => <span className='fs-7'>{row.comments}</span>,
+      selector: (row: DeductionType) => (
+        <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
+          <span className='fs-7'>{row.comments}</span>
+          <i className='ri-pencil-fill text-primary' style={{ cursor: 'pointer' }} onClick={() => setEditCommentModal({ show: true, id: row.id, comment: row.comments ?? '' })} />
+        </div>
+      ),
       sortable: false,
       left: true,
       compact: true,
       wrap: true,
-      grow: 1.4,
+      grow: 1.2,
     },
     {
       name: <span className='fw-bold fs-6'>Check Date</span>,

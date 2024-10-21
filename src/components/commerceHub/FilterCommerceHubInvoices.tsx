@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import SimpleSelect from '@components/Common/SimpleSelect'
 import { CommerceHubStore } from '@typesTs/commercehub/invoices'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { DebounceInput } from 'react-debounce-input'
 import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle, Input, Label } from 'reactstrap'
 
 type Filters = {
@@ -17,9 +18,11 @@ type Props = {
   setfilters: (cb: (prev: Filters) => Filters) => void
   stores: CommerceHubStore[]
   statusOptions?: { value: string; label: string }[]
+  daysOverdue?: number
+  setdaysOverdue?: (days: number) => void
 }
 
-const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions }: Props) => {
+const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions, daysOverdue, setdaysOverdue }: Props) => {
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const FilterCommerceHubInvoicesContainer = useRef<HTMLDivElement | null>(null)
 
@@ -35,6 +38,14 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions 
     }
   }, [])
 
+  const handleDaysOverdueValue = useMemo(() => {
+    if (daysOverdue === undefined || daysOverdue === 0) {
+      if (filters.store.value === 'all') return stores.reduce((max, store) => (store.payTerms > max ? store.payTerms : max), 0 as number)
+      return stores.find((store) => store.value === filters.store.value)?.payTerms || 0
+    }
+    return daysOverdue
+  }, [daysOverdue, filters.store, stores])
+
   return (
     <ButtonGroup>
       <Dropdown isOpen={openDatesMenu} toggle={() => setOpenDatesMenu(!openDatesMenu)}>
@@ -49,6 +60,7 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions 
                 selected={filters.store}
                 handleSelect={(option) => {
                   setfilters((prev: Filters) => ({ ...prev, store: option }))
+                  if (setdaysOverdue !== undefined) setdaysOverdue(0)
                   setOpenDatesMenu(false)
                 }}
                 options={[{ value: 'all', label: 'All' }, ...stores]}
@@ -67,20 +79,40 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions 
                 </>
               )}
               {filters.showOverdue && (
-                <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-end'>
-                  <Label className='fw-normal fs-7 w-75'>Show Only Overdue</Label>
-                  <Input
-                    className='form-check-input code-switcher'
-                    type='checkbox'
-                    id='showOnlyOverdue'
-                    name='showOnlyOverdue'
-                    checked={filters.onlyOverdue}
-                    onChange={(e) => {
-                      setfilters((prev: Filters) => ({ ...prev, onlyOverdue: e.target.checked }))
-                      setOpenDatesMenu(false)
-                    }}
-                  />
-                </div>
+                <>
+                  <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-end'>
+                    <Label className='fw-normal fs-7 w-75'>Show Only Overdue</Label>
+                    <Input
+                      className='form-check-input code-switcher'
+                      type='checkbox'
+                      id='showOnlyOverdue'
+                      name='showOnlyOverdue'
+                      checked={filters.onlyOverdue}
+                      onChange={(e) => {
+                        setfilters((prev: Filters) => ({ ...prev, onlyOverdue: e.target.checked }))
+                        if (daysOverdue === undefined) {
+                          setOpenDatesMenu(false)
+                        }
+                      }}
+                    />
+                  </div>
+                  {filters.onlyOverdue && setdaysOverdue && (
+                    <>
+                      <Label className='fw-normal fs-7 w-75 mb-0'>Days Overdue:</Label>
+                      <DebounceInput
+                        type='number'
+                        minLength={1}
+                        debounceTimeout={700}
+                        className='form-control form-control-sm fs-6'
+                        placeholder='Days Overdue'
+                        id='daysOverdue'
+                        value={handleDaysOverdueValue}
+                        onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
+                        onChange={(e) => setdaysOverdue(parseInt(e.target.value))}
+                      />
+                    </>
+                  )}
+                </>
               )}
               <span
                 style={{ width: '100%', cursor: 'pointer', textAlign: 'right' }}

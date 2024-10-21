@@ -75,6 +75,7 @@ const Invoices = ({ session }: Props) => {
     status: { value: 'all', label: 'All' },
     showStaus: true,
   })
+  const [daysOverdue, setdaysOverdue] = useState(0)
   const [showUpdateInvoices, setshowUpdateInvoices] = useState({
     show: false,
   })
@@ -100,6 +101,7 @@ const Invoices = ({ session }: Props) => {
     if (filters.onlyOverdue) url += `&onlyOverdue=${filters.onlyOverdue}`
     if (filters.store.value !== 'all') url += `&store=${filters.store.value}`
     if (filters.status.value !== 'all') url += `&status=${filters.status.value}`
+    if (daysOverdue > 0) url += `&daysOverdue=${daysOverdue}`
 
     return url
   }
@@ -243,7 +245,7 @@ const Invoices = ({ session }: Props) => {
                   shipmentsEndDate={endDate}
                   handleChangeDatesFromPicker={handleChangeDatesFromPicker}
                 />
-                <FilterCommerceHubInvoices filters={filters} setfilters={setfilters} stores={stores?.stores ?? []} statusOptions={STATUS_OPTIONS}/>
+                <FilterCommerceHubInvoices filters={filters} setfilters={setfilters} stores={stores?.stores ?? []} statusOptions={STATUS_OPTIONS} daysOverdue={daysOverdue} setdaysOverdue={setdaysOverdue}/>
                 <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='text-nowrap' onClick={clearFilters}>
                   Clear Filters
                 </Button>
