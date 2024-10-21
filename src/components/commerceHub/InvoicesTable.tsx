@@ -39,7 +39,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
     setSelectedRows(selectedRows)
   }
 
-  const rowDisabledCriteria = (row: Invoice) => !row.id;
+  const rowDisabledCriteria = (row: Invoice) => !row.orderId
 
   const columns: any = [
     {
@@ -192,26 +192,25 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
     {
       name: <span className='fw-bolder fs-6'>Status</span>,
       selector: (row: Invoice) => {
-        switch (row.status) {
+        if (row.checkNumber) {
+          return <span className='badge text-uppercase badge-soft-success p-2'>{` Paid `}</span>
+        }
+        switch (row.commerceHubStatus) {
           case 'paid':
-            return <span className='badge text-uppercase badge-soft-success p-2'>{` ${row.status} `}</span>
+            return <span className='badge text-uppercase badge-soft-success p-2'>{` ${row.commerceHubStatus} `}</span>
             break
           case 'unpaid':
-            return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${row.status} `}</span>
+            return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${row.commerceHubStatus} `}</span>
             break
           case 'closed':
           case 'resolved':
-            return <span className='badge text-uppercase badge-soft-dark p-2'>{` ${row.status} `}</span>
+            return <span className='badge text-uppercase badge-soft-dark p-2'>{` ${row.commerceHubStatus} `}</span>
             break
           case 'reviewing':
-            return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${row.status} `}</span>
+            return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${row.commerceHubStatus} `}</span>
             break
           default:
-            if (row.checkNumber) {
-              return <span className='badge text-uppercase badge-soft-success p-2'>{` Paid `}</span>
-            } else {
-              return <span className='badge text-uppercase badge-soft-warning p-2'>{` Unpaid `}</span>
-            }
+            return <span className='badge text-uppercase badge-soft-warning p-2'>{` Unpaid `}</span>
             break
         }
       },

@@ -48,7 +48,7 @@ export const generateDocument = async (reportType: string, info: any[]) => {
                     checkNumber: row.checkNumber ? row.checkNumber : '',
                     totalPaid: row.checkTotal ? row.checkTotal : '',
                     pending: parseFloat((row.invoiceTotal - row.checkTotal).toFixed(2)),
-                    status: !row.status || row.status === '' ? 'pending' : row.status,
+                    commerceHubStatus: !row.commerceHubStatus || row.commerceHubStatus === '' ? 'pending' : row.commerceHubStatus,
                 })
             }
             break;

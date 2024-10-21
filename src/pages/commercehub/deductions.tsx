@@ -142,10 +142,12 @@ const Deductions = ({ session, sessionToken }: Props) => {
   const changeSelectedStatus = async (status: string) => {
     if (selectedRows.length <= 0) return
 
-    const cleanSelectedRows = selectedRows.map((row) => row.id)
+    const cleanSelectedRows = selectedRows.map((row) => {
+      return { orderId: '', order: false, commerceHubId: row.id, commerceHub: true }
+    })
 
     const response = await axios
-      .post(`/api/commerceHub/updateStaus?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      .post(`/api/commerceHub/updateOrderStaus?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
         newStatus: status,
         selectedRows: cleanSelectedRows,
       })

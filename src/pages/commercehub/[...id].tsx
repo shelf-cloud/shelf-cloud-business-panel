@@ -135,10 +135,12 @@ const CheckNumberDetails = ({ session }: Props) => {
   const changeSelectedStatus = async (status: string) => {
     if (selectedRows.length <= 0) return
 
-    const cleanSelectedRows = selectedRows.map((row) => row.id)
+    const cleanSelectedRows = selectedRows.map((row) => {
+      return { orderId: '', order: false, commerceHubId: row.id, commerceHub: true }
+    })
 
     const response = await axios
-      .post(`/api/commerceHub/updateStaus?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      .post(`/api/commerceHub/updateOrderStaus?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
         newStatus: status,
         selectedRows: cleanSelectedRows,
       })
@@ -159,7 +161,7 @@ const CheckNumberDetails = ({ session }: Props) => {
     setSelectedRows([])
   }
 
-  const rowDisabledCriteria = (row: Invoice) => !row.id
+  const rowDisabledCriteria = (row: Invoice) => !row.id || row.checkTotal > 0
 
   const columns: any = [
     {

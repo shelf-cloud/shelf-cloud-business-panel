@@ -32,6 +32,6 @@ export const reportTemplateColumns: ReportTemplateColumns = {
         { key: 'checkNumber', header: 'Check Number' },
         { key: 'totalPaid', header: 'Total Paid' },
         { key: 'pending', header: 'Pending' },
-        { key: 'status', header: 'Status' },
+        { key: 'commerceHubStatus', header: 'Status' },
     ]
 }

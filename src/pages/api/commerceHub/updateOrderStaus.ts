@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 
-const updateStaus: NextApiHandler = async (request, response) => {
+const updateOrderStaus: NextApiHandler = async (request, response) => {
     const session = await getServerSession(request, response, authOptions)
 
     if (session == null) {
@@ -12,7 +12,7 @@ const updateStaus: NextApiHandler = async (request, response) => {
     }
 
     axios
-        .post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/commerceHub/updateStaus.php?businessId=${request.query.businessId}`, {
+        .post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/commerceHub/updateOrderStaus.php?businessId=${request.query.businessId}`, {
             newStatus: request.body.newStatus,
             selectedRows: request.body.selectedRows,
         })
@@ -43,4 +43,4 @@ const updateStaus: NextApiHandler = async (request, response) => {
         })
 }
 
-export default updateStaus
+export default updateOrderStaus

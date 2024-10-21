@@ -149,10 +149,12 @@ const Invoices = ({ session, sessionToken }: Props) => {
   const changeSelectedStatus = async (status: string) => {
     if (selectedRows.length <= 0) return
 
-    const cleanSelectedRows = selectedRows.map((row) => row.id)
+    const cleanSelectedRows = selectedRows.map((row) => {
+      return { orderId: row.orderId, order: true, commerceHubId: row.id, commerceHub: false }
+    })
 
     const response = await axios
-      .post(`/api/commerceHub/updateStaus?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      .post(`/api/commerceHub/updateOrderStaus?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
         newStatus: status,
         selectedRows: cleanSelectedRows,
       })

@@ -7,6 +7,7 @@ export interface InvoicesResponse {
 
 export interface Invoice {
     id: number
+    orderId: number
     invoicePoId: string
     orderNumber: string
     closedDate: string
@@ -22,6 +23,7 @@ export interface Invoice {
     checkNumber: string | null
     comments: string | null
     status: string | null
+    commerceHubStatus: string | null
     channelName: string
     storeName: string
     channelLogo: string
