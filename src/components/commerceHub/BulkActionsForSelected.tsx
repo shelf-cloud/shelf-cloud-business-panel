@@ -32,7 +32,7 @@ const BulkActionsForSelected = ({ selectedRows, clearSelected, statusOptions, ch
   return (
     <ButtonGroup>
       <Dropdown isOpen={openDatesMenu} toggle={() => setOpenDatesMenu(!openDatesMenu)}>
-        <DropdownToggle caret>
+        <DropdownToggle caret className='fs-7'>
           <span className='fw-bold'>{`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''}`}</span> Selected
         </DropdownToggle>
         <DropdownMenu style={{ backgroundColor: 'white', minWidth: '260px', border: '1px solid #E1E3E5' }}>

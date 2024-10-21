@@ -256,7 +256,7 @@ const Invoices = ({ session, sessionToken }: Props) => {
               <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'>
                 <Button
                   color='primary'
-                  className='text-nowrap'
+                  className='fs-7 text-nowrap'
                   onClick={() => {
                     setshowUpdateInvoices({ show: true })
                   }}>
@@ -282,7 +282,7 @@ const Invoices = ({ session, sessionToken }: Props) => {
                       type='text'
                       minLength={3}
                       debounceTimeout={300}
-                      className='form-control input_background_white'
+                      className='form-control input_background_white fs-6'
                       placeholder='Search...'
                       id='search-options'
                       value={searchValue}
@@ -315,7 +315,7 @@ const Invoices = ({ session, sessionToken }: Props) => {
                   daysOverdue={daysOverdue}
                   setdaysOverdue={setdaysOverdue}
                 />
-                <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='text-nowrap' onClick={clearFilters}>
+                <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='fs-7 text-nowrap' onClick={clearFilters}>
                   Clear Filters
                 </Button>
               </div>

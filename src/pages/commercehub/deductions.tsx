@@ -265,7 +265,7 @@ const Deductions = ({ session, sessionToken }: Props) => {
                       type='text'
                       minLength={3}
                       debounceTimeout={300}
-                      className='form-control input_background_white'
+                      className='form-control input_background_white fs-6'
                       placeholder='Search...'
                       id='search-options'
                       value={searchValue}
@@ -291,7 +291,7 @@ const Deductions = ({ session, sessionToken }: Props) => {
                   handleChangeDatesFromPicker={handleChangeDatesFromPicker}
                 />
                 <FilterCommerceHubInvoices filters={filters} setfilters={setfilters} stores={stores?.stores ?? []} statusOptions={STATUS_OPTIONS} />
-                <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='text-nowrap' onClick={clearFilters}>
+                <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='fs-7 text-nowrap' onClick={clearFilters}>
                   Clear Filters
                 </Button>
               </div>
