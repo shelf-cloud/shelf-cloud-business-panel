@@ -195,6 +195,12 @@ const Navdata = () => {
             },
             {
               id: 'invoices',
+              label: 'Check Summary',
+              link: '/commercehub/checkSummary',
+              parentId: 'marketplaces',
+            },
+            {
+              id: 'invoices',
               label: 'Invoices',
               link: '/commercehub/Invoices',
               parentId: 'marketplaces',
