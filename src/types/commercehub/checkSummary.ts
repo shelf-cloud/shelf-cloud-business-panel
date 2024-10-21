@@ -1,4 +1,6 @@
 export interface CheckSummaryResponse {
+    error: boolean
+    message: string
     offset: string
     search: string | null
     checks: CheckSummaryType[]

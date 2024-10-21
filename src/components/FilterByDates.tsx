@@ -39,12 +39,12 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
         aria-expanded='false'
         onClick={() => setOpenDatesMenu(!openDatesMenu)}>
         <i className='las la-calendar fs-4 m-0 p-0 text-primary' />
-        <span className='fw-semibold m-0 p-0'>{shipmentsStartDate !== '' || shipmentsEndDate !== '' ? `${shipmentsStartDate} -> ${shipmentsEndDate}` : 'Select Dates'}</span>
+        <span className='fw-semibold m-0 p-0 fs-7'>{shipmentsStartDate !== '' || shipmentsEndDate !== '' ? `${shipmentsStartDate} -> ${shipmentsEndDate}` : 'Select Dates'}</span>
       </button>
       <div className={'dropdown-menu dropdown-menu-md px-4 py-3' + (openDatesMenu ? ' show' : '')}>
         <div className='d-flex flex-column justify-content-start'>
           <p
-            className={selectedDateFilter == 'today' ? 'fw-bold' : ''}
+            className={'fs-7 ' + (selectedDateFilter == 'today' ? 'fw-bold' : '')}
             style={{ cursor: 'pointer' }}
             onClick={() => {
               setSelectedDateFilter('today')
@@ -55,7 +55,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
             Today
           </p>
           <p
-            className={selectedDateFilter == 'yesterday' ? 'fw-bold' : ''}
+            className={'fs-7 ' + (selectedDateFilter == 'yesterday' ? 'fw-bold' : '')}
             style={{ cursor: 'pointer' }}
             onClick={() => {
               setSelectedDateFilter('yesterday')
@@ -66,7 +66,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
             Yesterday
           </p>
           <p
-            className={selectedDateFilter == 'thisweek' ? 'fw-bold' : ''}
+            className={'fs-7 ' + (selectedDateFilter == 'thisweek' ? 'fw-bold' : '')}
             style={{ cursor: 'pointer' }}
             onClick={() => {
               setSelectedDateFilter('thisweek')
@@ -77,7 +77,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
             This Week
           </p>
           <p
-            className={selectedDateFilter == 'lastweek' ? 'fw-bold' : ''}
+            className={'fs-7 ' + (selectedDateFilter == 'lastweek' ? 'fw-bold' : '')}
             style={{ cursor: 'pointer' }}
             onClick={() => {
               setSelectedDateFilter('lastweek')
@@ -88,7 +88,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
             Last Week
           </p>
           <p
-            className={selectedDateFilter == 'past7days' ? 'fw-bold' : ''}
+            className={'fs-7 ' + (selectedDateFilter == 'past7days' ? 'fw-bold' : '')}
             style={{ cursor: 'pointer' }}
             onClick={() => {
               setSelectedDateFilter('past7days')
@@ -99,7 +99,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
             Past 7 Days
           </p>
           <p
-            className={selectedDateFilter == 'thismonth' ? 'fw-bold' : ''}
+            className={'fs-7 ' + (selectedDateFilter == 'thismonth' ? 'fw-bold' : '')}
             style={{ cursor: 'pointer' }}
             onClick={() => {
               setSelectedDateFilter('thismonth')
@@ -110,7 +110,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
             This Month
           </p>
           <p
-            className={selectedDateFilter == 'past3days' ? 'fw-bold' : ''}
+            className={'fs-7 ' + (selectedDateFilter == 'past3days' ? 'fw-bold' : '')}
             style={{ cursor: 'pointer' }}
             onClick={() => {
               setSelectedDateFilter('past3days')
@@ -121,7 +121,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
             Past 30 Days
           </p>
           <p
-            className={selectedDateFilter == 'lastmonth' ? 'fw-bold' : ''}
+            className={'fs-7 ' + (selectedDateFilter == 'lastmonth' ? 'fw-bold' : '')}
             style={{ cursor: 'pointer' }}
             onClick={() => {
               setSelectedDateFilter('lastmonth')
@@ -132,7 +132,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
             Last Month
           </p>
           <p
-            className={selectedDateFilter == 'yeartodate' ? 'fw-bold' : ''}
+            className={'fs-7 ' + (selectedDateFilter == 'yeartodate' ? 'fw-bold' : '')}
             style={{ cursor: 'pointer' }}
             onClick={() => {
               setSelectedDateFilter('yeartodate')
@@ -143,7 +143,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
             Year to Date
           </p>
           <p
-            className={selectedDateFilter == 'lastyear' ? 'fw-bold' : ''}
+            className={'fs-7 ' + (selectedDateFilter == 'lastyear' ? 'fw-bold' : '')}
             style={{ cursor: 'pointer' }}
             onClick={() => {
               setSelectedDateFilter('lastyear')

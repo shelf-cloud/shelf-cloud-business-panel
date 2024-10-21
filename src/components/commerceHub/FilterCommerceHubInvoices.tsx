@@ -49,7 +49,7 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions,
   return (
     <ButtonGroup>
       <Dropdown isOpen={openDatesMenu} toggle={() => setOpenDatesMenu(!openDatesMenu)}>
-        <DropdownToggle caret style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }} color='light'>
+        <DropdownToggle caret className='fs-7' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }} color='light'>
           Filters
         </DropdownToggle>
         <DropdownMenu style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>

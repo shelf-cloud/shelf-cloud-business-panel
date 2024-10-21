@@ -1,4 +1,6 @@
 export interface DeductionsResponse {
+    error: boolean
+    message: string
     offset: string
     search: any
     invoices: DeductionType[]

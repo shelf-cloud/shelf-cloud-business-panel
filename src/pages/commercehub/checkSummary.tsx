@@ -11,11 +11,12 @@ import { CommerceHubStoresResponse } from '@typesTs/commercehub/invoices'
 import { DebounceInput } from 'react-debounce-input'
 import FilterByDates from '@components/FilterByDates'
 import moment from 'moment'
-import UpdateInvoicesModal from '@components/modals/commercehub/UpdateInvoicesModal'
 import FilterCommerceHubInvoices from '@components/commerceHub/FilterCommerceHubInvoices'
 import useSWR from 'swr'
 import { CheckSummaryResponse, CheckSummaryType } from '@typesTs/commercehub/checkSummary'
 import CheckSummaryTable from '@components/commerceHub/CheckSummaryTable'
+import { toast } from 'react-toastify'
+import { generateDocument } from '@lib/commerceHub/getDocument'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -53,7 +54,7 @@ const fetcher = async (url: string) => {
 
 const fetcherStores = async (endPoint: string) => await axios.get<CommerceHubStoresResponse>(endPoint).then((res) => res.data)
 
-const CheckSummary = ({ session }: Props) => {
+const CheckSummary = ({ session, sessionToken }: Props) => {
   const title = `Commerce HUB Check Summary | ${session?.user?.businessName}`
   const { state }: any = useContext(AppContext)
   const [searchValue, setSearchValue] = useState<string>('')
@@ -65,9 +66,6 @@ const CheckSummary = ({ session }: Props) => {
     store: { value: 'all', label: 'All' },
     status: { value: 'all', label: 'All' },
     showStaus: true,
-  })
-  const [showUpdateInvoices, setshowUpdateInvoices] = useState({
-    show: false,
   })
 
   const { data: stores } = useSWR(state.user.businessId ? `/api/commerceHub/getStores?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcherStores, {
@@ -138,6 +136,58 @@ const CheckSummary = ({ session }: Props) => {
     [searchValue, startDate, endDate, filters]
   )
 
+  const downloadInfoToExcel = async () => {
+    const generatingDocument = toast.loading('Generating Document...')
+
+    let endPoint = `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reports/commerceHub/checkSummary?region=${state.currentRegion}&businessId=${state.user.businessId}`
+
+    if (searchValue) endPoint += `&search=${encodeURIComponent(searchValue)}`
+    if (startDate) endPoint += `&startDate=${startDate}`
+    if (endDate) endPoint += `&endDate=${endDate}`
+    if (filters.store.value !== 'all') endPoint += `&store=${filters.store.value}`
+
+    const controller = new AbortController()
+    const signal = controller.signal
+
+    const response = await axios
+      .get<CheckSummaryResponse>(endPoint, {
+        signal,
+        headers: {
+          Authorization: `Bearer ${sessionToken}`,
+        },
+      })
+      .then((res) => res.data)
+      .catch(({ error }) => {
+        if (axios.isCancel(error)) {
+          toast.error(error?.data?.message || 'Error generating document')
+        }
+        return {
+          error: true,
+          message: error?.data?.message || 'Error generating document',
+          checks: [],
+        }
+      })
+
+    if (response.error) {
+      toast.update(generatingDocument, {
+        render: 'Error generating document',
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
+      return
+    }
+
+    toast.update(generatingDocument, {
+      render: 'Downloading Document...',
+      type: 'success',
+      isLoading: false,
+      autoClose: 3000,
+    })
+
+    await generateDocument('checkSummary', response.checks)
+  }
+
   return (
     <div>
       <Head>
@@ -148,7 +198,12 @@ const CheckSummary = ({ session }: Props) => {
           <Container fluid>
             <BreadCrumb title='Commerce HUB Invoices' pageTitle='Marketplaces' />
             <div className='d-flex flex-column justify-content-center align-items-end gap-2 mb-1 flex-lg-row justify-content-md-between align-items-md-center px-1'>
-              <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'></div>
+              <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'>
+                <Button color='primary' className='btn-label fs-7' onClick={downloadInfoToExcel}>
+                  <i className='las la-cloud-download-alt label-icon align-middle fs-4 me-2' />
+                  Download To Excel
+                </Button>
+              </div>
               <div className='w-100 d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-end align-items-lg-center px-0'>
                 <div className='app-search p-0 col-sm-12 col-lg-5'>
                   <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
@@ -156,7 +211,7 @@ const CheckSummary = ({ session }: Props) => {
                       type='text'
                       minLength={3}
                       debounceTimeout={300}
-                      className='form-control input_background_white'
+                      className='form-control input_background_white fs-6'
                       placeholder='Search...'
                       id='search-options'
                       value={searchValue}
@@ -182,7 +237,7 @@ const CheckSummary = ({ session }: Props) => {
                   handleChangeDatesFromPicker={handleChangeDatesFromPicker}
                 />
                 <FilterCommerceHubInvoices filters={filters} setfilters={setfilters} stores={stores?.stores ?? []} />
-                <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='text-nowrap' onClick={clearFilters}>
+                <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='fs-7 text-nowrap' onClick={clearFilters}>
                   Clear Filters
                 </Button>
               </div>
@@ -201,7 +256,6 @@ const CheckSummary = ({ session }: Props) => {
             </Card>
           </Container>
         </div>
-        {showUpdateInvoices.show && <UpdateInvoicesModal showUpdateInvoices={showUpdateInvoices} setshowUpdateInvoices={setshowUpdateInvoices} clearFilters={clearFilters} />}
       </React.Fragment>
     </div>
   )

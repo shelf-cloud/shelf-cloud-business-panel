@@ -17,7 +17,8 @@ import { DeductionsResponse, DeductionType } from '@typesTs/commercehub/deductio
 import FilterCommerceHubInvoices from '@components/commerceHub/FilterCommerceHubInvoices'
 import { toast } from 'react-toastify'
 import BulkActionsForSelected from '@components/commerceHub/BulkActionsForSelected'
-import EditCommerceHubCommentModal from '@components/commerceHub/EditCommerceHubComment'
+import EditCommerceHubCommentModal from '@components/modals/commercehub/EditCommerceHubCommentModal'
+import { generateDocument } from '@lib/commerceHub/getDocument'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -61,7 +62,7 @@ const fetcher = async (url: string) => {
 
 const fetcherStores = async (endPoint: string) => await axios.get<CommerceHubStoresResponse>(endPoint).then((res) => res.data)
 
-const Deductions = ({ session }: Props) => {
+const Deductions = ({ session, sessionToken }: Props) => {
   const title = `Commerce HUB Deductions | ${session?.user?.businessName}`
   const { state }: any = useContext(AppContext)
   const [searchValue, setSearchValue] = useState<string>('')
@@ -178,6 +179,59 @@ const Deductions = ({ session }: Props) => {
     [searchValue, startDate, endDate, filters]
   )
 
+  const downloadInfoToExcel = async () => {
+    const generatingDocument = toast.loading('Generating Document...')
+
+    let endPoint = `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reports/commerceHub/deductions?region=${state.currentRegion}&businessId=${state.user.businessId}`
+
+    if (searchValue) endPoint += `&search=${encodeURIComponent(searchValue)}`
+    if (startDate) endPoint += `&startDate=${startDate}`
+    if (endDate) endPoint += `&endDate=${endDate}`
+    if (filters.store.value !== 'all') endPoint += `&store=${filters.store.value}`
+    if (filters.status.value !== 'all') endPoint += `&status=${filters.status.value}`
+
+    const controller = new AbortController()
+    const signal = controller.signal
+
+    const response = await axios
+      .get<DeductionsResponse>(endPoint, {
+        signal,
+        headers: {
+          Authorization: `Bearer ${sessionToken}`,
+        },
+      })
+      .then((res) => res.data)
+      .catch(({ error }) => {
+        if (axios.isCancel(error)) {
+          toast.error(error?.data?.message || 'Error generating document')
+        }
+        return {
+          error: true,
+          message: error?.data?.message || 'Error generating document',
+          invoices: [],
+        }
+      })
+
+    if (response.error) {
+      toast.update(generatingDocument, {
+        render: 'Error generating document',
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
+      return
+    }
+
+    toast.update(generatingDocument, {
+      render: 'Downloading Document...',
+      type: 'success',
+      isLoading: false,
+      autoClose: 3000,
+    })
+
+    await generateDocument('deductions', response.invoices)
+  }
+
   return (
     <div>
       <Head>
@@ -189,6 +243,10 @@ const Deductions = ({ session }: Props) => {
             <BreadCrumb title='Commerce HUB Invoices' pageTitle='Marketplaces' />
             <div className='d-flex flex-column justify-content-center align-items-end gap-2 mb-1 flex-lg-row justify-content-md-between align-items-md-center px-1'>
               <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'>
+                <Button color='primary' className='btn-label fs-7' onClick={downloadInfoToExcel}>
+                  <i className='las la-cloud-download-alt label-icon align-middle fs-4 me-2' />
+                  Download To Excel
+                </Button>
                 {selectedRows.length > 0 && (
                   <BulkActionsForSelected
                     selectedRows={selectedRows}
@@ -238,7 +296,13 @@ const Deductions = ({ session }: Props) => {
             </div>
             <Card>
               <CardBody>
-                <DeductionsTable filteredItems={invoices} pending={isValidating && size === 1} setSelectedRows={setSelectedRows} toggledClearRows={toggledClearRows} setEditCommentModal={setEditCommentModal}/>
+                <DeductionsTable
+                  filteredItems={invoices}
+                  pending={isValidating && size === 1}
+                  setSelectedRows={setSelectedRows}
+                  toggledClearRows={toggledClearRows}
+                  setEditCommentModal={setEditCommentModal}
+                />
                 <div ref={lastInvoiceElementRef} style={{ height: '20px', marginTop: '10px' }}>
                   {isValidating && size > 1 && (
                     <p className='text-center'>
