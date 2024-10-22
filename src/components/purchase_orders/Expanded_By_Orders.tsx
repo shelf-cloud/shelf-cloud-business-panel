@@ -330,25 +330,39 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                 <table className='table table-sm table-borderless table-nowrap mb-0'>
                   <thead className='table-light'>
                     <tr>
-                      <th scope='col' className='text-center'>
+                      <th scope='col' className='text-start'>
                         Date
                       </th>
-                      <th scope='col' className='text-center'>
+                      <th scope='col' className='text-start'>
                         Amount
                       </th>
                     </tr>
                   </thead>
                   <tbody>
                     {data.poPayments?.map((payment: PoPaymentHistory, key) => (
-                      <tr key={`${key}-${payment.date}`}>
-                        <td className='text-center'>{payment.date}</td>
-                        <td className='text-center'>{FormatCurrency(state.currentRegion, payment.amount)}</td>
+                      <tr key={`${data.orderNumber}-${key}-${payment.date}`}>
+                        <td className='text-start'>{payment.date}</td>
+                        <td className='d-flex justify-content-start align-items-center gap-2'>
+                          <span>{FormatCurrency(state.currentRegion, payment.amount)}</span>
+                          {payment.comment && (
+                            <>
+                              <i className='ri-information-fill m-0 p-0 fs-5 text-info' id={`paymentComment${data.orderNumber}-${key}-${payment.date}`} />
+                              <UncontrolledTooltip
+                                placement='right'
+                                target={`paymentComment${data.orderNumber}-${key}-${payment.date}`}
+                                popperClassName='bg-light shadow px-3 py-3 rounded-2'
+                                innerClassName='text-black bg-light p-0'>
+                                {payment.comment}
+                              </UncontrolledTooltip>
+                            </>
+                          )}
+                        </td>
                       </tr>
                     ))}
                     {data.poPayments?.length > 0 && (
                       <tr className='border-top'>
-                        <td className='text-center fw-semibold'>Total</td>
-                        <td className='text-center fw-semibold'>
+                        <td className='text-start fw-semibold'>Total</td>
+                        <td className='text-start fw-semibold'>
                           {FormatCurrency(
                             state.currentRegion,
                             data.poPayments.reduce((total, payment: PoPaymentHistory) => total + Number(payment.amount), 0)

@@ -22,10 +22,12 @@ const Add_Payment_Modal = ({}: Props) => {
     initialValues: {
       paymentDate: '',
       amount: '',
+      comment: '',
     },
     validationSchema: Yup.object({
       paymentDate: Yup.string().required('Please select Date'),
       amount: Yup.string().required('Please enter amount paid'),
+      comment: Yup.string(),
     }),
     onSubmit: async (values, { resetForm }) => {
       setloading(true)
@@ -71,12 +73,12 @@ const Add_Payment_Modal = ({}: Props) => {
           setShowAddPaymentToPo(!state.showAddPaymentToPo)
         }}
         className='modal-title'
-        id='myModalLabel'></ModalHeader>
+        id='myModalLabel'>Add Payment</ModalHeader>
       <ModalBody>
         <Form onSubmit={HandleAddProduct}>
           <Row>
-            <h5 className='fs-4 mb-4 fw-semibold text-primary'>
-              Add Payment: <span className='fs-4 fw-bold text-black'>{state.modalAddPaymentToPoDetails?.orderNumber}</span>
+            <h5 className='fs-5 mb-4 fw-semibold text-primary'>
+              PO: <span className='fw-semibold text-black'>{state.modalAddPaymentToPoDetails?.orderNumber}</span>
             </h5>
             <Row md={12}>
               <Col md={6}>
@@ -86,7 +88,7 @@ const Add_Payment_Modal = ({}: Props) => {
                   </Label>
                   <Input
                     type='date'
-                    className='form-control'
+                    className='form-control fs-6'
                     id='paymentDate'
                     name='paymentDate'
                     onChange={validation.handleChange}
@@ -105,15 +107,35 @@ const Add_Payment_Modal = ({}: Props) => {
                   <Input
                     type='number'
                     onWheel={(e: any) => e.currentTarget.blur()}
-                    className='form-control'
+                    className='form-control fs-6'
                     id='amount'
                     name='amount'
-                    step=".01"
+                    step='.01'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     invalid={validation.touched.amount && validation.errors.amount ? true : false}
                   />
                   {validation.touched.amount && validation.errors.amount ? <FormFeedback type='invalid'>{validation.errors.amount}</FormFeedback> : null}
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row md={12}>
+              <Col md={12}>
+                <FormGroup className='mb-3'>
+                  <Label htmlFor='comment' className='form-label'>
+                    Comments
+                  </Label>
+                  <Input
+                    type='textarea'
+                    className='form-control fs-6'
+                    id='comment'
+                    name='comment'
+                    onChange={validation.handleChange}
+                    onBlur={validation.handleBlur}
+                    value={validation.values.comment || ''}
+                    invalid={validation.touched.comment && validation.errors.comment ? true : false}
+                  />
+                  {validation.touched.comment && validation.errors.comment ? <FormFeedback type='invalid'>{validation.errors.comment}</FormFeedback> : null}
                 </FormGroup>
               </Col>
             </Row>

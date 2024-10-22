@@ -1,6 +1,7 @@
 export interface PoPaymentHistory {
     date: string
     amount: number
+    comment?: string
 }
 
 export interface PoItemArrivalHistory {
