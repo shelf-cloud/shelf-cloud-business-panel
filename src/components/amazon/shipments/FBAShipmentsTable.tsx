@@ -14,11 +14,12 @@ type Props = {
   pending: boolean
   getFBAShipmentProofOfShipped: (shipmentId: string) => void
   seteditShipmentName: (prev: any) => void
+  setFBAShipmentCompleteStatus: (shipmentId: string, newStatus: number, isManualComplete: number) => void
 }
 
 const UpdateShipmentNameStatus = ['shipped', 'ready_to_ship', 'working', 'awating', 'active', 'in_transit']
 
-const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShipped, seteditShipmentName }: Props) => {
+const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShipped, seteditShipmentName, setFBAShipmentCompleteStatus }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
   const orderStatus = (rowA: FBAShipment, rowB: FBAShipment) => {
@@ -244,7 +245,7 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
       sortFunction: orderStatus,
     },
     {
-      name: <span className='fw-bold fs-6'>Action</span>,
+      name: <span className='fw-bold fs-6'></span>,
       sortable: false,
       compact: true,
       center: true,
@@ -255,23 +256,28 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
               <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
                 <i className='mdi mdi-dots-vertical align-middle fs-3 m-0 px-2 py-0' style={{ color: '#919FAF' }} />
               </DropdownToggle>
-
               <DropdownMenu className='dropdown-menu-end' container={'body'}>
                 <DropdownItem onClick={() => router.push(`/amazon-sellers/shipments/${row.shipmentId}`)}>
                   <div>
-                    <i className='ri-file-list-line label-icon align-middle me-2 fs-4 text-muted' />
+                    <i className='ri-file-list-line label-icon align-middle me-2 fs-5 text-muted' />
                     <span className='fs-6 fw-normal text-dark'>View Shipment</span>
                   </div>
                 </DropdownItem>
+                <DropdownItem header>Documents</DropdownItem>
                 <FBAShipmentPackingSlip order={row} />
                 {row.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber && (
                   <DropdownItem onClick={() => getFBAShipmentProofOfShipped(row.shipment.shipmentConfirmationId)}>
                     <div>
                       <i className='las la-truck label-icon align-middle fs-4 me-2' />
-                      <span className='fs-6 fw-normal text-dark'>Proof Of Shipped</span>
+                      <span className='fs-7 fw-normal text-dark'>Proof Of Shipped</span>
                     </div>
                   </DropdownItem>
                 )}
+                <DropdownItem header>Actions</DropdownItem>
+                <DropdownItem onClick={() => setFBAShipmentCompleteStatus(row.shipmentId, !row.isComplete ? 1 : 0, !row.isComplete ? 1 : 0)}>
+                  <i className='las la-clipboard-check label-icon align-middle fs-5 me-2' />
+                  <span className='fs-6 fw-normal text-dark'>{!row.isComplete ? 'Mark as Complete' : 'Mark as Pending'}</span>
+                </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
           )

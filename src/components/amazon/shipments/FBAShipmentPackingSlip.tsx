@@ -112,7 +112,7 @@ const FBAShipmentPackingSlip = ({ order }: Props) => {
 
     const closedDate = new Date(order.createdAt)
 
-    worksheet.getCell('D8').value = closedDate.toLocaleDateString('en-GB')
+    worksheet.getCell('D8').value = closedDate.toLocaleDateString('en-US')
     worksheet.getCell('D8').alignment = { vertical: 'middle', horizontal: 'center' }
     worksheet.mergeCells('D8', 'E8')
     worksheet.getCell('D8').border = {
@@ -401,8 +401,8 @@ const FBAShipmentPackingSlip = ({ order }: Props) => {
 
   return (
     <DropdownItem className='edit-item-btn' onClick={downloadPackingSlip}>
-      <i className='mdi mdi-arrow-down-bold label-icon align-middle fs-4 me-2' />
-      Packing Slip
+      <i className='mdi mdi-arrow-down-bold label-icon align-middle fs-5 me-2' />
+      <span className='fs-6 fw-normal text-dark'>Packing Slip</span>
     </DropdownItem>
   )
 }

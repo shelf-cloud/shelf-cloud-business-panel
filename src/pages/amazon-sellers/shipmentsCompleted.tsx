@@ -8,7 +8,7 @@ import { DebounceInput } from 'react-debounce-input'
 import AppContext from '@context/AppContext'
 import Link from 'next/link'
 import axios from 'axios'
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import { toast } from 'react-toastify'
 import FBAShipmentsTable from '@components/amazon/shipments/FBAShipmentsTable'
 import { FBAShipment, FBAShipmentsRepsonse } from '@typesTs/amazon/fbaShipments.interface'
@@ -56,7 +56,7 @@ const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
   const controller = new AbortController()
   const signal = controller.signal
   const fetcher = (endPoint: string) => {
-    setPending(true)
+    allData.length === 0 && setPending(true)
     axios(endPoint, {
       signal,
       headers: {
@@ -136,6 +136,40 @@ const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
     }
   }
 
+  const setFBAShipmentCompleteStatus = async (shipmentId: string, newStatus: number, isManualComplete: number) => {
+    const setFBAShipmentCompleteStatus = toast.loading('Updating Status...')
+
+    const response = await axios
+      .post(`/api/amazon/shipments/setFBAShipmentCompleteStatus?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+        shipmentId,
+        newStatus,
+        isManualComplete,
+      })
+      .then(({ data }) => data)
+      .catch(({ error }) => {
+        if (axios.isCancel(error)) {
+          toast.error(error?.data?.message || 'Error updating status')
+        }
+      })
+
+    if (!response.error) {
+      toast.update(setFBAShipmentCompleteStatus, {
+        render: response.message,
+        type: 'success',
+        isLoading: false,
+        autoClose: 3000,
+      })
+      mutate(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/listSellerFbaShipmentsCompleted/${state.currentRegion}/${state.user.businessId}`)
+    } else {
+      toast.update(setFBAShipmentCompleteStatus, {
+        render: response.message,
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
+    }
+  }
+
   return (
     <div>
       <Head>
@@ -200,6 +234,7 @@ const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
                   pending={pending}
                   getFBAShipmentProofOfShipped={getFBAShipmentProofOfShipped}
                   seteditShipmentName={seteditShipmentName}
+                  setFBAShipmentCompleteStatus={setFBAShipmentCompleteStatus}
                 />
               </CardBody>
             </Card>
