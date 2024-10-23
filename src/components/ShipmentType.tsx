@@ -171,7 +171,7 @@ const ShipmentType = ({ data, apiMutateLink }: Props) => {
       <Row>
         <Col xl={12} className='d-flex justify-content-end align-items-end'>
           <Card className='m-0'>
-            {state.currentRegion == 'us'
+            {data.carrierService.toLowerCase() !== 'ltl' && state.currentRegion == 'us'
               ? data.orderStatus == 'shipped' &&
                 data.hasReturn == false &&
                 data.shipCountry == 'US' && (
