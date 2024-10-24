@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
+import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { DeductionType } from '@typesTs/commercehub/deductions'
 import moment from 'moment'
 import React, { useContext } from 'react'
@@ -61,14 +62,14 @@ const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClear
                   : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
               }
               alt='product Image'
-              id={`ChannelLogo-${row.invoicePoId}`}
+              id={`ChannelLogo-${CleanSpecialCharacters(row.invoicePoId)}`}
               style={{
                 width: '20px',
                 height: '20px',
                 objectFit: 'contain',
               }}
             />
-            <UncontrolledTooltip placement='right' target={`ChannelLogo-${row.invoicePoId}`}>
+            <UncontrolledTooltip placement='right' target={`ChannelLogo-${CleanSpecialCharacters(row.invoicePoId)}`}>
               {row.storeName}
             </UncontrolledTooltip>
           </>
