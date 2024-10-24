@@ -108,7 +108,7 @@ const CarrierPalletCard = ({ inboundPlan, handleNextStep, shipment, shipmentInde
         </div>
         <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
           <span className='fw-semibold fs-7'>Shipping Mode:</span>
-          {shipment.shipment.trackingDetails.spdTrackingDetail.spdTrackingItems.length > 0 ? (
+          {shipment.shipment.trackingDetails?.spdTrackingDetail.spdTrackingItems.length > 0 ? (
             <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
               <div
                 className='my-0'
@@ -140,7 +140,7 @@ const CarrierPalletCard = ({ inboundPlan, handleNextStep, shipment, shipmentInde
         </div>
       </CardBody>
       <CardFooter>
-        {shipment.shipment.trackingDetails.ltlTrackingDetail.billOfLadingNumber && (
+        {shipment.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber && (
           <div className='d-flex justify-content-between align-items-center'>
             <p className='m-0 p-0 fw-semibold'>Print Pallet Lables</p>
             <Button

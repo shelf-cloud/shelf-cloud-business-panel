@@ -124,6 +124,7 @@ const AssignFinishedWorkflowId = ({ assignFinishedWorkflowIdModal, setassignFini
     )
 
     if (!response.data.error) {
+      setloadingAssignment(false)
       setassignFinishedWorkflowIdModal({
         show: false,
         id: 0,
@@ -148,6 +149,7 @@ const AssignFinishedWorkflowId = ({ assignFinishedWorkflowIdModal, setassignFini
         isLoading: false,
         autoClose: 3000,
       })
+      setloadingAssignment(false)
     }
   }
 
