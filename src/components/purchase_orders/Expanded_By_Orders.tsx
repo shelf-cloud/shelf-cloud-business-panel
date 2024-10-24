@@ -15,6 +15,7 @@ import { useFormik } from 'formik'
 import Edit_PO_Ordered_Qty from '@components/modals/purchaseOrders/Edit_PO_Ordered_Qty'
 import Link from 'next/link'
 import DownloadExcelPurchaseOrder from './DownloadExcelPurchaseOrder'
+import Edit_Payment_Modal from '@components/modals/purchaseOrders/Edit_Payment_Modal'
 
 type Props = {
   data: PurchaseOrder
@@ -30,6 +31,15 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
   const [showEditNote, setShowEditNote] = useState(false)
   const [editPONumber, seteditPONumber] = useState(false)
   const [orderAsc, setOrderAsc] = useState(true)
+  const [editPaymentModal, setEditPaymentModal] = useState({
+    show: false,
+    poId: 0,
+    orderNumber: '',
+    paymentDate: '',
+    amount: 0,
+    comment: '',
+    paymentIndex: 0,
+  })
 
   const orderPoItems = useMemo(() => {
     if (orderAsc) {
@@ -344,6 +354,21 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                         <td className='text-start'>{payment.date}</td>
                         <td className='d-flex justify-content-start align-items-center gap-2'>
                           <span>{FormatCurrency(state.currentRegion, payment.amount)}</span>
+                          <i
+                            className='las la-edit fs-5 text-primary m-0 p-0'
+                            style={{ cursor: 'pointer' }}
+                            onClick={() =>
+                              setEditPaymentModal({
+                                show: true,
+                                poId: data.poId,
+                                orderNumber: data.orderNumber,
+                                paymentDate: payment.date,
+                                amount: payment.amount,
+                                comment: payment.comment ?? '',
+                                paymentIndex: key,
+                              })
+                            }
+                          />
                           {payment.comment && (
                             <>
                               <i className='ri-information-fill m-0 p-0 fs-5 text-info' id={`paymentComment${data.orderNumber}-${key}-${payment.date}`} />
@@ -661,6 +686,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
       </Row>
       {showDeleteModal.show && <Confirm_Delete_Item_From_PO showDeleteModal={showDeleteModal} setshowDeleteModal={setshowDeleteModal} loading={loading} setLoading={setLoading} />}
       {showEditOrderQty.show && <Edit_PO_Ordered_Qty showEditOrderQty={showEditOrderQty} setshowEditOrderQty={setshowEditOrderQty} loading={loading} setLoading={setLoading} />}
+      {editPaymentModal.show && <Edit_Payment_Modal editPaymentModal={editPaymentModal} setEditPaymentModal={setEditPaymentModal} />}
     </div>
   )
 }

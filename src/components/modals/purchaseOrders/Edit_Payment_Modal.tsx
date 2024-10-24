@@ -9,21 +9,34 @@ import { useSWRConfig } from 'swr'
 import { useRouter } from 'next/router'
 import { FormatCurrency } from '@lib/FormatNumbers'
 
-type Props = {}
+type EditPaymentModal = {
+  show: boolean
+  poId: number
+  orderNumber: string
+  paymentDate: string
+  amount: number
+  comment: string
+  paymentIndex: number
+}
 
-const Add_Payment_Modal = ({}: Props) => {
+type Props = {
+  editPaymentModal: EditPaymentModal
+  setEditPaymentModal: (editPaymentModal: EditPaymentModal) => void
+}
+
+const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) => {
   const router = useRouter()
   const { status, organizeBy } = router.query
-  const { state, setShowAddPaymentToPo }: any = useContext(AppContext)
+  const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [loading, setloading] = useState(false)
 
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
-      paymentDate: '',
-      amount: 0,
-      comment: '',
+      paymentDate: editPaymentModal.paymentDate,
+      amount: editPaymentModal.amount,
+      comment: editPaymentModal.comment,
     },
     validationSchema: Yup.object({
       paymentDate: Yup.string().required('Please select Date'),
@@ -33,15 +46,24 @@ const Add_Payment_Modal = ({}: Props) => {
     onSubmit: async (values, { resetForm }) => {
       setloading(true)
 
-      const response = await axios.post(`/api/purchaseOrders/addPaymentToPo?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      const response = await axios.post(`/api/purchaseOrders/editPaymentToPo?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
         poId: state.modalAddPaymentToPoDetails?.poId,
+        paymentIndex: editPaymentModal.paymentIndex,
         ...values,
       })
 
       if (!response.data.error) {
         resetForm()
         toast.success(response.data.msg)
-        setShowAddPaymentToPo(false)
+        setEditPaymentModal({
+          show: false,
+          poId: 0,
+          orderNumber: '',
+          paymentDate: '',
+          amount: 0,
+          comment: '',
+          paymentIndex: 0,
+        })
         if (organizeBy == 'suppliers') {
           mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
         } else if (organizeBy == 'orders') {
@@ -60,22 +82,71 @@ const Add_Payment_Modal = ({}: Props) => {
     event.preventDefault()
     validation.handleSubmit()
   }
+
+  const HandleDeletePayment = async () => {
+    setloading(true)
+
+    const response = await axios.post(`/api/purchaseOrders/deletePaymentToPo?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      poId: state.modalAddPaymentToPoDetails?.poId,
+      paymentIndex: editPaymentModal.paymentIndex,
+    })
+
+    if (!response.data.error) {
+      toast.success(response.data.msg)
+      setEditPaymentModal({
+        show: false,
+        poId: 0,
+        orderNumber: '',
+        paymentDate: '',
+        amount: 0,
+        comment: '',
+        paymentIndex: 0,
+      })
+      if (organizeBy == 'suppliers') {
+        mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+      } else if (organizeBy == 'orders') {
+        mutate(`/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+      } else if (organizeBy == 'sku') {
+        mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+      }
+    } else {
+      toast.error(response.data.msg)
+    }
+    setloading(false)
+  }
+
   return (
     <Modal
       fade={false}
       size='md'
       id='addPaymentToPoModal'
-      isOpen={state.showAddPaymentToPo}
+      isOpen={editPaymentModal.show}
       toggle={() => {
-        setShowAddPaymentToPo(!state.showAddPaymentToPo)
+        setEditPaymentModal({
+          show: false,
+          poId: 0,
+          orderNumber: '',
+          paymentDate: '',
+          amount: 0,
+          comment: '',
+          paymentIndex: 0,
+        })
       }}>
       <ModalHeader
         toggle={() => {
-          setShowAddPaymentToPo(!state.showAddPaymentToPo)
+          setEditPaymentModal({
+            show: false,
+            poId: 0,
+            orderNumber: '',
+            paymentDate: '',
+            amount: 0,
+            comment: '',
+            paymentIndex: 0,
+          })
         }}
         className='modal-title'
         id='myModalLabel'>
-        Add Payment
+        Edit Payment
       </ModalHeader>
       <ModalBody>
         <Form onSubmit={HandleAddProduct}>
@@ -97,7 +168,7 @@ const Add_Payment_Modal = ({}: Props) => {
                   name='paymentDate'
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
-                  value={validation.values.paymentDate || ''}
+                  value={validation.values.paymentDate}
                   invalid={validation.touched.paymentDate && validation.errors.paymentDate ? true : false}
                 />
                 {validation.touched.paymentDate && validation.errors.paymentDate ? <FormFeedback type='invalid'>{validation.errors.paymentDate}</FormFeedback> : null}
@@ -115,6 +186,7 @@ const Add_Payment_Modal = ({}: Props) => {
                   id='amount'
                   name='amount'
                   step='.01'
+                  value={validation.values.amount}
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
                   invalid={validation.touched.amount && validation.errors.amount ? true : false}
@@ -145,9 +217,12 @@ const Add_Payment_Modal = ({}: Props) => {
             </Col>
           </Row>
           <Row md={12}>
-            <div className='text-end'>
+            <div className='d-flex justify-content-between align-items-center'>
+              <Button disabled={loading} type='button' color='danger' className='btn fs-7' onClick={HandleDeletePayment}>
+                {loading ? <Spinner color='light' /> : 'Delete'}
+              </Button>
               <Button disabled={loading} type='submit' color='success' className='btn fs-7'>
-                {loading ? <Spinner color='#fff' /> : 'Add Payment'}
+                {loading ? <Spinner color='light' /> : 'Edit Payment'}
               </Button>
             </div>
           </Row>
@@ -157,4 +232,4 @@ const Add_Payment_Modal = ({}: Props) => {
   )
 }
 
-export default Add_Payment_Modal
+export default Edit_Payment_Modal
