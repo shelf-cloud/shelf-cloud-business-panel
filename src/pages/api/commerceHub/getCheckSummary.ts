@@ -17,6 +17,7 @@ const getCheckSummary: NextApiHandler = async (request, response) => {
     if (request.query.startDate) url += `&startDate=${request.query.startDate}`
     if (request.query.endDate) url += `&endDate=${request.query.endDate}`
     if (request.query.store) url += `&store=${request.query.store}`
+    url += `&sortBy=${request.query.sortBy}&direction=${request.query.direction}`
     
     axios
         .get(url)

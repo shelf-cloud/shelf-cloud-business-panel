@@ -20,6 +20,7 @@ const getInvoices: NextApiHandler = async (request, response) => {
     if (request.query.store) url += `&store=${request.query.store}`
     if (request.query.status) url += `&status=${request.query.status}`
     if (request.query.daysOverdue) url += `&daysOverdue=${request.query.daysOverdue}`
+    url += `&sortBy=${request.query.sortBy}&direction=${request.query.direction}`
     
     axios
         .get(url)

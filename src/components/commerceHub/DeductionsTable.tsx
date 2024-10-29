@@ -15,34 +15,41 @@ type EditComment = {
   comment: string
 }
 
+type SortByType = {
+  key: string
+  asc: boolean
+}
+
 type Props = {
   filteredItems: DeductionType[]
   pending: boolean
   setSelectedRows: (selectedRows: DeductionType[]) => void
   toggledClearRows: boolean
   setEditCommentModal: (prev: EditComment) => void
+  sortBy: SortByType
+  setSortBy: (prev: SortByType) => void
 }
 
-const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClearRows, setEditCommentModal }: Props) => {
+const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClearRows, setEditCommentModal, sortBy, setSortBy }: Props) => {
   const { state }: any = useContext(AppContext)
 
-  const sortDates = (Adate: string, Bdate: string) => {
-    const a = moment(Adate)
-    const b = moment(Bdate)
-    if (a.isBefore(b)) {
-      return -1
-    } else {
-      return 1
-    }
-  }
+  // const sortDates = (Adate: string, Bdate: string) => {
+  //   const a = moment(Adate)
+  //   const b = moment(Bdate)
+  //   if (a.isBefore(b)) {
+  //     return -1
+  //   } else {
+  //     return 1
+  //   }
+  // }
 
-  const sortStrings = (rowA: string, rowB: string) => {
-    if (rowA.localeCompare(rowB)) {
-      return 1
-    } else {
-      return -1
-    }
-  }
+  // const sortStrings = (rowA: string, rowB: string) => {
+  //   if (rowA.localeCompare(rowB)) {
+  //     return 1
+  //   } else {
+  //     return -1
+  //   }
+  // }
 
   const handleSelectedRows = ({ selectedRows }: { selectedRows: DeductionType[] }) => {
     setSelectedRows(selectedRows)
@@ -50,7 +57,12 @@ const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClear
 
   const columns: any = [
     {
-      name: <span className='fw-bolder fs-6'>Marketplace</span>,
+      name: (
+        <span className='fw-bolder fs-6' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'storeId', asc: !sortBy.asc })}>
+          Marketplace
+          {sortBy.key === 'storeId' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
       selector: (row: DeductionType) => {
         return (
           <>
@@ -79,10 +91,14 @@ const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClear
       wrap: true,
       center: true,
       compact: true,
-      sortFunction: (rowA: DeductionType, rowB: DeductionType) => sortStrings(rowA.channelName, rowB.channelName),
     },
     {
-      name: <span className='fw-bold fs-6'>Invoice No.</span>,
+      name: (
+        <span className='fw-bold fs-6' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'invoiceNumber', asc: !sortBy.asc })}>
+          Invoice No.
+          {sortBy.key === 'invoiceNumber' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
       selector: (row: DeductionType) => (
         <div className='d-flex flex-wrap justify-content-start align-items-center'>
           <p className='m-0 p-0 fw-semibold fs-7'>{row.invoiceNumber}</p>{' '}
@@ -129,31 +145,48 @@ const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClear
       grow: 1.2,
     },
     {
-      name: <span className='fw-bold fs-6'>Check Date</span>,
+      name: (
+        <span className='fw-bold fs-6' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkDate', asc: !sortBy.asc })}>
+          Check Date
+          {sortBy.key === 'checkDate' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
       selector: (row: DeductionType) => <span className='fs-7'>{row.checkDate ? moment.utc(row.checkDate).local().format('D MMM YYYY') : ''}</span>,
-      sortable: true,
+      sortable: false,
       center: true,
       compact: true,
-      sortFunction: (rowA: DeductionType, rowB: DeductionType) => {
-        if (rowA.checkDate && rowB.checkDate) sortDates(rowA.checkDate, rowB.checkDate)
-      },
     },
     {
-      name: <span className='fw-bold fs-6'>Check Number</span>,
+      name: (
+        <span className='fw-bold fs-6' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkNumber', asc: !sortBy.asc })}>
+          Check Number
+          {sortBy.key === 'checkNumber' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
       selector: (row: DeductionType) => <span className='fs-7'>{row.checkNumber}</span>,
       sortable: false,
       center: true,
       compact: true,
     },
     {
-      name: <span className='fw-bold fs-6'>Deduction</span>,
+      name: (
+        <span className='fw-bold fs-6' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkTotal', asc: !sortBy.asc })}>
+          Deduction
+          {sortBy.key === 'checkTotal' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
       selector: (row: DeductionType) => <span className='fs-7 text-danger'>{row.checkTotal ? FormatCurrency(state.currentRegion, row.checkTotal) : ''}</span>,
       sortable: false,
       center: true,
       compact: true,
     },
     {
-      name: <span className='fw-bolder fs-6'>Review Status</span>,
+      name: (
+        <span className='fw-bolder fs-6' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'status', asc: !sortBy.asc })}>
+          Status
+          {sortBy.key === 'status' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
       selector: (row: DeductionType) => {
         switch (row.status) {
           case 'closed':

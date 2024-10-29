@@ -66,7 +66,7 @@ const Dashboard = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <Container fluid>
-            <BreadCrumb title='Commerce HUB' pageTitle='Marketplaces' />
+            <BreadCrumb title='Dashboard' pageTitle='Commerce HUB' />
             {summary ? (
               <Row>
                 <Col xs={12} lg={6}>

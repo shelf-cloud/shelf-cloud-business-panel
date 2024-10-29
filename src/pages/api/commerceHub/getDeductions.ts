@@ -18,6 +18,7 @@ const getDeductions: NextApiHandler = async (request, response) => {
     if (request.query.endDate) url += `&endDate=${request.query.endDate}`
     if (request.query.store) url += `&store=${request.query.store}`
     if (request.query.status) url += `&status=${request.query.status}`
+    url += `&sortBy=${request.query.sortBy}&direction=${request.query.direction}`
     
     axios
         .get(url)

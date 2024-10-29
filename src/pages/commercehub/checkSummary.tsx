@@ -45,7 +45,7 @@ type Props = {
   }
 }
 
-const ITEMS_PER_PAGE = 50
+const ITEMS_PER_PAGE = 100
 
 const fetcher = async (url: string) => {
   const data = await axios.get<CheckSummaryResponse>(url).then((res) => res.data)
@@ -67,6 +67,10 @@ const CheckSummary = ({ session, sessionToken }: Props) => {
     status: { value: 'all', label: 'All' },
     showStaus: true,
   })
+  const [sortBy, setSortBy] = useState({
+    key: 'checkDate',
+    asc: false,
+  })
 
   const { data: stores } = useSWR(state.user.businessId ? `/api/commerceHub/getStores?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcherStores, {
     revalidateOnFocus: false,
@@ -84,6 +88,7 @@ const CheckSummary = ({ session, sessionToken }: Props) => {
     if (startDate) url += `&startDate=${startDate}`
     if (endDate) url += `&endDate=${endDate}`
     if (filters.store.value !== 'all') url += `&store=${filters.store.value}`
+    url += `&sortBy=${sortBy.key}&direction=${sortBy.asc ? 'ASC' : 'DESC'}`
 
     return url
   }
@@ -196,7 +201,7 @@ const CheckSummary = ({ session, sessionToken }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <Container fluid>
-            <BreadCrumb title='Commerce HUB Invoices' pageTitle='Marketplaces' />
+            <BreadCrumb title='Check Summary' pageTitle='Commerce HUB' />
             <div className='d-flex flex-column justify-content-center align-items-end gap-2 mb-1 flex-lg-row justify-content-md-between align-items-md-center px-1'>
               <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'>
                 <Button color='primary' className='btn-label fs-7' onClick={downloadInfoToExcel}>
@@ -209,8 +214,8 @@ const CheckSummary = ({ session, sessionToken }: Props) => {
                   <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                     <DebounceInput
                       type='text'
-                      minLength={3}
-                      debounceTimeout={300}
+                      minLength={1}
+                      debounceTimeout={500}
                       className='form-control input_background_white fs-6'
                       placeholder='Search...'
                       id='search-options'
@@ -244,7 +249,7 @@ const CheckSummary = ({ session, sessionToken }: Props) => {
             </div>
             <Card>
               <CardBody>
-                <CheckSummaryTable filteredItems={invoices} pending={isValidating && size === 1} />
+                <CheckSummaryTable filteredItems={invoices} pending={isValidating && size === 1} sortBy={sortBy} setSortBy={setSortBy} />
                 <div ref={lastInvoiceElementRef} style={{ height: '20px', marginTop: '10px' }}>
                   {isValidating && size > 1 && (
                     <p className='text-center'>

@@ -331,8 +331,8 @@ const CheckNumberDetails = ({ session }: Props) => {
                   <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                     <DebounceInput
                       type='text'
-                      minLength={3}
-                      debounceTimeout={300}
+                      minLength={1}
+                      debounceTimeout={500}
                       className='form-control input_background_white'
                       placeholder='Search...'
                       id='search-options'

@@ -192,6 +192,11 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
         <p className='text-primary fs-4'>Import File to Update Commerce Hub Invoices</p>
       </ModalHeader>
       <ModalBody>
+        <div className='mb-3'>
+          <p className='m-0 fs-5 fw-bold'>Download Guide:</p>
+          <p className='m-0 mb-1 fs-6 fw-semibold'>Lowes: <span className='m-0 fs-7 fw-light'>{`Download  de Vendor Gateway -> Finance & Accounting -> INVOICES`}</span></p>
+          <p className='m-0 mb-1 fs-6 fw-semibold'>Home Depot: <span className='m-0 fs-7 fw-light'>{`Download de Supplier Hub -> FINANCE AND ACCOUNTING -> Merch Payables Self-Service Portal -> Payments -> Remittance Advice`}</span></p>
+        </div>
         <Form onSubmit={handleUploadFile}>
           <Row className='mb-3'>
             <Col md={6}>
@@ -201,7 +206,7 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
                 </Label>
                 <Input
                   type='select'
-                  className='form-control'
+                  className='form-control fs-7'
                   id='fileType'
                   name='fileType'
                   onChange={validation.handleChange}

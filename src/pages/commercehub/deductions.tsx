@@ -47,7 +47,7 @@ type Props = {
   }
 }
 
-const ITEMS_PER_PAGE = 50
+const ITEMS_PER_PAGE = 100
 const STATUS_OPTIONS = [
   { value: 'pending', label: 'Pending' },
   { value: 'reviewing', label: 'Reviewing' },
@@ -82,6 +82,10 @@ const Deductions = ({ session, sessionToken }: Props) => {
   })
   const [selectedRows, setSelectedRows] = useState<DeductionType[]>([])
   const [toggledClearRows, setToggleClearRows] = useState(false)
+  const [sortBy, setSortBy] = useState({
+    key: 'checkDate',
+    asc: false,
+  })
 
   const { data: stores } = useSWR(state.user.businessId ? `/api/commerceHub/getStores?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcherStores, {
     revalidateOnFocus: false,
@@ -100,6 +104,7 @@ const Deductions = ({ session, sessionToken }: Props) => {
     if (endDate) url += `&endDate=${endDate}`
     if (filters.store.value !== 'all') url += `&store=${filters.store.value}`
     if (filters.status.value !== 'all') url += `&status=${filters.status.value}`
+    url += `&sortBy=${sortBy.key}&direction=${sortBy.asc ? 'ASC' : 'DESC'}`
 
     return url
   }
@@ -242,7 +247,7 @@ const Deductions = ({ session, sessionToken }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <Container fluid>
-            <BreadCrumb title='Commerce HUB Invoices' pageTitle='Marketplaces' />
+            <BreadCrumb title='Deductions' pageTitle='Commerce HUB' />
             <div className='d-flex flex-column justify-content-center align-items-end gap-2 mb-1 flex-lg-row justify-content-md-between align-items-md-center px-1'>
               <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'>
                 <Button color='primary' className='btn-label fs-7' onClick={downloadInfoToExcel}>
@@ -263,8 +268,8 @@ const Deductions = ({ session, sessionToken }: Props) => {
                   <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                     <DebounceInput
                       type='text'
-                      minLength={3}
-                      debounceTimeout={300}
+                      minLength={1}
+                      debounceTimeout={500}
                       className='form-control input_background_white fs-6'
                       placeholder='Search...'
                       id='search-options'
@@ -304,6 +309,8 @@ const Deductions = ({ session, sessionToken }: Props) => {
                   setSelectedRows={setSelectedRows}
                   toggledClearRows={toggledClearRows}
                   setEditCommentModal={setEditCommentModal}
+                  sortBy={sortBy}
+                  setSortBy={setSortBy}
                 />
                 <div ref={lastInvoiceElementRef} style={{ height: '20px', marginTop: '10px' }}>
                   {isValidating && size > 1 && (

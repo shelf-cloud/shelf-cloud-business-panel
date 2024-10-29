@@ -8,32 +8,22 @@ import DataTable from 'react-data-table-component'
 import { toast } from 'react-toastify'
 import { UncontrolledTooltip } from 'reactstrap'
 
+type SortByType = {
+  key: string
+  asc: boolean
+}
+
 type Props = {
   filteredItems: Invoice[]
   pending: boolean
   setSelectedRows: (selectedRows: Invoice[]) => void
   toggledClearRows: boolean
+  sortBy: SortByType
+  setSortBy: (prev: SortByType) => void
 }
 
-const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRows }: Props) => {
+const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRows, sortBy, setSortBy }: Props) => {
   const { state }: any = useContext(AppContext)
-
-  const sortDates = (Adate: string, Bdate: string) => {
-    const a = moment(Adate)
-    const b = moment(Bdate)
-    if (a.isBefore(b)) {
-      return -1
-    } else {
-      return 1
-    }
-  }
-  const sortStrings = (rowA: string, rowB: string) => {
-    if (rowA.localeCompare(rowB)) {
-      return 1
-    } else {
-      return -1
-    }
-  }
 
   const handleSelectedRows = ({ selectedRows }: { selectedRows: Invoice[] }) => {
     setSelectedRows(selectedRows)
@@ -43,7 +33,12 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
 
   const columns: any = [
     {
-      name: <span className='fw-bolder fs-6'>Marketplace</span>,
+      name: (
+        <span className='fw-bold fs-6 text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'storeId', asc: !sortBy.asc })}>
+          Marketplace
+          {sortBy.key === 'storeId' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
       selector: (row: Invoice) => {
         return (
           <>
@@ -72,7 +67,6 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       wrap: true,
       center: true,
       compact: true,
-      sortFunction: (rowA: Invoice, rowB: Invoice) => sortStrings(rowA.channelName, rowB.channelName),
     },
     {
       name: <span className='fw-bold fs-6 text-nowrap'>Invoice No.</span>,
@@ -125,58 +119,82 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       compact: true,
     },
     {
-      name: <span className='fw-bold fs-6 text-nowrap'>Invoice Date</span>,
+      name: (
+        <span className='fw-bold fs-6 text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'closedDate', asc: !sortBy.asc })}>
+          Invoice Date{' '}
+          {sortBy.key === 'closedDate' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
       selector: (row: Invoice) => <span className='fs-7'>{moment.utc(row.closedDate).local().format('D MMM YYYY')}</span>,
-      sortable: true,
+      sortable: false,
       center: true,
       compact: true,
-      sortFunction: (rowA: Invoice, rowB: Invoice) => sortDates(rowA.closedDate, rowB.closedDate),
     },
     {
-      name: <span className='fw-bold fs-6 text-nowrap'>Invoice Total</span>,
+      name: (
+        <span className='fw-bold fs-6 text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'orderTotal', asc: !sortBy.asc })}>
+          Invoice Total{' '}
+          {sortBy.key === 'orderTotal' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
       selector: (row: Invoice) => <span className='fs-7'>{row.invoiceTotal ? FormatCurrency(state.currentRegion, row.invoiceTotal) : ''}</span>,
-      sortable: true,
+      sortable: false,
       center: true,
       compact: true,
     },
     {
-      name: <span className='fw-bold fs-6'>Due Date</span>,
+      name: (
+        <span className='fw-bold fs-6 text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'dueDate', asc: !sortBy.asc })}>
+          Due Date {sortBy.key === 'dueDate' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
       selector: (row: Invoice) => <span className='fs-7'>{moment.utc(row.closedDate).local().add(row.payterms, 'days').format('D MMM YYYY')}</span>,
-      sortable: true,
+      sortable: false,
       center: true,
       compact: true,
-      sortFunction: (rowA: Invoice, rowB: Invoice) =>
-        sortDates(
-          moment.utc(rowA.closedDate).local().add(rowA.payterms, 'days').format('YYYY-MM-DD'),
-          moment.utc(rowB.closedDate).local().add(rowB.payterms, 'days').format('YYYY-MM-DD')
-        ),
     },
     {
-      name: <span className='fw-bold fs-6'>Check Date</span>,
+      name: (
+        <span className='fw-bold fs-6 text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkDate', asc: !sortBy.asc })}>
+          Check Date{' '}
+          {sortBy.key === 'checkDate' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
       selector: (row: Invoice) => <span className='fs-7'>{row.checkDate ? moment.utc(row.checkDate).local().format('D MMM YYYY') : ''}</span>,
-      sortable: true,
+      sortable: false,
       center: true,
       compact: true,
-      sortFunction: (rowA: Invoice, rowB: Invoice) => {
-        if (rowA.checkDate && rowB.checkDate) sortDates(rowA.checkDate, rowB.checkDate)
-      },
     },
     {
-      name: <span className='fw-bold fs-6'>Check Number</span>,
+      name: (
+        <span className='fw-bold fs-6 text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkNumber', asc: !sortBy.asc })}>
+          Check Number{' '}
+          {sortBy.key === 'checkNumber' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
       selector: (row: Invoice) => <span className='fs-7'>{row.checkNumber}</span>,
       sortable: false,
       center: true,
       compact: true,
     },
     {
-      name: <span className='fw-bold fs-6'>Total Paid</span>,
+      name: (
+        <span className='fw-bold fs-6 text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkTotal', asc: !sortBy.asc })}>
+          Total Paid
+          {sortBy.key === 'checkTotal' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
       selector: (row: Invoice) => <span className='fs-7'>{row.checkTotal ? FormatCurrency(state.currentRegion, row.checkTotal) : ''}</span>,
       sortable: false,
       center: true,
       compact: true,
     },
     {
-      name: <span className='fw-bold fs-6'>Pending</span>,
+      name: (
+        <span className='fw-bold fs-6 text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'pending', asc: !sortBy.asc })}>
+          Pending {sortBy.key === 'pending' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
       selector: (row: Invoice) => {
         const pending = parseFloat((row.invoiceTotal - row.checkTotal).toFixed(2))
         if (pending > 0) {
@@ -190,7 +208,12 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       compact: true,
     },
     {
-      name: <span className='fw-bolder fs-6'>Status</span>,
+      name: (
+        <span className='fw-bold fs-6 text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'commerceHubStatus', asc: !sortBy.asc })}>
+          Status{' '}
+          {sortBy.key === 'commerceHubStatus' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
       selector: (row: Invoice) => {
         if (row.checkNumber) {
           return <span className='badge text-uppercase badge-soft-success p-2'>{` Paid `}</span>
@@ -216,7 +239,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       },
       sortable: false,
       center: true,
-      compact: false,
+      compact: true,
     },
   ]
 

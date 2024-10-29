@@ -9,34 +9,29 @@ import DataTable from 'react-data-table-component'
 import { toast } from 'react-toastify'
 import { UncontrolledTooltip } from 'reactstrap'
 
+type SortByType = {
+  key: string
+  asc: boolean
+}
+
 type Props = {
   filteredItems: CheckSummaryType[]
   pending: boolean
+  sortBy: SortByType
+  setSortBy: (prev: SortByType) => void
 }
 
-const CheckSummaryTable = ({ filteredItems, pending }: Props) => {
+const CheckSummaryTable = ({ filteredItems, pending, sortBy, setSortBy }: Props) => {
   const { state }: any = useContext(AppContext)
-
-  const sortDates = (Adate: string, Bdate: string) => {
-    const a = moment(Adate)
-    const b = moment(Bdate)
-    if (a.isBefore(b)) {
-      return -1
-    } else {
-      return 1
-    }
-  }
-  const sortStrings = (rowA: string, rowB: string) => {
-    if (rowA.localeCompare(rowB)) {
-      return 1
-    } else {
-      return -1
-    }
-  }
 
   const columns: any = [
     {
-      name: <span className='fw-bolder fs-6'>Marketplace</span>,
+      name: (
+        <span className='fw-bold fs-6 text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'storeId', asc: !sortBy.asc })}>
+          Marketplace
+          {sortBy.key === 'storeId' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
       selector: (row: CheckSummaryType) => {
         return (
           <>
@@ -65,10 +60,14 @@ const CheckSummaryTable = ({ filteredItems, pending }: Props) => {
       wrap: true,
       center: true,
       compact: true,
-      sortFunction: (rowA: CheckSummaryType, rowB: CheckSummaryType) => sortStrings(rowA.storeName, rowB.storeName),
     },
     {
-      name: <span className='fw-bold fs-6'>Check Number</span>,
+      name: (
+        <span className='fw-bold fs-6' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkNumber', asc: !sortBy.asc })}>
+          Check Number{' '}
+          {sortBy.key === 'checkNumber' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
       selector: (row: CheckSummaryType) => {
         return row.checkNumber ? (
           <div className='d-flex flex-wrap justify-content-start align-items-center'>
@@ -95,17 +94,23 @@ const CheckSummaryTable = ({ filteredItems, pending }: Props) => {
       compact: true,
     },
     {
-      name: <span className='fw-bold fs-6'>Check Date</span>,
+      name: (
+        <span className='fw-bold fs-6' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkDate', asc: !sortBy.asc })}>
+          Check Date{' '}
+          {sortBy.key === 'checkDate' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
       selector: (row: CheckSummaryType) => <span className='fs-7'>{row.checkDate ? moment.utc(row.checkDate).local().format('D MMM YYYY') : ''}</span>,
-      sortable: true,
+      sortable: false,
       left: true,
       compact: true,
-      sortFunction: (rowA: CheckSummaryType, rowB: CheckSummaryType) => {
-        if (rowA.checkDate && rowB.checkDate) sortDates(rowA.checkDate, rowB.checkDate)
-      },
     },
     {
-      name: <span className='fw-bold fs-6'>Check Paid</span>,
+      name: (
+        <span className='fw-bold fs-6' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'pending', asc: !sortBy.asc })}>
+          Check Paid {sortBy.key === 'pending' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
       selector: (row: CheckSummaryType) => {
         const pending = row.checkTotal + row.cashDiscountTotal
         return <span className='text-center fs-7'>{FormatCurrency(state.currentRegion, pending)}</span>
@@ -115,7 +120,12 @@ const CheckSummaryTable = ({ filteredItems, pending }: Props) => {
       compact: true,
     },
     {
-      name: <span className='fw-bold fs-6'>Deductions</span>,
+      name: (
+        <span className='fw-bold fs-6' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'deductions', asc: !sortBy.asc })}>
+          Deductions{' '}
+          {sortBy.key === 'deductions' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
       selector: (row: CheckSummaryType) => <span className='text-center fs-7 text-danger'>{FormatCurrency(state.currentRegion, row.deductions)}</span>,
       sortable: false,
       left: true,

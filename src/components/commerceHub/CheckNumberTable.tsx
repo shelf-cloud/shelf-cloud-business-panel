@@ -18,7 +18,7 @@ const CheckNumberTable = ({ summary }: Props) => {
       <Col>
         <Card>
           <CardHeader className='align-items-center d-flex justify-content-between'>
-            <h4 className='card-title mb-0 flex-grow-1'>Checks Summary</h4>
+            <h4 className='card-title mb-0 flex-grow-1'>Check Summary</h4>
           </CardHeader>
 
           <CardBody>
