@@ -33,6 +33,7 @@ export interface FBAShipment {
     totalLtlFees: number;
     receipts?: { [msku: string]: Receipt }
     isComplete: boolean
+    status?: string
 }
 
 export interface Receipt {

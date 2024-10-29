@@ -136,7 +136,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
     }
   }
 
-  const setFBAShipmentCompleteStatus = async (shipmentId: string, newStatus: number, isManualComplete: number) => {
+  const setFBAShipmentCompleteStatus = async (shipmentId: string, newStatus: number, isManualComplete: number, status: string) => {
     const setFBAShipmentCompleteStatus = toast.loading('Updating Status...')
 
     const response = await axios
@@ -144,6 +144,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
         shipmentId,
         newStatus,
         isManualComplete,
+        status,
       })
       .then(({ data }) => data)
       .catch(({ error }) => {
@@ -162,6 +163,40 @@ const Shipments = ({ session, sessionToken }: Props) => {
       mutate(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/listSellerFbaShipments/${state.currentRegion}/${state.user.businessId}`)
     } else {
       toast.update(setFBAShipmentCompleteStatus, {
+        render: response.message,
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
+    }
+  }
+
+  const setFBAShipmentReviewingStatus = async (shipmentId: string, isManualComplete: number, status: string) => {
+    const setFBAShipmentReviewingStatus = toast.loading('Updating Status...')
+
+    const response = await axios
+      .post(`/api/amazon/shipments/setFBAShipmentReviewingStatus?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+        shipmentId,
+        isManualComplete,
+        status,
+      })
+      .then(({ data }) => data)
+      .catch(({ error }) => {
+        if (axios.isCancel(error)) {
+          toast.error(error?.data?.message || 'Error updating status')
+        }
+      })
+
+    if (!response.error) {
+      toast.update(setFBAShipmentReviewingStatus, {
+        render: response.message,
+        type: 'success',
+        isLoading: false,
+        autoClose: 3000,
+      })
+      mutate(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/listSellerFbaShipments/${state.currentRegion}/${state.user.businessId}`)
+    } else {
+      toast.update(setFBAShipmentReviewingStatus, {
         render: response.message,
         type: 'error',
         isLoading: false,
@@ -235,6 +270,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
                   getFBAShipmentProofOfShipped={getFBAShipmentProofOfShipped}
                   seteditShipmentName={seteditShipmentName}
                   setFBAShipmentCompleteStatus={setFBAShipmentCompleteStatus}
+                  setFBAShipmentReviewingStatus={setFBAShipmentReviewingStatus}
                 />
               </CardBody>
             </Card>

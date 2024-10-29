@@ -3,16 +3,15 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 
-const setFBAShipmentCompleteStatus: NextApiHandler = async (request, response) => {
+const setFBAShipmentReviewingStatus: NextApiHandler = async (request, response) => {
     const session = await getServerSession(request, response, authOptions)
     if (session == null) {
         response.status(401).end()
         return
     }
 
-    axios.post(`${process.env.SHELFCLOUD_SERVER_URL}/api/amz_workflow/setFBAShipmentCompleteStatus/${request.query.region}/${request.query.businessId}`, {
+    axios.post(`${process.env.SHELFCLOUD_SERVER_URL}/api/amz_workflow/setFBAShipmentReviewingStatus/${request.query.region}/${request.query.businessId}`, {
         shipmentId: request.body.shipmentId,
-        newStatus: request.body.newStatus,
         isManualComplete: request.body.isManualComplete,
         status: request.body.status,
     })
@@ -43,4 +42,4 @@ const setFBAShipmentCompleteStatus: NextApiHandler = async (request, response) =
         })
 }
 
-export default setFBAShipmentCompleteStatus
+export default setFBAShipmentReviewingStatus

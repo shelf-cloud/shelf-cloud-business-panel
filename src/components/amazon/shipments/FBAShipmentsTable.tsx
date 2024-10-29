@@ -14,12 +14,13 @@ type Props = {
   pending: boolean
   getFBAShipmentProofOfShipped: (shipmentId: string) => void
   seteditShipmentName: (prev: any) => void
-  setFBAShipmentCompleteStatus: (shipmentId: string, newStatus: number, isManualComplete: number) => void
+  setFBAShipmentCompleteStatus: (shipmentId: string, newStatus: number, isManualComplete: number, status: string) => void
+  setFBAShipmentReviewingStatus: (shipmentId: string, isManualComplete: number, status: string) => void
 }
 
 const UpdateShipmentNameStatus = ['shipped', 'ready_to_ship', 'working', 'awating', 'active', 'in_transit']
 
-const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShipped, seteditShipmentName, setFBAShipmentCompleteStatus }: Props) => {
+const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShipped, seteditShipmentName, setFBAShipmentCompleteStatus, setFBAShipmentReviewingStatus }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
   const orderStatus = (rowA: FBAShipment, rowB: FBAShipment) => {
@@ -207,35 +208,37 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
     {
       name: <span className='fw-bolder fs-13'>Status</span>,
       selector: (row: FBAShipment) => {
-        switch (row.shipment.status.toLowerCase()) {
+        const status = row.status ? row.status.toLowerCase() : row.shipment.status.toLowerCase()
+        switch (status) {
           case 'shipped':
           case 'ready_to_ship':
           case 'working':
-            return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${CleanStatus(row.shipment.status)} `}</span>
+            return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${CleanStatus(status)} `}</span>
             break
           case 'delivered':
-            return <span className='badge text-uppercase badge-soft-success p-2'>{` ${CleanStatus(row.shipment.status)} `}</span>
+            return <span className='badge text-uppercase badge-soft-success p-2'>{` ${CleanStatus(status)} `}</span>
             break
           case 'awating':
           case 'active':
           case 'unconfirmed':
-            return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${CleanStatus(row.shipment.status)} `}</span>
+          case 'reviewing':
+            return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${CleanStatus(status)} `}</span>
             break
           case 'in_transit':
           case 'checked_in':
           case 'receiving':
-            return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${CleanStatus(row.shipment.status)} `}</span>
+            return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${CleanStatus(status)} `}</span>
             break
           case 'error':
-            return <span className='badge text-uppercase badge-soft-danger p-2'>{` ${CleanStatus(row.shipment.status)} `}</span>
+            return <span className='badge text-uppercase badge-soft-danger p-2'>{` ${CleanStatus(status)} `}</span>
             break
           case 'cancelled':
           case 'closed':
           case 'deleted':
-            return <span className='badge text-uppercase badge-soft-dark p-2'>{` ${CleanStatus(row.shipment.status)} `}</span>
+            return <span className='badge text-uppercase badge-soft-dark p-2'>{` ${CleanStatus(status)} `}</span>
             break
           default:
-            return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${CleanStatus(row.shipment.status)} `}</span>
+            return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${CleanStatus(status)} `}</span>
             break
         }
       },
@@ -274,9 +277,13 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
                   </DropdownItem>
                 )}
                 <DropdownItem header>Actions</DropdownItem>
-                <DropdownItem onClick={() => setFBAShipmentCompleteStatus(row.shipmentId, !row.isComplete ? 1 : 0, !row.isComplete ? 1 : 0)}>
+                {row.status !== "REVIEWING" && <DropdownItem onClick={() => setFBAShipmentReviewingStatus(row.shipmentId, !row.isComplete ? 1 : 0, "REVIEWING")}>
                   <i className='las la-clipboard-check label-icon align-middle fs-5 me-2' />
-                  <span className='fs-6 fw-normal text-dark'>{!row.isComplete ? 'Mark as Complete' : 'Mark as Pending'}</span>
+                  <span className='fs-6 fw-normal text-dark'>Mark Reviewing</span>
+                </DropdownItem>}
+                <DropdownItem onClick={() => setFBAShipmentCompleteStatus(row.shipmentId, !row.isComplete ? 1 : 0, !row.isComplete ? 1 : 0, !row.isComplete ? "CLOSED" : "PENDING")}>
+                  <i className='las la-clipboard-check label-icon align-middle fs-5 me-2' />
+                  <span className='fs-6 fw-normal text-dark'>{!row.isComplete ? 'Mark Complete' : 'Mark Pending'}</span>
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
