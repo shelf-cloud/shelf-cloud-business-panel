@@ -9,6 +9,7 @@ import { DebounceInput } from 'react-debounce-input'
 import { Button, Spinner } from 'reactstrap'
 import useSWR, { useSWRConfig } from 'swr'
 import { toast } from 'react-toastify'
+import AssignNewMarketplaceLogo from './AssignNewMarketplaceLogo'
 
 type Props = {}
 
@@ -67,27 +68,35 @@ const MarketplacesFees = ({}: Props) => {
       name: <span className='fw-bold fs-6'>Logo</span>,
       selector: (row: MarketplaceFees) => {
         return (
-          <div
-            style={{
-              width: '30px',
-              height: '30px',
-              margin: '0px',
-              position: 'relative',
-            }}>
-            <img
-              loading='lazy'
-              src={
-                row.logoLink
-                  ? row.logoLink
-                  : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-              }
-              onError={(e) =>
-                (e.currentTarget.src =
-                  'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
-              }
-              alt='product Image'
-              style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
-            />
+          <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
+            <div
+              style={{
+                width: '30px',
+                height: '30px',
+                margin: '0px',
+                position: 'relative',
+              }}>
+              <img
+                loading='lazy'
+                src={
+                  row.logoLink
+                    ? row.aliasLogo ?? row.logoLink
+                    : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+                }
+                onError={(e) =>
+                  (e.currentTarget.src =
+                    'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
+                }
+                alt='product Image'
+                style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+              />
+            </div>
+            {showEditFields && (
+              <AssignNewMarketplaceLogo
+                selected={row.aliasLogo ? { value: row.aliasLogo, label: row.storeName } : { value: '', label: 'Default Logo' }}
+                setLogo={(selected) => setmarketplaceFees((prev) => ({ ...prev, [row.storeId]: { ...row, aliasLogo: selected.value !== '' ? selected.value : null } }))}
+              />
+            )}
           </div>
         )
       },
@@ -101,12 +110,36 @@ const MarketplacesFees = ({}: Props) => {
       selector: (row: MarketplaceFees) => row.name,
       sortable: true,
       center: false,
-      grow: 1.5,
+      grow: 1.3,
+      compact: true,
       sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortStrings(rowA.name, rowB.name),
     },
     {
       name: <span className='fw-bold fs-6'>Sales Channel</span>,
       selector: (row: MarketplaceFees) => row.storeName,
+      sortable: true,
+      center: true,
+      compact: true,
+      sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortStrings(rowA.storeName, rowB.storeName),
+    },
+    {
+      name: <span className='fw-bold fs-6'>Alias</span>,
+      selector: (row: MarketplaceFees) => {
+        if (!showEditFields) return <span className=''>{row.alias}</span>
+        return (
+          <div className='d-flex flex-row justify-content-center align-items-center gap-2'>
+            <DebounceInput
+              type='text'
+              minLength={1}
+              debounceTimeout={400}
+              className='form-control fs-6'
+              style={{ padding: '0.2rem 0.5rem', minWidth: '80px' }}
+              onChange={(e) => setmarketplaceFees((prev) => ({ ...prev, [row.storeId]: { ...row, alias: e.target.value !== '' ? e.target.value : null } }))}
+              value={row.alias || ''}
+            />
+          </div>
+        )
+      },
       sortable: true,
       center: true,
       sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortStrings(rowA.storeName, rowB.storeName),
@@ -188,6 +221,7 @@ const MarketplacesFees = ({}: Props) => {
       },
       sortable: true,
       center: true,
+      compact: true,
       sortFunction: (rowA: MarketplaceFees) => (rowA.isCommerceHub ? 1 : -1),
     },
     {
@@ -212,6 +246,7 @@ const MarketplacesFees = ({}: Props) => {
       },
       sortable: true,
       center: true,
+      compact: true,
       sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => (rowA.payTerms > rowB.payTerms ? 1 : -1),
     },
   ]

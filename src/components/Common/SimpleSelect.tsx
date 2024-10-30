@@ -8,7 +8,7 @@ type Props = {
 }
 
 const SimpleSelect = ({ selected, handleSelect, options }: Props) => {
-  return <Select value={selected} onChange={handleSelect} options={options} />
+  return <Select className='fs-7' value={selected} onChange={handleSelect} options={options} />
 }
 
 export default SimpleSelect

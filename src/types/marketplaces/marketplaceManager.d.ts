@@ -6,9 +6,11 @@ export interface MarketplaceFeesResponse {
 }
 export interface MarketplaceFees {
     name: string
+    alias: string | null
     storeId: number
     storeName: string
     logoLink: string
+    aliasLogo: string | null
     comissionFee: number
     fixedFee: number
     isCommerceHub: boolean
