@@ -16,14 +16,15 @@ type Props = {
   }
   setshowUpdateInvoices: (prev: any) => void
   clearFilters: () => void
+  stores: { value: string; label: string }[]
 }
 
 const FILE_TYPES = [
   { value: 'homedepot', label: 'Home Depot' },
-  { value: 'lowes', label: 'LOWES' },
+  { value: 'lowes', label: 'Lowes' },
 ]
 
-const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearFilters }: Props) => {
+const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearFilters, stores }: Props) => {
   const { state }: any = useContext(AppContext)
   const [selectedFiles, setselectedFiles] = useState([])
   const [errorFile, setErrorFile] = useState(false)
@@ -35,10 +36,12 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
 
   const validation = useFormik({
     initialValues: {
+      storeId: '',
       fileType: '',
     },
     validationSchema: Yup.object({
-      fileType: Yup.string().required('Select a file Type.'),
+      storeId: Yup.string().required('Select a Store'),
+      fileType: Yup.string().required('Select a file Type'),
     }),
 
     onSubmit: async (values, { resetForm }) => {
@@ -87,6 +90,7 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
             try {
               const response = await axios.post(`/api/commerceHub/uploadInvoicesFile?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
                 fileType: values.fileType,
+                storeId: values.storeId,
                 invoiceData: chunk,
               })
               if (response.data.error) {
@@ -194,12 +198,38 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
       <ModalBody>
         <div className='mb-3'>
           <p className='m-0 fs-5 fw-bold'>Download Guide:</p>
-          <p className='m-0 mb-1 fs-6 fw-semibold'>Lowes: <span className='m-0 fs-7 fw-light'>{`Download  de Vendor Gateway -> Finance & Accounting -> INVOICES`}</span></p>
-          <p className='m-0 mb-1 fs-6 fw-semibold'>Home Depot: <span className='m-0 fs-7 fw-light'>{`Download de Supplier Hub -> FINANCE AND ACCOUNTING -> Merch Payables Self-Service Portal -> Payments -> Remittance Advice`}</span></p>
+          <p className='m-0 mb-1 fs-6 fw-semibold'>
+            Lowes: <span className='m-0 fs-7 fw-light'>{`Download  de Vendor Gateway -> Finance & Accounting -> INVOICES`}</span>
+          </p>
+          <p className='m-0 mb-1 fs-6 fw-semibold'>
+            Home Depot:{' '}
+            <span className='m-0 fs-7 fw-light'>{`Download de Supplier Hub -> FINANCE AND ACCOUNTING -> Merch Payables Self-Service Portal -> Payments -> Remittance Advice`}</span>
+          </p>
         </div>
         <Form onSubmit={handleUploadFile}>
           <Row className='mb-3'>
             <Col md={6}>
+              <FormGroup className='mb-0'>
+                <Label htmlFor='storeId' className='form-label'>
+                  *Store
+                </Label>
+                <Input
+                  type='select'
+                  className='form-control fs-7'
+                  id='storeId'
+                  name='storeId'
+                  onChange={validation.handleChange}
+                  onBlur={validation.handleBlur}
+                  invalid={validation.touched.storeId && validation.errors.storeId ? true : false}>
+                  <option value=''>Choose Store..</option>
+                  {stores?.map((store) => (
+                    <option key={store.value} value={store.value}>
+                      {store.label}
+                    </option>
+                  ))}
+                </Input>
+                {validation.touched.storeId && validation.errors.storeId ? <FormFeedback type='invalid'>{validation.errors.storeId}</FormFeedback> : null}
+              </FormGroup>
               <FormGroup className='mb-3'>
                 <Label htmlFor='fileType' className='form-label'>
                   *File Type

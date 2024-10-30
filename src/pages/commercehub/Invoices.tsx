@@ -346,7 +346,7 @@ const Invoices = ({ session, sessionToken }: Props) => {
             </Card>
           </Container>
         </div>
-        {showUpdateInvoices.show && <UpdateInvoicesModal showUpdateInvoices={showUpdateInvoices} setshowUpdateInvoices={setshowUpdateInvoices} clearFilters={clearFilters} />}
+        {showUpdateInvoices.show && <UpdateInvoicesModal showUpdateInvoices={showUpdateInvoices} setshowUpdateInvoices={setshowUpdateInvoices} clearFilters={clearFilters} stores={stores?.stores ?? []}/>}
       </React.Fragment>
     </div>
   )

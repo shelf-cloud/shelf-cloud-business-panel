@@ -15,6 +15,7 @@ const uploadInvoicesFile: NextApiHandler = async (request, response) => {
         .post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/commerceHub/uploadInvoicesFile.php?businessId=${request.query.businessId}`, {
             invoiceData: request.body.invoiceData,
             fileType: request.body.fileType,
+            storeId: request.body.storeId,
         })
         .then(({ data }) => {
             response.json(data)
