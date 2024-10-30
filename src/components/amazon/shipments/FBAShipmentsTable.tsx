@@ -212,13 +212,13 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
         switch (status) {
           case 'shipped':
           case 'ready_to_ship':
-          case 'working':
+          case 'awating':
             return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${CleanStatus(status)} `}</span>
             break
           case 'delivered':
             return <span className='badge text-uppercase badge-soft-success p-2'>{` ${CleanStatus(status)} `}</span>
             break
-          case 'awating':
+          case 'working':
           case 'active':
           case 'unconfirmed':
           case 'reviewing':
@@ -277,11 +277,14 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
                   </DropdownItem>
                 )}
                 <DropdownItem header>Actions</DropdownItem>
-                {row.status !== "REVIEWING" && <DropdownItem onClick={() => setFBAShipmentReviewingStatus(row.shipmentId, !row.isComplete ? 1 : 0, "REVIEWING")}>
-                  <i className='las la-clipboard-check label-icon align-middle fs-5 me-2' />
-                  <span className='fs-6 fw-normal text-dark'>Mark Reviewing</span>
-                </DropdownItem>}
-                <DropdownItem onClick={() => setFBAShipmentCompleteStatus(row.shipmentId, !row.isComplete ? 1 : 0, !row.isComplete ? 1 : 0, !row.isComplete ? "CLOSED" : "PENDING")}>
+                {row.status !== 'REVIEWING' && (
+                  <DropdownItem onClick={() => setFBAShipmentReviewingStatus(row.shipmentId, !row.isComplete ? 1 : 0, 'WORKING')}>
+                    <i className='las la-clipboard-check label-icon align-middle fs-5 me-2' />
+                    <span className='fs-6 fw-normal text-dark'>Mark Working</span>
+                  </DropdownItem>
+                )}
+                <DropdownItem
+                  onClick={() => setFBAShipmentCompleteStatus(row.shipmentId, !row.isComplete ? 1 : 0, !row.isComplete ? 1 : 0, !row.isComplete ? 'CLOSED' : 'PENDING')}>
                   <i className='las la-clipboard-check label-icon align-middle fs-5 me-2' />
                   <span className='fs-6 fw-normal text-dark'>{!row.isComplete ? 'Mark Complete' : 'Mark Pending'}</span>
                 </DropdownItem>

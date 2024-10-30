@@ -13,6 +13,7 @@ import { toast } from 'react-toastify'
 import FBAShipmentsTable from '@components/amazon/shipments/FBAShipmentsTable'
 import { FBAShipment, FBAShipmentsRepsonse } from '@typesTs/amazon/fbaShipments.interface'
 import ChangeFBAShipmentName from '@components/modals/amazon/ChangeFBAShipmentName'
+import FilterFBAShipments from '@components/amazon/shipments/FilterFBAShipments'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -51,6 +52,10 @@ const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
     show: false,
     shipmentId: '',
     shipmentName: '',
+  })
+  const [filters, setFilters] = useState({
+    status: { value: 'all', label: 'All' },
+    showOnlyMissingQty: false,
   })
 
   const controller = new AbortController()
@@ -91,17 +96,18 @@ const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
   )
 
   const filteredItems = useMemo(() => {
-    if (searchValue === '') return allData
-
-    if (searchValue !== '') {
-      return allData.filter(
-        (item: FBAShipment) =>
-          item.shipment.shipmentConfirmationId.toLowerCase().includes(searchValue.toLowerCase()) || item.shipment.name.toLowerCase().includes(searchValue.toLowerCase())
-      )
-    }
-
-    return []
-  }, [allData, searchValue])
+    return allData.filter(
+      (item: FBAShipment) =>
+        (searchValue !== ''
+          ? item.shipment.shipmentConfirmationId.toLowerCase().includes(searchValue.toLowerCase()) || item.shipment.name.toLowerCase().includes(searchValue.toLowerCase())
+          : true) &&
+        (filters.status.value !== 'all' ? (item.status ? item.status === filters.status.value : item.shipment.status === filters.status.value) : true) &&
+        (filters.showOnlyMissingQty
+          ? (item.receipts ? Object.values(item.receipts).reduce((total, item) => total + item.quantity, 0) : 0) <
+            item.shipmentItems.items.reduce((total, item) => total + item.quantity, 0)
+          : true)
+    )
+  }, [allData, filters.showOnlyMissingQty, filters.status.value, searchValue])
 
   const getFBAShipmentProofOfShipped = async (shipmentId: string) => {
     const downloadingProofOfShipped = toast.loading('Searching Proof Of Shipped...')
@@ -213,13 +219,13 @@ const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <Container fluid>
-            <BreadCrumb title='Amazon FBA Shipments' pageTitle='Amazon' />
+            <BreadCrumb title='Amazon Complete FBA Shipments' pageTitle='Amazon' />
             <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-1 flex-md-row justify-content-md-end align-items-md-center px-3'>
               <div className='app-search d-flex flex-row justify-content-between align-items-center p-0'>
-                <div className='d-flex flex-row justify-content-start align-items-center gap-3'>
+                <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'>
                   <Link href={'/amazon-sellers/fulfillments'} passHref>
                     <a>
-                      <Button>
+                      <Button className='fs-7 text-nowrap'>
                         <span className='icon-on'>
                           <i className='ri-file-list-line align-bottom me-1' />
                           Fulfillments
@@ -228,7 +234,7 @@ const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
                     </a>
                   </Link>
                   <Link href={'/amazon-sellers/shipments'}>
-                    <Button color='info'>
+                    <Button color='info' className='fs-7 text-nowrap'>
                       <span className='icon-on'>
                         <i className='ri-file-list-line align-bottom me-1' />
                         Shipments
@@ -236,29 +242,32 @@ const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
                     </Button>
                   </Link>
                 </div>
-                <div className='col-sm-12 col-md-3'>
-                  <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
-                    <DebounceInput
-                      type='text'
-                      minLength={3}
-                      debounceTimeout={300}
-                      className='form-control input_background_white'
-                      placeholder='Search...'
-                      id='search-options'
-                      value={searchValue}
-                      onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
-                      onChange={(e) => setSearchValue(e.target.value)}
-                    />
-                    <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
-                    <span
-                      className='d-flex align-items-center justify-content-center input_background_white'
-                      style={{
-                        cursor: 'pointer',
-                      }}
-                      onClick={() => setSearchValue('')}>
-                      <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
-                    </span>
+                <div className='w-100 d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-end align-items-lg-center px-0'>
+                  <div className='app-search p-0 col-sm-12 col-lg-5'>
+                    <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+                      <DebounceInput
+                        type='text'
+                        minLength={3}
+                        debounceTimeout={300}
+                        className='form-control input_background_white fs-6'
+                        placeholder='Search...'
+                        id='search-options'
+                        value={searchValue}
+                        onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
+                        onChange={(e) => setSearchValue(e.target.value)}
+                      />
+                      <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
+                      <span
+                        className='d-flex align-items-center justify-content-center input_background_white'
+                        style={{
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => setSearchValue('')}>
+                        <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
+                      </span>
+                    </div>
                   </div>
+                  <FilterFBAShipments filters={filters} setfilters={setFilters} />
                 </div>
               </div>
             </Row>
