@@ -151,7 +151,7 @@ const ShipmentType = ({ data, apiMutateLink }: Props) => {
                             ))}
                         </td>
                         <td className='fs-7 text-muted'>{product.sku}</td>
-                        <td className='text-center'>{FormatCurrency(state.currentRegion, product.unitPrice)}</td>
+                        <td className='text-center'>{FormatCurrency(state.currentRegion, product.unitPrice ?? 0)}</td>
                         <td className='text-center'>{product.quantity}</td>
                       </tr>
                     ))}
