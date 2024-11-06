@@ -21,6 +21,7 @@ import { useRouter } from 'next/router'
 import ExportBlankTemplate from '@components/products/ExportBlankTemplate'
 import ImportProductsFileModal from '@components/modals/products/ImportProductsFileModal'
 import ExportProductsFile from '@components/products/ExportProductsFile'
+import CloneProductModal from '@components/modals/products/CloneProductModal'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -58,6 +59,12 @@ const Products = ({ session }: Props) => {
   const [toggledClearRows, setToggleClearRows] = useState(false)
   const [importModalDetails, setimportModalDetails] = useState({
     show: false,
+  })
+  const [cloneProductModal, setcloneProductModal] = useState({
+    isOpen: false,
+    originalId: 0,
+    originalName: '',
+    originalSku: '',
   })
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data } = useSWR(state.user.businessId ? `/api/getBusinessInventory?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher, {
@@ -167,7 +174,7 @@ const Products = ({ session }: Props) => {
           <Container fluid>
             <Row>
               <Col lg={12}>
-                <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-3 flex-md-row justify-content-md-between align-items-md-center'>
+                <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-1 flex-md-row justify-content-md-between align-items-md-center'>
                   <div className='w-auto d-flex flex-row align-items-center justify-content-between gap-3'>
                     <FilterProducts
                       brands={data?.brands}
@@ -180,7 +187,7 @@ const Products = ({ session }: Props) => {
                       activeTab={true}
                     />
                     <Link href={'/AddProduct'}>
-                      <Button color='primary' className='fs-6 py-1'>
+                      <Button color='primary' size='sm' className='fs-7'>
                         <i className='mdi mdi-plus-circle label-icon align-middle fs-5 me-2' />
                         Basic Product
                       </Button>
@@ -197,7 +204,7 @@ const Products = ({ session }: Props) => {
                     </Link> */}
                     {/* <CSVLink className='d-none' data={productsDetailsTemplate} filename={`${session?.user?.name.toUpperCase()}-Products-Details.csv`} ref={csvDownload} /> */}
                     <UncontrolledButtonDropdown>
-                      <DropdownToggle className='btn btn-primary fs-6 py-2' caret>
+                      <DropdownToggle className='fs-7' caret>
                         Bulk Actions
                       </DropdownToggle>
                       <DropdownMenu>
@@ -246,9 +253,9 @@ const Products = ({ session }: Props) => {
                       <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                         <DebounceInput
                           type='text'
-                          minLength={3}
-                          debounceTimeout={300}
-                          className='form-control input_background_white'
+                          minLength={2}
+                          debounceTimeout={500}
+                          className='form-control input_background_white fs-6'
                           placeholder='Search...'
                           id='search-options'
                           value={searchValue}
@@ -274,6 +281,7 @@ const Products = ({ session }: Props) => {
                       activeText={'text-danger'}
                       setSelectedRows={setSelectedRows}
                       toggledClearRows={toggledClearRows}
+                      setcloneProductModal={setcloneProductModal}
                     />
                   </CardBody>
                 </Card>
@@ -292,6 +300,7 @@ const Products = ({ session }: Props) => {
           categories={data?.categories}
         />
       )}
+      {cloneProductModal.isOpen && <CloneProductModal cloneProductModal={cloneProductModal} setcloneProductModal={setcloneProductModal} />}
     </div>
   )
 }

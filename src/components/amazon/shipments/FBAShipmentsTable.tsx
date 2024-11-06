@@ -271,7 +271,7 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
                 {row.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber && (
                   <DropdownItem onClick={() => getFBAShipmentProofOfShipped(row.shipment.shipmentConfirmationId)}>
                     <div>
-                      <i className='las la-truck label-icon align-middle fs-4 me-2' />
+                      <i className='las la-truck label-icon align-middle fs-5 me-2' />
                       <span className='fs-7 fw-normal text-dark'>Proof Of Shipped</span>
                     </div>
                   </DropdownItem>

@@ -9,6 +9,13 @@ import TooltipComponent from './constants/Tooltip'
 import Link from 'next/link'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 
+type CloneProductModal = {
+  isOpen: boolean
+  originalId: number
+  originalName: string
+  originalSku: string
+}
+
 type Props = {
   tableData: Product[]
   pending: boolean
@@ -18,9 +25,10 @@ type Props = {
   activeText: string
   setSelectedRows: (selectedRows: Product[]) => void
   toggledClearRows: boolean
+  setcloneProductModal?: (prev: CloneProductModal) => void
 }
 
-const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, activeText, setSelectedRows, toggledClearRows }: Props) => {
+const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, activeText, setSelectedRows, toggledClearRows, setcloneProductModal }: Props) => {
   const { setModalProductInfo, state }: any = useContext(AppContext)
 
   const loadBarcode = (product: Product) => {
@@ -344,13 +352,30 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
                 <Link href={`/product/${row.inventoryId}/${row.sku}`} passHref>
                   <a>
                     <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
-                    <span className='fs-6 fw-normal text-dark'>View Details</span>
+                    <span className='fs-7 fw-normal text-dark'>View Details</span>
                   </a>
                 </Link>
               </DropdownItem>
+              <DropdownItem header>Actions</DropdownItem>
+              {setcloneProductModal && (
+                <DropdownItem
+                  onClick={() =>
+                    setcloneProductModal({
+                      isOpen: true,
+                      originalId: row.inventoryId,
+                      originalName: row.title,
+                      originalSku: row.sku,
+                    })
+                  }>
+                  <div>
+                    <i className='las la-copy label-icon align-middle fs-5 me-2' />
+                    <span className='fs-7 fw-normal text-dark'>Clone</span>
+                  </div>
+                </DropdownItem>
+              )}
               {(row.quantity == 0 || !row.activeState) && (
-                <DropdownItem className={activeText} onClick={() => changeProductState(row.inventoryId, state.user.businessId, row.sku)}>
-                  <i className={icon}></i> {setMsg}
+                <DropdownItem className={'fs-7 ' + activeText} onClick={() => changeProductState(row.inventoryId, state.user.businessId, row.sku)}>
+                  <i className={'fs-5 ' + icon}></i> {setMsg}
                 </DropdownItem>
               )}
             </DropdownMenu>

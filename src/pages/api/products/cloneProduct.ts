@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 
-const editComment: NextApiHandler = async (request, response) => {
+const cloneProduct: NextApiHandler = async (request, response) => {
     const session = await getServerSession(request, response, authOptions)
 
     if (session == null) {
@@ -11,11 +11,9 @@ const editComment: NextApiHandler = async (request, response) => {
         return
     }
 
-    axios
-        .post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/commerceHub/editComment.php?businessId=${request.query.businessId}`, {
-            id: request.body.id,
-            comment: request.body.comment,
-        })
+    axios.post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/products/cloneProduct.php?businessId=${request.query.businessId}`, {
+        clone: request.body
+    })
         .then(({ data }) => {
             response.json(data)
         })
@@ -43,4 +41,4 @@ const editComment: NextApiHandler = async (request, response) => {
         })
 }
 
-export default editComment
+export default cloneProduct
