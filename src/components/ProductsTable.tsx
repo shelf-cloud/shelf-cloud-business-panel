@@ -248,7 +248,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
                   -{row.reserved}
                 </span>
                 <UncontrolledTooltip placement='right' target={`reservedQty${CleanSpecialCharacters(row.sku)}`}>
-                  Reserved in Awating Orders.
+                  Reserved in Awaiting Orders.
                 </UncontrolledTooltip>
               </>
             )}

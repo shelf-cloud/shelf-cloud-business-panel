@@ -18,7 +18,7 @@ type Props = {
   setFBAShipmentReviewingStatus: (shipmentId: string, isManualComplete: number, status: string) => void
 }
 
-const UpdateShipmentNameStatus = ['shipped', 'ready_to_ship', 'working', 'awating', 'active', 'in_transit']
+const UpdateShipmentNameStatus = ['shipped', 'ready_to_ship', 'working', 'awaiting', 'active', 'in_transit']
 
 const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShipped, seteditShipmentName, setFBAShipmentCompleteStatus, setFBAShipmentReviewingStatus }: Props) => {
   const { state }: any = useContext(AppContext)
@@ -212,7 +212,7 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
         switch (status) {
           case 'shipped':
           case 'ready_to_ship':
-          case 'awating':
+          case 'awaiting':
             return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${CleanStatus(status)} `}</span>
             break
           case 'delivered':

@@ -44,8 +44,8 @@ const ReceivingTable = ({ tableData, pending, apiMutateLink }: Props) => {
             return <span className='badge text-uppercase badge-soft-success p-2'> {row.orderStatus} </span>
             break
           case 'awaiting_shipment':
-          case 'awating':
-            return <span className='badge text-uppercase badge-soft-secondary p-2'>{' awating '}</span>
+          case 'awaiting':
+            return <span className='badge text-uppercase badge-soft-secondary p-2'>{' awaiting '}</span>
             break
           case 'on_hold':
             return <span className='badge text-uppercase badge-soft-warning p-2'>{' on hold '}</span>
@@ -119,7 +119,7 @@ const ReceivingTable = ({ tableData, pending, apiMutateLink }: Props) => {
       name: <span className='fw-bolder fs-13'></span>,
       selector: (row: OrderRowType) => {
         if (
-          (row.orderStatus == 'awating' || row.orderStatus == 'awaiting_shipment') &&
+          (row.orderStatus == 'awaiting' || row.orderStatus == 'awaiting_shipment') &&
           row.orderItems.reduce((totalReceived, item: ShipmentOrderItem) => totalReceived + item.qtyReceived!, 0) <= 0
         ) {
           return (

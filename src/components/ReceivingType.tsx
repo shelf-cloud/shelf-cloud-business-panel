@@ -216,7 +216,7 @@ const ReceivingType = ({ data, apiMutateLink }: Props) => {
                         <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.quantity))}</td>
                         <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.qtyReceived))}</td>
                         <td>
-                          {(data.orderStatus == 'awating' || data.orderStatus == 'awaiting_shipment') && product.qtyReceived! <= 0 && (
+                          {(data.orderStatus == 'awaiting' || data.orderStatus == 'awaiting_shipment') && product.qtyReceived! <= 0 && (
                             <i
                               className='fs-4 text-danger las la-trash-alt'
                               style={{ cursor: 'pointer' }}

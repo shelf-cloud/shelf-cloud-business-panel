@@ -113,11 +113,11 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
             return <span className='badge text-uppercase text-center badge-soft-secondary p-2'>{` ${Object.values(row.returns)[0].orderStatus} `}</span>
             break
           case 'awaiting_shipment':
-          case 'awating':
-            return <span className='badge text-uppercase text-center badge-soft-warning p-2'>{' awating '}</span>
+          case 'awaiting':
+            return <span className='badge text-uppercase text-center badge-soft-warning p-2'>{' awaiting '}</span>
             break
-          case 'awating pickup':
-            return <span className='badge text-uppercase text-center badge-soft-secondary p-2'>{' awating pickup '}</span>
+          case 'awaiting pickup':
+            return <span className='badge text-uppercase text-center badge-soft-secondary p-2'>{' awaiting pickup '}</span>
             break
           case 'on_hold':
             return <span className='badge text-uppercase text-center badge-soft-danger p-2'>{' on hold '}</span>

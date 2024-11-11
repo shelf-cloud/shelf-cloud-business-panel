@@ -81,7 +81,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
             break
           case 'assign':
           case 'working':
-          case 'awating':
+          case 'awaiting':
           case 'active':
             return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${row.status} `}</span>
             break

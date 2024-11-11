@@ -84,7 +84,7 @@ const FilterByOthers = ({ searchType, setSearchType, searchStatus, setSearchStat
                 }}>
                 <option value=''>All Status</option>
                 <option value='on_hold'>On Hold</option>
-                <option value='awating'>Awating</option>
+                <option value='awaiting'>Awaiting</option>
                 <option value='shipped'>Shipped</option>
                 <option value='cancelled'>Cancelled</option>
               </Input>

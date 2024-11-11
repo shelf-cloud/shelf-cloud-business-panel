@@ -121,11 +121,11 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
             return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${row.orderStatus} `}</span>
             break
           case 'awaiting_shipment':
-          case 'awating':
-            return <span className='badge text-uppercase badge-soft-warning p-2'>{' awating '}</span>
+          case 'awaiting':
+            return <span className='badge text-uppercase badge-soft-warning p-2'>{' awaiting '}</span>
             break
-          case 'awating pickup':
-            return <span className='badge text-uppercase badge-soft-secondary p-2'>{' awating pickup '}</span>
+          case 'awaiting pickup':
+            return <span className='badge text-uppercase badge-soft-secondary p-2'>{' awaiting pickup '}</span>
             break
           case 'on_hold':
             return <span className='badge text-uppercase badge-soft-danger p-2'>{' on hold '}</span>

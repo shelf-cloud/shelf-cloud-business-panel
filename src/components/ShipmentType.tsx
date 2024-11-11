@@ -188,7 +188,7 @@ const ShipmentType = ({ data, apiMutateLink }: Props) => {
                     Create Return
                   </Button>
                 )}
-            {state.currentRegion == 'us' && data.orderStatus == 'awating' && data.goFlowOrderId != 0 && data.trackingNumber == '' && (
+            {state.currentRegion == 'us' && data.orderStatus == 'awaiting' && data.goFlowOrderId != 0 && data.trackingNumber == '' && (
               <Button
                 color='danger'
                 className='btn-label'

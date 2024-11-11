@@ -102,11 +102,11 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
             return <span className='badge text-uppercase text-center badge-soft-secondary p-2'>{` ${row.orderStatus} `}</span>
             break
           case 'awaiting_shipment':
-          case 'awating':
-            return <span className='badge text-uppercase text-center badge-soft-warning p-2'>{' awating '}</span>
+          case 'awaiting':
+            return <span className='badge text-uppercase text-center badge-soft-warning p-2'>{' awaiting '}</span>
             break
-          case 'awating pickup':
-            return <span className='badge text-uppercase text-center badge-soft-secondary p-2'>{' awating pickup '}</span>
+          case 'awaiting pickup':
+            return <span className='badge text-uppercase text-center badge-soft-secondary p-2'>{' awaiting pickup '}</span>
             break
           case 'on_hold':
             return <span className='badge text-uppercase text-center badge-soft-danger p-2'>{' on hold '}</span>
