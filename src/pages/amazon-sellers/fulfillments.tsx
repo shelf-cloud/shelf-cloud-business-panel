@@ -8,7 +8,7 @@ import { DebounceInput } from 'react-debounce-input'
 import AppContext from '@context/AppContext'
 import Link from 'next/link'
 import axios from 'axios'
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import { toast } from 'react-toastify'
 import { ListInboundPlan } from '@typesTs/amazon/fulfillments/listInboundPlans'
 import FulfillmentsTable from '@components/amazon/fulfillment/FulfillmentsTable'
@@ -122,6 +122,34 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
     return []
   }, [allData, searchValue])
 
+  const handleRepairFBAWorkflow = async (inboundPlanId: string) => {
+    const repairFBAWorkflow = toast.loading('Retrying Inbound Plan...')
+    try {
+      const response = await axios.get(
+        `/api/amazon/fullfilments/repairFBAWorkflow?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`
+      )
+
+      if (!response.data.error) {
+        toast.update(repairFBAWorkflow, {
+          render: response.data.message,
+          type: 'success',
+          isLoading: false,
+          autoClose: 3000,
+        })
+        mutate(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/listSellerInboundPlans/${state.currentRegion}/${state.user.businessId}`)
+      } else {
+        toast.update(repairFBAWorkflow, {
+          render: response.data.message,
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+        })
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <div>
       <Head>
@@ -181,6 +209,7 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
                   setcancelInboundPlanModal={setcancelInboundPlanModal}
                   setassignWorkflowIdModal={setassignWorkflowIdModal}
                   setassignFinishedWorkflowIdModal={setassignFinishedWorkflowIdModal}
+                  handleRepairFBAWorkflow={handleRepairFBAWorkflow}
                 />
               </CardBody>
             </Card>

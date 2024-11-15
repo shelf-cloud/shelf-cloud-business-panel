@@ -14,9 +14,10 @@ type Props = {
   setcancelInboundPlanModal: (prev: any) => void
   setassignWorkflowIdModal: (prev: any) => void
   setassignFinishedWorkflowIdModal: (prev: any) => void
+  handleRepairFBAWorkflow: (inboundPlanId: string) => void
 }
 
-const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, setassignFinishedWorkflowIdModal }: Props) => {
+const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, setassignFinishedWorkflowIdModal, handleRepairFBAWorkflow }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
   const orderStatus = (rowA: ListInboundPlan, rowB: ListInboundPlan) => {
@@ -260,6 +261,23 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
                           )} min left`}</span>
                         </DropdownItem>
                       )} */}
+                </DropdownMenu>
+              </UncontrolledDropdown>
+            )
+            break
+          case 'error':
+            return (
+              <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
+                <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
+                  <i className='mdi mdi-dots-vertical align-middle fs-3 m-0 px-2 py-0' style={{ color: '#919FAF' }}></i>
+                </DropdownToggle>
+                <DropdownMenu className='dropdown-menu-end' container={'body'}>
+                  <DropdownItem onClick={() => handleRepairFBAWorkflow(row.inboundPlanId)}>
+                    <div>
+                      <i className='las la-undo-alt align-middle me-2 fs-5 text-danger'></i>
+                      <span className='fs-6 fw-normal text-danger'>Retry Inbound Plan</span>
+                    </div>
+                  </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
             )

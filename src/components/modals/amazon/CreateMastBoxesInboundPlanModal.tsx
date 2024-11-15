@@ -167,6 +167,76 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
               complete: false,
             },
           },
+          creationSteps: {
+            1: {
+              step: 'create',
+              complete: false,
+            },
+            2: {
+              step: 'generate packing Options',
+              complete: false,
+            },
+            3: {
+              step: 'list packing Options',
+              complete: false,
+            },
+            4: {
+              step: 'get packing groups info',
+              complete: false,
+            },
+            5: {
+              step: 'confirm packing options',
+              complete: false,
+            },
+            6: {
+              step: 'create pending picking and box plan',
+              complete: true,
+            },
+            7: {
+              step: 'complete pick and box plan',
+              complete: true,
+            },
+            8: {
+              step: 'set packing information',
+              complete: false,
+            },
+            9: {
+              step: 'generate palcement options',
+              complete: false,
+            },
+            10: {
+              step: 'list palcement options',
+              complete: false,
+            },
+            11: {
+              step: 'get placements shipment info',
+              complete: false,
+            },
+            12: {
+              step: 'generate transportation options',
+              complete: false,
+            },
+            13: {
+              step: 'list transportation options',
+              complete: false,
+            },
+            14: {
+              step: 'confirm placement option',
+              complete: false,
+            },
+            15: {
+              step: 'confirm transportation option',
+              complete: false,
+            },
+            16: {
+              step: 'create fba shipments and shelfcloud orders',
+              complete: false,
+            },
+            17: {
+              step: 'fba complete',
+              complete: false,
+            },
+          },
         },
         {
           headers: {

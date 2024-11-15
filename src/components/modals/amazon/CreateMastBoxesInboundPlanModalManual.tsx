@@ -173,6 +173,76 @@ const CreateMastBoxesInboundPlanModalManual = ({ orderProducts, showCreateInboun
             complete: false,
           },
         },
+        creationSteps: {
+          1: {
+            step: 'create',
+            complete: true,
+          },
+          2: {
+            step: 'generate packing Options',
+            complete: true,
+          },
+          3: {
+            step: 'list packing Options',
+            complete: true,
+          },
+          4: {
+            step: 'get packing groups info',
+            complete: true,
+          },
+          5: {
+            step: 'confirm packing options',
+            complete: true,
+          },
+          6: {
+            step: 'create pending picking and box plan',
+            complete: true,
+          },
+          7: {
+            step: 'complete pick and box plan',
+            complete: true,
+          },
+          8: {
+            step: 'set packing information',
+            complete: true,
+          },
+          9: {
+            step: 'generate palcement options',
+            complete: true,
+          },
+          10: {
+            step: 'list palcement options',
+            complete: true,
+          },
+          11: {
+            step: 'get placements shipment info',
+            complete: true,
+          },
+          12: {
+            step: 'generate transportation options',
+            complete: true,
+          },
+          13: {
+            step: 'list transportation options',
+            complete: true,
+          },
+          14: {
+            step: 'confirm placement option',
+            complete: true,
+          },
+          15: {
+            step: 'confirm transportation option',
+            complete: true,
+          },
+          16: {
+            step: 'create fba shipments and shelfcloud orders',
+            complete: true,
+          },
+          17: {
+            step: 'fba complete',
+            complete: true,
+          },
+        },
       })
 
       if (!response.data.error) {
