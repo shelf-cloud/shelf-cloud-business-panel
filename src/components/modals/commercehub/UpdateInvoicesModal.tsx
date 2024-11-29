@@ -81,10 +81,10 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
 
           let hasError = false
           const uploadingFile = toast.loading('Uploading file...')
-          const chunkSize = 90
+          const chunkSize = 110
           const totalChunks = Math.ceil(results.data.length / chunkSize)
 
-          for (let i = 0; i < results.data.length; i += chunkSize) {
+          for (let i = 1; i < results.data.length; i += chunkSize) {
             const chunk = results.data.slice(i, i + chunkSize)
 
             try {
