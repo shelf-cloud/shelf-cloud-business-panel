@@ -9,20 +9,17 @@ import Dropzone from 'react-dropzone'
 import Papa from 'papaparse'
 import { useFormik } from 'formik'
 import { validateHomeDepotFile, validateLowesFile } from './validateFileTypesInfo'
+import { CommerceHubStore } from '@typesTs/commercehub/invoices'
+import { mutate } from 'swr'
 
 type Props = {
   showUpdateInvoices: {
     show: boolean
   }
   setshowUpdateInvoices: (prev: any) => void
-  clearFilters: () => void
-  stores: { value: string; label: string }[]
+  clearFilters?: () => void
+  stores: CommerceHubStore[]
 }
-
-const FILE_TYPES = [
-  { value: 'homedepot', label: 'Home Depot' },
-  { value: 'lowes', label: 'Lowes' },
-]
 
 const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearFilters, stores }: Props) => {
   const { state }: any = useContext(AppContext)
@@ -140,7 +137,7 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
             })
             resetForm()
             setshowUpdateInvoices({ show: false })
-            clearFilters()
+            clearFilters ? clearFilters() : mutate(`/api/commerceHub/getSummary?region=${state.currentRegion}&businessId=${state.user.businessId}`)
           }
           setLoading(false)
         },
@@ -218,7 +215,10 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
                   className='form-control fs-7'
                   id='storeId'
                   name='storeId'
-                  onChange={validation.handleChange}
+                  onChange={(e) => {
+                    validation.handleChange(e)
+                    validation.setFieldValue('fileType', stores.find((store) => store.value === e.target.value)?.fileType)
+                  }}
                   onBlur={validation.handleBlur}
                   invalid={validation.touched.storeId && validation.errors.storeId ? true : false}>
                   <option value=''>Choose Store..</option>
@@ -229,27 +229,6 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
                   ))}
                 </Input>
                 {validation.touched.storeId && validation.errors.storeId ? <FormFeedback type='invalid'>{validation.errors.storeId}</FormFeedback> : null}
-              </FormGroup>
-              <FormGroup className='mb-3'>
-                <Label htmlFor='fileType' className='form-label'>
-                  *File Type
-                </Label>
-                <Input
-                  type='select'
-                  className='form-control fs-7'
-                  id='fileType'
-                  name='fileType'
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  invalid={validation.touched.fileType && validation.errors.fileType ? true : false}>
-                  <option value=''>Choose fileType..</option>
-                  {FILE_TYPES?.map((store) => (
-                    <option key={store.value} value={store.value}>
-                      {store.label}
-                    </option>
-                  ))}
-                </Input>
-                {validation.touched.fileType && validation.errors.fileType ? <FormFeedback type='invalid'>{validation.errors.fileType}</FormFeedback> : null}
               </FormGroup>
               <div className='list-unstyled mb-0' id='file-previews'>
                 {selectedFiles.map((f: any, i) => {
