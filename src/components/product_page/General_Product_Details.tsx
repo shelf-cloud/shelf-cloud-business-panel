@@ -24,9 +24,29 @@ type Props = {
   brands: string[]
   categories: string[]
   suppliers: string[]
+  useEntryDate: boolean
+  useExpireDate: boolean
+  expirationTime: number | null
 }
 
-const General_Product_Details = ({ inventoryId, sku, image, title, description, brand, category, supplier, itemCondition, note, brands, categories, suppliers }: Props) => {
+const General_Product_Details = ({
+  inventoryId,
+  sku,
+  image,
+  title,
+  description,
+  brand,
+  category,
+  supplier,
+  itemCondition,
+  note,
+  brands,
+  categories,
+  suppliers,
+  useEntryDate,
+  useExpireDate,
+  expirationTime,
+}: Props) => {
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [showEditFields, setShowEditFields] = useState(false)
@@ -43,6 +63,9 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
       category: category ?? '',
       supplier: supplier ?? '',
       itemCondition: itemCondition ?? 'New',
+      useEntryDate,
+      useExpireDate,
+      expirationTime,
       note,
     },
     validationSchema: Yup.object({
@@ -53,6 +76,12 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
       category: Yup.string().max(100, 'Title is to Long'),
       supplier: Yup.string().max(200, 'Title is to Long').required('Please enter product supplier'),
       itemCondition: Yup.string().max(10, 'Title is to Long').required('Please select product condition'),
+      expirationTime: Yup.number()
+        .min(0, 'Minimum of 0')
+        .when('useExpireDate', {
+          is: true,
+          then: Yup.number().min(1, 'Minimum of 1').required('Enter Expiration Time'),
+        }),
       note: Yup.string().max(300, 'Title is to Long'),
     }),
     onSubmit: async (values) => {
@@ -73,6 +102,8 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
 
   const HandleAddProduct = (event: any) => {
     event.preventDefault()
+    console.log(validation.values)
+    console.log(validation.errors)
     validation.handleSubmit()
   }
 
@@ -87,6 +118,9 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
       category: category ?? '',
       supplier: supplier ?? '',
       itemCondition: itemCondition ?? 'New',
+      useEntryDate,
+      useExpireDate,
+      expirationTime,
       note,
     })
     setShowEditFields(true)
@@ -149,6 +183,17 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
                 <tr>
                   <td className='fw-bolder'>Condition</td>
                   <td className={itemCondition ?? 'text-muted fw-light fst-italic'}>{itemCondition ?? 'No supplier'}</td>
+                </tr>
+                <tr>
+                  <td className='fw-bolder'>Tracking</td>
+                  <td className={itemCondition ?? 'text-muted fw-light fst-italic'}>
+                    <p className='m-0 p-0'>
+                      <span className='fw-semibold'>FIFO:</span> {useEntryDate ? 'Yes' : 'No'}
+                    </p>
+                    <p className='m-0 p-0'>
+                      <span className='fw-semibold'>Expires:</span> {useExpireDate ? `${expirationTime} Days` : 'No'}
+                    </p>
+                  </td>
                 </tr>
                 {note && (
                   <tr>
@@ -258,6 +303,61 @@ const General_Product_Details = ({ inventoryId, sku, image, title, description, 
                 errorMessage={validation.errors.itemCondition}
               />
             </Col>
+            <Col md={12} className='px-3'>
+              <FormGroup className='mb-1' check inline>
+                <Label htmlFor='useEntryDate' className='form-label' check>
+                  Track Entry: FIFO
+                </Label>
+                <Input
+                  type='checkbox'
+                  id='useEntryDate'
+                  name='useEntryDate'
+                  onChange={validation.handleChange}
+                  onBlur={validation.handleBlur}
+                  checked={validation.values.useEntryDate || false}
+                  invalid={validation.touched.useEntryDate && validation.errors.useEntryDate ? true : false}
+                />
+                {validation.touched.useEntryDate && validation.errors.useEntryDate ? <FormFeedback type='invalid'>{validation.errors.useEntryDate}</FormFeedback> : null}
+              </FormGroup>
+            </Col>
+            <div className='w-100 px-3 d-flex flex-row justify-content-start align-items-center gap-3'>
+              <FormGroup className='mb-3' check inline>
+                <Label htmlFor='useExpireDate' className='form-label' check>
+                  Track Expiration
+                </Label>
+                <Input
+                  type='checkbox'
+                  id='useExpireDate'
+                  name='useExpireDate'
+                  onChange={validation.handleChange}
+                  onBlur={validation.handleBlur}
+                  checked={validation.values.useExpireDate || false}
+                  invalid={validation.touched.useExpireDate && validation.errors.useExpireDate ? true : false}
+                />
+                {validation.touched.useExpireDate && validation.errors.useExpireDate ? <FormFeedback type='invalid'>{validation.errors.useExpireDate}</FormFeedback> : null}
+              </FormGroup>
+              {validation.values.useExpireDate && (
+                <FormGroup className='mb-3 d-flex flex-row justify-content-start align-items-center gap-3'>
+                  <Label htmlFor='expirationTime' className='form-label text-nowrap' check>
+                    *Expiration Time (Days)
+                  </Label>
+                  <Input
+                    type='number'
+                    className='form-control fs-6'
+                    placeholder='Expires in Days'
+                    id='expirationTime'
+                    name='expirationTime'
+                    bsSize='sm'
+                    min={0}
+                    onChange={validation.handleChange}
+                    onBlur={validation.handleBlur}
+                    value={validation.values.expirationTime ?? ''}
+                    invalid={validation.touched.expirationTime && validation.errors.expirationTime ? true : false}
+                  />
+                  {validation.touched.expirationTime && validation.errors.expirationTime ? <FormFeedback type='invalid'>{validation.errors.expirationTime}</FormFeedback> : null}
+                </FormGroup>
+              )}
+            </div>
             <Col md={12}>
               <FormGroup className='mb-3'>
                 <Label htmlFor='lastNameinput' className='form-label'>

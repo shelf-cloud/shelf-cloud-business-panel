@@ -143,6 +143,9 @@ const Product_Page_Layout = ({}: Props) => {
                           brands={productDetails?.brands ?? []}
                           categories={productDetails?.categories ?? []}
                           suppliers={productDetails?.suppliers ?? []}
+                          useEntryDate={productDetails?.useEntryDate ?? false}
+                          useExpireDate={productDetails?.useExpireDate ?? false}
+                          expirationTime={productDetails?.expirationTime ?? 0}
                         />
                         <Nav className='pt-2 nav-tabs-custom rounded card-header-tabs border-bottom-0' role='tablist'>
                           <NavItem style={{ cursor: 'pointer' }}>

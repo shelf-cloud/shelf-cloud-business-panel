@@ -50,16 +50,16 @@ export interface InvoiceDetails {
 }
 
 export interface OrderDetails {
-  orderId: number;
-  closedDate: string;
-  orderNumber: string;
-  orderType: string;
+  orderId: number
+  closedDate: string
+  orderNumber: string
+  orderType: string
   totalCharge: number
 }
 
 export interface InvoiceFullDetails {
-  invoice: InvoiceDetails;
-  orders: OrderDetails[];
+  invoice: InvoiceDetails
+  orders: OrderDetails[]
 }
 
 export interface Business {
@@ -143,26 +143,26 @@ export interface Product {
   boxWidth: number
   boxHeight: number
   activeState: boolean
-  htsCode: string;
-  description: string;
-  brand: string;
-  category: string;
-  defaultPrice: number;
-  msrp: number;
-  map: number;
-  floor: number;
-  ceilling: number;
-  supplier: string;
-  sellerCost: number;
-  inboundShippingCost: number;
-  otherCosts: number;
-  productionTime: number;
-  transitTime: number;
-  recommendedDaysOfStock: number;
-  shippingToFBA: number;
-  buffer: number;
-  itemCondition: string;
-  identifiers: Identifier[] | null;
+  htsCode: string
+  description: string
+  brand: string
+  category: string
+  defaultPrice: number
+  msrp: number
+  map: number
+  floor: number
+  ceilling: number
+  supplier: string
+  sellerCost: number
+  inboundShippingCost: number
+  otherCosts: number
+  productionTime: number
+  transitTime: number
+  recommendedDaysOfStock: number
+  shippingToFBA: number
+  buffer: number
+  itemCondition: string
+  identifiers: Identifier[] | null
 }
 
 // PRODUCT DETAILS PAGE
@@ -219,6 +219,9 @@ export interface ProductDetails {
   boxWidth: number
   boxHeight: number
   activeState: boolean
+  useEntryDate: boolean
+  useExpireDate: boolean
+  expirationTime: number | null
   // sku
   htsCode: string
   defaultPrice: number
@@ -248,7 +251,7 @@ export interface ProductDetails {
   latestOrders: LatestOrders[]
   bins: ProductBins[]
   listings: Listings[]
-  itemCondition: "New" | "Like New" | "Used"
+  itemCondition: 'New' | 'Like New' | 'Used'
   identifiers: Identifier[]
   brands: string[]
   categories: string[]
@@ -329,26 +332,26 @@ interface ChargesFees {
 
 interface Plan {
   items: {
-    sku: string,
-    name: string,
-    image: string,
+    sku: string
+    name: string
+    image: string
     cartons: {
-      boxId: number,
+      boxId: number
       qtyInBox: number
-    }[],
+    }[]
     qtyToShip: number
-  }[],
+  }[]
   cartons: {
     box: {
-      width: number,
-      height: number,
-      length: number,
+      width: number
+      height: number
+      length: number
       weight: number
-    },
+    }
     skus: {
-      sku: string,
+      sku: string
       qtyInBox: number
-    }[],
+    }[]
     boxId: number
   }[]
 }
@@ -419,7 +422,7 @@ export interface OrderRowType {
   returnRMA?: string
   returnId: number
   returnState?: 'pending' | 'complete' | 'partial refund' | 'refund' | 'cancelled' | 'on hold'
-  returnOrigin?: "shipment" | "return"
+  returnOrigin?: 'shipment' | 'return'
   extraComment: string
   individualUnitsPlan?: IndividualUnitsPlan
   isIndividualUnits?: boolean
@@ -544,7 +547,6 @@ export interface WholeSaleOrder {
   numberPallets: number
   numberBoxes: number
 }
-
 
 // KITS ORDERS
 
