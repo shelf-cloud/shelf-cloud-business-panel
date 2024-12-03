@@ -6,11 +6,17 @@ import moment from 'moment'
 import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import { toast } from 'react-toastify'
-import { UncontrolledTooltip } from 'reactstrap'
+import { Button, UncontrolledTooltip } from 'reactstrap'
 
 type SortByType = {
   key: string
   asc: boolean
+}
+
+type EditComment = {
+  show: boolean
+  orderId: number
+  comment: string
 }
 
 type Props = {
@@ -20,9 +26,10 @@ type Props = {
   toggledClearRows: boolean
   sortBy: SortByType
   setSortBy: (prev: SortByType) => void
+  setEditCommentModal: (prev: EditComment) => void
 }
 
-const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRows, sortBy, setSortBy }: Props) => {
+const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRows, sortBy, setSortBy, setEditCommentModal }: Props) => {
   const { state }: any = useContext(AppContext)
 
   const handleSelectedRows = ({ selectedRows }: { selectedRows: Invoice[] }) => {
@@ -239,6 +246,37 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       },
       sortable: false,
       center: true,
+      compact: true,
+    },
+    {
+      name: <span className='fw-bold fs-6 text-nowrap'>Notes</span>,
+      selector: (row: Invoice) => {
+        return (
+          <div className='w-100 d-flex flex-row justify-content-end align-items-center gap-1'>
+            {row.commerceHubComment && (
+              <>
+                <i className='ri-information-fill fs-5 text-primary' id={`tooltipCommerceHubComment${row.orderId}`} />
+                <UncontrolledTooltip
+                  placement='left'
+                  target={`tooltipCommerceHubComment${row.orderId}`}
+                  popperClassName='bg-white px-3 pt-3 rounded-2 border border-primary'
+                  innerClassName='text-black bg-white p-0'>
+                  <p className='fs-7 text-start fw-light'>{row.commerceHubComment}</p>
+                </UncontrolledTooltip>
+              </>
+            )}
+            <Button id='Popover1' type='button' color='ghost' size='sm'>
+              <i
+                className='las la-edit fs-5 text-muted m-0 p-0 '
+                style={{ cursor: 'pointer' }}
+                onClick={() => setEditCommentModal({ show: true, orderId: row.orderId, comment: row.commerceHubComment ?? '' })}
+              />
+            </Button>
+          </div>
+        )
+      },
+      sortable: false,
+      left: true,
       compact: true,
     },
   ]

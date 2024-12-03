@@ -49,6 +49,7 @@ export const generateDocument = async (reportType: string, info: any[]) => {
                     totalPaid: row.checkTotal ? row.checkTotal : '',
                     pending: parseFloat((row.invoiceTotal - row.checkTotal).toFixed(2)),
                     commerceHubStatus: !row.commerceHubStatus || row.commerceHubStatus === '' ? 'pending' : row.commerceHubStatus,
+                    commerceHubComment: !row.commerceHubComment || row.commerceHubComment === '' ? '' : row.commerceHubComment,
                 })
             }
             break;

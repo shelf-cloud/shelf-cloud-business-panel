@@ -18,6 +18,7 @@ import useSWR from 'swr'
 import { toast } from 'react-toastify'
 import BulkActionsForSelected from '@components/commerceHub/BulkActionsForSelected'
 import { generateDocument } from '@lib/commerceHub/getDocument'
+import EditInvoiceCommerceHubCommentModal from '@components/modals/commercehub/EditInvoiceCommerceHubCommentModal'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -79,6 +80,11 @@ const Invoices = ({ session, sessionToken }: Props) => {
   const [daysOverdue, setdaysOverdue] = useState(0)
   const [showUpdateInvoices, setshowUpdateInvoices] = useState({
     show: false,
+  })
+  const [editCommentModal, setEditCommentModal] = useState({
+    show: false,
+    orderId: 0,
+    comment: '',
   })
   const [sortBy, setSortBy] = useState({
     key: 'closedDate',
@@ -334,6 +340,7 @@ const Invoices = ({ session, sessionToken }: Props) => {
                   toggledClearRows={toggledClearRows}
                   sortBy={sortBy}
                   setSortBy={setSortBy}
+                  setEditCommentModal={setEditCommentModal}
                 />
                 <div ref={lastInvoiceElementRef} style={{ height: '20px', marginTop: '10px' }}>
                   {isValidating && size > 1 && (
@@ -347,6 +354,7 @@ const Invoices = ({ session, sessionToken }: Props) => {
           </Container>
         </div>
         {showUpdateInvoices.show && <UpdateInvoicesModal showUpdateInvoices={showUpdateInvoices} setshowUpdateInvoices={setshowUpdateInvoices} clearFilters={clearFilters} stores={stores?.stores ?? []}/>}
+        {editCommentModal.show && <EditInvoiceCommerceHubCommentModal editCommentModal={editCommentModal} setEditCommentModal={setEditCommentModal} mutate={mutate} />}
       </React.Fragment>
     </div>
   )

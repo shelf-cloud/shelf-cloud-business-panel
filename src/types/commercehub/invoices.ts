@@ -24,6 +24,7 @@ export interface Invoice {
     comments: string | null
     status: string | null
     commerceHubStatus: string | null
+    commerceHubComment: string | null
     channelName: string
     storeName: string
     channelLogo: string

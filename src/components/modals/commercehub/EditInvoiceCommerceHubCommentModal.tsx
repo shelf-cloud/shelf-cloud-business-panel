@@ -7,7 +7,7 @@ import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reacts
 
 type EditComment = {
   show: boolean
-  id: number
+  orderId: number
   comment: string
 }
 
@@ -17,18 +17,18 @@ type Props = {
   mutate: () => void
 }
 
-const EditCommerceHubCommentModal = ({ editCommentModal, setEditCommentModal, mutate }: Props) => {
+const EditInvoiceCommerceHubCommentModal = ({ editCommentModal, setEditCommentModal, mutate }: Props) => {
   const { state }: any = useContext(AppContext)
   const [newComment, setnewComment] = useState(editCommentModal.comment)
   const [isLoading, setisLoading] = useState(false)
 
   const hanldeEditFBAShipmentName = async () => {
     setisLoading(true)
-    const editComment = toast.loading('Saving Comment...')
+    const editComment = toast.loading('Saving Note...')
     try {
       const response = await axios
-        .post(`/api/commerceHub/editComment?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-          id: editCommentModal.id,
+        .post(`/api/commerceHub/editInvoiceComment?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+          id: editCommentModal.orderId,
           comment: newComment,
         })
         .then((res) => res.data)
@@ -42,7 +42,7 @@ const EditCommerceHubCommentModal = ({ editCommentModal, setEditCommentModal, mu
         })
         setEditCommentModal({
           show: false,
-          id: 0,
+          orderId: 0,
           comment: '',
         })
         mutate()
@@ -56,7 +56,7 @@ const EditCommerceHubCommentModal = ({ editCommentModal, setEditCommentModal, mu
       }
     } catch (error) {
       toast.update(editComment, {
-        render: 'Error saving comment',
+        render: 'Error saving note',
         type: 'error',
         isLoading: false,
         autoClose: 3000,
@@ -70,12 +70,12 @@ const EditCommerceHubCommentModal = ({ editCommentModal, setEditCommentModal, mu
       fade={false}
       size='md'
       centered
-      id='editCommentModal'
+      id='editInvoiceCommentModal'
       isOpen={editCommentModal.show}
       toggle={() => {
         setEditCommentModal({
           show: false,
-          id: 0,
+          orderId: 0,
           comment: '',
         })
       }}>
@@ -83,21 +83,21 @@ const EditCommerceHubCommentModal = ({ editCommentModal, setEditCommentModal, mu
         toggle={() => {
           setEditCommentModal({
             show: false,
-            id: 0,
+            orderId: 0,
             comment: '',
           })
         }}
         className='modal-title'
         id='myModalLabel'>
-        Comment
+        Invoice Note
       </ModalHeader>
       <ModalBody>
         <Row>
           <Col md={12} className='mt-2'>
             <DebounceInput
               element='textarea'
-              minLength={2}
-              debounceTimeout={500}
+              minLength={3}
+              debounceTimeout={700}
               className='form-control fs-7'
               placeholder='Comment ...'
               id='search-options'
@@ -115,7 +115,7 @@ const EditCommerceHubCommentModal = ({ editCommentModal, setEditCommentModal, mu
               onClick={() => {
                 setEditCommentModal({
                   show: false,
-                  id: 0,
+                  orderId: 0,
                   comment: '',
                 })
               }}>
@@ -131,4 +131,4 @@ const EditCommerceHubCommentModal = ({ editCommentModal, setEditCommentModal, mu
   )
 }
 
-export default EditCommerceHubCommentModal
+export default EditInvoiceCommerceHubCommentModal
