@@ -152,25 +152,31 @@ const Navdata = () => {
               id: 'listings',
               label: 'Listings',
               link: '/amazon-sellers/listings?showHidden=0&condition=All&mapped=All',
-              parentId: 'marketplaces',
+              parentId: 'amazon',
             },
             {
               id: 'orders',
               label: 'FBA Orders',
               link: '/amazon-sellers/orders',
-              parentId: 'marketplaces',
+              parentId: 'amazon',
+            },
+            {
+              id: 'fulfillments',
+              label: 'Fulfillments',
+              link: '/amazon-sellers/fulfillments',
+              parentId: 'amazon',
             },
             {
               id: 'shipments',
               label: 'FBA Shipments',
               link: '/amazon-sellers/shipments',
-              parentId: 'marketplaces',
+              parentId: 'amazon',
             },
             {
               id: 'fulfillments',
               label: 'Send To Amazon',
               link: '/amazon-sellers/fulfillment/sendToAmazon',
-              parentId: 'marketplaces',
+              parentId: 'amazon',
             },
           ],
         },
@@ -191,25 +197,25 @@ const Navdata = () => {
               id: 'dashboard',
               label: 'Dashboard',
               link: '/commercehub/',
-              parentId: 'marketplaces',
+              parentId: 'commercehub',
             },
             {
               id: 'invoices',
               label: 'Check Summary',
               link: '/commercehub/checkSummary',
-              parentId: 'marketplaces',
+              parentId: 'commercehub',
             },
             {
               id: 'invoices',
               label: 'Invoices',
               link: '/commercehub/Invoices',
-              parentId: 'marketplaces',
+              parentId: 'commercehub',
             },
             {
               id: 'invoices',
               label: 'Deductions',
               link: '/commercehub/deductions',
-              parentId: 'marketplaces',
+              parentId: 'commercehub',
             },
           ],
         },
@@ -348,7 +354,7 @@ const Navdata = () => {
     if (iscurrentState !== 'Billing') {
       setIsBilling(false)
     }
-  }, [iscurrentState, isDashboard, isWarehouse, isShipments, isReceiving, isBilling, isAmazon, isMarketplaceses, isReports])
+  }, [iscurrentState, isDashboard, isWarehouse, isShipments, isReceiving, isBilling, isMarketplaceses, isReports])
 
   useEffect(() => {}, [state.user, session])
 
@@ -356,19 +362,7 @@ const Navdata = () => {
 
   if (session?.user?.role === 'admin') {
     menuItems = [
-      {
-        id: 'dashboard',
-        label: 'Dashboard',
-        icon: 'ri-function-fill',
-        link: '/',
-        stateVariables: isDashboard,
-        click: function (e) {
-          e.preventDefault()
-          setIsDashboard(!isDashboard)
-          setIscurrentState('Dashboard')
-          updateIconSidebar(e)
-        },
-      },
+      modules.Dashboard,
       {
         id: 'warehouse',
         label: 'Inventory',
@@ -528,48 +522,23 @@ const Navdata = () => {
     ]
 
     if (state.user[state.currentRegion]?.showWholeSale) {
-      menuItems[2].subItems.unshift({
-        id: 'createwholesale',
-        label: 'Create Wholesale Order',
-        link: '/CreateWholeSaleOrder',
-        parentId: 'shipments',
-      })
+      menuItems[2].subItems.unshift(modules.Orders.subItems['Create WholeSale Order'])
     }
 
     if (state.user[state.currentRegion]?.showCreateOrder) {
-      menuItems[2].subItems.unshift({
-        id: 'createorder',
-        label: 'Create Order',
-        link: '/CreateOrder',
-        parentId: 'shipments',
-      })
+      menuItems[2].subItems.unshift(modules.Orders.subItems['Create Order'])
     }
 
     if (state.user[state.currentRegion]?.showKits) {
-      menuItems[1].subItems.unshift({
-        id: 'kits',
-        label: 'Kits',
-        link: '/Kits',
-        parentId: 'warehouse',
-      })
+      menuItems[1].subItems.unshift(modules.Inventory.subItems.Kits)
     }
 
     if (state.user[state.currentRegion]?.showReorderingPoints) {
-      menuItems[4].subItems.unshift({
-        id: 'reorderingPoints',
-        label: 'Reordering Points',
-        link: '/reorderingPoints?filters=true&urgency=[2,3]',
-        parentId: 'receiving',
-      })
+      menuItems[4].subItems.unshift(modules.Inbound.subItems['Reordering Points'])
     }
 
     if (state.user[state.currentRegion]?.showPurchaseOrders) {
-      menuItems[4].subItems.unshift({
-        id: 'purchaseorders',
-        label: 'Purchase Orders',
-        link: '/purchaseOrders?status=pending&organizeBy=suppliers',
-        parentId: 'receiving',
-      })
+      menuItems[4].subItems.unshift(modules.Inbound.subItems['Purchase Orders'])
     }
 
     if (state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected) {

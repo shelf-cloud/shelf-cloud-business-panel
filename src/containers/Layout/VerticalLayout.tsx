@@ -43,7 +43,7 @@ const VerticalLayout = () => {
                       }
                     }}
                     data-bs-toggle='collapse'
-                    aria-expanded={actualCollapsed == item.label ? 'true' : 'false'}>
+                    aria-expanded={actualCollapsed == item.label ? true : false}>
                     <i className={item.icon}></i>
                     <span data-key='t-apps'>{item.label}</span>
                     {item.badgeName ? (
@@ -97,7 +97,7 @@ const VerticalLayout = () => {
                                       'linkActive')
                                   }
                                   data-bs-toggle='collapse'
-                                  aria-expanded={actualSubItemCollapsed == subItem.label ? 'true' : 'false'}>
+                                  aria-expanded={actualSubItemCollapsed == subItem.label ? true : false}>
                                   {subItem.label}
                                 </a>
                               </Link>
