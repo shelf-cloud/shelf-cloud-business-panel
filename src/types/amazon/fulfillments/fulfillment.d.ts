@@ -336,15 +336,20 @@ export interface TransportationOption {
     shippingMode: ShippingMode;
     transportationOptionId: string;
     shippingSolution: ShippingSolution;
+    carrierAppointment?: {
+        endTime: string
+        startTime: string
+    }
 }
 
 export interface Carrier {
     name: string;
-    alphaCode?: string;
+    alphaCode: string;
 }
 
 export interface Quote {
     cost: Cost;
+    expiration?: string
 }
 
 export interface Cost {

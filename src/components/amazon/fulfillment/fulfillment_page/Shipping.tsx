@@ -2,14 +2,21 @@
 /* eslint-disable @next/next/no-img-element */
 import AppContext from '@context/AppContext'
 import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
-import { DeliveryWindowsOptions, DeliveryWindowsResponse, InboundPlan, PlacementOption, TransportationOption, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
+import {
+  DeliveryWindowsOptions,
+  DeliveryWindowsResponse,
+  InboundPlan,
+  PlacementOption,
+  TransportationOptionShipment,
+  WaitingReponses,
+} from '@typesTs/amazon/fulfillments/fulfillment'
 import moment from 'moment'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { Alert, Button, Card, CardBody, CardHeader, Col, Input, Label, Row, Spinner } from 'reactstrap'
 import Image from 'next/image'
 import boxIcon from '@assets/fulfillments/outbound_box.png'
 import palletIcon from '@assets/fulfillments/outbound_pallet.png'
-import SelectShippingCarrier from './SelectShippingCarrier'
+// import SelectShippingCarrier from './SelectShippingCarrier'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import ShippingSelectDate from './ShippingSelectDate'
@@ -34,98 +41,46 @@ type FinalShipment = {
   loadingDeliveryWindowOptions: boolean
 }
 
-const nonAmazonCarrierOptions = [
-  {
-    carrier: {
-      name: 'DHL',
-      alphaCode: 'DHLW',
-    },
-    preconditions: ['CONFIRMED_DELIVERY_WINDOW'],
-    shipmentId: '',
-    shippingMode: 'GROUND_SMALL_PARCEL',
-    transportationOptionId: '',
-    shippingSolution: 'USE_YOUR_OWN_CARRIER',
-  },
-  {
-    carrier: {
-      name: 'FedEx',
-      alphaCode: 'FDE',
-    },
-    preconditions: ['CONFIRMED_DELIVERY_WINDOW'],
-    shipmentId: '',
-    shippingMode: 'GROUND_SMALL_PARCEL',
-    transportationOptionId: '',
-    shippingSolution: 'USE_YOUR_OWN_CARRIER',
-  },
-  {
-    carrier: {
-      name: 'FedEx Ground',
-      alphaCode: 'FDEG',
-    },
-    preconditions: ['CONFIRMED_DELIVERY_WINDOW'],
-    shipmentId: '',
-    shippingMode: 'GROUND_SMALL_PARCEL',
-    transportationOptionId: '',
-    shippingSolution: 'USE_YOUR_OWN_CARRIER',
-  },
-  {
-    carrier: {
-      name: 'GES (ShipTrack)',
-      alphaCode: 'SHFI',
-    },
-    preconditions: ['CONFIRMED_DELIVERY_WINDOW'],
-    shipmentId: '',
-    shippingMode: 'GROUND_SMALL_PARCEL',
-    transportationOptionId: '',
-    shippingSolution: 'USE_YOUR_OWN_CARRIER',
-  },
-  {
-    carrier: {
-      name: 'NIUKU (ShipTrack)',
-      alphaCode: 'JCRA',
-    },
-    preconditions: ['CONFIRMED_DELIVERY_WINDOW'],
-    shipmentId: '',
-    shippingMode: 'GROUND_SMALL_PARCEL',
-    transportationOptionId: '',
-    shippingSolution: 'USE_YOUR_OWN_CARRIER',
-  },
-  {
-    carrier: {
-      name: 'Owl Supply Chain (ShipTrack)',
-      alphaCode: 'NSIV',
-    },
-    preconditions: ['CONFIRMED_DELIVERY_WINDOW'],
-    shipmentId: '',
-    shippingMode: 'GROUND_SMALL_PARCEL',
-    transportationOptionId: '',
-    shippingSolution: 'USE_YOUR_OWN_CARRIER',
-  },
-  {
-    carrier: {
-      name: 'UPS (non-partnered carrier)',
-      alphaCode: 'UPSN',
-    },
-    preconditions: ['CONFIRMED_DELIVERY_WINDOW'],
-    shipmentId: '',
-    shippingMode: 'GROUND_SMALL_PARCEL',
-    transportationOptionId: '',
-    shippingSolution: 'USE_YOUR_OWN_CARRIER',
-  },
-  {
-    carrier: {
-      name: 'USPS',
-      alphaCode: 'USPS',
-    },
-    preconditions: ['CONFIRMED_DELIVERY_WINDOW'],
-    shipmentId: '',
-    shippingMode: 'GROUND_SMALL_PARCEL',
-    transportationOptionId: '',
-    shippingSolution: 'USE_YOUR_OWN_CARRIER',
-  },
-] as TransportationOption[]
+const findLtlAlphaCode = (transportationOptions: TransportationOptionShipment) => {
+  const shipments = Object.values(transportationOptions)
+  const alphaCodeData: Record<string, { totalCost: number; shipmentCount: number }> = {}
 
-const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNextStep, watingRepsonse }: Props) => {
+  for (const shipment of shipments) {
+    const seenAlphaCodes = new Set<string>()
+
+    for (const option of shipment.filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'FREIGHT_LTL')) {
+      const { alphaCode } = option.carrier
+
+      if (seenAlphaCodes.has(alphaCode)) continue
+      seenAlphaCodes.add(alphaCode)
+
+      if (!alphaCodeData[alphaCode]) {
+        alphaCodeData[alphaCode] = { totalCost: 0, shipmentCount: 0 }
+      }
+
+      alphaCodeData[alphaCode].shipmentCount += 1
+
+      if (option.quote) {
+        alphaCodeData[alphaCode].totalCost += option.quote.cost.amount
+      }
+    }
+  }
+
+  let optimalAlphaCode: string | null = null
+  let minCost = Infinity
+
+  for (const [alphaCode, { totalCost, shipmentCount }] of Object.entries(alphaCodeData)) {
+    // Check if the alphaCode is present in all shipments
+    if (shipmentCount === shipments.length && totalCost < minCost) {
+      minCost = totalCost
+      optimalAlphaCode = alphaCode
+    }
+  }
+
+  return optimalAlphaCode
+}
+
+const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }: Props) => {
   const { state }: any = useContext(AppContext)
   const [placementOptionSelected, setplacementOptionSelected] = useState<PlacementOption>(
     !inboundPlan.placementOptionId
@@ -141,6 +96,11 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
     sameShippingMode: true,
     shippingMode: 'SPD',
     sameShippingCarrier: 'amazon',
+    sameLtlAlphaCode: findLtlAlphaCode(
+      !inboundPlan.placementOptionId
+        ? inboundPlan.transportationOptions[inboundPlan.placementOptions[0].placementOptionId]
+        : inboundPlan.transportationOptions[inboundPlan.placementOptionId]
+    ),
     nonAmazonCarrier: '',
     nonAmazonAlphaCode: '',
     placementOptionIdSelected: !inboundPlan.placementOptionId ? inboundPlan.placementOptions[0].placementOptionId : inboundPlan.placementOptionId,
@@ -179,6 +139,7 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
             ...prev,
             sameShippingMode: true,
             sameShippingCarrier: 'amazon',
+            sameLtlAlphaCode: findLtlAlphaCode(inboundPlan.transportationOptions[chosenPlacementOption.placementOptionId]),
             nonAmazonCarrier: '',
             nonAmazonAlphaCode: '',
             placementOptionIdSelected: chosenPlacementOption.placementOptionId,
@@ -198,7 +159,9 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
       const placementOption = inboundPlan.placementOptions.find(
         (placementOption) =>
           Object.values(inboundPlan.transportationOptions[placementOption.placementOptionId]).reduce((total, shipment) => {
-            const subtotal = shipment.find((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')?.quote?.cost.amount!
+            const subtotal = shipment
+              .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+              .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
             return total + subtotal
           }, 0) > 0
       )
@@ -228,14 +191,14 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
     }
   }, [inboundPlan.placementOptions, inboundPlan.transportationOptions])
 
-  useEffectAfterMount(() => {
-    if (inboundPlan.placementOptions.length > 0) {
-      const placementOptionsExpired = inboundPlan.placementOptions.some((placementOption) => moment(placementOption.expiration).isBefore(moment()))
-      if (placementOptionsExpired && !watingRepsonse.shippingExpired && !inboundPlan.steps[3].complete) {
-        handlePlacementExpired(inboundPlan.inboundPlanId)
-      }
-    }
-  }, [])
+  // useEffectAfterMount(() => {
+  //   if (inboundPlan.placementOptions.length > 0) {
+  //     const placementOptionsExpired = inboundPlan.placementOptions.some((placementOption) => moment(placementOption.expiration).isBefore(moment()))
+  //     if (placementOptionsExpired && !watingRepsonse.shippingExpired && !inboundPlan.steps[3].complete) {
+  //       handlePlacementExpired(inboundPlan.inboundPlanId)
+  //     }
+  //   }
+  // }, [])
 
   const handleGetDeliveryWindowOptions = async (placementOptionId: string, shipmentId: string) => {
     if (deliveryWindowOptions[placementOptionId] && deliveryWindowOptions[placementOptionId][shipmentId]) return
@@ -308,7 +271,9 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
       if (finalShippingCharges.shippingMode === 'SPD') {
         if (finalShippingCharges.sameShippingCarrier === 'amazon') {
           return Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]).reduce((total, shipment) => {
-            const subtotal = shipment.find((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')?.quote?.cost.amount!
+            const subtotal = shipment
+              .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+              .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
             return total + subtotal
           }, 0)
         }
@@ -325,9 +290,9 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
           if (finalShippingCharges.sameShippingCarrier === 'amazon') {
             return (
               total +
-              Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipment.shipmentId]).find(
-                (option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL'
-              )?.quote?.cost.amount!
+              Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipment.shipmentId])
+                .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
             )
           } else {
             return total
@@ -348,9 +313,14 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
         if (shipment.shippingMode === 'LTL') {
           return (
             total +
-            (Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipment.shipmentId]).find(
-              (option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'FREIGHT_LTL'
-            )?.quote?.cost.amount! || 0)
+            (Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipment.shipmentId])
+              .filter(
+                (option) =>
+                  option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' &&
+                  option.shippingMode === 'FREIGHT_LTL' &&
+                  option.carrier.alphaCode === finalShippingCharges.sameLtlAlphaCode
+              )
+              .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount! || 0)
           )
         } else {
           return total
@@ -410,9 +380,9 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
     if (finalShippingCharges.sameShippingMode) {
       if (finalShippingCharges.shippingMode === 'SPD') {
         if (finalShippingCharges.sameShippingCarrier === 'amazon') {
-          return Object.values(inboundPlan.transportationOptions[finalShippingCharges.placementOptionIdSelected][shipmentId]).find(
-            (option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL'
-          )?.quote?.cost.amount!
+          return Object.values(inboundPlan.transportationOptions[finalShippingCharges.placementOptionIdSelected][shipmentId])
+            .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+            .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
         }
 
         if (finalShippingCharges.sameShippingCarrier === 'non-amazon') {
@@ -422,9 +392,9 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
     }
 
     if (!finalShippingCharges.sameShippingMode) {
-      return Object.values(inboundPlan.transportationOptions[finalShippingCharges.placementOptionIdSelected][shipmentId]).find(
-        (option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL'
-      )?.quote?.cost.amount!
+      return Object.values(inboundPlan.transportationOptions[finalShippingCharges.placementOptionIdSelected][shipmentId])
+        .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+        .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
     }
 
     return 0
@@ -435,9 +405,12 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
 
     if (!finalShippingCharges.sameShippingMode) {
       if (shipment.shippingMode === 'LTL') {
-        return Object.values(inboundPlan.transportationOptions[finalShippingCharges.placementOptionIdSelected][shipment.shipmentId]).find(
-          (option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'FREIGHT_LTL'
-        )?.quote?.cost.amount!
+        return Object.values(inboundPlan.transportationOptions[finalShippingCharges.placementOptionIdSelected][shipment.shipmentId])
+          .filter(
+            (option) =>
+              option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'FREIGHT_LTL' && option.carrier.alphaCode === finalShippingCharges.sameLtlAlphaCode
+          )
+          .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
       }
     }
 
@@ -476,9 +449,9 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
         if (finalShippingCharges.sameShippingMode) {
           if (finalShippingCharges.shippingMode === 'SPD') {
             if (finalShippingCharges.sameShippingCarrier === 'amazon') {
-              transportation.transportationOptionId = Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipment.shipmentId]).find(
-                (option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL'
-              )?.transportationOptionId!
+              transportation.transportationOptionId = Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipment.shipmentId])
+                .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].transportationOptionId!
             }
 
             if (finalShippingCharges.sameShippingCarrier === 'non-amazon') {
@@ -488,18 +461,23 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
             }
           }
           if (finalShippingCharges.shippingMode === 'LTL') {
-            transportation.transportationOptionId = Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipment.shipmentId]).find(
-              (option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'FREIGHT_LTL'
-            )?.transportationOptionId!
+            transportation.transportationOptionId = Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipment.shipmentId])
+              .filter(
+                (option) =>
+                  option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' &&
+                  option.shippingMode === 'FREIGHT_LTL' &&
+                  option.carrier.alphaCode === finalShippingCharges.sameLtlAlphaCode
+              )
+              .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].transportationOptionId!
           }
         }
 
         if (!finalShippingCharges.sameShippingMode) {
           if (shipment.shippingMode === 'SPD') {
             if (finalShippingCharges.sameShippingCarrier === 'amazon') {
-              transportation.transportationOptionId = Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipment.shipmentId]).find(
-                (option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL'
-              )?.transportationOptionId!
+              transportation.transportationOptionId = Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipment.shipmentId])
+                .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].transportationOptionId!
             }
 
             if (finalShippingCharges.sameShippingCarrier === 'non-amazon') {
@@ -510,9 +488,14 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
           }
 
           if (shipment.shippingMode === 'LTL') {
-            transportation.transportationOptionId = Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipment.shipmentId]).find(
-              (option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'FREIGHT_LTL'
-            )?.transportationOptionId!
+            transportation.transportationOptionId = Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipment.shipmentId])
+              .filter(
+                (option) =>
+                  option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' &&
+                  option.shippingMode === 'FREIGHT_LTL' &&
+                  option.carrier.alphaCode === finalShippingCharges.sameLtlAlphaCode
+              )
+              .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].transportationOptionId!
           }
         }
 
@@ -712,9 +695,9 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                               state.currentRegion,
                               inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]
                                 ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]).reduce((total, shipment) => {
-                                    const subtotal = shipment.find(
-                                      (option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL'
-                                    )?.quote?.cost.amount!
+                                    const subtotal = shipment
+                                      .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                                      .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
                                     return total + subtotal
                                   }, 0)
                                 : 0
@@ -759,8 +742,14 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                                   state.currentRegion,
                                   inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]
                                     ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]).reduce((total, shipment) => {
-                                        const subtotal = shipment.find((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'FREIGHT_LTL')
-                                          ?.quote?.cost.amount!
+                                        const subtotal = shipment
+                                          .filter(
+                                            (option) =>
+                                              option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' &&
+                                              option.shippingMode === 'FREIGHT_LTL' &&
+                                              option.carrier.alphaCode === finalShippingCharges.sameLtlAlphaCode
+                                          )
+                                          .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
                                         return total + subtotal
                                       }, 0)
                                     : 0
@@ -799,9 +788,9 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                               state.currentRegion,
                               inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]
                                 ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]).reduce((total, shipment) => {
-                                    const subtotal = shipment.find(
-                                      (option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL'
-                                    )?.quote?.cost.amount!
+                                    const subtotal = shipment
+                                      .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                                      .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
                                     return total + subtotal
                                   }, 0)
                                 : 0
@@ -810,7 +799,7 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                         </CardBody>
                       </Card>
                     </Col>
-                    <Col xs='12' lg='3'>
+                    {/* <Col xs='12' lg='3'>
                       <Card
                         onClick={() =>
                           setfinalShippingCharges((prev) => {
@@ -834,7 +823,7 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                           />
                         </CardBody>
                       </Card>
-                    </Col>
+                    </Col> */}
                   </Row>
                 </div>
               )}
@@ -850,6 +839,7 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                       style={{ width: 'fit-content', maxWidth: '400px', zIndex: placementOptionSelected.shipmentIds.length - shipmentIndex }}>
                       <CardHeader>
                         <p className='m-0 p-0 fw-bold fs-6'>Shipment #{shipmentIndex + 1}</p>
+                        <p className='m-0 p-0 fs-7 text-muted fw-light'>ID: {shipmentId}</p>
                       </CardHeader>
                       <CardBody>
                         <p className='m-0 fs-7'>
@@ -935,9 +925,9 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                                 {FormatCurrency(
                                   state.currentRegion,
                                   inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]
-                                    ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId]).find(
-                                        (option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL'
-                                      )?.quote?.cost.amount!
+                                    ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
+                                        .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                                        .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
                                     : 0
                                 )}
                               </span>
@@ -1006,9 +996,14 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                                       {FormatCurrency(
                                         state.currentRegion,
                                         inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]
-                                          ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId]).find(
-                                              (option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'FREIGHT_LTL'
-                                            )?.quote?.cost.amount!
+                                          ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
+                                              .filter(
+                                                (option) =>
+                                                  option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' &&
+                                                  option.shippingMode === 'FREIGHT_LTL' &&
+                                                  option.carrier.alphaCode === finalShippingCharges.sameLtlAlphaCode
+                                              )
+                                              .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
                                           : 0
                                       )}
                                     </span>
@@ -1043,9 +1038,9 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                                             [shipmentId]: {
                                               ...prev.shipments[shipmentId],
                                               shippingMode: 'SPD',
-                                              transportationOptionId: Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId]).find(
-                                                (option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL'
-                                              )?.transportationOptionId,
+                                              transportationOptionId: Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
+                                                .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                                                .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].transportationOptionId,
                                             },
                                           },
                                         }
@@ -1069,9 +1064,9 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                                       {FormatCurrency(
                                         state.currentRegion,
                                         inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]
-                                          ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId]).find(
-                                              (option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL'
-                                            )?.quote?.cost.amount!
+                                          ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
+                                              .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                                              .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
                                           : 0
                                       )}
                                     </p>
@@ -1105,10 +1100,14 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                                               [shipmentId]: {
                                                 ...prev.shipments[shipmentId],
                                                 shippingMode: 'LTL',
-                                                transportationOptionId: Object.values(
-                                                  inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId]
-                                                ).find((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'FREIGHT_LTL')
-                                                  ?.transportationOptionId,
+                                                transportationOptionId: Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
+                                                  .filter(
+                                                    (option) =>
+                                                      option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' &&
+                                                      option.shippingMode === 'FREIGHT_LTL' &&
+                                                      option.carrier.alphaCode === finalShippingCharges.sameLtlAlphaCode
+                                                  )
+                                                  .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].transportationOptionId,
                                               },
                                             },
                                           }
@@ -1137,9 +1136,14 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                                             {FormatCurrency(
                                               state.currentRegion,
                                               inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]
-                                                ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId]).find(
-                                                    (option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'FREIGHT_LTL'
-                                                  )?.quote?.cost.amount!
+                                                ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
+                                                    .filter(
+                                                      (option) =>
+                                                        option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' &&
+                                                        option.shippingMode === 'FREIGHT_LTL' &&
+                                                        option.carrier.alphaCode === finalShippingCharges.sameLtlAlphaCode
+                                                    )
+                                                    .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
                                                 : 0
                                             )}
                                           </>
@@ -1177,10 +1181,9 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                                                 [shipmentId]: {
                                                   ...prev.shipments[shipmentId],
                                                   shippingMode: 'SPD',
-                                                  transportationOptionId: Object.values(
-                                                    inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId]
-                                                  ).find((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
-                                                    ?.transportationOptionId,
+                                                  transportationOptionId: Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
+                                                    .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                                                    .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].transportationOptionId,
                                                 },
                                               },
                                             }
@@ -1193,9 +1196,9 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                                           {FormatCurrency(
                                             state.currentRegion,
                                             inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]
-                                              ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId]).find(
-                                                  (option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL'
-                                                )?.quote?.cost.amount!
+                                              ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
+                                                  .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                                                  .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
                                               : 0
                                           )}
                                         </p>
@@ -1203,7 +1206,7 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                                     </div>
 
                                     {/* CARRIER NON-AMAZON */}
-                                    <div className='d-flex flex-row justify-content-start align-items-center gap-3'>
+                                    {/* <div className='d-flex flex-row justify-content-start align-items-center gap-3'>
                                       <Input
                                         className='my-0'
                                         type='radio'
@@ -1255,7 +1258,7 @@ const Shipping = ({ sessionToken, inboundPlan, handlePlacementExpired, handleNex
                                           }
                                         />
                                       </div>
-                                    </div>
+                                    </div> */}
                                   </div>
                                   <p className='m-0 my-3 p-0 text-muted fs-7'>The carrier for this SPD shipment must be the same as other SPD shipments.</p>
                                 </>
