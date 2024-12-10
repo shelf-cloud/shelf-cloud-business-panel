@@ -102,8 +102,6 @@ const General_Product_Details = ({
 
   const HandleAddProduct = (event: any) => {
     event.preventDefault()
-    console.log(validation.values)
-    console.log(validation.errors)
     validation.handleSubmit()
   }
 

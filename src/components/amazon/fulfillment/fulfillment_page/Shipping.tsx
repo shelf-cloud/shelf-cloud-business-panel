@@ -2,14 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 import AppContext from '@context/AppContext'
 import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
-import {
-  DeliveryWindowsOptions,
-  DeliveryWindowsResponse,
-  InboundPlan,
-  PlacementOption,
-  TransportationOptionShipment,
-  WaitingReponses,
-} from '@typesTs/amazon/fulfillments/fulfillment'
+import { DeliveryWindowsOptions, DeliveryWindowsResponse, InboundPlan, PlacementOption, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
 import moment from 'moment'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { Alert, Button, Card, CardBody, CardHeader, Col, Input, Label, Row, Spinner } from 'reactstrap'
@@ -21,6 +14,8 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 import ShippingSelectDate from './ShippingSelectDate'
 import useEffectAfterMount from '@hooks/useEffectAfterMount'
+import SelectLTLFreightReadyDate from './shippingLTL/SelectLTLFreightReadyDate'
+import { setInitialLTLTransportationOptions } from './shippingLTL/helperFunctions'
 
 type Props = {
   sessionToken: string
@@ -41,45 +36,6 @@ type FinalShipment = {
   loadingDeliveryWindowOptions: boolean
 }
 
-const findLtlAlphaCode = (transportationOptions: TransportationOptionShipment) => {
-  const shipments = Object.values(transportationOptions)
-  const alphaCodeData: Record<string, { totalCost: number; shipmentCount: number }> = {}
-
-  for (const shipment of shipments) {
-    const seenAlphaCodes = new Set<string>()
-
-    for (const option of shipment.filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'FREIGHT_LTL')) {
-      const { alphaCode } = option.carrier
-
-      if (seenAlphaCodes.has(alphaCode)) continue
-      seenAlphaCodes.add(alphaCode)
-
-      if (!alphaCodeData[alphaCode]) {
-        alphaCodeData[alphaCode] = { totalCost: 0, shipmentCount: 0 }
-      }
-
-      alphaCodeData[alphaCode].shipmentCount += 1
-
-      if (option.quote) {
-        alphaCodeData[alphaCode].totalCost += option.quote.cost.amount
-      }
-    }
-  }
-
-  let optimalAlphaCode: string | null = null
-  let minCost = Infinity
-
-  for (const [alphaCode, { totalCost, shipmentCount }] of Object.entries(alphaCodeData)) {
-    // Check if the alphaCode is present in all shipments
-    if (shipmentCount === shipments.length && totalCost < minCost) {
-      minCost = totalCost
-      optimalAlphaCode = alphaCode
-    }
-  }
-
-  return optimalAlphaCode
-}
-
 const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }: Props) => {
   const { state }: any = useContext(AppContext)
   const [placementOptionSelected, setplacementOptionSelected] = useState<PlacementOption>(
@@ -96,11 +52,6 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
     sameShippingMode: true,
     shippingMode: 'SPD',
     sameShippingCarrier: 'amazon',
-    sameLtlAlphaCode: findLtlAlphaCode(
-      !inboundPlan.placementOptionId
-        ? inboundPlan.transportationOptions[inboundPlan.placementOptions[0].placementOptionId]
-        : inboundPlan.transportationOptions[inboundPlan.placementOptionId]
-    ),
     nonAmazonCarrier: '',
     nonAmazonAlphaCode: '',
     placementOptionIdSelected: !inboundPlan.placementOptionId ? inboundPlan.placementOptions[0].placementOptionId : inboundPlan.placementOptionId,
@@ -125,6 +76,11 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
             }
             return acc
           }, {}) as { [shipmentId: string]: FinalShipment }),
+    ltlTransportationOptions: setInitialLTLTransportationOptions(
+      !inboundPlan.placementOptionId
+        ? inboundPlan.transportationOptions[inboundPlan.placementOptions[0].placementOptionId]
+        : inboundPlan.transportationOptions[inboundPlan.placementOptionId]
+    ),
   })
 
   useEffectAfterMount(() => {
@@ -139,7 +95,6 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
             ...prev,
             sameShippingMode: true,
             sameShippingCarrier: 'amazon',
-            sameLtlAlphaCode: findLtlAlphaCode(inboundPlan.transportationOptions[chosenPlacementOption.placementOptionId]),
             nonAmazonCarrier: '',
             nonAmazonAlphaCode: '',
             placementOptionIdSelected: chosenPlacementOption.placementOptionId,
@@ -152,6 +107,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
               }
               return acc
             }, {}),
+            ltlTransportationOptions: setInitialLTLTransportationOptions(inboundPlan.transportationOptions[chosenPlacementOption.placementOptionId]),
           }
         })
       }
@@ -185,6 +141,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
               }
               return acc
             }, {}),
+            ltlTransportationOptions: setInitialLTLTransportationOptions(inboundPlan.transportationOptions[placementOption.placementOptionId]),
           }
         })
       }
@@ -311,17 +268,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
     if (!finalShippingCharges.sameShippingMode) {
       return Object.values(finalShippingCharges.shipments).reduce((total, shipment) => {
         if (shipment.shippingMode === 'LTL') {
-          return (
-            total +
-            (Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipment.shipmentId])
-              .filter(
-                (option) =>
-                  option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' &&
-                  option.shippingMode === 'FREIGHT_LTL' &&
-                  option.carrier.alphaCode === finalShippingCharges.sameLtlAlphaCode
-              )
-              .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount! || 0)
-          )
+          return total + finalShippingCharges.ltlTransportationOptions[shipment.shipmentId].cost
         } else {
           return total
         }
@@ -405,12 +352,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
 
     if (!finalShippingCharges.sameShippingMode) {
       if (shipment.shippingMode === 'LTL') {
-        return Object.values(inboundPlan.transportationOptions[finalShippingCharges.placementOptionIdSelected][shipment.shipmentId])
-          .filter(
-            (option) =>
-              option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'FREIGHT_LTL' && option.carrier.alphaCode === finalShippingCharges.sameLtlAlphaCode
-          )
-          .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
+        return finalShippingCharges.ltlTransportationOptions[shipment.shipmentId].cost
       }
     }
 
@@ -461,14 +403,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
             }
           }
           if (finalShippingCharges.shippingMode === 'LTL') {
-            transportation.transportationOptionId = Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipment.shipmentId])
-              .filter(
-                (option) =>
-                  option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' &&
-                  option.shippingMode === 'FREIGHT_LTL' &&
-                  option.carrier.alphaCode === finalShippingCharges.sameLtlAlphaCode
-              )
-              .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].transportationOptionId!
+            transportation.transportationOptionId = finalShippingCharges.ltlTransportationOptions[shipment.shipmentId].transportationOptionId
           }
         }
 
@@ -488,14 +423,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
           }
 
           if (shipment.shippingMode === 'LTL') {
-            transportation.transportationOptionId = Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipment.shipmentId])
-              .filter(
-                (option) =>
-                  option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' &&
-                  option.shippingMode === 'FREIGHT_LTL' &&
-                  option.carrier.alphaCode === finalShippingCharges.sameLtlAlphaCode
-              )
-              .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].transportationOptionId!
+            transportation.transportationOptionId = finalShippingCharges.ltlTransportationOptions[shipment.shipmentId].transportationOptionId
           }
         }
 
@@ -582,6 +510,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                     }
                                     return acc
                                   }, {}),
+                                  ltlTransportationOptions: setInitialLTLTransportationOptions(inboundPlan.transportationOptions[placementOption.placementOptionId]),
                                 }
                               })
                             }
@@ -740,19 +669,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                 Estimates Starting at{' '}
                                 {FormatCurrency(
                                   state.currentRegion,
-                                  inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]
-                                    ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]).reduce((total, shipment) => {
-                                        const subtotal = shipment
-                                          .filter(
-                                            (option) =>
-                                              option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' &&
-                                              option.shippingMode === 'FREIGHT_LTL' &&
-                                              option.carrier.alphaCode === finalShippingCharges.sameLtlAlphaCode
-                                          )
-                                          .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
-                                        return total + subtotal
-                                      }, 0)
-                                    : 0
+                                  Object.values(finalShippingCharges.ltlTransportationOptions).reduce((total, shipment) => total + shipment.cost, 0)
                                 )}
                               </>
                             ) : (
@@ -936,83 +853,79 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
 
                           {/* SAME SHIPPING MODE && LTL */}
                           {finalShippingCharges.sameShippingMode && finalShippingCharges.shippingMode === 'LTL' && (
-                            <div className='my-3'>
-                              <p className='m-0 p-0 fw-semibold fs-7'>Pallet estimates:</p>
-                              <table className='table table-sm table-borderless table-responsive'>
-                                <tbody className='fs-7'>
-                                  <tr>
-                                    <td>
-                                      Pallets:{' '}
-                                      <span className='fw-semibold'>
-                                        {FormatIntNumber(
-                                          state.currentRegion,
-                                          inboundPlan.generateTransportationOptions[placementOptionSelected.placementOptionId][shipmentId]?.pallets!.length ?? 1
-                                        )}
-                                      </span>
-                                    </td>
-                                    <td>
-                                      Total Weight:{' '}
-                                      <span className='fw-semibold'>
-                                        {FormatIntPercentage(
-                                          state.currentRegion,
-                                          inboundPlan.generateTransportationOptions[placementOptionSelected.placementOptionId][shipmentId]?.pallets!.reduce(
-                                            (total, pallet) => total + pallet.weight.value,
-                                            0
-                                          )
-                                        )}{' '}
-                                        lb
-                                      </span>
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td>Value: --</td>
-                                    <td>
-                                      Total Volume:{' '}
-                                      <span className='fw-semibold'>
-                                        {FormatIntPercentage(
-                                          state.currentRegion,
-                                          inboundPlan.shipments[shipmentId]?.shipmentBoxes.boxes.reduce(
-                                            (total, box) => total + box.dimensions.width * box.dimensions.height * box.dimensions.length * box.quantity,
-                                            0
-                                          )
-                                        )}{' '}
-                                        inch3
-                                      </span>
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td>Frieght Class: --</td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                              <p className='m-0 mt-3 p-0 fs-7 text-end'>
-                                {inboundPlan.transportationOptions[placementOptionSelected.placementOptionId] &&
-                                Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId]).some(
-                                  (option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'FREIGHT_LTL'
-                                ) ? (
-                                  <>
-                                    Estimated Carrier Charges:{' '}
-                                    <span className='fw-semibold'>
-                                      {FormatCurrency(
-                                        state.currentRegion,
-                                        inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]
-                                          ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
-                                              .filter(
-                                                (option) =>
-                                                  option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' &&
-                                                  option.shippingMode === 'FREIGHT_LTL' &&
-                                                  option.carrier.alphaCode === finalShippingCharges.sameLtlAlphaCode
-                                              )
-                                              .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
-                                          : 0
-                                      )}
-                                    </span>
-                                  </>
-                                ) : (
-                                  'Estimate Not Available'
-                                )}
-                              </p>
-                            </div>
+                            <>
+                              <div className='my-3'>
+                                <p className='m-0 p-0 fw-semibold fs-7'>Pallet estimates:</p>
+                                <table className='table table-sm table-borderless table-responsive'>
+                                  <tbody className='fs-7'>
+                                    <tr>
+                                      <td>
+                                        Pallets:{' '}
+                                        <span className='fw-semibold'>
+                                          {FormatIntNumber(
+                                            state.currentRegion,
+                                            inboundPlan.generateTransportationOptions[placementOptionSelected.placementOptionId][shipmentId]?.pallets!.length ?? 1
+                                          )}
+                                        </span>
+                                      </td>
+                                      <td>
+                                        Total Weight:{' '}
+                                        <span className='fw-semibold'>
+                                          {FormatIntPercentage(
+                                            state.currentRegion,
+                                            inboundPlan.generateTransportationOptions[placementOptionSelected.placementOptionId][shipmentId]?.pallets!.reduce(
+                                              (total, pallet) => total + pallet.weight.value,
+                                              0
+                                            )
+                                          )}{' '}
+                                          lb
+                                        </span>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>Value: --</td>
+                                      <td>
+                                        Total Volume:{' '}
+                                        <span className='fw-semibold'>
+                                          {FormatIntPercentage(
+                                            state.currentRegion,
+                                            inboundPlan.shipments[shipmentId]?.shipmentBoxes.boxes.reduce(
+                                              (total, box) => total + box.dimensions.width * box.dimensions.height * box.dimensions.length * box.quantity,
+                                              0
+                                            )
+                                          )}{' '}
+                                          inch3
+                                        </span>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>Frieght Class: --</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                                <p className='m-0 mt-3 p-0 fs-7 text-end'>
+                                  {inboundPlan.transportationOptions[placementOptionSelected.placementOptionId] &&
+                                  Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId]).some(
+                                    (option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'FREIGHT_LTL'
+                                  ) ? (
+                                    <>
+                                      Estimated Carrier Charges:{' '}
+                                      <span className='fw-semibold'>{FormatCurrency(state.currentRegion, finalShippingCharges.ltlTransportationOptions[shipmentId].cost)}</span>
+                                    </>
+                                  ) : (
+                                    'Estimate Not Available'
+                                  )}
+                                </p>
+                              </div>
+                              <SelectLTLFreightReadyDate
+                                shipmentId={shipmentId}
+                                selectedLTLTransportationOption={finalShippingCharges.ltlTransportationOptions[shipmentId]}
+                                setfinalShippingCharges={setfinalShippingCharges}
+                                transportationOptions={Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
+                                  .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'FREIGHT_LTL')
+                                  .sort((a, b) => (moment(a.carrierAppointment?.startTime) > moment(b.carrierAppointment?.startTime) ? 1 : -1))}
+                              />
+                            </>
                           )}
 
                           {/* DIFFERENT SHIPPING MODE */}
@@ -1100,14 +1013,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                               [shipmentId]: {
                                                 ...prev.shipments[shipmentId],
                                                 shippingMode: 'LTL',
-                                                transportationOptionId: Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
-                                                  .filter(
-                                                    (option) =>
-                                                      option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' &&
-                                                      option.shippingMode === 'FREIGHT_LTL' &&
-                                                      option.carrier.alphaCode === finalShippingCharges.sameLtlAlphaCode
-                                                  )
-                                                  .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].transportationOptionId,
+                                                transportationOptionId: finalShippingCharges.ltlTransportationOptions[shipmentId].transportationOptionId,
                                               },
                                             },
                                           }
@@ -1131,22 +1037,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                         Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId]).some(
                                           (option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'FREIGHT_LTL'
                                         ) ? (
-                                          <>
-                                            Estimates Starting at{' '}
-                                            {FormatCurrency(
-                                              state.currentRegion,
-                                              inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]
-                                                ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
-                                                    .filter(
-                                                      (option) =>
-                                                        option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' &&
-                                                        option.shippingMode === 'FREIGHT_LTL' &&
-                                                        option.carrier.alphaCode === finalShippingCharges.sameLtlAlphaCode
-                                                    )
-                                                    .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
-                                                : 0
-                                            )}
-                                          </>
+                                          <>Estimates Starting at {FormatCurrency(state.currentRegion, finalShippingCharges.ltlTransportationOptions[shipmentId].cost)}</>
                                         ) : (
                                           <span className='m-0 p-0 text-danger'>Estimate Not Available</span>
                                         )}
@@ -1263,58 +1154,68 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                   <p className='m-0 my-3 p-0 text-muted fs-7'>The carrier for this SPD shipment must be the same as other SPD shipments.</p>
                                 </>
                               ) : (
-                                <div className='my-3'>
-                                  <p className='m-0 p-0 fw-semibold fs-7'>Pallet estimates:</p>
-                                  <table className='table table-sm table-borderless table-responsive'>
-                                    <tbody className='fs-7'>
-                                      <tr>
-                                        <td>
-                                          Pallets:{' '}
-                                          <span className='fw-semibold'>
-                                            {FormatIntNumber(
-                                              state.currentRegion,
-                                              inboundPlan.generateTransportationOptions[placementOptionSelected.placementOptionId][shipmentId]?.pallets!.length ?? 1
-                                            )}
-                                          </span>
-                                        </td>
-                                        <td>
-                                          Total Weight:{' '}
-                                          <span className='fw-semibold'>
-                                            {FormatIntPercentage(
-                                              state.currentRegion,
-                                              inboundPlan.generateTransportationOptions[placementOptionSelected.placementOptionId][shipmentId]?.pallets!.reduce(
-                                                (total, pallet) => total + pallet.weight.value,
-                                                0
-                                              )
-                                            )}{' '}
-                                            lb
-                                          </span>
-                                        </td>
-                                      </tr>
-                                      <tr>
-                                        <td>Value: --</td>
-                                        <td>
-                                          Total Volume:{' '}
-                                          <span className='fw-semibold'>
-                                            {FormatIntPercentage(
-                                              state.currentRegion,
-                                              inboundPlan.shipments[shipmentId]?.shipmentBoxes.boxes.reduce(
-                                                (total, box) => total + box.dimensions.width * box.dimensions.height * box.dimensions.length * box.quantity,
-                                                0
-                                              )
-                                            )}{' '}
-                                            inch3
-                                          </span>
-                                        </td>
-                                      </tr>
-                                      <tr>
-                                        <td>Frieght Class: --</td>
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                  <p className='m-0 p-0 fw-semibold fs-7'>Carrier:</p>
-                                  <p className='fs-7 text-muted'>{`You'll select your LTL carrier in Step 4.`}</p>
-                                </div>
+                                <>
+                                  <div className='my-3'>
+                                    <p className='m-0 p-0 fw-semibold fs-7'>Pallet estimates:</p>
+                                    <table className='table table-sm table-borderless table-responsive'>
+                                      <tbody className='fs-7'>
+                                        <tr>
+                                          <td>
+                                            Pallets:{' '}
+                                            <span className='fw-semibold'>
+                                              {FormatIntNumber(
+                                                state.currentRegion,
+                                                inboundPlan.generateTransportationOptions[placementOptionSelected.placementOptionId][shipmentId]?.pallets!.length ?? 1
+                                              )}
+                                            </span>
+                                          </td>
+                                          <td>
+                                            Total Weight:{' '}
+                                            <span className='fw-semibold'>
+                                              {FormatIntPercentage(
+                                                state.currentRegion,
+                                                inboundPlan.generateTransportationOptions[placementOptionSelected.placementOptionId][shipmentId]?.pallets!.reduce(
+                                                  (total, pallet) => total + pallet.weight.value,
+                                                  0
+                                                )
+                                              )}{' '}
+                                              lb
+                                            </span>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td>Value: --</td>
+                                          <td>
+                                            Total Volume:{' '}
+                                            <span className='fw-semibold'>
+                                              {FormatIntPercentage(
+                                                state.currentRegion,
+                                                inboundPlan.shipments[shipmentId]?.shipmentBoxes.boxes.reduce(
+                                                  (total, box) => total + box.dimensions.width * box.dimensions.height * box.dimensions.length * box.quantity,
+                                                  0
+                                                )
+                                              )}{' '}
+                                              inch3
+                                            </span>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td>Frieght Class: --</td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                    <p className='m-0 p-0 fw-semibold fs-7'>Carrier:</p>
+                                    <p className='fs-7 text-muted'>{`You'll select your LTL carrier in Step 4.`}</p>
+                                  </div>
+                                  <SelectLTLFreightReadyDate
+                                    shipmentId={shipmentId}
+                                    selectedLTLTransportationOption={finalShippingCharges.ltlTransportationOptions[shipmentId]}
+                                    setfinalShippingCharges={setfinalShippingCharges}
+                                    transportationOptions={Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
+                                      .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'FREIGHT_LTL')
+                                      .sort((a, b) => (moment(a.carrierAppointment?.startTime) > moment(b.carrierAppointment?.startTime) ? 1 : -1))}
+                                  />
+                                </>
                               )}
                             </div>
                           )}
