@@ -61,6 +61,49 @@ const SalesOverTime = ({ salesOverTime }: Props) => {
 
           <CardBody className='pb-0'>
             <div className='d-flex flex-row justify-content-start align-items-base gap-4'>
+              <div id={'SalesOverTimePrevious'}>
+                <p className='m-0 p-0 fw-medium'>Yesterday</p>
+                <p className='m-0 p-0 fw-semibold fs-5'>
+                  <span className='counter-value'>
+                    <CountUp
+                      start={0}
+                      prefix={state.currentRegion == 'us' ? '$ ' : ''}
+                      suffix={state.currentRegion == 'eu' ? ' €' : ''}
+                      separator={state.currentRegion == 'us' ? '.' : ','}
+                      end={totalYesterday}
+                      decimals={2}
+                      duration={1}
+                    />
+                  </span>
+                </p>
+              </div>
+              <UncontrolledTooltip
+                placement='right'
+                target={'SalesOverTimePrevious'}
+                autohide={false}
+                popperClassName='bg-white shadow px-3 py-3 rounded-2'
+                innerClassName='text-black bg-white p-0'
+                style={{ maxHeight: '300px', overflowY: 'hidden', overflowX: 'hidden', scrollbarWidth: 'none' }}>
+                <p className='fs-5 text-primary m-0 p-0 fw-bold mb-2'>Yesterday</p>
+                <table
+                  className='pb-1 table table-striped table-bordered table-sm table-responsive text-nowrap shadow'
+                  style={{ height: '270px', display: 'block', overflowY: 'scroll', overflowX: 'hidden', scrollbarWidth: 'none' }}>
+                  <thead>
+                    <tr>
+                      <th>Marketplace</th>
+                      <th>Sales</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {previousSortedMarketplaces.map((marketplace: SalesOverTimeMarketplace, index: number) => (
+                      <tr key={index}>
+                        <td className='text-start'>{marketplace.name}</td>
+                        <td className='text-end'>{FormatCurrency(state.currentRegion, marketplace.salesOverTime[previousDate])}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </UncontrolledTooltip>
               <div id={'SalesOverTimeCurrent'}>
                 <p className='m-0 p-0 fw-medium'>
                   Today <span className={'fw-semibold fs-7 ms-2 ' + (salesDiff > 0 ? 'text-success' : 'text-danger')}>{salesDiff.toFixed(2)}%</span>
@@ -101,49 +144,6 @@ const SalesOverTime = ({ salesOverTime }: Props) => {
                       <tr key={index}>
                         <td className='text-start'>{marketplace.name}</td>
                         <td className='text-end'>{FormatCurrency(state.currentRegion, marketplace.salesOverTime[currentDate])}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </UncontrolledTooltip>
-              <div id={'SalesOverTimePrevious'}>
-                <p className='m-0 p-0 fw-medium'>Yesterday</p>
-                <p className='m-0 p-0 fw-semibold fs-5'>
-                  <span className='counter-value'>
-                    <CountUp
-                      start={0}
-                      prefix={state.currentRegion == 'us' ? '$ ' : ''}
-                      suffix={state.currentRegion == 'eu' ? ' €' : ''}
-                      separator={state.currentRegion == 'us' ? '.' : ','}
-                      end={totalYesterday}
-                      decimals={2}
-                      duration={1}
-                    />
-                  </span>
-                </p>
-              </div>
-              <UncontrolledTooltip
-                placement='right'
-                target={'SalesOverTimePrevious'}
-                autohide={false}
-                popperClassName='bg-white shadow px-3 py-3 rounded-2'
-                innerClassName='text-black bg-white p-0'
-                style={{ maxHeight: '300px', overflowY: 'hidden', overflowX: 'hidden', scrollbarWidth: 'none' }}>
-                <p className='fs-5 text-primary m-0 p-0 fw-bold mb-2'>Yesterday</p>
-                <table
-                  className='pb-1 table table-striped table-bordered table-sm table-responsive text-nowrap shadow'
-                  style={{ height: '270px', display: 'block', overflowY: 'scroll', overflowX: 'hidden', scrollbarWidth: 'none' }}>
-                  <thead>
-                    <tr>
-                      <th>Marketplace</th>
-                      <th>Sales</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {previousSortedMarketplaces.map((marketplace: SalesOverTimeMarketplace, index: number) => (
-                      <tr key={index}>
-                        <td className='text-start'>{marketplace.name}</td>
-                        <td className='text-end'>{FormatCurrency(state.currentRegion, marketplace.salesOverTime[previousDate])}</td>
                       </tr>
                     ))}
                   </tbody>
