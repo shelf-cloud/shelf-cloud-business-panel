@@ -16,6 +16,7 @@ import Edit_PO_Ordered_Qty from '@components/modals/purchaseOrders/Edit_PO_Order
 import Link from 'next/link'
 import DownloadExcelPurchaseOrder from './DownloadExcelPurchaseOrder'
 import Edit_Payment_Modal from '@components/modals/purchaseOrders/Edit_Payment_Modal'
+import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   data: PurchaseOrder
@@ -481,15 +482,8 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                                 }}>
                                 <img
                                   loading='lazy'
-                                  src={
-                                    product.image
-                                      ? product.image
-                                      : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-                                  }
-                                  onError={(e) =>
-                                    (e.currentTarget.src =
-                                      'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
-                                  }
+                                  src={product.image ? product.image : NoImageAdress}
+                                  onError={(e) => (e.currentTarget.src = NoImageAdress)}
                                   alt='product Image'
                                   style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                                 />

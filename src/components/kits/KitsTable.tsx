@@ -8,6 +8,7 @@ import { DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown, 
 // import TooltipComponent from '../constants/Tooltip'
 import KitExpandedDetails from './KitExpandedDetails'
 import Link from 'next/link'
+import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   tableData: KitRow[]
@@ -90,11 +91,7 @@ const KitsTable = ({ tableData, pending }: Props) => {
             }}>
             <img
               loading='lazy'
-              src={
-                cell.image
-                  ? cell.image
-                  : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-              }
+              src={cell.image ? cell.image : NoImageAdress}
               alt='product Image'
               style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
             />

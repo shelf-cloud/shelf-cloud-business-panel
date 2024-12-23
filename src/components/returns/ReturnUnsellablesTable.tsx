@@ -37,39 +37,6 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending }: Props) => {
   ]
 
   const columns: any = [
-    // {
-    //   name: <span className='font-weight-bold fs-13'>Image</span>,
-    //   selector: (row: UnsellablesType) => {
-    //     return (
-    //       <div
-    //         style={{
-    //           width: '70px',
-    //           height: '60px',
-    //           margin: '2px 0px',
-    //           position: 'relative',
-    //         }}>
-    //         <img
-    //           loading='lazy'
-    //           src={
-    //             row.image
-    //               ? row.image
-    //               : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-    //           }
-    //           onError={(e) =>
-    //             (e.currentTarget.src =
-    //               'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
-    //           }
-    //           alt='product Image'
-    //           style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
-    //         />
-    //       </div>
-    //     )
-    //   },
-    //   sortable: false,
-    //   center: true,
-    //   compact: true,
-    //   width: '80px',
-    // },
     {
       name: <span className='fw-bolder fs-6'>SKU</span>,
       selector: (row: UnsellablesType) => row.sku,
@@ -138,7 +105,7 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending }: Props) => {
     },
     {
       name: <span className='fw-bolder text-start fs-6'>Status</span>,
-      selector: (row: UnsellablesType) => row.dispose ? 'Disposed' : row.converted ? 'Converted Sellable' : 'Unsellable',
+      selector: (row: UnsellablesType) => (row.dispose ? 'Disposed' : row.converted ? 'Converted Sellable' : 'Unsellable'),
       sortable: true,
       wrap: true,
       left: true,

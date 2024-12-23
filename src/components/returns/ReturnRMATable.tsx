@@ -6,6 +6,7 @@ import ReturnsTable from './ReturnsTable'
 import { UncontrolledTooltip } from 'reactstrap'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import AppContext from '@context/AppContext'
+import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   filterDataTable: ReturnsType[]
@@ -154,11 +155,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
           <>
             <img
               loading='lazy'
-              src={
-                Object.values(row.returns)[0].channelLogo
-                  ? Object.values(row.returns)[0].channelLogo
-                  : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-              }
+              src={Object.values(row.returns)[0].channelLogo ? Object.values(row.returns)[0].channelLogo : NoImageAdress}
               alt='product Image'
               id={`ChannelLogo-${Object.values(row.returns)[0].id}`}
               style={{

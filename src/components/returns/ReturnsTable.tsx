@@ -7,6 +7,7 @@ import { FormatCurrency } from '@lib/FormatNumbers'
 import AppContext from '@context/AppContext'
 import { ReturnOrder, ReturnsType } from '@typesTs/returns/returns'
 import ReturnExpandedType from './ReturnExpandedType'
+import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   data: ReturnsType
@@ -142,11 +143,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
           <>
             <img
               loading='lazy'
-              src={
-                row.channelLogo
-                  ? row.channelLogo
-                  : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-              }
+              src={row.channelLogo ? row.channelLogo : NoImageAdress}
               alt='product Image'
               id={`ChannelLogo-${row.id}`}
               style={{

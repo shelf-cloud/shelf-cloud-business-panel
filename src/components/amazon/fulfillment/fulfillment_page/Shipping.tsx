@@ -16,6 +16,7 @@ import ShippingSelectDate from './ShippingSelectDate'
 import useEffectAfterMount from '@hooks/useEffectAfterMount'
 import SelectLTLFreightReadyDate from './shippingLTL/SelectLTLFreightReadyDate'
 import { setInitialLTLTransportationOptions } from './shippingLTL/helperFunctions'
+import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   sessionToken: string
@@ -822,7 +823,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                       src={
                                         inboundPlan.skus_details[item.msku].image
                                           ? inboundPlan.skus_details[item.msku].image
-                                          : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+                                          : NoImageAdress
                                       }
                                       alt='product Image'
                                       style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}

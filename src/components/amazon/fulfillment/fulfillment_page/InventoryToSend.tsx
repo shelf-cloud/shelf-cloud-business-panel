@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { NoImageAdress } from '@lib/assetsConstants'
 import { InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
 import React from 'react'
 import { Button, Col, Spinner } from 'reactstrap'
@@ -41,7 +42,7 @@ const InventoryToSend = ({ inboundPlan, handleNextStep, watingRepsonse }: Props)
                         src={
                           inboundPlan.skus_details[item.msku].image
                             ? inboundPlan.skus_details[item.msku].image
-                            : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+                            : NoImageAdress
                         }
                         alt='product Image'
                         style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
@@ -60,7 +61,7 @@ const InventoryToSend = ({ inboundPlan, handleNextStep, watingRepsonse }: Props)
                         src={
                           inboundPlan.skus_details[item.msku].image
                             ? inboundPlan.skus_details[item.msku].image
-                            : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+                            : NoImageAdress
                         }
                         alt='product Image'
                         style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}

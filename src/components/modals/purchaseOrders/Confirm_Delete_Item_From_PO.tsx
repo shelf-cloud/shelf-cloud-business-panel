@@ -6,6 +6,7 @@ import { useSWRConfig } from 'swr'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import AppContext from '@context/AppContext'
+import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   showDeleteModal: {
@@ -110,11 +111,7 @@ const Confirm_Delete_Item_From_PO = ({ showDeleteModal, setshowDeleteModal, load
               }}>
               <img
                 loading='lazy'
-                src={
-                  showDeleteModal.image
-                    ? showDeleteModal.image
-                    : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-                }
+                src={showDeleteModal.image ? showDeleteModal.image : NoImageAdress}
                 alt='product Image'
                 style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
               />

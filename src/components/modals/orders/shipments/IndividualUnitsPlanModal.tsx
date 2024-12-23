@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import AppContext from '@context/AppContext'
+import { NoImageAdress } from '@lib/assetsConstants'
 import { IndividualUnitsPlan } from '@typings'
 import { useContext } from 'react'
 import { Button, Col, Modal, ModalBody, ModalHeader } from 'reactstrap'
@@ -94,7 +95,7 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
   return (
     <Modal
       fade={false}
-      size='xl'
+      size='lg'
       id='myModal'
       isOpen={state.showIndividualUnitsPlan}
       toggle={() => {
@@ -134,11 +135,7 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
                         }}>
                         <img
                           loading='lazy'
-                          src={
-                            item.image
-                              ? item.image
-                              : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-                          }
+                          src={item.image ? item.image : NoImageAdress}
                           alt='product Image'
                           style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                         />

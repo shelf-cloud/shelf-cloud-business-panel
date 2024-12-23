@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import AppContext from '@context/AppContext'
+import { NoImageAdress } from '@lib/assetsConstants'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { DeductionType } from '@typesTs/commercehub/deductions'
@@ -68,11 +69,7 @@ const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClear
           <>
             <img
               loading='lazy'
-              src={
-                row.channelLogo
-                  ? row.channelLogo
-                  : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-              }
+              src={row.channelLogo ? row.channelLogo : NoImageAdress}
               alt='product Image'
               id={`ChannelLogo-${CleanSpecialCharacters(row.invoicePoId)}`}
               style={{

@@ -6,6 +6,7 @@ import AppContext from '@context/AppContext'
 import { Button } from 'reactstrap'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
+import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   allData: wholesaleProductRow[]
@@ -100,7 +101,7 @@ const ReceivingOrderTable = ({ allData, filteredItems, setAllData, pending }: Pr
               src={
                 row.image
                   ? row.image
-                  : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+                  : NoImageAdress
               }
               alt='product Image'
               style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}

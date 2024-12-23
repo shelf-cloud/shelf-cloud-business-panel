@@ -9,6 +9,7 @@ import axios from 'axios'
 import AppContext from '@context/AppContext'
 import Select_Product_Details from './Select_Product_Details'
 import Select_Condition_Product_Details from './Select_Condition_Product_Details'
+import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   inventoryId?: number
@@ -146,14 +147,7 @@ const General_Product_Details = ({
               minWidth: '150px',
               maxWidth: '200px',
             }}>
-            <img
-              loading='lazy'
-              src={
-                image ? image : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-              }
-              alt='product Image'
-              style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
-            />
+            <img loading='lazy' src={image ? image : NoImageAdress} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
           </div>
           <div className='w-100'>
             <table className='table table-sm table-borderless'>

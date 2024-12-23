@@ -10,6 +10,7 @@ import { Button, Spinner } from 'reactstrap'
 import useSWR, { useSWRConfig } from 'swr'
 import { toast } from 'react-toastify'
 import AssignNewMarketplaceLogo from './AssignNewMarketplaceLogo'
+import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {}
 
@@ -78,15 +79,8 @@ const MarketplacesFees = ({}: Props) => {
               }}>
               <img
                 loading='lazy'
-                src={
-                  row.logoLink
-                    ? row.aliasLogo ?? row.logoLink
-                    : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-                }
-                onError={(e) =>
-                  (e.currentTarget.src =
-                    'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
-                }
+                src={row.logoLink ? row.aliasLogo ?? row.logoLink : NoImageAdress}
+                onError={(e) => (e.currentTarget.src = NoImageAdress)}
                 alt='product Image'
                 style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
               />

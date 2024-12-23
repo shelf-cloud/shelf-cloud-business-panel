@@ -2,6 +2,7 @@
 import React from 'react'
 import { InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
 import { Button, Card, CardBody, CardHeader, Col, Spinner } from 'reactstrap'
+import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   inboundPlan: InboundPlan
@@ -52,7 +53,7 @@ const PackingInfo = ({ inboundPlan, handleNextStep, watingRepsonse }: Props) => 
                                 src={
                                   inboundPlan.skus_details[item.msku].image
                                     ? inboundPlan.skus_details[item.msku].image
-                                    : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+                                    : NoImageAdress
                                 }
                                 alt='product Image'
                                 style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}

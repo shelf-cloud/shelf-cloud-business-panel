@@ -5,6 +5,7 @@ import { Button, Card, CardBody, Col, Row } from 'reactstrap'
 import AmazonAuthButton from '@components/amazon/AmazonAuthButton'
 import AmazonAdsAuthButton from '@components/amazon/AmazonAdsAuthButton'
 import AmazonReconnectButton from '@components/amazon/AmazonReconnectButton'
+import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   env: string
@@ -30,10 +31,7 @@ const Integrations = ({ env }: Props) => {
                   <img
                     loading='lazy'
                     src={'https://onixventuregroup.goflow.com/images/channels/amazon.svg'}
-                    onError={(e) =>
-                      (e.currentTarget.src =
-                        'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
-                    }
+                    onError={(e) => (e.currentTarget.src = NoImageAdress)}
                     alt='product Image'
                     style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                   />
@@ -71,10 +69,7 @@ const Integrations = ({ env }: Props) => {
                   <img
                     loading='lazy'
                     src={'https://onixventuregroup.goflow.com/images/channels/amazon.svg'}
-                    onError={(e) =>
-                      (e.currentTarget.src =
-                        'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
-                    }
+                    onError={(e) => (e.currentTarget.src = NoImageAdress)}
                     alt='product Image'
                     style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                   />

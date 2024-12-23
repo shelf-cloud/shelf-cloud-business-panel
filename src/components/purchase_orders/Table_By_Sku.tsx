@@ -7,6 +7,7 @@ import AppContext from '@context/AppContext'
 import { Badge } from 'reactstrap'
 import Table_By_Skus_Orders from './Table_By_Skus_Orders'
 import Link from 'next/link'
+import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   filterDataTable: PurchaseOrderBySkus[]
@@ -139,11 +140,7 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
                 }}>
                 <img
                   loading='lazy'
-                  src={
-                    row.image
-                      ? row.image
-                      : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-                  }
+                  src={row.image ? row.image : NoImageAdress}
                   alt='product Image'
                   style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                 />

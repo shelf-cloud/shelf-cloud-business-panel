@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { NoImageAdress } from '@lib/assetsConstants'
 import { Listings } from '@typings'
 import React from 'react'
 
@@ -25,11 +26,7 @@ const Listings_Kit_Details = ({ listings }: Props) => {
                 <td>
                   <img
                     loading='lazy'
-                    src={
-                      store.channel
-                        ? store.channel
-                        : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-                    }
+                    src={store.channel ? store.channel : NoImageAdress}
                     alt='product Image'
                     style={{
                       width: '25px',

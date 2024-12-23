@@ -7,6 +7,7 @@ import { Button, Card, CardBody, CardFooter, CardHeader, Spinner } from 'reactst
 import Image from 'next/image'
 import boxIcon from '@assets/fulfillments/outbound_box.png'
 import palletIcon from '@assets/fulfillments/outbound_pallet.png'
+import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   inboundPlan: InboundPlan
@@ -95,7 +96,7 @@ const CarrierPalletCard = ({ inboundPlan, handleNextStep, shipment, shipmentInde
                       src={
                         inboundPlan.skus_details[item.msku].image
                           ? inboundPlan.skus_details[item.msku].image
-                          : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+                          : NoImageAdress
                       }
                       alt='product Image'
                       style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}

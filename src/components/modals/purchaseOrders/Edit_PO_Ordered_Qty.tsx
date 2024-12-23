@@ -8,6 +8,7 @@ import { useRouter } from 'next/router'
 import AppContext from '@context/AppContext'
 import { PurchaseOrderItem } from '@typesTs/purchaseOrders'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
+import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   showEditOrderQty: {
@@ -129,15 +130,8 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
                         }}>
                         <img
                           loading='lazy'
-                          src={
-                            product.image
-                              ? product.image
-                              : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-                          }
-                          onError={(e) =>
-                            (e.currentTarget.src =
-                              'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
-                          }
+                          src={product.image ? product.image : NoImageAdress}
+                          onError={(e) => (e.currentTarget.src = NoImageAdress)}
                           alt='product Image'
                           style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                         />
@@ -174,7 +168,7 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
                         min={0}
                         value={product.orderQty || 0}
                         onChange={(e) => {
-                          e.target.closest('tr')?.classList.add('bg-warning','bg-opacity-25')
+                          e.target.closest('tr')?.classList.add('bg-warning', 'bg-opacity-25')
                           if (parseInt(e.target.value) <= 0 || parseInt(e.target.value) < product.receivedQty + product.inboundQty) {
                             setError(true)
                             e.target.classList.remove('border-warning')

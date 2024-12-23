@@ -30,6 +30,7 @@ import { toast } from 'react-toastify'
 import { useSWRConfig } from 'swr'
 import router from 'next/router'
 import { DebounceInput } from 'react-debounce-input'
+import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   reorderingPointsOrder: {
@@ -253,15 +254,8 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                               }}>
                               <img
                                 loading='lazy'
-                                src={
-                                  product.image
-                                    ? product.image
-                                    : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-                                }
-                                onError={(e) =>
-                                  (e.currentTarget.src =
-                                    'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
-                                }
+                                src={product.image ? product.image : NoImageAdress}
+                                onError={(e) => (e.currentTarget.src = NoImageAdress)}
                                 alt='product Image'
                                 style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                               />

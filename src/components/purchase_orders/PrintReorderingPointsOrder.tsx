@@ -1,4 +1,5 @@
 import AppContext from '@context/AppContext'
+import { NoImageAdress } from '@lib/assetsConstants'
 import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import moment from 'moment'
@@ -176,11 +177,7 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                       <div style="width: 60px;min-width: 30px;height: 50px;margin: 0px;position: relative;">
                       <img loading='lazy'
                           style="object-fit: contain;object-position: center;width: 100%;height: 100%;"
-                          src=${
-                            product.image
-                              ? product.image
-                              : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-                          }
+                          src=${product.image ? product.image : NoImageAdress}
                           alt='product Image'
                         />
                       </div>

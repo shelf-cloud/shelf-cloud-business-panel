@@ -5,6 +5,7 @@ import { Card, CardBody, Col } from 'reactstrap'
 import CountUp from 'react-countup'
 import { DashboardResponse } from '@typesTs/commercehub/dashboard'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
+import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   summary: DashboardResponse
@@ -119,11 +120,7 @@ const CommerceHubWidget = ({ summary }: Props) => {
                         <td>
                           <img
                             loading='lazy'
-                            src={
-                              item.channelLogo
-                                ? item.channelLogo
-                                : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-                            }
+                            src={item.channelLogo ? item.channelLogo : NoImageAdress}
                             alt='Channel Logo'
                             className='m-0 p-0 me-1 '
                             style={{

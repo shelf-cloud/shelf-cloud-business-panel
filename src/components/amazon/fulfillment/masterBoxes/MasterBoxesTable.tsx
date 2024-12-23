@@ -11,6 +11,7 @@ import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import Link from 'next/link'
 import moment from 'moment'
+import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   allData: AmazonFulfillmentSku[]
@@ -211,11 +212,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
                 }}>
                 <img
                   loading='lazy'
-                  src={
-                    row.image
-                      ? row.image
-                      : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-                  }
+                  src={row.image ? row.image : NoImageAdress}
                   alt='product Image'
                   style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                 />
@@ -671,11 +668,19 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
     },
     {
       name: <span className='fw-bold fs-6 text-center'>Total To Amazon</span>,
-      selector: (row: AmazonFulfillmentSku) => row.totalSendToAmazon > 0 ? <div>
-        <p className='m-0 fs-5 text-center fw-semibold'>{FormatIntNumber(state.currentRegion, parseInt(row.orderQty))} <span className='fs-7 fw-normal'>{parseInt(row.orderQty) > 1 ? 'Boxes' : 'Box'}</span></p>
-        <p className='m-0 fs-5 text-center fw-semibold'>{FormatIntNumber(state.currentRegion, row.totalSendToAmazon)} <span className='fs-7 fw-normal'>{row.totalSendToAmazon > 1 ? 'Units' : 'Unit'}</span></p>
-        </div>
-      : 0,
+      selector: (row: AmazonFulfillmentSku) =>
+        row.totalSendToAmazon > 0 ? (
+          <div>
+            <p className='m-0 fs-5 text-center fw-semibold'>
+              {FormatIntNumber(state.currentRegion, parseInt(row.orderQty))} <span className='fs-7 fw-normal'>{parseInt(row.orderQty) > 1 ? 'Boxes' : 'Box'}</span>
+            </p>
+            <p className='m-0 fs-5 text-center fw-semibold'>
+              {FormatIntNumber(state.currentRegion, row.totalSendToAmazon)} <span className='fs-7 fw-normal'>{row.totalSendToAmazon > 1 ? 'Units' : 'Unit'}</span>
+            </p>
+          </div>
+        ) : (
+          0
+        ),
       sortable: true,
       center: true,
       compact: true,

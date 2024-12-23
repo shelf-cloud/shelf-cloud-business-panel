@@ -6,6 +6,7 @@ import { FormatCurrency } from '@lib/FormatNumbers'
 import AppContext from '@context/AppContext'
 import { DashboardResponse } from '@typesTs/commercehub/dashboard'
 import moment from 'moment'
+import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   summary: DashboardResponse
@@ -42,11 +43,7 @@ const CheckNumberTable = ({ summary }: Props) => {
                         <td>
                           <img
                             loading='lazy'
-                            src={
-                              item.channelLogo
-                                ? item.channelLogo
-                                : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-                            }
+                            src={item.channelLogo ? item.channelLogo : NoImageAdress}
                             alt='Channel Logo'
                             className='m-0 p-0 me-1 '
                             style={{
@@ -75,7 +72,9 @@ const CheckNumberTable = ({ summary }: Props) => {
                 </tbody>
               </table>
               <div className='d-flex justify-content-end align-item-center px-3 py-2'>
-                <Link href={`/commercehub/checkSummary`} className='text-primary fs-7'>View More</Link>
+                <Link href={`/commercehub/checkSummary`} className='text-primary fs-7'>
+                  View More
+                </Link>
               </div>
             </div>
           </CardBody>

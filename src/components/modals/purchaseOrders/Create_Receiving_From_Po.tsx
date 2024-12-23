@@ -9,6 +9,7 @@ import { toast } from 'react-toastify'
 import router from 'next/router'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import useSWR from 'swr'
+import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   orderNumberStart: string
@@ -245,11 +246,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                                 }}>
                                 <img
                                   loading='lazy'
-                                  src={
-                                    item.image
-                                      ? item.image
-                                      : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-                                  }
+                                  src={item.image ? item.image : NoImageAdress}
                                   alt='product Image'
                                   style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                                 />

@@ -8,6 +8,7 @@ import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import AppContext from '@context/AppContext'
 import { DebounceInput } from 'react-debounce-input'
 import { Badge, Spinner, UncontrolledTooltip } from 'reactstrap'
+import { NoImageAdress } from '@lib/assetsConstants'
 
 const ReorderingPointsExpandedDetails = dynamic(() => import('./ReorderingPointsExpandedDetails'), {
   ssr: false,
@@ -165,15 +166,8 @@ const ReorderingPointsTable = ({
               }}>
               <img
                 loading='lazy'
-                src={
-                  row.image
-                    ? row.image
-                    : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-                }
-                onError={(e) =>
-                  (e.currentTarget.src =
-                    'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
-                }
+                src={row.image ? row.image : NoImageAdress}
+                onError={(e) => (e.currentTarget.src = NoImageAdress)}
                 alt='product Image'
                 style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
               />

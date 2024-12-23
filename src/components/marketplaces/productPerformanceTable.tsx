@@ -8,6 +8,7 @@ import ProductPerformanceExpandedDetails from './productPerformanceExpandedDetai
 import UnitsSoldDetailsModal from '@components/modals/marketplaces/unitsSoldDetailsModal'
 import { Button } from 'reactstrap'
 import Link from 'next/link'
+import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   tableData: ProductPerformance[]
@@ -38,7 +39,7 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
     selectedMarketplace.storeId === 9999
       ? tableData.reduce((total: number, product: ProductPerformance) => total + (product.grossRevenue - (product.expenses + product.storageCost)), 0)
       : tableData.reduce((total: number, product: ProductPerformance) => total + (product.grossRevenue - product.expenses), 0)
-      
+
   const totalMargin = ((totalGrossRevenue - totalExpenses) / totalGrossRevenue) * 100
   const totalRoi = ((totalGrossRevenue - totalExpenses) / totalExpenses) * 100
 
@@ -147,15 +148,8 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
               }}>
               <img
                 loading='lazy'
-                src={
-                  row.image
-                    ? row.image
-                    : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-                }
-                onError={(e) =>
-                  (e.currentTarget.src =
-                    'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
-                }
+                src={row.image ? row.image : NoImageAdress}
+                onError={(e) => (e.currentTarget.src = NoImageAdress)}
                 alt='product Image'
                 style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
               />
@@ -274,8 +268,17 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
           return <span>0%</span>
         } else {
           return (
-            <span className={((row?.grossRevenue - (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) / row?.grossRevenue) * 100 >= 0 ? 'text-black' : 'text-danger'}>
-              {FormatIntPercentage(state.currentRegion, ((row?.grossRevenue - (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) / row?.grossRevenue) * 100)}%
+            <span
+              className={
+                ((row?.grossRevenue - (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) / row?.grossRevenue) * 100 >= 0
+                  ? 'text-black'
+                  : 'text-danger'
+              }>
+              {FormatIntPercentage(
+                state.currentRegion,
+                ((row?.grossRevenue - (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) / row?.grossRevenue) * 100
+              )}
+              %
             </span>
           )
         }
@@ -297,8 +300,22 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
           return <span>0%</span>
         } else {
           return (
-            <span className={((row.grossRevenue - (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) / (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) * 100 >= 0 ? 'text-black' : 'text-danger'}>
-              {FormatIntPercentage(state.currentRegion, ((row.grossRevenue - (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) / (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) * 100)}%
+            <span
+              className={
+                ((row.grossRevenue - (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) /
+                  (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) *
+                  100 >=
+                0
+                  ? 'text-black'
+                  : 'text-danger'
+              }>
+              {FormatIntPercentage(
+                state.currentRegion,
+                ((row.grossRevenue - (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) /
+                  (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) *
+                  100
+              )}
+              %
             </span>
           )
         }

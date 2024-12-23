@@ -11,6 +11,7 @@ import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import Link from 'next/link'
 import moment from 'moment'
+import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   allData: AmazonFulfillmentSku[]
@@ -207,7 +208,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
                   src={
                     row.image
                       ? row.image
-                      : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
+                      : NoImageAdress
                   }
                   alt='product Image'
                   style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
