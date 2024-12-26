@@ -49,8 +49,15 @@ const initialState = {
   // MODAL - UPLOAD PRODUCTS
   showUploadProductsModal: false,
   // MODAL - ORDER DETAILS FROM INVOICE
-  orderNumberfromInvoices: null,
-  showOrderDetailsOfInvoiceModal: false,
+  shipmentDetailModal: {
+    show: false,
+    orderId: 0,
+    orderNumber: '',
+    orderType: '',
+    status: '',
+    orderDate: '',
+    showActions: false,
+  },
   // MODAL - PAYMENTS
   receivingFromPo: {},
   showCreateReceivingFromPo: false,
@@ -229,11 +236,18 @@ const useInitialState = () => {
     })
   }
 
-  const setShowOrderDetailsOfInvoiceModal = (payload, orderNumber) => {
+  const setShipmentDetailsModal = (show, orderId, orderNumber, orderType, status, orderDate, showActions) => {
     setState({
       ...state,
-      orderNumberfromInvoices: orderNumber,
-      showOrderDetailsOfInvoiceModal: payload,
+      shipmentDetailModal: {
+        show,
+        orderId,
+        orderNumber,
+        orderType,
+        status,
+        orderDate,
+        showActions,
+      },
     })
   }
 
@@ -332,7 +346,7 @@ const useInitialState = () => {
     setModalCreateReturnInfo,
     setShowCreateReturnModal,
     setUploadProductsModal,
-    setShowOrderDetailsOfInvoiceModal,
+    setShipmentDetailsModal,
     setIndividualUnitsPlan,
     setUploadIndividualUnitsLabelsModal,
     setReceivingFromPo,

@@ -1,10 +1,10 @@
 import React from 'react'
 import ExcelJS from 'exceljs'
 import { DropdownItem } from 'reactstrap'
-import { OrderRowType } from '@typings'
+import { Shipment } from '@typesTs/shipments/shipments'
 
 type Props = {
-  order: OrderRowType
+  order: Shipment
 }
 
 const DownloadPackingSlip = ({ order }: Props) => {

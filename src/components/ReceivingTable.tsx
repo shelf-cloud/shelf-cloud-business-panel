@@ -11,10 +11,10 @@ import Confirm_Delete_Receiving from './modals/receivings/Confirm_Delete_Receivi
 type Props = {
   tableData: OrderRowType[]
   pending: boolean
-  apiMutateLink: string
+  mutateReturns: () => void
 }
 
-const ReceivingTable = ({ tableData, pending, apiMutateLink }: Props) => {
+const ReceivingTable = ({ tableData, pending, mutateReturns }: Props) => {
   const { state }: any = useContext(AppContext)
   const [loading, setLoading] = useState(false)
   const [showDeleteModal, setshowDeleteModal] = useState({
@@ -165,7 +165,7 @@ const ReceivingTable = ({ tableData, pending, apiMutateLink }: Props) => {
         progressPending={pending}
         expandableRows
         expandableRowsComponent={ShipmentExpandedDetail}
-        expandableRowsComponentProps={{ apiMutateLink: apiMutateLink }}
+        expandableRowsComponentProps={{ mutateReturns: mutateReturns }}
         striped={true}
       />
       {showDeleteModal.show && (
@@ -174,7 +174,7 @@ const ReceivingTable = ({ tableData, pending, apiMutateLink }: Props) => {
           setshowDeleteModal={setshowDeleteModal}
           loading={loading}
           setLoading={setLoading}
-          apiMutateLink={apiMutateLink}
+          mutateReturns={mutateReturns}
         />
       )}
     </>

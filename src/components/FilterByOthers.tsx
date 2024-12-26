@@ -1,20 +1,41 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import AppContext from '@context/AppContext'
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { Input } from 'reactstrap'
+import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap'
+import SimpleSelect from './Common/SimpleSelect'
+
+type filter = {
+  value: string
+  label: string
+}
 
 type Props = {
-  searchType: string
-  setSearchType: (searchValue: string) => void
-  searchStatus: string
-  setSearchStatus: (searchValue: string) => void
-  searchMarketplace: string
-  setSearchMarketplace: (searchValue: string) => void
+  searchType: filter
+  setSearchType: (selectedOption: filter) => void
+  searchStatus: filter
+  setSearchStatus: (selectedOption: filter) => void
+  searchMarketplace: filter
+  setSearchMarketplace: (selectedOption: filter) => void
 }
+
+const TYPE_OPTIONS = [
+  { value: '', label: 'All' },
+  { value: 'Wholesale', label: 'Wholesale' },
+  { value: 'Shipment', label: 'Shipment' },
+  { value: 'FBA Shipment', label: 'FBA Shipment' },
+]
+
+const STATUS_OPTIONS = [
+  { value: '', label: 'All' },
+  { value: 'on_hold', label: 'On Hold' },
+  { value: 'awaiting', label: 'Awaiting' },
+  { value: 'shipped', label: 'Shipped' },
+  { value: 'cancelled', label: 'Cancelled' },
+]
 
 const FilterByOthers = ({ searchType, setSearchType, searchStatus, setSearchStatus, searchMarketplace, setSearchMarketplace }: Props) => {
   const { state }: any = useContext(AppContext)
-  const [openDatesMenu, setOpenDatesMenu] = useState(false)
+  const [isFiltersOpen, setOpenFilters] = useState(false)
   const filterByOthersContainer = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
@@ -22,7 +43,7 @@ const FilterByOthers = ({ searchType, setSearchType, searchStatus, setSearchStat
       document.addEventListener('click', (e: any) => {
         if (filterByOthersContainer.current) {
           if (!filterByOthersContainer.current.contains(e.target)) {
-            setOpenDatesMenu(false)
+            setOpenFilters(false)
           }
         }
       })
@@ -30,103 +51,69 @@ const FilterByOthers = ({ searchType, setSearchType, searchStatus, setSearchStat
   }, [])
 
   return (
-    <div
-      ref={filterByOthersContainer}
-      className='d-flex flex-column justify-content-center align-items-end gap-2 flex-md-row justify-content-md-between align-items-md-center w-auto'>
-      <div className='dropdown'>
-        <button
-          className='btn btn-light dropdown-toggle'
-          style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }}
-          type='button'
-          data-bs-toggle='dropdown'
-          data-bs-auto-close='outside'
-          aria-expanded='false'
-          onClick={() => setOpenDatesMenu(!openDatesMenu)}>
-          Filters
-        </button>
-        <div className={'dropdown-menu dropdown-menu-md px-4 py-3' + (openDatesMenu ? ' show' : '')}>
-          <div className='d-flex flex-column justify-content-start gap-2'>
-            <span className='fw-semibold fs-7'>Type:</span>
-            <div
-              className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto ps-1 pe-0 py-0 rounded-3'
-              style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
-              {/* <i className='ri-truck-line fs-5' /> */}
-              <Input
-                type='select'
-                className='border-0 fs-7 w-100'
-                id='type'
-                name='type'
-                value={searchType}
-                onChange={(e) => {
-                  setSearchType(e.target.value)
-                  setOpenDatesMenu(false)
-                }}>
-                <option value=''>All Types</option>
-                <option value='Wholesale'>Wholesale</option>
-                <option value='Shipment'>Shipment</option>
-                <option value='FBA Shipment'>FBA Shipment</option>
-              </Input>
+    <>
+      <ButtonGroup>
+        <Dropdown isOpen={isFiltersOpen} toggle={() => setOpenFilters(!isFiltersOpen)}>
+          <DropdownToggle caret className='fs-7' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }} color='light'>
+            Filters
+          </DropdownToggle>
+          <DropdownMenu style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
+            <div className={'px-4 py-3'}>
+              <div className='d-flex flex-column justify-content-start gap-2'>
+                <span className='fs-7 fw-normal'>Filter By Type:</span>
+                <SimpleSelect
+                  selected={searchType}
+                  handleSelect={(option) => {
+                    setSearchType(option)
+                    setOpenFilters(false)
+                  }}
+                  options={TYPE_OPTIONS}
+                />
+
+                <span className='fs-7 fw-normal'>Filter By Status:</span>
+                <SimpleSelect
+                  selected={searchStatus}
+                  handleSelect={(option) => {
+                    setSearchStatus(option)
+                    setOpenFilters(false)
+                  }}
+                  options={STATUS_OPTIONS}
+                />
+
+                {state?.user?.[`${state.currentRegion}`]?.marketplacesIds && (
+                  <>
+                    <span className='fs-7 fw-normal'>Filter By Store:</span>
+                    <SimpleSelect
+                      selected={searchMarketplace}
+                      handleSelect={(option) => {
+                        setSearchMarketplace(option)
+                        setOpenFilters(false)
+                      }}
+                      options={[
+                        { value: '', label: 'All Stores' },
+                        ...state?.user?.[`${state.currentRegion}`]?.marketplacesIds?.sort().map((market: any) => ({ value: market.value, label: market.label })),
+                      ]}
+                    />
+                  </>
+                )}
+
+                <span
+                  style={{ width: '100%', cursor: 'pointer', textAlign: 'right' }}
+                  onClick={() => {
+                    setSearchType({ value: '', label: 'All' })
+                    setSearchStatus({ value: '', label: 'All' })
+                    setSearchMarketplace({ value: '', label: 'All Stores' })
+                    setOpenFilters(false)
+                  }}
+                  className='text-muted mt-2 fs-7'>
+                  Clear All
+                </span>
+              </div>
             </div>
-            <span className='fw-semibold fs-7'>Status:</span>
-            <div
-              className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto ps-1 pe-0 py-0 rounded-3'
-              style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
-              {/* <i className='ri-truck-line fs-5' /> */}
-              <Input
-                type='select'
-                className='border-0 fs-7 w-100'
-                id='type'
-                name='type'
-                value={searchStatus}
-                onChange={(e) => {
-                  setSearchStatus(e.target.value)
-                  setOpenDatesMenu(false)
-                }}>
-                <option value=''>All Status</option>
-                <option value='on_hold'>On Hold</option>
-                <option value='awaiting'>Awaiting</option>
-                <option value='shipped'>Shipped</option>
-                <option value='cancelled'>Cancelled</option>
-              </Input>
-            </div>
-            <span className='fw-semibold fs-7'>Marketplace:</span>
-            <div
-              className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto ps-1 pe-0 py-0 rounded-3'
-              style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
-              {/* <i className='ri-truck-line fs-5' /> */}
-              <Input
-                type='select'
-                className='border-0 fs-7 w-100'
-                id='type'
-                name='type'
-                value={searchMarketplace}
-                onChange={(e) => {
-                  setSearchMarketplace(e.target.value)
-                  setOpenDatesMenu(false)
-                }}>
-                <option value=''>All Marketplaces</option>
-                {state?.user?.[`${state.currentRegion}`]?.marketplaces?.sort().map((market: string, index: number) => (
-                  <option key={`${market}-id${index}`} value={market}>
-                    {market}
-                  </option>
-                ))}
-              </Input>
-            </div>
-            <span
-              style={{ width: '100%', cursor: 'pointer', textAlign: 'right' }}
-              onClick={() => {
-                setSearchType('')
-                setSearchStatus('')
-                setSearchMarketplace('')
-                setOpenDatesMenu(false)
-              }}
-              className='fw-normal mt-2 fs-7'>
-              Clear All
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
+          </DropdownMenu>
+        </Dropdown>
+      </ButtonGroup>
+    </>
   )
 }
 

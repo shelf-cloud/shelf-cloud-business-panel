@@ -1,20 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useContext, useMemo } from 'react'
+import React, { useState, useContext, useMemo, useRef, useCallback } from 'react'
 import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
-import { OrderRowType, ShipmentOrderItem } from '@typings'
 import axios from 'axios'
 import Head from 'next/head'
-import { Card, CardBody, Col, Container, Input, Row } from 'reactstrap'
+import { Button, Card, CardBody, Container, Spinner } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import moment from 'moment'
-import ShipmentsTable from '@components/ShipmentsTable'
-import CreateReturnModal from '@components/CreateReturnModal'
+import ShipmentsTable from '@components/shipments/shipmentLog/ShipmentsTable'
 import { toast } from 'react-toastify'
 import FilterByDates from '@components/FilterByDates'
 import FilterByOthers from '@components/FilterByOthers'
-import useSWR from 'swr'
+import useSWRInfinite from 'swr/infinite'
+import { DebounceInput } from 'react-debounce-input'
+import ShipmentDetailsModal from '@components/modals/shipments/ShipmentDetailsModal'
+import { Shipment } from '@typesTs/shipments/shipments'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -43,257 +44,184 @@ type Props = {
   }
 }
 
-const Shipments = ({ session, sessionToken }: Props) => {
-  const { state }: any = useContext(AppContext)
-  const [shipmentsStartDate, setShipmentsStartDate] = useState(moment().subtract(1, 'months').format('YYYY-MM-DD'))
-  const [shipmentsEndDate, setShipmentsEndDate] = useState(moment().format('YYYY-MM-DD'))
-  const [pending, setPending] = useState(true)
-  const [allData, setAllData] = useState<OrderRowType[]>([])
-  const [searchValue, setSearchValue] = useState<any>('')
-  const [searchType, setSearchType] = useState<any>('')
-  const [searchStatus, setSearchStatus] = useState<any>('')
-  const [searchMarketplace, setSearchMarketplace] = useState<any>('')
+const ITEMS_PER_PAGE = 100
 
-  const controller = new AbortController()
-  const signal = controller.signal
-  const fetcher = async (endPoint: string) => {
-    const getShipmentOrders = toast.loading('Getting Shipments...')
-    await axios(endPoint, {
-      signal,
-      headers: {
-        Authorization: `Bearer ${sessionToken}`,
-      },
-    })
-      .then((res) => {
-        setAllData(res.data)
-        setPending(false)
-      })
-      .catch(({ error }) => {
-        if (axios.isCancel(error)) {
-          toast.error(error?.data?.message || 'Error fetching shipment Log data')
-          setAllData([])
-          setPending(false)
+const fetcher = async (url: string) => {
+  const data = await axios.get(url).then((res) => res.data)
+  return data
+}
+
+type filter = {
+  value: string
+  label: string
+}
+
+const Shipments = ({ session }: Props) => {
+  const { state }: any = useContext(AppContext)
+  const { currentRegion, user, shipmentDetailModal } = state
+  const [startDate, setStartDate] = useState<string>('')
+  const [endDate, setEndDate] = useState<string>('')
+  const [searchValue, setSearchValue] = useState<string>('')
+  const [searchType, setSearchType] = useState<filter>({ value: '', label: 'All' })
+  const [searchStatus, setSearchStatus] = useState<filter>({ value: '', label: 'All' })
+  const [searchMarketplace, setSearchMarketplace] = useState<filter>({ value: '', label: 'All Stores' })
+  const [sortBy, setSortBy] = useState({
+    key: '',
+    asc: false,
+  })
+
+  const getKey = (pageIndex: number, previousPageData: Shipment[]) => {
+    if (!currentRegion || !user.businessId) return null // No region or business
+
+    if (previousPageData && !previousPageData.length) return null // No more data to fetch
+
+    let url = `/api/shipments/getShipments?region=${currentRegion}&businessId=${user.businessId}&offset=${pageIndex * ITEMS_PER_PAGE}&limit=${ITEMS_PER_PAGE}`
+
+    // Append filters if they exist
+    if (searchValue) url += `&search=${encodeURIComponent(searchValue)}`
+    if (startDate) url += `&startDate=${startDate}`
+    if (endDate) url += `&endDate=${endDate}`
+    if (searchType.value !== '') url += `&orderType=${searchType.value}`
+    if (searchStatus.value !== '') url += `&orderStatus=${searchStatus.value}`
+    if (searchMarketplace.value !== '') url += `&storeId=${searchMarketplace.value}`
+    if (sortBy.key !== '') url += `&sortBy=${sortBy.key}&direction=${sortBy.asc ? 'ASC' : 'DESC'}`
+
+    return url
+  }
+
+  const {
+    data,
+    size,
+    setSize,
+    isValidating,
+    mutate: mutateShipments,
+  } = useSWRInfinite(getKey, fetcher, {
+    revalidateFirstPage: false,
+    revalidateOnFocus: false,
+  })
+
+  // Flatten invoices data
+  const shipments: Shipment[] = useMemo(() => (data ? ([] as Shipment[]).concat(...data) : []), [data])
+
+  // Observer for infinite scroll
+  const observer = useRef<IntersectionObserver | null>(null)
+  const lastInvoiceElementRef = useCallback(
+    (node: HTMLElement | null) => {
+      if (isValidating) return
+      if (observer.current) observer.current.disconnect()
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && data && data[data.length - 1].length === ITEMS_PER_PAGE) {
+          setSize(size + 1)
         }
       })
-    toast.update(getShipmentOrders, {
-      render: 'Completed',
-      type: 'success',
-      isLoading: false,
-      autoClose: 3000,
-    })
-  }
-  useSWR(
-    session && state.user.businessId
-      ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/shipments/getShipmentsOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`
-      : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    }
+
+      if (node) observer.current.observe(node)
+    },
+    [isValidating, setSize, data, size]
   )
 
-  const filterDataTable = useMemo(() => {
-    if (searchValue === '' && searchType === '' && searchStatus === '' && searchMarketplace === '') {
-      return allData
-    }
-
-    if (searchValue !== '') {
-      let newDataTable = allData.filter(
-        (order) =>
-          order?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
-          order?.poNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
-          order?.orderStatus?.toLowerCase().includes(searchValue.toLowerCase()) ||
-          order?.orderType?.toLowerCase().includes(searchValue.toLowerCase()) ||
-          order?.shipName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-          order?.trackingNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
-          order?.orderItems?.some(
-            (item: ShipmentOrderItem) =>
-              item?.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
-              searchValue.split(' ').every((word: string) => item?.name?.toLowerCase().includes(word.toLowerCase())) ||
-              item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
-          )
-      )
-      if (searchType !== '') {
-        newDataTable = newDataTable.filter((order) => order?.orderType?.toLowerCase().includes(searchType.toLowerCase()))
-      }
-
-      if (searchStatus !== '') {
-        newDataTable = newDataTable.filter((order) => order?.orderStatus?.toLowerCase().includes(searchStatus.toLowerCase()))
-      }
-
-      if (searchMarketplace !== '') {
-        newDataTable = newDataTable.filter((order) => order?.storeName?.toLowerCase() == searchMarketplace.toLowerCase())
-      }
-
-      return newDataTable
-    }
-
-    if (searchType !== '') {
-      let newDataTable = allData.filter((order) => order?.orderType?.toLowerCase().includes(searchType.toLowerCase()))
-
-      if (searchStatus !== '') {
-        newDataTable = newDataTable.filter((order) => order?.orderStatus?.toLowerCase().includes(searchStatus.toLowerCase()))
-      }
-
-      if (searchMarketplace !== '') {
-        newDataTable = newDataTable.filter((order) => order?.storeName?.toLowerCase() == searchMarketplace.toLowerCase())
-      }
-
-      if (searchValue !== '') {
-        newDataTable = newDataTable.filter(
-          (order) =>
-            order?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.poNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.orderStatus?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.orderType?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.shipName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.trackingNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.orderItems?.some(
-              (item: ShipmentOrderItem) =>
-                item?.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                searchValue.split(' ').every((word: string) => item?.name?.toLowerCase().includes(word.toLowerCase())) ||
-                item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
-            )
-        )
-      }
-
-      return newDataTable
-    }
-
-    if (searchStatus !== '') {
-      let newDataTable = allData.filter((order) => order?.orderStatus?.toLowerCase().includes(searchStatus.toLowerCase()))
-
-      if (searchType !== '') {
-        newDataTable = newDataTable.filter((order) => order?.orderType?.toLowerCase().includes(searchType.toLowerCase()))
-      }
-
-      if (searchMarketplace !== '') {
-        newDataTable = newDataTable.filter((order) => order?.storeName?.toLowerCase() == searchMarketplace.toLowerCase())
-      }
-
-      if (searchValue !== '') {
-        newDataTable = newDataTable.filter(
-          (order) =>
-            order?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.orderStatus?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.orderType?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.shipName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.trackingNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.orderItems?.some(
-              (item: ShipmentOrderItem) =>
-                item?.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                searchValue.split(' ').every((word: string) => item?.name?.toLowerCase().includes(word.toLowerCase())) ||
-                item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
-            )
-        )
-      }
-
-      return newDataTable
-    }
-
-    if (searchMarketplace !== '') {
-      let newDataTable = allData.filter((order) => order?.storeName?.toLowerCase() == searchMarketplace.toLowerCase())
-
-      if (searchType !== '') {
-        newDataTable = newDataTable.filter((order) => order?.orderType?.toLowerCase().includes(searchType.toLowerCase()))
-      }
-
-      if (searchStatus !== '') {
-        newDataTable = newDataTable.filter((order) => order?.orderStatus?.toLowerCase().includes(searchStatus.toLowerCase()))
-      }
-
-      if (searchValue !== '') {
-        newDataTable = newDataTable.filter(
-          (order) =>
-            order?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.orderStatus?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.orderType?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.shipName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.trackingNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order?.orderItems?.some(
-              (item: ShipmentOrderItem) =>
-                item?.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                searchValue.split(' ').every((word: string) => item?.name?.toLowerCase().includes(word.toLowerCase())) ||
-                item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
-            )
-        )
-      }
-
-      return newDataTable
-    }
-  }, [allData, searchValue, searchType, searchStatus, searchMarketplace])
+  const clearFilters = () => {
+    setSearchValue('')
+    setStartDate('')
+    setEndDate('')
+    setSearchType({ value: '', label: 'All' })
+    setSearchStatus({ value: '', label: 'All' })
+    setSearchMarketplace({ value: '', label: 'All Stores' })
+    setSize(1) // Reset to page 1
+    mutateShipments() // Refetch the initial data set
+  }
 
   const handleChangeDatesFromPicker = (dateStr: string) => {
     if (dateStr.includes(' to ')) {
       const dates = dateStr.split(' to ')
-      setShipmentsStartDate(moment(dates[0], 'DD MMM YY').format('YYYY-MM-DD'))
-      setShipmentsEndDate(moment(dates[1], 'DD MMM YY').format('YYYY-MM-DD'))
+      setStartDate(moment(dates[0], 'DD MMM YY').format('YYYY-MM-DD'))
+      setEndDate(moment(dates[1], 'DD MMM YY').format('YYYY-MM-DD'))
     }
   }
+
+  const hasActiveFilters = useMemo(
+    () => searchValue !== '' || startDate !== '' || endDate !== '' || searchType.value !== '' || searchStatus.value !== '' || searchMarketplace.value !== '',
+    [searchValue, startDate, endDate, searchType, searchStatus, searchMarketplace]
+  )
 
   const handleGetShipmentBOL = async (orderNumber: string, orderId: string, documentType: string) => {
     const getShipmentBOL = toast.loading('Getting Shipment Document...')
 
-    const response = await axios
-      .get(`/api/shipments/getShipmentBOLGoFlow?region=${state.currentRegion}&businessId=${state.user.businessId}&orderId=${orderId}`)
-      .then(({ data }) => data)
-      .catch(({ error }) => {
-        if (axios.isCancel(error)) {
-          toast.error(error?.data?.message || 'Error getting Document')
-        }
-      })
-
-    switch (documentType) {
-      case 'bill_of_lading':
-        if (!response.error && response.shipment[documentType].url) {
-          toast.update(getShipmentBOL, {
-            render: response.message,
-            type: 'success',
-            isLoading: false,
-            autoClose: 3000,
-          })
-          const a = document.createElement('a')
-          a.href = response.shipment[documentType].url
-          a.download = orderNumber
-          a.click()
-        } else {
-          toast.update(getShipmentBOL, {
-            render: 'Document not available',
-            type: 'error',
-            isLoading: false,
-            autoClose: 3000,
-          })
-        }
-        break
-      case 'carton_labels':
-        if (!response.error && response.shipment[documentType].all.url) {
-          toast.update(getShipmentBOL, {
-            render: response.message,
-            type: 'success',
-            isLoading: false,
-            autoClose: 3000,
-          })
-          const a = document.createElement('a')
-          a.href = response.shipment[documentType].all.url
-          a.download = orderNumber
-          a.click()
-        } else {
-          toast.update(getShipmentBOL, {
-            render: 'Document not available',
-            type: 'error',
-            isLoading: false,
-            autoClose: 3000,
-          })
-        }
-        break
-      default:
-        toast.update(getShipmentBOL, {
-          render: 'Document not available',
-          type: 'error',
-          isLoading: false,
-          autoClose: 3000,
+    try {
+      const response = await axios
+        .get(`/api/shipments/getShipmentBOLGoFlow?region=${currentRegion}&businessId=${user.businessId}&orderId=${orderId}`)
+        .then(({ data }) => data)
+        .catch(({ error }) => {
+          if (axios.isCancel(error)) {
+            toast.update(getShipmentBOL, {
+              render: error?.data?.message || 'Error getting Document',
+              type: 'error',
+              isLoading: false,
+              autoClose: 3000,
+            })
+          }
         })
-        break
+
+      switch (documentType) {
+        case 'bill_of_lading':
+          if (!response.error && response.shipment[documentType].url) {
+            toast.update(getShipmentBOL, {
+              render: response.message,
+              type: 'success',
+              isLoading: false,
+              autoClose: 3000,
+            })
+            const a = document.createElement('a')
+            a.href = response.shipment[documentType].url
+            a.download = orderNumber
+            a.click()
+          } else {
+            toast.update(getShipmentBOL, {
+              render: 'Document not available',
+              type: 'error',
+              isLoading: false,
+              autoClose: 3000,
+            })
+          }
+          break
+        case 'carton_labels':
+          if (!response.error && response.shipment[documentType].all.url) {
+            toast.update(getShipmentBOL, {
+              render: response.message,
+              type: 'success',
+              isLoading: false,
+              autoClose: 3000,
+            })
+            const a = document.createElement('a')
+            a.href = response.shipment[documentType].all.url
+            a.download = orderNumber
+            a.click()
+          } else {
+            toast.update(getShipmentBOL, {
+              render: 'Document not available',
+              type: 'error',
+              isLoading: false,
+              autoClose: 3000,
+            })
+          }
+          break
+        default:
+          toast.update(getShipmentBOL, {
+            render: 'Document not available',
+            type: 'error',
+            isLoading: false,
+            autoClose: 3000,
+          })
+          break
+      }
+    } catch (error) {
+      toast.update(getShipmentBOL, {
+        render: 'Document not available',
+        type: 'warning',
+        isLoading: false,
+        autoClose: 3000,
+      })
     }
   }
 
@@ -307,70 +235,70 @@ const Shipments = ({ session, sessionToken }: Props) => {
         <div className='page-content'>
           <Container fluid>
             <BreadCrumb title='Shipments' pageTitle='Orders' />
-            <Row>
-              <Col lg={12}>
-                <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-1 flex-md-row justify-content-md-between align-items-md-center'>
-                  <div className='d-flex flex-column justify-content-center align-items-end gap-2 flex-md-row justify-content-md-between align-items-md-center w-auto'>
-                    <FilterByDates
-                      shipmentsStartDate={shipmentsStartDate}
-                      setShipmentsStartDate={setShipmentsStartDate}
-                      setShipmentsEndDate={setShipmentsEndDate}
-                      shipmentsEndDate={shipmentsEndDate}
-                      handleChangeDatesFromPicker={handleChangeDatesFromPicker}
+            <div className='d-flex flex-column justify-content-center align-items-end gap-2 mb-1 flex-lg-row justify-content-md-between align-items-md-center px-1'>
+              <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'></div>
+              <div className='w-100 d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-end align-items-lg-center px-0'>
+                <FilterByDates
+                  shipmentsStartDate={startDate}
+                  setShipmentsStartDate={setStartDate}
+                  setShipmentsEndDate={setEndDate}
+                  shipmentsEndDate={endDate}
+                  handleChangeDatesFromPicker={handleChangeDatesFromPicker}
+                />
+                <FilterByOthers
+                  searchType={searchType}
+                  setSearchType={setSearchType}
+                  searchStatus={searchStatus}
+                  setSearchStatus={setSearchStatus}
+                  searchMarketplace={searchMarketplace}
+                  setSearchMarketplace={setSearchMarketplace}
+                />
+                <div className='app-search p-0 col-sm-12 col-lg-5'>
+                  <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+                    <DebounceInput
+                      type='text'
+                      minLength={1}
+                      debounceTimeout={500}
+                      className='form-control input_background_white fs-6'
+                      placeholder='Search...'
+                      id='search-options'
+                      value={searchValue}
+                      onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
+                      onChange={(e) => setSearchValue(e.target.value)}
                     />
-                    <FilterByOthers
-                      searchType={searchType}
-                      setSearchType={setSearchType}
-                      searchStatus={searchStatus}
-                      setSearchStatus={setSearchStatus}
-                      searchMarketplace={searchMarketplace}
-                      setSearchMarketplace={setSearchMarketplace}
-                    />
+                    <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
+                    <span
+                      className='d-flex align-items-center justify-content-center input_background_white'
+                      style={{
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => setSearchValue('')}>
+                      <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
+                    </span>
                   </div>
-                  <div className='col-sm-12 col-md-3'>
-                    <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
-                      <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
-                        <Input
-                          type='text'
-                          className='form-control input_background_white'
-                          placeholder='Search...'
-                          id='search-options'
-                          value={searchValue}
-                          onChange={(e) => setSearchValue(e.target.value)}
-                        />
-                        <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
-                        <span
-                          className='d-flex align-items-center justify-content-center input_background_white'
-                          style={{
-                            cursor: 'pointer',
-                          }}
-                          onClick={() => setSearchValue('')}>
-                          <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </Row>
-                <Card>
-                  <CardBody>
-                    <ShipmentsTable
-                      tableData={filterDataTable || []}
-                      pending={pending}
-                      apiMutateLink={`/api/getShipmentsOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`}
-                      handleGetShipmentBOL={handleGetShipmentBOL}
-                    />
-                  </CardBody>
-                </Card>
-              </Col>
-            </Row>
+                </div>
+
+                <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='fs-7 text-nowrap' onClick={clearFilters}>
+                  Clear Filters
+                </Button>
+              </div>
+            </div>
+            <Card>
+              <CardBody>
+                <ShipmentsTable tableData={shipments} pending={isValidating && size === 1} sortBy={sortBy} setSortBy={setSortBy} handleGetShipmentBOL={handleGetShipmentBOL} />
+                <div ref={lastInvoiceElementRef} style={{ height: '20px', marginTop: '10px' }}>
+                  {isValidating && size > 1 && (
+                    <p className='text-center'>
+                      <Spinner size='sm' color='primary' /> Loading more shipments...
+                    </p>
+                  )}
+                </div>
+              </CardBody>
+            </Card>
           </Container>
         </div>
       </React.Fragment>
-      {state.showCreateReturnModal && (
-        <CreateReturnModal
-          apiMutateLink={`/api/getShipmentsOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`}
-        />
-      )}
+      {shipmentDetailModal.show && <ShipmentDetailsModal mutateShipments={mutateShipments} />}
     </div>
   )
 }

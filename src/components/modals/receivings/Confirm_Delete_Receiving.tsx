@@ -2,7 +2,6 @@
 import React, { useContext } from 'react'
 import { Button, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
 import { toast } from 'react-toastify'
-import { useSWRConfig } from 'swr'
 import axios from 'axios'
 import AppContext from '@context/AppContext'
 
@@ -15,12 +14,11 @@ type Props = {
   setshowDeleteModal: (prev: any) => void
   loading: boolean
   setLoading: (state: boolean) => void
-  apiMutateLink:string
+  mutateReturns: () => void
 }
 
-const Confirm_Delete_Receiving = ({ showDeleteModal, setshowDeleteModal, loading, setLoading, apiMutateLink }: Props) => {
+const Confirm_Delete_Receiving = ({ showDeleteModal, setshowDeleteModal, loading, setLoading, mutateReturns }: Props) => {
   const { state }: any = useContext(AppContext)
-  const { mutate } = useSWRConfig()
 
   const handleDeleteReceiving = async () => {
     setLoading(true)
@@ -29,7 +27,7 @@ const Confirm_Delete_Receiving = ({ showDeleteModal, setshowDeleteModal, loading
       orderNumber: showDeleteModal.orderNumber,
     })
     if (!response.data.error) {
-      mutate(apiMutateLink)
+      mutateReturns()
       setshowDeleteModal({
         show: false,
         orderId: 0,

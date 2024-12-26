@@ -78,7 +78,7 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
         return (
           <div className='my-2'>
             <p className='m-0 p-0 fw-semibold'>{row.shipment.shipmentConfirmationId}</p>
-            <p className='m-0 p-0 text-muted'>
+            <p className='fs-7 m-0 p-0 text-muted'>
               {row.shipment.name}{' '}
               {UpdateShipmentNameStatus.includes(row.shipment.status.toLowerCase()) && row.totalPlacementFees > 0 && (
                 <i
@@ -107,8 +107,8 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
       selector: (row: FBAShipment) => {
         return (
           <>
-            <p className='m-0 p-0'>{moment(row.createdAt).local().format('LL')}</p>
-            <p className='m-0 p-0 text-muted'>{moment(row.createdAt).local().format('hh:mm A')}</p>
+            <p className='fs-7 m-0 p-0'>{moment(row.createdAt).local().format('LL')}</p>
+            <p className='fs-7 m-0 p-0 text-muted'>{moment(row.createdAt).local().format('hh:mm A')}</p>
           </>
         )
       },
@@ -122,8 +122,8 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
       selector: (row: FBAShipment) => {
         return (
           <>
-            <p className='m-0 p-0'>{moment.utc(row.lastUpdated).local().format('LL')}</p>
-            <p className='m-0 p-0 text-muted'>{moment.utc(row.lastUpdated).local().format('hh:mm A')}</p>
+            <p className='fs-7 m-0 p-0'>{moment.utc(row.lastUpdated).local().format('LL')}</p>
+            <p className='fs-7 m-0 p-0 text-muted'>{moment.utc(row.lastUpdated).local().format('hh:mm A')}</p>
           </>
         )
       },
@@ -138,16 +138,19 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
       sortable: true,
       center: true,
       compact: true,
+      style: {
+        fontSize: '0.7rem',
+      },
     },
     {
       name: <span className='fw-bold fs-6'>Type</span>,
       selector: (row: FBAShipment) => {
         switch (row.fulfillmentType) {
           case 'Master Boxes':
-            return <span className='fs-6 text-primary fw-semibold'>{CleanStatus(row.fulfillmentType)}</span>
+            return <span className='fs-7 text-primary fw-semibold'>{CleanStatus(row.fulfillmentType)}</span>
             break
           case 'Individual Units':
-            return <span className='fs-6 text-info fw-semibold'>{CleanStatus(row.fulfillmentType)}</span>
+            return <span className='fs-7 text-info fw-semibold'>{CleanStatus(row.fulfillmentType)}</span>
             break
           default:
             return <></>
@@ -165,6 +168,9 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
       sortable: true,
       center: true,
       compact: true,
+      style: {
+        fontSize: '0.7rem',
+      },
     },
     {
       name: <span className='fw-bold fs-6'>SKU</span>,
@@ -229,10 +235,12 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
           case 'receiving':
             return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${CleanStatus(status)} `}</span>
             break
+          case 'in_dispute':
           case 'error':
             return <span className='badge text-uppercase badge-soft-danger p-2'>{` ${CleanStatus(status)} `}</span>
             break
           case 'cancelled':
+          case 'manually_closed':
           case 'closed':
           case 'deleted':
             return <span className='badge text-uppercase badge-soft-dark p-2'>{` ${CleanStatus(status)} `}</span>
@@ -278,15 +286,15 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
                 )}
                 <DropdownItem header>Actions</DropdownItem>
                 {row.status !== 'REVIEWING' && (
-                  <DropdownItem onClick={() => setFBAShipmentReviewingStatus(row.shipmentId, !row.isComplete ? 1 : 0, 'WORKING')}>
+                  <DropdownItem onClick={() => setFBAShipmentReviewingStatus(row.shipmentId, !row.isComplete ? 1 : 0, 'IN_DISPUTE')}>
                     <i className='las la-clipboard-check label-icon align-middle fs-5 me-2' />
-                    <span className='fs-6 fw-normal text-dark'>Mark Working</span>
+                    <span className='fs-6 fw-normal text-dark'>Mark In Dispute</span>
                   </DropdownItem>
                 )}
                 <DropdownItem
-                  onClick={() => setFBAShipmentCompleteStatus(row.shipmentId, !row.isComplete ? 1 : 0, !row.isComplete ? 1 : 0, !row.isComplete ? 'CLOSED' : 'PENDING')}>
+                  onClick={() => setFBAShipmentCompleteStatus(row.shipmentId, !row.isComplete ? 1 : 0, !row.isComplete ? 1 : 0, !row.isComplete ? 'MANUALLY_CLOSED' : 'PENDING')}>
                   <i className='las la-clipboard-check label-icon align-middle fs-5 me-2' />
-                  <span className='fs-6 fw-normal text-dark'>{!row.isComplete ? 'Mark Complete' : 'Mark Pending'}</span>
+                  <span className='fs-6 fw-normal text-dark'>{!row.isComplete ? 'Mark Closed' : 'Mark Open'}</span>
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
@@ -297,7 +305,7 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
       },
     },
   ]
-
+'sh08ff820f-085f-4fe9-8072-add707145c26'
   return (
     <>
       <DataTable

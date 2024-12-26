@@ -2,7 +2,6 @@
 import React, { useContext, useState } from 'react'
 import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
 import { toast } from 'react-toastify'
-import { useSWRConfig } from 'swr'
 import axios from 'axios'
 import AppContext from '@context/AppContext'
 import * as Yup from 'yup'
@@ -16,13 +15,12 @@ type Props = {
     goFlowOrderId: number
   }
   setshowDeleteModal: (prev: any) => void
-  apiMutateLink?: string
+  mutateShipments?: () => void
 }
 
-const CancelManualOrderConfirmationModal = ({ showDeleteModal, setshowDeleteModal, apiMutateLink }: Props) => {
+const CancelManualOrderConfirmationModal = ({ showDeleteModal, setshowDeleteModal, mutateShipments }: Props) => {
   const { state }: any = useContext(AppContext)
   const [loading, setLoading] = useState(false)
-  const { mutate } = useSWRConfig()
 
   const validation = useFormik({
     enableReinitialize: true,
@@ -50,7 +48,7 @@ const CancelManualOrderConfirmationModal = ({ showDeleteModal, setshowDeleteModa
           orderNumber: '',
           goFlowOrderId: 0,
         })
-        mutate(apiMutateLink)
+        mutateShipments && mutateShipments()
         toast.success(response.data.msg)
       } else {
         toast.error(response.data.msg)

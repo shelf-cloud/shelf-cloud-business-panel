@@ -1,6 +1,6 @@
 import { getSession } from '@auth/client'
 import BreadCrumb from '@components/Common/BreadCrumb'
-import OrderDetailsFromInvoicesModal from '@components/OrderDetailsFromInvoicesModal'
+import ShipmentDetailsModal from '@components/modals/shipments/ShipmentDetailsModal'
 import Activity_Product_Details from '@components/product_page/Activity_Product_Details'
 import Bins_Product_Details from '@components/product_page/Bins_Product_Details'
 import General_Product_Details from '@components/product_page/General_Product_Details'
@@ -51,16 +51,14 @@ type Props = {
 const Product_Page_Layout = ({}: Props) => {
   const router = useRouter()
   const { state }: any = useContext(AppContext)
+  const { currentRegion, user, shipmentDetailModal } = state
   const { info } = router.query
 
   const [loading, setloading] = useState(true)
   const [productDetails, setProductDetails] = useState<ProductDetails | null>()
 
   const fetcher = async (endPoint: string) => await axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(
-    info![0] && state.user.businessId ? `/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${info![0]}&businessId=${state.user.businessId}` : null,
-    fetcher
-  )
+  const { data } = useSWR(info![0] && user.businessId ? `/api/getProductPageDetails?region=${currentRegion}&inventoryId=${info![0]}&businessId=${user.businessId}` : null, fetcher)
 
   useEffect(() => {
     if (data?.error) {
@@ -303,7 +301,7 @@ const Product_Page_Layout = ({}: Props) => {
           </Container>
         </div>
       </React.Fragment>
-      {state.showOrderDetailsOfInvoiceModal && <OrderDetailsFromInvoicesModal />}
+      {shipmentDetailModal.show && <ShipmentDetailsModal />}
     </div>
   )
 }

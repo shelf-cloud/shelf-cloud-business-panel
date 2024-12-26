@@ -22,7 +22,7 @@ const StorageTable = ({ data }: Props) => {
                     <tr className="fs-5 fw-bold">
                       <th scope="col">Bin Name</th>
                       <th scope="col">Bin Quantity</th>
-                      <th scope="col">Bin Current Balance</th>
+                      <th scope="col">Bin Est. Monthly Balance</th>
                     </tr>
                   </thead>
                   <tbody>

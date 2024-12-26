@@ -5,20 +5,18 @@ import Dropzone from 'react-dropzone'
 import { ref, uploadBytes } from 'firebase/storage'
 import { storage } from '@firebase'
 import { useSession } from 'next-auth/react'
-import { OrderRowType } from '@typings'
 import moment from 'moment'
 import { toast } from 'react-toastify'
 import axios from 'axios'
-import { mutate } from 'swr'
+import { Shipment } from '@typesTs/shipments/shipments'
 type Props = {
-  data: OrderRowType
+  data: Shipment
+  mutateShipment?: () => void
 }
 
-const UploadIndividualUnitsLabelsModal = ({ data }: Props) => {
+const UploadIndividualUnitsLabelsModal = ({ data, mutateShipment }: Props) => {
   const { data: session } = useSession()
   const { state, setUploadIndividualUnitsLabelsModal }: any = useContext(AppContext)
-  const shipmentsStartDate = moment().subtract(3, 'months').format('YYYY-MM-DD')
-  const shipmentsEndDate = moment().format('YYYY-MM-DD')
   const [selectedFiles, setselectedFiles] = useState([])
   const [palletSelectedFiles, setPalletSelectedFiles] = useState([])
   const [errorFile, setErrorFile] = useState(false)
@@ -45,43 +43,29 @@ const UploadIndividualUnitsLabelsModal = ({ data }: Props) => {
     const docTime = moment().format('DD-MM-YYYY-HH-mm-ss-a')
 
     if (!data.isThird) {
-      const storageRef = ref(
-        storage,
-        `shelf-cloud/etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
-      )
+      const storageRef = ref(storage, `shelf-cloud/etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`)
       await uploadBytes(storageRef, selectedFiles[0]).then((_snapshot) => {
         toast.success('Successfully uploaded Shipping labels!')
       })
 
       if (data.numberPallets > 0) {
-        const storageRef = ref(
-          storage,
-          `shelf-cloud/pallet-etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
-        )
+        const storageRef = ref(storage, `shelf-cloud/pallet-etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`)
         await uploadBytes(storageRef, palletSelectedFiles[0]).then((_snapshot) => {
           toast.success('Successfully uploaded Pallet labels!')
         })
       }
     }
 
-    const response = await axios.post(
-      `api/uploadIndividualUnitsLabelsModal?region=${state.currentRegion}&businessId=${state.user.businessId}`,
-      {
-        orderId: data.id,
-        labelsName: !data.isThird ? `etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf` : '',
-        palletLabels:
-          !data.isThird && data.numberPallets > 0
-            ? `pallet-etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
-            : '',
-      }
-    )
+    const response = await axios.post(`api/uploadIndividualUnitsLabelsModal?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      orderId: data.id,
+      labelsName: !data.isThird ? `etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf` : '',
+      palletLabels: !data.isThird && data.numberPallets > 0 ? `pallet-etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf` : '',
+    })
 
     if (!response.data.error) {
       setUploadIndividualUnitsLabelsModal(false)
       toast.success(response.data.msg)
-      mutate(
-        `/api/getShipmentsOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`
-      )
+      mutateShipment && mutateShipment()
     } else {
       toast.error(response.data.msg)
     }
@@ -159,9 +143,7 @@ const UploadIndividualUnitsLabelsModal = ({ data }: Props) => {
               <div className='list-unstyled mb-0' id='file-previews'>
                 {selectedFiles.map((f: any, i) => {
                   return (
-                    <Card
-                      className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete'
-                      key={i + '-file'}>
+                    <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
                       <div className='p-2'>
                         <Row className='align-items-center'>
                           <Col className='d-flex justify-content-between align-items-center'>
@@ -207,9 +189,7 @@ const UploadIndividualUnitsLabelsModal = ({ data }: Props) => {
               <div className='list-unstyled mb-0' id='file-previews'>
                 {palletSelectedFiles.map((f: any, i) => {
                   return (
-                    <Card
-                      className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete'
-                      key={i + '-file'}>
+                    <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
                       <div className='p-2'>
                         <Row className='align-items-center'>
                           <Col className='d-flex justify-content-between align-items-center'>

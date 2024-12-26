@@ -15,10 +15,10 @@ import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 
 type Props = {
   data: OrderRowType
-  apiMutateLink?: string
+  mutateReturns?: () => void
 }
 
-const ReceivingType = ({ data, apiMutateLink }: Props) => {
+const ReceivingType = ({ data, mutateReturns }: Props) => {
   const { state }: any = useContext(AppContext)
   const [serviceFee, setServiceFee] = useState('')
   const [loading, setLoading] = useState(false)
@@ -74,7 +74,7 @@ const ReceivingType = ({ data, apiMutateLink }: Props) => {
               </CardHeader>
               <CardBody>
                 <table className='table table-sm table-borderless'>
-                  <tbody>
+                  <tbody className='fs-7'>
                     <tr>
                       <td className='text-muted text-nowrap'>Type of Service:</td>
                       <td className='fw-semibold w-100'>{data.carrierService}</td>
@@ -107,7 +107,7 @@ const ReceivingType = ({ data, apiMutateLink }: Props) => {
               </CardHeader>
               <CardBody>
                 <table className='table table-sm table-borderless table-nowrap mb-0'>
-                  <tbody>
+                  <tbody className='fs-7'>
                     <tr className='border-bottom pb-2'>
                       <td className='text-muted d-flex flex-row justify-content-start align-items-start'>
                         Service
@@ -207,9 +207,9 @@ const ReceivingType = ({ data, apiMutateLink }: Props) => {
                       <th></th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className='fs-7'>
                     {data.orderItems.map((product: ShipmentOrderItem, key) => (
-                      <tr key={key} className='border-bottom py-2 w-100 fs-6'>
+                      <tr key={key} className='border-bottom py-2 w-100'>
                         <td className='fw-semibold'>{product.name || ''}</td>
                         {product.poNumber && <td className='fw-normal text-nowrap'>{product.poNumber}</td>}
                         <td className='text-muted'>{product.sku}</td>
@@ -239,11 +239,11 @@ const ReceivingType = ({ data, apiMutateLink }: Props) => {
                       </tr>
                     ))}
                     <tr>
-                      <td className='text-start fs-5 fw-bold text-nowrap'>Total QTY</td>
+                      <td className='text-start fs-6 fw-bold text-nowrap'>Total</td>
                       {data.orderItems.some((product: ShipmentOrderItem) => (product.poNumber ? true : false)) && <td></td>}
                       <td></td>
-                      <td className='text-center fw-semibold fs-5 text-primary'>{FormatIntNumber(state.currentRegion, Number(data.totalItems))}</td>
-                      <td className='text-center fw-semibold fs-5 text-primary'>{FormatIntNumber(state.currentRegion, Number(data.totalReceivedItems))}</td>
+                      <td className='text-center fw-semibold fs-6 text-primary'>{FormatIntNumber(state.currentRegion, Number(data.totalItems))}</td>
+                      <td className='text-center fw-semibold fs-6 text-primary'>{FormatIntNumber(state.currentRegion, Number(data.totalReceivedItems))}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -272,7 +272,7 @@ const ReceivingType = ({ data, apiMutateLink }: Props) => {
           setshowDeleteModal={setshowDeleteModal}
           loading={loading}
           setLoading={setLoading}
-          apiMutateLink={apiMutateLink}
+          mutateReturns={mutateReturns}
         />
       )}
     </div>

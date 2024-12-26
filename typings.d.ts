@@ -51,9 +51,11 @@ export interface InvoiceDetails {
 
 export interface OrderDetails {
   orderId: number
-  closedDate: string
   orderNumber: string
   orderType: string
+  orderDate: string
+  closedDate: string
+  orderStatus: string
   totalCharge: number
 }
 
@@ -169,8 +171,10 @@ export interface Product {
 
 export interface LatestOrders {
   orderId: number
-  date: string
   orderNumber: string
+  orderType: string
+  status: string
+  date: string
   qty: number
   isReceiving: boolean
 }

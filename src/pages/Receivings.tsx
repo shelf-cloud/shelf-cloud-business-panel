@@ -48,7 +48,7 @@ const Receiving = ({ session }: Props) => {
   const [searchValue, setSearchValue] = useState<string>('')
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(
+  const { data, mutate: mutateReturns } = useSWR(
     state.user.businessId
       ? `/api/getReceivingOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`
       : null,
@@ -156,11 +156,7 @@ const Receiving = ({ session }: Props) => {
                 </Row>
                 <Card>
                   <CardBody>
-                    <ReceivingTable
-                      tableData={tableData}
-                      pending={pending}
-                      apiMutateLink={`/api/getReceivingOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`}
-                    />
+                    <ReceivingTable tableData={tableData} pending={pending} mutateReturns={mutateReturns} />
                   </CardBody>
                 </Card>
               </Col>

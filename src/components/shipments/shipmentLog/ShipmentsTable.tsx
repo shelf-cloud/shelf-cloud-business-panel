@@ -1,84 +1,36 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { OrderRowType } from '@typings'
+
 import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
-import ShipmentExpandedDetail from './ShipmentExpandedDetail'
 import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import AppContext from '@context/AppContext'
-import DownloadPackingSlip from './shipments/wholesale/DownloadPackingSlip'
+import DownloadPackingSlip from '../wholesale/DownloadPackingSlip'
+import { Shipment } from '@typesTs/shipments/shipments'
+import { NoImageAdress } from '@lib/assetsConstants'
+import NoShipmentsFound from './NoShipmentsFound'
+
+type SortByType = {
+  key: string
+  asc: boolean
+}
 
 type Props = {
-  tableData: OrderRowType[]
+  tableData: Shipment[]
   pending: boolean
-  apiMutateLink: string
+  sortBy: SortByType
+  setSortBy: (prev: SortByType) => void
   handleGetShipmentBOL: (orderNumber: string, orderId: string, documentType: string) => Promise<void>
 }
 
-const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBOL }: Props) => {
-  const { state, setModalCreateReturnInfo }: any = useContext(AppContext)
-  const orderNumber = (rowA: OrderRowType, rowB: OrderRowType) => {
-    const a = rowA.orderNumber.toLowerCase()
-    const b = rowB.orderNumber.toLowerCase()
-
-    if (a > b) {
-      return 1
-    }
-
-    if (b > a) {
-      return -1
-    }
-
-    return 0
-  }
-  const orderStatus = (rowA: OrderRowType, rowB: OrderRowType) => {
-    const a = rowA.orderStatus.toLowerCase()
-    const b = rowB.orderStatus.toLowerCase()
-
-    if (a > b) {
-      return 1
-    }
-
-    if (b > a) {
-      return -1
-    }
-
-    return 0
-  }
-  const orderType = (rowA: OrderRowType, rowB: OrderRowType) => {
-    const a = rowA.orderType.toLowerCase()
-    const b = rowB.orderType.toLowerCase()
-
-    if (a > b) {
-      return 1
-    }
-
-    if (b > a) {
-      return -1
-    }
-
-    return 0
-  }
-  const orderMarketplace = (rowA: OrderRowType, rowB: OrderRowType) => {
-    const a = rowA.channelName.toLowerCase()
-    const b = rowB.channelName.toLowerCase()
-
-    if (a > b) {
-      return 1
-    }
-
-    if (b > a) {
-      return -1
-    }
-
-    return 0
-  }
+const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipmentBOL }: Props) => {
+  const { state, setModalCreateReturnInfo, setShipmentDetailsModal }: any = useContext(AppContext)
 
   const columns: any = [
     {
       name: <span className='fw-bold fs-6'>Order Number</span>,
-      selector: (row: OrderRowType) => {
+      selector: (row: Shipment) => {
         return (
           <>
             <div className='fs-7' style={{ margin: '0px', fontWeight: '600' }}>
@@ -103,15 +55,18 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
           </>
         )
       },
-      sortable: true,
+      sortable: false,
       wrap: true,
       grow: 1.7,
       left: true,
-      sortFunction: orderNumber,
     },
     {
-      name: <span className='fw-bold fs-6'>Status</span>,
-      selector: (row: OrderRowType) => {
+      name: (
+        <span className='fw-bold fs-6 text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'orderStatus', asc: !sortBy.asc })}>
+          Status {sortBy.key === 'orderStatus' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
+      selector: (row: Shipment) => {
         switch (row.orderStatus) {
           case 'shipped':
           case 'received':
@@ -138,31 +93,33 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
         }
       },
       compact: true,
-      sortable: true,
+      sortable: false,
       wrap: false,
       center: true,
-      sortFunction: orderStatus,
     },
     {
-      name: <span className='fw-bold fs-6'>Type</span>,
-      selector: (row: OrderRowType) => <span className='fs-7 text-muted'>{row.orderType}</span>,
-      sortable: true,
+      name: (
+        <span className='fw-bold fs-6 text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'orderType', asc: !sortBy.asc })}>
+          Type {sortBy.key === 'orderType' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
+      selector: (row: Shipment) => <span className='fs-7 text-muted'>{row.orderType}</span>,
+      sortable: false,
       wrap: false,
       center: true,
-      sortFunction: orderType,
     },
     {
-      name: <span className='fw-bold fs-6'>Marketplace</span>,
-      selector: (row: OrderRowType) => {
+      name: (
+        <span className='fw-bold fs-6 text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'storeId', asc: !sortBy.asc })}>
+          Store {sortBy.key === 'storeId' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
+      selector: (row: Shipment) => {
         return (
           <>
             <img
               loading='lazy'
-              src={
-                row.channelLogo
-                  ? row.channelLogo
-                  : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-              }
+              src={row.channelLogo ? row.channelLogo : NoImageAdress}
               alt='product Image'
               id={`ChannelLogo-${row.id}`}
               style={{
@@ -177,24 +134,39 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
           </>
         )
       },
-      sortable: true,
-      wrap: false,
-      center: true,
-      compact: true,
-      sortFunction: orderMarketplace,
-    },
-    {
-      name: <span className='fw-bold fs-6'>Order Date</span>,
-      selector: (row: OrderRowType) => <span className='fs-7'>{row.orderDate}</span>,
-      sortable: true,
+      sortable: false,
       wrap: false,
       center: true,
       compact: true,
     },
     {
-      name: <span className='fw-bold fs-6'>Order Closed</span>,
-      selector: (row: OrderRowType) => row.closedDate && <span className='fs-7'>{row.closedDate}</span>,
-      sortable: true,
+      name: (
+        <span className='fw-bold fs-6 text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'orderDate', asc: !sortBy.asc })}>
+          Order Date{' '}
+          {sortBy.key === 'orderDate' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+        </span>
+      ),
+      selector: (row: Shipment) => <span className='fs-7'>{row.orderDate}</span>,
+      sortable: false,
+      wrap: false,
+      center: true,
+      compact: true,
+    },
+    {
+      name: (
+        <span className='fw-bold fs-6 text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'closedDate', asc: !sortBy.asc })}>
+          Order Closed{' '}
+          {sortBy.key === 'closedDate' || sortBy.key === '' ? (
+            sortBy.asc ? (
+              <i className='ri-arrow-up-fill fs-7 text-primary' />
+            ) : (
+              <i className='ri-arrow-down-fill fs-7 text-primary' />
+            )
+          ) : null}
+        </span>
+      ),
+      selector: (row: Shipment) => row.closedDate && <span className='fs-7'>{row.closedDate}</span>,
+      sortable: false,
       wrap: true,
       grow: 1.2,
       center: true,
@@ -202,7 +174,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
     },
     {
       name: <span className='fw-bold fs-6'>Tracking No.</span>,
-      selector: (row: OrderRowType) => {
+      selector: (row: Shipment) => {
         let tracking
         {
           switch (true) {
@@ -294,7 +266,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
         }
         return tracking
       },
-      sortable: true,
+      sortable: false,
       wrap: true,
       grow: 1.7,
       left: true,
@@ -302,8 +274,8 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
     },
     {
       name: <span className='fw-bold fs-6'># of Items</span>,
-      selector: (row: OrderRowType) => row.totalItems && <span className='fs-7'>{row.totalItems}</span>,
-      sortable: true,
+      selector: (row: Shipment) => row.totalItems && <span className='fs-7'>{row.totalItems}</span>,
+      sortable: false,
       wrap: true,
       // grow: 1.5,
       center: true,
@@ -311,7 +283,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
     },
     {
       name: <span className='fw-bold fs-6'>Total Charge</span>,
-      selector: (row: OrderRowType) => {
+      selector: (row: Shipment) => {
         let totalCharge
         {
           switch (true) {
@@ -324,7 +296,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
         }
         return <span className='fs-7 text-primary'>{totalCharge}</span>
       },
-      sortable: true,
+      sortable: false,
       wrap: true,
       center: true,
     },
@@ -333,21 +305,27 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
       sortable: false,
       compact: true,
       center: true,
-      cell: (row: OrderRowType) => {
+      cell: (row: Shipment) => {
         switch (row.orderType) {
           case 'Shipment':
             return row.orderStatus === 'shipped' ? (
               <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
-                <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
+                <DropdownToggle className='btn btn-ghost btn-sm m-0 p-0' tag='button'>
                   <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-2 py-0' style={{ color: '#919FAF' }} />
                 </DropdownToggle>
                 <DropdownMenu className='dropdown-menu-end' container={'body'}>
-                  <DropdownItem header>Actions</DropdownItem>
+                  <DropdownItem onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
+                    <i className='ri-article-line align-middle me-2 fs-5 text-muted' />
+                    <span className='fs-6 fw-normal text-dark'>View Details</span>
+                  </DropdownItem>
                   {state.currentRegion == 'us' && row.orderStatus == 'shipped' && row.hasReturn == false && row.shipCountry == 'US' && (
-                    <DropdownItem className='edit-item-btn' onClick={() => setModalCreateReturnInfo(row.businessId, row.id)}>
-                      <i className='las la-reply label-icon align-middle fs-5 me-2' />
-                      Create Return
-                    </DropdownItem>
+                    <>
+                      <DropdownItem header>Actions</DropdownItem>
+                      <DropdownItem className='edit-item-btn' onClick={() => setModalCreateReturnInfo(row.businessId, row.id)}>
+                        <i className='las la-reply label-icon align-middle fs-5 me-2' />
+                        Create Return
+                      </DropdownItem>
+                    </>
                   )}
                   {row.carrierService.toLowerCase() === 'ltl' && (
                     <>
@@ -367,10 +345,14 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
               </UncontrolledDropdown>
             ) : (
               <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
-                <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
+                <DropdownToggle className='btn btn-ghost btn-sm m-0 p-0' tag='button'>
                   <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-2 py-0' style={{ color: '#919FAF' }} />
                 </DropdownToggle>
                 <DropdownMenu className='dropdown-menu-end' container={'body'}>
+                  <DropdownItem onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
+                    <i className='ri-article-line align-middle me-2 fs-5 text-muted' />
+                    <span className='fs-6 fw-normal text-dark'>View Details</span>
+                  </DropdownItem>
                   <DropdownItem header>Documents</DropdownItem>
                   {row.carrierService.toLowerCase() === 'ltl' && (
                     <DropdownItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'bill_of_lading')}>
@@ -390,10 +372,14 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
           case 'Wholesale':
             return (
               <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
-                <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
+                <DropdownToggle className='btn btn-ghost btn-sm m-0 p-0' tag='button'>
                   <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-2 py-0' style={{ color: '#919FAF' }} />
                 </DropdownToggle>
                 <DropdownMenu className='dropdown-menu-end' container={'body'}>
+                  <DropdownItem onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
+                    <i className='ri-article-line align-middle me-2 fs-5 text-muted' />
+                    <span className='fs-6 fw-normal text-dark'>View Details</span>
+                  </DropdownItem>
                   <DropdownItem header>Documents</DropdownItem>
                   {row.proofOfShipped != '' && row.proofOfShipped != null && (
                     <DropdownItem className='edit-item-btn'>
@@ -431,7 +417,19 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
             )
             break
           default:
-            return <></>
+            return (
+              <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
+                <DropdownToggle className='btn btn-ghost btn-sm m-0 p-0' tag='button'>
+                  <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-2 py-0' style={{ color: '#919FAF' }} />
+                </DropdownToggle>
+                <DropdownMenu className='dropdown-menu-end' container={'body'}>
+                  <DropdownItem onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
+                    <i className='ri-article-line align-middle me-2 fs-5 text-muted' />
+                    <span className='fs-6 fw-normal text-dark'>View Details</span>
+                  </DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown>
+            )
             break
         }
       },
@@ -440,25 +438,7 @@ const ShipmentsTable = ({ tableData, pending, apiMutateLink, handleGetShipmentBO
 
   return (
     <>
-      <DataTable
-        columns={columns}
-        data={tableData}
-        progressPending={pending}
-        expandableRows
-        expandableRowsComponent={ShipmentExpandedDetail}
-        expandableRowsComponentProps={{ apiMutateLink: apiMutateLink }}
-        striped={true}
-        pagination={tableData.length > 100 ? true : false}
-        paginationPerPage={100}
-        paginationRowsPerPageOptions={[100, 200, 500]}
-        paginationComponentOptions={{
-          rowsPerPageText: 'Orders per page:',
-          rangeSeparatorText: 'of',
-          noRowsPerPage: false,
-          selectAllRowsItem: true,
-          selectAllRowsItemText: 'All',
-        }}
-      />
+      <DataTable columns={columns} data={tableData} progressPending={pending} striped={true} noDataComponent={<NoShipmentsFound />} />
     </>
   )
 }

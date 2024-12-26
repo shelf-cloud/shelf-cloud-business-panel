@@ -3,16 +3,16 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 
-const createLabelForOrder: NextApiHandler = async (request, response) => {
+const getShipmentDetails: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)
-
   if (session == null) {
-    response.status(401).end()
+    response.status(401).end('Session not found')
 
     return
   }
 
-  axios(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/createLabelForOrder.php?businessId=${request.query.businessId}&orderId=${request.query.orderId}`)
+  axios
+    .get(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/shipments/getShipmentDetails.php?businessId=${request.query.businessId}&orderId=${request.query.orderId}`)
     .then(({ data }) => {
       response.json(data)
     })
@@ -40,4 +40,4 @@ const createLabelForOrder: NextApiHandler = async (request, response) => {
     })
 }
 
-export default createLabelForOrder
+export default getShipmentDetails

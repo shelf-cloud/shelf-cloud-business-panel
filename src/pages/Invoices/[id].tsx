@@ -1,5 +1,5 @@
 import BreadCrumb from '@components/Common/BreadCrumb'
-import OrderDetailsFromInvoicesModal from '@components/OrderDetailsFromInvoicesModal'
+import ShipmentDetailsModal from '@components/modals/shipments/ShipmentDetailsModal'
 import PrintInvoice from '@components/PrintInvoice'
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
@@ -34,13 +34,14 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 
 const InvoiceDetails = () => {
   const router = useRouter()
-  const { state, setShowOrderDetailsOfInvoiceModal }: any = useContext(AppContext)
+  const { state, setShipmentDetailsModal }: any = useContext(AppContext)
+  const { currentRegion, shipmentDetailModal } = state
   const { id } = router.query
   const [loading, setloading] = useState(true)
   const [invoiceDetails, setInvoiceDetails] = useState<InvoiceFullDetails | null>()
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(id ? `/api/getInvoiceDetails?region=${state.currentRegion}&id=${id}` : null, fetcher)
+  const { data } = useSWR(id ? `/api/getInvoiceDetails?region=${currentRegion}&id=${id}` : null, fetcher)
 
   useEffect(() => {
     if (data?.error) {
@@ -86,7 +87,7 @@ const InvoiceDetails = () => {
                         <div className='text-end pe-5'>
                           <div className='d-flex gap-3 flex-row align-items-center mb-3'>
                             <PrintInvoice invoiceDetails={invoiceDetails!} />
-                            {state.currentRegion == 'us' && (
+                            {currentRegion == 'us' && (
                               <a href={`${invoiceDetails?.invoice.payLink}`} target='blank'>
                                 <Button className={invoiceDetails?.invoice.paid ? 'btn btn-soft-success' : 'btn btn-primary'}>
                                   {invoiceDetails?.invoice.paid ? 'View Receipt' : 'Pay Now'}
@@ -121,22 +122,26 @@ const InvoiceDetails = () => {
                                 <td
                                   className={order.orderType != 'Storage' ? 'text-primary' : ''}
                                   style={order.orderType != 'Storage' ? { cursor: 'pointer' } : {}}
-                                  onClick={order.orderType != 'Storage' ? () => setShowOrderDetailsOfInvoiceModal(true, order.orderId) : () => {}}>
+                                  onClick={
+                                    order.orderType != 'Storage'
+                                      ? () => setShipmentDetailsModal(true, order.orderId, order.orderNumber, order.orderType, order.orderStatus, order.orderDate, false)
+                                      : () => {}
+                                  }>
                                   {order.orderNumber}
                                 </td>
                                 <td>{order.orderType}</td>
                                 <td>{moment(order.closedDate).format('LL')}</td>
-                                <td>{FormatCurrency(state.currentRegion, order.totalCharge)}</td>
+                                <td>{FormatCurrency(currentRegion, order.totalCharge)}</td>
                               </tr>
                             ))}
                           </tbody>
                           <tfoot className='fw-bold fs-5'>
-                            {state.currentRegion == 'us' ? (
+                            {currentRegion == 'us' ? (
                               <tr>
                                 <td className='text-end' colSpan={3}>
                                   Total
                                 </td>
-                                <td>{FormatCurrency(state.currentRegion, Number(invoiceDetails?.invoice?.totalCharge))}</td>
+                                <td>{FormatCurrency(currentRegion, Number(invoiceDetails?.invoice?.totalCharge))}</td>
                               </tr>
                             ) : (
                               <>
@@ -144,24 +149,19 @@ const InvoiceDetails = () => {
                                   <td className='text-end' colSpan={3}>
                                     SubTotal
                                   </td>
-                                  <td>{FormatCurrency(state.currentRegion, Number(invoiceDetails?.invoice?.totalCharge! / 1.21))}</td>
+                                  <td>{FormatCurrency(currentRegion, Number(invoiceDetails?.invoice?.totalCharge! / 1.21))}</td>
                                 </tr>
                                 <tr>
                                   <td className='text-end' colSpan={3}>
                                     IVA 21%
                                   </td>
-                                  <td>{FormatCurrency(state.currentRegion, Number((invoiceDetails?.invoice?.totalCharge! / 1.21) * 0.21))}</td>
+                                  <td>{FormatCurrency(currentRegion, Number((invoiceDetails?.invoice?.totalCharge! / 1.21) * 0.21))}</td>
                                 </tr>
                                 <tr>
                                   <td className='text-end' colSpan={3}>
                                     Total
                                   </td>
-                                  <td>
-                                    {FormatCurrency(
-                                      state.currentRegion,
-                                      Number(invoiceDetails?.invoice?.totalCharge!)
-                                    )}
-                                  </td>
+                                  <td>{FormatCurrency(currentRegion, Number(invoiceDetails?.invoice?.totalCharge!))}</td>
                                 </tr>
                               </>
                             )}
@@ -178,7 +178,7 @@ const InvoiceDetails = () => {
           </Container>
         </div>
       </React.Fragment>
-      {state.showOrderDetailsOfInvoiceModal && <OrderDetailsFromInvoicesModal />}
+      {shipmentDetailModal.show && <ShipmentDetailsModal />}
     </div>
   )
 }

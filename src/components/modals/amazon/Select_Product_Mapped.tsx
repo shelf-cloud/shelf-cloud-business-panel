@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { NoImageAdress } from '@lib/assetsConstants'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { DebounceInput } from 'react-debounce-input'
 
@@ -140,15 +141,8 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
                   }}>
                   <img
                     loading='lazy'
-                    src={
-                      option.image
-                        ? option.image
-                        : 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
-                    }
-                    onError={(e) =>
-                      (e.currentTarget.src =
-                        'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770')
-                    }
+                    src={option.image ? option.image : NoImageAdress}
+                    onError={(e) => (e.currentTarget.src = NoImageAdress)}
                     alt='product Image'
                     style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                   />

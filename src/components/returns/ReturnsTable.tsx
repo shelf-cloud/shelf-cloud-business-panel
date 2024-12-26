@@ -293,7 +293,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
       compact: true,
     },
     {
-      name: <span className='fw-semibold text-center fs-7 text-muted'>Return Charge</span>,
+      name: <span className='fw-semibold text-center fs-7 text-muted'>Charge</span>,
       selector: (row: ReturnOrder) => FormatCurrency(state.currentRegion, row.totalCharge),
       sortable: true,
       wrap: true,
@@ -304,7 +304,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
       },
     },
     {
-      name: <span className='fw-semibold text-center fs-7 text-muted'>Return State</span>,
+      name: <span className='fw-semibold text-center fs-7 text-muted'>Status</span>,
       cell: (row: ReturnOrder) => {
         var returnStateBtn
         switch (row.returnState) {

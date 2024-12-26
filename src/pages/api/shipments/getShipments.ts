@@ -3,16 +3,26 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 
-const createLabelForOrder: NextApiHandler = async (request, response) => {
+const getShipments: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)
-
   if (session == null) {
-    response.status(401).end()
+    response.status(401).end('Session not found')
 
     return
   }
 
-  axios(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/createLabelForOrder.php?businessId=${request.query.businessId}&orderId=${request.query.orderId}`)
+  let url = `${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/shipments/getShipments.php?businessId=${request.query.businessId}&offset=${request.query.offset}&limit=${request.query.limit}`
+
+  if (request.query.search) url += `&search=${encodeURIComponent(request.query.search as string)}`
+  if (request.query.startDate) url += `&startDate=${request.query.startDate}`
+  if (request.query.endDate) url += `&endDate=${request.query.endDate}`
+  if (request.query.orderType) url += `&orderType=${request.query.orderType}`
+  if (request.query.orderStatus) url += `&orderStatus=${request.query.orderStatus}`
+  if (request.query.storeId) url += `&storeId=${request.query.storeId}`
+  if (request.query.sortBy) url += `&sortBy=${request.query.sortBy}&direction=${request.query.direction}`
+
+  axios
+    .get(url)
     .then(({ data }) => {
       response.json(data)
     })
@@ -40,4 +50,4 @@ const createLabelForOrder: NextApiHandler = async (request, response) => {
     })
 }
 
-export default createLabelForOrder
+export default getShipments

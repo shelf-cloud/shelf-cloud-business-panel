@@ -211,3 +211,7 @@ $value in $theme-colors {
     color: $light;
   }
 }
+
+.capitalize {
+  text-transform: capitalize;
+}

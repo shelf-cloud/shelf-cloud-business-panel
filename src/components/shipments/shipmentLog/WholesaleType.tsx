@@ -1,24 +1,22 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
-// import Animation from '@components/Common/Animation'
-import { OrderRowType, ShipmentOrderItem } from '@typings'
-import TooltipComponent from './constants/Tooltip'
-import IndividualUnitsPlanModal from './modals/orders/shipments/IndividualUnitsPlanModal'
 import AppContext from '@context/AppContext'
-import UploadIndividualUnitsLabelsModal from './modals/orders/shipments/UploadIndividualUnitsLabelsModal'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
-
-// import dynamic from 'next/dynamic';
-// const Animation = dynamic(() => import('@components/Common/Animation'), {
-//     ssr: false
-// });
+import { Shipment, ShipmentOrderItem } from '@typesTs/shipments/shipments'
+import TooltipComponent from '@components/constants/Tooltip'
+import IndividualUnitsPlanModal from '@components/modals/orders/shipments/IndividualUnitsPlanModal'
+import UploadIndividualUnitsLabelsModal from '@components/modals/orders/shipments/UploadIndividualUnitsLabelsModal'
+import ShipmentCarrierStatusBar from './ShipmentCarrierStatusBar'
+import ShipmentTrackingNumber from './ShipmentTrackingNumber'
 
 type Props = {
-  data: OrderRowType
+  data: Shipment
+  showActions: boolean
+  mutateShipment?: () => void
 }
 
-const WholeSaleType = ({ data }: Props) => {
+const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
   const { state, setIndividualUnitsPlan, setUploadIndividualUnitsLabelsModal }: any = useContext(AppContext)
   const [serviceFee, setServiceFee] = useState('')
 
@@ -34,10 +32,10 @@ const WholeSaleType = ({ data }: Props) => {
         case data.isIndividualUnits:
           setServiceFee(
             `
-          ${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.individualUnitCost!)} per unit
-          ${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.parcelBoxCost!)} per box
-          ${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.palletCost!)} per pallet
-          `
+            ${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.individualUnitCost!)} per unit
+            ${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.parcelBoxCost!)} per box
+            ${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.palletCost!)} per pallet
+            `
           )
           break
         default:
@@ -49,12 +47,63 @@ const WholeSaleType = ({ data }: Props) => {
       setServiceFee('')
     }
   }, [data, state.currentRegion])
-  
+
   const OrderId = CleanSpecialCharacters(data.orderId!)
 
   return (
-    <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
+    <div className='w-100' style={{ backgroundColor: '#F0F4F7', padding: '0px 10px' }}>
+      {data.carrierStatus && (
+        <Row className=''>
+          <Col xs={12}>
+            <ShipmentCarrierStatusBar carrier={data.carrierUsed} currentStatus={data.carrierStatus} />
+          </Col>
+        </Row>
+      )}
+
       <Row>
+        <Col xl={8}>
+          <Card>
+            <CardHeader className='py-3'>
+              <h5 className='fw-semibold m-0'>Products</h5>
+            </CardHeader>
+            <CardBody>
+              <div className='table-responsive'>
+                <table className='table table-sm align-middle table-borderless mb-0'>
+                  <thead className='table-light'>
+                    <tr>
+                      <th scope='col'>Title</th>
+                      <th scope='col'>Sku</th>
+                      <th className='text-center' scope='col'>
+                        Qty
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className='fs-7'>
+                    {data.orderItems.map((product: ShipmentOrderItem, key) => (
+                      <tr key={key} className='border-bottom py-2'>
+                        <td className='w-75 fw-semibold'>{product.name || ''}</td>
+                        <td className=' text-muted'>{product.sku}</td>
+                        <td className='text-center'>{product.quantity}</td>
+                      </tr>
+                    ))}
+                    <tr className='bg-light fs-6'>
+                      <td></td>
+                      <td className='text-end fw-bold text-nowrap'>Total</td>
+                      <td className='text-center fw-bold text-primary'>{data.totalItems}</td>
+                    </tr>
+                    {data.totalIndividualUnits! > 0 && (
+                      <tr className='bg-light fs-6'>
+                        <td></td>
+                        <td className='text-end fw-normal text-nowrap'>{data.isIndividualUnits ? 'Total Individual Units' : 'Total Individual Units in Kits'}</td>
+                        <td className='text-center fw-bold text-primary'>{data.totalIndividualUnits}</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </CardBody>
+          </Card>
+        </Col>
         <Col xl={4}>
           <Col xl={12}>
             <Card>
@@ -88,6 +137,17 @@ const WholeSaleType = ({ data }: Props) => {
                     )}
                   </tbody>
                 </table>
+                <div className='px-1 fs-7'>
+                  <span className='m-0 text-muted fs-7'>Tracking No.</span>
+                  <ShipmentTrackingNumber
+                    orderStatus={data.orderStatus}
+                    orderType={data.orderType}
+                    trackingNumber={data.trackingNumber}
+                    trackingLink={data.trackingLink}
+                    carrierIcon={data.carrierIcon}
+                    carrierService={data.carrierService}
+                  />
+                </div>
               </CardBody>
             </Card>
           </Col>
@@ -166,108 +226,67 @@ const WholeSaleType = ({ data }: Props) => {
               </Card>
             </Col>
           )}
-        </Col>
-        <Col xl={8}>
-          <Card>
-            <CardHeader className='py-3'>
-              <h5 className='fw-semibold m-0'>Products</h5>
-            </CardHeader>
-            <CardBody>
-              <div className='table-responsive'>
-                <table className='table table-sm align-middle table-borderless mb-0'>
-                  <thead className='table-light'>
-                    <tr>
-                      <th scope='col'>Title</th>
-                      <th scope='col'>Sku</th>
-                      <th className='text-center' scope='col'>
-                        Qty
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.orderItems.map((product: ShipmentOrderItem, key) => (
-                      <tr key={key} className='border-bottom py-2'>
-                        <td className='w-75 fs-7 fw-semibold'>{product.name || ''}</td>
-                        <td className='fs-7 text-muted'>{product.sku}</td>
-                        <td className='text-center'>{product.quantity}</td>
-                      </tr>
-                    ))}
-                    <tr>
-                      <td></td>
-                      <td className='text-end fw-bold text-nowrap'>Total QTY</td>
-                      <td className='text-center fw-bold text-primary'>{data.totalItems}</td>
-                    </tr>
-                    {data.totalIndividualUnits! > 0 && (
-                      <tr>
-                        <td></td>
-                        <td className='text-end fw-normal text-nowrap'>{data.isIndividualUnits ? 'Total Individual Units' : 'Total Individual Units in Kits'}</td>
-                        <td className='text-center fw-bold text-primary'>{data.totalIndividualUnits}</td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
-      <Row>
-        <Col xl={12} className='d-flex justify-content-end align-items-end gap-2'>
-          {data.proofOfShipped != '' && data.proofOfShipped != null && (
-            <a href={data.proofOfShipped} target='blank'>
-              <Button color='info' className='btn-label'>
-                <i className='las la-truck label-icon align-middle fs-3 me-2' />
-                Proof Of Shipped
-              </Button>
-            </a>
-          )}
+          {showActions && (
+            <Row>
+              <Col xl={12} className='d-flex flex-row flex-wrap justify-content-start align-items-end gap-2'>
+                {data.proofOfShipped != '' && data.proofOfShipped != null && (
+                  <a href={data.proofOfShipped} target='blank'>
+                    <Button color='info' className='btn-label btn-sm fs-7 text-nowrap'>
+                      <i className='las la-truck label-icon align-middle fs-4 me-2' />
+                      Proof Of Shipped
+                    </Button>
+                  </a>
+                )}
 
-          {data.isIndividualUnits && (
-            <Button
-              disabled={data.individualUnitsPlan?.state == 'Pending' ? true : false}
-              color='info'
-              className='btn-label'
-              onClick={() => setIndividualUnitsPlan(!state.showIndividualUnitsPlan)}>
-              <i className='las la-boxes label-icon align-middle fs-3 me-2' />
-              {data.individualUnitsPlan?.state == 'Pending' ? 'Waiting for plan...' : 'Individual Units Plan'}
-            </Button>
-          )}
-          {data.labelsName != '' && (
-            <a
-              href={`https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/shelf-cloud%2F${data.labelsName}?alt=media&token=837cdbcf-11ab-4555-9697-50f1c6a3d0e3`}
-              target='blank'>
-              <Button color='secondary' className='btn-label'>
-                <i className='las la-toilet-paper label-icon align-middle fs-3 me-2' />
-                FBA Labels
-              </Button>
-            </a>
-          )}
-          {data.palletLabelsName != '' && (
-            <a
-              href={`https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/shelf-cloud%2F${data.palletLabelsName}?alt=media&token=837cdbcf-11ab-4555-9697-50f1c6a3d0e3`}
-              target='blank'>
-              <Button color='secondary' className='btn-label'>
-                <i className='las la-toilet-paper label-icon align-middle fs-3 me-2' />
-                Pallet Labels
-              </Button>
-            </a>
-          )}
-          {(data.labelsName == '' || (data.numberPallets > 0 && data.palletLabelsName == '')) && (
-            <Button
-              disabled={data.individualUnitsPlan?.state == 'Pending' ? true : false}
-              color='secondary'
-              className='btn-label'
-              onClick={() => setUploadIndividualUnitsLabelsModal(!state.showUploadIndividualUnitsLabelsModal)}>
-              <i className='las la-toilet-paper label-icon align-middle fs-3 me-2' />
-              Upload Labels
-            </Button>
+                {data.isIndividualUnits && (
+                  <Button
+                    disabled={data.individualUnitsPlan?.state == 'Pending' ? true : false}
+                    color='info'
+                    className='btn-label btn-sm fs-7 text-nowrap'
+                    onClick={() => setIndividualUnitsPlan(!state.showIndividualUnitsPlan)}>
+                    <i className='las la-boxes label-icon align-middle fs-3 me-2' />
+                    {data.individualUnitsPlan?.state == 'Pending' ? 'Waiting for plan...' : 'Individual Units Plan'}
+                  </Button>
+                )}
+                {data.labelsName != '' && (
+                  <a
+                    href={`https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/shelf-cloud%2F${data.labelsName}?alt=media&token=837cdbcf-11ab-4555-9697-50f1c6a3d0e3`}
+                    target='blank'>
+                    <Button color='secondary' className='btn-label btn-sm fs-7 text-nowrap'>
+                      <i className='las la-toilet-paper label-icon align-middle fs-4 me-2' />
+                      FBA Labels
+                    </Button>
+                  </a>
+                )}
+                {data.palletLabelsName != '' && (
+                  <a
+                    href={`https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/shelf-cloud%2F${data.palletLabelsName}?alt=media&token=837cdbcf-11ab-4555-9697-50f1c6a3d0e3`}
+                    target='blank'>
+                    <Button color='secondary' className='btn-label btn-sm fs-7 text-nowrap'>
+                      <i className='las la-toilet-paper label-icon align-middle fs-4 me-2' />
+                      Pallet Labels
+                    </Button>
+                  </a>
+                )}
+                {(data.labelsName == '' || (data.numberPallets > 0 && data.palletLabelsName == '')) && (
+                  <Button
+                    disabled={data.individualUnitsPlan?.state == 'Pending' ? true : false}
+                    color='secondary'
+                    className='btn-label btn-sm fs-7 text-nowrap'
+                    onClick={() => setUploadIndividualUnitsLabelsModal(!state.showUploadIndividualUnitsLabelsModal)}>
+                    <i className='las la-toilet-paper label-icon align-middle fs-4 me-2' />
+                    Upload Labels
+                  </Button>
+                )}
+              </Col>
+            </Row>
           )}
         </Col>
       </Row>
       {state.showIndividualUnitsPlan && <IndividualUnitsPlanModal individualUnitsPlan={data.individualUnitsPlan!} />}
-      {state.showUploadIndividualUnitsLabelsModal && <UploadIndividualUnitsLabelsModal data={data} />}
+      {state.showUploadIndividualUnitsLabelsModal && <UploadIndividualUnitsLabelsModal data={data} mutateShipment={mutateShipment} />}
     </div>
   )
 }
 
-export default WholeSaleType
+export default WholesaleType

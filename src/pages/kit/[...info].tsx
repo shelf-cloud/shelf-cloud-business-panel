@@ -10,7 +10,7 @@ import Listings_Kit_Details from '@components/kit_page/Listings_Kit_Details'
 import Measure_Kit_Details from '@components/kit_page/Measure_Kit_Details'
 import SKU_Kit_details from '@components/kit_page/SKU_Kit_details'
 import Status_Kit_Details from '@components/kit_page/Status_Kit_Details'
-import OrderDetailsFromInvoicesModal from '@components/OrderDetailsFromInvoicesModal'
+import ShipmentDetailsModal from '@components/modals/shipments/ShipmentDetailsModal'
 import AppContext from '@context/AppContext'
 import { ProductDetails } from '@typings'
 import axios from 'axios'
@@ -50,16 +50,14 @@ type Props = {
 const Kit_Page_Layout = ({}: Props) => {
   const router = useRouter()
   const { state }: any = useContext(AppContext)
+  const { currentRegion, user, shipmentDetailModal } = state
   const { info } = router.query
 
   const [loading, setloading] = useState(true)
   const [productDetails, setProductDetails] = useState<ProductDetails | null>()
 
   const fetcher = async (endPoint: string) => await axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(
-    info![0] && state.user.businessId ? `/api/getKitPageDetails?region=${state.currentRegion}&inventoryId=${info![0]}&businessId=${state.user.businessId}` : null,
-    fetcher
-  )
+  const { data } = useSWR(info![0] && user.businessId ? `/api/getKitPageDetails?region=${currentRegion}&inventoryId=${info![0]}&businessId=${user.businessId}` : null, fetcher)
 
   useEffect(() => {
     if (data?.error) {
@@ -289,7 +287,7 @@ const Kit_Page_Layout = ({}: Props) => {
           </Container>
         </div>
       </React.Fragment>
-      {state.showOrderDetailsOfInvoiceModal && <OrderDetailsFromInvoicesModal />}
+      {shipmentDetailModal.show && <ShipmentDetailsModal />}
     </div>
   )
 }

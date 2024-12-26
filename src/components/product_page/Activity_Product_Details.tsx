@@ -8,7 +8,7 @@ type Props = {
 }
 
 const Activity_Product_Details = ({ latestOrders }: Props) => {
-  const { setShowOrderDetailsOfInvoiceModal }: any = useContext(AppContext)
+  const { setShipmentDetailsModal }: any = useContext(AppContext)
   return (
     <div className='border-start ps-4 py-2 w-100'>
       <p className='fs-4 text-primary fw-semibold'>Recent Activity</p>
@@ -27,7 +27,10 @@ const Activity_Product_Details = ({ latestOrders }: Props) => {
               .map((order) => (
                 <tr key={order.orderNumber}>
                   <td>{order.date}</td>
-                  <td className='text-primary' style={{ cursor: 'pointer' }} onClick={() => setShowOrderDetailsOfInvoiceModal(true, order.orderId)}>
+                  <td
+                    className='text-primary'
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setShipmentDetailsModal(true, order.orderId, order.orderNumber, order.orderType, order.status, order.date, false)}>
                     {order.orderNumber}
                   </td>
                   <td className={'text-center ' + (order.isReceiving ? 'text-success' : 'text-danger')}>{order.isReceiving ? `+${order.qty}` : `-${order.qty}`}</td>

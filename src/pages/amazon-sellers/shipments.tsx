@@ -272,7 +272,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
               </div>
             </Row>
             <Card>
-              <CardBody>
+              <CardBody className='fs-7'>
                 <FBAShipmentsTable
                   filteredItems={filteredItems}
                   pending={pending}

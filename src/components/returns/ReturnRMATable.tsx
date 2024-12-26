@@ -185,15 +185,6 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
       left: true,
       compact: true,
     },
-    // {
-    //   name: <span className='fw-bolder text-center fs-6'>Order Closed</span>,
-    //   selector: (row: ReturnsType) => Object.values(row.returns)[0].closedDate || '',
-    //   sortable: true,
-    //   wrap: true,
-    //   //   grow: 1.2,
-    //   center: true,
-    //   compact: true,
-    // },
     {
       name: <span className='fw-bolder fs-6'>Tracking Number</span>,
       selector: (row: ReturnsType) => {
@@ -354,7 +345,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
       },
     },
     {
-      name: <span className='fw-bolder text-center fs-6'>Return State</span>,
+      name: <span className='fw-bolder text-center fs-6'>Status</span>,
       cell: (row: ReturnsType) => {
         var returnStateBtn
         switch (Object.values(row.returns)[0].returnState) {

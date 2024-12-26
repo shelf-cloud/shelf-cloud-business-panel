@@ -84,7 +84,7 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
               </CardHeader>
               <CardBody>
                 <table className='table table-sm table-borderless'>
-                  <tbody>
+                  <tbody className='fs-7'>
                     <tr>
                       <td className='text-muted text-nowrap'>Service Requested:</td>
                       <td className='fw-semibold w-100'>{data.carrierService}</td>
@@ -97,12 +97,12 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                       <td className='text-muted text-nowrap'>Customer Name:</td>
                       <td className='fw-semibold w-100'>{data.shipName}</td>
                     </tr>
-                    <tr>
+                    {/* <tr>
                       <td className='text-muted text-nowrap'>Address:</td>
                       <td className='fw-semibold w-100'>
                         {data.shipStreet !== '' && data.shipCity !== '' && `${data.shipStreet}, ${data.shipCity}, ${data.shipState}, ${data.shipZipcode}, ${data.shipCountry}`}
                       </td>
-                    </tr>
+                    </tr> */}
                   </tbody>
                 </table>
               </CardBody>
@@ -115,7 +115,7 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
               </CardHeader>
               <CardBody>
                 <table className='table table-sm table-borderless table-nowrap mb-0'>
-                  <tbody>
+                  <tbody className='fs-7'>
                     <tr className='border-bottom pb-2'>
                       <td className='text-muted d-flex flex-row justify-content-start align-items-start'>
                         Pick Pack Charge
@@ -214,20 +214,20 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                       </th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className='fs-7'>
                     {data.orderItems.map((product: OrderItem, key) => (
                       <tr key={key} className='border-bottom py-2'>
-                        <td className='w-50 fs-6 fw-semibold'>{product.title ? product.title : product.name}</td>
-                        <td className='fs-6 text-muted'>{product.sku}</td>
-                        <td className='fs-6 text-muted text-capitalize'>{product.state}</td>
+                        <td className='w-50 fw-semibold'>{product.title ? product.title : product.name}</td>
+                        <td className='text-muted'>{product.sku}</td>
+                        <td className='text-muted text-capitalize'>{product.state}</td>
                         <td className='text-center'>{product.qtyReceived ? product.qtyReceived : product.quantity}</td>
                       </tr>
                     ))}
                     <tr>
-                      <td className='text-start fs-5 fw-bold text-nowrap'>Total QTY</td>
                       <td></td>
                       <td></td>
-                      <td className='text-center fs-5 text-primary'>{data.orderItems.reduce((total, item: OrderItem) => total + item.qtyReceived, 0)}</td>
+                      <td className='text-start fs-6 fw-bold text-nowrap'>Total</td> 
+                      <td className='text-center fs-6 text-primary'>{data.orderItems.reduce((total, item: OrderItem) => total + item.qtyReceived, 0)}</td>
                     </tr>
                   </tbody>
                 </table>
