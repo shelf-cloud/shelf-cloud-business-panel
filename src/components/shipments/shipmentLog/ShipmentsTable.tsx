@@ -33,7 +33,10 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
       selector: (row: Shipment) => {
         return (
           <>
-            <div className='fs-7' style={{ margin: '0px', fontWeight: '600' }}>
+            <div
+              className='fs-7 m-0 fw-semibold text-primary'
+              style={{ cursor: 'pointer' }}
+              onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
               {row.orderNumber}
             </div>
             {row.poNumber && row.poNumber !== row.orderNumber && (
