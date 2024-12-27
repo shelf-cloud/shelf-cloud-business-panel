@@ -34,7 +34,7 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
         return (
           <>
             <div
-              className='fs-7 m-0 fw-semibold text-primary'
+              className='fs-7 m-0 fw-semibold'
               style={{ cursor: 'pointer' }}
               onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
               {row.orderNumber}
