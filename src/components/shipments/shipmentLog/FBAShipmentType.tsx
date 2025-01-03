@@ -118,9 +118,9 @@ const FBAShipmentType = ({ data }: Props) => {
                       <span className='fs-7 fw-semibold'>{data.storeName}</span>
                     </div>
                     <span className='text-muted fs-7'>Order Date:</span>
-                    <p className='fs-7 fw-semibold m-0'>{moment.utc(data.orderDate).local().format('LL')}</p>
+                    <p className='fs-7 fw-semibold m-0'>{moment.utc(data.orderDate).format('LL')}</p>
                     <span className='text-muted fs-7'>Closed Date:</span>
-                    {data.closedDate && <p className='fs-7 fw-semibold m-0'>{moment.utc(data.closedDate).local().format('LL')}</p>}
+                    {data.closedDate && <p className='fs-7 fw-semibold m-0'>{moment.utc(data.closedDate).format('LL')}</p>}
                   </Col>
                   {/* <Col xs={6} className='m-0 p-0'>
                     <table className='table table-sm table-borderless table-nowrap m-0'>

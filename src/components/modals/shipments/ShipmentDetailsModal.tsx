@@ -78,7 +78,7 @@ const ShipmentDetailsModal = ({ mutateShipments }: Props) => {
           Type: <span className='text-dark fw-semibold'>{orderType}</span>
         </p>
         <p className='fw-normal mb-2 text-muted fs-6 m-0'>
-          Order Date: <span className='text-dark fw-semibold'>{moment.utc(orderDate).local().format('LL')}</span>
+          Order Date: <span className='text-dark fw-semibold'>{moment.utc(orderDate).format('LL')}</span>
         </p>
       </ModalHeader>
       <ModalBody className='pt-2' style={{ backgroundColor: '#F0F4F7' }}>
