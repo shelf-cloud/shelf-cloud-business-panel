@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import { Button, Card, CardBody, CardHeader, Col, Form, FormFeedback, FormGroup, Input, Label, Row, Spinner } from 'reactstrap'
 // import Animation from '@components/Common/Animation'
 import axios from 'axios'
@@ -25,6 +25,30 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
   const [showEditNote, setShowEditNote] = useState(false)
   const OrderId = CleanSpecialCharacters(data.orderId!)
   const [loadingLabel, setLoadingLabel] = useState(false)
+
+  const serviceFee = useMemo(() => {
+    if (data.chargesFees) {
+      switch (true) {
+        case !data.isIndividualUnits && data.carrierService == 'Parcel Boxes':
+          return `${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.parcelBoxCost!)} per box`
+        case !data.isIndividualUnits && data.carrierService == 'LTL':
+          return `${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.palletCost!)} per pallet + ${FormatCurrency(state.currentRegion, 0.3)} per item`
+        case data.isIndividualUnits:
+          return `
+              ${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.individualUnitCost!)} per unit
+              ${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.parcelBoxCost!)} per box
+              ${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.palletCost!)} per pallet
+              `
+        default:
+          return `${FormatCurrency(state.currentRegion, data.chargesFees.orderCost!)} first item + ${FormatCurrency(
+            state.currentRegion,
+            data.chargesFees.extraItemOrderCost!
+          )} addt'l.`
+      }
+    }
+    return ''
+  }, [data, state.currentRegion])
+
   const handlePrintingLabel = async () => {
     setLoadingLabel(true)
     const response: any = await axios(`/api/createLabelForOrder?region=${state.currentRegion}&businessId=${state.user.businessId}&orderId=${data.id}`)
@@ -97,12 +121,10 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                       <td className='text-muted text-nowrap'>Customer Name:</td>
                       <td className='fw-semibold w-100'>{data.shipName}</td>
                     </tr>
-                    {/* <tr>
-                      <td className='text-muted text-nowrap'>Address:</td>
-                      <td className='fw-semibold w-100'>
-                        {data.shipStreet !== '' && data.shipCity !== '' && `${data.shipStreet}, ${data.shipCity}, ${data.shipState}, ${data.shipZipcode}, ${data.shipCountry}`}
-                      </td>
-                    </tr> */}
+                    <tr>
+                      <td className='text-muted text-nowrap'># Of Pallets:</td>
+                      <td className='fw-semibold w-100'>{data.numberPallets}</td>
+                    </tr>
                   </tbody>
                 </table>
               </CardBody>
@@ -122,13 +144,7 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                         {data.chargesFees && (
                           <>
                             <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltip${OrderId}`}></i>
-                            <TooltipComponent
-                              target={`tooltip${OrderId}`}
-                              text={`${FormatCurrency(state.currentRegion, data.chargesFees.orderCost!)} first item + ${FormatCurrency(
-                                state.currentRegion,
-                                data.chargesFees.extraItemOrderCost!
-                              )} addt'l.`}
-                            />
+                            <TooltipComponent target={`tooltip${OrderId}`} text={serviceFee} />
                           </>
                         )}
                       </td>
@@ -184,7 +200,7 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                           Cancel
                         </Button>
                         <Button type='submit' disabled={loading} color='primary' className='btn btn-sm'>
-                          {loading ? <Spinner size={'sm'} color='light'/> : 'Save Changes'}
+                          {loading ? <Spinner size={'sm'} color='light' /> : 'Save Changes'}
                         </Button>
                       </div>
                     </Col>
@@ -226,7 +242,7 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                     <tr>
                       <td></td>
                       <td></td>
-                      <td className='text-start fs-6 fw-bold text-nowrap'>Total</td> 
+                      <td className='text-start fs-6 fw-bold text-nowrap'>Total</td>
                       <td className='text-center fs-6 text-primary'>{data.orderItems.reduce((total, item: OrderItem) => total + item.qtyReceived, 0)}</td>
                     </tr>
                   </tbody>

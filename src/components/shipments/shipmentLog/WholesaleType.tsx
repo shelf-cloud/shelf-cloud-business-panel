@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
@@ -18,34 +18,26 @@ type Props = {
 
 const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
   const { state, setIndividualUnitsPlan, setUploadIndividualUnitsLabelsModal }: any = useContext(AppContext)
-  const [serviceFee, setServiceFee] = useState('')
 
-  useEffect(() => {
+  const serviceFee = useMemo(() => {
     if (data.chargesFees) {
       switch (true) {
         case !data.isIndividualUnits && data.carrierService == 'Parcel Boxes':
-          setServiceFee(`${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.parcelBoxCost!)} per box`)
-          break
+          return `${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.parcelBoxCost!)} per box`
         case !data.isIndividualUnits && data.carrierService == 'LTL':
-          setServiceFee(`${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.palletCost!)} per pallet`)
-          break
+          return `${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.palletCost!)} per pallet`
         case data.isIndividualUnits:
-          setServiceFee(
-            `
+          return `
             ${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.individualUnitCost!)} per unit
             ${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.parcelBoxCost!)} per box
             ${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.palletCost!)} per pallet
             `
-          )
-          break
         default:
-          setServiceFee(`Type of service...`)
+          return `Type of service...`
       }
     }
 
-    return () => {
-      setServiceFee('')
-    }
+    return ''
   }, [data, state.currentRegion])
 
   const OrderId = CleanSpecialCharacters(data.orderId!)
@@ -82,7 +74,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                     {data.orderItems.map((product: ShipmentOrderItem, key) => (
                       <tr key={key} className='border-bottom py-2'>
                         <td className='w-75 fw-semibold'>{product.name || ''}</td>
-                        <td className=' text-muted'>{product.sku}</td>
+                        <td className='text-muted'>{product.sku}</td>
                         <td className='text-center'>{product.quantity}</td>
                       </tr>
                     ))}
