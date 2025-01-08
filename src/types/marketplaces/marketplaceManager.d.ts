@@ -14,5 +14,6 @@ export interface MarketplaceFees {
     comissionFee: number
     fixedFee: number
     isCommerceHub: boolean
+    commerceHubFileType: string
     payTerms: number
 }

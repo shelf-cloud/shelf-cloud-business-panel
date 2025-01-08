@@ -24,7 +24,7 @@ const CheckNumberTable = ({ summary }: Props) => {
 
           <CardBody>
             <div className='table-responsive table-card'>
-              <table className='table table-hover table-centered align-middle mb-0'>
+              <table className='table table-sm table-hover table-centered align-middle mb-0'>
                 <thead>
                   <tr className='fw-semibold'>
                     <td>Store</td>
@@ -34,7 +34,7 @@ const CheckNumberTable = ({ summary }: Props) => {
                     <td>Deductions</td>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className='fs-7'>
                   {summary.invoices.map((item, key) => {
                     const pendingValue = item.checkTotal + item.cashDiscountTotal
                     const deductions = item.deductions
@@ -57,7 +57,7 @@ const CheckNumberTable = ({ summary }: Props) => {
                         <td>
                           {item.checkNumber ? (
                             <Link href={`/commercehub/${item.storeName}/${item.checkNumber}`}>
-                              <a className='fs-6 text-primary fw-normal'>{item.checkNumber}</a>
+                              <a className='fs-7 text-primary fw-normal'>{item.checkNumber}</a>
                             </Link>
                           ) : (
                             <span className='fs-6 mw-30 text-muted fw-light fst-italic'>Pending</span>

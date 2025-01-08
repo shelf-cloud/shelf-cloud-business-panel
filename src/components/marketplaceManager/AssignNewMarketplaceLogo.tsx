@@ -3,7 +3,7 @@ import SimpleSelect from '@components/Common/SimpleSelect'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap'
+import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap'
 import useSWR from 'swr'
 
 type Channels = {
@@ -12,7 +12,7 @@ type Channels = {
 }
 
 type Props = {
-  selected: { value: string; label: string }
+  selected: string
   setLogo: (selected: { value: string; label: string }) => void
 }
 
@@ -47,32 +47,30 @@ const AssignNewMarketplaceLogo = ({ selected, setLogo }: Props) => {
   }, [])
 
   return (
-    <ButtonGroup>
-      <Dropdown isOpen={openDatesMenu} toggle={() => setOpenDatesMenu(!openDatesMenu)} direction='end'>
-        <DropdownToggle caret className='fs-7' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }} color='light'>
-          Logo
-        </DropdownToggle>
-        <DropdownMenu container={'body'} style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
-          <div className={'px-3 py-1'}>
-            <div className='d-flex flex-column justify-content-start gap-2'>
-              <span className='fs-7 fw-normal'>Set custom Logo:</span>
-              {channels ? (
-                <SimpleSelect
-                  selected={selected}
-                  handleSelect={(option) => {
-                    setLogo(option)
-                    setOpenDatesMenu(false)
-                  }}
-                  options={[{ value: '', label: 'Default Logo' }, ...channels]}
-                />
-              ) : (
-                <div>Loading...</div>
-              )}
-            </div>
+    <Dropdown isOpen={openDatesMenu} toggle={() => setOpenDatesMenu(!openDatesMenu)} direction='end'>
+      <DropdownToggle size='sm' caret className='fs-7' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }} color='light'>
+        Logo
+      </DropdownToggle>
+      <DropdownMenu container={'body'} style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
+        <div className={'px-3 py-1'}>
+          <div className='d-flex flex-column justify-content-start gap-2'>
+            <span className='fs-7 fw-normal'>Set custom Logo:</span>
+            {channels ? (
+              <SimpleSelect
+                selected={channels.find((option) => option.value === selected) ?? { value: '', label: 'Default Logo' }}
+                handleSelect={(option) => {
+                  setLogo(option)
+                  setOpenDatesMenu(false)
+                }}
+                options={[{ value: '', label: 'Default Logo' }, ...channels]}
+              />
+            ) : (
+              <div>Loading...</div>
+            )}
           </div>
-        </DropdownMenu>
-      </Dropdown>
-    </ButtonGroup>
+        </div>
+      </DropdownMenu>
+    </Dropdown>
   )
 }
 

@@ -214,6 +214,8 @@ const CheckNumberDetails = ({ session }: Props) => {
       sortable: false,
       left: true,
       compact: true,
+      wrap: true,
+      grow: 1.3
     },
     {
       name: <span className='fw-bold fs-6'>Invoice Date</span>,

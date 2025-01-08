@@ -95,7 +95,7 @@ const Invoices = ({ session, sessionToken }: Props) => {
   const [toggledClearRows, setToggleClearRows] = useState(false)
 
   const { data: stores } = useSWR(state.user.businessId ? `/api/commerceHub/getStores?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcherStores, {
-    revalidateOnFocus: false,
+    // revalidateOnFocus: false,
   })
 
   const getKey = (pageIndex: number, previousPageData: Invoice[]) => {

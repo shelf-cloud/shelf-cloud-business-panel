@@ -113,7 +113,7 @@ const CommerceHubWidget = ({ summary }: Props) => {
                     <td>Pending</td>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className='fs-7'>
                   {summary.summary.map((item, key) => {
                     return (
                       <tr key={key}>

@@ -8,9 +8,10 @@ import { toast } from 'react-toastify'
 import Dropzone from 'react-dropzone'
 import Papa from 'papaparse'
 import { useFormik } from 'formik'
-import { validateHomeDepotFile, validateLowesFile } from './validateFileTypesInfo'
+import { validateCitiBankLowesFile, validateHomeDepotFile, validateLowesFile } from './validateFileTypesInfo'
 import { CommerceHubStore } from '@typesTs/commercehub/invoices'
 import { mutate } from 'swr'
+import router from 'next/router'
 
 type Props = {
   showUpdateInvoices: {
@@ -53,6 +54,7 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
       }
 
       let validateResponse = []
+      let fileLineStart = 1
 
       Papa.parse(selectedFiles[0], {
         complete: async function (results, _file) {
@@ -63,6 +65,10 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
               break
             case 'lowes':
               validateResponse = await validateLowesFile(resultValues)
+              break
+            case 'citibanklowes':
+              validateResponse = await validateCitiBankLowesFile(resultValues)
+              fileLineStart = 12
               break
             default:
               validateResponse = []
@@ -81,7 +87,7 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
           const chunkSize = 110
           const totalChunks = Math.ceil(results.data.length / chunkSize)
 
-          for (let i = 1; i < results.data.length; i += chunkSize) {
+          for (let i = fileLineStart; i < results.data.length; i += chunkSize) {
             const chunk = results.data.slice(i, i + chunkSize)
 
             try {
@@ -224,12 +230,18 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
                   <option value=''>Choose Store..</option>
                   {stores?.map((store) => (
                     <option key={store.value} value={store.value}>
-                      {store.label}
+                      {store.label} - File: {store.fileType}
                     </option>
                   ))}
                 </Input>
                 {validation.touched.storeId && validation.errors.storeId ? <FormFeedback type='invalid'>{validation.errors.storeId}</FormFeedback> : null}
               </FormGroup>
+              <p className='fs-7 text-muted fw-light m-0'>
+                {`You might need to configure in marketplace manager if you don't see a store.`}{' '}
+                <span onClick={() => router.push('/marketplaceManager')} className='text-primary' style={{ cursor: 'pointer' }}>
+                  <i className='ri-external-link-fill ms-1 fs-6 text-primary' />
+                </span>
+              </p>
               <div className='list-unstyled mb-0' id='file-previews'>
                 {selectedFiles.map((f: any, i) => {
                   return (

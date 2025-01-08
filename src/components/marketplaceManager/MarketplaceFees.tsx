@@ -11,6 +11,8 @@ import useSWR, { useSWRConfig } from 'swr'
 import { toast } from 'react-toastify'
 import AssignNewMarketplaceLogo from './AssignNewMarketplaceLogo'
 import { NoImageAdress } from '@lib/assetsConstants'
+import { commerceHubFileTypeOptions } from './marketplaceConstants'
+import AssignCommerceHubFileType from './AssignCommerceHubFileType'
 
 type Props = {}
 
@@ -69,7 +71,7 @@ const MarketplacesFees = ({}: Props) => {
       name: <span className='fw-bold fs-6'>Logo</span>,
       selector: (row: MarketplaceFees) => {
         return (
-          <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
+          <div className='d-flex flex-row justify-content-start align-items-center gap-2 fs-7'>
             <div
               style={{
                 width: '30px',
@@ -79,7 +81,7 @@ const MarketplacesFees = ({}: Props) => {
               }}>
               <img
                 loading='lazy'
-                src={row.logoLink ? row.aliasLogo ?? row.logoLink : NoImageAdress}
+                src={row.aliasLogo ?? row.logoLink}
                 onError={(e) => (e.currentTarget.src = NoImageAdress)}
                 alt='product Image'
                 style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
@@ -87,7 +89,7 @@ const MarketplacesFees = ({}: Props) => {
             </div>
             {showEditFields && (
               <AssignNewMarketplaceLogo
-                selected={row.aliasLogo ? { value: row.aliasLogo, label: row.storeName } : { value: '', label: 'Default Logo' }}
+                selected={row.aliasLogo ?? row.logoLink}
                 setLogo={(selected) => setmarketplaceFees((prev) => ({ ...prev, [row.storeId]: { ...row, aliasLogo: selected.value !== '' ? selected.value : null } }))}
               />
             )}
@@ -96,16 +98,23 @@ const MarketplacesFees = ({}: Props) => {
       },
       sortable: true,
       center: true,
-      compact: true,
+      compact: false,
+      style: {
+        fontSize: '0.7rem',
+      },
       sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortStrings(rowA.storeName, rowB.storeName),
     },
     {
       name: <span className='fw-bold fs-6'>Marketplace</span>,
       selector: (row: MarketplaceFees) => row.name,
       sortable: true,
-      center: false,
+      left: true,
       grow: 1.3,
-      compact: true,
+      compact: false,
+      wrap: true,
+      style: {
+        fontSize: '0.7rem',
+      },
       sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortStrings(rowA.name, rowB.name),
     },
     {
@@ -114,6 +123,9 @@ const MarketplacesFees = ({}: Props) => {
       sortable: true,
       center: true,
       compact: true,
+      style: {
+        fontSize: '0.7rem',
+      },
       sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortStrings(rowA.storeName, rowB.storeName),
     },
     {
@@ -126,7 +138,7 @@ const MarketplacesFees = ({}: Props) => {
               type='text'
               minLength={1}
               debounceTimeout={400}
-              className='form-control fs-6'
+              className='form-control fs-7'
               style={{ padding: '0.2rem 0.5rem', minWidth: '80px' }}
               onChange={(e) => setmarketplaceFees((prev) => ({ ...prev, [row.storeId]: { ...row, alias: e.target.value !== '' ? e.target.value : null } }))}
               value={row.alias || ''}
@@ -149,12 +161,12 @@ const MarketplacesFees = ({}: Props) => {
               }>{`${row.comissionFee} %`}</span>
           )
         return (
-          <div className='d-flex flex-row justify-content-center align-items-center gap-2'>
+          <div className='d-flex flex-row justify-content-center align-items-center gap-1'>
             <DebounceInput
               minLength={1}
               debounceTimeout={200}
               type='number'
-              className={'form-control fs-6 ' + ((row.comissionFee < 0 || row.comissionFee > 100) && 'is-invalid')}
+              className={'form-control fs-7 ' + ((row.comissionFee < 0 || row.comissionFee > 100) && 'is-invalid')}
               style={{ padding: '0.2rem 0.9rem', minWidth: '80px' }}
               max={100}
               min={0}
@@ -164,7 +176,7 @@ const MarketplacesFees = ({}: Props) => {
               }}
               value={row.comissionFee || 0}
             />
-            <span className='fw-sembold fs-5'>%</span>
+            <span className='fw-sembold fs-6'>%</span>
           </div>
         )
       },
@@ -182,7 +194,7 @@ const MarketplacesFees = ({}: Props) => {
             minLength={1}
             debounceTimeout={200}
             type='number'
-            className={'form-control fs-6 ' + (row.fixedFee < 0 && 'is-invalid')}
+            className={'form-control fs-7 ' + (row.fixedFee < 0 && 'is-invalid')}
             style={{ padding: '0.2rem 0.9rem', minWidth: '80px' }}
             min={0}
             onChange={(e) => {
@@ -199,23 +211,54 @@ const MarketplacesFees = ({}: Props) => {
       sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => (rowA.fixedFee > rowB.fixedFee ? 1 : -1),
     },
     {
-      name: <span className='fw-bold fs-6'>Commerce Hub</span>,
+      name: <span className='fw-bold fs-6 text-center'>Commerce Hub</span>,
       selector: (row: MarketplaceFees) => {
-        if (!showEditFields) return row.isCommerceHub && 'Active'
+        if (!showEditFields)
+          return (
+            row.isCommerceHub && (
+              <div className='my-2 d-flex flex-column justify-content-center align-items-center gap-0'>
+                <p className='fs-7 text-center m-0 text-primary'>Active</p>
+                <p className='fs-7 text-center m-0'>File: {row.commerceHubFileType}</p>
+              </div>
+            )
+          )
         return (
-          <div className='d-flex flex-row justify-content-center align-items-center gap-2'>
-            <input
-              type='checkbox'
-              className='form-check-input'
-              onChange={(e) => setmarketplaceFees((prev) => ({ ...prev, [row.storeId]: { ...row, isCommerceHub: e.target.checked } }))}
-              checked={row.isCommerceHub}
-            />
+          <div className='py-2 d-flex flex-column justify-content-center align-items-center gap-2'>
+            <div className='fs-7 d-flex flex-row justify-content-center align-items-center gap-2'>
+              <input
+                type='checkbox'
+                className='form-check-input'
+                onChange={(e) => {
+                  (e.target.checked && row.commerceHubFileType === '') ? setHasError(true) : setHasError(false)
+                  setmarketplaceFees((prev) => ({ ...prev, [row.storeId]: { ...row, isCommerceHub: e.target.checked, commerceHubFileType: '' } }))
+                }}
+                checked={row.isCommerceHub}
+              />
+              {row.isCommerceHub && (
+                <AssignCommerceHubFileType
+                  selected={commerceHubFileTypeOptions.find((option) => option.value === row.commerceHubFileType) ?? { value: '', label: 'Select File Type' }}
+                  setSelected={(selected: any) => {
+                    (row.isCommerceHub && selected.value === '') ? setHasError(true) : setHasError(false)
+                    setmarketplaceFees((prev) => ({ ...prev, [row.storeId]: { ...row, commerceHubFileType: selected.value } }))
+                  }}
+                  options={commerceHubFileTypeOptions}
+                />
+              )}
+            </div>
+            {row.isCommerceHub && (
+              <span className={'fs-7 text-info fw-light ' + (row.isCommerceHub && row.commerceHubFileType === '' ? 'text-danger' : '')}>
+                File: {row.commerceHubFileType || 'Required'}
+              </span>
+            )}
           </div>
         )
       },
       sortable: true,
       center: true,
-      compact: true,
+      compact: false,
+      style: {
+        fontSize: '0.7rem',
+      },
       sortFunction: (rowA: MarketplaceFees) => (rowA.isCommerceHub ? 1 : -1),
     },
     {
@@ -227,7 +270,7 @@ const MarketplacesFees = ({}: Props) => {
             minLength={1}
             debounceTimeout={200}
             type='number'
-            className={'form-control fs-6 ' + (row.payTerms < 0 && 'is-invalid')}
+            className={'form-control fs-7 ' + (row.payTerms < 0 && 'is-invalid')}
             style={{ padding: '0.2rem 0.9rem', minWidth: '80px' }}
             min={0}
             onChange={(e) => {
@@ -240,7 +283,7 @@ const MarketplacesFees = ({}: Props) => {
       },
       sortable: true,
       center: true,
-      compact: true,
+      compact: false,
       sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => (rowA.payTerms > rowB.payTerms ? 1 : -1),
     },
   ]
@@ -249,21 +292,21 @@ const MarketplacesFees = ({}: Props) => {
     <>
       <div className='text-end'>
         {!showEditFields ? (
-          <Button color='primary' onClick={() => setshowEditFields(true)}>
+          <Button color='primary' size='sm' onClick={() => setshowEditFields(true)}>
             Edit
           </Button>
         ) : (
           <div className='d-flex flex-row justify-content-end align-items-center gap-3'>
-            <Button color='light' onClick={() => setshowEditFields(false)}>
-              cancel
+            <Button color='light' size='sm' onClick={() => setshowEditFields(false)}>
+              Cancel
             </Button>
-            <Button color='success' disabled={hasError} onClick={handleUpdateMarketplaceFees}>
+            <Button color='success' size='sm' disabled={hasError} onClick={handleUpdateMarketplaceFees}>
               {updatingFees ? <Spinner size={'sm'} color='white' /> : 'Save'}
             </Button>
           </div>
         )}
       </div>
-      <DataTable columns={columns} data={Object.values(marketplaceFees)} progressPending={isLoaded} striped={true} defaultSortFieldId={2} />
+      <DataTable columns={columns} data={Object.values(marketplaceFees)} dense progressPending={isLoaded} striped={true} defaultSortFieldId={2} />
     </>
   )
 }
