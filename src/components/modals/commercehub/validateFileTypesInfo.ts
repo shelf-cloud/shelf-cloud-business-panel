@@ -78,74 +78,48 @@ export const validateLowesFile = async (resultValues: any) => {
 }
 
 const CITI_BANK_LOWES_HEADERS = [
-  '',
   'Reference',
-  '',
-  '',
-  '',
-  '',
   'Payment Reference',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
   'Buyer Name',
-  '',
-  '',
   'Buyer Account',
-  '',
-  '',
-  '',
-  '',
-  '',
+  'Supplier Name',
+  'Supplier Account',
   'Invoice Status',
-  '',
-  '',
-  '',
   'PMT ID',
-  '',
-  '',
   'Issue Date',
-  '',
-  '',
-  '',
   'Due Date',
-  '',
   'Settle Date',
+  'Currency',
+  'Amount',
+  'Remittances',
+  'Add. Info.',
   'Status',
+  'Base Rate(%)',
+  'Spread Rate(%)',
+  'Discount Rate(%)',
+  'Discount Tenor',
   'Type',
-  'Remit No.',
+  'Remit No',
   'Remit Date',
   'Pay Date',
   'Tenor',
   'Net Amount',
-  '',
   'Gross Amount',
-  'Adj. Amount',
-  'Disc. Amount',
-  'PO No.',
-  'Doc No.',
+  'Adj Amount',
+  'Disc Amount',
+  'PO No',
+  'Doc No',
   'Comment',
-  'Adj. Code',
+  'Adj Code',
   'Add. Info.',
-  'Base Rate(%)',
-  '',
-  'Spread Rate(%)',
-  '',
-  'Discount Rate(%)',
-  '',
-  'Discount Tenor',
   'CM Adjusted',
   'CM Adjusted Net Amount',
   'Fee',
   'Charge',
   'Proceeds',
-  '',
 ]
 
-const CITI_BANK_LOWES_HEADERS_LENGTH = 65
+const CITI_BANK_LOWES_HEADERS_LENGTH = 39
 
 export const validateCitiBankLowesFile = async (resultValues: any) => {
   let errorsList = [] as any[]
@@ -155,7 +129,7 @@ export const validateCitiBankLowesFile = async (resultValues: any) => {
     return errorsList
   }
 
-  const headerRow = resultValues[11] as any
+  const headerRow = resultValues[0] as any
   if (headerRow.length !== CITI_BANK_LOWES_HEADERS_LENGTH) {
     errorsList.push({ errorLine: 0, errorMessage: 'Columns not matching file type.', value: 'Missing Columns' })
     return errorsList

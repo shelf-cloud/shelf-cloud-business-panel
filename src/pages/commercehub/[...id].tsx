@@ -270,6 +270,20 @@ const CheckNumberDetails = ({ session }: Props) => {
       sortFunction: (rowA: Invoice, rowB: Invoice) => sortNumbers(rowA.checkTotal, rowB.checkTotal),
     },
     {
+      name: <span className='fw-bolder fs-6'>Charges</span>,
+      selector: (row: Invoice) => {
+        if (row.checkTotal > 0) {
+          return <span className={'text-center fs-7 ' + (row.cashDiscountTotal < 0 ? 'text-danger' : 'text-muted')}>{FormatCurrency(state.currentRegion, row.cashDiscountTotal)}</span>
+        } else {
+          return <></>
+        }
+      },
+      sortable: true,
+      center: true,
+      compact: true,
+      sortFunction: (rowA: Invoice, rowB: Invoice) => sortNumbers(rowA.checkTotal, rowB.checkTotal),
+    },
+    {
       name: <span className='fw-bolder fs-6'>Status</span>,
       selector: (row: Invoice) => {
         switch (row.status) {

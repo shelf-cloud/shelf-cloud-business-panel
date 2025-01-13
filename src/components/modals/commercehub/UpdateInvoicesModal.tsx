@@ -68,7 +68,6 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
               break
             case 'citibanklowes':
               validateResponse = await validateCitiBankLowesFile(resultValues)
-              fileLineStart = 12
               break
             default:
               validateResponse = []
