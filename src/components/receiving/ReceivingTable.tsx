@@ -3,18 +3,18 @@ import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { OrderRowType, ShipmentOrderItem } from '@typings'
 import React, { useContext, useState } from 'react'
 import DataTable from 'react-data-table-component'
-import ShipmentExpandedDetail from './ShipmentExpandedDetail'
+import ShipmentExpandedDetail from '../ShipmentExpandedDetail'
 import AppContext from '@context/AppContext'
 import { UncontrolledTooltip } from 'reactstrap'
-import Confirm_Delete_Receiving from './modals/receivings/Confirm_Delete_Receiving'
+import Confirm_Delete_Receiving from '../modals/receivings/Confirm_Delete_Receiving'
 
 type Props = {
   tableData: OrderRowType[]
   pending: boolean
-  mutateReturns: () => void
+  mutateReceivings: () => void
 }
 
-const ReceivingTable = ({ tableData, pending, mutateReturns }: Props) => {
+const ReceivingTable = ({ tableData, pending, mutateReceivings }: Props) => {
   const { state }: any = useContext(AppContext)
   const [loading, setLoading] = useState(false)
   const [showDeleteModal, setshowDeleteModal] = useState({
@@ -25,18 +25,18 @@ const ReceivingTable = ({ tableData, pending, mutateReturns }: Props) => {
 
   const columns: any = [
     {
-      name: <span className='fw-bolder fs-13'>Order Number</span>,
+      name: <span className='fw-bolder fs-6'>Order Number</span>,
       selector: (row: OrderRowType) => {
-        return <div className='m-0 p-0 fw-bold'>{row.orderNumber}</div>
+        return <div className='m-0 p-0 fw-bold fs-7'>{row.orderNumber}</div>
       },
       sortable: true,
       wrap: true,
-      grow: 1.3,
+      grow: 2,
       left: true,
       //   compact: true,
     },
     {
-      name: <span className='fw-bolder fs-13'>Status</span>,
+      name: <span className='fw-bolder fs-6'>Status</span>,
       selector: (row: OrderRowType) => {
         switch (row.orderStatus) {
           case 'shipped':
@@ -64,10 +64,10 @@ const ReceivingTable = ({ tableData, pending, mutateReturns }: Props) => {
       //   compact: true,
     },
     {
-      name: <span className='fw-bolder fs-13'>Origin</span>,
+      name: <span className='fw-bolder fs-6'>Origin</span>,
       selector: (row: OrderRowType) => {
         return (
-          <div className='text-center m-0 p-0 text-nowrap'>
+          <div className='text-center m-0 p-0 text-nowrap fs-7'>
             {row.isReceivingFromPo ? <span className='text-primary'>Purchase Orders</span> : <span className='text-info'>Manual Receiving</span>}
           </div>
         )
@@ -78,45 +78,50 @@ const ReceivingTable = ({ tableData, pending, mutateReturns }: Props) => {
       center: true,
     },
     {
-      name: <span className='fw-bolder fs-13'>Order Date</span>,
+      name: <span className='fw-bolder fs-6'>Order Date</span>,
       selector: (row: OrderRowType) => row.orderDate,
       sortable: true,
       wrap: true,
       grow: 1.2,
       center: true,
-      //   compact: true,
-    },
-    {
-      name: <span className='fw-bolder fs-13'>Order Closed</span>,
-      selector: (row: OrderRowType) => row.closedDate || '',
-      sortable: true,
-      wrap: true,
-      grow: 1.2,
-      center: true,
-      //   compact: true,
-    },
-    {
-      name: <span className='fw-bolder fs-13'># of Items</span>,
-      selector: (row: OrderRowType) => FormatIntNumber(state.currentRegion, Number(row.totalItems)),
-      sortable: true,
-      wrap: true,
-      // grow: 1.5,
-      center: true,
-      //   compact: true,
-    },
-    {
-      name: <span className='fw-bolder fs-13 text-center'>Total Charge</span>,
-      selector: (row: OrderRowType) => FormatCurrency(state.currentRegion, Number(row.totalCharge)),
-      sortable: true,
-      wrap: true,
-      // grow: 1.5,
-      center: true,
       style: {
-        color: '#4481FD',
+        fontSize: '0.7rem',
       },
     },
     {
-      name: <span className='fw-bolder fs-13'></span>,
+      name: <span className='fw-bolder fs-6'>Order Closed</span>,
+      selector: (row: OrderRowType) => row.closedDate || '',
+      sortable: true,
+      wrap: false,
+      grow: 1.2,
+      center: true,
+      style: {
+        fontSize: '0.7rem',
+      },
+    },
+    {
+      name: <span className='fw-bolder fs-6'># of Items</span>,
+      selector: (row: OrderRowType) => FormatIntNumber(state.currentRegion, Number(row.totalItems)),
+      sortable: true,
+      wrap: false,
+      center: true,
+      style: {
+        fontSize: '0.7rem',
+      },
+    },
+    {
+      name: <span className='fw-bolder fs-6 text-center'>Total Charge</span>,
+      selector: (row: OrderRowType) => FormatCurrency(state.currentRegion, Number(row.totalCharge)),
+      sortable: true,
+      wrap: false,
+      center: true,
+      style: {
+        color: '#4481FD',
+        fontSize: '0.7rem',
+      },
+    },
+    {
+      name: <span className='fw-bolder fs-6'></span>,
       selector: (row: OrderRowType) => {
         if (
           (row.orderStatus == 'awaiting' || row.orderStatus == 'awaiting_shipment') &&
@@ -125,7 +130,7 @@ const ReceivingTable = ({ tableData, pending, mutateReturns }: Props) => {
           return (
             <>
               <i
-                className='fs-3 text-danger las la-trash-alt'
+                className='fs-4 text-danger las la-trash-alt'
                 style={{ cursor: 'pointer' }}
                 id={`deleteReceiving${row.orderId}`}
                 onClick={() =>
@@ -165,7 +170,7 @@ const ReceivingTable = ({ tableData, pending, mutateReturns }: Props) => {
         progressPending={pending}
         expandableRows
         expandableRowsComponent={ShipmentExpandedDetail}
-        expandableRowsComponentProps={{ mutateReturns: mutateReturns }}
+        expandableRowsComponentProps={{ mutateReceivings: mutateReceivings }}
         striped={true}
       />
       {showDeleteModal.show && (
@@ -174,7 +179,7 @@ const ReceivingTable = ({ tableData, pending, mutateReturns }: Props) => {
           setshowDeleteModal={setshowDeleteModal}
           loading={loading}
           setLoading={setLoading}
-          mutateReturns={mutateReturns}
+          mutateReceivings={mutateReceivings}
         />
       )}
     </>

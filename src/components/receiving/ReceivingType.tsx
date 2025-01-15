@@ -3,10 +3,12 @@ import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
 // import Animation from '@components/Common/Animation'
 import { OrderRowType, ShipmentOrderItem } from '@typings'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
-import TooltipComponent from './constants/Tooltip'
+import TooltipComponent from '../constants/Tooltip'
 import AppContext from '@context/AppContext'
-import Confirm_Delete_Item_From_Receiving from './modals/receivings/Confirm_Delete_Item_From_Receiving'
+import Confirm_Delete_Item_From_Receiving from '../modals/receivings/Confirm_Delete_Item_From_Receiving'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
+import EditManualReceivingLog from './EditManualReceivingLog'
+import AddSkuToManualReceivingLog from './AddSkuToManualReceivingLog'
 
 // import dynamic from 'next/dynamic';
 // const Animation = dynamic(() => import('@components/Common/Animation'), {
@@ -15,10 +17,10 @@ import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 
 type Props = {
   data: OrderRowType
-  mutateReturns?: () => void
+  mutateReceivings?: () => void
 }
 
-const ReceivingType = ({ data, mutateReturns }: Props) => {
+const ReceivingType = ({ data, mutateReceivings }: Props) => {
   const { state }: any = useContext(AppContext)
   const [serviceFee, setServiceFee] = useState('')
   const [loading, setLoading] = useState(false)
@@ -29,6 +31,18 @@ const ReceivingType = ({ data, mutateReturns }: Props) => {
     sku: '',
     title: '',
     quantity: 0,
+  })
+  const [showEditOrderQty, setshowEditOrderQty] = useState({
+    show: false,
+    receivingId: 0,
+    orderNumber: '',
+    receivingItems: [] as ShipmentOrderItem[],
+  })
+  const [addSkuToReceiving, setAddSkuToReceiving] = useState({
+    show: false,
+    receivingId: 0,
+    orderNumber: '',
+    receivingItems: [] as string[],
   })
 
   useEffect(() => {
@@ -187,8 +201,31 @@ const ReceivingType = ({ data, mutateReturns }: Props) => {
         </Col>
         <Col md={8}>
           <Card>
-            <CardHeader className='py-3'>
+            <CardHeader className='py-3 d-flex flex-row justify-content-between'>
               <h5 className='fw-semibold m-0'>Products</h5>
+              {!data.isReceivingFromPo && data.orderStatus !== 'received' && (
+                <div className='d-flex flex-row justify-content-end gap-3 align-items-center'>
+                  <i
+                    className='las la-edit fs-4 text-primary m-0 p-0'
+                    style={{ cursor: 'pointer' }}
+                    onClick={() =>
+                      setshowEditOrderQty({
+                        show: true,
+                        receivingId: data.id,
+                        orderNumber: data.orderNumber,
+                        receivingItems: data.orderItems,
+                      })
+                    }
+                  />
+                  <i
+                    className='fs-4 text-success las la-plus-circle'
+                    style={{ cursor: 'pointer' }}
+                    onClick={() =>
+                      setAddSkuToReceiving({ show: true, receivingId: data.id, orderNumber: data.orderNumber, receivingItems: data.orderItems.map((item) => item.sku) })
+                    }
+                  />
+                </div>
+              )}
             </CardHeader>
             <CardBody>
               <div className='table-responsive'>
@@ -218,7 +255,7 @@ const ReceivingType = ({ data, mutateReturns }: Props) => {
                         <td>
                           {(data.orderStatus == 'awaiting' || data.orderStatus == 'awaiting_shipment') && product.qtyReceived! <= 0 && (
                             <i
-                              className='fs-4 text-danger las la-trash-alt'
+                              className='fs-5 text-danger las la-trash-alt'
                               style={{ cursor: 'pointer' }}
                               onClick={() =>
                                 setshowDeleteModal((prev) => {
@@ -272,9 +309,11 @@ const ReceivingType = ({ data, mutateReturns }: Props) => {
           setshowDeleteModal={setshowDeleteModal}
           loading={loading}
           setLoading={setLoading}
-          mutateReturns={mutateReturns}
+          mutateReceivings={mutateReceivings}
         />
       )}
+      {showEditOrderQty.show && <EditManualReceivingLog showEditOrderQty={showEditOrderQty} setshowEditOrderQty={setshowEditOrderQty} mutateReceivings={mutateReceivings}/>}
+      {addSkuToReceiving.show && <AddSkuToManualReceivingLog addSkuToReceiving={addSkuToReceiving} setshowAddSkuToManualReceiving={setAddSkuToReceiving} mutateReceivings={mutateReceivings}/>}
     </div>
   )
 }

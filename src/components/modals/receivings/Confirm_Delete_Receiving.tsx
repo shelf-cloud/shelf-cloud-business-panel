@@ -14,10 +14,10 @@ type Props = {
   setshowDeleteModal: (prev: any) => void
   loading: boolean
   setLoading: (state: boolean) => void
-  mutateReturns: () => void
+  mutateReceivings: () => void
 }
 
-const Confirm_Delete_Receiving = ({ showDeleteModal, setshowDeleteModal, loading, setLoading, mutateReturns }: Props) => {
+const Confirm_Delete_Receiving = ({ showDeleteModal, setshowDeleteModal, loading, setLoading, mutateReceivings }: Props) => {
   const { state }: any = useContext(AppContext)
 
   const handleDeleteReceiving = async () => {
@@ -27,7 +27,7 @@ const Confirm_Delete_Receiving = ({ showDeleteModal, setshowDeleteModal, loading
       orderNumber: showDeleteModal.orderNumber,
     })
     if (!response.data.error) {
-      mutateReturns()
+      mutateReceivings()
       setshowDeleteModal({
         show: false,
         orderId: 0,
