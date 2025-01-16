@@ -5,14 +5,16 @@ import { GetServerSideProps } from 'next'
 import { WholesaleProduct, wholesaleProductRow } from '@typings'
 import axios from 'axios'
 import Head from 'next/head'
-import { Button, Card, CardBody, CardHeader, Col, Container, Input, Row } from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col, Container, Row } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import useSWR from 'swr'
 import InventoryBinsModal from '@components/InventoryBinsModal'
 import ReceivingOrderTable from '@components/ReceivingOrderTable'
-import ReceivingOrderModal from '@components/ReceivingOrderModal'
+import ReceivingOrderModal from '@components/modals/receivings/ReceivingOrderModal'
 import { toast } from 'react-toastify'
+import { DebounceInput } from 'react-debounce-input'
+import ReceivingOrderModalUploading from '@components/modals/receivings/ReceivingOrderModalUploading'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -39,6 +41,8 @@ type Props = {
   }
 }
 
+const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
+
 const CreateWholeSaleOrder = ({ session }: Props) => {
   const { state, setWholeSaleOrderModal }: any = useContext(AppContext)
   const title = `Create Receiving Order | ${session?.user?.businessName}`
@@ -47,8 +51,13 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
   const [allData, setAllData] = useState<wholesaleProductRow[]>([])
   const [searchValue, setSearchValue] = useState<string>('')
 
-  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(state.user.businessId ? `/api/getReceivingInventory?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher)
+  const [receivingUploadingModal, setreceivingUploadingModal] = useState({
+    show: false,
+  })
+
+  const { data } = useSWR(state.user.businessId ? `/api/getReceivingInventory?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher, {
+    revalidateOnFocus: false,
+  })
 
   const filteredItems = useMemo(() => {
     return allData.filter(
@@ -103,36 +112,48 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
               <Col lg={12}>
                 <Card>
                   <CardHeader>
-                    <div className='d-flex justify-content-between align-center mt-3 mb-3'>
+                    <div className='d-flex justify-content-between align-items-start'>
                       <div>
-                        <h3 className='fs-3 fw-semibold text-primary'>Total SKUs in Order: {orderProducts.length}</h3>
-                        <h5 className='fs-5 fw-normal text-primary'>
+                        <h3 className='fs-5 fw-semibold text-primary'>Total SKUs in Order: {orderProducts.length}</h3>
+                        <h5 className='fs-6 fw-normal text-primary'>
                           Total Qty to Receive in Order: {orderProducts.reduce((total: number, item: wholesaleProductRow) => total + Number(item.orderQty), 0)}
                         </h5>
                       </div>
-                      <div>
-                        <Button className='fs-6 btn' color='primary' onClick={() => setWholeSaleOrderModal(!state.showWholeSaleOrderModal)}>
+                      <div className='d-flex justify-content-end align-items-start gap-2'>
+                        <Button className='fs-7 btn' color='info' onClick={() => setreceivingUploadingModal({ show: true })}>
+                          Create Uploading File
+                        </Button>
+                        <Button className='fs-7 btn' color='primary' onClick={() => setWholeSaleOrderModal(!state.showWholeSaleOrderModal)}>
                           Create Receiving
                         </Button>
                       </div>
                     </div>
-                    <form className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
-                      <div className='position-relative'>
-                        <Input
-                          type='text'
-                          className='form-control'
-                          placeholder='Search...'
-                          id='search-options'
-                          value={searchValue}
-                          onChange={(e) => setSearchValue(e.target.value)}
-                        />
-                        <span className='mdi mdi-magnify search-widget-icon'></span>
-                        <span className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none' id='search-close-options'></span>
+                    <div className='w-100 d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-end align-items-lg-center px-0'>
+                      <div className='app-search p-0 col-sm-12 col-lg-4'>
+                        <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+                          <DebounceInput
+                            type='text'
+                            minLength={1}
+                            debounceTimeout={500}
+                            className='form-control fs-6'
+                            placeholder='Search...'
+                            id='search-options'
+                            value={searchValue}
+                            onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
+                            onChange={(e) => setSearchValue(e.target.value)}
+                          />
+                          <span className='mdi mdi-magnify search-widget-icon fs-5'></span>
+                          <span
+                            className='d-flex align-items-center justify-content-center bg-light'
+                            style={{
+                              cursor: 'pointer',
+                            }}
+                            onClick={() => setSearchValue('')}>
+                            <i className='mdi mdi-window-close fs-5 m-0 px-2 py-0 text-muted' />
+                          </span>
+                        </div>
                       </div>
-                      <Button className='btn-soft-dark' onClick={() => setSearchValue('')}>
-                        Clear
-                      </Button>
-                    </form>
+                    </div>
                   </CardHeader>
                   <CardBody>
                     <ReceivingOrderTable allData={allData} filteredItems={filteredItems} setAllData={setAllData} pending={pending} />
@@ -145,6 +166,14 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
       </React.Fragment>
       {state.showInventoryBinsModal && <InventoryBinsModal />}
       {state.showWholeSaleOrderModal && <ReceivingOrderModal orderNumberStart={orderNumberStart} orderProducts={orderProducts} />}
+      {receivingUploadingModal.show && (
+        <ReceivingOrderModalUploading
+          orderNumberStart={orderNumberStart}
+          skuList={allData}
+          receivingUploadingModal={receivingUploadingModal}
+          setreceivingUploadingModal={setreceivingUploadingModal}
+        />
+      )}
     </div>
   )
 }

@@ -274,9 +274,12 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
                 <DropdownMenu className='dropdown-menu-end' container={'body'}>
                   <DropdownItem onClick={() => handleRepairFBAWorkflow(row.inboundPlanId)}>
                     <div>
-                      <i className='las la-undo-alt align-middle me-2 fs-5 text-danger'></i>
-                      <span className='fs-6 fw-normal text-danger'>Retry Inbound Plan</span>
+                      <i className='las la-undo-alt align-middle me-2 fs-5 text-info'></i>
+                      <span className='fs-6 fw-normal'>Repair Inbound Plan</span>
                     </div>
+                  </DropdownItem>
+                  <DropdownItem className='text-danger' onClick={() => setcancelInboundPlanModal({ show: true, inboundPlanId: row.inboundPlanId, inboundPlanName: row.name })}>
+                    <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>

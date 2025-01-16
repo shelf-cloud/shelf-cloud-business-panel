@@ -149,7 +149,7 @@ const EditManualReceivingLog = ({ showEditOrderQty, setshowEditOrderQty, mutateR
           </div>
           <Row md={12}>
             <div className='text-end mt-4'>
-              <Button disabled={loading || error ? true : false} type='button' size='sm' color='success' className='btn' onClick={handleEditManualReceiving}>
+              <Button disabled={loading || error ? true : false} type='button' color='success' className='btn fs-7' onClick={handleEditManualReceiving}>
                 {loading ? (
                   <span>
                     <Spinner color='#fff' size={'sm'} /> Saving...

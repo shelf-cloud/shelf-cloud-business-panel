@@ -342,7 +342,7 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
           </Col>
           <Row md={12}>
             <div className='text-end'>
-              <Button disabled={hasErrors} type='button' color='success' size='sm' className='btn' onClick={handleSubmitProductsToManualReceiving}>
+              <Button disabled={hasErrors} type='button' color='success' className='btn fs-7' onClick={handleSubmitProductsToManualReceiving}>
                 {loading ? (
                   <span>
                     <Spinner color='#fff' size={'sm'} /> Adding...

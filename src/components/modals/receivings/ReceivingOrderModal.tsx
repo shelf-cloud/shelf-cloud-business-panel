@@ -38,6 +38,9 @@ const ReceivingOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
     }),
     onSubmit: async (values, { resetForm }) => {
       setLoading(true)
+
+      const creatingUploadedReceiving = toast.loading('Creating Receiving...')
+
       const response = await axios.post(`api/createReceivingOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
         shippingProducts: orderProducts.map((product) => {
           return {
@@ -64,12 +67,22 @@ const ReceivingOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
       })
 
       if (!response.data.error) {
-        toast.success(response.data.msg)
+        toast.update(creatingUploadedReceiving, {
+          render: response.data.message,
+          type: 'success',
+          isLoading: false,
+          autoClose: 3000,
+        })
         resetForm()
         setWholeSaleOrderModal(false)
         router.push('/Receivings')
       } else {
-        toast.error(response.data.msg)
+        toast.update(creatingUploadedReceiving, {
+          render: response.data.message,
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+        })
       }
       setLoading(false)
     },
@@ -84,7 +97,7 @@ const ReceivingOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
     <Modal
       fade={false}
       size='lg'
-      id='myModal'
+      id='createReceivingOrderFromTable'
       isOpen={state.showWholeSaleOrderModal}
       toggle={() => {
         setWholeSaleOrderModal(!state.showWholeSaleOrderModal)
@@ -95,24 +108,25 @@ const ReceivingOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
         }}
         className='modal-title'
         id='myModalLabel'>
-        Receiving Order
+        Create Receiving From Table
       </ModalHeader>
       <ModalBody>
         <Form onSubmit={HandleAddProduct}>
           <Row>
-            <h5 className='fs-5 m-3 fw-bolder'>Order Details</h5>
+            <h5 className='fs-5 fw-bolder'>Order Details</h5>
+            <p className='m-0 mb-2 fs-7'>{`Add "Quantity to Receive" in the table for each SKU to create a receiving order.`}</p>
             <Col md={6}>
               <FormGroup className='mb-3'>
-                <Label htmlFor='firstNameinput' className='form-label'>
+                <Label htmlFor='orderNumber' className='fs-7 form-label text-muted'>
                   *Transaction Number
                 </Label>
                 <div className='input-group'>
-                  <span className='input-group-text fw-semibold fs-5' id='basic-addon1'>
+                  <span className='input-group-text fw-semibold fs-6' id='basic-addon1'>
                     {orderNumberStart}
                   </span>
                   <Input
                     type='text'
-                    className='form-control'
+                    className='form-control fs-6'
                     id='orderNumber'
                     name='orderNumber'
                     onChange={validation.handleChange}
@@ -125,14 +139,14 @@ const ReceivingOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
               </FormGroup>
             </Col>
             <Col md={12}>
-              <table className='table align-middle table-responsive table-nowrap table-striped-columns'>
-                <thead>
+              <table className='table table-sm align-middle table-responsive table-nowrap table-striped-columns'>
+                <thead className='table-light'>
                   <tr>
                     <th>SKU</th>
                     <th className='text-center'>Total to Received</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className='fs-7'>
                   {orderProducts?.map((product, index: number) => (
                     <tr key={index}>
                       <td>{product.sku}</td>
@@ -144,8 +158,14 @@ const ReceivingOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
             </Col>
             <Col md={12}>
               <div className='text-end'>
-                <Button disabled={loading} type='submit' color='success' className='btn'>
-                  {loading ? <Spinner color='#fff' /> : 'Confirm Order'}
+                <Button disabled={loading} type='submit' color='success' className='btn fs-7'>
+                  {loading ? (
+                    <span>
+                      <Spinner color='#fff' size={'sm'} /> Creating...
+                    </span>
+                  ) : (
+                    'Create Receiving'
+                  )}
                 </Button>
               </div>
             </Col>
