@@ -89,15 +89,14 @@ const Product_Page_Layout = ({}: Props) => {
             <Card className='fs-6'>
               {!loading ? (
                 <>
-                  <CardHeader className='d-flex flex-row justify-content-between align-items-start'>
+                  <CardHeader className='d-flex flex-column justify-content-between align-items-start flex-lg-row'>
                     <div>
                       <Link href={'/Products?brand=All&supplier=All&category=All&condition=All'}>
                         <Button
                           color='primary'
                           outline
-                          // className="d-flex flex-row gap-1 text-decoration-none text-primary"
                           style={{ cursor: 'pointer' }}>
-                          <span className='icon-on'>
+                          <span className='icon-on fs-7'>
                             <i className='ri-arrow-left-line align-bottom me-1' />
                             Products
                           </span>
@@ -105,9 +104,9 @@ const Product_Page_Layout = ({}: Props) => {
                       </Link>
                       <div className='mt-3'>
                         <p className='fw-semibold fs-3'>
-                          <span className='text-muted fw-normal'>SKU:</span> {info![1]}{' '}
+                          <span className='text-muted fs-4'>SKU:</span> {info![1]}{' '}
                           <i
-                            className='ri-file-copy-line fs-4 my-0 mx-1 p-0 text-muted'
+                            className='ri-file-copy-line fs-5 my-0 mx-1 p-0 text-muted'
                             style={{ cursor: 'pointer' }}
                             onClick={() => {
                               navigator.clipboard.writeText(info![1])
@@ -126,7 +125,7 @@ const Product_Page_Layout = ({}: Props) => {
                   </CardHeader>
                   <CardBody>
                     <Row>
-                      <Col className='gap-2 d-flex flex-column'>
+                      <Col xs='12' md='12' lg='9' className='gap-2 d-flex flex-column overflow-auto'>
                         <General_Product_Details
                           inventoryId={productDetails?.inventoryId}
                           sku={productDetails?.sku}
@@ -145,10 +144,10 @@ const Product_Page_Layout = ({}: Props) => {
                           useExpireDate={productDetails?.useExpireDate ?? false}
                           expirationTime={productDetails?.expirationTime ?? 0}
                         />
-                        <Nav className='pt-2 nav-tabs-custom rounded card-header-tabs border-bottom-0' role='tablist'>
+                        <Nav className='pt-2 border-bottom-0' role='tablist'>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
-                              className={'fs-4 fw-semibold ' + (activeTab == '1' ? 'text-primary' : 'text-muted')}
+                              className={'fs-5 fw-semibold ' + (activeTab == '1' ? 'text-primary' : 'text-muted')}
                               onClick={() => {
                                 tabChange('1')
                               }}>
@@ -161,7 +160,7 @@ const Product_Page_Layout = ({}: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={'fs-4 fw-semibold ' + (activeTab == '2' ? 'text-primary' : 'text-muted')}
+                              className={'fs-5 fw-semibold ' + (activeTab == '2' ? 'text-primary' : 'text-muted')}
                               onClick={() => {
                                 tabChange('2')
                               }}
@@ -175,7 +174,7 @@ const Product_Page_Layout = ({}: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={'fs-4 fw-semibold ' + (activeTab == '3' ? 'text-primary' : 'text-muted')}
+                              className={'fs-5 fw-semibold ' + (activeTab == '3' ? 'text-primary' : 'text-muted')}
                               onClick={() => {
                                 tabChange('3')
                               }}
@@ -189,7 +188,7 @@ const Product_Page_Layout = ({}: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={'fs-4 fw-semibold ' + (activeTab == '4' ? 'text-primary' : 'text-muted')}
+                              className={'fs-5 fw-semibold ' + (activeTab == '4' ? 'text-primary' : 'text-muted')}
                               onClick={() => {
                                 tabChange('4')
                               }}
@@ -203,7 +202,7 @@ const Product_Page_Layout = ({}: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={'fs-4 fw-semibold ' + (activeTab == '5' ? 'text-primary' : 'text-muted')}
+                              className={'fs-5 fw-semibold ' + (activeTab == '5' ? 'text-primary' : 'text-muted')}
                               onClick={() => {
                                 tabChange('5')
                               }}
@@ -280,7 +279,7 @@ const Product_Page_Layout = ({}: Props) => {
                           amazonFBA={productDetails?.amazonFBA ?? []}
                         />
                       </Col>
-                      <Col xs='3' className='gap-4 d-flex flex-column'>
+                      <Col xs='12' md='12' lg='3' className='gap-4 d-flex flex-column'>
                         <Status_Product_Details
                           active={productDetails?.activeState ?? true}
                           isKit={productDetails?.isKit ? true : false}

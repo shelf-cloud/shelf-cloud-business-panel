@@ -137,7 +137,7 @@ const General_Product_Details = ({
     <div className='px-4 pt-2 pb-4 border-bottom'>
       <p className='fs-4 text-primary fw-semibold'>General</p>
       {!showEditFields ? (
-        <div className='w-full d-flex justify-content-start align-items-start gap-4'>
+        <div className='w-full d-flex flex-column justify-content-start align-items-start gap-4 flex-lg-row'>
           <div
             style={{
               width: '30%',

@@ -84,7 +84,7 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
             <th>Inbound</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className='fs-7'>
           <tr className='text-center'>
             <td className='fw-semibold'>ShelfCloud</td>
             <td>{onhand}</td>
@@ -144,7 +144,7 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
               <th>Inbound</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className='fs-7'>
             <tr className='text-center'>
               <td className='fw-semibold'>Amazon FBA</td>
               <td>

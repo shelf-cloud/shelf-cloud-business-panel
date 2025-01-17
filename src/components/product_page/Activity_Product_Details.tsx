@@ -10,23 +10,23 @@ type Props = {
 const Activity_Product_Details = ({ latestOrders }: Props) => {
   const { setShipmentDetailsModal }: any = useContext(AppContext)
   return (
-    <div className='border-start ps-4 py-2 w-100'>
+    <div className='border-start ps-4 py-1 w-100'>
       <p className='fs-4 text-primary fw-semibold'>Recent Activity</p>
       <table className='table table-sm'>
-        <thead>
+        <thead className='table-light'>
           <tr>
             <th>Date</th>
             <th>Order No.</th>
             <th className='text-center'>Qty</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className='fs-7'>
           {latestOrders?.length > 0 ? (
             latestOrders
               ?.sort((a, b) => (moment(a.date) > moment(b.date) ? -1 : 1))
               .map((order) => (
                 <tr key={order.orderNumber}>
-                  <td>{order.date}</td>
+                  <td className='text-nowrap'>{order.date}</td>
                   <td
                     className='text-primary'
                     style={{ cursor: 'pointer' }}

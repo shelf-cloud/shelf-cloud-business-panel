@@ -86,7 +86,7 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
                 <th>Value</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className='fs-7'>
               {upc && (
                 <tr>
                   <td>UPC</td>
@@ -138,7 +138,7 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
                           disabled
                           type='text'
                           className='form-control fs-6'
-                          style={{ padding: '0.2rem 0.9rem' }}
+                          style={{ minWidth: '150px', padding: '0.2rem 0.9rem' }}
                           placeholder='Upc...'
                           id='upc'
                           name='upc'
@@ -152,7 +152,7 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
                     {({ remove, push }) => (
                       <>
                         <tr>
-                          <td className='text-muted align-middle'>Additional Identifiers</td>
+                          <td className='text-muted align-middle text-nowrap'>Additional Identifiers</td>
                           <td></td>
                           <td className='align-middle'>
                             <div className='d-flex flex-row flex-nowrap justify-content-center align-items-center mb-0 h-100'>

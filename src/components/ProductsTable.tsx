@@ -105,23 +105,23 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
 
   const columns: any = [
     {
-      name: <span className='font-weight-bold fs-13'></span>,
+      name: <span className='fw-bold fs-6'></span>,
       selector: () => <></>,
       sortable: true,
-      center: true,
+      left: true,
       compact: true,
-      width: 'fit-content',
+      width: '13px',
       sortFunction: AddedOrderSort,
     },
     {
-      name: <span className='font-weight-bold fs-13'>Image</span>,
+      name: <span className='fw-bold fs-6'>Image</span>,
       selector: (row: Product) => {
         return (
           <Link href={`/product/${row.inventoryId}/${row.sku}`} passHref>
             <a>
               <div
                 style={{
-                  width: '70px',
+                  width: '50px',
                   height: '60px',
                   margin: '2px 0px',
                   position: 'relative',
@@ -148,11 +148,11 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       sortable: false,
       center: true,
       compact: true,
-      width: '80px',
+      width: '65px',
     },
     {
       name: (
-        <span className='font-weight-bold fs-13'>
+        <span className='fw-bold fs-6'>
           Title
           <br />
           SKU
@@ -160,30 +160,28 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       ),
       selector: (row: Product) => {
         return (
-          <div>
+          <>
             <Link href={`/product/${row.inventoryId}/${row.sku}`} passHref>
               <a>
-                <p className='text-black' style={{ margin: '0px', fontWeight: '600' }}>
-                  {row.title}
-                </p>
+                <p className='fs-7 m-0 fw-semibold text-black'>{row.title}</p>
               </a>
             </Link>
-            <p style={{ margin: '0px' }} className='d-flex flex-row justify-content-start align-items-start'>
+            <p className='m-0 fs-7 d-flex flex-row justify-content-start align-items-start'>
               {row.sku} {row.note != '' && <i className='ri-information-fill ms-2 fs-5 text-warning' id={`tooltip${row.inventoryId}`}></i>}
             </p>
             {row.note != '' && <TooltipComponent target={`tooltip${row.inventoryId}`} text={row.note} />}
-          </div>
+          </>
         )
       },
       sortable: true,
       wrap: true,
-      grow: 1.5,
+      compact: true,
+      minWidth: '150px',
       sortFunction: caseInsensitiveSort,
-      //   compact: true,
     },
     {
       name: (
-        <span className='font-weight-bold fs-13'>
+        <span className='fw-bold fs-6'>
           ASIN
           <br />
           FNSKU
@@ -193,7 +191,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       ),
       selector: (row: Product) => {
         return (
-          <div className='d-flex flex-column justify-item-start gap-0'>
+          <div className='fs-7 d-flex flex-column justify-item-start gap-0'>
             {row.asin !== '' && (
               <a className='m-0' href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank'>
                 {row.asin}
@@ -210,33 +208,40 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       },
       sortable: false,
       compact: true,
-      grow: 1.3,
+      // grow: 1,
     },
     {
-      name: <span className='font-weight-bold fs-13'>Brand</span>,
+      name: <span className='fw-bold fs-6'>Brand</span>,
       selector: (row: Product) => row.brand,
       sortable: true,
-      center: false,
+      left: true,
       compact: true,
       wrap: true,
+      style: {
+        fontSize: '0.7rem',
+      },
     },
     {
-      name: <span className='font-weight-bold fs-13'>Supplier</span>,
+      name: <span className='fw-bold fs-6'>Supplier</span>,
       selector: (row: Product) => row.supplier,
       sortable: true,
-      center: true,
+      left: true,
       compact: true,
       wrap: true,
+      style: {
+        fontSize: '0.7rem',
+      },
+      width: '100px',
     },
     {
-      name: <span className='font-weight-bold fs-13'>Quantity</span>,
+      name: <span className='fw-bold fs-6'>Quantity</span>,
       selector: (row: Product) => {
         return (
-          <div className='d-flex flex-column justify-content-center align-items-center'>
+          <div className='fs-7 d-flex flex-column justify-content-center align-items-center'>
             <Button
               color='primary'
               outline
-              className='btn btn-ghost-primary'
+              className='fs-7 btn btn-ghost-primary'
               onClick={() => {
                 setModalProductInfo(row.inventoryId, state.user.businessId, row.sku)
               }}>
@@ -257,17 +262,18 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       },
       sortable: true,
       compact: true,
-      center: true,
+      left: true,
+      width: '90px',
       sortFunction: quantitySort,
     },
     {
-      name: <span className='font-weight-bold fs-13'>Unit Dimensions</span>,
+      name: <span className='fw-bold fs-6'>Unit Dimensions</span>,
       sortable: false,
       compact: true,
       grow: 1.4,
       selector: (row: Product) => {
         return (
-          <div style={{ padding: '7px 0px' }}>
+          <div className='fs-7' style={{ padding: '7px 0px' }}>
             <Row>
               <span>
                 Weight: {row.weight} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'lb' : 'kg')}
@@ -293,13 +299,13 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       },
     },
     {
-      name: <span className='font-weight-bold fs-13'>Box Dimensions</span>,
+      name: <span className='fw-bold fs-6'>Box Dimensions</span>,
       sortable: false,
       compact: true,
       grow: 1.4,
       selector: (row: Product) => {
         return (
-          <div style={{ padding: '7px 5px 7px 0px' }}>
+          <div className='fs-7' style={{ padding: '7px 5px 7px 0px' }}>
             <Row>
               <span>
                 Weight: {row.boxWeight} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'lb' : 'kg')}
@@ -325,29 +331,26 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       },
     },
     {
-      name: <span className='font-weight-bold fs-13'>Qty/Box</span>,
+      name: <span className='fw-bold fs-6'>Qty/Box</span>,
       selector: (row: Product) => row.boxQty,
       sortable: true,
       center: true,
       compact: true,
+      style: {
+        fontSize: '0.7rem',
+      },
     },
     {
-      name: <span className='font-weight-bold fs-13'>Action</span>,
+      name: <span className='fw-bold fs-6'>Action</span>,
       sortable: false,
       compact: true,
       cell: (row: Product) => {
         return (
-          <UncontrolledDropdown className='dropdown d-inline-block'>
+          <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
             <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
-              <i className='mdi mdi-dots-vertical align-middle fs-3 m-0 px-2 py-0' style={{ color: '#919FAF' }} />
+              <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-2 py-0' style={{ color: '#919FAF' }} />
             </DropdownToggle>
             <DropdownMenu className='dropdown-menu-end' container={'body'}>
-              {/* <DropdownItem
-                className='edit-item-btn'
-                onClick={() => setModalProductDetails(row.btns.inventoryId, state.user.businessId, row.btns.sku)}>
-                <i className='ri-pencil-fill align-middle me-2 fs-5 text-muted'></i>
-                <span className='fs-6 fw-normal'>Edit</span>
-              </DropdownItem> */}
               <DropdownItem className='edit-item-btn'>
                 <Link href={`/product/${row.inventoryId}/${row.sku}`} passHref>
                   <a>

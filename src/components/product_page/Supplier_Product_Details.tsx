@@ -25,7 +25,7 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
   const [showEditFields, setShowEditFields] = useState(false)
   const [isLoading, setisLoading] = useState(false)
 
-  const landedCost = sellerCost + inboundShippingCost + otherCosts ?? 0
+  const landedCost = sellerCost + inboundShippingCost + otherCosts || 0
   const totalLeadTime = productionTime + transitTime
 
   const validation = useFormik({
@@ -107,7 +107,7 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
                 <th></th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className='fs-7'>
               <tr className='text-center'>
                 <td className={sellerCost ? '' : 'text-muted fw-light fst-italic'}>{sellerCost ? FormatCurrency(state.currentRegion, sellerCost) : 'No Cost'}</td>
                 <td className={inboundShippingCost ? '' : 'text-muted fw-light fst-italic'}>
@@ -157,6 +157,7 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
                       <Input
                         type='number'
                         className='form-control fs-6'
+                        style={{ minWidth: '60px' }}
                         placeholder='Seller Cost...'
                         id='sellerCost'
                         name='sellerCost'
@@ -214,6 +215,7 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
                         disabled
                         type='number'
                         className='form-control fs-6'
+                        style={{ minWidth: '60px' }}
                         placeholder='Seller Cost...'
                         id='landedCost'
                         name='landedCost'

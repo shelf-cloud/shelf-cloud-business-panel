@@ -29,7 +29,7 @@ const Measure_Product_Details = ({ weight, length, width, height, boxQty, boxWei
             <th>Height</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className='fs-7'>
           <tr className='text-center'>
             <td className='fw-semibold'>Each</td>
             <td>1</td>

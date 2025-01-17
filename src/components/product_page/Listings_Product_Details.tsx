@@ -18,7 +18,7 @@ const Listings_Product_Details = ({ listings }: Props) => {
             <th>Store</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className='fs-7'>
           {listings.length > 0 ? (
             listings.map((store) => (
               <tr key={store.store} className='text-center'>
@@ -29,8 +29,8 @@ const Listings_Product_Details = ({ listings }: Props) => {
                     src={store.channel ? store.channel : NoImageAdress}
                     alt='product Image'
                     style={{
-                      width: '25px',
-                      height: '25px',
+                      width: '20px',
+                      height: '20px',
                       objectFit: 'contain',
                     }}
                   />

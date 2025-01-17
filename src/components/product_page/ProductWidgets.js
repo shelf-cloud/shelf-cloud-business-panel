@@ -21,7 +21,7 @@ const ProductWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValu
               </div>
               <div className='d-flex align-items-end justify-content-between mt-1'>
                 <div>
-                  <h4 className='fs-22 fw-semibold ff-secondary'>
+                  <h4 className='fs-4 fw-semibold'>
                     <span className='counter-value'>
                       <CountUp start={0} end={onhand} decimals={0} duration={1} />
                     </span>
@@ -41,7 +41,7 @@ const ProductWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValu
               </div>
               <div className='d-flex align-items-end justify-content-between mt-1'>
                 <div>
-                  <h4 className='fs-22 fw-semibold ff-secondary'>
+                  <h4 className='fs-4 fw-semibold'>
                     <span className='counter-value'>
                       <CountUp
                         start={0}
@@ -69,7 +69,7 @@ const ProductWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValu
               </div>
               <div className='d-flex align-items-end justify-content-between mt-1'>
                 <div>
-                  <h4 className='fs-22 fw-semibold ff-secondary'>
+                  <h4 className='fs-4 fw-semibold'>
                     <span className='counter-value'>
                       <CountUp
                         start={0}
@@ -98,7 +98,7 @@ const ProductWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValu
               <div className='d-flex align-items-end justify-content-between mt-1'>
                 <div>
                   {inventoryValue > 0 ? (
-                    <h4 className='fs-22 fw-semibold ff-secondary'>
+                    <h4 className='fs-4 fw-semibold'>
                       <span className='counter-value' id='inventoryValue'>
                         <CountUp
                           start={0}

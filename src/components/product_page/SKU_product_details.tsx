@@ -112,8 +112,8 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                 <th></th>
               </tr>
             </thead>
-            <tbody>
-              <tr className='text-center'>
+            <tbody className='fs-7'>
+              <tr className='text-center text-nowrap'>
                 <td>{sku}</td>
                 <td>{upc}</td>
                 <td>{htsCode}</td>
@@ -167,6 +167,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                         disabled
                         type='text'
                         className='form-control fs-6'
+                        style={{ minWidth: '80px' }}
                         placeholder='sku...'
                         id='sku'
                         name='sku'
@@ -185,6 +186,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                         disabled
                         type='text'
                         className='form-control fs-6'
+                        style={{ minWidth: '80px' }}
                         placeholder='upc...'
                         id='upc'
                         name='upc'
@@ -202,6 +204,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                       <Input
                         type='text'
                         className='form-control fs-6'
+                        style={{ minWidth: '80px' }}
                         placeholder='HTS Code...'
                         id='htsCode'
                         name='htsCode'

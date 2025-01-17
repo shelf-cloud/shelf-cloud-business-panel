@@ -10,17 +10,17 @@ type Props = {
 const Bins_Product_Details = ({ bins }: Props) => {
   const { state }: any = useContext(AppContext)
   return (
-    <div className='border-start ps-4 py-2 w-100'>
+    <div className='border-start ps-4 py-1 w-100'>
       <p className='fs-4 text-primary fw-semibold'>Storage Bins</p>
       <table className='table table-sm'>
-        <thead>
+        <thead className='table-light'>
           <tr className='text-center'>
             <th>Name</th>
             <th>Est. Cost</th>
             <th>Qty</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className='fs-7'>
           {bins?.length > 0 ? (
             bins?.map((order) => (
               <tr key={order.binName} className='text-center'>
