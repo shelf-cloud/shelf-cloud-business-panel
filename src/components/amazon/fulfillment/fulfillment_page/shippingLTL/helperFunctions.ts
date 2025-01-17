@@ -40,6 +40,19 @@ export const findLtlAlphaCode = (transportationOptions: TransportationOptionShip
   return optimalAlphaCode || Object.keys(alphaCodeData)[0]
 }
 
+export const validateIfPlacementOptionHasSPD = (transportationOptions: TransportationOptionShipment) => {
+  const shipments = Object.values(transportationOptions)
+
+  for (const shipment of shipments) {
+    if (
+      (shipment
+        .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+        .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]?.quote?.cost.amount! || 0) <= 0
+    )
+      return false
+  }
+}
+
 export const setInitialLTLTransportationOptions = (transportationOptions: TransportationOptionShipment) => {
   const ltlAlphaCode = findLtlAlphaCode(transportationOptions)
   const shipments = Object.values(transportationOptions)

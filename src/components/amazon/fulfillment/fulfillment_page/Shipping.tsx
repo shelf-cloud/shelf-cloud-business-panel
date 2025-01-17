@@ -15,7 +15,7 @@ import axios from 'axios'
 import ShippingSelectDate from './ShippingSelectDate'
 import useEffectAfterMount from '@hooks/useEffectAfterMount'
 import SelectLTLFreightReadyDate from './shippingLTL/SelectLTLFreightReadyDate'
-import { setInitialLTLTransportationOptions } from './shippingLTL/helperFunctions'
+import { setInitialLTLTransportationOptions, validateIfPlacementOptionHasSPD } from './shippingLTL/helperFunctions'
 import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
@@ -51,7 +51,13 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
     sameShipDate: true,
     shipDate: '',
     sameShippingMode: true,
-    shippingMode: 'SPD',
+    shippingMode: validateIfPlacementOptionHasSPD(
+      !inboundPlan.placementOptionId
+        ? inboundPlan.transportationOptions[inboundPlan.placementOptions[0].placementOptionId]
+        : inboundPlan.transportationOptions[inboundPlan.placementOptionId]
+    )
+      ? 'SPD'
+      : 'LTL',
     sameShippingCarrier: 'amazon',
     nonAmazonCarrier: '',
     nonAmazonAlphaCode: '',
@@ -60,7 +66,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
       ? inboundPlan.placementOptions[0].shipmentIds.reduce((acc: { [shipmentId: string]: FinalShipment }, shipmentId) => {
           acc[shipmentId] = {
             shipmentId: shipmentId,
-            shippingMode: 'SPD',
+            shippingMode: validateIfPlacementOptionHasSPD(inboundPlan.transportationOptions[inboundPlan.placementOptions[0].placementOptionId]) ? 'SPD' : 'LTL',
             deliveryWindow: '',
             loadingDeliveryWindowOptions: false,
           }
@@ -71,7 +77,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
           ?.shipmentIds.reduce((acc: { [shipmentId: string]: FinalShipment }, shipmentId) => {
             acc[shipmentId] = {
               shipmentId: shipmentId,
-              shippingMode: 'SPD',
+              shippingMode: validateIfPlacementOptionHasSPD(inboundPlan.transportationOptions[inboundPlan.placementOptionId]) ? 'SPD' : 'LTL',
               deliveryWindow: '',
               loadingDeliveryWindowOptions: false,
             }
@@ -118,7 +124,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
           Object.values(inboundPlan.transportationOptions[placementOption.placementOptionId]).reduce((total, shipment) => {
             const subtotal = shipment
               .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
-              .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
+              .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]?.quote?.cost.amount!
             return total + subtotal
           }, 0) > 0
       )
@@ -229,9 +235,10 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
       if (finalShippingCharges.shippingMode === 'SPD') {
         if (finalShippingCharges.sameShippingCarrier === 'amazon') {
           return Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]).reduce((total, shipment) => {
-            const subtotal = shipment
-              .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
-              .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
+            const subtotal =
+              shipment
+                .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]?.quote?.cost.amount! || 0
             return total + subtotal
           }, 0)
         }
@@ -248,9 +255,9 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
           if (finalShippingCharges.sameShippingCarrier === 'amazon') {
             return (
               total +
-              Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipment.shipmentId])
-                .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
-                .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
+                Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipment.shipmentId])
+                  .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                  .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]?.quote?.cost.amount! || 0
             )
           } else {
             return total
@@ -485,8 +492,9 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                         return total + subtotal
                       }, 0) > 0 &&
                       Object.values(inboundPlan.transportationOptions[placementOption.placementOptionId]).reduce((total, shipment) => {
-                        const subtotal = shipment.find((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')?.quote
-                          ?.cost.amount!
+                        const subtotal =
+                          shipment.find((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')?.quote?.cost.amount! ||
+                          shipment.find((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'FREIGHT_LTL')?.quote?.cost.amount!
                         return total + subtotal
                       }, 0) > 0 && (
                         <Card
@@ -598,12 +606,20 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                 {finalShippingCharges.sameShippingMode && (
                   <div className='d-flex justify-content-start align-items-start gap-3'>
                     <Card
-                      onClick={() =>
-                        !inboundPlan.steps[3].complete &&
+                      onClick={() => {
+                        if (
+                          (Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]).reduce((total, shipment) => {
+                            const subtotal = shipment
+                              .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                              .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]?.quote?.cost.amount!
+                            return total + subtotal
+                          }, 0) || 0) <= 0
+                        )
+                          return
                         setfinalShippingCharges((prev) => {
                           return { ...prev, shippingMode: 'SPD', sameShippingCarrier: 'amazon', nonAmazonCarrier: '', nonAmazonAlphaCode: '' }
                         })
-                      }
+                      }}
                       className={'shadow-sm ' + (finalShippingCharges.shippingMode === 'SPD' && 'border border-3 border-success')}
                       style={{ cursor: 'pointer' }}>
                       <CardBody className='d-flex justify-content-start align-items-center gap-1'>
@@ -620,17 +636,25 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                         <div>
                           <p className='m-0 p-0 fs-7 fw-semibold'>Small Parcel Delivery (SPD)</p>
                           <p className='m-0 p-0 fs-7'>
-                            Starting at{' '}
-                            {FormatCurrency(
-                              state.currentRegion,
-                              inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]
-                                ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]).reduce((total, shipment) => {
-                                    const subtotal = shipment
-                                      .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
-                                      .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
-                                    return total + subtotal
-                                  }, 0)
-                                : 0
+                            {Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]).reduce((total, shipment) => {
+                              const subtotal = shipment
+                                .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                                .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]?.quote?.cost.amount!
+                              return total + subtotal
+                            }, 0) > 0 ? (
+                              `Starting at ${FormatCurrency(
+                                state.currentRegion,
+                                inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]
+                                  ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]).reduce((total, shipment) => {
+                                      const subtotal = shipment
+                                        .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                                        .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]?.quote?.cost.amount!
+                                      return total + subtotal
+                                    }, 0) || 0
+                                  : 0
+                              )}`
+                            ) : (
+                              <span className='text-danger fw-semibold'>Not Available</span>
                             )}
                           </p>
                         </div>
@@ -702,16 +726,25 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                           <p className='m-0 p-0 fs-7 fw-semibold'>UPS (Amazon Partnered Carrier)*</p>
                           <p className='m-0 p-0 fs-7'>Pickup cost is NOT Included with the rate</p>
                           <p className='m-0 p-0 fs-5 fw-bold'>
-                            {FormatCurrency(
-                              state.currentRegion,
-                              inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]
-                                ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]).reduce((total, shipment) => {
-                                    const subtotal = shipment
-                                      .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
-                                      .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
-                                    return total + subtotal
-                                  }, 0)
-                                : 0
+                            {(Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]).reduce((total, shipment) => {
+                              const subtotal = shipment
+                                .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                                .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]?.quote?.cost.amount!
+                              return total + subtotal
+                            }, 0) || 0) > 0 ? (
+                              FormatCurrency(
+                                state.currentRegion,
+                                inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]
+                                  ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]).reduce((total, shipment) => {
+                                      const subtotal = shipment
+                                        .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                                        .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]?.quote?.cost.amount!
+                                      return total + subtotal
+                                    }, 0) || 0
+                                  : 0
+                              )
+                            ) : (
+                              <span className='text-danger fw-semibold'>Not Available</span>
                             )}
                           </p>
                         </CardBody>
@@ -820,11 +853,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                     }}>
                                     <img
                                       loading='lazy'
-                                      src={
-                                        inboundPlan.skus_details[item.msku].image
-                                          ? inboundPlan.skus_details[item.msku].image
-                                          : NoImageAdress
-                                      }
+                                      src={inboundPlan.skus_details[item.msku].image ? inboundPlan.skus_details[item.msku].image : NoImageAdress}
                                       alt='product Image'
                                       style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                                     />
@@ -838,15 +867,20 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                           {/* SAME SHIPPING MODE && AMAZON */}
                           {finalShippingCharges.sameShippingMode && finalShippingCharges.shippingMode === 'SPD' && finalShippingCharges.sameShippingCarrier === 'amazon' && (
                             <p className='m-0 mt-3 p-0 fs-7 text-end'>
-                              Estimated Carrier Charges:{' '}
                               <span className='fw-semibold'>
-                                {FormatCurrency(
-                                  state.currentRegion,
-                                  inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]
-                                    ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
-                                        .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
-                                        .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
-                                    : 0
+                                {(Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
+                                  .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                                  .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]?.quote?.cost.amount! || 0) > 0 ? (
+                                  `Estimated Carrier Charges: ${FormatCurrency(
+                                    state.currentRegion,
+                                    inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]
+                                      ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
+                                          .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                                          .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]?.quote?.cost.amount! || 0
+                                      : 0
+                                  )}`
+                                ) : (
+                                  <span className='text-danger fw-semibold'>Not Available</span>
                                 )}
                               </span>
                             </p>
@@ -942,6 +976,11 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                     style={{ cursor: 'pointer' }}
                                     id={`shippingModeSPD-${shipmentId}`}
                                     name={`shippingModeSPD-${shipmentId}`}
+                                    disabled={
+                                      (Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
+                                        .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                                        .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]?.quote?.cost.amount! || 0) <= 0
+                                    }
                                     checked={finalShippingCharges.shipments[shipmentId].shippingMode === 'SPD'}
                                     onChange={() =>
                                       setfinalShippingCharges((prev) => {
@@ -974,14 +1013,19 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                   <div>
                                     <p className='m-0 p-0 fs-7 fw-semibold'>Small Parcel Delivery (SPD)</p>
                                     <p className='m-0 p-0 fs-7'>
-                                      Starting at{' '}
-                                      {FormatCurrency(
-                                        state.currentRegion,
-                                        inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]
-                                          ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
-                                              .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
-                                              .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
-                                          : 0
+                                      {(Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
+                                        .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                                        .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]?.quote?.cost.amount! || 0) > 0 ? (
+                                        `Starting at ${FormatCurrency(
+                                          state.currentRegion,
+                                          inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]
+                                            ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
+                                                .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                                                .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]?.quote?.cost.amount! || 0
+                                            : 0
+                                        )}`
+                                      ) : (
+                                        <span className='text-danger fw-semibold'>Not Available</span>
                                       )}
                                     </p>
                                   </div>
@@ -1085,13 +1129,19 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                       <div className={'' + (finalShippingCharges.sameShippingCarrier !== 'amazon' && 'text-muted')}>
                                         <p className='m-0 p-0 fs-7'>UPS (Amazon Partnered Carrier)</p>
                                         <p className='m-0 p-0 fs-7 fw-bold'>
-                                          {FormatCurrency(
-                                            state.currentRegion,
-                                            inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]
-                                              ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
-                                                  .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
-                                                  .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0].quote?.cost.amount!
-                                              : 0
+                                          {(Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
+                                            .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                                            .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]?.quote?.cost.amount! || 0) > 0 ? (
+                                            FormatCurrency(
+                                              state.currentRegion,
+                                              inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]
+                                                ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
+                                                    .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                                                    .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]?.quote?.cost.amount! || 0
+                                                : 0
+                                            )
+                                          ) : (
+                                            <span className='text-danger fw-semibold'>Not Available</span>
                                           )}
                                         </p>
                                       </div>
