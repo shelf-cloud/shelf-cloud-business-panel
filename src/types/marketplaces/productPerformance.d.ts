@@ -85,6 +85,41 @@ export interface Fees {
     VariableClosingFee?: number
 }
 
+export interface SummaryProductPerformance {
+    grossRevenue: number;
+    expenses: number;
+    unitsSold: number;
+    basePrice: number;
+    totalTax: number;
+    taxCollected: number;
+    taxWithheld: number;
+    totalShipping: number;
+    totalMarketplacesFees: number;
+    reimbursements: number;
+    refunds: number;
+    refundsQty: number;
+    returns: number;
+    promos: number;
+    productCost: number;
+    productCostOfRefunds: number;
+    shippingCost: number;
+    storageCost: number;
+    sponsoredProducts: number;
+    displayAds: number;
+    keywordAds: number;
+    marketplaces: { [key: string]: Marketplace };
+    sellerCost: number;
+    inboundShippingCost: number;
+    otherCosts: number;
+    shippingToFBA: number;
+    shippingToFbaCost: number;
+    shippingToFbaCostOfRefunds: number;
+    shelfCloudCost: number
+    datesArray: { [key: string]: ProductDatesArray };
+    totalExpenses: number;
+    totalCogs: number;
+    totalPPCCosts: number;
+}
 
 // export interface ProductsPerformanceResponse {
 //     error: boolean;

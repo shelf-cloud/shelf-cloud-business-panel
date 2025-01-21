@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useMemo, useState } from 'react'
-import { Card, CardBody, Collapse, Container, Row, Spinner } from 'reactstrap'
+import { Button, Card, CardBody, Collapse, Container, Row, Spinner } from 'reactstrap'
 import { GetServerSideProps } from 'next'
 import { getSession } from '@auth/client'
 import Head from 'next/head'
@@ -18,6 +18,7 @@ import SelectMarketplaceDropDown from '@components/ui/SelectMarketplaceDropDown'
 import { toast } from 'react-toastify'
 import ProductPerformanceTable from '@components/marketplaces/productPerformanceTable'
 import ExportProductsPerformance from '@components/marketplaces/exportProductsPerformance'
+import SummaryPP from '@components/modals/productPerformance/SummaryPP'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -70,6 +71,9 @@ type MarketpalcesInfo = {
     logo: string
   }[]
 }
+
+const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
+
 const Profits = ({ session, sessionToken }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
@@ -82,7 +86,10 @@ const Profits = ({ session, sessionToken }: Props) => {
   const [selectedMarketplace, setSelectedMarketplace] = useState({ storeId: 9999, name: 'All Marketplaces', logo: '' })
   const [productsData, setProductsData] = useState<ProductsPerformanceResponse>({})
 
-  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
+  const [summaryModal, setsummaryModal] = useState({
+    show: false,
+  })
+
   const { data }: { data?: MarketpalcesInfo } = useSWR(
     state.user.businessId ? `/api/marketplaces/getMarketplacesInfo?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
     fetcher,
@@ -207,6 +214,7 @@ const Profits = ({ session, sessionToken }: Props) => {
     if (showWithSales || showWithSales !== '') filterString += `&showWithSales=${showWithSales}`
     router.push(filterString, undefined, { shallow: true })
   }
+
   const title = `Product Performance | ${session?.user?.businessName}`
   return (
     <div>
@@ -239,6 +247,9 @@ const Profits = ({ session, sessionToken }: Props) => {
                   />
                   <SelectMarketplaceDropDown selectionInfo={data?.marketplaces || []} selected={selectedMarketplace} handleSelection={setSelectedMarketplace} />
                   <ExportProductsPerformance products={filterDataTable || []} marketpalces={data?.marketplaces || []} startDate={startDate} endDate={endDate} />
+                  <Button color='info' onClick={() => setsummaryModal({ show: true })}>
+                    PP Summary
+                  </Button>
                 </div>
                 <div className='col-sm-12 col-xl-3'>
                   <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
@@ -312,6 +323,7 @@ const Profits = ({ session, sessionToken }: Props) => {
             </Card>
           </Container>
         </div>
+        {summaryModal.show && <SummaryPP productsData={filterDataTable || []} summaryModal={summaryModal} setsummaryModal={setsummaryModal} />}
       </React.Fragment>
     </div>
   )

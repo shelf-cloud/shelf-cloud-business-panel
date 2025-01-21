@@ -172,7 +172,7 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
                       style={{ textDecoration: 'none' }}>
                       {row.asin}
                     </a>
-                    <i className='ri-file-copy-line fs-5 my-0 mx-2 p-0 text-muted' style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(row.asin)} />
+                    <i className='ri-file-copy-line fs-6 my-0 ms-1 me-2 p-0 text-muted' style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(row.asin)} />
                   </>
                 )}
                 {row.barcode && (
@@ -186,9 +186,9 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
         )
       },
       sortable: true,
-      center: false,
-      compact: false,
-      grow: 2,
+      left: true,
+      compact: true,
+      grow: 2.5,
       sortFunction: caseInsensitiveSort,
     },
     {
