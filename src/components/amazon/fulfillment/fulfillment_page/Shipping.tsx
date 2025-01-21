@@ -15,7 +15,7 @@ import axios from 'axios'
 import ShippingSelectDate from './ShippingSelectDate'
 import useEffectAfterMount from '@hooks/useEffectAfterMount'
 import SelectLTLFreightReadyDate from './shippingLTL/SelectLTLFreightReadyDate'
-import { setInitialLTLTransportationOptions, validateIfPlacementOptionHasSPD } from './shippingLTL/helperFunctions'
+import { commonPlacementOptionCarriers, setInitialLTLTransportationOptions, validateIfPlacementOptionHasSPD } from './shippingLTL/helperFunctions'
 import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
@@ -154,15 +154,6 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
       }
     }
   }, [inboundPlan.placementOptions, inboundPlan.transportationOptions])
-
-  // useEffectAfterMount(() => {
-  //   if (inboundPlan.placementOptions.length > 0) {
-  //     const placementOptionsExpired = inboundPlan.placementOptions.some((placementOption) => moment(placementOption.expiration).isBefore(moment()))
-  //     if (placementOptionsExpired && !watingRepsonse.shippingExpired && !inboundPlan.steps[3].complete) {
-  //       handlePlacementExpired(inboundPlan.inboundPlanId)
-  //     }
-  //   }
-  // }, [])
 
   const handleGetDeliveryWindowOptions = async (placementOptionId: string, shipmentId: string) => {
     if (deliveryWindowOptions[placementOptionId] && deliveryWindowOptions[placementOptionId][shipmentId]) return
@@ -542,7 +533,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                               Status: <span className='fw-bold text-info'>{placementOption.status}</span>
                             </p>
                             <p className='m-0 p-0 fs-7'>
-                              Expires: <span className='text-danger'>{moment(placementOption.expiration).format('LL h:m a')}</span>
+                              Expires: <span className='text-danger'>{moment.utc(placementOption.expiration).local().format('LL h:mm a')}</span>
                             </p>
 
                             {placementOption.fees.map((fee, feeIndex) => (
@@ -787,7 +778,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                     <Card
                       key={shipmentId}
                       className='m-0 shadow-sm'
-                      style={{ width: 'fit-content', maxWidth: '400px', zIndex: placementOptionSelected.shipmentIds.length - shipmentIndex }}>
+                      style={{ width: 'fit-content', maxWidth: '430px', zIndex: placementOptionSelected.shipmentIds.length - shipmentIndex }}>
                       <CardHeader>
                         <p className='m-0 p-0 fw-bold fs-6'>Shipment #{shipmentIndex + 1}</p>
                         <p className='m-0 p-0 fs-7 text-muted fw-light'>ID: {shipmentId}</p>
@@ -956,6 +947,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                 shipmentId={shipmentId}
                                 selectedLTLTransportationOption={finalShippingCharges.ltlTransportationOptions[shipmentId]}
                                 setfinalShippingCharges={setfinalShippingCharges}
+                                commonCarriers={commonPlacementOptionCarriers(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId])}
                                 transportationOptions={Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
                                   .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'FREIGHT_LTL')
                                   .sort((a, b) => (moment(a.carrierAppointment?.startTime) > moment(b.carrierAppointment?.startTime) ? 1 : -1))}
@@ -1262,6 +1254,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                     shipmentId={shipmentId}
                                     selectedLTLTransportationOption={finalShippingCharges.ltlTransportationOptions[shipmentId]}
                                     setfinalShippingCharges={setfinalShippingCharges}
+                                    commonCarriers={commonPlacementOptionCarriers(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId])}
                                     transportationOptions={Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
                                       .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'FREIGHT_LTL')
                                       .sort((a, b) => (moment(a.carrierAppointment?.startTime) > moment(b.carrierAppointment?.startTime) ? 1 : -1))}

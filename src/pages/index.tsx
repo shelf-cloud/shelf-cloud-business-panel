@@ -78,7 +78,8 @@ const Home = ({ session, sessionToken }: Props) => {
     session && state.user.businessId
       ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/orders/getSalesOverTime?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${dashboardStartDate}&endDate=${dashboardEndDate}&storeId=9999`
       : null,
-    fetcherSalesOverTime
+    fetcherSalesOverTime,
+    { revalidateOnFocus: false }
   )
 
   const handleChangeDates = (dateStr: string) => {

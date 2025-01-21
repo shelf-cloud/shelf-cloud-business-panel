@@ -98,3 +98,32 @@ export const setLTLTransportationOption = (transportationOptions: Transportation
     ltlAlphaCode: selectedOption.carrier.alphaCode,
   }
 }
+
+export const commonPlacementOptionCarriers = (transportationOptions: TransportationOptionShipment) => {
+  const shipments = Object.values(transportationOptions)
+  const carrierCount: Record<string, { name: string; count: number }> = {}
+
+  for (const shipment of shipments) {
+    const seenAlphaCodes = new Set<string>()
+
+    for (const option of shipment
+      .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'FREIGHT_LTL')
+      .sort((a, b) => (moment(a.carrierAppointment?.startTime) > moment(b.carrierAppointment?.startTime) ? 1 : -1))) {
+      const { alphaCode, name } = option.carrier
+
+      if (!seenAlphaCodes.has(alphaCode)) {
+        seenAlphaCodes.add(alphaCode)
+
+        if (!carrierCount[alphaCode]) {
+          carrierCount[alphaCode] = { name, count: 0 }
+        }
+
+        carrierCount[alphaCode].count += 1
+      }
+    }
+  }
+
+  return Object.entries(carrierCount)
+    .filter(([_, { count }]) => count === shipments.length)
+    .map(([alphaCode, { name }]) => ({ value: alphaCode, label: name }))
+}

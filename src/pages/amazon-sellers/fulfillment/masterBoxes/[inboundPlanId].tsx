@@ -82,12 +82,15 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
       .then(({ data }: { data: { inboundPlan: InboundPlan } }) => {
         setinboundPlanDetails(data.inboundPlan)
         setloading(false)
-        Object.entries(data.inboundPlan.steps).find(([step, stepinfo]) => {
-          if (stepinfo.complete === false) {
-            setActiveTab(step)
-            return true
-          }
-        })
+        const allComplete = Object.values(data.inboundPlan.steps).every((stepinfo) => stepinfo.complete)
+        if (allComplete) {
+          setActiveTab(Object.keys(data.inboundPlan.steps).pop()?.toString() || '1')
+          return true
+        }
+        const incompleteStep = Object.entries(data.inboundPlan.steps).find(([_, stepinfo]) => !stepinfo.complete)
+        if (incompleteStep) {
+          setActiveTab(incompleteStep[0].toString())
+        }
       })
       .catch(({ error }) => {
         if (axios.isCancel(error)) {
