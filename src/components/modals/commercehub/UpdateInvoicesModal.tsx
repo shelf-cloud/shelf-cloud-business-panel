@@ -10,7 +10,6 @@ import Papa from 'papaparse'
 import { useFormik } from 'formik'
 import { validateCitiBankLowesFile, validateHomeDepotFile, validateLowesFile } from './validateFileTypesInfo'
 import { CommerceHubStore } from '@typesTs/commercehub/invoices'
-import { mutate } from 'swr'
 import router from 'next/router'
 
 type Props = {
@@ -19,10 +18,11 @@ type Props = {
   }
   setshowUpdateInvoices: (prev: any) => void
   clearFilters?: () => void
+  mutate: () => void
   stores: CommerceHubStore[]
 }
 
-const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearFilters, stores }: Props) => {
+const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearFilters, stores, mutate }: Props) => {
   const { state }: any = useContext(AppContext)
   const [selectedFiles, setselectedFiles] = useState([])
   const [errorFile, setErrorFile] = useState(false)
@@ -142,7 +142,8 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
             })
             resetForm()
             setshowUpdateInvoices({ show: false })
-            clearFilters ? clearFilters() : mutate(`/api/commerceHub/getSummary?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+            clearFilters && clearFilters()
+            mutate()
           }
           setLoading(false)
         },

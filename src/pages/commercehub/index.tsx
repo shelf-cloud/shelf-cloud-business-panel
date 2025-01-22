@@ -57,7 +57,7 @@ const Dashboard = ({ session }: Props) => {
     show: false,
   })
 
-  const { data: summary } = useSWR<DashboardResponse>(
+  const { data: summary, mutate } = useSWR<DashboardResponse>(
     state.user.businessId ? `/api/commerceHub/getSummary?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
     fetcherSummary,
     {
@@ -107,7 +107,9 @@ const Dashboard = ({ session }: Props) => {
             )}
           </Container>
         </div>
-        {showUpdateInvoices.show && <UpdateInvoicesModal showUpdateInvoices={showUpdateInvoices} setshowUpdateInvoices={setshowUpdateInvoices} stores={stores?.stores ?? []} />}
+        {showUpdateInvoices.show && (
+          <UpdateInvoicesModal showUpdateInvoices={showUpdateInvoices} setshowUpdateInvoices={setshowUpdateInvoices} stores={stores?.stores ?? []} mutate={mutate} />
+        )}
       </React.Fragment>
     </div>
   )

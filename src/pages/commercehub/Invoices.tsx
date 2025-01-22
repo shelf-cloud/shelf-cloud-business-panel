@@ -353,7 +353,7 @@ const Invoices = ({ session, sessionToken }: Props) => {
             </Card>
           </Container>
         </div>
-        {showUpdateInvoices.show && <UpdateInvoicesModal showUpdateInvoices={showUpdateInvoices} setshowUpdateInvoices={setshowUpdateInvoices} clearFilters={clearFilters} stores={stores?.stores ?? []}/>}
+        {showUpdateInvoices.show && <UpdateInvoicesModal showUpdateInvoices={showUpdateInvoices} setshowUpdateInvoices={setshowUpdateInvoices} clearFilters={clearFilters} stores={stores?.stores ?? []} mutate={mutate}/>}
         {editCommentModal.show && <EditInvoiceCommerceHubCommentModal editCommentModal={editCommentModal} setEditCommentModal={setEditCommentModal} mutate={mutate} />}
       </React.Fragment>
     </div>
