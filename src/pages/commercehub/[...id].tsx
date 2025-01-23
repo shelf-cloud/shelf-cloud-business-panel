@@ -16,6 +16,7 @@ import { FormatCurrency } from '@lib/FormatNumbers'
 import { DebounceInput } from 'react-debounce-input'
 import FilterCheckNumber from '@components/commerceHub/FilterCheckNumber'
 import BulkActionsForSelected from '@components/commerceHub/BulkActionsForSelected'
+import { getCheckAmountTotal } from '@components/commerceHub/helperFunctions'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -43,7 +44,7 @@ type Props = {
 }
 
 type PendingInfo = {
-  totalPending: number
+  checkTotal: number
   totalInvoices: number
 }
 
@@ -117,14 +118,28 @@ const CheckNumberDetails = ({ session }: Props) => {
   }, [data?.invoices, searchValue, invoiceType])
 
   const pendingInfo = useMemo(() => {
-    if (!data?.invoices || data.invoices.length == 0) return { totalPending: 0, totalInvoices: 0 }
+    if (!data?.invoices || data.invoices.length == 0) return { checkTotal: 0, totalInvoices: 0 }
     return data.invoices.reduce(
       (pendingInfo: PendingInfo, invoice) => {
-        pendingInfo.totalPending += invoice.checkTotal + invoice.cashDiscountTotal
+        const { orderTotal, checkTotal, cashDiscountTotal } = invoice
+
+        const orderTotalShort = parseFloat(orderTotal.toFixed(2))
+        const checkTotalShort = parseFloat(checkTotal.toFixed(2))
+
         if (invoice.checkTotal > 0) pendingInfo.totalInvoices += 1
+
+        if (checkTotalShort < 0) {
+          pendingInfo.checkTotal += checkTotalShort + cashDiscountTotal
+        } else if (!orderTotalShort) {
+          pendingInfo.checkTotal += checkTotalShort + cashDiscountTotal
+        } else if (orderTotalShort == checkTotalShort) {
+          pendingInfo.checkTotal += checkTotalShort + cashDiscountTotal
+        } else {
+          pendingInfo.checkTotal += orderTotalShort + cashDiscountTotal
+        }
         return pendingInfo
       },
-      { totalPending: 0, totalInvoices: 0 }
+      { checkTotal: 0, totalInvoices: 0 }
     )
   }, [data?.invoices])
 
@@ -215,7 +230,7 @@ const CheckNumberDetails = ({ session }: Props) => {
       left: true,
       compact: true,
       wrap: true,
-      grow: 1.3
+      grow: 1.3,
     },
     {
       name: <span className='fw-bold fs-6'>Invoice Date</span>,
@@ -227,7 +242,7 @@ const CheckNumberDetails = ({ session }: Props) => {
     },
     {
       name: <span className='fw-bold fs-6'>Invoice Total</span>,
-      selector: (row: Invoice) => row.checkTotal > 0 && <span className='fs-7'>{row.checkTotal ? FormatCurrency(state.currentRegion, row.checkTotal) : ''}</span>,
+      selector: (row: Invoice) => row.checkTotal > 0 && <span className='fs-7'>{row.checkTotal ? FormatCurrency(state.currentRegion, row.orderTotal) : ''}</span>,
       sortable: true,
       center: true,
       compact: true,
@@ -248,12 +263,7 @@ const CheckNumberDetails = ({ session }: Props) => {
         <div className='d-flex flex-column justify-content-center align-items-center'>
           <p className='m-0 fw-bold fs-6'>Check Amount</p>
           <p className='m-0 text-muted'>
-            <span className='fw-semibold'>
-              {FormatCurrency(
-                state.currentRegion,
-                filterInvoices.reduce((acc, invoice) => acc + invoice.checkTotal + invoice.cashDiscountTotal, 0)
-              )}
-            </span>
+            <span className='fw-semibold'>{FormatCurrency(state.currentRegion, getCheckAmountTotal(filterInvoices))}</span>
           </p>
         </div>
       ),
@@ -273,7 +283,9 @@ const CheckNumberDetails = ({ session }: Props) => {
       name: <span className='fw-bolder fs-6'>Charges</span>,
       selector: (row: Invoice) => {
         if (row.checkTotal > 0) {
-          return <span className={'text-center fs-7 ' + (row.cashDiscountTotal < 0 ? 'text-danger' : 'text-muted')}>{FormatCurrency(state.currentRegion, row.cashDiscountTotal)}</span>
+          return (
+            <span className={'text-center fs-7 ' + (row.cashDiscountTotal < 0 ? 'text-danger' : 'text-muted')}>{FormatCurrency(state.currentRegion, row.cashDiscountTotal)}</span>
+          )
         } else {
           return <></>
         }
@@ -385,7 +397,7 @@ const CheckNumberDetails = ({ session }: Props) => {
                   </div>
                   <div className='d-flex flex-column justify-content-start align-items-end'>
                     {pendingInfo.totalInvoices > 0 && <p className='m-0 p-0 fs-6'>Total Invoices: {pendingInfo.totalInvoices}</p>}
-                    <p className='m-0 p-0 fs-6'>Check Total: {FormatCurrency(state.currentRegion, pendingInfo.totalPending)}</p>
+                    <p className='m-0 p-0 fs-6'>Check Total: {FormatCurrency(state.currentRegion, pendingInfo.checkTotal)}</p>
                   </div>
                 </div>
               </CardHeader>

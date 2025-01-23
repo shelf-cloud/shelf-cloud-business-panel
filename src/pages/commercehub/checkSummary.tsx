@@ -16,7 +16,7 @@ import useSWR from 'swr'
 import { CheckSummaryResponse, CheckSummaryType } from '@typesTs/commercehub/checkSummary'
 import CheckSummaryTable from '@components/commerceHub/CheckSummaryTable'
 import { toast } from 'react-toastify'
-import { generateDocument } from '@lib/commerceHub/getDocument'
+import { generateDocument } from '@components/commerceHub/generateDocuments/getDocument'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']

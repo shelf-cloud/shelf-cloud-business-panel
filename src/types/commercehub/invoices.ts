@@ -17,6 +17,7 @@ export interface Invoice {
     invoiceDate: string | null
     dueDate: string | null
     checkDate: string | null
+    orderTotal: number
     invoiceTotal: number
     checkTotal: number
     cashDiscountTotal: number

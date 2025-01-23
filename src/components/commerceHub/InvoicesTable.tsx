@@ -4,10 +4,12 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { Invoice } from '@typesTs/commercehub/invoices'
 import moment from 'moment'
+import Link from 'next/link'
 import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import { toast } from 'react-toastify'
 import { Button, UncontrolledTooltip } from 'reactstrap'
+import { getInvoiceTotal } from './helperFunctions'
 
 type SortByType = {
   key: string
@@ -43,7 +45,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
     {
       name: (
         <span className='fw-bold fs-6 text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'storeId', asc: !sortBy.asc })}>
-          Marketplace
+          Store
           {sortBy.key === 'storeId' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
         </span>
       ),
@@ -71,6 +73,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       wrap: true,
       center: true,
       compact: true,
+      width: '40px',
     },
     {
       name: <span className='fw-bold fs-6 text-nowrap'>Invoice No.</span>,
@@ -92,7 +95,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       sortable: false,
       wrap: false,
       center: false,
-      compact: true,
+      compact: false,
     },
     {
       name: <span className='fw-bold fs-6 text-nowrap'>Order No.</span>,
@@ -125,11 +128,18 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
     {
       name: (
         <span className='fw-bold fs-6 text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'closedDate', asc: !sortBy.asc })}>
-          Invoice Date{' '}
+          Closed Date{' '}
           {sortBy.key === 'closedDate' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
         </span>
       ),
-      selector: (row: Invoice) => <span className='fs-7'>{moment.utc(row.closedDate).local().format('D MMM YYYY')}</span>,
+      selector: (row: Invoice) => (
+        <span className='fs-7'>
+          {moment
+            .utc(row.closedDate)
+            .local()
+            .format('D MMM YYYY')}
+        </span>
+      ),
       sortable: false,
       center: true,
       compact: true,
@@ -141,7 +151,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
           {sortBy.key === 'orderTotal' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
         </span>
       ),
-      selector: (row: Invoice) => <span className='fs-7'>{row.invoiceTotal ? FormatCurrency(state.currentRegion, row.invoiceTotal) : ''}</span>,
+      selector: (row: Invoice) => <span className='fs-7'>{FormatCurrency(state.currentRegion, getInvoiceTotal(row.orderTotal, row.invoiceTotal))}</span>,
       sortable: false,
       center: true,
       compact: true,
@@ -152,7 +162,11 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
           Due Date {sortBy.key === 'dueDate' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
         </span>
       ),
-      selector: (row: Invoice) => <span className='fs-7'>{moment.utc(row.closedDate).local().add(row.payterms, 'days').format('D MMM YYYY')}</span>,
+      selector: (row: Invoice) => (
+        <span className='fs-7'>
+          {row.dueDate ? moment.utc(row.dueDate).local().format('D MMM YYYY') : moment.utc(row.closedDate).local().add(row.payterms, 'days').format('D MMM YYYY')}
+        </span>
+      ),
       sortable: false,
       center: true,
       compact: true,
@@ -176,7 +190,11 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
           {sortBy.key === 'checkNumber' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
         </span>
       ),
-      selector: (row: Invoice) => <span className='fs-7'>{row.checkNumber}</span>,
+      selector: (row: Invoice) => (
+        <Link href={`/commercehub/${row.storeName}/${row.checkNumber}`}>
+          <a className='fs-7 text-primary fw-normal'>{row.checkNumber}</a>
+        </Link>
+      ),
       sortable: false,
       center: true,
       compact: true,
@@ -192,6 +210,23 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       sortable: false,
       center: true,
       compact: true,
+    },
+    {
+      name: <span className='fw-bold fs-6 text-nowrap'>Deductions</span>,
+      selector: (row: Invoice) => {
+        if (!row.checkTotal) return <span className='fs-7 text-muted'>{FormatCurrency(state.currentRegion, 0)}</span>
+        const deductions = parseFloat((row.orderTotal - row.checkTotal).toFixed(2))
+        if (deductions > 0) {
+          return <span className={'fs-7 ' + (deductions > 0 ? 'text-danger' : 'text-muted')}>{row.checkTotal ? `-${FormatCurrency(state.currentRegion, deductions)}` : ''}</span>
+        } else {
+          return <span className='fs-7 text-muted'>{FormatCurrency(state.currentRegion, 0)}</span>
+        }
+      },
+      sortable: false,
+      center: true,
+      compact: true,
+      grow: 0,
+      width: '80px',
     },
     {
       name: (
@@ -244,6 +279,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       sortable: false,
       center: true,
       compact: true,
+      width: '70px',
     },
     {
       name: <span className='fw-bold fs-6 text-nowrap'>Notes</span>,
@@ -275,6 +311,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       sortable: false,
       left: true,
       compact: true,
+      width: '40px',
     },
   ]
 

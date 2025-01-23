@@ -18,7 +18,7 @@ import FilterCommerceHubInvoices from '@components/commerceHub/FilterCommerceHub
 import { toast } from 'react-toastify'
 import BulkActionsForSelected from '@components/commerceHub/BulkActionsForSelected'
 import EditCommerceHubCommentModal from '@components/modals/commercehub/EditCommerceHubCommentModal'
-import { generateDocument } from '@lib/commerceHub/getDocument'
+import { generateDocument } from '@components/commerceHub/generateDocuments/getDocument'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']

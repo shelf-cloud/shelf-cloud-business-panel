@@ -17,7 +17,7 @@ import FilterCommerceHubInvoices from '@components/commerceHub/FilterCommerceHub
 import useSWR from 'swr'
 import { toast } from 'react-toastify'
 import BulkActionsForSelected from '@components/commerceHub/BulkActionsForSelected'
-import { generateDocument } from '@lib/commerceHub/getDocument'
+import { generateDocument } from '@components/commerceHub/generateDocuments/getDocument'
 import EditInvoiceCommerceHubCommentModal from '@components/modals/commercehub/EditInvoiceCommerceHubCommentModal'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
