@@ -44,12 +44,11 @@ export const validateIfPlacementOptionHasSPD = (transportationOptions: Transport
   const shipments = Object.values(transportationOptions)
 
   for (const shipment of shipments) {
-    if (
-      (shipment
-        .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
-        .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]?.quote?.cost.amount! || 0) <= 0
-    )
-      return false
+    const spdCost = shipment
+      .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+      .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]?.quote?.cost.amount! || 0
+      if (spdCost <= 0) return false
+      return true
   }
 }
 

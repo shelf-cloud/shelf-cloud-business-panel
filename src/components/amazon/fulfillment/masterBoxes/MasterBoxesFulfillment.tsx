@@ -87,6 +87,7 @@ const MasterBoxesFulfillment = ({ lisiting, pending, sessionToken, mutateLink }:
           (masterBoxVisibility === undefined || masterBoxVisibility === '' ? item.showForMasterBoxes : masterBoxVisibility === 'false' ? item.showForMasterBoxes : true) &&
           (item?.product_name?.toLowerCase().includes(searchValue.toLowerCase()) ||
             searchValue.split(' ').every((word) => item?.product_name?.toLowerCase().includes(word.toLowerCase())) ||
+            searchValue.split(' ').every((word) => item?.title?.toLowerCase().includes(word.toLowerCase())) ||
             item?.sku?.toLowerCase().includes(searchValue.toLowerCase()) ||
             item?.shelfcloud_sku?.toLowerCase().includes(searchValue.toLowerCase()) ||
             item?.asin?.toLowerCase().includes(searchValue.toLowerCase()) ||
