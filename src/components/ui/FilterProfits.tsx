@@ -61,7 +61,7 @@ const FilterProfits = ({ grossmin, grossmax, profitmin, profitmax, unitsmin, uni
       supplier: '',
       brand: '',
       category: '',
-      showWithSales: '',
+      showWithSales: 'true',
     })
     router.push('/marketplaces/productPerformance', undefined, { shallow: true })
     setFilterOpen(false)

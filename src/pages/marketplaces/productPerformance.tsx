@@ -148,7 +148,7 @@ const Profits = ({ session, sessionToken }: Props) => {
           (supplier !== undefined && supplier !== '' ? item.supplier.toLowerCase().includes(supplier.toLowerCase()) : true) &&
           (brand !== undefined && brand !== '' ? item.brand.toLowerCase() === brand.toLowerCase() : true) &&
           (category !== undefined && category !== '' ? item.category.toLowerCase() === category.toLowerCase() : true) &&
-          (showWithSales === undefined || showWithSales === '' ? item.unitsSold > 0 : showWithSales === 'false' ? item.unitsSold > 0 : true)
+          (showWithSales == undefined || !showWithSales ? true : showWithSales === 'false' ? item.unitsSold > 0 : true)
       )
     }
 
@@ -164,7 +164,7 @@ const Profits = ({ session, sessionToken }: Props) => {
           (supplier !== undefined && supplier !== '' ? item.supplier.toLowerCase().includes(supplier.toLowerCase()) : true) &&
           (brand !== undefined && brand !== '' ? item.brand.toLowerCase() === brand.toLowerCase() : true) &&
           (category !== undefined && category !== '' ? item.category.toLowerCase() === category.toLowerCase() : true) &&
-          (showWithSales == undefined || showWithSales == '' ? item.unitsSold > 0 : showWithSales === 'false' ? item.unitsSold > 0 : true) &&
+          (showWithSales == undefined || !showWithSales ? true : showWithSales === 'false' ? item.unitsSold > 0 : true) &&
           (item.sku.toLowerCase().includes(searchValue.toLowerCase()) ||
             item.asin.toLowerCase().includes(searchValue.toLowerCase()) ||
             item.title.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -289,7 +289,7 @@ const Profits = ({ session, sessionToken }: Props) => {
                       supplier={supplier !== undefined ? supplier : ''}
                       brand={brand !== undefined ? brand : ''}
                       category={category !== undefined ? category : ''}
-                      showWithSales={showWithSales !== undefined || showWithSales === '' ? showWithSales : 'false'}
+                      showWithSales={showWithSales !== undefined || showWithSales ? showWithSales : 'true'}
                       supplierOptions={data?.suppliers || []}
                       brandOptions={data?.brands || []}
                       categoryOptions={data?.categories || []}
