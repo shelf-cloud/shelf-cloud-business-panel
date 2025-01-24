@@ -73,12 +73,12 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       wrap: true,
       center: true,
       compact: true,
-      width: '40px',
+      width: '35px',
     },
     {
       name: <span className='fw-bold fs-6 text-nowrap'>Invoice No.</span>,
       selector: (row: Invoice) => (
-        <div className='d-flex flex-wrap justify-content-start align-items-center'>
+        <div className='d-flex flex-nowrap justify-content-start align-items-center'>
           <p className='m-0 p-0 fw-semibold fs-7'>{row.invoiceNumber}</p>{' '}
           <i
             className='ri-file-copy-line fs-6 my-0 mx-1 p-0 text-muted'
@@ -94,7 +94,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       ),
       sortable: false,
       wrap: false,
-      center: false,
+      left: true,
       compact: false,
     },
     {
@@ -225,7 +225,6 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       sortable: false,
       center: true,
       compact: true,
-      grow: 0,
       width: '80px',
     },
     {
@@ -239,7 +238,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
         if (pending > 0) {
           return <span className='text-danger text-center fs-7'>{FormatCurrency(state.currentRegion, pending)}</span>
         } else {
-          return <span className='text-success text-center fs-7'>{FormatCurrency(state.currentRegion, 0)}</span>
+          return <span className='text-muted text-center fs-7'>{FormatCurrency(state.currentRegion, 0)}</span>
         }
       },
       sortable: false,
@@ -255,7 +254,12 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       ),
       selector: (row: Invoice) => {
         if (row.checkNumber) {
-          return <span className='badge text-uppercase badge-soft-success p-2'>{` Paid `}</span>
+          const deductions = parseFloat((row.orderTotal - row.checkTotal).toFixed(2))
+          if (deductions > 0) {
+            return <span className='badge text-uppercase badge-soft-success p-2'>{` W/ Deductions `}</span>
+          } else {
+            return <span className='badge text-uppercase badge-soft-success p-2'>{` Paid `}</span>
+          }
         }
         switch (row.commerceHubStatus) {
           case 'paid':
@@ -279,7 +283,6 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       sortable: false,
       center: true,
       compact: true,
-      width: '70px',
     },
     {
       name: <span className='fw-bold fs-6 text-nowrap'>Notes</span>,
@@ -311,7 +314,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       sortable: false,
       left: true,
       compact: true,
-      width: '40px',
+      width: '70px',
     },
   ]
 

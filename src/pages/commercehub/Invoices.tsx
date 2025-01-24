@@ -50,6 +50,7 @@ type Props = {
 const ITEMS_PER_PAGE = 100
 const STATUS_OPTIONS = [
   { value: 'paid', label: 'Paid' },
+  { value: 'paidWithDeductions', label: 'Paid with Deductions' },
   { value: 'unpaid', label: 'Unpaid' },
   // { value: 'overdue', label: 'Overdue' },
   { value: 'reviewing', label: 'Reviewing' },
