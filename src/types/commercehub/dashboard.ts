@@ -7,10 +7,10 @@ export interface Invoice {
     totalInvoices: number
     storeId: number
     checkDate: string
-    invoiceTotal: number
+    orderTotal: number
     checkTotal: number
     deductions: number
-    cashDiscountTotal: number
+    charges: number
     checkNumber?: string
     storeName: string
     channelLogo: string

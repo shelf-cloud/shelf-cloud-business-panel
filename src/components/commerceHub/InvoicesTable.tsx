@@ -9,7 +9,7 @@ import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import { toast } from 'react-toastify'
 import { Button, UncontrolledTooltip } from 'reactstrap'
-import { getInvoiceTotal } from './helperFunctions'
+import { getTotalPaid, getTotalPending } from './helperFunctions'
 
 type SortByType = {
   key: string
@@ -132,14 +132,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
           {sortBy.key === 'closedDate' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
         </span>
       ),
-      selector: (row: Invoice) => (
-        <span className='fs-7'>
-          {moment
-            .utc(row.closedDate)
-            .local()
-            .format('D MMM YYYY')}
-        </span>
-      ),
+      selector: (row: Invoice) => <span className='fs-7'>{moment.utc(row.closedDate).local().format('D MMM YYYY')}</span>,
       sortable: false,
       center: true,
       compact: true,
@@ -147,11 +140,11 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
     {
       name: (
         <span className='fw-bold fs-6 text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'orderTotal', asc: !sortBy.asc })}>
-          Invoice Total{' '}
+          Order Total{' '}
           {sortBy.key === 'orderTotal' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
         </span>
       ),
-      selector: (row: Invoice) => <span className='fs-7'>{FormatCurrency(state.currentRegion, getInvoiceTotal(row.orderTotal, row.invoiceTotal))}</span>,
+      selector: (row: Invoice) => <span className='fs-7'>{FormatCurrency(state.currentRegion, row.orderTotal)}</span>,
       sortable: false,
       center: true,
       compact: true,
@@ -200,32 +193,39 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       compact: true,
     },
     {
+      name: <span className='fw-bold fs-6 text-nowrap'>Deductions</span>,
+      selector: (row: Invoice) => {
+        if (!row.checkNumber) return <></>
+        return <span className={'fs-7 text-danger'}>{FormatCurrency(state.currentRegion, row.deductions)}</span>
+      },
+      sortable: false,
+      center: true,
+      compact: true,
+    },
+    {
+      name: <span className='fw-bold fs-6 text-nowrap'>Charges</span>,
+      selector: (row: Invoice) => {
+        if (!row.checkNumber) return <></>
+        return <span className={'fs-7 text-danger'}>{FormatCurrency(state.currentRegion, row.charges)}</span>
+      },
+      sortable: false,
+      center: true,
+      compact: true,
+    },
+    {
       name: (
         <span className='fw-bold fs-6 text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkTotal', asc: !sortBy.asc })}>
           Total Paid
           {sortBy.key === 'checkTotal' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
         </span>
       ),
-      selector: (row: Invoice) => <span className='fs-7'>{row.checkTotal ? FormatCurrency(state.currentRegion, row.checkTotal) : ''}</span>,
-      sortable: false,
-      center: true,
-      compact: true,
-    },
-    {
-      name: <span className='fw-bold fs-6 text-nowrap'>Deductions</span>,
       selector: (row: Invoice) => {
-        if (!row.checkTotal) return <span className='fs-7 text-muted'>{FormatCurrency(state.currentRegion, 0)}</span>
-        const deductions = parseFloat((row.orderTotal - row.checkTotal).toFixed(2))
-        if (deductions > 0) {
-          return <span className={'fs-7 ' + (deductions > 0 ? 'text-danger' : 'text-muted')}>{row.checkTotal ? `-${FormatCurrency(state.currentRegion, deductions)}` : ''}</span>
-        } else {
-          return <span className='fs-7 text-muted'>{FormatCurrency(state.currentRegion, 0)}</span>
-        }
+        if (!row.checkNumber) return <></>
+        return <span className='fs-7'>{FormatCurrency(state.currentRegion, getTotalPaid(row.orderTotal, row.deductions, row.charges))}</span>
       },
       sortable: false,
       center: true,
       compact: true,
-      width: '80px',
     },
     {
       name: (
@@ -234,12 +234,9 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
         </span>
       ),
       selector: (row: Invoice) => {
-        const pending = parseFloat((row.invoiceTotal - row.checkTotal).toFixed(2))
-        if (pending > 0) {
-          return <span className='text-danger text-center fs-7'>{FormatCurrency(state.currentRegion, pending)}</span>
-        } else {
-          return <span className='text-muted text-center fs-7'>{FormatCurrency(state.currentRegion, 0)}</span>
-        }
+        if (!row.checkNumber) return <></>
+        const pending = getTotalPending(row.orderTotal, row.deductions, row.charges)
+        return <span className={'text-center fs-7 ' + (pending > 0 ? 'text-danger' : 'text-muted')}>{FormatCurrency(state.currentRegion, pending)}</span>
       },
       sortable: false,
       center: true,
@@ -254,8 +251,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       ),
       selector: (row: Invoice) => {
         if (row.checkNumber) {
-          const deductions = parseFloat((row.orderTotal - row.checkTotal).toFixed(2))
-          if (deductions > 0) {
+          if (row.deductions < 0) {
             return <span className='badge text-uppercase badge-soft-success p-2'>{` W/ Deductions `}</span>
           } else {
             return <span className='badge text-uppercase badge-soft-success p-2'>{` Paid `}</span>

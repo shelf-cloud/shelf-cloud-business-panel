@@ -7,6 +7,7 @@ import AppContext from '@context/AppContext'
 import { DashboardResponse } from '@typesTs/commercehub/dashboard'
 import moment from 'moment'
 import { NoImageAdress } from '@lib/assetsConstants'
+import { getTotalPaid } from './helperFunctions'
 
 type Props = {
   summary: DashboardResponse
@@ -30,13 +31,13 @@ const CheckNumberTable = ({ summary }: Props) => {
                     <td>Store</td>
                     <td>Check Number</td>
                     <td>Check Date</td>
-                    <td>Check Paid</td>
+                    <td>Total Paid</td>
                     <td>Deductions</td>
                   </tr>
                 </thead>
                 <tbody className='fs-7'>
                   {summary.invoices.map((item, key) => {
-                    const pendingValue = item.checkTotal + item.cashDiscountTotal
+                    const totalPaid = getTotalPaid(item.orderTotal, item.deductions, item.charges)
                     const deductions = item.deductions
                     return (
                       <tr key={key}>
@@ -63,8 +64,8 @@ const CheckNumberTable = ({ summary }: Props) => {
                             <span className='fs-6 mw-30 text-muted fw-light fst-italic'>Pending</span>
                           )}
                         </td>
-                        <td className={'' + (pendingValue == 0 && 'text-muted')}>{moment.utc(item.checkDate).local().format('LL')}</td>
-                        <td>{FormatCurrency(state.currentRegion, pendingValue)}</td>
+                        <td>{moment.utc(item.checkDate).local().format('LL')}</td>
+                        <td>{FormatCurrency(state.currentRegion, totalPaid)}</td>
                         <td className='text-danger'>{FormatCurrency(state.currentRegion, deductions)}</td>
                       </tr>
                     )

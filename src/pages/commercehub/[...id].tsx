@@ -44,7 +44,7 @@ type Props = {
 }
 
 type PendingInfo = {
-  checkTotal: number
+  totalPaid: number
   totalInvoices: number
 }
 
@@ -118,28 +118,24 @@ const CheckNumberDetails = ({ session }: Props) => {
   }, [data?.invoices, searchValue, invoiceType])
 
   const pendingInfo = useMemo(() => {
-    if (!data?.invoices || data.invoices.length == 0) return { checkTotal: 0, totalInvoices: 0 }
+    if (!data?.invoices || data.invoices.length == 0) return { totalPaid: 0, totalInvoices: 0 }
     return data.invoices.reduce(
       (pendingInfo: PendingInfo, invoice) => {
-        const { orderTotal, checkTotal, cashDiscountTotal } = invoice
+        const { orderTotal, charges, deductions, checkTotal } = invoice
 
-        const orderTotalShort = parseFloat(orderTotal.toFixed(2))
-        const checkTotalShort = parseFloat(checkTotal.toFixed(2))
+        if (invoice.checkTotal >= 0) pendingInfo.totalInvoices += 1
 
-        if (invoice.checkTotal > 0) pendingInfo.totalInvoices += 1
-
-        if (checkTotalShort < 0) {
-          pendingInfo.checkTotal += checkTotalShort + cashDiscountTotal
-        } else if (!orderTotalShort) {
-          pendingInfo.checkTotal += checkTotalShort + cashDiscountTotal
-        } else if (orderTotalShort == checkTotalShort) {
-          pendingInfo.checkTotal += checkTotalShort + cashDiscountTotal
+        if (deductions < 0) {
+          pendingInfo.totalPaid += orderTotal + deductions + charges
+        } else if (checkTotal < 0) {
+          pendingInfo.totalPaid += orderTotal + checkTotal + charges
         } else {
-          pendingInfo.checkTotal += orderTotalShort + cashDiscountTotal
+          pendingInfo.totalPaid += orderTotal + charges
         }
+
         return pendingInfo
       },
-      { checkTotal: 0, totalInvoices: 0 }
+      { totalPaid: 0, totalInvoices: 0 }
     )
   }, [data?.invoices])
 
@@ -241,8 +237,8 @@ const CheckNumberDetails = ({ session }: Props) => {
       sortFunction: (rowA: Invoice, rowB: Invoice) => sortDates(rowA.invoiceDate!, rowB.invoiceDate!),
     },
     {
-      name: <span className='fw-bold fs-6'>Invoice Total</span>,
-      selector: (row: Invoice) => row.checkTotal > 0 && <span className='fs-7'>{row.checkTotal ? FormatCurrency(state.currentRegion, row.orderTotal) : ''}</span>,
+      name: <span className='fw-bold fs-6'>Order Total</span>,
+      selector: (row: Invoice) => (row.checkTotal >= 0 ? <span className='fs-7'>{FormatCurrency(state.currentRegion, row.orderTotal)}</span> : <></>),
       sortable: true,
       center: true,
       compact: true,
@@ -259,19 +255,12 @@ const CheckNumberDetails = ({ session }: Props) => {
       },
     },
     {
-      name: (
-        <div className='d-flex flex-column justify-content-center align-items-center'>
-          <p className='m-0 fw-bold fs-6'>Check Amount</p>
-          <p className='m-0 text-muted'>
-            <span className='fw-semibold'>{FormatCurrency(state.currentRegion, getCheckAmountTotal(filterInvoices))}</span>
-          </p>
-        </div>
-      ),
+      name: <span className='fw-bolder fs-6'>Deductions</span>,
       selector: (row: Invoice) => {
-        if (row.checkTotal > 0) {
-          return <span className='text-center fs-7'>{FormatCurrency(state.currentRegion, row.checkTotal)}</span>
+        if (row.checkTotal >= 0) {
+          return <span className={'text-center fs-7 ' + (row.deductions < 0 ? 'text-danger' : 'text-muted')}>{FormatCurrency(state.currentRegion, row.deductions)}</span>
         } else {
-          return <span className='text-danger text-center fs-7'>{FormatCurrency(state.currentRegion, row.checkTotal)}</span>
+          return <></>
         }
       },
       sortable: true,
@@ -282,12 +271,31 @@ const CheckNumberDetails = ({ session }: Props) => {
     {
       name: <span className='fw-bolder fs-6'>Charges</span>,
       selector: (row: Invoice) => {
-        if (row.checkTotal > 0) {
-          return (
-            <span className={'text-center fs-7 ' + (row.cashDiscountTotal < 0 ? 'text-danger' : 'text-muted')}>{FormatCurrency(state.currentRegion, row.cashDiscountTotal)}</span>
-          )
+        if (row.checkTotal >= 0) {
+          return <span className={'text-center fs-7 ' + (row.charges < 0 ? 'text-danger' : 'text-muted')}>{FormatCurrency(state.currentRegion, row.charges)}</span>
         } else {
           return <></>
+        }
+      },
+      sortable: true,
+      center: true,
+      compact: true,
+      sortFunction: (rowA: Invoice, rowB: Invoice) => sortNumbers(rowA.checkTotal, rowB.checkTotal),
+    },
+    {
+      name: (
+        <div className='d-flex flex-column justify-content-center align-items-center'>
+          <p className='m-0 fw-bold fs-6'>Total Paid</p>
+          <p className='m-0 text-muted'>
+            <span className='fw-semibold'>{FormatCurrency(state.currentRegion, getCheckAmountTotal(filterInvoices))}</span>
+          </p>
+        </div>
+      ),
+      selector: (row: Invoice) => {
+        if (row.checkTotal >= 0) {
+          return <span className='text-center fs-7'>{FormatCurrency(state.currentRegion, row.checkTotal)}</span>
+        } else {
+          return <span className='text-danger text-center fs-7'>{FormatCurrency(state.currentRegion, row.checkTotal)}</span>
         }
       },
       sortable: true,
@@ -397,7 +405,7 @@ const CheckNumberDetails = ({ session }: Props) => {
                   </div>
                   <div className='d-flex flex-column justify-content-start align-items-end'>
                     {pendingInfo.totalInvoices > 0 && <p className='m-0 p-0 fs-6'>Total Invoices: {pendingInfo.totalInvoices}</p>}
-                    <p className='m-0 p-0 fs-6'>Check Total: {FormatCurrency(state.currentRegion, pendingInfo.checkTotal)}</p>
+                    <p className='m-0 p-0 fs-6'>Total Paid: {FormatCurrency(state.currentRegion, pendingInfo.totalPaid <= 0 ? 0 : pendingInfo.totalPaid)}</p>
                   </div>
                 </div>
               </CardHeader>

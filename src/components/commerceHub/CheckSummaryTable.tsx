@@ -9,6 +9,7 @@ import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import { toast } from 'react-toastify'
 import { UncontrolledTooltip } from 'reactstrap'
+import { getTotalPaid } from './helperFunctions'
 
 type SortByType = {
   key: string
@@ -105,12 +106,11 @@ const CheckSummaryTable = ({ filteredItems, pending, sortBy, setSortBy }: Props)
     {
       name: (
         <span className='fw-bold fs-6' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'pending', asc: !sortBy.asc })}>
-          Check Paid {sortBy.key === 'pending' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+          Total Paid {sortBy.key === 'pending' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
         </span>
       ),
       selector: (row: CheckSummaryType) => {
-        const pending = row.checkTotal + row.cashDiscountTotal
-        return <span className='text-center fs-7'>{FormatCurrency(state.currentRegion, pending)}</span>
+        return <span className='text-center fs-7'>{FormatCurrency(state.currentRegion, getTotalPaid(row.orderTotal, row.deductions, row.charges))}</span>
       },
       sortable: false,
       left: true,

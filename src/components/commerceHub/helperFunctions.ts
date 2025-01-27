@@ -1,14 +1,4 @@
-import { Invoice } from "@typesTs/commercehub/invoices"
-
-export const getDeductionsValue = (orderTotal: number, checkTotal: number) => {
-  if (!checkTotal) return ''
-  const deductions = parseFloat((orderTotal - checkTotal).toFixed(2))
-  if (deductions > 0) {
-    return deductions * -1
-  } else {
-    return 0
-  }
-}
+import { Invoice } from '@typesTs/commercehub/invoices'
 
 export const getOrderStatus = (checkNumber: string, commerceHubStatus: string) => {
   if (checkNumber) return 'Paid'
@@ -16,28 +6,26 @@ export const getOrderStatus = (checkNumber: string, commerceHubStatus: string) =
   return 'unpaid'
 }
 
-export const getPendingValue = (orderTotal: number, invoiceTotal: number, checkTotal: number) => {
-  if (invoiceTotal) return parseFloat((invoiceTotal - checkTotal).toFixed(2))
-  if (orderTotal > invoiceTotal) return parseFloat((orderTotal - checkTotal).toFixed(2))
-  return parseFloat((invoiceTotal - checkTotal).toFixed(2))
-}
-
-export const getInvoiceTotal = (orderTotal: number, invoiceTotal: number) => {
-  if (!invoiceTotal) return parseFloat(orderTotal.toFixed(2))
-  if (orderTotal > invoiceTotal) return parseFloat(orderTotal.toFixed(2))
-  return parseFloat(invoiceTotal.toFixed(2))
-}
-
 export const getCheckAmountTotal = (invoices: Invoice[]) => {
-  return invoices.reduce((acc, invoice) => {
-    const { orderTotal, checkTotal, cashDiscountTotal } = invoice
+  const totalPaid = invoices.reduce((acc, invoice) => {
+    const { orderTotal, charges, deductions, checkTotal } = invoice
 
-    const orderTotalShort = parseFloat(orderTotal.toFixed(2))
-    const checkTotalShort = parseFloat(checkTotal.toFixed(2))
-
-    if(checkTotalShort < 0) return acc + checkTotalShort + cashDiscountTotal
-    if(!orderTotalShort) return acc + checkTotalShort + cashDiscountTotal
-    if(orderTotalShort == checkTotalShort) return acc + checkTotalShort + cashDiscountTotal
-    return acc + orderTotalShort + cashDiscountTotal
+    if (deductions < 0) return acc + orderTotal + deductions + charges
+    if (checkTotal < 0) return acc + orderTotal + checkTotal + charges
+    return acc + orderTotal + charges
   }, 0)
+  if (totalPaid <= 0) return 0
+  return parseFloat(totalPaid.toFixed(2))
+}
+
+export const getTotalPaid = (orderTotal: number, deductions: number, charges: number) => {
+  const totalPaid = orderTotal + deductions + charges
+  if (totalPaid <= 0) return 0
+  return parseFloat(totalPaid.toFixed(2))
+}
+
+export const getTotalPending = (orderTotal: number, deductions: number, charges: number) => {
+  const totalPending = orderTotal - (orderTotal + deductions * -1 + charges * -1)
+  if (totalPending <= 0) return 0
+  return parseFloat(totalPending.toFixed(2))
 }

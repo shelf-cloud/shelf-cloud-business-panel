@@ -1,9 +1,7 @@
 import ExcelJS from 'exceljs'
 import { reportTemplateColumns } from './documentsHeaderColumns'
 import moment from 'moment'
-import { getDeductionsValue, getInvoiceTotal, getOrderStatus, getPendingValue } from '../helperFunctions'
-
-
+import { getOrderStatus, getTotalPaid, getTotalPending } from '../helperFunctions'
 
 export const generateDocument = async (reportType: string, info: any[]) => {
   const workbook = new ExcelJS.Workbook()
@@ -17,7 +15,7 @@ export const generateDocument = async (reportType: string, info: any[]) => {
           storeName: row.storeName,
           checkNumber: row.checkNumber,
           checkDate: moment.utc(row.checkDate).local().format('YYYY-MM-DD'),
-          checkPaid: parseFloat((row.checkTotal + row.cashDiscountTotal).toFixed(2)),
+          totalPaid: getTotalPaid(row.orderTotal, row.deductions, row.charges),
           deductions: row.deductions,
         })
       }
@@ -47,13 +45,14 @@ export const generateDocument = async (reportType: string, info: any[]) => {
             .utc(row.invoiceDate ?? row.closedDate)
             .local()
             .format('YYYY-MM-DD'),
-          invoiceTotal: getInvoiceTotal(row.orderTotal, row.invoiceTotal),
+          orderTotal: row.orderTotal,
           dueDate: row.dueDate ? moment.utc(row.dueDate).local().format('YYYY-MM-DD') : moment.utc(row.closedDate).local().add(row.payterms, 'days').format('YYYY-MM-DD'),
           checkDate: row.checkDate ? moment.utc(row.checkDate).local().format('YYYY-MM-DD') : '',
           checkNumber: row.checkNumber ? row.checkNumber : '',
-          totalPaid: row.checkTotal ? row.checkTotal : '',
-          deductions: getDeductionsValue(row.orderTotal, row.checkTotal),
-          pending: getPendingValue(row.orderTotal, row.invoiceTotal, row.checkTotal),
+          deductions: row.deductions ? row.deductions : '',
+          charges: row.charges ? row.charges : '',
+          totalPaid: getTotalPaid(row.orderTotal, row.deductions, row.charges),
+          pending: getTotalPending(row.orderTotal, row.deductions, row.charges),
           commerceHubStatus: getOrderStatus(row.checkNumber, row.commerceHubStatus),
           commerceHubComment: !row.commerceHubComment || row.commerceHubComment === '' ? '' : row.commerceHubComment,
         })

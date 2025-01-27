@@ -20,7 +20,8 @@ export interface Invoice {
     orderTotal: number
     invoiceTotal: number
     checkTotal: number
-    cashDiscountTotal: number
+    deductions: number
+    charges: number
     checkNumber: string | null
     comments: string | null
     status: string | null
