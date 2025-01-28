@@ -30,6 +30,7 @@ export interface ProductPerformance {
     productCostOfRefunds: number;
     shippingCost: number;
     storageCost: number;
+    fbaStorageCost: number;
     sponsoredProducts: number;
     displayAds: number;
     keywordAds: number;

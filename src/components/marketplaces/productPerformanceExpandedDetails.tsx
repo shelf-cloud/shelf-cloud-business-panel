@@ -28,7 +28,7 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
       <Row>
-        <Col xs={4} xl={3}>
+        <Col xs={12} lg={4}>
           <Col sm={12}>
             <Card>
               <CardHeader className='py-3'>
@@ -183,6 +183,12 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                         <td className={'fw-light text-end text-black'}>-{FormatCurrency(state.currentRegion, data.storageCost)}</td>
                       </tr>
                     )}
+                    {data.fbaStorageCost > 0 && (
+                      <tr className='border-bottom pb-2'>
+                        <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>FBA Storage Cost</td>
+                        <td className={'fw-light text-end text-black'}>-{FormatCurrency(state.currentRegion, data.fbaStorageCost)}</td>
+                      </tr>
+                    )}
                     {data.shippingCost > 0 && (
                       <tr className='border-bottom pb-2'>
                         <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Shipping Cost</td>
@@ -265,7 +271,7 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
             </Card>
           </Col>
         </Col>
-        <Col xs={8} xl={9}>
+        <Col xs={12} lg={8}>
           <Card>
             <CardHeader className='py-3'>
               <h5 className='fw-semibold m-0'>Performance Timeline</h5>
