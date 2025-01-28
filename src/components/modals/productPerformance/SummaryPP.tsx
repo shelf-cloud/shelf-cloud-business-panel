@@ -45,6 +45,7 @@ function SummaryPP({ productsData, summaryModal, setsummaryModal }: Props) {
         data.productCostOfRefunds += sku.productCostOfRefunds
         data.shippingCost += sku.shippingCost
         data.storageCost += sku.storageCost
+        data.fbaStorageCost += sku.fbaStorageCost
         data.sponsoredProducts += sku.sponsoredProducts
         data.displayAds += sku.displayAds
         data.keywordAds += sku.keywordAds
@@ -81,6 +82,7 @@ function SummaryPP({ productsData, summaryModal, setsummaryModal }: Props) {
         productCostOfRefunds: 0,
         shippingCost: 0,
         storageCost: 0,
+        fbaStorageCost: 0,
         sponsoredProducts: 0,
         displayAds: 0,
         keywordAds: 0,
@@ -282,6 +284,12 @@ function SummaryPP({ productsData, summaryModal, setsummaryModal }: Props) {
                         <tr className='border-bottom pb-2'>
                           <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Storage Cost</td>
                           <td className={'fw-light text-end text-black'}>-{FormatCurrency(state.currentRegion, data.storageCost)}</td>
+                        </tr>
+                      )}
+                      {data.fbaStorageCost > 0 && (
+                        <tr className='border-bottom pb-2'>
+                          <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>FBA Storage Cost</td>
+                          <td className={'fw-light text-end text-black'}>-{FormatCurrency(state.currentRegion, data.fbaStorageCost)}</td>
                         </tr>
                       )}
                       {data.shippingCost > 0 && (

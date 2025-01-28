@@ -105,6 +105,7 @@ export interface SummaryProductPerformance {
     productCostOfRefunds: number;
     shippingCost: number;
     storageCost: number;
+    fbaStorageCost: number;
     sponsoredProducts: number;
     displayAds: number;
     keywordAds: number;
