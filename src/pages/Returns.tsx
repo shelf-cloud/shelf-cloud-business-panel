@@ -11,10 +11,11 @@ import moment from 'moment'
 import { toast } from 'react-toastify'
 import FilterByDates from '@components/FilterByDates'
 import FilterReturns from '@components/returns/FilterReturns'
-import { ReturnList, ReturnOrder, ReturnsType } from '@typesTs/returns/returns'
+import { ReturnList, ReturnOrder, ReturnType } from '@typesTs/returns/returns'
 import ReturnRMATable from '@components/returns/ReturnRMATable'
 import useSWR, { useSWRConfig } from 'swr'
 import Link from 'next/link'
+import ExportReturns from '@components/returns/ExportReturns'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -54,7 +55,7 @@ const Returns = ({ session, sessionToken }: Props) => {
   const [searchStatus, setSearchStatus] = useState<string>('')
   const [searchReason, setSearchReason] = useState<string>('')
   const [searchMarketplace, setSearchMarketplace] = useState<string>('')
-  const [selectedRows, setSelectedRows] = useState<ReturnsType[]>([])
+  const [selectedRows, setSelectedRows] = useState<ReturnType[]>([])
   const [toggledClearRows, setToggleClearRows] = useState(false)
 
   const controller = new AbortController()
@@ -94,7 +95,7 @@ const Returns = ({ session, sessionToken }: Props) => {
     }
 
     if (searchValue === '') {
-      return Object.values(allData).filter((order: ReturnsType) =>
+      return Object.values(allData).filter((order: ReturnType) =>
         Object.values(order?.returns).some(
           (returnOrder: ReturnOrder) =>
             (searchStatus !== '' ? returnOrder?.orderStatus?.toLowerCase().includes(searchStatus.toLowerCase()) : true) &&
@@ -106,7 +107,7 @@ const Returns = ({ session, sessionToken }: Props) => {
 
     if (searchValue !== '') {
       return Object.values(allData).filter(
-        (order: ReturnsType) =>
+        (order: ReturnType) =>
           order.shipmentOrderNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
           Object.values(order?.returns).some(
             (returnOrder: ReturnOrder) =>
@@ -218,12 +219,14 @@ const Returns = ({ session, sessionToken }: Props) => {
                     <Link href='/returns/Unsellables'>
                       <Button className='btn btn-primary'>Unsellables</Button>
                     </Link>
+                    <ExportReturns returns={filterDataTable || []} />
                     {selectedRows.length > 0 && (
                       <UncontrolledButtonDropdown>
                         <DropdownToggle className='btn btn-primary fs-6 py-2' caret>
                           <span className='fw-bold'>{`${selectedRows.length} Order${selectedRows.length > 1 ? 's' : ''}`}</span> Selected
                         </DropdownToggle>
                         <DropdownMenu>
+                          <DropdownItem header>Actions</DropdownItem>
                           <DropdownItem className='text-nowrap text-capitalize' onClick={() => changeSelectedProductsState('complete')}>
                             <i className='mdi mdi-check-circle-outline fs-5 text-success align-middle m-0 p-0' /> set complete
                           </DropdownItem>

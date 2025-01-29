@@ -2,7 +2,7 @@ export interface ReturnList {
     [key: string]: ReturnType
 }
 
-export interface ReturnsType {
+export interface ReturnType {
     shipmentOrderNumber: string;
     totalOrderItems: number;
     returns: { [key: string]: ReturnOrder };

@@ -5,17 +5,17 @@ import DataTable, { ExpanderComponentProps } from 'react-data-table-component'
 import { ButtonGroup, Card, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledButtonDropdown, UncontrolledTooltip } from 'reactstrap'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import AppContext from '@context/AppContext'
-import { ReturnOrder, ReturnsType } from '@typesTs/returns/returns'
+import { ReturnOrder, ReturnType } from '@typesTs/returns/returns'
 import ReturnExpandedType from './ReturnExpandedType'
 import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
-  data: ReturnsType
+  data: ReturnType
   apiMutateLink?: string
   handleReturnStateChange?: (newState: string, orderId: number) => void
 }
 
-const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, apiMutateLink, handleReturnStateChange }: Props) => {
+const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiMutateLink, handleReturnStateChange }: Props) => {
   const { state }: any = useContext(AppContext)
   const orderNumber = (rowA: ReturnOrder, rowB: ReturnOrder) => {
     const a = rowA.orderNumber.toLowerCase()
@@ -77,14 +77,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
   const columns: any = [
     {
       name: <span className='fw-semibold fs-7 text-muted'>Returns Received</span>,
-      selector: (row: ReturnOrder) => {
-        return (
-          <>
-            <div style={{ margin: '0px', fontWeight: '600' }}>{row.orderNumber}</div>
-            {/* {row.returnRMA && row.returnRMA !== '' && <span className='text-muted fs-7'>RMA: {row.returnRMA}</span>} */}
-          </>
-        )
-      },
+      selector: (row: ReturnOrder) => <span className='fs-7 fw-semibold'>{row.orderNumber}</span>,
       sortable: true,
       wrap: true,
       grow: 1.7,
@@ -122,7 +115,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
       sortable: true,
       wrap: true,
       // grow: 2,
-      left: true,
+      center: true,
       sortFunction: orderStatus,
     },
     {
@@ -147,8 +140,8 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
               alt='product Image'
               id={`ChannelLogo-${row.id}`}
               style={{
-                width: '25px',
-                height: '25px',
+                width: '20px',
+                height: '20px',
                 objectFit: 'contain',
               }}
             />
@@ -160,7 +153,6 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
       },
       sortable: true,
       wrap: true,
-      grow: 1.2,
       center: true,
       compact: true,
       sortFunction: orderMarketplace,
@@ -170,19 +162,12 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
       selector: (row: ReturnOrder) => row.orderDate,
       sortable: true,
       wrap: true,
-      // grow: 1.2,
       left: true,
       compact: true,
+      style: {
+        fontSize: '0.7rem',
+      }
     },
-    // {
-    //   name: <span className='fw-semibold text-center fs-7 text-muted'>Return Closed</span>,
-    //   selector: (row: ReturnOrder) => row.closedDate || '',
-    //   sortable: true,
-    //   wrap: true,
-    //   grow: 1.2,
-    //   center: true,
-    //   compact: true,
-    // },
     {
       name: <span className='fw-semibold fs-7 text-muted'>Tracking Number</span>,
       selector: (row: ReturnOrder) => {
@@ -288,9 +273,11 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
       selector: (row: ReturnOrder) => row.totalItems || '',
       sortable: true,
       wrap: true,
-      // grow: 1.5,
       center: true,
       compact: true,
+      style: {
+        fontSize: '0.7rem',
+      }
     },
     {
       name: <span className='fw-semibold text-center fs-7 text-muted'>Charge</span>,
@@ -300,6 +287,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
       compact: true,
       center: true,
       style: {
+        fontSize: '0.7rem',
         color: '#4481FD',
       },
     },
@@ -309,10 +297,10 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
         var returnStateBtn
         switch (row.returnState) {
           case 'complete':
-            returnStateBtn = <span className='text-capitalize text-nowrap text-success p-2'>{` ${row.returnState} `}</span>
+            returnStateBtn = <span className=' fs-7 text-capitalize text-nowrap text-success p-2'>{` ${row.returnState} `}</span>
             break
           case 'pending':
-            returnStateBtn = <span className='text-capitalize text-nowrap text-warning p-2'>{` ${row.returnState} `}</span>
+            returnStateBtn = <span className=' fs-7 text-capitalize text-nowrap text-warning p-2'>{` ${row.returnState} `}</span>
             break
           default:
             break
@@ -324,13 +312,13 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnsType>> = ({ data, api
               <DropdownToggle tag='button' className='btn btn-sm p-0 m-0' split></DropdownToggle>
               <DropdownMenu end={true} className='shadow-md p-0 rounded'>
                 {row.returnState !== 'pending' && (
-                  <DropdownItem className='text-capitalize' onClick={() => handleReturnStateChange!('pending', row.id)}>
-                    <i className='mdi mdi-backup-restore fs-5 text-warning align-middle m-0 p-0' /> pending
+                  <DropdownItem className='text-capitalize fs-7' onClick={() => handleReturnStateChange!('pending', row.id)}>
+                    <i className='mdi mdi-backup-restore fs-6 text-warning align-middle m-0 p-0' /> pending
                   </DropdownItem>
                 )}
                 {row.returnState !== 'complete' && (
-                  <DropdownItem className='text-capitalize' onClick={() => handleReturnStateChange!('complete', row.id)}>
-                    <i className='mdi mdi-check-circle-outline fs-5 text-success align-middle m-0 p-0' /> complete
+                  <DropdownItem className='text-capitalize fs-7' onClick={() => handleReturnStateChange!('complete', row.id)}>
+                    <i className='mdi mdi-check-circle-outline fs-6 text-success align-middle m-0 p-0' /> complete
                   </DropdownItem>
                 )}
               </DropdownMenu>

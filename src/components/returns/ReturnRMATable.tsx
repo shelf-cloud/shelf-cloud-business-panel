@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
-import { ReturnOrder, ReturnsType } from '@typesTs/returns/returns'
+import { ReturnOrder, ReturnType } from '@typesTs/returns/returns'
 import ReturnsTable from './ReturnsTable'
 import { UncontrolledTooltip } from 'reactstrap'
 import { FormatCurrency } from '@lib/FormatNumbers'
@@ -9,18 +9,18 @@ import AppContext from '@context/AppContext'
 import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
-  filterDataTable: ReturnsType[]
+  filterDataTable: ReturnType[]
   pending: boolean
   apiMutateLink: string
   handleReturnStateChange: (newState: string, orderId: number) => void
-  setSelectedRows: (selectedRows: ReturnsType[]) => void
+  setSelectedRows: (selectedRows: ReturnType[]) => void
   toggledClearRows: boolean
 }
 
 const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnStateChange, setSelectedRows, toggledClearRows }: Props) => {
   const { state }: any = useContext(AppContext)
 
-  const orderNumber = (rowA: ReturnsType, rowB: ReturnsType) => {
+  const orderNumber = (rowA: ReturnType, rowB: ReturnType) => {
     const a = rowA.shipmentOrderNumber.toLowerCase()
     const b = rowB.shipmentOrderNumber.toLowerCase()
 
@@ -34,7 +34,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
 
     return 0
   }
-  const orderStatus = (rowA: ReturnsType, rowB: ReturnsType) => {
+  const orderStatus = (rowA: ReturnType, rowB: ReturnType) => {
     const a = Object.values(rowA.returns)[0].orderStatus.toLowerCase()
     const b = Object.values(rowB.returns)[0].orderStatus.toLowerCase()
 
@@ -48,7 +48,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
 
     return 0
   }
-  const orderMarketplace = (rowA: ReturnsType, rowB: ReturnsType) => {
+  const orderMarketplace = (rowA: ReturnType, rowB: ReturnType) => {
     const a = Object.values(rowA.returns)[0].channelName.toLowerCase()
     const b = Object.values(rowB.returns)[0].channelName.toLowerCase()
 
@@ -62,7 +62,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
 
     return 0
   }
-  const orderReturnState = (rowA: ReturnsType, rowB: ReturnsType) => {
+  const orderReturnState = (rowA: ReturnType, rowB: ReturnType) => {
     const a = Object.values(rowA.returns)[0].returnState.toLowerCase()
     const b = Object.values(rowB.returns)[0].returnState.toLowerCase()
 
@@ -77,17 +77,17 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
     return 0
   }
 
-  const handleSelectedRows = ({ selectedRows }: { selectedRows: ReturnsType[] }) => {
+  const handleSelectedRows = ({ selectedRows }: { selectedRows: ReturnType[] }) => {
     setSelectedRows(selectedRows)
   }
 
   const columns: any = [
     {
       name: <span className='fw-bolder fs-6'>Orders Returned</span>,
-      selector: (row: ReturnsType) => {
+      selector: (row: ReturnType) => {
         return (
           <>
-            <p className='fw-semibold fs-6 m-0 p-0'>{row.shipmentOrderNumber}</p>
+            <p className='fw-semibold fs-7 m-0 p-0'>{row.shipmentOrderNumber}</p>
             <p className='text-muted fs-7 m-0 p-0'>
               {Object.values(row.returns)[0].orderNumber}
               {Object.values(row.returns).length > 1 && <span className='fs-7 text-danger'>{` +${Object.values(row.returns).length - 1}`}</span>}
@@ -104,14 +104,15 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
     },
     {
       name: <span className='fw-bolder text-center fs-6'>Status</span>,
-      selector: (row: ReturnsType) => {
-        switch (Object.values(row.returns)[0].orderStatus) {
+      selector: (row: ReturnType) => {
+        const status = Object.values(row.returns)[0].orderStatus
+        switch (status) {
           case 'shipped':
           case 'received':
-            return <span className='badge text-uppercase text-center badge-soft-success p-2'>{` ${Object.values(row.returns)[0].orderStatus} `}</span>
+            return <span className='badge text-uppercase text-center badge-soft-success p-2'>{` ${status} `}</span>
             break
           case 'Processed':
-            return <span className='badge text-uppercase text-center badge-soft-secondary p-2'>{` ${Object.values(row.returns)[0].orderStatus} `}</span>
+            return <span className='badge text-uppercase text-center badge-soft-secondary p-2'>{` ${status} `}</span>
             break
           case 'awaiting_shipment':
           case 'awaiting':
@@ -124,7 +125,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
             return <span className='badge text-uppercase text-center badge-soft-danger p-2'>{' on hold '}</span>
             break
           case 'cancelled':
-            return <span className='badge text-uppercase text-center badge-soft-dark p-2'> {Object.values(row.returns)[0].orderStatus} </span>
+            return <span className='badge text-uppercase text-center badge-soft-dark p-2'> {status} </span>
             break
           default:
             break
@@ -133,13 +134,13 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
       sortable: true,
       wrap: true,
       // grow: 2,
-      left: true,
+      center: true,
       compact: true,
       sortFunction: orderStatus,
     },
     {
       name: <span className='fw-bolder fs-6'>Reason</span>,
-      selector: (row: ReturnsType) => Object.values(row.returns)[0].returnReason,
+      selector: (row: ReturnType) => Object.values(row.returns)[0].returnReason,
       sortable: true,
       wrap: true,
       left: true,
@@ -150,7 +151,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
     },
     {
       name: <span className='fw-bolder text-center fs-6'>Marketplace</span>,
-      selector: (row: ReturnsType) => {
+      selector: (row: ReturnType) => {
         return (
           <>
             <img
@@ -159,8 +160,8 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
               alt='product Image'
               id={`ChannelLogo-${Object.values(row.returns)[0].id}`}
               style={{
-                width: '25px',
-                height: '25px',
+                width: '20px',
+                height: '20px',
                 objectFit: 'contain',
               }}
             />
@@ -171,23 +172,26 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
         )
       },
       sortable: true,
-      wrap: true,
+      wrap: false,
       center: true,
       compact: true,
       sortFunction: orderMarketplace,
     },
     {
       name: <span className='fw-bolder text-center fs-6'>Return Date</span>,
-      selector: (row: ReturnsType) => Object.values(row.returns)[0].orderDate,
+      selector: (row: ReturnType) => Object.values(row.returns)[0].orderDate,
       sortable: true,
       wrap: true,
       //   grow: 1.2,
       left: true,
       compact: true,
+      style: {
+        fontSize: '0.7rem',
+      }
     },
     {
       name: <span className='fw-bolder fs-6'>Tracking Number</span>,
-      selector: (row: ReturnsType) => {
+      selector: (row: ReturnType) => {
         let tracking
         {
           switch (true) {
@@ -305,22 +309,22 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
     },
     {
       name: <span className='fw-bolder text-center fs-6'>Items Received</span>,
-      selector: (row: ReturnsType) =>
+      selector: (row: ReturnType) =>
         row.totalOrderItems === 0 ? (
           <>
-            <span>{Object.values(row.returns).reduce((total: number, returnOrder: ReturnOrder) => total + returnOrder.totalItems, 0)}</span>
+            <span className='fs-7'>{Object.values(row.returns).reduce((total: number, returnOrder: ReturnOrder) => total + returnOrder.totalItems, 0)}</span>
           </>
         ) : (
           <>
             <span
               className={
-                'fw-semibold fs-5' +
+                'fw-bold fs-6' +
                 (Object.values(row.returns).reduce((total: number, returnOrder: ReturnOrder) => total + returnOrder.totalItems, 0) !== row.totalOrderItems ? ' text-danger' : '')
               }>
               {Object.values(row.returns).reduce((total: number, returnOrder: ReturnOrder) => total + returnOrder.totalItems, 0)}
             </span>
             {` / `}
-            <span>{row.totalOrderItems}</span>
+            <span className='fs-7'>{row.totalOrderItems}</span>
           </>
         ),
       sortable: true,
@@ -331,7 +335,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
     },
     {
       name: <span className='fw-bolder text-center fs-6'>Total Charge</span>,
-      selector: (row: ReturnsType) =>
+      selector: (row: ReturnType) =>
         FormatCurrency(
           state.currentRegion,
           Object.values(row.returns).reduce((total: number, returnOrder: ReturnOrder) => total + returnOrder.totalCharge, 0)
@@ -341,17 +345,18 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
       // grow: 1.5,
       center: true,
       style: {
+        fontSize: '0.7rem',
         color: '#4481FD',
       },
     },
     {
       name: <span className='fw-bolder text-center fs-6'>Status</span>,
-      cell: (row: ReturnsType) => {
+      cell: (row: ReturnType) => {
         var returnStateBtn
         switch (Object.values(row.returns)[0].returnState) {
           case 'complete':
             returnStateBtn = (
-              <span className='text-capitalize text-nowrap text-success p-2'>
+              <span className='fs-7 text-capitalize text-nowrap text-success p-2'>
                 {` ${Object.values(row.returns)[0].returnState} `}
                 {Object.values(row.returns).length > 1 && <span className='fs-7 text-danger'>{` +${Object.values(row.returns).length}`}</span>}
               </span>
@@ -359,7 +364,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
             break
           case 'pending':
             returnStateBtn = (
-              <span className='text-capitalize text-nowrap text-warning p-2'>
+              <span className='fs-7 text-capitalize text-nowrap text-warning p-2'>
                 {` ${Object.values(row.returns)[0].returnState} `}
                 {Object.values(row.returns).length > 1 && <span className='fs-7 text-danger'>{` +${Object.values(row.returns).length}`}</span>}
               </span>
