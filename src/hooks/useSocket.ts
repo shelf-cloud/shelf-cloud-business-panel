@@ -12,7 +12,7 @@ export const useSocket = (userId: string | null, mutate: () => void) => {
 
     const panelUserId = `panel_${userId}` // ✅ Create unique user ID for panel
 
-    const socketUrl = process.env.WS_SHELFCLOUD_SERVER_URL
+    const socketUrl = process.env.NEXT_PUBLIC_WS_SHELFCLOUD_SERVER_URL
 
     // ✅ Create WebSocket connection
     socket = io(socketUrl, {
