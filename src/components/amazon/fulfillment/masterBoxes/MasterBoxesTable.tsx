@@ -325,7 +325,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       selector: (row: AmazonFulfillmentSku) => {
         return (
           <div className='text-center'>
-            <p className='m-0 p-0'>{row.shelfcloud_sku}</p>
+            <p className='m-0 p-0 fs-7'>{row.shelfcloud_sku}</p>
             {/* <p className='m-0 p-0 d-inline-flex flex-row justify-content-center align-items-center gap-1'>
               <span
                 className='text-primary fs-7'
@@ -456,7 +456,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       name: <span className='fw-bold fs-6'>Amazon</span>,
       selector: (row: AmazonFulfillmentSku) => {
         return (
-          <div className='d-flex flex-column justify-content-center align-items-end my-1'>
+          <div className='d-flex flex-column justify-content-center align-items-end my-1 fs-7'>
             <span className='m-0 p-0 fw-semibold'>
               <span className='text-muted fw-light'>Fulfillable: </span>
               {row.afn_fulfillable_quantity}
@@ -490,7 +490,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       ),
       selector: (row: AmazonFulfillmentSku) => {
         return (
-          <div className='d-flex flex-row justify-content-start align-items-center gap-2 my-2 fs-6'>
+          <div className='d-flex flex-row justify-content-start align-items-center gap-2 my-2 fs-7'>
             <div className='d-flex flex-column justify-content-start align-items-center gap-2' style={{ overflow: 'unset', textOverflow: 'unset' }}>
               <div>
                 <span className='fw-semibold'>1D: </span>
@@ -533,7 +533,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       name: <span className='fw-bold fs-6 text-center'>Warehouse Qty</span>,
       selector: (cell: AmazonFulfillmentSku) => {
         if (cell.isKit) {
-          return <span className='text-info'>{FormatIntNumber(state.currentRegion, cell.quantity)}</span>
+          return <span className='text-info fs-7'>{FormatIntNumber(state.currentRegion, cell.quantity)}</span>
         }
         return (
           <>
@@ -541,7 +541,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
               tabIndex={-1}
               color='info'
               outline
-              className='btn btn-ghost-info'
+              className='btn btn-ghost-info fs-7'
               id={`reservedMasterQty${CleanSpecialCharacters(cell.sku)}`}
               onClick={() => {
                 setModalProductInfo(cell.inventoryId, state.user.businessId, cell.sku)
@@ -570,6 +570,9 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       compact: true,
       width: '80px',
       minWidth: 'fit-content',
+      style: {
+        fontSize: '0.7rem',
+      },
     },
     {
       name: <span className='fw-bold fs-6 text-center'>Recommended Ship Date</span>,
@@ -579,6 +582,9 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       compact: true,
       width: '120px',
       minWidth: 'fit-content',
+      style: {
+        fontSize: '0.7rem',
+      },
       conditionalCellStyles: [
         {
           when: (row: AmazonFulfillmentSku) => moment(row.recommendedShipDate).isBefore(moment().add(1, 'days'), 'day'),
@@ -611,6 +617,9 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       compact: false,
       width: '150px',
       minWidth: 'fit-content',
+      style: {
+        fontSize: '0.7rem',
+      },
     },
     {
       name: (
@@ -671,10 +680,10 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       selector: (row: AmazonFulfillmentSku) =>
         row.totalSendToAmazon > 0 ? (
           <div>
-            <p className='m-0 fs-5 text-center fw-semibold'>
+            <p className='m-0 text-center fw-semibold'>
               {FormatIntNumber(state.currentRegion, parseInt(row.orderQty))} <span className='fs-7 fw-normal'>{parseInt(row.orderQty) > 1 ? 'Boxes' : 'Box'}</span>
             </p>
-            <p className='m-0 fs-5 text-center fw-semibold'>
+            <p className='m-0 text-center fw-semibold'>
               {FormatIntNumber(state.currentRegion, row.totalSendToAmazon)} <span className='fs-7 fw-normal'>{row.totalSendToAmazon > 1 ? 'Units' : 'Unit'}</span>
             </p>
           </div>

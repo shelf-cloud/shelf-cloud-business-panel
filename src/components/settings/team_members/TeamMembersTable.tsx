@@ -13,12 +13,12 @@ type Props = {
 const TeamMembersTable = ({teamMembers, handleManageUser, pending}: Props) => {
   const columns: any = [
     {
-      name: <span className='font-weight-bold fs-13'>Name</span>,
+      name: <span className='fw-bold fs-6'>Name</span>,
       selector: (row: TeamMember) => {
         return (
           <>
             <p className='m-0 p-0'>{row.name}</p>
-            <p className='m-0 p-0 text-muted'>{row.email}</p>
+            <p className='m-0 p-0 text-muted fs-7'>{row.email}</p>
           </>
         )
       },
@@ -26,31 +26,38 @@ const TeamMembersTable = ({teamMembers, handleManageUser, pending}: Props) => {
       center: false,
     },
     {
-      name: <span className='font-weight-bold fs-13'>Role</span>,
+      name: <span className='fw-bold fs-6'>Role</span>,
       selector: (row: TeamMember) => row.role,
       sortable: true,
       center: true,
       style: {
+        fontSize: '0.7rem',
         textTransform: 'capitalize',
       },
     },
     {
-      name: <span className='font-weight-bold fs-13'>Date Added</span>,
+      name: <span className='fw-bold fs-6'>Date Added</span>,
       selector: (row: TeamMember) => row.dateAdded,
       sortable: true,
       center: true,
+      style: {
+        fontSize: '0.7rem',
+      },
     },
     {
-      name: <span className='font-weight-bold fs-13'>Last Activity</span>,
+      name: <span className='fw-bold fs-6'>Last Activity</span>,
       selector: (row: TeamMember) => row.lastActive ? moment(row.lastActive).format('YYYY-MM-DD, h:mm:ss a') : 'No Activity',
       sortable: true,
       center: true,
+      style: {
+        fontSize: '0.7rem',
+      },
     },
     {
-      name: <span className='font-weight-bold fs-13'></span>,
+      name: <span className='fw-bold fs-6'></span>,
       selector: (row: TeamMember) => {
         return (
-          <Button color='light' onClick={() => handleManageUser(JSON.parse(JSON.stringify(row)))}>
+          <Button color='light' className='fs-7' onClick={() => handleManageUser(JSON.parse(JSON.stringify(row)))}>
             Manage
           </Button>
         )

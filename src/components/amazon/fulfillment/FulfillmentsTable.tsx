@@ -51,7 +51,10 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
       sortable: true,
       center: false,
       compact: false,
-      grow: 2,
+      grow: 1.8,
+      style: {
+        fontSize: '0.7rem',
+      }
     },
     {
       name: <span className='fw-bold fs-6'>Marketpalce</span>,
@@ -59,6 +62,9 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
       sortable: true,
       center: true,
       compact: true,
+      style: {
+        fontSize: '0.7rem',
+      }
     },
     {
       name: <span className='fw-bold fs-6'>Date Created</span>,
@@ -66,6 +72,10 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
       sortable: true,
       center: true,
       compact: true,
+      grow: 1.2,
+      style: {
+        fontSize: '0.7rem',
+      },
       sortFunction: (rowA: ListInboundPlan, rowB: ListInboundPlan) => sortDates(rowA.createdAt, rowB.createdAt),
     },
     {
@@ -114,6 +124,9 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
       sortable: true,
       center: true,
       compact: true,
+      style: {
+        fontSize: '0.7rem',
+      }
     },
     {
       name: <span className='fw-bold fs-6'>Units</span>,
@@ -125,6 +138,9 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
       sortable: true,
       center: true,
       compact: true,
+      style: {
+        fontSize: '0.7rem',
+      }
     },
     {
       name: <span className='fw-bold fs-6'>Action</span>,
@@ -142,7 +158,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
             return (
               <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
                 <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
-                  <i className='mdi mdi-dots-vertical align-middle fs-3 m-0 px-2 py-0' style={{ color: '#919FAF' }}></i>
+                  <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-2 py-0' style={{ color: '#919FAF' }}></i>
                 </DropdownToggle>
                 {row.inboundPlanId ? (
                   <DropdownMenu className='dropdown-menu-end' container={'body'}>
@@ -222,7 +238,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
             return (
               <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
                 <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
-                  <i className='mdi mdi-dots-vertical align-middle fs-3 m-0 px-2 py-0' style={{ color: '#919FAF' }}></i>
+                  <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-2 py-0' style={{ color: '#919FAF' }}></i>
                 </DropdownToggle>
                 <DropdownMenu className='dropdown-menu-end' container={'body'}>
                   <DropdownItem
@@ -269,7 +285,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
             return (
               <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
                 <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
-                  <i className='mdi mdi-dots-vertical align-middle fs-3 m-0 px-2 py-0' style={{ color: '#919FAF' }}></i>
+                  <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-2 py-0' style={{ color: '#919FAF' }}></i>
                 </DropdownToggle>
                 <DropdownMenu className='dropdown-menu-end' container={'body'}>
                   <DropdownItem onClick={() => handleRepairFBAWorkflow(row.inboundPlanId)}>

@@ -100,21 +100,21 @@ const TeamMembers = ({}: Props) => {
                         type='text'
                         minLength={3}
                         debounceTimeout={500}
-                        className='form-control bg-white'
+                        className='form-control fs-6 bg-white'
                         placeholder='Search...'
                         id='search-options'
                         value={searchValue}
                         onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
                         onChange={(e) => setSearchValue(e.target.value)}
                       />
-                      <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
+                      <span className='mdi mdi-magnify search-widget-icon fs-5'></span>
                       <span
                         className='d-flex align-items-center justify-content-center bg-white'
                         style={{
                           cursor: 'pointer',
                         }}
                         onClick={() => setSearchValue('')}>
-                        <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
+                        <i className='mdi mdi-window-close fs-5 m-0 px-2 py-0 text-muted' />
                       </span>
                     </div>
                   </div>

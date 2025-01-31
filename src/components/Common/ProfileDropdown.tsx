@@ -26,26 +26,26 @@ const ProfileDropdown = () => {
         <Dropdown
           isOpen={isProfileDropdown}
           toggle={toggleProfileDropdown}
-          className='ms-sm-3 d-flex align-items-center rounded-4 shadow'
+          className='d-flex align-items-center rounded-4 shadow'
           style={{ backgroundColor: 'rgba(239, 243, 246, 1)' }}>
           <DropdownToggle tag='button' type='button' className='btn'>
             <span className='d-flex align-items-center justify-content-between gap-2'>
               <span className='text-end d-flex flex-column'>
-                <span className='d-inline-block fs-5 m-0 fw-medium user-name-text text-capitalize'>{session?.user?.businessName}</span>
-                <span className='inline-block fs-6 m-0 text-muted user-name-sub-text'>{state.currentRegion !== '' && (state.currentRegion == 'us' ? 'USA' : 'EUROPE')}</span>
+                <span className='d-inline-block fs-6 m-0 fw-medium user-name-text text-capitalize'>{session?.user?.businessName}</span>
+                <span className='inline-block fs-7 m-0 text-muted user-name-sub-text'>{state.currentRegion !== '' && (state.currentRegion == 'us' ? 'USA' : 'EUROPE')}</span>
               </span>
               {state &&
                 state.currentRegion !== '' &&
                 (state.currentRegion == 'us' ? (
-                  <Image className='rounded-circle header-profile-user' src={flag_of_usa} width={35} height={35} alt='Header Avatar' />
+                  <Image className='rounded-circle header-profile-user' src={flag_of_usa} width={25} height={25} alt='Header Avatar' />
                 ) : state.currentRegion == 'eu' ? (
-                  <Image className='rounded-circle header-profile-user' src={flag_of_europe} width={35} height={35} alt='Header Avatar' />
+                  <Image className='rounded-circle header-profile-user' src={flag_of_europe} width={25} height={25} alt='Header Avatar' />
                 ) : (
-                  <Image className='rounded-circle header-profile-user' src={flag_of_SC} width={35} height={35} alt='Header Avatar' />
+                  <Image className='rounded-circle header-profile-user' src={flag_of_SC} width={25} height={25} alt='Header Avatar' />
                 ))}
             </span>
           </DropdownToggle>
-          <DropdownMenu className='dropdown-menu-end' container={'body'}>
+          <DropdownMenu className='dropdown-menu-end' container={'body'} end>
             <h6 className='dropdown-header text-capitalize'>Welcome {session?.user?.profileName}</h6>
             {session?.user?.role === 'admin' && (
               <DropdownItem onClick={() => router.push('/Profile')}>

@@ -2,6 +2,7 @@ import React from 'react'
 
 //import Components
 import ProfileDropdown from '../../components/Common/ProfileDropdown'
+import NotificationsPanel from '@components/Common/NotificationsPanel'
 
 type Props = {
   headerClass: string
@@ -67,7 +68,8 @@ const Header = ({ headerClass }: Props) => {
               </button>
             </div>
 
-            <div className="d-flex align-items-center">
+            <div className="d-flex justify-content-end align-items-center gap-3 gap-md-4"> 
+              <NotificationsPanel />
               <ProfileDropdown />
             </div>
           </div>
