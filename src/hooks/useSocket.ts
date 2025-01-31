@@ -12,9 +12,8 @@ export const useSocket = (userId: string | null, mutate: () => void) => {
 
     const panelUserId = `panel_${userId}` // ✅ Create unique user ID for panel
 
-    const socketUrl = process.env.NODE_ENV === 'production' ? 'wss://your-production-url.com' : 'ws://localhost:3090'
+    const socketUrl = process.env.WS_SHELFCLOUD_SERVER_URL
 
-    console.log(`🔄 Connecting to WebSocket: ${socketUrl}`)
     // ✅ Create WebSocket connection
     socket = io(socketUrl, {
       query: { userId: panelUserId },
