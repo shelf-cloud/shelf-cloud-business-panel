@@ -60,6 +60,7 @@ const IndividualUnitsFulfillment = ({ lisiting, pending, sessionToken }: Props) 
             searchValue.split(' ').every((word) => item?.product_name?.toLowerCase().includes(word.toLowerCase())) ||
             searchValue.split(' ').every((word) => item?.title?.toLowerCase().includes(word.toLowerCase())) ||
             item?.sku?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            searchValue.split(' ').every((word) => item?.sku?.toLowerCase().includes(word.toLowerCase())) ||
             item?.shelfcloud_sku?.toLowerCase().includes(searchValue.toLowerCase()) ||
             item?.asin?.toLowerCase().includes(searchValue.toLowerCase()) ||
             item?.barcode?.toLowerCase().includes(searchValue.toLowerCase()) ||

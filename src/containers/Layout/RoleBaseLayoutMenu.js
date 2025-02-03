@@ -219,6 +219,12 @@ const Navdata = () => {
             },
           ],
         },
+        PPWithNoSCFees: {
+          id: 'productPerformanceNoFees',
+          label: 'Product Performance No SC Fees',
+          link: '/marketplaces/productPerformanceNoFees',
+          parentId: 'marketplaces',
+        },
       },
     },
     Inbound: {
@@ -547,6 +553,10 @@ const Navdata = () => {
 
     if (state.user[state.currentRegion]?.showCommerceHub) {
       menuItems[3].subItems?.push(modules.Marketplaces.subItems.CommerceHub)
+    }
+    
+    if (state.user[state.currentRegion]?.showPPWithNoSCFees) {
+      menuItems[3].subItems?.unshift(modules.Marketplaces.subItems.PPWithNoSCFees)
     }
   } else {
     menuItems = [modules.Dashboard]
