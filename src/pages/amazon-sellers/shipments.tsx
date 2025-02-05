@@ -99,7 +99,9 @@ const Shipments = ({ session, sessionToken }: Props) => {
     return allData.filter(
       (item: FBAShipment) =>
         (searchValue !== ''
-          ? item.shipment.shipmentConfirmationId.toLowerCase().includes(searchValue.toLowerCase()) || item.shipment.name.toLowerCase().includes(searchValue.toLowerCase())
+          ? item.shipment.shipmentConfirmationId.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.shipment.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.shippingMode.toLowerCase().includes(searchValue.toLowerCase())
           : true) &&
         (filters.status.value !== 'all' ? (item.status ? item.status === filters.status.value : item.shipment.status === filters.status.value) : true) &&
         (filters.showOnlyMissingQty

@@ -101,6 +101,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
           return {
             ...prev,
             sameShippingMode: true,
+            shippingMode: validateIfPlacementOptionHasSPD(inboundPlan.transportationOptions[chosenPlacementOption.placementOptionId]) ? 'SPD' : 'LTL',
             sameShippingCarrier: 'amazon',
             nonAmazonCarrier: '',
             nonAmazonAlphaCode: '',
@@ -108,7 +109,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
             shipments: chosenPlacementOption.shipmentIds.reduce((acc: { [shipmentId: string]: FinalShipment }, shipmentId) => {
               acc[shipmentId] = {
                 shipmentId: shipmentId,
-                shippingMode: 'SPD',
+                shippingMode: validateIfPlacementOptionHasSPD(inboundPlan.transportationOptions[chosenPlacementOption.placementOptionId]) ? 'SPD' : 'LTL',
                 deliveryWindow: '',
                 loadingDeliveryWindowOptions: false,
               }
@@ -135,6 +136,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
           return {
             ...prev,
             sameShippingMode: true,
+            shippingMode: validateIfPlacementOptionHasSPD(inboundPlan.transportationOptions[placementOption.placementOptionId]) ? 'SPD' : 'LTL',
             sameShippingCarrier: 'amazon',
             nonAmazonCarrier: '',
             nonAmazonAlphaCode: '',
@@ -142,7 +144,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
             shipments: placementOption.shipmentIds.reduce((acc: { [shipmentId: string]: FinalShipment }, shipmentId) => {
               acc[shipmentId] = {
                 shipmentId: shipmentId,
-                shippingMode: 'SPD',
+                shippingMode: validateIfPlacementOptionHasSPD(inboundPlan.transportationOptions[placementOption.placementOptionId]) ? 'SPD' : 'LTL',
                 deliveryWindow: '',
                 loadingDeliveryWindowOptions: false,
               }
@@ -263,6 +265,14 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
 
   const totalLTLFees = useMemo(() => {
     if (!inboundPlan.transportationOptions || !inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]) return 0
+
+    if (finalShippingCharges.sameShippingMode) {
+      if (finalShippingCharges.shippingMode === 'LTL') {
+        return Object.values(finalShippingCharges.shipments).reduce((total, shipment) => {
+          return total + finalShippingCharges.ltlTransportationOptions[shipment.shipmentId].cost
+        }, 0)
+      }
+    }
 
     if (!finalShippingCharges.sameShippingMode) {
       return Object.values(finalShippingCharges.shipments).reduce((total, shipment) => {
@@ -497,6 +507,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                 return {
                                   ...prev,
                                   sameShippingMode: true,
+                                  shippingMode: validateIfPlacementOptionHasSPD(inboundPlan.transportationOptions[placementOption.placementOptionId]) ? 'SPD' : 'LTL',
                                   sameShippingCarrier: 'amazon',
                                   nonAmazonCarrier: '',
                                   nonAmazonAlphaCode: '',
@@ -504,7 +515,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                   shipments: placementOption.shipmentIds.reduce((acc: { [shipmentId: string]: FinalShipment }, shipmentId) => {
                                     acc[shipmentId] = {
                                       shipmentId: shipmentId,
-                                      shippingMode: 'SPD',
+                                      shippingMode: validateIfPlacementOptionHasSPD(inboundPlan.transportationOptions[placementOption.placementOptionId]) ? 'SPD' : 'LTL',
                                       deliveryWindow: '',
                                       loadingDeliveryWindowOptions: false,
                                     }

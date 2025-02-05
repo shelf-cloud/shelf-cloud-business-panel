@@ -43,13 +43,15 @@ export const findLtlAlphaCode = (transportationOptions: TransportationOptionShip
 export const validateIfPlacementOptionHasSPD = (transportationOptions: TransportationOptionShipment) => {
   const shipments = Object.values(transportationOptions)
 
+  let hastSPDCost = true
   for (const shipment of shipments) {
-    const spdCost = shipment
-      .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
-      .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]?.quote?.cost.amount! || 0
-      if (spdCost <= 0) return false
-      return true
+    const spdCost =
+      shipment
+        .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+        .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]?.quote?.cost.amount! || 0
+    if (spdCost <= 0) hastSPDCost = false
   }
+  return hastSPDCost
 }
 
 export const setInitialLTLTransportationOptions = (transportationOptions: TransportationOptionShipment) => {

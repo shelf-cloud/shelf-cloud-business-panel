@@ -48,7 +48,7 @@ const Pallets = ({ shipmentDetails, handlePrintShipmentBillOfLading, watingRepso
             {shipmentDetails.shipmentPallets.pallets.map((pallet) => (
               <tr key={pallet.packageId}>
                 <td>{`${pallet.dimensions.length} x ${pallet.dimensions.width} x ${pallet.dimensions.height}`}</td>
-                <td>{pallet.weight.value}</td>
+                <td>{FormatIntPercentage(state.currentRegion, pallet.weight.value)}</td>
                 <td>{pallet.quantity}</td>
                 <td>{FormatIntPercentage(state.currentRegion, pallet.weight.value * pallet.quantity)}</td>
                 <td>{CleanStatus(pallet.stackability)}</td>
