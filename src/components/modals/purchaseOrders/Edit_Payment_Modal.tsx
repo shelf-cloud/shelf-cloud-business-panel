@@ -47,7 +47,7 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
       setloading(true)
 
       const response = await axios.post(`/api/purchaseOrders/editPaymentToPo?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        poId: state.modalAddPaymentToPoDetails?.poId,
+        poId: editPaymentModal.poId,
         paymentIndex: editPaymentModal.paymentIndex,
         ...values,
       })
@@ -87,7 +87,7 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
     setloading(true)
 
     const response = await axios.post(`/api/purchaseOrders/deletePaymentToPo?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-      poId: state.modalAddPaymentToPoDetails?.poId,
+      poId: editPaymentModal.poId,
       paymentIndex: editPaymentModal.paymentIndex,
     })
 
@@ -152,7 +152,7 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
         <Form onSubmit={HandleAddProduct}>
           <Row md={12}>
             <h5 className='fs-5 mb-4 fw-semibold text-primary'>
-              PO: <span className='fw-semibold text-black'>{state.modalAddPaymentToPoDetails?.orderNumber}</span>
+              PO: <span className='fw-semibold text-black'>{editPaymentModal.orderNumber}</span>
             </h5>
           </Row>
           <Row md={12}>
