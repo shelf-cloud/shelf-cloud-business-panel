@@ -58,6 +58,15 @@ const initialState = {
     orderDate: '',
     showActions: false,
   },
+  // MODAL - ORDER DETAILS FROM INVOICE
+  storageFeesDetailModal: {
+    show: false,
+    orderNumber: '',
+    totalCharge: 0,
+    orderType: '',
+    startDate: '',
+    endDate: '',
+  },
   // MODAL - PAYMENTS
   receivingFromPo: {},
   showCreateReceivingFromPo: false,
@@ -251,6 +260,20 @@ const useInitialState = () => {
     })
   }
 
+  const setStorageFeesDetailsModal = (show, orderNumber, totalCharge, orderType, startDate, endDate) => {
+    setState({
+      ...state,
+      storageFeesDetailModal: {
+        show,
+        orderNumber,
+        totalCharge,
+        orderType,
+        startDate,
+        endDate,
+      },
+    })
+  }
+
   const setIndividualUnitsPlan = (payload) => {
     setState({
       ...state,
@@ -347,6 +370,7 @@ const useInitialState = () => {
     setShowCreateReturnModal,
     setUploadProductsModal,
     setShipmentDetailsModal,
+    setStorageFeesDetailsModal,
     setIndividualUnitsPlan,
     setUploadIndividualUnitsLabelsModal,
     setReceivingFromPo,

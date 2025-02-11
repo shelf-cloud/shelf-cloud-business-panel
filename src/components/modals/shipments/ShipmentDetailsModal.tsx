@@ -4,7 +4,6 @@ import ReturnType from '@components/shipments/shipmentLog/ReturnType'
 import ServiceType from '@components/shipments/shipmentLog/ServiceType'
 import ShipmentStatusBadge from '@components/shipments/shipmentLog/ShipmentStatusBadge'
 import ShipmentType from '@components/shipments/shipmentLog/ShipmentType'
-import StorageType from '@components/shipments/shipmentLog/StorageType'
 import WholesaleType from '@components/shipments/shipmentLog/WholesaleType'
 import AppContext from '@context/AppContext'
 import { Shipment, ShipmentDetialsResponse } from '@typesTs/shipments/shipments'
@@ -30,8 +29,6 @@ const SelectShipmentType = (orderType: string, data: Shipment, showActions: bool
       return <FBAShipmentType data={data} />
     case 'Receiving':
       return <ReceivingType data={data} />
-    case 'Storage':
-      return <StorageType />
     case 'Adjustment':
     case 'Service':
       return <ServiceType data={data} />

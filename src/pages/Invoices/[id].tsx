@@ -1,5 +1,6 @@
 import BreadCrumb from '@components/Common/BreadCrumb'
 import ShipmentDetailsModal from '@components/modals/shipments/ShipmentDetailsModal'
+import StorageFeesDetailsModal from '@components/modals/shipments/StorageFeesDetailsModal'
 import PrintInvoice from '@components/PrintInvoice'
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
@@ -34,14 +35,16 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 
 const InvoiceDetails = () => {
   const router = useRouter()
-  const { state, setShipmentDetailsModal }: any = useContext(AppContext)
-  const { currentRegion, shipmentDetailModal } = state
+  const { state, setShipmentDetailsModal, setStorageFeesDetailsModal }: any = useContext(AppContext)
+  const { currentRegion, shipmentDetailModal, storageFeesDetailModal } = state
   const { id } = router.query
   const [loading, setloading] = useState(true)
   const [invoiceDetails, setInvoiceDetails] = useState<InvoiceFullDetails | null>()
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(id ? `/api/getInvoiceDetails?region=${currentRegion}&id=${id}` : null, fetcher)
+  const { data } = useSWR(id ? `/api/getInvoiceDetails?region=${currentRegion}&id=${id}` : null, fetcher, {
+    revalidateOnFocus: false,
+  })
 
   useEffect(() => {
     if (data?.error) {
@@ -120,12 +123,20 @@ const InvoiceDetails = () => {
                             {invoiceDetails?.orders.map((order) => (
                               <tr key={order.orderNumber}>
                                 <td
-                                  className={order.orderType != 'Storage' ? 'text-primary' : ''}
-                                  style={order.orderType != 'Storage' ? { cursor: 'pointer' } : {}}
+                                  className='text-primary'
+                                  style={{ cursor: 'pointer' }}
                                   onClick={
                                     order.orderType != 'Storage'
                                       ? () => setShipmentDetailsModal(true, order.orderId, order.orderNumber, order.orderType, order.orderStatus, order.orderDate, false)
-                                      : () => {}
+                                      : () =>
+                                          setStorageFeesDetailsModal(
+                                            true,
+                                            order.orderNumber,
+                                            order.totalCharge,
+                                            order.orderType,
+                                            moment(order.closedDate).subtract(1, 'months').startOf('month').format('YYYY-MM-DD'),
+                                            moment(order.closedDate).subtract(1, 'months').endOf('month').format('YYYY-MM-DD')
+                                          )
                                   }>
                                   {order.orderNumber}
                                 </td>
@@ -179,6 +190,7 @@ const InvoiceDetails = () => {
         </div>
       </React.Fragment>
       {shipmentDetailModal.show && <ShipmentDetailsModal />}
+      {storageFeesDetailModal.show && <StorageFeesDetailsModal />}
     </div>
   )
 }
