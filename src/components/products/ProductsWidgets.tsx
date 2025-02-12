@@ -32,7 +32,7 @@ const ProductsWidgets = ({}: Props) => {
             <div className='d-flex align-items-center justify-content-between mb-1'>
               <p className='text-capitalize fw-medium mb-0'>Total Inventory Qty</p>
               <div className='flex-shrink-0'>
-                <h5 className={'fs-6 mb-0 fw-bold'}>{1762} SKUs</h5>
+                {/* <h5 className={'fs-6 mb-0 fw-bold'}>{1762} SKUs</h5> */}
               </div>
             </div>
             <div className='d-flex align-items-end justify-content-between'>
