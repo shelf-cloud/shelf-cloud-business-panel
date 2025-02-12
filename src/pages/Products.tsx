@@ -22,6 +22,7 @@ import ExportBlankTemplate from '@components/products/ExportBlankTemplate'
 import ImportProductsFileModal from '@components/modals/products/ImportProductsFileModal'
 import ExportProductsFile from '@components/products/ExportProductsFile'
 import CloneProductModal from '@components/modals/products/CloneProductModal'
+import ProductsWidgets from '@components/products/ProductsWidgets'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -172,9 +173,10 @@ const Products = ({ session }: Props) => {
         <div className='page-content'>
           <BreadCrumb title='Products' pageTitle='Warehouse' />
           <Container fluid>
+            <ProductsWidgets />
             <Row>
               <Col lg={12}>
-                <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-1 flex-md-row justify-content-md-between align-items-md-center'>
+                <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-between align-items-md-center'>
                   <div className='w-auto d-flex flex-row align-items-center justify-content-between gap-3'>
                     <FilterProducts
                       brands={data?.brands}
