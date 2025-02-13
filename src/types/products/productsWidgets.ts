@@ -11,3 +11,9 @@ export interface ProductsWidgetsResponse {
     dailyLandedValue: number[]
     dates: string[]
   }
+
+  export interface FBAProductsWidgetResponse {
+    totalQty: number
+    totalSellerValue: number
+    totalLandedValue: number
+  }
