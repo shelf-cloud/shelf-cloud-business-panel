@@ -50,15 +50,12 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
     inboundPlanId: inboundPlan.inboundPlanId,
     sameShipDate: true,
     shipDate: '',
-    sameShippingMode: true,
-    shippingMode: validateIfPlacementOptionHasSPD(
+    sameShippingMode: !inboundPlan.placementOptionId ? true : inboundPlan.sameShippingMode,
+    shippingMode: 
       !inboundPlan.placementOptionId
-        ? inboundPlan.transportationOptions[inboundPlan.placementOptions[0].placementOptionId]
-        : inboundPlan.transportationOptions[inboundPlan.placementOptionId]
-    )
-      ? 'SPD'
-      : 'LTL',
-    sameShippingCarrier: 'amazon',
+        ? validateIfPlacementOptionHasSPD(inboundPlan.transportationOptions[inboundPlan.placementOptions[0].placementOptionId]) ? 'SPD' : 'LTL'
+        : inboundPlan.shippingMode,
+    sameShippingCarrier: !inboundPlan.placementOptionId ? 'amazon' : inboundPlan.sameShippingCarrier,
     nonAmazonCarrier: '',
     nonAmazonAlphaCode: '',
     placementOptionIdSelected: !inboundPlan.placementOptionId ? inboundPlan.placementOptions[0].placementOptionId : inboundPlan.placementOptionId,
@@ -100,9 +97,9 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
         setfinalShippingCharges((prev) => {
           return {
             ...prev,
-            sameShippingMode: true,
-            shippingMode: validateIfPlacementOptionHasSPD(inboundPlan.transportationOptions[chosenPlacementOption.placementOptionId]) ? 'SPD' : 'LTL',
-            sameShippingCarrier: 'amazon',
+            sameShippingMode: inboundPlan.sameShippingMode,
+            shippingMode: inboundPlan.shippingMode,
+            sameShippingCarrier: inboundPlan.sameShippingCarrier,
             nonAmazonCarrier: '',
             nonAmazonAlphaCode: '',
             placementOptionIdSelected: chosenPlacementOption.placementOptionId,
