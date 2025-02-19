@@ -23,9 +23,10 @@ type Props = {
   setdimensionsModal: (dimensionsModal: any) => void
   setSelectedRows: (selectedRows: AmazonFulfillmentSku[]) => void
   toggledClearRows: boolean
+  setinboundFBAHistoryModal: (prev: any) => void
 }
 
-const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setError, setHasQtyError, setSelectedRows, toggledClearRows }: Props) => {
+const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setError, setHasQtyError, setSelectedRows, toggledClearRows, setinboundFBAHistoryModal }: Props) => {
   const { state, setModalProductInfo }: any = useContext(AppContext)
   const [skusWithError, setSkusWithError] = useState<{ [key: string]: boolean }>({})
 
@@ -205,8 +206,8 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
               <div
                 className='my-2'
                 style={{
-                  width: '70px',
-                  height: '60px',
+                  width: '50px',
+                  height: '50px',
                   margin: '2px 0px',
                   position: 'relative',
                 }}>
@@ -456,7 +457,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       name: <span className='fw-bold fs-6'>Amazon</span>,
       selector: (row: AmazonFulfillmentSku) => {
         return (
-          <div className='d-flex flex-column justify-content-center align-items-end my-1 fs-7'>
+          <div className='d-flex flex-column justify-content-start align-items-start my-1 fs-7'>
             <span className='m-0 p-0 fw-semibold'>
               <span className='text-muted fw-light'>Fulfillable: </span>
               {row.afn_fulfillable_quantity}
@@ -469,15 +470,24 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
               <span className='text-muted fw-light'>Unsellable: </span>
               {row.afn_unsellable_quantity}
             </span>
-            <span className='m-0 p-0 fw-semibold'>
+            <div className='m-0 p-0 fw-semibold d-flex flex-row justify-content-end align-items-center gap-1'>
               <span className='text-muted fw-light'>Inbound: </span>
               {row.afn_inbound_receiving_quantity + row.afn_inbound_shipped_quantity + row.afn_inbound_working_quantity}
-            </span>
+              {row.fbaShipments.length > 0 && (
+                <Button
+                  color='light'
+                  outline
+                  className='p-0 m-0 btn btn-sm btn-icon btn-ghost-info'
+                  onClick={() => setinboundFBAHistoryModal({ show: true, sku: row.shelfcloud_sku, msku: row.msku, shipments: row.fbaShipments })}>
+                  <i className='ri-information-fill p-0 m-0 fs-6 text-info' />
+                </Button>
+              )}
+            </div>
           </div>
         )
       },
       sortable: true,
-      center: true,
+      left: true,
       compact: true,
       width: '100px',
       minWidth: 'fit-content',

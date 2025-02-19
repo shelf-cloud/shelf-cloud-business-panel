@@ -20,9 +20,10 @@ type Props = {
   pending: boolean
   setError: (skus: any) => void
   setHasQtyError: (hasQtyError: boolean) => void
+  setinboundFBAHistoryModal: (prev: any) => void
 }
 
-const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, setError, setHasQtyError }: Props) => {
+const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, setError, setHasQtyError, setinboundFBAHistoryModal }: Props) => {
   const { state, setModalProductInfo }: any = useContext(AppContext)
   const [skusWithError, setSkusWithError] = useState<{ [key: string]: boolean }>({})
 
@@ -198,18 +199,14 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
               <div
                 className='my-2'
                 style={{
-                  width: '70px',
-                  height: '60px',
+                  width: '50px',
+                  height: '50px',
                   margin: '2px 0px',
                   position: 'relative',
                 }}>
                 <img
                   loading='lazy'
-                  src={
-                    row.image
-                      ? row.image
-                      : NoImageAdress
-                  }
+                  src={row.image ? row.image : NoImageAdress}
                   alt='product Image'
                   style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                 />
@@ -322,7 +319,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
       selector: (row: AmazonFulfillmentSku) => {
         return (
           <div className='text-center'>
-            <p className='m-0 p-0'>{row.shelfcloud_sku}</p>
+            <p className='m-0 p-0 fs-7'>{row.shelfcloud_sku}</p>
           </div>
         )
       },
@@ -350,7 +347,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
       name: <span className='fw-bold fs-6'>Amazon</span>,
       selector: (row: AmazonFulfillmentSku) => {
         return (
-          <div className='d-flex flex-column justify-content-center align-items-end my-1'>
+          <div className='d-flex flex-column justify-content-start align-items-start my-1 fs-7'>
             <span className='m-0 p-0 fw-semibold'>
               <span className='text-muted fw-light'>Fulfillable: </span>
               {row.afn_fulfillable_quantity}
@@ -363,15 +360,24 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
               <span className='text-muted fw-light'>Unsellable: </span>
               {row.afn_unsellable_quantity}
             </span>
-            <span className='m-0 p-0 fw-semibold'>
+            <div className='m-0 p-0 fw-semibold d-flex flex-row justify-content-end align-items-center gap-1'>
               <span className='text-muted fw-light'>Inbound: </span>
               {row.afn_inbound_receiving_quantity + row.afn_inbound_shipped_quantity + row.afn_inbound_working_quantity}
-            </span>
+              {row.fbaShipments.length > 0 && (
+                <Button
+                  color='light'
+                  outline
+                  className='btn btn-sm btn-icon btn-ghost-info'
+                  onClick={() => setinboundFBAHistoryModal({ show: true, sku: row.shelfcloud_sku, msku: row.msku, shipments: row.fbaShipments })}>
+                  <i className='ri-information-fill p-0 m-0 fs-6 text-info' />
+                </Button>
+              )}
+            </div>
           </div>
         )
       },
       sortable: true,
-      center: true,
+      left: true,
       compact: true,
       width: '100px',
       minWidth: 'fit-content',
@@ -384,7 +390,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
       ),
       selector: (row: AmazonFulfillmentSku) => {
         return (
-          <div className='d-flex flex-row justify-content-start align-items-center gap-2 my-2 fs-6'>
+          <div className='d-flex flex-row justify-content-start align-items-center gap-2 my-2 fs-7'>
             <div className='d-flex flex-column justify-content-start align-items-center gap-2' style={{ overflow: 'unset', textOverflow: 'unset' }}>
               <div>
                 <span className='fw-semibold'>1D: </span>
@@ -427,7 +433,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
       name: <span className='fw-bold fs-6 text-center'>Warehouse Qty</span>,
       selector: (cell: AmazonFulfillmentSku) => {
         if (cell.isKit) {
-          return <span className='text-info'>{FormatIntNumber(state.currentRegion, cell.quantity)}</span>
+          return <span className='text-info fs-7'>{FormatIntNumber(state.currentRegion, cell.quantity)}</span>
         }
         return (
           <>
@@ -435,7 +441,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
               tabIndex={-1}
               color='info'
               outline
-              className='btn btn-ghost-info'
+              className='btn btn-ghost-info fs-7'
               id={`reservedMasterQty${CleanSpecialCharacters(cell.sku)}`}
               onClick={() => {
                 setModalProductInfo(cell.inventoryId, state.user.businessId, cell.sku)
@@ -464,6 +470,9 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
       compact: true,
       width: '120px',
       minWidth: 'fit-content',
+      style: {
+        fontSize: '0.7rem',
+      },
       conditionalCellStyles: [
         {
           when: (row: AmazonFulfillmentSku) => moment(row.recommendedShipDate).isBefore(moment().add(1, 'days'), 'day'),
@@ -496,6 +505,9 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
       compact: false,
       width: '150px',
       minWidth: 'fit-content',
+      style: {
+        fontSize: '0.7rem',
+      },
     },
     {
       name: (
@@ -554,7 +566,14 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
     },
     {
       name: <span className='fw-bold fs-6 text-center'>Total To Amazon</span>,
-      selector: (row: AmazonFulfillmentSku) => row.totalSendToAmazon > 0 ? <p className='m-0 fs-5 text-center fw-semibold'>{FormatIntNumber(state.currentRegion, row.totalSendToAmazon)} <span className='fs-7 fw-normal'>{row.totalSendToAmazon > 1 ? 'Units' : 'Unit'}</span></p> : 0,
+      selector: (row: AmazonFulfillmentSku) =>
+        row.totalSendToAmazon > 0 ? (
+          <p className='m-0 fs-5 text-center fw-semibold'>
+            {FormatIntNumber(state.currentRegion, row.totalSendToAmazon)} <span className='fs-7 fw-normal'>{row.totalSendToAmazon > 1 ? 'Units' : 'Unit'}</span>
+          </p>
+        ) : (
+          0
+        ),
       sortable: true,
       center: true,
       compact: true,

@@ -1,4 +1,4 @@
-import { AmazonFulfillmentSku, AmzDimensions, Dimensions, FilterProps } from '@typesTs/amazon/fulfillments'
+import { AmazonFulfillmentSku, AmzDimensions, Dimensions, FBAShipmentHisotry, FilterProps } from '@typesTs/amazon/fulfillments'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { DebounceInput } from 'react-debounce-input'
 import { Button, Col, Row, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledButtonDropdown } from 'reactstrap'
@@ -12,6 +12,7 @@ import { toast } from 'react-toastify'
 import { useSWRConfig } from 'swr'
 import axios from 'axios'
 import AppContext from '@context/AppContext'
+import InboundFBAHistoryModal from '@components/modals/amazon/InboundFBAHistoryModal'
 
 type Props = {
   lisiting: AmazonFulfillmentSku[]
@@ -43,6 +44,12 @@ const MasterBoxesFulfillment = ({ lisiting, pending, sessionToken, mutateLink }:
     boxQty: 0,
     shelfCloudDimensions: {} as AmzDimensions,
     amazonDimensions: {} as Dimensions,
+  })
+  const [inboundFBAHistoryModal, setinboundFBAHistoryModal] = useState({
+    show: false,
+    sku: '',
+    msku: '',
+    shipments: [] as FBAShipmentHisotry[],
   })
 
   useEffect(() => {
@@ -224,6 +231,7 @@ const MasterBoxesFulfillment = ({ lisiting, pending, sessionToken, mutateLink }:
         setdimensionsModal={setdimensionsModal}
         setSelectedRows={setSelectedRows}
         toggledClearRows={toggledClearRows}
+        setinboundFBAHistoryModal={setinboundFBAHistoryModal}
       />
       {showCreateInboundPlanModal && (
         <CreateMastBoxesInboundPlanModal
@@ -243,6 +251,7 @@ const MasterBoxesFulfillment = ({ lisiting, pending, sessionToken, mutateLink }:
         />
       )}
       {dimensionsModal.show && <AmazonFulfillmentDimensions dimensionsModal={dimensionsModal} setdimensionsModal={setdimensionsModal} />}
+      {inboundFBAHistoryModal.show && <InboundFBAHistoryModal inboundFBAHistoryModal={inboundFBAHistoryModal} setinboundFBAHistoryModal={setinboundFBAHistoryModal} />}
     </>
   )
 }

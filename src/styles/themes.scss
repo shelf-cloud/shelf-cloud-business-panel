@@ -215,3 +215,11 @@ $value in $theme-colors {
 .capitalize {
   text-transform: capitalize;
 }
+
+.w-fit {
+  width: fit-content;
+}
+
+.tooltip-max-w-none {
+  --bs-tooltip-max-width: none !important;
+}

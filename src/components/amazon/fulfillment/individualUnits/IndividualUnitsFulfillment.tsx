@@ -1,4 +1,4 @@
-import { AmazonFulfillmentSku, AmzDimensions, Dimensions, FilterProps } from '@typesTs/amazon/fulfillments'
+import { AmazonFulfillmentSku, AmzDimensions, Dimensions, FBAShipmentHisotry, FilterProps } from '@typesTs/amazon/fulfillments'
 import React, { useEffect, useMemo, useState } from 'react'
 import { DebounceInput } from 'react-debounce-input'
 import { Button, Col, Row } from 'reactstrap'
@@ -7,6 +7,7 @@ import AmazonFulfillmentDimensions from '@components/modals/amazon/AmazonFulfill
 import FilterListings from '../FilterListings'
 import IndividualUnitsTable from './IndividualUnitsTable'
 import CreateIndvUnitsInboundPlanModal from '@components/modals/amazon/CreateIndvUnitsInboundPlanModal'
+import InboundFBAHistoryModal from '@components/modals/amazon/InboundFBAHistoryModal'
 
 type Props = {
   lisiting: AmazonFulfillmentSku[]
@@ -32,6 +33,12 @@ const IndividualUnitsFulfillment = ({ lisiting, pending, sessionToken }: Props) 
     boxQty: 0,
     shelfCloudDimensions: {} as AmzDimensions,
     amazonDimensions: {} as Dimensions,
+  })
+  const [inboundFBAHistoryModal, setinboundFBAHistoryModal] = useState({
+    show: false,
+    sku: '',
+    msku: '',
+    shipments: [] as FBAShipmentHisotry[],
   })
 
   useEffect(() => {
@@ -126,7 +133,15 @@ const IndividualUnitsFulfillment = ({ lisiting, pending, sessionToken }: Props) 
           Total Item Quantities: <span className='fw-bold'>{orderProducts.reduce((total: number, item: AmazonFulfillmentSku) => total + Number(item.totalSendToAmazon), 0)}</span>
         </p>
       </div>
-      <IndividualUnitsTable allData={allData} filteredItems={filteredItems} setAllData={setAllData} pending={pending} setError={setError} setHasQtyError={setHasQtyError} />
+      <IndividualUnitsTable
+        allData={allData}
+        filteredItems={filteredItems}
+        setAllData={setAllData}
+        pending={pending}
+        setError={setError}
+        setHasQtyError={setHasQtyError}
+        setinboundFBAHistoryModal={setinboundFBAHistoryModal}
+      />
       {showCreateInboundPlanModal && (
         <CreateIndvUnitsInboundPlanModal
           orderProducts={orderProducts}
@@ -137,6 +152,7 @@ const IndividualUnitsFulfillment = ({ lisiting, pending, sessionToken }: Props) 
         />
       )}
       {dimensionsModal.show && <AmazonFulfillmentDimensions dimensionsModal={dimensionsModal} setdimensionsModal={setdimensionsModal} />}
+      {inboundFBAHistoryModal.show && <InboundFBAHistoryModal inboundFBAHistoryModal={inboundFBAHistoryModal} setinboundFBAHistoryModal={setinboundFBAHistoryModal} />}
     </>
   )
 }
