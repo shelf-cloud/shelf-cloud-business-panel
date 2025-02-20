@@ -32,6 +32,7 @@ import { useRouter } from 'next/router'
 import Add_Sku_To_Purchase_Order from '@components/modals/purchaseOrders/Add_Sku_To_Purchase_Order'
 import Add_Po_With_File from '@components/modals/purchaseOrders/Add_Po_With_File'
 import Add_Po_Manually from '@components/modals/purchaseOrders/Add_Po_Manually'
+import PurchaseOrdersWidgets from '@components/purchase_orders/ProductsWidgets'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -87,16 +88,17 @@ const PurchaseOrders = ({ session }: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
+          <BreadCrumb title='Purchase Orders' pageTitle='Inbound' />
           <Container fluid>
-            <BreadCrumb title='Purchase Orders' pageTitle='Inbound' />
+            <PurchaseOrdersWidgets />
             <Row>
               <Col lg={12}>
                 <Card>
                   <CardHeader>
-                    <div className='d-flex justify-content-between align-center mt-2 mb-3'>
-                      <div>
-                        <p className='m-0 p-0 fs-6 text-muted fw-normal'>Organize Purchase Orders by:</p>
-                        <Nav className='pt-2 nav-tabs-custom rounded card-header-tabs border-bottom-0' role='tablist'>
+                    <div className='d-flex flex-column justify-content-between align-center mt-2 mb-0 gap-3 flex-lg-row'>
+                      <div className='flex-1'>
+                        <p className='m-0 p-0 fs-7 text-muted fw-normal'>Organize Purchase Orders by:</p>
+                        <Nav className='pt-1 nav-tabs-custom rounded card-header-tabs border-bottom-0' role='tablist'>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               className={activeTab == 'suppliers' ? 'text-primary fw-semibold fs-5' : 'text-muted fs-5'}
@@ -137,10 +139,10 @@ const PurchaseOrders = ({ session }: Props) => {
                           </NavItem>
                         </Nav>
                       </div>
-                      <div className='w-auto d-flex flex-row align-items-center justify-content-between gap-3'>
+                      <div className='flex-1 w-auto d-flex flex-row flex-wrap align-items-center justify-content-start gap-2 justify-content-lg-end'>
                         {status == 'pending' ? (
                           <Button
-                            className='btn fs-6 py-1 px-3'
+                            className='fs-7 btn py-1 px-3 text-nowrap'
                             color='info'
                             onClick={() => {
                               router.replace(`/purchaseOrders?status=all&organizeBy=${organizeBy}`)
@@ -150,7 +152,7 @@ const PurchaseOrders = ({ session }: Props) => {
                           </Button>
                         ) : (
                           <Button
-                            className='btn fs-6 py-1 px-3'
+                            className='fs-7 btn py-1 px-3 text-nowrap'
                             color='info'
                             onClick={() => {
                               router.replace(`/purchaseOrders?status=pending&organizeBy=${organizeBy}`)
@@ -160,7 +162,7 @@ const PurchaseOrders = ({ session }: Props) => {
                           </Button>
                         )}
                         <UncontrolledButtonDropdown>
-                          <DropdownToggle className='btn btn-primary fs-6 py-1 px-3' caret>
+                          <DropdownToggle className='fs-7 btn btn-primary py-1 px-3 text-nowrap' caret>
                             <i className='mdi mdi-plus-circle label-icon align-middle fs-5 me-2' />
                             Add Purchase Order
                           </DropdownToggle>
@@ -175,7 +177,7 @@ const PurchaseOrders = ({ session }: Props) => {
                         </Button> */}
                         <Button
                           color='primary'
-                          className='fs-6 py-1 px-3'
+                          className='fs-7 btn py-1 px-3 text-nowrap'
                           onClick={() => {
                             setShowCreateReceivingFromPo(true)
                           }}>
