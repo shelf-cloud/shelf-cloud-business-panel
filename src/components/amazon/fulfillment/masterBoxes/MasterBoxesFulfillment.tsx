@@ -151,10 +151,10 @@ const MasterBoxesFulfillment = ({ lisiting, pending, sessionToken, mutateLink }:
     <>
       <Row className='justify-content-between gap-2'>
         <Col xs='12' lg='6' className='d-flex justify-content-start align-items-center gap-3'>
-          <Button disabled={error.length > 0 || hasQtyError} className='btn text-nowrap' color='success' onClick={() => setShowCreateInboundPlanModal(true)}>
+          <Button disabled={error.length > 0 || hasQtyError} className='fs-7 text-nowrap' color='success' onClick={() => setShowCreateInboundPlanModal(true)}>
             Create Inbound Plan
           </Button>
-          <Button disabled={error.length > 0 || hasQtyError} className='btn text-nowrap' color='secondary' onClick={() => setShowCreateManualInboundPlanModal(true)}>
+          <Button disabled={error.length > 0 || hasQtyError} className='fs-7 text-nowrap' color='secondary' onClick={() => setShowCreateManualInboundPlanModal(true)}>
             Create Manual Inbound Plan
           </Button>
           <FilterListings
@@ -165,7 +165,7 @@ const MasterBoxesFulfillment = ({ lisiting, pending, sessionToken, mutateLink }:
             masterBoxVisibility={masterBoxVisibility !== undefined || masterBoxVisibility === '' ? masterBoxVisibility : 'false'}
           />
           <UncontrolledButtonDropdown>
-            <DropdownToggle className='btn btn-info fs-6 py-2' caret>
+            <DropdownToggle className='btn btn-info fs-7 py-2' caret>
               Bulk Actions
             </DropdownToggle>
             <DropdownMenu>

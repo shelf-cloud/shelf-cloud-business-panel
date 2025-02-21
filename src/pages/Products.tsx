@@ -176,8 +176,8 @@ const Products = ({ session }: Props) => {
             <ProductsWidgets />
             <Row>
               <Col lg={12}>
-                <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-between align-items-md-center'>
-                  <div className='w-auto d-flex flex-row align-items-center justify-content-between gap-3'>
+                <Row className='d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-2 flex-md-row justify-content-md-between align-items-md-center'>
+                  <div className='w-auto d-flex flex-row align-items-center justify-content-between gap-2'>
                     <FilterProducts
                       brands={data?.brands}
                       suppliers={data?.suppliers}
@@ -189,7 +189,7 @@ const Products = ({ session }: Props) => {
                       activeTab={true}
                     />
                     <Link href={'/AddProduct'}>
-                      <Button color='primary' size='sm' className='fs-7'>
+                      <Button color='primary' size='sm' className='fs-7 text-nowrap'>
                         <i className='mdi mdi-plus-circle label-icon align-middle fs-5 me-2' />
                         Basic Product
                       </Button>

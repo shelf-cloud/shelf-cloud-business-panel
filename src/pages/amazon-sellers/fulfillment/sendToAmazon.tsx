@@ -132,7 +132,7 @@ const SendToAmazon = ({ session, sessionToken }: Props) => {
                     <div className='d-flex justify-content-end align-items-center gap-3'>
                       <Link href={'/amazon-sellers/fulfillments'} passHref>
                         <a>
-                          <Button color='info'>
+                          <Button color='info' className='fs-7'>
                             <span className='icon-on'>
                               <i className='ri-file-list-line align-bottom me-1' />
                               Fulfillments

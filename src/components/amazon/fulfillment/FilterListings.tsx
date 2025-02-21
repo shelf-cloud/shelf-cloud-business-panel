@@ -69,7 +69,7 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, ma
       <div className='dropdown'>
         <Button
           color={filters === 'true' ? 'info' : 'light'}
-          className='dropdown-toggle'
+          className='dropdown-toggle fs-7'
           type='button'
           data-bs-toggle='dropdown'
           data-bs-auto-close='outside'

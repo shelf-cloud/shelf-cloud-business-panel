@@ -181,7 +181,7 @@ const InvoiceDetails = () => {
                       </CardBody>
                     </>
                   ) : (
-                    <CardHeader className='fw-bold fs-2 text-center'>Loading...</CardHeader>
+                    <CardHeader className='fw-bold fs-5 text-center'>Loading...</CardHeader>
                   )}
                 </Card>
               </Col>

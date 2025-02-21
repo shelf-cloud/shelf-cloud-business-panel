@@ -86,7 +86,7 @@ const IndividualUnitsFulfillment = ({ lisiting, pending, sessionToken }: Props) 
     <>
       <Row className='justify-content-between gap-2'>
         <Col xs='12' lg='6' className='d-flex justify-content-start align-items-center gap-3'>
-          <Button disabled={error.length > 0 || hasQtyError} className='btn text-nowrap' color='success' onClick={() => setShowCreateInboundPlanModal(true)}>
+          <Button disabled={error.length > 0 || hasQtyError} className='fs-7 text-nowrap' color='success' onClick={() => setShowCreateInboundPlanModal(true)}>
             Create Inbound Plan
           </Button>
           <FilterListings

@@ -38,7 +38,7 @@ const ProductsWidgets = ({}: Props) => {
   )
 
   return (
-    <Row className='mb-2 gy-2 gx-1'>
+    <Row className='mb-2 gy-2 gx-2'>
       <Col xs={12} md={state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected ? 2 : 3}>
         <Card className='card-animate mb-0'>
           <CardBody className='py-2'>
@@ -54,7 +54,7 @@ const ProductsWidgets = ({}: Props) => {
                   <CountUp start={0} separator={','} end={productsWidgets?.totalQty ?? 0} decimals={0} duration={1} />
                 </span>
               </h4>
-              <Button className='btn-icon btn-primary btn-sm m-0 p-0 h-100' onClick={() => setproductsQtyTimelineModal({ show: true })}>
+              <Button color='primary' size='sm' className='btn-icon m-0 p-0 h-100' onClick={() => setproductsQtyTimelineModal({ show: true })}>
                 <i className='ri-line-chart-fill fs-5 align-middle m-0 p-0' />
               </Button>
             </div>

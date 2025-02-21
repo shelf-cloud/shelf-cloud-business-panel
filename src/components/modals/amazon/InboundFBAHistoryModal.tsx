@@ -46,7 +46,7 @@ const InboundFBAHistoryModal = ({ inboundFBAHistoryModal, setinboundFBAHistoryMo
     revalidateOnFocus: false, // Prevent re-fetching on window focus
   })
 
-  // Flatten invoices data
+  // Flatten shipment data
   const newShipments: FBAShipmentHisotry[] = useMemo(
     () => (data ? inboundFBAHistoryModal.shipments.concat(...data) : inboundFBAHistoryModal.shipments),
     [data, inboundFBAHistoryModal.shipments]
@@ -137,7 +137,7 @@ const InboundFBAHistoryModal = ({ inboundFBAHistoryModal, setinboundFBAHistoryMo
                     <td colSpan={5}>
                       {isValidating && (
                         <p className='text-center fs-7 m-0'>
-                          <Spinner size='sm' color='primary' /> Loading more invoices...
+                          <Spinner size='sm' color='primary' /> Loading more shipments...
                         </p>
                       )}
                     </td>
