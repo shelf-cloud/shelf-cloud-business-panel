@@ -9,16 +9,18 @@
     "lint": "next lint"
   },
   "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
     "semi": false,
     "singleQuote": true,
     "jsxSingleQuote": true,
-    "printWidth": 180,
-    "tabWidth": 2,
+    "printWidth": 250,
     "useTabs": false,
-    "trailingComma": "es5",
     "bracketSpacing": true,
     "bracketSameLine": true,
-    "singleAttributePerLine": false
+    "singleAttributePerLine": false,
+    "arrowParens": "always",
+    "proseWrap": "preserve"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.7.0",
