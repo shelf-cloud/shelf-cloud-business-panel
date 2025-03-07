@@ -188,11 +188,11 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                             state.currentRegion,
                             state.currentRegion === 'us'
                               ? product.useOrderAdjusted
-                                ? product.orderAdjusted * product.itemVolume
-                                : (product.order * product.itemVolume) / 1728
+                                ? ((product.orderAdjusted * product.itemVolume) / 1728)
+                                : ((product.order * product.itemVolume) / 1728)
                               : product.useOrderAdjusted
-                              ? product.orderAdjusted * product.itemVolume
-                              : (product.order * product.itemVolume) / 1000000
+                              ? ((product.orderAdjusted * product.itemVolume) / 1000000)
+                              : ((product.order * product.itemVolume) / 1000000)
                           )} ${state.currentRegion === 'us' ? 'ft³' : 'm³'}</td>`
                         : ''
                     }
@@ -394,11 +394,11 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                               state.currentRegion,
                               state.currentRegion === 'us'
                                 ? product.useOrderAdjusted
-                                  ? product.orderSplits[`${splitIndex}`].orderAdjusted * product.itemVolume
-                                  : (product.orderSplits[`${splitIndex}`].order * product.itemVolume) / 1728
+                                  ? ((product.orderSplits[`${splitIndex}`].orderAdjusted * product.itemVolume) / 1728)
+                                  : ((product.orderSplits[`${splitIndex}`].order * product.itemVolume) / 1728)
                                 : product.useOrderAdjusted
-                                ? product.orderSplits[`${splitIndex}`].orderAdjusted * product.itemVolume
-                                : (product.orderSplits[`${splitIndex}`].order * product.itemVolume) / 1000000
+                                ? ((product.orderSplits[`${splitIndex}`].orderAdjusted * product.itemVolume) / 1000000)
+                                : ((product.orderSplits[`${splitIndex}`].order * product.itemVolume) / 1000000)
                             )} ${state.currentRegion === 'us' ? 'ft³' : 'm³'}</td>`
                           : ''
                       }
