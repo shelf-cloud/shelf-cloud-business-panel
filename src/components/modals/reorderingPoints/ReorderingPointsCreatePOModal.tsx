@@ -4,23 +4,7 @@ import AppContext from '@context/AppContext'
 import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import React, { useContext, useState } from 'react'
-import {
-  Button,
-  Col,
-  DropdownMenu,
-  DropdownToggle,
-  FormFeedback,
-  FormGroup,
-  Input,
-  Label,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-  Row,
-  Spinner,
-  UncontrolledButtonDropdown,
-} from 'reactstrap'
+import { Button, Col, DropdownMenu, DropdownToggle, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner, UncontrolledButtonDropdown } from 'reactstrap'
 import * as Yup from 'yup'
 import { Formik, Form } from 'formik'
 import PrintReorderingPointsOrder from '@components/reorderingPoints/PrintReorderingPointsOrder'
@@ -43,11 +27,12 @@ type Props = {
   showPOModal: boolean
   setshowPOModal: (showPOModal: boolean) => void
   username: string
+  splits: { isSplitting: boolean; splitsQty: number }
 }
 
 const DESTINATION_OPTIONS = ['ShelfCloud Warehouse', 'Direct to Marketplace']
 
-function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier, showPOModal, setshowPOModal, username }: Props) {
+function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier, showPOModal, setshowPOModal, username, splits }: Props) {
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [loading, setLoading] = useState(false)
@@ -163,13 +148,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                 </Col>
                 <Col xs={12} md={5}>
                   <Label className='form-label mb-0 fs-7'>*Select Destination</Label>
-                  <SelectDropDown
-                    formValue={'destinationSC'}
-                    selectionInfo={DESTINATION_OPTIONS}
-                    selected={values.destinationSC}
-                    handleSelection={setFieldValue}
-                    error={errors.destinationSC && touched.destinationSC ? true : false}
-                  />
+                  <SelectDropDown formValue={'destinationSC'} selectionInfo={DESTINATION_OPTIONS} selected={values.destinationSC} handleSelection={setFieldValue} error={errors.destinationSC && touched.destinationSC ? true : false} />
                   {errors.destinationSC && touched.destinationSC ? <div className='m-0 p-0 text-danger fs-7'>*{errors.destinationSC}</div> : null}
                 </Col>
               </Row>
@@ -207,6 +186,14 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                           }
                         />
                       </th>
+                      {splits.isSplitting &&
+                        Array(splits.splitsQty)
+                          .fill('')
+                          .map((_, splitIndex) => (
+                            <th key={`splitHeader-${splitIndex}`} className='text-center'>
+                              Split #{splitIndex + 1}
+                            </th>
+                          ))}
                       <th className='text-center'>Order Qty</th>
                       <th className='text-center'>
                         Volume{' '}
@@ -283,14 +270,18 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                             {savingComment ? <Spinner color='success' size={'sm'} /> : <i className={`mdi mdi-check-all fs-5 m-0 p-0 text-success`} />}
                           </td>
                           <td className='text-center align-middle'>{product.boxQty}</td>
+                          {splits.isSplitting &&
+                            Array(splits.splitsQty)
+                              .fill('')
+                              .map((_, splitIndex) => (
+                                <td key={`splitProduct-${product.sku}-${splitIndex}`} className='text-center align-middle'>
+                                  {FormatIntNumber(state.currentRegion, product.useOrderAdjusted ? product.orderSplits[`${splitIndex}`].orderAdjusted : product.orderSplits[`${splitIndex}`].order)}
+                                </td>
+                              ))}
                           <td className='text-center align-middle'>{FormatIntNumber(state.currentRegion, product.useOrderAdjusted ? product.orderAdjusted : product.order)}</td>
-                          <td className='text-center align-middle'>
-                            {`${FormatIntPercentage(state.currentRegion, state.currentRegion === 'us' ? productVolume / 61020 : productVolume / 1000000)} m³`}
-                          </td>
+                          <td className='text-center align-middle'>{`${FormatIntPercentage(state.currentRegion, state.currentRegion === 'us' ? productVolume / 61020 : productVolume / 1000000)} m³`}</td>
 
-                          <td className='text-center align-middle'>
-                            {FormatCurrency(state.currentRegion, product.useOrderAdjusted ? product.orderAdjusted * product.sellerCost : product.order * product.sellerCost)}
-                          </td>
+                          <td className='text-center align-middle'>{FormatCurrency(state.currentRegion, product.useOrderAdjusted ? product.orderAdjusted * product.sellerCost : product.order * product.sellerCost)}</td>
                         </tr>
                       )
                     })}
@@ -302,11 +293,19 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                       <td></td>
                       <td></td>
                       <td className='text-center'>TOTAL</td>
+                      {splits.isSplitting &&
+                        Array(splits.splitsQty)
+                          .fill('')
+                          .map((_, splitIndex) => (
+                            <td key={`splitFooter-${splitIndex}`} className='text-center align-middle'>
+                              {FormatIntNumber(
+                                state.currentRegion,
+                                Object.values(reorderingPointsOrder.products).reduce((total, product) => total + (product.useOrderAdjusted ? product.orderSplits[`${splitIndex}`].orderAdjusted : product.orderSplits[`${splitIndex}`].order), 0)
+                              )}
+                            </td>
+                          ))}
                       <td className='text-center'>{FormatIntNumber(state.currentRegion, reorderingPointsOrder.totalQty)}</td>
-                      <td className='text-center'>{`${FormatIntPercentage(
-                        state.currentRegion,
-                        state.currentRegion === 'us' ? reorderingPointsOrder.totalVolume / 61020 : reorderingPointsOrder.totalVolume / 1000000
-                      )} m³`}</td>
+                      <td className='text-center'>{`${FormatIntPercentage(state.currentRegion, state.currentRegion === 'us' ? reorderingPointsOrder.totalVolume / 61020 : reorderingPointsOrder.totalVolume / 1000000)} m³`}</td>
                       <td className='text-center'>{FormatCurrency(state.currentRegion, reorderingPointsOrder.totalCost)}</td>
                     </tr>
                   </tfoot>
@@ -339,21 +338,8 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                   Actions
                 </DropdownToggle>
                 <DropdownMenu>
-                  <PrintReorderingPointsOrder
-                    reorderingPointsOrder={reorderingPointsOrder}
-                    orderDetails={values}
-                    selectedSupplier={selectedSupplier}
-                    username={username}
-                    orderComment={orderComment}
-                    printColumns={printColumns}
-                  />
-                  <DownloadExcelReorderingPointsOrder
-                    reorderingPointsOrder={reorderingPointsOrder}
-                    orderDetails={values}
-                    selectedSupplier={selectedSupplier}
-                    username={username}
-                    orderComment={orderComment}
-                  />
+                  <PrintReorderingPointsOrder reorderingPointsOrder={reorderingPointsOrder} orderDetails={values} selectedSupplier={selectedSupplier} username={username} orderComment={orderComment} printColumns={printColumns} splits={splits} />
+                  <DownloadExcelReorderingPointsOrder reorderingPointsOrder={reorderingPointsOrder} orderDetails={values} selectedSupplier={selectedSupplier} username={username} orderComment={orderComment} />
                 </DropdownMenu>
               </UncontrolledButtonDropdown>
               <Button disabled={loading} type='submit' color='success'>

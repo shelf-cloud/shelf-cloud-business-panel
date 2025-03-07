@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useMemo, useState } from 'react'
-import { Card, CardBody, Collapse, Container, Row, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledButtonDropdown, Button, Spinner } from 'reactstrap'
+import React, { useContext, useMemo, useState } from 'react'
+import { Card, CardBody, Collapse, Container, Row, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledButtonDropdown, Button } from 'reactstrap'
 import { GetServerSideProps } from 'next'
 import { getSession } from '@auth/client'
 import Head from 'next/head'
@@ -14,13 +14,15 @@ import AppContext from '@context/AppContext'
 import axios from 'axios'
 import useSWR from 'swr'
 import { toast } from 'react-toastify'
-import { ReorderingPointsProduct, ReorderingPointsResponse, ReorderingPointsSalesResponse } from '@typesTs/reorderingPoints/reorderingPoints'
+import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import ReorderingPointsTable from '@components/reorderingPoints/ReorderingPointsTable'
 import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
 import ReorderingPointsSalesModal from '@components/modals/reorderingPoints/ReorderingPointsSalesModal'
 import ReorderingPointsSettings from '@components/reorderingPoints/ReorderingPointsSettings'
 import ReorderingPointsCreatePOModal from '@components/modals/reorderingPoints/ReorderingPointsCreatePOModal'
-import { SingleForecastResponse } from '@typesTs/reorderingPoints/singleForecast'
+import { useRPProductsInfo } from '@hooks/useRPProductsInfo'
+import { useRPProductConfig } from '@hooks/useRPProductConfig'
+import RPEditProductConfigOffCanvas from '@components/reorderingPoints/RPEditProductConfigOffCanvas'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -77,21 +79,48 @@ type MarketpalcesInfo = {
   }[]
 }
 
+const fetcherMarketplaces = (endPoint: string) => axios(endPoint).then((res) => res.data)
+
 const ReorderingPoints = ({ session, sessionToken }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
   const { filters, urgency, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, brand, category, showHidden }: FilterProps = router.query
-  const [searchValue, setSearchValue] = useState<string>('')
-  const [selectedSupplier, setSelectedSupplier] = useState<string>('')
-  const [filterOpen, setFilterOpen] = useState(false)
   const [startDate, setStartDate] = useState(moment().subtract(15, 'days').format('YYYY-MM-DD'))
   const [endDate, setEndDate] = useState(moment().format('YYYY-MM-DD'))
-  const [loadingData, setLoadingData] = useState(true)
-  const [productsData, setProductsData] = useState<ReorderingPointsResponse>({})
+  const [setField, setsetField] = useState('urgency')
+  const [sortingDirectionAsc, setsortingDirectionAsc] = useState(true)
+  const [searchValue, setSearchValue] = useState<string>('')
+  const [splits, setsplits] = useState({ isSplitting: false, splitsQty: 2 })
+
+  const { productsData, isLoadingProductsData, handleOrderQty, handleSplitsOrderQty, handleUseAdjustedQty, handleNewVisibilityState, handleSaveProductConfig, handleUrgencyRange } = useRPProductsInfo({
+    sessionToken,
+    session,
+    state,
+    startDate,
+    endDate,
+    searchValue,
+    urgency,
+    grossmin,
+    grossmax,
+    profitmin,
+    profitmax,
+    unitsmin,
+    unitsmax,
+    supplier,
+    brand,
+    category,
+    showHidden,
+    setField,
+    sortingDirectionAsc,
+    isSplitting: splits.isSplitting,
+  })
+
+  const { rpProductConfig, setRPProductConfig } = useRPProductConfig()
+
+  const [selectedSupplier, setSelectedSupplier] = useState<string>('')
+  const [filterOpen, setFilterOpen] = useState(false)
   const [toggledClearRows, setToggleClearRows] = useState(false)
   const [selectedRows, setSelectedRows] = useState<ReorderingPointsProduct[]>([])
-  const [loadingSales, setLoadingSales] = useState(false)
-  const [loadingForecast, setloadingForecast] = useState(false)
   const [error, setError] = useState<string[]>([])
   const [salesModal, setSalesModal] = useState({
     showSalesModal: false,
@@ -100,130 +129,24 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
     totalUnitsSold: {},
     marketplaces: {},
   })
-  const [setField, setsetField] = useState('urgency')
-  const [sortingDirectionAsc, setsortingDirectionAsc] = useState(true)
+
   const [showPOModal, setshowPOModal] = useState(false)
 
-  const fetcherMarketplaces = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data: marketplacesInfo }: { data?: MarketpalcesInfo } = useSWR(
-    state.user.businessId ? `/api/marketplaces/getMarketplacesInfo?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
-    fetcherMarketplaces,
-    {
-      revalidateOnFocus: false,
-    }
-  )
-
-  // REORDERING POINTS PRODUCTS
-  useEffect(() => {
-    const controller = new AbortController()
-    const signal = controller.signal
-
-    const getReorderingPointsProducts = async () => {
-      setLoadingData(true)
-      await axios(
-        `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reorderingPoints/getReorderingPointsProducts?region=${state.currentRegion}&businessId=${state.user.businessId}`,
-        {
-          signal,
-          headers: {
-            Authorization: `Bearer ${sessionToken}`,
-          },
-        }
-      )
-        .then((res) => {
-          setProductsData(res.data as ReorderingPointsResponse)
-          setLoadingData(false)
-        })
-        .catch(({ error }) => {
-          if (axios.isCancel(error)) {
-            toast.error(error?.data?.message || 'Error fetching product performance data')
-            setProductsData({})
-          }
-        })
-    }
-    if (session && state.user.businessId) getReorderingPointsProducts()
-    return () => {
-      controller.abort()
-    }
-  }, [session, state.user.businessId])
-
-  useEffect(() => {
-    const controller = new AbortController()
-    const signal = controller.signal
-
-    const getNewDateRange = async () => {
-      setLoadingSales(true)
-      await axios(
-        `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reorderingPoints/getReorderingPointsSales?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${startDate}&endDate=${endDate}`,
-        {
-          signal,
-          headers: {
-            Authorization: `Bearer ${sessionToken}`,
-          },
-        }
-      )
-        .then(async ({ data }: { data: ReorderingPointsSalesResponse }) => {
-          if (data.error) {
-            toast.error(data.message || 'Error fetching Products Sales Data')
-          }
-          if (Object.keys(data).length > 0) {
-            for await (const product of Object.values(data)) {
-              setProductsData((prevData) => {
-                const newProductsData = { ...prevData }
-                if (newProductsData[product.sku]) {
-                  newProductsData[product.sku].grossRevenue = product.grossRevenue
-                  newProductsData[product.sku].expenses = product.expenses
-                  newProductsData[product.sku].unitsSold = product.unitsSold
-                  newProductsData[product.sku].storageCost = product.storageCost
-                  for (const [storeId, values] of Object.entries(product.marketplaces)) {
-                    if (newProductsData[product.sku].marketplaces[storeId] === undefined) {
-                      newProductsData[product.sku].marketplaces[storeId] = {
-                        name: values.name,
-                        storeId: values.storeId,
-                        grossRevenue: values.grossRevenue,
-                        expenses: values.expenses,
-                        totalUnitsSold: values.totalUnitsSold,
-                        unitsSold: {},
-                      }
-                    }
-                    newProductsData[product.sku].marketplaces[storeId].grossRevenue = values.grossRevenue
-                    newProductsData[product.sku].marketplaces[storeId].expenses = values.expenses
-                    newProductsData[product.sku].marketplaces[storeId].totalUnitsSold = values.totalUnitsSold
-                  }
-                }
-                return newProductsData
-              })
-            }
-          }
-          setLoadingSales(false)
-        })
-        .catch(({ error }) => {
-          if (axios.isCancel(error)) {
-            toast.error(error?.data?.message || 'Error fetching product performance data')
-            setProductsData({})
-          }
-        })
-    }
-    if (session && state.user.businessId && Object.keys(productsData).length > 0 && !loadingData) getNewDateRange()
-
-    return () => {
-      controller.abort()
-    }
-  }, [session, state.user.businessId, startDate, endDate, loadingData])
+  // GET MARKETPLACES
+  const { data: marketplacesInfo }: { data?: MarketpalcesInfo } = useSWR(state.user.businessId ? `/api/marketplaces/getMarketplacesInfo?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcherMarketplaces, {
+    revalidateOnFocus: false,
+  })
 
   // FILTER FUNCTIONS
   const handleChangeDatesFromPicker = (dateStr: string) => {
-    // setStartDate(moment(dateStr, 'DD MMM YY').format('YYYY-MM-DD'))
     if (dateStr.includes(' to ')) {
       const dates = dateStr.split(' to ')
       setStartDate(moment(dates[0], 'DD MMM YY').format('YYYY-MM-DD'))
       setEndDate(moment(dates[1], 'DD MMM YY').format('YYYY-MM-DD'))
       return
     }
-    // if (startDate === moment(dateStr, 'DD MMM YY').format('YYYY-MM-DD')) {
-    //   setEndDate(moment(dateStr, 'DD MMM YY').format('YYYY-MM-DD'))
-    //   return
-    // }
   }
+
   const handleApplyFilters = (
     urgency: string,
     grossmin: string,
@@ -256,265 +179,14 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
   }
 
   // TABLE FUNCTIONS
-  const handleOrderQty = (sku: string, orderQty: number) => {
-    setProductsData((prevData) => {
-      const newProductsData = { ...prevData }
-      if (orderQty === 0 || orderQty === null || orderQty === undefined || isNaN(orderQty)) {
-        newProductsData[sku].order = 0
-        newProductsData[sku].orderAdjusted = 0
-        return newProductsData
-      }
-      if (orderQty < 0) {
-        newProductsData[sku].order = orderQty
-        newProductsData[sku].orderAdjusted = newProductsData[sku].boxQty === 0 ? orderQty : newProductsData[sku].boxQty
-        return newProductsData
-      }
-      if (orderQty <= newProductsData[sku].boxQty) {
-        newProductsData[sku].order = orderQty
-        newProductsData[sku].orderAdjusted = newProductsData[sku].boxQty === 0 ? orderQty : newProductsData[sku].boxQty
-        return newProductsData
-      }
-      if (orderQty > newProductsData[sku].boxQty) {
-        newProductsData[sku].order = orderQty
-        newProductsData[sku].orderAdjusted = newProductsData[sku].boxQty === 0 ? orderQty : newProductsData[sku].boxQty * Math.ceil(orderQty / newProductsData[sku].boxQty)
-        return newProductsData
-      }
-      return newProductsData
-    })
-  }
-  const handleUseAdjustedQty = (sku: string, state: boolean) => {
-    setProductsData((prevData) => {
-      const newProductsData = { ...prevData }
-      newProductsData[sku].useOrderAdjusted = state
-      return newProductsData
-    })
-  }
   const clearAllSelectedRows = () => {
     setToggleClearRows(!toggledClearRows)
     setSelectedRows([])
   }
-  const handleNewVisibilityState = async (selectedRows: ReorderingPointsProduct[], newState: boolean) => {
-    setProductsData((prevData) => {
-      const newProductsData = { ...prevData }
-      for (const item of selectedRows) {
-        newProductsData[item.sku].hideReorderingPoints = newState
-      }
-      return newProductsData
-    })
-  }
-  const handleDaysOfStockQty = async (sku: string, daysOfStockQty: number, inventoryId: number) => {
-    setloadingForecast(true)
 
-    const newForecast = await axios
-      .put(
-        `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reorderingPoints/getForecastSingle`,
-        {
-          region: state.currentRegion,
-          businessId: state.user.businessId,
-          inventoryId: inventoryId,
-          sku: sku,
-          recommendedDaysOfStock: daysOfStockQty,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${sessionToken}`,
-          },
-        }
-      )
-      .then(({ data }: { data: SingleForecastResponse }) => {
-        setProductsData((prevData) => {
-          const newProductsData = { ...prevData }
-          if (daysOfStockQty <= 0 || daysOfStockQty === null || daysOfStockQty === undefined || isNaN(daysOfStockQty)) {
-            newProductsData[sku].recommendedDaysOfStock = 0
-            newProductsData[sku].forecastModel = data[sku].best_model
-            newProductsData[sku].forecast = data[sku].unitsSold
-            newProductsData[sku].adjustedForecast =
-              Object.values(data[sku].unitsSold[data[sku].best_model]).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) *
-              newProductsData[sku].variation
-            return newProductsData
-          }
-
-          newProductsData[sku].recommendedDaysOfStock = daysOfStockQty
-          newProductsData[sku].forecastModel = data[sku].best_model
-          newProductsData[sku].forecast = data[sku].unitsSold
-          newProductsData[sku].adjustedForecast =
-            Object.values(data[sku].unitsSold[data[sku].best_model]).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) *
-            newProductsData[sku].variation
-          return newProductsData
-        })
-      })
-      .then(async () => {
-        const response = await axios.post(`/api/reorderingPoints/setNewRecommendedDaysOfSotck?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-          daysOfStockQty: daysOfStockQty <= 0 || daysOfStockQty === null || daysOfStockQty === undefined || isNaN(daysOfStockQty) ? 0 : daysOfStockQty,
-          inventoryId,
-        })
-
-        return response
-      })
-      .catch((error) => {
-        return error
-      })
-
-    if (newForecast.data.error) {
-      toast.error(newForecast.data.message)
-    } else {
-      toast.success(`SKU ${sku}: Forecast Updated`)
-    }
-    setloadingForecast(false)
-  }
   const handleSetSorting = (field: string) => {
     setsetField(field)
     setsortingDirectionAsc(!sortingDirectionAsc)
-  }
-  const handleSortingList = (rows: ReorderingPointsProduct[], field: string, direction: boolean) => {
-    if (['30D', '60D', '90D', '120D', '180D', '365D'].includes(field)) {
-      return rows.sort((a, b) => {
-        if (a.totalUnitsSold[field] > b.totalUnitsSold[field]) {
-          return direction ? 1 : -1
-        } else if (a.totalUnitsSold[field] < b.totalUnitsSold[field]) {
-          return direction ? -1 : 1
-        } else {
-          return 0
-        }
-      })
-    }
-
-    if (['sku', 'supplier', 'brand'].includes(field)) {
-      return rows.sort((a, b) => {
-        const aField = a[field as keyof ReorderingPointsProduct]!.toLocaleString().toLowerCase()
-        const bField = b[field as keyof ReorderingPointsProduct]!.toLocaleString().toLowerCase()
-        if (aField > bField) {
-          return direction ? 1 : -1
-        } else if (aField < bField) {
-          return direction ? -1 : 1
-        } else {
-          return 0
-        }
-      })
-    }
-
-    if (
-      ['daysRemaining', 'warehouseQty', 'fbaQty', 'productionQty', 'receiving', 'sellerCost', 'leadTime', 'boxQty', 'adjustedForecast', 'order', 'orderAdjusted'].includes(field)
-    ) {
-      return rows.sort((a, b) => {
-        const aField = a[field as keyof ReorderingPointsProduct]!
-        const bField = b[field as keyof ReorderingPointsProduct]!
-        if (aField > bField) {
-          return direction ? 1 : -1
-        } else if (aField < bField) {
-          return direction ? -1 : 1
-        } else {
-          return 0
-        }
-      })
-    }
-
-    if (['recommendedQty'].includes(field)) {
-      return rows.sort((a, b) => {
-        const aField = (a.leadTime + a.recommendedDaysOfStock) * (a.totalUnitsSold['30D'] / 30) - (a.warehouseQty + a.fbaQty + a.productionQty + a.receiving)
-        const bField = (b.leadTime + b.recommendedDaysOfStock) * (b.totalUnitsSold['30D'] / 30) - (b.warehouseQty + b.fbaQty + b.productionQty + b.receiving)
-        if (aField > bField) {
-          return direction ? 1 : -1
-        } else if (aField < bField) {
-          return direction ? -1 : 1
-        } else {
-          return 0
-        }
-      })
-    }
-
-    if (['forecast'].includes(field)) {
-      return rows.sort((a, b) => {
-        const aField =
-          Object.values(a.forecast[a.forecastModel]!).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-          (a.warehouseQty + a.fbaQty + a.productionQty + a.receiving)
-        const bField =
-          Object.values(b.forecast[b.forecastModel]!).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-          (b.warehouseQty + b.fbaQty + b.productionQty + b.receiving)
-        if (aField > bField) {
-          return direction ? 1 : -1
-        } else if (aField < bField) {
-          return direction ? -1 : 1
-        } else {
-          return 0
-        }
-      })
-    }
-
-    if (['totalInventory'].includes(field)) {
-      return rows.sort((a, b) => {
-        const aField = a.warehouseQty + a.fbaQty + a.productionQty + a.receiving
-        const bField = b.warehouseQty + b.fbaQty + b.productionQty + b.receiving
-        if (aField > bField) {
-          return direction ? 1 : -1
-        } else if (aField < bField) {
-          return direction ? -1 : 1
-        } else {
-          return 0
-        }
-      })
-    }
-
-    if (['ExponentialSmoothing', 'AutoREG', 'VAR', 'Naive', 'ARDL', 'ARDL_seasonal'].includes(field)) {
-      return rows.sort((a, b) => {
-        const aField =
-          Object.values(a.forecast[field as keyof ReorderingPointsProduct]!).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-          (a.warehouseQty + a.fbaQty + a.productionQty + a.receiving)
-        const bField =
-          Object.values(b.forecast[field as keyof ReorderingPointsProduct]!).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-          (b.warehouseQty + b.fbaQty + b.productionQty + b.receiving)
-        if (aField > bField) {
-          return direction ? 1 : -1
-        } else if (aField < bField) {
-          return direction ? -1 : 1
-        } else {
-          return 0
-        }
-      })
-    }
-
-    return rows.sort((a, b) => {
-      if (a.daysToOrder > b.daysToOrder) {
-        return direction ? 1 : -1
-      } else if (a.daysToOrder < b.daysToOrder) {
-        return direction ? -1 : 1
-      } else {
-        return 0
-      }
-    })
-  }
-  const handleUrgencyRange = async (highAlertMax: number, mediumAlertMax: number, lowAlertMax: number) => {
-    setProductsData((prevData) => {
-      const newProductsData = { ...prevData }
-      for (const product of Object.values(newProductsData)) {
-        switch (true) {
-          case product.daysToOrder <= highAlertMax:
-            product.urgency = 3
-            break
-          case product.daysToOrder <= mediumAlertMax && product.daysToOrder >= highAlertMax + 1:
-            product.urgency = 2
-            break
-          case product.daysToOrder <= lowAlertMax && product.daysToOrder >= mediumAlertMax + 1:
-            product.urgency = 1
-            break
-          default:
-            product.urgency = 0
-            break
-        }
-      }
-      return newProductsData
-    })
-
-    const response = await axios.post(`/api/reorderingPoints/setNewUrgencyRange?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-      highAlertMax,
-      mediumAlertMax,
-      lowAlertMax,
-    })
-    if (response.data.error) {
-      toast.error(response.data.msg)
-    } else {
-      toast.success(response.data.msg)
-    }
   }
 
   // ACTIONS
@@ -544,59 +216,6 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
     }
   }
 
-  // FILTERING TABLE
-  const filterDataTable = useMemo(() => {
-    if (!productsData || Object.values(productsData).length === 0) {
-      return []
-    }
-    const urgencyParsed: number[] = urgency !== undefined && urgency !== '[]' ? JSON.parse(urgency) : []
-    const sortedList = handleSortingList(Object.values(productsData), setField, sortingDirectionAsc)
-
-    if (searchValue === '') {
-      return sortedList.filter(
-        (item: ReorderingPointsProduct) =>
-          (urgency !== undefined && urgency !== '[]' ? urgencyParsed.includes(item.urgency) : true) &&
-          (grossmin !== undefined && grossmin !== '' ? item.grossRevenue >= parseFloat(grossmin!) : true) &&
-          (grossmax !== undefined && grossmax !== '' ? item.grossRevenue <= parseFloat(grossmax!) : true) &&
-          (profitmin !== undefined && profitmin !== '' ? item.grossRevenue - item.expenses >= parseFloat(profitmin!) : true) &&
-          (profitmax !== undefined && profitmax !== '' ? item.grossRevenue - item.expenses <= parseFloat(profitmax!) : true) &&
-          (unitsmin !== undefined && unitsmin !== '' ? item.unitsSold >= parseInt(unitsmin!) : true) &&
-          (unitsmax !== undefined && unitsmax !== '' ? item.unitsSold <= parseInt(unitsmax!) : true) &&
-          (supplier !== undefined && supplier !== '' ? item.supplier.toLowerCase() === supplier.toLowerCase() : true) &&
-          (brand !== undefined && brand !== '' ? item.brand.toLowerCase() === brand.toLowerCase() : true) &&
-          (category !== undefined && category !== '' ? item.category.toLowerCase() === category.toLowerCase() : true) &&
-          (showHidden === undefined || showHidden === '' ? !item.hideReorderingPoints : showHidden === 'false' ? !item.hideReorderingPoints : true)
-        // (show0Days === undefined || show0Days === '' ? item.daysRemaining > 0 : show0Days === 'false' ? item.daysRemaining > 0 : true)
-      )
-    }
-
-    if (searchValue !== '') {
-      return sortedList.filter(
-        (item: ReorderingPointsProduct) =>
-          (urgency !== undefined && urgency !== '[]' ? urgencyParsed.includes(item.urgency) : true) &&
-          (grossmin !== undefined && grossmin !== '' ? item.grossRevenue >= parseFloat(grossmin!) : true) &&
-          (grossmax !== undefined && grossmax !== '' ? item.grossRevenue <= parseFloat(grossmax!) : true) &&
-          (profitmin !== undefined && profitmin !== '' ? item.grossRevenue - item.expenses >= parseFloat(profitmin!) : true) &&
-          (profitmax !== undefined && profitmax !== '' ? item.grossRevenue - item.expenses <= parseFloat(profitmax!) : true) &&
-          (unitsmin !== undefined && unitsmin !== '' ? item.unitsSold >= parseInt(unitsmin!) : true) &&
-          (unitsmax !== undefined && unitsmax !== '' ? item.unitsSold <= parseInt(unitsmax!) : true) &&
-          (supplier !== undefined && supplier !== '' ? item.supplier.toLowerCase() === supplier.toLowerCase() : true) &&
-          (brand !== undefined && brand !== '' ? item.brand.toLowerCase() === brand.toLowerCase() : true) &&
-          (category !== undefined && category !== '' ? item.category.toLowerCase() === category.toLowerCase() : true) &&
-          (showHidden === undefined || showHidden === '' ? !item.hideReorderingPoints : showHidden === 'false' ? !item.hideReorderingPoints : true) &&
-          // (show0Days === undefined || show0Days === '' ? item.daysRemaining > 0 : show0Days === 'false' ? item.daysRemaining > 0 : true) &&
-          (item.sku.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item.asin.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item.title.toLowerCase().includes(searchValue.toLowerCase()) ||
-            searchValue.split(' ').every((word) => item?.title?.toLowerCase().includes(word.toLowerCase())) ||
-            item.supplier.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item.brand.toLowerCase().includes(searchValue.toLowerCase()))
-      )
-    }
-
-    return []
-  }, [productsData, searchValue, urgency, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, brand, category, showHidden, setField, sortingDirectionAsc])
-
   // REORDERING POINTS ORDER SUMMARY
   const reorderingPointsOrder = useMemo(() => {
     const orderSummary = { totalQty: 0, totalCost: 0, totalVolume: 0, products: {} } as {
@@ -622,6 +241,21 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
     return orderSummary
   }, [productsData])
 
+  const orderHasSplitswithZeroQty = useMemo(() => {
+    if (splits.isSplitting) {
+      for (const product of Object.values(reorderingPointsOrder.products)) {
+        for (let i = 0; i < splits.splitsQty; i++) {
+          if (product.orderSplits[`${i}`] === undefined || product.orderSplits[`${i}`]?.order <= 0) {
+            return true
+          }
+        }
+      }
+      return false
+    } else {
+      return false
+    }
+  }, [splits, reorderingPointsOrder])
+
   const title = `Reordering Points | ${session?.user?.businessName}`
 
   return (
@@ -631,11 +265,11 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
+          <BreadCrumb title='Reordering Points' pageTitle='Inbound' />
           <Container fluid>
-            <BreadCrumb title='Reordering Points' pageTitle='Inbound' />
             <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-1 flex-md-row justify-content-md-end align-items-md-center px-3'>
               <div className='d-flex flex-sm-column justify-content-between align-items-center p-0 flex-xl-row gap-sm-2 gap-xl-0'>
-                <div className='d-flex flex-wrap justify-content-start align-items-center gap-3 w-100'>
+                <div className='d-flex flex-wrap justify-content-start align-items-center gap-2 w-100'>
                   <button
                     className={'btn dropdown-toggle ' + (filters === 'true' ? 'btn-info' : 'btn-light')}
                     style={filters === 'true' ? {} : { backgroundColor: 'white', border: '1px solid #E1E3E5' }}
@@ -646,13 +280,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
                     onClick={() => setFilterOpen(!filterOpen)}>
                     Filters
                   </button>
-                  <FilterByDates
-                    shipmentsStartDate={startDate}
-                    setShipmentsStartDate={setStartDate}
-                    setShipmentsEndDate={setEndDate}
-                    shipmentsEndDate={endDate}
-                    handleChangeDatesFromPicker={handleChangeDatesFromPicker}
-                  />
+                  <FilterByDates shipmentsStartDate={startDate} setShipmentsStartDate={setStartDate} setShipmentsEndDate={setEndDate} shipmentsEndDate={endDate} handleChangeDatesFromPicker={handleChangeDatesFromPicker} />
                   {selectedRows.length > 0 && (
                     <UncontrolledButtonDropdown>
                       <DropdownToggle className='btn btn-info fs-7 py-2' caret>
@@ -679,6 +307,8 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
                       initialMediumAlert={state?.user?.us?.rpmediumAlertMax}
                       initialLowAlert={state?.user?.us?.rplowAlertMax}
                       handleUrgencyRange={handleUrgencyRange}
+                      splits={splits}
+                      setsplits={setsplits}
                     />
                   )}
                 </div>
@@ -735,16 +365,11 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
             </Row>
             <Card>
               <CardBody style={{ height: '82dvh', scrollbarWidth: 'thin' }}>
-                {!loadingData && loadingSales && (
-                  <div className='text-left fs-6 text-primary m-0 p-0'>
-                    Loading Sales Data... <Spinner size={'sm'} color='primary' />
-                  </div>
-                )}
                 <ReorderingPointsTable
-                  filterDataTable={filterDataTable}
-                  pending={loadingData}
-                  loadingSales={loadingSales}
+                  filterDataTable={productsData}
+                  pending={isLoadingProductsData}
                   handleOrderQty={handleOrderQty}
+                  handleSplitsOrderQty={handleSplitsOrderQty}
                   handleUseAdjustedQty={handleUseAdjustedQty}
                   setSelectedRows={setSelectedRows}
                   toggledClearRows={toggledClearRows}
@@ -752,17 +377,18 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
                   setSelectedSupplier={setSelectedSupplier}
                   setError={setError}
                   setSalesModal={setSalesModal}
-                  handleDaysOfStockQty={handleDaysOfStockQty}
                   setField={setField}
                   handleSetSorting={handleSetSorting}
                   sortingDirectionAsc={sortingDirectionAsc}
-                  loadingForecast={loadingForecast}
+                  splits={splits}
+                  setRPProductConfig={setRPProductConfig}
+                  expandedRowProps={{ sessionToken, session, startDate, endDate }}
                 />
               </CardBody>
             </Card>
           </Container>
         </div>
-        {!loadingData && filterDataTable.length > 0 && (
+        {!isLoadingProductsData && productsData.length > 0 && (
           <div className='position-fixed shadow-lg' style={{ left: '40px', bottom: '150px', zIndex: '99999' }}>
             <Card className='mb-0 bg-body-tertiary border border-primary border-opacity-25 rounded' style={{ zIndex: '999' }}>
               <CardBody>
@@ -783,22 +409,16 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
                     </tr>
                     <tr className='border-bottom pb-2'>
                       <td className='text-muted'>Total Volume</td>
-                      <td className='fw-semibold text-end'>{`${FormatIntPercentage(
-                        state.currentRegion,
-                        state.currentRegion === 'us' ? reorderingPointsOrder.totalVolume / 61020 : reorderingPointsOrder.totalVolume / 1000000
-                      )} m³`}</td>
+                      <td className='fw-semibold text-end'>{`${FormatIntPercentage(state.currentRegion, state.currentRegion === 'us' ? reorderingPointsOrder.totalVolume / 61020 : reorderingPointsOrder.totalVolume / 1000000)} m³`}</td>
                     </tr>
                   </tbody>
                 </table>
                 <div className='mt-2 text-end'>
-                  <Button
-                    disabled={error.length > 0 || Object.keys(reorderingPointsOrder.products).length === 0}
-                    className='fs-7 btn btn-sm'
-                    color='primary'
-                    onClick={() => setshowPOModal(true)}>
+                  <Button disabled={error.length > 0 || Object.keys(reorderingPointsOrder.products).length === 0 || orderHasSplitswithZeroQty} className='fs-7 btn btn-sm' color='primary' onClick={() => setshowPOModal(true)}>
                     Create Order
                   </Button>
                   {error.length > 0 && <p className='fs-7 text-danger m-0 p-0'>Error in some Products</p>}
+                  {orderHasSplitswithZeroQty && <p className='fs-7 text-danger m-0 p-0'>Products missing splits Qty</p>}
                 </div>
               </CardBody>
             </Card>
@@ -806,14 +426,9 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
         )}
         {salesModal.showSalesModal && <ReorderingPointsSalesModal salesModal={salesModal} setSalesModal={setSalesModal} />}
         {showPOModal && (
-          <ReorderingPointsCreatePOModal
-            reorderingPointsOrder={reorderingPointsOrder}
-            selectedSupplier={selectedSupplier}
-            showPOModal={showPOModal}
-            setshowPOModal={setshowPOModal}
-            username={session?.user?.businessOrderStart}
-          />
+          <ReorderingPointsCreatePOModal reorderingPointsOrder={reorderingPointsOrder} selectedSupplier={selectedSupplier} showPOModal={showPOModal} setshowPOModal={setshowPOModal} username={session?.user?.businessOrderStart} splits={splits} />
         )}
+        <RPEditProductConfigOffCanvas rpProductConfig={rpProductConfig} setRPProductConfig={setRPProductConfig} handleSaveProductConfig={handleSaveProductConfig} />
       </React.Fragment>
     </div>
   )
