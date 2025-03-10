@@ -15,7 +15,9 @@ const setNewProductConfig: NextApiHandler = async (request, response) => {
   axios
     .post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/reorderingPoints/setNewProductConfig.php?businessId=${request.query.businessId}`, {
       inventoryId: request.body.inventoryId,
-      leadTime: request.body.leadTime,
+      leadTimeSC: request.body.leadTimeSC,
+      leadTimeFBA: request.body.leadTimeFBA,
+      leadTimeAWD: request.body.leadTimeAWD,
       daysOfStockSC: request.body.daysOfStockSC,
       daysOfStockFBA: request.body.daysOfStockFBA,
       daysOfStockAWD: request.body.daysOfStockAWD,

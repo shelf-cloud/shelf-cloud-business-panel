@@ -31,6 +31,9 @@ export interface ReorderingPointsProduct {
   receiving: number
   sellerCost: number
   leadTime: number
+  leadTimeSC: number
+  leadTimeFBA: number
+  leadTimeAWD: number
   note: string
   brand: string
   category: string
@@ -44,7 +47,7 @@ export interface ReorderingPointsProduct {
   order: number
   orderAdjusted: number
   useOrderAdjusted: boolean
-  orderSplits: { [split: string]: {order: number, orderAdjusted: number} }
+  orderSplits: { [split: string]: { order: number; orderAdjusted: number } }
   marketplaces: { [key: string]: ReorderingPointsMarketplace }
   dateList: { [key: string]: DateList }
   totalUnitsSold: { [key: string]: number }

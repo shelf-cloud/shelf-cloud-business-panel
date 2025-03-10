@@ -99,11 +99,12 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
           <div className='mt-2 d-grid justify-content-between align-items-center gap-2' style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
             <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-start'>
               <Label className='form-label'>Split Order</Label>
-              <Input className='form-check-input code-switcher' type='checkbox' id='showOnlyOverdue' name='showOnlyOverdue' checked={splits.isSplitting} onChange={(e) => handleIsSplitting(e)} />
+              <Input disabled className='form-check-input code-switcher' type='checkbox' id='showOnlyOverdue' name='showOnlyOverdue' checked={splits.isSplitting} onChange={(e) => handleIsSplitting(e)} />
             </div>
             <InputGroup size='sm'>
               <Input
                 type='number'
+                disabled
                 className='form-control fs-6 m-0'
                 bsSize='sm'
                 style={{ padding: '0.2rem 0.9rem' }}

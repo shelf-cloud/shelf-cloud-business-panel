@@ -438,9 +438,6 @@ const ReorderingPointsTable = ({
     {
       name: (
         <div className='w-100 text-center d-flex flex-column justify-content-center align-items-center'>
-          <span className={'fs-7 ' + (setField === 'leadTime' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('leadTime')}>
-            Lead Time {setField === 'leadTime' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
-          </span>
           <span className={'fs-7 ' + (setField === 'sellerCost' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('sellerCost')}>
             Supplier Cost {setField === 'sellerCost' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
           </span>
@@ -452,9 +449,6 @@ const ReorderingPointsTable = ({
       selector: (row: ReorderingPointsProduct) => {
         return (
           <div className='fs-7 my-3'>
-            <p className={'m-0 p-0 text-center' + (row.leadTime <= 0 ? ' fw-semibold text-danger' : '')}>
-              {row.leadTime} <span className='text-muted'>days</span>
-            </p>
             <p className='m-0 p-0 text-center'>{FormatCurrency(state.currentRegion, row.sellerCost)}</p>
             <p className='m-0 p-0 text-center'>{row.boxQty}</p>
           </div>
@@ -468,17 +462,17 @@ const ReorderingPointsTable = ({
       name: (
         <div className='text-center d-flex flex-column justify-content-center align-items-center py-1'>
           <span className={'fs-7 fw-bold'}>Forecast</span>
-          <span className={'fs-7 ' + (setField === 'recommendedQty' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('recommendedQty')}>
-            Warehouses {setField === 'recommendedQty' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
+          <span className={'fs-7 ' + (setField === 'totalSCForecast' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('totalSCForecast')}>
+            Warehouses {setField === 'totalSCForecast' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
           </span>
           {state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected && (
-            <span className={'fs-7 ' + (setField === 'forecast' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('forecast')}>
-              FBA {setField === 'forecast' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
+            <span className={'fs-7 ' + (setField === 'totalFBAForecast' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('totalFBAForecast')}>
+              FBA {setField === 'totalFBAForecast' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
             </span>
           )}
           {state.user[state.currentRegion]?.showAWD && (
-            <span className={'fs-7 ' + (setField === 'adjustedForecast' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('adjustedForecast')}>
-              AWD {setField === 'adjustedForecast' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
+            <span className={'fs-7 ' + (setField === 'totalAWDForecast' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('totalAWDForecast')}>
+              AWD {setField === 'totalAWDForecast' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
             </span>
           )}
         </div>
@@ -489,12 +483,12 @@ const ReorderingPointsTable = ({
             <p className='m-0 p-0 text-center' id={'Recommended_Qty'}>
               {FormatIntNumber(state.currentRegion, row.totalSCForecast)}
             </p>
-            {true && (
+            {state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected && (
               <p className='m-0 p-0 text-center' id={`forecast_${row.sku}`}>
                 {FormatIntNumber(state.currentRegion, row.totalFBAForecast)}
               </p>
             )}
-            {true && (
+            {state.user[state.currentRegion]?.showAWD && (
               <p className='m-0 p-0 text-center' id={`Adjustedforecast_${row.sku}`}>
                 {FormatIntNumber(state.currentRegion, row.totalAWDForecast)}
               </p>
@@ -506,184 +500,6 @@ const ReorderingPointsTable = ({
       center: true,
       compact: true,
     },
-    {
-      name: (
-        <span className={'fs-7 text-wrap text-center ' + (setField === 'totalInventory' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('totalInventory')}>
-          Total <br /> Forecast {setField === 'totalInventory' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
-        </span>
-      ),
-      selector: (row: ReorderingPointsProduct) => FormatIntNumber(state.currentRegion, row.totalSCForecast + row.totalFBAForecast + row.totalAWDForecast),
-      wrap: true,
-      sortable: false,
-      center: true,
-      compact: true,
-      // grow: 0,
-    },
-    // PYTHON FORECAST
-    // {
-    //   name: (
-    //     <span
-    //       className={'w-fit fs-7 text-wrap text-center ' + (setField === 'ExponentialSmoothing' ? 'fw-bold' : 'text-muted')}
-    //       style={{ cursor: 'pointer' }}
-    //       onClick={() => handleSetSorting('ExponentialSmoothing')}>
-    //       ExpoSm{' '}
-    //       {setField === 'ExponentialSmoothing' ? (
-    //         sortingDirectionAsc ? (
-    //           <i className='ri-arrow-down-fill fs-7 text-primary' />
-    //         ) : (
-    //           <i className='ri-arrow-up-fill fs-7 text-primary' />
-    //         )
-    //       ) : null}
-    //     </span>
-    //   ),
-    //   selector: (row: ReorderingPointsProduct) => {
-    //     const forecast =
-    //       Object.values(row.forecast['ExponentialSmoothing']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-    //         (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving) <
-    //       0
-    //         ? 0
-    //         : Object.values(row.forecast['ExponentialSmoothing']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-    //           (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
-
-    //     return FormatIntNumber(state.currentRegion, forecast)
-    //   },
-    //   // wrap: true,
-    //   sortable: false,
-    //   center: true,
-    //   compact: true,
-    //   width: '80px',
-    //   minWidth: 'fit-content',
-    // },
-    // {
-    //   name: (
-    //     <span
-    //       className={'fs-7 text-wrap text-center ' + (setField === 'AutoREG' ? 'fw-bold' : 'text-muted')}
-    //       style={{ cursor: 'pointer' }}
-    //       onClick={() => handleSetSorting('AutoREG')}>
-    //       AutoREG{' '}
-    //       {setField === 'AutoREG' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
-    //     </span>
-    //   ),
-    //   selector: (row: ReorderingPointsProduct) => {
-    //     const forecast =
-    //       Object.values(row.forecast['AutoREG']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-    //         (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving) <
-    //       0
-    //         ? 0
-    //         : Object.values(row.forecast['AutoREG']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-    //           (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
-
-    //     return FormatIntNumber(state.currentRegion, forecast)
-    //   },
-    //   sortable: false,
-    //   center: true,
-    //   compact: true,
-    //   width: '80px',
-    //   minWidth: 'fit-content',
-    // },
-    // {
-    //   name: (
-    //     <span className={'fs-7 text-wrap text-center ' + (setField === 'VAR' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('VAR')}>
-    //       VAR {setField === 'VAR' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
-    //     </span>
-    //   ),
-    //   selector: (row: ReorderingPointsProduct) => {
-    //     const forecast =
-    //       Object.values(row.forecast['VAR']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-    //         (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving) <
-    //       0
-    //         ? 0
-    //         : Object.values(row.forecast['VAR']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-    //           (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
-
-    //     return FormatIntNumber(state.currentRegion, forecast)
-    //   },
-    //   sortable: false,
-    //   center: true,
-    //   compact: true,
-    //   width: '80px',
-    //   minWidth: 'fit-content',
-    // },
-    // {
-    //   name: (
-    //     <span className={'fs-7 text-wrap text-center ' + (setField === 'Naive' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('Naive')}>
-    //       Naive {setField === 'Naive' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
-    //     </span>
-    //   ),
-    //   selector: (row: ReorderingPointsProduct) => {
-    //     const forecast =
-    //       Object.values(row.forecast['Naive']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-    //         (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving) <
-    //       0
-    //         ? 0
-    //         : Object.values(row.forecast['Naive']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-    //           (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
-
-    //     return FormatIntNumber(state.currentRegion, forecast)
-    //   },
-    //   // wrap: true,
-    //   sortable: false,
-    //   center: true,
-    //   compact: true,
-    //   // grow: 0,
-    // },
-    // {
-    //   name: (
-    //     <span className={'fs-7 text-wrap text-center ' + (setField === 'ARDL' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('ARDL')}>
-    //       ARDL {setField === 'ARDL' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
-    //     </span>
-    //   ),
-    //   selector: (row: ReorderingPointsProduct) => {
-    //     const forecast =
-    //       Object.values(row.forecast['ARDL']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-    //         (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving) <
-    //       0
-    //         ? 0
-    //         : Object.values(row.forecast['ARDL']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-    //           (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
-
-    //     return FormatIntNumber(state.currentRegion, forecast)
-    //   },
-    //   sortable: false,
-    //   center: true,
-    //   compact: true,
-    //   width: '80px',
-    //   minWidth: 'fit-content',
-    // },
-    // {
-    //   name: (
-    //     <span
-    //       className={'fs-7 text-wrap text-center ' + (setField === 'ARDL_seasonal' ? 'fw-bold' : 'text-muted')}
-    //       style={{ cursor: 'pointer' }}
-    //       onClick={() => handleSetSorting('ARDL_seasonal')}>
-    //       ARDL_S{' '}
-    //       {setField === 'ARDL_seasonal' ? (
-    //         sortingDirectionAsc ? (
-    //           <i className='ri-arrow-down-fill fs-7 text-primary' />
-    //         ) : (
-    //           <i className='ri-arrow-up-fill fs-7 text-primary' />
-    //         )
-    //       ) : null}
-    //     </span>
-    //   ),
-    //   selector: (row: ReorderingPointsProduct) => {
-    //     const forecast =
-    //       Object.values(row.forecast['ARDL_seasonal']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-    //         (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving) <
-    //       0
-    //         ? 0
-    //         : Object.values(row.forecast['ARDL_seasonal']).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-    //           (row.warehouseQty + row.fbaQty + row.productionQty + row.receiving)
-
-    //     return FormatIntNumber(state.currentRegion, forecast)
-    //   },
-    //   sortable: false,
-    //   center: true,
-    //   compact: true,
-    //   width: '80px',
-    //   minWidth: 'fit-content',
-    // },
-    // ORDER QTY
     ...orderSplitsColumns(splits.isSplitting, splits.splitsQty),
     {
       name: (

@@ -1,6 +1,6 @@
 import { RPProductConfig } from '@hooks/useRPProductConfig'
 import React, { useContext, useState } from 'react'
-import { Button, Col, Form, FormFeedback, FormGroup, FormText, Input, Label, Offcanvas, OffcanvasBody, OffcanvasHeader, Row, Spinner } from 'reactstrap'
+import { Button, Col, Form, Input, Label, Offcanvas, OffcanvasBody, OffcanvasHeader, Row, Spinner } from 'reactstrap'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import { RPProductUpdateConfig } from '@hooks/useRPProductsInfo'
@@ -9,7 +9,7 @@ import AppContext from '@context/AppContext'
 type Props = {
   rpProductConfig: RPProductConfig
   setRPProductConfig: (cb: (prev: RPProductConfig) => RPProductConfig) => void
-  handleSaveProductConfig: ({ inventoryId, sku, leadTime, daysOfStockSC, daysOfStockFBA, daysOfStockAWD, sellerCost, buffer }: RPProductUpdateConfig) => Promise<void>
+  handleSaveProductConfig: ({ inventoryId, sku, leadTimeSC, leadTimeFBA, leadTimeAWD, daysOfStockSC, daysOfStockFBA, daysOfStockAWD, sellerCost, buffer }: RPProductUpdateConfig) => Promise<void>
 }
 
 const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, handleSaveProductConfig }: Props) => {
@@ -27,7 +27,9 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
-      leadTime: product.leadTime,
+      leadTimeSC: product.leadTimeSC,
+      leadTimeFBA: product.leadTimeFBA || 0,
+      leadTimeAWD: product.leadTimeAWD || 0,
       daysOfStockSC: product.daysOfStockSC,
       daysOfStockFBA: product.daysOfStockFBA || 0,
       daysOfStockAWD: product.daysOfStockAWD || 0,
@@ -35,7 +37,9 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
       sellerCost: product.sellerCost || 0,
     },
     validationSchema: Yup.object({
-      leadTime: Yup.number().min(0, 'Minimum of 0').required('Enter Lead Time'),
+      leadTimeSC: Yup.number().min(0, 'Minimum of 0').required('Enter Lead Time'),
+      leadTimeFBA: Yup.number().min(0, 'Minimum of 0').required('Enter Lead Time'),
+      leadTimeAWD: Yup.number().min(0, 'Minimum of 0').required('Enter Lead Time'),
       daysOfStockSC: Yup.number().min(0, 'Minimum of 0').required('Enter Days of Stock SC'),
       daysOfStockFBA: Yup.number().min(0, 'Minimum of 0').required('Enter Days of Stock FBA'),
       daysOfStockAWD: Yup.number().min(0, 'Minimum of 0').required('Enter Days of Stock AWD'),
@@ -47,7 +51,9 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
       await handleSaveProductConfig({
         inventoryId: product.inventoryId,
         sku: product.sku,
-        leadTime: values.leadTime,
+        leadTimeSC: values.leadTimeSC,
+        leadTimeFBA: values.leadTimeFBA,
+        leadTimeAWD: values.leadTimeAWD,
         daysOfStockSC: values.daysOfStockSC,
         daysOfStockFBA: values.daysOfStockFBA,
         daysOfStockAWD: values.daysOfStockAWD,
@@ -79,61 +85,80 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
           <p className='fs-6 m-0 p-0 fw-semibold'>{rpProductConfig.product.title}</p>
           <p className='fs-7 text-muted'>Here you can edit some configurations related to the product to adjust the forecast.</p>
           <Form onSubmit={HandleAddProduct}>
+            <h5 className='fs-5 fw-bold'>Warehouse</h5>
             <Row>
               <Col xs={12} md={10}>
-                <FormGroup>
-                  <Label htmlFor='leadTime' className='fs-7 form-label'>
-                    Lead Time
-                  </Label>
-                  <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
-                    <Input
-                      type='number'
-                      className='form-control fs-6'
-                      bsSize='sm'
-                      id='leadTime'
-                      name='leadTime'
-                      onChange={validation.handleChange}
-                      onBlur={validation.handleBlur}
-                      value={validation.values.leadTime}
-                      invalid={validation.touched.leadTime && validation.errors.leadTime ? true : false}
-                    />
-                    <span>Days</span>
-                  </div>
-                  {validation.touched.leadTime && validation.errors.leadTime ? <FormFeedback type='invalid'>{validation.errors.leadTime}</FormFeedback> : null}
-                </FormGroup>
+                <Label htmlFor='leadTimeSC' className='fs-7 form-label'>
+                  Lead Time
+                </Label>
+                <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
+                  <Input
+                    type='number'
+                    className='form-control fs-6'
+                    bsSize='sm'
+                    id='leadTimeSC'
+                    name='leadTimeSC'
+                    onChange={validation.handleChange}
+                    onBlur={validation.handleBlur}
+                    value={validation.values.leadTimeSC}
+                    invalid={validation.touched.leadTimeSC && validation.errors.leadTimeSC ? true : false}
+                  />
+                  <span>Days</span>
+                </div>
+                {validation.touched.leadTimeSC && validation.errors.leadTimeSC ? <p className='m-0 p-0 fs-7 text-danger'>{validation.errors.leadTimeSC}</p> : null}
               </Col>
             </Row>
             <Row>
-              <Col xs={12} md={10}>
-                <FormGroup>
-                  <Label htmlFor='daysOfStockSC' className='fs-7 form-label'>
-                    Days of Stock for Warehouses
-                  </Label>
-                  <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
-                    <Input
-                      type='number'
-                      className='form-control fs-6'
-                      bsSize='sm'
-                      id='daysOfStockSC'
-                      name='daysOfStockSC'
-                      onChange={validation.handleChange}
-                      onBlur={validation.handleBlur}
-                      value={validation.values.daysOfStockSC || ''}
-                      invalid={validation.touched.daysOfStockSC && validation.errors.daysOfStockSC ? true : false}
-                    />
-                    <span>Days</span>
-                  </div>
-                  <FormText className='fs-7'>The number of days you want to have stock in addition to the lead time.</FormText>
-                  {validation.touched.daysOfStockSC && validation.errors.daysOfStockSC ? <FormFeedback type='invalid'>{validation.errors.daysOfStockSC}</FormFeedback> : null}
-                </FormGroup>
+              <Col xs={12} md={10} className='mb-3'>
+                <Label htmlFor='daysOfStockSC' className='fs-7 form-label'>
+                  *Days of Stock after Lead Time
+                </Label>
+                <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
+                  <Input
+                    type='number'
+                    className='form-control fs-6'
+                    bsSize='sm'
+                    id='daysOfStockSC'
+                    name='daysOfStockSC'
+                    onChange={validation.handleChange}
+                    onBlur={validation.handleBlur}
+                    value={validation.values.daysOfStockSC || ''}
+                    invalid={validation.touched.daysOfStockSC && validation.errors.daysOfStockSC ? true : false}
+                  />
+                  <span>Days</span>
+                </div>
+                {validation.touched.daysOfStockSC && validation.errors.daysOfStockSC ? <p className='m-0 p-0 fs-7 text-danger'>{validation.errors.daysOfStockSC}</p> : null}
               </Col>
             </Row>
             {state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected && (
-              <Row>
-                <Col xs={12} md={10}>
-                  <FormGroup>
+              <>
+                <h5 className='fs-5 fw-bold'>Amazon FBA</h5>
+                <Row>
+                  <Col xs={12} md={10}>
+                    <Label htmlFor='leadTimeFBA' className='fs-7 form-label'>
+                      Lead Time
+                    </Label>
+                    <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
+                      <Input
+                        type='number'
+                        className='form-control fs-6'
+                        bsSize='sm'
+                        id='leadTimeFBA'
+                        name='leadTimeFBA'
+                        onChange={validation.handleChange}
+                        onBlur={validation.handleBlur}
+                        value={validation.values.leadTimeFBA}
+                        invalid={validation.touched.leadTimeFBA && validation.errors.leadTimeFBA ? true : false}
+                      />
+                      <span>Days</span>
+                    </div>
+                    {validation.touched.leadTimeFBA && validation.errors.leadTimeFBA ? <p className='m-0 p-0 fs-7 text-danger'>{validation.errors.leadTimeFBA}</p> : null}
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={12} md={10} className='mb-3'>
                     <Label htmlFor='daysOfStockFBA' className='fs-7 form-label'>
-                      Days of Stock for Amazon FBA
+                      *Days of Stock after Lead Time
                     </Label>
                     <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
                       <Input
@@ -149,18 +174,40 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
                       />
                       <span>Days</span>
                     </div>
-                    <FormText className='fs-7'>The number of days you want to have stock in addition to the lead time.</FormText>
-                    {validation.touched.daysOfStockFBA && validation.errors.daysOfStockFBA ? <FormFeedback type='invalid'>{validation.errors.daysOfStockFBA}</FormFeedback> : null}
-                  </FormGroup>
-                </Col>
-              </Row>
+                    {validation.touched.daysOfStockFBA && validation.errors.daysOfStockFBA ? <p className='m-0 p-0 fs-7 text-danger'>{validation.errors.daysOfStockFBA}</p> : null}
+                  </Col>
+                </Row>
+              </>
             )}
             {state.user[state.currentRegion]?.showAWD && (
-              <Row>
-                <Col xs={12} md={10}>
-                  <FormGroup>
+              <>
+                <h5 className='fs-5 fw-bold'>Amazon AWD</h5>
+                <Row>
+                  <Col xs={12} md={10}>
+                    <Label htmlFor='leadTimeAWD' className='fs-7 form-label'>
+                      Lead Time
+                    </Label>
+                    <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
+                      <Input
+                        type='number'
+                        className='form-control fs-6'
+                        bsSize='sm'
+                        id='leadTimeAWD'
+                        name='leadTimeAWD'
+                        onChange={validation.handleChange}
+                        onBlur={validation.handleBlur}
+                        value={validation.values.leadTimeAWD}
+                        invalid={validation.touched.leadTimeAWD && validation.errors.leadTimeAWD ? true : false}
+                      />
+                      <span>Days</span>
+                    </div>
+                    {validation.touched.leadTimeAWD && validation.errors.leadTimeAWD ? <p className='m-0 p-0 fs-7 text-danger'>{validation.errors.leadTimeAWD}</p> : null}
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={12} md={10} className='mb-3'>
                     <Label htmlFor='daysOfStockAWD' className='fs-7 form-label'>
-                      Days of Stock for Amazon AWD
+                      *Days of Stock after Lead Time
                     </Label>
                     <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
                       <Input
@@ -176,57 +223,54 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
                       />
                       <span>Days</span>
                     </div>
-                    <FormText className='fs-7'>The number of days you want to have stock in addition to the lead time.</FormText>
-                    {validation.touched.daysOfStockAWD && validation.errors.daysOfStockAWD ? <FormFeedback type='invalid'>{validation.errors.daysOfStockAWD}</FormFeedback> : null}
-                  </FormGroup>
-                </Col>
-              </Row>
+                    {validation.touched.daysOfStockAWD && validation.errors.daysOfStockAWD ? <p className='m-0 p-0 fs-7 text-danger'>{validation.errors.daysOfStockAWD}</p> : null}
+                  </Col>
+                </Row>
+              </>
             )}
+            <h5 className='fs-5 fw-bold'>Extra Config</h5>
             <Row>
               <Col xs={12} md={10}>
-                <FormGroup>
-                  <Label htmlFor='buffer' className='fs-7 form-label'>
-                    Buffer
-                  </Label>
+                <Label htmlFor='buffer' className='fs-7 form-label'>
+                  Buffer
+                </Label>
+                <Input
+                  type='number'
+                  className='form-control fs-6'
+                  bsSize='sm'
+                  id='buffer'
+                  name='buffer'
+                  onChange={validation.handleChange}
+                  onBlur={validation.handleBlur}
+                  value={validation.values.buffer || ''}
+                  invalid={validation.touched.buffer && validation.errors.buffer ? true : false}
+                />
+                {validation.touched.buffer && validation.errors.buffer ? <p className='m-0 p-0 fs-7 text-danger'>{validation.errors.buffer}</p> : null}
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12} md={10} className='mb-3'>
+                <Label htmlFor='sellerCost' className='fs-7 form-label'>
+                  Seller Cost
+                </Label>
+                <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
+                  <span>$</span>
                   <Input
                     type='number'
                     className='form-control fs-6'
                     bsSize='sm'
-                    id='buffer'
-                    name='buffer'
+                    id='sellerCost'
+                    name='sellerCost'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
-                    value={validation.values.buffer || ''}
-                    invalid={validation.touched.buffer && validation.errors.buffer ? true : false}
+                    value={validation.values.sellerCost || ''}
+                    invalid={validation.touched.sellerCost && validation.errors.sellerCost ? true : false}
                   />
-                  {validation.touched.buffer && validation.errors.buffer ? <FormFeedback type='invalid'>{validation.errors.buffer}</FormFeedback> : null}
-                </FormGroup>
+                </div>
+                {validation.touched.sellerCost && validation.errors.sellerCost ? <p className='m-0 p-0 fs-7 text-danger'>{validation.errors.sellerCost}</p> : null}
               </Col>
             </Row>
-            <Row>
-              <Col xs={12} md={10}>
-                <FormGroup>
-                  <Label htmlFor='sellerCost' className='fs-7 form-label'>
-                    Seller Cost
-                  </Label>
-                  <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
-                    <span>$</span>
-                    <Input
-                      type='number'
-                      className='form-control fs-6'
-                      bsSize='sm'
-                      id='sellerCost'
-                      name='sellerCost'
-                      onChange={validation.handleChange}
-                      onBlur={validation.handleBlur}
-                      value={validation.values.sellerCost || ''}
-                      invalid={validation.touched.sellerCost && validation.errors.sellerCost ? true : false}
-                    />
-                  </div>
-                  {validation.touched.sellerCost && validation.errors.sellerCost ? <FormFeedback type='invalid'>{validation.errors.sellerCost}</FormFeedback> : null}
-                </FormGroup>
-              </Col>
-            </Row>
+            <p className='fs-7 text-muted'>*The number of days you want to have of stock in addition to the lead time.</p>
             <Row className='mt-3'>
               <Col md={12}>
                 <div className='text-end'>

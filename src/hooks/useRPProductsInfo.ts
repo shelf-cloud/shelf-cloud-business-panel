@@ -7,7 +7,9 @@ import useSWR from 'swr'
 export type RPProductUpdateConfig = {
   inventoryId: number
   sku: string
-  leadTime: number
+  leadTimeSC: number
+  leadTimeFBA: number
+  leadTimeAWD: number
   daysOfStockSC: number
   daysOfStockFBA: number
   daysOfStockAWD: number
@@ -155,14 +157,16 @@ export const useRPProductsInfo = ({ sessionToken, session, state, searchValue, u
   }, [])
 
   const handleSaveProductConfig = useCallback(
-    async ({ inventoryId, sku, leadTime, daysOfStockSC, daysOfStockFBA, daysOfStockAWD, buffer, sellerCost }: RPProductUpdateConfig) => {
+    async ({ inventoryId, sku, leadTimeSC, leadTimeFBA, leadTimeAWD, daysOfStockSC, daysOfStockFBA, daysOfStockAWD, buffer, sellerCost }: RPProductUpdateConfig) => {
       const updatingProductConfig = toast.loading('Updating Product Config...')
 
       const response = await axios
         .post(`/api/reorderingPoints/setNewProductConfig?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
           inventoryId,
           sku,
-          leadTime,
+          leadTimeSC,
+          leadTimeFBA,
+          leadTimeAWD,
           daysOfStockSC,
           daysOfStockFBA,
           daysOfStockAWD,
@@ -294,7 +298,7 @@ export const useRPProductsInfo = ({ sessionToken, session, state, searchValue, u
       })
     }
 
-    if (['daysRemaining', 'warehouseQty', 'fbaQty', 'productionQty', 'receiving', 'sellerCost', 'leadTime', 'boxQty', 'adjustedForecast', 'order', 'orderAdjusted'].includes(field)) {
+    if (['daysRemaining', 'warehouseQty', 'fbaQty', 'productionQty', 'receiving', 'sellerCost', 'leadTime', 'boxQty', 'adjustedForecast', 'order', 'orderAdjusted', 'totalSCForecast', 'totalFBAForecast', 'totalAWDForecast'].includes(field)) {
       return rows.sort((a, b) => {
         const aField = a[field as keyof ReorderingPointsProduct]!
         const bField = b[field as keyof ReorderingPointsProduct]!
@@ -308,24 +312,10 @@ export const useRPProductsInfo = ({ sessionToken, session, state, searchValue, u
       })
     }
 
-    if (['recommendedQty'].includes(field)) {
+    if (['totalOrdered'].includes(field)) {
       return rows.sort((a, b) => {
-        const aField = (a.leadTime + a.recommendedDaysOfStock) * (a.totalUnitsSold['30D'] / 30) - (a.warehouseQty + a.fbaQty + a.productionQty + a.receiving)
-        const bField = (b.leadTime + b.recommendedDaysOfStock) * (b.totalUnitsSold['30D'] / 30) - (b.warehouseQty + b.fbaQty + b.productionQty + b.receiving)
-        if (aField > bField) {
-          return direction ? 1 : -1
-        } else if (aField < bField) {
-          return direction ? -1 : 1
-        } else {
-          return 0
-        }
-      })
-    }
-
-    if (['forecast'].includes(field)) {
-      return rows.sort((a, b) => {
-        const aField = Object.values(a.forecast[a.forecastModel]!).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) - (a.warehouseQty + a.fbaQty + a.productionQty + a.receiving)
-        const bField = Object.values(b.forecast[b.forecastModel]!).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) - (b.warehouseQty + b.fbaQty + b.productionQty + b.receiving)
+        const aField = a.useOrderAdjusted ? a.orderAdjusted : a.order
+        const bField = b.adjustedForecast ? b.orderAdjusted : b.order
         if (aField > bField) {
           return direction ? 1 : -1
         } else if (aField < bField) {

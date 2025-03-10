@@ -26,7 +26,7 @@ const SelectDropDown = ({ formValue, selectionInfo, selected, handleSelection, e
 
   return (
     <div ref={selectDropDownElement} className='dropdown mb-0'>
-      <div className={'btn-group w-100 form-control form-control-sm p-0' + (error ? ' border border-danger' : '')} onClick={() => setOpenDatesMenu(!openDatesMenu)}>
+      <div className={'btn-group w-100 form-control form-control-sm p-0' + (error ? ' border border-danger' : '')} style={{ cursor: 'pointer'}} onClick={() => setOpenDatesMenu(!openDatesMenu)}>
         <button type='button' disabled className='btn btn-light btn-sm py-0 fs-6 w-100 text-start' style={{ backgroundColor: 'white', opacity: '100%' }}>
           {selected == '' ? <span className='text-muted'>Select</span> : selected}
         </button>
@@ -43,7 +43,7 @@ const SelectDropDown = ({ formValue, selectionInfo, selected, handleSelection, e
       </div>
       <div className={'dropdown-menu w-100 py-3 px-4' + (openDatesMenu ? ' show' : '')}>
         <div className='d-flex flex-column justify-content-start'>
-          <div style={{ maxHeight: '25vh', overflowY: 'scroll', scrollbarWidth: 'thin' }}>
+          <div style={{ maxHeight: '25vh', overflowY: 'scroll', scrollbarWidth: 'none' }}>
             {selectionInfo?.map((option) => (
               <p
                 key={option}
