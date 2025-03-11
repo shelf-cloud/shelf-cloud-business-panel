@@ -15,9 +15,12 @@ const TrackingEvents = ({ shipmentDetails, handlePrintShipmentBillOfLading, wati
       <Col sm='12' lg='8'>
         <p className='fs-5 fw-bold'>Bill of Lading (BOL)</p>
         <p>
-          Print Bill of Lading (BOL) document: <span className='fw-semibold'>{shipmentDetails.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber}</span>
+          Print Bill of Lading (BOL) document: <span className='fw-semibold'>{shipmentDetails.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber ?? 'Pending'}</span>
         </p>
-        <Button disabled={watingRepsonse.printingLabel} color='primary' onClick={() => handlePrintShipmentBillOfLading(shipmentDetails.shipment.shipmentConfirmationId)}>
+        <Button
+          disabled={watingRepsonse.printingLabel || !shipmentDetails.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber}
+          color='primary'
+          onClick={() => handlePrintShipmentBillOfLading(shipmentDetails.shipment.shipmentConfirmationId)}>
           {watingRepsonse.printingLabel ? (
             <span>
               <Spinner color='light' size={'sm'} className='me-1' /> Downloading BOL...

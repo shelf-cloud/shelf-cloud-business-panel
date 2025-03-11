@@ -468,6 +468,7 @@ export interface ConfirmedShipments {
 
 export interface ConfirmedShipment {
   name: string
+  dates: Dates
   source: Source
   status: string
   shipmentId: string
@@ -478,6 +479,15 @@ export interface ConfirmedShipment {
   contactInformation: ContactInformation
   shipmentConfirmationId: string
   selectedTransportationOptionId: string
+}
+
+export interface Dates {
+  readyToShipWindow: ReadyToShipWindow
+}
+
+export interface ReadyToShipWindow {
+  end: string
+  start: string
 }
 
 export interface TrackingDetails {

@@ -440,7 +440,7 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                               <p className='m-0 p-0 fs-7 fw-semibold'>Less than and Full TruckLoad (LTL/FTL)</p>
                               <p className='m-0 p-0 fs-7'>
                                 {inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].shippingMode.includes('LTL') ? (
-                                  <>Estimates Starting at {FormatCurrency(state.currentRegion, inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].quote?.cost.amount!)}</>
+                                  <>Estimates Starting at {FormatCurrency(state.currentRegion, inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].quote?.cost.amount ?? 0)}</>
                                 ) : (
                                   <span className='m-0 p-0 text-danger'>Not Available</span>
                                 )}
@@ -512,10 +512,19 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                               </tbody>
                             </table>
                             <p className='m-0 mt-3 p-0 fs-7 text-start'>
-                              Carrier: <span className='fw-semibold'>{inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].carrier.alphaCode}</span>
+                              Carrier:{' '}
+                              <span className='fw-semibold'>
+                                {inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].carrier.alphaCode ||
+                                  inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].carrier.name}
+                              </span>
                             </p>
                             <p className='m-0 p-0 fs-7 text-start'>
-                              Pick up: <span className='fw-semibold'>{moment(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].carrierAppointment?.startTime).format('LL')}</span>
+                              Pick up:{' '}
+                              <span className='fw-semibold'>
+                                {moment(
+                                  inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].carrierAppointment?.startTime || inboundPlan.confirmedShipments[shipmentId]?.shipment.dates.readyToShipWindow.start
+                                ).format('LL')}
+                              </span>
                             </p>
                             <p className='m-0 p-0 fs-7 text-end'>
                               {inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].quote?.cost.amount! > 0 ? (

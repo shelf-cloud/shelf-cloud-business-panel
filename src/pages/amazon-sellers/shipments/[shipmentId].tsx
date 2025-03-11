@@ -277,7 +277,7 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                         </Nav>
                         <TabContent activeTab={activeTab} className='pt-2 pb-4'>
                           <TabPane tabId='1'>
-                            {shipmentDetails.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber ? (
+                            {shipmentDetails.shippingMode === 'LTL' ? (
                               <TrackingEvents shipmentDetails={shipmentDetails} handlePrintShipmentBillOfLading={handlePrintShipmentBillOfLading} watingRepsonse={watingRepsonse} />
                             ) : (
                               <TrackShipment shipmentDetails={shipmentDetails} />

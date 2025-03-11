@@ -82,14 +82,14 @@ const TrackingDetails = ({ inboundPlan, handlePrintShipmentBillOfLading, watingR
                 </Col>
               </div>
             )}
-            {selectedShipment.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber && (
+            {inboundPlan.shippingMode === 'LTL' && (
               <div className='my-3 px-2'>
                 <Col sm='12' lg='8'>
                   <p className='fs-5 fw-bold'>Bill of Lading (BOL)</p>
                   <p>
-                    Amazon Reference ID: <span className='fw-semibold'>{selectedShipment.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber}</span>
+                    Amazon Reference ID: <span className='fw-semibold'>{selectedShipment.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber ?? 'Pending'}</span>
                   </p>
-                  <Button disabled={watingRepsonse.printingLabel} color='primary' onClick={() => handlePrintShipmentBillOfLading(selectedShipment.shipment.shipmentConfirmationId)}>
+                  <Button disabled={watingRepsonse.printingLabel || !selectedShipment.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber} color='primary' onClick={() => handlePrintShipmentBillOfLading(selectedShipment.shipment.shipmentConfirmationId)}>
                     {watingRepsonse.printingLabel ? (
                       <span>
                         <Spinner color='light' size={'sm'} className='me-1' /> Downloading BOL...
