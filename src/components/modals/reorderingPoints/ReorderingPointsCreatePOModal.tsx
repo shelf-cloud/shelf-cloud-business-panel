@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-import SelectDropDown from '@components/ui/SelectDropDown'
 import AppContext from '@context/AppContext'
 import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
@@ -15,6 +14,24 @@ import { useSWRConfig } from 'swr'
 import router from 'next/router'
 import { DebounceInput } from 'react-debounce-input'
 import { NoImageAdress } from '@lib/assetsConstants'
+import { useWarehouses } from '@hooks/warehouses/useWarehouse'
+import SimpleSelect from '@components/Common/SimpleSelect'
+import { SplitNames } from '@hooks/reorderingPoints/useRPSplits'
+
+export type Splits = {
+  isSplitting: boolean
+  splitsQty: number
+}
+
+type poItem = {
+  sku: string
+  orderQty: number
+  inboundQty: number
+  sellerCost: number
+  inventoryId: number
+  receivedQty: number
+  arrivalHistory: never[]
+}
 
 type Props = {
   reorderingPointsOrder: {
@@ -27,13 +44,14 @@ type Props = {
   showPOModal: boolean
   setshowPOModal: (showPOModal: boolean) => void
   username: string
-  splits: { isSplitting: boolean; splitsQty: number }
+  splits: Splits
+  splitNames: SplitNames
 }
+// const DESTINATION_OPTIONS = ['ShelfCloud Warehouse', 'Direct to Marketplace']
 
-const DESTINATION_OPTIONS = ['ShelfCloud Warehouse', 'Direct to Marketplace']
-
-function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier, showPOModal, setshowPOModal, username, splits }: Props) {
+function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier, showPOModal, setshowPOModal, username, splits, splitNames }: Props) {
   const { state }: any = useContext(AppContext)
+  const { warehouses, isLoading } = useWarehouses()
   const { mutate } = useSWRConfig()
   const [loading, setLoading] = useState(false)
   const [orderComment, setorderComment] = useState('')
@@ -48,21 +66,49 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
 
   const initialValues = {
     orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
-    destinationSC: '',
+    destinationSC: { value: '', label: 'Select ...' },
+    splitDestinations: splits.isSplitting ? Object.fromEntries(Array.from({ length: splits.splitsQty }, (_, index) => [index, { value: '', label: 'Select ...' }])) : {},
   }
 
   const validationSchema = Yup.object({
-    destinationSC: Yup.string().required('You must select a destination'),
     orderNumber: Yup.string()
       .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ... Nor White Spaces`)
       .max(50, 'Order Number is to Long')
       .required('Required Order Number'),
+    destinationSC: Yup.object().shape({
+      value: Yup.number().when([], {
+        is: () => !splits.isSplitting,
+        then: Yup.number().required('Destination Required'),
+      }),
+    }),
+    splitDestinations: Yup.object().when([], {
+      is: () => splits.isSplitting,
+      then: Yup.object()
+        .shape(
+          Object.fromEntries(
+            Array.from({ length: splits.splitsQty }, (_, index) => [
+              index,
+              Yup.object().shape({
+                value: Yup.number()
+                  .min(0, `Required Split #${index + 1} Destination`)
+                  .required(`Required Split #${index + 1} Destination`),
+              }),
+            ])
+          )
+        )
+        .test('unique', 'Splits must have unique destinations', function (value) {
+          const values = Object.values(value || {}).map((v: any) => v.value)
+          return new Set(values).size === values.length
+        }),
+    }),
   })
 
   const handleSubmit = async (values: any) => {
     setLoading(true)
 
-    const poItems = []
+    const createNewPurchaseOrder = toast.loading('Creating Purchase Order...')
+
+    const poItems: poItem[] = []
     for await (const product of Object.values(reorderingPointsOrder.products)) {
       poItems.push({
         sku: product.sku,
@@ -75,19 +121,59 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
       })
     }
 
+    const hasSplitting = splits.isSplitting
+
+    const splitsInfo = {} as { [split: string]: { splitId: number; splitName: string; destination: { value: string; label: string }; items: poItem[] } }
+    if (splits.isSplitting) {
+      for await (const product of Object.values(reorderingPointsOrder.products)) {
+        for (let i = 0; i < splits.splitsQty; i++) {
+          if (!splitsInfo[i])
+            splitsInfo[i] = {
+              splitId: i,
+              splitName: splitNames[`${i}`],
+              destination: values.splitDestinations[i],
+              items: [],
+            }
+          splitsInfo[i].items.push({
+            sku: product.sku,
+            orderQty: product.useOrderAdjusted ? product.orderSplits[`${i}`].orderAdjusted : product.orderSplits[`${i}`].order,
+            inboundQty: 0,
+            sellerCost: product.sellerCost,
+            inventoryId: product.inventoryId,
+            receivedQty: 0,
+            arrivalHistory: [],
+          })
+        }
+      }
+    }
+
     const response = await axios.post(`/api/reorderingPoints/createNewPurchaseOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
       orderNumber: values.orderNumber,
-      destinationSC: values.destinationSC === 'ShelfCloud Warehouse' ? 1 : 0,
-      poItems: poItems,
+      destinationSC: values.destinationSC.value === 1 ? 1 : 0,
+      warehouseId: values.destinationSC.value ? values.destinationSC.value : 0,
+      poItems,
+      hasSplitting,
+      splits: splitsInfo,
       selectedSupplier: selectedSupplier,
     })
+
     if (!response.data.error) {
       setshowPOModal(false)
-      toast.success(response.data.message)
+      toast.update(createNewPurchaseOrder, {
+        render: response.data.message,
+        type: 'success',
+        isLoading: false,
+        autoClose: 3000,
+      })
       mutate('/api/getuser')
       router.push('/purchaseOrders?status=pending&organizeBy=suppliers')
     } else {
-      toast.error(response.data.message ?? 'Error creating Purchase Order')
+      toast.update(createNewPurchaseOrder, {
+        render: response.data.message ?? 'Error creating Purchase Order',
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
     }
 
     setLoading(false)
@@ -117,11 +203,11 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
               <p className='m-0 p-0 mb-1 fw-bold fs-5'>Purchase Order</p>
               <p className='m-0 p-0 fw-normal fs-6'>Supplier: {selectedSupplier}</p>
             </ModalHeader>
-            <ModalBody>
-              <Row className='mb-3'>
+            <ModalBody className='overflow-auto'>
+              <Row className='mb-2'>
                 <Col xs={12} md={5}>
                   <FormGroup className='createOrder_inputs'>
-                    <Label htmlFor='lastNameinput' className='form-label mb-0 fs-7'>
+                    <Label htmlFor='lastNameinput' className='form-label mb-1 fs-7'>
                       *Purchase Order Number
                     </Label>
                     <div className='input-group'>
@@ -146,12 +232,45 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                     </div>
                   </FormGroup>
                 </Col>
-                <Col xs={12} md={5}>
-                  <Label className='form-label mb-0 fs-7'>*Select Destination</Label>
-                  <SelectDropDown formValue={'destinationSC'} selectionInfo={DESTINATION_OPTIONS} selected={values.destinationSC} handleSelection={setFieldValue} error={errors.destinationSC && touched.destinationSC ? true : false} />
-                  {errors.destinationSC && touched.destinationSC ? <div className='m-0 p-0 text-danger fs-7'>*{errors.destinationSC}</div> : null}
-                </Col>
+                {!splits.isSplitting && (
+                  <Col xs={12} md={5}>
+                    <Label className='form-label mb-1 fs-7'>*Select Destination</Label>
+                    <SimpleSelect
+                      options={warehouses?.map((w) => ({ value: w.warehouseId, label: w.name })) || []}
+                      selected={values.destinationSC}
+                      handleSelect={(selected) => {
+                        setFieldValue('destinationSC', selected)
+                      }}
+                      placeholder={isLoading ? 'Loading...' : 'Select ...'}
+                      customStyle='sm'
+                    />
+                    {errors.destinationSC && touched.destinationSC ? <div className='m-0 p-0 text-danger fs-7'>*{errors.destinationSC.value}</div> : null}
+                  </Col>
+                )}
               </Row>
+              {splits.isSplitting && (
+                <Row className='mb-3'>
+                  <Label className='mb-1 fs-7 fw-semibold'>*Select Split Destination</Label>
+                  {Object.entries(values.splitDestinations).map(([key, split]) => (
+                    <Col xs={12} md={4} key={`splitDestination-${key}`}>
+                      <Label className='form-label mb-1 fs-7'>{splitNames[`${key}`]}</Label>
+                      <SimpleSelect
+                        options={warehouses?.map((w) => ({ value: w.warehouseId, label: w.name })) || []}
+                        selected={split}
+                        handleSelect={(selected) => {
+                          setFieldValue(`splitDestinations.${key}`, selected)
+                        }}
+                        placeholder={isLoading ? 'Loading...' : 'Select ...'}
+                        customStyle='sm'
+                      />
+                      {errors.splitDestinations && typeof errors.splitDestinations !== 'string' && errors.splitDestinations[key]?.value && touched.splitDestinations ? (
+                        <div className='m-0 p-0 text-danger fs-7'>{`*${errors.splitDestinations[key]?.value}`}</div>
+                      ) : null}
+                    </Col>
+                  ))}
+                  {errors.splitDestinations && typeof errors.splitDestinations === 'string' && touched.splitDestinations ? <p className='mb-0 mt-1 text-danger fs-7'>{`*${errors.splitDestinations}`}</p> : null}
+                </Row>
+              )}
               <span className='fs-7 text-muted'>*Select the columns you wish to print.</span>
               <div className='d-flex flex-row justify-content-evenly align-items-start'>
                 <table className='table table-bordered table-hover table-striped table-sm mb-0'>
@@ -191,7 +310,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                           .fill('')
                           .map((_, splitIndex) => (
                             <th key={`splitHeader-${splitIndex}`} className='text-center'>
-                              Split #{splitIndex + 1}
+                              {splitNames[`${splitIndex}`]}
                             </th>
                           ))}
                       <th className='text-center'>Order Qty</th>
@@ -330,7 +449,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
               </Row>
             </ModalBody>
             <ModalFooter className='d-flex flex-row justify-content-end align-items-center gap-2'>
-              <Button color='light' onClick={() => setshowPOModal(false)}>
+              <Button type='button' color='light' onClick={() => setshowPOModal(false)}>
                 Close
               </Button>
               <UncontrolledButtonDropdown>
@@ -338,12 +457,27 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                   Actions
                 </DropdownToggle>
                 <DropdownMenu>
-                  <PrintReorderingPointsOrder reorderingPointsOrder={reorderingPointsOrder} orderDetails={values} selectedSupplier={selectedSupplier} username={username} orderComment={orderComment} printColumns={printColumns} splits={splits} />
-                  <DownloadExcelReorderingPointsOrder reorderingPointsOrder={reorderingPointsOrder} orderDetails={values} selectedSupplier={selectedSupplier} username={username} orderComment={orderComment} />
+                  <PrintReorderingPointsOrder
+                    reorderingPointsOrder={reorderingPointsOrder}
+                    orderDetails={values}
+                    selectedSupplier={selectedSupplier}
+                    username={username}
+                    orderComment={orderComment}
+                    printColumns={printColumns}
+                    splits={splits}
+                    splitNames={splitNames}
+                  />
+                  <DownloadExcelReorderingPointsOrder reorderingPointsOrder={reorderingPointsOrder} orderDetails={values} selectedSupplier={selectedSupplier} username={username} orderComment={orderComment} splits={splits} splitNames={splitNames} />
                 </DropdownMenu>
               </UncontrolledButtonDropdown>
-              <Button disabled={loading} type='submit' color='success'>
-                {loading || savingComment ? <Spinner color='white' size={'sm'} /> : 'Create'}
+              <Button disabled={loading || savingComment} type='submit' color='success'>
+                {loading ? (
+                  <span>
+                    <Spinner color='light' size={'sm'} /> Creating PO
+                  </span>
+                ) : (
+                  'Create PO'
+                )}
               </Button>
             </ModalFooter>
           </Form>

@@ -1,23 +1,27 @@
 import { ReorderingPointsSalesResponse } from '@typesTs/reorderingPoints/reorderingPoints'
 import axios from 'axios'
+import { useEffect, useRef } from 'react'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
-import useEffectAfterMount from './useEffectAfterMount'
 
 export type ExpandedRowProps = { sessionToken: string; session: any; startDate: string; endDate: string }
 
 export const useRPProductSales = ({ sessionToken, session, state, startDate, endDate, sku }: any) => {
-  const controller = new AbortController()
-  useEffectAfterMount(() => {
+  const controllerRef = useRef<AbortController | null>(null)
+
+  useEffect(() => {
+    controllerRef.current = new AbortController()
     return () => {
-      controller.abort()
+      if (controllerRef.current) {
+        controllerRef.current.abort()
+      }
     }
   }, [])
 
   const fetcher = async (endPoint: string) => {
     try {
       const response = await axios.get<ReorderingPointsSalesResponse>(endPoint, {
-        signal: controller.signal,
+        signal: controllerRef.current?.signal,
         headers: {
           Authorization: `Bearer ${sessionToken}`,
         },

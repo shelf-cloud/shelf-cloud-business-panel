@@ -2,9 +2,9 @@ import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoi
 import React from 'react'
 import { ExpanderComponentProps } from 'react-data-table-component'
 import { Row } from 'reactstrap'
-import { ExpandedRowProps } from '@hooks/useRPProductSale'
 import ReorderingPointsSalesDetails from './ReorderingPointsSalesDetails'
 import ReorderingPointsTimelineDetails from './ReorderingPointsTimelineDetails'
+import { ExpandedRowProps } from '@hooks/reorderingPoints/useRPProductSale'
 
 type Props = {
   data: ReorderingPointsProduct

@@ -1,9 +1,9 @@
-import { RPProductConfig } from '@hooks/useRPProductConfig'
+import { RPProductConfig } from '@hooks/reorderingPoints/useRPProductConfig'
 import React, { useContext, useState } from 'react'
 import { Button, Col, Form, Input, Label, Offcanvas, OffcanvasBody, OffcanvasHeader, Row, Spinner } from 'reactstrap'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
-import { RPProductUpdateConfig } from '@hooks/useRPProductsInfo'
+import { RPProductUpdateConfig } from '@hooks/reorderingPoints/useRPProductsInfo'
 import AppContext from '@context/AppContext'
 
 type Props = {
@@ -179,7 +179,7 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
                 </Row>
               </>
             )}
-            {state.user[state.currentRegion]?.showAWD && (
+            {state.user[state.currentRegion]?.rpShowAWD && (
               <>
                 <h5 className='fs-5 fw-bold'>Amazon AWD</h5>
                 <Row>

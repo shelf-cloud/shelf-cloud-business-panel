@@ -1,6 +1,6 @@
 import { ReorderingPointsProduct, ReorderingPointsResponse } from '@typesTs/reorderingPoints/reorderingPoints'
 import axios from 'axios'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
 
@@ -18,14 +18,23 @@ export type RPProductUpdateConfig = {
 }
 export const useRPProductsInfo = ({ sessionToken, session, state, searchValue, urgency, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, brand, category, showHidden, setField, sortingDirectionAsc, isSplitting }: any) => {
   const [productsData, setProductsData] = useState<ReorderingPointsResponse>({})
+  const controllerRef = useRef<AbortController | null>(null)
+
+  useEffect(() => {
+    controllerRef.current = new AbortController()
+    return () => {
+      if (controllerRef.current) {
+        controllerRef.current.abort()
+      }
+    }
+  }, [])
 
   const { isValidating: isLoadingProductsData } = useSWR(
     session && state.user.businessId ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reorderingPoints/getReorderingPointsProducts?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
     async (endPoint: string) => {
-      const controller = new AbortController()
       try {
         const response = await axios.get<ReorderingPointsResponse>(endPoint, {
-          signal: controller.signal,
+          signal: controllerRef.current?.signal,
           headers: {
             Authorization: `Bearer ${sessionToken}`,
           },
@@ -40,7 +49,9 @@ export const useRPProductsInfo = ({ sessionToken, session, state, searchValue, u
     },
     {
       revalidateOnFocus: false,
-      dedupingInterval: 60000 * 15, // 15 minutes
+      revalidateOnMount: true,
+      revalidateIfStale: false,
+      revalidateOnReconnect: false,
       onSuccess: (data) => {
         setProductsData(data)
       },
@@ -355,12 +366,18 @@ export const useRPProductsInfo = ({ sessionToken, session, state, searchValue, u
     }
 
     return rows.sort((a, b) => {
-      if (a.daysToOrder > b.daysToOrder) {
-        return direction ? 1 : -1
-      } else if (a.daysToOrder < b.daysToOrder) {
-        return direction ? -1 : 1
+      if (a.urgency > b.urgency) {
+        return !direction ? 1 : -1
+      } else if (a.urgency < b.urgency) {
+        return !direction ? -1 : 1
       } else {
-        return 0
+        if (a.daysToOrder < b.daysToOrder) {
+          return !direction ? 1 : -1
+        } else if (a.daysToOrder > b.daysToOrder) {
+          return !direction ? -1 : 1
+        } else {
+          return 0
+        }
       }
     })
   }, [])

@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
 import { Card, CardBody, CardHeader, Col, Spinner } from 'reactstrap'
-import { ExpandedRowProps } from '@hooks/useRPProductSale'
 import AppContext from '@context/AppContext'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import ReorderingPointsTimeLine from './ReorderingPointsTimeLine'
-import { useRPProductTimeline } from '@hooks/useRPProductTimeline'
+import { ExpandedRowProps } from '@hooks/reorderingPoints/useRPProductSale'
+import { useRPProductTimeline } from '@hooks/reorderingPoints/useRPProductTimeline'
 type Props = {
   data: ReorderingPointsProduct
   expandedRowProps?: ExpandedRowProps

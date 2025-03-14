@@ -1,4 +1,5 @@
 import AppContext from '@context/AppContext'
+import { SplitNames } from '@hooks/reorderingPoints/useRPSplits'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
@@ -15,7 +16,8 @@ type Props = {
   }
   orderDetails: {
     orderNumber: string
-    destinationSC: string
+    destinationSC: { value: string; label: string; }
+    splitDestinations: { [k: string]: { value: string; label: string; } }
   }
   selectedSupplier: string
   username: string
@@ -27,9 +29,10 @@ type Props = {
     cost: boolean
   }
   splits: { isSplitting: boolean; splitsQty: number }
+  splitNames: SplitNames
 }
 
-function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selectedSupplier, username, orderComment, printColumns, splits }: Props) {
+function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selectedSupplier, username, orderComment, printColumns, splits, splitNames }: Props) {
   const { state }: any = useContext(AppContext)
   const printInvoice = async () => {
     let invoice = `<!DOCTYPE html>
@@ -448,9 +451,12 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                       <h3 style="font-size: 40px;font-weight: 900;color: #458BC9;">
                           ${username.substring(0, 3).toUpperCase()}-${orderDetails.orderNumber}/${splitIndex + 1}
                       </h3>
-                      <h5 style="font-size: 16px;font-weight: 500;">
-                          PO Date: ${moment().startOf('day').format('LL')}
+                      <h5 style="font-size: 18px;font-weight: 700;color: #458BC9;">
+                          Split: ${splitNames[`${splitIndex}`]}
                       </h5>
+                      <p style="font-size: 16px;font-weight: 500;">
+                          PO Date: ${moment().startOf('day').format('LL')}
+                      </p>
                       </div><!--End Right-->
                   </div><!--End Zone-->
                   

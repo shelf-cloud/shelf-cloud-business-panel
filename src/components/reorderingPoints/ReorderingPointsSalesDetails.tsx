@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
 import { Card, CardBody, CardHeader, Col, Spinner, UncontrolledTooltip } from 'reactstrap'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
-import { ExpandedRowProps, useRPProductSales } from '@hooks/useRPProductSale'
 import AppContext from '@context/AppContext'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
+import { ExpandedRowProps, useRPProductSales } from '@hooks/reorderingPoints/useRPProductSale'
 
 type Props = {
   data: ReorderingPointsProduct

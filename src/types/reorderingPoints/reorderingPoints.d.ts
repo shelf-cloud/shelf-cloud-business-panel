@@ -58,6 +58,7 @@ export interface ReorderingPointsProduct {
   totalFBAForecast: number
   totalAWDForecast: number
   monthlyForecast: { [year: string]: { [month: string]: { unitsSoldSC: number; daysWithStockSC: number; unitsSoldFBA: number; daysWithStockFBA: number } } }
+  canSendToAWD: boolean
   comment?: string
 }
 

@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 
-const createNewPurchaseOrder: NextApiHandler = async (request, response) => {
+const setNewSplitName: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)
 
   if (session == null) {
@@ -13,14 +13,9 @@ const createNewPurchaseOrder: NextApiHandler = async (request, response) => {
   }
 
   axios
-    .post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/reorderingPoints/createNewPurchaseOrder.php?businessId=${request.query.businessId}`, {
-      orderNumber: request.body.orderNumber,
-      destinationSC: request.body.destinationSC,
-      warehouseId: request.body.warehouseId,
-      poItems: request.body.poItems,
-      hasSplitting: request.body.hasSplitting,
-      splits: request.body.splits,
-      selectedSupplier: request.body.selectedSupplier,
+    .post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/reorderingPoints/setNewSplitName.php?businessId=${request.query.businessId}`, {
+      splitId: request.body.splitId,
+      newName: request.body.newName,
     })
     .then(({ data }) => {
       response.json(data)
@@ -31,7 +26,7 @@ const createNewPurchaseOrder: NextApiHandler = async (request, response) => {
         // that falls out of the range of 2xx
         response.json({
           error: true,
-          message: `Error from server please try again later.`,
+          message: `Error ${error.response.data.error_description}, please try again later.`,
         })
       } else if (error.request) {
         // The request was made but no response was received
@@ -49,4 +44,4 @@ const createNewPurchaseOrder: NextApiHandler = async (request, response) => {
     })
 }
 
-export default createNewPurchaseOrder
+export default setNewSplitName

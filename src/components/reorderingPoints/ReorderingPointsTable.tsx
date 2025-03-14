@@ -7,10 +7,12 @@ import Link from 'next/link'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import AppContext from '@context/AppContext'
 import { DebounceInput } from 'react-debounce-input'
-import { Badge, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
+import { Badge, Button, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
 import { NoImageAdress } from '@lib/assetsConstants'
-import { RPProductConfig } from '@hooks/useRPProductConfig'
-import { ExpandedRowProps } from '@hooks/useRPProductSale'
+import { RPProductConfig } from '@hooks/reorderingPoints/useRPProductConfig'
+import { ExpandedRowProps } from '@hooks/reorderingPoints/useRPProductSale'
+import { SplitNames } from '@hooks/reorderingPoints/useRPSplits'
+import { SimpleInputModal } from '@hooks/ui/useInputModal'
 
 const ReorderingPointsExpandedDetails = dynamic(() => import('./ReorderingPointsExpandedDetails'), {
   ssr: false,
@@ -32,7 +34,9 @@ type Props = {
   handleSetSorting: (field: string) => void
   sortingDirectionAsc: boolean
   splits: { isSplitting: boolean; splitsQty: number }
+  splitNames: SplitNames
   setRPProductConfig: (prev: RPProductConfig) => void
+  setValuesAndOpen: (newValue: SimpleInputModal) => void
   expandedRowProps: ExpandedRowProps
 }
 
@@ -52,7 +56,9 @@ const ReorderingPointsTable = ({
   handleSetSorting,
   sortingDirectionAsc,
   splits,
+  splitNames,
   setRPProductConfig,
+  setValuesAndOpen,
   expandedRowProps,
 }: Props) => {
   const { state }: any = useContext(AppContext)
@@ -142,7 +148,12 @@ const ReorderingPointsTable = ({
         .map((_, splitIndex) => ({
           name: (
             <div className='text-center d-flex flex-column justify-content-center align-items-center'>
-              <span className={'fs-7 fw-bold'}>Split # {splitIndex + 1}</span>
+              <span className={'fs-7 fw-bold'}>
+                {splitNames[`${splitIndex}`].length > 10 ? `${splitNames[`${splitIndex}`].substring(0, 11)}..` : splitNames[`${splitIndex}`]}
+                <Button className='m-0 p-0' color='ghost' size='sm' onClick={() => setValuesAndOpen({ id: `${splitIndex}`, text: splitNames[`${splitIndex}`] })}>
+                  <i className='las la-edit fs-5 text-primary m-0 p-0 ' />
+                </Button>
+              </span>
               <span className={'fs-7 text-muted'}>Order Qty</span>
               <span className='fs-7 text-muted'>Adjusted to Box Qty</span>
             </div>
@@ -184,7 +195,7 @@ const ReorderingPointsTable = ({
           compact: true,
         }))
     },
-    [handleOrderQty, handleSetSorting, handleSplitsOrderQty, selectedSupplier, setError, setField, setSelectedSupplier, sortingDirectionAsc, state.currentRegion]
+    [handleOrderQty, handleSetSorting, handleSplitsOrderQty, selectedSupplier, setError, setField, setSelectedSupplier, setValuesAndOpen, sortingDirectionAsc, splitNames, state.currentRegion]
   )
 
   const columns: any = [
@@ -465,12 +476,12 @@ const ReorderingPointsTable = ({
           <span className={'fs-7 ' + (setField === 'totalSCForecast' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('totalSCForecast')}>
             Warehouses {setField === 'totalSCForecast' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
           </span>
-          {state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected && (
+          {state.user[state.currentRegion]?.rpShowFBA && (
             <span className={'fs-7 ' + (setField === 'totalFBAForecast' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('totalFBAForecast')}>
               FBA {setField === 'totalFBAForecast' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
             </span>
           )}
-          {state.user[state.currentRegion]?.showAWD && (
+          {state.user[state.currentRegion]?.rpShowAWD && (
             <span className={'fs-7 ' + (setField === 'totalAWDForecast' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('totalAWDForecast')}>
               AWD {setField === 'totalAWDForecast' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
             </span>
@@ -483,13 +494,13 @@ const ReorderingPointsTable = ({
             <p className='m-0 p-0 text-center' id={'Recommended_Qty'}>
               {FormatIntNumber(state.currentRegion, row.totalSCForecast)}
             </p>
-            {state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected && (
+            {state.user[state.currentRegion]?.rpShowFBA && (
               <p className='m-0 p-0 text-center' id={`forecast_${row.sku}`}>
                 {FormatIntNumber(state.currentRegion, row.totalFBAForecast)}
               </p>
             )}
-            {state.user[state.currentRegion]?.showAWD && (
-              <p className='m-0 p-0 text-center' id={`Adjustedforecast_${row.sku}`}>
+            {state.user[state.currentRegion]?.rpShowAWD && (
+              <p className={'m-0 p-0 text-center ' + (!row.canSendToAWD ? 'text-danger text-decoration-line-through' : '')} id={`Adjustedforecast_${row.sku}`}>
                 {FormatIntNumber(state.currentRegion, row.totalAWDForecast)}
               </p>
             )}

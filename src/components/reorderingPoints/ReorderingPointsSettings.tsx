@@ -8,11 +8,12 @@ type Props = {
   initialMediumAlert: number
   initialLowAlert: number
   handleUrgencyRange: (highAlertMax: number, mediumAlertMax: number, lowAlertMax: number) => void
+  canSplit: boolean
   setsplits: (prev: any) => void
   splits: { isSplitting: boolean; splitsQty: number }
 }
 
-const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initialLowAlert, handleUrgencyRange, setsplits, splits }: Props) => {
+const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initialLowAlert, handleUrgencyRange, canSplit, setsplits, splits }: Props) => {
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const rpSettings = useRef<HTMLDivElement | null>(null)
 
@@ -89,37 +90,39 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
         <i className='las la-cog fs-4 m-0 p-0 text-primary' />
         {/* <span className='fw-semibold m-0 p-0'></span> */}
       </button>
-      <div className={'dropdown-menu dropdown-menu-xl px-2 pt-3 pb-1' + (openDatesMenu ? ' show' : '')}>
-        <div className='mb-3 px-2'>
-          <p className='fs-6 m-0 p-0 fw-semibold'>Splits</p>
-          <p className='fs-7 m-0 p-0 text-muted fw-light'>
-            Splits are used to split the Purchase Order Quantities in different PDFs. This is usefull when you want to send the Purchase Order Quantities to different Locations. Only One Puchase order is created.{' '}
-            <span className='fw-semibold'>Max. 3 Splits.</span>
-          </p>
-          <div className='mt-2 d-grid justify-content-between align-items-center gap-2' style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
-            <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-start'>
-              <Label className='form-label'>Split Order</Label>
-              <Input disabled className='form-check-input code-switcher' type='checkbox' id='showOnlyOverdue' name='showOnlyOverdue' checked={splits.isSplitting} onChange={(e) => handleIsSplitting(e)} />
+      <div className={'dropdown-menu dropdown-menu-xl px-2 pt-3 pb-1' + (openDatesMenu ? ' show' : '')} style={{ minWidth: '300px' }}>
+        {canSplit && (
+          <div className='mb-3 px-2'>
+            <p className='fs-6 m-0 p-0 fw-semibold'>Splits</p>
+            <p className='fs-7 m-0 p-0 text-muted fw-light'>
+              Splits are used to split the Purchase Order Quantities in different PDFs. This is usefull when you want to send the Purchase Order Quantities to different Locations. Only One Puchase order is created.{' '}
+              <span className='fw-semibold'>Max. 3 Splits.</span>
+            </p>
+            <div className='mt-2 d-grid justify-content-between align-items-center gap-2' style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
+              <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-start'>
+                <Label className='form-label'>Split Order</Label>
+                <Input disabled={!canSplit} className='form-check-input code-switcher' type='checkbox' id='showOnlyOverdue' name='showOnlyOverdue' checked={splits.isSplitting} onChange={(e) => handleIsSplitting(e)} />
+              </div>
+              <InputGroup size='sm'>
+                <Input
+                  type='number'
+                  disabled={!canSplit}
+                  className='form-control fs-6 m-0'
+                  bsSize='sm'
+                  style={{ padding: '0.2rem 0.9rem' }}
+                  placeholder='Splits'
+                  id='splitsMax'
+                  name='splitsMax'
+                  min={2}
+                  max={3}
+                  onChange={(e) => handleSplitsQty(e)}
+                  value={splits.splitsQty}
+                />
+                <InputGroupText className='fs-7 py-0'>Splits</InputGroupText>
+              </InputGroup>
             </div>
-            <InputGroup size='sm'>
-              <Input
-                type='number'
-                disabled
-                className='form-control fs-6 m-0'
-                bsSize='sm'
-                style={{ padding: '0.2rem 0.9rem' }}
-                placeholder='Splits'
-                id='splitsMax'
-                name='splitsMax'
-                min={2}
-                max={3}
-                onChange={(e) => handleSplitsQty(e)}
-                value={splits.splitsQty}
-              />
-              <InputGroupText className='fs-7 py-0'>Splits</InputGroupText>
-            </InputGroup>
           </div>
-        </div>
+        )}
         <div className='d-flex flex-column justify-content-start px-2'>
           <p className='fs-6 m-0 p-0 fw-semibold'>Urgency Time Range</p>
           <p className='fs-7 m-0 p-0 text-muted fw-light'>A product&apos;s urgency depends on how many days of stock remain after lead time. The remaining days to place an order to avoid being out of stock during lead time.</p>
