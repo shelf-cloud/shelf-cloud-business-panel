@@ -281,12 +281,12 @@ const ReorderingPointsTable = ({
               <p className='m-0 p-0 text-black fw-semibold fs-7 text-wrap'>{row.title}</p>
               <span className='m-0 p-0 text-black fw-normal fs-7 d-flex flex-wrap justify-content-start align-items-center'>
                 {row.asin && (
-                  <div className='d-flex flex-wrap justify-content-start align-items-center'>
-                    {`ASIN:`}
+                  <div className='d-flex flex-nowrap justify-content-start align-items-center' style={{ gap: '2px' }}>
+                    {`ASIN: `}
                     <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank' className='fw-light' style={{ textDecoration: 'none' }}>
                       {row.asin}
                     </a>
-                    <i className='ri-file-copy-line fs-5 my-0 mx-1 p-0 text-muted' style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(row.asin)} />
+                    <i className='ri-file-copy-line fs-6 m-0 p-0 text-muted' style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(row.asin)} />
                   </div>
                 )}
                 {row.barcode && (
@@ -584,7 +584,7 @@ const ReorderingPointsTable = ({
   ]
 
   return (
-    <>
+    <div style={{ height: '82dvh', scrollbarWidth: 'thin' }}>
       <DataTable
         columns={columns}
         data={filterDataTable}
@@ -612,7 +612,7 @@ const ReorderingPointsTable = ({
         conditionalRowStyles={conditionalRowStyles}
         customStyles={customStyles}
       />
-    </>
+    </div>
   )
 }
 

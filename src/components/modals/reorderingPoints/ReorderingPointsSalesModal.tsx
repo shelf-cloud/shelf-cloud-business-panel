@@ -39,12 +39,14 @@ function ReorderingPointsSalesModal({ salesModal, setSalesModal }: Props) {
             marketplaces: {},
           })
         }}>
-        <p className='m-0 p-0 fw-bold fs-5'>Total Orders by Marketplaces</p>
-        <p className='m-0 p-0 fw-normal fs-5'>{salesModal.title}</p>
-        <p className='m-0 p-0 fw-light fs-5'>{salesModal.sku}</p>
+        Orders by Marketplaces
       </ModalHeader>
-      <ModalBody>
-        <div className='d-flex flex-row justify-content-evenly align-items-start mb-5'>
+      <ModalBody className='overflow-auto'>
+        <p className='fs-5 fw-bold m-0 p-0'>
+          SKU: <span className='text-primary'>{salesModal.sku}</span>
+        </p>
+        <p className='fs-6 p-0 fw-semibold'>{salesModal.title}</p>
+        <div className='d-flex flex-row justify-content-evenly align-items-start gap-2 mb-5'>
           {/* 30 DAYS */}
           <div>
             <p className='fs-5 fw-bold text-center'>30 Days</p>
@@ -139,7 +141,7 @@ function ReorderingPointsSalesModal({ salesModal, setSalesModal }: Props) {
             </table>
           </div>
         </div>
-        <div className='d-flex flex-row justify-content-evenly align-items-start'>
+        <div className='d-flex flex-row justify-content-evenly align-items-start gap-2'>
           {/* 120 DAYS */}
           <div>
             <p className='fs-5 fw-bold text-center'>120 Days</p>

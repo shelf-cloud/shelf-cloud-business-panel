@@ -296,12 +296,12 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
                         {`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''} Selected`}
                       </DropdownToggle>
                       <DropdownMenu>
-                        <DropdownItem className='text-nowrap text-primary fs-7' onClick={() => changeSelectedProductsState(false)}>
-                          <i className='mdi mdi-eye label-icon align-middle fs-5 me-2' />
+                        <DropdownItem className='text-nowrap fs-7' onClick={() => changeSelectedProductsState(false)}>
+                          <i className='mdi mdi-eye label-icon align-middle fs-5 me-2 text-primary' />
                           Set Visible
                         </DropdownItem>
-                        <DropdownItem className='text-nowrap text-danger fs-7' onClick={() => changeSelectedProductsState(true)}>
-                          <i className='mdi mdi-eye-off label-icon align-middle fs-5 me-2' />
+                        <DropdownItem className='text-nowrap fs-7' onClick={() => changeSelectedProductsState(true)}>
+                          <i className='mdi mdi-eye-off label-icon align-middle fs-5 me-2 text-danger' />
                           Hide Selected
                         </DropdownItem>
                         <DropdownItem className='text-nowrap text-muted fs-7 text-end' onClick={clearAllSelectedRows}>
@@ -370,7 +370,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
               </Collapse>
             </Row>
             <Card>
-              <CardBody style={{ height: '82dvh', scrollbarWidth: 'thin' }}>
+              <CardBody>
                 <ReorderingPointsTable
                   filterDataTable={productsData}
                   pending={isLoadingProductsData}

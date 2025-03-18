@@ -30,28 +30,28 @@ const ReorderingPointsSummary = ({ reorderingPointsOrder, selectedSupplier, erro
           <CardBody className='d-flex flex-column align-items-center justify-content-between gap-1 flex-md-row py-2'>
             <div>
               <p className='text-capitalize fw-semibold mb-0  text-nowrap' style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                Reordering Points Order
+                Order Summary
               </p>
               <p className='fs-7 m-0 p-0 text-muted mb-1'>
                 <span>{`Supplier: `}</span>
                 <span className='fw-semibold text-dark'>{selectedSupplier}</span>
               </p>
             </div>
-            <div className='d-flex flex-row align-items-center justify-content-between gap-0 flex-md-column align-items-md-start align-items-lg-center'>
+            <div className='d-flex flex-row align-items-center justify-content-between gap-1 gap-md-0 flex-md-column align-items-md-start align-items-lg-center'>
               <span className='text-muted fs-7'>Total Qty</span>
               <span className='fw-semibold text-end'>{FormatIntNumber(state.currentRegion, reorderingPointsOrder.totalQty)}</span>
             </div>
-            <div className='d-flex flex-row align-items-center justify-content-between gap-0 flex-md-column align-items-md-start align-items-lg-center'>
+            <div className='d-flex flex-row align-items-center justify-content-between gap-1 gap-md-0 flex-md-column align-items-md-start align-items-lg-center'>
               <span className='text-muted fs-7'>Total Cost</span>
               <span className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, reorderingPointsOrder.totalCost)}</span>
             </div>
-            <div className='d-flex flex-row align-items-center justify-content-between gap-0 flex-md-column align-items-md-start align-items-lg-center'>
+            <div className='d-flex flex-row align-items-center justify-content-between gap-1 gap-md-0 flex-md-column align-items-md-start align-items-lg-center'>
               <span className='text-muted fs-7'>Total Volume</span>
               <span className='fw-semibold text-end'>{`${FormatIntPercentage(state.currentRegion, state.currentRegion === 'us' ? reorderingPointsOrder.totalVolume / 61020 : reorderingPointsOrder.totalVolume / 1000000)} m³`}</span>
             </div>
             {splits.isSplitting && (
               <div className='d-flex flex-row align-items-center justify-content-between gap-3 align-items-md-start align-items-lg-center'>
-                <div className='d-flex flex-row align-items-center justify-content-between gap-0 flex-md-column align-items-md-start align-items-lg-center'>
+                <div className='d-flex flex-row align-items-center justify-content-between gap-1 gap-md-0 flex-md-column align-items-md-start align-items-lg-center'>
                   <span className='text-muted fs-7'>Total Splits</span>
                   <span className='fw-semibold text-end'>{FormatIntNumber(state.currentRegion, splits.splitsQty)}</span>
                 </div>
