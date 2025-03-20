@@ -225,7 +225,7 @@ const Navdata = () => {
           link: '/marketplaces/productPerformanceNoFees',
           parentId: 'marketplaces',
         },
-        MarketpalcePricing: {
+        'Marketplace Pricing': {
           id: 'marketplacePricing',
           label: 'Marketplace Pricing',
           link: '/marketplaces/marketplacePricing',
