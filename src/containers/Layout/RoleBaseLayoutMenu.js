@@ -566,7 +566,7 @@ const Navdata = () => {
     }
 
     if (state.user[state.currentRegion]?.showMarketpalcePricing) {
-      menuItems[3].subItems?.unshift(modules.Marketplaces.subItems.MarketpalcePricing)
+      menuItems[3].subItems?.unshift(modules.Marketplaces.subItems['Marketplace Pricing'])
     }
   } else {
     menuItems = [modules.Dashboard]
