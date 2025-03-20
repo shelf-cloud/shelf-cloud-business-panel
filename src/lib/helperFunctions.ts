@@ -17,3 +17,13 @@ export const sortStringsCaseInsensitive = (string1: string, string2: string) => 
   }
   return 0
 }
+
+export const sortNumbers = (a: number, b: number) => {
+  if (a > b) {
+    return 1
+  }
+  if (b > a) {
+    return -1
+  }
+  return 0
+}

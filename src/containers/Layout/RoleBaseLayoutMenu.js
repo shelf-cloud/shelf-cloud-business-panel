@@ -225,6 +225,12 @@ const Navdata = () => {
           link: '/marketplaces/productPerformanceNoFees',
           parentId: 'marketplaces',
         },
+        MarketpalcePricing: {
+          id: 'marketplacePricing',
+          label: 'Marketplace Pricing',
+          link: '/marketplaces/marketplacePricing',
+          parentId: 'marketplaces',
+        },
       },
     },
     Inbound: {
@@ -554,9 +560,13 @@ const Navdata = () => {
     if (state.user[state.currentRegion]?.showCommerceHub) {
       menuItems[3].subItems?.push(modules.Marketplaces.subItems.CommerceHub)
     }
-    
+
     if (state.user[state.currentRegion]?.showPPWithNoSCFees) {
       menuItems[3].subItems?.unshift(modules.Marketplaces.subItems.PPWithNoSCFees)
+    }
+
+    if (state.user[state.currentRegion]?.showMarketpalcePricing) {
+      menuItems[3].subItems?.unshift(modules.Marketplaces.subItems.MarketpalcePricing)
     }
   } else {
     menuItems = [modules.Dashboard]
