@@ -31,7 +31,8 @@ export interface MKP_Marketplaces {
   fixedFee: number
   logo: string
   shippingToMarketpalce: number
-  otherCosts: number
+  storeOtherCosts: number
+  notes: string
   currency: string
   actualPrice: number
   totalFees: number
@@ -67,8 +68,15 @@ export interface MKP_Product_Table {
   storeId: number
   comissionFee: number
   fixedFee: number
+  logo: string
+  shippingToMarketpalce: number
+  storeOtherCosts: number
+  notes: string
+  currency: string
   actualPrice: number
   totalFees: number
   proposedPrice: number
+  proposedMargin: number
+  fbaHandlingFee: number
   unitsSold: MKP_Marketplaces_UnitsSold
 }

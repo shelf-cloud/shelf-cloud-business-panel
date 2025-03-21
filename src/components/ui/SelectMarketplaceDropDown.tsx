@@ -10,14 +10,15 @@ type Props = {
     logo: string
   }[]
   selected: {
-    storeId: number
+    storeId: string
     name: string
     logo: string
   }
   handleSelection: (prev: any) => void
+  showAllMarketsOption: boolean
 }
 
-const SelectMarketplaceDropDown = ({ selectionInfo, selected, handleSelection }: Props) => {
+const SelectMarketplaceDropDown = ({ selectionInfo, selected, handleSelection, showAllMarketsOption }: Props) => {
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const selectMarketplace = useRef<HTMLDivElement | null>(null)
 
@@ -43,7 +44,7 @@ const SelectMarketplaceDropDown = ({ selectionInfo, selected, handleSelection }:
         data-bs-auto-close='outside'
         aria-expanded='false'
         onClick={() => setOpenDatesMenu(!openDatesMenu)}>
-        {selected.storeId === 9999 ? (
+        {selected.storeId === '9999' ? (
           <i className='las la-store-alt fs-4 m-0 p-0 text-primary' />
         ) : (
           <div
@@ -66,18 +67,20 @@ const SelectMarketplaceDropDown = ({ selectionInfo, selected, handleSelection }:
       </button>
       <div className={'dropdown-menu w-100 py-3 px-3' + (openDatesMenu ? ' show' : '')} style={{ minWidth: '280px' }}>
         <div className='d-flex flex-column justify-content-start'>
-          <div className='d-flex flex-column justify-content-start gap-2 py-1' style={{ maxHeight: '25vh', overflowY: 'scroll' }}>
-            <div
-              key={9999}
-              className='d-flex flex-row justify-content-start gap-1 align-items-center'
-              style={{ cursor: 'pointer' }}
-              onClick={() => {
-                handleSelection((prev: any) => ({ ...prev, storeId: 9999, name: 'All Marketplaces', logo: '' }))
-                setOpenDatesMenu(false)
-              }}>
-              <i className='las la-store-alt fs-3 m-0 p-0 text-primary' />
-              <span className={'m-0 p-0 text-nowrap ' + (selected.storeId === 9999 ? 'fw-semibold' : '')}>All Marketplaces</span>
-            </div>
+          <div className='d-flex flex-column justify-content-start gap-2 py-1' style={{ maxHeight: '25vh', overflowY: 'scroll', scrollbarWidth: 'thin' }}>
+            {showAllMarketsOption && (
+              <div
+                key={'9999'}
+                className='d-flex flex-row justify-content-start gap-1 align-items-center'
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  handleSelection((prev: any) => ({ ...prev, storeId: '9999', name: 'All Marketplaces', logo: '' }))
+                  setOpenDatesMenu(false)
+                }}>
+                <i className='las la-store-alt fs-3 m-0 p-0 text-primary' />
+                <span className={'m-0 p-0 text-nowrap ' + (selected.storeId === '9999' ? 'fw-semibold' : '')}>All Marketplaces</span>
+              </div>
+            )}
             {selectionInfo?.map((option) => (
               <div
                 key={option.storeId}

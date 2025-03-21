@@ -12,20 +12,21 @@ import MKP_ExpandedDetails from './MKP_ExpandedDetails'
 type Props = {
   products: MKP_Product[]
   isLoading: boolean
-//   setSelectedRows: (selectedRows: MKP_Product[]) => void
-//   toggledClearRows: boolean
+  //   setSelectedRows: (selectedRows: MKP_Product[]) => void
+  //   toggledClearRows: boolean
   handleProposedPrice: (sku: string, storeId: number, value: number) => void
   handleOtherCosts: (sku: string, storeId: number, value: number) => void
   handleSetSingleMargin: (sku: string, storeId: number, value: number) => void
   handleSetProductMargin: (sku: string, value: number) => void
+  handleNotes: (sku: string, storeId: number, value: string) => void
 }
 
-const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice, handleSetSingleMargin, handleSetProductMargin }: Props) => {
+const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice, handleSetSingleMargin, handleSetProductMargin, handleNotes }: Props) => {
   const { state }: any = useContext(AppContext)
 
-//   const handleSelectedRows = ({ selectedRows }: { selectedRows: MKP_Product[] }) => {
-//     setSelectedRows(selectedRows)
-//   }
+  //   const handleSelectedRows = ({ selectedRows }: { selectedRows: MKP_Product[] }) => {
+  //     setSelectedRows(selectedRows)
+  //   }
 
   const columns: any = [
     {
@@ -148,7 +149,7 @@ const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice,
         // clearSelectedRows={toggledClearRows}
         expandableRows={true}
         expandableRowsComponent={MKP_ExpandedDetails}
-        expandableRowsComponentProps={{ expandedRowProps: { handleOtherCosts, handleProposedPrice, handleSetSingleMargin, handleSetProductMargin } }}
+        expandableRowsComponentProps={{ expandedRowProps: { handleOtherCosts, handleProposedPrice, handleSetSingleMargin, handleSetProductMargin, handleNotes } }}
         pagination={products.length > 100 ? true : false}
         paginationPerPage={50}
         paginationRowsPerPageOptions={[50, 100, 200, 500]}

@@ -14,7 +14,7 @@ type Props = {
   tableData: ProductPerformance[]
   pending: boolean
   selectedMarketplace: {
-    storeId: number
+    storeId: string
     name: string
     logo: string
   }
@@ -31,12 +31,12 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
   })
   const totalGrossRevenue = tableData.reduce((total: number, product: ProductPerformance) => total + product.grossRevenue, 0)
   const totalExpenses =
-    selectedMarketplace.storeId === 9999
+    selectedMarketplace.storeId === '9999'
       ? tableData.reduce((total: number, product: ProductPerformance) => total + product.expenses + product.storageCost, 0)
       : tableData.reduce((total: number, product: ProductPerformance) => total + product.expenses, 0)
 
   const totalProfit =
-    selectedMarketplace.storeId === 9999
+    selectedMarketplace.storeId === '9999'
       ? tableData.reduce((total: number, product: ProductPerformance) => total + (product.grossRevenue - (product.expenses + product.storageCost)), 0)
       : tableData.reduce((total: number, product: ProductPerformance) => total + (product.grossRevenue - product.expenses), 0)
 
@@ -230,7 +230,7 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
         </div>
       ),
       selector: (row: ProductPerformance) => {
-        return <span>{FormatCurrency(state.currentRegion, selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)}</span>
+        return <span>{FormatCurrency(state.currentRegion, selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)}</span>
       },
       center: true,
       sortable: true,
@@ -246,8 +246,8 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
       ),
       selector: (row: ProductPerformance) => {
         return (
-          <span className={row?.grossRevenue - (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses) >= 0 ? 'text-black' : 'text-danger'}>
-            {FormatCurrency(state.currentRegion, row?.grossRevenue - (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses))}
+          <span className={row?.grossRevenue - (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses) >= 0 ? 'text-black' : 'text-danger'}>
+            {FormatCurrency(state.currentRegion, row?.grossRevenue - (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses))}
           </span>
         )
       },
@@ -270,13 +270,13 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
           return (
             <span
               className={
-                ((row?.grossRevenue - (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) / row?.grossRevenue) * 100 >= 0
+                ((row?.grossRevenue - (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) / row?.grossRevenue) * 100 >= 0
                   ? 'text-black'
                   : 'text-danger'
               }>
               {FormatIntPercentage(
                 state.currentRegion,
-                ((row?.grossRevenue - (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) / row?.grossRevenue) * 100
+                ((row?.grossRevenue - (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) / row?.grossRevenue) * 100
               )}
               %
             </span>
@@ -302,8 +302,8 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
           return (
             <span
               className={
-                ((row.grossRevenue - (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) /
-                  (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) *
+                ((row.grossRevenue - (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) /
+                  (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) *
                   100 >=
                 0
                   ? 'text-black'
@@ -311,8 +311,8 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
               }>
               {FormatIntPercentage(
                 state.currentRegion,
-                ((row.grossRevenue - (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) /
-                  (selectedMarketplace.storeId === 9999 ? row?.expenses + row?.storageCost : row?.expenses)) *
+                ((row.grossRevenue - (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) /
+                  (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) *
                   100
               )}
               %

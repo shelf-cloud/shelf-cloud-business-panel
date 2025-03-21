@@ -9,9 +9,11 @@ export type MKP_ExpandedRowProps = {
   handleProposedPrice: (sku: string, storeId: number, value: number) => void
   handleSetSingleMargin: (sku: string, storeId: number, value: number) => void
   handleSetProductMargin: (sku: string, value: number) => void
+  handleNotes: (sku: string, storeId: number, value: string) => void
+  handleSetMarketplaceMargin: (storeId: string, value: number) => void
 }
 
-export const useMarketplacePricing = ({ sessionToken, session, state, storeId, searchValue }: any) => {
+export const useMarketplacePricing = ({ sessionToken, session, state, storeId, searchValue, setchangesMade }: any) => {
   const [productsInfo, setproductsInfo] = useState<MKP_Response>({})
   const controllerRef = useRef<AbortController | null>(null)
 
@@ -52,98 +54,88 @@ export const useMarketplacePricing = ({ sessionToken, session, state, storeId, s
     }
   )
 
-  const handleOtherCosts = useCallback((sku: string, storeId: number, value: number) => {
-    if (value <= 0) {
+  const handleOtherCosts = useCallback(
+    (sku: string, storeId: number, value: number) => {
+      setchangesMade(true)
+      if (value <= 0) {
+        setproductsInfo((prevProducts) => {
+          const updatedProducts = { ...prevProducts }
+
+          updatedProducts[sku].marketplaces[storeId].storeOtherCosts = 0
+
+          return updatedProducts
+        })
+        return
+      } else {
+        setproductsInfo((prevProducts) => {
+          const updatedProducts = { ...prevProducts }
+
+          updatedProducts[sku].marketplaces[storeId].storeOtherCosts = value
+
+          return updatedProducts
+        })
+      }
+    },
+    [setchangesMade]
+  )
+  const handleNotes = useCallback(
+    (sku: string, storeId: number, value: string) => {
+      setchangesMade(true)
       setproductsInfo((prevProducts) => {
         const updatedProducts = { ...prevProducts }
 
-        updatedProducts[sku].marketplaces[storeId].otherCosts = 0
+        updatedProducts[sku].marketplaces[storeId].notes = value
 
         return updatedProducts
       })
-      return
-    } else {
-      setproductsInfo((prevProducts) => {
-        const updatedProducts = { ...prevProducts }
+    },
+    [setchangesMade]
+  )
 
-        updatedProducts[sku].marketplaces[storeId].otherCosts = value
+  const handleProposedPrice = useCallback(
+    (sku: string, storeId: number, value: number) => {
+      setchangesMade(true)
+      if (value <= 0) {
+        setproductsInfo((prevProducts) => {
+          const updatedProducts = { ...prevProducts }
 
-        return updatedProducts
-      })
-    }
-  }, [])
+          updatedProducts[sku].marketplaces[storeId].proposedPrice = 0
 
-  const handleProposedPrice = useCallback((sku: string, storeId: number, value: number) => {
-    if (value <= 0) {
-      setproductsInfo((prevProducts) => {
-        const updatedProducts = { ...prevProducts }
+          return updatedProducts
+        })
+        return
+      } else {
+        setproductsInfo((prevProducts) => {
+          const updatedProducts = { ...prevProducts }
 
-        updatedProducts[sku].marketplaces[storeId].proposedPrice = 0
+          updatedProducts[sku].marketplaces[storeId].proposedPrice = value
 
-        return updatedProducts
-      })
-      return
-    } else {
-      setproductsInfo((prevProducts) => {
-        const updatedProducts = { ...prevProducts }
+          return updatedProducts
+        })
+      }
+    },
+    [setchangesMade]
+  )
 
-        updatedProducts[sku].marketplaces[storeId].proposedPrice = value
+  const handleSetSingleMargin = useCallback(
+    (sku: string, storeId: number, value: number) => {
+      setchangesMade(true)
+      if (value <= 0) {
+        setproductsInfo((prevProducts) => {
+          const updatedProducts = { ...prevProducts }
 
-        return updatedProducts
-      })
-    }
-  }, [])
-
-  const handleSetSingleMargin = useCallback((sku: string, storeId: number, value: number) => {
-    if (value <= 0) {
-      setproductsInfo((prevProducts) => {
-        const updatedProducts = { ...prevProducts }
-
-        updatedProducts[sku].marketplaces[storeId].proposedPrice = 0
-        updatedProducts[sku].marketplaces[storeId].proposedMargin = 0
-
-        return updatedProducts
-      })
-    } else {
-      setproductsInfo((prevProducts) => {
-        const updatedProducts = { ...prevProducts }
-        const product = updatedProducts[sku]
-        const marketplace = product.marketplaces[storeId]
-
-        const up = product.sellerCost + product.inboundShippingCost + marketplace.shippingToMarketpalce + product.otherCosts + marketplace.otherCosts + marketplace.fbaHandlingFee
-        const newMargin = value / 100
-        const down1 = 1 - newMargin
-        const down2 = marketplace.comissionFee / 100
-        const proposedPrice = up / (down1 - down2)
-
-        updatedProducts[sku].marketplaces[storeId].proposedPrice = parseFloat(proposedPrice.toFixed(2))
-        updatedProducts[sku].marketplaces[storeId].proposedMargin = value
-
-        return updatedProducts
-      })
-    }
-  }, [])
-
-  const handleSetProductMargin = useCallback((sku: string, value: number) => {
-    if (value <= 0) {
-      setproductsInfo((prevProducts) => {
-        const updatedProducts = { ...prevProducts }
-
-        for (const storeId in updatedProducts[sku].marketplaces) {
           updatedProducts[sku].marketplaces[storeId].proposedPrice = 0
           updatedProducts[sku].marketplaces[storeId].proposedMargin = 0
-        }
 
-        return updatedProducts
-      })
-    } else {
-      setproductsInfo((prevProducts) => {
-        const updatedProducts = { ...prevProducts }
-        const product = updatedProducts[sku]
-        for (const storeId in updatedProducts[sku].marketplaces) {
+          return updatedProducts
+        })
+      } else {
+        setproductsInfo((prevProducts) => {
+          const updatedProducts = { ...prevProducts }
+          const product = updatedProducts[sku]
           const marketplace = product.marketplaces[storeId]
 
-          const up = product.sellerCost + product.inboundShippingCost + marketplace.shippingToMarketpalce + product.otherCosts + marketplace.otherCosts + marketplace.fbaHandlingFee
+          const up = product.sellerCost + product.inboundShippingCost + marketplace.shippingToMarketpalce + product.otherCosts + marketplace.storeOtherCosts + marketplace.fbaHandlingFee + marketplace.fixedFee
           const newMargin = value / 100
           const down1 = 1 - newMargin
           const down2 = marketplace.comissionFee / 100
@@ -151,17 +143,161 @@ export const useMarketplacePricing = ({ sessionToken, session, state, storeId, s
 
           updatedProducts[sku].marketplaces[storeId].proposedPrice = parseFloat(proposedPrice.toFixed(2))
           updatedProducts[sku].marketplaces[storeId].proposedMargin = value
+
+          return updatedProducts
+        })
+      }
+    },
+    [setchangesMade]
+  )
+
+  const handleSetProductMargin = useCallback(
+    (sku: string, value: number) => {
+      setchangesMade(true)
+      if (value <= 0) {
+        setproductsInfo((prevProducts) => {
+          const updatedProducts = { ...prevProducts }
+
+          for (const storeId in updatedProducts[sku].marketplaces) {
+            updatedProducts[sku].marketplaces[storeId].proposedPrice = 0
+            updatedProducts[sku].marketplaces[storeId].proposedMargin = 0
+          }
+
+          return updatedProducts
+        })
+      } else {
+        setproductsInfo((prevProducts) => {
+          const updatedProducts = { ...prevProducts }
+          const product = updatedProducts[sku]
+          for (const storeId in updatedProducts[sku].marketplaces) {
+            const marketplace = product.marketplaces[storeId]
+
+            const up = product.sellerCost + product.inboundShippingCost + marketplace.shippingToMarketpalce + product.otherCosts + marketplace.storeOtherCosts + marketplace.fbaHandlingFee + marketplace.fixedFee
+            const newMargin = value / 100
+            const down1 = 1 - newMargin
+            const down2 = marketplace.comissionFee / 100
+            const proposedPrice = up / (down1 - down2)
+
+            updatedProducts[sku].marketplaces[storeId].proposedPrice = parseFloat(proposedPrice.toFixed(2))
+            updatedProducts[sku].marketplaces[storeId].proposedMargin = value
+          }
+
+          return updatedProducts
+        })
+      }
+    },
+    [setchangesMade]
+  )
+
+  const handleSetMarketplaceMargin = useCallback(
+    (storeId: string, value: number) => {
+      setchangesMade(true)
+      if (value <= 0) {
+        setproductsInfo((prevProducts) => {
+          const updatedProducts = { ...prevProducts }
+
+          for (const sku in updatedProducts) {
+            if (updatedProducts[sku].marketplaces[storeId]) {
+              updatedProducts[sku].marketplaces[storeId].proposedPrice = 0
+              updatedProducts[sku].marketplaces[storeId].proposedMargin = 0
+            }
+          }
+
+          return updatedProducts
+        })
+      } else {
+        setproductsInfo((prevProducts) => {
+          const updatedProducts = { ...prevProducts }
+
+          for (const sku in updatedProducts) {
+            if (updatedProducts[sku].marketplaces[storeId]) {
+              const product = updatedProducts[sku]
+              const marketplace = product.marketplaces[storeId]
+
+              const up = product.sellerCost + product.inboundShippingCost + marketplace.shippingToMarketpalce + product.otherCosts + marketplace.storeOtherCosts + marketplace.fbaHandlingFee + marketplace.fixedFee
+              const newMargin = value / 100
+              const down1 = 1 - newMargin
+              const down2 = marketplace.comissionFee / 100
+              const proposedPrice = up / (down1 - down2)
+
+              updatedProducts[sku].marketplaces[storeId].proposedPrice = parseFloat(proposedPrice.toFixed(2))
+              updatedProducts[sku].marketplaces[storeId].proposedMargin = value
+            }
+          }
+
+          return updatedProducts
+        })
+      }
+    },
+    [setchangesMade]
+  )
+
+  const handleSaveProductsInfo = useCallback(async () => {
+    try {
+      const saveProductInfoToast = toast.loading('Saving products info...')
+      const chunkSize = 20 // Adjust the chunk size as needed
+      const productsArray = Object.values(productsInfo)
+      const totalChunks = Math.ceil(productsArray.length / chunkSize)
+
+      for (let i = 0; i < totalChunks; i++) {
+        const chunk = productsArray.slice(i * chunkSize, (i + 1) * chunkSize).map((product) => {
+          const { marketplaces, sku } = product
+          return {
+            sku,
+            marketplaces: Object.values(marketplaces).map((marketplace) => {
+              const { proposedPrice, storeId, storeOtherCosts, notes } = marketplace
+              return {
+                proposedPrice,
+                storeId,
+                storeOtherCosts,
+                notes,
+              }
+            }),
+          }
+        })
+
+        const { data } = await axios.post(`/api/marketplaces/pricing/updateMarketplacePricing`, {
+          region: state.currentRegion,
+          businessId: state.user.businessId,
+          productsInfo: chunk,
+        })
+
+        if (data.error) {
+          toast.update(saveProductInfoToast, {
+            render: data.message,
+            type: 'error',
+            isLoading: false,
+            autoClose: 3000,
+          })
+          return
         }
 
-        return updatedProducts
+        const progress = Math.round(((i + 1) / totalChunks) * 100)
+        toast.update(saveProductInfoToast, {
+          render: `Saving products info... ${progress}%`,
+          type: 'info',
+          isLoading: true,
+        })
+      }
+
+      toast.update(saveProductInfoToast, {
+        render: 'Products info updated successfully',
+        type: 'success',
+        isLoading: false,
+        autoClose: 3000,
       })
+      setchangesMade(false)
+    } catch (error) {
+      if (!axios.isCancel(error)) {
+        toast.error((error as any)?.data?.message || 'Error updating products info')
+      }
     }
-  }, [])
+  }, [productsInfo, setchangesMade, state.currentRegion, state.user.businessId])
 
   const filteredProducts = useMemo(() => {
     if (!productsInfo) return []
 
-    if (storeId !== 9999) {
+    if (storeId !== '9999') {
       if (searchValue) {
         return Object.values(productsInfo)
           .map((product: MKP_Product) => {
@@ -196,5 +332,15 @@ export const useMarketplacePricing = ({ sessionToken, session, state, storeId, s
     return Object.values(productsInfo).map((product) => product)
   }, [productsInfo, storeId, searchValue])
 
-  return { products: filteredProducts, isLoadingProducts: isValidating, handleOtherCosts, handleProposedPrice, handleSetSingleMargin, handleSetProductMargin }
+  return {
+    products: filteredProducts,
+    isLoadingProducts: isValidating,
+    handleOtherCosts,
+    handleProposedPrice,
+    handleSetSingleMargin,
+    handleSetProductMargin,
+    handleSaveProductsInfo,
+    handleNotes,
+    handleSetMarketplaceMargin,
+  }
 }

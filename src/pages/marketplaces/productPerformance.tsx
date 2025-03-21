@@ -83,20 +83,16 @@ const Profits = ({ session, sessionToken }: Props) => {
   const [loadingData, setLoadingData] = useState(true)
   const [startDate, setStartDate] = useState(moment().subtract(15, 'days').format('YYYY-MM-DD'))
   const [endDate, setEndDate] = useState(moment().format('YYYY-MM-DD'))
-  const [selectedMarketplace, setSelectedMarketplace] = useState({ storeId: 9999, name: 'All Marketplaces', logo: '' })
+  const [selectedMarketplace, setSelectedMarketplace] = useState({ storeId: '9999', name: 'All Marketplaces', logo: '' })
   const [productsData, setProductsData] = useState<ProductsPerformanceResponse>({})
 
   const [summaryModal, setsummaryModal] = useState({
     show: false,
   })
 
-  const { data }: { data?: MarketpalcesInfo } = useSWR(
-    state.user.businessId ? `/api/marketplaces/getMarketplacesInfo?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  )
+  const { data }: { data?: MarketpalcesInfo } = useSWR(state.user.businessId ? `/api/marketplaces/getMarketplacesInfo?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher, {
+    revalidateOnFocus: false,
+  })
 
   useEffect(() => {
     const controller = new AbortController()
@@ -189,18 +185,7 @@ const Profits = ({ session, sessionToken }: Props) => {
     }
   }
 
-  const handleApplyFilters = (
-    grossmin: string,
-    grossmax: string,
-    profitmin: string,
-    profitmax: string,
-    unitsmin: string,
-    unitsmax: string,
-    supplier: string,
-    brand: string,
-    category: string,
-    showWithSales: string
-  ) => {
+  const handleApplyFilters = (grossmin: string, grossmax: string, profitmin: string, profitmax: string, unitsmin: string, unitsmax: string, supplier: string, brand: string, category: string, showWithSales: string) => {
     let filterString = `/marketplaces/productPerformance?filters=true`
     if (grossmin || grossmin !== '') filterString += `&grossmin=${grossmin}`
     if (grossmax || grossmax !== '') filterString += `&grossmax=${grossmax}`
@@ -238,14 +223,8 @@ const Profits = ({ session, sessionToken }: Props) => {
                     onClick={() => setFilterOpen(!filterOpen)}>
                     Filters
                   </button>
-                  <FilterByDates
-                    shipmentsStartDate={startDate}
-                    setShipmentsStartDate={setStartDate}
-                    setShipmentsEndDate={setEndDate}
-                    shipmentsEndDate={endDate}
-                    handleChangeDatesFromPicker={handleChangeDatesFromPicker}
-                  />
-                  <SelectMarketplaceDropDown selectionInfo={data?.marketplaces || []} selected={selectedMarketplace} handleSelection={setSelectedMarketplace} />
+                  <FilterByDates shipmentsStartDate={startDate} setShipmentsStartDate={setStartDate} setShipmentsEndDate={setEndDate} shipmentsEndDate={endDate} handleChangeDatesFromPicker={handleChangeDatesFromPicker} />
+                  <SelectMarketplaceDropDown selectionInfo={data?.marketplaces || []} selected={selectedMarketplace} handleSelection={setSelectedMarketplace} showAllMarketsOption />
                   <ExportProductsPerformance products={filterDataTable || []} marketpalces={data?.marketplaces || []} startDate={startDate} endDate={endDate} />
                   <Button color='info' onClick={() => setsummaryModal({ show: true })}>
                     PP Summary

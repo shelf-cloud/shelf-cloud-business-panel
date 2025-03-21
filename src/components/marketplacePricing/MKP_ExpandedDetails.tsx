@@ -16,7 +16,7 @@ type Props = {
 
 const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ data, expandedRowProps }: Props) => {
   const { state }: any = useContext(AppContext)
-  const { handleOtherCosts, handleProposedPrice, handleSetSingleMargin, handleSetProductMargin } = expandedRowProps!
+  const { handleOtherCosts, handleProposedPrice, handleSetSingleMargin, handleSetProductMargin, handleNotes } = expandedRowProps!
   const columns: any = [
     {
       name: <span className='fw-semibold text-center fs-7'>Marketplace</span>,
@@ -75,7 +75,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
               className='form-control form-control-sm fs-7 m-0 py-0 w-75 text-center'
               min={0}
               id={`orderQty-${data.sku}-${row.storeId}`}
-              value={row.otherCosts}
+              value={row.storeOtherCosts}
               onChange={(e) => {
                 if (e.target.value === '') {
                   handleOtherCosts(data.sku, row.storeId, 0)
@@ -83,6 +83,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
                   handleOtherCosts(data.sku, row.storeId, parseFloat(e.target.value))
                 }
               }}
+              onClick={(e: any) => e.target.select()}
             />
           </div>
         )
@@ -116,7 +117,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
     },
     {
       name: <span className='fw-semibold text-center fs-7'>Profit</span>,
-      selector: (row: MKP_Marketplaces) => FormatCurrency(state.currentRegion, row.actualPrice - row.totalFees - data.sellerCost - data.inboundShippingCost - row.otherCosts - row.shippingToMarketpalce),
+      selector: (row: MKP_Marketplaces) => FormatCurrency(state.currentRegion, row.actualPrice - row.totalFees - data.sellerCost - data.inboundShippingCost - row.storeOtherCosts - row.shippingToMarketpalce),
       sortable: true,
       center: true,
       compact: true,
@@ -127,7 +128,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
     {
       name: <span className='fw-semibold text-center fs-7'>Margin</span>,
       selector: (row: MKP_Marketplaces) => {
-        const actualMargin = row.actualPrice <= 0 ? 0 : ((row.actualPrice - row.totalFees - data.sellerCost - data.inboundShippingCost - row.otherCosts - row.shippingToMarketpalce) / row.actualPrice) * 100
+        const actualMargin = row.actualPrice <= 0 ? 0 : ((row.actualPrice - row.totalFees - data.sellerCost - data.inboundShippingCost - row.storeOtherCosts - row.shippingToMarketpalce) / row.actualPrice) * 100
         return <span className={actualMargin < 0 ? 'text-danger' : 'text-success'}>{`${FormatIntPercentage(state.currentRegion, actualMargin)} %`}</span>
       },
       sortable: true,
@@ -149,6 +150,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
               min={0}
               id={`orderQty-${data.sku}-${row.storeId}`}
               value={row.proposedPrice}
+              onClick={(e: any) => e.target.select()}
               onChange={(e) => {
                 if (e.target.value === '') {
                   handleProposedPrice(data.sku, row.storeId, 0)
@@ -180,7 +182,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
     {
       name: <span className='fw-semibold text-center fs-7'>Profit</span>,
       selector: (row: MKP_Marketplaces) =>
-        FormatCurrency(state.currentRegion, row.proposedPrice - (row.proposedPrice * (row.comissionFee / 100) + row.fixedFee + row.fbaHandlingFee) - data.sellerCost - data.inboundShippingCost - row.otherCosts - row.shippingToMarketpalce),
+        FormatCurrency(state.currentRegion, row.proposedPrice - (row.proposedPrice * (row.comissionFee / 100) + row.fixedFee + row.fbaHandlingFee) - data.sellerCost - data.inboundShippingCost - row.storeOtherCosts - row.shippingToMarketpalce),
       sortable: true,
       center: true,
       compact: true,
@@ -192,7 +194,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       name: <span className='fw-semibold text-center fs-7'>Margin</span>,
       selector: (row: MKP_Marketplaces) => {
         const proposedMargin =
-          ((row.proposedPrice - (row.proposedPrice * (row.comissionFee / 100) + row.fixedFee + row.fbaHandlingFee) - data.sellerCost - data.inboundShippingCost - row.otherCosts - row.shippingToMarketpalce) / row.proposedPrice) * 100
+          ((row.proposedPrice - (row.proposedPrice * (row.comissionFee / 100) + row.fixedFee + row.fbaHandlingFee) - data.sellerCost - data.inboundShippingCost - row.storeOtherCosts - row.shippingToMarketpalce) / row.proposedPrice) * 100
         return <span className={proposedMargin < 0 ? 'text-danger' : 'text-success'}>{`${FormatIntPercentage(state.currentRegion, proposedMargin)} %`}</span>
       },
       sortable: true,
@@ -212,7 +214,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
             className='form-control form-control-sm fs-7 m-0 py-0 w-75 text-center'
             min={0}
             id={`productMargin-${data.sku}`}
-            // value={row.proposedMargin}
+            onClick={(e: any) => e.target.select()}
             onChange={(e) => {
               if (e.target.value === '') {
                 handleSetProductMargin(data.sku, 0)
@@ -233,6 +235,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
               min={0}
               id={`orderQty-${data.sku}-${row.storeId}`}
               value={row.proposedMargin}
+              onClick={(e: any) => e.target.select()}
               onChange={(e) => {
                 if (e.target.value === '') {
                   handleSetSingleMargin(data.sku, row.storeId, 0)
@@ -254,7 +257,20 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
     },
     {
       name: <span className='fw-semibold text-center fs-7'>Notes</span>,
-      selector: (_row: MKP_Marketplaces) => '',
+      selector: (row: MKP_Marketplaces) => (
+        <DebounceInput
+          element="textarea"
+          debounceTimeout={600}
+          className='form-control form-control-sm fs-7 m-0'
+          min={3}
+          id={`notes-${data.sku}-${row.storeId}`}
+          value={row.notes}
+          onChange={(e) => {
+            handleNotes(data.sku, row.storeId, e.target.value)
+          }}
+          onClick={(e: any) => e.target.select()}
+        />
+      ),
       sortable: false,
       center: true,
       compact: true,
