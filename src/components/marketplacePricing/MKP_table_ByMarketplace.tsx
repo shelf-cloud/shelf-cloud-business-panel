@@ -97,12 +97,12 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
     },
     {
       name: <span className='fw-semibold text-center fs-7'>On Watch</span>,
-      selector: (row: MKP_Product_Table) => (row.proposedPrice > 0 && row.proposedPrice !== row.actualPrice) ? <i className='mdi mdi-eye label-icon align-middle fs-5 me-2 text-primary' /> : null,
+      selector: (row: MKP_Product_Table) => (row.proposedPrice > 0 && row.proposedPrice !== row.actualPrice ? <i className='mdi mdi-eye label-icon align-middle fs-5 me-2 text-primary' /> : null),
       sortable: true,
       center: true,
       compact: true,
       with: 'fit-content',
-      sortFunction: (rowA: MKP_Product_Table, rowB: MKP_Product_Table) => sortNumbers((rowA.proposedPrice > 0 && rowA.proposedPrice !== rowA.actualPrice) ? 1 : 0, (rowB.proposedPrice > 0 && rowB.proposedPrice !== rowB.actualPrice) ? 1 : 0),
+      sortFunction: (rowA: MKP_Product_Table, rowB: MKP_Product_Table) => sortNumbers(rowA.proposedPrice > 0 && rowA.proposedPrice !== rowA.actualPrice ? 1 : 0, rowB.proposedPrice > 0 && rowB.proposedPrice !== rowB.actualPrice ? 1 : 0),
     },
     {
       name: <span className='fw-semibold text-center fs-7'>1 Month Sales</span>,
@@ -119,6 +119,16 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
       center: true,
       compact: true,
       sortFunction: (rowA: MKP_Product_Table, rowB: MKP_Product_Table) => sortNumbers(rowA.unitsSold['1Y'] ?? 0, rowB.unitsSold['1Y'] ?? 0),
+    },
+    {
+      name: <span className='fw-semibold text-center fs-7'>Landed Cost</span>,
+      selector: (row: MKP_Product) => FormatCurrency(state.currentRegion, row.sellerCost + row.inboundShippingCost),
+      sortable: true,
+      center: true,
+      compact: false,
+      style: {
+        backgroundColor: 'rgba(163, 228, 215, 0.5)',
+      },
     },
     {
       name: <span className='fw-semibold text-center fs-7'>Shipping Cost</span>,
