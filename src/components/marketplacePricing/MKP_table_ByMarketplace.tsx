@@ -96,6 +96,15 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
       sortFunction: (rowA: MKP_Product, rowB: MKP_Product) => sortStringsCaseInsensitive(rowA.sku, rowB.sku),
     },
     {
+      name: <span className='fw-semibold text-center fs-7'>On Watch</span>,
+      selector: (row: MKP_Product_Table) => (row.proposedPrice > 0 && row.proposedPrice !== row.actualPrice) ? <i className='mdi mdi-eye label-icon align-middle fs-5 me-2 text-primary' /> : null,
+      sortable: true,
+      center: true,
+      compact: true,
+      with: 'fit-content',
+      sortFunction: (rowA: MKP_Product_Table, rowB: MKP_Product_Table) => sortNumbers((rowA.proposedPrice > 0 && rowA.proposedPrice !== rowA.actualPrice) ? 1 : 0, (rowB.proposedPrice > 0 && rowB.proposedPrice !== rowB.actualPrice) ? 1 : 0),
+    },
+    {
       name: <span className='fw-semibold text-center fs-7'>1 Month Sales</span>,
       selector: (row: MKP_Product_Table) => FormatIntNumber(state.currentRegion, row.unitsSold['1M'] ?? 0),
       sortable: true,
@@ -379,7 +388,7 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
         striped={true}
         dense={true}
         defaultSortAsc={false}
-        defaultSortFieldId={4}
+        defaultSortFieldId={3}
         // selectableRows
         // onSelectedRowsChange={handleSelectedRows}
         // clearSelectedRows={toggledClearRows}

@@ -8,6 +8,7 @@ import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/Forma
 import { NoImageAdress } from '@lib/assetsConstants'
 import { DebounceInput } from 'react-debounce-input'
 import { MKP_ExpandedRowProps } from '@hooks/marketplacePricing/useMarketplacePricing'
+import { sortNumbers } from '@lib/helperFunctions'
 
 type Props = {
   data: MKP_Product
@@ -39,6 +40,15 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       sortable: true,
       compact: false,
       center: true,
+    },
+    {
+      name: <span className='fw-semibold text-center fs-7'>On Watch</span>,
+      selector: (row: MKP_Marketplaces) => (row.proposedPrice > 0 && row.proposedPrice !== row.actualPrice ? <i className='mdi mdi-eye label-icon align-middle fs-5 me-2 text-primary' /> : null),
+      sortable: true,
+      center: true,
+      compact: true,
+      with: 'fit-content',
+      sortFunction: (rowA: MKP_Marketplaces, rowB: MKP_Marketplaces) => sortNumbers(rowA.proposedPrice > 0 && rowA.proposedPrice !== rowA.actualPrice ? 1 : 0, rowB.proposedPrice > 0 && rowB.proposedPrice !== rowB.actualPrice ? 1 : 0),
     },
     {
       name: <span className='fw-semibold text-center fs-7'>1 Month Sales</span>,
@@ -259,7 +269,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       name: <span className='fw-semibold text-center fs-7'>Notes</span>,
       selector: (row: MKP_Marketplaces) => (
         <DebounceInput
-          element="textarea"
+          element='textarea'
           debounceTimeout={600}
           className='form-control form-control-sm fs-7 m-0'
           min={3}

@@ -123,7 +123,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
 
     const hasSplitting = splits.isSplitting
 
-    const splitsInfo = {} as { [split: string]: { splitId: number; splitName: string; destination: { value: string; label: string }; items: poItem[] } }
+    const splitsInfo = {} as { [split: string]: { splitId: number; splitName: string; destination: { value: number; label: string }; items: poItem[] } }
     if (splits.isSplitting) {
       for await (const product of Object.values(reorderingPointsOrder.products)) {
         for (let i = 0; i < splits.splitsQty; i++) {
@@ -131,7 +131,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
             splitsInfo[i] = {
               splitId: i,
               splitName: splitNames[`${i}`],
-              destination: values.splitDestinations[i],
+              destination: { value: parseInt(values.splitDestinations[i].value), label: values.splitDestinations[i].label },
               items: [],
             }
           splitsInfo[i].items.push({
@@ -149,8 +149,8 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
 
     const response = await axios.post(`/api/reorderingPoints/createNewPurchaseOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
       orderNumber: values.orderNumber,
-      destinationSC: values.destinationSC.value === 1 ? 1 : 0,
-      warehouseId: values.destinationSC.value ? values.destinationSC.value : 0,
+      destinationSC: parseInt(values.destinationSC.value) === 1 ? 1 : 0,
+      warehouseId: values.destinationSC.value ? parseInt(values.destinationSC.value) : 0,
       poItems,
       hasSplitting,
       splits: splitsInfo,
@@ -236,7 +236,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                   <Col xs={12} md={5}>
                     <Label className='form-label mb-1 fs-7'>*Select Destination</Label>
                     <SimpleSelect
-                      options={warehouses?.map((w) => ({ value: w.warehouseId, label: w.name })) || []}
+                      options={warehouses?.map((w) => ({ value: `${w.warehouseId}`, label: w.name })) || []}
                       selected={values.destinationSC}
                       handleSelect={(selected) => {
                         setFieldValue('destinationSC', selected)
@@ -255,7 +255,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                     <Col xs={12} md={4} key={`splitDestination-${key}`}>
                       <Label className='form-label mb-1 fs-7'>{splitNames[`${key}`]}</Label>
                       <SimpleSelect
-                        options={warehouses?.map((w) => ({ value: w.warehouseId, label: w.name })) || []}
+                        options={warehouses?.map((w) => ({ value: `${w.warehouseId}`, label: w.name })) || []}
                         selected={split}
                         handleSelect={(selected) => {
                           setFieldValue(`splitDestinations.${key}`, selected)

@@ -65,52 +65,50 @@ const SelectMarketplaceDropDown = ({ selectionInfo, selected, handleSelection, s
         )}
         <span className='fw-semibold m-0 p-0'>{selected?.name}</span>
       </button>
-      <div className={'dropdown-menu w-100 py-3 px-3' + (openDatesMenu ? ' show' : '')} style={{ minWidth: '280px' }}>
-        <div className='d-flex flex-column justify-content-start'>
-          <div className='d-flex flex-column justify-content-start gap-2 py-1' style={{ maxHeight: '25vh', overflowY: 'scroll', scrollbarWidth: 'thin' }}>
-            {showAllMarketsOption && (
-              <div
-                key={'9999'}
-                className='d-flex flex-row justify-content-start gap-1 align-items-center'
-                style={{ cursor: 'pointer' }}
-                onClick={() => {
-                  handleSelection((prev: any) => ({ ...prev, storeId: '9999', name: 'All Marketplaces', logo: '' }))
-                  setOpenDatesMenu(false)
-                }}>
-                <i className='las la-store-alt fs-3 m-0 p-0 text-primary' />
-                <span className={'m-0 p-0 text-nowrap ' + (selected.storeId === '9999' ? 'fw-semibold' : '')}>All Marketplaces</span>
-              </div>
-            )}
-            {selectionInfo?.map((option) => (
-              <div
-                key={option.storeId}
-                className='d-flex flex-row justify-content-start gap-1 align-items-center'
-                style={{ cursor: 'pointer' }}
-                onClick={() => {
-                  handleSelection((prev: any) => ({ ...prev, storeId: option.storeId, name: option.name, logo: option.logo }))
-                  setOpenDatesMenu(false)
-                }}>
-                {option.logo !== '' && (
-                  <div
-                    style={{
-                      width: '25px',
-                      height: '25px',
-                      margin: '0px',
-                      position: 'relative',
-                    }}>
-                    <img
-                      loading='lazy'
-                      src={option.logo ? option.logo : NoImageAdress}
-                      onError={(e) => (e.currentTarget.src = NoImageAdress)}
-                      alt='product Image'
-                      style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
-                    />
-                  </div>
-                )}
-                <span className={'m-0 p-0 text-nowrap ' + (String(selected.storeId) === option.storeId ? 'fw-bold' : '')}>{option.name}</span>
-              </div>
-            ))}
-          </div>
+      <div className={'dropdown-menu w-100 py-3 ps-3 pe-1' + (openDatesMenu ? ' show' : '')} style={{ minWidth: '280px' }}>
+        <div className='w-100 d-flex flex-column justify-content-start align-items-start gap-2' style={{ maxHeight: '25vh', overflowY: 'scroll', scrollbarWidth: 'thin' }}>
+          {showAllMarketsOption && (
+            <div
+              key={'9999'}
+              className='d-flex flex-row justify-content-start gap-1 align-items-center'
+              style={{ cursor: 'pointer' }}
+              onClick={() => {
+                handleSelection((prev: any) => ({ ...prev, storeId: '9999', name: 'All Marketplaces', logo: '' }))
+                setOpenDatesMenu(false)
+              }}>
+              <i className='las la-store-alt fs-3 m-0 p-0 text-primary' />
+              <span className={'m-0 p-0 text-nowrap ' + (selected.storeId === '9999' ? 'fw-semibold' : '')}>All Marketplaces</span>
+            </div>
+          )}
+          {selectionInfo?.map((option) => (
+            <div
+              key={option.storeId}
+              className='d-flex flex-row justify-content-start gap-2 align-items-center mb-1'
+              style={{ cursor: 'pointer' }}
+              onClick={() => {
+                handleSelection((prev: any) => ({ ...prev, storeId: option.storeId, name: option.name, logo: option.logo }))
+                setOpenDatesMenu(false)
+              }}>
+              {option.logo !== '' && (
+                <div
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    margin: '0px',
+                    position: 'relative',
+                  }}>
+                  <img
+                    loading='lazy'
+                    src={option.logo ? option.logo : NoImageAdress}
+                    onError={(e) => (e.currentTarget.src = NoImageAdress)}
+                    alt='product Image'
+                    style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+                  />
+                </div>
+              )}
+              <span className={'m-0 p-0 text-nowrap ' + (String(selected.storeId) === option.storeId ? 'fw-bold' : '')}>{option.name}</span>
+            </div>
+          ))}
         </div>
       </div>
     </div>

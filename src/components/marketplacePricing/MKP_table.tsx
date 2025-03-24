@@ -30,7 +30,7 @@ const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice,
 
   const columns: any = [
     {
-      name: <span className='fw-bold fs-6'>Image</span>,
+      name: <span className='fw-semibold text-center fs-7'>Image</span>,
       selector: (row: MKP_Product) => {
         return (
           <Link href={`/product/${row.inventoryId}/${row.sku}`} passHref>
@@ -54,7 +54,7 @@ const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice,
     },
     {
       name: (
-        <span className='fw-bold fs-6'>
+        <span className='fw-semibold text-center fs-7'>
           SKU
           <br />
           Title
@@ -79,7 +79,21 @@ const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice,
       sortFunction: (rowA: MKP_Product, rowB: MKP_Product) => sortStringsCaseInsensitive(rowA.sku, rowB.sku),
     },
     {
-      name: <span className='fw-bold fs-6'>ASIN</span>,
+      name: <span className='fw-semibold text-center fs-7'>On Watch</span>,
+      selector: (row: MKP_Product) =>
+        Object.values(row.marketplaces).find((marketplace) => marketplace.proposedPrice > 0 && marketplace.proposedPrice !== marketplace.actualPrice) ? <i className='mdi mdi-eye label-icon align-middle fs-5 me-2 text-primary' /> : null,
+      sortable: true,
+      center: true,
+      compact: true,
+      with: 'fit-content',
+      sortFunction: (rowA: MKP_Product, rowB: MKP_Product) =>
+        sortNumbers(
+          Object.values(rowA.marketplaces).find((marketplace) => marketplace.proposedPrice > 0 && marketplace.proposedPrice !== marketplace.actualPrice) ? 1 : 0,
+          Object.values(rowB.marketplaces).find((marketplace) => marketplace.proposedPrice > 0 && marketplace.proposedPrice !== marketplace.actualPrice) ? 1 : 0
+        ),
+    },
+    {
+      name: <span className='fw-semibold text-center fs-7'>ASIN</span>,
       selector: (row: MKP_Product) => {
         return row.asin !== '' ? (
           <a className='m-0' href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank'>
@@ -94,7 +108,7 @@ const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice,
       // grow: 1,
     },
     {
-      name: <span className='fw-bold fs-6'>1 Month Sales</span>,
+      name: <span className='fw-semibold text-center fs-7'>1 Month Sales</span>,
       selector: (row: MKP_Product) =>
         FormatIntNumber(
           state.currentRegion,
@@ -110,7 +124,7 @@ const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice,
         ),
     },
     {
-      name: <span className='fw-bold fs-6'>1 Year Sales</span>,
+      name: <span className='fw-semibold text-center fs-7'>1 Year Sales</span>,
       selector: (row: MKP_Product) =>
         FormatIntNumber(
           state.currentRegion,
@@ -126,7 +140,7 @@ const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice,
         ),
     },
     {
-      name: <span className='fw-bold fs-6'>Landed Cost</span>,
+      name: <span className='fw-semibold text-center fs-7'>Landed Cost</span>,
       selector: (row: MKP_Product) => FormatCurrency(state.currentRegion, row.sellerCost + row.inboundShippingCost),
       sortable: true,
       center: true,
@@ -143,7 +157,7 @@ const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice,
         striped={true}
         dense={true}
         defaultSortAsc={false}
-        defaultSortFieldId={5}
+        defaultSortFieldId={3}
         // selectableRows
         // onSelectedRowsChange={handleSelectedRows}
         // clearSelectedRows={toggledClearRows}

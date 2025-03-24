@@ -1,10 +1,12 @@
 import React from 'react'
 import Select from 'react-select'
 
+export type SelectOptionType = { value: string; label: string }
+
 type Props = {
   selected: any
-  handleSelect: (selected: any) => void
-  options: any[]
+  handleSelect: (option: SelectOptionType) => void
+  options: SelectOptionType[]
   customStyle?: 'sm' | 'base'
   placeholder?: string
 }
