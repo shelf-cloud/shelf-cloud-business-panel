@@ -45,12 +45,12 @@ const SelectMarketplaceDropDown = ({ selectionInfo, selected, handleSelection, s
         aria-expanded='false'
         onClick={() => setOpenDatesMenu(!openDatesMenu)}>
         {selected.storeId === '9999' ? (
-          <i className='las la-store-alt fs-4 m-0 p-0 text-primary' />
+          <i className='las la-store-alt fs-5 m-0 p-0 text-primary' />
         ) : (
           <div
             style={{
-              width: '20px',
-              height: '20px',
+              width: '16px',
+              height: '16px',
               margin: '0px',
               position: 'relative',
             }}>
@@ -63,20 +63,20 @@ const SelectMarketplaceDropDown = ({ selectionInfo, selected, handleSelection, s
             />
           </div>
         )}
-        <span className='fw-semibold m-0 p-0'>{selected?.name}</span>
+        <span className='fw-semibold m-0 p-0 fs-7'>{selected?.name}</span>
       </button>
       <div className={'dropdown-menu w-100 py-3 ps-3 pe-1' + (openDatesMenu ? ' show' : '')} style={{ minWidth: '280px' }}>
         <div className='w-100 d-flex flex-column justify-content-start align-items-start gap-2' style={{ maxHeight: '25vh', overflowY: 'scroll', scrollbarWidth: 'thin' }}>
           {showAllMarketsOption && (
             <div
               key={'9999'}
-              className='d-flex flex-row justify-content-start gap-1 align-items-center'
+              className='d-flex flex-row justify-content-start gap-2 align-items-center'
               style={{ cursor: 'pointer' }}
               onClick={() => {
                 handleSelection((prev: any) => ({ ...prev, storeId: '9999', name: 'All Marketplaces', logo: '' }))
                 setOpenDatesMenu(false)
               }}>
-              <i className='las la-store-alt fs-3 m-0 p-0 text-primary' />
+              <i className='las la-store-alt fs-4 m-0 p-0 text-primary' />
               <span className={'m-0 p-0 text-nowrap ' + (selected.storeId === '9999' ? 'fw-semibold' : '')}>All Marketplaces</span>
             </div>
           )}

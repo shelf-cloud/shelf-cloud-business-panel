@@ -47,51 +47,35 @@ const Sidebar = ({}: Props) => {
 
   return (
     <React.Fragment>
-      <div className="app-menu navbar-menu">
-        <div className="navbar-brand-box p-2">
-          <Link href="/" passHref>
-            <a className="logo">
-              <span className="w-100 position-relative logo-sm">
-                <Image
-                  className="rounded-3"
-                  src={ShelfCloudLogoSolo}
-                  layout="intrinsic"
-                  alt="ShelfCloud Logo"
-                  objectFit="contain"
-                />
+      <div className='app-menu navbar-menu'>
+        <div className='navbar-brand-box p-2'>
+          <Link href='/' passHref>
+            <a className='logo'>
+              <span className='w-100 position-relative logo-sm'>
+                <Image className='rounded-3' src={ShelfCloudLogoSolo} layout='intrinsic' alt='ShelfCloud Logo' objectFit='contain' />
               </span>
-              <span className="w-100 position-relative logo-lg">
-                <Image
-                  className="rounded-3"
-                  src={ShelfCloudLogo}
-                  layout="intrinsic"
-                  alt="ShelfCloud Logo"
-                  objectFit="contain"
-                  objectPosition='center'
-                />
+              <span className='w-100 position-relative logo-lg'>
+                <Image className='rounded-3' src={ShelfCloudLogo} layout='intrinsic' alt='ShelfCloud Logo' objectFit='contain' objectPosition='center' />
               </span>
             </a>
           </Link>
         </div>
         <React.Fragment>
-          <SimpleBar id="scrollbar" className="">
+          <SimpleBar id='scrollbar' className=''>
             <Container fluid>
-              <div id="two-column-menu"></div>
-              <ul className="navbar-nav" id="navbar-nav">
+              <div id='two-column-menu'></div>
+              <ul className='navbar-nav' id='navbar-nav'>
                 <VerticalLayout />
               </ul>
             </Container>
           </SimpleBar>
-          <div
-            className="logout_container"
-            onClick={() => signOut()}
-          >
-            <i className="mdi mdi-logout"></i>
+          <div className='logout_container' onClick={() => signOut()}>
+            <i className='mdi mdi-logout'></i>
             <span>Logout</span>
           </div>
         </React.Fragment>
       </div>
-      <div className="vertical-overlay"></div>
+      <div className='vertical-overlay'></div>
     </React.Fragment>
   )
 }

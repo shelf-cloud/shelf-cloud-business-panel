@@ -208,13 +208,13 @@ const Profits = ({ session, sessionToken }: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
+          <BreadCrumb title='Product Performance' pageTitle='Marketplaces' />
           <Container fluid>
-            <BreadCrumb title='Product Performance' pageTitle='Marketplaces' />
-            <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-end align-items-md-center px-3'>
-              <div className='app-search d-flex flex-sm-column justify-content-between align-items-center p-0 flex-xl-row gap-sm-2 gap-xl-0'>
-                <div className='d-flex flex-wrap justify-content-start align-items-center gap-3 w-100'>
+            <Row className='d-flex flex-column justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-end align-items-md-center px-3'>
+              <div className='app-search d-flex flex-column gap-2 justify-content-between align-items-center p-0 flex-lg-row gap-sm-2'>
+                <div className='d-flex flex-wrap justify-content-start align-items-end gap-2 w-100'>
                   <button
-                    className={'btn dropdown-toggle ' + (filters === 'true' ? 'btn-info' : 'btn-light')}
+                    className={'btn fs-7 dropdown-toggle ' + (filters === 'true' ? 'btn-info' : 'btn-light')}
                     style={filters === 'true' ? {} : { backgroundColor: 'white', border: '1px solid #E1E3E5' }}
                     type='button'
                     data-bs-toggle='dropdown'
@@ -226,11 +226,11 @@ const Profits = ({ session, sessionToken }: Props) => {
                   <FilterByDates shipmentsStartDate={startDate} setShipmentsStartDate={setStartDate} setShipmentsEndDate={setEndDate} shipmentsEndDate={endDate} handleChangeDatesFromPicker={handleChangeDatesFromPicker} />
                   <SelectMarketplaceDropDown selectionInfo={data?.marketplaces || []} selected={selectedMarketplace} handleSelection={setSelectedMarketplace} showAllMarketsOption />
                   <ExportProductsPerformance products={filterDataTable || []} marketpalces={data?.marketplaces || []} startDate={startDate} endDate={endDate} />
-                  <Button color='info' onClick={() => setsummaryModal({ show: true })}>
+                  <Button color='info' className='fs-7' onClick={() => setsummaryModal({ show: true })}>
                     PP Summary
                   </Button>
                 </div>
-                <div className='col-sm-12 col-xl-3'>
+                <div className='col-12 col-xl-3'>
                   <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                     <DebounceInput
                       type='text'

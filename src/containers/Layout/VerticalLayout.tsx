@@ -29,10 +29,8 @@ const VerticalLayout = () => {
                 <Link href={item.link ? item.link : '/#'} passHref>
                   <a
                     className={
-                      'nav-link menu-link ' +
-                      (item?.subItems?.some(
-                        (subItem: any) => pathname == subItem?.link.split('?')[0] || subItem?.childItems?.some((subitemChild: any) => pathname == subitemChild.link.split('?')[0])
-                      ) && 'linkActive')
+                      'nav-link menu-link rounded-top ' +
+                      (item?.subItems?.some((subItem: any) => pathname == subItem?.link.split('?')[0] || subItem?.childItems?.some((subitemChild: any) => pathname == subitemChild.link.split('?')[0])) && 'linkActive')
                     }
                     onClick={(e) => {
                       item.click(e)
@@ -62,13 +60,7 @@ const VerticalLayout = () => {
                           {!subItem.isChildItem ? (
                             <li className='nav-item w-100'>
                               <Link href={subItem.link ? subItem.link : '/#'} passHref>
-                                <a
-                                  className={
-                                    'nav-link menu-link w-100 ' +
-                                    ((pathname == `${subItem.link.split('?')[0]}` ||
-                                      subItem?.childItems?.some((subitemChild: any) => pathname == subitemChild.link.split('?')[0])) &&
-                                      'subLinkActive')
-                                  }>
+                                <a className={'nav-link menu-link w-100 ' + ((pathname == `${subItem.link.split('?')[0]}` || subItem?.childItems?.some((subitemChild: any) => pathname == subitemChild.link.split('?')[0])) && 'subLinkActive')}>
                                   {subItem.label}
                                   {subItem.badgeName ? (
                                     <span className={'badge badge-pill bg-' + subItem.badgeColor} data-key='t-new'>
@@ -90,33 +82,26 @@ const VerticalLayout = () => {
                                       setActualSubItemCollapsed(subItem.label)
                                     }
                                   }}
-                                  className={
-                                    'nav-link w-100 ' +
-                                    ((pathname == `${subItem.link.split('?')[0]}` ||
-                                      subItem?.childItems?.some((subitemChild: any) => pathname == subitemChild.link.split('?')[0])) &&
-                                      'linkActive')
-                                  }
+                                  className={'nav-link w-100 ' + ((pathname == `${subItem.link.split('?')[0]}` || subItem?.childItems?.some((subitemChild: any) => pathname == subitemChild.link.split('?')[0])) && 'linkActive')}
                                   data-bs-toggle='collapse'
                                   aria-expanded={actualSubItemCollapsed == subItem.label ? true : false}>
                                   {subItem.label}
                                 </a>
                               </Link>
                               <Collapse className='menu-dropdown' isOpen={subItem.stateVariables}>
-                                <ul className='nav nav-sm flex-column' style={{ borderLeft: '2px solid rgba(255, 255, 255, 0.1)' }}>
+                                <ul className='nav nav-sm flex-column' style={{ borderLeft: '2px solid rgba(255, 255, 255, 0.1)', paddingLeft: '0px' }} id='childrenChildslist'>
                                   {/* child subItms  */}
                                   {subItem.childItems &&
                                     (subItem.childItems || []).map((childItem: any, key: any) => (
                                       <React.Fragment key={key}>
                                         {!childItem.childItems ? (
-                                          <li className='nav-item'>
+                                          <li className='nav-item rounded'>
                                             <Link href={childItem.link ? childItem.link : '/#'} passHref>
-                                              <a className={'nav-link menu-link w-100 ' + (pathname == `${childItem.link.split('?')[0]}` && 'subLinkActiveChildren')}>
-                                                {childItem.label}
-                                              </a>
+                                              <a className={'nav-link menu-link w-100 ' + (pathname == `${childItem.link.split('?')[0]}` && 'subLinkActiveChildren')}>{childItem.label}</a>
                                             </Link>
                                           </li>
                                         ) : (
-                                          <li className='nav-item'>
+                                          <li className='nav-item rounded'>
                                             <Link href={'/#'} passHref>
                                               <a className='nav-link w-100' onClick={childItem.click} data-bs-toggle='collapse'>
                                                 {childItem.label}{' '}
@@ -128,7 +113,7 @@ const VerticalLayout = () => {
                                             <Collapse className='menu-dropdown' isOpen={childItem.stateVariables}>
                                               <ul className='nav nav-sm flex-column'>
                                                 {childItem.childItems.map((subChildItem: any, key: any) => (
-                                                  <li className='nav-item' key={key}>
+                                                  <li className='nav-item rounded' key={key}>
                                                     <Link href={subChildItem.link} passHref>
                                                       <a className='nav-link w-100' data-key='t-basic-action'>
                                                         {subChildItem.label}{' '}
@@ -154,7 +139,7 @@ const VerticalLayout = () => {
             ) : (
               <li className='nav-item'>
                 <Link href={item.link ? item.link : '/#'} passHref>
-                  <a className={'nav-link menu-link ' + (pathname == '/' && 'linkActive')}>
+                  <a className={'nav-link menu-link rounded ' + (pathname == '/' && 'linkActive')}>
                     <i className={item.icon}></i>
                     <span data-key='t-apps'>{item.label}</span>
                     {item.badgeName ? (
