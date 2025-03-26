@@ -134,7 +134,7 @@ const SendToAmazon = ({ session, sessionToken }: Props) => {
                         <a>
                           <Button color='info' className='fs-7'>
                             <span className='icon-on'>
-                              <i className='ri-file-list-line align-bottom me-1' />
+                              <i className='ri-external-link-fill align-bottom me-1' />
                               Fulfillments
                             </span>
                           </Button>

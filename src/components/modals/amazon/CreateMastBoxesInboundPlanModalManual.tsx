@@ -90,6 +90,7 @@ const CreateMastBoxesInboundPlanModalManual = ({ orderProducts, showCreateInboun
           image: product.image,
           isKit: product.isKit,
           inventoryId: product.inventoryId,
+          cost: product.cost,
           weight: product.weight,
           length: product.length,
           width: product.width,

@@ -44,7 +44,7 @@ type Props = {
 
 const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
   const { state }: any = useContext(AppContext)
-  const title = `Amazon FBA Shipments | ${session?.user?.businessName}`
+  const title = `Amazon Complete FBA Shipments | ${session?.user?.businessName}`
   const [searchValue, setSearchValue] = useState<any>('')
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<FBAShipment[]>([])
@@ -85,27 +85,16 @@ const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
         }
       })
   }
-  useSWR(
-    session && sessionToken && state.user.businessId
-      ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/listSellerFbaShipmentsCompleted/${state.currentRegion}/${state.user.businessId}`
-      : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  )
+  useSWR(session && sessionToken && state.user.businessId ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/listSellerFbaShipmentsCompleted/${state.currentRegion}/${state.user.businessId}` : null, fetcher, {
+    revalidateOnFocus: false,
+  })
 
   const filteredItems = useMemo(() => {
     return allData.filter(
       (item: FBAShipment) =>
-        (searchValue !== ''
-          ? item.shipment.shipmentConfirmationId.toLowerCase().includes(searchValue.toLowerCase()) || item.shipment.name.toLowerCase().includes(searchValue.toLowerCase())
-          : true) &&
+        (searchValue !== '' ? item.shipment.shipmentConfirmationId.toLowerCase().includes(searchValue.toLowerCase()) || item.shipment.name.toLowerCase().includes(searchValue.toLowerCase()) : true) &&
         (filters.status.value !== 'all' ? (item.status ? item.status === filters.status.value : item.shipment.status === filters.status.value) : true) &&
-        (filters.showOnlyMissingQty
-          ? (item.receipts ? Object.values(item.receipts).reduce((total, item) => total + item.quantity, 0) : 0) <
-            item.shipmentItems.items.reduce((total, item) => total + item.quantity, 0)
-          : true)
+        (filters.showOnlyMissingQty ? (item.receipts ? Object.values(item.receipts).reduce((total, item) => total + item.quantity, 0) : 0) < item.shipmentItems.items.reduce((total, item) => total + item.quantity, 0) : true)
     )
   }, [allData, filters.showOnlyMissingQty, filters.status.value, searchValue])
 
@@ -220,14 +209,15 @@ const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
         <div className='page-content'>
           <Container fluid>
             <BreadCrumb title='Amazon Complete FBA Shipments' pageTitle='Amazon' />
-            <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-1 flex-md-row justify-content-md-end align-items-md-center px-3'>
+            <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-end align-items-md-center px-3'>
               <div className='app-search d-flex flex-row justify-content-between align-items-center p-0'>
                 <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'>
+                  <FilterFBAShipments filters={filters} setfilters={setFilters} />
                   <Link href={'/amazon-sellers/fulfillments'} passHref>
                     <a>
                       <Button className='fs-7 text-nowrap'>
                         <span className='icon-on'>
-                          <i className='ri-file-list-line align-bottom me-1' />
+                          <i className='ri-external-link-fill align-bottom me-1' />
                           Fulfillments
                         </span>
                       </Button>
@@ -236,7 +226,7 @@ const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
                   <Link href={'/amazon-sellers/shipments'}>
                     <Button color='info' className='fs-7 text-nowrap'>
                       <span className='icon-on'>
-                        <i className='ri-file-list-line align-bottom me-1' />
+                        <i className='ri-external-link-fill align-bottom me-1' />
                         Shipments
                       </span>
                     </Button>
@@ -267,7 +257,6 @@ const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
                       </span>
                     </div>
                   </div>
-                  <FilterFBAShipments filters={filters} setfilters={setFilters} />
                 </div>
               </div>
             </Row>

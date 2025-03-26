@@ -30,6 +30,7 @@ export interface AmazonFulfillmentSku {
   reserved: number
   inventoryId: number
   barcode: string
+  cost: number
   weight: number
   length: number
   width: number

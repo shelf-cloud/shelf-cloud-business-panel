@@ -160,8 +160,8 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
           <Container fluid>
             <BreadCrumb title='Fulfillments' pageTitle='Amazon' />
             {/* <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-1 flex-md-row justify-content-md-end align-items-md-center px-3'> */}
-            <Row className='justify-content-between gap-2 mb-1'>
-              <Col xs='12' lg='6' className='d-flex justify-content-start align-items-center gap-3'>
+            <Row className='justify-content-between gap-2 mb-2 px-1'>
+              <Col xs='12' lg='6' className='d-flex justify-content-start align-items-center gap-2'>
                 <Link href={'/amazon-sellers/fulfillment/sendToAmazon'} passHref>
                   <a>
                     <Button>Start New</Button>
