@@ -6,7 +6,7 @@ import useSWR from 'swr'
 import Table_By_Suppliers from './Table_By_Suppliers'
 import { PurchaseOrder, PurchaseOrderBySuppliers, PurchaseOrderItem } from '@typesTs/purchaseOrders'
 import { useRouter } from 'next/router'
-import { DebounceInput } from 'react-debounce-input'
+import SearchInput from '@components/ui/searchInput'
 
 type Props = {}
 
@@ -18,13 +18,9 @@ const By_Suppliers = ({}: Props) => {
   const { status }: any = router.query
   const [searchValue, setSearchValue] = useState<string>('')
 
-  const { data }: { data?: PurchaseOrderBySuppliers[] } = useSWR(
-    state.user.businessId ? `/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}` : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  )
+  const { data }: { data?: PurchaseOrderBySuppliers[] } = useSWR(state.user.businessId ? `/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}` : null, fetcher, {
+    revalidateOnFocus: false,
+  })
 
   const filterDataTable = useMemo(() => {
     if (searchValue === '') {
@@ -76,40 +72,12 @@ const By_Suppliers = ({}: Props) => {
   return (
     <div>
       <React.Fragment>
-        <Row>
-          <Col lg={12}>
-            <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-end align-items-md-center'>
-              <div className='col-sm-12 col-md-3'>
-                <div className='app-search p-0 col-sm-12'>
-                  <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
-                    <DebounceInput
-                      type='text'
-                      minLength={1}
-                      debounceTimeout={500}
-                      className='form-control fs-6'
-                      placeholder='Search...'
-                      id='search-options'
-                      value={searchValue}
-                      onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
-                      onChange={(e) => setSearchValue(e.target.value)}
-                    />
-                    <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
-                    <span
-                      className='d-flex align-items-center justify-content-center'
-                      style={{
-                        cursor: 'pointer',
-                        backgroundColor: '#f3f3f9',
-                      }}
-                      onClick={() => setSearchValue('')}>
-                      <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </Row>
-            <Table_By_Suppliers filterDataTable={filterDataTable || []} pending={data ? false : true} />
-          </Col>
-        </Row>
+        <Col xs={12}>
+          <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-end align-items-md-center'>
+            <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='none' />
+          </Row>
+          <Table_By_Suppliers filterDataTable={filterDataTable || []} pending={data ? false : true} />
+        </Col>
       </React.Fragment>
     </div>
   )

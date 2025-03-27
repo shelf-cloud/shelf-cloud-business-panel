@@ -6,6 +6,7 @@ export interface WarehousesResponse {
   export interface Warehouse {
     warehouseId: number
     isActive: boolean
+    isSCDestination: boolean
     name: string
     type: string
     address1: string

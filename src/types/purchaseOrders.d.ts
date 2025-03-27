@@ -40,7 +40,24 @@ export interface PurchaseOrder {
   note: string
   poPayments: PoPaymentHistory[]
   poItems: PurchaseOrderItem[]
+  hasSplitting: boolean
+  splits: { [splitId: string]: Split }
   destinationSC: boolean
+  warehouseId: number
+  warehouseName: string
+  isSCDestination: boolean
+}
+
+export interface Split {
+  items: PurchaseOrderItem[]
+  splitId: number
+  splitName: string
+  destination: Destination
+}
+
+export interface Destination {
+  id: number
+  label: string
 }
 
 export interface PoItemForCreateReceiving {

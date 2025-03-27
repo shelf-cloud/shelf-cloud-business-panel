@@ -1,10 +1,4 @@
-export const sortStringsLocaleCompare = (a: string, b: string) => {
-  if (a.localeCompare(b)) {
-    return 1
-  } else {
-    return -1
-  }
-}
+export const sortStringsLocaleCompare = (a: string, b: string) => a.localeCompare(b)
 
 export const sortStringsCaseInsensitive = (string1: string, string2: string) => {
   const a = string1.toLowerCase()

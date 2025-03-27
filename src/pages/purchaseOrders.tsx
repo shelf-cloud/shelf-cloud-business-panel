@@ -1,25 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Container,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Nav,
-  NavItem,
-  NavLink,
-  Row,
-  TabContent,
-  TabPane,
-  UncontrolledButtonDropdown,
-} from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, NavLink, Row, TabContent, TabPane, UncontrolledButtonDropdown } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import By_Suppliers from '@components/purchase_orders/By_Suppliers'
@@ -65,15 +48,6 @@ const PurchaseOrders = ({ session }: Props) => {
   const { state, setShowCreateReceivingFromPo, setReceivingFromPo, setShowCreatePoFromFile, setShowCreatePoManually }: any = useContext(AppContext)
   const title = `Purchase Orders | ${session?.user?.businessName}`
   const orderNumberStart = `${session?.user?.businessOrderStart?.substring(0, 3).toUpperCase()}-`
-  const [activeTab, setActiveTab] = useState(organizeBy)
-  const tabChange = (tab: any) => {
-    if (activeTab !== tab) setActiveTab(tab)
-  }
-
-  useEffect(() => {
-    tabChange(organizeBy)
-    setActiveTab(organizeBy)
-  }, [organizeBy])
 
   useEffect(() => {
     return () => {
@@ -95,51 +69,42 @@ const PurchaseOrders = ({ session }: Props) => {
               <Col lg={12}>
                 <Card>
                   <CardHeader>
-                    <div className='d-flex flex-column justify-content-between align-center mt-2 mb-0 gap-3 flex-lg-row'>
+                    <div className='d-flex flex-column justify-content-between align-items-end mt-0 mb-0 gap-3 flex-lg-row'>
                       <div className='flex-1'>
                         <p className='m-0 p-0 fs-7 text-muted fw-normal'>Organize Purchase Orders by:</p>
                         <Nav className='pt-1 nav-tabs-custom rounded card-header-tabs border-bottom-0' role='tablist'>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
-                              className={activeTab == 'suppliers' ? 'text-primary fw-semibold fs-5' : 'text-muted fs-5'}
+                              className={organizeBy == 'suppliers' ? 'text-primary fw-semibold fs-5' : 'text-muted fs-5'}
                               onClick={() => {
-                                router.replace(`/purchaseOrders?status=${status}&organizeBy=suppliers`)
+                                router.replace(`/purchaseOrders?status=${status}&organizeBy=suppliers`, undefined, { shallow: true })
                               }}>
-                              <>
-                                <i className='fas fa-home'></i>
-                                Suppliers
-                              </>
+                              Suppliers
                             </NavLink>
                           </NavItem>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
-                              className={activeTab == 'orders' ? 'text-primary fw-semibold fs-5' : 'text-muted fs-5'}
+                              className={organizeBy == 'orders' ? 'text-primary fw-semibold fs-5' : 'text-muted fs-5'}
                               onClick={() => {
-                                router.replace(`/purchaseOrders?status=${status}&organizeBy=orders`)
+                                router.replace(`/purchaseOrders?status=${status}&organizeBy=orders`, undefined, { shallow: true })
                               }}
                               type='button'>
-                              <>
-                                <i className='far fa-user'></i>
-                                Purchase Order
-                              </>
+                              Purchase Order
                             </NavLink>
                           </NavItem>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
-                              className={activeTab == 'sku' ? 'text-primary fw-semibold fs-5' : 'text-muted fs-5'}
+                              className={organizeBy == 'sku' ? 'text-primary fw-semibold fs-5' : 'text-muted fs-5'}
                               onClick={() => {
-                                router.replace(`/purchaseOrders?status=${status}&organizeBy=sku`)
+                                router.replace(`/purchaseOrders?status=${status}&organizeBy=sku`, undefined, { shallow: true })
                               }}
                               type='button'>
-                              <>
-                                <i className='far fa-user'></i>
-                                SKU
-                              </>
+                              SKU
                             </NavLink>
                           </NavItem>
                         </Nav>
                       </div>
-                      <div className='flex-1 w-auto d-flex flex-row flex-wrap align-items-center justify-content-start gap-2 justify-content-lg-end'>
+                      <div className='flex-1 w-auto d-flex flex-row flex-wrap align-items-end justify-content-start gap-2 justify-content-lg-end'>
                         {status == 'pending' ? (
                           <Button
                             className='fs-7 btn py-1 px-3 text-nowrap'
@@ -188,10 +153,10 @@ const PurchaseOrders = ({ session }: Props) => {
                     </div>
                   </CardHeader>
                   <CardBody>
-                    <TabContent activeTab={activeTab}>
-                      <TabPane tabId='suppliers'>{activeTab == 'suppliers' && <By_Suppliers />}</TabPane>
-                      <TabPane tabId='orders'>{activeTab == 'orders' && <By_Purchase_Orders />}</TabPane>
-                      <TabPane tabId='sku'>{activeTab == 'sku' && <By_Sku />}</TabPane>
+                    <TabContent activeTab={organizeBy}>
+                      <TabPane tabId='suppliers'>{organizeBy == 'suppliers' && <By_Suppliers />}</TabPane>
+                      <TabPane tabId='orders'>{organizeBy == 'orders' && <By_Purchase_Orders />}</TabPane>
+                      <TabPane tabId='sku'>{organizeBy == 'sku' && <By_Sku />}</TabPane>
                     </TabContent>
                   </CardBody>
                 </Card>

@@ -7,6 +7,7 @@ import AppContext from '@context/AppContext'
 import { Badge, Card, UncontrolledTooltip } from 'reactstrap'
 import Expanded_By_Orders from './Expanded_By_Orders'
 import Confirm_Delete_Po from '@components/modals/purchaseOrders/Confirm_Delete_Po'
+import { sortNumbers } from '@lib/helperFunctions'
 
 type Props = {
   data: PurchaseOrderBySkus
@@ -27,18 +28,28 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
       sortable: true,
       wrap: false,
       grow: 1.5,
+      style: {
+        fontSize: '0.7rem',
+      },
     },
     {
       name: <span className='fw-bolder fs-6'>Supplier</span>,
       selector: (row: PurchaseOrder) => row.suppliersName,
       sortable: true,
       compact: true,
+      style: {
+        fontSize: '0.7rem',
+      },
     },
     {
       name: <span className='fw-bolder fs-6'>Date Created</span>,
       selector: (row: PurchaseOrder) => row.date,
       sortable: true,
+      center:true,
       compact: true,
+      style: {
+        fontSize: '0.7rem',
+      },
     },
     {
       name: <span className='fw-bolder fs-6'>Order Cost</span>,
@@ -50,6 +61,14 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
       sortable: true,
       compact: true,
       center: true,
+      style: {
+        fontSize: '0.7rem',
+      },
+      sortFunction: (rowA: PurchaseOrder, rowB: PurchaseOrder) =>
+        sortNumbers(
+          rowA?.poItems?.reduce((total: number, product: PurchaseOrderItem) => total + Number(product.orderQty * product.sellerCost), 0),
+          rowB?.poItems?.reduce((total: number, product: PurchaseOrderItem) => total + Number(product.orderQty * product.sellerCost), 0)
+        ),
     },
     {
       name: <span className='fw-bolder fs-6'>Status</span>,
@@ -58,18 +77,13 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
           case row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) === 0:
             return 'Pending'
             break
-          case row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) <
-            row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0):
+          case row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) < row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0):
             return 'Partial Received'
             break
-          case row.isOpen &&
-            row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) ===
-              row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0):
+          case row.isOpen && row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) === row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0):
             return 'Total Received'
             break
-          case !row.isOpen &&
-            row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) ===
-              row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0):
+          case !row.isOpen && row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) === row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0):
             return 'Completed'
             break
           default:
@@ -78,8 +92,11 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
         }
       },
       sortable: true,
-      center: true,
+      left: true,
       compact: true,
+      style: {
+        fontSize: '0.7rem',
+      },
       conditionalCellStyles: [
         {
           when: (row: PurchaseOrder) => row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) === 0,
@@ -92,18 +109,12 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
           classNames: ['text-info'],
         },
         {
-          when: (row: PurchaseOrder) =>
-            row.isOpen &&
-            row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) ===
-              row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0),
+          when: (row: PurchaseOrder) => row.isOpen && row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) === row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0),
 
           classNames: ['text-danger'],
         },
         {
-          when: (row: PurchaseOrder) =>
-            !row.isOpen &&
-            row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) ===
-              row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0),
+          when: (row: PurchaseOrder) => !row.isOpen && row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) === row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0),
 
           classNames: ['text-success'],
         },
@@ -111,11 +122,13 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
     },
     {
       name: <span className='fw-bolder fs-6'>Destination</span>,
-      selector: (row: PurchaseOrder) => (row.destinationSC ? 'ShelfCloud Warehouse' : 'Direct to Marketplace'),
+      selector: (row: PurchaseOrder) => row.warehouseName,
       sortable: true,
-      center: true,
+      left: true,
       compact: true,
-      wrap: true,
+      style: {
+        fontSize: '0.7rem',
+      },
     },
     {
       name: <span className='fw-bolder fs-6'></span>,
@@ -140,13 +153,10 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
     {
       name: <span className='fw-bolder fs-6'></span>,
       selector: (row: PurchaseOrder) =>
-        row.isOpen &&
-        row.poPayments.length <= 0 &&
-        row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.inboundQty, 0) <= 0 &&
-        row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) <= 0 ? (
+        row.isOpen && row.poPayments.length <= 0 && row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.inboundQty, 0) <= 0 && row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) <= 0 ? (
           <>
             <i
-              className='fs-3 text-danger las la-trash-alt'
+              className='fs-4 text-danger las la-trash-alt'
               style={{ cursor: 'pointer' }}
               id={`deletePo${row.poId}`}
               onClick={() =>

@@ -8,6 +8,7 @@ import { Badge } from 'reactstrap'
 import Table_By_Skus_Orders from './Table_By_Skus_Orders'
 import Link from 'next/link'
 import { NoImageAdress } from '@lib/assetsConstants'
+import { sortNumbers, sortStringsLocaleCompare } from '@lib/helperFunctions'
 
 type Props = {
   filterDataTable: PurchaseOrderBySkus[]
@@ -16,112 +17,6 @@ type Props = {
 
 const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
   const { state }: any = useContext(AppContext)
-  const sortTitle = (rowA: PurchaseOrderBySkus, rowB: PurchaseOrderBySkus) => {
-    const a = rowA.title.toLowerCase()
-    const b = rowB.title.toLowerCase()
-    if (a > b) {
-      return 1
-    }
-    if (b > a) {
-      return -1
-    }
-    return 0
-  }
-  const sortOrdered = (rowA: PurchaseOrderBySkus, rowB: PurchaseOrderBySkus) => {
-    const totalSkuOrderedA = rowA.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
-      const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
-        if (item.sku == rowA.sku) {
-          return subtotal + item.orderQty
-        } else {
-          return subtotal
-        }
-      }, 0)
-      return totalSku + totalOrdered
-    }, 0)
-
-    const totalSkuOrderedB = rowB.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
-      const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
-        if (item.sku == rowB.sku) {
-          return subtotal + item.orderQty
-        } else {
-          return subtotal
-        }
-      }, 0)
-      return totalSku + totalOrdered
-    }, 0)
-
-    if (totalSkuOrderedA > totalSkuOrderedB) {
-      return 1
-    }
-    if (totalSkuOrderedB > totalSkuOrderedA) {
-      return -1
-    }
-    return 0
-  }
-  const sortInbound = (rowA: PurchaseOrderBySkus, rowB: PurchaseOrderBySkus) => {
-    const totalSkuOrderedA = rowA.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
-      const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
-        if (item.sku == rowA.sku) {
-          return subtotal + item.inboundQty
-        } else {
-          return subtotal
-        }
-      }, 0)
-      return totalSku + totalOrdered
-    }, 0)
-
-    const totalSkuOrderedB = rowB.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
-      const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
-        if (item.sku == rowB.sku) {
-          return subtotal + item.inboundQty
-        } else {
-          return subtotal
-        }
-      }, 0)
-      return totalSku + totalOrdered
-    }, 0)
-
-    if (totalSkuOrderedA > totalSkuOrderedB) {
-      return 1
-    }
-    if (totalSkuOrderedB > totalSkuOrderedA) {
-      return -1
-    }
-    return 0
-  }
-  const sortArrived = (rowA: PurchaseOrderBySkus, rowB: PurchaseOrderBySkus) => {
-    const totalSkuOrderedA = rowA.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
-      const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
-        if (item.sku == rowA.sku) {
-          return subtotal + item.receivedQty
-        } else {
-          return subtotal
-        }
-      }, 0)
-      return totalSku + totalOrdered
-    }, 0)
-
-    const totalSkuOrderedB = rowB.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
-      const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
-        if (item.sku == rowB.sku) {
-          return subtotal + item.receivedQty
-        } else {
-          return subtotal
-        }
-      }, 0)
-      return totalSku + totalOrdered
-    }, 0)
-
-    if (totalSkuOrderedA > totalSkuOrderedB) {
-      return 1
-    }
-    if (totalSkuOrderedB > totalSkuOrderedA) {
-      return -1
-    }
-    return 0
-  }
-
-  const sortString = (a: string, b: string) => a.localeCompare(b)
 
   const columns: any = [
     {
@@ -138,12 +33,7 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
                   margin: '2px 0px',
                   position: 'relative',
                 }}>
-                <img
-                  loading='lazy'
-                  src={row.image ? row.image : NoImageAdress}
-                  alt='product Image'
-                  style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
-                />
+                <img loading='lazy' src={row.image ? row.image : NoImageAdress} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
               </div>
             </a>
           </Link>
@@ -167,14 +57,14 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
               <>
                 <br />
                 <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/exec/obidos/ASIN${row.asin}`} target='blank'>
-                  <span className='fs-6 fw-normal'>{row.asin}</span>
+                  <span className='fs-7 fw-normal'>{row.asin}</span>
                 </a>
               </>
             )}
             {row.barcode && (
               <>
                 <br />
-                <span className='text-muted fs-6 fw-normal'>{row.barcode}</span>
+                <span className='text-muted fs-7 fw-normal'>{row.barcode}</span>
               </>
             )}
           </>
@@ -182,7 +72,8 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
       },
       sortable: true,
       compact: true,
-      sortFunction: sortTitle,
+      grow: 1.5,
+      sortFunction: (rowA: PurchaseOrderBySkus, rowB: PurchaseOrderBySkus) => sortStringsLocaleCompare(rowA.title, rowB.title),
     },
     {
       name: <span className='fw-bolder fs-6'>SKU</span>,
@@ -190,15 +81,14 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
         return (
           <Link href={`/product/${row.inventoryId}/${row.sku}`} passHref>
             <a target='blank' className='text-black'>
-              <span className='fs-6'>{row.sku}</span>
+              <span className='fs-7'>{row.sku}</span>
             </a>
           </Link>
         )
       },
       sortable: true,
       compact: true,
-      grow: 0,
-      sortFunction: (rowA: PurchaseOrderBySkus, rowB: PurchaseOrderBySkus) => sortString(rowA.sku, rowB.sku),
+      sortFunction: (rowA: PurchaseOrderBySkus, rowB: PurchaseOrderBySkus) => sortStringsLocaleCompare(rowA.sku, rowB.sku),
     },
     {
       name: <span className='fw-bolder fs-6'>Ordered</span>,
@@ -219,8 +109,32 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
       sortable: true,
       compact: true,
       center: true,
-      grow: 0,
-      sortFunction: sortOrdered,
+      style: {
+        fontSize: '0.7rem',
+      },
+      sortFunction: (rowA: PurchaseOrderBySkus, rowB: PurchaseOrderBySkus) =>
+        sortNumbers(
+          rowA.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
+            const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
+              if (item.sku == rowA.sku) {
+                return subtotal + item.orderQty
+              } else {
+                return subtotal
+              }
+            }, 0)
+            return totalSku + totalOrdered
+          }, 0),
+          rowB.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
+            const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
+              if (item.sku == rowB.sku) {
+                return subtotal + item.orderQty
+              } else {
+                return subtotal
+              }
+            }, 0)
+            return totalSku + totalOrdered
+          }, 0)
+        ),
     },
     {
       name: <span className='fw-bolder fs-6'>Inbound</span>,
@@ -241,8 +155,32 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
       sortable: true,
       compact: true,
       center: true,
-      grow: 0,
-      sortFunction: sortInbound,
+      style: {
+        fontSize: '0.7rem',
+      },
+      sortFunction: (rowA: PurchaseOrderBySkus, rowB: PurchaseOrderBySkus) =>
+        sortNumbers(
+          rowA.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
+            const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
+              if (item.sku == rowA.sku) {
+                return subtotal + item.inboundQty
+              } else {
+                return subtotal
+              }
+            }, 0)
+            return totalSku + totalOrdered
+          }, 0),
+          rowB.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
+            const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
+              if (item.sku == rowB.sku) {
+                return subtotal + item.inboundQty
+              } else {
+                return subtotal
+              }
+            }, 0)
+            return totalSku + totalOrdered
+          }, 0)
+        ),
     },
     {
       name: <span className='fw-bolder fs-6'>Arrived</span>,
@@ -263,8 +201,32 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
       sortable: true,
       compact: true,
       center: true,
-      grow: 0,
-      sortFunction: sortArrived,
+      style: {
+        fontSize: '0.7rem',
+      },
+      sortFunction: (rowA: PurchaseOrderBySkus, rowB: PurchaseOrderBySkus) =>
+        sortNumbers(
+          rowA.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
+            const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
+              if (item.sku == rowA.sku) {
+                return subtotal + item.receivedQty
+              } else {
+                return subtotal
+              }
+            }, 0)
+            return totalSku + totalOrdered
+          }, 0),
+          rowB.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
+            const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
+              if (item.sku == rowB.sku) {
+                return subtotal + item.receivedQty
+              } else {
+                return subtotal
+              }
+            }, 0)
+            return totalSku + totalOrdered
+          }, 0)
+        ),
     },
     {
       name: <span className='fw-bolder fs-6'></span>,
@@ -298,15 +260,7 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
   ]
   return (
     <>
-      <DataTable
-        columns={columns}
-        data={filterDataTable}
-        progressPending={pending}
-        striped={true}
-        expandableRows
-        expandableRowsComponent={Table_By_Skus_Orders}
-        defaultSortFieldId={3}
-      />
+      <DataTable columns={columns} data={filterDataTable} progressPending={pending} striped={true} expandableRows expandableRowsComponent={Table_By_Skus_Orders} defaultSortFieldId={3} />
     </>
   )
 }

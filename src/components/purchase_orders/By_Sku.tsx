@@ -6,7 +6,7 @@ import useSWR from 'swr'
 import { PurchaseOrder, PurchaseOrderBySkus } from '@typesTs/purchaseOrders'
 import Table_By_Sku from './Table_By_Sku'
 import { useRouter } from 'next/router'
-import { DebounceInput } from 'react-debounce-input'
+import SearchInput from '@components/ui/searchInput'
 
 type Props = {}
 
@@ -18,13 +18,9 @@ const By_Sku = ({}: Props) => {
   const { status }: any = router.query
   const [searchValue, setSearchValue] = useState<string>('')
 
-  const { data }: { data?: PurchaseOrderBySkus[] } = useSWR(
-    state.user.businessId ? `/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}` : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  )
+  const { data }: { data?: PurchaseOrderBySkus[] } = useSWR(state.user.businessId ? `/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}` : null, fetcher, {
+    revalidateOnFocus: false,
+  })
 
   const filterDataTable = useMemo(() => {
     if (searchValue === '') {
@@ -43,16 +39,8 @@ const By_Sku = ({}: Props) => {
         ) {
           return newDataTable.push(po)
         }
-        if (
-          po?.orders?.some(
-            (poInfo: PurchaseOrder) =>
-              poInfo?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) || poInfo?.suppliersName?.toLowerCase().includes(searchValue.toLowerCase())
-          )
-        ) {
-          const filteredOrders = po?.orders?.filter(
-            (poInfo: PurchaseOrder) =>
-              poInfo?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) || poInfo?.suppliersName?.toLowerCase().includes(searchValue.toLowerCase())
-          )
+        if (po?.orders?.some((poInfo: PurchaseOrder) => poInfo?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) || poInfo?.suppliersName?.toLowerCase().includes(searchValue.toLowerCase()))) {
+          const filteredOrders = po?.orders?.filter((poInfo: PurchaseOrder) => poInfo?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) || poInfo?.suppliersName?.toLowerCase().includes(searchValue.toLowerCase()))
           return newDataTable.push({
             sku: po.sku,
             title: po.title,
@@ -70,40 +58,12 @@ const By_Sku = ({}: Props) => {
   return (
     <div>
       <React.Fragment>
-        <Row>
-          <Col lg={12}>
-            <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-0 flex-md-row justify-content-md-end align-items-md-center'>
-              <div className='col-sm-12 col-md-3'>
-                <div className='app-search p-0 col-sm-12'>
-                  <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
-                    <DebounceInput
-                      type='text'
-                      minLength={1}
-                      debounceTimeout={500}
-                      className='form-control fs-6'
-                      placeholder='Search...'
-                      id='search-options'
-                      value={searchValue}
-                      onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
-                      onChange={(e) => setSearchValue(e.target.value)}
-                    />
-                    <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
-                    <span
-                      className='d-flex align-items-center justify-content-center'
-                      style={{
-                        cursor: 'pointer',
-                        backgroundColor: '#f3f3f9',
-                      }}
-                      onClick={() => setSearchValue('')}>
-                      <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </Row>
-            <Table_By_Sku filterDataTable={filterDataTable || []} pending={data ? false : true} />
-          </Col>
-        </Row>
+        <Col xs={12}>
+          <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-0 flex-md-row justify-content-md-end align-items-md-center'>
+            <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='none' />
+          </Row>
+          <Table_By_Sku filterDataTable={filterDataTable || []} pending={data ? false : true} />
+        </Col>
       </React.Fragment>
     </div>
   )

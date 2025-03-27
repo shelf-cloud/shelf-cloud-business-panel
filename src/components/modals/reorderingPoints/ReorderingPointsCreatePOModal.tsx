@@ -123,7 +123,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
 
     const hasSplitting = splits.isSplitting
 
-    const splitsInfo = {} as { [split: string]: { splitId: number; splitName: string; destination: { value: number; label: string }; items: poItem[] } }
+    const splitsInfo = {} as { [split: string]: { splitId: number; splitName: string; destination: { id: number; label: string }; items: poItem[] } }
     if (splits.isSplitting) {
       for await (const product of Object.values(reorderingPointsOrder.products)) {
         for (let i = 0; i < splits.splitsQty; i++) {
@@ -131,7 +131,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
             splitsInfo[i] = {
               splitId: i,
               splitName: splitNames[`${i}`],
-              destination: { value: parseInt(values.splitDestinations[i].value), label: values.splitDestinations[i].label },
+              destination: { id: parseInt(values.splitDestinations[i].value), label: values.splitDestinations[i].label },
               items: [],
             }
           splitsInfo[i].items.push({
