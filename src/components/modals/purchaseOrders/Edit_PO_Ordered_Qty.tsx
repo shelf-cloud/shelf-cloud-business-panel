@@ -116,7 +116,7 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
                   </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className='fs-7'>
                 {newOrderedQtyItems?.map((product: PurchaseOrderItem, key: number) => (
                   <tr key={`${key}-${product.sku}`} className='border-bottom py-2'>
                     <td className='text-center'>
@@ -124,7 +124,7 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
                         style={{
                           width: '100%',
                           maxWidth: '80px',
-                          height: '50px',
+                          height: '40px',
                           margin: '2px 0px',
                           position: 'relative',
                         }}>
@@ -137,29 +137,29 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
                         />
                       </div>
                     </td>
-                    <td className='fs-6 fw-semibold'>
+                    <td className='fs-7 fw-semibold'>
                       {product.title}
 
                       {product.asin && (
                         <>
                           <br />
-                          <span className='text-muted fs-6 fw-normal'>{product.asin}</span>
+                          <span className='text-muted fs-7 fw-normal'>ASIN: {product.asin}</span>
                         </>
                       )}
                       {product.barcode && (
                         <>
                           <br />
-                          <span className='text-muted fs-6 fw-normal'>{product.barcode}</span>
+                          <span className='text-muted fs-7 fw-normal'>UPC: {product.barcode}</span>
                         </>
                       )}
                     </td>
-                    <td className='fs-6 text-center text-nowrap'>{product.sku}</td>
-                    <td className='fs-6 text-center text-nowrap'>{FormatCurrency(state.currentRegion, product.orderQty * product.sellerCost || 0)}</td>
-                    <td className='fs-6 text-center text-nowrap'>
+                    <td className='text-center text-nowrap'>{product.sku}</td>
+                    <td className='text-center text-nowrap'>{FormatCurrency(state.currentRegion, product.orderQty * product.sellerCost || 0)}</td>
+                    <td className='text-center text-nowrap'>
                       <Input
                         type='number'
                         onWheel={(e) => e.currentTarget.blur()}
-                        className='form-control fs-6 m-0 shadow-sm'
+                        className='form-control fs-6 m-0 mx-auto'
                         style={{ maxWidth: '60px' }}
                         placeholder='Qty'
                         id='newOrderQty'
@@ -190,9 +190,15 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
             </table>
           </div>
           <Row md={12}>
-            <div className='text-end mt-4'>
-              <Button disabled={loading || error ? true : false} type='button' color='success' className='btn' onClick={handleEditOrderedQtyFromPO}>
-                {loading ? <Spinner color='#fff' /> : 'Save Changes'}
+            <div className='text-end mt-3'>
+              <Button disabled={loading || error ? true : false} type='button' color='success' className='fs-7' onClick={handleEditOrderedQtyFromPO}>
+                {loading ? (
+                  <span>
+                    <Spinner color='light' size={'sm'} /> Saving...
+                  </span>
+                ) : (
+                  'Save Changes'
+                )}
               </Button>
             </div>
           </Row>

@@ -18,6 +18,8 @@ type Supplier = {
   suppliersId: number
   name: string
 }
+const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
+
 const Add_Po_With_File = ({ orderNumberStart }: Props) => {
   const router = useRouter()
   const { status, organizeBy } = router.query
@@ -30,7 +32,6 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
   const [errorLines, setErrorLines] = useState([]) as any
   const [showerrorResponse, setShowErrorResponse] = useState(false)
   const [errorResponse, setErrorResponse] = useState([]) as any
-  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data: suppliersList }: { data?: Supplier[] } = useSWR(
     state.user.businessId ? `/api/purchaseOrders/getSuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
     fetcher
@@ -183,14 +184,15 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                       *Purchase Order Number
                     </Label>
                     <div className='input-group'>
-                      <span className='input-group-text fw-semibold fs-5' id='basic-addon1'>
+                      <span className='input-group-text fw-semibold fs-5 m-0 px-2 py-0' id='basic-addon1'>
                         {orderNumberStart}
                       </span>
                       <Input
                         type='text'
-                        className='form-control'
+                        className='form-control fs-6'
                         id='orderNumber'
                         name='orderNumber'
+                        bsSize='sm'
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.orderNumber || ''}
@@ -205,9 +207,10 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                     </Label>
                     <Input
                       type='select'
-                      className='form-control'
+                      className='form-control fs-6'
                       id='supplier'
                       name='supplier'
+                      bsSize='sm'
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.supplier || ''}
@@ -227,9 +230,10 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                     </Label>
                     <Input
                       type='date'
-                      className='form-control'
+                      className='form-control fs-6'
                       id='date'
                       name='date'
+                      bsSize='sm'
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.date || ''}
@@ -269,9 +273,9 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                       <div className='dropzone dz-clickable cursor-pointer'>
                         <div className='dz-message needsclick' {...getRootProps()}>
                           <div className='mb-3'>
-                            <i className='display-4 text-muted ri-upload-cloud-2-fill' />
+                            <i className='display-5 text-muted ri-upload-cloud-2-fill' />
                           </div>
-                          <h4 className='fs-5 px-3'>Upload Purchase Order Info. Drop Only CSV files here or click to upload.</h4>
+                          <h4 className='fs-6 px-3'>Upload Purchase Order Info. Drop Only CSV files here or click to upload.</h4>
                         </div>
                       </div>
                     )}
@@ -309,8 +313,8 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
 
               <Col md={12} className='mt-4'>
                 <div className='text-end'>
-                  <Button disabled={errorFile || showErrorLines || showerrorResponse} type='submit' color='success' className='btn'>
-                    {loading ? <Spinner /> : 'Create PO'}
+                  <Button disabled={errorFile || showErrorLines || showerrorResponse} type='submit' color='success' className='fs-7'>
+                    {loading ? <span><Spinner color='light' size={'sm'}  /> Creating...</span> : 'Create PO'}
                   </Button>
                 </div>
               </Col>

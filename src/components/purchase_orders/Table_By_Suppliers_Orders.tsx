@@ -57,8 +57,8 @@ const Table_By_Suppliers_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBy
           row?.poItems?.reduce((total, product: PurchaseOrderItem) => total + Number(product.orderQty * product.sellerCost), 0)
         ),
       sortable: true,
-      compact: true,
-      center: true,
+      compact: false,
+      right: true,
       sortFunction: (rowA: PurchaseOrder, rowB: PurchaseOrder) =>
         sortNumbers(
           rowA?.poItems?.reduce((total: number, product: PurchaseOrderItem) => total + Number(product.orderQty * product.sellerCost), 0),
@@ -91,7 +91,7 @@ const Table_By_Suppliers_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBy
       },
       sortable: true,
       left: true,
-      compact: true,
+      compact: false,
       conditionalCellStyles: [
         {
           when: (row: PurchaseOrder) => row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) === 0,
@@ -132,12 +132,12 @@ const Table_By_Suppliers_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBy
     {
       name: <span className='fw-bolder fs-6'></span>,
       selector: (row: PurchaseOrder) =>
-        state.receivingFromPo[row.poId] ? (
+        state.receivingFromPo.items[row.poId] ? (
           <>
-            <Badge pill color='success' className='fs-6'>
+            <Badge pill color='success' className='fs-7'>
               {FormatIntNumber(
                 state.currentRegion,
-                Object.entries(state.receivingFromPo[row.poId]).reduce((total: number, obj: [string, any]) => total + obj[1].receivingQty, 0)
+                Object.entries(state.receivingFromPo.items[row.poId]).reduce((total: number, obj: [string, any]) => total + obj[1].receivingQty, 0)
               )}
             </Badge>
           </>

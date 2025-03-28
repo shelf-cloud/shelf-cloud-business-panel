@@ -51,7 +51,13 @@ const PurchaseOrders = ({ session }: Props) => {
 
   useEffect(() => {
     return () => {
-      Object.keys(state.receivingFromPo).length > 0 && setReceivingFromPo({})
+      Object.keys(state.receivingFromPo).length > 0 && setReceivingFromPo({
+        warehouse: {
+          id: 0,
+          name: '',
+        },
+        items: {},
+      })
     }
   }, [])
 

@@ -23,7 +23,7 @@ const Table_By_Suppliers = ({ filterDataTable, pending }: Props) => {
     {
       name: <span className='fw-bolder fs-6'></span>,
       selector: (row: PurchaseOrderBySuppliers) => {
-        const totalReceivingQty = Object.entries(state.receivingFromPo).reduce((total: number, po: [string, any]) => {
+        const totalReceivingQty = Object.entries(state.receivingFromPo.items).reduce((total: number, po: [string, any]) => {
           const poTotal = Object.entries(po[1]).reduce((subtotal: number, inventoryId: [string, any]) => {
             if (inventoryId[1].suppliersName == row.suppliersName) {
               return subtotal + inventoryId[1].receivingQty
@@ -36,7 +36,7 @@ const Table_By_Suppliers = ({ filterDataTable, pending }: Props) => {
 
         if (totalReceivingQty > 0) {
           return (
-            <Badge pill color='success' className='fs-6'>
+            <Badge pill color='success' className='fs-7'>
               {FormatIntNumber(state.currentRegion, totalReceivingQty)}
             </Badge>
           )

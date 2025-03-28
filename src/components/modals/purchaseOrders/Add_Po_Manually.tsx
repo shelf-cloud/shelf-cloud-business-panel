@@ -94,14 +94,15 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
                       *Purchase Order Number
                     </Label>
                     <div className='input-group'>
-                      <span className='input-group-text fw-semibold fs-5' id='basic-addon1'>
+                      <span className='input-group-text fw-semibold fs-5 m-0 px-2 py-0' id='basic-addon1'>
                         {orderNumberStart}
                       </span>
                       <Input
                         type='text'
-                        className='form-control'
+                        className='form-control fs-6'
                         id='orderNumber'
                         name='orderNumber'
+                        bsSize='sm'
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.orderNumber || ''}
@@ -116,7 +117,8 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
                     </Label>
                     <Input
                       type='select'
-                      className='form-control'
+                      className='form-control fs-6'
+                      bsSize='sm'
                       id='supplier'
                       name='supplier'
                       onChange={handleChange}
@@ -140,7 +142,8 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
                     </Label>
                     <Input
                       type='date'
-                      className='form-control'
+                      className='form-control fs-6'
+                      bsSize='sm'
                       id='date'
                       name='date'
                       onChange={handleChange}
@@ -155,8 +158,8 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
 
               <Col md={12} className='mt-4'>
                 <div className='text-end'>
-                  <Button disabled={loading} type='submit' color='success' className='btn'>
-                    {loading ? <Spinner /> : 'Create PO'}
+                  <Button disabled={loading} type='submit' color='success' className='fs-7'>
+                    {loading ? <span><Spinner color='light' size={'sm'}  /> Creating...</span> : 'Create PO'}
                   </Button>
                 </div>
               </Col>

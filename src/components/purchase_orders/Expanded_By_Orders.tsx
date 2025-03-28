@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useContext, useMemo, useState } from 'react'
-import { Button, Card, CardBody, CardHeader, Col, Form, FormFeedback, FormGroup, Input, Label, Row, UncontrolledTooltip } from 'reactstrap'
+import React, { useContext, useState } from 'react'
+import { Button, Card, CardBody, CardHeader, Col, Form, FormFeedback, FormGroup, Input, Label, Nav, NavItem, Row, UncontrolledTooltip } from 'reactstrap'
 import { ExpanderComponentProps } from 'react-data-table-component'
-import { PoItemArrivalHistory, PoPaymentHistory, PurchaseOrder, PurchaseOrderItem } from '@typesTs/purchaseOrders'
-import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
+import { PoPaymentHistory, PurchaseOrder, PurchaseOrderItem } from '@typesTs/purchaseOrders'
+import { FormatCurrency } from '@lib/FormatNumbers'
 import AppContext from '@context/AppContext'
 import Confirm_Delete_Item_From_PO from '@components/modals/purchaseOrders/Confirm_Delete_Item_From_PO'
 import axios from 'axios'
@@ -13,10 +13,9 @@ import { useRouter } from 'next/router'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import Edit_PO_Ordered_Qty from '@components/modals/purchaseOrders/Edit_PO_Ordered_Qty'
-import Link from 'next/link'
 import DownloadExcelPurchaseOrder from './DownloadExcelPurchaseOrder'
 import Edit_Payment_Modal from '@components/modals/purchaseOrders/Edit_Payment_Modal'
-import { NoImageAdress } from '@lib/assetsConstants'
+import ExpandedOrderItems from './ExpandedOrderItems'
 
 type Props = {
   data: PurchaseOrder
@@ -27,11 +26,11 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
   const { status, organizeBy } = router.query
   const { state, setReceivingFromPo, setModalAddPaymentToPoDetails, setModalAddSkuToPurchaseOrder }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
+  const [activeTab, setactiveTab] = useState('all')
   const orderNumberStart = `${state?.user?.name.substring(0, 3).toUpperCase()}-`
   const [loading, setLoading] = useState(false)
   const [showEditNote, setShowEditNote] = useState(false)
   const [editPONumber, seteditPONumber] = useState(false)
-  const [orderAsc, setOrderAsc] = useState(true)
   const [editPaymentModal, setEditPaymentModal] = useState({
     show: false,
     poId: 0,
@@ -42,13 +41,6 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
     paymentIndex: 0,
   })
 
-  const orderPoItems = useMemo(() => {
-    if (orderAsc) {
-      return data.poItems.sort((a, b) => a.sku.localeCompare(b.sku))
-    } else {
-      return data.poItems.sort((a, b) => b.sku.localeCompare(a.sku))
-    }
-  }, [data, orderAsc])
   const [showDeleteModal, setshowDeleteModal] = useState({
     show: false,
     poId: 0,
@@ -65,30 +57,32 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
     poItems: [] as PurchaseOrderItem[],
   })
 
-  const handlereceivingOrderFromPo = (
-    poId: number,
-    orderNumber: string,
-    inventoryId: number,
-    sku: string,
-    title: string,
-    image: string,
-    businessId: number,
-    suppliersName: string,
-    receivingQty: number
-  ) => {
+  const handlereceivingOrderFromPo = (warehouseId: number, warehouseName: string, poId: number, orderNumber: string, inventoryId: number, sku: string, title: string, image: string, businessId: number, suppliersName: string, receivingQty: number) => {
     let newReceivingOrderFromPo = state.receivingFromPo
-    if (newReceivingOrderFromPo?.[poId]?.[inventoryId]) {
+    newReceivingOrderFromPo.warehouse.id = warehouseId
+    newReceivingOrderFromPo.warehouse.name = warehouseName
+
+    if (newReceivingOrderFromPo?.items[poId]?.[inventoryId]) {
       if (receivingQty === 0 || String(receivingQty) === '') {
-        delete newReceivingOrderFromPo[poId][inventoryId]
-        Object.keys(newReceivingOrderFromPo[poId]).length <= 0 && delete newReceivingOrderFromPo[poId]
+        delete newReceivingOrderFromPo.items[poId][inventoryId]
+        Object.keys(newReceivingOrderFromPo.items[poId]).length <= 0 && delete newReceivingOrderFromPo.items[poId]
+        if (Object.keys(newReceivingOrderFromPo.items).length <= 0) {
+          newReceivingOrderFromPo = {
+            warehouse: {
+              id: 0,
+              name: '',
+            },
+            items: {},
+          }
+        }
       } else {
-        newReceivingOrderFromPo[poId][inventoryId].receivingQty = receivingQty
+        newReceivingOrderFromPo.items[poId][inventoryId].receivingQty = receivingQty
       }
     } else {
-      if (!newReceivingOrderFromPo[poId]) {
-        newReceivingOrderFromPo[poId] = {}
+      if (!newReceivingOrderFromPo.items[poId]) {
+        newReceivingOrderFromPo.items[poId] = {}
       }
-      newReceivingOrderFromPo[poId][inventoryId] = {
+      newReceivingOrderFromPo.items[poId][inventoryId] = {
         poId,
         orderNumber,
         inventoryId,
@@ -214,22 +208,17 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
         <Col sm={3}>
           <Col sm={12}>
             <Card>
-              <CardHeader className='py-3'>
+              <CardHeader className='py-2'>
                 <h5 className='fw-semibold m-0'>Details</h5>
               </CardHeader>
               <CardBody>
                 <table className='table table-sm table-borderless mb-0'>
-                  <tbody>
+                  <tbody className='fs-7'>
                     {!editPONumber && (
                       <tr>
                         <td className='text-muted text-nowrap'>PO Number:</td>
                         <td className='fw-semibold w-100'>
-                          {data.orderNumber}{' '}
-                          <i
-                            className={'las la-edit fs-5 text-primary m-0 p-0 ' + (editPONumber && 'd-none')}
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => seteditPONumber(true)}
-                          />
+                          {data.orderNumber} <i className={'las la-edit fs-5 text-primary m-0 p-0 ' + (editPONumber && 'd-none')} style={{ cursor: 'pointer' }} onClick={() => seteditPONumber(true)} />
                         </td>
                       </tr>
                     )}
@@ -238,17 +227,17 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                         <td colSpan={2}>
                           <Form onSubmit={HandleChangePONumber}>
                             <Col md={12}>
-                              <FormGroup className='m-0'>
+                              <FormGroup>
                                 <Label htmlFor='note' className='form-label'>
                                   New PO Number:
                                 </Label>
-                                <div className='input-group'>
-                                  <span className='input-group-text fw-semibold fs-6 m-0 px-2 py-0' id='basic-addon1'>
+                                <div className='input-group mb-2'>
+                                  <span className='input-group-text fw-semibold fs-7 m-0 px-2 py-0' id='basic-addon1'>
                                     {orderNumberStart}
                                   </span>
                                   <Input
                                     type='text'
-                                    className='form-control fs-6'
+                                    className='form-control fs-7'
                                     id='orderNumber'
                                     name='orderNumber'
                                     bsSize='sm'
@@ -257,19 +246,17 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                                     value={validationPONumber.values.orderNumber || ''}
                                     invalid={validationPONumber.touched.orderNumber && validationPONumber.errors.orderNumber ? true : false}
                                   />
-                                  {validationPONumber.touched.orderNumber && validationPONumber.errors.orderNumber ? (
-                                    <FormFeedback type='invalid'>{validationPONumber.errors.orderNumber}</FormFeedback>
-                                  ) : null}
+                                  {validationPONumber.touched.orderNumber && validationPONumber.errors.orderNumber ? <FormFeedback type='invalid'>{validationPONumber.errors.orderNumber}</FormFeedback> : null}
+                                </div>
+                                <div className='d-flex flex-row justify-content-end align-items-center gap-2'>
+                                  <Button type='button' disabled={loading} color='light' className='btn btn-sm' onClick={() => seteditPONumber(false)}>
+                                    Cancel
+                                  </Button>
+                                  <Button type='submit' disabled={loading} color='primary' className='btn btn-sm'>
+                                    Save Changes
+                                  </Button>
                                 </div>
                               </FormGroup>
-                              <div className='d-flex flex-row justify-content-end align-items-center gap-3'>
-                                <Button type='button' disabled={loading} color='light' className='btn btn-sm' onClick={() => seteditPONumber(false)}>
-                                  Cancel
-                                </Button>
-                                <Button type='submit' disabled={loading} color='primary' className='btn btn-sm'>
-                                  Save Changes
-                                </Button>
-                              </div>
                             </Col>
                           </Form>
                         </td>
@@ -292,7 +279,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                 </table>
                 <p className='m-0 px-1 fs-7'>{data.note}</p>
                 <p className='text-end m-0 px-1'>
-                  <i className={'las la-edit fs-3 text-primary m-0 p-0 ' + (showEditNote && 'd-none')} style={{ cursor: 'pointer' }} onClick={() => setShowEditNote(true)}></i>
+                  <i className={'las la-edit fs-4 text-primary m-0 p-0 ' + (showEditNote && 'd-none')} style={{ cursor: 'pointer' }} onClick={() => setShowEditNote(true)}></i>
                 </p>
                 {showEditNote && (
                   <Form onSubmit={HandleAddComment}>
@@ -331,17 +318,14 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
           </Col>
           <Col sm={12}>
             <Card>
-              <CardHeader className='py-3 d-flex flex-row justify-content-between'>
-                <h5 className='fw-semibold m-0'>Payment History</h5>{' '}
-                {data.isOpen && (
-                  <i className='fs-3 text-success las la-plus-circle' style={{ cursor: 'pointer' }} onClick={() => setModalAddPaymentToPoDetails(data.poId, data.orderNumber)} />
-                )}
+              <CardHeader className='py-2 d-flex flex-row justify-content-between'>
+                <h5 className='fw-semibold m-0'>Payment History</h5> {data.isOpen && <i className='fs-4 text-success las la-plus-circle' style={{ cursor: 'pointer' }} onClick={() => setModalAddPaymentToPoDetails(data.poId, data.orderNumber)} />}
               </CardHeader>
-              <CardBody>
+              <CardBody className='pt-0 px-0'>
                 <table className='table table-sm table-borderless table-nowrap mb-0'>
-                  <thead className='table-light'>
+                  <thead className='table-light fs-7'>
                     <tr>
-                      <th scope='col' className='text-start'>
+                      <th scope='col' className='text-center'>
                         Date
                       </th>
                       <th scope='col' className='text-start'>
@@ -349,10 +333,10 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                       </th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className='fs-7'>
                     {data.poPayments?.map((payment: PoPaymentHistory, key) => (
                       <tr key={`${data.orderNumber}-${key}-${payment.date}`}>
-                        <td className='text-start'>{payment.date}</td>
+                        <td className='text-center'>{payment.date}</td>
                         <td className='d-flex justify-content-start align-items-center gap-2'>
                           <span>{FormatCurrency(state.currentRegion, payment.amount)}</span>
                           <i
@@ -373,11 +357,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                           {payment.comment && (
                             <>
                               <i className='ri-information-fill m-0 p-0 fs-5 text-info' id={`paymentComment${data.orderNumber}-${key}-${payment.date}`} />
-                              <UncontrolledTooltip
-                                placement='right'
-                                target={`paymentComment${data.orderNumber}-${key}-${payment.date}`}
-                                popperClassName='bg-light shadow px-3 py-3 rounded-2'
-                                innerClassName='text-black bg-light p-0'>
+                              <UncontrolledTooltip placement='right' target={`paymentComment${data.orderNumber}-${key}-${payment.date}`} popperClassName='bg-light shadow px-3 py-3 rounded-2' innerClassName='text-black bg-light p-0'>
                                 {payment.comment}
                               </UncontrolledTooltip>
                             </>
@@ -387,7 +367,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                     ))}
                     {data.poPayments?.length > 0 && (
                       <tr className='border-top'>
-                        <td className='text-start fw-semibold'>Total</td>
+                        <td className='text-center fw-semibold'>Total</td>
                         <td className='text-start fw-semibold'>
                           {FormatCurrency(
                             state.currentRegion,
@@ -403,14 +383,35 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
           </Col>
         </Col>
         <Col sm={9}>
-          <Card>
-            <CardHeader className='py-3 d-flex flex-row justify-content-between'>
-              <h5 className='fw-semibold m-0'>Products</h5>
-              {data.isOpen && (
-                <div className='d-flex flex-row justify-content-end gap-3 align-items-center'>
+          <Card className='mb-3'>
+            <CardHeader className='py-2 d-flex flex-row justify-content-between align-items-start'>
+              <div>
+                <h5 className='fw-semibold m-0'>Products</h5>
+                {data.hasSplitting && (
+                  <>
+                    <p className='m-0 p-0 fs-7 text-muted fw-normal'>Split Destinations:</p>
+                    <Nav className='m-0 d-flex flex-row justify-content-start align-items-center gap-2 fs-7' role='tablist'>
+                      <NavItem style={{ cursor: 'pointer' }} onClick={() => setactiveTab('all')}>
+                        <Button color={activeTab === 'all' ? 'primary' : 'light'} size='sm' className='fs-7'>
+                          All Splits
+                        </Button>
+                      </NavItem>
+                      {Object.values(data.splits).map((split) => (
+                        <NavItem key={`splitId-${split.splitId}`} style={{ cursor: 'pointer' }} onClick={() => setactiveTab(`${split.splitId}`)}>
+                          <Button color={activeTab === `${split.splitId}` ? 'primary' : 'light'} size='sm' className='fs-7'>
+                            {split.splitName}
+                          </Button>
+                        </NavItem>
+                      ))}
+                    </Nav>
+                  </>
+                )}
+              </div>
+              {!data.hasSplitting && data.isOpen && (
+                <div className='d-flex flex-row justify-content-end gap-2 align-items-center'>
                   {data.poItems.length > 0 && (
                     <i
-                      className='las la-edit fs-3 text-primary m-0 p-0'
+                      className='las la-edit fs-4 text-primary m-0 p-0'
                       style={{ cursor: 'pointer' }}
                       onClick={() =>
                         setshowEditOrderQty((prev) => {
@@ -425,251 +426,34 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                       }
                     />
                   )}
-                  <i
-                    className='fs-3 text-success las la-plus-circle'
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => setModalAddSkuToPurchaseOrder(data.poId, data.orderNumber, data.suppliersName)}
-                  />
+                  <i className='fs-4 text-success las la-plus-circle' style={{ cursor: 'pointer' }} onClick={() => setModalAddSkuToPurchaseOrder(data.poId, data.orderNumber, data.suppliersName)} />
                 </div>
               )}
             </CardHeader>
-            <CardBody>
-              <div className='table-responsive'>
-                <table className='table table-sm align-middle table-borderless mb-0'>
-                  <thead className='table-light'>
-                    <tr>
-                      <th scope='col' className='text-center'>
-                        Image
-                      </th>
-                      <th scope='col'>Title</th>
-                      <th className='text-center' scope='col' onClick={() => setOrderAsc(!orderAsc)} style={{ cursor: 'pointer' }}>
-                        SKU {orderAsc ? <i className='las la-sort-amount-down-alt ms-1 fs-5' /> : <i className='las la-sort-amount-up ms-1 fs-5' />}
-                      </th>
-                      <th className='text-center' scope='col'>
-                        Cost
-                      </th>
-                      <th className='text-center' scope='col'>
-                        Ordered
-                      </th>
-                      <th className='text-center' scope='col'>
-                        Inbound
-                      </th>
-                      <th className='text-center' scope='col'>
-                        Arrived
-                      </th>
-                      <th className='text-center' scope='col'>
-                        Pending
-                      </th>
-                      <th className='text-center' scope='col'>
-                        Receiving
-                      </th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {orderPoItems.map((product: PurchaseOrderItem, key) => (
-                      <tr key={`${key}-${product.sku}`} className='border-bottom py-2'>
-                        <td className='text-center'>
-                          <Link href={`/product/${product.inventoryId}/${product.sku}`} passHref tabIndex={-1}>
-                            <a target='blank' className='text-black' tabIndex={-1}>
-                              <div
-                                style={{
-                                  width: '100%',
-                                  maxWidth: '80px',
-                                  height: '50px',
-                                  margin: '2px 0px',
-                                  position: 'relative',
-                                }}>
-                                <img
-                                  loading='lazy'
-                                  src={product.image ? product.image : NoImageAdress}
-                                  onError={(e) => (e.currentTarget.src = NoImageAdress)}
-                                  alt='product Image'
-                                  style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
-                                />
-                              </div>
-                            </a>
-                          </Link>
-                        </td>
-                        <td className='fs-6 fw-semibold'>
-                          <Link href={`/product/${product.inventoryId}/${product.sku}`} passHref tabIndex={-1}>
-                            <a target='blank' className='text-black' tabIndex={-1}>
-                              {product.title}
-                            </a>
-                          </Link>
-                          {product.arrivalHistory?.length > 0 && (
-                            <>
-                              <i className='ri-information-fill ms-2 fs-5 text-warning' id={`tooltipHistory${product.inventoryId}`} />
-                              <UncontrolledTooltip
-                                placement='right'
-                                target={`tooltipHistory${product.inventoryId}`}
-                                popperClassName='bg-white shadow px-3 pt-3 rounded-2'
-                                innerClassName='text-black bg-white p-0'>
-                                <p className='fs-5 text-primary m-0 p-0 fw-bold mb-2'>Arrival History</p>
-                                <table className='table table-striped table-bordered table-sm table-responsive text-nowrap'>
-                                  <thead>
-                                    <tr>
-                                      <th>Date</th>
-                                      <th>Order</th>
-                                      <th>Qty</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {product.arrivalHistory.map((received: PoItemArrivalHistory, index: number) => (
-                                      <tr key={index}>
-                                        <td>{received.date}</td>
-                                        <td>{received.receivingOrder}</td>
-                                        <td>{FormatIntNumber(state.currentRegion, received.quantity)}</td>
-                                      </tr>
-                                    ))}
-                                  </tbody>
-                                </table>
-                              </UncontrolledTooltip>
-                            </>
-                          )}
-                          {product.asin && (
-                            <>
-                              <br />
-                              <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/exec/obidos/ASIN${product.asin}`} target='blank' tabIndex={-1}>
-                                <span className='fs-6 fw-normal'>{product.asin}</span>
-                              </a>
-                            </>
-                          )}
-                          {product.barcode && (
-                            <>
-                              <br />
-                              <span className='text-muted fs-6 fw-normal'>{product.barcode}</span>
-                            </>
-                          )}
-                        </td>
-                        <td className='fs-6 text-center text-nowrap'>
-                          <Link href={`/product/${product.inventoryId}/${product.sku}`} passHref tabIndex={-1}>
-                            <a target='blank' className='text-black' tabIndex={-1}>
-                              {product.sku}
-                            </a>
-                          </Link>
-                        </td>
-                        <td className='fs-6 text-center text-nowrap'>{FormatCurrency(state.currentRegion, product.orderQty * product.sellerCost)}</td>
-                        <td className='fs-6 text-center text-nowrap'>{FormatIntNumber(state.currentRegion, product.orderQty)}</td>
-                        <td className='fs-6 text-center text-nowrap'>{FormatIntNumber(state.currentRegion, product.inboundQty)}</td>
-                        <td className='fs-6 text-center text-nowrap'>{FormatIntNumber(state.currentRegion, product.receivedQty)}</td>
-                        <td className='fs-6 text-center text-nowrap'>{FormatIntNumber(state.currentRegion, product.orderQty - product.receivedQty - product.inboundQty)}</td>
-                        <td className='fs-6 text-center text-nowrap'>
-                          <Input
-                            disabled={product.orderQty - product.receivedQty - product.inboundQty <= 0 || !data.isOpen}
-                            type='number'
-                            onWheel={(e) => e.currentTarget.blur()}
-                            className='form-control fs-6 m-0'
-                            style={{ maxWidth: '80px' }}
-                            placeholder='--'
-                            bsSize='sm'
-                            value={state.receivingFromPo?.[data.poId]?.[product.inventoryId]?.receivingQty || ''}
-                            onChange={(e) => {
-                              if (Number(e.target.value) <= product.orderQty - product.receivedQty - product.inboundQty && Number(e.target.value) >= 0) {
-                                handlereceivingOrderFromPo(
-                                  data.poId,
-                                  data.orderNumber,
-                                  product.inventoryId,
-                                  product.sku,
-                                  product.title,
-                                  product.image,
-                                  data.businessId,
-                                  data.suppliersName,
-                                  Number(e.target.value)
-                                )
-                              }
-                            }}
-                            // onBlur={validation.handleBlur}
-                            invalid={
-                              Number(state.receivingFromPo?.[data.poId]?.[product.inventoryId]?.receivingQty) > product.orderQty - product.receivedQty - product.inboundQty
-                                ? true
-                                : false
-                            }
-                          />
-                        </td>
-                        <td>
-                          {data.isOpen &&
-                            Number(product.inboundQty) <= 0 &&
-                            Number(product.receivedQty) <= 0 &&
-                            (loading ? (
-                              <i className='fs-4 text-muted las la-trash-alt ps-3' />
-                            ) : (
-                              <i
-                                className='fs-4 text-danger las la-trash-alt ps-3'
-                                style={{ cursor: 'pointer' }}
-                                onClick={() =>
-                                  setshowDeleteModal((prev) => {
-                                    return {
-                                      ...prev,
-                                      show: true,
-                                      poId: data.poId,
-                                      orderNumber: data.orderNumber,
-                                      inventoryId: product.inventoryId,
-                                      sku: product.sku,
-                                      title: product.title,
-                                      image: product.image,
-                                    }
-                                  })
-                                }
-                              />
-                            ))}
-                        </td>
-                      </tr>
-                    ))}
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td className='text-center fs-5 fw-semibold text-nowrap'>Totals</td>
-                      <td className='text-center fs-5 fw-semibold'>
-                        {FormatCurrency(
-                          state.currentRegion,
-                          data?.poItems?.reduce((total, product: PurchaseOrderItem) => total + Number(product.orderQty * product.sellerCost), 0)
-                        )}
-                      </td>
-                      <td className='text-center fs-5 fw-semibold'>
-                        {FormatIntNumber(
-                          state.currentRegion,
-                          data?.poItems?.reduce((total, product: PurchaseOrderItem) => total + Number(product.orderQty), 0)
-                        )}
-                      </td>
-                      <td className='text-center fs-5 fw-semibold'>
-                        {FormatIntNumber(
-                          state.currentRegion,
-                          data?.poItems?.reduce((total, product: PurchaseOrderItem) => total + Number(product.inboundQty), 0)
-                        )}
-                      </td>
-                      <td className='text-center fs-5 fw-semibold'>
-                        {FormatIntNumber(
-                          state.currentRegion,
-                          data?.poItems?.reduce((total, product: PurchaseOrderItem) => total + Number(product.receivedQty), 0)
-                        )}
-                      </td>
-                      <td className='text-center fs-5 fw-semibold'>
-                        {FormatIntNumber(
-                          state.currentRegion,
-                          data?.poItems?.reduce((total, product: PurchaseOrderItem) => total + Number(product.orderQty - product.receivedQty - product.inboundQty), 0)
-                        )}
-                      </td>
-                      <td></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+            <CardBody className='pt-0 px-0'>
+              <ExpandedOrderItems
+                activeTab={activeTab}
+                poItems={activeTab === 'all' ? data.poItems : data.splits[activeTab].items}
+                data={data}
+                loading={loading}
+                handlereceivingOrderFromPo={handlereceivingOrderFromPo}
+                setshowDeleteModal={setshowDeleteModal}
+              />
             </CardBody>
           </Card>
-          <Row>
+          <Row className='mb-2'>
             <Col sm={12} className='d-flex flex-row justify-content-end align-items-end'>
-              <div className='m-0 d-flex flex-row justify-content-end align-items-end gap-4'>
+              <div className='m-0 d-flex flex-row justify-content-end align-items-end gap-2'>
                 {/* <DownloadExcelPurchaseOrder purchaseOrder={data}/> */}
                 <DownloadExcelPurchaseOrder purchaseOrder={data} />
                 {data.isOpen ? (
-                  <Button color='success' disabled={loading} className='btn-label' onClick={() => handlePoOpenState(data.poId, !data.isOpen)}>
-                    <i className='las la-check-circle label-icon align-middle fs-3 me-2' />
+                  <Button color='success' disabled={loading} className='btn-label fs-7' onClick={() => handlePoOpenState(data.poId, !data.isOpen)}>
+                    <i className='las la-check-circle label-icon align-middle fs-4 me-2' />
                     Mark as Complete
                   </Button>
                 ) : (
-                  <Button color='info' disabled={loading} className='btn-label' onClick={() => handlePoOpenState(data.poId, !data.isOpen)}>
-                    <i className='las la-lock-open label-icon align-middle fs-3 me-2' />
+                  <Button color='info' disabled={loading} className='btn-label fs-7' onClick={() => handlePoOpenState(data.poId, !data.isOpen)}>
+                    <i className='las la-lock-open label-icon align-middle fs-5 me-2' />
                     ReOpen PO
                   </Button>
                 )}

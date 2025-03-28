@@ -11,6 +11,7 @@ import { SkuToAddPo } from '@typesTs/purchaseOrders'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
 import { NoImageAdress } from '@lib/assetsConstants'
+import SearchInput from '@components/ui/SearchInput'
 
 interface SkuInListToAddToPo extends SkuToAddPo {
   addQty: number | string
@@ -27,9 +28,7 @@ const Add_Sku_To_Purchase_Order = ({}) => {
   const [skuToAddToPo, setSkuToAddToPo] = useState<SkuInListToAddToPo[]>([])
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data: skuList }: { data?: SkuToAddPo[] } = useSWR(
-    state.user.businessId
-      ? `/api/purchaseOrders/getSkusToAddToPo?region=${state.currentRegion}&businessId=${state.user.businessId}&supplier=${state.modalAddSkuToPurchaseOrder?.suppliersName}`
-      : null,
+    state.user.businessId ? `/api/purchaseOrders/getSkusToAddToPo?region=${state.currentRegion}&businessId=${state.user.businessId}&supplier=${state.modalAddSkuToPurchaseOrder?.suppliersName}` : null,
     fetcher
   )
 
@@ -60,49 +59,35 @@ const Add_Sku_To_Purchase_Order = ({}) => {
 
   const columnsSkuListToAdd: any = [
     {
-      name: <span className='fw-bolder fs-6'>Image</span>,
+      name: <span className='fw-bolder fs-6'>Item</span>,
       selector: (row: SkuToAddPo) => {
         return (
-          <div
-            style={{
-              width: '100%',
-              maxWidth: '80px',
-              height: '40px',
-              margin: '2px 0px',
-              position: 'relative',
-            }}>
-            <img
-              loading='lazy'
-              src={row.image ? row.image : NoImageAdress}
-              onError={(e) => (e.currentTarget.src = NoImageAdress)}
-              alt='product Image'
-              style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
-            />
+          <div className='d-flex justify-content-center align-items-center gap-2 my-1'>
+            <div
+              style={{
+                width: '100%',
+                maxWidth: '50px',
+                height: '35px',
+                margin: '2px 0px',
+                position: 'relative',
+              }}>
+              <img loading='lazy' src={row.image ? row.image : NoImageAdress} onError={(e) => (e.currentTarget.src = NoImageAdress)} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
+            </div>
+            <div>
+              <p className='m-0 p-0 fs-7 fw-semibold'>{row.title}</p>
+              <p className='m-0 p-0 text-muted fs-7 fw-normal'>{`${row.sku} / ${row.barcode} / ${row.asin}`}</p>
+            </div>
           </div>
         )
       },
       sortable: false,
-      wrap: false,
-      grow: 0,
-    },
-    {
-      name: <span className='fw-bolder fs-6'>Title</span>,
-      selector: (row: SkuToAddPo) => {
-        return (
-          <>
-            <span className='fs-6 fw-semibold'>{row.title}</span>
-            <br />
-            <span className='text-muted fs-6 fw-normal'>{`${row.sku} / ${row.barcode} / ${row.asin}`}</span>
-          </>
-        )
-      },
-      sortable: true,
       wrap: true,
-      compact: true,
+      left: true,
+      compact: false,
       grow: 1,
     },
     {
-      name: <span className='fw-bolder fs-6'></span>,
+      name: <span className='fw-bolder fs-6'>Add</span>,
       selector: (row: SkuToAddPo) => {
         if (skuToAddToPo.some((item) => item.sku == row.sku)) {
           return <i className='fs-3 text-muted las la-check-circle' />
@@ -111,50 +96,39 @@ const Add_Sku_To_Purchase_Order = ({}) => {
         }
       },
       sortable: false,
+      center: true,
       compact: true,
       grow: 0,
     },
   ]
+
   const columnsSkuListAdded: any = [
     {
       name: <span className='fw-bolder fs-6'>Image</span>,
       selector: (row: SkuToAddPo) => {
         return (
-          <div
-            style={{
-              width: '100%',
-              maxWidth: '80px',
-              height: '40px',
-              margin: '2px 0px',
-              position: 'relative',
-            }}>
-            <img
-              loading='lazy'
-              src={row.image ? row.image : NoImageAdress}
-              alt='product Image'
-              style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
-            />
+          <div className='d-flex justify-content-center align-items-center gap-2 my-1'>
+            <div
+              style={{
+                width: '100%',
+                maxWidth: '50px',
+                height: '35px',
+                margin: '2px 0px',
+                position: 'relative',
+              }}>
+              <img loading='lazy' src={row.image ? row.image : NoImageAdress} onError={(e) => (e.currentTarget.src = NoImageAdress)} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
+            </div>
+            <div>
+              <p className='m-0 p-0 fs-7 fw-semibold'>{row.title}</p>
+              <p className='m-0 p-0 text-muted fs-7 fw-normal'>{`${row.sku} / ${row.barcode} / ${row.asin}`}</p>
+            </div>
           </div>
         )
       },
       sortable: false,
-      wrap: false,
-      grow: 0,
-    },
-    {
-      name: <span className='fw-bolder fs-6'>Title</span>,
-      selector: (row: SkuToAddPo) => {
-        return (
-          <>
-            <span className='fs-6 fw-semibold'>{row.title}</span>
-            <br />
-            <span className='text-muted fs-6 fw-normal'>{`${row.sku} / ${row.barcode} / ${row.asin}`}</span>
-          </>
-        )
-      },
-      sortable: true,
       wrap: true,
-      compact: true,
+      left: true,
+      compact: false,
       grow: 1,
     },
     {
@@ -167,7 +141,7 @@ const Add_Sku_To_Purchase_Order = ({}) => {
               onWheel={(e: any) => e.currentTarget.blur()}
               minLength={1}
               debounceTimeout={300}
-              className={'form-control fs-6 m-0 ' + (Number(row.addQty) <= 0 || row.addQty == '' ? 'border-danger' : '')}
+              className={'form-control form-control-sm fs-6 m-0 ' + (Number(row.addQty) <= 0 || row.addQty == '' ? 'border-danger' : '')}
               style={{ maxWidth: '80px' }}
               placeholder='Qty...'
               id='qtyToAdd'
@@ -185,11 +159,12 @@ const Add_Sku_To_Purchase_Order = ({}) => {
       grow: 0,
     },
     {
-      name: <span className='fw-bolder fs-6'></span>,
+      name: <span className='fw-bolder fs-6'>Remove</span>,
       selector: (row: SkuInListToAddToPo) => {
-        return <i className='fs-3 text-danger las la-trash-alt ps-3' style={{ cursor: 'pointer' }} onClick={() => handleDeleteFromSkuList(row.sku)} />
+        return <i className='fs-4 text-danger las la-trash-alt ps-3' style={{ cursor: 'pointer' }} onClick={() => handleDeleteFromSkuList(row.sku)} />
       },
       sortable: false,
+      center: true,
       compact: true,
       grow: 0,
     },
@@ -256,73 +231,37 @@ const Add_Sku_To_Purchase_Order = ({}) => {
         className='modal-title pb-0'
         id='myModalLabel'>
         <p>Add Products to PO</p>
-        <span className='fs-4 mb-0 fw-normal text-primary'>
-          Purchase Order: <span className='fs-4 fw-bold text-black'>{state.modalAddSkuToPurchaseOrder?.orderNumber}</span>
+        <span className='fs-5 mb-0 fw-semibold'>
+          Purchase Order: <span className='fs-4 text-primary'>{state.modalAddSkuToPurchaseOrder?.orderNumber}</span>
         </span>
         <br />
-        <span className='fs-4 mb-0 fw-normal text-primary'>
-          Supplier: <span className='fs-4 fw-bold text-black'>{state.modalAddSkuToPurchaseOrder?.suppliersName}</span>
+        <span className='fs-5 mb-0 fw-semibold'>
+          Supplier: <span className='fs-4 text-primary'>{state.modalAddSkuToPurchaseOrder?.suppliersName}</span>
         </span>
       </ModalHeader>
       <ModalBody>
         <Row>
-          <Col md={5} className='overflow-auto h-100'>
+          <Col xs={12} md={6} className='overflow-auto h-100'>
             <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-between align-items-md-center'>
-              <span className='fs-2 fw-semibold text-muted flex-1'>SKU List</span>
-              <div className='col-sm-12 col-md-7'>
-                <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
-                  <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
-                    <DebounceInput
-                      minLength={3}
-                      debounceTimeout={400}
-                      type='text'
-                      className='form-control input_background_white'
-                      placeholder='Search...'
-                      id='search-options'
-                      value={searchValue}
-                      onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
-                      onChange={(e) => {
-                        setSearchValue(e.target.value)
-                      }}
-                    />
-                    <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
-                    <span
-                      className='d-flex align-items-center justify-content-center input_background_white'
-                      style={{
-                        cursor: 'pointer',
-                      }}
-                      onClick={() => setSearchValue('')}>
-                      <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
-                    </span>
-                  </div>
-                </div>
-              </div>
+              <span className='fs-4 fw-semibold flex-1'>SKU List</span>
+              <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='none' widths='col-12 col-md-7' />
             </Row>
-            <Col sm={12} style={{ height: '60vh', overflowX: 'hidden', overflowY: 'auto' }}>
-              <DataTable
-                columns={columnsSkuListToAdd}
-                data={filterDataTable || []}
-                progressPending={skuList ? false : true}
-                striped={true}
-                dense={true}
-                fixedHeader={true}
-                fixedHeaderScrollHeight='60vh'
-                className='pb-4'
-              />
+            <Col sm={12} style={{ height: '60vh', overflowX: 'hidden', overflowY: 'auto', scrollbarWidth: 'thin' }}>
+              <DataTable columns={columnsSkuListToAdd} data={filterDataTable || []} progressPending={skuList ? false : true} striped={true} dense={true} fixedHeader={true} fixedHeaderScrollHeight='60vh' className='pb-4' />
             </Col>
           </Col>
-          <Col md={7}>
+          <Col xs={12} md={6}>
             <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-end align-items-md-center'>
-              <span className='fs-2 fw-semibold text-muted'>SKU List to Add to PO</span>
+                <span className='fs-4 fw-semibold'>Selected SKUs to Add to Purchase Order</span>
             </Row>
-            <Col sm={12} style={{ height: '60vh', overflowX: 'hidden', overflowY: 'auto' }}>
+            <Col sm={12} style={{ height: '60vh', overflowX: 'hidden', overflowY: 'auto', scrollbarWidth: 'thin' }}>
               <DataTable columns={columnsSkuListAdded} data={skuToAddToPo || []} striped={true} dense={true} fixedHeader={true} fixedHeaderScrollHeight='60vh' />
             </Col>
           </Col>
           <Row md={12}>
             <div className='text-end'>
-              <Button disabled={hasErrors} type='button' color='success' className='btn' onClick={handleSubmitProductsToPo}>
-                {loading ? <Spinner color='#fff' /> : 'Add Products'}
+              <Button disabled={hasErrors} type='button' color='success' className='fs-7' onClick={handleSubmitProductsToPo}>
+                {loading ? <span><Spinner color='light' /> Adding...</span> : 'Add Products'}
               </Button>
             </div>
           </Row>

@@ -133,12 +133,12 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
     {
       name: <span className='fw-bolder fs-6'></span>,
       selector: (row: PurchaseOrder) =>
-        state.receivingFromPo[row.poId] ? (
+        state.receivingFromPo.items[row.poId] ? (
           <>
-            <Badge pill color='success' className='fs-6'>
+            <Badge pill color='success' className='fs-7'>
               {FormatIntNumber(
                 state.currentRegion,
-                Object.entries(state.receivingFromPo[row.poId]).reduce((total: number, obj: [string, any]) => total + obj[1].receivingQty, 0)
+                Object.entries(state.receivingFromPo.items[row.poId]).reduce((total: number, obj: [string, any]) => total + obj[1].receivingQty, 0)
               )}
             </Badge>
           </>

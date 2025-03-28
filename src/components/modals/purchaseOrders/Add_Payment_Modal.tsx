@@ -80,8 +80,8 @@ const Add_Payment_Modal = ({}: Props) => {
       <ModalBody>
         <Form onSubmit={HandleAddProduct}>
           <Row md={12}>
-            <h5 className='fs-5 mb-4 fw-semibold text-primary'>
-              PO: <span className='fw-semibold text-black'>{state.modalAddPaymentToPoDetails?.orderNumber}</span>
+            <h5 className='fs-5 mb-4 fw-semibold'>
+              PO: <span className='fw-semibold text-primary'>{state.modalAddPaymentToPoDetails?.orderNumber}</span>
             </h5>
           </Row>
           <Row md={12}>
@@ -93,6 +93,7 @@ const Add_Payment_Modal = ({}: Props) => {
                 <Input
                   type='date'
                   className='form-control fs-6'
+                  bsSize='sm'
                   id='paymentDate'
                   name='paymentDate'
                   onChange={validation.handleChange}
@@ -112,6 +113,7 @@ const Add_Payment_Modal = ({}: Props) => {
                   type='number'
                   onWheel={(e: any) => e.currentTarget.blur()}
                   className='form-control fs-6'
+                  bsSize='sm'
                   id='amount'
                   name='amount'
                   step='.01'
@@ -133,6 +135,7 @@ const Add_Payment_Modal = ({}: Props) => {
                 <Input
                   type='textarea'
                   className='form-control fs-6'
+                  bsSize='sm'
                   id='comment'
                   name='comment'
                   onChange={validation.handleChange}
@@ -147,7 +150,13 @@ const Add_Payment_Modal = ({}: Props) => {
           <Row md={12}>
             <div className='text-end'>
               <Button disabled={loading} type='submit' color='success' className='btn fs-7'>
-                {loading ? <Spinner color='#fff' /> : 'Add Payment'}
+                {loading ? (
+                  <span>
+                    <Spinner color='light' size={'sm'} /> Adding...
+                  </span>
+                ) : (
+                  'Add Payment'
+                )}
               </Button>
             </div>
           </Row>

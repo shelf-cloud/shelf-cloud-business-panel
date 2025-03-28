@@ -22,14 +22,19 @@ type OpenReceivings = {
   orderDate: string
 }
 
+const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
+
 const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
   const { state, setShowCreateReceivingFromPo }: any = useContext(AppContext)
   const [loading, setloading] = useState(false)
 
-  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data: OpenReceivings }: { data?: OpenReceivings[] } = useSWR(
-    state.user.businessId ? `/api/purchaseOrders/getOpenReceivings?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
-    fetcher
+    state.user.businessId ? `/api/purchaseOrders/getOpenReceivings?region=${state.currentRegion}&businessId=${state.user.businessId}&warehouseId=${state.receivingFromPo.warehouse.id}` : null,
+    fetcher,
+    {
+      revalidateOnMount: true,
+      revalidateOnFocus: true,
+    }
   )
 
   const validation = useFormik({
@@ -54,7 +59,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
     onSubmit: async (values) => {
       setloading(true)
       let shippingProducts = [] as any
-      Object.entries(state.receivingFromPo).forEach(([_poId, inventoryId]: any) =>
+      Object.entries(state.receivingFromPo.items).forEach(([_poId, inventoryId]: any) =>
         Object.entries(inventoryId).map(([_inventoryId, item]: any) => {
           shippingProducts.push({
             poId: item.poId,
@@ -69,7 +74,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
       )
 
       let orderProducts = [] as any
-      Object.entries(state.receivingFromPo).map(([_poId, inventoryId]: any) =>
+      Object.entries(state.receivingFromPo.items).map(([_poId, inventoryId]: any) =>
         Object.entries(inventoryId).map(([_inventoryId, item]: any) => {
           orderProducts.push({
             poId: item.poId,
@@ -90,7 +95,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
           orderNumber: values.orderNumber,
           orderProducts,
         },
-        poInfo: state.receivingFromPo,
+        poInfo: state.receivingFromPo.items,
         isNewReceiving: values.isNewReceiving == 'true' ? true : false,
         receivingIdToAdd: parseInt(values.receivingIdToAdd),
       })
@@ -114,7 +119,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
   return (
     <Modal
       fade={false}
-      size='xl'
+      size='lg'
       id='addPaymentToPoModal'
       isOpen={state.showCreateReceivingFromPo}
       toggle={() => {
@@ -129,11 +134,16 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
         Create Receiving From Purchase Orders
       </ModalHeader>
       <ModalBody>
+        <Row>
+          <p className='m-0 fs-5 fw-semibold'>
+            Destination: <span className='text-primary'>{state.receivingFromPo.warehouse.name}</span>
+          </p>
+        </Row>
         <Form onSubmit={HandleAddProduct}>
           <Row>
             <Col md={6}>
-              <FormGroup className='mb-3'>
-                <Label htmlFor='firstNameinput' className='form-label'>
+              <FormGroup>
+                <Label htmlFor='firstNameinput' className='form-label fs-7'>
                   *Transaction Number
                 </Label>
                 <div className='input-group'>
@@ -143,7 +153,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                   <Input
                     disabled={validation.values.isNewReceiving == 'false'}
                     type='text'
-                    className='form-control'
+                    className='form-control fs-6'
                     id='orderNumber'
                     name='orderNumber'
                     bsSize='sm'
@@ -157,13 +167,13 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
               </FormGroup>
             </Col>
             <Col md={6}>
-              <FormGroup className='mb-3'>
-                <Label htmlFor='firstNameinput' className='form-label'>
+              <FormGroup>
+                <Label htmlFor='firstNameinput' className='form-label fs-7'>
                   *Select Receiving Type
                 </Label>
                 <Input
                   type='select'
-                  className='form-control'
+                  className='form-control fs-6'
                   id='isNewReceiving'
                   name='isNewReceiving'
                   bsSize='sm'
@@ -172,18 +182,18 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                   invalid={validation.touched.isNewReceiving && validation.errors.isNewReceiving ? true : false}>
                   <option value=''>Choose a Type..</option>
                   <option value='true'>Create New Receiving</option>
-                  <option value='false'>Add to Existing Receiving</option>
+                  {OpenReceivings && OpenReceivings.length > 0 && <option value='false'>Add to Existing Receiving</option>}
                 </Input>
                 {validation.touched.isNewReceiving && validation.errors.isNewReceiving ? <FormFeedback type='invalid'>{validation.errors.isNewReceiving}</FormFeedback> : null}
               </FormGroup>
               {validation.values.isNewReceiving == 'false' && (
-                <FormGroup className='mb-3'>
-                  <Label htmlFor='firstNameinput' className='form-label'>
+                <FormGroup>
+                  <Label htmlFor='firstNameinput' className='form-label fs-7'>
                     *Select Existing Receiving
                   </Label>
                   <Input
                     type='select'
-                    className='form-control'
+                    className='form-control fs-6'
                     id='receivingIdToAdd'
                     name='receivingIdToAdd'
                     bsSize='sm'
@@ -197,16 +207,16 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                       </option>
                     ))}
                   </Input>
-                  {validation.touched.receivingIdToAdd && validation.errors.receivingIdToAdd ? (
-                    <FormFeedback type='invalid'>{validation.errors.receivingIdToAdd}</FormFeedback>
-                  ) : null}
+                  {validation.touched.receivingIdToAdd && validation.errors.receivingIdToAdd ? <FormFeedback type='invalid'>{validation.errors.receivingIdToAdd}</FormFeedback> : null}
                 </FormGroup>
               )}
             </Col>
+          </Row>
 
+          <Row>
             <Col md={12}>
               <table className='table table-sm align-middle table-responsive table-nowrap table-striped'>
-                <thead>
+                <thead className='table-light'>
                   <tr>
                     <th scope='col'>PO Number</th>
                     <th scope='col'>Supplier</th>
@@ -216,8 +226,8 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                     </th>
                   </tr>
                 </thead>
-                <tbody>
-                  {Object.entries(state.receivingFromPo)
+                <tbody className='fs-7'>
+                  {Object.entries(state.receivingFromPo.items)
                     .sort(([_poIdA, inventoryIdA]: any, [_poIdB, inventoryIdB]: any) => {
                       const supplerA = Object.values<any>(inventoryIdA)[0].suppliersName
                       const supplerB = Object.values<any>(inventoryIdB)[0].suppliersName
@@ -233,7 +243,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                       Object.entries(inventoryId).map(([inventoryId, item]: any) => (
                         <tr key={`${poId}-${inventoryId}`}>
                           <td>{item.orderNumber}</td>
-                          <td className='fw-bold fs-5'>{item.suppliersName}</td>
+                          <td className='fw-bold fs-6'>{item.suppliersName}</td>
                           <td className='text-center'>
                             <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
                               <div
@@ -244,12 +254,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                                   margin: '0px',
                                   position: 'relative',
                                 }}>
-                                <img
-                                  loading='lazy'
-                                  src={item.image ? item.image : NoImageAdress}
-                                  alt='product Image'
-                                  style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
-                                />
+                                <img loading='lazy' src={item.image ? item.image : NoImageAdress} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
                               </div>
                               <div className='text-start'>
                                 <p className='text-nowrap m-0 fw-semibold'>{item.title}</p>
@@ -264,11 +269,11 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                   <tr>
                     <td></td>
                     <td></td>
-                    <td className='fw-bold fs-5 text-end'>Total</td>
-                    <td className='fw-bold fs-5 text-center'>
+                    <td className='fw-bold fs-6 text-end'>Total</td>
+                    <td className='fw-bold fs-6 text-center'>
                       {FormatIntNumber(
                         state.currentRegion,
-                        Object.entries(state.receivingFromPo).reduce((total: number, po: [string, any]) => {
+                        Object.entries(state.receivingFromPo.items).reduce((total: number, po: [string, any]) => {
                           const poTotal = Object.entries(po[1]).reduce((subtotal: number, inventoryId: [string, any]) => {
                             return subtotal + inventoryId[1].receivingQty
                           }, 0)
@@ -280,13 +285,19 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                 </tbody>
               </table>
             </Col>
-            <Row md={12}>
-              <div className='text-end'>
-                <Button disabled={loading || Object.keys(state.receivingFromPo).length <= 0} type='submit' color='success' className='btn'>
-                  {loading ? <Spinner color='#fff' /> : 'Confirm Receiving'}
-                </Button>
-              </div>
-            </Row>
+          </Row>
+          <Row md={12}>
+            <div className='text-end'>
+              <Button disabled={loading || Object.keys(state.receivingFromPo.items).length <= 0} type='submit' color='success' className='fs-7'>
+                {loading ? (
+                  <span>
+                    <Spinner color='light' size={'sm'} /> Creating...
+                  </span>
+                ) : (
+                  'Confirm Receiving'
+                )}
+              </Button>
+            </div>
           </Row>
         </Form>
       </ModalBody>

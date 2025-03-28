@@ -231,7 +231,7 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
     {
       name: <span className='fw-bolder fs-6'></span>,
       selector: (row: PurchaseOrderBySkus) => {
-        const totalReceivingQty = Object.entries(state.receivingFromPo).reduce((total: number, po: [string, any]) => {
+        const totalReceivingQty = Object.entries(state.receivingFromPo.items).reduce((total: number, po: [string, any]) => {
           const poTotal = Object.entries(po[1]).reduce((subtotal: number, inventoryId: [string, any]) => {
             if (inventoryId[1].sku == row.sku) {
               return subtotal + inventoryId[1].receivingQty
@@ -244,7 +244,7 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
 
         if (totalReceivingQty > 0) {
           return (
-            <Badge pill color='success' className='fs-6'>
+            <Badge pill color='success' className='fs-7'>
               {FormatIntNumber(state.currentRegion, totalReceivingQty)}
             </Badge>
           )

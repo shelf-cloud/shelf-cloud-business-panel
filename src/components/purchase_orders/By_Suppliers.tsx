@@ -6,7 +6,7 @@ import useSWR from 'swr'
 import Table_By_Suppliers from './Table_By_Suppliers'
 import { PurchaseOrder, PurchaseOrderBySuppliers, PurchaseOrderItem } from '@typesTs/purchaseOrders'
 import { useRouter } from 'next/router'
-import SearchInput from '@components/ui/searchInput'
+import SearchInput from '@components/ui/SearchInput'
 
 type Props = {}
 

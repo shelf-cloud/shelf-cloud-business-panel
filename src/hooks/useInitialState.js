@@ -5,17 +5,7 @@ import useSWR from 'swr'
 import { useRouter } from 'next/router'
 
 //constants
-import {
-  layoutTypes,
-  leftSidebarTypes,
-  layoutModeTypes,
-  layoutWidthTypes,
-  layoutPositionTypes,
-  topbarThemeTypes,
-  leftsidbarSizeTypes,
-  leftSidebarViewTypes,
-  leftSidebarImageTypes,
-} from '../components/constants/layout'
+import { layoutTypes, leftSidebarTypes, layoutModeTypes, layoutWidthTypes, layoutPositionTypes, topbarThemeTypes, leftsidbarSizeTypes, leftSidebarViewTypes, leftSidebarImageTypes } from '../components/constants/layout'
 
 const initialState = {
   layoutType: layoutTypes.VERTICAL,
@@ -68,7 +58,13 @@ const initialState = {
     endDate: '',
   },
   // MODAL - PAYMENTS
-  receivingFromPo: {},
+  receivingFromPo: {
+    warehouse: {
+      id: 0,
+      name: '',
+    },
+    items: {},
+  },
   showCreateReceivingFromPo: false,
   modalAddPaymentToPoDetails: {},
   showAddPaymentToPo: false,
@@ -78,10 +74,11 @@ const initialState = {
   showCreatePoManually: false,
 }
 
+const fetcher = async (endPoint) => await axios(endPoint).then((res) => res.data)
+
 const useInitialState = () => {
   const [state, setState] = useState(initialState)
   const router = useRouter()
-  const fetcher = async (endPoint) => await axios(endPoint).then((res) => res.data)
   const { data, error } = useSWR('/api/getuser', fetcher)
 
   useEffect(() => {
