@@ -146,7 +146,7 @@ const CreateOrder = ({ session }: Props) => {
     zipCode: Yup.string().required('Required Zip Code'),
     country: Yup.string().oneOf(validCountries, 'Must be a Valid Country Code').required('Required Country'),
     phoneNumber: state.currentRegion === 'us' ? Yup.string() : Yup.string().required('Required phone number'),
-    email: state.currentRegion === 'us' ? Yup.string().email() : Yup.string().email().required('Required email'),
+    email: Yup.string().email().required('Required email'),
     amount: Yup.number().min(0, 'Amount must be greater than or equal to 0').required('Required Amount'),
     shipping: Yup.number().min(0, 'Shipping must be greater than or equal to 0.1').required('Required Shipping'),
     tax: Yup.number().min(0, 'Tax must be greater than or equal to 0').required('Required Tax'),
@@ -216,9 +216,7 @@ const CreateOrder = ({ session }: Props) => {
       return
     }
     searchText = searchText.replace(/ /g, '%20')
-    await axios(
-      `https://api.geoapify.com/v1/geocode/autocomplete?text=${searchText}&apiKey=e7137de1f9144ed8a7d24f041bb6e725&limit=3&lang=${state.currentRegion == 'us' ? 'en' : 'es'}`
-    ).then((res) => {
+    await axios(`https://api.geoapify.com/v1/geocode/autocomplete?text=${searchText}&apiKey=e7137de1f9144ed8a7d24f041bb6e725&limit=3&lang=${state.currentRegion == 'us' ? 'en' : 'es'}`).then((res) => {
       setAutoCompleteAddress(res.data.features)
     })
   }
@@ -390,11 +388,9 @@ const CreateOrder = ({ session }: Props) => {
                                           <div className='d-flex justify-content-between align-items-center border-bottom'>
                                             <div className='d-flex flex-column'>
                                               <span className='fs-6 fw-semibold'>{address.properties.formatted}</span>
-                                              <span className='fs-6 text-muted'>{`${address.properties.street ? address.properties.street + ', ' : ''}${
-                                                address.properties.city ? address.properties.city + ', ' : ''
-                                              }${address.properties.postcode ? address.properties.postcode + ', ' : ''}${
-                                                address.properties.state ? address.properties.state + ', ' : ''
-                                              }${address.properties.country ? address.properties.country : ''}`}</span>
+                                              <span className='fs-6 text-muted'>{`${address.properties.street ? address.properties.street + ', ' : ''}${address.properties.city ? address.properties.city + ', ' : ''}${
+                                                address.properties.postcode ? address.properties.postcode + ', ' : ''
+                                              }${address.properties.state ? address.properties.state + ', ' : ''}${address.properties.country ? address.properties.country : ''}`}</span>
                                             </div>
                                             <div className='d-flex justify-content-end align-items-center'>
                                               <Button
