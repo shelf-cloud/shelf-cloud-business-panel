@@ -20,24 +20,39 @@ type Props = {
   mutateReceivings?: () => void
 }
 
+export type DeleteSKUFromReceivingModalType = {
+  show: boolean
+  orderId: number
+  orderNumber: string
+  sku: string
+  title: string
+  poNumber: string
+  poId: number
+  isReceivingFromPo: boolean
+}
+
 const ReceivingType = ({ data, mutateReceivings }: Props) => {
   const { state }: any = useContext(AppContext)
   const [serviceFee, setServiceFee] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [showDeleteModal, setshowDeleteModal] = useState({
+
+  const [deleteSKUModal, setDeleteSKUModal] = useState<DeleteSKUFromReceivingModalType>({
     show: false,
     orderId: 0,
     orderNumber: '',
     sku: '',
     title: '',
-    quantity: 0,
+    poNumber: '',
+    poId: 0,
+    isReceivingFromPo: false,
   })
+
   const [showEditOrderQty, setshowEditOrderQty] = useState({
     show: false,
     receivingId: 0,
     orderNumber: '',
     receivingItems: [] as ShipmentOrderItem[],
   })
+
   const [addSkuToReceiving, setAddSkuToReceiving] = useState({
     show: false,
     receivingId: 0,
@@ -77,13 +92,14 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
   }, [data, state.currentRegion])
 
   const OrderId = CleanSpecialCharacters(data.orderId!)
+
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
       <Row>
-        <Col md={4}>
-          <Col md={12}>
+        <Col sm={3}>
+          <Col sm={12}>
             <Card>
-              <CardHeader className='py-3'>
+              <CardHeader className='py-2'>
                 <h5 className='fw-semibold m-0'>Receiving Details</h5>
               </CardHeader>
               <CardBody>
@@ -114,9 +130,9 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
               </CardBody>
             </Card>
           </Col>
-          <Col md={12}>
+          <Col sm={12}>
             <Card>
-              <CardHeader className='py-3'>
+              <CardHeader className='py-2'>
                 <h5 className='fw-semibold m-0'>Charge Details</h5>
               </CardHeader>
               <CardBody>
@@ -140,10 +156,7 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                         {data.chargesFees && (
                           <>
                             <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltipPallet${OrderId}`}></i>
-                            <TooltipComponent
-                              target={`tooltipPallet${OrderId}`}
-                              text={`${FormatCurrency(state.currentRegion, data.chargesFees.receivingPalletCost!)} per pallet`}
-                            />
+                            <TooltipComponent target={`tooltipPallet${OrderId}`} text={`${FormatCurrency(state.currentRegion, data.chargesFees.receivingPalletCost!)} per pallet`} />
                           </>
                         )}
                       </td>
@@ -187,7 +200,7 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
             </Card>
           </Col>
           {data.extraComment != '' && (
-            <Col md={12}>
+            <Col sm={12}>
               <Card>
                 <CardHeader className='py-3'>
                   <h5 className='fw-semibold m-0'>Order Comment</h5>
@@ -199,9 +212,9 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
             </Col>
           )}
         </Col>
-        <Col md={8}>
-          <Card>
-            <CardHeader className='py-3 d-flex flex-row justify-content-between'>
+        <Col sm={9}>
+          <Card className='mb-3'>
+            <CardHeader className='py-2 d-flex flex-row justify-content-between'>
               <h5 className='fw-semibold m-0'>Products</h5>
               {!data.isReceivingFromPo && data.orderStatus !== 'received' && (
                 <div className='d-flex flex-row justify-content-end gap-3 align-items-center'>
@@ -220,9 +233,7 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                   <i
                     className='fs-4 text-success las la-plus-circle'
                     style={{ cursor: 'pointer' }}
-                    onClick={() =>
-                      setAddSkuToReceiving({ show: true, receivingId: data.id, orderNumber: data.orderNumber, receivingItems: data.orderItems.map((item) => item.sku) })
-                    }
+                    onClick={() => setAddSkuToReceiving({ show: true, receivingId: data.id, orderNumber: data.orderNumber, receivingItems: data.orderItems.map((item) => item.sku) })}
                   />
                 </div>
               )}
@@ -258,16 +269,15 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                               className='fs-5 text-danger las la-trash-alt'
                               style={{ cursor: 'pointer' }}
                               onClick={() =>
-                                setshowDeleteModal((prev) => {
-                                  return {
-                                    ...prev,
-                                    show: true,
-                                    orderId: data.id,
-                                    orderNumber: data.orderNumber,
-                                    sku: product.sku,
-                                    title: product.name,
-                                    quantity: product.quantity,
-                                  }
+                                setDeleteSKUModal({
+                                  show: true,
+                                  orderId: data.id,
+                                  orderNumber: data.orderNumber,
+                                  sku: product.sku,
+                                  title: product.name,
+                                  poNumber: product.poNumber ? product.poNumber : '',
+                                  poId: product.poId ? product.poId : 0,
+                                  isReceivingFromPo: data.isReceivingFromPo ? true : false,
                                 })
                               }
                             />
@@ -287,33 +297,25 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
               </div>
             </CardBody>
           </Card>
+          <Row className='mb-2'>
+            <Col sm={12} className='d-flex flex-row justify-content-end align-items-end'>
+              <div className='m-0 d-flex flex-row justify-content-end align-items-end gap-2'>
+                {!data.isReceivingFromPo && data.orderStatus !== 'received' && (
+                  <a href={data.proofOfShipped} target='blank'>
+                    <Button color='info' className='btn-label fs-7'>
+                      <i className='las la-truck label-icon align-middle fs-5 me-2' />
+                      Proof Of Received
+                    </Button>
+                  </a>
+                )}
+              </div>
+            </Col>
+          </Row>
         </Col>
       </Row>
-      <Row>
-        <Col md={12} className='d-flex justify-content-end align-items-end'>
-          <Card className='m-0'>
-            {data.proofOfShipped != '' && data.proofOfShipped != null && (
-              <a href={data.proofOfShipped} target='blank'>
-                <Button color='info' className='btn-label'>
-                  <i className='las la-truck label-icon align-middle fs-16 me-2' />
-                  Proof Of Received
-                </Button>
-              </a>
-            )}
-          </Card>
-        </Col>
-      </Row>
-      {showDeleteModal.show && (
-        <Confirm_Delete_Item_From_Receiving
-          showDeleteModal={showDeleteModal}
-          setshowDeleteModal={setshowDeleteModal}
-          loading={loading}
-          setLoading={setLoading}
-          mutateReceivings={mutateReceivings}
-        />
-      )}
-      {showEditOrderQty.show && <EditManualReceivingLog showEditOrderQty={showEditOrderQty} setshowEditOrderQty={setshowEditOrderQty} mutateReceivings={mutateReceivings}/>}
-      {addSkuToReceiving.show && <AddSkuToManualReceivingLog addSkuToReceiving={addSkuToReceiving} setshowAddSkuToManualReceiving={setAddSkuToReceiving} mutateReceivings={mutateReceivings}/>}
+      {deleteSKUModal.show && <Confirm_Delete_Item_From_Receiving deleteSKUModal={deleteSKUModal} setDeleteSKUModal={setDeleteSKUModal} mutateReceivings={mutateReceivings} />}
+      {showEditOrderQty.show && <EditManualReceivingLog showEditOrderQty={showEditOrderQty} setshowEditOrderQty={setshowEditOrderQty} mutateReceivings={mutateReceivings} />}
+      {addSkuToReceiving.show && <AddSkuToManualReceivingLog addSkuToReceiving={addSkuToReceiving} setshowAddSkuToManualReceiving={setAddSkuToReceiving} mutateReceivings={mutateReceivings} />}
     </div>
   )
 }

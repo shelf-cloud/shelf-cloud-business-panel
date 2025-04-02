@@ -11,7 +11,7 @@ import { CommerceHubStoresResponse } from '@typesTs/commercehub/invoices'
 import { DebounceInput } from 'react-debounce-input'
 import FilterByDates from '@components/FilterByDates'
 import moment from 'moment'
-import FilterCommerceHubInvoices from '@components/commerceHub/FilterCommerceHubInvoices'
+import FilterCommerceHubInvoices, { InvoiceCommerceHubFiltersType } from '@components/commerceHub/FilterCommerceHubInvoices'
 import useSWR from 'swr'
 import { CheckSummaryResponse, CheckSummaryType } from '@typesTs/commercehub/checkSummary'
 import CheckSummaryTable from '@components/commerceHub/CheckSummaryTable'
@@ -60,7 +60,7 @@ const CheckSummary = ({ session, sessionToken }: Props) => {
   const [searchValue, setSearchValue] = useState<string>('')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
-  const [filters, setfilters] = useState({
+  const [filters, setfilters] = useState<InvoiceCommerceHubFiltersType>({
     onlyOverdue: false,
     showOverdue: false,
     store: { value: 'all', label: 'All' },
@@ -136,10 +136,7 @@ const CheckSummary = ({ session, sessionToken }: Props) => {
     }
   }
 
-  const hasActiveFilters = useMemo(
-    () => searchValue !== '' || startDate !== '' || endDate !== '' || filters.onlyOverdue || filters.store.value !== 'all',
-    [searchValue, startDate, endDate, filters]
-  )
+  const hasActiveFilters = useMemo(() => searchValue !== '' || startDate !== '' || endDate !== '' || filters.onlyOverdue || filters.store.value !== 'all', [searchValue, startDate, endDate, filters])
 
   const downloadInfoToExcel = async () => {
     const generatingDocument = toast.loading('Generating Document...')
@@ -234,13 +231,7 @@ const CheckSummary = ({ session, sessionToken }: Props) => {
                     </span>
                   </div>
                 </div>
-                <FilterByDates
-                  shipmentsStartDate={startDate}
-                  setShipmentsStartDate={setStartDate}
-                  setShipmentsEndDate={setEndDate}
-                  shipmentsEndDate={endDate}
-                  handleChangeDatesFromPicker={handleChangeDatesFromPicker}
-                />
+                <FilterByDates shipmentsStartDate={startDate} setShipmentsStartDate={setStartDate} setShipmentsEndDate={setEndDate} shipmentsEndDate={endDate} handleChangeDatesFromPicker={handleChangeDatesFromPicker} />
                 <FilterCommerceHubInvoices filters={filters} setfilters={setfilters} stores={stores?.stores ?? []} />
                 <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='fs-7 text-nowrap' onClick={clearFilters}>
                   Clear Filters

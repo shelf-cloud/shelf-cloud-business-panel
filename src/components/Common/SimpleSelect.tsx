@@ -1,7 +1,7 @@
 import React from 'react'
 import Select from 'react-select'
 
-export type SelectOptionType = { value: string; label: string }
+export type SelectOptionType = { value: string | number; label: string }
 
 type Props = {
   selected: any
@@ -9,6 +9,7 @@ type Props = {
   options: SelectOptionType[]
   customStyle?: 'sm' | 'base'
   placeholder?: string
+  hasError?: boolean
 }
 
 type CustomStyles = { [key: string]: any }
@@ -48,10 +49,24 @@ const customStyles: CustomStyles = {
       height: '30px',
     }),
   },
+} as const
+
+const getStyle = (customStyle: string, hasError: boolean) => {
+  const style = customStyles[customStyle as keyof CustomStyles]
+  if (hasError) {
+    return {
+      ...style,
+      control: (provided: any, state: any) => ({
+        ...style.control(provided, state),
+        borderColor: '#f06548',
+      }),
+    };
+  }
+  return style
 }
 
-const SimpleSelect = ({ selected, handleSelect, options, customStyle, placeholder }: Props) => {
-  return <Select value={selected} placeholder={placeholder} onChange={handleSelect} options={options} styles={customStyle ? customStyles[customStyle as keyof CustomStyles] : customStyles['base']} />
+const SimpleSelect = ({ selected, handleSelect, options, customStyle = 'base', placeholder, hasError }: Props) => {
+  return <Select value={selected} placeholder={placeholder} onChange={handleSelect} options={options} styles={getStyle(customStyle, hasError || false)} />
 }
 
 export default SimpleSelect

@@ -5,14 +5,14 @@ import { ExpanderComponentProps } from 'react-data-table-component'
 import { PoPaymentHistory, PurchaseOrder, PurchaseOrderItem } from '@typesTs/purchaseOrders'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import AppContext from '@context/AppContext'
-import Confirm_Delete_Item_From_PO from '@components/modals/purchaseOrders/Confirm_Delete_Item_From_PO'
+import Confirm_Delete_Item_From_PO, { DeleteItemFromOrderType } from '@components/modals/purchaseOrders/Confirm_Delete_Item_From_PO'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useSWRConfig } from 'swr'
 import { useRouter } from 'next/router'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
-import Edit_PO_Ordered_Qty from '@components/modals/purchaseOrders/Edit_PO_Ordered_Qty'
+import Edit_PO_Ordered_Qty, { EditPurchaseOrderQtyType } from '@components/modals/purchaseOrders/Edit_PO_Ordered_Qty'
 import DownloadExcelPurchaseOrder from './DownloadExcelPurchaseOrder'
 import Edit_Payment_Modal from '@components/modals/purchaseOrders/Edit_Payment_Modal'
 import ExpandedOrderItems from './ExpandedOrderItems'
@@ -24,7 +24,7 @@ type Props = {
 const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ data }: Props) => {
   const router = useRouter()
   const { status, organizeBy } = router.query
-  const { state, setReceivingFromPo, setModalAddPaymentToPoDetails, setModalAddSkuToPurchaseOrder }: any = useContext(AppContext)
+  const { state, setReceivingFromPo, setModalAddPaymentToPoDetails, setModalAddSkuToPurchaseOrder } = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [activeTab, setactiveTab] = useState('all')
   const orderNumberStart = `${state?.user?.name.substring(0, 3).toUpperCase()}-`
@@ -41,7 +41,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
     paymentIndex: 0,
   })
 
-  const [showDeleteModal, setshowDeleteModal] = useState({
+  const [showDeleteModal, setshowDeleteModal] = useState<DeleteItemFromOrderType>({
     show: false,
     poId: 0,
     orderNumber: '',
@@ -49,15 +49,34 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
     sku: '',
     title: '',
     image: '',
+    hasSplitting: false,
+    split: undefined,
   })
-  const [showEditOrderQty, setshowEditOrderQty] = useState({
+
+  const [showEditOrderQty, setshowEditOrderQty] = useState<EditPurchaseOrderQtyType>({
     show: false,
     poId: 0,
     orderNumber: '',
     poItems: [] as PurchaseOrderItem[],
+    hasSplitting: false,
+    split: undefined,
   })
 
-  const handlereceivingOrderFromPo = (warehouseId: number, warehouseName: string, poId: number, orderNumber: string, inventoryId: number, sku: string, title: string, image: string, businessId: number, suppliersName: string, receivingQty: number) => {
+  const handlereceivingOrderFromPo = (
+    warehouseId: number,
+    warehouseName: string,
+    poId: number,
+    orderNumber: string,
+    inventoryId: number,
+    sku: string,
+    title: string,
+    image: string,
+    businessId: number,
+    suppliersName: string,
+    receivingQty: number,
+    hasSplitting: boolean,
+    splitId: number | undefined
+  ) => {
     let newReceivingOrderFromPo = state.receivingFromPo
     newReceivingOrderFromPo.warehouse.id = warehouseId
     newReceivingOrderFromPo.warehouse.name = warehouseName
@@ -92,6 +111,8 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
         businessId,
         suppliersName,
         receivingQty,
+        hasSplitting,
+        splitId,
       }
     }
 
@@ -389,7 +410,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                 <h5 className='fw-semibold m-0'>Products</h5>
                 {data.hasSplitting && (
                   <>
-                    <p className='m-0 p-0 fs-7 text-muted fw-normal'>Split Destinations:</p>
+                    <p className='m-0 my-1 p-0 fs-7 text-muted fw-normal'>Split Destinations:</p>
                     <Nav className='m-0 d-flex flex-row justify-content-start align-items-center gap-2 fs-7' role='tablist'>
                       <NavItem style={{ cursor: 'pointer' }} onClick={() => setactiveTab('all')}>
                         <Button color={activeTab === 'all' ? 'primary' : 'light'} size='sm' className='fs-7'>
@@ -407,7 +428,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                   </>
                 )}
               </div>
-              {!data.hasSplitting && data.isOpen && (
+              {(!data.hasSplitting || (data.hasSplitting && activeTab !== 'all')) && data.isOpen && (
                 <div className='d-flex flex-row justify-content-end gap-2 align-items-center'>
                   {data.poItems.length > 0 && (
                     <i
@@ -420,13 +441,19 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                             show: true,
                             poId: data.poId,
                             orderNumber: data.orderNumber,
-                            poItems: data.poItems,
+                            poItems: data.hasSplitting ? data.splits[activeTab].items : data.poItems,
+                            hasSplitting: data.hasSplitting,
+                            split: data.splits[activeTab] || undefined,
                           }
                         })
                       }
                     />
                   )}
-                  <i className='fs-4 text-success las la-plus-circle' style={{ cursor: 'pointer' }} onClick={() => setModalAddSkuToPurchaseOrder(data.poId, data.orderNumber, data.suppliersName)} />
+                  <i
+                    className='fs-4 text-success las la-plus-circle'
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setModalAddSkuToPurchaseOrder(true, data.poId, data.orderNumber, data.suppliersName, data.hasSplitting, data.splits[activeTab] || undefined)}
+                  />
                 </div>
               )}
             </CardHeader>

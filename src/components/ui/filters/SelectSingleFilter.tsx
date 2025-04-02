@@ -1,6 +1,7 @@
 import React from 'react'
-import { FormGroup, Label } from 'reactstrap'
+import { Label } from 'reactstrap'
 import SimpleSelect, { SelectOptionType } from '@components/Common/SimpleSelect'
+import ErrorInputLabel from '../forms/ErrorInputLabel'
 
 type Props = {
   inputLabel: string
@@ -9,17 +10,18 @@ type Props = {
   selected: SelectOptionType
   options: SelectOptionType[]
   handleSelect: (option: SelectOptionType) => void
-  error?: boolean
+  error?: string | undefined
 }
 
-const SelectSingleFilter = ({ inputLabel, inputName, placeholder, options, selected, handleSelect }: Props) => {
+const SelectSingleFilter = ({ inputLabel, inputName, placeholder, options, selected, handleSelect, error }: Props) => {
   return (
-    <FormGroup id={inputName} className='createOrder_inputs'>
+    <div id={inputName} className='mb-2'>
       <Label htmlFor='lastNameinput' className='form-label'>
         {inputLabel}
       </Label>
-      <SimpleSelect selected={selected} options={options} handleSelect={handleSelect} customStyle='sm' placeholder={placeholder} />
-    </FormGroup>
+      <SimpleSelect selected={selected} options={options} handleSelect={handleSelect} customStyle='sm' placeholder={placeholder} hasError={Boolean(error)}/>
+      <ErrorInputLabel error={error} />
+    </div>
   )
 }
 

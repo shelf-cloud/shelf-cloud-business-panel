@@ -3,7 +3,6 @@ import AppContext from '@context/AppContext'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
 import axios from 'axios'
-import useSWR from 'swr'
 import { toast } from 'react-toastify'
 import { useSWRConfig } from 'swr'
 import { useRouter } from 'next/router'
@@ -12,25 +11,30 @@ import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
 import { NoImageAdress } from '@lib/assetsConstants'
 import SearchInput from '@components/ui/SearchInput'
+import { SkuInListToAddToPo, useAddToPo } from '@hooks/purchaseOrders/useAddToPo'
 
-interface SkuInListToAddToPo extends SkuToAddPo {
-  addQty: number | string
+const customStyles = {
+  responsiveWrapper: {
+    style: {
+      scrollbarWidth: 'thin',
+    },
+  },
 }
 
 const Add_Sku_To_Purchase_Order = ({}) => {
   const router = useRouter()
   const { status, organizeBy } = router.query
   const { mutate } = useSWRConfig()
-  const { state, setShowAddSkuToPurchaseOrder }: any = useContext(AppContext)
+  const { skuList, isLoading } = useAddToPo()
+  const {
+    state: { currentRegion, user, modalAddSkuToPurchaseOrder },
+    setModalAddSkuToPurchaseOrder,
+  } = useContext(AppContext)
+  const { show, poId, orderNumber, suppliersName, hasSplitting, split } = modalAddSkuToPurchaseOrder
   const [loading, setloading] = useState(false)
   const [hasErrors, setHasErrors] = useState(false)
   const [searchValue, setSearchValue] = useState<any>('')
   const [skuToAddToPo, setSkuToAddToPo] = useState<SkuInListToAddToPo[]>([])
-  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data: skuList }: { data?: SkuToAddPo[] } = useSWR(
-    state.user.businessId ? `/api/purchaseOrders/getSkusToAddToPo?region=${state.currentRegion}&businessId=${state.user.businessId}&supplier=${state.modalAddSkuToPurchaseOrder?.suppliersName}` : null,
-    fetcher
-  )
 
   useEffect(() => {
     skuToAddToPo.length <= 0 ? setHasErrors(true) : setHasErrors(false)
@@ -170,6 +174,10 @@ const Add_Sku_To_Purchase_Order = ({}) => {
     },
   ]
 
+  const handleCloseModal = () => {
+    setModalAddSkuToPurchaseOrder(false, 0, '', '', false, undefined)
+  }
+
   const handleAddSkuToList = (row: SkuToAddPo) => {
     setSkuToAddToPo((prev) => [...prev, { ...row, addQty: '' }])
   }
@@ -192,22 +200,24 @@ const Add_Sku_To_Purchase_Order = ({}) => {
   const handleSubmitProductsToPo = async () => {
     setloading(true)
 
-    const response = await axios.post(`/api/purchaseOrders/addSkusToPo?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-      poId: state.modalAddSkuToPurchaseOrder?.poId,
-      orderNumber: state.modalAddSkuToPurchaseOrder?.orderNumber,
+    const response = await axios.post(`/api/purchaseOrders/addSkusToPo?region=${currentRegion}&businessId=${user.businessId}`, {
+      poId: poId,
+      orderNumber: orderNumber,
       skuToAddToPo,
+      hasSplitting,
+      split: hasSplitting ? split : undefined,
     })
 
     if (!response.data.error) {
-      setShowAddSkuToPurchaseOrder(false)
-      toast.success(response.data.msg)
       if (organizeBy == 'suppliers') {
-        mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+        mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${currentRegion}&businessId=${user.businessId}&status=${status}`)
       } else if (organizeBy == 'orders') {
-        mutate(`/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+        mutate(`/api/purchaseOrders/getpurchaseOrdersByOrders?region=${currentRegion}&businessId=${user.businessId}&status=${status}`)
       } else if (organizeBy == 'sku') {
-        mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+        mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${currentRegion}&businessId=${user.businessId}&status=${status}`)
       }
+      toast.success(response.data.msg)
+      handleCloseModal()
     } else {
       toast.error(response.data.msg)
     }
@@ -215,56 +225,56 @@ const Add_Sku_To_Purchase_Order = ({}) => {
   }
 
   return (
-    <Modal
-      fade={false}
-      scrollable={true}
-      size='xl'
-      id='addSkuToPoModal'
-      isOpen={state.showAddSkuToPurchaseOrder}
-      toggle={() => {
-        setShowAddSkuToPurchaseOrder(!state.showAddSkuToPurchaseOrder)
-      }}>
-      <ModalHeader
-        toggle={() => {
-          setShowAddSkuToPurchaseOrder(!state.showAddSkuToPurchaseOrder)
-        }}
-        className='modal-title pb-0'
-        id='myModalLabel'>
-        <p>Add Products to PO</p>
-        <span className='fs-5 mb-0 fw-semibold'>
-          Purchase Order: <span className='fs-4 text-primary'>{state.modalAddSkuToPurchaseOrder?.orderNumber}</span>
-        </span>
-        <br />
-        <span className='fs-5 mb-0 fw-semibold'>
-          Supplier: <span className='fs-4 text-primary'>{state.modalAddSkuToPurchaseOrder?.suppliersName}</span>
-        </span>
+    <Modal fade={false} scrollable={true} size='xl' id='addSkuToPoModal' isOpen={show} toggle={handleCloseModal}>
+      <ModalHeader toggle={handleCloseModal} className='modal-title pb-0' id='addSkuToPoModalLabel'>
+        Add Products to PO
       </ModalHeader>
       <ModalBody>
+        <p className='m-0 fs-5 fw-semibold'>
+          Purchase Order: <span className='text-primary'>{orderNumber}</span>
+        </p>
+        <p className='m-0 fs-5 fw-semibold'>
+          Supplier: <span className='text-primary'>{suppliersName}</span>
+        </p>
+        {hasSplitting && (
+          <p className='fs-5 fw-semibold'>
+            To Split: <span className='text-primary'>{split?.splitName}</span>
+          </p>
+        )}
         <Row>
           <Col xs={12} md={6} className='overflow-auto h-100'>
             <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-between align-items-md-center'>
               <span className='fs-4 fw-semibold flex-1'>SKU List</span>
               <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='none' widths='col-12 col-md-7' />
             </Row>
-            <Col sm={12} style={{ height: '60vh', overflowX: 'hidden', overflowY: 'auto', scrollbarWidth: 'thin' }}>
-              <DataTable columns={columnsSkuListToAdd} data={filterDataTable || []} progressPending={skuList ? false : true} striped={true} dense={true} fixedHeader={true} fixedHeaderScrollHeight='60vh' className='pb-4' />
+            <Col sm={12} style={{ height: '60vh', overflowX: 'hidden', overflowY: 'auto' }}>
+              <DataTable columns={columnsSkuListToAdd} data={filterDataTable || []} progressPending={isLoading} striped={true} dense={true} fixedHeader={true} fixedHeaderScrollHeight='60vh' className='pb-4' customStyles={customStyles} />
             </Col>
           </Col>
           <Col xs={12} md={6}>
             <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-end align-items-md-center'>
-                <span className='fs-4 fw-semibold'>Selected SKUs to Add to Purchase Order</span>
+              <span className='fs-4 fw-semibold'>Selected SKUs to Add to Purchase Order</span>
             </Row>
-            <Col sm={12} style={{ height: '60vh', overflowX: 'hidden', overflowY: 'auto', scrollbarWidth: 'thin' }}>
-              <DataTable columns={columnsSkuListAdded} data={skuToAddToPo || []} striped={true} dense={true} fixedHeader={true} fixedHeaderScrollHeight='60vh' />
+            <Col sm={12} style={{ height: '60vh', overflowX: 'hidden', overflowY: 'auto' }}>
+              <DataTable columns={columnsSkuListAdded} data={skuToAddToPo || []} striped={true} dense={true} fixedHeader={true} fixedHeaderScrollHeight='60vh' customStyles={customStyles}/>
             </Col>
           </Col>
-          <Row md={12}>
-            <div className='text-end'>
-              <Button disabled={hasErrors} type='button' color='success' className='fs-7' onClick={handleSubmitProductsToPo}>
-                {loading ? <span><Spinner color='light' /> Adding...</span> : 'Add Products'}
-              </Button>
-            </div>
-          </Row>
+        </Row>
+        <Row md={12}>
+          <div className='mt-3 d-flex justify-content-end align-items-center gap-2'>
+            <Button type='button' color='light' className='fs-7' onClick={handleCloseModal}>
+              Cancel
+            </Button>
+            <Button disabled={loading || hasErrors} type='button' color='success' className='fs-7' onClick={handleSubmitProductsToPo}>
+              {loading ? (
+                <span>
+                  <Spinner color='light' size={'sm'} /> Adding...
+                </span>
+              ) : (
+                'Add Products'
+              )}
+            </Button>
+          </div>
         </Row>
       </ModalBody>
     </Modal>

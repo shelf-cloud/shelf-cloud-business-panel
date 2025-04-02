@@ -75,7 +75,7 @@ const ReceivingOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
         })
         resetForm()
         setWholeSaleOrderModal(false)
-        router.push('/Receivings')
+        router.push('/receivings')
       } else {
         toast.update(creatingUploadedReceiving, {
           render: response.data.message,

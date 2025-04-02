@@ -377,6 +377,9 @@ export interface OrderRowType {
   closedDate: string
   orderStatus: string
   orderType: string
+  warehouseId: number
+  warehouseName: string
+  isSCDestination: boolean
   trackingNumber: string
   pickpackCharge: number
   shippingCharge: number
@@ -432,6 +435,7 @@ export interface OrderRowType {
   isIndividualUnits?: boolean
   totalIndividualUnits?: number
   isReceivingFromPo?: boolean
+  receivingShippingCost: number | null
 }
 
 export interface ShipmentOrderItem {
@@ -449,8 +453,11 @@ export interface ShipmentOrderItem {
   fulfillmentSku: string
   warehouseLocation: string
   poNumber?: string
+  poId?: number
   qtyReceived?: number
   state?: string
+  hasSplitting?: boolean
+  splitId?: number
 }
 
 export interface KitChildren {

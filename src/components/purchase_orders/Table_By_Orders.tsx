@@ -43,9 +43,10 @@ const Table_By_Orders = ({ filterDataTable, pending }: Props) => {
       },
     },
     {
-      name: <span className='fw-bolder fs-6'>Date Created</span>,
+      name: <span className='fw-bolder text-center fs-6'>Date Created</span>,
       selector: (row: PurchaseOrder) => row.date,
       sortable: true,
+      wrap: false,
       center: true,
       compact: true,
       style: {
@@ -67,9 +68,9 @@ const Table_By_Orders = ({ filterDataTable, pending }: Props) => {
           rowA?.poItems?.reduce((total: number, product: PurchaseOrderItem) => total + Number(product.orderQty * product.sellerCost), 0),
           rowB?.poItems?.reduce((total: number, product: PurchaseOrderItem) => total + Number(product.orderQty * product.sellerCost), 0)
         ),
-        style: {
-          fontSize: '0.7rem',
-        },
+      style: {
+        fontSize: '0.7rem',
+      },
     },
     {
       name: <span className='fw-bolder fs-6'>Status</span>,
@@ -127,6 +128,8 @@ const Table_By_Orders = ({ filterDataTable, pending }: Props) => {
       sortable: true,
       left: true,
       compact: true,
+      wrap: true,
+      grow: 1.5,
       style: {
         fontSize: '0.7rem',
       },

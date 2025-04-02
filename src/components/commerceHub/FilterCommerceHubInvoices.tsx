@@ -1,23 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import SimpleSelect from '@components/Common/SimpleSelect'
+import SimpleSelect, { SelectOptionType } from '@components/Common/SimpleSelect'
 import { CommerceHubStore } from '@typesTs/commercehub/invoices'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { DebounceInput } from 'react-debounce-input'
 import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle, Input, Label } from 'reactstrap'
 
-type Filters = {
+export type InvoiceCommerceHubFiltersType = {
   onlyOverdue: boolean
   showOverdue: boolean
-  store: { value: string; label: string }
-  status: { value: string; label: string }
+  store: SelectOptionType
+  status: SelectOptionType
   showStaus: boolean
 }
 
 type Props = {
-  filters: Filters
-  setfilters: (cb: (prev: Filters) => Filters) => void
+  filters: InvoiceCommerceHubFiltersType
+  setfilters: (cb: (prev: InvoiceCommerceHubFiltersType) => InvoiceCommerceHubFiltersType) => void
   stores: CommerceHubStore[]
-  statusOptions?: { value: string; label: string }[]
+  statusOptions?: SelectOptionType[]
   daysOverdue?: number
   setdaysOverdue?: (days: number) => void
 }
@@ -59,7 +59,7 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions,
               <SimpleSelect
                 selected={filters.store}
                 handleSelect={(option) => {
-                  setfilters((prev: Filters) => ({ ...prev, store: option }))
+                  setfilters((prev: InvoiceCommerceHubFiltersType) => ({ ...prev, store: option }))
                   if (setdaysOverdue !== undefined) setdaysOverdue(0)
                   setOpenDatesMenu(false)
                 }}
@@ -71,7 +71,7 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions,
                   <SimpleSelect
                     selected={filters.status}
                     handleSelect={(option) => {
-                      setfilters((prev: Filters) => ({ ...prev, status: option }))
+                      setfilters((prev: InvoiceCommerceHubFiltersType) => ({ ...prev, status: option }))
                       setOpenDatesMenu(false)
                     }}
                     options={statusOptions ? [{ value: 'all', label: 'All' }, ...statusOptions] : []}
@@ -89,7 +89,7 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions,
                       name='showOnlyOverdue'
                       checked={filters.onlyOverdue}
                       onChange={(e) => {
-                        setfilters((prev: Filters) => ({ ...prev, onlyOverdue: e.target.checked }))
+                        setfilters((prev: InvoiceCommerceHubFiltersType) => ({ ...prev, onlyOverdue: e.target.checked }))
                         if (daysOverdue === undefined) {
                           setOpenDatesMenu(false)
                         }

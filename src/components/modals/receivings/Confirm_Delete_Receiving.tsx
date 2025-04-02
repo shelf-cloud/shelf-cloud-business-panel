@@ -1,82 +1,70 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import AppContext from '@context/AppContext'
+import { DeleteReceivingModalType } from '@pages/receivings'
 
 type Props = {
-  showDeleteModal: {
-    show: boolean
-    orderId: number
-    orderNumber: string
-  }
-  setshowDeleteModal: (prev: any) => void
-  loading: boolean
-  setLoading: (state: boolean) => void
+  showDeleteModal: DeleteReceivingModalType
+  setshowDeleteModal: (prev: DeleteReceivingModalType) => void
   mutateReceivings: () => void
 }
 
-const Confirm_Delete_Receiving = ({ showDeleteModal, setshowDeleteModal, loading, setLoading, mutateReceivings }: Props) => {
+const Confirm_Delete_Receiving = ({ showDeleteModal, setshowDeleteModal, mutateReceivings }: Props) => {
+  const { show, orderId, orderNumber } = showDeleteModal
   const { state }: any = useContext(AppContext)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleClose = () => {
+    setshowDeleteModal({
+      show: false,
+      orderId: 0,
+      orderNumber: '',
+    })
+  }
 
   const handleDeleteReceiving = async () => {
-    setLoading(true)
+    setIsLoading(true)
     const response = await axios.post(`/api/receivings/deleteReceiving?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-      orderId: showDeleteModal.orderId,
-      orderNumber: showDeleteModal.orderNumber,
+      orderId: orderId,
+      orderNumber: orderNumber,
     })
     if (!response.data.error) {
       mutateReceivings()
-      setshowDeleteModal({
-        show: false,
-        orderId: 0,
-        orderNumber: '',
-      })
       toast.success(response.data.msg)
+      handleClose()
     } else {
       toast.error(response.data.msg)
     }
-    setLoading(false)
+    setIsLoading(false)
   }
 
   return (
-    <Modal
-      fade={false}
-      size='md'
-      id='confirmDelete'
-      isOpen={showDeleteModal.show}
-      toggle={() => {
-        setshowDeleteModal({
-          show: false,
-          orderId: 0,
-          orderNumber: '',
-        })
-      }}>
-      <ModalHeader
-        toggle={() => {
-          setshowDeleteModal({
-            show: false,
-            orderId: 0,
-            orderNumber: '',
-          })
-        }}
-        className='modal-title'
-        id='myModalLabel'>
+    <Modal fade={false} size='md' id='confirmDeleteReceiving' isOpen={show} toggle={handleClose}>
+      <ModalHeader toggle={handleClose} className='modal-title' id='myModalLabel'>
         Confirm Delete Receiving
       </ModalHeader>
       <ModalBody>
         <Row>
-          <h5 className='fs-4 mb-0 fw-semibold text-primary'>
-            Receiving: <span className='fs-4 fw-bold text-black'>{showDeleteModal.orderNumber}</span>
-          </h5>
-          <Row md={12}>
-            <div className='text-end mt-2'>
-              <Button disabled={loading} type='button' color='danger' className='btn' onClick={handleDeleteReceiving}>
-                {loading ? <Spinner color='#fff' /> : 'Delete'}
-              </Button>
-            </div>
-          </Row>
+          <p className='m-0 fs-5 fw-semibold'>
+            Receiving: <span className='text-primary'>{orderNumber}</span>
+          </p>
+          <div className='mt-3 d-flex justify-content-end align-items-center gap-2'>
+            <Button type='button' color='light' className='fs-7' onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button disabled={isLoading} type='button' color='danger' className='fs-7' onClick={handleDeleteReceiving}>
+              {isLoading ? (
+                <span>
+                  <Spinner color='light' size={'sm'} /> Deleting...
+                </span>
+              ) : (
+                'Delete'
+              )}
+            </Button>
+          </div>
         </Row>
       </ModalBody>
     </Modal>

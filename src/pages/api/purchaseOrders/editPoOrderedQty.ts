@@ -11,7 +11,7 @@ const editPoOrderedQty: NextApiHandler = async (request, response) => {
         return
     }
 
-    axios.post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/purchaseOrders/editPoOrderedQty.php?businessId=${request.query.businessId}`, {
+    axios.post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/purchaseOrders/editPoOrderedQty-v2.php?businessId=${request.query.businessId}`, {
         poInfo: request.body
     })
         .then(({ data }) => {

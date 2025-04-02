@@ -111,7 +111,7 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, skuLis
           autoClose: 3000,
         })
         resetForm()
-        router.push('/Receivings')
+        router.push('/receivings')
       } else {
         toast.update(creatingUploadedReceiving, {
           render: response.data.message,

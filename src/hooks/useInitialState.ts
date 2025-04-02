@@ -6,8 +6,65 @@ import { useRouter } from 'next/router'
 
 //constants
 import { layoutTypes, leftSidebarTypes, layoutModeTypes, layoutWidthTypes, layoutPositionTypes, topbarThemeTypes, leftsidbarSizeTypes, leftSidebarViewTypes, leftSidebarImageTypes } from '../components/constants/layout'
+import { Split } from '@typesTs/purchaseOrders'
 
-const initialState = {
+export interface UserType {
+  businessId: string
+  name: string
+  role: string
+  hasShelfCloudUsa: boolean
+  hasShelfCloudEu: boolean
+  defaultRegion: string
+  orderNumber: OrderNumber
+  us: RegionInfoTypeUS
+}
+
+export interface OrderNumber {
+  us: number
+  eu: number
+}
+
+export interface RegionInfoTypeUS {
+  name: string
+  email: string
+  contactName: string
+  phone: string
+  website: string
+  address: string
+  city: string
+  state: string
+  country: string
+  zipcode: string
+  showCreateOrder: boolean
+  showWholeSale: boolean
+  showKits: boolean
+  showPurchaseOrders: boolean
+  showAmazonTab: boolean
+  amazonConnected: boolean
+  showAmazonAdsTab: boolean
+  amazonAdsConnected: boolean
+  amazonNeedsUpdate: boolean
+  minQtyForIndividualUnitsOrder: number
+  showReorderingPoints: boolean
+  showCommerceHub: boolean
+  showPPWithNoSCFees: boolean
+  showMarketpalcePricing: boolean
+  rpShowFBA: boolean
+  rpShowAWD: boolean
+  rpCanSplit: boolean
+  rphighAlertMax: number
+  rpmediumAlertMax: number
+  rplowAlertMax: number
+  marketplaces: string[]
+  marketplacesIds: MarketplacesId[]
+}
+
+export interface MarketplacesId {
+  value: number
+  label: string
+}
+
+export const initialState = {
   layoutType: layoutTypes.VERTICAL,
   leftSidebarType: leftSidebarTypes.DARK,
   layoutModeType: layoutModeTypes.LIGHTMODE,
@@ -18,7 +75,7 @@ const initialState = {
   leftSidebarViewType: leftSidebarViewTypes.DEFAULT,
   leftSidebarImageType: leftSidebarImageTypes.NONE,
   currentRegion: '',
-  user: {},
+  user: {} as UserType,
   showInventoryBinsModal: false,
   // MODAL - PRODUCT DETAILS
   modalProductInfo: {},
@@ -28,7 +85,7 @@ const initialState = {
   showEditKitModal: false,
   modalKitDetails: {},
   // MODAL - WHOLESALE ORDERS
-  wholesaleOrderProducts: [],
+  wholesaleOrderProducts: [] as any[],
   showWholeSaleOrderModal: false,
   showSingleBoxesOrderModal: false,
   showIndividualUnitsPlan: false,
@@ -63,23 +120,29 @@ const initialState = {
       id: 0,
       name: '',
     },
-    items: {},
+    items: {} as any,
   },
   showCreateReceivingFromPo: false,
   modalAddPaymentToPoDetails: {},
   showAddPaymentToPo: false,
-  modalAddSkuToPurchaseOrder: {},
-  showAddSkuToPurchaseOrder: false,
+  modalAddSkuToPurchaseOrder: {
+    show: false,
+    poId: 0,
+    orderNumber: '',
+    suppliersName: '',
+    hasSplitting: false,
+    split: undefined as Split | undefined,
+  },
   showCreatePoFromFile: false,
   showCreatePoManually: false,
 }
 
-const fetcher = async (endPoint) => await axios(endPoint).then((res) => res.data)
+const fetcher = async (endPoint: string) => await axios(endPoint).then((res) => res.data)
 
 const useInitialState = () => {
   const [state, setState] = useState(initialState)
   const router = useRouter()
-  const { data, error } = useSWR('/api/getuser', fetcher)
+  const { data } = useSWR('/api/getuser', fetcher)
 
   useEffect(() => {
     if (data) {
@@ -107,44 +170,30 @@ const useInitialState = () => {
     document.documentElement.setAttribute('data-topbar', 'light')
     document.documentElement.setAttribute('data-layout', 'vertical')
     document.documentElement.setAttribute('data-sidebar-image', 'none')
-
-    // axios('/api/getuser').then(({ data }) =>
-    //   setState({
-    //     ...state,
-    //     user: data,
-    //   })
-    // )
   }, [])
 
-  const setRegion = (payload) => {
+  const setRegion = (payload: string) => {
     setState({
       ...state,
       currentRegion: payload,
     })
   }
 
-  const setProducts = (payload) => {
-    setState({
-      ...state,
-      products: payload,
-    })
-  }
-
-  const setshowInventoryBinsModal = (payload) => {
+  const setshowInventoryBinsModal = (payload: boolean) => {
     setState({
       ...state,
       showInventoryBinsModal: payload,
     })
   }
 
-  const setShowEditProductModal = (payload) => {
+  const setShowEditProductModal = (payload: boolean) => {
     setState({
       ...state,
       showEditProductModal: payload,
     })
   }
 
-  const setModalProductInfo = (inventoryId, businessId, sku) => {
+  const setModalProductInfo = (inventoryId: number, businessId: number, sku: string) => {
     setState({
       ...state,
       modalProductInfo: {
@@ -157,14 +206,14 @@ const useInitialState = () => {
     })
   }
 
-  const setShowEditKitModal = (payload) => {
+  const setShowEditKitModal = (payload: boolean) => {
     setState({
       ...state,
       showEditKitModal: payload,
     })
   }
 
-  const setModalKitDetails = (kitId, businessId, sku) => {
+  const setModalKitDetails = (kitId: number, businessId: number, sku: string) => {
     setState({
       ...state,
       modalKitDetails: {
@@ -176,7 +225,7 @@ const useInitialState = () => {
     })
   }
 
-  const setModalProductDetails = (inventoryId, businessId, sku) => {
+  const setModalProductDetails = (inventoryId: number, businessId: number, sku: string) => {
     setState({
       ...state,
       modalProductDetails: {
@@ -189,35 +238,35 @@ const useInitialState = () => {
     })
   }
 
-  const addWholesaleProduct = (product) => {
+  const addWholesaleProduct = (product: any) => {
     setState({
       ...state,
       wholesaleOrderProducts: [...state.wholesaleOrderProducts, product],
     })
   }
 
-  const removeWholesaleProduct = (sku) => {
+  const removeWholesaleProduct = (sku: string) => {
     setState({
       ...state,
       wholesaleOrderProducts: state.wholesaleOrderProducts.filter((product) => product.sku !== sku),
     })
   }
 
-  const setWholeSaleOrderModal = (payload) => {
+  const setWholeSaleOrderModal = (payload: boolean) => {
     setState({
       ...state,
       showWholeSaleOrderModal: payload,
     })
   }
 
-  const setSingleBoxesOrderModal = (payload) => {
+  const setSingleBoxesOrderModal = (payload: boolean) => {
     setState({
       ...state,
       showSingleBoxesOrderModal: payload,
     })
   }
 
-  const setModalCreateReturnInfo = (businessId, orderId) => {
+  const setModalCreateReturnInfo = (businessId: number, orderId: number) => {
     setState({
       ...state,
       modalCreateReturnInfo: {
@@ -228,21 +277,21 @@ const useInitialState = () => {
     })
   }
 
-  const setShowCreateReturnModal = (payload) => {
+  const setShowCreateReturnModal = (payload: boolean) => {
     setState({
       ...state,
       showCreateReturnModal: payload,
     })
   }
 
-  const setUploadProductsModal = (payload) => {
+  const setUploadProductsModal = (payload: boolean) => {
     setState({
       ...state,
       showUploadProductsModal: payload,
     })
   }
 
-  const setShipmentDetailsModal = (show, orderId, orderNumber, orderType, status, orderDate, showActions) => {
+  const setShipmentDetailsModal = (show: boolean, orderId: number, orderNumber: string, orderType: string, status: string, orderDate: string, showActions: boolean) => {
     setState({
       ...state,
       shipmentDetailModal: {
@@ -257,7 +306,7 @@ const useInitialState = () => {
     })
   }
 
-  const setStorageFeesDetailsModal = (show, orderNumber, totalCharge, orderType, startDate, endDate) => {
+  const setStorageFeesDetailsModal = (show: boolean, orderNumber: string, totalCharge: number, orderType: string, startDate: string, endDate: string) => {
     setState({
       ...state,
       storageFeesDetailModal: {
@@ -271,42 +320,42 @@ const useInitialState = () => {
     })
   }
 
-  const setIndividualUnitsPlan = (payload) => {
+  const setIndividualUnitsPlan = (payload: boolean) => {
     setState({
       ...state,
       showIndividualUnitsPlan: payload,
     })
   }
 
-  const setUploadIndividualUnitsLabelsModal = (payload) => {
+  const setUploadIndividualUnitsLabelsModal = (payload: boolean) => {
     setState({
       ...state,
       showUploadIndividualUnitsLabelsModal: payload,
     })
   }
 
-  const setReceivingFromPo = (payload) => {
+  const setReceivingFromPo = (payload: any) => {
     setState({
       ...state,
       receivingFromPo: payload,
     })
   }
 
-  const setShowCreateReceivingFromPo = (payload) => {
+  const setShowCreateReceivingFromPo = (payload: boolean) => {
     setState({
       ...state,
       showCreateReceivingFromPo: payload,
     })
   }
 
-  const setShowAddPaymentToPo = (payload) => {
+  const setShowAddPaymentToPo = (payload: boolean) => {
     setState({
       ...state,
       showAddPaymentToPo: payload,
     })
   }
 
-  const setModalAddPaymentToPoDetails = (poId, orderNumber) => {
+  const setModalAddPaymentToPoDetails = (poId: number, orderNumber: string) => {
     setState({
       ...state,
       modalAddPaymentToPoDetails: {
@@ -317,32 +366,27 @@ const useInitialState = () => {
     })
   }
 
-  const setModalAddSkuToPurchaseOrder = (poId, orderNumber, suppliersName) => {
+  const setModalAddSkuToPurchaseOrder = (show: boolean, poId: number, orderNumber: string, suppliersName: string, hasSplitting: boolean, split: any) => {
     setState({
       ...state,
       modalAddSkuToPurchaseOrder: {
+        show,
         poId,
         orderNumber,
         suppliersName,
+        hasSplitting,
+        split,
       },
-      showAddSkuToPurchaseOrder: true,
     })
   }
 
-  const setShowAddSkuToPurchaseOrder = (payload) => {
-    setState({
-      ...state,
-      showAddSkuToPurchaseOrder: payload,
-    })
-  }
-
-  const setShowCreatePoFromFile = (payload) => {
+  const setShowCreatePoFromFile = (payload: boolean) => {
     setState({
       ...state,
       showCreatePoFromFile: payload,
     })
   }
-  const setShowCreatePoManually = (payload) => {
+  const setShowCreatePoManually = (payload: boolean) => {
     setState({
       ...state,
       showCreatePoManually: payload,
@@ -352,7 +396,6 @@ const useInitialState = () => {
   return {
     state,
     setRegion,
-    setProducts,
     setshowInventoryBinsModal,
     setModalProductInfo,
     setShowEditProductModal,
@@ -375,7 +418,6 @@ const useInitialState = () => {
     setShowAddPaymentToPo,
     setModalAddPaymentToPoDetails,
     setModalAddSkuToPurchaseOrder,
-    setShowAddSkuToPurchaseOrder,
     setShowCreatePoFromFile,
     setShowCreatePoManually,
   }

@@ -1,19 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useContext } from 'react'
-import AppContext from '@context/AppContext'
+import React, { useState } from 'react'
 import { GetServerSideProps } from 'next'
-import { OrderRowType, ShipmentOrderItem } from '@typings'
-import axios from 'axios'
 import Head from 'next/head'
 import { Card, CardBody, Container } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
-import useSWR from 'swr'
 import moment from 'moment'
 import ReceivingTable from '@components/receiving/ReceivingTable'
-import { toast } from 'react-toastify'
 import FilterByDates from '@components/FilterByDates'
-import { DebounceInput } from 'react-debounce-input'
+import { useReceivings } from '@hooks/receivings/useReceivings'
+import SearchInput from '@components/ui/SearchInput'
+import Confirm_Delete_Receiving from '@components/modals/receivings/Confirm_Delete_Receiving'
+import InputNumberModal from '@components/modals/shared/inputNumberModal'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -39,66 +37,38 @@ type Props = {
   }
 }
 
+export type DeleteReceivingModalType = {
+  show: boolean
+  orderId: number
+  orderNumber: string
+}
+
+export type AddShippingCostModalType = {
+  show: boolean
+  orderId: number
+  orderNumber: string
+  shippingCost: number | string
+}
+
 const Receiving = ({ session }: Props) => {
-  const { state }: any = useContext(AppContext)
   const [shipmentsStartDate, setShipmentsStartDate] = useState(moment().subtract(3, 'months').format('YYYY-MM-DD'))
   const [shipmentsEndDate, setShipmentsEndDate] = useState(moment().format('YYYY-MM-DD'))
-  const [pending, setPending] = useState(true)
-  const [allData, setAllData] = useState<OrderRowType[]>([])
-  const [tableData, setTableData] = useState<OrderRowType[]>([])
   const [searchValue, setSearchValue] = useState<string>('')
 
-  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data, mutate: mutateReceivings } = useSWR(
-    state.user.businessId
-      ? `/api/getReceivingOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`
-      : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  )
+  const { receivings, isLoading, mutateReceivings } = useReceivings({ searchValue, startDate: shipmentsStartDate, endDate: shipmentsEndDate })
 
-  useEffect(() => {
-    if (data?.error) {
-      setAllData([])
-      setPending(false)
-      toast.error(data?.message)
-    } else if (data) {
-      setTableData(data)
-      setAllData(data)
-      setPending(false)
-    }
-  }, [data])
+  const [showDeleteModal, setshowDeleteModal] = useState<DeleteReceivingModalType>({
+    show: false,
+    orderId: 0,
+    orderNumber: '',
+  })
 
-  const filterByText = (e: any) => {
-    if (e.target.value !== '') {
-      setSearchValue(e.target.value)
-      const filterTable: OrderRowType[] = allData.filter(
-        (order) =>
-          order?.orderNumber?.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          order?.orderStatus?.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          order?.orderType?.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          order?.shipName?.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          order?.trackingNumber?.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          order?.orderItems?.some(
-            (item: ShipmentOrderItem) =>
-              item.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
-              searchValue.split(' ').every((word) => item?.name?.toLowerCase().includes(word.toLowerCase())) ||
-              item.sku.toLowerCase().includes(e.target.value.toLowerCase())
-          )
-      )
-      setTableData(filterTable)
-    } else {
-      setSearchValue(e.target.value)
-      setTableData(allData)
-    }
-  }
-
-  const clearSearch = () => {
-    setSearchValue('')
-    setTableData(allData)
-  }
+  const [addShippingCostModal, setaddShippingCostModal] = useState<AddShippingCostModalType>({
+    show: false,
+    orderId: 0,
+    orderNumber: '',
+    shippingCost: 0,
+  })
 
   const handleChangeDatesFromPicker = (dateStr: string) => {
     if (dateStr.includes(' to ')) {
@@ -109,6 +79,7 @@ const Receiving = ({ session }: Props) => {
   }
 
   const title = `Receivings | ${session?.user?.businessName}`
+
   return (
     <div>
       <Head>
@@ -128,41 +99,42 @@ const Receiving = ({ session }: Props) => {
                   handleChangeDatesFromPicker={handleChangeDatesFromPicker}
                 />
               </div>
-              <div className='w-100 d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-end align-items-lg-center px-0'>
-                <div className='app-search p-0 col-sm-12 col-lg-5'>
-                  <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
-                    <DebounceInput
-                      type='text'
-                      minLength={1}
-                      debounceTimeout={500}
-                      className='form-control input_background_white fs-6'
-                      placeholder='Search...'
-                      id='search-options'
-                      value={searchValue}
-                      onKeyDown={(e) => e.key == 'Enter' && e.preventDefault()}
-                      onChange={(e) => filterByText(e)}
-                    />
-                    <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
-                    <span
-                      className='d-flex align-items-center justify-content-center input_background_white'
-                      style={{
-                        cursor: 'pointer',
-                      }}
-                      onClick={clearSearch}>
-                      <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
-                    </span>
-                  </div>
-                </div>
-              </div>
+              <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' />
             </div>
             <Card>
               <CardBody className='fs-7'>
-                <ReceivingTable tableData={tableData} pending={pending} mutateReceivings={mutateReceivings} />
+                <ReceivingTable tableData={receivings} pending={isLoading} mutateReceivings={mutateReceivings} setshowDeleteModal={setshowDeleteModal} setaddShippingCostModal={setaddShippingCostModal} />
               </CardBody>
             </Card>
           </Container>
         </div>
+        {showDeleteModal.show && <Confirm_Delete_Receiving showDeleteModal={showDeleteModal} setshowDeleteModal={setshowDeleteModal} mutateReceivings={mutateReceivings} />}
       </React.Fragment>
+      {addShippingCostModal.show && (
+        <InputNumberModal
+          isOpen={addShippingCostModal.show}
+          headerText='Add Shipping Cost to Receiving'
+          primaryText='Receiving:'
+          primaryTextSub={addShippingCostModal.orderNumber}
+          descriptionText={`Enter the shipping cost from the seller's warehouse to the receiving destination. This value will be used to calculate the Inbound Shipping Cost for the receiving SKUs. Leave this field blank if you do not want to include this shipment in the Inbound Shipping Cost calculation.`}
+          confirmText='Save'
+          loadingText='Saving...'
+          placeholder='Shipping Cost'
+          initialValue={addShippingCostModal.shippingCost}
+          isPrice
+          handleSubmit={async (value) => {
+            console.log(value)
+          }}
+          handleClose={() =>
+            setaddShippingCostModal({
+              show: false,
+              orderId: 0,
+              orderNumber: '',
+              shippingCost: 0,
+            })
+          }
+        />
+      )}
     </div>
   )
 }

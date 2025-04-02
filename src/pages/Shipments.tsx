@@ -16,6 +16,7 @@ import useSWRInfinite from 'swr/infinite'
 import { DebounceInput } from 'react-debounce-input'
 import ShipmentDetailsModal from '@components/modals/shipments/ShipmentDetailsModal'
 import { Shipment } from '@typesTs/shipments/shipments'
+import { SelectOptionType } from '@components/Common/SimpleSelect'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -51,20 +52,15 @@ const fetcher = async (url: string) => {
   return data
 }
 
-type filter = {
-  value: string
-  label: string
-}
-
 const Shipments = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
   const { currentRegion, user, shipmentDetailModal } = state
   const [startDate, setStartDate] = useState<string>('')
   const [endDate, setEndDate] = useState<string>('')
   const [searchValue, setSearchValue] = useState<string>('')
-  const [searchType, setSearchType] = useState<filter>({ value: '', label: 'All' })
-  const [searchStatus, setSearchStatus] = useState<filter>({ value: '', label: 'All' })
-  const [searchMarketplace, setSearchMarketplace] = useState<filter>({ value: '', label: 'All Stores' })
+  const [searchType, setSearchType] = useState<SelectOptionType>({ value: '', label: 'All' })
+  const [searchStatus, setSearchStatus] = useState<SelectOptionType>({ value: '', label: 'All' })
+  const [searchMarketplace, setSearchMarketplace] = useState<SelectOptionType>({ value: '', label: 'All Stores' })
   const [sortBy, setSortBy] = useState({
     key: '',
     asc: false,
@@ -238,21 +234,8 @@ const Shipments = ({ session }: Props) => {
             <div className='d-flex flex-column justify-content-center align-items-end gap-2 mb-1 flex-lg-row justify-content-md-between align-items-md-center px-1'>
               <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'></div>
               <div className='w-100 d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-end align-items-lg-center px-0'>
-                <FilterByDates
-                  shipmentsStartDate={startDate}
-                  setShipmentsStartDate={setStartDate}
-                  setShipmentsEndDate={setEndDate}
-                  shipmentsEndDate={endDate}
-                  handleChangeDatesFromPicker={handleChangeDatesFromPicker}
-                />
-                <FilterByOthers
-                  searchType={searchType}
-                  setSearchType={setSearchType}
-                  searchStatus={searchStatus}
-                  setSearchStatus={setSearchStatus}
-                  searchMarketplace={searchMarketplace}
-                  setSearchMarketplace={setSearchMarketplace}
-                />
+                <FilterByDates shipmentsStartDate={startDate} setShipmentsStartDate={setStartDate} setShipmentsEndDate={setEndDate} shipmentsEndDate={endDate} handleChangeDatesFromPicker={handleChangeDatesFromPicker} />
+                <FilterByOthers searchType={searchType} setSearchType={setSearchType} searchStatus={searchStatus} setSearchStatus={setSearchStatus} searchMarketplace={searchMarketplace} setSearchMarketplace={setSearchMarketplace} />
                 <div className='app-search p-0 col-sm-12 col-lg-5'>
                   <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                     <DebounceInput

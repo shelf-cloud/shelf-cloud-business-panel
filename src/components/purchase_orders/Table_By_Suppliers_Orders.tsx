@@ -125,6 +125,7 @@ const Table_By_Suppliers_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBy
       left: true,
       compact: true,
       wrap: true,
+      grow: 1.5,
       style: {
         fontSize: '0.7rem',
       },

@@ -27,7 +27,7 @@ const Add_Payment_Modal = ({}: Props) => {
     },
     validationSchema: Yup.object({
       paymentDate: Yup.string().required('Please select Date'),
-      amount: Yup.string().required('Please enter amount paid'),
+      amount: Yup.number().min(0.1, 'Please enter amount paid').required('Please enter amount paid'),
       comment: Yup.string(),
     }),
     onSubmit: async (values, { resetForm }) => {
@@ -40,8 +40,6 @@ const Add_Payment_Modal = ({}: Props) => {
 
       if (!response.data.error) {
         resetForm()
-        toast.success(response.data.msg)
-        setShowAddPaymentToPo(false)
         if (organizeBy == 'suppliers') {
           mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
         } else if (organizeBy == 'orders') {
@@ -49,6 +47,8 @@ const Add_Payment_Modal = ({}: Props) => {
         } else if (organizeBy == 'sku') {
           mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
         }
+        toast.success(response.data.msg)
+        setShowAddPaymentToPo(false)
       } else {
         toast.error(response.data.msg)
       }

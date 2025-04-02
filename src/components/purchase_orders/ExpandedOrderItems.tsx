@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { DeleteItemFromOrderType } from '@components/modals/purchaseOrders/Confirm_Delete_Item_From_PO'
 import AppContext from '@context/AppContext'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
@@ -14,8 +15,22 @@ type Props = {
   poItems: PurchaseOrderItem[]
   data: PurchaseOrder
   loading: boolean
-  handlereceivingOrderFromPo: (warehouseId: number, warehouseName: string, poId: number, orderNumber: string, inventoryId: number, sku: string, title: string, image: string, businessId: number, suppliersName: string, receivingQty: number) => void
-  setshowDeleteModal: (cb: (prev: any) => any) => void
+  handlereceivingOrderFromPo: (
+    warehouseId: number,
+    warehouseName: string,
+    poId: number,
+    orderNumber: string,
+    inventoryId: number,
+    sku: string,
+    title: string,
+    image: string,
+    businessId: number,
+    suppliersName: string,
+    receivingQty: number,
+    hasSplitting: boolean,
+    splitId: number | undefined
+  ) => void
+  setshowDeleteModal: (cb: (prev: DeleteItemFromOrderType) => DeleteItemFromOrderType) => void
 }
 
 const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceivingOrderFromPo, setshowDeleteModal }: Props) => {
@@ -200,7 +215,9 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
                             product.image,
                             data.businessId,
                             data.suppliersName,
-                            Number(e.target.value)
+                            Number(e.target.value),
+                            data.hasSplitting,
+                            data.hasSplitting ? data.splits[activeTab].splitId : undefined
                           )
                         }
                       }}
@@ -208,7 +225,8 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
                   </td>
                 )}
                 <td>
-                  {data.isOpen &&
+                  {(!data.hasSplitting || (data.hasSplitting && activeTab !== 'all')) &&
+                    data.isOpen &&
                     Number(product.inboundQty) <= 0 &&
                     Number(product.receivedQty) <= 0 &&
                     (loading ? (
@@ -228,6 +246,8 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
                               sku: product.sku,
                               title: product.title,
                               image: product.image,
+                              hasSplitting: data.hasSplitting,
+                              split: data.splits[activeTab] || undefined,
                             }
                           })
                         }

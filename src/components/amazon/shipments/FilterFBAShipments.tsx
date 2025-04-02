@@ -1,16 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import SimpleSelect from '@components/Common/SimpleSelect'
+import SimpleSelect, { SelectOptionType } from '@components/Common/SimpleSelect'
 import React, { useEffect, useRef, useState } from 'react'
 import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle, Input, Label } from 'reactstrap'
 
-type Filters = {
-  status: { value: string; label: string }
+export type FBAFiltersType = {
+  status: SelectOptionType
   showOnlyMissingQty: boolean
 }
 
 type Props = {
-  filters: Filters
-  setfilters: (cb: (prev: Filters) => Filters) => void
+  filters: FBAFiltersType
+  setfilters: (cb: (prev: FBAFiltersType) => FBAFiltersType) => void
 }
 
 const STATUSOPTIONS = [
@@ -58,7 +58,7 @@ const FilterFBAShipments = ({ filters, setfilters }: Props) => {
               <SimpleSelect
                 selected={filters.status}
                 handleSelect={(option) => {
-                  setfilters((prev: Filters) => ({ ...prev, status: option }))
+                  setfilters((prev: FBAFiltersType) => ({ ...prev, status: option }))
                   setOpenDatesMenu(false)
                 }}
                 options={[{ value: 'all', label: 'All' }, ...STATUSOPTIONS]}
@@ -71,7 +71,7 @@ const FilterFBAShipments = ({ filters, setfilters }: Props) => {
                   id='showOnlyOverdue'
                   name='showOnlyOverdue'
                   checked={filters.showOnlyMissingQty}
-                  onChange={(e) => setfilters((prev: Filters) => ({ ...prev, showOnlyMissingQty: e.target.checked }))}
+                  onChange={(e) => setfilters((prev: FBAFiltersType) => ({ ...prev, showOnlyMissingQty: e.target.checked }))}
                 />
               </div>
               <span

@@ -1,45 +1,47 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import AppContext from '@context/AppContext'
+import { DeleteSKUFromReceivingModalType } from '@components/receiving/ReceivingType'
 
 type Props = {
-  showDeleteModal: {
-    show: boolean
-    orderId: number
-    orderNumber: string
-    sku: string
-    title: string
-    quantity: number
-  }
-  setshowDeleteModal: (prev: any) => void
-  loading: boolean
-  setLoading: (state: boolean) => void
+  deleteSKUModal: DeleteSKUFromReceivingModalType
+  setDeleteSKUModal: (prev: DeleteSKUFromReceivingModalType) => void
   mutateReceivings?: () => void
 }
 
-const Confirm_Delete_Item_From_Receiving = ({ showDeleteModal, setshowDeleteModal, loading, setLoading, mutateReceivings }: Props) => {
+const Confirm_Delete_Item_From_Receiving = ({ deleteSKUModal, setDeleteSKUModal, mutateReceivings }: Props) => {
+  const { show, orderId, orderNumber, sku, title, poNumber, poId, isReceivingFromPo } = deleteSKUModal
   const { state }: any = useContext(AppContext)
+  const [loading, setLoading] = useState(false)
+
+  const handleClose = () => {
+    setDeleteSKUModal({
+      show: false,
+      orderId: 0,
+      orderNumber: '',
+      sku: '',
+      title: '',
+      poNumber: '',
+      poId: 0,
+      isReceivingFromPo: false,
+    })
+  }
 
   const handleDeleteFromSkuList = async () => {
     setLoading(true)
     const response = await axios.post(`/api/receivings/deleteSkufromReceiving?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-      orderId: showDeleteModal.orderId,
-      orderNumber: showDeleteModal.orderNumber,
-      sku: showDeleteModal.sku,
+      orderId,
+      orderNumber,
+      sku,
+      poId,
+      isReceivingFromPo,
     })
     if (!response.data.error) {
       mutateReceivings && mutateReceivings()
-      setshowDeleteModal({
-        show: false,
-        orderId: 0,
-        orderNumber: '',
-        sku: '',
-        title: '',
-        quantity: 0,
-      })
+      handleClose()
       toast.success(response.data.msg)
     } else {
       toast.error(response.data.msg)
@@ -48,59 +50,38 @@ const Confirm_Delete_Item_From_Receiving = ({ showDeleteModal, setshowDeleteModa
   }
 
   return (
-    <Modal
-      fade={false}
-      size='md'
-      id='confirmDelete'
-      isOpen={showDeleteModal.show}
-      toggle={() => {
-        setshowDeleteModal({
-          show: false,
-          orderId: 0,
-          orderNumber: '',
-          sku: '',
-          title: '',
-          quantity: 0,
-        })
-      }}>
-      <ModalHeader
-        toggle={() => {
-          setshowDeleteModal({
-            show: false,
-            orderId: 0,
-            orderNumber: '',
-            sku: '',
-            title: '',
-            quantity: 0,
-          })
-        }}
-        className='modal-title'
-        id='myModalLabel'>
+    <Modal fade={false} size='md' id='confirmDeleteItemFromReceiving' isOpen={show} toggle={handleClose}>
+      <ModalHeader toggle={handleClose} className='modal-title' id='confirmDeleteItemFromReceivingModalLabel'>
         Confirm Delete Item From Receiving
       </ModalHeader>
       <ModalBody>
         <Row>
-          <h5 className='fs-4 mb-2 fw-semibold text-primary'>
-            Receiving: <span className='fs-4 fw-bold text-black'>{showDeleteModal.orderNumber}</span>
-          </h5>
-          <div className='d-flex flex-row gap-4'>
+          <p className='mb-2 fs-5 fw-semibold'>
+            Receiving: <span className='text-primary'>{orderNumber}</span>
+          </p>
+          <div className='my-2 d-flex flex-row'>
             <div>
-              <p className='fw-semibold fs-5 mb-0 text-muted'>Item</p>
-              <p className='fw-semibold fs-6 mb-0'>{showDeleteModal.title}</p>
-              <p className='fw-normal fs-6 mb-0'>{showDeleteModal.sku}</p>
-            </div>
-            <div className='text-center'>
-              <p className='fw-semibold fs-5 mb-0 text-muted'>Quantity</p>
-              <p className='fw-normal fs-6 mb-0'>{showDeleteModal.quantity}</p>
+              <p className='fw-bold mb-1'>
+                PO: <span className='text-primary'>{poNumber}</span>
+              </p>
+              <p className='fw-semibold mb-0'>{title}</p>
+              <p className='fw-normal mb-0'>SKU: {sku}</p>
             </div>
           </div>
-          <Row md={12}>
-            <div className='text-end mt-2'>
-              <Button disabled={loading} type='button' color='danger' className='btn' onClick={handleDeleteFromSkuList}>
-                {loading ? <Spinner color='#fff' /> : 'Delete'}
-              </Button>
-            </div>
-          </Row>
+          <div className='mt-3 d-flex justify-content-end align-items-center gap-2'>
+            <Button type='button' color='light' className='fs-7' onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button disabled={loading} type='button' color='danger' className='fs-7' onClick={handleDeleteFromSkuList}>
+              {loading ? (
+                <span>
+                  <Spinner color='light' size={'sm'} /> Deleting...
+                </span>
+              ) : (
+                'Delete'
+              )}
+            </Button>
+          </div>
         </Row>
       </ModalBody>
     </Modal>

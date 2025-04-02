@@ -9,16 +9,13 @@ import * as Yup from 'yup'
 import { Formik, Form } from 'formik'
 import Papa from 'papaparse'
 import Dropzone from 'react-dropzone'
-import useSWR from 'swr'
+import { Supplier, useSuppliers } from '@hooks/suppliers/useSuppliers'
+import SelectSingleFilter from '@components/ui/filters/SelectSingleFilter'
+import { SelectOptionType } from '@components/Common/SimpleSelect'
 
 type Props = {
   orderNumberStart: string
 }
-type Supplier = {
-  suppliersId: number
-  name: string
-}
-const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
 
 const Add_Po_With_File = ({ orderNumberStart }: Props) => {
   const router = useRouter()
@@ -32,10 +29,7 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
   const [errorLines, setErrorLines] = useState([]) as any
   const [showerrorResponse, setShowErrorResponse] = useState(false)
   const [errorResponse, setErrorResponse] = useState([]) as any
-  const { data: suppliersList }: { data?: Supplier[] } = useSWR(
-    state.user.businessId ? `/api/purchaseOrders/getSuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
-    fetcher
-  )
+  const { suppliers } = useSuppliers()
 
   const initialValues = {
     orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
@@ -64,14 +58,10 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
         for (let v = 0; v < rowValues.length; v++) {
           switch (v) {
             case 0:
-              ;/^[a-zA-Z0-9-]{4,50}$/.test(rowValues[v])
-                ? () => {}
-                : errorsList.push({ errorLine: i, errorMessage: 'Format error, invalid special characters: " , . @... No blank spaces.', value: rowValues[v] })
+              ;/^[a-zA-Z0-9-]{4,50}$/.test(rowValues[v]) ? () => {} : errorsList.push({ errorLine: i, errorMessage: 'Format error, invalid special characters: " , . @... No blank spaces.', value: rowValues[v] })
               break
             case 1:
-              ;/^[0-9]{1,}$/.test(rowValues[v])
-                ? () => {}
-                : errorsList.push({ errorLine: i, errorMessage: 'Format error, only integers are valid. No decimal numbers.', value: rowValues[v] })
+              ;/^[0-9]{1,}$/.test(rowValues[v]) ? () => {} : errorsList.push({ errorLine: i, errorMessage: 'Format error, only integers are valid. No decimal numbers.', value: rowValues[v] })
               break
             default:
             // code block
@@ -109,10 +99,6 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
             resultValues,
           })
           if (!response.data.error) {
-            setShowErrorResponse(false)
-            setErrorResponse([])
-            toast.success(response.data.msg)
-            setShowCreatePoFromFile(false)
             if (organizeBy == 'suppliers') {
               mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
             } else if (organizeBy == 'orders') {
@@ -120,6 +106,10 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
             } else if (organizeBy == 'sku') {
               mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
             }
+            setShowErrorResponse(false)
+            setErrorResponse([])
+            toast.success(response.data.msg)
+            setShowCreatePoFromFile(false)
           } else {
             setErrorResponse(response.data.errorList)
             setShowErrorResponse(true)
@@ -170,7 +160,7 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
           setShowCreatePoFromFile(!state.showCreatePoFromFile)
         }}
         className='modal-title'
-        id='myModalLabel'>
+        id='addPoFromFileModalLabel'>
         Create New Purchase Order
       </ModalHeader>
       <ModalBody>
@@ -201,50 +191,26 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                       {touched.orderNumber && errors.orderNumber ? <FormFeedback type='invalid'>{errors.orderNumber}</FormFeedback> : null}
                     </div>
                   </FormGroup>
-                  <FormGroup className='mb-1'>
-                    <Label htmlFor='firstNameinput' className='form-label'>
-                      *Supplier
-                    </Label>
-                    <Input
-                      type='select'
-                      className='form-control fs-6'
-                      id='supplier'
-                      name='supplier'
-                      bsSize='sm'
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.supplier || ''}
-                      invalid={touched.supplier && errors.supplier ? true : false}>
-                      <option value=''>Select ...</option>
-                      {suppliersList?.map((supplier: Supplier) => (
-                        <option key={supplier.suppliersId} value={supplier.suppliersId}>
-                          {supplier.name}
-                        </option>
-                      ))}
-                    </Input>
-                    {touched.supplier && errors.supplier ? <FormFeedback type='invalid'>{errors.supplier}</FormFeedback> : null}
-                  </FormGroup>
+                  <SelectSingleFilter
+                    inputLabel={'*Supplier'}
+                    inputName={'supplier'}
+                    placeholder={'Select ...'}
+                    selected={{ value: values.supplier, label: suppliers?.find((supplier: Supplier) => supplier.suppliersId == parseInt(values.supplier))?.name || 'Select...' }}
+                    options={suppliers?.map((supplier: Supplier) => ({ value: supplier.suppliersId, label: supplier.name })) || [{ value: '', label: '' }]}
+                    handleSelect={(option: SelectOptionType) => {
+                      handleChange({ target: { name: 'supplier', value: option.value } })
+                      console.log('errors', errors)
+                    }}
+                    error={errors.supplier}
+                  />
                   <FormGroup className='mb-1'>
                     <Label htmlFor='firstNameinput' className='form-label'>
                       *Date
                     </Label>
-                    <Input
-                      type='date'
-                      className='form-control fs-6'
-                      id='date'
-                      name='date'
-                      bsSize='sm'
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.date || ''}
-                      invalid={touched.date && errors.date ? true : false}
-                    />
+                    <Input type='date' className='form-control fs-6' id='date' name='date' bsSize='sm' onChange={handleChange} onBlur={handleBlur} value={values.date || ''} invalid={touched.date && errors.date ? true : false} />
                     {touched.date && errors.date ? <FormFeedback type='invalid'>{errors.date}</FormFeedback> : null}
                   </FormGroup>
-                  {showErrorLines &&
-                    errorLines.map((error: any, index: number) => (
-                      <p key={`ErrorLine${index}`} className='text-danger m-0 p-0'>{`- Error in Line: ${error.errorLine} Value: ${error.value} Error: ${error.errorMessage}`}</p>
-                    ))}
+                  {showErrorLines && errorLines.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='text-danger m-0 p-0'>{`- Error in Line: ${error.errorLine} Value: ${error.value} Error: ${error.errorMessage}`}</p>)}
                   {showerrorResponse && errorResponse.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='text-danger m-0'>{`Error: ${error}`}</p>)}
                 </Col>
                 <Col md={6}>
@@ -314,7 +280,13 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
               <Col md={12} className='mt-4'>
                 <div className='text-end'>
                   <Button disabled={errorFile || showErrorLines || showerrorResponse} type='submit' color='success' className='fs-7'>
-                    {loading ? <span><Spinner color='light' size={'sm'}  /> Creating...</span> : 'Create PO'}
+                    {loading ? (
+                      <span>
+                        <Spinner color='light' size={'sm'} /> Creating...
+                      </span>
+                    ) : (
+                      'Create PO'
+                    )}
                   </Button>
                 </div>
               </Col>

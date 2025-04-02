@@ -4,26 +4,28 @@ import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 
 const createReceivingFromPo: NextApiHandler = async (request, response) => {
-    const session = await getServerSession(request, response, authOptions)
-    if (session == null) {
-        response.status(401).end()
+  const session = await getServerSession(request, response, authOptions)
+  if (session == null) {
+    response.status(401).end()
 
-        return
-    }
+    return
+  }
 
-    axios.post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/purchaseOrders/createReceivingFromPo.php?businessId=${request.query.businessId}`, {
-        shippingProducts: request.body.shippingProducts,
-        orderInfo: request.body.orderInfo,
-        poInfo: request.body.poInfo,
-        isNewReceiving: request.body.isNewReceiving,
-        receivingIdToAdd: request.body.receivingIdToAdd,
+  axios
+    .post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/purchaseOrders/createReceivingFromPo-v2.php?businessId=${request.query.businessId}`, {
+      shippingProducts: request.body.shippingProducts,
+      orderInfo: request.body.orderInfo,
+      receivingItems: request.body.receivingItems,
+      isNewReceiving: request.body.isNewReceiving,
+      receivingIdToAdd: request.body.receivingIdToAdd,
+      warehouseId: request.body.warehouseId,
     })
-        .then(({ data }) => {
-            response.json(data)
-        })
-        .catch((error) => {
-            response.end(error)
-        });
+    .then(({ data }) => {
+      response.json(data)
+    })
+    .catch((error) => {
+      response.end(error)
+    })
 }
 
 export default createReceivingFromPo

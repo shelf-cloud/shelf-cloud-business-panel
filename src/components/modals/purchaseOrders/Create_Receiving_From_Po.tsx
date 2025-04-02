@@ -10,6 +10,8 @@ import router from 'next/router'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import useSWR from 'swr'
 import { NoImageAdress } from '@lib/assetsConstants'
+import SelectSingleFilter from '@components/ui/filters/SelectSingleFilter'
+import { SelectOptionType } from '@components/Common/SimpleSelect'
 
 type Props = {
   orderNumberStart: string
@@ -22,13 +24,19 @@ type OpenReceivings = {
   orderDate: string
 }
 
+const RECEIVING_TYPES: SelectOptionType[] = [
+  { value: '', label: 'Choose a Type...' },
+  { value: 'true', label: 'Create New Receiving' },
+]
+const EXIST_RECEIVING_TYPE: SelectOptionType[] = [{ value: 'false', label: 'Add to Existing Receiving' }]
+
 const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
 
 const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
-  const { state, setShowCreateReceivingFromPo }: any = useContext(AppContext)
+  const { state, setShowCreateReceivingFromPo } = useContext(AppContext)
   const [loading, setloading] = useState(false)
 
-  const { data: OpenReceivings }: { data?: OpenReceivings[] } = useSWR(
+  const { data: openReceivings }: { data?: OpenReceivings[] } = useSWR(
     state.user.businessId ? `/api/purchaseOrders/getOpenReceivings?region=${state.currentRegion}&businessId=${state.user.businessId}&warehouseId=${state.receivingFromPo.warehouse.id}` : null,
     fetcher,
     {
@@ -58,11 +66,15 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
     }),
     onSubmit: async (values) => {
       setloading(true)
+
+      // SHIPPING PRODUCTS
       let shippingProducts = [] as any
       Object.entries(state.receivingFromPo.items).forEach(([_poId, inventoryId]: any) =>
         Object.entries(inventoryId).map(([_inventoryId, item]: any) => {
           shippingProducts.push({
             poId: item.poId,
+            hasSplitting: item.hasSplitting,
+            splitId: item.splitId,
             sku: item.sku,
             inventoryId: item.inventoryId,
             qty: Number(item.receivingQty),
@@ -73,11 +85,14 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
         })
       )
 
+      // ORDER PRODUCTS
       let orderProducts = [] as any
       Object.entries(state.receivingFromPo.items).map(([_poId, inventoryId]: any) =>
         Object.entries(inventoryId).map(([_inventoryId, item]: any) => {
           orderProducts.push({
             poId: item.poId,
+            hasSplitting: item.hasSplitting,
+            splitId: item.splitId,
             sku: item.sku,
             inventoryId: item.inventoryId,
             name: item.title,
@@ -95,15 +110,16 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
           orderNumber: values.orderNumber,
           orderProducts,
         },
-        poInfo: state.receivingFromPo.items,
+        receivingItems: state.receivingFromPo.items,
         isNewReceiving: values.isNewReceiving == 'true' ? true : false,
         receivingIdToAdd: parseInt(values.receivingIdToAdd),
+        warehouseId: state.receivingFromPo.warehouse.id,
       })
 
       if (!response.data.error) {
         toast.success(response.data.msg)
         setShowCreateReceivingFromPo(false)
-        router.push('/Receivings')
+        router.push('/receivings')
       } else {
         toast.error(response.data.msg)
       }
@@ -167,48 +183,30 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
               </FormGroup>
             </Col>
             <Col md={6}>
-              <FormGroup>
-                <Label htmlFor='firstNameinput' className='form-label fs-7'>
-                  *Select Receiving Type
-                </Label>
-                <Input
-                  type='select'
-                  className='form-control fs-6'
-                  id='isNewReceiving'
-                  name='isNewReceiving'
-                  bsSize='sm'
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  invalid={validation.touched.isNewReceiving && validation.errors.isNewReceiving ? true : false}>
-                  <option value=''>Choose a Type..</option>
-                  <option value='true'>Create New Receiving</option>
-                  {OpenReceivings && OpenReceivings.length > 0 && <option value='false'>Add to Existing Receiving</option>}
-                </Input>
-                {validation.touched.isNewReceiving && validation.errors.isNewReceiving ? <FormFeedback type='invalid'>{validation.errors.isNewReceiving}</FormFeedback> : null}
-              </FormGroup>
+              <SelectSingleFilter
+                inputLabel='*Select Receiving Type'
+                inputName='isNewReceiving'
+                placeholder='Choose a Type...'
+                selected={[...RECEIVING_TYPES, ...EXIST_RECEIVING_TYPE].find((option) => option.value === validation.values.isNewReceiving) || { value: '', label: 'Choose a Type...' }}
+                options={openReceivings && openReceivings.length > 0 ? [...RECEIVING_TYPES, ...EXIST_RECEIVING_TYPE] : RECEIVING_TYPES}
+                handleSelect={(option: SelectOptionType) => {
+                  validation.handleChange({ target: { name: 'isNewReceiving', value: option.value } })
+                }}
+                error={validation.errors.isNewReceiving}
+              />
+              {openReceivings && openReceivings.length <= 0 && <p className='text-muted fs-7'>{`There's no open receiving for Amazon - FBA ${state.receivingFromPo.warehouse.name}`}</p>}
               {validation.values.isNewReceiving == 'false' && (
-                <FormGroup>
-                  <Label htmlFor='firstNameinput' className='form-label fs-7'>
-                    *Select Existing Receiving
-                  </Label>
-                  <Input
-                    type='select'
-                    className='form-control fs-6'
-                    id='receivingIdToAdd'
-                    name='receivingIdToAdd'
-                    bsSize='sm'
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    invalid={validation.touched.receivingIdToAdd && validation.errors.receivingIdToAdd ? true : false}>
-                    <option value=''>Choose a Receiving..</option>
-                    {OpenReceivings?.map((receiving) => (
-                      <option key={receiving.id} value={receiving.id}>
-                        {receiving.orderNumber}
-                      </option>
-                    ))}
-                  </Input>
-                  {validation.touched.receivingIdToAdd && validation.errors.receivingIdToAdd ? <FormFeedback type='invalid'>{validation.errors.receivingIdToAdd}</FormFeedback> : null}
-                </FormGroup>
+                <SelectSingleFilter
+                  inputLabel='*Select Existing Receiving'
+                  inputName='receivingIdToAdd'
+                  placeholder='Choose a Type...'
+                  selected={{ value: validation.values.receivingIdToAdd, label: openReceivings?.find((receiving) => receiving.id == parseInt(validation.values.receivingIdToAdd))?.orderNumber || 'Choose a Receiving...' }}
+                  options={openReceivings?.map((receiving) => ({ value: receiving.id, label: receiving.orderNumber })) || [{ value: '', label: '' }]}
+                  handleSelect={(option: SelectOptionType) => {
+                    validation.handleChange({ target: { name: 'receivingIdToAdd', value: option.value } })
+                  }}
+                  error={validation.errors.receivingIdToAdd}
+                />
               )}
             </Col>
           </Row>

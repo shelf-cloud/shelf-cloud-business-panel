@@ -45,7 +45,7 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
       name: <span className='fw-bolder fs-6'>Date Created</span>,
       selector: (row: PurchaseOrder) => row.date,
       sortable: true,
-      center:true,
+      center: true,
       compact: true,
       style: {
         fontSize: '0.7rem',
@@ -126,6 +126,8 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
       sortable: true,
       left: true,
       compact: true,
+      wrap: true,
+      grow: 1.5,
       style: {
         fontSize: '0.7rem',
       },

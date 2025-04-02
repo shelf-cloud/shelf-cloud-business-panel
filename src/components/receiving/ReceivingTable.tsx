@@ -1,42 +1,50 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { OrderRowType, ShipmentOrderItem } from '@typings'
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import ShipmentExpandedDetail from '../ShipmentExpandedDetail'
 import AppContext from '@context/AppContext'
-import { UncontrolledTooltip } from 'reactstrap'
-import Confirm_Delete_Receiving from '../modals/receivings/Confirm_Delete_Receiving'
+import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from 'reactstrap'
+import { sortNumbers, sortStringsLocaleCompare } from '@lib/helperFunctions'
+import { AddShippingCostModalType, DeleteReceivingModalType } from '@pages/receivings'
 
 type Props = {
   tableData: OrderRowType[]
   pending: boolean
   mutateReceivings: () => void
+  setshowDeleteModal: (prev: DeleteReceivingModalType) => void
+  setaddShippingCostModal: (prev: AddShippingCostModalType) => void
 }
 
-const ReceivingTable = ({ tableData, pending, mutateReceivings }: Props) => {
+const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteModal, setaddShippingCostModal }: Props) => {
   const { state }: any = useContext(AppContext)
-  const [loading, setLoading] = useState(false)
-  const [showDeleteModal, setshowDeleteModal] = useState({
-    show: false,
-    orderId: 0,
-    orderNumber: '',
-  })
 
   const columns: any = [
     {
-      name: <span className='fw-bolder fs-6'>Order Number</span>,
-      selector: (row: OrderRowType) => {
-        return <div className='m-0 p-0 fw-bold fs-7'>{row.orderNumber}</div>
-      },
+      name: <span className='fw-bolder fs-6'>Receiving</span>,
+      selector: (row: OrderRowType) => <p className='m-0 p-0 fw-bold fs-7'>{row.orderNumber}</p>,
       sortable: true,
       wrap: true,
       grow: 2,
       left: true,
-      //   compact: true,
+      compact: true,
+      sortFunction: (rowA: OrderRowType, rowB: OrderRowType) => sortStringsLocaleCompare(rowA.orderNumber, rowB.orderNumber),
     },
     {
-      name: <span className='fw-bolder fs-6'>Status</span>,
+      name: <span className='fw-bolder fs-6'>Created In</span>,
+      selector: (row: OrderRowType) => (row.isReceivingFromPo ? 'Purchase Orders' : 'Manual Receiving'),
+      sortable: true,
+      wrap: true,
+      left: true,
+      compact: true,
+      style: {
+        fontSize: '0.7rem',
+      },
+      sortFunction: (rowA: OrderRowType, rowB: OrderRowType) => sortStringsLocaleCompare(rowA.warehouseName, rowB.warehouseName),
+    },
+    {
+      name: <span className='fw-bolder text-center fs-6'>Status</span>,
       selector: (row: OrderRowType) => {
         switch (row.orderStatus) {
           case 'shipped':
@@ -58,43 +66,45 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings }: Props) => {
         }
       },
       sortable: true,
-      wrap: true,
-      // grow: 2,
+      wrap: false,
       center: true,
-      //   compact: true,
+      compact: true,
+      style: {
+        fontSize: '0.7rem',
+      },
+      sortFunction: (rowA: OrderRowType, rowB: OrderRowType) => sortStringsLocaleCompare(rowA.orderStatus, rowB.orderStatus),
     },
     {
-      name: <span className='fw-bolder fs-6'>Origin</span>,
-      selector: (row: OrderRowType) => {
-        return (
-          <div className='text-center m-0 p-0 text-nowrap fs-7'>
-            {row.isReceivingFromPo ? <span className='text-primary'>Purchase Orders</span> : <span className='text-info'>Manual Receiving</span>}
-          </div>
-        )
-      },
+      name: <span className='fw-bolder fs-6'>Destination</span>,
+      selector: (row: OrderRowType) => row.warehouseName,
       sortable: true,
       wrap: true,
-      grow: 1.2,
-      center: true,
+      left: true,
+      grow: 1.5,
+      compact: true,
+      style: {
+        fontSize: '0.7rem',
+      },
+      sortFunction: (rowA: OrderRowType, rowB: OrderRowType) => sortStringsLocaleCompare(rowA.warehouseName, rowB.warehouseName),
     },
     {
-      name: <span className='fw-bolder fs-6'>Order Date</span>,
+      name: <span className='fw-bolder text-center fs-6'>Date Created</span>,
       selector: (row: OrderRowType) => row.orderDate,
       sortable: true,
-      wrap: true,
-      grow: 1.2,
+      wrap: false,
       center: true,
+      compact: true,
       style: {
         fontSize: '0.7rem',
       },
     },
     {
-      name: <span className='fw-bolder fs-6'>Order Closed</span>,
+      name: <span className='fw-bolder text-center fs-6'>Date Closed</span>,
       selector: (row: OrderRowType) => row.closedDate || '',
       sortable: true,
       wrap: false,
-      grow: 1.2,
       center: true,
+      compact: true,
       style: {
         fontSize: '0.7rem',
       },
@@ -104,84 +114,70 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings }: Props) => {
       selector: (row: OrderRowType) => FormatIntNumber(state.currentRegion, Number(row.totalItems)),
       sortable: true,
       wrap: false,
-      center: true,
+      compact: true,
+      right: true,
       style: {
         fontSize: '0.7rem',
       },
+      sortFunction: (rowA: OrderRowType, rowB: OrderRowType) => sortNumbers(rowA.totalItems, rowB.totalItems),
     },
     {
-      name: <span className='fw-bolder fs-6 text-center'>Total Charge</span>,
+      name: <span className='fw-bolder fs-6 text-end'>Total Charge</span>,
       selector: (row: OrderRowType) => FormatCurrency(state.currentRegion, Number(row.totalCharge)),
       sortable: true,
       wrap: false,
-      center: true,
+      right: true,
+      compact: true,
       style: {
         color: '#4481FD',
         fontSize: '0.7rem',
       },
+      sortFunction: (rowA: OrderRowType, rowB: OrderRowType) => sortNumbers(rowA.totalCharge, rowB.totalCharge),
     },
     {
-      name: <span className='fw-bolder fs-6'></span>,
-      selector: (row: OrderRowType) => {
-        if (
-          (row.orderStatus == 'awaiting' || row.orderStatus == 'awaiting_shipment') &&
-          row.orderItems.reduce((totalReceived, item: ShipmentOrderItem) => totalReceived + item.qtyReceived!, 0) <= 0
-        ) {
-          return (
-            <>
-              <i
-                className='fs-4 text-danger las la-trash-alt'
-                style={{ cursor: 'pointer' }}
-                id={`deleteReceiving${row.orderId}`}
-                onClick={() =>
-                  setshowDeleteModal((prev) => {
-                    return {
-                      ...prev,
-                      show: true,
-                      orderId: row.id,
-                      orderNumber: row.orderNumber,
-                    }
-                  })
-                }
-              />
-              <UncontrolledTooltip
-                placement='top'
-                target={`deleteReceiving${row.orderId}`}
-                popperClassName='bg-white shadow px-1 pt-1 rounded-2'
-                innerClassName='text-black bg-white p-0'>
-                <p className='fs-6 text-danger m-0 p-0 mb-0'>Delete Receiving</p>
-              </UncontrolledTooltip>
-            </>
-          )
-        }
-      },
+      name: <span className='fw-bold fs-6'></span>,
       sortable: false,
-      wrap: false,
-      center: true,
       compact: true,
+      center: true,
+      cell: (row: OrderRowType) => {
+        return (
+          <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
+            <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
+              <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-1 py-0' style={{ color: '#919FAF' }} />
+            </DropdownToggle>
+            <DropdownMenu className='dropdown-menu-end fs-7' container={'body'}>
+              <DropdownItem onClick={() => setaddShippingCostModal({ show: true, orderId: row.id, orderNumber: row.orderNumber, shippingCost: row.receivingShippingCost ?? '' })}>
+                <div>
+                  <i className='las la-ship label-icon align-middle me-2 fs-5' />
+                  <span className='fw-normal text-dark'>Add Shipping Cost</span>
+                </div>
+              </DropdownItem>
+              {(row.orderStatus == 'awaiting' || row.orderStatus == 'awaiting_shipment') && row.orderItems.reduce((totalReceived, item: ShipmentOrderItem) => totalReceived + item.qtyReceived!, 0) <= 0 && (
+                <>
+                  <DropdownItem header>Actions</DropdownItem>
+                  <DropdownItem
+                    onClick={() =>
+                      setshowDeleteModal({
+                        show: true,
+                        orderId: row.id,
+                        orderNumber: row.orderNumber,
+                      })
+                    }>
+                    <i className='las la-trash-alt text-danger label-icon align-middle fs-5 me-2' />
+                    <span className='fw-normal text-danger'>Delete Receiving</span>
+                  </DropdownItem>
+                </>
+              )}
+            </DropdownMenu>
+          </UncontrolledDropdown>
+        )
+      },
     },
   ]
 
   return (
     <>
-      <DataTable
-        columns={columns}
-        data={tableData}
-        progressPending={pending}
-        expandableRows
-        expandableRowsComponent={ShipmentExpandedDetail}
-        expandableRowsComponentProps={{ mutateReceivings: mutateReceivings }}
-        striped={true}
-      />
-      {showDeleteModal.show && (
-        <Confirm_Delete_Receiving
-          showDeleteModal={showDeleteModal}
-          setshowDeleteModal={setshowDeleteModal}
-          loading={loading}
-          setLoading={setLoading}
-          mutateReceivings={mutateReceivings}
-        />
-      )}
+      <DataTable columns={columns} data={tableData} progressPending={pending} expandableRows expandableRowsComponent={ShipmentExpandedDetail} expandableRowsComponentProps={{ mutateReceivings: mutateReceivings }} striped={true} />
     </>
   )
 }

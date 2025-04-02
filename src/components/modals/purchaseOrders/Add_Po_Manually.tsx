@@ -7,7 +7,9 @@ import { useSWRConfig } from 'swr'
 import { useRouter } from 'next/router'
 import * as Yup from 'yup'
 import { Formik, Form } from 'formik'
-import useSWR from 'swr'
+import { useSuppliers } from '@hooks/suppliers/useSuppliers'
+import SelectSingleFilter from '@components/ui/filters/SelectSingleFilter'
+import { SelectOptionType } from '@components/Common/SimpleSelect'
 
 type Props = {
   orderNumberStart: string
@@ -22,11 +24,7 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
   const { state, setShowCreatePoManually }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [loading, setLoading] = useState(false)
-  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data: suppliersList }: { data?: Supplier[] } = useSWR(
-    state.user.businessId ? `/api/purchaseOrders/getSuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
-    fetcher
-  )
+  const { suppliers } = useSuppliers()
 
   const initialValues = {
     orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
@@ -50,7 +48,7 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
       ...values,
     })
     if (!response.data.error) {
-      setShowCreatePoManually(false)
+      mutate('/api/getuser')
       if (organizeBy == 'suppliers') {
         mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
       } else if (organizeBy == 'orders') {
@@ -58,8 +56,8 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
       } else if (organizeBy == 'sku') {
         mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
       }
-      mutate('/api/getuser')
       toast.success(response.data.msg)
+      setShowCreatePoManually(false)
     } else {
       toast.error('There were some errors creating Purchase Order.')
     }
@@ -111,46 +109,25 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
                       {touched.orderNumber && errors.orderNumber ? <FormFeedback type='invalid'>{errors.orderNumber}</FormFeedback> : null}
                     </div>
                   </FormGroup>
-                  <FormGroup className='mb-1'>
-                    <Label htmlFor='firstNameinput' className='form-label'>
-                      *Supplier
-                    </Label>
-                    <Input
-                      type='select'
-                      className='form-control fs-6'
-                      bsSize='sm'
-                      id='supplier'
-                      name='supplier'
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.supplier || ''}
-                      invalid={touched.supplier && errors.supplier ? true : false}>
-                      <option value=''>Select ...</option>
-                      {suppliersList?.map((supplier: Supplier) => (
-                        <option key={supplier.suppliersId} value={supplier.suppliersId}>
-                          {supplier.name}
-                        </option>
-                      ))}
-                    </Input>
-                    {touched.supplier && errors.supplier ? <FormFeedback type='invalid'>{errors.supplier}</FormFeedback> : null}
-                  </FormGroup>
+                  <SelectSingleFilter
+                    inputLabel={'*Supplier'}
+                    inputName={'supplier'}
+                    placeholder={'Select ...'}
+                    selected={{ value: values.supplier, label: suppliers?.find((supplier: Supplier) => supplier.suppliersId == parseInt(values.supplier))?.name || 'Select...' }}
+                    options={suppliers?.map((supplier: Supplier) => ({ value: supplier.suppliersId, label: supplier.name })) || [{ value: '', label: '' }]}
+                    handleSelect={(option: SelectOptionType) => {
+                      handleChange({ target: { name: 'supplier', value: option.value } })
+                      console.log('errors', errors)
+                    }}
+                    error={errors.supplier}
+                  />
                 </Col>
                 <Col md={6}>
                   <FormGroup className='mb-1'>
                     <Label htmlFor='firstNameinput' className='form-label'>
                       *Date
                     </Label>
-                    <Input
-                      type='date'
-                      className='form-control fs-6'
-                      bsSize='sm'
-                      id='date'
-                      name='date'
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.date || ''}
-                      invalid={touched.date && errors.date ? true : false}
-                    />
+                    <Input type='date' className='form-control fs-6' bsSize='sm' id='date' name='date' onChange={handleChange} onBlur={handleBlur} value={values.date || ''} invalid={touched.date && errors.date ? true : false} />
                     {touched.date && errors.date ? <FormFeedback type='invalid'>{errors.date}</FormFeedback> : null}
                   </FormGroup>
                 </Col>
@@ -159,7 +136,13 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
               <Col md={12} className='mt-4'>
                 <div className='text-end'>
                   <Button disabled={loading} type='submit' color='success' className='fs-7'>
-                    {loading ? <span><Spinner color='light' size={'sm'}  /> Creating...</span> : 'Create PO'}
+                    {loading ? (
+                      <span>
+                        <Spinner color='light' size={'sm'} /> Creating...
+                      </span>
+                    ) : (
+                      'Create PO'
+                    )}
                   </Button>
                 </div>
               </Col>

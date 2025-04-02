@@ -2,20 +2,15 @@
 import AppContext from '@context/AppContext'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap'
-import SimpleSelect from './Common/SimpleSelect'
-
-type filter = {
-  value: string
-  label: string
-}
+import SimpleSelect, { SelectOptionType } from './Common/SimpleSelect'
 
 type Props = {
-  searchType: filter
-  setSearchType: (selectedOption: filter) => void
-  searchStatus: filter
-  setSearchStatus: (selectedOption: filter) => void
-  searchMarketplace: filter
-  setSearchMarketplace: (selectedOption: filter) => void
+  searchType: SelectOptionType
+  setSearchType: (selectedOption: SelectOptionType) => void
+  searchStatus: SelectOptionType
+  setSearchStatus: (selectedOption: SelectOptionType) => void
+  searchMarketplace: SelectOptionType
+  setSearchMarketplace: (selectedOption: SelectOptionType) => void
 }
 
 const TYPE_OPTIONS = [
@@ -89,10 +84,7 @@ const FilterByOthers = ({ searchType, setSearchType, searchStatus, setSearchStat
                         setSearchMarketplace(option)
                         setOpenFilters(false)
                       }}
-                      options={[
-                        { value: '', label: 'All Stores' },
-                        ...state?.user?.[`${state.currentRegion}`]?.marketplacesIds?.sort().map((market: any) => ({ value: market.value, label: market.label })),
-                      ]}
+                      options={[{ value: '', label: 'All Stores' }, ...state?.user?.[`${state.currentRegion}`]?.marketplacesIds?.sort().map((market: any) => ({ value: market.value, label: market.label }))]}
                     />
                   </>
                 )}

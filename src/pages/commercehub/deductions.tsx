@@ -14,7 +14,7 @@ import moment from 'moment'
 import useSWR from 'swr'
 import DeductionsTable from '@components/commerceHub/DeductionsTable'
 import { DeductionsResponse, DeductionType } from '@typesTs/commercehub/deductions'
-import FilterCommerceHubInvoices from '@components/commerceHub/FilterCommerceHubInvoices'
+import FilterCommerceHubInvoices, { InvoiceCommerceHubFiltersType } from '@components/commerceHub/FilterCommerceHubInvoices'
 import { toast } from 'react-toastify'
 import BulkActionsForSelected from '@components/commerceHub/BulkActionsForSelected'
 import EditCommerceHubCommentModal from '@components/modals/commercehub/EditCommerceHubCommentModal'
@@ -68,7 +68,7 @@ const Deductions = ({ session, sessionToken }: Props) => {
   const [searchValue, setSearchValue] = useState<string>('')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
-  const [filters, setfilters] = useState({
+  const [filters, setfilters] = useState<InvoiceCommerceHubFiltersType>({
     onlyOverdue: false,
     showOverdue: false,
     store: { value: 'all', label: 'All' },
@@ -181,10 +181,7 @@ const Deductions = ({ session, sessionToken }: Props) => {
     }
   }
 
-  const hasActiveFilters = useMemo(
-    () => searchValue !== '' || startDate !== '' || endDate !== '' || filters.onlyOverdue || filters.store.value !== 'all' || filters.status.value !== 'all',
-    [searchValue, startDate, endDate, filters]
-  )
+  const hasActiveFilters = useMemo(() => searchValue !== '' || startDate !== '' || endDate !== '' || filters.onlyOverdue || filters.store.value !== 'all' || filters.status.value !== 'all', [searchValue, startDate, endDate, filters])
 
   const downloadInfoToExcel = async () => {
     const generatingDocument = toast.loading('Generating Document...')
@@ -254,14 +251,7 @@ const Deductions = ({ session, sessionToken }: Props) => {
                   <i className='las la-cloud-download-alt label-icon align-middle fs-4 me-2' />
                   Download To Excel
                 </Button>
-                {selectedRows.length > 0 && (
-                  <BulkActionsForSelected
-                    selectedRows={selectedRows}
-                    statusOptions={STATUS_OPTIONS}
-                    clearSelected={clearAllSelectedRows}
-                    changeSelectedStatus={changeSelectedStatus}
-                  />
-                )}
+                {selectedRows.length > 0 && <BulkActionsForSelected selectedRows={selectedRows} statusOptions={STATUS_OPTIONS} clearSelected={clearAllSelectedRows} changeSelectedStatus={changeSelectedStatus} />}
               </div>
               <div className='w-100 d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-end align-items-lg-center px-0'>
                 <div className='app-search p-0 col-sm-12 col-lg-5'>
@@ -288,13 +278,7 @@ const Deductions = ({ session, sessionToken }: Props) => {
                     </span>
                   </div>
                 </div>
-                <FilterByDates
-                  shipmentsStartDate={startDate}
-                  setShipmentsStartDate={setStartDate}
-                  setShipmentsEndDate={setEndDate}
-                  shipmentsEndDate={endDate}
-                  handleChangeDatesFromPicker={handleChangeDatesFromPicker}
-                />
+                <FilterByDates shipmentsStartDate={startDate} setShipmentsStartDate={setStartDate} setShipmentsEndDate={setEndDate} shipmentsEndDate={endDate} handleChangeDatesFromPicker={handleChangeDatesFromPicker} />
                 <FilterCommerceHubInvoices filters={filters} setfilters={setfilters} stores={stores?.stores ?? []} statusOptions={STATUS_OPTIONS} />
                 <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='fs-7 text-nowrap' onClick={clearFilters}>
                   Clear Filters
@@ -303,15 +287,7 @@ const Deductions = ({ session, sessionToken }: Props) => {
             </div>
             <Card>
               <CardBody>
-                <DeductionsTable
-                  filteredItems={invoices}
-                  pending={isValidating && size === 1}
-                  setSelectedRows={setSelectedRows}
-                  toggledClearRows={toggledClearRows}
-                  setEditCommentModal={setEditCommentModal}
-                  sortBy={sortBy}
-                  setSortBy={setSortBy}
-                />
+                <DeductionsTable filteredItems={invoices} pending={isValidating && size === 1} setSelectedRows={setSelectedRows} toggledClearRows={toggledClearRows} setEditCommentModal={setEditCommentModal} sortBy={sortBy} setSortBy={setSortBy} />
                 <div ref={lastInvoiceElementRef} style={{ height: '20px', marginTop: '10px' }}>
                   {isValidating && size > 1 && (
                     <p className='text-center'>

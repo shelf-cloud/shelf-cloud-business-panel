@@ -22,7 +22,7 @@ export const notificationsTagLinks: NotificationTagLinks = {
     title: 'FBA Shipments',
   },
   receiving_log: {
-    link: '/Receivings',
+    link: '/receivings',
     title: 'Receivings',
   },
   reports_ready: {

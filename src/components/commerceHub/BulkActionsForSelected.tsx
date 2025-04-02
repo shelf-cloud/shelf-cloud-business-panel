@@ -1,4 +1,4 @@
-import SimpleSelect from '@components/Common/SimpleSelect'
+import SimpleSelect, { SelectOptionType } from '@components/Common/SimpleSelect'
 import React, { useEffect, useRef, useState } from 'react'
 import { Button, ButtonGroup, Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap'
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
 const BulkActionsForSelected = ({ selectedRows, clearSelected, statusOptions, changeSelectedStatus }: Props) => {
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const FilterCommerceHubInvoicesContainer = useRef<HTMLDivElement | null>(null)
-  const [selectedStatus, setselectedStatus] = useState({ value: '', label: 'Select Status' })
+  const [selectedStatus, setselectedStatus] = useState<SelectOptionType>({ value: '', label: 'Select Status' })
 
   useEffect(() => {
     if (document) {
@@ -26,7 +26,7 @@ const BulkActionsForSelected = ({ selectedRows, clearSelected, statusOptions, ch
   }, [])
 
   const handleApplyNewStatus = () => {
-    changeSelectedStatus(selectedStatus.value)
+    changeSelectedStatus(String(selectedStatus.value))
   }
 
   return (

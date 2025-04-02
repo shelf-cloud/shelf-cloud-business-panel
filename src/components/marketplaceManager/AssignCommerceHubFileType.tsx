@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import SimpleSelect from '@components/Common/SimpleSelect'
+import SimpleSelect, { SelectOptionType } from '@components/Common/SimpleSelect'
 import React, { useEffect, useRef, useState } from 'react'
 import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap'
 
 type Props = {
-  selected:  { value: string; label: string }
-  setSelected: (selected: { value: string; label: string }) => void
-  options: { value: string; label: string }[]
+  selected: SelectOptionType
+  setSelected: (selected: SelectOptionType) => void
+  options: SelectOptionType[]
 }
 
 const AssignCommerceHubFileType = ({ selected, setSelected, options }: Props) => {

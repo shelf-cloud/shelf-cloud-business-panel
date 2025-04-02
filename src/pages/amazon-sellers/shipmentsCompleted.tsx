@@ -13,7 +13,7 @@ import { toast } from 'react-toastify'
 import FBAShipmentsTable from '@components/amazon/shipments/FBAShipmentsTable'
 import { FBAShipment, FBAShipmentsRepsonse } from '@typesTs/amazon/fbaShipments.interface'
 import ChangeFBAShipmentName from '@components/modals/amazon/ChangeFBAShipmentName'
-import FilterFBAShipments from '@components/amazon/shipments/FilterFBAShipments'
+import FilterFBAShipments, { FBAFiltersType } from '@components/amazon/shipments/FilterFBAShipments'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -53,7 +53,7 @@ const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
     shipmentId: '',
     shipmentName: '',
   })
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<FBAFiltersType>({
     status: { value: 'all', label: 'All' },
     showOnlyMissingQty: false,
   })

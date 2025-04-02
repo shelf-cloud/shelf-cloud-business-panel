@@ -13,7 +13,7 @@ import { DebounceInput } from 'react-debounce-input'
 import FilterByDates from '@components/FilterByDates'
 import moment from 'moment'
 import UpdateInvoicesModal from '@components/modals/commercehub/UpdateInvoicesModal'
-import FilterCommerceHubInvoices from '@components/commerceHub/FilterCommerceHubInvoices'
+import FilterCommerceHubInvoices, { InvoiceCommerceHubFiltersType } from '@components/commerceHub/FilterCommerceHubInvoices'
 import useSWR from 'swr'
 import { toast } from 'react-toastify'
 import BulkActionsForSelected from '@components/commerceHub/BulkActionsForSelected'
@@ -71,7 +71,7 @@ const Invoices = ({ session, sessionToken }: Props) => {
   const [searchValue, setSearchValue] = useState<string>('')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
-  const [filters, setfilters] = useState({
+  const [filters, setfilters] = useState<InvoiceCommerceHubFiltersType>({
     onlyOverdue: false,
     showOverdue: true,
     store: { value: 'all', label: 'All' },

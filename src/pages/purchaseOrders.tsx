@@ -45,19 +45,20 @@ type Props = {
 const PurchaseOrders = ({ session }: Props) => {
   const router = useRouter()
   const { status, organizeBy }: any = router.query
-  const { state, setShowCreateReceivingFromPo, setReceivingFromPo, setShowCreatePoFromFile, setShowCreatePoManually }: any = useContext(AppContext)
+  const { state, setShowCreateReceivingFromPo, setReceivingFromPo, setShowCreatePoFromFile, setShowCreatePoManually } = useContext(AppContext)
   const title = `Purchase Orders | ${session?.user?.businessName}`
   const orderNumberStart = `${session?.user?.businessOrderStart?.substring(0, 3).toUpperCase()}-`
 
   useEffect(() => {
     return () => {
-      Object.keys(state.receivingFromPo).length > 0 && setReceivingFromPo({
-        warehouse: {
-          id: 0,
-          name: '',
-        },
-        items: {},
-      })
+      Object.keys(state.receivingFromPo).length > 0 &&
+        setReceivingFromPo({
+          warehouse: {
+            id: 0,
+            name: '',
+          },
+          items: {},
+        })
     }
   }, [])
 
@@ -171,7 +172,7 @@ const PurchaseOrders = ({ session }: Props) => {
           </Container>
         </div>
       </React.Fragment>
-      {state.showAddSkuToPurchaseOrder && <Add_Sku_To_Purchase_Order />}
+      {state.modalAddSkuToPurchaseOrder.show && <Add_Sku_To_Purchase_Order />}
       {state.showAddPaymentToPo && <Add_Payment_Modal />}
       {state.showCreateReceivingFromPo && <Create_Receiving_From_Po orderNumberStart={orderNumberStart} />}
       {state.showCreatePoFromFile && <Add_Po_With_File orderNumberStart={orderNumberStart} />}
