@@ -7,7 +7,7 @@ import ShipmentExpandedDetail from '../ShipmentExpandedDetail'
 import AppContext from '@context/AppContext'
 import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from 'reactstrap'
 import { sortNumbers, sortStringsLocaleCompare } from '@lib/helperFunctions'
-import { AddShippingCostModalType, DeleteReceivingModalType } from '@pages/receivings'
+import { AddShippingCostModalType, DeleteReceivingModalType, MarkReceivedModalType } from '@pages/receivings'
 import SCTooltip from '@components/ui/SCTooltip'
 
 type Props = {
@@ -16,9 +16,10 @@ type Props = {
   mutateReceivings: () => void
   setshowDeleteModal: (prev: DeleteReceivingModalType) => void
   setaddShippingCostModal: (prev: AddShippingCostModalType) => void
+  setmarkReceivedModal: (prev: MarkReceivedModalType) => void
 }
 
-const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteModal, setaddShippingCostModal }: Props) => {
+const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteModal, setaddShippingCostModal, setmarkReceivedModal }: Props) => {
   const { state } = useContext(AppContext)
 
   const columns: any = [
@@ -169,9 +170,28 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
                   <span className='fw-normal text-dark'>Shipping Cost</span>
                 </div>
               </DropdownItem>
-              {(row.orderStatus == 'awaiting' || row.orderStatus == 'awaiting_shipment') && row.orderItems.reduce((totalReceived, item: ShipmentOrderItem) => totalReceived + item.qtyReceived!, 0) <= 0 && (
+              {!row.isReceivingFromPo && row.orderStatus !== 'received' && (
+                <DropdownItem>
+                  <a href={row.proofOfShipped || '#'} target='blank' className='text-black'>
+                    <i className='las la-truck label-icon align-middle fs-5 me-2' />
+                    <span className='fw-normal text-dark'>Proof Of Received</span>
+                  </a>
+                </DropdownItem>
+              )}
+              {!row.isSCDestination && row.orderStatus !== 'received' && (
                 <>
                   <DropdownItem header>Actions</DropdownItem>
+                  <DropdownItem onClick={() => setmarkReceivedModal({ show: true, orderId: row.id, orderNumber: row.orderNumber })}>
+                    <i className='las la-check-circle text-success label-icon align-middle me-2 fs-5' />
+                    <span className='fw-normal text-dark'>Mark as Received</span>
+                  </DropdownItem>
+                </>
+              )}
+              {(row.orderStatus == 'awaiting' || row.orderStatus == 'awaiting_shipment') && row.orderItems.reduce((totalReceived, item: ShipmentOrderItem) => totalReceived + item.qtyReceived!, 0) <= 0 && (
+                <>
+                  <DropdownItem header className='text-danger'>
+                    Danger Zone
+                  </DropdownItem>
                   <DropdownItem
                     onClick={() =>
                       setshowDeleteModal({
