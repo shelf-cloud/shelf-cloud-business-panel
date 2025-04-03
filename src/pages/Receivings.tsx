@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { Card, CardBody, Container } from 'reactstrap'
@@ -12,6 +12,9 @@ import { useReceivings } from '@hooks/receivings/useReceivings'
 import SearchInput from '@components/ui/SearchInput'
 import Confirm_Delete_Receiving from '@components/modals/receivings/Confirm_Delete_Receiving'
 import InputNumberModal from '@components/modals/shared/inputNumberModal'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import AppContext from '@context/AppContext'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -50,7 +53,30 @@ export type AddShippingCostModalType = {
   shippingCost: number | string
 }
 
+export type AddShippingCostToReceivingType = {
+  currentRegion: string
+  businessId: string
+  orderId: number
+  value: number | string
+}
+
+const handleAddShippingCostToReceiving = async ({ currentRegion, businessId, orderId, value }: AddShippingCostToReceivingType): Promise<{ error: boolean }> => {
+  const { data } = await axios.post(`/api/receivings/addShippingCostToReceiving?region=${currentRegion}&businessId=${businessId}`, {
+    orderId,
+    shippingCost: value,
+  })
+
+  if (!data.error) {
+    toast.success(data.message)
+    return { error: false }
+  } else {
+    toast.error(data.message)
+    return { error: true }
+  }
+}
+
 const Receiving = ({ session }: Props) => {
+  const { state } = useContext(AppContext)
   const [shipmentsStartDate, setShipmentsStartDate] = useState(moment().subtract(3, 'months').format('YYYY-MM-DD'))
   const [shipmentsEndDate, setShipmentsEndDate] = useState(moment().format('YYYY-MM-DD'))
   const [searchValue, setSearchValue] = useState<string>('')
@@ -122,15 +148,34 @@ const Receiving = ({ session }: Props) => {
           placeholder='Shipping Cost'
           initialValue={addShippingCostModal.shippingCost}
           isPrice
-          handleSubmit={async (value) => {
-            console.log(value)
-          }}
+          handleSubmit={async (value) =>
+            await handleAddShippingCostToReceiving({
+              currentRegion: state.currentRegion,
+              businessId: state.user.businessId,
+              orderId: addShippingCostModal.orderId,
+              value,
+            }).then((res) => {
+              mutateReceivings()
+              return res
+            })
+          }
           handleClose={() =>
             setaddShippingCostModal({
               show: false,
               orderId: 0,
               orderNumber: '',
               shippingCost: 0,
+            })
+          }
+          handleSubmitClearValue={async (value) =>
+            await handleAddShippingCostToReceiving({
+              currentRegion: state.currentRegion,
+              businessId: state.user.businessId,
+              orderId: addShippingCostModal.orderId,
+              value,
+            }).then((res) => {
+              mutateReceivings()
+              return res
             })
           }
         />

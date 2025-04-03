@@ -43,6 +43,7 @@ export const useReceivings = ({ searchValue, startDate, endDate }: ReceiginsHook
     data: receivings,
     isValidating,
     mutate: mutateReceivings,
+
   } = useSWR(state.user.businessId ? `/api/receivings/getReceivingOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${startDate}&endDate=${endDate}` : null, fetcher, {
     revalidateOnFocus: false,
     revalidateOnMount: true,
@@ -67,5 +68,5 @@ export const useReceivings = ({ searchValue, startDate, endDate }: ReceiginsHook
     )
   }, [receivings, searchValue])
 
-  return { receivings: filteredData, isLoading: isValidating, mutateReceivings }
+  return { receivings: filteredData, isLoading: isValidating && !receivings, mutateReceivings }
 }

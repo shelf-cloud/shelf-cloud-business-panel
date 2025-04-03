@@ -8,6 +8,7 @@ import AppContext from '@context/AppContext'
 import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from 'reactstrap'
 import { sortNumbers, sortStringsLocaleCompare } from '@lib/helperFunctions'
 import { AddShippingCostModalType, DeleteReceivingModalType } from '@pages/receivings'
+import SCTooltip from '@components/ui/SCTooltip'
 
 type Props = {
   tableData: OrderRowType[]
@@ -18,7 +19,7 @@ type Props = {
 }
 
 const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteModal, setaddShippingCostModal }: Props) => {
-  const { state }: any = useContext(AppContext)
+  const { state } = useContext(AppContext)
 
   const columns: any = [
     {
@@ -76,11 +77,27 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
     },
     {
       name: <span className='fw-bolder fs-6'>Destination</span>,
-      selector: (row: OrderRowType) => row.warehouseName,
+      selector: (row: OrderRowType) => {
+        return (
+          <div>
+            <p className='m-0'>{row.warehouseName}</p>
+            {row.receivingShippingCost && (
+              <>
+                <small className='m-0 fw-light text-muted' id={`receivingShippingCost-${row.id}`}>
+                  Shipping: <span className='text-primary'>{FormatCurrency(state.currentRegion, row.receivingShippingCost)}</span>
+                </small>
+                <SCTooltip target={`receivingShippingCost-${row.id}`} placement='right' key={`receivingShippingCost-${row.id}`}>
+                  <p className='fs-7 text-primary m-0 p-0'>{`Shipping cost from Seller's warehouse to ${row.warehouseName}.`}</p>
+                </SCTooltip>
+              </>
+            )}
+          </div>
+        )
+      },
       sortable: true,
       wrap: true,
       left: true,
-      grow: 1.5,
+      grow: 1.7,
       compact: true,
       style: {
         fontSize: '0.7rem',
@@ -149,7 +166,7 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
               <DropdownItem onClick={() => setaddShippingCostModal({ show: true, orderId: row.id, orderNumber: row.orderNumber, shippingCost: row.receivingShippingCost ?? '' })}>
                 <div>
                   <i className='las la-ship label-icon align-middle me-2 fs-5' />
-                  <span className='fw-normal text-dark'>Add Shipping Cost</span>
+                  <span className='fw-normal text-dark'>Shipping Cost</span>
                 </div>
               </DropdownItem>
               {(row.orderStatus == 'awaiting' || row.orderStatus == 'awaiting_shipment') && row.orderItems.reduce((totalReceived, item: ShipmentOrderItem) => totalReceived + item.qtyReceived!, 0) <= 0 && (

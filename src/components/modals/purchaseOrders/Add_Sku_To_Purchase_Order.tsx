@@ -10,8 +10,8 @@ import { SkuToAddPo } from '@typesTs/purchaseOrders'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
 import { NoImageAdress } from '@lib/assetsConstants'
-import SearchInput from '@components/ui/SearchInput'
 import { SkuInListToAddToPo, useAddToPo } from '@hooks/purchaseOrders/useAddToPo'
+import SearchInput from '@components/ui/SearchInput'
 
 const customStyles = {
   responsiveWrapper: {
@@ -256,7 +256,7 @@ const Add_Sku_To_Purchase_Order = ({}) => {
               <span className='fs-4 fw-semibold'>Selected SKUs to Add to Purchase Order</span>
             </Row>
             <Col sm={12} style={{ height: '60vh', overflowX: 'hidden', overflowY: 'auto' }}>
-              <DataTable columns={columnsSkuListAdded} data={skuToAddToPo || []} striped={true} dense={true} fixedHeader={true} fixedHeaderScrollHeight='60vh' customStyles={customStyles}/>
+              <DataTable columns={columnsSkuListAdded} data={skuToAddToPo || []} striped={true} dense={true} fixedHeader={true} fixedHeaderScrollHeight='60vh' customStyles={customStyles} />
             </Col>
           </Col>
         </Row>

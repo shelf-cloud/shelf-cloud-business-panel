@@ -194,7 +194,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                 }}
                 error={validation.errors.isNewReceiving}
               />
-              {openReceivings && openReceivings.length <= 0 && <p className='text-muted fs-7'>{`There's no open receiving for Amazon - FBA ${state.receivingFromPo.warehouse.name}`}</p>}
+              {openReceivings && openReceivings.length <= 0 && <p className='text-muted fs-7'>{`No open receiving to ${state.receivingFromPo.warehouse.name}`}</p>}
               {validation.values.isNewReceiving == 'false' && (
                 <SelectSingleFilter
                   inputLabel='*Select Existing Receiving'

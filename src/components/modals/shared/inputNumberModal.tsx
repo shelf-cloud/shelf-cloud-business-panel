@@ -18,11 +18,27 @@ type InputModalProps = {
   initialValue?: number | string
   minLength?: number
   isPrice?: boolean
-  handleSubmit: (value: number) => Promise<void>
+  handleSubmit: (value: number) => Promise<{ error: boolean }>
   handleClose: () => void
+  handleSubmitClearValue?: (value: number | string) => Promise<{ error: boolean }>
 }
 
-const InputNumberModal = ({ isOpen, headerText, primaryText, primaryTextSub, descriptionText, confirmText, loadingText, placeholder = '', initialValue, minLength = 0, isPrice = false, handleSubmit, handleClose }: InputModalProps) => {
+const InputNumberModal = ({
+  isOpen,
+  headerText,
+  primaryText,
+  primaryTextSub,
+  descriptionText,
+  confirmText,
+  loadingText,
+  placeholder = '',
+  initialValue,
+  minLength = 0,
+  isPrice = false,
+  handleSubmit,
+  handleClose,
+  handleSubmitClearValue,
+}: InputModalProps) => {
   const { state } = useContext(AppContext)
   const [isLoading, setisLoading] = useState(false)
   const validation = useFormik({
@@ -47,6 +63,16 @@ const InputNumberModal = ({ isOpen, headerText, primaryText, primaryTextSub, des
     event.preventDefault()
     validation.handleSubmit()
   }
+
+  const handleClearValue = async () => {
+    setisLoading(true)
+    await handleSubmitClearValue?.('').then(() => {
+      validation.resetForm()
+      handleClose()
+      setisLoading(false)
+    })
+  }
+
   return (
     <Modal fade={false} size='md' id='inputNumberModal' isOpen={isOpen} toggle={handleClose}>
       <ModalHeader toggle={handleClose} className='modal-title' id='myModalLabel'>
@@ -60,12 +86,12 @@ const InputNumberModal = ({ isOpen, headerText, primaryText, primaryTextSub, des
             </p>
             {descriptionText && <p className='fs-7 text-muted'>{descriptionText}</p>}
             <Col sm={12} className='d-flex flex-column justify-content-end align-items-end'>
-              <Col xs={12} lg={5} className='text-end'>
+              <Col xs={12} lg={4} className='text-end'>
                 <DebounceInput
                   type='number'
                   minLength={minLength}
-                  debounceTimeout={300}
-                  className={`form-control form-control-sm fs-6 ${validation.errors.inputValue ? 'is-invalid' : ''}`}
+                  debounceTimeout={200}
+                  className={`form-control form-control-sm text-end fs-6 ${validation.errors.inputValue ? 'is-invalid' : ''}`}
                   placeholder={placeholder}
                   id='inputValue'
                   name='inputValue'
@@ -73,6 +99,11 @@ const InputNumberModal = ({ isOpen, headerText, primaryText, primaryTextSub, des
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
                   invalid={validation.touched.inputValue && validation.errors.inputValue ? true : false}
+                  inputRef={(input) => {
+                    if (isOpen && input) {
+                      input.select()
+                    }
+                  }}
                 />
                 {isPrice && <p className='m-0 mt-1 ps-1 fw-semibold text-primary'>{FormatCurrency(state.currentRegion, Number(validation.values.inputValue))}</p>}
                 {validation.touched.inputValue && validation.errors.inputValue ? <p className='m-0 p-0 fs-7 text-danger'>{validation.errors.inputValue}</p> : null}
@@ -81,19 +112,26 @@ const InputNumberModal = ({ isOpen, headerText, primaryText, primaryTextSub, des
           </Row>
         </ModalBody>
         <ModalFooter>
-          <div className='text-end mt-2 d-flex flex-row gap-2 justify-content-end'>
-            <Button disabled={isLoading} type='button' color='light' className='fs-7' onClick={handleClose}>
-              Cancel
-            </Button>
-            <Button disabled={isLoading} type='submit' color='success' className='fs-7'>
-              {isLoading ? (
-                <span>
-                  <Spinner color='light' size={'sm'} /> {loadingText}
-                </span>
-              ) : (
-                confirmText
-              )}
-            </Button>
+          <div className='w-100 mt-2 d-flex flex-row gap-2 justify-content-between align-items-center'>
+            <div>
+              <Button disabled={isLoading} type='button' color='danger' className='fs-7' onClick={handleClearValue}>
+                Clear Value
+              </Button>
+            </div>
+            <div className='d-flex flex-row gap-2 justify-content-end'>
+              <Button disabled={isLoading} type='button' color='light' className='fs-7' onClick={handleClose}>
+                Cancel
+              </Button>
+              <Button disabled={isLoading} type='submit' color='success' className='fs-7'>
+                {isLoading ? (
+                  <span>
+                    <Spinner color='light' size={'sm'} /> {loadingText}
+                  </span>
+                ) : (
+                  confirmText
+                )}
+              </Button>
+            </div>
           </div>
         </ModalFooter>
       </Form>
