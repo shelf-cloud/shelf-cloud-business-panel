@@ -319,14 +319,16 @@ export const useMarketplacePricing = ({ sessionToken, session, state, storeId, s
     if (storeId !== '9999') {
       if (searchValue) {
         return Object.values(productsInfo)
-          .filter(
-            (product: MKP_Product) =>
+          .filter((product: MKP_Product) => {
+            const unitsSold1M = product.marketplaces[storeId as keyof typeof product.marketplaces]?.unitsSold?.['1M'] || 0
+            const unitsSold1Y = product.marketplaces[storeId as keyof typeof product.marketplaces]?.unitsSold?.['1Y'] || 0
+
+            return (
               product.marketplaces[storeId as keyof typeof product.marketplaces] &&
-              (units1monthmin !== undefined && units1monthmin !== '' ? Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1M'] || 0, 0) >= parseFloat(units1monthmin!) : true) &&
-              (units1monthmax !== undefined && units1monthmax !== '' ? Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1M'] || 0, 0) <= parseFloat(units1monthmax!) : true) &&
-              (units1yearmin !== undefined && units1yearmin !== '' ? Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1Y'] || 0, 0) >= parseFloat(units1yearmin!) : true) &&
-              (units1yearmax !== undefined && units1yearmax !== '' ? Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1Y'] || 0, 0) <= parseFloat(units1yearmax!) : true) &&
-              (units1yearmax !== undefined && units1yearmax !== '' ? Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1Y'] || 0, 0) <= parseFloat(units1yearmax!) : true) &&
+              (units1monthmin !== undefined && units1monthmin !== '' ? unitsSold1M >= Number(units1monthmin!) : true) &&
+              (units1monthmax !== undefined && units1monthmax !== '' ? unitsSold1M <= Number(units1monthmax!) : true) &&
+              (units1yearmin !== undefined && units1yearmin !== '' ? unitsSold1Y >= Number(units1yearmin!) : true) &&
+              (units1yearmax !== undefined && units1yearmax !== '' ? unitsSold1Y <= Number(units1yearmax!) : true) &&
               (supplier !== undefined && supplier !== '' ? product.supplier.toLowerCase() === supplier.toLowerCase() : true) &&
               (brand !== undefined && brand !== '' ? product.brand.toLowerCase() === brand.toLowerCase() : true) &&
               (category !== undefined && category !== '' ? product.category.toLowerCase() === category.toLowerCase() : true) &&
@@ -334,21 +336,24 @@ export const useMarketplacePricing = ({ sessionToken, session, state, storeId, s
                 searchValue.split(' ').every((word: string) => product?.title?.toLowerCase().includes(word.toLowerCase())) ||
                 product?.sku?.toLowerCase().includes(searchValue.toLowerCase()) ||
                 product?.asin?.toLowerCase().includes(searchValue.toLowerCase()))
-          )
+            )
+          })
           .map((product: MKP_Product) => {
             return { ...product, marketplaces: { [storeId]: product.marketplaces[storeId as keyof typeof product.marketplaces] } }
           })
       }
 
       return Object.values(productsInfo)
-        .filter(
-          (product: MKP_Product) =>
+        .filter((product: MKP_Product) => {
+          const unitsSold1M = product.marketplaces[storeId as keyof typeof product.marketplaces]?.unitsSold?.['1M'] || 0
+          const unitsSold1Y = product.marketplaces[storeId as keyof typeof product.marketplaces]?.unitsSold?.['1Y'] || 0
+
+          return (
             product.marketplaces[storeId as keyof typeof product.marketplaces] &&
-            (units1monthmin !== undefined && units1monthmin !== '' ? Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1M'] || 0, 0) >= parseFloat(units1monthmin!) : true) &&
-            (units1monthmax !== undefined && units1monthmax !== '' ? Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1M'] || 0, 0) <= parseFloat(units1monthmax!) : true) &&
-            (units1yearmin !== undefined && units1yearmin !== '' ? Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1Y'] || 0, 0) >= parseFloat(units1yearmin!) : true) &&
-            (units1yearmax !== undefined && units1yearmax !== '' ? Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1Y'] || 0, 0) <= parseFloat(units1yearmax!) : true) &&
-            (units1yearmax !== undefined && units1yearmax !== '' ? Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1Y'] || 0, 0) <= parseFloat(units1yearmax!) : true) &&
+            (units1monthmin !== undefined && units1monthmin !== '' ? unitsSold1M >= Number(units1monthmin!) : true) &&
+            (units1monthmax !== undefined && units1monthmax !== '' ? unitsSold1M <= Number(units1monthmax!) : true) &&
+            (units1yearmin !== undefined && units1yearmin !== '' ? unitsSold1Y >= Number(units1yearmin!) : true) &&
+            (units1yearmax !== undefined && units1yearmax !== '' ? unitsSold1Y <= Number(units1yearmax!) : true) &&
             (supplier !== undefined && supplier !== '' ? product.supplier.toLowerCase() === supplier.toLowerCase() : true) &&
             (brand !== undefined && brand !== '' ? product.brand.toLowerCase() === brand.toLowerCase() : true) &&
             (category !== undefined && category !== '' ? product.category.toLowerCase() === category.toLowerCase() : true) &&
@@ -356,20 +361,23 @@ export const useMarketplacePricing = ({ sessionToken, session, state, storeId, s
               searchValue.split(' ').every((word: string) => product?.title?.toLowerCase().includes(word.toLowerCase())) ||
               product?.sku?.toLowerCase().includes(searchValue.toLowerCase()) ||
               product?.asin?.toLowerCase().includes(searchValue.toLowerCase()))
-        )
+          )
+        })
         .map((product: MKP_Product) => {
           return { ...product, marketplaces: { [storeId]: product.marketplaces[storeId as keyof typeof product.marketplaces] } }
         })
     }
 
     if (searchValue) {
-      return Object.values(productsInfo).filter(
-        (product: MKP_Product) =>
-          (units1monthmin !== undefined && units1monthmin !== '' ? Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1M'] || 0, 0) >= parseFloat(units1monthmin!) : true) &&
-          (units1monthmax !== undefined && units1monthmax !== '' ? Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1M'] || 0, 0) <= parseFloat(units1monthmax!) : true) &&
-          (units1yearmin !== undefined && units1yearmin !== '' ? Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1Y'] || 0, 0) >= parseFloat(units1yearmin!) : true) &&
-          (units1yearmax !== undefined && units1yearmax !== '' ? Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1Y'] || 0, 0) <= parseFloat(units1yearmax!) : true) &&
-          (units1yearmax !== undefined && units1yearmax !== '' ? Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1Y'] || 0, 0) <= parseFloat(units1yearmax!) : true) &&
+      return Object.values(productsInfo).filter((product: MKP_Product) => {
+        const unitsSold1M = Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1M'] || 0, 0)
+        const unitsSold1Y = Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1Y'] || 0, 0)
+
+        return (
+          (units1monthmin !== undefined && units1monthmin !== '' ? unitsSold1M >= Number(units1monthmin!) : true) &&
+          (units1monthmax !== undefined && units1monthmax !== '' ? unitsSold1M <= Number(units1monthmax!) : true) &&
+          (units1yearmin !== undefined && units1yearmin !== '' ? unitsSold1Y >= Number(units1yearmin!) : true) &&
+          (units1yearmax !== undefined && units1yearmax !== '' ? unitsSold1Y <= Number(units1yearmax!) : true) &&
           (supplier !== undefined && supplier !== '' ? product.supplier.toLowerCase() === supplier.toLowerCase() : true) &&
           (brand !== undefined && brand !== '' ? product.brand.toLowerCase() === brand.toLowerCase() : true) &&
           (category !== undefined && category !== '' ? product.category.toLowerCase() === category.toLowerCase() : true) &&
@@ -377,16 +385,19 @@ export const useMarketplacePricing = ({ sessionToken, session, state, storeId, s
             searchValue.split(' ').every((word: string) => product?.title?.toLowerCase().includes(word.toLowerCase())) ||
             product?.sku?.toLowerCase().includes(searchValue.toLowerCase()) ||
             product?.asin?.toLowerCase().includes(searchValue.toLowerCase()))
-      )
+        )
+      })
     }
 
-    return Object.values(productsInfo).filter(
-      (product) =>
-        (units1monthmin !== undefined && units1monthmin !== '' ? Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1M'] || 0, 0) >= parseFloat(units1monthmin!) : true) &&
-        (units1monthmax !== undefined && units1monthmax !== '' ? Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1M'] || 0, 0) <= parseFloat(units1monthmax!) : true) &&
-        (units1yearmin !== undefined && units1yearmin !== '' ? Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1Y'] || 0, 0) >= parseFloat(units1yearmin!) : true) &&
-        (units1yearmax !== undefined && units1yearmax !== '' ? Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1Y'] || 0, 0) <= parseFloat(units1yearmax!) : true) &&
-        (units1yearmax !== undefined && units1yearmax !== '' ? Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1Y'] || 0, 0) <= parseFloat(units1yearmax!) : true) &&
+    return Object.values(productsInfo).filter((product) => {
+      const unitsSold1M = Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1M'] || 0, 0)
+      const unitsSold1Y = Object.values(product.marketplaces).reduce((acc, curr) => acc + curr?.unitsSold?.['1Y'] || 0, 0)
+
+      return (
+        (units1monthmin !== undefined && units1monthmin !== '' ? unitsSold1M >= Number(units1monthmin!) : true) &&
+        (units1monthmax !== undefined && units1monthmax !== '' ? unitsSold1M <= Number(units1monthmax!) : true) &&
+        (units1yearmin !== undefined && units1yearmin !== '' ? unitsSold1Y >= Number(units1yearmin!) : true) &&
+        (units1yearmax !== undefined && units1yearmax !== '' ? unitsSold1Y <= Number(units1yearmax!) : true) &&
         (supplier !== undefined && supplier !== '' ? product.supplier.toLowerCase() === supplier.toLowerCase() : true) &&
         (brand !== undefined && brand !== '' ? product.brand.toLowerCase() === brand.toLowerCase() : true) &&
         (category !== undefined && category !== '' ? product.category.toLowerCase() === category.toLowerCase() : true) &&
@@ -394,7 +405,8 @@ export const useMarketplacePricing = ({ sessionToken, session, state, storeId, s
           searchValue.split(' ').every((word: string) => product?.title?.toLowerCase().includes(word.toLowerCase())) ||
           product?.sku?.toLowerCase().includes(searchValue.toLowerCase()) ||
           product?.asin?.toLowerCase().includes(searchValue.toLowerCase()))
-    )
+      )
+    })
   }, [productsInfo, storeId, searchValue, units1monthmin, units1monthmax, units1yearmin, units1yearmax, supplier, brand, category])
 
   return {
