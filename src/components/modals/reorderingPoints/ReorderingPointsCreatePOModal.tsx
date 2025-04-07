@@ -149,8 +149,8 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
 
     const response = await axios.post(`/api/reorderingPoints/createNewPurchaseOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
       orderNumber: values.orderNumber,
-      destinationSC: parseInt(values.destinationSC.value) === 1 ? 1 : 0,
-      warehouseId: values.destinationSC.value ? parseInt(values.destinationSC.value) : 0,
+      destinationSC: !hasSplitting ? (warehouses?.find((w) => w.warehouseId === parseInt(values.destinationSC.value))?.isSCDestination ? 1 : 0) : 0,
+      warehouseId: !hasSplitting ? parseInt(values.destinationSC.value) : 0,
       poItems,
       hasSplitting,
       splits: splitsInfo,
