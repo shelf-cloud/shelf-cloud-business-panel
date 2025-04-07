@@ -199,7 +199,6 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                     options={suppliers?.map((supplier: Supplier) => ({ value: supplier.suppliersId, label: supplier.name })) || [{ value: '', label: '' }]}
                     handleSelect={(option: SelectOptionType) => {
                       handleChange({ target: { name: 'supplier', value: option.value } })
-                      console.log('errors', errors)
                     }}
                     error={errors.supplier}
                   />
