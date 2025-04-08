@@ -65,13 +65,9 @@ const CheckNumberDetails = ({ session }: Props) => {
   const title = `Check No. ${id![1]} | ${session?.user?.businessName}`
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR<InvoicesResponse>(
-    id && state.user.businessId ? `/api/commerceHub/getCheckNumberInfo?region=${state.currentRegion}&businessId=${state.user.businessId}&checkNumber=${id[1]}` : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  )
+  const { data } = useSWR<InvoicesResponse>(id && state.user.businessId ? `/api/commerceHub/getCheckNumberInfo?region=${state.currentRegion}&businessId=${state.user.businessId}&checkNumber=${id[1]}` : null, fetcher, {
+    revalidateOnFocus: false,
+  })
 
   const sortDates = (Adate: string, Bdate: string) => {
     const a = moment(Adate)
@@ -108,9 +104,7 @@ const CheckNumberDetails = ({ session }: Props) => {
       return data.invoices.filter(
         (invoice: Invoice) =>
           (invoiceType === 'all' ? true : invoiceType === 'invoices' ? invoice.checkTotal > 0 : invoice.checkTotal < 0) &&
-          (invoice.invoiceNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            invoice.poNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            invoice.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()))
+          (invoice.invoiceNumber?.toLowerCase().includes(searchValue.toLowerCase()) || invoice.poNumber?.toLowerCase().includes(searchValue.toLowerCase()) || invoice.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()))
       )
     }
 
@@ -336,8 +330,7 @@ const CheckNumberDetails = ({ session }: Props) => {
       wrap: true,
       center: true,
       compact: true,
-      sortFunction: (rowA: Invoice, rowB: Invoice) =>
-        sortStrings(rowA.status ? rowA.status : rowA.checkTotal > 0 ? 'paid' : 'pending', rowB.status ? rowB.status : rowB.checkTotal > 0 ? 'paid' : 'pending'),
+      sortFunction: (rowA: Invoice, rowB: Invoice) => sortStrings(rowA.status ? rowA.status : rowA.checkTotal > 0 ? 'paid' : 'pending', rowB.status ? rowB.status : rowB.checkTotal > 0 ? 'paid' : 'pending'),
     },
   ]
 
@@ -348,19 +341,12 @@ const CheckNumberDetails = ({ session }: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
+          <BreadCrumb title='Check Number' pageTitle='Commerce HUB' />
           <Container fluid>
-            <BreadCrumb title='Check Number' pageTitle='Commerce HUB' />
             <div className='d-flex flex-column justify-content-center align-items-end gap-2 mb-1 flex-lg-row justify-content-md-between align-items-md-center px-1'>
               <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'>
                 <FilterCheckNumber type={invoiceType} setInvoiceType={setInvoiceType} />
-                {selectedRows.length > 0 && (
-                  <BulkActionsForSelected
-                    selectedRows={selectedRows}
-                    statusOptions={STATUS_OPTIONS}
-                    clearSelected={clearAllSelectedRows}
-                    changeSelectedStatus={changeSelectedStatus}
-                  />
-                )}
+                {selectedRows.length > 0 && <BulkActionsForSelected selectedRows={selectedRows} statusOptions={STATUS_OPTIONS} clearSelected={clearAllSelectedRows} changeSelectedStatus={changeSelectedStatus} />}
               </div>
               <div className='w-100 d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-end align-items-lg-center px-0'>
                 <div className='app-search p-0 col-sm-12 col-lg-5'>

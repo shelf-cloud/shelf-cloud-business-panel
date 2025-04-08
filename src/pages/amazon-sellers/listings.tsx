@@ -49,13 +49,9 @@ const Listings = ({ session }: Props) => {
   const [selectedRows, setSelectedRows] = useState<Listing[]>([])
   const [toggledClearRows, setToggleClearRows] = useState(false)
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data }: { data?: ListingsResponse } = useSWR(
-    state.user.businessId ? `/api/amazon/getAmazonSellerListings?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  )
+  const { data }: { data?: ListingsResponse } = useSWR(state.user.businessId ? `/api/amazon/getAmazonSellerListings?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher, {
+    revalidateOnFocus: false,
+  })
 
   useEffect(() => {
     if (state.user) {
@@ -134,9 +130,7 @@ const Listings = ({ session }: Props) => {
   }
 
   const csvData = useMemo(() => {
-    const fileData: any[] = [
-      ['Title', 'SKU', 'AISN', 'FNSKU', 'Brand', 'Condition', 'Fulfillment Channel', 'Fulfillable', 'Reserved', 'Unsellable', 'inbound', 'ShelfCloud Mapped'],
-    ]
+    const fileData: any[] = [['Title', 'SKU', 'AISN', 'FNSKU', 'Brand', 'Condition', 'Fulfillment Channel', 'Fulfillable', 'Reserved', 'Unsellable', 'inbound', 'ShelfCloud Mapped']]
 
     filterDataTable?.forEach((item: Listing) =>
       fileData.push([
@@ -165,8 +159,8 @@ const Listings = ({ session }: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
+          <BreadCrumb title='Amazon Listings' pageTitle='Amazon' />
           <Container fluid>
-            <BreadCrumb title='Amazon Listings' pageTitle='Amazon' />
             <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-1 flex-md-row justify-content-md-end align-items-md-center px-3'>
               <div className='app-search d-flex flex-row justify-content-between align-items-center p-0'>
                 <div className='d-flex flex-row justify-content-start align-items-center gap-3'>

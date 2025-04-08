@@ -47,8 +47,8 @@ const MarketplaceManager = ({ session, env }: Props) => {
 
       <React.Fragment>
         <div className='page-content'>
+          <BreadCrumb title='Settings' pageTitle='Marketpalce Manager' />
           <Container fluid>
-            <BreadCrumb title='Settings' pageTitle='Marketpalce Manager' />
             <Row>
               <Col lg={12}>
                 <Card className=''>

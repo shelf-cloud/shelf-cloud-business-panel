@@ -207,8 +207,8 @@ const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
+          <BreadCrumb title='Amazon Complete FBA Shipments' pageTitle='Amazon' />
           <Container fluid>
-            <BreadCrumb title='Amazon Complete FBA Shipments' pageTitle='Amazon' />
             <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-end align-items-md-center px-3'>
               <div className='app-search d-flex flex-row justify-content-between align-items-center p-0'>
                 <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'>

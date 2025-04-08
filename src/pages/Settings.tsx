@@ -21,8 +21,8 @@ const Settings = ({}: Props) => {
 
       <React.Fragment>
         <div className='page-content'>
+          <BreadCrumb title='Settings' pageTitle='Account Settings' />
           <Container fluid>
-            <BreadCrumb title='Settings' pageTitle='Account Settings' />
             <Row>
               <Col lg={12}>
                 <Card className=''>

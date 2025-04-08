@@ -130,8 +130,8 @@ const AddProducts = ({ session }: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
+          <BreadCrumb title='Add Basic Product' pageTitle='Warehouse' />
           <Container fluid>
-            <BreadCrumb title='Add Basic Product' pageTitle='Warehouse' />
             <Card>
               <CardBody>
                 {/* <Col md={12}>

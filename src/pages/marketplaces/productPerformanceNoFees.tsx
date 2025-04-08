@@ -218,8 +218,8 @@ const ProductPerformanceNoFees = ({ session, sessionToken }: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
+          <BreadCrumb title='Product Performance NO SC Fees' pageTitle='Marketplaces' />
           <Container fluid>
-            <BreadCrumb title='Product Performance NO SC Fees' pageTitle='Marketplaces' />
             <Row className='d-flex flex-column justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-end align-items-md-center px-3'>
               <div className='app-search d-flex flex-column gap-2 justify-content-between align-items-center p-0 flex-lg-row gap-sm-2'>
                 <div className='d-flex flex-wrap justify-content-start align-items-center gap-2 w-100'>

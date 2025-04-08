@@ -97,25 +97,16 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
         }
       })
   }
-  useSWR(
-    session && state.user.businessId
-      ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/listSellerInboundPlans/${state.currentRegion}/${state.user.businessId}`
-      : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  )
+  useSWR(session && state.user.businessId ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/listSellerInboundPlans/${state.currentRegion}/${state.user.businessId}` : null, fetcher, {
+    revalidateOnFocus: false,
+  })
 
   const filteredItems = useMemo(() => {
     if (searchValue === '') return allData
 
     if (searchValue !== '') {
       return allData.filter(
-        (item: ListInboundPlan) =>
-          item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-          item.status.toLowerCase().includes(searchValue.toLowerCase()) ||
-          item.destinationMarketplaces.toLowerCase().includes(searchValue.toLowerCase())
+        (item: ListInboundPlan) => item.name.toLowerCase().includes(searchValue.toLowerCase()) || item.status.toLowerCase().includes(searchValue.toLowerCase()) || item.destinationMarketplaces.toLowerCase().includes(searchValue.toLowerCase())
       )
     }
 
@@ -125,9 +116,7 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
   const handleRepairFBAWorkflow = async (inboundPlanId: string) => {
     const repairFBAWorkflow = toast.loading('Retrying Inbound Plan...')
     try {
-      const response = await axios.get(
-        `/api/amazon/fullfilments/repairFBAWorkflow?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`
-      )
+      const response = await axios.get(`/api/amazon/fullfilments/repairFBAWorkflow?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`)
 
       if (!response.data.error) {
         toast.update(repairFBAWorkflow, {
@@ -157,8 +146,8 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
+          <BreadCrumb title='Fulfillments' pageTitle='Amazon' />
           <Container fluid>
-            <BreadCrumb title='Fulfillments' pageTitle='Amazon' />
             {/* <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-1 flex-md-row justify-content-md-end align-items-md-center px-3'> */}
             <Row className='justify-content-between gap-2 mb-2 px-1'>
               <Col xs='12' lg='6' className='d-flex justify-content-start align-items-center gap-2'>
@@ -217,17 +206,8 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
         </div>
       </React.Fragment>
       {cancelInboundPlanModal.show && <ConfirmCancelInboundPlan cancelInboundPlanModal={cancelInboundPlanModal} setcancelInboundPlanModal={setcancelInboundPlanModal} />}
-      {assignWorkflowIdModal.show && (
-        <AssignWorkflowId allData={allData} assignWorkflowIdModal={assignWorkflowIdModal} setassignWorkflowIdModal={setassignWorkflowIdModal} sessionToken={sessionToken} />
-      )}
-      {assignFinishedWorkflowIdModal.show && (
-        <AssignFinishedWorkflowId
-          allData={allData}
-          assignFinishedWorkflowIdModal={assignFinishedWorkflowIdModal}
-          setassignFinishedWorkflowIdModal={setassignFinishedWorkflowIdModal}
-          sessionToken={sessionToken}
-        />
-      )}
+      {assignWorkflowIdModal.show && <AssignWorkflowId allData={allData} assignWorkflowIdModal={assignWorkflowIdModal} setassignWorkflowIdModal={setassignWorkflowIdModal} sessionToken={sessionToken} />}
+      {assignFinishedWorkflowIdModal.show && <AssignFinishedWorkflowId allData={allData} assignFinishedWorkflowIdModal={assignFinishedWorkflowIdModal} setassignFinishedWorkflowIdModal={setassignFinishedWorkflowIdModal} sessionToken={sessionToken} />}
       <MasterBoxHelp isOpen={helpOffCanvasIsOpen} setHelpOffCanvasIsOpen={setHelpOffCanvasIsOpen} />
     </div>
   )

@@ -227,8 +227,8 @@ const CreateOrder = ({ session }: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
+          <BreadCrumb title='Create Order' pageTitle='Shipments' />
           <Container fluid>
-            <BreadCrumb title='Create Order' pageTitle='Shipments' />
             <Card className='fs-6'>
               <CardBody>
                 {ready ? (

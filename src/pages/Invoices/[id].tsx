@@ -65,8 +65,8 @@ const InvoiceDetails = () => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
+          <BreadCrumb title='Invoices' pageTitle='Billing' />
           <Container fluid>
-            <BreadCrumb title='Invoices' pageTitle='Billing' />
             <Row>
               <Col lg={12}>
                 <Card>
@@ -92,9 +92,7 @@ const InvoiceDetails = () => {
                             <PrintInvoice invoiceDetails={invoiceDetails!} />
                             {currentRegion == 'us' && (
                               <a href={`${invoiceDetails?.invoice.payLink}`} target='blank'>
-                                <Button className={invoiceDetails?.invoice.paid ? 'btn btn-soft-success' : 'btn btn-primary'}>
-                                  {invoiceDetails?.invoice.paid ? 'View Receipt' : 'Pay Now'}
-                                </Button>
+                                <Button className={invoiceDetails?.invoice.paid ? 'btn btn-soft-success' : 'btn btn-primary'}>{invoiceDetails?.invoice.paid ? 'View Receipt' : 'Pay Now'}</Button>
                               </a>
                             )}
                           </div>
@@ -104,9 +102,7 @@ const InvoiceDetails = () => {
                           </h2>
                           <p className='m-0 fw-semibold'>Invoice Date: {moment(invoiceDetails?.invoice.createdDate).format('LL')}</p>
                           <p className='m-0 fw-normal'>Expire Date: {moment(invoiceDetails?.invoice.expireDate).format('LL')}</p>
-                          <h4 className={invoiceDetails?.invoice?.paid ? 'm-0 fw-bold text-success' : 'm-0 fw-bold text-danger'}>
-                            {invoiceDetails?.invoice?.paid ? 'Paid' : 'Due'}
-                          </h4>
+                          <h4 className={invoiceDetails?.invoice?.paid ? 'm-0 fw-bold text-success' : 'm-0 fw-bold text-danger'}>{invoiceDetails?.invoice?.paid ? 'Paid' : 'Due'}</h4>
                         </div>
                       </CardHeader>
                       <CardBody>

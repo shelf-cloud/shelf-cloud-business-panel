@@ -96,7 +96,6 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
     if (activeTab !== tab) setActiveTab(tab)
   }
 
-  
   return (
     <div>
       <Head>
@@ -104,8 +103,8 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
+          <BreadCrumb title='Create WholeSale Order' pageTitle='Shipments' />
           <Container fluid>
-            <BreadCrumb title='Create WholeSale Order' pageTitle='Shipments' />
             <Row>
               <Col lg={12}>
                 <Card>

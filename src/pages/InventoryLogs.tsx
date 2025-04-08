@@ -5,16 +5,7 @@ import { GetServerSideProps } from 'next'
 import { LogRowType } from '@typings'
 import axios from 'axios'
 import Head from 'next/head'
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Container,
-  Input,
-  Row,
-} from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col, Container, Input, Row } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import useSWR from 'swr'
@@ -54,14 +45,9 @@ const InventoryLogs = ({ session }: Props) => {
   const title = `Inventory Log | ${session?.user?.businessName}`
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(
-    state.user.businessId
-      ? `/api/getBusinessInventoryLog?region=${state.currentRegion}&businessId=${state.user.businessId}`
-      : null,
-    fetcher
-  )
+  const { data } = useSWR(state.user.businessId ? `/api/getBusinessInventoryLog?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher)
   useEffect(() => {
-    if (data?.error){
+    if (data?.error) {
       setLogData([])
       setPending(false)
       toast.error(data?.message)
@@ -74,11 +60,7 @@ const InventoryLogs = ({ session }: Props) => {
   const filterByText = (e: any) => {
     if (e.target.value !== '') {
       setSerachValue(e.target.value)
-      const filterTable = logData.filter(
-        (log: any) =>
-          log.sku.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          log.details.toLowerCase().includes(e.target.value.toLowerCase())
-      )
+      const filterTable = logData.filter((log: any) => log.sku.toLowerCase().includes(e.target.value.toLowerCase()) || log.details.toLowerCase().includes(e.target.value.toLowerCase()))
       setLogData(filterTable)
     } else {
       setSerachValue(e.target.value)
@@ -92,19 +74,19 @@ const InventoryLogs = ({ session }: Props) => {
 
   const columns: any = [
     {
-      name: <span className="fw-bolder fs-5">SKU</span>,
+      name: <span className='fw-bolder fs-5'>SKU</span>,
       selector: (row: { sku: string }) => row.sku,
       sortable: true,
       center: true,
     },
     {
-      name: <span className="fw-bolder fs-5">Date</span>,
+      name: <span className='fw-bolder fs-5'>Date</span>,
       selector: (row: { date: string }) => row.date,
       sortable: true,
       center: true,
     },
     {
-      name: <span className="fw-bolder fs-5">Details</span>,
+      name: <span className='fw-bolder fs-5'>Details</span>,
       selector: (row: { details: string }) => row.details,
       sortable: true,
       center: true,
@@ -138,30 +120,20 @@ const InventoryLogs = ({ session }: Props) => {
         <title>{title}</title>
       </Head>
       <React.Fragment>
-        <div className="page-content">
+        <div className='page-content'>
+          <BreadCrumb title='Inventory Log' pageTitle='Warehouse' />
           <Container fluid>
-            <BreadCrumb title="Inventory Log" pageTitle="Warehouse" />
             <Row>
               <Col lg={12}>
                 <Card>
                   <CardHeader>
-                    <div className="app-search d-flex flex-row justify-content-end align-items-center p-0">
-                      <div className="position-relative">
-                        <Input
-                          type="text"
-                          className="form-control"
-                          placeholder="Search..."
-                          id="search-options"
-                          value={serachValue}
-                          onChange={filterByText}
-                        />
-                        <span className="mdi mdi-magnify search-widget-icon"></span>
-                        <span
-                          className="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none"
-                          id="search-close-options"
-                        ></span>
+                    <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
+                      <div className='position-relative'>
+                        <Input type='text' className='form-control' placeholder='Search...' id='search-options' value={serachValue} onChange={filterByText} />
+                        <span className='mdi mdi-magnify search-widget-icon'></span>
+                        <span className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none' id='search-close-options'></span>
                       </div>
-                      <Button className="btn-soft-dark" onClick={clearSearch}>
+                      <Button className='btn-soft-dark' onClick={clearSearch}>
                         Clear
                       </Button>
                     </div>

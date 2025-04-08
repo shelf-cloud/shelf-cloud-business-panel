@@ -152,8 +152,8 @@ const InactiveProducts = ({ session }: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
+          <BreadCrumb title='Inactive Products' pageTitle='Warehouse' />
           <Container fluid>
-            <BreadCrumb title='Inactive Products' pageTitle='Warehouse' />
             <Row>
               <Col lg={12}>
                 <Card>
@@ -161,16 +161,7 @@ const InactiveProducts = ({ session }: Props) => {
                     <Col lg={12}>
                       <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-3 flex-md-row justify-content-md-between align-items-md-center'>
                         <div className='w-auto d-flex flex-row align-items-center justify-content-between gap-3'>
-                          <FilterProducts
-                            brands={data?.brands}
-                            suppliers={data?.suppliers}
-                            categories={data?.categories}
-                            brand={brand}
-                            supplier={supplier}
-                            category={category}
-                            condition={condition}
-                            activeTab={false}
-                          />
+                          <FilterProducts brands={data?.brands} suppliers={data?.suppliers} categories={data?.categories} brand={brand} supplier={supplier} category={category} condition={condition} activeTab={false} />
                           {selectedRows.length > 0 && (
                             <UncontrolledButtonDropdown>
                               <DropdownToggle className='btn btn-info fs-6 py-2' caret>
@@ -203,10 +194,7 @@ const InactiveProducts = ({ session }: Props) => {
                                 onChange={(e) => setSearchValue(e.target.value)}
                               />
                               <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
-                              <span
-                                className='d-flex align-items-center justify-content-center input_background_white'
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => setSearchValue('')}>
+                              <span className='d-flex align-items-center justify-content-center input_background_white' style={{ cursor: 'pointer' }} onClick={() => setSearchValue('')}>
                                 <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
                               </span>
                             </div>

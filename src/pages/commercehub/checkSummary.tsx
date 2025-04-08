@@ -197,8 +197,8 @@ const CheckSummary = ({ session, sessionToken }: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
+          <BreadCrumb title='Check Summary' pageTitle='Commerce HUB' />
           <Container fluid>
-            <BreadCrumb title='Check Summary' pageTitle='Commerce HUB' />
             <div className='d-flex flex-column justify-content-center align-items-end gap-2 mb-1 flex-lg-row justify-content-md-between align-items-md-center px-1'>
               <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'>
                 <Button color='primary' className='btn-label fs-7' onClick={downloadInfoToExcel}>

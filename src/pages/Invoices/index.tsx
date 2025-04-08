@@ -45,12 +45,7 @@ const Invoices = ({ session }: Props) => {
   const [searchValue, setSearchValue] = useState<any>('')
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(
-    state.user.businessId
-      ? `/api/getBusinessInvoices?region=${state.currentRegion}&businessId=${state.user.businessId}`
-      : null,
-    fetcher
-  )
+  const { data } = useSWR(state.user.businessId ? `/api/getBusinessInvoices?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher)
 
   const filteredItems = useMemo(() => {
     return allData.filter((item: InvoiceList) => item?.invoiceNumber?.toLowerCase().includes(searchValue.toLowerCase()))
@@ -77,8 +72,8 @@ const Invoices = ({ session }: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
+          <BreadCrumb title='Invoices' pageTitle='Billing' />
           <Container fluid>
-            <BreadCrumb title='Invoices' pageTitle='Billing' />
             <Row>
               <Col lg={12}>
                 <Card>
@@ -91,18 +86,9 @@ const Invoices = ({ session }: Props) => {
                         </div>
                         <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
                           <div className='position-relative'>
-                            <Input
-                              type='text'
-                              className='form-control'
-                              placeholder='Search...'
-                              id='search-options'
-                              value={searchValue}
-                              onChange={(e) => setSearchValue(e.target.value)}
-                            />
+                            <Input type='text' className='form-control' placeholder='Search...' id='search-options' value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
                             <span className='mdi mdi-magnify search-widget-icon'></span>
-                            <span
-                              className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none'
-                              id='search-close-options'></span>
+                            <span className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none' id='search-close-options'></span>
                           </div>
                           <Button className='btn-soft-dark' onClick={() => setSearchValue('')}>
                             Clear

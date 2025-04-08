@@ -61,10 +61,7 @@ const List = ({ session, sessionToken }: Props) => {
         Authorization: `Bearer ${sessionToken}`,
       },
     }).then((res) => res.data)
-  const { data }: { data?: ShelfCloudReportList[] } = useSWR(
-    state.user.businessId ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reports/getReportList?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
-    fetcher
-  )
+  const { data }: { data?: ShelfCloudReportList[] } = useSWR(state.user.businessId ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reports/getReportList?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher)
 
   const handleDownloadReport = async (reportFileName: string) => {
     const reportUrlResponse = await axios(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reports/getReportUrl?reportFileName=${reportFileName}`, {
@@ -140,8 +137,8 @@ const List = ({ session, sessionToken }: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
+          <BreadCrumb title='Report List' pageTitle='Reports' />
           <Container fluid>
-            <BreadCrumb title='Report List' pageTitle='Reports' />
             <Row>
               <Col lg={12}>
                 <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-1 flex-md-row justify-content-md-between align-items-md-center'>
@@ -164,14 +161,7 @@ const List = ({ session, sessionToken }: Props) => {
                   <div className='col-sm-12 col-md-3'>
                     <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
                       <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
-                        <Input
-                          type='text'
-                          className='form-control input_background_white'
-                          placeholder='Search...'
-                          id='search-options'
-                          value={searchValue}
-                          onChange={(e) => setSearchValue(e.target.value)}
-                        />
+                        <Input type='text' className='form-control input_background_white' placeholder='Search...' id='search-options' value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
                         <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
                         <span
                           className='d-flex align-items-center justify-content-center input_background_white'
@@ -195,9 +185,7 @@ const List = ({ session, sessionToken }: Props) => {
           </Container>
         </div>
       </React.Fragment>
-      {showMappedCreateReport.show && (
-        <CreateReportModal showMappedCreateReport={showMappedCreateReport} setshowMappedCreateReport={setshowMappedCreateReport} handleCreateReport={handleCreateReport} />
-      )}
+      {showMappedCreateReport.show && <CreateReportModal showMappedCreateReport={showMappedCreateReport} setshowMappedCreateReport={setshowMappedCreateReport} handleCreateReport={handleCreateReport} />}
     </div>
   )
 }

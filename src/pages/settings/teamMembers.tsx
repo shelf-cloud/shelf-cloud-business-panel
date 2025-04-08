@@ -58,10 +58,7 @@ const TeamMembers = ({}: Props) => {
   const [showNewMemberModal, setShowNewMemberModal] = useState(false)
 
   const fetcherMarketplaces = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data: Members }: { data?: TeamMember[] } = useSWR(
-    state.user.businessId ? `/api/settings/teamMembers/getTeamMembers?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
-    fetcherMarketplaces
-  )
+  const { data: Members }: { data?: TeamMember[] } = useSWR(state.user.businessId ? `/api/settings/teamMembers/getTeamMembers?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcherMarketplaces)
 
   const filterTeamMembers = useMemo(() => {
     if (!Members) return []
@@ -86,14 +83,12 @@ const TeamMembers = ({}: Props) => {
 
       <React.Fragment>
         <div className='page-content'>
+          <BreadCrumb title='Team Members' pageTitle='Settings' />
           <Container fluid>
-            <BreadCrumb title='Team Members' pageTitle='Settings' />
             <Card className=''>
               <CardBody className='p-4'>
                 <div className='d-flex flex-sm-column justify-content-between align-items-center p-0 flex-xl-row gap-sm-2 gap-xl-0'>
-                  <div className='d-flex flex-wrap justify-content-start align-items-center gap-3 w-100'>
-                    {Members?.length! < 3 && <Button onClick={() => setShowNewMemberModal(true)}>+ Add Member</Button>}
-                  </div>
+                  <div className='d-flex flex-wrap justify-content-start align-items-center gap-3 w-100'>{Members?.length! < 3 && <Button onClick={() => setShowNewMemberModal(true)}>+ Add Member</Button>}</div>
                   <div className='app-search col-sm-12 col-xl-3 p-0'>
                     <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                       <DebounceInput
@@ -119,7 +114,7 @@ const TeamMembers = ({}: Props) => {
                     </div>
                   </div>
                 </div>
-                <TeamMembersTable teamMembers={filterTeamMembers} handleManageUser={handleManageUser} pending={Members ? false : true}/>
+                <TeamMembersTable teamMembers={filterTeamMembers} handleManageUser={handleManageUser} pending={Members ? false : true} />
               </CardBody>
             </Card>
           </Container>

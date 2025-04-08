@@ -81,8 +81,8 @@ const Storage = ({ session }: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
+          <BreadCrumb title='Storage' pageTitle='Billing' />
           <Container fluid>
-            <BreadCrumb title='Storage' pageTitle='Warehouse' />
             <Row>
               <Col lg={12}>
                 <Card>
@@ -92,12 +92,7 @@ const Storage = ({ session }: Props) => {
                         <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>Monthly Storage Fees</p>
                         <StorageChart storageInvoices={storageInvoices} storageDates={storageDates} />
                       </div>
-                      <StorageWidgets
-                        previousCharge={storageInvoices[storageInvoices.length - 1]}
-                        previousChargeDate={storageDates[storageDates.length - 1]}
-                        currentBalance={data?.dailyStorageBalance}
-                        binsUSed={data?.totalBinsUSed}
-                      />
+                      <StorageWidgets previousCharge={storageInvoices[storageInvoices.length - 1]} previousChargeDate={storageDates[storageDates.length - 1]} currentBalance={data?.dailyStorageBalance} binsUSed={data?.totalBinsUSed} />
                     </div>
                     <div className='d-flex flex-row justify-content-between'>
                       <div>
@@ -118,14 +113,7 @@ const Storage = ({ session }: Props) => {
                       </div>
                       <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
                         <div className='position-relative'>
-                          <Input
-                            type='text'
-                            className='form-control'
-                            placeholder='Search...'
-                            id='search-options'
-                            value={searchValue}
-                            onChange={(e) => setSearchValue(e.target.value)}
-                          />
+                          <Input type='text' className='form-control' placeholder='Search...' id='search-options' value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
                           <span className='mdi mdi-magnify search-widget-icon'></span>
                           <span className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none' id='search-close-options'></span>
                         </div>

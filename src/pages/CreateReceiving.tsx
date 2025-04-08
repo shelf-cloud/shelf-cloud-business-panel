@@ -62,9 +62,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
   const filteredItems = useMemo(() => {
     return allData.filter(
       (item: wholesaleProductRow) =>
-        item?.title?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        searchValue.split(' ').every((word) => item?.title?.toLowerCase().includes(word.toLowerCase())) ||
-        item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
+        item?.title?.toLowerCase().includes(searchValue.toLowerCase()) || searchValue.split(' ').every((word) => item?.title?.toLowerCase().includes(word.toLowerCase())) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
     )
   }, [allData, searchValue])
 
@@ -106,8 +104,8 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
+          <BreadCrumb title='Create Receiving Order' pageTitle='Inbound' />
           <Container fluid>
-            <BreadCrumb title='Create Receiving Order' pageTitle='Inbound' />
             <Row>
               <Col lg={12}>
                 <Card>
@@ -115,9 +113,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                     <div className='d-flex justify-content-between align-items-start'>
                       <div>
                         <h3 className='fs-5 fw-semibold text-primary'>Total SKUs in Order: {orderProducts.length}</h3>
-                        <h5 className='fs-6 fw-normal text-primary'>
-                          Total Qty to Receive in Order: {orderProducts.reduce((total: number, item: wholesaleProductRow) => total + Number(item.orderQty), 0)}
-                        </h5>
+                        <h5 className='fs-6 fw-normal text-primary'>Total Qty to Receive in Order: {orderProducts.reduce((total: number, item: wholesaleProductRow) => total + Number(item.orderQty), 0)}</h5>
                       </div>
                       <div className='d-flex justify-content-end align-items-start gap-2'>
                         <Button className='fs-7 btn' color='info' onClick={() => setreceivingUploadingModal({ show: true })}>
@@ -166,14 +162,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
       </React.Fragment>
       {state.showInventoryBinsModal && <InventoryBinsModal />}
       {state.showWholeSaleOrderModal && <ReceivingOrderModal orderNumberStart={orderNumberStart} orderProducts={orderProducts} />}
-      {receivingUploadingModal.show && (
-        <ReceivingOrderModalUploading
-          orderNumberStart={orderNumberStart}
-          skuList={allData}
-          receivingUploadingModal={receivingUploadingModal}
-          setreceivingUploadingModal={setreceivingUploadingModal}
-        />
-      )}
+      {receivingUploadingModal.show && <ReceivingOrderModalUploading orderNumberStart={orderNumberStart} skuList={allData} receivingUploadingModal={receivingUploadingModal} setreceivingUploadingModal={setreceivingUploadingModal} />}
     </div>
   )
 }

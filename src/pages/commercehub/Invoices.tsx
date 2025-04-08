@@ -195,10 +195,7 @@ const Invoices = ({ session, sessionToken }: Props) => {
     }
   }
 
-  const hasActiveFilters = useMemo(
-    () => searchValue !== '' || startDate !== '' || endDate !== '' || filters.onlyOverdue || filters.store.value !== 'all' || filters.status.value !== 'all',
-    [searchValue, startDate, endDate, filters]
-  )
+  const hasActiveFilters = useMemo(() => searchValue !== '' || startDate !== '' || endDate !== '' || filters.onlyOverdue || filters.store.value !== 'all' || filters.status.value !== 'all', [searchValue, startDate, endDate, filters])
 
   const downloadInfoToExcel = async () => {
     const generatingDocument = toast.loading('Generating Document...')
@@ -262,8 +259,8 @@ const Invoices = ({ session, sessionToken }: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
+          <BreadCrumb title='Invoices' pageTitle='Commerce HUB' />
           <Container fluid>
-            <BreadCrumb title='Invoices' pageTitle='Commerce HUB' />
             <div className='d-flex flex-column justify-content-center align-items-end gap-2 mb-1 flex-lg-row justify-content-md-between align-items-md-center px-1'>
               <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'>
                 <Button
@@ -278,14 +275,7 @@ const Invoices = ({ session, sessionToken }: Props) => {
                   <i className='las la-cloud-download-alt label-icon align-middle fs-4 me-2' />
                   Download To Excel
                 </Button>
-                {selectedRows.length > 0 && (
-                  <BulkActionsForSelected
-                    selectedRows={selectedRows}
-                    statusOptions={STATUS_OPTIONS}
-                    clearSelected={clearAllSelectedRows}
-                    changeSelectedStatus={changeSelectedStatus}
-                  />
-                )}
+                {selectedRows.length > 0 && <BulkActionsForSelected selectedRows={selectedRows} statusOptions={STATUS_OPTIONS} clearSelected={clearAllSelectedRows} changeSelectedStatus={changeSelectedStatus} />}
               </div>
               <div className='w-100 d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-end align-items-lg-center px-0'>
                 <div className='app-search p-0 col-sm-12 col-lg-5'>
@@ -312,21 +302,8 @@ const Invoices = ({ session, sessionToken }: Props) => {
                     </span>
                   </div>
                 </div>
-                <FilterByDates
-                  shipmentsStartDate={startDate}
-                  setShipmentsStartDate={setStartDate}
-                  setShipmentsEndDate={setEndDate}
-                  shipmentsEndDate={endDate}
-                  handleChangeDatesFromPicker={handleChangeDatesFromPicker}
-                />
-                <FilterCommerceHubInvoices
-                  filters={filters}
-                  setfilters={setfilters}
-                  stores={stores?.stores ?? []}
-                  statusOptions={STATUS_OPTIONS}
-                  daysOverdue={daysOverdue}
-                  setdaysOverdue={setdaysOverdue}
-                />
+                <FilterByDates shipmentsStartDate={startDate} setShipmentsStartDate={setStartDate} setShipmentsEndDate={setEndDate} shipmentsEndDate={endDate} handleChangeDatesFromPicker={handleChangeDatesFromPicker} />
+                <FilterCommerceHubInvoices filters={filters} setfilters={setfilters} stores={stores?.stores ?? []} statusOptions={STATUS_OPTIONS} daysOverdue={daysOverdue} setdaysOverdue={setdaysOverdue} />
                 <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='fs-7 text-nowrap' onClick={clearFilters}>
                   Clear Filters
                 </Button>
@@ -334,15 +311,7 @@ const Invoices = ({ session, sessionToken }: Props) => {
             </div>
             <Card>
               <CardBody>
-                <InvoicesTable
-                  filteredItems={invoices}
-                  pending={isValidating && size === 1}
-                  setSelectedRows={setSelectedRows}
-                  toggledClearRows={toggledClearRows}
-                  sortBy={sortBy}
-                  setSortBy={setSortBy}
-                  setEditCommentModal={setEditCommentModal}
-                />
+                <InvoicesTable filteredItems={invoices} pending={isValidating && size === 1} setSelectedRows={setSelectedRows} toggledClearRows={toggledClearRows} sortBy={sortBy} setSortBy={setSortBy} setEditCommentModal={setEditCommentModal} />
                 <div ref={lastInvoiceElementRef} style={{ height: '20px', marginTop: '10px' }}>
                   {isValidating && size > 1 && (
                     <p className='text-center'>
@@ -354,7 +323,7 @@ const Invoices = ({ session, sessionToken }: Props) => {
             </Card>
           </Container>
         </div>
-        {showUpdateInvoices.show && <UpdateInvoicesModal showUpdateInvoices={showUpdateInvoices} setshowUpdateInvoices={setshowUpdateInvoices} clearFilters={clearFilters} stores={stores?.stores ?? []} mutate={mutate}/>}
+        {showUpdateInvoices.show && <UpdateInvoicesModal showUpdateInvoices={showUpdateInvoices} setshowUpdateInvoices={setshowUpdateInvoices} clearFilters={clearFilters} stores={stores?.stores ?? []} mutate={mutate} />}
         {editCommentModal.show && <EditInvoiceCommerceHubCommentModal editCommentModal={editCommentModal} setEditCommentModal={setEditCommentModal} mutate={mutate} />}
       </React.Fragment>
     </div>

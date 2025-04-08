@@ -164,7 +164,7 @@ const MarketplacePricing = ({ session, sessionToken }: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
-          <BreadCrumb title='Reordering Points' pageTitle='Inbound' />
+          <BreadCrumb title='Marketplace Pricing' pageTitle='Marketplaces' />
           <Container fluid>
             <Row className='d-flex flex-column justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-end align-items-md-center px-3'>
               <div className='d-flex flex-column justify-content-between align-items-start p-0 flex-md-row align-items-md-center gap-2'>

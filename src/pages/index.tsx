@@ -56,13 +56,9 @@ const Home = ({ session, sessionToken }: Props) => {
       .catch(({ error }) => {
         toast.error(error?.data?.message || 'Error fetching Summary data')
       })
-  const { data: summary } = useSWR(
-    state.user.businessId
-      ? `/api/getBusinessSummary?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${dashboardStartDate}&endDate=${dashboardEndDate}`
-      : null,
-    fetcherSummary,
-    { revalidateOnFocus: false }
-  )
+  const { data: summary } = useSWR(state.user.businessId ? `/api/getBusinessSummary?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${dashboardStartDate}&endDate=${dashboardEndDate}` : null, fetcherSummary, {
+    revalidateOnFocus: false,
+  })
 
   const fetcherSalesOverTime = (endPoint: string) =>
     axios(endPoint, {
@@ -99,8 +95,8 @@ const Home = ({ session, sessionToken }: Props) => {
       </Head>
 
       <div className='page-content'>
+        <BreadCrumb title='Dashboard' pageTitle='Dashboard' />
         <Container fluid>
-          <BreadCrumb title='Dashboard' pageTitle='Dashboards' />
           <Row>
             <Col>
               <DashboardHeader user={state.user.name} handleChangeDates={handleChangeDates} startDate={dashboardStartDate} endDate={dashboardEndDate} />

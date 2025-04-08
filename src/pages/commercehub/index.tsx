@@ -57,14 +57,10 @@ const Dashboard = ({ session }: Props) => {
     show: false,
   })
 
-  const { data: summary, mutate } = useSWR<DashboardResponse>(
-    state.user.businessId ? `/api/commerceHub/getSummary?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
-    fetcherSummary,
-    {
-      revalidateOnFocus: false,
-      // revalidateOnMount: false,
-    }
-  )
+  const { data: summary, mutate } = useSWR<DashboardResponse>(state.user.businessId ? `/api/commerceHub/getSummary?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcherSummary, {
+    revalidateOnFocus: false,
+    // revalidateOnMount: false,
+  })
 
   const { data: stores } = useSWR(state.user.businessId ? `/api/commerceHub/getStores?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcherStores, {
     revalidateOnFocus: false,
@@ -77,8 +73,8 @@ const Dashboard = ({ session }: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
+          <BreadCrumb title='Dashboard' pageTitle='Commerce HUB' />
           <Container fluid>
-            <BreadCrumb title='Dashboard' pageTitle='Commerce HUB' />
             <div className='d-flex flex-column justify-content-center align-items-end gap-2 mb-3 flex-lg-row justify-content-md-between align-items-md-center px-1'>
               <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'>
                 <Button
@@ -107,9 +103,7 @@ const Dashboard = ({ session }: Props) => {
             )}
           </Container>
         </div>
-        {showUpdateInvoices.show && (
-          <UpdateInvoicesModal showUpdateInvoices={showUpdateInvoices} setshowUpdateInvoices={setshowUpdateInvoices} stores={stores?.stores ?? []} mutate={mutate} />
-        )}
+        {showUpdateInvoices.show && <UpdateInvoicesModal showUpdateInvoices={showUpdateInvoices} setshowUpdateInvoices={setshowUpdateInvoices} stores={stores?.stores ?? []} mutate={mutate} />}
       </React.Fragment>
     </div>
   )
