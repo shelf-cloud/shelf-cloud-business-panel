@@ -32,14 +32,14 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
 
   const columns: any = [
     {
-      name: <span className='fw-semibold text-center fs-7'>Marketplace</span>,
+      name: <span className='fw-semibold text-center fs-7'></span>,
       selector: (row: MKP_Product_Table) => {
         return (
           <div className='d-flex flex-column justify-content-center gap-0 align-items-center'>
             <div
               style={{
-                width: '20px',
-                height: '20px',
+                width: '22px',
+                height: '22px',
                 margin: '0px',
                 position: 'relative',
               }}>
@@ -51,6 +51,7 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
       sortable: false,
       compact: true,
       center: true,
+      minWidth: '30px',
     },
     {
       name: <span className='fw-semibold text-center fs-7'>Product</span>,
@@ -69,7 +70,7 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
             <div className='w-100'>
               <Link href={`/product/${row.inventoryId}/${row.sku}`} passHref>
                 <a>
-                  <p className='m-0 p-0 text-primary fw-semibold fs-6'>{row.sku}</p>
+                  <p className='m-0 p-0 text-primary fw-semibold fs-7'>{row.sku}</p>
                 </a>
               </Link>
               <p className='m-0 p-0 text-black fw-semibold fs-7 text-wrap'>{row.title}</p>
@@ -101,6 +102,7 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
       sortable: true,
       center: true,
       compact: true,
+      minWidth: '70px',
       with: 'fit-content',
       sortFunction: (rowA: MKP_Product_Table, rowB: MKP_Product_Table) => sortNumbers(rowA.proposedPrice > 0 && rowA.proposedPrice !== rowA.actualPrice ? 1 : 0, rowB.proposedPrice > 0 && rowB.proposedPrice !== rowB.actualPrice ? 1 : 0),
     },
@@ -110,6 +112,7 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
       sortable: true,
       center: true,
       compact: true,
+      minWidth: '70px',
       sortFunction: (rowA: MKP_Product_Table, rowB: MKP_Product_Table) => sortNumbers(rowA.unitsSold['1M'] ?? 0, rowB.unitsSold['1M'] ?? 0),
     },
     {
@@ -118,6 +121,7 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
       sortable: true,
       center: true,
       compact: true,
+      minWidth: '70px',
       sortFunction: (rowA: MKP_Product_Table, rowB: MKP_Product_Table) => sortNumbers(rowA.unitsSold['1Y'] ?? 0, rowB.unitsSold['1Y'] ?? 0),
     },
     {
@@ -125,7 +129,8 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
       selector: (row: MKP_Product) => FormatCurrency(state.currentRegion, row.sellerCost + row.inboundShippingCost),
       sortable: true,
       center: true,
-      compact: false,
+      compact: true,
+      minWidth: '70px',
       style: {
         backgroundColor: 'rgba(163, 228, 215, 0.5)',
       },
@@ -136,6 +141,7 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
       sortable: true,
       center: true,
       compact: true,
+      minWidth: '70px',
       style: {
         backgroundColor: 'rgba(163, 228, 215, 0.5)',
       },
@@ -174,11 +180,12 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
       sortFunction: (rowA: MKP_Product_Table, rowB: MKP_Product_Table) => sortNumbers(rowA.storeOtherCosts, rowB.storeOtherCosts),
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Price</span>,
+      name: <span className='fw-semibold text-center fs-7'>Current Price</span>,
       selector: (row: MKP_Product_Table) => FormatCurrency(state.currentRegion, row.actualPrice),
       sortable: true,
       center: true,
       compact: true,
+      minWidth: '70px',
       style: {
         backgroundColor: 'rgba(249, 231, 159, 0.5)',
       },
@@ -190,6 +197,7 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
       sortable: true,
       center: true,
       compact: true,
+      minWidth: '70px',
       style: {
         backgroundColor: 'rgba(249, 231, 159, 0.5)',
       },
@@ -201,6 +209,7 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
       sortable: true,
       center: true,
       compact: true,
+      minWidth: '70px',
       style: {
         backgroundColor: 'rgba(249, 231, 159, 0.5)',
       },
@@ -219,6 +228,7 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
       sortable: true,
       center: true,
       compact: true,
+      minWidth: '70px',
       style: {
         backgroundColor: 'rgba(249, 231, 159, 0.5)',
       },
@@ -229,7 +239,7 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
         ),
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Price</span>,
+      name: <span className='fw-semibold text-center fs-7'>Proposed Price</span>,
       selector: (row: MKP_Product_Table) => {
         return (
           <div className='d-flex flex-column justify-content-start align-items-center gap-2 w-100 px-1'>
@@ -266,6 +276,7 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
       sortable: true,
       center: true,
       compact: true,
+      minWidth: '70px',
       style: {
         backgroundColor: 'rgba(174, 214, 241, 0.5)',
       },
@@ -282,6 +293,7 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
       sortable: true,
       center: true,
       compact: true,
+      minWidth: '70px',
       style: {
         backgroundColor: 'rgba(174, 214, 241, 0.5)',
       },
@@ -302,6 +314,7 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
       sortable: true,
       center: true,
       compact: true,
+      minWidth: '70px',
       style: {
         backgroundColor: 'rgba(174, 214, 241, 0.5)',
       },
@@ -372,9 +385,10 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
       selector: (row: MKP_Product_Table) => (
         <DebounceInput
           element='textarea'
+          minLength={3}
           debounceTimeout={600}
           className='form-control form-control-sm fs-7 m-0'
-          min={3}
+          rows={2}
           id={`notes-${row.sku}-${row.storeId}`}
           value={row.notes}
           onClick={(e: any) => e.target.select()}

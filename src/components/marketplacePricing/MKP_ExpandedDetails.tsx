@@ -23,7 +23,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       name: <span className='fw-semibold text-center fs-7'>Marketplace</span>,
       selector: (row: MKP_Marketplaces) => {
         return (
-          <div className='d-flex flex-column justify-content-center gap-0 align-items-center'>
+          <div className='d-flex flex-row justify-content-start gap-1 align-items-center'>
             <div
               style={{
                 width: '20px',
@@ -33,13 +33,14 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
               }}>
               <img loading='lazy' src={row.logo ?? NoImageAdress} onError={(e) => (e.currentTarget.src = NoImageAdress)} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
             </div>
-            <p className='m-0 p-0 fs-7 text-muted'>{row.name}</p>
+            <span className='m-0 p-0 fs-7 text-muted text-wrap'>{row.name}</span>
           </div>
         )
       },
       sortable: true,
       compact: false,
-      center: true,
+      left: true,
+      grow: 2,
     },
     {
       name: <span className='fw-semibold text-center fs-7'>On Watch</span>,
@@ -47,6 +48,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       sortable: true,
       center: true,
       compact: true,
+      minWidth: '50px',
       with: 'fit-content',
       sortFunction: (rowA: MKP_Marketplaces, rowB: MKP_Marketplaces) => sortNumbers(rowA.proposedPrice > 0 && rowA.proposedPrice !== rowA.actualPrice ? 1 : 0, rowB.proposedPrice > 0 && rowB.proposedPrice !== rowB.actualPrice ? 1 : 0),
     },
@@ -106,11 +108,12 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       },
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Price</span>,
+      name: <span className='fw-semibold text-center fs-7'>Current Price</span>,
       selector: (row: MKP_Marketplaces) => FormatCurrency(state.currentRegion, row.actualPrice),
       sortable: true,
       center: true,
       compact: true,
+      minWidth: '50px',
       style: {
         backgroundColor: 'rgba(249, 231, 159, 0.5)',
       },
@@ -121,6 +124,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       sortable: true,
       center: true,
       compact: true,
+      minWidth: '50px',
       style: {
         backgroundColor: 'rgba(249, 231, 159, 0.5)',
       },
@@ -131,6 +135,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       sortable: true,
       center: true,
       compact: true,
+      minWidth: '50px',
       style: {
         backgroundColor: 'rgba(249, 231, 159, 0.5)',
       },
@@ -144,12 +149,13 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       sortable: true,
       center: true,
       compact: true,
+      minWidth: '50px',
       style: {
         backgroundColor: 'rgba(249, 231, 159, 0.5)',
       },
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Price</span>,
+      name: <span className='fw-semibold text-center fs-7'>Proposed Price</span>,
       selector: (row: MKP_Marketplaces) => {
         return (
           <div className='d-flex flex-column justify-content-start align-items-center gap-2 w-100 px-1'>
@@ -185,6 +191,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       sortable: true,
       center: true,
       compact: true,
+      minWidth: '50px',
       style: {
         backgroundColor: 'rgba(174, 214, 241, 0.5)',
       },
@@ -196,6 +203,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       sortable: true,
       center: true,
       compact: true,
+      minWidth: '50px',
       style: {
         backgroundColor: 'rgba(174, 214, 241, 0.5)',
       },
@@ -210,6 +218,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       sortable: true,
       center: true,
       compact: true,
+      minWidth: '50px',
       style: {
         backgroundColor: 'rgba(174, 214, 241, 0.5)',
       },

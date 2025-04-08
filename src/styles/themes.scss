@@ -210,6 +210,10 @@ $value in $theme-colors {
   .Toastify__close-button--light {
     color: $light;
   }
+  .Toastify__spinner{
+    border-color: #e0e0e0;
+    border-right-color: #616161;
+  }
 }
 
 .capitalize {

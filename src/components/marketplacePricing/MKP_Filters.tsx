@@ -107,7 +107,7 @@ const MKP_Filters = ({ filters, supplierOptions, brandOptions, categoryOptions, 
                     <Label htmlFor='lastNameinput' className='form-label'>
                       Units Sold 1 Month
                     </Label>
-                    <div className='d-flex flex-row justify-content-between align-items-end gap-2'>
+                    <div className='d-flex flex-row justify-content-between align-items-end gap-1'>
                       <InputNumberFilter
                         inputName='units1monthmin'
                         value={values.units1monthmin}
@@ -136,7 +136,7 @@ const MKP_Filters = ({ filters, supplierOptions, brandOptions, categoryOptions, 
                     <Label htmlFor='lastNameinput' className='form-label'>
                       Units Sold 1 Year
                     </Label>
-                    <div className='d-flex flex-row justify-content-between align-items-end gap-2'>
+                    <div className='d-flex flex-row justify-content-between align-items-end gap-1'>
                       <InputNumberFilter inputName='units1yearmin' value={values.units1yearmin} isInvalid={touched.units1yearmin && errors.units1yearmin ? true : false} handleChange={handleChange} handleBlur={handleBlur} placeholder='Units Sold' />
                       <span className='fs-7 text-muted p-0 m-0'>min</span>
                       <InputNumberFilter inputName='units1yearmax' value={values.units1yearmax} isInvalid={touched.units1yearmax && errors.units1yearmax ? true : false} handleChange={handleChange} handleBlur={handleBlur} placeholder='Units Sold' />
@@ -235,10 +235,10 @@ const MKP_Filters = ({ filters, supplierOptions, brandOptions, categoryOptions, 
                 )}
                 <Col xs={12} md={4}>
                   <div className='d-flex flewx-row justify-content-end align-items-center gap-3'>
-                    <Button type='button' color='light' className='fs-6 btn' onClick={() => handleClearFilters(setValues)}>
+                    <Button type='button' color='light' className='fs-7' onClick={() => handleClearFilters(setValues)}>
                       Clear
                     </Button>
-                    <Button type='submit' className='fs-6 btn bg-primary'>
+                    <Button type='submit' className='fs-7' color='primary'>
                       Apply Filters
                     </Button>
                   </div>
