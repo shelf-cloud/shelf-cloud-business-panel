@@ -9,7 +9,7 @@ import { AMAZON_MARKETPLACES_ID } from '@lib/AmzConstants'
 
 type Props = {
   data: ProductPerformance
-  selectedMarketplaceStoreId?: number
+  selectedMarketplaceStoreId?: number | string
 }
 
 const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<ProductPerformance>> = ({ data, selectedMarketplaceStoreId }: Props) => {
@@ -177,7 +177,7 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                         <td className={'fw-light text-end text-black'}>-{FormatCurrency(state.currentRegion, data.shelfCloudCost)}</td>
                       </tr>
                     )}
-                    {data.storageCost > 0 && selectedMarketplaceStoreId === 9999 && (
+                    {data.storageCost > 0 && selectedMarketplaceStoreId === '9999' && (
                       <tr className='border-bottom pb-2'>
                         <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Storage Cost</td>
                         <td className={'fw-light text-end text-black'}>-{FormatCurrency(state.currentRegion, data.storageCost)}</td>
