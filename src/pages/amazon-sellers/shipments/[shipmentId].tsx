@@ -78,7 +78,7 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
       })
       .catch(({ error }) => {
         if (axios.isCancel(error)) {
-          toast.error(error?.data?.message || 'Error fetching shipment data')
+          toast.error('Error fetching shipment data')
           setshipmentDetails(null)
           setloading(false)
         }
@@ -115,7 +115,7 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
         .then(({ data }) => data)
         .catch(({ error }) => {
           if (axios.isCancel(error)) {
-            toast.error(error?.data?.message || 'Error Generating Bill Of Lading')
+            toast.error('Error Generating Bill Of Lading')
           }
         })) as GetLabelsResponse
 

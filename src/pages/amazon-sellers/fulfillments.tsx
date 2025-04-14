@@ -91,7 +91,7 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
       })
       .catch(({ error }) => {
         if (axios.isCancel(error)) {
-          toast.error(error?.data?.message || 'Error fetching shipment Log data')
+          toast.error('Error fetching shipment Log data')
           setAllData([])
           setPending(false)
         }

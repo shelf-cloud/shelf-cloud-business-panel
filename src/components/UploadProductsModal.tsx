@@ -5,9 +5,9 @@ import { Button, Card, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from '
 import AppContext from '@context/AppContext'
 import { toast } from 'react-toastify'
 import router from 'next/router'
-import Dropzone from 'react-dropzone'
 import axios from 'axios'
 import Papa from 'papaparse'
+import UploadFileDropzone from '@components/ui/UploadFileDropzone'
 
 type Props = {}
 
@@ -33,19 +33,13 @@ const UploadProductsModal = ({}: Props) => {
         for (let v = 0; v < rowValues.length; v++) {
           switch (v) {
             case 0:
-              ;/^[a-zA-Z0-9-]{4,50}$/.test(rowValues[v])
-                ? () => {}
-                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              ;/^[a-zA-Z0-9-]{4,50}$/.test(rowValues[v]) ? () => {} : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
             case 1:
-              ;/^[a-zA-Z0-9-Á-öø-ÿ\s]{10,100}$/.test(rowValues[v])
-                ? () => {}
-                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              ;/^[a-zA-Z0-9-Á-öø-ÿ\s]{10,100}$/.test(rowValues[v]) ? () => {} : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
             case 2:
-              ;/^[0-9]{5,20}$/.test(rowValues[v])
-                ? () => {}
-                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              ;/^[0-9]{5,20}$/.test(rowValues[v]) ? () => {} : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
             case 3:
               ;() => {}
@@ -54,56 +48,34 @@ const UploadProductsModal = ({}: Props) => {
               ;() => {}
               break
             case 5:
-              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v])
-                ? () => {}
-                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v]) ? () => {} : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
             case 6:
-              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v])
-                ? () => {}
-                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v]) ? () => {} : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
             case 7:
-              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v])
-                ? () => {}
-                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v]) ? () => {} : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
             case 8:
-              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v])
-                ? () => {}
-                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v]) ? () => {} : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
             case 9:
-              ;/^[0-9]{1,}$/.test(rowValues[v])
-                ? () => {}
-                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              ;/^[0-9]{1,}$/.test(rowValues[v]) ? () => {} : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
             case 10:
-              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v])
-                ? () => {}
-                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v]) ? () => {} : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
             case 11:
-              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v])
-                ? () => {}
-                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v]) ? () => {} : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
             case 12:
-              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v])
-                ? () => {}
-                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v]) ? () => {} : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
             case 13:
-              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v])
-                ? () => {}
-                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v]) ? () => {} : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
             case 14:
-              ;/[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(
-                rowValues[v]
-              )
-                ? () => {}
-                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              ;/[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(rowValues[v]) ? () => {} : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
             default:
             // code block
@@ -134,12 +106,9 @@ const UploadProductsModal = ({}: Props) => {
             return
           }
 
-          const response = await axios.post(
-            `api/uploadTemplateFile?region=${state.currentRegion}&businessId=${state.user.businessId}`,
-            {
-              productInfo: results.data,
-            }
-          )
+          const response = await axios.post(`api/uploadTemplateFile?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+            productInfo: results.data,
+          })
           if (!response.data.error) {
             setShowErrorResponse(false)
             setErrorResponse([])
@@ -217,14 +186,17 @@ const UploadProductsModal = ({}: Props) => {
         </p>
         <Row>
           <Col md={6}>
-            <Dropzone
+            {/* <Dropzone
               accept={{ 'text/csv': ['.csv'] }}
               multiple={false}
               onDrop={(acceptedFiles) => {
                 handleAcceptedFiles(acceptedFiles)
+              }}
+              onDropRejected={(error) => {
+                toast.error(error[0].errors[0].message)
               }}>
               {({ getRootProps }) => (
-                <div className='dropzone dz-clickable cursor-pointer'>
+                <div className='dropzone dz-clickable cursor-pointer' {...getRootProps()}>
                   <div className='dz-message needsclick' {...getRootProps()}>
                     <div className='mb-3'>
                       <i className='display-4 text-muted ri-upload-cloud-2-fill' />
@@ -233,15 +205,14 @@ const UploadProductsModal = ({}: Props) => {
                   </div>
                 </div>
               )}
-            </Dropzone>
+            </Dropzone> */}
+            <UploadFileDropzone accptedFiles={{ 'text/csv': ['.csv'] }} handleAcceptedFiles={handleAcceptedFiles} description={`Upload Products Info. Drop Only CSV files here or click to upload.`} />
           </Col>
           <Col md={6}>
             <div className='list-unstyled mb-0' id='file-previews'>
               {selectedFiles.map((f: any, i) => {
                 return (
-                  <Card
-                    className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete'
-                    key={i + '-file'}>
+                  <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
                     <div className='p-2'>
                       <Row className='align-items-center'>
                         <Col className='d-flex justify-content-between align-items-center'>
@@ -266,16 +237,8 @@ const UploadProductsModal = ({}: Props) => {
           </Col>
         </Row>
         {errorFile && <p className='text-danger m-0'>You must Upload a CSV file to upload products.</p>}
-        {showErrorLines &&
-          errorLines.map((error: any, index: number) => (
-            <p
-              key={`ErrorLine${index}`}
-              className='text-danger m-0'>{`Error in Line: ${error.errorLine} Value: ${error.value} Error: ${error.errorMessage}`}</p>
-          ))}
-        {showerrorResponse &&
-          errorResponse.map((error: any, index: number) => (
-            <p key={`ErrorLine${index}`} className='text-danger m-0'>{`Error: ${error}`}</p>
-          ))}
+        {showErrorLines && errorLines.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='text-danger m-0'>{`Error in Line: ${error.errorLine} Value: ${error.value} Error: ${error.errorMessage}`}</p>)}
+        {showerrorResponse && errorResponse.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='text-danger m-0'>{`Error: ${error}`}</p>)}
         <Col md={12}>
           <div className='text-end'>
             <Button type='button' color='success' className='btn' onClick={handleUploadProducts}>

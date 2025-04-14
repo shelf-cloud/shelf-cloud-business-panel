@@ -85,7 +85,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
       })
       .catch(({ error }) => {
         if (axios.isCancel(error)) {
-          toast.error(error?.data?.message || 'Error fetching shipment Log data')
+          toast.error('Error fetching shipment Log data')
           setinboundPlanDetails(null)
           setloading(false)
         }
@@ -123,7 +123,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
         .then(({ data }) => data)
         .catch(({ error }) => {
           if (axios.isCancel(error)) {
-            toast.error(error?.data?.message || 'Error generating Packing Options')
+            toast.error('Error generating Packing Options')
           }
         })
 
@@ -176,7 +176,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
         .then(({ data }) => data)
         .catch(({ error }) => {
           if (axios.isCancel(error)) {
-            toast.error(error?.data?.message || 'Error generating Placement Options')
+            toast.error('Error generating Placement Options')
           }
         })
 
@@ -225,7 +225,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
         .then(({ data }) => data)
         .catch(({ error }) => {
           if (axios.isCancel(error)) {
-            toast.error(error?.data?.message || 'Error generating Placement Options')
+            toast.error('Error generating Placement Options')
           }
         })
 
@@ -275,7 +275,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
         .then(({ data }) => data)
         .catch(({ error }) => {
           if (axios.isCancel(error)) {
-            toast.error(error?.data?.message || 'Error generating Transportation Options')
+            toast.error('Error generating Transportation Options')
           }
         })
 
@@ -325,7 +325,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
         .then(({ data }) => data)
         .catch(({ error }) => {
           if (axios.isCancel(error)) {
-            toast.error(error?.data?.message || 'Error Confirming Charges and Fees')
+            toast.error('Error Confirming Charges and Fees')
           }
         })
 
@@ -367,7 +367,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
         .then(({ data }) => data)
         .catch(({ error }) => {
           if (axios.isCancel(error)) {
-            toast.error(error?.data?.message || 'Error Generating Shipment Label')
+            toast.error('Error Generating Shipment Label')
           }
         })) as GetLabelsResponse
 
@@ -412,7 +412,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
         .then(({ data }) => data)
         .catch(({ error }) => {
           if (axios.isCancel(error)) {
-            toast.error(error?.data?.message || 'Error Generating Shipment Pallet Label')
+            toast.error('Error Generating Shipment Pallet Label')
           }
         })) as GetLabelsResponse
 
@@ -457,7 +457,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
         .then(({ data }) => data)
         .catch(({ error }) => {
           if (axios.isCancel(error)) {
-            toast.error(error?.data?.message || 'Error Generating Bill Of Lading')
+            toast.error('Error Generating Bill Of Lading')
           }
         })) as GetLabelsResponse
 

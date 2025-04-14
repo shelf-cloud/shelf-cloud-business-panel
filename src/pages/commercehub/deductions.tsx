@@ -207,11 +207,11 @@ const Deductions = ({ session, sessionToken }: Props) => {
       .then((res) => res.data)
       .catch(({ error }) => {
         if (axios.isCancel(error)) {
-          toast.error(error?.data?.message || 'Error generating document')
+          toast.error('Error generating document')
         }
         return {
           error: true,
-          message: error?.data?.message || 'Error generating document',
+          message: 'Error generating document',
           invoices: [],
         }
       })

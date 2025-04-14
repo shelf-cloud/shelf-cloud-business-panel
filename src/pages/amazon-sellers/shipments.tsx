@@ -79,7 +79,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
       })
       .catch(({ error }) => {
         if (axios.isCancel(error)) {
-          toast.error(error?.data?.message || 'Error fetching shipment Log data')
+          toast.error('Error fetching shipment Log data')
           setAllData([])
           setPending(false)
         }
@@ -108,7 +108,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
       .then(({ data }) => data)
       .catch(({ error }) => {
         if (axios.isCancel(error)) {
-          toast.error(error?.data?.message || 'Error Generating Bill Of Lading')
+          toast.error('Error Generating Bill Of Lading')
         }
       })
 
@@ -146,7 +146,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
       .then(({ data }) => data)
       .catch(({ error }) => {
         if (axios.isCancel(error)) {
-          toast.error(error?.data?.message || 'Error updating status')
+          toast.error('Error updating status')
         }
       })
 
@@ -180,7 +180,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
       .then(({ data }) => data)
       .catch(({ error }) => {
         if (axios.isCancel(error)) {
-          toast.error(error?.data?.message || 'Error updating status')
+          toast.error('Error updating status')
         }
       })
 

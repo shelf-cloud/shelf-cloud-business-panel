@@ -1,7 +1,6 @@
 import AppContext from '@context/AppContext'
 import { useContext, useState } from 'react'
 import { Button, Card, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
-import Dropzone from 'react-dropzone'
 import { ref, uploadBytes } from 'firebase/storage'
 import { storage } from '@firebase'
 import { useSession } from 'next-auth/react'
@@ -9,6 +8,7 @@ import moment from 'moment'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { Shipment } from '@typesTs/shipments/shipments'
+import UploadFileDropzone from '@components/ui/UploadFileDropzone'
 type Props = {
   data: Shipment
   mutateShipment?: () => void
@@ -124,7 +124,7 @@ const UploadIndividualUnitsLabelsModal = ({ data, mutateShipment }: Props) => {
         <Col>
           <Row>
             <Col>
-              <Dropzone
+              {/* <Dropzone
                 multiple={false}
                 onDrop={(acceptedFiles) => {
                   handleAcceptedFiles(acceptedFiles)
@@ -139,7 +139,8 @@ const UploadIndividualUnitsLabelsModal = ({ data, mutateShipment }: Props) => {
                     </div>
                   </div>
                 )}
-              </Dropzone>
+              </Dropzone> */}
+              <UploadFileDropzone accptedFiles={undefined} handleAcceptedFiles={handleAcceptedFiles} description={`Upload Shipping Labels. Drop Only PDF files here or click to upload.`} />
               <div className='list-unstyled mb-0' id='file-previews'>
                 {selectedFiles.map((f: any, i) => {
                   return (
@@ -169,22 +170,23 @@ const UploadIndividualUnitsLabelsModal = ({ data, mutateShipment }: Props) => {
             </Col>
             <Col>
               {data.numberPallets > 0 && (
-                <Dropzone
-                  multiple={false}
-                  onDrop={(acceptedFiles) => {
-                    handlePalletAcceptedFiles(acceptedFiles)
-                  }}>
-                  {({ getRootProps }) => (
-                    <div className='dropzone dz-clickable cursor-pointer'>
-                      <div className='dz-message needsclick' {...getRootProps()}>
-                        <div className='mb-3'>
-                          <i className='display-4 text-muted ri-upload-cloud-2-fill' />
-                        </div>
-                        <h4>Upload Pallet Labels. Drop Only PDF files here or click to upload.</h4>
-                      </div>
-                    </div>
-                  )}
-                </Dropzone>
+                // <Dropzone
+                //   multiple={false}
+                //   onDrop={(acceptedFiles) => {
+                //     handlePalletAcceptedFiles(acceptedFiles)
+                //   }}>
+                //   {({ getRootProps }) => (
+                //     <div className='dropzone dz-clickable cursor-pointer'>
+                //       <div className='dz-message needsclick' {...getRootProps()}>
+                //         <div className='mb-3'>
+                //           <i className='display-4 text-muted ri-upload-cloud-2-fill' />
+                //         </div>
+                //         <h4>Upload Pallet Labels. Drop Only PDF files here or click to upload.</h4>
+                //       </div>
+                //     </div>
+                //   )}
+                // </Dropzone>
+                <UploadFileDropzone accptedFiles={undefined} handleAcceptedFiles={handlePalletAcceptedFiles} description={`Upload Pallet Labels. Drop Only PDF files here or click to upload.`} />
               )}
               <div className='list-unstyled mb-0' id='file-previews'>
                 {palletSelectedFiles.map((f: any, i) => {

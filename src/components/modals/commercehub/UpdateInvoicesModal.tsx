@@ -5,12 +5,12 @@ import AppContext from '@context/AppContext'
 import axios from 'axios'
 import * as Yup from 'yup'
 import { toast } from 'react-toastify'
-import Dropzone from 'react-dropzone'
 import Papa from 'papaparse'
 import { useFormik } from 'formik'
 import { validateCitiBankLowesFile, validateHomeDepotFile, validateLowesFile } from './validateFileTypesInfo'
 import { CommerceHubStore } from '@typesTs/commercehub/invoices'
 import router from 'next/router'
+import UploadFileDropzone from '@components/ui/UploadFileDropzone'
 
 type Props = {
   showUpdateInvoices: {
@@ -278,7 +278,7 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
               </div>
             </Col>
             <Col md={6}>
-              <Dropzone
+              {/* <Dropzone
                 accept={{ 'text/csv': ['.csv'] }}
                 multiple={false}
                 onDrop={(acceptedFiles) => {
@@ -294,7 +294,8 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
                     </div>
                   </div>
                 )}
-              </Dropzone>
+              </Dropzone> */}
+              <UploadFileDropzone accptedFiles={{ 'text/csv': ['.csv'] }} handleAcceptedFiles={handleAcceptedFiles} description={`Upload Products Details. Drop Only CSV files here or click to upload.`} />
             </Col>
           </Row>
           {errorFile && <p className='text-danger m-0'>You must Upload a CSV file to upload products.</p>}

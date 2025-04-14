@@ -9,10 +9,10 @@ import { toast } from 'react-toastify'
 import { wholesaleProductRow } from '@typings'
 import router from 'next/router'
 import moment from 'moment'
-import Dropzone from 'react-dropzone'
 import { ref, uploadBytes } from 'firebase/storage'
 import { storage } from '@firebase'
 import { useSession } from 'next-auth/react'
+import UploadFileDropzone from './ui/UploadFileDropzone'
 
 type Props = {
   orderNumberStart: string
@@ -261,11 +261,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     onClick={() => validation.setFieldValue('type', 'Parcel Boxes')}>
                     Parcel Boxes
                   </Button>
-                  <Button
-                    type='button'
-                    className={'' + (validation.values.type == 'LTL' ? '' : 'text-muted')}
-                    color={validation.values.type == 'LTL' ? 'primary' : 'light'}
-                    onClick={() => validation.setFieldValue('type', 'LTL')}>
+                  <Button type='button' className={'' + (validation.values.type == 'LTL' ? '' : 'text-muted')} color={validation.values.type == 'LTL' ? 'primary' : 'light'} onClick={() => validation.setFieldValue('type', 'LTL')}>
                     Pallets
                   </Button>
                 </div>
@@ -286,9 +282,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                       value={validation.values.numberOfPallets || ''}
                       invalid={validation.touched.numberOfPallets && validation.errors.numberOfPallets ? true : false}
                     />
-                    {validation.touched.numberOfPallets && validation.errors.numberOfPallets ? (
-                      <FormFeedback type='invalid'>{validation.errors.numberOfPallets}</FormFeedback>
-                    ) : null}
+                    {validation.touched.numberOfPallets && validation.errors.numberOfPallets ? <FormFeedback type='invalid'>{validation.errors.numberOfPallets}</FormFeedback> : null}
                   </FormGroup>
                 </Col>
               )}
@@ -297,14 +291,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                   <Label htmlFor='firstNameinput' className='form-label'>
                     *Type of Shipment Payment
                   </Label>
-                  <Input
-                    type='select'
-                    className='form-control'
-                    id='isThird'
-                    name='isThird'
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    invalid={validation.touched.isThird && validation.errors.isThird ? true : false}>
+                  <Input type='select' className='form-control' id='isThird' name='isThird' onChange={validation.handleChange} onBlur={validation.handleBlur} invalid={validation.touched.isThird && validation.errors.isThird ? true : false}>
                     <option value=''>Choose a Type..</option>
                     <option value='false'>Prepaid Shipping Label</option>
                     <option value='true'>Shelf-Cloud Preferred Carrier</option>
@@ -316,7 +303,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
             <Col md={6}>
               <Row>
                 <Col>
-                  <Dropzone
+                  {/* <Dropzone
                     multiple={false}
                     onDrop={(acceptedFiles) => {
                       handleAcceptedFiles(acceptedFiles)
@@ -331,7 +318,8 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                         </div>
                       </div>
                     )}
-                  </Dropzone>
+                  </Dropzone> */}
+                  <UploadFileDropzone accptedFiles={undefined} handleAcceptedFiles={handleAcceptedFiles} description={`Upload Shipping Labels. Drop Only PDF files here or click to upload.`} />
                   <div className='list-unstyled mb-0' id='file-previews'>
                     {selectedFiles.map((f: any, i) => {
                       return (
@@ -361,22 +349,23 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                 </Col>
                 <Col>
                   {validation.values.type == 'LTL' && (
-                    <Dropzone
-                      multiple={false}
-                      onDrop={(acceptedFiles) => {
-                        handlePalletAcceptedFiles(acceptedFiles)
-                      }}>
-                      {({ getRootProps }) => (
-                        <div className='dropzone dz-clickable cursor-pointer'>
-                          <div className='dz-message needsclick' {...getRootProps()}>
-                            <div className='mb-3'>
-                              <i className='display-4 text-muted ri-upload-cloud-2-fill' />
-                            </div>
-                            <h4>Upload Pallet Labels. Drop Only PDF files here or click to upload.</h4>
-                          </div>
-                        </div>
-                      )}
-                    </Dropzone>
+                    // <Dropzone
+                    //   multiple={false}
+                    //   onDrop={(acceptedFiles) => {
+                    //     handlePalletAcceptedFiles(acceptedFiles)
+                    //   }}>
+                    //   {({ getRootProps }) => (
+                    //     <div className='dropzone dz-clickable cursor-pointer'>
+                    //       <div className='dz-message needsclick' {...getRootProps()}>
+                    //         <div className='mb-3'>
+                    //           <i className='display-4 text-muted ri-upload-cloud-2-fill' />
+                    //         </div>
+                    //         <h4>Upload Pallet Labels. Drop Only PDF files here or click to upload.</h4>
+                    //       </div>
+                    //     </div>
+                    //   )}
+                    // </Dropzone>
+                    <UploadFileDropzone accptedFiles={undefined} handleAcceptedFiles={handlePalletAcceptedFiles} description={`Upload Pallet Labels. Drop Only PDF files here or click to upload.`} />
                   )}
                   <div className='list-unstyled mb-0' id='file-previews'>
                     {palletSelectedFiles.map((f: any, i) => {

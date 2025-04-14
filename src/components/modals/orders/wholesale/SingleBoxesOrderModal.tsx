@@ -9,22 +9,14 @@ import { toast } from 'react-toastify'
 import { wholesaleProductRow } from '@typings'
 import router from 'next/router'
 import moment from 'moment'
-// import Dropzone from 'react-dropzone'
-// import { ref, uploadBytes } from 'firebase/storage'
-// import { storage } from '@firebase'
-// import { useSession } from 'next-auth/react'
 
 type Props = {
   orderNumberStart: string
   orderProducts: wholesaleProductRow[]
 }
 const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
-  // const { data: session } = useSession()
-  const { state, setSingleBoxesOrderModal }: any = useContext(AppContext)
-  // const [selectedFiles, setselectedFiles] = useState([])
-  // const [palletSelectedFiles, setPalletSelectedFiles] = useState([])
-  // const [errorFile, setErrorFile] = useState(false)
-  // const [errorPalletFile, setErrorPalletFile] = useState(false)
+  const { state, setSingleBoxesOrderModal } = useContext(AppContext)
+
   const [loading, setloading] = useState(false)
 
   const TotalMasterBoxes = orderProducts.reduce((total: number, item: wholesaleProductRow) => total + Number(item.orderQty), 0)
@@ -199,11 +191,7 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     onClick={() => validation.setFieldValue('type', 'Parcel Boxes')}>
                     Parcel Boxes
                   </Button>
-                  <Button
-                    type='button'
-                    className={'' + (validation.values.type == 'LTL' ? '' : 'text-muted')}
-                    color={validation.values.type == 'LTL' ? 'primary' : 'light'}
-                    onClick={() => validation.setFieldValue('type', 'LTL')}>
+                  <Button type='button' className={'' + (validation.values.type == 'LTL' ? '' : 'text-muted')} color={validation.values.type == 'LTL' ? 'primary' : 'light'} onClick={() => validation.setFieldValue('type', 'LTL')}>
                     Pallets
                   </Button>
                 </div>
@@ -224,9 +212,7 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                       value={validation.values.numberOfPallets || ''}
                       invalid={validation.touched.numberOfPallets && validation.errors.numberOfPallets ? true : false}
                     />
-                    {validation.touched.numberOfPallets && validation.errors.numberOfPallets ? (
-                      <FormFeedback type='invalid'>{validation.errors.numberOfPallets}</FormFeedback>
-                    ) : null}
+                    {validation.touched.numberOfPallets && validation.errors.numberOfPallets ? <FormFeedback type='invalid'>{validation.errors.numberOfPallets}</FormFeedback> : null}
                   </FormGroup>
                 </Col>
               )}
@@ -235,14 +221,7 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                   <Label htmlFor='firstNameinput' className='form-label'>
                     *Type of Shipment Payment
                   </Label>
-                  <Input
-                    type='select'
-                    className='form-control'
-                    id='isThird'
-                    name='isThird'
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    invalid={validation.touched.isThird && validation.errors.isThird ? true : false}>
+                  <Input type='select' className='form-control' id='isThird' name='isThird' onChange={validation.handleChange} onBlur={validation.handleBlur} invalid={validation.touched.isThird && validation.errors.isThird ? true : false}>
                     <option value=''>Choose a Type..</option>
                     <option value='false'>Prepaid Shipping Label</option>
                     <option value='true'>Shelf-Cloud Preferred Carrier</option>
@@ -250,106 +229,6 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                   {validation.touched.isThird && validation.errors.isThird ? <FormFeedback type='invalid'>{validation.errors.isThird}</FormFeedback> : null}
                 </FormGroup>
               </Col>
-            </Col>
-            <Col md={6}>
-              {/* <Row>
-                <Col>
-                  <Dropzone
-                    multiple={false}
-                    onDrop={(acceptedFiles) => {
-                      handleAcceptedFiles(acceptedFiles)
-                    }}>
-                    {({ getRootProps }) => (
-                      <div className='dropzone dz-clickable cursor-pointer'>
-                        <div className='dz-message needsclick' {...getRootProps()}>
-                          <div className='mb-3'>
-                            <i className='display-4 text-muted ri-upload-cloud-2-fill' />
-                          </div>
-                          <h4>Upload Shipping Labels. Drop Only PDF files here or click to upload.</h4>
-                        </div>
-                      </div>
-                    )}
-                  </Dropzone>
-                  <div className='list-unstyled mb-0' id='file-previews'>
-                    {selectedFiles.map((f: any, i) => {
-                      return (
-                        <Card
-                          className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete'
-                          key={i + '-file'}>
-                          <div className='p-2'>
-                            <Row className='align-items-center'>
-                              <Col className='d-flex justify-content-between align-items-center'>
-                                <div>
-                                  <p className='text-muted font-weight-bold m-0'>{f.name}</p>
-                                  <p className='mb-0'>
-                                    <strong>{f.formattedSize}</strong>
-                                  </p>
-                                </div>
-                                <div>
-                                  <Button color='light' className='btn-icon' onClick={() => setselectedFiles([])}>
-                                    <i className=' ri-close-line' />
-                                  </Button>
-                                </div>
-                              </Col>
-                            </Row>
-                          </div>
-                        </Card>
-                      )
-                    })}
-                  </div>
-                  {errorFile && <p className='text-danger m-0'>You must Upload the FBA Labels to create order.</p>}
-                </Col>
-                <Col>
-                  {validation.values.type == 'LTL' && (
-                    <Dropzone
-                      multiple={false}
-                      onDrop={(acceptedFiles) => {
-                        handlePalletAcceptedFiles(acceptedFiles)
-                      }}>
-                      {({ getRootProps }) => (
-                        <div className='dropzone dz-clickable cursor-pointer'>
-                          <div className='dz-message needsclick' {...getRootProps()}>
-                            <div className='mb-3'>
-                              <i className='display-4 text-muted ri-upload-cloud-2-fill' />
-                            </div>
-                            <h4>Upload Pallet Labels. Drop Only PDF files here or click to upload.</h4>
-                          </div>
-                        </div>
-                      )}
-                    </Dropzone>
-                  )}
-                  <div className='list-unstyled mb-0' id='file-previews'>
-                    {palletSelectedFiles.map((f: any, i) => {
-                      return (
-                        <Card
-                          className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete'
-                          key={i + '-file'}>
-                          <div className='p-2'>
-                            <Row className='align-items-center'>
-                              <Col className='d-flex justify-content-between align-items-center'>
-                                <div>
-                                  <p className='text-muted font-weight-bold m-0'>{f.name}</p>
-                                  <p className='mb-0'>
-                                    <strong>{f.formattedSize}</strong>
-                                  </p>
-                                </div>
-                                <div>
-                                  <Button color='light' className='btn-icon' onClick={() => setPalletSelectedFiles([])}>
-                                    <i className=' ri-close-line' />
-                                  </Button>
-                                </div>
-                              </Col>
-                            </Row>
-                          </div>
-                        </Card>
-                      )
-                    })}
-                  </div>
-                  {errorPalletFile && (
-                    <p className='text-danger m-0'>You must Upload the Pallet Labels to create order.</p>
-                  )}
-                </Col>
-              </Row> */}
             </Col>
             <Col md={12}>
               {validation.values.isThird == 'true' && (

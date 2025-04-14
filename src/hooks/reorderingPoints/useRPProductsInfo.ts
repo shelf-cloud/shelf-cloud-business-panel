@@ -213,13 +213,13 @@ export const useRPProductsInfo = ({ sessionToken, session, state, searchValue, u
               })
               return { error: false, message: `SKU ${sku}: Forecast Updated` }
             })
-            .catch((error) => {
-              return { error: true, message: error?.data?.message || 'Error saving product config' }
+            .catch(() => {
+              return { error: true, message: 'Error saving product config' }
             })
           return newForecast
         })
-        .catch((error) => {
-          return { error: true, message: error?.data?.message || 'Error saving product config' }
+        .catch(() => {
+          return { error: true, message: 'Error saving product config' }
         })
 
       if (response.error) {

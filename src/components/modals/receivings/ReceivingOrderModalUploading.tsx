@@ -9,10 +9,10 @@ import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
 import { wholesaleProductRow } from '@typings'
 import router from 'next/router'
-import Dropzone from 'react-dropzone'
 import Papa from 'papaparse'
 import { validateReceivingFile } from './validateReceivingFile'
 import ExportBlankReceivingTemplate from './ExportBlankReceivingTemplate'
+import UploadFileDropzone from '@components/ui/UploadFileDropzone'
 
 type Props = {
   receivingUploadingModal: {
@@ -23,7 +23,7 @@ type Props = {
   setreceivingUploadingModal: (prev: any) => void
 }
 const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, skuList, setreceivingUploadingModal }: Props) => {
-  const { state }: any = useContext(AppContext)
+  const { state } = useContext(AppContext)
   const [selectedFiles, setselectedFiles] = useState([])
   const [uploadedSkuList, setuploadedSkuList] = useState<wholesaleProductRow[]>([])
   const [errorFile, setErrorFile] = useState(false)
@@ -261,7 +261,7 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, skuLis
               </div>
             </Col>
             <Col md={6}>
-              <Dropzone
+              {/* <Dropzone
                 accept={{ 'text/csv': ['.csv'] }}
                 multiple={false}
                 onDrop={(acceptedFiles) => {
@@ -280,7 +280,8 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, skuLis
                     </div>
                   </div>
                 )}
-              </Dropzone>
+              </Dropzone> */}
+              <UploadFileDropzone accptedFiles={{ 'text/csv': ['.csv'] }} handleAcceptedFiles={handleAcceptedFiles} description={`Upload Invoices File. Drop Only CSV files here or click to upload.`} />
             </Col>
             {errorFile && <p className='text-danger m-0 fs-7'>You must Upload a CSV file to upload products.</p>}
             {showErrorLines && (

@@ -8,10 +8,10 @@ import { useRouter } from 'next/router'
 import * as Yup from 'yup'
 import { Formik, Form } from 'formik'
 import Papa from 'papaparse'
-import Dropzone from 'react-dropzone'
 import { Supplier, useSuppliers } from '@hooks/suppliers/useSuppliers'
 import SelectSingleFilter from '@components/ui/filters/SelectSingleFilter'
 import { SelectOptionType } from '@components/Common/SimpleSelect'
+import UploadFileDropzone from '@components/ui/UploadFileDropzone'
 
 type Props = {
   orderNumberStart: string
@@ -228,7 +228,7 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                     </a>{' '}
                     file.
                   </p>
-                  <Dropzone
+                  {/* <Dropzone
                     accept={{ 'text/csv': ['.csv'] }}
                     multiple={false}
                     onDrop={(acceptedFiles) => {
@@ -244,7 +244,8 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                         </div>
                       </div>
                     )}
-                  </Dropzone>
+                  </Dropzone> */}
+                  <UploadFileDropzone accptedFiles={{ 'text/csv': ['.csv'] }} handleAcceptedFiles={handleAcceptedFiles} description={`Upload Purchase Order Info. Drop Only CSV files here or click to upload.`} />
                   <Col md={12}>
                     <div className='list-unstyled mb-0' id='file-previews'>
                       {selectedFiles.map((f: any, i) => {
