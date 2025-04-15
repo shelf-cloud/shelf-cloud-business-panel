@@ -40,10 +40,7 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
               ${data.carrierService} - ${FormatCurrency(state.currentRegion, data.chargesFees.palletCost!)} per pallet
               `
         default:
-          return `${FormatCurrency(state.currentRegion, data.chargesFees.orderCost!)} first item + ${FormatCurrency(
-            state.currentRegion,
-            data.chargesFees.extraItemOrderCost!
-          )} addt'l.`
+          return `${FormatCurrency(state.currentRegion, data.chargesFees.orderCost!)} first item + ${FormatCurrency(state.currentRegion, data.chargesFees.extraItemOrderCost!)} addt'l.`
       }
     }
     return ''
@@ -104,7 +101,7 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
           <Col xl={12}>
             <Card>
               <CardHeader className='py-3'>
-                <h5 className='fw-semibold m-0'>Shipping</h5>
+                <h5 className='fw-semibold m-0'>Return</h5>
               </CardHeader>
               <CardBody>
                 <table className='table table-sm table-borderless'>
@@ -243,7 +240,7 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                       <td></td>
                       <td></td>
                       <td className='text-start fs-6 fw-bold text-nowrap'>Total</td>
-                      <td className='text-center fs-6 text-primary'>{data.orderItems.reduce((total, item: OrderItem) => total + item.qtyReceived, 0)}</td>
+                      <td className='text-center fs-6 text-primary'>{data.orderItems.reduce((total, item: OrderItem) => total + (item.qtyReceived ? item.qtyReceived : item.quantity), 0)}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -259,7 +256,7 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
               {loadingLabel ? (
                 <Button color='secondary' className='btn-label'>
                   <i className='las la-toilet-paper label-icon align-middle fs-3 me-2' />
-                  <Spinner color='light' />
+                  <Spinner color='light' size={'sm'}/>
                 </Button>
               ) : (
                 <Button color='secondary' className='btn-label' onClick={() => handlePrintingLabel()}>
