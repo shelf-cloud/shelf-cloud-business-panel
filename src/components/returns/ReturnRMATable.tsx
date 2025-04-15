@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
-import { ReturnOrder, ReturnType } from '@typesTs/returns/returns'
+import { OrderItem, ReturnOrder, ReturnType } from '@typesTs/returns/returns'
 import ReturnsTable from './ReturnsTable'
 import { UncontrolledTooltip } from 'reactstrap'
 import { FormatCurrency } from '@lib/FormatNumbers'
@@ -187,7 +187,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
       compact: true,
       style: {
         fontSize: '0.7rem',
-      }
+      },
     },
     {
       name: <span className='fw-bolder fs-6'>Tracking Number</span>,
@@ -198,9 +198,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
             case Object.values(row.returns)[0].orderStatus == 'cancelled':
               tracking = <></>
               break
-            case (Object.values(row.returns)[0].orderType == 'Shipment' || Object.values(row.returns)[0].orderType == 'Return') &&
-              Object.values(row.returns)[0].trackingNumber != '' &&
-              !!Object.values(row.returns)[0].trackingLink:
+            case (Object.values(row.returns)[0].orderType == 'Shipment' || Object.values(row.returns)[0].orderType == 'Return') && Object.values(row.returns)[0].trackingNumber != '' && !!Object.values(row.returns)[0].trackingLink:
               tracking = (
                 <div className='trackingNumber_container'>
                   <img
@@ -213,19 +211,14 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
                       objectFit: 'contain',
                     }}
                   />
-                  <a
-                    href={`${Object.values(row.returns)[0].trackingLink}${Object.values(row.returns)[0].trackingNumber}`}
-                    target='blank'
-                    className='fs-7'
-                    style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
+                  <a href={`${Object.values(row.returns)[0].trackingLink}${Object.values(row.returns)[0].trackingNumber}`} target='blank' className='fs-7' style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
                     {Object.values(row.returns)[0].trackingNumber}
                     {Object.values(row.returns).length > 1 && <span className='fs-7 text-danger'>{` +${Object.values(row.returns).length}`}</span>}
                   </a>
                 </div>
               )
               break
-            case (Object.values(row.returns)[0].orderType == 'Shipment' || Object.values(row.returns)[0].orderType == 'Return') &&
-              Object.values(row.returns)[0].trackingNumber != '':
+            case (Object.values(row.returns)[0].orderType == 'Shipment' || Object.values(row.returns)[0].orderType == 'Return') && Object.values(row.returns)[0].trackingNumber != '':
               tracking = (
                 <div className='trackingNumber_container'>
                   <img
@@ -245,10 +238,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
                 </div>
               )
               break
-            case Object.values(row.returns)[0].orderType == 'Wholesale' &&
-              Object.values(row.returns)[0].trackingNumber != '' &&
-              !!Object.values(row.returns)[0].trackingLink &&
-              Object.values(row.returns)[0].carrierService == 'Parcel Boxes':
+            case Object.values(row.returns)[0].orderType == 'Wholesale' && Object.values(row.returns)[0].trackingNumber != '' && !!Object.values(row.returns)[0].trackingLink && Object.values(row.returns)[0].carrierService == 'Parcel Boxes':
               tracking = (
                 <div className='trackingNumber_container'>
                   <img
@@ -261,11 +251,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
                       objectFit: 'contain',
                     }}
                   />
-                  <a
-                    href={`${Object.values(row.returns)[0].trackingLink}${Object.values(row.returns)[0].trackingNumber}`}
-                    target='blank'
-                    className='fs-7'
-                    style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
+                  <a href={`${Object.values(row.returns)[0].trackingLink}${Object.values(row.returns)[0].trackingNumber}`} target='blank' className='fs-7' style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
                     {Object.values(row.returns)[0].trackingNumber}
                     {Object.values(row.returns).length > 1 && <span className='fs-7 text-danger'>{` +${Object.values(row.returns).length}`}</span>}
                   </a>
@@ -309,24 +295,25 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
     },
     {
       name: <span className='fw-bolder text-center fs-6'>Items Received</span>,
-      selector: (row: ReturnType) =>
-        row.totalOrderItems === 0 ? (
+      selector: (row: ReturnType) => {
+        const totalOrderItems = Object.values(row.returns).reduce((total: number, returnOrder: ReturnOrder) => total + returnOrder.totalItems, 0)
+        const totalReceivedItems = Object.values(row.returns).reduce((total: number, returnOrder: ReturnOrder) => {
+          const received = returnOrder.orderItems.reduce((total: number, item: OrderItem) => total + (item.qtyReceived ?? 0), 0)
+          return total + received
+        }, 0)
+
+        return row.totalOrderItems === 0 ? (
           <>
-            <span className='fs-7'>{Object.values(row.returns).reduce((total: number, returnOrder: ReturnOrder) => total + returnOrder.totalItems, 0)}</span>
+            <span className='fs-7'>{totalOrderItems}</span>
           </>
         ) : (
           <>
-            <span
-              className={
-                'fw-bold fs-6' +
-                (Object.values(row.returns).reduce((total: number, returnOrder: ReturnOrder) => total + returnOrder.totalItems, 0) !== row.totalOrderItems ? ' text-danger' : '')
-              }>
-              {Object.values(row.returns).reduce((total: number, returnOrder: ReturnOrder) => total + returnOrder.totalItems, 0)}
-            </span>
+            <span className={'fw-bold fs-6' + (totalReceivedItems !== row.totalOrderItems ? ' text-danger' : '')}>{totalReceivedItems}</span>
             {` / `}
             <span className='fs-7'>{row.totalOrderItems}</span>
           </>
-        ),
+        )
+      },
       sortable: true,
       wrap: true,
       // grow: 1.5,

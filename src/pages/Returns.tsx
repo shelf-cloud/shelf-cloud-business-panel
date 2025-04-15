@@ -4,7 +4,7 @@ import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
 import axios from 'axios'
 import Head from 'next/head'
-import { Button, Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Input, Row, UncontrolledButtonDropdown } from 'reactstrap'
+import { Button, Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import { getSession } from '@auth/client'
 import moment from 'moment'
@@ -16,6 +16,7 @@ import ReturnRMATable from '@components/returns/ReturnRMATable'
 import useSWR, { useSWRConfig } from 'swr'
 import Link from 'next/link'
 import ExportReturns from '@components/returns/ExportReturns'
+import SearchInput from '@components/ui/SearchInput'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -191,73 +192,56 @@ const Returns = ({ session, sessionToken }: Props) => {
         <div className='page-content'>
           <BreadCrumb title='Returns' pageTitle='Orders' />
           <Container fluid>
-            <Row>
-              <Col lg={12}>
-                <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-1 flex-md-row justify-content-md-between align-items-md-center'>
-                  <div className='d-flex flex-column justify-content-center align-items-end gap-2 flex-md-row justify-content-md-between align-items-md-center w-auto'>
-                    <FilterByDates
-                      shipmentsStartDate={shipmentsStartDate}
-                      setShipmentsStartDate={setShipmentsStartDate}
-                      setShipmentsEndDate={setShipmentsEndDate}
-                      shipmentsEndDate={shipmentsEndDate}
-                      handleChangeDatesFromPicker={handleChangeDatesFromPicker}
-                    />
-                    <FilterReturns searchStatus={searchStatus} setSearchStatus={setSearchStatus} searchReason={searchReason} setSearchReason={setSearchReason} searchMarketplace={searchMarketplace} setSearchMarketplace={setSearchMarketplace} />
-                    <Link href='/returns/Unsellables'>
-                      <Button className='btn btn-primary'>Unsellables</Button>
-                    </Link>
-                    <ExportReturns returns={filterDataTable || []} />
-                    {selectedRows.length > 0 && (
-                      <UncontrolledButtonDropdown>
-                        <DropdownToggle className='btn btn-primary fs-6 py-2' caret>
-                          <span className='fw-bold'>{`${selectedRows.length} Order${selectedRows.length > 1 ? 's' : ''}`}</span> Selected
-                        </DropdownToggle>
-                        <DropdownMenu>
-                          <DropdownItem header>Actions</DropdownItem>
-                          <DropdownItem className='text-nowrap text-capitalize' onClick={() => changeSelectedProductsState('complete')}>
-                            <i className='mdi mdi-check-circle-outline fs-5 text-success align-middle m-0 p-0' /> set complete
-                          </DropdownItem>
-                          <DropdownItem className='text-nowrap text-capitalize' onClick={() => changeSelectedProductsState('pending')}>
-                            <i className='mdi mdi-backup-restore fs-5 text-warning align-middle m-0 p-0' /> set pending
-                          </DropdownItem>
-                          <DropdownItem className='text-nowrap text-end fs-7 text-muted' onClick={clearAllSelectedRows}>
-                            Clear All
-                          </DropdownItem>
-                        </DropdownMenu>
-                      </UncontrolledButtonDropdown>
-                    )}
-                  </div>
-                  <div className='col-sm-12 col-md-3'>
-                    <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
-                      <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
-                        <Input type='text' className='form-control input_background_white' placeholder='Search...' id='search-options' value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
-                        <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
-                        <span
-                          className='d-flex align-items-center justify-content-center input_background_white'
-                          style={{
-                            cursor: 'pointer',
-                          }}
-                          onClick={() => setSearchValue('')}>
-                          <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </Row>
-                <Card>
-                  <CardBody>
-                    <ReturnRMATable
-                      filterDataTable={filterDataTable || []}
-                      pending={pending}
-                      apiMutateLink={`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/shipments/getReturnOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`}
-                      handleReturnStateChange={handleReturnStateChange}
-                      setSelectedRows={setSelectedRows}
-                      toggledClearRows={toggledClearRows}
-                    />
-                  </CardBody>
-                </Card>
-              </Col>
-            </Row>
+            <Col xs={12}>
+              <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-between align-items-md-center'>
+                <div className='d-flex flex-column justify-content-center align-items-end gap-2 flex-md-row justify-content-md-between align-items-md-center w-auto'>
+                  <FilterByDates
+                    shipmentsStartDate={shipmentsStartDate}
+                    setShipmentsStartDate={setShipmentsStartDate}
+                    setShipmentsEndDate={setShipmentsEndDate}
+                    shipmentsEndDate={shipmentsEndDate}
+                    handleChangeDatesFromPicker={handleChangeDatesFromPicker}
+                  />
+                  <FilterReturns searchStatus={searchStatus} setSearchStatus={setSearchStatus} searchReason={searchReason} setSearchReason={setSearchReason} searchMarketplace={searchMarketplace} setSearchMarketplace={setSearchMarketplace} />
+                  <Link href='/returns/Unsellables'>
+                    <Button color='primary' className='fs-7'>Unsellables</Button>
+                  </Link>
+                  <ExportReturns returns={filterDataTable || []} />
+                  {selectedRows.length > 0 && (
+                    <UncontrolledButtonDropdown>
+                      <DropdownToggle className='btn btn-primary fs-7 py-2' caret>
+                        <span className='fw-bold'>{`${selectedRows.length} Order${selectedRows.length > 1 ? 's' : ''}`}</span> Selected
+                      </DropdownToggle>
+                      <DropdownMenu>
+                        <DropdownItem header>Actions</DropdownItem>
+                        <DropdownItem className='text-nowrap text-capitalize fs-7' onClick={() => changeSelectedProductsState('complete')}>
+                          <i className='mdi mdi-check-circle-outline fs-5 text-success align-middle m-0 p-0' /> set complete
+                        </DropdownItem>
+                        <DropdownItem className='text-nowrap text-capitalize fs-7' onClick={() => changeSelectedProductsState('pending')}>
+                          <i className='mdi mdi-backup-restore fs-5 text-warning align-middle m-0 p-0' /> set pending
+                        </DropdownItem>
+                        <DropdownItem className='text-nowrap text-end fs-7 text-muted' onClick={clearAllSelectedRows}>
+                          Clear All
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </UncontrolledButtonDropdown>
+                  )}
+                </div>
+                <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' minLength={3} />
+              </Row>
+              <Card>
+                <CardBody>
+                  <ReturnRMATable
+                    filterDataTable={filterDataTable || []}
+                    pending={pending}
+                    apiMutateLink={`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/shipments/getReturnOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`}
+                    handleReturnStateChange={handleReturnStateChange}
+                    setSelectedRows={setSelectedRows}
+                    toggledClearRows={toggledClearRows}
+                  />
+                </CardBody>
+              </Card>
+            </Col>
           </Container>
         </div>
       </React.Fragment>

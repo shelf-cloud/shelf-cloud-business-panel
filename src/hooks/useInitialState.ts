@@ -64,6 +64,8 @@ export interface MarketplacesId {
   label: string
 }
 
+export type CurrentRegionType = 'us' | 'eu'
+
 export const initialState = {
   layoutType: layoutTypes.VERTICAL,
   leftSidebarType: leftSidebarTypes.DARK,
@@ -74,7 +76,7 @@ export const initialState = {
   leftsidbarSizeType: leftsidbarSizeTypes.DEFAULT,
   leftSidebarViewType: leftSidebarViewTypes.DEFAULT,
   leftSidebarImageType: leftSidebarImageTypes.NONE,
-  currentRegion: '',
+  currentRegion: '' as CurrentRegionType,
   user: {} as UserType,
   showInventoryBinsModal: false,
   // MODAL - PRODUCT DETAILS
@@ -172,7 +174,7 @@ const useInitialState = () => {
     document.documentElement.setAttribute('data-sidebar-image', 'none')
   }, [])
 
-  const setRegion = (payload: string) => {
+  const setRegion = (payload: CurrentRegionType) => {
     setState({
       ...state,
       currentRegion: payload,

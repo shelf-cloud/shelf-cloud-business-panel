@@ -13,6 +13,7 @@ import useSWR, { useSWRConfig } from 'swr'
 import { toast } from 'react-toastify'
 import router, { useRouter } from 'next/router'
 import { DebounceInput } from 'react-debounce-input'
+import { RegionInfoTypeUS, UserType } from '@hooks/useInitialState'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -48,7 +49,8 @@ declare module 'yup' {
 
 const CreateOrder = ({ session }: Props) => {
   const { push } = useRouter()
-  const { state }: any = useContext(AppContext)
+  const { state } = useContext(AppContext)
+  const userRegion = state.user[state.currentRegion as keyof UserType] as RegionInfoTypeUS
   const { mutate } = useSWRConfig()
   const title = `Create Order | ${session?.user?.businessName}`
   const orderNumberStart = `${session?.user?.businessOrderStart.substring(0, 3).toUpperCase()}-`
@@ -65,7 +67,7 @@ const CreateOrder = ({ session }: Props) => {
   const [autoCompleteAddress, setAutoCompleteAddress] = useState([])
 
   useEffect(() => {
-    if (!state.user[state.currentRegion]?.showCreateOrder) {
+    if (!userRegion.showCreateOrder) {
       push('/')
     }
   }, [])
@@ -193,12 +195,13 @@ const CreateOrder = ({ session }: Props) => {
 
   const handlePickUpOrder = async (values: any, isPickUpOrder: boolean) => {
     if (isPickUpOrder) {
-      values.adress1 = 'PickUp Order'
-      values.adress2 = 'PickUp Order'
-      values.city = 'PickUp Order'
-      values.state = 'PickUp Order'
+      values.adress1 = '9629 Premier Parkway'
+      values.adress2 = 'Pick Up Order'
+      values.city = 'Miramar'
+      values.state = 'FL'
       values.country = state.currentRegion == 'us' ? 'US' : 'ES'
-      values.zipCode = 'PickUp Order'
+      values.zipCode = '33025'
+      values.phoneNumber = '9546134941'
     } else {
       values.adress1 = ''
       values.adress2 = ''
@@ -206,6 +209,7 @@ const CreateOrder = ({ session }: Props) => {
       values.state = ''
       values.country = state.currentRegion == 'us' ? 'US' : 'ES'
       values.zipCode = ''
+      values.phoneNumber = ''
     }
     setIsPickUpOrder(isPickUpOrder)
   }

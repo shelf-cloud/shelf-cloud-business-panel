@@ -60,8 +60,8 @@ const ExportReturns = ({ returns }: Props) => {
   }
 
   return (
-    <Button color='primary' onClick={exportExcelFile}>
-      <i className='mdi mdi-arrow-down-bold label-icon align-middle me-2' />
+    <Button color='primary' size='sm' className='fs-7' onClick={exportExcelFile}>
+      <i className='mdi mdi-arrow-down-bold label-icon align-middle me-2 fs-5' />
       Export List
     </Button>
   )

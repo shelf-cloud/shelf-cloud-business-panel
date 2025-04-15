@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import AppContext from '@context/AppContext'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { memo, useContext, useEffect, useRef, useState } from 'react'
 import { Input } from 'reactstrap'
 
 type Props = {
@@ -35,7 +35,7 @@ const FilterReturns = ({ searchStatus, setSearchStatus, searchReason, setSearchR
       className='d-flex flex-column justify-content-center align-items-end gap-2 flex-md-row justify-content-md-between align-items-md-center w-auto'>
       <div className='dropdown'>
         <button
-          className='btn btn-light dropdown-toggle'
+          className='btn btn-light dropdown-toggle fs-7'
           style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }}
           type='button'
           data-bs-toggle='dropdown'
@@ -149,4 +149,4 @@ const FilterReturns = ({ searchStatus, setSearchStatus, searchReason, setSearchR
   )
 }
 
-export default FilterReturns
+export default memo(FilterReturns)
