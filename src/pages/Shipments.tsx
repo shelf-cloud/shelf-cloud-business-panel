@@ -151,7 +151,7 @@ const Shipments = ({ session }: Props) => {
         .catch(({ error }) => {
           if (axios.isCancel(error)) {
             toast.update(getShipmentBOL, {
-              render: error?.data?.message || 'Error getting Document',
+              render: 'Error getting Document',
               type: 'error',
               isLoading: false,
               autoClose: 3000,

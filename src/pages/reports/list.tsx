@@ -72,8 +72,8 @@ const List = ({ session, sessionToken }: Props) => {
       .then((res) => {
         return res.data
       })
-      .catch(({ error }) => {
-        toast.error(error?.data?.message || 'Error fetching reports')
+      .catch(() => {
+        toast.error('Error fetching reports')
       })
 
     const a = document.createElement('a')

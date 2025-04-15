@@ -202,9 +202,9 @@ const SalesOverTimeTimeline = ({ salesOverTime }: Props) => {
   } as ApexOptions
 
   return (
-    <>
+    <div style={{ width: '100%', height: '315px' }}>
       <ApexCharts options={options} series={series} type='line' height={300} />
-    </>
+    </div>
   )
 }
 

@@ -85,5 +85,5 @@ export interface OrderItem {
     inventoryId: number;
     qtyReceived: number;
     name?: string;
-    quantity?: number;
+    quantity: number;
 }

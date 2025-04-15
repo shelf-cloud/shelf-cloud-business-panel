@@ -44,8 +44,8 @@ type Props = {
 const fetcherSummary = (endPoint: string) =>
   axios(endPoint)
     .then((res) => res.data)
-    .catch(({ error }) => {
-      toast.error(error?.data?.message || 'Error fetching Summary data')
+    .catch(() => {
+      toast.error('Error fetching Summary data')
     })
 
 const fetcherStores = async (endPoint: string) => await axios.get<CommerceHubStoresResponse>(endPoint).then((res) => res.data)

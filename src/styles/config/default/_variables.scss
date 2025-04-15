@@ -581,10 +581,10 @@ $utilities-bg-colors: map-loop($utilities-bg, rgba-css-var, "$key", "bg");
 //
 // Style anchor elements.
 
-$link-color:                              var(--#{$variable-prefix}link-color);
+$link-color:                              #4481FD;
 $link-decoration:                         underline;
 $link-shade-percentage:                   20%;
-$link-hover-color:                        var(--#{$variable-prefix}link-hover-color);
+$link-hover-color:                        #4481FD;
 $link-hover-decoration:                   null;
 
 $stretched-link-pseudo-element:           after;

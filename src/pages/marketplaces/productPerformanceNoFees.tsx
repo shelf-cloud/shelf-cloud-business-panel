@@ -115,7 +115,7 @@ const ProductPerformanceNoFees = ({ session, sessionToken }: Props) => {
       })
       .catch(({ error }) => {
         if (axios.isCancel(error)) {
-          toast.error(error?.data?.message || 'Error fetching product performance data')
+          toast.error('Error fetching product performance data')
           setProductsData({})
         }
       })

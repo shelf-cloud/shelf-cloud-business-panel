@@ -53,8 +53,8 @@ const Home = ({ session, sessionToken }: Props) => {
   const fetcherSummary = (endPoint: string) =>
     axios(endPoint)
       .then((res) => res.data)
-      .catch(({ error }) => {
-        toast.error(error?.data?.message || 'Error fetching Summary data')
+      .catch(() => {
+        toast.error('Error fetching Summary data')
       })
   const { data: summary } = useSWR(state.user.businessId ? `/api/getBusinessSummary?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${dashboardStartDate}&endDate=${dashboardEndDate}` : null, fetcherSummary, {
     revalidateOnFocus: false,
@@ -67,8 +67,8 @@ const Home = ({ session, sessionToken }: Props) => {
       },
     })
       .then((res) => res.data)
-      .catch(({ error }) => {
-        toast.error(error?.data?.message || 'Error fetching Sales Over Time data')
+      .catch(() => {
+        toast.error('Error fetching Sales Over Time data')
       })
   const { data: salesOverTime } = useSWR(
     session && state.user.businessId
