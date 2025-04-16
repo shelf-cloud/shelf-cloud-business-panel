@@ -18,9 +18,8 @@ type Props = {
   handleProposedPrice: (sku: string, storeId: number, value: number) => void
   handleOtherCosts: (sku: string, storeId: number, value: number) => void
   handleSetSingleMargin: (sku: string, storeId: number, value: number) => void
-  handleSetProductMargin: (sku: string, value: number) => void
   handleNotes: (sku: string, storeId: number, value: string) => void
-  handleSetMarketplaceMargin: (sku: string, value: number) => void
+  handleSetMarketplaceMargin: (sku: string, value: number, skus: string[]) => void
 }
 
 const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCosts, handleProposedPrice, handleSetSingleMargin, handleNotes, handleSetMarketplaceMargin }: Props) => {
@@ -332,21 +331,24 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
       name: (
         <div className='d-flex flex-column justify-content-start align-items-center gap-1 w-100'>
           <span className='fw-semibold text-center fs-7'>Set Margin</span>
-          <DebounceInput
-            type='number'
-            debounceTimeout={400}
-            className='form-control form-control-sm fs-7 m-0 py-0 w-75 text-center'
-            min={0}
-            id={`marketplaceMargin-${storeId}`}
-            onClick={(e: any) => e.target.select()}
-            onChange={(e) => {
-              if (e.target.value === '') {
-                handleSetMarketplaceMargin(storeId, 0)
-              } else {
-                handleSetMarketplaceMargin(storeId, parseFloat(e.target.value))
-              }
-            }}
-          />
+          <div className='d-flex flex-row justify-content-center align-items-center gap-2 w-100 px-1'>
+            <DebounceInput
+              type='number'
+              debounceTimeout={400}
+              className='form-control form-control-sm fs-7 m-0 py-0 w-50 text-center'
+              min={0}
+              id={`marketplaceMargin-${storeId}`}
+              onClick={(e: any) => e.target.select()}
+              onChange={(e) => {
+                if (e.target.value === '') {
+                  handleSetMarketplaceMargin(storeId, 0, products.map((product) => product.sku))
+                } else {
+                  handleSetMarketplaceMargin(storeId, parseFloat(e.target.value), products.map((product) => product.sku))
+                }
+              }}
+            />
+            <span className='text-muted'>%</span>
+          </div>
         </div>
       ),
 

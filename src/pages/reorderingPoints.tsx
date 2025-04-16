@@ -4,7 +4,6 @@ import { GetServerSideProps } from 'next'
 import { getSession } from '@auth/client'
 import Head from 'next/head'
 import BreadCrumb from '@components/Common/BreadCrumb'
-import { DebounceInput } from 'react-debounce-input'
 import moment from 'moment'
 import FilterReorderingPoints from '@components/ui/FilterReorderingPoints'
 import FilterByDates from '@components/FilterByDates'
@@ -25,6 +24,7 @@ import { useRPSplits } from '@hooks/reorderingPoints/useRPSplits'
 import { useInputModal } from '@hooks/ui/useInputModal'
 import InputModal from '@components/modals/shared/inputModal'
 import ReorderingPointsSummary from '@components/reorderingPoints/ReorderingPointsSummary'
+import SearchInput from '@components/ui/SearchInput'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -322,30 +322,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
                     />
                   )}
                 </div>
-                <div className='app-search col-12 col-md-3 p-0'>
-                  <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
-                    <DebounceInput
-                      type='text'
-                      minLength={3}
-                      debounceTimeout={500}
-                      className='form-control bg-white'
-                      placeholder='Search...'
-                      id='search-options'
-                      value={searchValue}
-                      onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
-                      onChange={(e) => setSearchValue(e.target.value)}
-                    />
-                    <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
-                    <span
-                      className='d-flex align-items-center justify-content-center bg-white'
-                      style={{
-                        cursor: 'pointer',
-                      }}
-                      onClick={() => setSearchValue('')}>
-                      <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
-                    </span>
-                  </div>
-                </div>
+                <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' minLength={3} />
               </div>
               <Collapse className='px-0' isOpen={filterOpen}>
                 <FilterReorderingPoints

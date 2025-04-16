@@ -13,10 +13,10 @@ import { toast } from 'react-toastify'
 import FilterByDates from '@components/FilterByDates'
 import FilterByOthers from '@components/FilterByOthers'
 import useSWRInfinite from 'swr/infinite'
-import { DebounceInput } from 'react-debounce-input'
 import ShipmentDetailsModal from '@components/modals/shipments/ShipmentDetailsModal'
 import { Shipment } from '@typesTs/shipments/shipments'
 import { SelectOptionType } from '@components/Common/SimpleSelect'
+import SearchInput from '@components/ui/SearchInput'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -231,35 +231,13 @@ const Shipments = ({ session }: Props) => {
         <div className='page-content'>
           <BreadCrumb title='Shipments' pageTitle='Orders' />
           <Container fluid>
-            <div className='d-flex flex-column justify-content-center align-items-end gap-2 mb-1 flex-lg-row justify-content-md-between align-items-md-center px-1'>
+            <div className='d-flex flex-column justify-content-center align-items-end gap-2 mb-2 flex-lg-row justify-content-md-between align-items-md-center px-1'>
               <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'></div>
               <div className='w-100 d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-end align-items-lg-center px-0'>
                 <FilterByDates shipmentsStartDate={startDate} setShipmentsStartDate={setStartDate} setShipmentsEndDate={setEndDate} shipmentsEndDate={endDate} handleChangeDatesFromPicker={handleChangeDatesFromPicker} />
                 <FilterByOthers searchType={searchType} setSearchType={setSearchType} searchStatus={searchStatus} setSearchStatus={setSearchStatus} searchMarketplace={searchMarketplace} setSearchMarketplace={setSearchMarketplace} />
-                <div className='app-search p-0 col-sm-12 col-lg-5'>
-                  <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
-                    <DebounceInput
-                      type='text'
-                      minLength={1}
-                      debounceTimeout={500}
-                      className='form-control input_background_white fs-6'
-                      placeholder='Search...'
-                      id='search-options'
-                      value={searchValue}
-                      onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
-                      onChange={(e) => setSearchValue(e.target.value)}
-                    />
-                    <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
-                    <span
-                      className='d-flex align-items-center justify-content-center input_background_white'
-                      style={{
-                        cursor: 'pointer',
-                      }}
-                      onClick={() => setSearchValue('')}>
-                      <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
-                    </span>
-                  </div>
-                </div>
+
+                <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' minLength={3} widths='col-12 col-md-5'/>
 
                 <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='fs-7 text-nowrap' onClick={clearFilters}>
                   Clear Filters

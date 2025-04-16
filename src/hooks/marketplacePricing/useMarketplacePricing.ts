@@ -32,6 +32,11 @@ type Props = {
   category: string | undefined
 }
 
+const calculateNewProposedPrice = ({ totalCosts, commissionDecimal, marginDecimal }: { totalCosts: number; commissionDecimal: number; marginDecimal: number }): number => {
+  const price = totalCosts / (1 - marginDecimal - commissionDecimal)
+  return Math.round(price * 100) / 100
+}
+
 export const useMarketplacePricing = ({ sessionToken, session, state, storeId, searchValue, setchangesMade, units1monthmin, units1monthmax, units1yearmin, units1yearmax, supplier, brand, category }: Props) => {
   const [productsInfo, setproductsInfo] = useState<MKP_Response>({})
   const controllerRef = useRef<AbortController | null>(null)
@@ -154,13 +159,17 @@ export const useMarketplacePricing = ({ sessionToken, session, state, storeId, s
           const product = updatedProducts[sku]
           const marketplace = product.marketplaces[storeId]
 
-          const up = product.sellerCost + product.inboundShippingCost + marketplace.shippingToMarketpalce + product.otherCosts + marketplace.storeOtherCosts + marketplace.fbaHandlingFee + marketplace.fixedFee
-          const newMargin = value / 100
-          const down1 = 1 - newMargin
-          const down2 = marketplace.comissionFee / 100
-          const proposedPrice = up / (down1 - down2)
+          const totalCosts = product.sellerCost + product.inboundShippingCost + marketplace.shippingToMarketpalce + product.otherCosts + marketplace.storeOtherCosts + marketplace.fbaHandlingFee + marketplace.fixedFee
+          const marginDecimal = value / 100
+          const commissionDecimal = marketplace.comissionFee / 100
 
-          updatedProducts[sku].marketplaces[storeId].proposedPrice = parseFloat(proposedPrice.toFixed(2))
+          const newProposedPrice = calculateNewProposedPrice({
+            totalCosts,
+            commissionDecimal,
+            marginDecimal,
+          })
+
+          updatedProducts[sku].marketplaces[storeId].proposedPrice = newProposedPrice
           updatedProducts[sku].marketplaces[storeId].proposedMargin = value
 
           return updatedProducts
@@ -191,13 +200,17 @@ export const useMarketplacePricing = ({ sessionToken, session, state, storeId, s
           for (const storeId in updatedProducts[sku].marketplaces) {
             const marketplace = product.marketplaces[storeId]
 
-            const up = product.sellerCost + product.inboundShippingCost + marketplace.shippingToMarketpalce + product.otherCosts + marketplace.storeOtherCosts + marketplace.fbaHandlingFee + marketplace.fixedFee
-            const newMargin = value / 100
-            const down1 = 1 - newMargin
-            const down2 = marketplace.comissionFee / 100
-            const proposedPrice = up / (down1 - down2)
+            const totalCosts = product.sellerCost + product.inboundShippingCost + marketplace.shippingToMarketpalce + product.otherCosts + marketplace.storeOtherCosts + marketplace.fbaHandlingFee + marketplace.fixedFee
+            const marginDecimal = value / 100
+            const commissionDecimal = marketplace.comissionFee / 100
 
-            updatedProducts[sku].marketplaces[storeId].proposedPrice = parseFloat(proposedPrice.toFixed(2))
+            const newProposedPrice = calculateNewProposedPrice({
+              totalCosts,
+              commissionDecimal,
+              marginDecimal,
+            })
+
+            updatedProducts[sku].marketplaces[storeId].proposedPrice = newProposedPrice
             updatedProducts[sku].marketplaces[storeId].proposedMargin = value
           }
 
@@ -209,13 +222,14 @@ export const useMarketplacePricing = ({ sessionToken, session, state, storeId, s
   )
 
   const handleSetMarketplaceMargin = useCallback(
-    (storeId: string, value: number) => {
+    (storeId: string, value: number, skus: string[]) => {
       setchangesMade(true)
       if (value <= 0) {
         setproductsInfo((prevProducts) => {
           const updatedProducts = { ...prevProducts }
 
           for (const sku in updatedProducts) {
+            if (!skus.includes(sku)) continue
             if (updatedProducts[sku].marketplaces[storeId]) {
               updatedProducts[sku].marketplaces[storeId].proposedPrice = 0
               updatedProducts[sku].marketplaces[storeId].proposedMargin = 0
@@ -229,17 +243,22 @@ export const useMarketplacePricing = ({ sessionToken, session, state, storeId, s
           const updatedProducts = { ...prevProducts }
 
           for (const sku in updatedProducts) {
+            if (!skus.includes(sku)) continue
             if (updatedProducts[sku].marketplaces[storeId]) {
               const product = updatedProducts[sku]
               const marketplace = product.marketplaces[storeId]
 
-              const up = product.sellerCost + product.inboundShippingCost + marketplace.shippingToMarketpalce + product.otherCosts + marketplace.storeOtherCosts + marketplace.fbaHandlingFee + marketplace.fixedFee
-              const newMargin = value / 100
-              const down1 = 1 - newMargin
-              const down2 = marketplace.comissionFee / 100
-              const proposedPrice = up / (down1 - down2)
+              const totalCosts = product.sellerCost + product.inboundShippingCost + marketplace.shippingToMarketpalce + product.otherCosts + marketplace.storeOtherCosts + marketplace.fbaHandlingFee + marketplace.fixedFee
+              const marginDecimal = value / 100
+              const commissionDecimal = marketplace.comissionFee / 100
 
-              updatedProducts[sku].marketplaces[storeId].proposedPrice = parseFloat(proposedPrice.toFixed(2))
+              const newProposedPrice = calculateNewProposedPrice({
+                totalCosts,
+                commissionDecimal,
+                marginDecimal,
+              })
+
+              updatedProducts[sku].marketplaces[storeId].proposedPrice = newProposedPrice
               updatedProducts[sku].marketplaces[storeId].proposedMargin = value
             }
           }

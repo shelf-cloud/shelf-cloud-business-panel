@@ -20,13 +20,14 @@ function UploadFileDropzone({ accptedFiles, handleAcceptedFiles, description }: 
         toast.error(error[0].errors[0].message)
       }}>
       {({ getRootProps, getInputProps }) => (
-        <div className='dropzone dz-clickable cursor-pointer' {...getRootProps()}>
+        <div className='dropzone dz-clickable cursor-pointer d-flex flex-column justify-content-center gap-1' {...getRootProps()}>
           <input {...getInputProps()} />
           <div className='px-3 dz-message needsclick'>
-            <div className='mb-3'>
-              <i className='display-5 text-primary ri-upload-cloud-2-fill' />
+            <div className='mb-2'>
+              <i className='display-6 text-primary ri-upload-2-line' />
             </div>
-            <p className='fs-6'>{description}</p>
+            <p className='m-0 mb-2 fs-7'>Upload 1 file</p>
+            <p className='w-75 mx-auto fs-7'>{description}</p>
           </div>
         </div>
       )}

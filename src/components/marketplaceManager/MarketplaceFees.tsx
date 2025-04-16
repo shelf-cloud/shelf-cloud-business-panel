@@ -13,8 +13,11 @@ import AssignNewMarketplaceLogo from './AssignNewMarketplaceLogo'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { commerceHubFileTypeOptions } from './marketplaceConstants'
 import AssignCommerceHubFileType from './AssignCommerceHubFileType'
+import { sortNumbers, sortStringsCaseInsensitive } from '@lib/helperFunctions'
 
 type Props = {}
+
+const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
 
 const MarketplacesFees = ({}: Props) => {
   const { state }: any = useContext(AppContext)
@@ -24,14 +27,9 @@ const MarketplacesFees = ({}: Props) => {
   const [isLoaded, setisLoaded] = useState(false)
   const [hasError, setHasError] = useState(false)
   const [updatingFees, setUpdatingFees] = useState(false)
-  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data }: { data?: MarketplaceFeesResponse } = useSWR(
-    state.user.businessId ? `/api/marketplaces/getMarketplacesFees?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  )
+  const { data }: { data?: MarketplaceFeesResponse } = useSWR(state.user.businessId ? `/api/marketplaces/getMarketplacesFees?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher, {
+    revalidateOnFocus: false,
+  })
 
   useEffect(() => {
     setisLoaded(true)
@@ -58,14 +56,6 @@ const MarketplacesFees = ({}: Props) => {
     setUpdatingFees(false)
   }
 
-  const sortStrings = (rowA: string, rowB: string) => {
-    if (rowA.localeCompare(rowB)) {
-      return 1
-    } else {
-      return -1
-    }
-  }
-
   const columns: any = [
     {
       name: <span className='fw-bold fs-6'>Logo</span>,
@@ -74,24 +64,15 @@ const MarketplacesFees = ({}: Props) => {
           <div className='d-flex flex-row justify-content-start align-items-center gap-2 fs-7'>
             <div
               style={{
-                width: '30px',
-                height: '30px',
+                width: '22px',
+                height: '22px',
                 margin: '0px',
                 position: 'relative',
               }}>
-              <img
-                loading='lazy'
-                src={row.aliasLogo ?? row.logoLink}
-                onError={(e) => (e.currentTarget.src = NoImageAdress)}
-                alt='product Image'
-                style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
-              />
+              <img loading='lazy' src={row.aliasLogo ?? row.logoLink} onError={(e) => (e.currentTarget.src = NoImageAdress)} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
             </div>
             {showEditFields && (
-              <AssignNewMarketplaceLogo
-                selected={row.aliasLogo ?? row.logoLink}
-                setLogo={(selected) => setmarketplaceFees((prev) => ({ ...prev, [row.storeId]: { ...row, aliasLogo: selected.value !== '' ? selected.value : null } }))}
-              />
+              <AssignNewMarketplaceLogo selected={row.aliasLogo ?? row.logoLink} setLogo={(selected) => setmarketplaceFees((prev) => ({ ...prev, [row.storeId]: { ...row, aliasLogo: selected.value !== '' ? selected.value : null } }))} />
             )}
           </div>
         )
@@ -102,7 +83,7 @@ const MarketplacesFees = ({}: Props) => {
       style: {
         fontSize: '0.7rem',
       },
-      sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortStrings(rowA.storeName, rowB.storeName),
+      sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortStringsCaseInsensitive(rowA.storeName, rowB.storeName),
     },
     {
       name: <span className='fw-bold fs-6'>Marketplace</span>,
@@ -115,7 +96,7 @@ const MarketplacesFees = ({}: Props) => {
       style: {
         fontSize: '0.7rem',
       },
-      sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortStrings(rowA.name, rowB.name),
+      sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortStringsCaseInsensitive(rowA.name, rowB.name),
     },
     {
       name: <span className='fw-bold fs-6'>Sales Channel</span>,
@@ -126,7 +107,7 @@ const MarketplacesFees = ({}: Props) => {
       style: {
         fontSize: '0.7rem',
       },
-      sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortStrings(rowA.storeName, rowB.storeName),
+      sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortStringsCaseInsensitive(rowA.storeName, rowB.storeName),
     },
     {
       name: <span className='fw-bold fs-6'>Alias</span>,
@@ -148,18 +129,12 @@ const MarketplacesFees = ({}: Props) => {
       },
       sortable: true,
       center: true,
-      sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortStrings(rowA.storeName, rowB.storeName),
+      sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortStringsCaseInsensitive(rowA.storeName, rowB.storeName),
     },
     {
       name: <span className='fw-bold fs-6'>Comission Fee</span>,
       selector: (row: MarketplaceFees) => {
-        if (!showEditFields)
-          return (
-            <span
-              className={
-                row.comissionFee === 0 ? 'text-muted fw-light' : row.comissionFee < 0 || row.comissionFee > 100 ? 'text-danger fw-bold' : 'text-dark'
-              }>{`${row.comissionFee} %`}</span>
-          )
+        if (!showEditFields) return <span className={row.comissionFee === 0 ? 'text-muted fw-light' : row.comissionFee < 0 || row.comissionFee > 100 ? 'text-danger fw-bold' : 'text-dark'}>{`${row.comissionFee} %`}</span>
         return (
           <div className='d-flex flex-row justify-content-center align-items-center gap-1'>
             <DebounceInput
@@ -183,7 +158,7 @@ const MarketplacesFees = ({}: Props) => {
       sortable: true,
       center: true,
       compact: true,
-      sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => (rowA.comissionFee > rowB.comissionFee ? 1 : -1),
+      sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortNumbers(rowA.comissionFee, rowB.comissionFee),
     },
     {
       name: <span className='fw-bold fs-6'>Fixed Fee</span>,
@@ -208,7 +183,7 @@ const MarketplacesFees = ({}: Props) => {
       sortable: true,
       center: true,
       compact: true,
-      sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => (rowA.fixedFee > rowB.fixedFee ? 1 : -1),
+      sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortNumbers(rowA.fixedFee, rowB.fixedFee),
     },
     {
       name: <span className='fw-bold fs-6 text-center'>Commerce Hub</span>,
@@ -229,7 +204,7 @@ const MarketplacesFees = ({}: Props) => {
                 type='checkbox'
                 className='form-check-input'
                 onChange={(e) => {
-                  (e.target.checked && row.commerceHubFileType === '') ? setHasError(true) : setHasError(false)
+                  e.target.checked && row.commerceHubFileType === '' ? setHasError(true) : setHasError(false)
                   setmarketplaceFees((prev) => ({ ...prev, [row.storeId]: { ...row, isCommerceHub: e.target.checked, commerceHubFileType: '' } }))
                 }}
                 checked={row.isCommerceHub}
@@ -238,18 +213,14 @@ const MarketplacesFees = ({}: Props) => {
                 <AssignCommerceHubFileType
                   selected={commerceHubFileTypeOptions.find((option) => option.value === row.commerceHubFileType) ?? { value: '', label: 'Select File Type' }}
                   setSelected={(selected: any) => {
-                    (row.isCommerceHub && selected.value === '') ? setHasError(true) : setHasError(false)
+                    row.isCommerceHub && selected.value === '' ? setHasError(true) : setHasError(false)
                     setmarketplaceFees((prev) => ({ ...prev, [row.storeId]: { ...row, commerceHubFileType: selected.value } }))
                   }}
                   options={commerceHubFileTypeOptions}
                 />
               )}
             </div>
-            {row.isCommerceHub && (
-              <span className={'fs-7 text-info fw-light ' + (row.isCommerceHub && row.commerceHubFileType === '' ? 'text-danger' : '')}>
-                File: {row.commerceHubFileType || 'Required'}
-              </span>
-            )}
+            {row.isCommerceHub && <span className={'fs-7 text-info fw-light ' + (row.isCommerceHub && row.commerceHubFileType === '' ? 'text-danger' : '')}>File: {row.commerceHubFileType || 'Required'}</span>}
           </div>
         )
       },
@@ -284,7 +255,7 @@ const MarketplacesFees = ({}: Props) => {
       sortable: true,
       center: true,
       compact: false,
-      sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => (rowA.payTerms > rowB.payTerms ? 1 : -1),
+      sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortNumbers(rowA.payTerms, rowB.payTerms),
     },
   ]
 

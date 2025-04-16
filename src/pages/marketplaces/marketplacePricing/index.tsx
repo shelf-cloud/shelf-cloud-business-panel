@@ -97,7 +97,8 @@ const filterProducts = (products: MKP_Product[], margin: string | undefined, mar
 }
 
 const MarketplacePricing = ({ session, sessionToken }: Props) => {
-  const { state }: any = useContext(AppContext)
+  const title = `Marketplace Pricing | ${session?.user?.businessName}`
+  const { state } = useContext(AppContext)
   const router = useRouter()
   const { filters, units1monthmin, units1monthmax, units1yearmin, units1yearmax, margin, marginoperator, showOnlyOnWatch, supplier, brand, category }: FilterProps = router.query
   const [filterOpen, setFilterOpen] = useState(false)
@@ -153,9 +154,7 @@ const MarketplacePricing = ({ session, sessionToken }: Props) => {
     [router]
   )
 
-  const filteredProducts = useMemo(() => filterProducts(products, margin, marginoperator, showOnlyOnWatch), [products, margin, marginoperator, showOnlyOnWatch])
-
-  const title = `Marketplace Pricing | ${session?.user?.businessName}`
+  const filteredByMarketplaceProducts = useMemo(() => filterProducts(products, margin, marginoperator, showOnlyOnWatch), [products, margin, marginoperator, showOnlyOnWatch])
 
   return (
     <div>
@@ -180,7 +179,7 @@ const MarketplacePricing = ({ session, sessionToken }: Props) => {
                     Filters
                   </Button>
 
-                  <ExportMarketplacePricing products={activeTab === 'byProducts' ? products : filteredProducts} activeTab={activeTab} />
+                  <ExportMarketplacePricing products={activeTab === 'byProducts' ? products : filteredByMarketplaceProducts} activeTab={activeTab} />
                   <Button className='fs-7' color={changesMade ? 'warning' : 'light'} onClick={() => handleSaveProductsInfo()}>
                     Save Changes
                   </Button>
@@ -258,7 +257,7 @@ const MarketplacePricing = ({ session, sessionToken }: Props) => {
                   <TabPane tabId='byMarketplace'>
                     {activeTab === 'byMarketplace' && (
                       <MKP_table_ByMarketplace
-                        products={filteredProducts}
+                        products={filteredByMarketplaceProducts}
                         storeId={selectedMarketplace.storeId}
                         isLoading={isLoadingProducts}
                         //   setSelectedRows={setSelectedRows}
@@ -266,7 +265,6 @@ const MarketplacePricing = ({ session, sessionToken }: Props) => {
                         handleOtherCosts={handleOtherCosts}
                         handleProposedPrice={handleProposedPrice}
                         handleSetSingleMargin={handleSetSingleMargin}
-                        handleSetProductMargin={handleSetProductMargin}
                         handleNotes={handleNotes}
                         handleSetMarketplaceMargin={handleSetMarketplaceMargin}
                       />

@@ -227,21 +227,24 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       name: (
         <div className='d-flex flex-column justify-content-start align-items-center gap-1 w-100'>
           <span className='fw-semibold text-center fs-7'>Set Margin</span>
-          <DebounceInput
-            type='number'
-            debounceTimeout={400}
-            className='form-control form-control-sm fs-7 m-0 py-0 w-75 text-center'
-            min={0}
-            id={`productMargin-${data.sku}`}
-            onClick={(e: any) => e.target.select()}
-            onChange={(e) => {
-              if (e.target.value === '') {
-                handleSetProductMargin(data.sku, 0)
-              } else {
-                handleSetProductMargin(data.sku, parseFloat(e.target.value))
-              }
-            }}
-          />
+          <div className='d-flex flex-row justify-content-center align-items-center gap-2 w-100 px-1'>
+            <DebounceInput
+              type='number'
+              debounceTimeout={400}
+              className='form-control form-control-sm fs-7 m-0 py-0 w-50 text-center'
+              min={0}
+              id={`productMargin-${data.sku}`}
+              onClick={(e: any) => e.target.select()}
+              onChange={(e) => {
+                if (e.target.value === '') {
+                  handleSetProductMargin(data.sku, 0)
+                } else {
+                  handleSetProductMargin(data.sku, parseFloat(e.target.value))
+                }
+              }}
+            />
+            <span className='text-muted'>%</span>
+          </div>
         </div>
       ),
       selector: (row: MKP_Marketplaces) => {
