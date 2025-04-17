@@ -19,6 +19,7 @@ const getShipments: NextApiHandler = async (request, response) => {
   if (request.query.orderType) url += `&orderType=${request.query.orderType}`
   if (request.query.orderStatus) url += `&orderStatus=${request.query.orderStatus}`
   if (request.query.storeId) url += `&storeId=${request.query.storeId}`
+  if (request.query.sku) url += `&sku=${request.query.sku}`
   if (request.query.sortBy) url += `&sortBy=${request.query.sortBy}&direction=${request.query.direction}`
 
   axios

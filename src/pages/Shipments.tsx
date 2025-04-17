@@ -61,6 +61,7 @@ const Shipments = ({ session }: Props) => {
   const [searchType, setSearchType] = useState<SelectOptionType>({ value: '', label: 'All' })
   const [searchStatus, setSearchStatus] = useState<SelectOptionType>({ value: '', label: 'All' })
   const [searchMarketplace, setSearchMarketplace] = useState<SelectOptionType>({ value: '', label: 'All Stores' })
+  const [searchSku, setSearchSku] = useState<SelectOptionType>({ value: '', label: 'All' })
   const [sortBy, setSortBy] = useState({
     key: '',
     asc: false,
@@ -80,6 +81,7 @@ const Shipments = ({ session }: Props) => {
     if (searchType.value !== '') url += `&orderType=${searchType.value}`
     if (searchStatus.value !== '') url += `&orderStatus=${searchStatus.value}`
     if (searchMarketplace.value !== '') url += `&storeId=${searchMarketplace.value}`
+    if (searchSku.value !== '') url += `&sku=${searchSku.value}`
     if (sortBy.key !== '') url += `&sortBy=${sortBy.key}&direction=${sortBy.asc ? 'ASC' : 'DESC'}`
 
     return url
@@ -123,6 +125,7 @@ const Shipments = ({ session }: Props) => {
     setEndDate('')
     setSearchType({ value: '', label: 'All' })
     setSearchStatus({ value: '', label: 'All' })
+    setSearchSku({ value: '', label: 'All' })
     setSearchMarketplace({ value: '', label: 'All Stores' })
     setSize(1) // Reset to page 1
     mutateShipments() // Refetch the initial data set
@@ -137,8 +140,8 @@ const Shipments = ({ session }: Props) => {
   }
 
   const hasActiveFilters = useMemo(
-    () => searchValue !== '' || startDate !== '' || endDate !== '' || searchType.value !== '' || searchStatus.value !== '' || searchMarketplace.value !== '',
-    [searchValue, startDate, endDate, searchType, searchStatus, searchMarketplace]
+    () => searchValue !== '' || startDate !== '' || endDate !== '' || searchType.value !== '' || searchStatus.value !== '' || searchMarketplace.value !== '' || searchSku.value !== '',
+    [searchValue, startDate, endDate, searchType, searchStatus, searchMarketplace, searchSku]
   )
 
   const handleGetShipmentBOL = async (orderNumber: string, orderId: string, documentType: string) => {
@@ -232,12 +235,21 @@ const Shipments = ({ session }: Props) => {
           <BreadCrumb title='Shipments' pageTitle='Orders' />
           <Container fluid>
             <div className='d-flex flex-column justify-content-center align-items-end gap-2 mb-2 flex-lg-row justify-content-md-between align-items-md-center px-1'>
-              <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'></div>
-              <div className='w-100 d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-end align-items-lg-center px-0'>
+              <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'>
                 <FilterByDates shipmentsStartDate={startDate} setShipmentsStartDate={setStartDate} setShipmentsEndDate={setEndDate} shipmentsEndDate={endDate} handleChangeDatesFromPicker={handleChangeDatesFromPicker} />
-                <FilterByOthers searchType={searchType} setSearchType={setSearchType} searchStatus={searchStatus} setSearchStatus={setSearchStatus} searchMarketplace={searchMarketplace} setSearchMarketplace={setSearchMarketplace} />
-
-                <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' minLength={3} widths='col-12 col-md-5'/>
+                <FilterByOthers
+                  searchType={searchType}
+                  setSearchType={setSearchType}
+                  searchStatus={searchStatus}
+                  setSearchStatus={setSearchStatus}
+                  searchMarketplace={searchMarketplace}
+                  setSearchMarketplace={setSearchMarketplace}
+                  searchSku={searchSku}
+                  setSearchSku={setSearchSku}
+                />
+              </div>
+              <div className='w-100 d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-end align-items-lg-center px-0'>
+                <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' minLength={3} widths='col-12 col-md-6' />
 
                 <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='fs-7 text-nowrap' onClick={clearFilters}>
                   Clear Filters

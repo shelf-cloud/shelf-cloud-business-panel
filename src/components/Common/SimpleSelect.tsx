@@ -1,7 +1,7 @@
 import React from 'react'
 import Select from 'react-select'
 
-export type SelectOptionType = { value: string | number; label: string }
+export type SelectOptionType = { value: string | number; label: string; description?: string }
 
 type Props = {
   selected: any
@@ -60,13 +60,52 @@ const getStyle = (customStyle: string, hasError: boolean) => {
         ...style.control(provided, state),
         borderColor: '#f06548',
       }),
-    };
+    }
   }
   return style
 }
 
 const SimpleSelect = ({ selected, handleSelect, options, customStyle = 'base', placeholder, hasError }: Props) => {
-  return <Select value={selected} placeholder={placeholder} onChange={handleSelect} options={options} styles={getStyle(customStyle, hasError || false)} />
+  return (
+    <Select
+      value={selected}
+      placeholder={placeholder}
+      onChange={handleSelect}
+      options={options}
+      styles={getStyle(customStyle, hasError || false)}
+      filterOption={(option: { data: SelectOptionType }, inputValue: string) => {
+        if (!inputValue) return true
+        const { label, description } = option.data
+        const searchTerms = inputValue.toLowerCase().trim().split(/\s+/)
+        const labelLower = label.toLowerCase()
+        const allTermsInLabel = searchTerms.every((term) => labelLower.includes(term))
+
+        if (description) {
+          const descriptionLower = description.toLowerCase()
+          const allTermsInDescription = searchTerms.every((term) => descriptionLower.includes(term))
+          if (allTermsInLabel || allTermsInDescription) return true
+        }
+        if (allTermsInLabel) return true
+        return false
+      }}
+      formatOptionLabel={(option: SelectOptionType, { context }: { context: 'menu' | 'value' }) => {
+        if (context === 'menu') {
+          return (
+            <div className='d-flex flex-column gap-0'>
+              <span className='fs-7'>{option.label}</span>
+              {option.description && (
+                <small className='text-muted' style={{ fontSize: '0.8em', lineHeight: '1.2em', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {option.description}
+                </small>
+              )}
+            </div>
+          )
+        }
+
+        return <span>{option.label}</span>
+      }}
+    />
+  )
 }
 
 export default SimpleSelect

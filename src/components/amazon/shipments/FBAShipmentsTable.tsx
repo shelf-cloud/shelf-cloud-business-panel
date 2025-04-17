@@ -253,6 +253,9 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
       sortable: true,
       wrap: true,
       center: true,
+      style: {
+        fontSize: '0.7rem',
+      },
       sortFunction: orderStatus,
     },
     {
@@ -265,7 +268,7 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
           return (
             <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
               <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
-                <i className='mdi mdi-dots-vertical align-middle fs-3 m-0 px-2 py-0' style={{ color: '#919FAF' }} />
+                <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-1 py-0' style={{ color: '#919FAF' }} />
               </DropdownToggle>
               <DropdownMenu className='dropdown-menu-end' container={'body'}>
                 <DropdownItem onClick={() => router.push(`/amazon-sellers/shipments/${row.shipmentId}`)}>

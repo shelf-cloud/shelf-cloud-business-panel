@@ -99,6 +99,9 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
       sortable: false,
       wrap: false,
       center: true,
+      style: {
+        fontSize: '0.7rem',
+      }
     },
     {
       name: (

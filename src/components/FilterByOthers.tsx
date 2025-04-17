@@ -2,7 +2,9 @@
 import AppContext from '@context/AppContext'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap'
-import SimpleSelect, { SelectOptionType } from './Common/SimpleSelect'
+import { SelectOptionType } from './Common/SimpleSelect'
+import SelectSingleFilter from './ui/filters/SelectSingleFilter'
+import { useSkus } from '@hooks/products/useSkus'
 
 type Props = {
   searchType: SelectOptionType
@@ -11,6 +13,8 @@ type Props = {
   setSearchStatus: (selectedOption: SelectOptionType) => void
   searchMarketplace: SelectOptionType
   setSearchMarketplace: (selectedOption: SelectOptionType) => void
+  searchSku: SelectOptionType
+  setSearchSku: (selectedOption: SelectOptionType) => void
 }
 
 const TYPE_OPTIONS = [
@@ -28,10 +32,11 @@ const STATUS_OPTIONS = [
   { value: 'cancelled', label: 'Cancelled' },
 ]
 
-const FilterByOthers = ({ searchType, setSearchType, searchStatus, setSearchStatus, searchMarketplace, setSearchMarketplace }: Props) => {
+const FilterByOthers = ({ searchType, setSearchType, searchStatus, setSearchStatus, searchMarketplace, setSearchMarketplace, searchSku, setSearchSku }: Props) => {
   const { state }: any = useContext(AppContext)
   const [isFiltersOpen, setOpenFilters] = useState(false)
   const filterByOthersContainer = useRef<HTMLDivElement | null>(null)
+  const { skus } = useSkus()
 
   useEffect(() => {
     if (document) {
@@ -55,8 +60,10 @@ const FilterByOthers = ({ searchType, setSearchType, searchStatus, setSearchStat
           <DropdownMenu style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
             <div className={'px-4 py-3'}>
               <div className='d-flex flex-column justify-content-start gap-2'>
-                <span className='fs-7 fw-normal'>Filter By Type:</span>
-                <SimpleSelect
+                <SelectSingleFilter
+                  inputLabel='Type'
+                  inputName='type-filter'
+                  placeholder='All'
                   selected={searchType}
                   handleSelect={(option) => {
                     setSearchType(option)
@@ -65,8 +72,10 @@ const FilterByOthers = ({ searchType, setSearchType, searchStatus, setSearchStat
                   options={TYPE_OPTIONS}
                 />
 
-                <span className='fs-7 fw-normal'>Filter By Status:</span>
-                <SimpleSelect
+                <SelectSingleFilter
+                  inputLabel='Status'
+                  inputName='status-filter'
+                  placeholder='All'
                   selected={searchStatus}
                   handleSelect={(option) => {
                     setSearchStatus(option)
@@ -75,10 +84,24 @@ const FilterByOthers = ({ searchType, setSearchType, searchStatus, setSearchStat
                   options={STATUS_OPTIONS}
                 />
 
+                <SelectSingleFilter
+                  inputLabel='SKU'
+                  inputName='sku-filter'
+                  placeholder='All'
+                  selected={searchSku}
+                  handleSelect={(option) => {
+                    setSearchSku(option)
+                    setOpenFilters(false)
+                  }}
+                  options={skus.map((sku) => ({ value: sku.sku, label: sku.sku, description: sku.title }))}
+                />
+
                 {state?.user?.[`${state.currentRegion}`]?.marketplacesIds && (
                   <>
-                    <span className='fs-7 fw-normal'>Filter By Store:</span>
-                    <SimpleSelect
+                    <SelectSingleFilter
+                      inputLabel='Stores'
+                      inputName='stores-filter'
+                      placeholder='All'
                       selected={searchMarketplace}
                       handleSelect={(option) => {
                         setSearchMarketplace(option)
@@ -94,6 +117,7 @@ const FilterByOthers = ({ searchType, setSearchType, searchStatus, setSearchStat
                   onClick={() => {
                     setSearchType({ value: '', label: 'All' })
                     setSearchStatus({ value: '', label: 'All' })
+                    setSearchSku({ value: '', label: 'All' })
                     setSearchMarketplace({ value: '', label: 'All Stores' })
                     setOpenFilters(false)
                   }}
