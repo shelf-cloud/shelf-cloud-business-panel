@@ -10,6 +10,9 @@ type Props = {
   customStyle?: 'sm' | 'base'
   placeholder?: string
   hasError?: boolean
+  isClearable?: boolean
+  isDisabled?: boolean
+  menuPortalTarget?: HTMLElement
 }
 
 type CustomStyles = { [key: string]: any }
@@ -65,13 +68,16 @@ const getStyle = (customStyle: string, hasError: boolean) => {
   return style
 }
 
-const SimpleSelect = ({ selected, handleSelect, options, customStyle = 'base', placeholder, hasError }: Props) => {
+const SimpleSelect = ({ selected, handleSelect, options, customStyle = 'base', placeholder, hasError, isClearable = false, isDisabled = false, menuPortalTarget }: Props) => {
   return (
     <Select
       value={selected}
       placeholder={placeholder}
       onChange={handleSelect}
       options={options}
+      isClearable={isClearable}
+      isDisabled={isDisabled}
+      menuPortalTarget={menuPortalTarget && document.body}
       styles={getStyle(customStyle, hasError || false)}
       filterOption={(option: { data: SelectOptionType }, inputValue: string) => {
         if (!inputValue) return true
@@ -94,7 +100,7 @@ const SimpleSelect = ({ selected, handleSelect, options, customStyle = 'base', p
             <div className='d-flex flex-column gap-0'>
               <span className='fs-7'>{option.label}</span>
               {option.description && (
-                <small className='text-muted' style={{ fontSize: '0.8em', lineHeight: '1.2em', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                <small style={{ fontSize: '0.8em', lineHeight: '1.2em', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {option.description}
                 </small>
               )}
