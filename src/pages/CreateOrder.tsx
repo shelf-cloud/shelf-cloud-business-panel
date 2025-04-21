@@ -709,7 +709,6 @@ const CreateOrder = ({ session }: Props) => {
                                     aria-describedby='orderNumberid'
                                     id='orderNumber'
                                     name='orderNumber'
-                                    readOnly={isPickUpOrder}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.orderNumber || ''}
