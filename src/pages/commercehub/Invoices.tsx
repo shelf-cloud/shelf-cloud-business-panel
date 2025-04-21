@@ -120,6 +120,7 @@ const Invoices = ({ session, sessionToken }: Props) => {
   }
 
   const { data, size, setSize, isValidating, mutate } = useSWRInfinite(getKey, fetcher, {
+    revalidateOnMount: true,
     revalidateFirstPage: false, // Prevent re-fetching of the first page when setting a new size
     revalidateOnFocus: false, // Prevent re-fetching on window focus
   })

@@ -11,11 +11,12 @@ import { getSession } from '@auth/client'
 import AppContext from '@context/AppContext'
 import useSWR, { useSWRConfig } from 'swr'
 import { toast } from 'react-toastify'
-import router, { useRouter } from 'next/router'
+import router from 'next/router'
 import { DebounceInput } from 'react-debounce-input'
-import { RegionInfoTypeUS, UserType } from '@hooks/useInitialState'
-import SimpleSelect from '@components/Common/SimpleSelect'
+import SimpleSelect, { SelectOptionType } from '@components/Common/SimpleSelect'
 import ErrorInputLabel from '@components/ui/forms/ErrorInputLabel'
+import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
+import { Session } from 'next-auth'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -33,13 +34,42 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   }
 }
 
+type OrderType = {
+  firstName: string
+  lastName: string
+  company: string
+  orderNumber: string
+  adress1: string
+  adress2: string
+  city: string
+  state: string
+  zipCode: string
+  country: string
+  phoneNumber: string
+  email: string
+  amount: string
+  shipping: string
+  tax: string
+  products: {
+    sku: string
+    title: string
+    qty: number
+    price: string
+  }[]
+}
+
+type SkuExceedsAvailability = {
+  sku: string
+  availableQty: number
+  orderedQty: number
+}
+
+type StateListType = {
+  [key: string]: SelectOptionType[]
+}
+
 type Props = {
-  session: {
-    user: {
-      businessName: string
-      businessOrderStart: string
-    }
-  }
+  session: Session
 }
 
 declare module 'yup' {
@@ -53,10 +83,9 @@ const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
 
 const CreateOrder = ({ session }: Props) => {
   const title = `Create Order | ${session?.user?.businessName}`
-  const { push } = useRouter()
   const { state } = useContext(AppContext)
   const { mutate } = useSWRConfig()
-  const userRegion = state.user[state.currentRegion as keyof UserType] as RegionInfoTypeUS
+  // const userRegion = state.user[state.currentRegion as keyof UserType] as RegionInfoTypeUS
   const orderNumberStart = `${session?.user?.businessOrderStart.substring(0, 3).toUpperCase()}-`
   const [ready, setReady] = useState(false)
   const [isPickUpOrder, setIsPickUpOrder] = useState(false)
@@ -65,16 +94,16 @@ const CreateOrder = ({ session }: Props) => {
   const [skuQuantities, setSkuQuantities] = useState<any>({})
   const [validSkus, setValidSkus] = useState<string[]>([])
   const [inValidSkus, setInValidSkus] = useState<string[]>([])
-  const [countries, setcountries] = useState([])
+  const [countries, setcountries] = useState<SelectOptionType[]>([])
+  const [stateList, setStateList] = useState<StateListType>({})
   const [validCountries, setValidCountries] = useState<string[]>([])
   const [creatingOrder, setCreatingOrder] = useState(false)
   const [autoCompleteAddress, setAutoCompleteAddress] = useState([])
-
-  useEffect(() => {
-    if (!userRegion?.showCreateOrder) {
-      push('/')
-    }
-  }, [])
+  const [skuExceededAvailability, setskuExceededAvailability] = useState<SkuExceedsAvailability>({
+    sku: '',
+    availableQty: 0,
+    orderedQty: 0,
+  })
 
   const { data } = useSWR(state.user.businessId ? `/api/getSkus?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher, { revalidateOnMount: true })
 
@@ -85,6 +114,7 @@ const CreateOrder = ({ session }: Props) => {
       setInValidSkus([])
       setSkus([])
       setcountries([])
+      setStateList({})
       setSkusTitles({})
       setSkuQuantities({})
       setReady(true)
@@ -95,6 +125,7 @@ const CreateOrder = ({ session }: Props) => {
       setInValidSkus(data.invalidSkus)
       setSkus(data.skus)
       setcountries(data.countries)
+      setStateList(data.states)
       setSkusTitles(data.skuTitle)
       setSkuQuantities(data.skuQuantities)
       setReady(true)
@@ -104,7 +135,7 @@ const CreateOrder = ({ session }: Props) => {
     }
   }, [data])
 
-  const initialValues = {
+  const initialValues: OrderType = {
     firstName: '',
     lastName: '',
     company: '',
@@ -116,7 +147,7 @@ const CreateOrder = ({ session }: Props) => {
     zipCode: '',
     country: state.currentRegion == 'us' ? 'US' : 'ES',
     phoneNumber: '',
-    email: '',
+    email: session.user.email || '',
     amount: '0',
     shipping: '0',
     tax: '0',
@@ -164,17 +195,44 @@ const CreateOrder = ({ session }: Props) => {
             .positive()
             .integer('Qty must be an integer')
             .min(1, 'Quantity must be greater than 0')
-            .when('sku', (sku, schema) => (sku != '' ? schema.max(skuQuantities[sku], `SKU is ${skuQuantities[sku] ? skuQuantities[sku] : 'Unavailable'}`) : schema))
-            .required('Required Quantity'),
+            .when('sku', (sku, schema) => (sku != '' ? schema.max(skuQuantities[sku], `SKU Qty is ${skuQuantities[sku] ? skuQuantities[sku] : 'Unavailable'}`) : schema))
+            .required('Qty Required'),
           price: Yup.number().min(0, 'Price must be greater than or equal to 0').required('Required Price'),
         })
       )
-      .unique((values: any) => values.sku, 'Duplicate SKU')
+      // .unique((values: any) => values.sku, 'Duplicate SKU')
       .required('Must have products'),
   })
 
-  const handleSubmit = async (values: any, { resetForm }: any) => {
+  const handleSubmit = async (values: OrderType, { resetForm }: any) => {
     setCreatingOrder(true)
+    setskuExceededAvailability({ sku: '', availableQty: 0, orderedQty: 0 })
+
+    const orderProducts: { [key: string]: number } = {}
+
+    values.products.forEach((product) => {
+      if (!orderProducts[product.sku]) {
+        orderProducts[product.sku] = 0
+      }
+      orderProducts[product.sku] += Number(product.qty)
+    })
+
+    const checkIfQuantitiesExceedAvailability = Object.keys(orderProducts).some((sku) => {
+      const availableQty = skuQuantities[sku]
+      const orderedQty = orderProducts[sku]
+      const exceeds = availableQty < orderedQty
+      if (exceeds) {
+        setskuExceededAvailability({ sku, availableQty, orderedQty })
+      }
+      return exceeds
+    })
+
+    if (checkIfQuantitiesExceedAvailability) {
+      toast.error('Some SKUs exceed available quantities')
+      setCreatingOrder(false)
+      return
+    }
+
     values.products.map((product: any) => {
       if (product.title.includes(' -||- ')) {
         product.title = product.title.split(' -||- ')[0]
@@ -182,6 +240,7 @@ const CreateOrder = ({ session }: Props) => {
     })
     const response = await axios.post(`api/createNewOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
       orderInfo: values,
+      isPickUpOrder,
     })
 
     if (!response.data.error) {
@@ -227,6 +286,7 @@ const CreateOrder = ({ session }: Props) => {
       setAutoCompleteAddress(res.data.features)
     })
   }
+
   return (
     <div>
       <Head>
@@ -263,6 +323,8 @@ const CreateOrder = ({ session }: Props) => {
                           </div>
                         </Row>
                         <Row>
+                          {/* NAME */}
+
                           <Col xs={12} md={8} className='d-flex flex-column gap-1'>
                             <Row>
                               <Col xs={12} md={6}>
@@ -312,6 +374,9 @@ const CreateOrder = ({ session }: Props) => {
                                 </FormGroup>
                               </Col>
                             </Row>
+
+                            {/* COMPANY */}
+
                             <Col md={12}>
                               <FormGroup className='createOrder_inputs'>
                                 <Label htmlFor='company' className='form-label mb-1'>
@@ -335,6 +400,9 @@ const CreateOrder = ({ session }: Props) => {
                                 ) : null}
                               </FormGroup>
                             </Col>
+
+                            {/* ADDRESS */}
+
                             <Col md={12}>
                               <FormGroup className='createOrder_inputs relative'>
                                 <Label htmlFor='adress1' className='form-label mb-1'>
@@ -344,7 +412,7 @@ const CreateOrder = ({ session }: Props) => {
                                   minLength={3}
                                   debounceTimeout={500}
                                   type='text'
-                                  className='form-control form-control-sm fs-6'
+                                  className={'form-control form-control-sm fs-6 ' + (errors.adress1 && touched.adress1 ? 'is-invalid' : '')}
                                   placeholder='Address...'
                                   id='adress1'
                                   name='adress1'
@@ -355,13 +423,8 @@ const CreateOrder = ({ session }: Props) => {
                                   }}
                                   onBlur={handleBlur}
                                   value={values.adress1 || ''}
-                                  invalid={touched.adress1 && errors.adress1 ? true : false}
                                 />
-                                {touched.adress1 && errors.adress1 ? (
-                                  <FormFeedback className='m-0 fs-7' type='invalid'>
-                                    {errors.adress1}
-                                  </FormFeedback>
-                                ) : null}
+                                {touched.adress1 && errors.adress1 ? <ErrorInputLabel error={errors.adress1} marginTop='mt-0' /> : null}
                                 {!isPickUpOrder && autoCompleteAddress?.length > 0 && (
                                   <div className='absolute'>
                                     <Card>
@@ -431,7 +494,6 @@ const CreateOrder = ({ session }: Props) => {
                                   onChange={handleChange}
                                   onBlur={handleBlur}
                                   value={values.adress2 || ''}
-                                  invalid={touched.adress2 && errors.adress2 ? true : false}
                                 />
                                 {touched.adress2 && errors.adress2 ? (
                                   <FormFeedback className='m-0 fs-7' type='invalid'>
@@ -440,7 +502,10 @@ const CreateOrder = ({ session }: Props) => {
                                 ) : null}
                               </FormGroup>
                             </Col>
-                            <Col xs={12} className='d-flex justify-content-between w-100 gap-1'>
+
+                            {/* CITY, STATE, ZIP CODE AND COUNTRY */}
+
+                            <Col xs={12}>
                               <Row>
                                 <Col xs={12} md={3}>
                                   <FormGroup className='createOrder_inputs'>
@@ -462,30 +527,6 @@ const CreateOrder = ({ session }: Props) => {
                                     {touched.city && errors.city ? (
                                       <FormFeedback className='m-0 fs-7' type='invalid'>
                                         {errors.city}
-                                      </FormFeedback>
-                                    ) : null}
-                                  </FormGroup>
-                                </Col>
-                                <Col xs={12} md={3}>
-                                  <FormGroup className='createOrder_inputs'>
-                                    <Label htmlFor='compnayNameinput' className='form-label mb-1'>
-                                      *State
-                                    </Label>
-                                    <Input
-                                      type='text'
-                                      className='form-control form-control-sm fs-6'
-                                      placeholder='State...'
-                                      id='state'
-                                      name='state'
-                                      readOnly={isPickUpOrder}
-                                      onChange={handleChange}
-                                      onBlur={handleBlur}
-                                      value={values.state || ''}
-                                      invalid={touched.state && errors.state ? true : false}
-                                    />
-                                    {touched.state && errors.state ? (
-                                      <FormFeedback className='m-0 fs-7' type='invalid'>
-                                        {errors.state}
                                       </FormFeedback>
                                     ) : null}
                                   </FormGroup>
@@ -519,43 +560,82 @@ const CreateOrder = ({ session }: Props) => {
                                     <Label htmlFor='compnayNameinput' className='form-label mb-1'>
                                       *Country
                                     </Label>
-                                    <Input
-                                      type='text'
-                                      className='form-control form-control-sm fs-6'
-                                      placeholder='Country...'
-                                      id='country'
-                                      list='countries'
-                                      name='country'
-                                      readOnly={isPickUpOrder}
-                                      onChange={handleChange}
-                                      onBlur={handleBlur}
-                                      value={values.country || ''}
-                                      invalid={touched.country && errors.country ? true : false}
+                                    <SimpleSelect
+                                      selected={{ label: values.country, value: values.country }}
+                                      options={countries || []}
+                                      handleSelect={(option: any) => {
+                                        if (!option) {
+                                          setFieldValue(`country`, '')
+                                          return
+                                        }
+                                        setFieldValue(`country`, option.value)
+                                      }}
+                                      isReadOnly={isPickUpOrder}
+                                      isDisabled={isPickUpOrder}
+                                      placeholder='Select country...'
+                                      customStyle='sm'
+                                      hasError={errors.country ? true : false}
+                                      isClearable
+                                      menuPortalTarget={document.body}
                                     />
-                                    {touched.country && errors.country ? (
-                                      <FormFeedback className='m-0 fs-7' type='invalid'>
-                                        {errors.country}
-                                      </FormFeedback>
-                                    ) : null}
-                                    <datalist id='countries'>
-                                      {countries.map(
-                                        (
-                                          country: {
-                                            name: string
-                                            code: string
-                                          },
-                                          index
-                                        ) => (
-                                          <option key={`country${index}`} value={country.code}>
-                                            {country.name} / {country.code}
-                                          </option>
-                                        )
-                                      )}
-                                    </datalist>
+                                    {errors.country ? <ErrorInputLabel error={errors.country} marginTop='mt-0' /> : null}
+                                  </FormGroup>
+                                </Col>
+                                <Col xs={12} md={3}>
+                                  <FormGroup className='createOrder_inputs'>
+                                    <Label htmlFor='compnayNameinput' className='form-label mb-1'>
+                                      *State
+                                    </Label>
+                                    {stateList[values.country] ? (
+                                      <>
+                                        <SimpleSelect
+                                          selected={{ label: values.state, value: values.state }}
+                                          options={stateList[values.country] || []}
+                                          handleSelect={(option: any) => {
+                                            if (!option) {
+                                              setFieldValue(`state`, '')
+                                              return
+                                            }
+                                            setFieldValue(`state`, option.value)
+                                          }}
+                                          isReadOnly={isPickUpOrder}
+                                          isDisabled={isPickUpOrder}
+                                          placeholder='Select State...'
+                                          customStyle='sm'
+                                          hasError={errors.state ? true : false}
+                                          isClearable
+                                          menuPortalTarget={document.body}
+                                        />
+                                        {errors.state ? <ErrorInputLabel error={errors.state} marginTop='mt-0' /> : null}
+                                      </>
+                                    ) : (
+                                      <>
+                                        <Input
+                                          type='text'
+                                          className='form-control form-control-sm fs-6'
+                                          placeholder='State...'
+                                          id='state'
+                                          name='state'
+                                          readOnly={isPickUpOrder}
+                                          onChange={handleChange}
+                                          onBlur={handleBlur}
+                                          value={values.state || ''}
+                                          invalid={touched.state && errors.state ? true : false}
+                                        />
+                                        {touched.state && errors.state ? (
+                                          <FormFeedback className='m-0 fs-7' type='invalid'>
+                                            {errors.state}
+                                          </FormFeedback>
+                                        ) : null}
+                                      </>
+                                    )}
                                   </FormGroup>
                                 </Col>
                               </Row>
                             </Col>
+
+                            {/* PHONE AND EMAIL */}
+
                             <Col xs={12}>
                               <Row>
                                 <Col xs={12} md={6}>
@@ -569,6 +649,7 @@ const CreateOrder = ({ session }: Props) => {
                                       placeholder='Phone Number...'
                                       id='phoneNumber'
                                       name='phoneNumber'
+                                      readOnly={isPickUpOrder}
                                       onChange={handleChange}
                                       onBlur={handleBlur}
                                       value={values.phoneNumber || ''}
@@ -592,6 +673,7 @@ const CreateOrder = ({ session }: Props) => {
                                       placeholder='Email Address...'
                                       id='email'
                                       name='email'
+                                      readOnly={isPickUpOrder}
                                       onChange={handleChange}
                                       onBlur={handleBlur}
                                       value={values.email || ''}
@@ -607,6 +689,8 @@ const CreateOrder = ({ session }: Props) => {
                               </Row>
                             </Col>
                           </Col>
+
+                          {/* ORDER NUMBER */}
 
                           <Col xs={12} md={4}>
                             <Col xs={12} md={12}>
@@ -639,7 +723,7 @@ const CreateOrder = ({ session }: Props) => {
                                 </div>
                               </FormGroup>
                             </Col>
-                            <Col xs={12} md={6}>
+                            <Col xs={12} md={6} className='mt-3'>
                               <FormGroup className='createOrder_inputs'>
                                 <Label htmlFor='lastNameinput' className='form-label'>
                                   *Amount Paid
@@ -694,6 +778,8 @@ const CreateOrder = ({ session }: Props) => {
                             </Col>
                           </Col>
                         </Row>
+
+                        {/* TABLE OF PRODUCTS */}
                         <Row>
                           <Col xs={12} className='mt-2'>
                             <div className='table-responsive'>
@@ -708,10 +794,13 @@ const CreateOrder = ({ session }: Props) => {
                                       Title
                                     </th>
                                     <th scope='col' className='py-1 fs-5 m-0 fw-semibold text-center bg-primary text-white'>
+                                      Unit Price
+                                    </th>
+                                    <th scope='col' className='py-1 fs-5 m-0 fw-semibold text-center bg-primary text-white'>
                                       Qty
                                     </th>
                                     <th scope='col' className='py-1 fs-5 m-0 fw-semibold text-center bg-primary text-white'>
-                                      Price
+                                      Total
                                     </th>
                                   </tr>
                                 </thead>
@@ -730,7 +819,7 @@ const CreateOrder = ({ session }: Props) => {
                                                     onClick={() =>
                                                       push({
                                                         sku: '',
-                                                        name: '',
+                                                        title: '',
                                                         qty: 1,
                                                         price: '0',
                                                       })
@@ -746,7 +835,7 @@ const CreateOrder = ({ session }: Props) => {
                                                     onClick={() =>
                                                       push({
                                                         sku: '',
-                                                        name: '',
+                                                        title: '',
                                                         qty: 1,
                                                         price: '0',
                                                       })
@@ -770,7 +859,6 @@ const CreateOrder = ({ session }: Props) => {
                                                         }
                                                         setFieldValue(`products.${index}.sku`, option.value)
                                                         setFieldValue(`products.${index}.title`, skusTitles[option.value])
-                                                        console.log({ meta })
                                                       }}
                                                       placeholder='Select SKU...'
                                                       customStyle='sm'
@@ -808,6 +896,29 @@ const CreateOrder = ({ session }: Props) => {
                                               </Field>
                                             </td>
                                             <td className='col-12 col-md-1' style={{ minWidth: '80px' }}>
+                                              <Field name={`products.${index}.price`}>
+                                                {({ meta }: any) => (
+                                                  <FormGroup className='createOrder_inputs'>
+                                                    <Input
+                                                      type='text'
+                                                      className='form-control form-control-sm fs-6'
+                                                      name={`products.${index}.price`}
+                                                      placeholder='Price...'
+                                                      onChange={handleChange}
+                                                      onBlur={handleBlur}
+                                                      value={values.products[index].price || ''}
+                                                      invalid={meta.touched && meta.error ? true : false}
+                                                    />
+                                                    {meta.touched && meta.error ? (
+                                                      <FormFeedback className='m-0 fs-7' type='invalid'>
+                                                        {meta.error}
+                                                      </FormFeedback>
+                                                    ) : null}
+                                                  </FormGroup>
+                                                )}
+                                              </Field>
+                                            </td>
+                                            <td className='col-12 col-md-1' style={{ minWidth: '80px' }}>
                                               <Field name={`products.${index}.qty`}>
                                                 {({ meta }: any) => (
                                                   <FormGroup className='createOrder_inputs'>
@@ -831,28 +942,8 @@ const CreateOrder = ({ session }: Props) => {
                                                 )}
                                               </Field>
                                             </td>
-                                            <td className='col-12 col-md-1' style={{ minWidth: '80px' }}>
-                                              <Field name={`products.${index}.price`}>
-                                                {({ meta }: any) => (
-                                                  <FormGroup className='createOrder_inputs'>
-                                                    <Input
-                                                      type='text'
-                                                      className='form-control form-control-sm fs-6'
-                                                      name={`products.${index}.price`}
-                                                      placeholder='Price...'
-                                                      onChange={handleChange}
-                                                      onBlur={handleBlur}
-                                                      value={values.products[index].price || ''}
-                                                      invalid={meta.touched && meta.error ? true : false}
-                                                    />
-                                                    {meta.touched && meta.error ? (
-                                                      <FormFeedback className='m-0 fs-7' type='invalid'>
-                                                        {meta.error}
-                                                      </FormFeedback>
-                                                    ) : null}
-                                                  </FormGroup>
-                                                )}
-                                              </Field>
+                                            <td className='text-end col-12 col-md-1' style={{ minWidth: '80px' }}>
+                                              {FormatCurrency(state.currentRegion, values.products[index].qty * Number(values.products[index].price))}
                                             </td>
                                           </tr>
                                         ))}
@@ -860,16 +951,40 @@ const CreateOrder = ({ session }: Props) => {
                                     )}
                                   </FieldArray>
                                 </tbody>
+                                <tfoot className='bg-light'>
+                                  <tr>
+                                    <td className='text-end fw-bold' colSpan={4}>
+                                      TOTAL
+                                    </td>
+                                    <td className='text-center fw-semibold'>
+                                      {FormatIntNumber(
+                                        state.currentRegion,
+                                        values.products.reduce((acc: number, product: any) => acc + Number(product.qty), 0)
+                                      )}
+                                    </td>
+                                    <td className='text-end fw-semibold'>
+                                      {FormatCurrency(
+                                        state.currentRegion,
+                                        values.products.reduce((acc: number, product: any) => acc + product.qty * Number(product.price), 0)
+                                      )}
+                                    </td>
+                                  </tr>
+                                </tfoot>
                               </table>
                             </div>
                           </Col>
                         </Row>
+
+                        {/* INFO AND SUBMIT BUTTON */}
+
                         <Row>
-                          {errors.products === 'Duplicate SKU' && <span className='text-danger fs-6 fw-normal'>*The order has Duplicate SKUs.</span>}
+                          {skuExceededAvailability.sku !== '' && (
+                            <span className='text-danger fs-6 fw-normal'>{`*SKU: ${skuExceededAvailability.sku} Available: ${skuExceededAvailability.availableQty} Ordered: ${skuExceededAvailability.orderedQty}`}</span>
+                          )}
                           <p className='fs-6 mb-0 text-muted'>*You must complete all required fields or you will not be able to create your product.</p>
                           <Col md={12}>
                             <div className='text-end'>
-                              <Button type='submit' disabled={Object.keys(errors).length > 0 || creatingOrder} className='fs-6 btn bg-primary'>
+                              <Button type='submit' disabled={creatingOrder} className='fs-6 btn bg-primary'>
                                 {creatingOrder ? (
                                   <span className='d-flex align-items-center gap-2'>
                                     <Spinner color='light' size={'sm'} /> Creating...

@@ -12,6 +12,7 @@ type Props = {
   hasError?: boolean
   isClearable?: boolean
   isDisabled?: boolean
+  isReadOnly?: boolean
   menuPortalTarget?: HTMLElement
 }
 
@@ -68,7 +69,7 @@ const getStyle = (customStyle: string, hasError: boolean) => {
   return style
 }
 
-const SimpleSelect = ({ selected, handleSelect, options, customStyle = 'base', placeholder, hasError, isClearable = false, isDisabled = false, menuPortalTarget }: Props) => {
+const SimpleSelect = ({ selected, handleSelect, options, customStyle = 'base', placeholder, hasError, isClearable = false, isDisabled = false, menuPortalTarget, isReadOnly = false }: Props) => {
   return (
     <Select
       value={selected}
@@ -77,6 +78,7 @@ const SimpleSelect = ({ selected, handleSelect, options, customStyle = 'base', p
       options={options}
       isClearable={isClearable}
       isDisabled={isDisabled}
+      readOnly={isReadOnly}
       menuPortalTarget={menuPortalTarget && document.body}
       styles={getStyle(customStyle, hasError || false)}
       filterOption={(option: { data: SelectOptionType }, inputValue: string) => {
@@ -99,11 +101,7 @@ const SimpleSelect = ({ selected, handleSelect, options, customStyle = 'base', p
           return (
             <div className='d-flex flex-column gap-0'>
               <span className='fs-7'>{option.label}</span>
-              {option.description && (
-                <small style={{ fontSize: '0.8em', lineHeight: '1.2em', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                  {option.description}
-                </small>
-              )}
+              {option.description && <small style={{ fontSize: '0.8em', lineHeight: '1.2em', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', textOverflow: 'ellipsis' }}>{option.description}</small>}
             </div>
           )
         }

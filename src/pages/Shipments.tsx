@@ -94,6 +94,7 @@ const Shipments = ({ session }: Props) => {
     isValidating,
     mutate: mutateShipments,
   } = useSWRInfinite(getKey, fetcher, {
+    revalidateOnMount: true,
     revalidateFirstPage: false,
     revalidateOnFocus: false,
   })
