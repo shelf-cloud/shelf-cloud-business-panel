@@ -258,7 +258,7 @@ const CreateOrder = ({ session }: Props) => {
   const handlePickUpOrder = async (values: any, isPickUpOrder: boolean) => {
     if (isPickUpOrder) {
       values.adress1 = '9629 Premier Parkway'
-      values.adress2 = 'Pick Up Order'
+      values.adress2 = 'Pickup Order'
       values.city = 'Miramar'
       values.state = 'FL'
       values.country = state.currentRegion == 'us' ? 'US' : 'ES'
