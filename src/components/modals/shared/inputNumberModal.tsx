@@ -33,7 +33,7 @@ const InputNumberModal = ({
   loadingText,
   placeholder = '',
   initialValue,
-  minLength = 0,
+  minLength = 1,
   isPrice = false,
   handleSubmit,
   handleClose,
@@ -59,7 +59,7 @@ const InputNumberModal = ({
     },
   })
 
-  const HandleAddProduct = (event: any) => {
+  const handleSubmitForm = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
   }
@@ -78,7 +78,7 @@ const InputNumberModal = ({
       <ModalHeader toggle={handleClose} className='modal-title' id='myModalLabel'>
         {headerText}
       </ModalHeader>
-      <Form onSubmit={HandleAddProduct}>
+      <Form onSubmit={handleSubmitForm}>
         <ModalBody>
           <Row>
             <p className='fs-5 fw-semibold'>
@@ -90,7 +90,7 @@ const InputNumberModal = ({
                 <DebounceInput
                   type='number'
                   minLength={minLength}
-                  debounceTimeout={200}
+                  debounceTimeout={600}
                   className={`form-control form-control-sm text-end fs-6 ${validation.errors.inputValue ? 'is-invalid' : ''}`}
                   placeholder={placeholder}
                   id='inputValue'
@@ -101,7 +101,7 @@ const InputNumberModal = ({
                   invalid={validation.touched.inputValue && validation.errors.inputValue ? true : false}
                   inputRef={(input) => {
                     if (isOpen && input) {
-                      input.select()
+                      input.focus()
                     }
                   }}
                 />
@@ -139,4 +139,4 @@ const InputNumberModal = ({
   )
 }
 
-export default memo(InputNumberModal) as typeof InputNumberModal
+export default memo(InputNumberModal)
