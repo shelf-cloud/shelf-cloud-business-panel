@@ -257,6 +257,29 @@ const MarketplacesFees = ({}: Props) => {
       compact: false,
       sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortNumbers(rowA.payTerms, rowB.payTerms),
     },
+    {
+      name: <span className='fw-bold fs-6'>Notes</span>,
+      selector: (row: MarketplaceFees) => {
+        if (!showEditFields) return <p className='fs-7 my-1'>{row.notes}</p>
+        return (
+          <div className='d-flex flex-row justify-content-center align-items-center gap-2 my-1'>
+            <DebounceInput
+              element='textarea'
+              minLength={3}
+              debounceTimeout={500}
+              className='form-control fs-7'
+              style={{ padding: '0.2rem 0.5rem', minWidth: '80px' }}
+              onChange={(e) => setmarketplaceFees((prev) => ({ ...prev, [row.storeId]: { ...row, notes: e.target.value !== '' ? e.target.value : null } }))}
+              value={row.notes || ''}
+            />
+          </div>
+        )
+      },
+      wrap: true,
+      sortable: false,
+      center: true,
+      compact: false,
+    },
   ]
 
   return (

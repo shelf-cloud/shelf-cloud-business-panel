@@ -160,7 +160,7 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
                           )
                       )
                     ) : (
-                      <td className='text-center text-muted'>-</td>
+                      <td key={`empty-${box.boxId}`} className='text-center text-muted'>-</td>
                     )
                   )}
                 </tr>

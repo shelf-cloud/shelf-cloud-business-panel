@@ -16,4 +16,5 @@ export interface MarketplaceFees {
     isCommerceHub: boolean
     commerceHubFileType: string
     payTerms: number
+    notes: string | null
 }

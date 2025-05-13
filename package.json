@@ -1,5 +1,5 @@
 {
-  "name": "business-cliente-manager",
+  "name": "business-client-manager",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -28,13 +28,10 @@
     "apexcharts": "^3.36.3",
     "axios": "^1.8.4",
     "bootstrap": "^5.3.5",
-    "chart.js": "^4.0.1",
     "exceljs": "^4.4.0",
     "feather-icons-react": "0.5.0",
     "firebase": "^9.13.0",
     "formik": "^2.2.9",
-    "fs": "^0.0.1-security",
-    "jsbarcode": "^3.11.5",
     "lord-icon-element": "^3.4.4",
     "lottie-web": "^5.9.6",
     "moment": "^2.29.4",
@@ -43,7 +40,6 @@
     "papaparse": "^5.4.0",
     "react": "18.2.0",
     "react-apexcharts": "^1.4.0",
-    "react-chartjs-2": "^5.0.1",
     "react-countup": "^6.3.1",
     "react-csv": "^2.2.2",
     "react-data-table-component": "^7.5.3",

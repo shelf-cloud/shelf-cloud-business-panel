@@ -17,6 +17,7 @@ import TotalChagesList from '@components/TotalChagesList'
 import InvoicesList from '@components/InvoicesList'
 import { toast } from 'react-toastify'
 import SalesOverTime from '@components/dashboard/SalesOverTime'
+import SalesOverTimeLoading from '@components/dashboard/SalesOverTime-loading'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -107,7 +108,7 @@ const Home = ({ session, sessionToken }: Props) => {
                   </Row>
                   <Row>
                     <Col md={7}>
-                      {salesOverTime ? <SalesOverTime salesOverTime={salesOverTime} /> : null}
+                      {salesOverTime ? <SalesOverTime salesOverTime={salesOverTime} /> : <SalesOverTimeLoading />}
                       {summary && <MostInvenotryList products={summary?.mostInventory} />}
                     </Col>
                     <Col md={5}>
