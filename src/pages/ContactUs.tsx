@@ -9,7 +9,7 @@ import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
 import axios from 'axios'
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import PlaneImage from '../assets/images/contactus-plane.png'
 import SquareImage from '../assets/images/contactus-square.png'
 

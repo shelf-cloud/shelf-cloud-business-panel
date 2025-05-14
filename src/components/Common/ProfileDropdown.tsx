@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useContext, useState } from 'react'
 import { signOut, useSession } from '@auth/client'
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap'
 import Link from 'next/link'
 import flag_of_europe from '@assets/images/flag_of_europe.png'

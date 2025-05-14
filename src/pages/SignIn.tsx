@@ -1,5 +1,5 @@
 import React, { FormEventHandler, useRef, useState } from 'react'
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import ShelfCloudLogo from '@assets/images/shelfcloud-blue-h.png'
 import RightImage from '@assets/images/signin-image-right.png'
 import PuntosImage from '@assets/images/signin-puntos.png'

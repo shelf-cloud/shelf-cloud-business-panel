@@ -6,7 +6,7 @@ import { DeliveryWindowsOptions, DeliveryWindowsResponse, InboundPlan, Placement
 import moment from 'moment'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { Alert, Button, Card, CardBody, CardHeader, Col, Input, Label, Row, Spinner } from 'reactstrap'
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import boxIcon from '@assets/fulfillments/outbound_box.png'
 import palletIcon from '@assets/fulfillments/outbound_pallet.png'
 // import SelectShippingCarrier from './SelectShippingCarrier'

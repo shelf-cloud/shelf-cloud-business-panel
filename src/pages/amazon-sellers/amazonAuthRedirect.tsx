@@ -8,7 +8,7 @@ import { Button, Card, CardBody, Container, Spinner } from 'reactstrap'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import axios from 'axios'
 import AppContext from '@context/AppContext'
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import ShelfCloudLogoSolo from '../../assets/images/shelfcloud-blue-h-solo.png'
 import moment from 'moment'
 import { useSWRConfig } from 'swr'

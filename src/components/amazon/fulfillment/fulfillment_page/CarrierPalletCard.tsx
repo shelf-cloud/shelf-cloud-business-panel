@@ -4,7 +4,7 @@ import { FormatIntPercentage } from '@lib/FormatNumbers'
 import { ConfirmedShipments, InboundPlan } from '@typesTs/amazon/fulfillments/fulfillment'
 import React, { useContext, useState } from 'react'
 import { Button, Card, CardBody, CardFooter, CardHeader, Spinner } from 'reactstrap'
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import boxIcon from '@assets/fulfillments/outbound_box.png'
 import palletIcon from '@assets/fulfillments/outbound_pallet.png'
 import { NoImageAdress } from '@lib/assetsConstants'

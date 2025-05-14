@@ -1,5 +1,5 @@
 import React, { FormEventHandler, useState } from 'react'
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import ShelfCloudLogo from '@images/shelfcloud-blue-h.png'
 import { Button, Label, Spinner } from 'reactstrap'
 import { useRouter } from 'next/router'
