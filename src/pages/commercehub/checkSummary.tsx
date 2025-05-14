@@ -1,22 +1,23 @@
-import React, { useCallback, useContext, useMemo, useRef, useState } from 'react'
-import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
-import { Button, Card, CardBody, Container, Spinner } from 'reactstrap'
-import BreadCrumb from '@components/Common/BreadCrumb'
+import React, { useCallback, useContext, useMemo, useRef, useState } from 'react'
+
 import { getSession } from '@auth/client'
-import axios from 'axios'
-import useSWRInfinite from 'swr/infinite'
-import { CommerceHubStoresResponse } from '@typesTs/commercehub/invoices'
-import { DebounceInput } from 'react-debounce-input'
+import BreadCrumb from '@components/Common/BreadCrumb'
 import FilterByDates from '@components/FilterByDates'
-import moment from 'moment'
-import FilterCommerceHubInvoices, { InvoiceCommerceHubFiltersType } from '@components/commerceHub/FilterCommerceHubInvoices'
-import useSWR from 'swr'
-import { CheckSummaryResponse, CheckSummaryType } from '@typesTs/commercehub/checkSummary'
 import CheckSummaryTable from '@components/commerceHub/CheckSummaryTable'
-import { toast } from 'react-toastify'
+import FilterCommerceHubInvoices, { InvoiceCommerceHubFiltersType } from '@components/commerceHub/FilterCommerceHubInvoices'
 import { generateDocument } from '@components/commerceHub/generateDocuments/getDocument'
+import AppContext from '@context/AppContext'
+import { CheckSummaryResponse, CheckSummaryType } from '@typesTs/commercehub/checkSummary'
+import { CommerceHubStoresResponse } from '@typesTs/commercehub/invoices'
+import axios from 'axios'
+import moment from 'moment'
+import { DebounceInput } from 'react-debounce-input'
+import { toast } from 'react-toastify'
+import { Button, Card, CardBody, Container, Spinner } from 'reactstrap'
+import useSWR from 'swr'
+import useSWRInfinite from 'swr/infinite'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -87,7 +88,7 @@ const CheckSummary = ({ session, sessionToken }: Props) => {
     if (searchValue) url += `&search=${encodeURIComponent(searchValue)}`
     if (startDate) url += `&startDate=${startDate}`
     if (endDate) url += `&endDate=${endDate}`
-    if (filters.store.value !== 'all') url += `&store=${filters.store.value}`
+    if (filters.store!.value !== 'all') url += `&store=${filters.store!.value}`
     url += `&sortBy=${sortBy.key}&direction=${sortBy.asc ? 'ASC' : 'DESC'}`
 
     return url
@@ -137,7 +138,10 @@ const CheckSummary = ({ session, sessionToken }: Props) => {
     }
   }
 
-  const hasActiveFilters = useMemo(() => searchValue !== '' || startDate !== '' || endDate !== '' || filters.onlyOverdue || filters.store.value !== 'all', [searchValue, startDate, endDate, filters])
+  const hasActiveFilters = useMemo(
+    () => searchValue !== '' || startDate !== '' || endDate !== '' || filters.onlyOverdue || filters.store!.value !== 'all',
+    [searchValue, startDate, endDate, filters]
+  )
 
   const downloadInfoToExcel = async () => {
     const generatingDocument = toast.loading('Generating Document...')
@@ -147,7 +151,7 @@ const CheckSummary = ({ session, sessionToken }: Props) => {
     if (searchValue) endPoint += `&search=${encodeURIComponent(searchValue)}`
     if (startDate) endPoint += `&startDate=${startDate}`
     if (endDate) endPoint += `&endDate=${endDate}`
-    if (filters.store.value !== 'all') endPoint += `&store=${filters.store.value}`
+    if (filters.store!.value !== 'all') endPoint += `&store=${filters.store!.value}`
 
     const controller = new AbortController()
     const signal = controller.signal
@@ -232,7 +236,13 @@ const CheckSummary = ({ session, sessionToken }: Props) => {
                     </span>
                   </div>
                 </div>
-                <FilterByDates shipmentsStartDate={startDate} setShipmentsStartDate={setStartDate} setShipmentsEndDate={setEndDate} shipmentsEndDate={endDate} handleChangeDatesFromPicker={handleChangeDatesFromPicker} />
+                <FilterByDates
+                  shipmentsStartDate={startDate}
+                  setShipmentsStartDate={setStartDate}
+                  setShipmentsEndDate={setEndDate}
+                  shipmentsEndDate={endDate}
+                  handleChangeDatesFromPicker={handleChangeDatesFromPicker}
+                />
                 <FilterCommerceHubInvoices filters={filters} setfilters={setfilters} stores={stores?.stores ?? []} />
                 <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='fs-7 text-nowrap' onClick={clearFilters}>
                   Clear Filters

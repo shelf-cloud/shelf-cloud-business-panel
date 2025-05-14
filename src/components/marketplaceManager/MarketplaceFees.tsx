@@ -1,19 +1,21 @@
 /* eslint-disable @next/next/no-img-element */
+import { useContext, useEffect, useState } from 'react'
+
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
+import { NoImageAdress } from '@lib/assetsConstants'
+import { sortNumbers, sortStringsCaseInsensitive } from '@lib/helperFunctions'
 import { MarketplaceFees, MarketplaceFeesResponse } from '@typesTs/marketplaces/marketplaceManager'
 import axios from 'axios'
-import React, { useContext, useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
+import { toast } from 'react-toastify'
 import { Button, Spinner } from 'reactstrap'
 import useSWR, { useSWRConfig } from 'swr'
-import { toast } from 'react-toastify'
-import AssignNewMarketplaceLogo from './AssignNewMarketplaceLogo'
-import { NoImageAdress } from '@lib/assetsConstants'
-import { commerceHubFileTypeOptions } from './marketplaceConstants'
+
 import AssignCommerceHubFileType from './AssignCommerceHubFileType'
-import { sortNumbers, sortStringsCaseInsensitive } from '@lib/helperFunctions'
+import AssignNewMarketplaceLogo from './AssignNewMarketplaceLogo'
+import { commerceHubFileTypeOptions } from './marketplaceConstants'
 
 type Props = {}
 
@@ -27,9 +29,13 @@ const MarketplacesFees = ({}: Props) => {
   const [isLoaded, setisLoaded] = useState(false)
   const [hasError, setHasError] = useState(false)
   const [updatingFees, setUpdatingFees] = useState(false)
-  const { data }: { data?: MarketplaceFeesResponse } = useSWR(state.user.businessId ? `/api/marketplaces/getMarketplacesFees?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher, {
-    revalidateOnFocus: false,
-  })
+  const { data }: { data?: MarketplaceFeesResponse } = useSWR(
+    state.user.businessId ? `/api/marketplaces/getMarketplacesFees?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  )
 
   useEffect(() => {
     setisLoaded(true)
@@ -69,10 +75,19 @@ const MarketplacesFees = ({}: Props) => {
                 margin: '0px',
                 position: 'relative',
               }}>
-              <img loading='lazy' src={row.aliasLogo ?? row.logoLink} onError={(e) => (e.currentTarget.src = NoImageAdress)} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
+              <img
+                loading='lazy'
+                src={row.aliasLogo ?? row.logoLink}
+                onError={(e) => (e.currentTarget.src = NoImageAdress)}
+                alt='product Image'
+                style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+              />
             </div>
             {showEditFields && (
-              <AssignNewMarketplaceLogo selected={row.aliasLogo ?? row.logoLink} setLogo={(selected) => setmarketplaceFees((prev) => ({ ...prev, [row.storeId]: { ...row, aliasLogo: selected.value !== '' ? selected.value : null } }))} />
+              <AssignNewMarketplaceLogo
+                selected={row.aliasLogo ?? row.logoLink}
+                setLogo={(selected) => setmarketplaceFees((prev) => ({ ...prev, [row.storeId]: { ...row, aliasLogo: selected!.value !== '' ? selected!.value : null } }))}
+              />
             )}
           </div>
         )
@@ -134,7 +149,13 @@ const MarketplacesFees = ({}: Props) => {
     {
       name: <span className='fw-bold fs-6'>Comission Fee</span>,
       selector: (row: MarketplaceFees) => {
-        if (!showEditFields) return <span className={row.comissionFee === 0 ? 'text-muted fw-light' : row.comissionFee < 0 || row.comissionFee > 100 ? 'text-danger fw-bold' : 'text-dark'}>{`${row.comissionFee} %`}</span>
+        if (!showEditFields)
+          return (
+            <span
+              className={
+                row.comissionFee === 0 ? 'text-muted fw-light' : row.comissionFee < 0 || row.comissionFee > 100 ? 'text-danger fw-bold' : 'text-dark'
+              }>{`${row.comissionFee} %`}</span>
+          )
         return (
           <div className='d-flex flex-row justify-content-center align-items-center gap-1'>
             <DebounceInput
@@ -220,7 +241,11 @@ const MarketplacesFees = ({}: Props) => {
                 />
               )}
             </div>
-            {row.isCommerceHub && <span className={'fs-7 text-info fw-light ' + (row.isCommerceHub && row.commerceHubFileType === '' ? 'text-danger' : '')}>File: {row.commerceHubFileType || 'Required'}</span>}
+            {row.isCommerceHub && (
+              <span className={'fs-7 text-info fw-light ' + (row.isCommerceHub && row.commerceHubFileType === '' ? 'text-danger' : '')}>
+                File: {row.commerceHubFileType || 'Required'}
+              </span>
+            )}
           </div>
         )
       },

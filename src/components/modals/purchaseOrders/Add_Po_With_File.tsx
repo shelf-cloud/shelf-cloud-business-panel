@@ -1,17 +1,18 @@
-import React, { useContext, useState } from 'react'
-import { Button, Card, Col, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
-import AppContext from '@context/AppContext'
-import axios from 'axios'
-import { toast } from 'react-toastify'
-import { useSWRConfig } from 'swr'
 import { useRouter } from 'next/router'
-import * as Yup from 'yup'
-import { Formik, Form } from 'formik'
-import Papa from 'papaparse'
-import { Supplier, useSuppliers } from '@hooks/suppliers/useSuppliers'
-import SelectSingleFilter from '@components/ui/filters/SelectSingleFilter'
-import { SelectOptionType } from '@components/Common/SimpleSelect'
+import { useContext, useState } from 'react'
+
+import { SelectSingleValueType } from '@components/Common/SimpleSelect'
 import UploadFileDropzone from '@components/ui/UploadFileDropzone'
+import SelectSingleFilter from '@components/ui/filters/SelectSingleFilter'
+import AppContext from '@context/AppContext'
+import { Supplier, useSuppliers } from '@hooks/suppliers/useSuppliers'
+import axios from 'axios'
+import { Form, Formik } from 'formik'
+import Papa from 'papaparse'
+import { toast } from 'react-toastify'
+import { Button, Card, Col, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { useSWRConfig } from 'swr'
+import * as Yup from 'yup'
 
 type Props = {
   orderNumberStart: string
@@ -58,10 +59,14 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
         for (let v = 0; v < rowValues.length; v++) {
           switch (v) {
             case 0:
-              ;/^[a-zA-Z0-9-]{4,50}$/.test(rowValues[v]) ? () => {} : errorsList.push({ errorLine: i, errorMessage: 'Format error, invalid special characters: " , . @... No blank spaces.', value: rowValues[v] })
+              ;/^[a-zA-Z0-9-]{4,50}$/.test(rowValues[v])
+                ? () => {}
+                : errorsList.push({ errorLine: i, errorMessage: 'Format error, invalid special characters: " , . @... No blank spaces.', value: rowValues[v] })
               break
             case 1:
-              ;/^[0-9]{1,}$/.test(rowValues[v]) ? () => {} : errorsList.push({ errorLine: i, errorMessage: 'Format error, only integers are valid. No decimal numbers.', value: rowValues[v] })
+              ;/^[0-9]{1,}$/.test(rowValues[v])
+                ? () => {}
+                : errorsList.push({ errorLine: i, errorMessage: 'Format error, only integers are valid. No decimal numbers.', value: rowValues[v] })
               break
             default:
             // code block
@@ -197,8 +202,8 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                     placeholder={'Select ...'}
                     selected={{ value: values.supplier, label: suppliers?.find((supplier: Supplier) => supplier.suppliersId == parseInt(values.supplier))?.name || 'Select...' }}
                     options={suppliers?.map((supplier: Supplier) => ({ value: supplier.suppliersId, label: supplier.name })) || [{ value: '', label: '' }]}
-                    handleSelect={(option: SelectOptionType) => {
-                      handleChange({ target: { name: 'supplier', value: option.value } })
+                    handleSelect={(option: SelectSingleValueType) => {
+                      handleChange({ target: { name: 'supplier', value: option!.value } })
                     }}
                     error={errors.supplier}
                   />
@@ -206,10 +211,23 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                     <Label htmlFor='firstNameinput' className='form-label'>
                       *Date
                     </Label>
-                    <Input type='date' className='form-control fs-6' id='date' name='date' bsSize='sm' onChange={handleChange} onBlur={handleBlur} value={values.date || ''} invalid={touched.date && errors.date ? true : false} />
+                    <Input
+                      type='date'
+                      className='form-control fs-6'
+                      id='date'
+                      name='date'
+                      bsSize='sm'
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.date || ''}
+                      invalid={touched.date && errors.date ? true : false}
+                    />
                     {touched.date && errors.date ? <FormFeedback type='invalid'>{errors.date}</FormFeedback> : null}
                   </FormGroup>
-                  {showErrorLines && errorLines.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='text-danger m-0 p-0'>{`- Error in Line: ${error.errorLine} Value: ${error.value} Error: ${error.errorMessage}`}</p>)}
+                  {showErrorLines &&
+                    errorLines.map((error: any, index: number) => (
+                      <p key={`ErrorLine${index}`} className='text-danger m-0 p-0'>{`- Error in Line: ${error.errorLine} Value: ${error.value} Error: ${error.errorMessage}`}</p>
+                    ))}
                   {showerrorResponse && errorResponse.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='text-danger m-0'>{`Error: ${error}`}</p>)}
                 </Col>
                 <Col md={6}>
@@ -245,7 +263,11 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                       </div>
                     )}
                   </Dropzone> */}
-                  <UploadFileDropzone accptedFiles={{ 'text/csv': ['.csv'] }} handleAcceptedFiles={handleAcceptedFiles} description={`Upload Purchase Order Info. Drop Only CSV files here or click to upload.`} />
+                  <UploadFileDropzone
+                    accptedFiles={{ 'text/csv': ['.csv'] }}
+                    handleAcceptedFiles={handleAcceptedFiles}
+                    description={`Upload Purchase Order Info. Drop Only CSV files here or click to upload.`}
+                  />
                   <Col md={12}>
                     <div className='list-unstyled mb-0' id='file-previews'>
                       {selectedFiles.map((f: any, i) => {

@@ -1,19 +1,20 @@
-import React, { useContext, useMemo, useState } from 'react'
-import Head from 'next/head'
 import { GetServerSideProps } from 'next'
-import { getSession } from '@auth/client'
-import { Button, Card, CardBody, Container, Row } from 'reactstrap'
-import BreadCrumb from '@components/Common/BreadCrumb'
-import { DebounceInput } from 'react-debounce-input'
-import AppContext from '@context/AppContext'
+import Head from 'next/head'
 import Link from 'next/link'
-import axios from 'axios'
-import useSWR, { mutate } from 'swr'
-import { toast } from 'react-toastify'
+import React, { useContext, useMemo, useState } from 'react'
+
+import { getSession } from '@auth/client'
+import BreadCrumb from '@components/Common/BreadCrumb'
 import FBAShipmentsTable from '@components/amazon/shipments/FBAShipmentsTable'
-import { FBAShipment, FBAShipmentsRepsonse } from '@typesTs/amazon/fbaShipments.interface'
-import ChangeFBAShipmentName from '@components/modals/amazon/ChangeFBAShipmentName'
 import FilterFBAShipments, { FBAFiltersType } from '@components/amazon/shipments/FilterFBAShipments'
+import ChangeFBAShipmentName from '@components/modals/amazon/ChangeFBAShipmentName'
+import AppContext from '@context/AppContext'
+import { FBAShipment, FBAShipmentsRepsonse } from '@typesTs/amazon/fbaShipments.interface'
+import axios from 'axios'
+import { DebounceInput } from 'react-debounce-input'
+import { toast } from 'react-toastify'
+import { Button, Card, CardBody, Container, Row } from 'reactstrap'
+import useSWR, { mutate } from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -85,20 +86,31 @@ const Shipments = ({ session, sessionToken }: Props) => {
         }
       })
   }
-  useSWR(session && sessionToken && state.user.businessId ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/listSellerFbaShipments/${state.currentRegion}/${state.user.businessId}` : null, fetcher, {
-    revalidateOnFocus: false,
-  })
+  useSWR(
+    session && sessionToken && state.user.businessId
+      ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/listSellerFbaShipments/${state.currentRegion}/${state.user.businessId}`
+      : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  )
 
   const filteredItems = useMemo(() => {
     return allData.filter(
       (item: FBAShipment) =>
         (searchValue !== ''
-          ? item.shipment.shipmentConfirmationId.toLowerCase().includes(searchValue.toLowerCase()) || item.shipment.name.toLowerCase().includes(searchValue.toLowerCase()) || item.shippingMode.toLowerCase().includes(searchValue.toLowerCase())
+          ? item.shipment.shipmentConfirmationId.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.shipment.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.shippingMode.toLowerCase().includes(searchValue.toLowerCase())
           : true) &&
-        (filters.status.value !== 'all' ? (item.status ? item.status === filters.status.value : item.shipment.status === filters.status.value) : true) &&
-        (filters.showOnlyMissingQty ? (item.receipts ? Object.values(item.receipts).reduce((total, item) => total + item.quantity, 0) : 0) < item.shipmentItems.items.reduce((total, item) => total + item.quantity, 0) : true)
+        (filters.status!.value !== 'all' ? (item.status ? item.status === filters.status!.value : item.shipment.status === filters.status!.value) : true) &&
+        (filters.showOnlyMissingQty
+          ? (item.receipts ? Object.values(item.receipts).reduce((total, item) => total + item.quantity, 0) : 0) <
+            item.shipmentItems.items.reduce((total, item) => total + item.quantity, 0)
+          : true)
     )
-  }, [allData, filters.showOnlyMissingQty, filters.status.value, searchValue])
+  }, [allData, filters.showOnlyMissingQty, filters.status, searchValue])
 
   const getFBAShipmentProofOfShipped = async (shipmentId: string) => {
     const downloadingProofOfShipped = toast.loading('Searching Proof Of Shipped...')

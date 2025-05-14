@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import SimpleSelect, { SelectOptionType } from '@components/Common/SimpleSelect'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+
+import SimpleSelect, { SelectOptionType, SelectSingleValueType } from '@components/Common/SimpleSelect'
 import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap'
 
 type Props = {
-  selected: SelectOptionType
-  setSelected: (selected: SelectOptionType) => void
+  selected: SelectSingleValueType
+  setSelected: (selected: SelectSingleValueType) => void
   options: SelectOptionType[]
 }
 

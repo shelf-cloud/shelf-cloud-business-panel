@@ -1,20 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { useContext, useEffect, useRef, useState } from 'react'
+
 import AppContext from '@context/AppContext'
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap'
-import { SelectOptionType } from './Common/SimpleSelect'
-import SelectSingleFilter from './ui/filters/SelectSingleFilter'
 import { useSkus } from '@hooks/products/useSkus'
+import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap'
+
+import { SelectSingleValueType } from './Common/SimpleSelect'
+import SelectSingleFilter from './ui/filters/SelectSingleFilter'
 
 type Props = {
-  searchType: SelectOptionType
-  setSearchType: (selectedOption: SelectOptionType) => void
-  searchStatus: SelectOptionType
-  setSearchStatus: (selectedOption: SelectOptionType) => void
-  searchMarketplace: SelectOptionType
-  setSearchMarketplace: (selectedOption: SelectOptionType) => void
-  searchSku: SelectOptionType
-  setSearchSku: (selectedOption: SelectOptionType) => void
+  searchType: SelectSingleValueType
+  setSearchType: (selectedOption: SelectSingleValueType) => void
+  searchStatus: SelectSingleValueType
+  setSearchStatus: (selectedOption: SelectSingleValueType) => void
+  searchMarketplace: SelectSingleValueType
+  setSearchMarketplace: (selectedOption: SelectSingleValueType) => void
+  searchSku: SelectSingleValueType
+  setSearchSku: (selectedOption: SelectSingleValueType) => void
 }
 
 const TYPE_OPTIONS = [
@@ -107,7 +109,10 @@ const FilterByOthers = ({ searchType, setSearchType, searchStatus, setSearchStat
                         setSearchMarketplace(option)
                         setOpenFilters(false)
                       }}
-                      options={[{ value: '', label: 'All Stores' }, ...state?.user?.[`${state.currentRegion}`]?.marketplacesIds?.sort().map((market: any) => ({ value: market.value, label: market.label }))]}
+                      options={[
+                        { value: '', label: 'All Stores' },
+                        ...state?.user?.[`${state.currentRegion}`]?.marketplacesIds?.sort().map((market: any) => ({ value: market.value, label: market.label })),
+                      ]}
                     />
                   </>
                 )}
