@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import Image from "next/legacy/image"
+import Image from "next/image"
 import Link from 'next/link'
 import { signOut } from '@auth/client'
 import SimpleBar from 'simplebar-react'
@@ -52,10 +52,27 @@ const Sidebar = ({}: Props) => {
           <Link href='/' passHref>
             <a className='logo'>
               <span className='w-100 position-relative logo-sm'>
-                <Image className='rounded-3' src={ShelfCloudLogoSolo} layout='intrinsic' alt='ShelfCloud Logo' objectFit='contain' />
+                <Image
+                  className='rounded-3'
+                  src={ShelfCloudLogoSolo}
+                  alt='ShelfCloud Logo'
+                  style={{
+                    maxWidth: "100%",
+                    height: "auto",
+                    objectFit: "contain"
+                  }} />
               </span>
               <span className='w-100 position-relative logo-lg'>
-                <Image className='rounded-3' src={ShelfCloudLogo} layout='intrinsic' alt='ShelfCloud Logo' objectFit='contain' objectPosition='center' />
+                <Image
+                  className='rounded-3'
+                  src={ShelfCloudLogo}
+                  alt='ShelfCloud Logo'
+                  style={{
+                    maxWidth: "100%",
+                    height: "auto",
+                    objectFit: "contain",
+                    objectPosition: "center"
+                  }} />
               </span>
             </a>
           </Link>
@@ -77,7 +94,7 @@ const Sidebar = ({}: Props) => {
       </div>
       <div className='vertical-overlay'></div>
     </React.Fragment>
-  )
+  );
 }
 
 export default Sidebar

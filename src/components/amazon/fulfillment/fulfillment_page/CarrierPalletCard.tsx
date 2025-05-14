@@ -4,7 +4,7 @@ import { FormatIntPercentage } from '@lib/FormatNumbers'
 import { ConfirmedShipments, InboundPlan } from '@typesTs/amazon/fulfillments/fulfillment'
 import React, { useContext, useState } from 'react'
 import { Button, Card, CardBody, CardFooter, CardHeader, Spinner } from 'reactstrap'
-import Image from "next/legacy/image"
+import Image from "next/image"
 import boxIcon from '@assets/fulfillments/outbound_box.png'
 import palletIcon from '@assets/fulfillments/outbound_pallet.png'
 import { NoImageAdress } from '@lib/assetsConstants'
@@ -119,7 +119,14 @@ const CarrierPalletCard = ({ inboundPlan, handleNextStep, shipment, shipmentInde
                   margin: '0px',
                   position: 'relative',
                 }}>
-                <Image src={boxIcon} alt='box_icon' className='object-contain' />
+                <Image
+                  src={boxIcon}
+                  alt='box_icon'
+                  className='object-contain'
+                  style={{
+                    maxWidth: "100%",
+                    height: "auto"
+                  }} />
               </div>
               <span className='fs-7 fw-semibold'>Small Parcel Delivery (SPD)</span>
             </div>
@@ -133,7 +140,14 @@ const CarrierPalletCard = ({ inboundPlan, handleNextStep, shipment, shipmentInde
                   margin: '0px',
                   position: 'relative',
                 }}>
-                <Image src={palletIcon} alt='box_icon' className='object-contain' />
+                <Image
+                  src={palletIcon}
+                  alt='box_icon'
+                  className='object-contain'
+                  style={{
+                    maxWidth: "100%",
+                    height: "auto"
+                  }} />
               </div>
               <span className='fs-7 fw-semibold'>Less than and full truckload (LTL/FTL)</span>
             </div>
@@ -168,7 +182,7 @@ const CarrierPalletCard = ({ inboundPlan, handleNextStep, shipment, shipmentInde
         )}
       </CardFooter>
     </Card>
-  )
+  );
 }
 
 export default CarrierPalletCard

@@ -6,7 +6,7 @@ import { InboundPlan, PlacementOption } from '@typesTs/amazon/fulfillments/fulfi
 import moment from 'moment'
 import React, { useContext, useState } from 'react'
 import { Button, Card, CardBody, CardHeader, Col, Input, Label, Row } from 'reactstrap'
-import Image from "next/legacy/image"
+import Image from "next/image"
 import boxIcon from '@assets/fulfillments/outbound_box.png'
 import palletIcon from '@assets/fulfillments/outbound_pallet.png'
 import useEffectAfterMount from '@hooks/useEffectAfterMount'
@@ -134,7 +134,6 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
           )}
         </div>
       </div>
-
       {/* SAME SHIPPING MODE */}
       <div>
         <p className='fs-5 fw-bold'>Shipping mode</p>
@@ -156,7 +155,14 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                     margin: '2px 0px',
                     position: 'relative',
                   }}>
-                  <Image src={boxIcon} alt='box_icon' className='object-contain' />
+                  <Image
+                    src={boxIcon}
+                    alt='box_icon'
+                    className='object-contain'
+                    style={{
+                      maxWidth: "100%",
+                      height: "auto"
+                    }} />
                 </div>
                 <div>
                   <p className='m-0 p-0 fs-7 fw-semibold'>Small Parcel Delivery (SPD)</p>
@@ -174,7 +180,14 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                     margin: '2px 0px',
                     position: 'relative',
                   }}>
-                  <Image src={palletIcon} alt='box_icon' className='object-contain' />
+                  <Image
+                    src={palletIcon}
+                    alt='box_icon'
+                    className='object-contain'
+                    style={{
+                      maxWidth: "100%",
+                      height: "auto"
+                    }} />
                 </div>
                 <div>
                   <p className='m-0 p-0 fs-7 fw-semibold'>Less than and Full TruckLoad (LTL/FTL)</p>
@@ -187,7 +200,6 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
           </div>
         ) : null}
       </div>
-
       {/* SAME SHIPPING CARRIER */}
       {finalShippingCharges.sameShippingMode && finalShippingCharges.shippingMode === 'SPD' ? (
         <div>
@@ -224,7 +236,6 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
           </Row>
         </div>
       ) : null}
-
       {/* SHIPMENTS */}
       <div>
         <p className='fs-5 fw-bold'>Number of shipments: {placementOptionSelected.shipmentIds.length}</p>
@@ -401,7 +412,14 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                               margin: '2px 0px',
                               position: 'relative',
                             }}>
-                            <Image src={boxIcon} alt='box_icon' className='object-contain' />
+                            <Image
+                              src={boxIcon}
+                              alt='box_icon'
+                              className='object-contain'
+                              style={{
+                                maxWidth: "100%",
+                                height: "auto"
+                              }} />
                           </div>
                           <div>
                             <p className='m-0 p-0 fs-7 fw-semibold'>Small Parcel Delivery (SPD)</p>
@@ -434,7 +452,14 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                                 margin: '2px 0px',
                                 position: 'relative',
                               }}>
-                              <Image src={palletIcon} alt='box_icon' className='object-contain' />
+                              <Image
+                                src={palletIcon}
+                                alt='box_icon'
+                                className='object-contain'
+                                style={{
+                                  maxWidth: "100%",
+                                  height: "auto"
+                                }} />
                             </div>
                             <div>
                               <p className='m-0 p-0 fs-7 fw-semibold'>Less than and Full TruckLoad (LTL/FTL)</p>
@@ -552,7 +577,6 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
           ))}
         </div>
       </div>
-
       {/* TOTAL ESTIMATED FEES */}
       <Row className='my-3'>
         <Col xs='12' lg='8'></Col>
@@ -593,7 +617,7 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
         </Col>
       </Row>
     </div>
-  )
+  );
 }
 
 export default ShippingCompleted
