@@ -1,8 +1,9 @@
-import React from 'react'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
-import { Container } from 'reactstrap'
 import Link from 'next/link'
+import React from 'react'
+
+import { Container } from 'reactstrap'
 
 const Animation = dynamic(() => import('@components/Common/Animation'), {
   ssr: false,
