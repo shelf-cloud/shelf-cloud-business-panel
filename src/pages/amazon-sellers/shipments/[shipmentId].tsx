@@ -84,15 +84,9 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
         }
       })
   }
-  useSWR(
-    session && state.user.businessId
-      ? `/api/amazon/shipments/getFBAShipmentDetails?region=${state.currentRegion}&businessId=${state.user.businessId}&shipmentId=${shipmentId}`
-      : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  )
+  useSWR(session && state.user.businessId ? `/api/amazon/shipments/getFBAShipmentDetails?region=${state.currentRegion}&businessId=${state.user.businessId}&shipmentId=${shipmentId}` : null, fetcher, {
+    revalidateOnFocus: false,
+  })
 
   const [activeTab, setActiveTab] = useState('1')
   const tabChange = (tab: any) => {
@@ -158,15 +152,13 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                 <>
                   <CardHeader className='d-flex flex-row justify-content-between align-items-start'>
                     <div>
-                      <Link href={'/amazon-sellers/shipments'} passHref>
-                        <a>
-                          <Button outline>
-                            <span className='icon-on'>
-                              <i className='ri-arrow-left-line align-bottom me-1' />
-                              FBA Shipments
-                            </span>
-                          </Button>
-                        </a>
+                      <Link href={'/amazon-sellers/shipments'}>
+                        <Button outline>
+                          <span className='icon-on'>
+                            <i className='ri-arrow-left-line align-bottom me-1' />
+                            FBA Shipments
+                          </span>
+                        </Button>
                       </Link>
                       <div className='mt-3'>
                         <p className='fw-semibold fs-4 m-0 p-0'>
@@ -232,8 +224,7 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                           Total inbound placement service fees: <span className='fw-normal'>{FormatCurrency(state.currentRegion, shipmentDetails.totalPlacementFees)}</span>
                         </p>
                         <p className='m-0 p-0 fs-7 fw-semibold'>
-                          Amazon partnered carrier cost:{' '}
-                          <span className='fw-normal'>{FormatCurrency(state.currentRegion, shipmentDetails.totalSpdFees + shipmentDetails.totalLtlFees)}</span>
+                          Amazon partnered carrier cost: <span className='fw-normal'>{FormatCurrency(state.currentRegion, shipmentDetails.totalSpdFees + shipmentDetails.totalLtlFees)}</span>
                         </p>
                       </Col>
                     </Row>

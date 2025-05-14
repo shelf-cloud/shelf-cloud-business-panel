@@ -23,19 +23,17 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
       name: <span className='fw-bolder fs-6'>Image</span>,
       selector: (row: PurchaseOrderBySkus) => {
         return (
-          <Link href={`/product/${row.inventoryId}/${row.sku}`} passHref>
-            <a target='blank' className='text-black'>
-              <div
-                style={{
-                  width: '100%',
-                  maxWidth: '80px',
-                  height: '50px',
-                  margin: '2px 0px',
-                  position: 'relative',
-                }}>
-                <img loading='lazy' src={row.image ? row.image : NoImageAdress} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
-              </div>
-            </a>
+          <Link href={`/product/${row.inventoryId}/${row.sku}`} target='blank' className='text-black'>
+            <div
+              style={{
+                width: '100%',
+                maxWidth: '80px',
+                height: '50px',
+                margin: '2px 0px',
+                position: 'relative',
+              }}>
+              <img loading='lazy' src={row.image ? row.image : NoImageAdress} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
+            </div>
           </Link>
         )
       },
@@ -48,10 +46,8 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
       selector: (row: PurchaseOrderBySkus) => {
         return (
           <>
-            <Link href={`/product/${row.inventoryId}/${row.sku}`} passHref>
-              <a target='blank' className='text-black'>
-                <span className='fs-6 fw-semibold'>{row.title}</span>
-              </a>
+            <Link href={`/product/${row.inventoryId}/${row.sku}`} target='blank' className='text-black'>
+              <span className='fs-6 fw-semibold'>{row.title}</span>
             </Link>
             {row.asin && (
               <>
@@ -79,10 +75,8 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
       name: <span className='fw-bolder fs-6'>SKU</span>,
       selector: (row: PurchaseOrderBySkus) => {
         return (
-          <Link href={`/product/${row.inventoryId}/${row.sku}`} passHref>
-            <a target='blank' className='text-black'>
-              <span className='fs-7'>{row.sku}</span>
-            </a>
+          <Link href={`/product/${row.inventoryId}/${row.sku}`} target='blank' className='text-black'>
+            <span className='fs-7'>{row.sku}</span>
           </Link>
         )
       },

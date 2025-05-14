@@ -99,32 +99,28 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
             return (
               <tr key={`${key}-${product.sku}`} className='border-bottom py-2'>
                 <td className='text-center'>
-                  <Link href={`/product/${product.inventoryId}/${product.sku}`} passHref tabIndex={-1}>
-                    <a target='blank' className='text-black' tabIndex={-1}>
-                      <div
-                        style={{
-                          width: '100%',
-                          maxWidth: '60px',
-                          height: '40px',
-                          margin: '2px 0px',
-                          position: 'relative',
-                        }}>
-                        <img
-                          loading='lazy'
-                          src={product.image ? product.image : NoImageAdress}
-                          onError={(e) => (e.currentTarget.src = NoImageAdress)}
-                          alt='product Image'
-                          style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
-                        />
-                      </div>
-                    </a>
+                  <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' className='text-black'>
+                    <div
+                      style={{
+                        width: '100%',
+                        maxWidth: '60px',
+                        height: '40px',
+                        margin: '2px 0px',
+                        position: 'relative',
+                      }}>
+                      <img
+                        loading='lazy'
+                        src={product.image ? product.image : NoImageAdress}
+                        onError={(e) => (e.currentTarget.src = NoImageAdress)}
+                        alt='product Image'
+                        style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+                      />
+                    </div>
                   </Link>
                 </td>
                 <td className='fw-semibold'>
-                  <Link href={`/product/${product.inventoryId}/${product.sku}`} passHref tabIndex={-1}>
-                    <a target='blank' className='text-black' tabIndex={-1}>
-                      {product.title}
-                    </a>
+                  <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' className='text-black'>
+                    {product.title}
                   </Link>
                   {product.arrivalHistory?.length > 0 && (
                     <>
@@ -178,10 +174,8 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
                   </span>
                 </td>
                 <td className='text-center text-nowrap'>
-                  <Link href={`/product/${product.inventoryId}/${product.sku}`} passHref tabIndex={-1}>
-                    <a target='blank' className='text-black' tabIndex={-1}>
-                      {product.sku}
-                    </a>
+                  <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' className='text-black'>
+                    {product.sku}
                   </Link>
                 </td>
                 <td className='text-center text-nowrap'>{FormatCurrency(state.currentRegion, product.orderQty * product.sellerCost)}</td>

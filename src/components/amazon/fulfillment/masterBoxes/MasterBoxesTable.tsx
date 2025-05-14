@@ -186,12 +186,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       classNames: ['bg-success bg-opacity-25'],
     },
     {
-      when: (row: AmazonFulfillmentSku) =>
-        Number(row.orderQty) < 0 ||
-        !Number.isInteger(Number(row.orderQty)) ||
-        parseInt(row.orderQty) > row.maxOrderQty! ||
-        skusWithError[row.shelfcloud_sku] === true ||
-        row.hasError,
+      when: (row: AmazonFulfillmentSku) => Number(row.orderQty) < 0 || !Number.isInteger(Number(row.orderQty)) || parseInt(row.orderQty) > row.maxOrderQty! || skusWithError[row.shelfcloud_sku] === true || row.hasError,
       classNames: ['bg-danger bg-opacity-25'],
     },
   ]
@@ -201,24 +196,17 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       name: <span className='fw-bold fs-6'>Image</span>,
       selector: (row: AmazonFulfillmentSku) => {
         return (
-          <Link href={row.isKit ? `/kit/${row.inventoryId}/${row.sku}` : `/product/${row.inventoryId}/${row.sku}`} passHref>
-            <a target='blank' tabIndex={-1}>
-              <div
-                className='my-2'
-                style={{
-                  width: '50px',
-                  height: '50px',
-                  margin: '2px 0px',
-                  position: 'relative',
-                }}>
-                <img
-                  loading='lazy'
-                  src={row.image ? row.image : NoImageAdress}
-                  alt='product Image'
-                  style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
-                />
-              </div>
-            </a>
+          <Link href={row.isKit ? `/kit/${row.inventoryId}/${row.sku}` : `/product/${row.inventoryId}/${row.sku}`} target='blank' tabIndex={-1}>
+            <div
+              className='my-2'
+              style={{
+                width: '50px',
+                height: '50px',
+                margin: '2px 0px',
+                position: 'relative',
+              }}>
+              <img loading='lazy' src={row.image ? row.image : NoImageAdress} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
+            </div>
           </Link>
         )
       },
@@ -233,10 +221,8 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
         if (row.isKit) {
           return (
             <div className='d-flex flex-column justify-content-start align-items-start my-2'>
-              <Link href={`/kit/${row.inventoryId}/${row.sku}`} passHref style={{ cursor: 'pointer' }}>
-                <a target='blank' tabIndex={-1}>
-                  <p className='m-0 p-0 fs-7 fw-semibold text-black'>{row.title || `${row.product_name.substring(0, 80)}...`}</p>
-                </a>
+              <Link href={`/kit/${row.inventoryId}/${row.sku}`} style={{ cursor: 'pointer' }} target='blank' tabIndex={-1}>
+                <p className='m-0 p-0 fs-7 fw-semibold text-black'>{row.title || `${row.product_name.substring(0, 80)}...`}</p>
               </Link>
               <div className='d-flex flex-wrap justify-content-start align-items-center'>
                 <p className='m-0 p-0 fs-7'>{`${row.msku}`}</p>
@@ -267,9 +253,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
               </p>
               <div>
                 {row.children?.map((child) => (
-                  <li
-                    style={{ margin: '0px', fontSize: '10px' }}
-                    key={child.idInventory}>{`${child.title} | ${child.sku} | Available: ${child.available} | Used: ${child.qty}`}</li>
+                  <li style={{ margin: '0px', fontSize: '10px' }} key={child.idInventory}>{`${child.title} | ${child.sku} | Available: ${child.available} | Used: ${child.qty}`}</li>
                 ))}
               </div>
             </div>
@@ -277,10 +261,8 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
         } else {
           return (
             <div className='d-flex flex-column justify-content-start align-items-start'>
-              <Link href={`/product/${row.inventoryId}/${row.sku}`} passHref style={{ cursor: 'pointer' }}>
-                <a target='blank' tabIndex={-1}>
-                  <p className='m-0 p-0 fs-7 fw-semibold text-black'>{row.title || `${row.product_name.substring(0, 80)}...`}</p>
-                </a>
+              <Link href={`/product/${row.inventoryId}/${row.sku}`} style={{ cursor: 'pointer' }} target='blank' tabIndex={-1}>
+                <p className='m-0 p-0 fs-7 fw-semibold text-black'>{row.title || `${row.product_name.substring(0, 80)}...`}</p>
               </Link>
               <div className='d-flex flex-wrap justify-content-start align-items-center'>
                 <p className='m-0 p-0 fs-7'>{`${row.msku}`}</p>
@@ -474,11 +456,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
               <span className='text-muted fw-light'>Inbound: </span>
               {row.afn_inbound_receiving_quantity + row.afn_inbound_shipped_quantity + row.afn_inbound_working_quantity}
               {row.fbaShipments.length > 0 && (
-                <Button
-                  color='light'
-                  outline
-                  className='p-0 m-0 btn btn-sm btn-icon btn-ghost-info'
-                  onClick={() => setinboundFBAHistoryModal({ show: true, sku: row.shelfcloud_sku, msku: row.msku, shipments: row.fbaShipments })}>
+                <Button color='light' outline className='p-0 m-0 btn btn-sm btn-icon btn-ghost-info' onClick={() => setinboundFBAHistoryModal({ show: true, sku: row.shelfcloud_sku, msku: row.msku, shipments: row.fbaShipments })}>
                   <i className='ri-information-fill p-0 m-0 fs-6 text-info' />
                 </Button>
               )}

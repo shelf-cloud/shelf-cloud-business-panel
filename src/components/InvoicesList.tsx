@@ -58,29 +58,11 @@ const InvoicesList = ({ invoices }: Props) => {
                         </h5>
                       </td>
                       <td className='text-center'>
-                        <span
-                          className={
-                            invoice.paid
-                              ? 'fs-14 my-1 text-muted'
-                              : moment(today).isAfter(invoice.expireDate)
-                              ? 'fs-14 my-1 text-danger'
-                              : 'fs-14 my-1 text-muted'
-                          }>
-                          {moment(invoice.expireDate, 'YYYY-MM-DD').format('LL')}
-                        </span>
+                        <span className={invoice.paid ? 'fs-14 my-1 text-muted' : moment(today).isAfter(invoice.expireDate) ? 'fs-14 my-1 text-danger' : 'fs-14 my-1 text-muted'}>{moment(invoice.expireDate, 'YYYY-MM-DD').format('LL')}</span>
                       </td>
                       <td>
-                        <div
-                          className='text-center px-2 py-1 rounded-2'
-                          style={{ background: 'rgba(49, 154, 246, 0.1)' }}>
-                          <span
-                            className={
-                              invoice.paid
-                                ? 'fs-6 my-1 text-success'
-                                : moment(today).isAfter(invoice.expireDate)
-                                ? 'fs-6 my-1 text-danger'
-                                : 'fs-6 my-1'
-                            }>
+                        <div className='text-center px-2 py-1 rounded-2' style={{ background: 'rgba(49, 154, 246, 0.1)' }}>
+                          <span className={invoice.paid ? 'fs-6 my-1 text-success' : moment(today).isAfter(invoice.expireDate) ? 'fs-6 my-1 text-danger' : 'fs-6 my-1'}>
                             {invoice.paid
                               ? 'Paid'
                               : moment(today).isAfter(invoice.expireDate)
@@ -91,13 +73,13 @@ const InvoicesList = ({ invoices }: Props) => {
                           </span>
                         </div>
                       </td>
-                      {state.currentRegion == 'us' &&  <td className='text-center'>
-                        <a href={`${invoice.payLink}`} target='blank'>
-                          <Button className={'px-2 py-1 ' + (invoice.paid ? 'btn btn-soft-success' : 'btn btn-primary')}>
-                            {invoice.paid ? 'View Receipt' : 'Pay Now'}
-                          </Button>
-                        </a>
-                      </td>}
+                      {state.currentRegion == 'us' && (
+                        <td className='text-center'>
+                          <a href={`${invoice.payLink}`} target='blank'>
+                            <Button className={'px-2 py-1 ' + (invoice.paid ? 'btn btn-soft-success' : 'btn btn-primary')}>{invoice.paid ? 'View Receipt' : 'Pay Now'}</Button>
+                          </a>
+                        </td>
+                      )}
                     </tr>
                   ))}
                 </tbody>

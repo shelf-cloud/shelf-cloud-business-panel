@@ -100,15 +100,9 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
         }
       })
   }
-  useSWR(
-    session && state.user.businessId
-      ? `/api/amazon/fullfilments/getSellerInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`
-      : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  )
+  useSWR(session && state.user.businessId ? `/api/amazon/fullfilments/getSellerInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}` : null, fetcher, {
+    revalidateOnFocus: false,
+  })
 
   const handleNextShipping = async (inboundPlanId: string) => {
     setWatingRepsonse((prev: any) => ({ ...prev, inventoryToSend: true, shipping: true, transportationOptions: true }))
@@ -139,12 +133,10 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
           autoClose: 3000,
         })
         setWatingRepsonse((prev: any) => ({ ...prev, inventoryToSend: false, shipping: false }))
-        await mutate(`/api/amazon/fullfilments/getSellerInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`).then(
-          async () => {
-            tabChange('3')
-            await handleTransportationOptions(inboundPlanId)
-          }
-        )
+        await mutate(`/api/amazon/fullfilments/getSellerInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`).then(async () => {
+          tabChange('3')
+          await handleTransportationOptions(inboundPlanId)
+        })
       } else {
         setWatingRepsonse((prev: any) => ({ ...prev, inventoryToSend: false, shipping: false }))
         toast.update(generatePlacementOptions, {
@@ -188,12 +180,10 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
           autoClose: 3000,
         })
         setWatingRepsonse((prev: any) => ({ ...prev, shippingExpired: false }))
-        await mutate(`/api/amazon/fullfilments/getSellerInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`).then(
-          async () => {
-            tabChange('3')
-            await handleTransportationOptions(inboundPlanId)
-          }
-        )
+        await mutate(`/api/amazon/fullfilments/getSellerInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`).then(async () => {
+          tabChange('3')
+          await handleTransportationOptions(inboundPlanId)
+        })
       } else {
         setWatingRepsonse((prev: any) => ({ ...prev, shippingExpired: false }))
         toast.update(generatePlacementOptions, {
@@ -263,16 +253,12 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
       const controller = new AbortController()
       const signal = controller.signal
       const response = await axios
-        .post(
-          `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/confirmCharges/${state.currentRegion}/${state.user.businessId}/${inboundPlanId}`,
-          confirmChargesInfo,
-          {
-            signal,
-            headers: {
-              Authorization: `Bearer ${sessionToken}`,
-            },
-          }
-        )
+        .post(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/confirmCharges/${state.currentRegion}/${state.user.businessId}/${inboundPlanId}`, confirmChargesInfo, {
+          signal,
+          headers: {
+            Authorization: `Bearer ${sessionToken}`,
+          },
+        })
         .then(({ data }) => data)
         .catch(({ error }) => {
           if (axios.isCancel(error)) {
@@ -451,15 +437,13 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                 <>
                   <CardHeader>
                     <div className='d-flex flex-row justify-content-between align-items-start'>
-                      <Link href={'/amazon-sellers/fulfillments'} passHref>
-                        <a>
-                          <Button outline>
-                            <span className='icon-on'>
-                              <i className='ri-arrow-left-line align-bottom me-1' />
-                              Fulfillments
-                            </span>
-                          </Button>
-                        </a>
+                      <Link href={'/amazon-sellers/fulfillments'}>
+                        <Button outline>
+                          <span className='icon-on'>
+                            <i className='ri-arrow-left-line align-bottom me-1' />
+                            Fulfillments
+                          </span>
+                        </Button>
                       </Link>
                       <Button color='info' className='d-flex align-items-center' onClick={() => setHelpOffCanvasIsOpen(true)}>
                         <i className='ri-question-line fs-14 p-0 m-0 me-lg-1' />
@@ -495,9 +479,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={
-                                'fs-5 fw-semibold ' + (activeTab == '1' ? 'text-primary' : inboundPlanDetails.steps[1].complete ? 'text-success opacity-50' : 'text-muted')
-                              }
+                              className={'fs-5 fw-semibold ' + (activeTab == '1' ? 'text-primary' : inboundPlanDetails.steps[1].complete ? 'text-success opacity-50' : 'text-muted')}
                               onClick={() => {
                                 tabChange('1')
                               }}
@@ -510,9 +492,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           </NavItem>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
-                              className={
-                                'fs-5 fw-semibold ' + (activeTab == '2' ? 'text-primary' : inboundPlanDetails.steps[2].complete ? 'text-success opacity-50' : 'text-muted')
-                              }
+                              className={'fs-5 fw-semibold ' + (activeTab == '2' ? 'text-primary' : inboundPlanDetails.steps[2].complete ? 'text-success opacity-50' : 'text-muted')}
                               onClick={() => {
                                 inboundPlanDetails?.steps[1]?.complete ? tabChange('2') : document.getElementById('btn_handleNextStepPacking')?.focus()
                               }}>
@@ -524,9 +504,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           </NavItem>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
-                              className={
-                                'fs-5 fw-semibold ' + (activeTab == '3' ? 'text-primary' : inboundPlanDetails.steps[3].complete ? 'text-success opacity-50' : 'text-muted')
-                              }
+                              className={'fs-5 fw-semibold ' + (activeTab == '3' ? 'text-primary' : inboundPlanDetails.steps[3].complete ? 'text-success opacity-50' : 'text-muted')}
                               onClick={() => {
                                 inboundPlanDetails?.steps[2]?.complete ? tabChange('3') : document.getElementById('btn_handleNextStepPacking')?.focus()
                               }}>
@@ -539,9 +517,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={
-                                'fs-5 fw-semibold ' + (activeTab == '4' ? 'text-primary' : inboundPlanDetails.steps[4].complete ? 'text-success opacity-50' : 'text-muted')
-                              }
+                              className={'fs-5 fw-semibold ' + (activeTab == '4' ? 'text-primary' : inboundPlanDetails.steps[4].complete ? 'text-success opacity-50' : 'text-muted')}
                               onClick={() => {
                                 inboundPlanDetails?.steps[3]?.complete ? tabChange('4') : document.getElementById('btn_handleNextShipping')?.focus()
                               }}
@@ -555,9 +531,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={
-                                'fs-5 fw-semibold ' + (activeTab == '5' ? 'text-primary' : inboundPlanDetails.steps[5].complete ? 'text-success opacity-50' : 'text-muted')
-                              }
+                              className={'fs-5 fw-semibold ' + (activeTab == '5' ? 'text-primary' : inboundPlanDetails.steps[5].complete ? 'text-success opacity-50' : 'text-muted')}
                               onClick={() => {
                                 inboundPlanDetails?.steps[4]?.complete ? tabChange('5') : document.getElementById('btn_handleNextShipping')?.focus()
                               }}
@@ -571,9 +545,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={
-                                'fs-5 fw-semibold ' + (activeTab == '6' ? 'text-primary' : inboundPlanDetails.steps[6].complete ? 'text-success opacity-50' : 'text-muted')
-                              }
+                              className={'fs-5 fw-semibold ' + (activeTab == '6' ? 'text-primary' : inboundPlanDetails.steps[6].complete ? 'text-success opacity-50' : 'text-muted')}
                               onClick={() => {
                                 inboundPlanDetails?.steps[5]?.complete ? tabChange('6') : document.getElementById('btn_handleNextShipping')?.focus()
                               }}
@@ -589,11 +561,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           <TabPane tabId='1'>
                             <InventoryToSend inboundPlan={inboundPlanDetails} watingRepsonse={watingRepsonse} />
                           </TabPane>
-                          <TabPane tabId='2'>
-                            {inboundPlanDetails.steps[1].complete && (
-                              <PackingInfo inboundPlan={inboundPlanDetails} handleNextStep={handleNextShipping} watingRepsonse={watingRepsonse} />
-                            )}
-                          </TabPane>
+                          <TabPane tabId='2'>{inboundPlanDetails.steps[1].complete && <PackingInfo inboundPlan={inboundPlanDetails} handleNextStep={handleNextShipping} watingRepsonse={watingRepsonse} />}</TabPane>
                           <TabPane tabId='3'>
                             {inboundPlanDetails.steps[2].complete && (
                               <Shipping
@@ -606,21 +574,9 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                               />
                             )}
                           </TabPane>
-                          <TabPane tabId='4'>
-                            {inboundPlanDetails.steps[3].complete && (
-                              <BoxLabels inboundPlan={inboundPlanDetails} handleNextStep={handlePrintShipmentBoxesLabel} watingRepsonse={watingRepsonse} />
-                            )}
-                          </TabPane>
-                          <TabPane tabId='5'>
-                            {inboundPlanDetails.steps[4].complete && (
-                              <CarrierPalletInfo inboundPlan={inboundPlanDetails} handleNextStep={handlePrintShipmentPalletLabel} watingRepsonse={watingRepsonse} />
-                            )}
-                          </TabPane>
-                          <TabPane tabId='6'>
-                            {inboundPlanDetails.steps[5].complete && (
-                              <TrackingDetails inboundPlan={inboundPlanDetails} handlePrintShipmentBillOfLading={handlePrintShipmentBillOfLading} watingRepsonse={watingRepsonse} />
-                            )}
-                          </TabPane>
+                          <TabPane tabId='4'>{inboundPlanDetails.steps[3].complete && <BoxLabels inboundPlan={inboundPlanDetails} handleNextStep={handlePrintShipmentBoxesLabel} watingRepsonse={watingRepsonse} />}</TabPane>
+                          <TabPane tabId='5'>{inboundPlanDetails.steps[4].complete && <CarrierPalletInfo inboundPlan={inboundPlanDetails} handleNextStep={handlePrintShipmentPalletLabel} watingRepsonse={watingRepsonse} />}</TabPane>
+                          <TabPane tabId='6'>{inboundPlanDetails.steps[5].complete && <TrackingDetails inboundPlan={inboundPlanDetails} handlePrintShipmentBillOfLading={handlePrintShipmentBillOfLading} watingRepsonse={watingRepsonse} />}</TabPane>
                         </TabContent>
                       </Col>
                     </Row>

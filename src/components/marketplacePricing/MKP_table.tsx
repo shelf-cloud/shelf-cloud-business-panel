@@ -33,18 +33,16 @@ const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice,
       name: <span className='fw-semibold text-center fs-7'>Image</span>,
       selector: (row: MKP_Product) => {
         return (
-          <Link href={`/product/${row.inventoryId}/${row.sku}`} passHref>
-            <a>
-              <div
-                style={{
-                  width: '50px',
-                  height: '60px',
-                  margin: '2px 0px',
-                  position: 'relative',
-                }}>
-                <img loading='lazy' src={row.image ? row.image : NoImageAdress} onError={(e) => (e.currentTarget.src = NoImageAdress)} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
-              </div>
-            </a>
+          <Link href={`/product/${row.inventoryId}/${row.sku}`}>
+            <div
+              style={{
+                width: '50px',
+                height: '60px',
+                margin: '2px 0px',
+                position: 'relative',
+              }}>
+              <img loading='lazy' src={row.image ? row.image : NoImageAdress} onError={(e) => (e.currentTarget.src = NoImageAdress)} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
+            </div>
           </Link>
         )
       },
@@ -62,12 +60,10 @@ const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice,
       ),
       selector: (row: MKP_Product) => {
         return (
-          <Link href={`/product/${row.inventoryId}/${row.sku}`} passHref>
-            <a target='_blank'>
-              <p className='m-0 fs-7 fw-semibold d-flex flex-row justify-content-start align-items-start'>{row.sku}</p>
-              <a>
-                <p className='fs-7 m-0 fw-semibold text-black'>{row.title}</p>
-              </a>
+          <Link href={`/product/${row.inventoryId}/${row.sku}`} target='_blank'>
+            <p className='m-0 fs-7 fw-semibold d-flex flex-row justify-content-start align-items-start'>{row.sku}</p>
+            <a>
+              <p className='fs-7 m-0 fw-semibold text-black'>{row.title}</p>
             </a>
           </Link>
         )

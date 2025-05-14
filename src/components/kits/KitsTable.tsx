@@ -33,18 +33,9 @@ const KitsTable = ({ tableData, pending }: Props) => {
     html += '.barcodeSection p{position:relative;float:left;left:5%;width:95%;text-align:left;margin-top:0px;margin-bottom:0px;font-size:14px;z-index:5;}'
     html += '.barcodeSection svg{width:90%;transform: translate(0px, -10px) !important;}'
     html += '</style></head><body>'
+    html += '<div class="barcodeSection"><p style="text-align:center;">' + product.sku + '</p><p style="text-align:center;white-space: nowrap;overflow: hidden;">' + product.title + '</p><svg id="barcode" width="100%" height="100%"></svg></div>'
     html +=
-      '<div class="barcodeSection"><p style="text-align:center;">' +
-      product.sku +
-      '</p><p style="text-align:center;white-space: nowrap;overflow: hidden;">' +
-      product.title +
-      '</p><svg id="barcode" width="100%" height="100%"></svg></div>'
-    html +=
-      '</body><script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/JsBarcode.all.min.js"></script><script>JsBarcode("#barcode", "' +
-      product.barcode +
-      '", {text: "' +
-      product.barcode +
-      '",fontSize: 12,textMargin: 0, height:31});</script></html>'
+      '</body><script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/JsBarcode.all.min.js"></script><script>JsBarcode("#barcode", "' + product.barcode + '", {text: "' + product.barcode + '",fontSize: 12,textMargin: 0, height:31});</script></html>'
     var wnd = window.open('about:Barcode-Generated', '', '_blank')
     wnd?.document.write(html)
   }
@@ -89,12 +80,7 @@ const KitsTable = ({ tableData, pending }: Props) => {
               margin: '2px 0px',
               position: 'relative',
             }}>
-            <img
-              loading='lazy'
-              src={cell.image ? cell.image : NoImageAdress}
-              alt='product Image'
-              style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
-            />
+            <img loading='lazy' src={cell.image ? cell.image : NoImageAdress} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
           </div>
         )
       },
@@ -258,11 +244,9 @@ const KitsTable = ({ tableData, pending }: Props) => {
                 <span className='fs-6 fw-normal'>Edit</span>
               </DropdownItem>
               <DropdownItem className='edit-item-btn'>
-                <Link href={`/kit/${row.kitId}/${row.sku}`} passHref>
-                  <a>
-                    <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
-                    <span className='fs-6 fw-normal text-dark'>View Details</span>
-                  </a>
+                <Link href={`/kit/${row.kitId}/${row.sku}`}>
+                  <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
+                  <span className='fs-6 fw-normal text-dark'>View Details</span>
                 </Link>
               </DropdownItem>
             </DropdownMenu>
@@ -274,16 +258,7 @@ const KitsTable = ({ tableData, pending }: Props) => {
 
   return (
     <>
-      <DataTable
-        columns={columns}
-        data={tableData}
-        progressPending={pending}
-        striped={true}
-        dense
-        defaultSortFieldId={2}
-        expandableRows
-        expandableRowsComponent={KitExpandedDetails}
-      />
+      <DataTable columns={columns} data={tableData} progressPending={pending} striped={true} dense defaultSortFieldId={2} expandableRows expandableRowsComponent={KitExpandedDetails} />
     </>
   )
 }

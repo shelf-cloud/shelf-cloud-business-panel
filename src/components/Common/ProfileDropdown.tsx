@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useContext, useState } from 'react'
 import { signOut, useSession } from '@auth/client'
-import Image from "next/image"
+import Image from 'next/image'
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap'
 import Link from 'next/link'
 import flag_of_europe from '@assets/images/flag_of_europe.png'
@@ -23,11 +23,7 @@ const ProfileDropdown = () => {
   return (
     <React.Fragment>
       {session?.user?.businessName ? (
-        <Dropdown
-          isOpen={isProfileDropdown}
-          toggle={toggleProfileDropdown}
-          className='d-flex align-items-center rounded-4 shadow'
-          style={{ backgroundColor: 'rgba(239, 243, 246, 1)' }}>
+        <Dropdown isOpen={isProfileDropdown} toggle={toggleProfileDropdown} className='d-flex align-items-center rounded-4 shadow' style={{ backgroundColor: 'rgba(239, 243, 246, 1)' }}>
           <DropdownToggle tag='button' type='button' className='btn'>
             <span className='d-flex align-items-center justify-content-between gap-2'>
               <span className='text-end d-flex flex-column'>
@@ -44,9 +40,10 @@ const ProfileDropdown = () => {
                     height={25}
                     alt='Header Avatar'
                     style={{
-                      maxWidth: "100%",
-                      height: "auto"
-                    }} />
+                      maxWidth: '100%',
+                      height: 'auto',
+                    }}
+                  />
                 ) : state.currentRegion == 'eu' ? (
                   <Image
                     className='rounded-circle header-profile-user'
@@ -55,9 +52,10 @@ const ProfileDropdown = () => {
                     height={25}
                     alt='Header Avatar'
                     style={{
-                      maxWidth: "100%",
-                      height: "auto"
-                    }} />
+                      maxWidth: '100%',
+                      height: 'auto',
+                    }}
+                  />
                 ) : (
                   <Image
                     className='rounded-circle header-profile-user'
@@ -66,9 +64,10 @@ const ProfileDropdown = () => {
                     height={25}
                     alt='Header Avatar'
                     style={{
-                      maxWidth: "100%",
-                      height: "auto"
-                    }} />
+                      maxWidth: '100%',
+                      height: 'auto',
+                    }}
+                  />
                 ))}
             </span>
           </DropdownToggle>
@@ -109,9 +108,10 @@ const ProfileDropdown = () => {
                       height={16}
                       alt='Header Avatar'
                       style={{
-                        maxWidth: "100%",
-                        height: "auto"
-                      }} />
+                        maxWidth: '100%',
+                        height: 'auto',
+                      }}
+                    />
                   ) : (
                     <Image
                       className='rounded-circle header-profile-user'
@@ -120,9 +120,10 @@ const ProfileDropdown = () => {
                       height={16}
                       alt='Header Avatar'
                       style={{
-                        maxWidth: "100%",
-                        height: "auto"
-                      }} />
+                        maxWidth: '100%',
+                        height: 'auto',
+                      }}
+                    />
                   )}
                 </div>
                 <div className='align-middle'>Change Location</div>
@@ -149,7 +150,7 @@ const ProfileDropdown = () => {
         </Link>
       )}
     </React.Fragment>
-  );
+  )
 }
 
 export default ProfileDropdown

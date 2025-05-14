@@ -35,9 +35,7 @@ const InboundFBAHistoryModal = ({ inboundFBAHistoryModal, setinboundFBAHistoryMo
     if (!showMore) return null
     if (previousPageData && !previousPageData.length) return null // No more data to fetch
 
-    let url = `/api/amazon/shipments/getSkuFBAShipments?region=${state.currentRegion}&businessId=${state.user.businessId}&msku=${inboundFBAHistoryModal.msku}&offset=${
-      pageIndex * ITEMS_PER_PAGE
-    }&limit=${ITEMS_PER_PAGE}`
+    let url = `/api/amazon/shipments/getSkuFBAShipments?region=${state.currentRegion}&businessId=${state.user.businessId}&msku=${inboundFBAHistoryModal.msku}&offset=${pageIndex * ITEMS_PER_PAGE}&limit=${ITEMS_PER_PAGE}`
     return url
   }
 
@@ -47,10 +45,7 @@ const InboundFBAHistoryModal = ({ inboundFBAHistoryModal, setinboundFBAHistoryMo
   })
 
   // Flatten shipment data
-  const newShipments: FBAShipmentHisotry[] = useMemo(
-    () => (data ? inboundFBAHistoryModal.shipments.concat(...data) : inboundFBAHistoryModal.shipments),
-    [data, inboundFBAHistoryModal.shipments]
-  )
+  const newShipments: FBAShipmentHisotry[] = useMemo(() => (data ? inboundFBAHistoryModal.shipments.concat(...data) : inboundFBAHistoryModal.shipments), [data, inboundFBAHistoryModal.shipments])
 
   // Observer for infinite scroll
   const observer = useRef<IntersectionObserver | null>(null)
@@ -120,8 +115,8 @@ const InboundFBAHistoryModal = ({ inboundFBAHistoryModal, setinboundFBAHistoryMo
                 {newShipments.map((shipment, index: number) => (
                   <tr key={index}>
                     <td className='text-start'>
-                      <Link passHref href={`/amazon-sellers/shipments/${shipment.id}`}>
-                        <a target='blank'>{shipment.shipmentId}</a>
+                      <Link href={`/amazon-sellers/shipments/${shipment.id}`} target='blank'>
+                        {shipment.shipmentId}
                       </Link>
                     </td>
                     <td>{moment.utc(shipment.createdAt).local().format('MM/DD/YYYY')}</td>

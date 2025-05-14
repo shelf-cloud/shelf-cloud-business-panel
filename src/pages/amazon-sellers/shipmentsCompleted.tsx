@@ -213,15 +213,13 @@ const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
               <div className='app-search d-flex flex-row justify-content-between align-items-center p-0'>
                 <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'>
                   <FilterFBAShipments filters={filters} setfilters={setFilters} />
-                  <Link href={'/amazon-sellers/fulfillments'} passHref>
-                    <a>
-                      <Button className='fs-7 text-nowrap'>
-                        <span className='icon-on'>
-                          <i className='ri-external-link-fill align-bottom me-1' />
-                          Fulfillments
-                        </span>
-                      </Button>
-                    </a>
+                  <Link href={'/amazon-sellers/fulfillments'}>
+                    <Button className='fs-7 text-nowrap'>
+                      <span className='icon-on'>
+                        <i className='ri-external-link-fill align-bottom me-1' />
+                        Fulfillments
+                      </span>
+                    </Button>
                   </Link>
                   <Link href={'/amazon-sellers/shipments'}>
                     <Button color='info' className='fs-7 text-nowrap'>
