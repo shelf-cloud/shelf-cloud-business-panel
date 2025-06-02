@@ -1,7 +1,8 @@
 import ExcelJS from 'exceljs'
-import { reportTemplateColumns } from './documentsHeaderColumns'
 import moment from 'moment'
+
 import { getOrderStatus, getTotalPaid, getTotalPending } from '../helperFunctions'
+import { reportTemplateColumns } from './documentsHeaderColumns'
 
 export const generateDocument = async (reportType: string, info: any[]) => {
   const workbook = new ExcelJS.Workbook()
@@ -25,6 +26,7 @@ export const generateDocument = async (reportType: string, info: any[]) => {
         worksheet.addRow({
           storeName: row.storeName,
           invoiceNumber: row.invoiceNumber,
+          keyrecNumber: row.keyrecNumber,
           poNumber: row.poNumber,
           comments: row.comments,
           checkDate: moment.utc(row.checkDate).local().format('YYYY-MM-DD'),
@@ -39,6 +41,7 @@ export const generateDocument = async (reportType: string, info: any[]) => {
         worksheet.addRow({
           storeName: row.storeName,
           invoiceNumber: row.invoiceNumber,
+          keyrecNumber: row.keyrecNumber,
           orderNumber: row.orderNumber,
           poNumber: row.poNumber,
           invoiceDate: moment

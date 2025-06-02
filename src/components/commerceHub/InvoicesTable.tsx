@@ -1,14 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
+import Link from 'next/link'
+import { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
-import { NoImageAdress } from '@lib/assetsConstants'
 import { FormatCurrency } from '@lib/FormatNumbers'
+import { NoImageAdress } from '@lib/assetsConstants'
 import { Invoice } from '@typesTs/commercehub/invoices'
 import moment from 'moment'
-import Link from 'next/link'
-import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import { toast } from 'react-toastify'
 import { Button, UncontrolledTooltip } from 'reactstrap'
+
 import { getTotalPaid, getTotalPending } from './helperFunctions'
 
 type SortByType = {
@@ -98,6 +100,13 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       compact: false,
     },
     {
+      name: <span className='fw-bold fs-6 text-nowrap'>Keyrec No.</span>,
+      selector: (row: Invoice) => <p className='m-0 p-0 text-muted fs-7'>{row.keyrecNumber ? row.keyrecNumber : ''}</p>,
+      sortable: false,
+      left: true,
+      compact: true,
+    },
+    {
       name: <span className='fw-bold fs-6 text-nowrap'>Order No.</span>,
       selector: (row: Invoice) => <p className='m-0 p-0 text-muted fs-7'>{row.orderNumber}</p>,
       sortable: false,
@@ -184,9 +193,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
         </span>
       ),
       selector: (row: Invoice) => (
-        <Link
-          href={`/commercehub/${row.storeName}/${row.checkNumber}`}
-          className='fs-7 text-primary fw-normal'>
+        <Link href={`/commercehub/${row.storeName}/${row.checkNumber}`} className='fs-7 text-primary fw-normal'>
           {row.checkNumber}
         </Link>
       ),
@@ -262,20 +269,15 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
         switch (row.commerceHubStatus) {
           case 'paid':
             return <span className='badge text-uppercase badge-soft-success p-2'>{` ${row.commerceHubStatus} `}</span>
-            break
           case 'unpaid':
             return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${row.commerceHubStatus} `}</span>
-            break
           case 'closed':
           case 'resolved':
             return <span className='badge text-uppercase badge-soft-dark p-2'>{` ${row.commerceHubStatus} `}</span>
-            break
           case 'reviewing':
             return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${row.commerceHubStatus} `}</span>
-            break
           default:
             return <span className='badge text-uppercase badge-soft-warning p-2'>{` Unpaid `}</span>
-            break
         }
       },
       sortable: false,

@@ -1,11 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
+import { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
-import { NoImageAdress } from '@lib/assetsConstants'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
+import { NoImageAdress } from '@lib/assetsConstants'
 import { DeductionType } from '@typesTs/commercehub/deductions'
 import moment from 'moment'
-import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import { toast } from 'react-toastify'
 import { UncontrolledTooltip } from 'reactstrap'
@@ -117,6 +118,13 @@ const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClear
       compact: true,
     },
     {
+      name: <span className='fw-bold fs-6 text-nowrap'>Keyrec No.</span>,
+      selector: (row: DeductionType) => <p className='m-0 p-0 text-muted fs-7'>{row.keyrecNumber ? row.keyrecNumber : ''}</p>,
+      sortable: false,
+      left: true,
+      compact: true,
+    },
+    {
       name: <span className='fw-bold fs-6'>PO No.</span>,
       selector: (row: DeductionType) => (
         <div className='d-flex flex-wrap justify-content-start align-items-center'>
@@ -189,16 +197,12 @@ const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClear
           case 'closed':
           case 'resolved':
             return <span className='badge text-uppercase badge-soft-dark p-2'>{` ${row.status} `}</span>
-            break
           case 'reviewing':
             return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${row.status} `}</span>
-            break
           case 'pending':
             return <span className='badge text-uppercase badge-soft-info p-2'>{` ${row.status} `}</span>
-            break
           default:
             return <span className='badge text-uppercase badge-soft-info p-2'>{` pending `}</span>
-            break
         }
       },
       sortable: false,

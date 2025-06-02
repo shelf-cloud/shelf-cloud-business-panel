@@ -1,22 +1,23 @@
-import React, { useContext, useMemo, useState } from 'react'
-import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
-import { getSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import axios from 'axios'
-import useSWR, { mutate } from 'swr'
-import DataTable from 'react-data-table-component'
-import { Invoice, InvoicesResponse } from '@typesTs/commercehub/invoices'
-import { Card, CardBody, CardHeader, Container } from 'reactstrap'
+import React, { useContext, useMemo, useState } from 'react'
+
 import BreadCrumb from '@components/Common/BreadCrumb'
-import { toast } from 'react-toastify'
-import moment from 'moment'
-import { FormatCurrency } from '@lib/FormatNumbers'
-import { DebounceInput } from 'react-debounce-input'
-import FilterCheckNumber from '@components/commerceHub/FilterCheckNumber'
 import BulkActionsForSelected from '@components/commerceHub/BulkActionsForSelected'
+import FilterCheckNumber from '@components/commerceHub/FilterCheckNumber'
 import { getCheckAmountTotal } from '@components/commerceHub/helperFunctions'
+import AppContext from '@context/AppContext'
+import { FormatCurrency } from '@lib/FormatNumbers'
+import { Invoice, InvoicesResponse } from '@typesTs/commercehub/invoices'
+import axios from 'axios'
+import moment from 'moment'
+import { getSession } from 'next-auth/react'
+import DataTable from 'react-data-table-component'
+import { DebounceInput } from 'react-debounce-input'
+import { toast } from 'react-toastify'
+import { Card, CardBody, CardHeader, Container } from 'reactstrap'
+import useSWR, { mutate } from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -65,9 +66,13 @@ const CheckNumberDetails = ({ session }: Props) => {
   const title = `Check No. ${id![1]} | ${session?.user?.businessName}`
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR<InvoicesResponse>(id && state.user.businessId ? `/api/commerceHub/getCheckNumberInfo?region=${state.currentRegion}&businessId=${state.user.businessId}&checkNumber=${id[1]}` : null, fetcher, {
-    revalidateOnFocus: false,
-  })
+  const { data } = useSWR<InvoicesResponse>(
+    id && state.user.businessId ? `/api/commerceHub/getCheckNumberInfo?region=${state.currentRegion}&businessId=${state.user.businessId}&checkNumber=${id[1]}` : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  )
 
   const sortDates = (Adate: string, Bdate: string) => {
     const a = moment(Adate)
@@ -104,7 +109,9 @@ const CheckNumberDetails = ({ session }: Props) => {
       return data.invoices.filter(
         (invoice: Invoice) =>
           (invoiceType === 'all' ? true : invoiceType === 'invoices' ? invoice.checkTotal > 0 : invoice.checkTotal < 0) &&
-          (invoice.invoiceNumber?.toLowerCase().includes(searchValue.toLowerCase()) || invoice.poNumber?.toLowerCase().includes(searchValue.toLowerCase()) || invoice.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()))
+          (invoice.invoiceNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            invoice.poNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            invoice.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()))
       )
     }
 
@@ -190,6 +197,13 @@ const CheckNumberDetails = ({ session }: Props) => {
       center: false,
       compact: false,
       sortFunction: (rowA: Invoice, rowB: Invoice) => sortStrings(rowA.invoiceNumber, rowB.invoiceNumber),
+    },
+    {
+      name: <span className='fw-bold fs-6 text-nowrap'>Keyrec No.</span>,
+      selector: (row: Invoice) => <p className='m-0 p-0 text-muted fs-7'>{row.keyrecNumber ? row.keyrecNumber : ''}</p>,
+      sortable: false,
+      left: true,
+      compact: true,
     },
     {
       name: <span className='fw-bold fs-6'>PO No.</span>,
@@ -303,34 +317,29 @@ const CheckNumberDetails = ({ session }: Props) => {
         switch (row.status) {
           case 'paid':
             return <span className='badge text-uppercase badge-soft-success p-2'>{` ${row.status} `}</span>
-            break
           case 'unpaid':
             return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${row.status} `}</span>
-            break
           case 'closed':
           case 'resolved':
             return <span className='badge text-uppercase badge-soft-dark p-2'>{` ${row.status} `}</span>
-            break
           case 'reviewing':
             return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${row.status} `}</span>
-            break
           case 'pending':
             return <span className='badge text-uppercase badge-soft-info p-2'>{` ${row.status} `}</span>
-            break
           default:
             if (row.checkTotal > 0) {
               return <span className='badge text-uppercase badge-soft-success p-2'>{` Paid `}</span>
             } else {
               return <span className='badge text-uppercase badge-soft-info p-2'>{` pending `}</span>
             }
-            break
         }
       },
       sortable: true,
       wrap: true,
       center: true,
       compact: true,
-      sortFunction: (rowA: Invoice, rowB: Invoice) => sortStrings(rowA.status ? rowA.status : rowA.checkTotal > 0 ? 'paid' : 'pending', rowB.status ? rowB.status : rowB.checkTotal > 0 ? 'paid' : 'pending'),
+      sortFunction: (rowA: Invoice, rowB: Invoice) =>
+        sortStrings(rowA.status ? rowA.status : rowA.checkTotal > 0 ? 'paid' : 'pending', rowB.status ? rowB.status : rowB.checkTotal > 0 ? 'paid' : 'pending'),
     },
   ]
 
@@ -346,7 +355,14 @@ const CheckNumberDetails = ({ session }: Props) => {
             <div className='d-flex flex-column justify-content-center align-items-end gap-2 mb-1 flex-lg-row justify-content-md-between align-items-md-center px-1'>
               <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'>
                 <FilterCheckNumber type={invoiceType} setInvoiceType={setInvoiceType} />
-                {selectedRows.length > 0 && <BulkActionsForSelected selectedRows={selectedRows} statusOptions={STATUS_OPTIONS} clearSelected={clearAllSelectedRows} changeSelectedStatus={changeSelectedStatus} />}
+                {selectedRows.length > 0 && (
+                  <BulkActionsForSelected
+                    selectedRows={selectedRows}
+                    statusOptions={STATUS_OPTIONS}
+                    clearSelected={clearAllSelectedRows}
+                    changeSelectedStatus={changeSelectedStatus}
+                  />
+                )}
               </div>
               <div className='w-100 d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-end align-items-lg-center px-0'>
                 <div className='app-search p-0 col-sm-12 col-lg-5'>

@@ -1,14 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
+import Link from 'next/link'
+import { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
-import { NoImageAdress } from '@lib/assetsConstants'
 import { FormatCurrency } from '@lib/FormatNumbers'
+import { NoImageAdress } from '@lib/assetsConstants'
 import { CheckSummaryType } from '@typesTs/commercehub/checkSummary'
 import moment from 'moment'
-import Link from 'next/link'
-import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import { toast } from 'react-toastify'
 import { UncontrolledTooltip } from 'reactstrap'
+
 import { getTotalPaid } from './helperFunctions'
 
 type SortByType = {
@@ -69,9 +71,7 @@ const CheckSummaryTable = ({ filteredItems, pending, sortBy, setSortBy }: Props)
       selector: (row: CheckSummaryType) => {
         return row.checkNumber ? (
           <div className='d-flex flex-wrap justify-content-start align-items-center'>
-            <Link
-              href={`/commercehub/${row.storeName}/${row.checkNumber}`}
-              className='fs-7 text-primary fw-normal'>
+            <Link href={`/commercehub/${row.storeName}/${row.checkNumber}`} className='fs-7 text-primary fw-normal'>
               {row.checkNumber}
             </Link>
             <i
@@ -87,7 +87,7 @@ const CheckSummaryTable = ({ filteredItems, pending, sortBy, setSortBy }: Props)
           </div>
         ) : (
           <span className='fs-7 mw-30 text-muted fw-light fst-italic'>Pending</span>
-        );
+        )
       },
       sortable: false,
       left: true,
