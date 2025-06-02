@@ -1,16 +1,17 @@
-import React, { FormEventHandler, useRef, useState } from 'react'
+import { GetServerSideProps } from 'next'
+import Head from 'next/head'
 import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { FormEventHandler, useRef, useState } from 'react'
+
 import ShelfCloudLogo from '@assets/images/shelfcloud-blue-h.png'
 import RightImage from '@assets/images/signin-image-right.png'
-import PuntosImage from '@assets/images/signin-puntos.png'
 import LinesImage from '@assets/images/signin-lines.png'
-import { Button, Label } from 'reactstrap'
+import PuntosImage from '@assets/images/signin-puntos.png'
 import { getSession, signIn } from '@auth/client'
-import { GetServerSideProps } from 'next'
-import { useRouter } from 'next/router'
-import Link from 'next/link'
-import Head from 'next/head'
 import ForgotPasswordModal from '@components/ForgotPasswordModal'
+import { Button, Label } from 'reactstrap'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -74,7 +75,7 @@ function SignIn({}: Props) {
               <h2 className='w-100 text-center fw-semibold mb-3'>Sign in</h2>
               <p className='w-100 text-center fs-5 mb-5'>
                 New user?{' '}
-                <a href={'https://www.shelf-cloud.com'} target='blank' className=' text-primary fw-semibold'>
+                <a href={'https://www.shelf-cloud.com'} target='blank' rel='noopener noreferrer' className=' text-primary fw-semibold'>
                   Create an account
                 </a>
               </p>
@@ -91,7 +92,12 @@ function SignIn({}: Props) {
                   </Label>
                   <div className='position-relative auth-pass-inputgroup mb-3'>
                     <input type={show ? 'text' : 'password'} className='form-control pe-5' placeholder='Enter password' id='password' required name='password' ref={passwordRef} />
-                    <button name='passwordVisibility' className='btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted' type='button' id='password-addon' onClick={() => setShow(!show)}>
+                    <button
+                      name='passwordVisibility'
+                      className='btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted'
+                      type='button'
+                      id='password-addon'
+                      onClick={() => setShow(!show)}>
                       <i className='ri-eye-fill align-middle fs-5'></i>
                     </button>
                   </div>

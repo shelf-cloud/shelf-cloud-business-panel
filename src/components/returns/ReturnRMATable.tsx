@@ -1,12 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useContext } from 'react'
-import DataTable from 'react-data-table-component'
-import { OrderItem, ReturnOrder, ReturnType } from '@typesTs/returns/returns'
-import ReturnsTable from './ReturnsTable'
-import { UncontrolledTooltip } from 'reactstrap'
-import { FormatCurrency } from '@lib/FormatNumbers'
+import { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
+import { FormatCurrency } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
+import { OrderItem, ReturnOrder, ReturnType } from '@typesTs/returns/returns'
+import DataTable from 'react-data-table-component'
+import { UncontrolledTooltip } from 'reactstrap'
+
+import ReturnsTable from './ReturnsTable'
 
 type Props = {
   filterDataTable: ReturnType[]
@@ -110,23 +112,17 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
           case 'shipped':
           case 'received':
             return <span className='badge text-uppercase text-center badge-soft-success p-2'>{` ${status} `}</span>
-            break
           case 'Processed':
             return <span className='badge text-uppercase text-center badge-soft-secondary p-2'>{` ${status} `}</span>
-            break
           case 'awaiting_shipment':
           case 'awaiting':
             return <span className='badge text-uppercase text-center badge-soft-warning p-2'>{' awaiting '}</span>
-            break
           case 'awaiting pickup':
             return <span className='badge text-uppercase text-center badge-soft-secondary p-2'>{' awaiting pickup '}</span>
-            break
           case 'on_hold':
             return <span className='badge text-uppercase text-center badge-soft-danger p-2'>{' on hold '}</span>
-            break
           case 'cancelled':
             return <span className='badge text-uppercase text-center badge-soft-dark p-2'> {status} </span>
-            break
           default:
             break
         }
@@ -198,7 +194,9 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
             case Object.values(row.returns)[0].orderStatus == 'cancelled':
               tracking = <></>
               break
-            case (Object.values(row.returns)[0].orderType == 'Shipment' || Object.values(row.returns)[0].orderType == 'Return') && Object.values(row.returns)[0].trackingNumber != '' && !!Object.values(row.returns)[0].trackingLink:
+            case (Object.values(row.returns)[0].orderType == 'Shipment' || Object.values(row.returns)[0].orderType == 'Return') &&
+              Object.values(row.returns)[0].trackingNumber != '' &&
+              !!Object.values(row.returns)[0].trackingLink:
               tracking = (
                 <div className='trackingNumber_container'>
                   <img
@@ -211,14 +209,20 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
                       objectFit: 'contain',
                     }}
                   />
-                  <a href={`${Object.values(row.returns)[0].trackingLink}${Object.values(row.returns)[0].trackingNumber}`} target='blank' className='fs-7' style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
+                  <a
+                    href={`${Object.values(row.returns)[0].trackingLink}${Object.values(row.returns)[0].trackingNumber}`}
+                    target='blank'
+                    rel='noopener noreferrer'
+                    className='fs-7'
+                    style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
                     {Object.values(row.returns)[0].trackingNumber}
                     {Object.values(row.returns).length > 1 && <span className='fs-7 text-danger'>{` +${Object.values(row.returns).length}`}</span>}
                   </a>
                 </div>
               )
               break
-            case (Object.values(row.returns)[0].orderType == 'Shipment' || Object.values(row.returns)[0].orderType == 'Return') && Object.values(row.returns)[0].trackingNumber != '':
+            case (Object.values(row.returns)[0].orderType == 'Shipment' || Object.values(row.returns)[0].orderType == 'Return') &&
+              Object.values(row.returns)[0].trackingNumber != '':
               tracking = (
                 <div className='trackingNumber_container'>
                   <img
@@ -238,7 +242,10 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
                 </div>
               )
               break
-            case Object.values(row.returns)[0].orderType == 'Wholesale' && Object.values(row.returns)[0].trackingNumber != '' && !!Object.values(row.returns)[0].trackingLink && Object.values(row.returns)[0].carrierService == 'Parcel Boxes':
+            case Object.values(row.returns)[0].orderType == 'Wholesale' &&
+              Object.values(row.returns)[0].trackingNumber != '' &&
+              !!Object.values(row.returns)[0].trackingLink &&
+              Object.values(row.returns)[0].carrierService == 'Parcel Boxes':
               tracking = (
                 <div className='trackingNumber_container'>
                   <img
@@ -251,7 +258,12 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
                       objectFit: 'contain',
                     }}
                   />
-                  <a href={`${Object.values(row.returns)[0].trackingLink}${Object.values(row.returns)[0].trackingNumber}`} target='blank' className='fs-7' style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
+                  <a
+                    href={`${Object.values(row.returns)[0].trackingLink}${Object.values(row.returns)[0].trackingNumber}`}
+                    target='blank'
+                    rel='noopener noreferrer'
+                    className='fs-7'
+                    style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
                     {Object.values(row.returns)[0].trackingNumber}
                     {Object.values(row.returns).length > 1 && <span className='fs-7 text-danger'>{` +${Object.values(row.returns).length}`}</span>}
                   </a>

@@ -1,12 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
+import Link from 'next/link'
+import { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
-import { NoImageAdress } from '@lib/assetsConstants'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
+import { NoImageAdress } from '@lib/assetsConstants'
 import { sortNumbers, sortStringsCaseInsensitive } from '@lib/helperFunctions'
 import { MKP_Product } from '@typesTs/marketplacePricing/marketplacePricing'
-import Link from 'next/link'
-import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
+
 import MKP_ExpandedDetails from './MKP_ExpandedDetails'
 
 type Props = {
@@ -41,7 +43,13 @@ const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice,
                 margin: '2px 0px',
                 position: 'relative',
               }}>
-              <img loading='lazy' src={row.image ? row.image : NoImageAdress} onError={(e) => (e.currentTarget.src = NoImageAdress)} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
+              <img
+                loading='lazy'
+                src={row.image ? row.image : NoImageAdress}
+                onError={(e) => (e.currentTarget.src = NoImageAdress)}
+                alt='product Image'
+                style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+              />
             </div>
           </Link>
         )
@@ -77,7 +85,9 @@ const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice,
     {
       name: <span className='fw-semibold text-center fs-7'>On Watch</span>,
       selector: (row: MKP_Product) =>
-        Object.values(row.marketplaces).find((marketplace) => marketplace.proposedPrice > 0 && marketplace.proposedPrice !== marketplace.actualPrice) ? <i className='mdi mdi-eye label-icon align-middle fs-5 me-2 text-primary' /> : null,
+        Object.values(row.marketplaces).find((marketplace) => marketplace.proposedPrice > 0 && marketplace.proposedPrice !== marketplace.actualPrice) ? (
+          <i className='mdi mdi-eye label-icon align-middle fs-5 me-2 text-primary' />
+        ) : null,
       sortable: true,
       center: true,
       compact: true,
@@ -92,7 +102,7 @@ const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice,
       name: <span className='fw-semibold text-center fs-7'>ASIN</span>,
       selector: (row: MKP_Product) => {
         return row.asin !== '' ? (
-          <a className='m-0' href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank'>
+          <a className='m-0' href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank' rel='noopener noreferrer'>
             {row.asin}
           </a>
         ) : (

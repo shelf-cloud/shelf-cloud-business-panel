@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import { NoImageAdress } from '@lib/assetsConstants'
-import React from 'react'
 
 type Props = {
   orderStatus: string
@@ -15,7 +14,6 @@ const ShipmentTrackingNumber = ({ orderStatus, orderType, trackingNumber, tracki
   switch (true) {
     case orderStatus == 'cancelled':
       return <></>
-      break
     case (orderType == 'Shipment' || orderType == 'Return') && trackingNumber != '' && !!trackingLink:
       return (
         <div className='trackingNumber_container'>
@@ -29,12 +27,16 @@ const ShipmentTrackingNumber = ({ orderStatus, orderType, trackingNumber, tracki
               objectFit: 'contain',
             }}
           />
-          <a className='fs-7 text-primary' href={`${trackingLink}${trackingNumber}`} target='blank' style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
+          <a
+            className='fs-7 text-primary'
+            href={`${trackingLink}${trackingNumber}`}
+            target='blank'
+            rel='noopener noreferrer'
+            style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
             {trackingNumber}
           </a>
         </div>
       )
-      break
     case (orderType == 'Shipment' || orderType == 'Return') && trackingNumber != '':
       return (
         <div className='trackingNumber_container'>
@@ -53,7 +55,6 @@ const ShipmentTrackingNumber = ({ orderStatus, orderType, trackingNumber, tracki
           </p>
         </div>
       )
-      break
     case (orderType == 'Wholesale' || orderType == 'FBA Shipment') && trackingNumber != '' && !!trackingLink && carrierService == 'Parcel Boxes':
       return (
         <div className='trackingNumber_container'>
@@ -67,12 +68,16 @@ const ShipmentTrackingNumber = ({ orderStatus, orderType, trackingNumber, tracki
               objectFit: 'contain',
             }}
           />
-          <a className='fs-7 text-primary' href={`${trackingLink}${trackingNumber}`} target='blank' style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
+          <a
+            className='fs-7 text-primary'
+            href={`${trackingLink}${trackingNumber}`}
+            target='blank'
+            rel='noopener noreferrer'
+            style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
             {trackingNumber}
           </a>
         </div>
       )
-      break
     case orderType == 'Wholesale' && trackingNumber != '':
       return (
         <div className='trackingNumber_container'>
@@ -91,10 +96,8 @@ const ShipmentTrackingNumber = ({ orderStatus, orderType, trackingNumber, tracki
           </p>
         </div>
       )
-      break
     case trackingNumber == '':
       return <span className='fs-7'>{trackingNumber}</span>
-      break
     default:
       return <span className='fs-7'>{trackingNumber}</span>
   }

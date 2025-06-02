@@ -1,14 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { KitRow } from '@typings'
-import React, { useContext } from 'react'
-import DataTable from 'react-data-table-component'
-import AppContext from '@context/AppContext'
-import { DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
-// import TooltipComponent from '../constants/Tooltip'
-import KitExpandedDetails from './KitExpandedDetails'
 import Link from 'next/link'
+import { useContext } from 'react'
+
+import AppContext from '@context/AppContext'
+// import TooltipComponent from '../constants/Tooltip'
 import { NoImageAdress } from '@lib/assetsConstants'
+import { KitRow } from '@typings'
+import DataTable from 'react-data-table-component'
+import { DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
+
+import KitExpandedDetails from './KitExpandedDetails'
 
 type Props = {
   tableData: KitRow[]
@@ -33,9 +35,18 @@ const KitsTable = ({ tableData, pending }: Props) => {
     html += '.barcodeSection p{position:relative;float:left;left:5%;width:95%;text-align:left;margin-top:0px;margin-bottom:0px;font-size:14px;z-index:5;}'
     html += '.barcodeSection svg{width:90%;transform: translate(0px, -10px) !important;}'
     html += '</style></head><body>'
-    html += '<div class="barcodeSection"><p style="text-align:center;">' + product.sku + '</p><p style="text-align:center;white-space: nowrap;overflow: hidden;">' + product.title + '</p><svg id="barcode" width="100%" height="100%"></svg></div>'
     html +=
-      '</body><script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/JsBarcode.all.min.js"></script><script>JsBarcode("#barcode", "' + product.barcode + '", {text: "' + product.barcode + '",fontSize: 12,textMargin: 0, height:31});</script></html>'
+      '<div class="barcodeSection"><p style="text-align:center;">' +
+      product.sku +
+      '</p><p style="text-align:center;white-space: nowrap;overflow: hidden;">' +
+      product.title +
+      '</p><svg id="barcode" width="100%" height="100%"></svg></div>'
+    html +=
+      '</body><script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/JsBarcode.all.min.js"></script><script>JsBarcode("#barcode", "' +
+      product.barcode +
+      '", {text: "' +
+      product.barcode +
+      '",fontSize: 12,textMargin: 0, height:31});</script></html>'
     var wnd = window.open('about:Barcode-Generated', '', '_blank')
     wnd?.document.write(html)
   }
@@ -80,7 +91,12 @@ const KitsTable = ({ tableData, pending }: Props) => {
               margin: '2px 0px',
               position: 'relative',
             }}>
-            <img loading='lazy' src={cell.image ? cell.image : NoImageAdress} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
+            <img
+              loading='lazy'
+              src={cell.image ? cell.image : NoImageAdress}
+              alt='product Image'
+              style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+            />
           </div>
         )
       },
@@ -132,7 +148,7 @@ const KitsTable = ({ tableData, pending }: Props) => {
         return (
           <div>
             <p style={{ margin: '0px' }}>
-              <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/exec/obidos/ASIN${row.asin}`} target='blank'>
+              <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/exec/obidos/ASIN${row.asin}`} target='blank' rel='noopener noreferrer'>
                 {row.asin}
               </a>
             </p>
@@ -258,7 +274,16 @@ const KitsTable = ({ tableData, pending }: Props) => {
 
   return (
     <>
-      <DataTable columns={columns} data={tableData} progressPending={pending} striped={true} dense defaultSortFieldId={2} expandableRows expandableRowsComponent={KitExpandedDetails} />
+      <DataTable
+        columns={columns}
+        data={tableData}
+        progressPending={pending}
+        striped={true}
+        dense
+        defaultSortFieldId={2}
+        expandableRows
+        expandableRowsComponent={KitExpandedDetails}
+      />
     </>
   )
 }

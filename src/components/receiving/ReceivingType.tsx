@@ -1,14 +1,16 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
+import { useContext, useEffect, useState } from 'react'
+
 // import Animation from '@components/Common/Animation'
-import { OrderRowType, ShipmentOrderItem } from '@typings'
-import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
-import TooltipComponent from '../constants/Tooltip'
 import AppContext from '@context/AppContext'
-import Confirm_Delete_Item_From_Receiving from '../modals/receivings/Confirm_Delete_Item_From_Receiving'
+import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
-import EditManualReceivingLog from './EditManualReceivingLog'
+import { OrderRowType, ShipmentOrderItem } from '@typings'
+import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
+
+import TooltipComponent from '../constants/Tooltip'
+import Confirm_Delete_Item_From_Receiving from '../modals/receivings/Confirm_Delete_Item_From_Receiving'
 import AddSkuToManualReceivingLog from './AddSkuToManualReceivingLog'
+import EditManualReceivingLog from './EditManualReceivingLog'
 
 // import dynamic from 'next/dynamic';
 // const Animation = dynamic(() => import('@components/Common/Animation'), {
@@ -156,7 +158,10 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                         {data.chargesFees && (
                           <>
                             <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltipPallet${OrderId}`}></i>
-                            <TooltipComponent target={`tooltipPallet${OrderId}`} text={`${FormatCurrency(state.currentRegion, data.chargesFees.receivingPalletCost!)} per pallet`} />
+                            <TooltipComponent
+                              target={`tooltipPallet${OrderId}`}
+                              text={`${FormatCurrency(state.currentRegion, data.chargesFees.receivingPalletCost!)} per pallet`}
+                            />
                           </>
                         )}
                       </td>
@@ -233,7 +238,9 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                   <i
                     className='fs-4 text-success las la-plus-circle'
                     style={{ cursor: 'pointer' }}
-                    onClick={() => setAddSkuToReceiving({ show: true, receivingId: data.id, orderNumber: data.orderNumber, receivingItems: data.orderItems.map((item) => item.sku) })}
+                    onClick={() =>
+                      setAddSkuToReceiving({ show: true, receivingId: data.id, orderNumber: data.orderNumber, receivingItems: data.orderItems.map((item) => item.sku) })
+                    }
                   />
                 </div>
               )}
@@ -301,7 +308,7 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
             <Col sm={12} className='d-flex flex-row justify-content-end align-items-end'>
               <div className='m-0 d-flex flex-row justify-content-end align-items-end gap-2'>
                 {!data.isReceivingFromPo && data.orderStatus !== 'received' && (
-                  <a href={data.proofOfShipped} target='blank'>
+                  <a href={data.proofOfShipped} target='blank' rel='noopener noreferrer'>
                     <Button color='info' className='btn-label fs-7'>
                       <i className='las la-truck label-icon align-middle fs-5 me-2' />
                       Proof Of Received
@@ -315,7 +322,9 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
       </Row>
       {deleteSKUModal.show && <Confirm_Delete_Item_From_Receiving deleteSKUModal={deleteSKUModal} setDeleteSKUModal={setDeleteSKUModal} mutateReceivings={mutateReceivings} />}
       {showEditOrderQty.show && <EditManualReceivingLog showEditOrderQty={showEditOrderQty} setshowEditOrderQty={setshowEditOrderQty} mutateReceivings={mutateReceivings} />}
-      {addSkuToReceiving.show && <AddSkuToManualReceivingLog addSkuToReceiving={addSkuToReceiving} setshowAddSkuToManualReceiving={setAddSkuToReceiving} mutateReceivings={mutateReceivings} />}
+      {addSkuToReceiving.show && (
+        <AddSkuToManualReceivingLog addSkuToReceiving={addSkuToReceiving} setshowAddSkuToManualReceiving={setAddSkuToReceiving} mutateReceivings={mutateReceivings} />
+      )}
     </div>
   )
 }

@@ -1,12 +1,14 @@
-import React, { useContext, useMemo } from 'react'
-import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
+import { useContext, useMemo } from 'react'
+
+import TooltipComponent from '@components/constants/Tooltip'
+import IndividualUnitsPlanModal from '@components/modals/orders/shipments/IndividualUnitsPlanModal'
+import UploadIndividualUnitsLabelsModal from '@components/modals/orders/shipments/UploadIndividualUnitsLabelsModal'
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { Shipment, ShipmentOrderItem } from '@typesTs/shipments/shipments'
-import TooltipComponent from '@components/constants/Tooltip'
-import IndividualUnitsPlanModal from '@components/modals/orders/shipments/IndividualUnitsPlanModal'
-import UploadIndividualUnitsLabelsModal from '@components/modals/orders/shipments/UploadIndividualUnitsLabelsModal'
+import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
+
 import ShipmentCarrierStatusBar from './ShipmentCarrierStatusBar'
 import ShipmentTrackingNumber from './ShipmentTrackingNumber'
 
@@ -222,7 +224,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
             <Row>
               <Col xl={12} className='d-flex flex-row flex-wrap justify-content-start align-items-end gap-2'>
                 {data.proofOfShipped != '' && data.proofOfShipped != null && (
-                  <a href={data.proofOfShipped} target='blank'>
+                  <a href={data.proofOfShipped} target='blank' rel='noopener noreferrer'>
                     <Button color='info' className='btn-label btn-sm fs-7 text-nowrap'>
                       <i className='las la-truck label-icon align-middle fs-4 me-2' />
                       Proof Of Shipped
@@ -243,7 +245,8 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                 {data.labelsName != '' && (
                   <a
                     href={`https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/shelf-cloud%2F${data.labelsName}?alt=media&token=837cdbcf-11ab-4555-9697-50f1c6a3d0e3`}
-                    target='blank'>
+                    target='blank'
+                    rel='noopener noreferrer'>
                     <Button color='secondary' className='btn-label btn-sm fs-7 text-nowrap'>
                       <i className='las la-toilet-paper label-icon align-middle fs-4 me-2' />
                       FBA Labels
@@ -253,7 +256,8 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                 {data.palletLabelsName != '' && (
                   <a
                     href={`https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/shelf-cloud%2F${data.palletLabelsName}?alt=media&token=837cdbcf-11ab-4555-9697-50f1c6a3d0e3`}
-                    target='blank'>
+                    target='blank'
+                    rel='noopener noreferrer'>
                     <Button color='secondary' className='btn-label btn-sm fs-7 text-nowrap'>
                       <i className='las la-toilet-paper label-icon align-middle fs-4 me-2' />
                       Pallet Labels

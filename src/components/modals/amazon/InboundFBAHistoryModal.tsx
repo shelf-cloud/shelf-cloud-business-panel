@@ -1,13 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useCallback, useContext, useMemo, useRef, useState } from 'react'
-import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
-import { FBAShipmentHisotry } from '@typesTs/amazon/fulfillments'
-import moment from 'moment'
 import Link from 'next/link'
-import { CleanStatus } from '@lib/SkuFormatting'
-import useSWRInfinite from 'swr/infinite'
+import { useCallback, useContext, useMemo, useRef, useState } from 'react'
+
 import AppContext from '@context/AppContext'
+import { CleanStatus } from '@lib/SkuFormatting'
+import { FBAShipmentHisotry } from '@typesTs/amazon/fulfillments'
 import axios from 'axios'
+import moment from 'moment'
+import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import useSWRInfinite from 'swr/infinite'
 
 type ModalInfo = {
   show: boolean
@@ -45,7 +46,10 @@ const InboundFBAHistoryModal = ({ inboundFBAHistoryModal, setinboundFBAHistoryMo
   })
 
   // Flatten shipment data
-  const newShipments: FBAShipmentHisotry[] = useMemo(() => (data ? inboundFBAHistoryModal.shipments.concat(...data) : inboundFBAHistoryModal.shipments), [data, inboundFBAHistoryModal.shipments])
+  const newShipments: FBAShipmentHisotry[] = useMemo(
+    () => (data ? inboundFBAHistoryModal.shipments.concat(...data) : inboundFBAHistoryModal.shipments),
+    [data, inboundFBAHistoryModal.shipments]
+  )
 
   // Observer for infinite scroll
   const observer = useRef<IntersectionObserver | null>(null)
@@ -115,7 +119,7 @@ const InboundFBAHistoryModal = ({ inboundFBAHistoryModal, setinboundFBAHistoryMo
                 {newShipments.map((shipment, index: number) => (
                   <tr key={index}>
                     <td className='text-start'>
-                      <Link href={`/amazon-sellers/shipments/${shipment.id}`} target='blank'>
+                      <Link href={`/amazon-sellers/shipments/${shipment.id}`} target='blank' rel='noopener noreferrer'>
                         {shipment.shipmentId}
                       </Link>
                     </td>

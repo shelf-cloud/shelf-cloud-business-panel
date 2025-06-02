@@ -174,7 +174,7 @@ const UploadProductsModal = ({}: Props) => {
       <ModalBody>
         <p className='fs-5 fw-normal'>
           You can import products in bulk by uploading a CSV file using the{' '}
-          <a className='text-primary' href={'https://docs.google.com/spreadsheets/d/19H7hs8kS6D5cysi3QmJTH0Hfpmjw7VuG/template/preview'} target={'_blank'} rel='noreferrer'>
+          <a className='text-primary' href={'https://docs.google.com/spreadsheets/d/19H7hs8kS6D5cysi3QmJTH0Hfpmjw7VuG/template/preview'} target='blank' rel='noopener noreferrer'>
             template
           </a>{' '}
           file.

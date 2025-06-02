@@ -1,11 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
-import { DeleteItemFromOrderType } from '@components/modals/purchaseOrders/Confirm_Delete_Item_From_PO'
-import AppContext from '@context/AppContext'
-import { NoImageAdress } from '@lib/assetsConstants'
-import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
-import { PoItemArrivalHistory, PurchaseOrder, PurchaseOrderItem } from '@typesTs/purchaseOrders'
 import Link from 'next/link'
 import { useContext, useMemo, useState } from 'react'
+
+import { DeleteItemFromOrderType } from '@components/modals/purchaseOrders/Confirm_Delete_Item_From_PO'
+import AppContext from '@context/AppContext'
+import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
+import { NoImageAdress } from '@lib/assetsConstants'
+import { PoItemArrivalHistory, PurchaseOrder, PurchaseOrderItem } from '@typesTs/purchaseOrders'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
 import { UncontrolledTooltip } from 'reactstrap'
@@ -99,7 +100,7 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
             return (
               <tr key={`${key}-${product.sku}`} className='border-bottom py-2'>
                 <td className='text-center'>
-                  <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' className='text-black'>
+                  <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' rel='noopener noreferrer' className='text-black'>
                     <div
                       style={{
                         width: '100%',
@@ -119,13 +120,17 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
                   </Link>
                 </td>
                 <td className='fw-semibold'>
-                  <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' className='text-black'>
+                  <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' rel='noopener noreferrer' className='text-black'>
                     {product.title}
                   </Link>
                   {product.arrivalHistory?.length > 0 && (
                     <>
                       <i className='ri-information-fill ms-1 fs-7 text-warning' id={`tooltipHistory${product.inventoryId}`} />
-                      <UncontrolledTooltip placement='right' target={`tooltipHistory${product.inventoryId}`} popperClassName='bg-white shadow px-3 pt-3 rounded-2' innerClassName='text-black bg-white p-0'>
+                      <UncontrolledTooltip
+                        placement='right'
+                        target={`tooltipHistory${product.inventoryId}`}
+                        popperClassName='bg-white shadow px-3 pt-3 rounded-2'
+                        innerClassName='text-black bg-white p-0'>
                         <p className='fs-6 text-primary m-0 p-0 fw-bold mb-2'>Arrival History</p>
                         <table className='table table-striped table-bordered table-sm table-responsive text-nowrap fs-7'>
                           <thead>
@@ -152,7 +157,12 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
                     {product.asin && (
                       <div className='d-flex flex-nowrap justify-content-start align-items-center' style={{ gap: '2px' }}>
                         {`ASIN: `}
-                        <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${product.asin}`} target='blank' className='fw-light' style={{ textDecoration: 'none' }}>
+                        <a
+                          href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${product.asin}`}
+                          target='blank'
+                          rel='noopener noreferrer'
+                          className='fw-light'
+                          style={{ textDecoration: 'none' }}>
                           {product.asin}
                         </a>
                         <i
@@ -174,7 +184,7 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
                   </span>
                 </td>
                 <td className='text-center text-nowrap'>
-                  <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' className='text-black'>
+                  <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' rel='noopener noreferrer' className='text-black'>
                     {product.sku}
                   </Link>
                 </td>

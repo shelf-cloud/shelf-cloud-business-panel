@@ -1,14 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useContext } from 'react'
-import { PurchaseOrder, PurchaseOrderBySkus, PurchaseOrderItem } from '@typesTs/purchaseOrders'
-import DataTable from 'react-data-table-component'
-import { FormatIntNumber } from '@lib/FormatNumbers'
-import AppContext from '@context/AppContext'
-import { Badge } from 'reactstrap'
-import Table_By_Skus_Orders from './Table_By_Skus_Orders'
 import Link from 'next/link'
+import { useContext } from 'react'
+
+import AppContext from '@context/AppContext'
+import { FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { sortNumbers, sortStringsLocaleCompare } from '@lib/helperFunctions'
+import { PurchaseOrder, PurchaseOrderBySkus, PurchaseOrderItem } from '@typesTs/purchaseOrders'
+import DataTable from 'react-data-table-component'
+import { Badge } from 'reactstrap'
+
+import Table_By_Skus_Orders from './Table_By_Skus_Orders'
 
 type Props = {
   filterDataTable: PurchaseOrderBySkus[]
@@ -23,7 +25,7 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
       name: <span className='fw-bolder fs-6'>Image</span>,
       selector: (row: PurchaseOrderBySkus) => {
         return (
-          <Link href={`/product/${row.inventoryId}/${row.sku}`} target='blank' className='text-black'>
+          <Link href={`/product/${row.inventoryId}/${row.sku}`} target='blank' rel='noopener noreferrer' className='text-black'>
             <div
               style={{
                 width: '100%',
@@ -32,7 +34,12 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
                 margin: '2px 0px',
                 position: 'relative',
               }}>
-              <img loading='lazy' src={row.image ? row.image : NoImageAdress} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
+              <img
+                loading='lazy'
+                src={row.image ? row.image : NoImageAdress}
+                alt='product Image'
+                style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+              />
             </div>
           </Link>
         )
@@ -46,13 +53,13 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
       selector: (row: PurchaseOrderBySkus) => {
         return (
           <>
-            <Link href={`/product/${row.inventoryId}/${row.sku}`} target='blank' className='text-black'>
+            <Link href={`/product/${row.inventoryId}/${row.sku}`} target='blank' rel='noopener noreferrer' className='text-black'>
               <span className='fs-6 fw-semibold'>{row.title}</span>
             </Link>
             {row.asin && (
               <>
                 <br />
-                <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/exec/obidos/ASIN${row.asin}`} target='blank'>
+                <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/exec/obidos/ASIN${row.asin}`} target='blank' rel='noopener noreferrer'>
                   <span className='fs-7 fw-normal'>{row.asin}</span>
                 </a>
               </>
@@ -75,7 +82,7 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
       name: <span className='fw-bolder fs-6'>SKU</span>,
       selector: (row: PurchaseOrderBySkus) => {
         return (
-          <Link href={`/product/${row.inventoryId}/${row.sku}`} target='blank' className='text-black'>
+          <Link href={`/product/${row.inventoryId}/${row.sku}`} target='blank' rel='noopener noreferrer' className='text-black'>
             <span className='fs-7'>{row.sku}</span>
           </Link>
         )
@@ -254,7 +261,15 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
   ]
   return (
     <>
-      <DataTable columns={columns} data={filterDataTable} progressPending={pending} striped={true} expandableRows expandableRowsComponent={Table_By_Skus_Orders} defaultSortFieldId={3} />
+      <DataTable
+        columns={columns}
+        data={filterDataTable}
+        progressPending={pending}
+        striped={true}
+        expandableRows
+        expandableRowsComponent={Table_By_Skus_Orders}
+        defaultSortFieldId={3}
+      />
     </>
   )
 }

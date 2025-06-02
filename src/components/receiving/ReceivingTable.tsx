@@ -1,14 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
-import { OrderRowType, ShipmentOrderItem } from '@typings'
-import React, { useContext } from 'react'
-import DataTable from 'react-data-table-component'
-import ShipmentExpandedDetail from '../ShipmentExpandedDetail'
+import { useContext } from 'react'
+
+import SCTooltip from '@components/ui/SCTooltip'
 import AppContext from '@context/AppContext'
-import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from 'reactstrap'
+import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { sortNumbers, sortStringsLocaleCompare } from '@lib/helperFunctions'
 import { AddShippingCostModalType, DeleteReceivingModalType, MarkReceivedModalType } from '@pages/receivings'
-import SCTooltip from '@components/ui/SCTooltip'
+import { OrderRowType, ShipmentOrderItem } from '@typings'
+import DataTable from 'react-data-table-component'
+import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from 'reactstrap'
+
+import ShipmentExpandedDetail from '../ShipmentExpandedDetail'
 
 type Props = {
   tableData: OrderRowType[]
@@ -52,17 +54,13 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
           case 'shipped':
           case 'received':
             return <span className='badge text-uppercase badge-soft-success p-2'> {row.orderStatus} </span>
-            break
           case 'awaiting_shipment':
           case 'awaiting':
             return <span className='badge text-uppercase badge-soft-secondary p-2'>{' awaiting '}</span>
-            break
           case 'on_hold':
             return <span className='badge text-uppercase badge-soft-warning p-2'>{' on hold '}</span>
-            break
           case 'cancelled':
             return <span className='badge text-uppercase badge-soft-danger p-2'> {row.orderStatus} </span>
-            break
           default:
             break
         }
@@ -172,7 +170,7 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
               </DropdownItem>
               {!row.isReceivingFromPo && row.orderStatus !== 'received' && (
                 <DropdownItem>
-                  <a href={row.proofOfShipped || '#'} target='blank' className='text-black'>
+                  <a href={row.proofOfShipped || '#'} target='blank' rel='noopener noreferrer' className='text-black'>
                     <i className='las la-truck label-icon align-middle fs-5 me-2' />
                     <span className='fw-normal text-dark'>Proof Of Received</span>
                   </a>
@@ -187,24 +185,25 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
                   </DropdownItem>
                 </>
               )}
-              {(row.orderStatus == 'awaiting' || row.orderStatus == 'awaiting_shipment') && row.orderItems.reduce((totalReceived, item: ShipmentOrderItem) => totalReceived + item.qtyReceived!, 0) <= 0 && (
-                <>
-                  <DropdownItem header className='text-danger'>
-                    Danger Zone
-                  </DropdownItem>
-                  <DropdownItem
-                    onClick={() =>
-                      setshowDeleteModal({
-                        show: true,
-                        orderId: row.id,
-                        orderNumber: row.orderNumber,
-                      })
-                    }>
-                    <i className='las la-trash-alt text-danger label-icon align-middle fs-5 me-2' />
-                    <span className='fw-normal text-danger'>Delete Receiving</span>
-                  </DropdownItem>
-                </>
-              )}
+              {(row.orderStatus == 'awaiting' || row.orderStatus == 'awaiting_shipment') &&
+                row.orderItems.reduce((totalReceived, item: ShipmentOrderItem) => totalReceived + item.qtyReceived!, 0) <= 0 && (
+                  <>
+                    <DropdownItem header className='text-danger'>
+                      Danger Zone
+                    </DropdownItem>
+                    <DropdownItem
+                      onClick={() =>
+                        setshowDeleteModal({
+                          show: true,
+                          orderId: row.id,
+                          orderNumber: row.orderNumber,
+                        })
+                      }>
+                      <i className='las la-trash-alt text-danger label-icon align-middle fs-5 me-2' />
+                      <span className='fw-normal text-danger'>Delete Receiving</span>
+                    </DropdownItem>
+                  </>
+                )}
             </DropdownMenu>
           </UncontrolledDropdown>
         )
@@ -214,7 +213,15 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
 
   return (
     <>
-      <DataTable columns={columns} data={tableData} progressPending={pending} expandableRows expandableRowsComponent={ShipmentExpandedDetail} expandableRowsComponentProps={{ mutateReceivings: mutateReceivings }} striped={true} />
+      <DataTable
+        columns={columns}
+        data={tableData}
+        progressPending={pending}
+        expandableRows
+        expandableRowsComponent={ShipmentExpandedDetail}
+        expandableRowsComponentProps={{ mutateReceivings: mutateReceivings }}
+        striped={true}
+      />
     </>
   )
 }
