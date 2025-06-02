@@ -19,14 +19,10 @@ const NotificationsPanel = () => {
 
   const { state }: any = useContext(AppContext)
 
-  const { data: notifications, mutate } = useSWR(
-    state.user.businessId ? `/api/notifications/getNotifications?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-      refreshInterval: 1000 * 60 * 5,
-    }
-  )
+  const { data: notifications, mutate } = useSWR(state.user.businessId ? `/api/notifications/getNotifications?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher, {
+    revalidateOnFocus: false,
+    refreshInterval: 1000 * 60 * 5,
+  })
 
   useSocket(userId, mutate) // ✅ Pass userId to useSocket
 
@@ -67,9 +63,7 @@ const NotificationsPanel = () => {
         <UncontrolledDropdown className='dropdown d-inline-block' direction='down'>
           <DropdownToggle tag='button' className='btn btn-primary btn-icon'>
             <i className='mdi mdi-bell fs-4' />
-            {notifications?.some((info) => !info.read) && (
-              <span className='badge bg-danger position-absolute top-0 start-100 translate-middle'>{notifications?.filter((info) => !info.read).length}</span>
-            )}
+            {notifications?.some((info) => !info.read) && <span className='badge bg-danger position-absolute top-0 start-100 translate-middle'>{notifications?.filter((info) => !info.read).length}</span>}
           </DropdownToggle>
           <DropdownMenu className='dropdown-menu-lg pt-0 mt-2' end style={{ minWidth: '200px' }}>
             <div className='bg-primary bg-pattern rounded-top d-flex flex-column justify-content-between align-items-baseline flex-md-row'>
@@ -94,11 +88,9 @@ const NotificationsPanel = () => {
                     <span className='m-0 fw-normal d-column justify-content-start align-items-end gap-1 d-lg-flex' style={{ fontSize: '0.65rem' }}>
                       {moment(info.created).fromNow()}
                       {info.tag && notificationsTagLinks[info.tag as keyof typeof notificationsTagLinks]?.link && (
-                        <Link href={notificationsTagLinks[info.tag as keyof typeof notificationsTagLinks].link}>
-                          <a className='capitalize text-primary d-flex align-items-end gap-1'>
-                            {' • '}
-                            {notificationsTagLinks[info.tag as keyof typeof notificationsTagLinks].title} <i className='ri-external-link-fill m-0 fs-7 text-primary' />
-                          </a>
+                        <Link href={notificationsTagLinks[info.tag as keyof typeof notificationsTagLinks].link} className='capitalize text-primary d-flex align-items-end gap-1'>
+                          {' • '}
+                          {notificationsTagLinks[info.tag as keyof typeof notificationsTagLinks].title} <i className='ri-external-link-fill m-0 fs-7 text-primary' />
                         </Link>
                       )}
                     </span>

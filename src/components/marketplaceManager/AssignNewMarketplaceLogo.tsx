@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import SimpleSelect, { SelectOptionType } from '@components/Common/SimpleSelect'
+import { useContext, useEffect, useRef, useState } from 'react'
+
+import SimpleSelect, { SelectSingleValueType } from '@components/Common/SimpleSelect'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
-import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap'
 import useSWR from 'swr'
 
@@ -13,7 +14,7 @@ type Channels = {
 
 type Props = {
   selected: string
-  setLogo: (selected: SelectOptionType) => void
+  setLogo: (selected: SelectSingleValueType) => void
 }
 
 const fetcher = async (endPoint: string) => {
@@ -26,9 +27,13 @@ const AssignNewMarketplaceLogo = ({ selected, setLogo }: Props) => {
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const AssignNewMarketplaceLogoContainer = useRef<HTMLDivElement | null>(null)
 
-  const { data: channels } = useSWR(state.user.businessId ? `/api/marketplaces/getStoreChannels?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher, {
-    revalidateOnFocus: false,
-  })
+  const { data: channels } = useSWR(
+    state.user.businessId ? `/api/marketplaces/getStoreChannels?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  )
 
   useEffect(() => {
     if (document) {

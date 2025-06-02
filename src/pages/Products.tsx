@@ -178,16 +178,7 @@ const Products = ({ session }: Props) => {
               <Col lg={12}>
                 <Row className='d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-2 flex-md-row justify-content-md-between align-items-md-center'>
                   <div className='w-auto d-flex flex-row align-items-center justify-content-between gap-2'>
-                    <FilterProducts
-                      brands={data?.brands}
-                      suppliers={data?.suppliers}
-                      categories={data?.categories}
-                      brand={brand}
-                      supplier={supplier}
-                      category={category}
-                      condition={condition}
-                      activeTab={true}
-                    />
+                    <FilterProducts brands={data?.brands} suppliers={data?.suppliers} categories={data?.categories} brand={brand} supplier={supplier} category={category} condition={condition} activeTab={true} />
                     <Link href={'/AddProduct'}>
                       <Button color='primary' size='sm' className='fs-7 text-nowrap'>
                         <i className='mdi mdi-plus-circle label-icon align-middle fs-5 me-2' />
@@ -198,7 +189,7 @@ const Products = ({ session }: Props) => {
                       <i className='mdi mdi-arrow-down-bold label-icon align-middle fs-5 me-2' />
                       {loadingCsv ? <Spinner color='white' size={'sm'} /> : 'Export'}
                     </Button> */}
-                    {/* <Link href={'/ProductsBulkEdit'} passHref>
+                    {/* <Link href={'/ProductsBulkEdit'} >
                       <Button type='button' color='primary' className='fs-6 py-1'>
                         <i className='mdi mdi-database-edit label-icon align-middle fs-5 me-2' />
                         Bulk Edit
@@ -293,15 +284,7 @@ const Products = ({ session }: Props) => {
         </div>
       </React.Fragment>
       {state.showInventoryBinsModal && <InventoryBinsModal />}
-      {importModalDetails.show && (
-        <ImportProductsFileModal
-          importModalDetails={importModalDetails}
-          setimportModalDetails={setimportModalDetails}
-          brands={data?.brands}
-          suppliers={data?.suppliers}
-          categories={data?.categories}
-        />
-      )}
+      {importModalDetails.show && <ImportProductsFileModal importModalDetails={importModalDetails} setimportModalDetails={setimportModalDetails} brands={data?.brands} suppliers={data?.suppliers} categories={data?.categories} />}
       {cloneProductModal.isOpen && <CloneProductModal cloneProductModal={cloneProductModal} setcloneProductModal={setcloneProductModal} />}
     </div>
   )

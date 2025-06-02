@@ -1,17 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
+import { useContext, useState } from 'react'
+
 import TooltipComponent from '@components/constants/Tooltip'
 import CancelManualOrderConfirmationModal from '@components/modals/orders/shipments/CancelManualOrderConfirmationModal'
+import CreateReturnModal from '@components/modals/shipments/CreateReturnModal'
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
+import { NoImageAdress } from '@lib/assetsConstants'
 import { KitChildren, Shipment, ShipmentOrderItem } from '@typesTs/shipments/shipments'
 import moment from 'moment'
-import React, { useContext, useState } from 'react'
 import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
+
 import ShipmentCarrierStatusBar from './ShipmentCarrierStatusBar'
 import ShipmentTrackingNumber from './ShipmentTrackingNumber'
-import CreateReturnModal from '@components/modals/shipments/CreateReturnModal'
-import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   data: Shipment
@@ -125,12 +127,16 @@ const ShipmentType = ({ data, showActions, mutateShipments }: Props) => {
                       </tr>
                       <tr>
                         <td className='text-muted text-nowrap'>Customer Name:</td>
-                        <td className='fw-semibold w-100 capitalize'>{data.shipName}</td>
+                        <td className='fw-semibold w-100 capitalize'>
+                          {data.shipName} {data.shipName2}
+                        </td>
                       </tr>
                       <tr>
                         <td className='text-muted text-nowrap'>Address:</td>
                         <td className='fw-semibold w-100 text-wrap'>
-                          <p className='m-0 p-0'>{data.shipStreet}</p>
+                          <p className='m-0 p-0'>
+                            {data.shipStreet} {data.shipStreet2}
+                          </p>
                           <p className='m-0 p-0'>
                             {data.shipCity}, {data.shipState}, {data.shipZipcode}, {data.shipCountry}
                           </p>

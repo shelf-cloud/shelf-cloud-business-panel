@@ -23,11 +23,7 @@ const ProfileDropdown = () => {
   return (
     <React.Fragment>
       {session?.user?.businessName ? (
-        <Dropdown
-          isOpen={isProfileDropdown}
-          toggle={toggleProfileDropdown}
-          className='d-flex align-items-center rounded-4 shadow'
-          style={{ backgroundColor: 'rgba(239, 243, 246, 1)' }}>
+        <Dropdown isOpen={isProfileDropdown} toggle={toggleProfileDropdown} className='d-flex align-items-center rounded-4 shadow' style={{ backgroundColor: 'rgba(239, 243, 246, 1)' }}>
           <DropdownToggle tag='button' type='button' className='btn'>
             <span className='d-flex align-items-center justify-content-between gap-2'>
               <span className='text-end d-flex flex-column'>
@@ -37,11 +33,41 @@ const ProfileDropdown = () => {
               {state &&
                 state.currentRegion !== '' &&
                 (state.currentRegion == 'us' ? (
-                  <Image className='rounded-circle header-profile-user' src={flag_of_usa} width={25} height={25} alt='Header Avatar' />
+                  <Image
+                    className='rounded-circle header-profile-user'
+                    src={flag_of_usa}
+                    width={25}
+                    height={25}
+                    alt='Header Avatar'
+                    style={{
+                      maxWidth: '100%',
+                      height: 'auto',
+                    }}
+                  />
                 ) : state.currentRegion == 'eu' ? (
-                  <Image className='rounded-circle header-profile-user' src={flag_of_europe} width={25} height={25} alt='Header Avatar' />
+                  <Image
+                    className='rounded-circle header-profile-user'
+                    src={flag_of_europe}
+                    width={25}
+                    height={25}
+                    alt='Header Avatar'
+                    style={{
+                      maxWidth: '100%',
+                      height: 'auto',
+                    }}
+                  />
                 ) : (
-                  <Image className='rounded-circle header-profile-user' src={flag_of_SC} width={25} height={25} alt='Header Avatar' />
+                  <Image
+                    className='rounded-circle header-profile-user'
+                    src={flag_of_SC}
+                    width={25}
+                    height={25}
+                    alt='Header Avatar'
+                    style={{
+                      maxWidth: '100%',
+                      height: 'auto',
+                    }}
+                  />
                 ))}
             </span>
           </DropdownToggle>
@@ -75,9 +101,29 @@ const ProfileDropdown = () => {
               <DropdownItem className='d-flex justify-content-start align-items-center' onClick={state.currentRegion == 'us' ? () => setRegion('eu') : () => setRegion('us')}>
                 <div className=' align-middle me-1' style={{ width: '15px', height: '15px' }}>
                   {state.currentRegion == 'eu' ? (
-                    <Image className='rounded-circle header-profile-user' src={flag_of_usa} width={16} height={16} alt='Header Avatar' />
+                    <Image
+                      className='rounded-circle header-profile-user'
+                      src={flag_of_usa}
+                      width={16}
+                      height={16}
+                      alt='Header Avatar'
+                      style={{
+                        maxWidth: '100%',
+                        height: 'auto',
+                      }}
+                    />
                   ) : (
-                    <Image className='rounded-circle header-profile-user' src={flag_of_europe} width={16} height={16} alt='Header Avatar' />
+                    <Image
+                      className='rounded-circle header-profile-user'
+                      src={flag_of_europe}
+                      width={16}
+                      height={16}
+                      alt='Header Avatar'
+                      style={{
+                        maxWidth: '100%',
+                        height: 'auto',
+                      }}
+                    />
                   )}
                 </div>
                 <div className='align-middle'>Change Location</div>

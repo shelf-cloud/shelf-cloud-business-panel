@@ -9,7 +9,7 @@ import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
 import axios from 'axios'
-import Image from 'next/image'
+import Image from "next/image"
 import PlaneImage from '../assets/images/contactus-plane.png'
 import SquareImage from '../assets/images/contactus-square.png'
 
@@ -79,10 +79,24 @@ function ContactUs() {
                   <CardBody className='pb-2 pb-md-5'>
                     <div className='d-flex flex-row justify-content-between w-100 align-items-start pt-3 pb-2'>
                       <div className='position-relative d-flex' style={{ width: '30%', minWidth: '130px' }}>
-                        <Image src={PlaneImage} layout='intrinsic' alt='ShelfCloud Logo' objectFit='contain' />
+                        <Image
+                          src={PlaneImage}
+                          alt='ShelfCloud Logo'
+                          style={{
+                            maxWidth: "100%",
+                            height: "auto",
+                            objectFit: "contain"
+                          }} />
                       </div>
                       <div className='position-relative d-flex' style={{ width: '8%', minWidth: '40px' }}>
-                        <Image src={SquareImage} layout='intrinsic' alt='ShelfCloud Logo' objectFit='contain' />
+                        <Image
+                          src={SquareImage}
+                          alt='ShelfCloud Logo'
+                          style={{
+                            maxWidth: "100%",
+                            height: "auto",
+                            objectFit: "contain"
+                          }} />
                       </div>
                     </div>
                     <Col md={9} className='mx-auto my-0'>
@@ -183,7 +197,7 @@ function ContactUs() {
         </div>
       </React.Fragment>
     </div>
-  )
+  );
 }
 
 export default ContactUs

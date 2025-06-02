@@ -58,7 +58,15 @@ function SignIn({}: Props) {
         <div className='w-100 h-100 d-flex flex-column align-items-center justify-content-start' style={{ backgroundColor: '#FAFBFD' }}>
           <div className='w-100 px-4 py-2 border-bottom h-fit'>
             <div className='position-relative d-flex align-self-center h-100' style={{ width: '26%', minWidth: '220px' }}>
-              <Image src={ShelfCloudLogo} layout='intrinsic' alt='ShelfCloud Logo' objectFit='contain' />
+              <Image
+                src={ShelfCloudLogo}
+                alt='ShelfCloud Logo'
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                  objectFit: 'contain',
+                }}
+              />
             </div>
           </div>
           <div className='col-10 col-lg-8 h-fit m-auto d-flex justify-content-center align-items-center' style={{ backgroundColor: '#FAFBFD' }}>
@@ -83,12 +91,7 @@ function SignIn({}: Props) {
                   </Label>
                   <div className='position-relative auth-pass-inputgroup mb-3'>
                     <input type={show ? 'text' : 'password'} className='form-control pe-5' placeholder='Enter password' id='password' required name='password' ref={passwordRef} />
-                    <button
-                      name='passwordVisibility'
-                      className='btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted'
-                      type='button'
-                      id='password-addon'
-                      onClick={() => setShow(!show)}>
+                    <button name='passwordVisibility' className='btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted' type='button' id='password-addon' onClick={() => setShow(!show)}>
                       <i className='ri-eye-fill align-middle fs-5'></i>
                     </button>
                   </div>
@@ -119,14 +122,38 @@ function SignIn({}: Props) {
             <h2 className='fs-1 fw-bold text-white text-start m-0 p-0 w-100 mb-3'>Welcome Back</h2>
             <p className='fs-5 fw-light text-white text-start m-0 p-0 w-100 mb-3'>4 in 1 Cloud-Based Software Solutions for Small Business.</p>
             <div className='position-relative text-start mb-3' style={{ width: '70px' }}>
-              <Image src={LinesImage} layout='intrinsic' alt='ShelfCloud Logo' objectFit='contain' />
+              <Image
+                src={LinesImage}
+                alt='ShelfCloud Lines Image'
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                  objectFit: 'contain',
+                }}
+              />
             </div>
             <div className='w-100 position-relative'>
               <div className='position-relative text-start' style={{ width: '100%', zIndex: '9' }}>
-                <Image priority src={RightImage} layout='intrinsic' alt='ShelfCloud Logo' objectFit='contain' />
+                <Image
+                  src={RightImage}
+                  alt='ShelfCloud Dashboard Image'
+                  style={{
+                    maxWidth: '100%',
+                    height: 'auto',
+                    objectFit: 'contain',
+                  }}
+                />
               </div>
               <div className='position-absolute translate-middle' style={{ width: '45%', zIndex: '1', top: '85%', left: '95%' }}>
-                <Image src={PuntosImage} layout='intrinsic' alt='ShelfCloud Logo' objectFit='contain' />
+                <Image
+                  src={PuntosImage}
+                  alt='ShelfCloud Background dots Image'
+                  style={{
+                    maxWidth: '100%',
+                    height: 'auto',
+                    objectFit: 'contain',
+                  }}
+                />
               </div>
             </div>
           </div>

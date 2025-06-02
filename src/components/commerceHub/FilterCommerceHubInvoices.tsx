@@ -1,15 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import SimpleSelect, { SelectOptionType } from '@components/Common/SimpleSelect'
+import { useEffect, useMemo, useRef, useState } from 'react'
+
+import SimpleSelect, { SelectOptionType, SelectSingleValueType } from '@components/Common/SimpleSelect'
 import { CommerceHubStore } from '@typesTs/commercehub/invoices'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { DebounceInput } from 'react-debounce-input'
 import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle, Input, Label } from 'reactstrap'
 
 export type InvoiceCommerceHubFiltersType = {
   onlyOverdue: boolean
   showOverdue: boolean
-  store: SelectOptionType
-  status: SelectOptionType
+  store: SelectSingleValueType
+  status: SelectSingleValueType
   showStaus: boolean
 }
 
@@ -40,8 +41,8 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions,
 
   const handleDaysOverdueValue = useMemo(() => {
     if (daysOverdue === undefined || daysOverdue === 0) {
-      if (filters.store.value === 'all') return stores.reduce((max, store) => (store.payTerms > max ? store.payTerms : max), 0 as number)
-      return stores.find((store) => store.value === filters.store.value)?.payTerms || 0
+      if (filters.store!.value === 'all') return stores.reduce((max, store) => (store.payTerms > max ? store.payTerms : max), 0 as number)
+      return stores.find((store) => store.value === filters.store!.value)?.payTerms || 0
     }
     return daysOverdue
   }, [daysOverdue, filters.store, stores])

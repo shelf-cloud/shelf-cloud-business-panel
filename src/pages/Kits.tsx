@@ -122,7 +122,7 @@ const Kits = ({ session }: Props) => {
               <Col lg={12}>
                 <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-3 flex-md-row justify-content-md-between align-items-md-center'>
                   <div className='w-auto d-flex flex-row align-items-center justify-content-between gap-4'>
-                    <Link href={'/AddKit'} passHref>
+                    <Link href={'/AddKit'}>
                       <Button color='primary' className='fs-6 py-1 p3-1'>
                         <i className='mdi mdi-plus-circle label-icon align-middle fs-5 me-2' />
                         Add Kit

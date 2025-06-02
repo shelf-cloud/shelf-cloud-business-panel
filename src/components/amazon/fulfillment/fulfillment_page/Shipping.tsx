@@ -6,7 +6,7 @@ import { DeliveryWindowsOptions, DeliveryWindowsResponse, InboundPlan, Placement
 import moment from 'moment'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { Alert, Button, Card, CardBody, CardHeader, Col, Input, Label, Row, Spinner } from 'reactstrap'
-import Image from 'next/image'
+import Image from "next/image"
 import boxIcon from '@assets/fulfillments/outbound_box.png'
 import palletIcon from '@assets/fulfillments/outbound_pallet.png'
 // import SelectShippingCarrier from './SelectShippingCarrier'
@@ -630,7 +630,14 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                             margin: '2px 0px',
                             position: 'relative',
                           }}>
-                          <Image src={boxIcon} alt='box_icon' className='object-contain' />
+                          <Image
+                            src={boxIcon}
+                            alt='box_icon'
+                            className='object-contain'
+                            style={{
+                              maxWidth: "100%",
+                              height: "auto"
+                            }} />
                         </div>
                         <div>
                           <p className='m-0 p-0 fs-7 fw-semibold'>Small Parcel Delivery (SPD)</p>
@@ -680,7 +687,14 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                             margin: '2px 0px',
                             position: 'relative',
                           }}>
-                          <Image src={palletIcon} alt='box_icon' className='object-contain' />
+                          <Image
+                            src={palletIcon}
+                            alt='box_icon'
+                            className='object-contain'
+                            style={{
+                              maxWidth: "100%",
+                              height: "auto"
+                            }} />
                         </div>
                         <div>
                           <p className='m-0 p-0 fs-7 fw-semibold'>Less than and Full TruckLoad (LTL/FTL)</p>
@@ -1008,7 +1022,14 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                       margin: '2px 0px',
                                       position: 'relative',
                                     }}>
-                                    <Image src={boxIcon} alt='box_icon' className='object-contain' />
+                                    <Image
+                                      src={boxIcon}
+                                      alt='box_icon'
+                                      className='object-contain'
+                                      style={{
+                                        maxWidth: "100%",
+                                        height: "auto"
+                                      }} />
                                   </div>
                                   <div>
                                     <p className='m-0 p-0 fs-7 fw-semibold'>Small Parcel Delivery (SPD)</p>
@@ -1073,7 +1094,14 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                         margin: '2px 0px',
                                         position: 'relative',
                                       }}>
-                                      <Image src={palletIcon} alt='box_icon' className='object-contain' />
+                                      <Image
+                                        src={palletIcon}
+                                        alt='box_icon'
+                                        className='object-contain'
+                                        style={{
+                                          maxWidth: "100%",
+                                          height: "auto"
+                                        }} />
                                     </div>
                                     <div>
                                       <p className='m-0 p-0 fs-7 fw-semibold'>Less than and Full TruckLoad (LTL/FTL)</p>
@@ -1468,7 +1496,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
         </div>
       )}
     </>
-  )
+  );
 }
 
 export default Shipping

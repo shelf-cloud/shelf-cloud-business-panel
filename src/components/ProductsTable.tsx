@@ -42,18 +42,9 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
     html += '.barcodeSection p{position:relative;float:left;left:5%;width:95%;text-align:left;margin-top:0px;margin-bottom:0px;font-size:14px;z-index:5;}'
     html += '.barcodeSection svg{width:90%;transform: translate(0px, -10px) !important;}'
     html += '</style></head><body>'
+    html += '<div class="barcodeSection"><p style="text-align:center;">' + product.sku + '</p><p style="text-align:center;white-space: nowrap;overflow: hidden;">' + product.title + '</p><svg id="barcode" width="100%" height="100%"></svg></div>'
     html +=
-      '<div class="barcodeSection"><p style="text-align:center;">' +
-      product.sku +
-      '</p><p style="text-align:center;white-space: nowrap;overflow: hidden;">' +
-      product.title +
-      '</p><svg id="barcode" width="100%" height="100%"></svg></div>'
-    html +=
-      '</body><script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/JsBarcode.all.min.js"></script><script>JsBarcode("#barcode", "' +
-      product.barcode +
-      '", {text: "' +
-      product.barcode +
-      '",fontSize: 12,textMargin: 0, height:31});</script></html>'
+      '</body><script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/JsBarcode.all.min.js"></script><script>JsBarcode("#barcode", "' + product.barcode + '", {text: "' + product.barcode + '",fontSize: 12,textMargin: 0, height:31});</script></html>'
     var wnd = window.open('about:Barcode-Generated', '', '_blank')
     wnd?.document.write(html)
   }
@@ -117,31 +108,22 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       name: <span className='fw-bold fs-6'>Image</span>,
       selector: (row: Product) => {
         return (
-          <Link href={`/product/${row.inventoryId}/${row.sku}`} passHref>
-            <a>
-              <div
-                style={{
-                  width: '50px',
-                  height: '60px',
-                  margin: '2px 0px',
-                  position: 'relative',
-                }}>
-                <img
-                  loading='lazy'
-                  src={
-                    row.image
-                      ? row.image
-                      : 'https://firebasestorage.googleapis.com/v0/b/shelf-cloud-bucket.appspot.com/o/operations%2Fno-image.png?alt=media&token=a4dc1fc9-fa29-40d8-9afc-fe7e09486d75'
-                  }
-                  onError={(e) =>
-                    (e.currentTarget.src =
-                      'https://firebasestorage.googleapis.com/v0/b/shelf-cloud-bucket.appspot.com/o/operations%2Fno-image.png?alt=media&token=a4dc1fc9-fa29-40d8-9afc-fe7e09486d75')
-                  }
-                  alt='product Image'
-                  style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
-                />
-              </div>
-            </a>
+          <Link href={`/product/${row.inventoryId}/${row.sku}`}>
+            <div
+              style={{
+                width: '50px',
+                height: '60px',
+                margin: '2px 0px',
+                position: 'relative',
+              }}>
+              <img
+                loading='lazy'
+                src={row.image ? row.image : 'https://firebasestorage.googleapis.com/v0/b/shelf-cloud-bucket.appspot.com/o/operations%2Fno-image.png?alt=media&token=a4dc1fc9-fa29-40d8-9afc-fe7e09486d75'}
+                onError={(e) => (e.currentTarget.src = 'https://firebasestorage.googleapis.com/v0/b/shelf-cloud-bucket.appspot.com/o/operations%2Fno-image.png?alt=media&token=a4dc1fc9-fa29-40d8-9afc-fe7e09486d75')}
+                alt='product Image'
+                style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+              />
+            </div>
           </Link>
         )
       },
@@ -161,10 +143,8 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       selector: (row: Product) => {
         return (
           <>
-            <Link href={`/product/${row.inventoryId}/${row.sku}`} passHref>
-              <a>
-                <p className='fs-7 m-0 fw-semibold text-black'>{row.title}</p>
-              </a>
+            <Link href={`/product/${row.inventoryId}/${row.sku}`}>
+              <p className='fs-7 m-0 fw-semibold text-black'>{row.title}</p>
             </Link>
             <p className='m-0 fs-7 d-flex flex-row justify-content-start align-items-start'>
               {row.sku} {row.note != '' && <i className='ri-information-fill ms-2 fs-5 text-warning' id={`tooltip${row.inventoryId}`}></i>}
@@ -352,11 +332,9 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
             </DropdownToggle>
             <DropdownMenu className='dropdown-menu-end' container={'body'}>
               <DropdownItem className='edit-item-btn'>
-                <Link href={`/product/${row.inventoryId}/${row.sku}`} passHref>
-                  <a>
-                    <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
-                    <span className='fs-7 fw-normal text-dark'>View Details</span>
-                  </a>
+                <Link href={`/product/${row.inventoryId}/${row.sku}`}>
+                  <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
+                  <span className='fs-7 fw-normal text-dark'>View Details</span>
                 </Link>
               </DropdownItem>
               <DropdownItem header>Actions</DropdownItem>

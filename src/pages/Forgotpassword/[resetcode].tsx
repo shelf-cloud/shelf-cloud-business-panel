@@ -1,5 +1,5 @@
 import React, { FormEventHandler, useState } from 'react'
-import Image from 'next/image'
+import Image from "next/image"
 import ShelfCloudLogo from '@images/shelfcloud-blue-h.png'
 import { Button, Label, Spinner } from 'reactstrap'
 import { useRouter } from 'next/router'
@@ -59,7 +59,14 @@ const ResetPasswordPage = ({}: Props) => {
     <div className='vw-100 vh-100 d-flex flex-column relative'>
       <div className='w-100 px-4 py-2 border-bottom' style={{ height: '80px', backgroundColor: '#FAFBFD' }}>
         <div className='position-relative d-flex align-self-center h-100' style={{ width: '20%', minWidth: '220px' }}>
-          <Image src={ShelfCloudLogo} layout='intrinsic' alt='ShelfCloud Logo' objectFit='contain' />
+          <Image
+            src={ShelfCloudLogo}
+            alt='ShelfCloud Logo'
+            style={{
+              maxWidth: "100%",
+              height: "auto",
+              objectFit: "contain"
+            }} />
         </div>
       </div>
       <div className='w-100 h-100 d-flex flex-column justify-content-center align-items-center'>
@@ -121,7 +128,7 @@ const ResetPasswordPage = ({}: Props) => {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default ResetPasswordPage

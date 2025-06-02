@@ -57,8 +57,10 @@ const CheckNumberTable = ({ summary }: Props) => {
                         </td>
                         <td>
                           {item.checkNumber ? (
-                            <Link href={`/commercehub/${item.storeName}/${item.checkNumber}`}>
-                              <a className='fs-7 text-primary fw-normal'>{item.checkNumber}</a>
+                            <Link
+                              href={`/commercehub/${item.storeName}/${item.checkNumber}`}
+                              className='fs-7 text-primary fw-normal'>
+                              {item.checkNumber}
                             </Link>
                           ) : (
                             <span className='fs-6 mw-30 text-muted fw-light fst-italic'>Pending</span>
@@ -68,7 +70,7 @@ const CheckNumberTable = ({ summary }: Props) => {
                         <td>{FormatCurrency(state.currentRegion, totalPaid)}</td>
                         <td className='text-danger'>{FormatCurrency(state.currentRegion, deductions)}</td>
                       </tr>
-                    )
+                    );
                   })}
                 </tbody>
               </table>
@@ -82,7 +84,7 @@ const CheckNumberTable = ({ summary }: Props) => {
         </Card>
       </Col>
     </React.Fragment>
-  )
+  );
 }
 
 export default CheckNumberTable

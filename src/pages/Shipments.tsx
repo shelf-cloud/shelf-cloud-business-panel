@@ -1,22 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useContext, useMemo, useRef, useCallback } from 'react'
-import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
-import axios from 'axios'
 import Head from 'next/head'
-import { Button, Card, CardBody, Container, Spinner } from 'reactstrap'
-import BreadCrumb from '@components/Common/BreadCrumb'
+import React, { useCallback, useContext, useMemo, useRef, useState } from 'react'
+
 import { getSession } from '@auth/client'
-import moment from 'moment'
-import ShipmentsTable from '@components/shipments/shipmentLog/ShipmentsTable'
-import { toast } from 'react-toastify'
+import BreadCrumb from '@components/Common/BreadCrumb'
+import { SelectSingleValueType } from '@components/Common/SimpleSelect'
 import FilterByDates from '@components/FilterByDates'
 import FilterByOthers from '@components/FilterByOthers'
-import useSWRInfinite from 'swr/infinite'
 import ShipmentDetailsModal from '@components/modals/shipments/ShipmentDetailsModal'
-import { Shipment } from '@typesTs/shipments/shipments'
-import { SelectOptionType } from '@components/Common/SimpleSelect'
+import ShipmentsTable from '@components/shipments/shipmentLog/ShipmentsTable'
 import SearchInput from '@components/ui/SearchInput'
+import AppContext from '@context/AppContext'
+import { Shipment } from '@typesTs/shipments/shipments'
+import axios from 'axios'
+import moment from 'moment'
+import { toast } from 'react-toastify'
+import { Button, Card, CardBody, Container, Spinner } from 'reactstrap'
+import useSWRInfinite from 'swr/infinite'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -58,10 +59,10 @@ const Shipments = ({ session }: Props) => {
   const [startDate, setStartDate] = useState<string>('')
   const [endDate, setEndDate] = useState<string>('')
   const [searchValue, setSearchValue] = useState<string>('')
-  const [searchType, setSearchType] = useState<SelectOptionType>({ value: '', label: 'All' })
-  const [searchStatus, setSearchStatus] = useState<SelectOptionType>({ value: '', label: 'All' })
-  const [searchMarketplace, setSearchMarketplace] = useState<SelectOptionType>({ value: '', label: 'All Stores' })
-  const [searchSku, setSearchSku] = useState<SelectOptionType>({ value: '', label: 'All' })
+  const [searchType, setSearchType] = useState<SelectSingleValueType>({ value: '', label: 'All' })
+  const [searchStatus, setSearchStatus] = useState<SelectSingleValueType>({ value: '', label: 'All' })
+  const [searchMarketplace, setSearchMarketplace] = useState<SelectSingleValueType>({ value: '', label: 'All Stores' })
+  const [searchSku, setSearchSku] = useState<SelectSingleValueType>({ value: '', label: 'All' })
   const [sortBy, setSortBy] = useState({
     key: '',
     asc: false,
@@ -78,10 +79,10 @@ const Shipments = ({ session }: Props) => {
     if (searchValue) url += `&search=${encodeURIComponent(searchValue)}`
     if (startDate) url += `&startDate=${startDate}`
     if (endDate) url += `&endDate=${endDate}`
-    if (searchType.value !== '') url += `&orderType=${searchType.value}`
-    if (searchStatus.value !== '') url += `&orderStatus=${searchStatus.value}`
-    if (searchMarketplace.value !== '') url += `&storeId=${searchMarketplace.value}`
-    if (searchSku.value !== '') url += `&sku=${searchSku.value}`
+    if (searchType!.value !== '') url += `&orderType=${searchType!.value}`
+    if (searchStatus!.value !== '') url += `&orderStatus=${searchStatus!.value}`
+    if (searchMarketplace!.value !== '') url += `&storeId=${searchMarketplace!.value}`
+    if (searchSku!.value !== '') url += `&sku=${searchSku!.value}`
     if (sortBy.key !== '') url += `&sortBy=${sortBy.key}&direction=${sortBy.asc ? 'ASC' : 'DESC'}`
 
     return url
@@ -141,7 +142,14 @@ const Shipments = ({ session }: Props) => {
   }
 
   const hasActiveFilters = useMemo(
-    () => searchValue !== '' || startDate !== '' || endDate !== '' || searchType.value !== '' || searchStatus.value !== '' || searchMarketplace.value !== '' || searchSku.value !== '',
+    () =>
+      searchValue !== '' ||
+      startDate !== '' ||
+      endDate !== '' ||
+      searchType!.value !== '' ||
+      searchStatus!.value !== '' ||
+      searchMarketplace!.value !== '' ||
+      searchSku!.value !== '',
     [searchValue, startDate, endDate, searchType, searchStatus, searchMarketplace, searchSku]
   )
 
@@ -237,7 +245,13 @@ const Shipments = ({ session }: Props) => {
           <Container fluid>
             <div className='d-flex flex-column justify-content-center align-items-end gap-2 mb-2 flex-lg-row justify-content-md-between align-items-md-center px-1'>
               <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'>
-                <FilterByDates shipmentsStartDate={startDate} setShipmentsStartDate={setStartDate} setShipmentsEndDate={setEndDate} shipmentsEndDate={endDate} handleChangeDatesFromPicker={handleChangeDatesFromPicker} />
+                <FilterByDates
+                  shipmentsStartDate={startDate}
+                  setShipmentsStartDate={setStartDate}
+                  setShipmentsEndDate={setEndDate}
+                  shipmentsEndDate={endDate}
+                  handleChangeDatesFromPicker={handleChangeDatesFromPicker}
+                />
                 <FilterByOthers
                   searchType={searchType}
                   setSearchType={setSearchType}

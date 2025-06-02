@@ -1,24 +1,25 @@
-import React, { useCallback, useContext, useMemo, useRef, useState } from 'react'
-import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
-import { Button, Card, CardBody, Container, Spinner } from 'reactstrap'
-import BreadCrumb from '@components/Common/BreadCrumb'
+import React, { useCallback, useContext, useMemo, useRef, useState } from 'react'
+
 import { getSession } from '@auth/client'
-import axios from 'axios'
-import useSWRInfinite from 'swr/infinite'
-import { CommerceHubStoresResponse, Invoice, InvoicesResponse } from '@typesTs/commercehub/invoices'
-import InvoicesTable from '@components/commerceHub/InvoicesTable'
-import { DebounceInput } from 'react-debounce-input'
+import BreadCrumb from '@components/Common/BreadCrumb'
 import FilterByDates from '@components/FilterByDates'
-import moment from 'moment'
-import UpdateInvoicesModal from '@components/modals/commercehub/UpdateInvoicesModal'
-import FilterCommerceHubInvoices, { InvoiceCommerceHubFiltersType } from '@components/commerceHub/FilterCommerceHubInvoices'
-import useSWR from 'swr'
-import { toast } from 'react-toastify'
 import BulkActionsForSelected from '@components/commerceHub/BulkActionsForSelected'
+import FilterCommerceHubInvoices, { InvoiceCommerceHubFiltersType } from '@components/commerceHub/FilterCommerceHubInvoices'
+import InvoicesTable from '@components/commerceHub/InvoicesTable'
 import { generateDocument } from '@components/commerceHub/generateDocuments/getDocument'
 import EditInvoiceCommerceHubCommentModal from '@components/modals/commercehub/EditInvoiceCommerceHubCommentModal'
+import UpdateInvoicesModal from '@components/modals/commercehub/UpdateInvoicesModal'
+import AppContext from '@context/AppContext'
+import { CommerceHubStoresResponse, Invoice, InvoicesResponse } from '@typesTs/commercehub/invoices'
+import axios from 'axios'
+import moment from 'moment'
+import { DebounceInput } from 'react-debounce-input'
+import { toast } from 'react-toastify'
+import { Button, Card, CardBody, Container, Spinner } from 'reactstrap'
+import useSWR from 'swr'
+import useSWRInfinite from 'swr/infinite'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -111,8 +112,8 @@ const Invoices = ({ session, sessionToken }: Props) => {
     if (startDate) url += `&startDate=${startDate}`
     if (endDate) url += `&endDate=${endDate}`
     if (filters.onlyOverdue) url += `&onlyOverdue=${filters.onlyOverdue}`
-    if (filters.store.value !== 'all') url += `&store=${filters.store.value}`
-    if (filters.status.value !== 'all') url += `&status=${filters.status.value}`
+    if (filters.store!.value !== 'all') url += `&store=${filters.store!.value}`
+    if (filters.status!.value !== 'all') url += `&status=${filters.status!.value}`
     if (daysOverdue > 0) url += `&daysOverdue=${daysOverdue}`
     url += `&sortBy=${sortBy.key}&direction=${sortBy.asc ? 'ASC' : 'DESC'}`
 
@@ -196,7 +197,10 @@ const Invoices = ({ session, sessionToken }: Props) => {
     }
   }
 
-  const hasActiveFilters = useMemo(() => searchValue !== '' || startDate !== '' || endDate !== '' || filters.onlyOverdue || filters.store.value !== 'all' || filters.status.value !== 'all', [searchValue, startDate, endDate, filters])
+  const hasActiveFilters = useMemo(
+    () => searchValue !== '' || startDate !== '' || endDate !== '' || filters.onlyOverdue || filters.store!.value !== 'all' || filters.status!.value !== 'all',
+    [searchValue, startDate, endDate, filters]
+  )
 
   const downloadInfoToExcel = async () => {
     const generatingDocument = toast.loading('Generating Document...')
@@ -207,8 +211,8 @@ const Invoices = ({ session, sessionToken }: Props) => {
     if (startDate) endPoint += `&startDate=${startDate}`
     if (endDate) endPoint += `&endDate=${endDate}`
     if (filters.onlyOverdue) endPoint += `&onlyOverdue=${filters.onlyOverdue}`
-    if (filters.store.value !== 'all') endPoint += `&store=${filters.store.value}`
-    if (filters.status.value !== 'all') endPoint += `&status=${filters.status.value}`
+    if (filters.store!.value !== 'all') endPoint += `&store=${filters.store!.value}`
+    if (filters.status!.value !== 'all') endPoint += `&status=${filters.status!.value}`
     if (daysOverdue > 0) endPoint += `&daysOverdue=${daysOverdue}`
 
     const controller = new AbortController()
@@ -276,7 +280,14 @@ const Invoices = ({ session, sessionToken }: Props) => {
                   <i className='las la-cloud-download-alt label-icon align-middle fs-4 me-2' />
                   Download To Excel
                 </Button>
-                {selectedRows.length > 0 && <BulkActionsForSelected selectedRows={selectedRows} statusOptions={STATUS_OPTIONS} clearSelected={clearAllSelectedRows} changeSelectedStatus={changeSelectedStatus} />}
+                {selectedRows.length > 0 && (
+                  <BulkActionsForSelected
+                    selectedRows={selectedRows}
+                    statusOptions={STATUS_OPTIONS}
+                    clearSelected={clearAllSelectedRows}
+                    changeSelectedStatus={changeSelectedStatus}
+                  />
+                )}
               </div>
               <div className='w-100 d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-end align-items-lg-center px-0'>
                 <div className='app-search p-0 col-sm-12 col-lg-5'>
@@ -303,8 +314,21 @@ const Invoices = ({ session, sessionToken }: Props) => {
                     </span>
                   </div>
                 </div>
-                <FilterByDates shipmentsStartDate={startDate} setShipmentsStartDate={setStartDate} setShipmentsEndDate={setEndDate} shipmentsEndDate={endDate} handleChangeDatesFromPicker={handleChangeDatesFromPicker} />
-                <FilterCommerceHubInvoices filters={filters} setfilters={setfilters} stores={stores?.stores ?? []} statusOptions={STATUS_OPTIONS} daysOverdue={daysOverdue} setdaysOverdue={setdaysOverdue} />
+                <FilterByDates
+                  shipmentsStartDate={startDate}
+                  setShipmentsStartDate={setStartDate}
+                  setShipmentsEndDate={setEndDate}
+                  shipmentsEndDate={endDate}
+                  handleChangeDatesFromPicker={handleChangeDatesFromPicker}
+                />
+                <FilterCommerceHubInvoices
+                  filters={filters}
+                  setfilters={setfilters}
+                  stores={stores?.stores ?? []}
+                  statusOptions={STATUS_OPTIONS}
+                  daysOverdue={daysOverdue}
+                  setdaysOverdue={setdaysOverdue}
+                />
                 <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='fs-7 text-nowrap' onClick={clearFilters}>
                   Clear Filters
                 </Button>
@@ -312,7 +336,15 @@ const Invoices = ({ session, sessionToken }: Props) => {
             </div>
             <Card>
               <CardBody>
-                <InvoicesTable filteredItems={invoices} pending={isValidating && size === 1} setSelectedRows={setSelectedRows} toggledClearRows={toggledClearRows} sortBy={sortBy} setSortBy={setSortBy} setEditCommentModal={setEditCommentModal} />
+                <InvoicesTable
+                  filteredItems={invoices}
+                  pending={isValidating && size === 1}
+                  setSelectedRows={setSelectedRows}
+                  toggledClearRows={toggledClearRows}
+                  sortBy={sortBy}
+                  setSortBy={setSortBy}
+                  setEditCommentModal={setEditCommentModal}
+                />
                 <div ref={lastInvoiceElementRef} style={{ height: '20px', marginTop: '10px' }}>
                   {isValidating && size > 1 && (
                     <p className='text-center'>
@@ -324,7 +356,15 @@ const Invoices = ({ session, sessionToken }: Props) => {
             </Card>
           </Container>
         </div>
-        {showUpdateInvoices.show && <UpdateInvoicesModal showUpdateInvoices={showUpdateInvoices} setshowUpdateInvoices={setshowUpdateInvoices} clearFilters={clearFilters} stores={stores?.stores ?? []} mutate={mutate} />}
+        {showUpdateInvoices.show && (
+          <UpdateInvoicesModal
+            showUpdateInvoices={showUpdateInvoices}
+            setshowUpdateInvoices={setshowUpdateInvoices}
+            clearFilters={clearFilters}
+            stores={stores?.stores ?? []}
+            mutate={mutate}
+          />
+        )}
         {editCommentModal.show && <EditInvoiceCommerceHubCommentModal editCommentModal={editCommentModal} setEditCommentModal={setEditCommentModal} mutate={mutate} />}
       </React.Fragment>
     </div>

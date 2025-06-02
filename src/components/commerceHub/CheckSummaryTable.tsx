@@ -69,8 +69,10 @@ const CheckSummaryTable = ({ filteredItems, pending, sortBy, setSortBy }: Props)
       selector: (row: CheckSummaryType) => {
         return row.checkNumber ? (
           <div className='d-flex flex-wrap justify-content-start align-items-center'>
-            <Link href={`/commercehub/${row.storeName}/${row.checkNumber}`}>
-              <a className='fs-7 text-primary fw-normal'>{row.checkNumber}</a>
+            <Link
+              href={`/commercehub/${row.storeName}/${row.checkNumber}`}
+              className='fs-7 text-primary fw-normal'>
+              {row.checkNumber}
             </Link>
             <i
               className='ri-file-copy-line fs-6 my-0 mx-1 p-0 text-muted'
@@ -85,7 +87,7 @@ const CheckSummaryTable = ({ filteredItems, pending, sortBy, setSortBy }: Props)
           </div>
         ) : (
           <span className='fs-7 mw-30 text-muted fw-light fst-italic'>Pending</span>
-        )
+        );
       },
       sortable: false,
       left: true,

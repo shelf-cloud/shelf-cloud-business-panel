@@ -1,13 +1,14 @@
-import React, { memo } from 'react'
+import { useRouter } from 'next/router'
+import { memo } from 'react'
+
+import SimpleSelect, { SelectSingleValueType } from '@components/Common/SimpleSelect'
+import InputCheckFilter from '@components/ui/filters/InputCheckFilter'
+import InputNumberFilter from '@components/ui/filters/InputNumberFilter'
+import InputPercentageFilter from '@components/ui/filters/InputPercentageFilter'
+import { COMPARE_NUMBER_OPERATORS } from '@components/ui/filters/constants'
+import { Form, Formik } from 'formik'
 import { Button, Card, CardBody, Col, FormFeedback, FormGroup, Label, Row } from 'reactstrap'
 import * as Yup from 'yup'
-import { Formik, Form } from 'formik'
-import { useRouter } from 'next/router'
-import { COMPARE_NUMBER_OPERATORS } from '@components/ui/filters/constants'
-import SimpleSelect, { SelectOptionType } from '@components/Common/SimpleSelect'
-import InputNumberFilter from '@components/ui/filters/InputNumberFilter'
-import InputCheckFilter from '@components/ui/filters/InputCheckFilter'
-import InputPercentageFilter from '@components/ui/filters/InputPercentageFilter'
 
 export type MKP_FiltersType = {
   units1monthmin: string
@@ -137,9 +138,23 @@ const MKP_Filters = ({ filters, supplierOptions, brandOptions, categoryOptions, 
                       Units Sold 1 Year
                     </Label>
                     <div className='d-flex flex-row justify-content-between align-items-end gap-1'>
-                      <InputNumberFilter inputName='units1yearmin' value={values.units1yearmin} isInvalid={touched.units1yearmin && errors.units1yearmin ? true : false} handleChange={handleChange} handleBlur={handleBlur} placeholder='Units Sold' />
+                      <InputNumberFilter
+                        inputName='units1yearmin'
+                        value={values.units1yearmin}
+                        isInvalid={touched.units1yearmin && errors.units1yearmin ? true : false}
+                        handleChange={handleChange}
+                        handleBlur={handleBlur}
+                        placeholder='Units Sold'
+                      />
                       <span className='fs-7 text-muted p-0 m-0'>min</span>
-                      <InputNumberFilter inputName='units1yearmax' value={values.units1yearmax} isInvalid={touched.units1yearmax && errors.units1yearmax ? true : false} handleChange={handleChange} handleBlur={handleBlur} placeholder='Units Sold' />
+                      <InputNumberFilter
+                        inputName='units1yearmax'
+                        value={values.units1yearmax}
+                        isInvalid={touched.units1yearmax && errors.units1yearmax ? true : false}
+                        handleChange={handleChange}
+                        handleBlur={handleBlur}
+                        placeholder='Units Sold'
+                      />
                       <span className='fs-7 text-muted p-0 m-0'>max</span>
                     </div>
                     {touched.units1yearmin && errors.units1yearmin ? <FormFeedback type='invalid'>{errors.units1yearmin}</FormFeedback> : null}
@@ -157,12 +172,19 @@ const MKP_Filters = ({ filters, supplierOptions, brandOptions, categoryOptions, 
                           customStyle='sm'
                           placeholder='Select'
                           selected={COMPARE_NUMBER_OPERATORS.find((option) => option.value === values.marginoperator) || { value: '', label: 'Select...' }}
-                          handleSelect={(option: SelectOptionType) => {
-                            setFieldValue('marginoperator', option.value)
+                          handleSelect={(option: SelectSingleValueType) => {
+                            setFieldValue('marginoperator', option!.value)
                           }}
                           options={COMPARE_NUMBER_OPERATORS}
                         />
-                        <InputPercentageFilter inputName='margin' value={values.margin} isInvalid={touched.margin && errors.margin ? true : false} handleChange={handleChange} handleBlur={handleBlur} error={errors.margin} />
+                        <InputPercentageFilter
+                          inputName='margin'
+                          value={values.margin}
+                          isInvalid={touched.margin && errors.margin ? true : false}
+                          handleChange={handleChange}
+                          handleBlur={handleBlur}
+                          error={errors.margin}
+                        />
                       </div>
                       {errors.marginoperator ? <p className='m-0 p-0 mt-1 fs-7 text-danger'>{errors.marginoperator}</p> : null}
                     </FormGroup>
@@ -178,8 +200,8 @@ const MKP_Filters = ({ filters, supplierOptions, brandOptions, categoryOptions, 
                     <SimpleSelect
                       customStyle='sm'
                       selected={supplierOptionsList.find((option) => option.value === values.supplier) || { value: '', label: 'Select...' }}
-                      handleSelect={(option: SelectOptionType) => {
-                        setFieldValue('supplier', option.value)
+                      handleSelect={(option: SelectSingleValueType) => {
+                        setFieldValue('supplier', option!.value)
                       }}
                       options={supplierOptionsList}
                     />
@@ -193,8 +215,8 @@ const MKP_Filters = ({ filters, supplierOptions, brandOptions, categoryOptions, 
                     <SimpleSelect
                       customStyle='sm'
                       selected={brandOptionsList.find((option) => option.value === values.brand) || { value: '', label: 'Select...' }}
-                      handleSelect={(option: SelectOptionType) => {
-                        setFieldValue('brand', option.value)
+                      handleSelect={(option: SelectSingleValueType) => {
+                        setFieldValue('brand', option!.value)
                       }}
                       options={brandOptionsList}
                     />
@@ -208,8 +230,8 @@ const MKP_Filters = ({ filters, supplierOptions, brandOptions, categoryOptions, 
                     <SimpleSelect
                       customStyle='sm'
                       selected={categoryOptionsList.find((option) => option.value === values.category) || { value: '', label: 'Select...' }}
-                      handleSelect={(option: SelectOptionType) => {
-                        setFieldValue('category', option.value)
+                      handleSelect={(option: SelectSingleValueType) => {
+                        setFieldValue('category', option!.value)
                       }}
                       options={categoryOptionsList}
                     />

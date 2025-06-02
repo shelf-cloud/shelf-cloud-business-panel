@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import SimpleSelect, { SelectOptionType } from '@components/Common/SimpleSelect'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+
+import SimpleSelect, { SelectSingleValueType } from '@components/Common/SimpleSelect'
 import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle, Input, Label } from 'reactstrap'
 
 export type FBAFiltersType = {
-  status: SelectOptionType
+  status: SelectSingleValueType
   showOnlyMissingQty: boolean
 }
 

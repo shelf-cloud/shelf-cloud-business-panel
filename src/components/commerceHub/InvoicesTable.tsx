@@ -184,8 +184,10 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
         </span>
       ),
       selector: (row: Invoice) => (
-        <Link href={`/commercehub/${row.storeName}/${row.checkNumber}`}>
-          <a className='fs-7 text-primary fw-normal'>{row.checkNumber}</a>
+        <Link
+          href={`/commercehub/${row.storeName}/${row.checkNumber}`}
+          className='fs-7 text-primary fw-normal'>
+          {row.checkNumber}
         </Link>
       ),
       sortable: false,

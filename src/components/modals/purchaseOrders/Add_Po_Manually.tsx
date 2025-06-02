@@ -1,15 +1,16 @@
-import React, { useContext, useState } from 'react'
-import { Button, Col, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
-import AppContext from '@context/AppContext'
-import axios from 'axios'
-import { toast } from 'react-toastify'
-import { useSWRConfig } from 'swr'
 import { useRouter } from 'next/router'
-import * as Yup from 'yup'
-import { Formik, Form } from 'formik'
-import { useSuppliers } from '@hooks/suppliers/useSuppliers'
+import { useContext, useState } from 'react'
+
+import { SelectSingleValueType } from '@components/Common/SimpleSelect'
 import SelectSingleFilter from '@components/ui/filters/SelectSingleFilter'
-import { SelectOptionType } from '@components/Common/SimpleSelect'
+import AppContext from '@context/AppContext'
+import { useSuppliers } from '@hooks/suppliers/useSuppliers'
+import axios from 'axios'
+import { Form, Formik } from 'formik'
+import { toast } from 'react-toastify'
+import { Button, Col, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { useSWRConfig } from 'swr'
+import * as Yup from 'yup'
 
 type Props = {
   orderNumberStart: string
@@ -115,8 +116,8 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
                     placeholder={'Select ...'}
                     selected={{ value: values.supplier, label: suppliers?.find((supplier: Supplier) => supplier.suppliersId == parseInt(values.supplier))?.name || 'Select...' }}
                     options={suppliers?.map((supplier: Supplier) => ({ value: supplier.suppliersId, label: supplier.name })) || [{ value: '', label: '' }]}
-                    handleSelect={(option: SelectOptionType) => {
-                      handleChange({ target: { name: 'supplier', value: option.value } })
+                    handleSelect={(option: SelectSingleValueType) => {
+                      handleChange({ target: { name: 'supplier', value: option!.value } })
                     }}
                     error={errors.supplier}
                   />
@@ -126,7 +127,17 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
                     <Label htmlFor='firstNameinput' className='form-label'>
                       *Date
                     </Label>
-                    <Input type='date' className='form-control fs-6' bsSize='sm' id='date' name='date' onChange={handleChange} onBlur={handleBlur} value={values.date || ''} invalid={touched.date && errors.date ? true : false} />
+                    <Input
+                      type='date'
+                      className='form-control fs-6'
+                      bsSize='sm'
+                      id='date'
+                      name='date'
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.date || ''}
+                      invalid={touched.date && errors.date ? true : false}
+                    />
                     {touched.date && errors.date ? <FormFeedback type='invalid'>{errors.date}</FormFeedback> : null}
                   </FormGroup>
                 </Col>

@@ -247,15 +247,13 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                 <>
                   <CardHeader>
                     <div className='d-flex flex-row justify-content-between align-items-start'>
-                      <Link href={'/amazon-sellers/fulfillments'} passHref>
-                        <a>
-                          <Button outline>
-                            <span className='icon-on'>
-                              <i className='ri-arrow-left-line align-bottom me-1' />
-                              Fulfillments
-                            </span>
-                          </Button>
-                        </a>
+                      <Link href={'/amazon-sellers/fulfillments'}>
+                        <Button outline>
+                          <span className='icon-on'>
+                            <i className='ri-arrow-left-line align-bottom me-1' />
+                            Fulfillments
+                          </span>
+                        </Button>
                       </Link>
                       <Button color='info' className='d-flex align-items-center' onClick={() => setHelpOffCanvasIsOpen(true)}>
                         <i className='ri-question-line fs-14 p-0 m-0 me-lg-1' />

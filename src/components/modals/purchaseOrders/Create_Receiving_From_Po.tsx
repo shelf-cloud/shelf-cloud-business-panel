@@ -1,17 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useContext, useState } from 'react'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import router from 'next/router'
+import { useContext, useState } from 'react'
+
+import { SelectOptionType, SelectSingleValueType } from '@components/Common/SimpleSelect'
+import SelectSingleFilter from '@components/ui/filters/SelectSingleFilter'
 import AppContext from '@context/AppContext'
+import { FormatIntNumber } from '@lib/FormatNumbers'
+import { NoImageAdress } from '@lib/assetsConstants'
 import axios from 'axios'
-import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import router from 'next/router'
-import { FormatIntNumber } from '@lib/FormatNumbers'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
 import useSWR from 'swr'
-import { NoImageAdress } from '@lib/assetsConstants'
-import SelectSingleFilter from '@components/ui/filters/SelectSingleFilter'
-import { SelectOptionType } from '@components/Common/SimpleSelect'
+import * as Yup from 'yup'
 
 type Props = {
   orderNumberStart: string
@@ -37,7 +38,9 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
   const [loading, setloading] = useState(false)
 
   const { data: openReceivings }: { data?: OpenReceivings[] } = useSWR(
-    state.user.businessId ? `/api/purchaseOrders/getOpenReceivings?region=${state.currentRegion}&businessId=${state.user.businessId}&warehouseId=${state.receivingFromPo.warehouse.id}` : null,
+    state.user.businessId
+      ? `/api/purchaseOrders/getOpenReceivings?region=${state.currentRegion}&businessId=${state.user.businessId}&warehouseId=${state.receivingFromPo.warehouse.id}`
+      : null,
     fetcher,
     {
       revalidateOnMount: true,
@@ -187,10 +190,12 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                 inputLabel='*Select Receiving Type'
                 inputName='isNewReceiving'
                 placeholder='Choose a Type...'
-                selected={[...RECEIVING_TYPES, ...EXIST_RECEIVING_TYPE].find((option) => option.value === validation.values.isNewReceiving) || { value: '', label: 'Choose a Type...' }}
+                selected={
+                  [...RECEIVING_TYPES, ...EXIST_RECEIVING_TYPE].find((option) => option.value === validation.values.isNewReceiving) || { value: '', label: 'Choose a Type...' }
+                }
                 options={openReceivings && openReceivings.length > 0 ? [...RECEIVING_TYPES, ...EXIST_RECEIVING_TYPE] : RECEIVING_TYPES}
-                handleSelect={(option: SelectOptionType) => {
-                  validation.handleChange({ target: { name: 'isNewReceiving', value: option.value } })
+                handleSelect={(option: SelectSingleValueType) => {
+                  validation.handleChange({ target: { name: 'isNewReceiving', value: option!.value } })
                 }}
                 error={validation.errors.isNewReceiving}
               />
@@ -200,10 +205,13 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                   inputLabel='*Select Existing Receiving'
                   inputName='receivingIdToAdd'
                   placeholder='Choose a Type...'
-                  selected={{ value: validation.values.receivingIdToAdd, label: openReceivings?.find((receiving) => receiving.id == parseInt(validation.values.receivingIdToAdd))?.orderNumber || 'Choose a Receiving...' }}
+                  selected={{
+                    value: validation.values.receivingIdToAdd,
+                    label: openReceivings?.find((receiving) => receiving.id == parseInt(validation.values.receivingIdToAdd))?.orderNumber || 'Choose a Receiving...',
+                  }}
                   options={openReceivings?.map((receiving) => ({ value: receiving.id, label: receiving.orderNumber })) || [{ value: '', label: '' }]}
-                  handleSelect={(option: SelectOptionType) => {
-                    validation.handleChange({ target: { name: 'receivingIdToAdd', value: option.value } })
+                  handleSelect={(option: SelectSingleValueType) => {
+                    validation.handleChange({ target: { name: 'receivingIdToAdd', value: option!.value } })
                   }}
                   error={validation.errors.receivingIdToAdd}
                 />
@@ -252,7 +260,12 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                                   margin: '0px',
                                   position: 'relative',
                                 }}>
-                                <img loading='lazy' src={item.image ? item.image : NoImageAdress} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
+                                <img
+                                  loading='lazy'
+                                  src={item.image ? item.image : NoImageAdress}
+                                  alt='product Image'
+                                  style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+                                />
                               </div>
                               <div className='text-start'>
                                 <p className='text-nowrap m-0 fw-semibold'>{item.title}</p>

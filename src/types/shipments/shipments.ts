@@ -29,11 +29,16 @@ export interface Shipment {
   extraCharge: number
   chargesFees: ChargesFees
   shipName: string
+  shipName2?: string
+  shipCompany?: string
   shipStreet: string
+  shipStreet2?: string
   shipCity: string
   shipState: string
   shipZipcode: string
   shipCountry: string
+  shipEmail?: string
+  shipPhone?: string
   subtotal: number
   salesShipping: number
   salesTax: number

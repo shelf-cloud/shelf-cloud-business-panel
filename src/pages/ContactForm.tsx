@@ -1,5 +1,5 @@
 import React, { FormEventHandler, useRef } from 'react'
-import Image from 'next/image'
+import Image from "next/image"
 import ShelfCloudLogo from '../assets/images/shelfcloud-blue-h.png'
 import RightImage from '../assets/images/contactform-image-right.png'
 import PuntosImage from '../assets/images/signin-puntos.png'
@@ -62,7 +62,14 @@ function ContactForm({}: Props) {
         style={{ backgroundColor: '#FAFBFD' }}>
         <div className='w-100 px-4 py-2 border-bottom' style={{ height: '80px' }}>
           <div className='position-relative d-flex align-self-center h-100' style={{ width: '26%', minWidth: '220px' }}>
-            <Image src={ShelfCloudLogo} layout='intrinsic' alt='ShelfCloud Logo' objectFit='contain' />
+            <Image
+              src={ShelfCloudLogo}
+              alt='ShelfCloud Logo'
+              style={{
+                maxWidth: "100%",
+                height: "auto",
+                objectFit: "contain"
+              }} />
           </div>
         </div>
         <div
@@ -138,27 +145,55 @@ function ContactForm({}: Props) {
             4 in 1 Cloud-Based Software Solutions for Small Business.
           </p>
           <div className='position-relative text-start mb-3' style={{ width: '70px' }}>
-            <Image src={LinesImage} layout='intrinsic' alt='ShelfCloud Logo' objectFit='contain' />
+            <Image
+              src={LinesImage}
+              alt='ShelfCloud Logo'
+              style={{
+                maxWidth: "100%",
+                height: "auto",
+                objectFit: "contain"
+              }} />
           </div>
           <div className='w-100 position-relative'>
             <div
               className='position-absolute translate-middle'
               style={{ width: '35%', zIndex: '1', top: '30%', left: '0%' }}>
-              <Image src={PuntosImageLeft} layout='intrinsic' alt='ShelfCloud Logo' objectFit='contain' />
+              <Image
+                src={PuntosImageLeft}
+                alt='ShelfCloud Logo'
+                style={{
+                  maxWidth: "100%",
+                  height: "auto",
+                  objectFit: "contain"
+                }} />
             </div>
             <div className='position-relative text-start' style={{ width: '100%', zIndex: '9' }}>
-              <Image src={RightImage} layout='intrinsic' alt='ShelfCloud Logo' objectFit='contain' />
+              <Image
+                src={RightImage}
+                alt='ShelfCloud Logo'
+                style={{
+                  maxWidth: "100%",
+                  height: "auto",
+                  objectFit: "contain"
+                }} />
             </div>
             <div
               className='position-absolute translate-middle'
               style={{ width: '45%', zIndex: '1', top: '85%', left: '95%' }}>
-              <Image src={PuntosImage} layout='intrinsic' alt='ShelfCloud Logo' objectFit='contain' />
+              <Image
+                src={PuntosImage}
+                alt='ShelfCloud Logo'
+                style={{
+                  maxWidth: "100%",
+                  height: "auto",
+                  objectFit: "contain"
+                }} />
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default ContactForm

@@ -67,10 +67,8 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
               <img loading='lazy' src={row.image ? row.image : NoImageAdress} onError={(e) => (e.currentTarget.src = NoImageAdress)} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
             </div>
             <div className='w-100'>
-              <Link href={`/product/${row.inventoryId}/${row.sku}`} passHref>
-                <a>
-                  <p className='m-0 p-0 text-primary fw-semibold fs-7'>{row.sku}</p>
-                </a>
+              <Link href={`/product/${row.inventoryId}/${row.sku}`}>
+                <p className='m-0 p-0 text-primary fw-semibold fs-7'>{row.sku}</p>
               </Link>
               <p className='m-0 p-0 text-black fw-semibold fs-7 text-wrap'>{row.title}</p>
               <span className='m-0 p-0 text-black fw-normal fs-7 d-flex flex-wrap justify-content-start align-items-center'>
@@ -341,9 +339,17 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
               onClick={(e: any) => e.target.select()}
               onChange={(e) => {
                 if (e.target.value === '') {
-                  handleSetMarketplaceMargin(storeId, 0, products.map((product) => product.sku))
+                  handleSetMarketplaceMargin(
+                    storeId,
+                    0,
+                    products.map((product) => product.sku)
+                  )
                 } else {
-                  handleSetMarketplaceMargin(storeId, parseFloat(e.target.value), products.map((product) => product.sku))
+                  handleSetMarketplaceMargin(
+                    storeId,
+                    parseFloat(e.target.value),
+                    products.map((product) => product.sku)
+                  )
                 }
               }}
             />

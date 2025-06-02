@@ -49,15 +49,32 @@ const Sidebar = ({}: Props) => {
     <React.Fragment>
       <div className='app-menu navbar-menu'>
         <div className='navbar-brand-box p-2'>
-          <Link href='/' passHref>
-            <a className='logo'>
-              <span className='w-100 position-relative logo-sm'>
-                <Image className='rounded-3' src={ShelfCloudLogoSolo} layout='intrinsic' alt='ShelfCloud Logo' objectFit='contain' />
-              </span>
-              <span className='w-100 position-relative logo-lg'>
-                <Image className='rounded-3' src={ShelfCloudLogo} layout='intrinsic' alt='ShelfCloud Logo' objectFit='contain' objectPosition='center' />
-              </span>
-            </a>
+          <Link href='/' className='logo'>
+            <span className='w-100 position-relative logo-sm'>
+              <Image
+                className='rounded-3'
+                src={ShelfCloudLogoSolo}
+                alt='ShelfCloud Logo'
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                  objectFit: 'contain',
+                }}
+              />
+            </span>
+            <span className='w-100 position-relative logo-lg'>
+              <Image
+                className='rounded-3'
+                src={ShelfCloudLogo}
+                alt='ShelfCloud Logo'
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                  objectFit: 'contain',
+                  objectPosition: 'center',
+                }}
+              />
+            </span>
           </Link>
         </div>
         <React.Fragment>

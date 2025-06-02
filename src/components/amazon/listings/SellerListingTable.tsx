@@ -76,13 +76,7 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
               margin: '2px 0px',
               position: 'relative',
             }}>
-            <img
-              loading='lazy'
-              src={row.image ? row.image : NoImageAdress}
-              onError={(e) => (e.currentTarget.src = NoImageAdress)}
-              alt='product Image'
-              style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
-            />
+            <img loading='lazy' src={row.image ? row.image : NoImageAdress} onError={(e) => (e.currentTarget.src = NoImageAdress)} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
           </div>
         )
       },
@@ -228,10 +222,8 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
                     })
                   }
                 />
-                <Link href={row.shelfcloud_isKit ? `/kit/${row.shelfcloud_sku_id}/${row.shelfcloud_sku}` : `/product/${row.shelfcloud_sku_id}/${row.shelfcloud_sku}`} passHref>
-                  <a target='blank'>
-                    <span className='fs-7'>{row.shelfcloud_sku}</span>
-                  </a>
+                <Link href={row.shelfcloud_isKit ? `/kit/${row.shelfcloud_sku_id}/${row.shelfcloud_sku}` : `/product/${row.shelfcloud_sku_id}/${row.shelfcloud_sku}`} target='blank'>
+                  <span className='fs-7'>{row.shelfcloud_sku}</span>
                 </Link>
               </div>
             ) : (
@@ -288,9 +280,7 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
           selectAllRowsItemText: 'All',
         }}
       />
-      {showMappedListingModal.show && (
-        <MappedListing showMappedListingModal={showMappedListingModal} setshowMappedListingModal={setshowMappedListingModal} loading={loading} setLoading={setLoading} />
-      )}
+      {showMappedListingModal.show && <MappedListing showMappedListingModal={showMappedListingModal} setshowMappedListingModal={setshowMappedListingModal} loading={loading} setLoading={setLoading} />}
     </>
   )
 }

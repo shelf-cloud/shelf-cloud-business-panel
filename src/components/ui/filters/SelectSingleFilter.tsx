@@ -1,15 +1,15 @@
-import React from 'react'
+import SimpleSelect, { SelectOptionType, SelectSingleValueType } from '@components/Common/SimpleSelect'
 import { Label } from 'reactstrap'
-import SimpleSelect, { SelectOptionType } from '@components/Common/SimpleSelect'
+
 import ErrorInputLabel from '../forms/ErrorInputLabel'
 
 type Props = {
   inputLabel: string
   inputName: string
   placeholder: string
-  selected: SelectOptionType
+  selected: SelectSingleValueType
   options: SelectOptionType[]
-  handleSelect: (option: SelectOptionType) => void
+  handleSelect: (option: SelectSingleValueType) => void
   error?: string | undefined
 }
 
@@ -19,7 +19,7 @@ const SelectSingleFilter = ({ inputLabel, inputName, placeholder, options, selec
       <Label htmlFor={inputLabel} className='form-label'>
         {inputLabel}
       </Label>
-      <SimpleSelect selected={selected} options={options} handleSelect={handleSelect} customStyle='sm' placeholder={placeholder} hasError={Boolean(error)}/>
+      <SimpleSelect selected={selected} options={options} handleSelect={handleSelect} customStyle='sm' placeholder={placeholder} hasError={Boolean(error)} />
       <ErrorInputLabel error={error} />
     </div>
   )

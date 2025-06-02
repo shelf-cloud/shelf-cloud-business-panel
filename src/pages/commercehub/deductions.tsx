@@ -1,24 +1,25 @@
-import React, { useCallback, useContext, useMemo, useRef, useState } from 'react'
-import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
-import { Button, Card, CardBody, Container, Spinner } from 'reactstrap'
-import BreadCrumb from '@components/Common/BreadCrumb'
+import React, { useCallback, useContext, useMemo, useRef, useState } from 'react'
+
 import { getSession } from '@auth/client'
-import axios from 'axios'
-import useSWRInfinite from 'swr/infinite'
-import { CommerceHubStoresResponse } from '@typesTs/commercehub/invoices'
-import { DebounceInput } from 'react-debounce-input'
+import BreadCrumb from '@components/Common/BreadCrumb'
 import FilterByDates from '@components/FilterByDates'
-import moment from 'moment'
-import useSWR from 'swr'
-import DeductionsTable from '@components/commerceHub/DeductionsTable'
-import { DeductionsResponse, DeductionType } from '@typesTs/commercehub/deductions'
-import FilterCommerceHubInvoices, { InvoiceCommerceHubFiltersType } from '@components/commerceHub/FilterCommerceHubInvoices'
-import { toast } from 'react-toastify'
 import BulkActionsForSelected from '@components/commerceHub/BulkActionsForSelected'
-import EditCommerceHubCommentModal from '@components/modals/commercehub/EditCommerceHubCommentModal'
+import DeductionsTable from '@components/commerceHub/DeductionsTable'
+import FilterCommerceHubInvoices, { InvoiceCommerceHubFiltersType } from '@components/commerceHub/FilterCommerceHubInvoices'
 import { generateDocument } from '@components/commerceHub/generateDocuments/getDocument'
+import EditCommerceHubCommentModal from '@components/modals/commercehub/EditCommerceHubCommentModal'
+import AppContext from '@context/AppContext'
+import { DeductionType, DeductionsResponse } from '@typesTs/commercehub/deductions'
+import { CommerceHubStoresResponse } from '@typesTs/commercehub/invoices'
+import axios from 'axios'
+import moment from 'moment'
+import { DebounceInput } from 'react-debounce-input'
+import { toast } from 'react-toastify'
+import { Button, Card, CardBody, Container, Spinner } from 'reactstrap'
+import useSWR from 'swr'
+import useSWRInfinite from 'swr/infinite'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -102,8 +103,8 @@ const Deductions = ({ session, sessionToken }: Props) => {
     if (searchValue) url += `&search=${encodeURIComponent(searchValue)}`
     if (startDate) url += `&startDate=${startDate}`
     if (endDate) url += `&endDate=${endDate}`
-    if (filters.store.value !== 'all') url += `&store=${filters.store.value}`
-    if (filters.status.value !== 'all') url += `&status=${filters.status.value}`
+    if (filters.store!.value !== 'all') url += `&store=${filters.store!.value}`
+    if (filters.status!.value !== 'all') url += `&status=${filters.status!.value}`
     url += `&sortBy=${sortBy.key}&direction=${sortBy.asc ? 'ASC' : 'DESC'}`
 
     return url
@@ -182,7 +183,10 @@ const Deductions = ({ session, sessionToken }: Props) => {
     }
   }
 
-  const hasActiveFilters = useMemo(() => searchValue !== '' || startDate !== '' || endDate !== '' || filters.onlyOverdue || filters.store.value !== 'all' || filters.status.value !== 'all', [searchValue, startDate, endDate, filters])
+  const hasActiveFilters = useMemo(
+    () => searchValue !== '' || startDate !== '' || endDate !== '' || filters.onlyOverdue || filters.store!.value !== 'all' || filters.status!.value !== 'all',
+    [searchValue, startDate, endDate, filters]
+  )
 
   const downloadInfoToExcel = async () => {
     const generatingDocument = toast.loading('Generating Document...')
@@ -192,8 +196,8 @@ const Deductions = ({ session, sessionToken }: Props) => {
     if (searchValue) endPoint += `&search=${encodeURIComponent(searchValue)}`
     if (startDate) endPoint += `&startDate=${startDate}`
     if (endDate) endPoint += `&endDate=${endDate}`
-    if (filters.store.value !== 'all') endPoint += `&store=${filters.store.value}`
-    if (filters.status.value !== 'all') endPoint += `&status=${filters.status.value}`
+    if (filters.store!.value !== 'all') endPoint += `&store=${filters.store!.value}`
+    if (filters.status!.value !== 'all') endPoint += `&status=${filters.status!.value}`
 
     const controller = new AbortController()
     const signal = controller.signal
@@ -252,7 +256,14 @@ const Deductions = ({ session, sessionToken }: Props) => {
                   <i className='las la-cloud-download-alt label-icon align-middle fs-4 me-2' />
                   Download To Excel
                 </Button>
-                {selectedRows.length > 0 && <BulkActionsForSelected selectedRows={selectedRows} statusOptions={STATUS_OPTIONS} clearSelected={clearAllSelectedRows} changeSelectedStatus={changeSelectedStatus} />}
+                {selectedRows.length > 0 && (
+                  <BulkActionsForSelected
+                    selectedRows={selectedRows}
+                    statusOptions={STATUS_OPTIONS}
+                    clearSelected={clearAllSelectedRows}
+                    changeSelectedStatus={changeSelectedStatus}
+                  />
+                )}
               </div>
               <div className='w-100 d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-end align-items-lg-center px-0'>
                 <div className='app-search p-0 col-sm-12 col-lg-5'>
@@ -279,7 +290,13 @@ const Deductions = ({ session, sessionToken }: Props) => {
                     </span>
                   </div>
                 </div>
-                <FilterByDates shipmentsStartDate={startDate} setShipmentsStartDate={setStartDate} setShipmentsEndDate={setEndDate} shipmentsEndDate={endDate} handleChangeDatesFromPicker={handleChangeDatesFromPicker} />
+                <FilterByDates
+                  shipmentsStartDate={startDate}
+                  setShipmentsStartDate={setStartDate}
+                  setShipmentsEndDate={setEndDate}
+                  shipmentsEndDate={endDate}
+                  handleChangeDatesFromPicker={handleChangeDatesFromPicker}
+                />
                 <FilterCommerceHubInvoices filters={filters} setfilters={setfilters} stores={stores?.stores ?? []} statusOptions={STATUS_OPTIONS} />
                 <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='fs-7 text-nowrap' onClick={clearFilters}>
                   Clear Filters
@@ -288,7 +305,15 @@ const Deductions = ({ session, sessionToken }: Props) => {
             </div>
             <Card>
               <CardBody>
-                <DeductionsTable filteredItems={invoices} pending={isValidating && size === 1} setSelectedRows={setSelectedRows} toggledClearRows={toggledClearRows} setEditCommentModal={setEditCommentModal} sortBy={sortBy} setSortBy={setSortBy} />
+                <DeductionsTable
+                  filteredItems={invoices}
+                  pending={isValidating && size === 1}
+                  setSelectedRows={setSelectedRows}
+                  toggledClearRows={toggledClearRows}
+                  setEditCommentModal={setEditCommentModal}
+                  sortBy={sortBy}
+                  setSortBy={setSortBy}
+                />
                 <div ref={lastInvoiceElementRef} style={{ height: '20px', marginTop: '10px' }}>
                   {isValidating && size > 1 && (
                     <p className='text-center'>

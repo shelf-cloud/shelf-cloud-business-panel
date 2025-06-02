@@ -73,13 +73,9 @@ const SendToAmazon = ({ session, sessionToken }: Props) => {
         }
       })
   }
-  useSWR(
-    session && state.user.businessId ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/getAmazonFbaSkus/${state.currentRegion}/${state.user.businessId}` : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  )
+  useSWR(session && state.user.businessId ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/getAmazonFbaSkus/${state.currentRegion}/${state.user.businessId}` : null, fetcher, {
+    revalidateOnFocus: false,
+  })
 
   const [activeTab, setActiveTab] = useState('1')
   const tabChange = (tab: any) => {
@@ -130,15 +126,13 @@ const SendToAmazon = ({ session, sessionToken }: Props) => {
                       </NavItem>
                     </Nav>
                     <div className='d-flex justify-content-end align-items-center gap-3'>
-                      <Link href={'/amazon-sellers/fulfillments'} passHref>
-                        <a>
-                          <Button color='info' className='fs-7'>
-                            <span className='icon-on'>
-                              <i className='ri-external-link-fill align-bottom me-1' />
-                              Fulfillments
-                            </span>
-                          </Button>
-                        </a>
+                      <Link href={'/amazon-sellers/fulfillments'}>
+                        <Button color='info' className='fs-7'>
+                          <span className='icon-on'>
+                            <i className='ri-external-link-fill align-bottom me-1' />
+                            Fulfillments
+                          </span>
+                        </Button>
                       </Link>
                       {/* <Button color='info' className='d-flex align-items-center' onClick={() => setHelpOffCanvasIsOpen(true)}>
                         <i className='ri-question-line fs-14 p-0 m-0 me-lg-1' />
