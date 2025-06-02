@@ -1,11 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
+import Link from 'next/link'
+import { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
-import { NoImageAdress } from '@lib/assetsConstants'
 import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
+import { NoImageAdress } from '@lib/assetsConstants'
 import { sortNumbers, sortStringsCaseInsensitive } from '@lib/helperFunctions'
 import { MKP_Product, MKP_Product_Table } from '@typesTs/marketplacePricing/marketplacePricing'
-import Link from 'next/link'
-import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
 
@@ -22,7 +23,16 @@ type Props = {
   handleSetMarketplaceMargin: (sku: string, value: number, skus: string[]) => void
 }
 
-const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCosts, handleProposedPrice, handleSetSingleMargin, handleNotes, handleSetMarketplaceMargin }: Props) => {
+const MKP_table_ByMarketplace = ({
+  products,
+  isLoading,
+  storeId,
+  handleOtherCosts,
+  handleProposedPrice,
+  handleSetSingleMargin,
+  handleNotes,
+  handleSetMarketplaceMargin,
+}: Props) => {
   const { state }: any = useContext(AppContext)
 
   //   const handleSelectedRows = ({ selectedRows }: { selectedRows: MKP_Product[] }) => {
@@ -42,7 +52,13 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
                 margin: '0px',
                 position: 'relative',
               }}>
-              <img loading='lazy' src={row.logo ?? NoImageAdress} onError={(e) => (e.currentTarget.src = NoImageAdress)} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
+              <img
+                loading='lazy'
+                src={row.logo ?? NoImageAdress}
+                onError={(e) => (e.currentTarget.src = NoImageAdress)}
+                alt='product Image'
+                style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+              />
             </div>
           </div>
         )
@@ -64,7 +80,13 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
                 margin: '0px',
                 position: 'relative',
               }}>
-              <img loading='lazy' src={row.image ? row.image : NoImageAdress} onError={(e) => (e.currentTarget.src = NoImageAdress)} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
+              <img
+                loading='lazy'
+                src={row.image ? row.image : NoImageAdress}
+                onError={(e) => (e.currentTarget.src = NoImageAdress)}
+                alt='product Image'
+                style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+              />
             </div>
             <div className='w-100'>
               <Link href={`/product/${row.inventoryId}/${row.sku}`}>
@@ -75,7 +97,12 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
                 {row.asin && (
                   <div className='d-flex flex-nowrap justify-content-start align-items-center' style={{ gap: '2px' }}>
                     {`ASIN: `}
-                    <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank' className='fw-light' style={{ textDecoration: 'none' }}>
+                    <a
+                      href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`}
+                      target='blank'
+                      rel='noopener noreferrer'
+                      className='fw-light'
+                      style={{ textDecoration: 'none' }}>
                       {row.asin}
                     </a>
                     <i className='ri-file-copy-line fs-6 m-0 p-0 text-muted' style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(row.asin)} />
@@ -95,13 +122,15 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
     },
     {
       name: <span className='fw-semibold text-center fs-7'>On Watch</span>,
-      selector: (row: MKP_Product_Table) => (row.proposedPrice > 0 && row.proposedPrice !== row.actualPrice ? <i className='mdi mdi-eye label-icon align-middle fs-5 me-2 text-primary' /> : null),
+      selector: (row: MKP_Product_Table) =>
+        row.proposedPrice > 0 && row.proposedPrice !== row.actualPrice ? <i className='mdi mdi-eye label-icon align-middle fs-5 me-2 text-primary' /> : null,
       sortable: true,
       center: true,
       compact: true,
       minWidth: '70px',
       with: 'fit-content',
-      sortFunction: (rowA: MKP_Product_Table, rowB: MKP_Product_Table) => sortNumbers(rowA.proposedPrice > 0 && rowA.proposedPrice !== rowA.actualPrice ? 1 : 0, rowB.proposedPrice > 0 && rowB.proposedPrice !== rowB.actualPrice ? 1 : 0),
+      sortFunction: (rowA: MKP_Product_Table, rowB: MKP_Product_Table) =>
+        sortNumbers(rowA.proposedPrice > 0 && rowA.proposedPrice !== rowA.actualPrice ? 1 : 0, rowB.proposedPrice > 0 && rowB.proposedPrice !== rowB.actualPrice ? 1 : 0),
     },
     {
       name: <span className='fw-semibold text-center fs-7'>1 Month Sales</span>,
@@ -202,7 +231,11 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
     },
     {
       name: <span className='fw-semibold text-center fs-7'>Profit</span>,
-      selector: (row: MKP_Product_Table) => FormatCurrency(state.currentRegion, row.actualPrice - row.totalFees - row.sellerCost - row.inboundShippingCost - row.otherCosts - row.shippingToMarketpalce - row.storeOtherCosts),
+      selector: (row: MKP_Product_Table) =>
+        FormatCurrency(
+          state.currentRegion,
+          row.actualPrice - row.totalFees - row.sellerCost - row.inboundShippingCost - row.otherCosts - row.shippingToMarketpalce - row.storeOtherCosts
+        ),
       sortable: true,
       center: true,
       compact: true,
@@ -219,7 +252,11 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
     {
       name: <span className='fw-semibold text-center fs-7'>Margin</span>,
       selector: (row: MKP_Product_Table) => {
-        const actualMargin = row.actualPrice <= 0 ? 0 : ((row.actualPrice - row.totalFees - row.sellerCost - row.inboundShippingCost - row.otherCosts - row.shippingToMarketpalce - row.storeOtherCosts) / row.actualPrice) * 100
+        const actualMargin =
+          row.actualPrice <= 0
+            ? 0
+            : ((row.actualPrice - row.totalFees - row.sellerCost - row.inboundShippingCost - row.otherCosts - row.shippingToMarketpalce - row.storeOtherCosts) / row.actualPrice) *
+              100
         return <span className={actualMargin < 0 ? 'text-danger' : 'text-success'}>{`${FormatIntPercentage(state.currentRegion, actualMargin)} %`}</span>
       },
       sortable: true,
@@ -231,8 +268,12 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
       },
       sortFunction: (rowA: MKP_Product_Table, rowB: MKP_Product_Table) =>
         sortNumbers(
-          ((rowA.actualPrice - rowA.totalFees - rowA.sellerCost - rowA.inboundShippingCost - rowA.otherCosts - rowA.shippingToMarketpalce - rowA.storeOtherCosts) / rowA.actualPrice) * 100,
-          ((rowB.actualPrice - rowB.totalFees - rowB.sellerCost - rowB.inboundShippingCost - rowB.otherCosts - rowB.shippingToMarketpalce - rowB.storeOtherCosts) / rowB.actualPrice) * 100
+          ((rowA.actualPrice - rowA.totalFees - rowA.sellerCost - rowA.inboundShippingCost - rowA.otherCosts - rowA.shippingToMarketpalce - rowA.storeOtherCosts) /
+            rowA.actualPrice) *
+            100,
+          ((rowB.actualPrice - rowB.totalFees - rowB.sellerCost - rowB.inboundShippingCost - rowB.otherCosts - rowB.shippingToMarketpalce - rowB.storeOtherCosts) /
+            rowB.actualPrice) *
+            100
         ),
     },
     {
@@ -278,14 +319,23 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
         backgroundColor: 'rgba(174, 214, 241, 0.5)',
       },
       sortFunction: (rowA: MKP_Product_Table, rowB: MKP_Product_Table) =>
-        sortNumbers(rowA.proposedPrice * (rowA.comissionFee / 100) + rowA.fixedFee + rowA.fbaHandlingFee, rowB.proposedPrice * (rowB.comissionFee / 100) + rowB.fixedFee + rowB.fbaHandlingFee),
+        sortNumbers(
+          rowA.proposedPrice * (rowA.comissionFee / 100) + rowA.fixedFee + rowA.fbaHandlingFee,
+          rowB.proposedPrice * (rowB.comissionFee / 100) + rowB.fixedFee + rowB.fbaHandlingFee
+        ),
     },
     {
       name: <span className='fw-semibold text-center fs-7'>Profit</span>,
       selector: (row: MKP_Product_Table) =>
         FormatCurrency(
           state.currentRegion,
-          row.proposedPrice - (row.proposedPrice * (row.comissionFee / 100) + row.fixedFee + row.fbaHandlingFee) - row.sellerCost - row.inboundShippingCost - row.otherCosts - row.shippingToMarketpalce - row.storeOtherCosts
+          row.proposedPrice -
+            (row.proposedPrice * (row.comissionFee / 100) + row.fixedFee + row.fbaHandlingFee) -
+            row.sellerCost -
+            row.inboundShippingCost -
+            row.otherCosts -
+            row.shippingToMarketpalce -
+            row.storeOtherCosts
         ),
       sortable: true,
       center: true,
@@ -296,15 +346,34 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
       },
       sortFunction: (rowA: MKP_Product_Table, rowB: MKP_Product_Table) =>
         sortNumbers(
-          rowA.proposedPrice - (rowA.proposedPrice * (rowA.comissionFee / 100) + rowA.fixedFee + rowA.fbaHandlingFee) - rowA.sellerCost - rowA.inboundShippingCost - rowA.otherCosts - rowA.shippingToMarketpalce - rowA.storeOtherCosts,
-          rowB.proposedPrice - (rowB.proposedPrice * (rowB.comissionFee / 100) + rowB.fixedFee + rowB.fbaHandlingFee) - rowB.sellerCost - rowB.inboundShippingCost - rowB.otherCosts - rowB.shippingToMarketpalce - rowB.storeOtherCosts
+          rowA.proposedPrice -
+            (rowA.proposedPrice * (rowA.comissionFee / 100) + rowA.fixedFee + rowA.fbaHandlingFee) -
+            rowA.sellerCost -
+            rowA.inboundShippingCost -
+            rowA.otherCosts -
+            rowA.shippingToMarketpalce -
+            rowA.storeOtherCosts,
+          rowB.proposedPrice -
+            (rowB.proposedPrice * (rowB.comissionFee / 100) + rowB.fixedFee + rowB.fbaHandlingFee) -
+            rowB.sellerCost -
+            rowB.inboundShippingCost -
+            rowB.otherCosts -
+            rowB.shippingToMarketpalce -
+            rowB.storeOtherCosts
         ),
     },
     {
       name: <span className='fw-semibold text-center fs-7'>Margin</span>,
       selector: (row: MKP_Product_Table) => {
         const proposedMargin =
-          ((row.proposedPrice - (row.proposedPrice * (row.comissionFee / 100) + row.fixedFee + row.fbaHandlingFee) - row.sellerCost - row.inboundShippingCost - row.otherCosts - row.shippingToMarketpalce - row.storeOtherCosts) / row.proposedPrice) *
+          ((row.proposedPrice -
+            (row.proposedPrice * (row.comissionFee / 100) + row.fixedFee + row.fbaHandlingFee) -
+            row.sellerCost -
+            row.inboundShippingCost -
+            row.otherCosts -
+            row.shippingToMarketpalce -
+            row.storeOtherCosts) /
+            row.proposedPrice) *
           100
         return <span className={proposedMargin < 0 ? 'text-danger' : 'text-success'}>{`${FormatIntPercentage(state.currentRegion, proposedMargin)} %`}</span>
       },
@@ -317,10 +386,22 @@ const MKP_table_ByMarketplace = ({ products, isLoading, storeId, handleOtherCost
       },
       sortFunction: (rowA: MKP_Product_Table, rowB: MKP_Product_Table) =>
         sortNumbers(
-          ((rowA.proposedPrice - (rowA.proposedPrice * (rowA.comissionFee / 100) + rowA.fixedFee + rowA.fbaHandlingFee) - rowA.sellerCost - rowA.inboundShippingCost - rowA.otherCosts - rowA.shippingToMarketpalce - rowA.storeOtherCosts) /
+          ((rowA.proposedPrice -
+            (rowA.proposedPrice * (rowA.comissionFee / 100) + rowA.fixedFee + rowA.fbaHandlingFee) -
+            rowA.sellerCost -
+            rowA.inboundShippingCost -
+            rowA.otherCosts -
+            rowA.shippingToMarketpalce -
+            rowA.storeOtherCosts) /
             rowA.proposedPrice) *
             100,
-          ((rowB.proposedPrice - (rowB.proposedPrice * (rowB.comissionFee / 100) + rowB.fixedFee + rowB.fbaHandlingFee) - rowB.sellerCost - rowB.inboundShippingCost - rowB.otherCosts - rowB.shippingToMarketpalce - rowB.storeOtherCosts) /
+          ((rowB.proposedPrice -
+            (rowB.proposedPrice * (rowB.comissionFee / 100) + rowB.fixedFee + rowB.fbaHandlingFee) -
+            rowB.sellerCost -
+            rowB.inboundShippingCost -
+            rowB.otherCosts -
+            rowB.shippingToMarketpalce -
+            rowB.storeOtherCosts) /
             rowB.proposedPrice) *
             100
         ),

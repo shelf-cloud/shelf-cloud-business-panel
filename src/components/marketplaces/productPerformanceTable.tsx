@@ -1,14 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
+import Link from 'next/link'
+import { useContext, useState } from 'react'
+
+import UnitsSoldDetailsModal from '@components/modals/marketplaces/unitsSoldDetailsModal'
 import AppContext from '@context/AppContext'
 import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
-import { ProductPerformance, Marketplace } from '@typesTs/marketplaces/productPerformance'
-import React, { useContext, useState } from 'react'
-import DataTable from 'react-data-table-component'
-import ProductPerformanceExpandedDetails from './productPerformanceExpandedDetails'
-import UnitsSoldDetailsModal from '@components/modals/marketplaces/unitsSoldDetailsModal'
-import { Button } from 'reactstrap'
-import Link from 'next/link'
 import { NoImageAdress } from '@lib/assetsConstants'
+import { Marketplace, ProductPerformance } from '@typesTs/marketplaces/productPerformance'
+import DataTable from 'react-data-table-component'
+import { Button } from 'reactstrap'
+
+import ProductPerformanceExpandedDetails from './productPerformanceExpandedDetails'
 
 type Props = {
   tableData: ProductPerformance[]
@@ -146,7 +148,13 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
                 margin: '0px',
                 position: 'relative',
               }}>
-              <img loading='lazy' src={row.image ? row.image : NoImageAdress} onError={(e) => (e.currentTarget.src = NoImageAdress)} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
+              <img
+                loading='lazy'
+                src={row.image ? row.image : NoImageAdress}
+                onError={(e) => (e.currentTarget.src = NoImageAdress)}
+                alt='product Image'
+                style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+              />
             </div>
             <div>
               <Link href={`/product/${row.inventoryId}/${row.sku}`}>
@@ -157,7 +165,12 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
                 {row.asin && (
                   <>
                     {`ASIN: `}
-                    <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank' className='fw-light' style={{ textDecoration: 'none' }}>
+                    <a
+                      href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`}
+                      target='blank'
+                      rel='noopener noreferrer'
+                      className='fw-light'
+                      style={{ textDecoration: 'none' }}>
                       {row.asin}
                     </a>
                     <i className='ri-file-copy-line fs-6 my-0 ms-1 me-2 p-0 text-muted' style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(row.asin)} />
@@ -256,8 +269,17 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
           return <span>0%</span>
         } else {
           return (
-            <span className={((row?.grossRevenue - (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) / row?.grossRevenue) * 100 >= 0 ? 'text-black' : 'text-danger'}>
-              {FormatIntPercentage(state.currentRegion, ((row?.grossRevenue - (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) / row?.grossRevenue) * 100)}%
+            <span
+              className={
+                ((row?.grossRevenue - (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) / row?.grossRevenue) * 100 >= 0
+                  ? 'text-black'
+                  : 'text-danger'
+              }>
+              {FormatIntPercentage(
+                state.currentRegion,
+                ((row?.grossRevenue - (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) / row?.grossRevenue) * 100
+              )}
+              %
             </span>
           )
         }
@@ -281,13 +303,18 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
           return (
             <span
               className={
-                ((row.grossRevenue - (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) / (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) * 100 >= 0
+                ((row.grossRevenue - (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) /
+                  (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) *
+                  100 >=
+                0
                   ? 'text-black'
                   : 'text-danger'
               }>
               {FormatIntPercentage(
                 state.currentRegion,
-                ((row.grossRevenue - (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) / (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) * 100
+                ((row.grossRevenue - (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) /
+                  (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) *
+                  100
               )}
               %
             </span>
@@ -303,7 +330,8 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
       name: (
         <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
           <span className='fw-semibold fs-6'>Refunds</span>
-          <span className={'fw-normal fs-5 ' + (tableData.reduce((total: number, product: ProductPerformance) => total + product.refundsQty, 0) > 0 ? 'text-primary' : 'text-muted')}>
+          <span
+            className={'fw-normal fs-5 ' + (tableData.reduce((total: number, product: ProductPerformance) => total + product.refundsQty, 0) > 0 ? 'text-primary' : 'text-muted')}>
             {FormatIntNumber(
               state.currentRegion,
               tableData.reduce((total: number, product: ProductPerformance) => total + product.refundsQty, 0)
@@ -384,7 +412,9 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
           selectAllRowsItemText: 'All',
         }}
       />
-      {showUnitsSoldDetailsModal.showUnitsSoldDetailsModal && <UnitsSoldDetailsModal showUnitsSoldDetailsModal={showUnitsSoldDetailsModal} setshowUnitsSoldDetailsModal={setshowUnitsSoldDetailsModal} />}
+      {showUnitsSoldDetailsModal.showUnitsSoldDetailsModal && (
+        <UnitsSoldDetailsModal showUnitsSoldDetailsModal={showUnitsSoldDetailsModal} setshowUnitsSoldDetailsModal={setshowUnitsSoldDetailsModal} />
+      )}
     </>
   )
 }

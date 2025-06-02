@@ -1,12 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useState } from 'react'
-import DataTable from 'react-data-table-component'
-import AppContext from '@context/AppContext'
-import { Listing } from '@typesTs/amazon/listings'
-import MappedListing from '@components/modals/amazon/MappedListing'
 import Link from 'next/link'
+import { useContext, useState } from 'react'
+
+import MappedListing from '@components/modals/amazon/MappedListing'
+import AppContext from '@context/AppContext'
 import { NoImageAdress } from '@lib/assetsConstants'
+import { Listing } from '@typesTs/amazon/listings'
+import DataTable from 'react-data-table-component'
 
 type Props = {
   tableData: Listing[]
@@ -76,7 +77,13 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
               margin: '2px 0px',
               position: 'relative',
             }}>
-            <img loading='lazy' src={row.image ? row.image : NoImageAdress} onError={(e) => (e.currentTarget.src = NoImageAdress)} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
+            <img
+              loading='lazy'
+              src={row.image ? row.image : NoImageAdress}
+              onError={(e) => (e.currentTarget.src = NoImageAdress)}
+              alt='product Image'
+              style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+            />
           </div>
         )
       },
@@ -122,7 +129,7 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
           <div>
             <p className='m-0 fs-7'>
               {/* <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/exec/obidos/ASIN${row.asin}`} target='blank'> */}
-              <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank'>
+              <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank' rel='noopener noreferrer'>
                 {row.asin}
               </a>
             </p>
@@ -222,7 +229,10 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
                     })
                   }
                 />
-                <Link href={row.shelfcloud_isKit ? `/kit/${row.shelfcloud_sku_id}/${row.shelfcloud_sku}` : `/product/${row.shelfcloud_sku_id}/${row.shelfcloud_sku}`} target='blank'>
+                <Link
+                  href={row.shelfcloud_isKit ? `/kit/${row.shelfcloud_sku_id}/${row.shelfcloud_sku}` : `/product/${row.shelfcloud_sku_id}/${row.shelfcloud_sku}`}
+                  target='blank'
+                  rel='noopener noreferrer'>
                   <span className='fs-7'>{row.shelfcloud_sku}</span>
                 </Link>
               </div>
@@ -280,7 +290,9 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
           selectAllRowsItemText: 'All',
         }}
       />
-      {showMappedListingModal.show && <MappedListing showMappedListingModal={showMappedListingModal} setshowMappedListingModal={setshowMappedListingModal} loading={loading} setLoading={setLoading} />}
+      {showMappedListingModal.show && (
+        <MappedListing showMappedListingModal={showMappedListingModal} setshowMappedListingModal={setshowMappedListingModal} loading={loading} setLoading={setLoading} />
+      )}
     </>
   )
 }

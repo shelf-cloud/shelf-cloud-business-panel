@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import Link from 'next/link'
+import { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { InvoiceList } from '@typings'
 import moment from 'moment'
-import Link from 'next/link'
-import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import { Button } from 'reactstrap'
 
@@ -110,21 +111,14 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
       name: <span className='fw-bold fs-5'>Status</span>,
       selector: (row: InvoiceList) => {
         return (
-          <p
-            className={
-              row.paid
-                ? 'fs-14 my-1 text-success'
-                : moment(today).isAfter(row.expireDate)
-                ? 'fs-14 my-1 text-danger'
-                : 'fs-14 my-1'
-            }>
+          <p className={row.paid ? 'fs-14 my-1 text-success' : moment(today).isAfter(row.expireDate) ? 'fs-14 my-1 text-danger' : 'fs-14 my-1'}>
             {row.paid
               ? 'Paid'
               : moment(today).isAfter(row.expireDate)
-              ? `Past Due ${moment(row.expireDate).fromNow(true)}`
-              : moment(today).isSame(row.expireDate)
-              ? 'Due Today'
-              : `Due in ${moment(row.expireDate).fromNow(true)}`}
+                ? `Past Due ${moment(row.expireDate).fromNow(true)}`
+                : moment(today).isSame(row.expireDate)
+                  ? 'Due Today'
+                  : `Due in ${moment(row.expireDate).fromNow(true)}`}
           </p>
         )
       },
@@ -147,14 +141,7 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
       name: <span className='fw-bold fs-5'>Expire Date</span>,
       selector: (row: InvoiceList) => {
         return (
-          <p
-            className={
-              row.paid
-                ? 'fs-14 my-1'
-                : moment(today).isSameOrAfter(row.expireDate)
-                ? 'fs-14 my-1 text-danger'
-                : 'fs-14 my-1'
-            }>
+          <p className={row.paid ? 'fs-14 my-1' : moment(today).isSameOrAfter(row.expireDate) ? 'fs-14 my-1 text-danger' : 'fs-14 my-1'}>
             {moment(row.expireDate, 'YYYY-MM-DD').format('LL')}
           </p>
         )
@@ -175,12 +162,10 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
     {
       name: <span className='fw-bold fs-5'></span>,
       selector: (row: InvoiceList) => {
-        if(state.currentRegion == 'us'){
+        if (state.currentRegion == 'us') {
           return (
-            <a href={`${row.payLink}`} target='blank'>
-              <Button className={row.paid ? 'btn btn-soft-success' : 'btn btn-primary'}>
-                {row.paid ? 'View Receipt' : 'Pay Now'}
-              </Button>
+            <a href={`${row.payLink}`} target='blank' rel='noopener noreferrer'>
+              <Button className={row.paid ? 'btn btn-soft-success' : 'btn btn-primary'}>{row.paid ? 'View Receipt' : 'Pay Now'}</Button>
             </a>
           )
         } else {
@@ -204,14 +189,7 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
 
   return (
     <>
-      <DataTable
-        columns={columns}
-        data={filteredItems}
-        progressPending={pending}
-        striped={true}
-        pagination
-        paginationComponentOptions={paginationComponentOptions}
-      />
+      <DataTable columns={columns} data={filteredItems} progressPending={pending} striped={true} pagination paginationComponentOptions={paginationComponentOptions} />
     </>
   )
 }

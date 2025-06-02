@@ -1,10 +1,11 @@
-import React, { useContext } from 'react'
-import { Button, Card, CardBody, CardHeader, Col } from 'reactstrap'
-import { InvoiceList } from '@typings'
-import CountUp from 'react-countup'
-import moment from 'moment'
 import Link from 'next/link'
+import React, { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
+import { InvoiceList } from '@typings'
+import moment from 'moment'
+import CountUp from 'react-countup'
+import { Button, Card, CardBody, CardHeader, Col } from 'reactstrap'
 
 type Props = {
   invoices: InvoiceList[] | undefined
@@ -58,7 +59,9 @@ const InvoicesList = ({ invoices }: Props) => {
                         </h5>
                       </td>
                       <td className='text-center'>
-                        <span className={invoice.paid ? 'fs-14 my-1 text-muted' : moment(today).isAfter(invoice.expireDate) ? 'fs-14 my-1 text-danger' : 'fs-14 my-1 text-muted'}>{moment(invoice.expireDate, 'YYYY-MM-DD').format('LL')}</span>
+                        <span className={invoice.paid ? 'fs-14 my-1 text-muted' : moment(today).isAfter(invoice.expireDate) ? 'fs-14 my-1 text-danger' : 'fs-14 my-1 text-muted'}>
+                          {moment(invoice.expireDate, 'YYYY-MM-DD').format('LL')}
+                        </span>
                       </td>
                       <td>
                         <div className='text-center px-2 py-1 rounded-2' style={{ background: 'rgba(49, 154, 246, 0.1)' }}>
@@ -66,16 +69,16 @@ const InvoicesList = ({ invoices }: Props) => {
                             {invoice.paid
                               ? 'Paid'
                               : moment(today).isAfter(invoice.expireDate)
-                              ? `Past Due ${moment(invoice.expireDate).fromNow(true)}`
-                              : moment(today).isSame(invoice.expireDate)
-                              ? 'Due Today'
-                              : `Due in ${moment(invoice.expireDate).fromNow(true)}`}
+                                ? `Past Due ${moment(invoice.expireDate).fromNow(true)}`
+                                : moment(today).isSame(invoice.expireDate)
+                                  ? 'Due Today'
+                                  : `Due in ${moment(invoice.expireDate).fromNow(true)}`}
                           </span>
                         </div>
                       </td>
                       {state.currentRegion == 'us' && (
                         <td className='text-center'>
-                          <a href={`${invoice.payLink}`} target='blank'>
+                          <a href={`${invoice.payLink}`} target='blank' rel='noopener noreferrer'>
                             <Button className={'px-2 py-1 ' + (invoice.paid ? 'btn btn-soft-success' : 'btn btn-primary')}>{invoice.paid ? 'View Receipt' : 'Pay Now'}</Button>
                           </a>
                         </td>

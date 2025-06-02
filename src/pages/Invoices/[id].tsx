@@ -1,18 +1,19 @@
+import { GetServerSideProps } from 'next'
+import Head from 'next/head'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import React, { useContext, useEffect, useState } from 'react'
+
 import BreadCrumb from '@components/Common/BreadCrumb'
+import PrintInvoice from '@components/PrintInvoice'
 import ShipmentDetailsModal from '@components/modals/shipments/ShipmentDetailsModal'
 import StorageFeesDetailsModal from '@components/modals/shipments/StorageFeesDetailsModal'
-import PrintInvoice from '@components/PrintInvoice'
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { InvoiceFullDetails } from '@typings'
 import axios from 'axios'
 import moment from 'moment'
-import { GetServerSideProps } from 'next'
 import { getSession } from 'next-auth/react'
-import Head from 'next/head'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import React, { useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { Button, Card, CardBody, CardHeader, Col, Container, Row } from 'reactstrap'
 import useSWR from 'swr'
@@ -91,8 +92,10 @@ const InvoiceDetails = () => {
                           <div className='d-flex gap-3 flex-row align-items-center mb-3'>
                             <PrintInvoice invoiceDetails={invoiceDetails!} />
                             {currentRegion == 'us' && (
-                              <a href={`${invoiceDetails?.invoice.payLink}`} target='blank'>
-                                <Button className={invoiceDetails?.invoice.paid ? 'btn btn-soft-success' : 'btn btn-primary'}>{invoiceDetails?.invoice.paid ? 'View Receipt' : 'Pay Now'}</Button>
+                              <a href={`${invoiceDetails?.invoice.payLink}`} target='blank' rel='noopener noreferrer'>
+                                <Button className={invoiceDetails?.invoice.paid ? 'btn btn-soft-success' : 'btn btn-primary'}>
+                                  {invoiceDetails?.invoice.paid ? 'View Receipt' : 'Pay Now'}
+                                </Button>
                               </a>
                             )}
                           </div>
@@ -102,7 +105,9 @@ const InvoiceDetails = () => {
                           </h2>
                           <p className='m-0 fw-semibold'>Invoice Date: {moment(invoiceDetails?.invoice.createdDate).format('LL')}</p>
                           <p className='m-0 fw-normal'>Expire Date: {moment(invoiceDetails?.invoice.expireDate).format('LL')}</p>
-                          <h4 className={invoiceDetails?.invoice?.paid ? 'm-0 fw-bold text-success' : 'm-0 fw-bold text-danger'}>{invoiceDetails?.invoice?.paid ? 'Paid' : 'Due'}</h4>
+                          <h4 className={invoiceDetails?.invoice?.paid ? 'm-0 fw-bold text-success' : 'm-0 fw-bold text-danger'}>
+                            {invoiceDetails?.invoice?.paid ? 'Paid' : 'Due'}
+                          </h4>
                         </div>
                       </CardHeader>
                       <CardBody>

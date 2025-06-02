@@ -1,14 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
+import { useContext } from 'react'
 
-import React, { useContext } from 'react'
+import AppContext from '@context/AppContext'
+import { FormatCurrency } from '@lib/FormatNumbers'
+import { NoImageAdress } from '@lib/assetsConstants'
+import { Shipment } from '@typesTs/shipments/shipments'
 import DataTable from 'react-data-table-component'
 import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
-import { FormatCurrency } from '@lib/FormatNumbers'
-import AppContext from '@context/AppContext'
+
 import DownloadPackingSlip from '../wholesale/DownloadPackingSlip'
-import { Shipment } from '@typesTs/shipments/shipments'
-import { NoImageAdress } from '@lib/assetsConstants'
 import NoShipmentsFound from './NoShipmentsFound'
 
 type SortByType = {
@@ -74,23 +75,17 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
           case 'shipped':
           case 'received':
             return <span className='badge text-uppercase badge-soft-success p-2'>{` ${row.orderStatus} `}</span>
-            break
           case 'Processed':
             return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${row.orderStatus} `}</span>
-            break
           case 'awaiting_shipment':
           case 'awaiting':
             return <span className='badge text-uppercase badge-soft-warning p-2'>{' awaiting '}</span>
-            break
           case 'awaiting pickup':
             return <span className='badge text-uppercase badge-soft-secondary p-2'>{' awaiting pickup '}</span>
-            break
           case 'on_hold':
             return <span className='badge text-uppercase badge-soft-danger p-2'>{' on hold '}</span>
-            break
           case 'cancelled':
             return <span className='badge text-uppercase badge-soft-dark p-2'> {row.orderStatus} </span>
-            break
           default:
             break
         }
@@ -101,7 +96,7 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
       center: true,
       style: {
         fontSize: '0.7rem',
-      }
+      },
     },
     {
       name: (
@@ -200,7 +195,12 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                       objectFit: 'contain',
                     }}
                   />
-                  <a className='fs-7' href={`${row.trackingLink}${row.trackingNumber}`} target='blank' style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
+                  <a
+                    className='fs-7'
+                    href={`${row.trackingLink}${row.trackingNumber}`}
+                    target='blank'
+                    rel='noopener noreferrer'
+                    style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
                     {row.trackingNumber}
                   </a>
                 </div>
@@ -238,7 +238,12 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                       objectFit: 'contain',
                     }}
                   />
-                  <a className='fs-7' href={`${row.trackingLink}${row.trackingNumber}`} target='blank' style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
+                  <a
+                    className='fs-7'
+                    href={`${row.trackingLink}${row.trackingNumber}`}
+                    target='blank'
+                    rel='noopener noreferrer'
+                    style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
                     {row.trackingNumber}
                   </a>
                 </div>
@@ -374,7 +379,6 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                 </DropdownMenu>
               </UncontrolledDropdown>
             )
-            break
           case 'Wholesale':
             return (
               <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
@@ -389,7 +393,7 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                   <DropdownItem header>Documents</DropdownItem>
                   {row.proofOfShipped != '' && row.proofOfShipped != null && (
                     <DropdownItem className='edit-item-btn'>
-                      <a className='text-black' href={row.proofOfShipped} target='blank'>
+                      <a className='text-black' href={row.proofOfShipped} target='blank' rel='noopener noreferrer'>
                         <i className='las la-truck label-icon align-middle fs-3 me-2' />
                         Proof Of Shipped
                       </a>
@@ -400,7 +404,8 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                       <a
                         className='text-black'
                         href={`https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/shelf-cloud%2F${row.labelsName}?alt=media&token=837cdbcf-11ab-4555-9697-50f1c6a3d0e3`}
-                        target='blank'>
+                        target='blank'
+                        rel='noopener noreferrer'>
                         <i className='las la-toilet-paper label-icon align-middle fs-3 me-2' />
                         FBA Labels
                       </a>
@@ -411,7 +416,8 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                       <a
                         className='text-black'
                         href={`https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/shelf-cloud%2F${row.palletLabelsName}?alt=media&token=837cdbcf-11ab-4555-9697-50f1c6a3d0e3`}
-                        target='blank'>
+                        target='blank'
+                        rel='noopener noreferrer'>
                         <i className='las la-toilet-paper label-icon align-middle fs-3 me-2' />
                         Pallet Labels
                       </a>
@@ -421,7 +427,6 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                 </DropdownMenu>
               </UncontrolledDropdown>
             )
-            break
           default:
             return (
               <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
@@ -436,7 +441,6 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                 </DropdownMenu>
               </UncontrolledDropdown>
             )
-            break
         }
       },
     },

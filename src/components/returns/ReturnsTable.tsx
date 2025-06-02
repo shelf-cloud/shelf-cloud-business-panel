@@ -1,13 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext } from 'react'
+
+import AppContext from '@context/AppContext'
+import { FormatCurrency } from '@lib/FormatNumbers'
+import { NoImageAdress } from '@lib/assetsConstants'
+import { ReturnOrder, ReturnType } from '@typesTs/returns/returns'
 import DataTable, { ExpanderComponentProps } from 'react-data-table-component'
 import { ButtonGroup, Card, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledButtonDropdown, UncontrolledTooltip } from 'reactstrap'
-import { FormatCurrency } from '@lib/FormatNumbers'
-import AppContext from '@context/AppContext'
-import { ReturnOrder, ReturnType } from '@typesTs/returns/returns'
+
 import ReturnExpandedType from './ReturnExpandedType'
-import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   data: ReturnType
@@ -91,23 +93,17 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
           case 'shipped':
           case 'received':
             return <span className='badge text-uppercase text-center badge-soft-success p-2'>{` ${row.orderStatus} `}</span>
-            break
           case 'Processed':
             return <span className='badge text-uppercase text-center badge-soft-secondary p-2'>{` ${row.orderStatus} `}</span>
-            break
           case 'awaiting_shipment':
           case 'awaiting':
             return <span className='badge text-uppercase text-center badge-soft-warning p-2'>{' awaiting '}</span>
-            break
           case 'awaiting pickup':
             return <span className='badge text-uppercase text-center badge-soft-secondary p-2'>{' awaiting pickup '}</span>
-            break
           case 'on_hold':
             return <span className='badge text-uppercase text-center badge-soft-danger p-2'>{' on hold '}</span>
-            break
           case 'cancelled':
             return <span className='badge text-uppercase text-center badge-soft-dark p-2'> {row.orderStatus} </span>
-            break
           default:
             break
         }
@@ -166,7 +162,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
       compact: true,
       style: {
         fontSize: '0.7rem',
-      }
+      },
     },
     {
       name: <span className='fw-semibold fs-7 text-muted'>Tracking Number</span>,
@@ -190,7 +186,12 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
                       objectFit: 'contain',
                     }}
                   />
-                  <a href={`${row.trackingLink}${row.trackingNumber}`} target='blank' style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }} className='fs-7'>
+                  <a
+                    href={`${row.trackingLink}${row.trackingNumber}`}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}
+                    className='fs-7'>
                     {row.trackingNumber}
                   </a>
                 </div>
@@ -228,7 +229,12 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
                       objectFit: 'contain',
                     }}
                   />
-                  <a href={`${row.trackingLink}${row.trackingNumber}`} target='blank' style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }} className='fs-7'>
+                  <a
+                    href={`${row.trackingLink}${row.trackingNumber}`}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}
+                    className='fs-7'>
                     {row.trackingNumber}
                   </a>
                 </div>
@@ -277,7 +283,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
       compact: true,
       style: {
         fontSize: '0.7rem',
-      }
+      },
     },
     {
       name: <span className='fw-semibold text-center fs-7 text-muted'>Charge</span>,
