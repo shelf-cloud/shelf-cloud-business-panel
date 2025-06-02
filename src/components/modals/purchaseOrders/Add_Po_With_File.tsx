@@ -235,11 +235,7 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                     You can import a Purchase Order by uploading a CSV file using the{' '}
                     <a
                       className='text-primary'
-                      href={
-                        state.currentRegion == 'us'
-                          ? 'https://docs.google.com/spreadsheets/d/1c-Scw5zmrSkaBqu5HSaO7EHXbm0_hxKTQecjRaLRSR4/template/preview'
-                          : 'https://docs.google.com/spreadsheets/d/1c-Scw5zmrSkaBqu5HSaO7EHXbm0_hxKTQecjRaLRSR4/template/preview'
-                      }
+                      href={'https://docs.google.com/spreadsheets/d/15_8JObdU8ysyTPu-CkwdO5yOAioDJVq-/template/preview'}
                       target={'_blank'}
                       rel='noreferrer'>
                       template

@@ -1,13 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useContext } from 'react'
-import { Button, Card, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
-import AppContext from '@context/AppContext'
-import { toast } from 'react-toastify'
 import router from 'next/router'
+import { useContext, useState } from 'react'
+
+import UploadFileDropzone from '@components/ui/UploadFileDropzone'
+import AppContext from '@context/AppContext'
 import axios from 'axios'
 import Papa from 'papaparse'
-import UploadFileDropzone from '@components/ui/UploadFileDropzone'
+import { toast } from 'react-toastify'
+import { Button, Card, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
 
 type Props = {}
 
@@ -75,7 +76,9 @@ const UploadProductsModal = ({}: Props) => {
               ;/[0-9]?[.]?[0-9]{1,}/.test(rowValues[v]) ? () => {} : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
             case 14:
-              ;/[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(rowValues[v]) ? () => {} : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
+              ;/[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(rowValues[v])
+                ? () => {}
+                : errorsList.push({ errorLine: i, errorMessage: 'Value format error', value: rowValues[v] })
               break
             default:
             // code block
@@ -171,15 +174,7 @@ const UploadProductsModal = ({}: Props) => {
       <ModalBody>
         <p className='fs-5 fw-normal'>
           You can import products in bulk by uploading a CSV file using the{' '}
-          <a
-            className='text-primary'
-            href={
-              state.currentRegion == 'us'
-                ? 'https://docs.google.com/spreadsheets/d/1eHz260ce5orrlv8Jc_rx0xc1uiYB_U5V21dB72lpi_w/template/preview'
-                : 'https://docs.google.com/spreadsheets/d/1fCb_bxaFt3P2O5FPiPIInESBB8vFIPtQKUU86N2P8UQ/template/preview'
-            }
-            target={'_blank'}
-            rel='noreferrer'>
+          <a className='text-primary' href={'https://docs.google.com/spreadsheets/d/19H7hs8kS6D5cysi3QmJTH0Hfpmjw7VuG/template/preview'} target={'_blank'} rel='noreferrer'>
             template
           </a>{' '}
           file.
@@ -206,7 +201,11 @@ const UploadProductsModal = ({}: Props) => {
                 </div>
               )}
             </Dropzone> */}
-            <UploadFileDropzone accptedFiles={{ 'text/csv': ['.csv'] }} handleAcceptedFiles={handleAcceptedFiles} description={`Upload Products Info. Drop Only CSV files here or click to upload.`} />
+            <UploadFileDropzone
+              accptedFiles={{ 'text/csv': ['.csv'] }}
+              handleAcceptedFiles={handleAcceptedFiles}
+              description={`Upload Products Info. Drop Only CSV files here or click to upload.`}
+            />
           </Col>
           <Col md={6}>
             <div className='list-unstyled mb-0' id='file-previews'>
@@ -237,7 +236,10 @@ const UploadProductsModal = ({}: Props) => {
           </Col>
         </Row>
         {errorFile && <p className='text-danger m-0'>You must Upload a CSV file to upload products.</p>}
-        {showErrorLines && errorLines.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='text-danger m-0'>{`Error in Line: ${error.errorLine} Value: ${error.value} Error: ${error.errorMessage}`}</p>)}
+        {showErrorLines &&
+          errorLines.map((error: any, index: number) => (
+            <p key={`ErrorLine${index}`} className='text-danger m-0'>{`Error in Line: ${error.errorLine} Value: ${error.value} Error: ${error.errorMessage}`}</p>
+          ))}
         {showerrorResponse && errorResponse.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='text-danger m-0'>{`Error: ${error}`}</p>)}
         <Col md={12}>
           <div className='text-end'>

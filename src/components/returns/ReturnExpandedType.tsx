@@ -1,17 +1,19 @@
 import React, { useContext, useMemo, useState } from 'react'
-import { Button, Card, CardBody, CardHeader, Col, Form, FormFeedback, FormGroup, Input, Label, Row, Spinner } from 'reactstrap'
+
 // import Animation from '@components/Common/Animation'
-import axios from 'axios'
-import AppContext from '@context/AppContext'
-import { useSWRConfig } from 'swr'
-import { FormatCurrency } from '@lib/FormatNumbers'
-import { ExpanderComponentProps } from 'react-data-table-component'
-import { OrderItem, ReturnOrder } from '@typesTs/returns/returns'
 import TooltipComponent from '@components/constants/Tooltip'
-import { toast } from 'react-toastify'
-import * as Yup from 'yup'
-import { useFormik } from 'formik'
+import AppContext from '@context/AppContext'
+import { FormatCurrency } from '@lib/FormatNumbers'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
+import { convertLabelZPLToPDF } from '@lib/convertZPLToPDF'
+import { OrderItem, ReturnOrder } from '@typesTs/returns/returns'
+import axios from 'axios'
+import { useFormik } from 'formik'
+import { ExpanderComponentProps } from 'react-data-table-component'
+import { toast } from 'react-toastify'
+import { Button, Card, CardBody, CardHeader, Col, Form, FormFeedback, FormGroup, Input, Label, Row, Spinner } from 'reactstrap'
+import { useSWRConfig } from 'swr'
+import * as Yup from 'yup'
 
 type Props = {
   data: ReturnOrder
@@ -47,16 +49,42 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
   }, [data, state.currentRegion])
 
   const handlePrintingLabel = async () => {
+    const printingLabel = toast.loading('Generating label...')
     setLoadingLabel(true)
-    const response: any = await axios(`/api/createLabelForOrder?region=${state.currentRegion}&businessId=${state.user.businessId}&orderId=${data.id}`)
+    const { data: labelinfo }: { data: { error: boolean; message: string; label?: string } } = await axios(
+      `/api/createLabelForOrder?region=${state.currentRegion}&businessId=${state.user.businessId}&orderId=${data.id}`
+    )
 
-    const linkSource = `data:application/pdf;base64,${response.data}`
+    if (!labelinfo.label || labelinfo.error) {
+      toast.update(printingLabel, {
+        render: labelinfo.message || 'Error generating label',
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
+      setLoadingLabel(false)
+      return
+    }
+
+    const labelData = await convertLabelZPLToPDF(labelinfo.label)
+
+    const blob = new Blob([labelData], { type: 'application/pdf' })
+    const url = URL.createObjectURL(blob)
     const downloadLink = document.createElement('a')
     const fileName = data.orderNumber + '-shipLabel.pdf'
 
-    downloadLink.href = linkSource
+    downloadLink.href = url
     downloadLink.download = fileName
     downloadLink.click()
+    URL.revokeObjectURL(url)
+
+    toast.update(printingLabel, {
+      render: 'Label generated successfully',
+      type: 'success',
+      isLoading: false,
+      autoClose: 3000,
+    })
+
     mutate(apiMutateLink)
     setLoadingLabel(false)
   }
@@ -240,7 +268,9 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                       <td></td>
                       <td></td>
                       <td className='text-start fs-6 fw-bold text-nowrap'>Total</td>
-                      <td className='text-center fs-6 text-primary'>{data.orderItems.reduce((total, item: OrderItem) => total + (item.qtyReceived ? item.qtyReceived : item.quantity), 0)}</td>
+                      <td className='text-center fs-6 text-primary'>
+                        {data.orderItems.reduce((total, item: OrderItem) => total + (item.qtyReceived ? item.qtyReceived : item.quantity), 0)}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -256,7 +286,7 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
               {loadingLabel ? (
                 <Button color='secondary' className='btn-label'>
                   <i className='las la-toilet-paper label-icon align-middle fs-3 me-2' />
-                  <Spinner color='light' size={'sm'}/>
+                  <Spinner color='light' size={'sm'} />
                 </Button>
               ) : (
                 <Button color='secondary' className='btn-label' onClick={() => handlePrintingLabel()}>
