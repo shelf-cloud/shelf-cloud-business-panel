@@ -188,7 +188,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
                   />
                   <a
                     href={`${row.trackingLink}${row.trackingNumber}`}
-                    target='blank'
+                    target='_blank'
                     rel='noopener noreferrer'
                     style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}
                     className='fs-7'>
@@ -231,7 +231,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
                   />
                   <a
                     href={`${row.trackingLink}${row.trackingNumber}`}
-                    target='blank'
+                    target='_blank'
                     rel='noopener noreferrer'
                     style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}
                     className='fs-7'>

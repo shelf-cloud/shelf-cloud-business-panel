@@ -30,7 +30,7 @@ const ShipmentTrackingNumber = ({ orderStatus, orderType, trackingNumber, tracki
           <a
             className='fs-7 text-primary'
             href={`${trackingLink}${trackingNumber}`}
-            target='blank'
+            target='_blank'
             rel='noopener noreferrer'
             style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
             {trackingNumber}
@@ -71,7 +71,7 @@ const ShipmentTrackingNumber = ({ orderStatus, orderType, trackingNumber, tracki
           <a
             className='fs-7 text-primary'
             href={`${trackingLink}${trackingNumber}`}
-            target='blank'
+            target='_blank'
             rel='noopener noreferrer'
             style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
             {trackingNumber}

@@ -333,7 +333,7 @@ const ReorderingPointsTable = ({
                     {`ASIN: `}
                     <a
                       href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`}
-                      target='blank'
+                      target='_blank'
                       rel='noopener noreferrer'
                       className='fw-light'
                       style={{ textDecoration: 'none' }}>

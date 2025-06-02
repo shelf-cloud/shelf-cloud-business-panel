@@ -211,7 +211,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
                   />
                   <a
                     href={`${Object.values(row.returns)[0].trackingLink}${Object.values(row.returns)[0].trackingNumber}`}
-                    target='blank'
+                    target='_blank'
                     rel='noopener noreferrer'
                     className='fs-7'
                     style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
@@ -260,7 +260,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
                   />
                   <a
                     href={`${Object.values(row.returns)[0].trackingLink}${Object.values(row.returns)[0].trackingNumber}`}
-                    target='blank'
+                    target='_blank'
                     rel='noopener noreferrer'
                     className='fs-7'
                     style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
