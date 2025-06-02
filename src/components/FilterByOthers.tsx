@@ -17,6 +17,8 @@ type Props = {
   setSearchMarketplace: (selectedOption: SelectSingleValueType) => void
   searchSku: SelectSingleValueType
   setSearchSku: (selectedOption: SelectSingleValueType) => void
+  carrierStatus: SelectSingleValueType
+  setcarrierStatus: (selectedOption: SelectSingleValueType) => void
 }
 
 const TYPE_OPTIONS = [
@@ -34,7 +36,27 @@ const STATUS_OPTIONS = [
   { value: 'cancelled', label: 'Cancelled' },
 ]
 
-const FilterByOthers = ({ searchType, setSearchType, searchStatus, setSearchStatus, searchMarketplace, setSearchMarketplace, searchSku, setSearchSku }: Props) => {
+const CARRIER_STATUS_OPTIONS = [
+  { value: '', label: 'All' },
+  { value: 'pending', label: 'Pending' },
+  // { value: 'in_transit', label: 'In Transit' },
+  { value: 'delivered', label: 'Delivered' },
+  { value: 'delay', label: 'Delayed' },
+  { value: 'damage', label: 'Damaged' },
+]
+
+const FilterByOthers = ({
+  searchType,
+  setSearchType,
+  searchStatus,
+  setSearchStatus,
+  searchMarketplace,
+  setSearchMarketplace,
+  searchSku,
+  setSearchSku,
+  carrierStatus,
+  setcarrierStatus,
+}: Props) => {
   const { state }: any = useContext(AppContext)
   const [isFiltersOpen, setOpenFilters] = useState(false)
   const filterByOthersContainer = useRef<HTMLDivElement | null>(null)
@@ -84,6 +106,18 @@ const FilterByOthers = ({ searchType, setSearchType, searchStatus, setSearchStat
                     setOpenFilters(false)
                   }}
                   options={STATUS_OPTIONS}
+                />
+
+                <SelectSingleFilter
+                  inputLabel='Carrier Status'
+                  inputName='carrier-status-filter'
+                  placeholder='All'
+                  selected={carrierStatus}
+                  handleSelect={(option) => {
+                    setcarrierStatus(option)
+                    setOpenFilters(false)
+                  }}
+                  options={CARRIER_STATUS_OPTIONS}
                 />
 
                 <SelectSingleFilter

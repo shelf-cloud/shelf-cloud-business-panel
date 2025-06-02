@@ -63,6 +63,7 @@ const Shipments = ({ session }: Props) => {
   const [searchStatus, setSearchStatus] = useState<SelectSingleValueType>({ value: '', label: 'All' })
   const [searchMarketplace, setSearchMarketplace] = useState<SelectSingleValueType>({ value: '', label: 'All Stores' })
   const [searchSku, setSearchSku] = useState<SelectSingleValueType>({ value: '', label: 'All' })
+  const [carrierStatus, setcarrierStatus] = useState<SelectSingleValueType>({ value: '', label: 'All' })
   const [sortBy, setSortBy] = useState({
     key: '',
     asc: false,
@@ -83,6 +84,7 @@ const Shipments = ({ session }: Props) => {
     if (searchStatus!.value !== '') url += `&orderStatus=${searchStatus!.value}`
     if (searchMarketplace!.value !== '') url += `&storeId=${searchMarketplace!.value}`
     if (searchSku!.value !== '') url += `&sku=${searchSku!.value}`
+    if (carrierStatus!.value !== '') url += `&carrierStatus=${carrierStatus!.value}`
     if (sortBy.key !== '') url += `&sortBy=${sortBy.key}&direction=${sortBy.asc ? 'ASC' : 'DESC'}`
 
     return url
@@ -128,6 +130,7 @@ const Shipments = ({ session }: Props) => {
     setSearchType({ value: '', label: 'All' })
     setSearchStatus({ value: '', label: 'All' })
     setSearchSku({ value: '', label: 'All' })
+    setcarrierStatus({ value: '', label: 'All' })
     setSearchMarketplace({ value: '', label: 'All Stores' })
     setSize(1) // Reset to page 1
     mutateShipments() // Refetch the initial data set
@@ -149,8 +152,9 @@ const Shipments = ({ session }: Props) => {
       searchType!.value !== '' ||
       searchStatus!.value !== '' ||
       searchMarketplace!.value !== '' ||
-      searchSku!.value !== '',
-    [searchValue, startDate, endDate, searchType, searchStatus, searchMarketplace, searchSku]
+      searchSku!.value !== '' ||
+      carrierStatus!.value !== '',
+    [searchValue, startDate, endDate, searchType, searchStatus, searchMarketplace, searchSku, carrierStatus]
   )
 
   const handleGetShipmentBOL = async (orderNumber: string, orderId: string, documentType: string) => {
@@ -261,6 +265,8 @@ const Shipments = ({ session }: Props) => {
                   setSearchMarketplace={setSearchMarketplace}
                   searchSku={searchSku}
                   setSearchSku={setSearchSku}
+                  carrierStatus={carrierStatus}
+                  setcarrierStatus={setcarrierStatus}
                 />
               </div>
               <div className='w-100 d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-end align-items-lg-center px-0'>

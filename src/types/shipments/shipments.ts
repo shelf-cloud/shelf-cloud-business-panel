@@ -49,7 +49,7 @@ export interface Shipment {
   carrierService: string
   carrierUsed: string
   carrierType: string
-  carrierStatus?: string
+  carrierStatus: string | null
   carrierShipping: number
   onixShipping: number
   storeId: string

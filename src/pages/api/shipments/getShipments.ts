@@ -1,7 +1,8 @@
 import { NextApiHandler } from 'next'
-import { getServerSession } from 'next-auth'
+
 import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
+import { getServerSession } from 'next-auth'
 
 const getShipments: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)
@@ -20,6 +21,7 @@ const getShipments: NextApiHandler = async (request, response) => {
   if (request.query.orderStatus) url += `&orderStatus=${request.query.orderStatus}`
   if (request.query.storeId) url += `&storeId=${request.query.storeId}`
   if (request.query.sku) url += `&sku=${request.query.sku}`
+  if (request.query.carrierStatus) url += `&carrierStatus=${request.query.carrierStatus}`
   if (request.query.sortBy) url += `&sortBy=${request.query.sortBy}&direction=${request.query.direction}`
 
   axios
