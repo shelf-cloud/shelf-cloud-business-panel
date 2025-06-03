@@ -126,7 +126,7 @@ const ReorderingPointsTable = ({
                 <div className='d-flex flex-column justify-content-start align-items-center gap-2 w-100 px-1'>
                   <DebounceInput
                     type='number'
-                    disabled={row.supplier === '' ? false : selectedSupplier !== '' && selectedSupplier !== row.supplier}
+                    disabled={row.supplier === '' ? false : selectedSupplier !== '' && selectedSupplier.toLowerCase() !== row.supplier.toLowerCase()}
                     debounceTimeout={400}
                     className='form-control form-control-sm fs-7 m-0 py-0 w-75 text-center'
                     placeholder='Order Qty'
@@ -138,7 +138,7 @@ const ReorderingPointsTable = ({
                         setError((prev: string[]) => [...prev, row.sku])
                         handleOrderQty(row.sku, parseInt(e.target.value))
                       } else {
-                        setSelectedSupplier(row.supplier)
+                        if (row.supplier !== '') setSelectedSupplier(row.supplier)
                         setError((prev: string[]) => prev.filter((sku) => sku !== row.sku))
                         handleOrderQty(row.sku, parseInt(e.target.value))
                       }
@@ -181,7 +181,7 @@ const ReorderingPointsTable = ({
               <div className='d-flex flex-column justify-content-start align-items-center gap-2 w-100 px-1'>
                 <DebounceInput
                   type='number'
-                  disabled={row.supplier === '' ? false : selectedSupplier !== '' && selectedSupplier !== row.supplier}
+                  disabled={row.supplier === '' ? false : selectedSupplier !== '' && selectedSupplier.toLowerCase() !== row.supplier.toLowerCase()}
                   debounceTimeout={400}
                   className='form-control form-control-sm fs-7 m-0 py-0 w-75 text-center'
                   placeholder='Order Qty'
@@ -193,7 +193,7 @@ const ReorderingPointsTable = ({
                       setError((prev: string[]) => [...prev, row.sku])
                       handleSplitsOrderQty(row.sku, parseInt(e.target.value), `${splitIndex}`)
                     } else {
-                      setSelectedSupplier(row.supplier)
+                      if (row.supplier !== '') setSelectedSupplier(row.supplier)
                       setError((prev: string[]) => prev.filter((sku) => sku !== row.sku))
                       handleSplitsOrderQty(row.sku, parseInt(e.target.value), `${splitIndex}`)
                     }

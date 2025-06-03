@@ -1,22 +1,39 @@
 /* eslint-disable @next/next/no-img-element */
-import AppContext from '@context/AppContext'
-import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
-import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
-import React, { useContext, useState } from 'react'
-import { Button, Col, DropdownMenu, DropdownToggle, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner, UncontrolledButtonDropdown } from 'reactstrap'
-import * as Yup from 'yup'
-import { Formik, Form } from 'formik'
-import PrintReorderingPointsOrder from '@components/reorderingPoints/PrintReorderingPointsOrder'
-import DownloadExcelReorderingPointsOrder from '@components/reorderingPoints/DownloadExcelReorderingPointsOrder'
-import axios from 'axios'
-import { toast } from 'react-toastify'
-import { useSWRConfig } from 'swr'
 import router from 'next/router'
-import { DebounceInput } from 'react-debounce-input'
-import { NoImageAdress } from '@lib/assetsConstants'
-import { useWarehouses } from '@hooks/warehouses/useWarehouse'
+import { useContext, useState } from 'react'
+
 import SimpleSelect from '@components/Common/SimpleSelect'
+import DownloadExcelReorderingPointsOrder from '@components/reorderingPoints/DownloadExcelReorderingPointsOrder'
+import PrintReorderingPointsOrder from '@components/reorderingPoints/PrintReorderingPointsOrder'
+import AppContext from '@context/AppContext'
 import { SplitNames } from '@hooks/reorderingPoints/useRPSplits'
+import { useWarehouses } from '@hooks/warehouses/useWarehouse'
+import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
+import { NoImageAdress } from '@lib/assetsConstants'
+import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
+import axios from 'axios'
+import { Form, Formik } from 'formik'
+import { DebounceInput } from 'react-debounce-input'
+import { toast } from 'react-toastify'
+import {
+  Button,
+  Col,
+  DropdownMenu,
+  DropdownToggle,
+  FormFeedback,
+  FormGroup,
+  Input,
+  Label,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  Row,
+  Spinner,
+  UncontrolledButtonDropdown,
+} from 'reactstrap'
+import { useSWRConfig } from 'swr'
+import * as Yup from 'yup'
 
 export type Splits = {
   isSplitting: boolean
@@ -149,8 +166,8 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
 
     const response = await axios.post(`/api/reorderingPoints/createNewPurchaseOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
       orderNumber: values.orderNumber,
-      destinationSC: !hasSplitting ? (warehouses?.find((w) => w.warehouseId === parseInt(values.destinationSC.value))?.isSCDestination ? 1 : 0) : 0,
-      warehouseId: !hasSplitting ? parseInt(values.destinationSC.value) : 0,
+      destinationSC: hasSplitting ? 0 : warehouses?.find((w) => w.warehouseId === parseInt(values.destinationSC.value))?.isSCDestination ? 1 : 0,
+      warehouseId: hasSplitting ? 0 : parseInt(values.destinationSC.value),
       poItems,
       hasSplitting,
       splits: splitsInfo,
@@ -268,7 +285,9 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                       ) : null}
                     </Col>
                   ))}
-                  {errors.splitDestinations && typeof errors.splitDestinations === 'string' && touched.splitDestinations ? <p className='mb-0 mt-1 text-danger fs-7'>{`*${errors.splitDestinations}`}</p> : null}
+                  {errors.splitDestinations && typeof errors.splitDestinations === 'string' && touched.splitDestinations ? (
+                    <p className='mb-0 mt-1 text-danger fs-7'>{`*${errors.splitDestinations}`}</p>
+                  ) : null}
                 </Row>
               )}
               <span className='fs-7 text-muted'>*Select the columns you wish to print.</span>
@@ -394,13 +413,18 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                               .fill('')
                               .map((_, splitIndex) => (
                                 <td key={`splitProduct-${product.sku}-${splitIndex}`} className='text-center align-middle'>
-                                  {FormatIntNumber(state.currentRegion, product.useOrderAdjusted ? product.orderSplits[`${splitIndex}`].orderAdjusted : product.orderSplits[`${splitIndex}`].order)}
+                                  {FormatIntNumber(
+                                    state.currentRegion,
+                                    product.useOrderAdjusted ? product.orderSplits[`${splitIndex}`].orderAdjusted : product.orderSplits[`${splitIndex}`].order
+                                  )}
                                 </td>
                               ))}
                           <td className='text-center align-middle'>{FormatIntNumber(state.currentRegion, product.useOrderAdjusted ? product.orderAdjusted : product.order)}</td>
                           <td className='text-center align-middle'>{`${FormatIntPercentage(state.currentRegion, state.currentRegion === 'us' ? productVolume / 61020 : productVolume / 1000000)} m³`}</td>
 
-                          <td className='text-center align-middle'>{FormatCurrency(state.currentRegion, product.useOrderAdjusted ? product.orderAdjusted * product.sellerCost : product.order * product.sellerCost)}</td>
+                          <td className='text-center align-middle'>
+                            {FormatCurrency(state.currentRegion, product.useOrderAdjusted ? product.orderAdjusted * product.sellerCost : product.order * product.sellerCost)}
+                          </td>
                         </tr>
                       )
                     })}
@@ -419,7 +443,11 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                             <td key={`splitFooter-${splitIndex}`} className='text-center align-middle'>
                               {FormatIntNumber(
                                 state.currentRegion,
-                                Object.values(reorderingPointsOrder.products).reduce((total, product) => total + (product.useOrderAdjusted ? product.orderSplits[`${splitIndex}`].orderAdjusted : product.orderSplits[`${splitIndex}`].order), 0)
+                                Object.values(reorderingPointsOrder.products).reduce(
+                                  (total, product) =>
+                                    total + (product.useOrderAdjusted ? product.orderSplits[`${splitIndex}`].orderAdjusted : product.orderSplits[`${splitIndex}`].order),
+                                  0
+                                )
                               )}
                             </td>
                           ))}
@@ -467,7 +495,15 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                     splits={splits}
                     splitNames={splitNames}
                   />
-                  <DownloadExcelReorderingPointsOrder reorderingPointsOrder={reorderingPointsOrder} orderDetails={values} selectedSupplier={selectedSupplier} username={username} orderComment={orderComment} splits={splits} splitNames={splitNames} />
+                  <DownloadExcelReorderingPointsOrder
+                    reorderingPointsOrder={reorderingPointsOrder}
+                    orderDetails={values}
+                    selectedSupplier={selectedSupplier}
+                    username={username}
+                    orderComment={orderComment}
+                    splits={splits}
+                    splitNames={splitNames}
+                  />
                 </DropdownMenu>
               </UncontrolledButtonDropdown>
               <Button disabled={loading || savingComment} type='submit' color='success'>

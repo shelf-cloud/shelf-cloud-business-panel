@@ -305,7 +305,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                     <Spinner color='light' size={'sm'} /> Creating...
                   </span>
                 ) : (
-                  'Confirm Receiving'
+                  'Create Receiving'
                 )}
               </Button>
             </div>
