@@ -1,12 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+
+import { Split } from '@typesTs/purchaseOrders'
 import axios from 'axios'
 import useSWR from 'swr'
-import { useRouter } from 'next/router'
 
 //constants
-import { layoutTypes, leftSidebarTypes, layoutModeTypes, layoutWidthTypes, layoutPositionTypes, topbarThemeTypes, leftsidbarSizeTypes, leftSidebarViewTypes, leftSidebarImageTypes } from '../components/constants/layout'
-import { Split } from '@typesTs/purchaseOrders'
+import {
+  layoutModeTypes,
+  layoutPositionTypes,
+  layoutTypes,
+  layoutWidthTypes,
+  leftSidebarImageTypes,
+  leftSidebarTypes,
+  leftSidebarViewTypes,
+  leftsidbarSizeTypes,
+  topbarThemeTypes,
+} from '../components/constants/layout'
 
 export interface UserType {
   businessId: string
@@ -80,7 +91,11 @@ export const initialState = {
   user: {} as UserType,
   showInventoryBinsModal: false,
   // MODAL - PRODUCT DETAILS
-  modalProductInfo: {},
+  modalProductInfo: {
+    inventoryId: 0,
+    businessId: 0,
+    sku: '',
+  },
   showEditProductModal: false,
   modalProductDetails: {},
   // MODAL - KIT DETAILS

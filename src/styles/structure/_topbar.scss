@@ -343,12 +343,13 @@
   }
 
   .page-content {
+    padding: calc(45px + #{$grid-gutter-width}) calc(#{$grid-gutter-width} / 2)
+    $footer-height calc(#{$grid-gutter-width} / 2);
+    
     @media (min-width: 1024.1px) {
       margin-top: $header-height;
     }
 
-    padding: calc(45px + #{$grid-gutter-width}) calc(#{$grid-gutter-width} / 2)
-      $footer-height calc(#{$grid-gutter-width} / 2);
   }
   &[data-layout-width="boxed"] {
     .page-content {
