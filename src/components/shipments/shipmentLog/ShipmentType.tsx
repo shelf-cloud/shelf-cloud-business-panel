@@ -128,7 +128,10 @@ const ShipmentType = ({ data, showActions, mutateShipments }: Props) => {
                       <tr>
                         <td className='text-muted text-nowrap'>Customer Name:</td>
                         <td className='fw-semibold w-100 capitalize'>
-                          {data.shipName} {data.shipName2}
+                          <p className='m-0 p-0'>
+                            {data.shipName} {data.shipName2}
+                          </p>
+                          <p className='m-0 p-0'>{data.shipCompany}</p>
                         </td>
                       </tr>
                       <tr>
@@ -140,7 +143,6 @@ const ShipmentType = ({ data, showActions, mutateShipments }: Props) => {
                           <p className='m-0 p-0'>
                             {data.shipCity}, {data.shipState}, {data.shipZipcode}, {data.shipCountry}
                           </p>
-                          {/* {data.shipStreet}, {data.shipCity}, {data.shipState}, {data.shipZipcode}, {data.shipCountry} */}
                         </td>
                       </tr>
                     </tbody>

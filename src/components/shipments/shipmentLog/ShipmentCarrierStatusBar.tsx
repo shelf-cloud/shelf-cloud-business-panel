@@ -1,4 +1,3 @@
-import React from 'react'
 import { Card, CardBody } from 'reactstrap'
 
 type Props = {
@@ -62,13 +61,12 @@ const ShipmentCarrierStatusBar = ({ carrier, currentStatus }: Props) => {
                 key={index}
                 className={'text-center py-2' + (index <= statusIndex ? ' bg-primary bg-gradient' : '')}
                 style={{ borderRadius: checkBorderRadius(index, statusIndex) }}>
-                <p className={'m-0 p-0' + (index <= statusIndex ? ' fw-semibold text-white' : ' fw-semibold text-muted')}>{status}</p>
+                <p className={'m-0 p-0 fs-7' + (index <= statusIndex ? ' fw-semibold text-white' : ' fw-semibold text-muted')}>{status}</p>
               </div>
             ))}
           </CardBody>
         </Card>
       )
-      break
     case 'fedex':
       gridTemplateColumns = `repeat(${FEDEX_STATUS_BAR.length}, 1fr)`
       statusLabel = FEDEX_STATUS[currentStatus]
@@ -81,13 +79,12 @@ const ShipmentCarrierStatusBar = ({ carrier, currentStatus }: Props) => {
                 key={index}
                 className={'text-center py-2' + (index <= statusIndex ? ' bg-primary bg-gradient' : '')}
                 style={{ borderRadius: checkBorderRadius(index, statusIndex) }}>
-                <p className={'m-0 p-0' + (index <= statusIndex ? ' fw-semibold text-white' : ' fw-semibold text-muted')}>{status}</p>
+                <p className={'m-0 p-0 fs-7' + (index <= statusIndex ? ' fw-semibold text-white' : ' fw-semibold text-muted')}>{status}</p>
               </div>
             ))}
           </CardBody>
         </Card>
       )
-      break
     default:
       gridTemplateColumns = `repeat(${UPS_STATUS_BAR.length}, 1fr)`
       statusLabel = UPS_STATUS[currentStatus]
@@ -100,13 +97,12 @@ const ShipmentCarrierStatusBar = ({ carrier, currentStatus }: Props) => {
                 key={index}
                 className={'text-center py-2' + (index <= statusIndex ? ' bg-primary bg-gradient' : '')}
                 style={{ borderRadius: checkBorderRadius(index, statusIndex) }}>
-                <p className={'m-0 p-0' + (index <= statusIndex ? ' fw-semibold text-white' : ' fw-semibold text-muted')}>{status}</p>
+                <p className={'m-0 p-0 fs-7' + (index <= statusIndex ? ' fw-semibold text-white' : ' fw-semibold text-muted')}>{status}</p>
               </div>
             ))}
           </CardBody>
         </Card>
       )
-      break
   }
 }
 
