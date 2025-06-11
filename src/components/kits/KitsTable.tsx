@@ -3,12 +3,13 @@
 import Link from 'next/link'
 import { useContext } from 'react'
 
+import TooltipComponent from '@components/constants/Tooltip'
 import AppContext from '@context/AppContext'
 // import TooltipComponent from '../constants/Tooltip'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { KitRow } from '@typings'
 import DataTable from 'react-data-table-component'
-import { DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
+import { DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from 'reactstrap'
 
 import KitExpandedDetails from './KitExpandedDetails'
 
@@ -81,12 +82,12 @@ const KitsTable = ({ tableData, pending }: Props) => {
   }
   const columns: any = [
     {
-      name: <span className='font-weight-bold fs-13'>Image</span>,
+      name: <span className='fw-bold fs-6'>Image</span>,
       selector: (cell: { image: any }) => {
         return (
           <div
             style={{
-              width: '70px',
+              width: '50px',
               height: '60px',
               margin: '2px 0px',
               position: 'relative',
@@ -107,7 +108,7 @@ const KitsTable = ({ tableData, pending }: Props) => {
     },
     {
       name: (
-        <span className='font-weight-bold fs-13'>
+        <span className='fw-bold fs-6'>
           Title
           <br />
           SKU
@@ -116,15 +117,11 @@ const KitsTable = ({ tableData, pending }: Props) => {
       selector: (row: KitRow) => {
         return (
           <div>
-            <p style={{ margin: '0px', fontWeight: '800' }}>{row.title}</p>
-            <p style={{ margin: '0px' }} className='d-flex flex-row justify-content-start align-items-start'>
+            <p className='fs-7 m-0 fw-semibold text-black'>{row.title}</p>
+            <p className='m-0 fs-7 d-flex flex-row justify-content-start align-items-start'>
               {row.sku} {row.note && row.note != '' && <i className='ri-information-fill ms-2 fs-5 text-warning' id={`tooltip${row.sku}`}></i>}
             </p>
-            {row.note != '' && (
-              <UncontrolledTooltip placement='top' target={`tooltip${row.sku}`} innerClassName='bg-white border border-info border-opacity-50 p-2'>
-                <p className='fs-7 text-primary m-0 p-0 mb-0'>{row.note}</p>
-              </UncontrolledTooltip>
-            )}
+            {row.note != '' && <TooltipComponent target={`tooltip${row.sku}`} text={row.note || ''} />}
           </div>
         )
       },
@@ -136,7 +133,7 @@ const KitsTable = ({ tableData, pending }: Props) => {
     },
     {
       name: (
-        <span className='font-weight-bold fs-13'>
+        <span className='fw-bold fs-6'>
           ASIN
           <br />
           FNSKU
@@ -146,27 +143,26 @@ const KitsTable = ({ tableData, pending }: Props) => {
       ),
       selector: (row: KitRow) => {
         return (
-          <div>
-            <p style={{ margin: '0px' }}>
-              <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/exec/obidos/ASIN${row.asin}`} target='blank' rel='noopener noreferrer'>
+          <div className='fs-7 d-flex flex-column justify-item-start gap-0'>
+            {row.asin !== '' && (
+              <a className='m-0' href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank' rel='noopener noreferrer'>
                 {row.asin}
               </a>
-            </p>
-            <p style={{ margin: '0px' }}>{row.fnSku}</p>
-            <p style={{ margin: '0px' }}>
-              <a href='#' onClick={() => loadBarcode(row)}>
+            )}
+            {row.fnSku !== '' && <p className='m-0'>{row.fnSku}</p>}
+            {row.barcode !== '' && (
+              <a className='m-0 text-info' href='#' onClick={() => loadBarcode(row)}>
                 {row.barcode}
               </a>
-            </p>
+            )}
           </div>
         )
       },
       sortable: false,
       compact: true,
-      grow: 1.3,
     },
     {
-      name: <span className='font-weight-bold fs-13'>Quantity</span>,
+      name: <span className='fw-bold fs-6'>Quantity</span>,
       selector: (cell: any) => cell.quantity,
       sortable: true,
       compact: true,
@@ -174,13 +170,13 @@ const KitsTable = ({ tableData, pending }: Props) => {
       sortFunction: quantitySort,
     },
     {
-      name: <span className='font-weight-bold fs-13'>Unit Dimensions</span>,
+      name: <span className='fw-bold fs-6'>Unit Dimensions</span>,
       sortable: false,
       compact: true,
       grow: 1.3,
       selector: (cell: any) => {
         return (
-          <div style={{ padding: '7px 0px' }}>
+          <div className='fs-7' style={{ padding: '7px 0px' }}>
             <Row>
               <span>
                 Weight: {cell.weight} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'lb' : 'kg')}
@@ -206,13 +202,13 @@ const KitsTable = ({ tableData, pending }: Props) => {
       },
     },
     {
-      name: <span className='font-weight-bold fs-13'>Box Dimensions</span>,
+      name: <span className='fw-bold fs-6'>Box Dimensions</span>,
       sortable: false,
       compact: true,
       grow: 1.3,
       selector: (cell: any) => {
         return (
-          <div style={{ padding: '7px 5px 7px 0px' }}>
+          <div className='fs-7' style={{ padding: '7px 5px 7px 0px' }}>
             <Row>
               <span>
                 Weight: {cell.boxweight} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'lb' : 'kg')}
@@ -238,31 +234,34 @@ const KitsTable = ({ tableData, pending }: Props) => {
       },
     },
     {
-      name: <span className='font-weight-bold fs-13'>Qty/Box</span>,
+      name: <span className='fw-bold fs-6'>Qty/Box</span>,
       selector: (row: { boxQty: number }) => row.boxQty,
       sortable: true,
       center: true,
       compact: true,
+      style: {
+        fontSize: '0.7rem',
+      },
     },
     {
-      name: <span className='font-weight-bold fs-13'>Action</span>,
+      name: <span className='fw-bold fs-6'>Action</span>,
       sortable: false,
       compact: true,
       cell: (row: KitRow) => {
         return (
           <UncontrolledDropdown className='dropdown d-inline-block'>
             <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
-              <i className='mdi mdi-dots-vertical align-middle fs-2 m-0 p-2' style={{ color: '#919FAF' }}></i>
+              <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-2 py-0' style={{ color: '#919FAF' }} />
             </DropdownToggle>
             <DropdownMenu className='dropdown-menu-end' container={'body'}>
               <DropdownItem className='edit-item-btn' onClick={() => setModalKitDetails(row.kitId, state.user.businessId, row.sku)}>
                 <i className='ri-pencil-fill align-middle me-2 fs-5 text-muted'></i>
-                <span className='fs-6 fw-normal'>Edit</span>
+                <span className='fs-7 fw-normal'>Edit</span>
               </DropdownItem>
               <DropdownItem className='edit-item-btn'>
                 <Link href={`/kit/${row.kitId}/${row.sku}`}>
                   <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
-                  <span className='fs-6 fw-normal text-dark'>View Details</span>
+                  <span className='fs-7 fw-normal text-dark'>View Details</span>
                 </Link>
               </DropdownItem>
             </DropdownMenu>

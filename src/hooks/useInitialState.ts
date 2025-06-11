@@ -100,7 +100,11 @@ export const initialState = {
   modalProductDetails: {},
   // MODAL - KIT DETAILS
   showEditKitModal: false,
-  modalKitDetails: {},
+  modalKitDetails: {
+    kitId: 0,
+    businessId: 0,
+    sku: '',
+  },
   // MODAL - WHOLESALE ORDERS
   wholesaleOrderProducts: [] as any[],
   showWholeSaleOrderModal: false,

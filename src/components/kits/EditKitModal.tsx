@@ -1,44 +1,83 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // ALTER TABLE `dbpruebas` ADD `activeState` BOOLEAN NOT NULL DEFAULT TRUE AFTER `image`;
-import React, { useState, useEffect, useContext } from 'react'
-import { Button, Col, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { useContext, useState } from 'react'
+
+import SimpleSelect from '@components/Common/SimpleSelect'
+import ErrorInputLabel from '@components/ui/forms/ErrorInputLabel'
 import AppContext from '@context/AppContext'
+import { useCreateKit } from '@hooks/kits/useCreateKit'
 import axios from 'axios'
-import * as Yup from 'yup'
+import { Field, FieldArray, Form, Formik } from 'formik'
 import { toast } from 'react-toastify'
-import useSWR, { useSWRConfig } from 'swr'
-import { Field, FieldArray, Formik, Form } from 'formik'
+import { Button, Col, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import useSWR from 'swr'
+import * as Yup from 'yup'
 
-type Props = {}
+interface EditKitDetails {
+  kitId: number
+  businessId: number
+  business: string
+  image: string
+  title: string
+  barcode: string
+  sku: string
+  asin: string
+  fnsku: string
+  boxqty: number
+  note: string
+  children: KitChildren[]
+}
 
-function EditKitModal({}: Props) {
-  const { mutate } = useSWRConfig()
-  const { state, setShowEditKitModal }: any = useContext(AppContext)
-  const [loading, setLoading] = useState(true)
-  const [skus, setSkus] = useState([])
-  const [skusTitles, setSkusTitles] = useState<any>({})
-  const [skuQuantities, setSkuQuantities] = useState<any>({})
-  const [validSkus, setValidSkus] = useState<string[]>([])
-  const [duplicateSkus, setDuplicateSkus] = useState(false)
-  const [initialValues, setinitialValues] = useState({
-    kitId: '',
-    businessId: '',
-    title: '',
-    sku: '',
-    image: '',
-    asin: '',
-    fnsku: '',
-    barcode: '',
-    boxqty: '',
-    note: '',
-    children: [
-      {
-        sku: '',
+interface KitChildren {
+  qty: string
+  sku: string
+  title: string
+  inventoryId: number
+}
+
+type EditKitResponse = EditKitDetails
+
+type Props = {
+  mutateKits: () => void
+}
+
+const fetcher = async (endPoint: string) => axios.get<EditKitResponse>(endPoint).then((res) => res.data)
+
+function EditKitModal({ mutateKits }: Props) {
+  const { state, setShowEditKitModal } = useContext(AppContext)
+  const { skus, validSkus, skuInfo, isLoading } = useCreateKit()
+  const [updatingKit, setUpdatingKit] = useState(false)
+
+  const { data, isValidating } = useSWR(
+    state.user.businessId ? `/api/kits/getKitDetails?region=${state.currentRegion}&kitId=${state.modalKitDetails.kitId}&businessId=${state.user.businessId}` : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnMount: true,
+    }
+  )
+
+  const initialValues = data
+    ? data
+    : {
+        kitId: '',
         title: '',
-        qty: 1,
-      },
-    ],
-  })
+        sku: '',
+        image: '',
+        asin: '',
+        fnsku: '',
+        barcode: '',
+        boxqty: '',
+        note: '',
+        children: [
+          {
+            sku: '',
+            title: '',
+            qty: 1,
+            inventoryId: 0,
+          },
+        ],
+      }
 
   const validationSchema = Yup.object({
     title: Yup.string()
@@ -66,9 +105,13 @@ function EditKitModal({}: Props) {
   })
 
   const handleSubmit = async (values: any) => {
-    const ChildrenSkus = (await values.children.map((child: any) => {
+    setUpdatingKit(true)
+    const updatingKit = toast.loading('Updating Kit...')
+
+    const ChildrenSkus: String[] = await values.children.map((child: any) => {
       return child.sku
-    })) as String[]
+    })
+
     if (
       values.children.some((child: any) => {
         const count = ChildrenSkus.filter((sku) => sku == child.sku)
@@ -79,68 +122,42 @@ function EditKitModal({}: Props) {
         }
       })
     ) {
-      setDuplicateSkus(true)
+      toast.update(updatingKit, {
+        render: 'Duplicate SKUs found in Children List',
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
       return
     }
-    setDuplicateSkus(false)
-    const response = await axios.post(`api/updateKitDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+
+    const { data } = await axios.post(`/api/kits/updateKitDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
       productInfo: values,
     })
-    if (!response.data.error) {
-      toast.success(response.data.msg)
-      mutate(`/api/getBusinessKitsInventory?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+    if (!data.error) {
+      toast.update(updatingKit, {
+        render: data.message,
+        type: 'success',
+        isLoading: false,
+        autoClose: 3000,
+      })
+      mutateKits()
       setShowEditKitModal(false)
     } else {
-      toast.error(response.data.msg)
+      toast.update(updatingKit, {
+        render: data.message,
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
     }
+    setUpdatingKit(false)
   }
-
-  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(state.user.businessId ? `/api/getSkus?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher)
-
-  useEffect(() => {
-    if (data?.error) {
-      setValidSkus([])
-      setSkus([])
-      setSkusTitles({})
-      setSkuQuantities({})
-      // setReady(true)
-      toast.error(data?.message)
-    } else if (data) {
-      setValidSkus(data.validSkus)
-      setSkus(data.skus)
-      setSkusTitles(data.skuTitle)
-      setSkuQuantities(data.skuQuantities)
-      // setReady(true)
-    }
-    return () => {
-      // setReady(false)
-    }
-  }, [data])
-
-  useEffect(() => {
-    const bringProductBins = async () => {
-      const response = (await axios(
-        `/api/getKitDetails?region=${state.currentRegion}&kitId=${state.modalKitDetails.kitId}&businessId=${state.user.businessId}`
-      )) as any
-      if (response?.error) {
-        setLoading(false)
-        toast.error(response.message)
-      } else {
-        setinitialValues(response.data)
-        setLoading(false)
-      }
-    }
-    bringProductBins()
-    return () => {
-      setLoading(true)
-    }
-  }, [state.currentRegion, state.user.businessId, state.modalKitDetails.kitId])
 
   return (
     <Modal
       size='xl'
-      id='myModal'
+      id='EditKitModal'
       isOpen={state.showEditKitModal}
       toggle={() => {
         setShowEditKitModal(!state.showEditKitModal)
@@ -149,27 +166,26 @@ function EditKitModal({}: Props) {
         toggle={() => {
           setShowEditKitModal(!state.showEditKitModal)
         }}>
-        <h3 className='modal-title' id='myModalLabel'>
-          Edit Kit
-        </h3>
-        {loading && <Spinner />}
+        <h4 className='modal-title' id='EditKitModalLabel'>
+          Edit Kit: <span className='text-primary'>{state.modalKitDetails.sku}</span>
+        </h4>
       </ModalHeader>
       <ModalBody>
-        {!loading && (
+        {!isLoading && !isValidating ? (
           <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => handleSubmit(values)}>
-            {({ values, errors, touched, handleChange, handleBlur }) => (
+            {({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => (
               <Form>
                 <Row>
-                  <h5 className='fs-5 m-3 fw-bolder'>Kit Details</h5>
+                  <h5 className='fs-5 mb-3 fw-bolder'>Kit Details</h5>
                   <Col md={6} className='d-none'>
-                    <FormGroup className='mb-3'>
-                      <Label htmlFor='firstNameinput' className='form-label'>
+                    <FormGroup>
+                      <Label htmlFor='kitId' className='form-label mb-1'>
                         *kitId
                       </Label>
                       <Input
                         disabled
                         type='number'
-                        className='form-control'
+                        className='form-control form-control-sm fs-6'
                         id='kitId'
                         name='kitId'
                         onChange={handleChange}
@@ -180,33 +196,14 @@ function EditKitModal({}: Props) {
                       {touched.kitId && errors.kitId ? <FormFeedback type='invalid'>{errors.kitId}</FormFeedback> : null}
                     </FormGroup>
                   </Col>
-                  <Col md={6} className='d-none'>
-                    <FormGroup className='mb-3'>
-                      <Label htmlFor='firstNameinput' className='form-label'>
-                        *BusinessId
-                      </Label>
-                      <Input
-                        disabled
-                        type='number'
-                        className='form-control'
-                        id='businessId'
-                        name='businessId'
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.businessId || ''}
-                        invalid={touched.businessId && errors.businessId ? true : false}
-                      />
-                      {touched.businessId && errors.businessId ? <FormFeedback type='invalid'>{errors.businessId}</FormFeedback> : null}
-                    </FormGroup>
-                  </Col>
                   <Col md={6}>
-                    <FormGroup className='mb-3'>
-                      <Label htmlFor='firstNameinput' className='form-label'>
+                    <FormGroup>
+                      <Label htmlFor='title' className='form-label mb-1'>
                         *Title
                       </Label>
                       <Input
                         type='text'
-                        className='form-control'
+                        className='form-control form-control-sm fs-6'
                         placeholder='Title...'
                         id='title'
                         name='title'
@@ -219,14 +216,13 @@ function EditKitModal({}: Props) {
                     </FormGroup>
                   </Col>
                   <Col md={6}>
-                    <FormGroup className='mb-3'>
-                      <Label htmlFor='lastNameinput' className='form-label'>
+                    <FormGroup>
+                      <Label htmlFor='sku' className='form-label mb-1'>
                         *SKU
                       </Label>
                       <Input
-                        disabled={true}
                         type='text'
-                        className='form-control'
+                        className='form-control form-control-sm fs-6'
                         placeholder='Sku...'
                         id='sku'
                         name='sku'
@@ -239,13 +235,13 @@ function EditKitModal({}: Props) {
                     </FormGroup>
                   </Col>
                   <Col md={4}>
-                    <FormGroup className='mb-3'>
-                      <Label htmlFor='compnayNameinput' className='form-label'>
+                    <FormGroup>
+                      <Label htmlFor='asin' className='form-label mb-1'>
                         ASIN
                       </Label>
                       <Input
                         type='text'
-                        className='form-control'
+                        className='form-control form-control-sm fs-6'
                         placeholder='Asin...'
                         id='asin'
                         name='asin'
@@ -258,13 +254,13 @@ function EditKitModal({}: Props) {
                     </FormGroup>
                   </Col>
                   <Col md={4}>
-                    <FormGroup className='mb-3'>
-                      <Label htmlFor='compnayNameinput' className='form-label'>
+                    <FormGroup>
+                      <Label htmlFor='fnsku' className='form-label mb-1'>
                         FNSKU
                       </Label>
                       <Input
                         type='text'
-                        className='form-control'
+                        className='form-control form-control-sm fs-6'
                         placeholder='Fnsku...'
                         id='fnsku'
                         name='fnsku'
@@ -277,14 +273,13 @@ function EditKitModal({}: Props) {
                     </FormGroup>
                   </Col>
                   <Col md={4}>
-                    <FormGroup className='mb-3'>
-                      <Label htmlFor='compnayNameinput' className='form-label'>
-                        Barcode
+                    <FormGroup>
+                      <Label htmlFor='barcode' className='form-label mb-1'>
+                        UPC / Barcode
                       </Label>
                       <Input
-                        disabled={true}
                         type='text'
-                        className='form-control'
+                        className='form-control form-control-sm fs-6'
                         placeholder='Barcode...'
                         id='barcode'
                         name='barcode'
@@ -298,13 +293,13 @@ function EditKitModal({}: Props) {
                   </Col>
                   <Row>
                     <Col md={9}>
-                      <FormGroup className='mb-3'>
-                        <Label htmlFor='lastNameinput' className='form-label'>
+                      <FormGroup>
+                        <Label htmlFor='image' className='form-label mb-1'>
                           Product Image
                         </Label>
                         <Input
                           type='text'
-                          className='form-control'
+                          className='form-control form-control-sm fs-6'
                           placeholder='Image URL...'
                           id='image'
                           name='image'
@@ -317,13 +312,13 @@ function EditKitModal({}: Props) {
                       </FormGroup>
                     </Col>
                     <Col md={3}>
-                      <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label'>
-                          * Master Box Quantity
+                      <FormGroup>
+                        <Label htmlFor='boxqty' className='form-label mb-1'>
+                          *Master Box Quantity
                         </Label>
                         <Input
                           type='number'
-                          className='form-control'
+                          className='form-control form-control-sm fs-6'
                           placeholder='Box Qty...'
                           id='boxqty'
                           name='boxqty'
@@ -337,13 +332,13 @@ function EditKitModal({}: Props) {
                     </Col>
                   </Row>
                   <Col md={12}>
-                    <FormGroup className='mb-3'>
-                      <Label htmlFor='lastNameinput' className='form-label'>
-                        Product Note
+                    <FormGroup>
+                      <Label htmlFor='note' className='form-label mb-1'>
+                        Kit Note
                       </Label>
                       <Input
                         type='textarea'
-                        className='form-control'
+                        className='form-control form-control-sm fs-6'
                         placeholder=''
                         id='note'
                         name='note'
@@ -356,15 +351,21 @@ function EditKitModal({}: Props) {
                     </FormGroup>
                   </Col>
                   <Row>
-                    <h5 className='fs-5 m-3 mb-1 fw-bolder'>Kit Children</h5>
+                    <h5 className='fs-5 mb-1 fw-bolder'>Kit Children</h5>
                     <Col xl={12} className='p-0 mt-1'>
-                      <table className='table table-hover table-centered align-middle'>
+                      <table className='table table-hover align-middle table-nowrap'>
                         <thead>
                           <tr>
-                            <th className='py-1 fs-5 m-0 fw-semibold text-center bg-primary text-white'>SKU</th>
-                            <th className='py-1 fs-5 m-0 fw-semibold text-center bg-primary text-white'>Title</th>
-                            <th className='py-1 fs-5 m-0 fw-semibold text-center bg-primary text-white'>Qty</th>
-                            <th className='py-1 fs-5 m-0 fw-semibold text-center bg-primary text-white'></th>
+                            <th scope='col' className='py-1 m-0 fw-semibold text-center bg-primary text-white'></th>
+                            <th scope='col' className='py-1 m-0 fw-semibold text-center bg-primary text-white'>
+                              SKU
+                            </th>
+                            <th scope='col' className='py-1 m-0 fw-semibold text-center bg-primary text-white'>
+                              Title
+                            </th>
+                            <th scope='col' className='py-1 m-0 fw-semibold text-center bg-primary text-white'>
+                              Qty
+                            </th>
                           </tr>
                         </thead>
                         <tbody>
@@ -373,63 +374,78 @@ function EditKitModal({}: Props) {
                               <>
                                 {values.children.map((_product, index) => (
                                   <tr key={index}>
-                                    <td>
+                                    <td className='col-1' style={{ minWidth: '50px' }}>
+                                      {index > 0 ? (
+                                        <Row className='w-100 d-flex flex-row flex-nowrap justify-content-center gap-1 align-items-center mb-0'>
+                                          <i
+                                            className='fs-3 text-success las la-plus-circle m-0 p-0 w-auto'
+                                            style={{ cursor: 'pointer' }}
+                                            onClick={() =>
+                                              push({
+                                                sku: '',
+                                                title: '',
+                                                qty: 1,
+                                                inventoryId: 0,
+                                              })
+                                            }
+                                          />
+                                          <i className='text-danger fs-3 las la-minus-circle m-0 p-0 w-auto' style={{ cursor: 'pointer' }} onClick={() => remove(index)} />
+                                        </Row>
+                                      ) : (
+                                        <Row className='w-100 d-flex flex-row flex-nowrap justify-content-center gap-0 align-items-center mb-0'>
+                                          <i
+                                            className='fs-3 text-success las la-plus-circle m-0 p-0 w-auto'
+                                            style={{ cursor: 'pointer' }}
+                                            onClick={() =>
+                                              push({
+                                                sku: '',
+                                                title: '',
+                                                qty: 1,
+                                                inventoryId: 0,
+                                              })
+                                            }
+                                          />
+                                        </Row>
+                                      )}
+                                    </td>
+                                    <td className='col-12 col-md-4' style={{ minWidth: '200px' }}>
                                       <Field name={`children.${index}.sku`}>
                                         {({ meta }: any) => (
                                           <FormGroup className='createOrder_inputs'>
-                                            <Input
-                                              type='text'
-                                              className='form-select'
-                                              style={{
-                                                padding: '0.2rem 0.9rem',
+                                            <SimpleSelect
+                                              selected={{ label: values.children[index].sku, value: values.children[index].sku }}
+                                              options={skus.map((sku) => ({ label: sku.sku, value: sku.sku, description: sku.title }))}
+                                              handleSelect={(option: any) => {
+                                                if (!option) {
+                                                  setFieldValue(`children.${index}.sku`, '')
+                                                  setFieldValue(`children.${index}.title`, '')
+                                                  setFieldValue(`children.${index}.inventoryId`, 0)
+                                                  return
+                                                }
+                                                setFieldValue(`children.${index}.sku`, option.value)
+                                                setFieldValue(`children.${index}.title`, skuInfo[option.value].title)
+                                                setFieldValue(`children.${index}.inventoryId`, skuInfo[option.value].inventoryId)
                                               }}
-                                              name={`children.${index}.sku`}
-                                              list='skuList'
-                                              placeholder='Sku...'
-                                              onChange={(e: any) => {
-                                                handleChange(e)
-                                                e.target.value == ''
-                                                  ? (values.children[index].title = '')
-                                                  : (values.children[index].title = skusTitles[e.target.value])
-                                              }}
-                                              // onChange={(e) => handleChangeInSKU(e.target.value, values, index)}
-                                              onBlur={handleBlur}
-                                              value={values.children[index].sku || ''}
-                                              invalid={meta.touched && meta.error ? true : false}
+                                              placeholder='Select SKU...'
+                                              customStyle='sm'
+                                              hasError={meta.error ? true : false}
+                                              isClearable
                                             />
-                                            {meta.touched && meta.error ? <FormFeedback type='invalid'>{meta.error}</FormFeedback> : null}
+                                            {meta.error ? <ErrorInputLabel error={meta.error} marginTop='mt-0' /> : null}
                                           </FormGroup>
                                         )}
                                       </Field>
-                                      <datalist id='skuList'>
-                                        {skus.map(
-                                          (
-                                            skus: {
-                                              sku: string
-                                              name: string
-                                            },
-                                            index
-                                          ) => (
-                                            <option key={`sku${index}`} value={skus.sku}>
-                                              {skus.sku} / {skus.name}
-                                            </option>
-                                          )
-                                        )}
-                                      </datalist>
                                     </td>
-                                    <td>
+                                    <td className='col-12 col-md-5' style={{ minWidth: '200px' }}>
                                       <Field name={`children.${index}.title`}>
                                         {({ meta }: any) => (
                                           <FormGroup className='createOrder_inputs'>
                                             <Input
                                               type='text'
-                                              className='form-control'
-                                              style={{
-                                                padding: '0.2rem 0.9rem',
-                                              }}
+                                              className='form-control form-control-sm fs-6'
                                               name={`children.${index}.title`}
                                               placeholder='Title...'
-                                              list='skuNames'
+                                              readOnly
                                               onChange={handleChange}
                                               onBlur={handleBlur}
                                               value={values.children[index].title || ''}
@@ -439,31 +455,15 @@ function EditKitModal({}: Props) {
                                           </FormGroup>
                                         )}
                                       </Field>
-                                      <datalist id='skuNames'>
-                                        {skus.map(
-                                          (
-                                            skus: {
-                                              name: string
-                                            },
-                                            index
-                                          ) => (
-                                            <option key={`skuName${index}`} value={skus.name} />
-                                          )
-                                        )}
-                                      </datalist>
                                     </td>
-                                    <td>
+                                    <td className='col-12 col-md-1' style={{ minWidth: '80px' }}>
                                       <Field name={`children.${index}.qty`}>
                                         {({ meta }: any) => (
                                           <FormGroup className='createOrder_inputs'>
                                             <Input
                                               type='text'
-                                              className='form-control'
-                                              style={{
-                                                padding: '0.2rem 0.9rem',
-                                              }}
+                                              className='text-center form-control form-control-sm fs-6'
                                               name={`children.${index}.qty`}
-                                              max={skuQuantities[values.children[index].sku]}
                                               placeholder='Qty...'
                                               onChange={handleChange}
                                               onBlur={handleBlur}
@@ -475,47 +475,6 @@ function EditKitModal({}: Props) {
                                         )}
                                       </Field>
                                     </td>
-                                    <td>
-                                      {index > 0 ? (
-                                        <Row className='d-flex flex-row flex-nowrap justify-content-center gap-2 align-items-center mb-0'>
-                                          <Button
-                                            type='button'
-                                            className='btn-icon btn-success'
-                                            onClick={() =>
-                                              push({
-                                                sku: '',
-                                                title: '',
-                                                qty: 1,
-                                              })
-                                            }>
-                                            <i className='fs-2 las la-plus-circle' />
-                                          </Button>
-                                          <Button
-                                            type='button'
-                                            className='btn-icon btn-danger'
-                                            onClick={() => {
-                                              remove(index)
-                                            }}>
-                                            <i className='fs-2 las la-minus-circle' />
-                                          </Button>
-                                        </Row>
-                                      ) : (
-                                        <Row className='d-flex flex-row flex-nowrap justify-content-center align-items-center mb-0'>
-                                          <Button
-                                            type='button'
-                                            className='btn-icon btn-success'
-                                            onClick={() =>
-                                              push({
-                                                sku: '',
-                                                title: '',
-                                                qty: 1,
-                                              })
-                                            }>
-                                            <i className='fs-2 las la-plus-circle' />
-                                          </Button>
-                                        </Row>
-                                      )}
-                                    </td>
                                   </tr>
                                 ))}
                               </>
@@ -525,14 +484,20 @@ function EditKitModal({}: Props) {
                       </table>
                     </Col>
                   </Row>
-                  {duplicateSkus && (
-                    <p style={{ width: '100%', marginTop: '0.25rem', fontSize: '0.875em', color: '#f06548' }}>Duplicate SKUS in Children List</p>
-                  )}
-                  <h5 className='fs-14 mb-3 text-muted'>*You must complete all required fields or you will not be able to create your product.</h5>
+                  <p className='fs-7 text-muted'>*You must complete all required fields or you will not be able to create your product.</p>
                   <Col md={12}>
-                    <div className='text-end'>
-                      <Button type='submit' color='primary' className='btn'>
-                        Save Changes
+                    <div className='text-end d-flex gap-3 justify-content-end align-items-center'>
+                      <Button color='light' onClick={() => setShowEditKitModal(!state.showEditKitModal)}>
+                        Cancel
+                      </Button>
+                      <Button type='submit' disabled={updatingKit} color='primary' className='fs-7'>
+                        {updatingKit ? (
+                          <span className='d-flex align-items-center gap-2'>
+                            <Spinner color='light' size={'sm'} /> Updating...
+                          </span>
+                        ) : (
+                          'Save Changes'
+                        )}
                       </Button>
                     </div>
                   </Col>
@@ -540,6 +505,10 @@ function EditKitModal({}: Props) {
               </Form>
             )}
           </Formik>
+        ) : (
+          <p className='w-full text-center d-flex align-items-center justify-content-center gap-3 fs-6'>
+            <Spinner color='primary' /> <span className='fs-5 fw-normal'>Loading kit details...</span>
+          </p>
         )}
       </ModalBody>
     </Modal>

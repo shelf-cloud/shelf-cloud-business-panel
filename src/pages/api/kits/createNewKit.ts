@@ -1,7 +1,8 @@
 import { NextApiHandler } from 'next'
-import { getServerSession } from 'next-auth'
+
 import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
+import { getServerSession } from 'next-auth'
 
 const createNewKit: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)
@@ -13,9 +14,17 @@ const createNewKit: NextApiHandler = async (request, response) => {
   }
 
   axios
-    .post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/createNewKit.php?businessId=${request.query.businessId}`, {
-      productInfo: request.body.orderInfo,
-    })
+    .post(
+      `${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/kits/createNewKit.php?businessId=${request.query.businessId}`,
+      {
+        productInfo: request.body.orderInfo,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.TARSE_API_AUTH_TOKEN}`,
+        },
+      }
+    )
     .then(({ data }) => {
       response.json(data)
     })

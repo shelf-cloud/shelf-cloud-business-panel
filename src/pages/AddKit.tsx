@@ -1,17 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useState } from 'react'
 import { GetServerSideProps } from 'next'
-import axios from 'axios'
-import * as Yup from 'yup'
-import { Field, FieldArray, Formik, Form } from 'formik'
 import Head from 'next/head'
-import { Button, Card, CardBody, Col, Container, FormFeedback, FormGroup, Input, Label, Row, Spinner } from 'reactstrap'
-import BreadCrumb from '@components/Common/BreadCrumb'
-import { getSession } from '@auth/client'
-import AppContext from '@context/AppContext'
-import { toast } from 'react-toastify'
-import useSWR from 'swr'
 import router from 'next/router'
+import React, { useContext, useState } from 'react'
+
+import { getSession } from '@auth/client'
+import BreadCrumb from '@components/Common/BreadCrumb'
+import SimpleSelect from '@components/Common/SimpleSelect'
+import ErrorInputLabel from '@components/ui/forms/ErrorInputLabel'
+import AppContext from '@context/AppContext'
+import { useCreateKit } from '@hooks/kits/useCreateKit'
+import axios from 'axios'
+import { Field, FieldArray, Form, Formik } from 'formik'
+import { toast } from 'react-toastify'
+import { Button, Card, CardBody, Col, Container, FormFeedback, FormGroup, Input, Label, Row, Spinner } from 'reactstrap'
+import * as Yup from 'yup'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -39,37 +42,9 @@ type Props = {
 
 const AddKit = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
-  const title = `Add Kit | ${session?.user?.businessName}`
-  const [ready, setReady] = useState(false)
+  const { skus, validSkus, skuInfo, isLoading } = useCreateKit()
+  const title = `Create New Kit | ${session?.user?.businessName}`
   const [creatingKit, setCreatingKit] = useState(false)
-  const [skus, setSkus] = useState([])
-  const [skusTitles, setSkusTitles] = useState<any>({})
-  const [skuQuantities, setSkuQuantities] = useState<any>({})
-  const [validSkus, setValidSkus] = useState<string[]>([])
-  const [duplicateSkus, setDuplicateSkus] = useState(false)
-
-  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(state.user.businessId ? `/api/getSkus?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher)
-
-  useEffect(() => {
-    if (data?.error) {
-      setValidSkus([])
-      setSkus([])
-      setSkusTitles({})
-      setSkuQuantities({})
-      setReady(true)
-      toast.error(data?.message)
-    } else if (data) {
-      setValidSkus(data.validSkus)
-      setSkus(data.skus)
-      setSkusTitles(data.skuTitle)
-      setSkuQuantities(data.skuQuantities)
-      setReady(true)
-    }
-    return () => {
-      setReady(false)
-    }
-  }, [data])
 
   const initialValues = {
     title: '',
@@ -92,6 +67,7 @@ const AddKit = ({ session }: Props) => {
         sku: '',
         title: '',
         qty: 1,
+        inventoryId: 0,
       },
     ],
   }
@@ -130,9 +106,13 @@ const AddKit = ({ session }: Props) => {
   })
 
   const handleSubmit = async (values: any, { resetForm }: any) => {
-    const ChildrenSkus = (await values.children.map((child: any) => {
+    setCreatingKit(true)
+    const creatingKit = toast.loading('Creating Kit...')
+
+    const ChildrenSkus: String[] = await values.children.map((child: any) => {
       return child.sku
-    })) as String[]
+    })
+
     if (
       values.children.some((child: any) => {
         const count = ChildrenSkus.filter((sku) => sku == child.sku)
@@ -143,24 +123,37 @@ const AddKit = ({ session }: Props) => {
         }
       })
     ) {
-      setDuplicateSkus(true)
+      toast.update(creatingKit, {
+        render: 'Duplicate SKUs found in Children List',
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
+      setCreatingKit(false)
       return
     }
-    setDuplicateSkus(false)
-    setCreatingKit(true)
-    const response = await axios.post(`api/createNewKit?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+
+    const { data } = await axios.post(`/api/kits/createNewKit?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
       orderInfo: values,
     })
-    if (!response.data.error) {
-      // mutate('/api/getuser')
-      toast.success(response.data.msg)
+    if (!data.error) {
+      toast.update(creatingKit, {
+        render: data.message,
+        type: 'success',
+        isLoading: false,
+        autoClose: 3000,
+      })
       resetForm()
       router.push('/Kits')
-      setCreatingKit(false)
     } else {
-      toast.error(response.data.msg)
-      setCreatingKit(false)
+      toast.update(creatingKit, {
+        render: data.message,
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
     }
+    setCreatingKit(false)
   }
 
   return (
@@ -171,38 +164,23 @@ const AddKit = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <Container fluid>
-            <BreadCrumb title='Add Kit' pageTitle='Inventory' />
+            <BreadCrumb title='Create New Kit' pageTitle='Inventory' />
             <Card>
-              <CardBody>
-                <Col md={12}>
-                  {/* <div className='text-end'>
-                    <Button
-                      type='submit'
-                      color='primary'
-                      className='fs-5 py-1 p3-1'
-                      onClick={() => setUploadProductsModal(true)}>
-                      <i className='mdi mdi-arrow-up-bold-circle label-icon align-middle fs-4 me-2' />
-                      Upload File
-                    </Button>
-                  </div> */}
-                </Col>
-                {ready ? (
-                  <Formik
-                    initialValues={initialValues}
-                    validationSchema={validationSchema}
-                    onSubmit={(values, { resetForm }) => handleSubmit(values, { resetForm })}>
-                    {({ values, errors, touched, handleChange, handleBlur }) => (
+              <CardBody className='px-4'>
+                {!isLoading ? (
+                  <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values, { resetForm }) => handleSubmit(values, { resetForm })}>
+                    {({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => (
                       <Form>
                         <Row>
-                          <h5 className='fs-5 m-3 fw-bolder'>Kit Details</h5>
+                          <h5 className='fs-5 mb-3 fw-bolder'>New Kit Details</h5>
                           <Col md={6}>
-                            <FormGroup className='mb-3'>
-                              <Label htmlFor='firstNameinput' className='form-label'>
+                            <FormGroup>
+                              <Label htmlFor='title' className='form-label mb-1'>
                                 *Title
                               </Label>
                               <Input
                                 type='text'
-                                className='form-control'
+                                className='form-control form-control-sm fs-6'
                                 placeholder='Title...'
                                 id='title'
                                 name='title'
@@ -215,13 +193,13 @@ const AddKit = ({ session }: Props) => {
                             </FormGroup>
                           </Col>
                           <Col md={6}>
-                            <FormGroup className='mb-3'>
-                              <Label htmlFor='lastNameinput' className='form-label'>
+                            <FormGroup>
+                              <Label htmlFor='sku' className='form-label mb-1'>
                                 *SKU
                               </Label>
                               <Input
                                 type='text'
-                                className='form-control'
+                                className='form-control form-control-sm fs-6'
                                 placeholder='Sku...'
                                 id='sku'
                                 name='sku'
@@ -234,13 +212,13 @@ const AddKit = ({ session }: Props) => {
                             </FormGroup>
                           </Col>
                           <Col md={4}>
-                            <FormGroup className='mb-3'>
-                              <Label htmlFor='compnayNameinput' className='form-label'>
+                            <FormGroup>
+                              <Label htmlFor='asin' className='form-label mb-1'>
                                 ASIN
                               </Label>
                               <Input
                                 type='text'
-                                className='form-control'
+                                className='form-control form-control-sm fs-6'
                                 placeholder='Asin...'
                                 id='asin'
                                 name='asin'
@@ -253,13 +231,13 @@ const AddKit = ({ session }: Props) => {
                             </FormGroup>
                           </Col>
                           <Col md={4}>
-                            <FormGroup className='mb-3'>
-                              <Label htmlFor='compnayNameinput' className='form-label'>
+                            <FormGroup>
+                              <Label htmlFor='fnsku' className='form-label mb-1'>
                                 FNSKU
                               </Label>
                               <Input
                                 type='text'
-                                className='form-control'
+                                className='form-control form-control-sm fs-6'
                                 placeholder='Fnsku...'
                                 id='fnsku'
                                 name='fnsku'
@@ -272,13 +250,13 @@ const AddKit = ({ session }: Props) => {
                             </FormGroup>
                           </Col>
                           <Col md={4}>
-                            <FormGroup className='mb-3'>
-                              <Label htmlFor='compnayNameinput' className='form-label'>
+                            <FormGroup>
+                              <Label htmlFor='barcode' className='form-label mb-1'>
                                 UPC / Barcode
                               </Label>
                               <Input
                                 type='text'
-                                className='form-control'
+                                className='form-control form-control-sm fs-6'
                                 placeholder='Barcode...'
                                 id='barcode'
                                 name='barcode'
@@ -291,13 +269,13 @@ const AddKit = ({ session }: Props) => {
                             </FormGroup>
                           </Col>
                           <Col md={12}>
-                            <FormGroup className='mb-3'>
-                              <Label htmlFor='lastNameinput' className='form-label'>
+                            <FormGroup>
+                              <Label htmlFor='image' className='form-label mb-1'>
                                 Product Image
                               </Label>
                               <Input
                                 type='text'
-                                className='form-control'
+                                className='form-control form-control-sm fs-6'
                                 placeholder='Image URL...'
                                 id='image'
                                 name='image'
@@ -309,16 +287,15 @@ const AddKit = ({ session }: Props) => {
                               {touched.image && errors.image ? <FormFeedback type='invalid'>{errors.image}</FormFeedback> : null}
                             </FormGroup>
                           </Col>
-                          <div className='border mt-3 border-dashed'></div>
-                          <h5 className='fs-5 m-3 fw-bolder'>Unit Dimensions</h5>
+                          <h5 className='fs-5 my-3 fw-bolder'>Unit Dimensions</h5>
                           <Col md={3}>
-                            <FormGroup className='mb-3'>
-                              <Label htmlFor='compnayNameinput' className='form-label'>
+                            <FormGroup>
+                              <Label htmlFor='weight' className='form-label mb-1'>
                                 *Weight {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(lb)' : '(kg)')}
                               </Label>
                               <Input
                                 type='number'
-                                className='form-control'
+                                className='form-control form-control-sm fs-6'
                                 placeholder='Weight...'
                                 id='weight'
                                 name='weight'
@@ -331,13 +308,13 @@ const AddKit = ({ session }: Props) => {
                             </FormGroup>
                           </Col>
                           <Col md={3}>
-                            <FormGroup className='mb-3'>
-                              <Label htmlFor='compnayNameinput' className='form-label'>
+                            <FormGroup>
+                              <Label htmlFor='width' className='form-label mb-1'>
                                 *Width {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(in)' : '(cm)')}
                               </Label>
                               <Input
                                 type='number'
-                                className='form-control'
+                                className='form-control form-control-sm fs-6'
                                 placeholder='Width...'
                                 id='width'
                                 name='width'
@@ -350,13 +327,13 @@ const AddKit = ({ session }: Props) => {
                             </FormGroup>
                           </Col>
                           <Col md={3}>
-                            <FormGroup className='mb-3'>
-                              <Label htmlFor='compnayNameinput' className='form-label'>
+                            <FormGroup>
+                              <Label htmlFor='length' className='form-label mb-1'>
                                 *Length {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(in)' : '(cm)')}
                               </Label>
                               <Input
                                 type='number'
-                                className='form-control'
+                                className='form-control form-control-sm fs-6'
                                 placeholder='Length...'
                                 id='length'
                                 name='length'
@@ -369,13 +346,13 @@ const AddKit = ({ session }: Props) => {
                             </FormGroup>
                           </Col>
                           <Col md={3}>
-                            <FormGroup className='mb-3'>
-                              <Label htmlFor='compnayNameinput' className='form-label'>
+                            <FormGroup>
+                              <Label htmlFor='height' className='form-label mb-1'>
                                 *Height {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(in)' : '(cm)')}
                               </Label>
                               <Input
                                 type='number'
-                                className='form-control'
+                                className='form-control form-control-sm fs-6'
                                 placeholder='Height...'
                                 id='height'
                                 name='height'
@@ -387,18 +364,15 @@ const AddKit = ({ session }: Props) => {
                               {touched.height && errors.height ? <FormFeedback type='invalid'>{errors.height}</FormFeedback> : null}
                             </FormGroup>
                           </Col>
-                          <div className='border mt-3 border-dashed'></div>
-                          <div className='align-items-center d-flex'>
-                            <h5 className='fs-5 m-3 fw-bolder'>Master Box Dimensions</h5>
-                          </div>
+                          <h5 className='fs-5 my-3 fw-bolder'>Master Box Dimensions</h5>
                           <Col md={3}>
-                            <FormGroup className='mb-3'>
-                              <Label htmlFor='compnayNameinput' className='form-label'>
+                            <FormGroup>
+                              <Label htmlFor='boxweight' className='form-label mb-1'>
                                 *Box Weight {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(lb)' : '(kg)')}
                               </Label>
                               <Input
                                 type='number'
-                                className='form-control'
+                                className='form-control form-control-sm fs-6'
                                 placeholder='Box Weight...'
                                 id='boxweight'
                                 name='boxweight'
@@ -411,13 +385,13 @@ const AddKit = ({ session }: Props) => {
                             </FormGroup>
                           </Col>
                           <Col md={3}>
-                            <FormGroup className='mb-3'>
-                              <Label htmlFor='compnayNameinput' className='form-label'>
+                            <FormGroup>
+                              <Label htmlFor='boxwidth' className='form-label mb-1'>
                                 *Box Width {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(in)' : '(cm)')}
                               </Label>
                               <Input
                                 type='number'
-                                className='form-control'
+                                className='form-control form-control-sm fs-6'
                                 placeholder='Box Width...'
                                 id='boxwidth'
                                 name='boxwidth'
@@ -430,13 +404,13 @@ const AddKit = ({ session }: Props) => {
                             </FormGroup>
                           </Col>
                           <Col md={3}>
-                            <FormGroup className='mb-3'>
-                              <Label htmlFor='compnayNameinput' className='form-label'>
+                            <FormGroup>
+                              <Label htmlFor='boxlength' className='form-label mb-1'>
                                 *Box Length {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(in)' : '(cm)')}
                               </Label>
                               <Input
                                 type='number'
-                                className='form-control'
+                                className='form-control form-control-sm fs-6'
                                 placeholder='Box Length...'
                                 id='boxlength'
                                 name='boxlength'
@@ -449,13 +423,13 @@ const AddKit = ({ session }: Props) => {
                             </FormGroup>
                           </Col>
                           <Col md={3}>
-                            <FormGroup className='mb-3'>
-                              <Label htmlFor='compnayNameinput' className='form-label'>
+                            <FormGroup>
+                              <Label htmlFor='boxheight' className='form-label mb-1'>
                                 *Box Height {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(in)' : '(cm)')}
                               </Label>
                               <Input
                                 type='number'
-                                className='form-control'
+                                className='form-control form-control-sm fs-6'
                                 placeholder='Box Height...'
                                 id='boxheight'
                                 name='boxheight'
@@ -468,13 +442,13 @@ const AddKit = ({ session }: Props) => {
                             </FormGroup>
                           </Col>
                           <Col md={3}>
-                            <FormGroup className='mb-3'>
-                              <Label htmlFor='compnayNameinput' className='form-label'>
+                            <FormGroup>
+                              <Label htmlFor='boxqty' className='form-label mb-1'>
                                 *Master Box Quantity
                               </Label>
                               <Input
                                 type='number'
-                                className='form-control'
+                                className='form-control form-control-sm fs-6'
                                 placeholder='Box Qty...'
                                 id='boxqty'
                                 name='boxqty'
@@ -486,17 +460,22 @@ const AddKit = ({ session }: Props) => {
                               {touched.boxqty && errors.boxqty ? <FormFeedback type='invalid'>{errors.boxqty}</FormFeedback> : null}
                             </FormGroup>
                           </Col>
-                          <div className='border mt-3 border-dashed'></div>
                           <Row>
-                            <h5 className='fs-5 m-3 mb-1 fw-bolder'>Kit Children</h5>
+                            <h5 className='fs-5 mb-3 fw-bolder'>Kit Children</h5>
                             <Col xl={12} className='p-0 mt-1'>
-                              <table className='table table-hover table-centered align-middle'>
+                              <table className='table table-hover align-middle table-nowrap'>
                                 <thead>
                                   <tr>
-                                    <th className='py-1 fs-5 m-0 fw-semibold text-center bg-primary text-white'>SKU</th>
-                                    <th className='py-1 fs-5 m-0 fw-semibold text-center bg-primary text-white'>Title</th>
-                                    <th className='py-1 fs-5 m-0 fw-semibold text-center bg-primary text-white'>Qty</th>
-                                    <th className='py-1 fs-5 m-0 fw-semibold text-center bg-primary text-white'></th>
+                                    <th scope='col' className='py-1 fs-5 m-0 fw-semibold text-center bg-primary text-white'></th>
+                                    <th scope='col' className='py-1 fs-5 m-0 fw-semibold text-center bg-primary text-white'>
+                                      SKU
+                                    </th>
+                                    <th scope='col' className='py-1 fs-5 m-0 fw-semibold text-center bg-primary text-white'>
+                                      Title
+                                    </th>
+                                    <th scope='col' className='py-1 fs-5 m-0 fw-semibold text-center bg-primary text-white'>
+                                      Qty
+                                    </th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -505,63 +484,79 @@ const AddKit = ({ session }: Props) => {
                                       <>
                                         {values.children.map((_product, index) => (
                                           <tr key={index}>
-                                            <td>
+                                            <td className='col-1' style={{ minWidth: '50px' }}>
+                                              {index > 0 ? (
+                                                <Row className='w-100 d-flex flex-row flex-nowrap justify-content-center gap-1 align-items-center mb-0'>
+                                                  <i
+                                                    className='fs-3 text-success las la-plus-circle m-0 p-0 w-auto'
+                                                    style={{ cursor: 'pointer' }}
+                                                    onClick={() =>
+                                                      push({
+                                                        sku: '',
+                                                        title: '',
+                                                        qty: 1,
+                                                        inventoryId: 0,
+                                                      })
+                                                    }
+                                                  />
+                                                  <i className='text-danger fs-3 las la-minus-circle m-0 p-0 w-auto' style={{ cursor: 'pointer' }} onClick={() => remove(index)} />
+                                                </Row>
+                                              ) : (
+                                                <Row className='w-100 d-flex flex-row flex-nowrap justify-content-center gap-0 align-items-center mb-0'>
+                                                  <i
+                                                    className='fs-3 text-success las la-plus-circle m-0 p-0 w-auto'
+                                                    style={{ cursor: 'pointer' }}
+                                                    onClick={() =>
+                                                      push({
+                                                        sku: '',
+                                                        title: '',
+                                                        qty: 1,
+                                                        inventoryId: 0,
+                                                      })
+                                                    }
+                                                  />
+                                                </Row>
+                                              )}
+                                            </td>
+                                            <td className='col-12 col-md-4' style={{ minWidth: '200px' }}>
                                               <Field name={`children.${index}.sku`}>
                                                 {({ meta }: any) => (
                                                   <FormGroup className='createOrder_inputs'>
-                                                    <Input
-                                                      type='text'
-                                                      className='form-select'
-                                                      style={{
-                                                        padding: '0.2rem 0.9rem',
+                                                    <SimpleSelect
+                                                      selected={{ label: values.children[index].sku, value: values.children[index].sku }}
+                                                      options={skus.map((sku) => ({ label: sku.sku, value: sku.sku, description: sku.title }))}
+                                                      handleSelect={(option: any) => {
+                                                        if (!option) {
+                                                          setFieldValue(`children.${index}.sku`, '')
+                                                          setFieldValue(`children.${index}.title`, '')
+                                                          setFieldValue(`children.${index}.inventoryId`, 0)
+                                                          return
+                                                        }
+                                                        setFieldValue(`children.${index}.sku`, option.value)
+                                                        setFieldValue(`children.${index}.title`, skuInfo[option.value].title)
+                                                        setFieldValue(`children.${index}.inventoryId`, skuInfo[option.value].inventoryId)
                                                       }}
-                                                      name={`children.${index}.sku`}
-                                                      list='skuList'
-                                                      placeholder='Sku...'
-                                                      onChange={(e: any) => {
-                                                        handleChange(e)
-                                                        e.target.value == ''
-                                                          ? (values.children[index].title = '')
-                                                          : (values.children[index].title = skusTitles[e.target.value])
-                                                      }}
-                                                      // onChange={(e) => handleChangeInSKU(e.target.value, values, index)}
-                                                      onBlur={handleBlur}
-                                                      value={values.children[index].sku || ''}
-                                                      invalid={meta.touched && meta.error ? true : false}
+                                                      placeholder='Select SKU...'
+                                                      customStyle='sm'
+                                                      hasError={meta.error ? true : false}
+                                                      isClearable
+                                                      menuPortalTarget={document?.body}
                                                     />
-                                                    {meta.touched && meta.error ? <FormFeedback type='invalid'>{meta.error}</FormFeedback> : null}
+                                                    {meta.error ? <ErrorInputLabel error={meta.error} marginTop='mt-0' /> : null}
                                                   </FormGroup>
                                                 )}
                                               </Field>
-                                              <datalist id='skuList'>
-                                                {skus.map(
-                                                  (
-                                                    skus: {
-                                                      sku: string
-                                                      name: string
-                                                    },
-                                                    index
-                                                  ) => (
-                                                    <option key={`sku${index}`} value={skus.sku}>
-                                                      {skus.sku} / {skus.name}
-                                                    </option>
-                                                  )
-                                                )}
-                                              </datalist>
                                             </td>
-                                            <td>
+                                            <td className='col-12 col-md-5' style={{ minWidth: '200px' }}>
                                               <Field name={`children.${index}.title`}>
                                                 {({ meta }: any) => (
                                                   <FormGroup className='createOrder_inputs'>
                                                     <Input
                                                       type='text'
-                                                      className='form-control'
-                                                      style={{
-                                                        padding: '0.2rem 0.9rem',
-                                                      }}
+                                                      className='form-control form-control-sm fs-6'
                                                       name={`children.${index}.title`}
                                                       placeholder='Title...'
-                                                      list='skuNames'
+                                                      readOnly
                                                       onChange={handleChange}
                                                       onBlur={handleBlur}
                                                       value={values.children[index].title || ''}
@@ -571,31 +566,15 @@ const AddKit = ({ session }: Props) => {
                                                   </FormGroup>
                                                 )}
                                               </Field>
-                                              <datalist id='skuNames'>
-                                                {skus.map(
-                                                  (
-                                                    skus: {
-                                                      name: string
-                                                    },
-                                                    index
-                                                  ) => (
-                                                    <option key={`skuName${index}`} value={skus.name} />
-                                                  )
-                                                )}
-                                              </datalist>
                                             </td>
-                                            <td>
+                                            <td className='col-12 col-md-1' style={{ minWidth: '80px' }}>
                                               <Field name={`children.${index}.qty`}>
                                                 {({ meta }: any) => (
                                                   <FormGroup className='createOrder_inputs'>
                                                     <Input
                                                       type='text'
-                                                      className='form-control'
-                                                      style={{
-                                                        padding: '0.2rem 0.9rem',
-                                                      }}
+                                                      className='text-center form-control form-control-sm fs-6'
                                                       name={`children.${index}.qty`}
-                                                      max={skuQuantities[values.children[index].sku]}
                                                       placeholder='Qty...'
                                                       onChange={handleChange}
                                                       onBlur={handleBlur}
@@ -607,42 +586,6 @@ const AddKit = ({ session }: Props) => {
                                                 )}
                                               </Field>
                                             </td>
-                                            <td>
-                                              {index > 0 ? (
-                                                <Row className='d-flex flex-row flex-nowrap justify-content-center gap-2 align-items-center mb-0'>
-                                                  <Button
-                                                    type='button'
-                                                    className='btn-icon btn-success'
-                                                    onClick={() =>
-                                                      push({
-                                                        sku: '',
-                                                        title: '',
-                                                        qty: 1,
-                                                      })
-                                                    }>
-                                                    <i className='fs-2 las la-plus-circle' />
-                                                  </Button>
-                                                  <Button type='button' className='btn-icon btn-danger' onClick={() => remove(index)}>
-                                                    <i className='fs-2 las la-minus-circle' />
-                                                  </Button>
-                                                </Row>
-                                              ) : (
-                                                <Row className='d-flex flex-row flex-nowrap justify-content-center align-items-center mb-0'>
-                                                  <Button
-                                                    type='button'
-                                                    className='btn-icon btn-success'
-                                                    onClick={() =>
-                                                      push({
-                                                        sku: '',
-                                                        title: '',
-                                                        qty: 1,
-                                                      })
-                                                    }>
-                                                    <i className='fs-2 las la-plus-circle' />
-                                                  </Button>
-                                                </Row>
-                                              )}
-                                            </td>
                                           </tr>
                                         ))}
                                       </>
@@ -652,18 +595,17 @@ const AddKit = ({ session }: Props) => {
                               </table>
                             </Col>
                           </Row>
-                          {duplicateSkus && (
-                            <p style={{ width: '100%', marginTop: '0.25rem', fontSize: '0.875em', color: '#f06548' }}>
-                              Duplicate SKUS in Children List
-                            </p>
-                          )}
-                          <h5 className='fs-14 my-0 text-muted fw-normal'>
-                            *You must complete all required fields or you will not be able to create your product.
-                          </h5>
+                          <h5 className='fs-6 my-0 text-muted fw-normal'>*You must complete all required fields or you will not be able to create your product.</h5>
                           <Col md={12}>
                             <div className='text-end'>
                               <Button type='submit' disabled={creatingKit} className='btn btn-primary'>
-                                {creatingKit ? <Spinner /> : 'Create Kit'}
+                                {creatingKit ? (
+                                  <span className='d-flex align-items-center gap-2'>
+                                    <Spinner color='light' size={'sm'} /> Creating...
+                                  </span>
+                                ) : (
+                                  'Create Kit'
+                                )}
                               </Button>
                             </div>
                           </Col>
