@@ -21,7 +21,7 @@ const updateKitDetails: NextApiHandler = async (request, response) => {
       },
       {
         headers: {
-          Authorization: `Bearer ${process.env.TARSE_API_AUTH_TOKEN}`,
+          Authorization: `Bearer ${process.env.TARS_API_AUTH_TOKEN}`,
         },
       }
     )

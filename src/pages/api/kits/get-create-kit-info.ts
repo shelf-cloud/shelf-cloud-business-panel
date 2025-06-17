@@ -15,7 +15,7 @@ const getCreateKitInfo: NextApiHandler = async (request, response) => {
   axios
     .get(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/kits/get-create-kit-info.php?businessId=${request.query.businessId}`, {
       headers: {
-        Authorization: `Bearer ${process.env.TARSE_API_AUTH_TOKEN}`,
+        Authorization: `Bearer ${process.env.TARS_API_AUTH_TOKEN}`,
       },
     })
     .then(({ data }) => {

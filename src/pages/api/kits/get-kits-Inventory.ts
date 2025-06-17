@@ -15,7 +15,7 @@ const getBusinessKitsInventory: NextApiHandler = async (request, response) => {
 
   axios(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/kits/get-kits-Inventory.php?businessId=${request.query.businessId}`, {
     headers: {
-      Authorization: `Bearer ${process.env.TARSE_API_AUTH_TOKEN}`,
+      Authorization: `Bearer ${process.env.TARS_API_AUTH_TOKEN}`,
     },
   })
     .then(({ data }) => {
