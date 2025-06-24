@@ -65,6 +65,8 @@ export const setInitialLTLTransportationOptions = (transportationOptions: Transp
       .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'FREIGHT_LTL' && option.carrier.alphaCode === ltlAlphaCode)
       .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]
 
+    if (!selectedOption) continue
+
     selectedTransportationOptions[selectedOption.shipmentId] = {
       shipmentId: selectedOption.shipmentId,
       transportationOptionId: selectedOption.transportationOptionId,
