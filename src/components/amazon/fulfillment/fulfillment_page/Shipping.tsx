@@ -1,22 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
-import AppContext from '@context/AppContext'
-import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
-import { DeliveryWindowsOptions, DeliveryWindowsResponse, InboundPlan, PlacementOption, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
-import moment from 'moment'
-import React, { useContext, useEffect, useMemo, useState } from 'react'
-import { Alert, Button, Card, CardBody, CardHeader, Col, Input, Label, Row, Spinner } from 'reactstrap'
-import Image from "next/image"
+import Image from 'next/image'
+import { useContext, useEffect, useMemo, useState } from 'react'
+
 import boxIcon from '@assets/fulfillments/outbound_box.png'
 import palletIcon from '@assets/fulfillments/outbound_pallet.png'
+import AppContext from '@context/AppContext'
+import useEffectAfterMount from '@hooks/useEffectAfterMount'
+import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
+import { NoImageAdress } from '@lib/assetsConstants'
+import { DeliveryWindowsOptions, DeliveryWindowsResponse, InboundPlan, PlacementOption, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
+import axios from 'axios'
+import moment from 'moment'
 // import SelectShippingCarrier from './SelectShippingCarrier'
 import { toast } from 'react-toastify'
-import axios from 'axios'
+import { Alert, Button, Card, CardBody, CardHeader, Col, Input, Label, Row, Spinner } from 'reactstrap'
+
 import ShippingSelectDate from './ShippingSelectDate'
-import useEffectAfterMount from '@hooks/useEffectAfterMount'
+import { regenerateFBAPlacementOptions } from './helperFunctions/fbaRegenerate'
 import SelectLTLFreightReadyDate from './shippingLTL/SelectLTLFreightReadyDate'
 import { commonPlacementOptionCarriers, setInitialLTLTransportationOptions, validateIfPlacementOptionHasSPD } from './shippingLTL/helperFunctions'
-import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   sessionToken: string
@@ -51,10 +54,11 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
     sameShipDate: true,
     shipDate: '',
     sameShippingMode: !inboundPlan.placementOptionId ? true : inboundPlan.sameShippingMode,
-    shippingMode: 
-      !inboundPlan.placementOptionId
-        ? validateIfPlacementOptionHasSPD(inboundPlan.transportationOptions[inboundPlan.placementOptions[0].placementOptionId]) ? 'SPD' : 'LTL'
-        : inboundPlan.shippingMode,
+    shippingMode: !inboundPlan.placementOptionId
+      ? validateIfPlacementOptionHasSPD(inboundPlan.transportationOptions[inboundPlan.placementOptions[0].placementOptionId])
+        ? 'SPD'
+        : 'LTL'
+      : inboundPlan.shippingMode,
     sameShippingCarrier: !inboundPlan.placementOptionId ? 'amazon' : inboundPlan.sameShippingCarrier,
     nonAmazonCarrier: '',
     nonAmazonAlphaCode: '',
@@ -86,6 +90,12 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
         : inboundPlan.transportationOptions[inboundPlan.placementOptionId]
     ),
   })
+
+  const placementOptionsExpired = useMemo(() => {
+    return inboundPlan.placementOptions.some((placementOption) => {
+      return moment.utc(placementOption.expiration).local().isBefore(moment())
+    })
+  }, [inboundPlan.placementOptions])
 
   useEffectAfterMount(() => {
     if (!inboundPlan.transportationOptions || Object.values(inboundPlan.transportationOptions).length === 0) return
@@ -635,9 +645,10 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                             alt='box_icon'
                             className='object-contain'
                             style={{
-                              maxWidth: "100%",
-                              height: "auto"
-                            }} />
+                              maxWidth: '100%',
+                              height: 'auto',
+                            }}
+                          />
                         </div>
                         <div>
                           <p className='m-0 p-0 fs-7 fw-semibold'>Small Parcel Delivery (SPD)</p>
@@ -692,9 +703,10 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                             alt='box_icon'
                             className='object-contain'
                             style={{
-                              maxWidth: "100%",
-                              height: "auto"
-                            }} />
+                              maxWidth: '100%',
+                              height: 'auto',
+                            }}
+                          />
                         </div>
                         <div>
                           <p className='m-0 p-0 fs-7 fw-semibold'>Less than and Full TruckLoad (LTL/FTL)</p>
@@ -1027,9 +1039,10 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                       alt='box_icon'
                                       className='object-contain'
                                       style={{
-                                        maxWidth: "100%",
-                                        height: "auto"
-                                      }} />
+                                        maxWidth: '100%',
+                                        height: 'auto',
+                                      }}
+                                    />
                                   </div>
                                   <div>
                                     <p className='m-0 p-0 fs-7 fw-semibold'>Small Parcel Delivery (SPD)</p>
@@ -1099,9 +1112,10 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                         alt='box_icon'
                                         className='object-contain'
                                         style={{
-                                          maxWidth: "100%",
-                                          height: "auto"
-                                        }} />
+                                          maxWidth: '100%',
+                                          height: 'auto',
+                                        }}
+                                      />
                                     </div>
                                     <div>
                                       <p className='m-0 p-0 fs-7 fw-semibold'>Less than and Full TruckLoad (LTL/FTL)</p>
@@ -1457,7 +1471,14 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                       </tr>
                     </tbody>
                   </table>
-                  {inboundPlan.fulfillmentType === 'Master Boxes' && (
+                  {placementOptionsExpired && (
+                    <div className='d-flex justify-content-end align-items-center'>
+                      <Button color='danger' onClick={() => regenerateFBAPlacementOptions(state.currentRegion, state.user.businessId, inboundPlan.inboundPlanId)}>
+                        Placement Needs to be Re-Generated
+                      </Button>
+                    </div>
+                  )}
+                  {!placementOptionsExpired && inboundPlan.fulfillmentType === 'Master Boxes' && (
                     <div className='d-flex justify-content-end align-items-center'>
                       {!inboundPlan.steps[3].complete ? (
                         <Button disabled={shippingHasErrors || watingRepsonse.boxLabels} color='success' id='btn_handleNextShipping' onClick={handleConfirmChargesFees}>
@@ -1496,7 +1517,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
         </div>
       )}
     </>
-  );
+  )
 }
 
 export default Shipping
