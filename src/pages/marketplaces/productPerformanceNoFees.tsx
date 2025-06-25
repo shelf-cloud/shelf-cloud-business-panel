@@ -1,24 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useMemo, useState } from 'react'
-import { Button, Card, CardBody, Collapse, Container, Row, Spinner } from 'reactstrap'
 import { GetServerSideProps } from 'next'
-import { getSession } from '@auth/client'
 import Head from 'next/head'
-import BreadCrumb from '@components/Common/BreadCrumb'
-import { DebounceInput } from 'react-debounce-input'
-import moment from 'moment'
-import FilterProfits from '@components/ui/FilterProfits'
 import { useRouter } from 'next/router'
-import AppContext from '@context/AppContext'
-import axios from 'axios'
-import { ProductPerformance, ProductsPerformanceResponse } from '@typesTs/marketplaces/productPerformance'
-import useSWR from 'swr'
-import SelectMarketplaceDropDown from '@components/ui/SelectMarketplaceDropDown'
-import { toast } from 'react-toastify'
-import ProductPerformanceTable from '@components/marketplaces/productPerformanceTable'
+import React, { useContext, useMemo, useState } from 'react'
+
+import { getSession } from '@auth/client'
+import BreadCrumb from '@components/Common/BreadCrumb'
 import ExportProductsPerformance from '@components/marketplaces/exportProductsPerformance'
+import ProductPerformanceTable from '@components/marketplaces/productPerformanceTable'
 import SummaryPP from '@components/modals/productPerformance/SummaryPP'
+import FilterProfits from '@components/ui/FilterProfits'
 import NewFilterByDates from '@components/ui/NewFilterByDates'
+import SelectMarketplaceDropDown from '@components/ui/SelectMarketplaceDropDown'
+import AppContext from '@context/AppContext'
+import { ProductPerformance, ProductsPerformanceResponse } from '@typesTs/marketplaces/productPerformance'
+import axios from 'axios'
+import moment from 'moment'
+import { DebounceInput } from 'react-debounce-input'
+import { toast } from 'react-toastify'
+import { Button, Card, CardBody, Collapse, Container, Row, Spinner } from 'reactstrap'
+import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -94,9 +95,13 @@ const ProductPerformanceNoFees = ({ session, sessionToken }: Props) => {
     show: false,
   })
 
-  const { data }: { data?: MarketpalcesInfo } = useSWR(state.user.businessId ? `/api/marketplaces/getMarketplacesInfo?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher, {
-    revalidateOnFocus: false,
-  })
+  const { data }: { data?: MarketpalcesInfo } = useSWR(
+    state.user.businessId ? `/api/marketplaces/getMarketplacesInfo?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  )
 
   const fetcherPP = async (endPoint: string) => {
     const controller = new AbortController()
@@ -195,8 +200,19 @@ const ProductPerformanceNoFees = ({ session, sessionToken }: Props) => {
     }
   }
 
-  const handleApplyFilters = (grossmin: string, grossmax: string, profitmin: string, profitmax: string, unitsmin: string, unitsmax: string, supplier: string, brand: string, category: string, showWithSales: string) => {
-    let filterString = `/marketplaces/productPerformance?filters=true`
+  const handleApplyFilters = (
+    grossmin: string,
+    grossmax: string,
+    profitmin: string,
+    profitmax: string,
+    unitsmin: string,
+    unitsmax: string,
+    supplier: string,
+    brand: string,
+    category: string,
+    showWithSales: string
+  ) => {
+    let filterString = `/marketplaces/productPerformanceNoFees?filters=true`
     if (grossmin || grossmin !== '') filterString += `&grossmin=${grossmin}`
     if (grossmax || grossmax !== '') filterString += `&grossmax=${grossmax}`
     if (profitmin || profitmin !== '') filterString += `&profitmin=${profitmin}`
@@ -241,8 +257,18 @@ const ProductPerformanceNoFees = ({ session, sessionToken }: Props) => {
                     shipmentsEndDate={endDate}
                     handleChangeDatesFromPicker={handleChangeDatesFromPicker}
                   /> */}
-                  <SelectMarketplaceDropDown selectionInfo={data?.marketplaces || []} selected={selectedMarketplace} handleSelection={setSelectedMarketplace} showAllMarketsOption />
-                  <ExportProductsPerformance products={filterDataTable || []} marketpalces={data?.marketplaces || []} startDate={filterDates.startDate} endDate={filterDates.endDate} />
+                  <SelectMarketplaceDropDown
+                    selectionInfo={data?.marketplaces || []}
+                    selected={selectedMarketplace}
+                    handleSelection={setSelectedMarketplace}
+                    showAllMarketsOption
+                  />
+                  <ExportProductsPerformance
+                    products={filterDataTable || []}
+                    marketpalces={data?.marketplaces || []}
+                    startDate={filterDates.startDate}
+                    endDate={filterDates.endDate}
+                  />
                   <Button color='info' onClick={() => setsummaryModal({ show: true })}>
                     PP Summary
                   </Button>
@@ -291,6 +317,7 @@ const ProductPerformanceNoFees = ({ session, sessionToken }: Props) => {
                       categoryOptions={data?.categories || []}
                       handleApplyFilters={handleApplyFilters}
                       setFilterOpen={setFilterOpen}
+                      destination='productPerformanceNoFees'
                     />
                   </CardBody>
                 </Card>

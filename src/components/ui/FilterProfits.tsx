@@ -1,10 +1,12 @@
-import React, { useContext } from 'react'
+import { useRouter } from 'next/router'
+import { useContext } from 'react'
+
+import AppContext from '@context/AppContext'
+import { Form, Formik } from 'formik'
 import { Button, Col, FormGroup, Input, InputGroup, InputGroupText, Label, Row } from 'reactstrap'
 import * as Yup from 'yup'
-import { Formik, Form } from 'formik'
-import AppContext from '@context/AppContext'
+
 import SelectDropDown from './SelectDropDown'
-import { useRouter } from 'next/router'
 
 type Props = {
   grossmin: string
@@ -20,11 +22,40 @@ type Props = {
   supplierOptions: string[]
   brandOptions: string[]
   categoryOptions: string[]
-  handleApplyFilters: (grossmin: string, grossmax: string, profitmin: string, profitmax: string, unitsmin: string, unitsmax: string, supplier: string, brand: string, category: string, showWithSales: string) => void
+  handleApplyFilters: (
+    grossmin: string,
+    grossmax: string,
+    profitmin: string,
+    profitmax: string,
+    unitsmin: string,
+    unitsmax: string,
+    supplier: string,
+    brand: string,
+    category: string,
+    showWithSales: string
+  ) => void
   setFilterOpen: (value: boolean) => void
+  destination: string
 }
 
-const FilterProfits = ({ grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, brand, category, showWithSales, supplierOptions, brandOptions, categoryOptions, handleApplyFilters, setFilterOpen }: Props) => {
+const FilterProfits = ({
+  grossmin,
+  grossmax,
+  profitmin,
+  profitmax,
+  unitsmin,
+  unitsmax,
+  supplier,
+  brand,
+  category,
+  showWithSales,
+  supplierOptions,
+  brandOptions,
+  categoryOptions,
+  handleApplyFilters,
+  setFilterOpen,
+  destination,
+}: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
 
@@ -47,7 +78,18 @@ const FilterProfits = ({ grossmin, grossmax, profitmin, profitmax, unitsmin, uni
   })
 
   const handleSubmit = async (values: any) => {
-    handleApplyFilters(values.grossRevenueMin, values.grossRevenueMax, values.netProfitMin, values.netProfitMax, values.unitsSoldMin, values.unitsSoldMax, values.supplier, values.brand, values.category, values.showWithSales)
+    handleApplyFilters(
+      values.grossRevenueMin,
+      values.grossRevenueMax,
+      values.netProfitMin,
+      values.netProfitMax,
+      values.unitsSoldMin,
+      values.unitsSoldMax,
+      values.supplier,
+      values.brand,
+      values.category,
+      values.showWithSales
+    )
   }
 
   const handleClearFilters = (setValues: any) => {
@@ -63,7 +105,7 @@ const FilterProfits = ({ grossmin, grossmax, profitmin, profitmax, unitsmin, uni
       category: '',
       showWithSales: 'true',
     })
-    router.push('/marketplaces/productPerformance', undefined, { shallow: true })
+    router.push(`/marketplaces/${destination}`, undefined, { shallow: true })
     setFilterOpen(false)
   }
 
