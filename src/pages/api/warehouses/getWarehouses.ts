@@ -1,7 +1,8 @@
 import { NextApiHandler } from 'next'
-import { getServerSession } from 'next-auth'
+
 import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
+import { getServerSession } from 'next-auth'
 
 const getWarehouses: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)
@@ -11,7 +12,11 @@ const getWarehouses: NextApiHandler = async (request, response) => {
     return
   }
 
-  axios(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/warehouses/getWarehouses.php?businessId=${request.query.businessId}`)
+  axios(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/warehouses/getWarehouses.php?businessId=${request.query.businessId}`, {
+    headers: {
+      Authorization: `Bearer ${process.env.TARS_API_AUTH_TOKEN}`,
+    },
+  })
     .then(async ({ data }) => {
       response.json(data)
     })

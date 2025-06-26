@@ -1,7 +1,8 @@
+import { useContext, useEffect, useRef } from 'react'
+
 import AppContext from '@context/AppContext'
 import { WarehousesResponse } from '@typesTs/warehouses/warehouse'
 import axios from 'axios'
-import { useContext, useEffect, useRef } from 'react'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
 
@@ -20,10 +21,15 @@ export const useWarehouses = () => {
 
   const fetcher = async (endPoint: string) => {
     try {
-      const response = await axios.get<WarehousesResponse>(endPoint, {
+      const { data } = await axios.get<WarehousesResponse>(endPoint, {
         signal: controllerRef.current?.signal,
       })
-      return response.data.warehouses
+
+      if (data.error) {
+        toast.error(data.message || 'Error fetching warehouses')
+      }
+
+      return data.warehouses
     } catch (error) {
       if (!axios.isCancel(error)) {
         toast.error((error as any)?.data?.message || 'Error fetching product performance data')
@@ -32,11 +38,15 @@ export const useWarehouses = () => {
     }
   }
 
-  const { data: warehouses, isValidating: isLoadingWareouses } = useSWR(state.user.businessId ? `/api/warehouses/getWarehouses?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher, {
-    revalidateOnFocus: false,
-    revalidateOnMount: true,
-    // dedupingInterval: 60000 * 5, // 5 minutes
-  })
+  const { data: warehouses, isValidating: isLoadingWareouses } = useSWR(
+    state.user.businessId ? `/api/warehouses/getWarehouses?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnMount: true,
+      // dedupingInterval: 60000 * 5, // 5 minutes
+    }
+  )
 
   return { warehouses, isLoading: isLoadingWareouses }
 }
