@@ -14,15 +14,23 @@ const createNewPurchaseOrder: NextApiHandler = async (request, response) => {
   }
 
   axios
-    .post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/reorderingPoints/createNewPurchaseOrder.php?businessId=${request.query.businessId}`, {
-      orderNumber: request.body.orderNumber,
-      destinationSC: request.body.destinationSC,
-      warehouseId: request.body.warehouseId,
-      poItems: request.body.poItems,
-      hasSplitting: request.body.hasSplitting,
-      splits: request.body.splits,
-      selectedSupplier: request.body.selectedSupplier,
-    })
+    .post(
+      `${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/reorderingPoints/create-purchase-order-3pl.php?businessId=${request.query.businessId}`,
+      {
+        orderNumber: request.body.orderNumber,
+        destinationSC: request.body.destinationSC,
+        warehouseId: request.body.warehouseId,
+        poItems: request.body.poItems,
+        hasSplitting: request.body.hasSplitting,
+        splits: request.body.splits,
+        selectedSupplier: request.body.selectedSupplier,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.TARS_API_AUTH_TOKEN}`,
+        },
+      }
+    )
     .then(({ data }) => {
       response.json(data)
     })

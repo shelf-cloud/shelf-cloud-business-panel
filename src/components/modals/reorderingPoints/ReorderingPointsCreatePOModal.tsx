@@ -42,6 +42,8 @@ export type Splits = {
 
 type poItem = {
   sku: string
+  name: string
+  boxQty: number
   orderQty: number
   inboundQty: number
   sellerCost: number
@@ -129,6 +131,8 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
     for await (const product of Object.values(reorderingPointsOrder.products)) {
       poItems.push({
         sku: product.sku,
+        name: product.title,
+        boxQty: product.boxQty,
         orderQty: product.useOrderAdjusted ? product.orderAdjusted : product.order,
         inboundQty: 0,
         sellerCost: product.sellerCost,
@@ -140,7 +144,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
 
     const hasSplitting = splits.isSplitting
 
-    const splitsInfo = {} as { [split: string]: { splitId: number; splitName: string; destination: { id: number; label: string }; items: poItem[] } }
+    const splitsInfo = {} as { [split: string]: { splitId: number; splitName: string; destination: { id: number; label: string }; items: poItem[]; name3PL: string | null } }
     if (splits.isSplitting) {
       for await (const product of Object.values(reorderingPointsOrder.products)) {
         for (let i = 0; i < splits.splitsQty; i++) {
@@ -150,9 +154,12 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
               splitName: splitNames[`${i}`],
               destination: { id: parseInt(values.splitDestinations[i].value), label: values.splitDestinations[i].label },
               items: [],
+              name3PL: warehouses.find((w) => w.warehouseId === parseInt(values.splitDestinations[i].value))?.name3PL || null,
             }
           splitsInfo[i].items.push({
             sku: product.sku,
+            name: product.title,
+            boxQty: product.boxQty,
             orderQty: product.useOrderAdjusted ? product.orderSplits[`${i}`].orderAdjusted : product.orderSplits[`${i}`].order,
             inboundQty: 0,
             sellerCost: product.sellerCost,
@@ -164,6 +171,8 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
       }
     }
 
+    const selectedWarehouse = warehouses.find((w) => w.warehouseId === parseInt(values.destinationSC.value))
+
     const response = await axios.post(`/api/reorderingPoints/createNewPurchaseOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
       orderNumber: values.orderNumber,
       destinationSC: hasSplitting ? 0 : warehouses?.find((w) => w.warehouseId === parseInt(values.destinationSC.value))?.isSCDestination ? 1 : 0,
@@ -172,6 +181,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
       hasSplitting,
       splits: splitsInfo,
       selectedSupplier: selectedSupplier,
+      name3PL: hasSplitting ? null : selectedWarehouse?.name3PL,
     })
 
     if (!response.data.error) {

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef } from 'react'
 
 import AppContext from '@context/AppContext'
-import { WarehousesResponse } from '@typesTs/warehouses/warehouse'
+import { Warehouse, WarehousesResponse } from '@typesTs/warehouses/warehouse'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
@@ -19,7 +19,7 @@ export const useWarehouses = () => {
     }
   }, [])
 
-  const fetcher = async (endPoint: string) => {
+  const fetcher = async (endPoint: string): Promise<Warehouse[]> => {
     try {
       const { data } = await axios.get<WarehousesResponse>(endPoint, {
         signal: controllerRef.current?.signal,
@@ -29,12 +29,13 @@ export const useWarehouses = () => {
         toast.error(data.message || 'Error fetching warehouses')
       }
 
-      return data.warehouses
+      return data.warehouses ?? []
     } catch (error) {
       if (!axios.isCancel(error)) {
         toast.error((error as any)?.data?.message || 'Error fetching product performance data')
-        throw error
+        return []
       }
+      return []
     }
   }
 
@@ -48,5 +49,5 @@ export const useWarehouses = () => {
     }
   )
 
-  return { warehouses, isLoading: isLoadingWareouses }
+  return { warehouses: warehouses ?? [], isLoading: isLoadingWareouses }
 }

@@ -16,4 +16,7 @@ export interface Warehouse {
   city: string
   state: string
   countryCode: string
+  id3PL: string
+  name3PL: string
+  type: string
 }
