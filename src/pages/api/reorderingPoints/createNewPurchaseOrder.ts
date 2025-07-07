@@ -9,7 +9,6 @@ const createNewPurchaseOrder: NextApiHandler = async (request, response) => {
 
   if (session == null) {
     response.status(401).end()
-
     return
   }
 
@@ -24,6 +23,7 @@ const createNewPurchaseOrder: NextApiHandler = async (request, response) => {
         hasSplitting: request.body.hasSplitting,
         splits: request.body.splits,
         selectedSupplier: request.body.selectedSupplier,
+        name3PL: request.body.name3PL,
       },
       {
         headers: {
