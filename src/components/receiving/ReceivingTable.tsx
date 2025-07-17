@@ -5,12 +5,13 @@ import SCTooltip from '@components/ui/SCTooltip'
 import AppContext from '@context/AppContext'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { sortNumbers, sortStringsLocaleCompare } from '@lib/helperFunctions'
-import { AddShippingCostModalType, DeleteReceivingModalType, MarkReceivedModalType } from '@pages/receivings'
+import { AddShippingCostModalType, DeleteReceivingModalType, EditReceivingType, MarkReceivedModalType } from '@pages/receivings'
 import { OrderRowType, ShipmentOrderItem } from '@typings'
 import DataTable from 'react-data-table-component'
 import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from 'reactstrap'
 
 import ShipmentExpandedDetail from '../ShipmentExpandedDetail'
+import GenerateReceivingLabels from './GenerateReceivingLabels'
 
 type Props = {
   tableData: OrderRowType[]
@@ -19,9 +20,10 @@ type Props = {
   setshowDeleteModal: (prev: DeleteReceivingModalType) => void
   setaddShippingCostModal: (prev: AddShippingCostModalType) => void
   setmarkReceivedModal: (prev: MarkReceivedModalType) => void
+  seteditReceiving: (prev: EditReceivingType) => void
 }
 
-const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteModal, setaddShippingCostModal, setmarkReceivedModal }: Props) => {
+const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteModal, setaddShippingCostModal, setmarkReceivedModal, seteditReceiving }: Props) => {
   const { state } = useContext(AppContext)
 
   const columns: any = [
@@ -176,14 +178,29 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
                   </a>
                 </DropdownItem>
               )}
-              {!row.isSCDestination && row.orderStatus !== 'received' && (
+              {row.boxes && (
                 <>
-                  <DropdownItem header>Actions</DropdownItem>
-                  <DropdownItem onClick={() => setmarkReceivedModal({ show: true, orderId: row.id, orderNumber: row.orderNumber })}>
-                    <i className='las la-check-circle text-success label-icon align-middle me-2 fs-5' />
-                    <span className='fw-normal text-dark'>Mark as Received</span>
-                  </DropdownItem>
+                  <DropdownItem header>Labels</DropdownItem>
+                  <GenerateReceivingLabels finalBoxesConfiguration={row.boxes} orderBarcode={row.isShipjoyCreated ? row.id3PL : row.orderNumber} fileName={row.orderNumber}>
+                    <DropdownItem>
+                      <i className='las la-toilet-paper label-icon align-middle me-2 fs-5 text-muted' />
+                      <span className='fw-normal text-dark'>Receiving Labels</span>
+                    </DropdownItem>
+                  </GenerateReceivingLabels>
                 </>
+              )}
+              <DropdownItem header>Actions</DropdownItem>
+              {row.boxes && (
+                <DropdownItem onClick={() => seteditReceiving({ show: true, order: row })}>
+                  <i className='las la-edit text-primary label-icon align-middle me-2 fs-5' />
+                  <span className='fw-normal text-dark'>Edit Receiving</span>
+                </DropdownItem>
+              )}
+              {!row.isSCDestination && row.orderStatus !== 'received' && (
+                <DropdownItem onClick={() => setmarkReceivedModal({ show: true, orderId: row.id, orderNumber: row.orderNumber })}>
+                  <i className='las la-check-circle text-success label-icon align-middle me-2 fs-5' />
+                  <span className='fw-normal text-dark'>Mark as Received</span>
+                </DropdownItem>
               )}
               {(row.orderStatus == 'awaiting' || row.orderStatus == 'awaiting_shipment') &&
                 row.orderItems.reduce((totalReceived, item: ShipmentOrderItem) => totalReceived + item.qtyReceived!, 0) <= 0 && (

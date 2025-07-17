@@ -29,7 +29,8 @@ type Props = {
     suppliersName: string,
     receivingQty: number,
     hasSplitting: boolean,
-    splitId: number | undefined
+    splitId: number | undefined,
+    boxQty: number
   ) => void
   setshowDeleteModal: (cb: (prev: DeleteItemFromOrderType) => DeleteItemFromOrderType) => void
 }
@@ -105,7 +106,7 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
                       style={{
                         width: '100%',
                         maxWidth: '60px',
-                        height: '40px',
+                        height: '30px',
                         margin: '2px 0px',
                         position: 'relative',
                       }}>
@@ -221,7 +222,8 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
                             data.suppliersName,
                             Number(e.target.value),
                             data.hasSplitting,
-                            data.hasSplitting ? data.splits[activeTab].splitId : undefined
+                            data.hasSplitting ? data.splits[activeTab].splitId : undefined,
+                            product.boxQty
                           )
                         }
                       }}

@@ -1,21 +1,40 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
-import { Button, Card, CardBody, CardHeader, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, NavLink, Row, TabContent, TabPane, UncontrolledButtonDropdown } from 'reactstrap'
-import BreadCrumb from '@components/Common/BreadCrumb'
+import { useRouter } from 'next/router'
+import React, { useContext, useEffect } from 'react'
+
 import { getSession } from '@auth/client'
-import By_Suppliers from '@components/purchase_orders/By_Suppliers'
+import BreadCrumb from '@components/Common/BreadCrumb'
+import Add_Payment_Modal from '@components/modals/purchaseOrders/Add_Payment_Modal'
+import Add_Po_Manually from '@components/modals/purchaseOrders/Add_Po_Manually'
+import Add_Po_With_File from '@components/modals/purchaseOrders/Add_Po_With_File'
+import Add_Sku_To_Purchase_Order from '@components/modals/purchaseOrders/Add_Sku_To_Purchase_Order'
+import Create_Receiving_From_Po from '@components/modals/purchaseOrders/Create_Receiving_From_Po'
 import By_Purchase_Orders from '@components/purchase_orders/By_Purchase_Orders'
 import By_Sku from '@components/purchase_orders/By_Sku'
-import AppContext from '@context/AppContext'
-import Add_Payment_Modal from '@components/modals/purchaseOrders/Add_Payment_Modal'
-import Create_Receiving_From_Po from '@components/modals/purchaseOrders/Create_Receiving_From_Po'
-import { useRouter } from 'next/router'
-import Add_Sku_To_Purchase_Order from '@components/modals/purchaseOrders/Add_Sku_To_Purchase_Order'
-import Add_Po_With_File from '@components/modals/purchaseOrders/Add_Po_With_File'
-import Add_Po_Manually from '@components/modals/purchaseOrders/Add_Po_Manually'
+import By_Suppliers from '@components/purchase_orders/By_Suppliers'
 import PurchaseOrdersWidgets from '@components/purchase_orders/ProductsWidgets'
+import AppContext from '@context/AppContext'
+import { useWarehouses } from '@hooks/warehouses/useWarehouse'
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Container,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  Nav,
+  NavItem,
+  NavLink,
+  Row,
+  TabContent,
+  TabPane,
+  UncontrolledButtonDropdown,
+} from 'reactstrap'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -48,6 +67,7 @@ const PurchaseOrders = ({ session }: Props) => {
   const { state, setShowCreateReceivingFromPo, setReceivingFromPo, setShowCreatePoFromFile, setShowCreatePoManually } = useContext(AppContext)
   const title = `Purchase Orders | ${session?.user?.businessName}`
   const orderNumberStart = `${session?.user?.businessOrderStart?.substring(0, 3).toUpperCase()}-`
+  useWarehouses()
 
   useEffect(() => {
     return () => {

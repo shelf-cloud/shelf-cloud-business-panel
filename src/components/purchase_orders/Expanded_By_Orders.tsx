@@ -1,20 +1,22 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useContext, useState } from 'react'
-import { Button, Card, CardBody, CardHeader, Col, Form, FormFeedback, FormGroup, Input, Label, Nav, NavItem, Row, UncontrolledTooltip } from 'reactstrap'
-import { ExpanderComponentProps } from 'react-data-table-component'
-import { PoPaymentHistory, PurchaseOrder, PurchaseOrderItem } from '@typesTs/purchaseOrders'
-import { FormatCurrency } from '@lib/FormatNumbers'
-import AppContext from '@context/AppContext'
-import Confirm_Delete_Item_From_PO, { DeleteItemFromOrderType } from '@components/modals/purchaseOrders/Confirm_Delete_Item_From_PO'
-import axios from 'axios'
-import { toast } from 'react-toastify'
-import { useSWRConfig } from 'swr'
 import { useRouter } from 'next/router'
-import * as Yup from 'yup'
-import { useFormik } from 'formik'
+import React, { useContext, useState } from 'react'
+
+import Confirm_Delete_Item_From_PO, { DeleteItemFromOrderType } from '@components/modals/purchaseOrders/Confirm_Delete_Item_From_PO'
 import Edit_PO_Ordered_Qty, { EditPurchaseOrderQtyType } from '@components/modals/purchaseOrders/Edit_PO_Ordered_Qty'
-import DownloadExcelPurchaseOrder from './DownloadExcelPurchaseOrder'
 import Edit_Payment_Modal from '@components/modals/purchaseOrders/Edit_Payment_Modal'
+import AppContext from '@context/AppContext'
+import { FormatCurrency } from '@lib/FormatNumbers'
+import { PoPaymentHistory, PurchaseOrder, PurchaseOrderItem } from '@typesTs/purchaseOrders'
+import axios from 'axios'
+import { useFormik } from 'formik'
+import { ExpanderComponentProps } from 'react-data-table-component'
+import { toast } from 'react-toastify'
+import { Button, Card, CardBody, CardHeader, Col, Form, FormFeedback, FormGroup, Input, Label, Nav, NavItem, Row, UncontrolledTooltip } from 'reactstrap'
+import { useSWRConfig } from 'swr'
+import * as Yup from 'yup'
+
+import DownloadExcelPurchaseOrder from './DownloadExcelPurchaseOrder'
 import ExpandedOrderItems from './ExpandedOrderItems'
 
 type Props = {
@@ -75,7 +77,8 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
     suppliersName: string,
     receivingQty: number,
     hasSplitting: boolean,
-    splitId: number | undefined
+    splitId: number | undefined,
+    boxQty: number
   ) => {
     let newReceivingOrderFromPo = state.receivingFromPo
     newReceivingOrderFromPo.warehouse.id = warehouseId
@@ -113,6 +116,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
         receivingQty,
         hasSplitting,
         splitId,
+        boxQty,
       }
     }
 
@@ -239,7 +243,12 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                       <tr>
                         <td className='text-muted text-nowrap'>PO Number:</td>
                         <td className='fw-semibold w-100'>
-                          {data.orderNumber} <i className={'las la-edit fs-5 text-primary m-0 p-0 ' + (editPONumber && 'd-none')} style={{ cursor: 'pointer' }} onClick={() => seteditPONumber(true)} />
+                          {data.orderNumber}{' '}
+                          <i
+                            className={'las la-edit fs-5 text-primary m-0 p-0 ' + (editPONumber && 'd-none')}
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => seteditPONumber(true)}
+                          />
                         </td>
                       </tr>
                     )}
@@ -267,7 +276,9 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                                     value={validationPONumber.values.orderNumber || ''}
                                     invalid={validationPONumber.touched.orderNumber && validationPONumber.errors.orderNumber ? true : false}
                                   />
-                                  {validationPONumber.touched.orderNumber && validationPONumber.errors.orderNumber ? <FormFeedback type='invalid'>{validationPONumber.errors.orderNumber}</FormFeedback> : null}
+                                  {validationPONumber.touched.orderNumber && validationPONumber.errors.orderNumber ? (
+                                    <FormFeedback type='invalid'>{validationPONumber.errors.orderNumber}</FormFeedback>
+                                  ) : null}
                                 </div>
                                 <div className='d-flex flex-row justify-content-end align-items-center gap-2'>
                                   <Button type='button' disabled={loading} color='light' className='btn btn-sm' onClick={() => seteditPONumber(false)}>
@@ -340,7 +351,10 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
           <Col sm={12}>
             <Card>
               <CardHeader className='py-2 d-flex flex-row justify-content-between'>
-                <h5 className='fw-semibold m-0'>Payment History</h5> {data.isOpen && <i className='fs-4 text-success las la-plus-circle' style={{ cursor: 'pointer' }} onClick={() => setModalAddPaymentToPoDetails(data.poId, data.orderNumber)} />}
+                <h5 className='fw-semibold m-0'>Payment History</h5>{' '}
+                {data.isOpen && (
+                  <i className='fs-4 text-success las la-plus-circle' style={{ cursor: 'pointer' }} onClick={() => setModalAddPaymentToPoDetails(data.poId, data.orderNumber)} />
+                )}
               </CardHeader>
               <CardBody className='pt-0 px-0'>
                 <table className='table table-sm table-borderless table-nowrap mb-0'>
@@ -378,7 +392,11 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                           {payment.comment && (
                             <>
                               <i className='ri-information-fill m-0 p-0 fs-5 text-info' id={`paymentComment${data.orderNumber}-${key}-${payment.date}`} />
-                              <UncontrolledTooltip placement='right' target={`paymentComment${data.orderNumber}-${key}-${payment.date}`} popperClassName='bg-light shadow px-3 py-3 rounded-2' innerClassName='text-black bg-light p-0'>
+                              <UncontrolledTooltip
+                                placement='right'
+                                target={`paymentComment${data.orderNumber}-${key}-${payment.date}`}
+                                popperClassName='bg-light shadow px-3 py-3 rounded-2'
+                                innerClassName='text-black bg-light p-0'>
                                 {payment.comment}
                               </UncontrolledTooltip>
                             </>

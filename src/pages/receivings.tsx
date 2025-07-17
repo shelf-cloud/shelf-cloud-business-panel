@@ -1,21 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useState } from 'react'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
-import { Card, CardBody, Container } from 'reactstrap'
-import BreadCrumb from '@components/Common/BreadCrumb'
+import React, { useContext, useState } from 'react'
+
 import { getSession } from '@auth/client'
-import moment from 'moment'
-import ReceivingTable from '@components/receiving/ReceivingTable'
+import BreadCrumb from '@components/Common/BreadCrumb'
 import FilterByDates from '@components/FilterByDates'
-import { useReceivings } from '@hooks/receivings/useReceivings'
-import SearchInput from '@components/ui/SearchInput'
 import Confirm_Delete_Receiving from '@components/modals/receivings/Confirm_Delete_Receiving'
-import InputNumberModal from '@components/modals/shared/inputNumberModal'
-import axios from 'axios'
-import { toast } from 'react-toastify'
-import AppContext from '@context/AppContext'
+import EditReceivingModal from '@components/modals/receivings/EditReceiving/EditReceivingModal'
 import ConfirmActionModal from '@components/modals/shared/ConfirmActionModal'
+import InputNumberModal from '@components/modals/shared/inputNumberModal'
+import ReceivingTable from '@components/receiving/ReceivingTable'
+import SearchInput from '@components/ui/SearchInput'
+import AppContext from '@context/AppContext'
+import { useReceivings } from '@hooks/receivings/useReceivings'
+import { useWarehouses } from '@hooks/warehouses/useWarehouse'
+import { OrderRowType } from '@typings'
+import axios from 'axios'
+import moment from 'moment'
+import { toast } from 'react-toastify'
+import { Card, CardBody, Container } from 'reactstrap'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -63,6 +67,11 @@ export type AddShippingCostToReceivingType = {
   value: number | string
 }
 
+export type EditReceivingType = {
+  show: boolean
+  order: OrderRowType
+}
+
 const handleAddShippingCostToReceiving = async ({ currentRegion, businessId, orderId, value }: AddShippingCostToReceivingType): Promise<{ error: boolean }> => {
   const { data } = await axios.post(`/api/receivings/addShippingCostToReceiving?region=${currentRegion}&businessId=${businessId}`, {
     orderId,
@@ -93,11 +102,11 @@ const handleMarkAsReceived = async ({ currentRegion, businessId, orderId }: Omit
 }
 
 const Receiving = ({ session }: Props) => {
+  useWarehouses()
   const { state } = useContext(AppContext)
   const [shipmentsStartDate, setShipmentsStartDate] = useState(moment().subtract(3, 'months').format('YYYY-MM-DD'))
   const [shipmentsEndDate, setShipmentsEndDate] = useState(moment().format('YYYY-MM-DD'))
   const [searchValue, setSearchValue] = useState<string>('')
-
   const { receivings, isLoading, mutateReceivings } = useReceivings({ searchValue, startDate: shipmentsStartDate, endDate: shipmentsEndDate })
 
   const [showDeleteModal, setshowDeleteModal] = useState<DeleteReceivingModalType>({
@@ -117,6 +126,11 @@ const Receiving = ({ session }: Props) => {
     show: false,
     orderId: 0,
     orderNumber: '',
+  })
+
+  const [editReceiving, seteditReceiving] = useState<EditReceivingType>({
+    show: false,
+    order: {} as OrderRowType,
   })
 
   const handleChangeDatesFromPicker = (dateStr: string) => {
@@ -152,7 +166,15 @@ const Receiving = ({ session }: Props) => {
             </div>
             <Card>
               <CardBody className='fs-7'>
-                <ReceivingTable tableData={receivings} pending={isLoading} mutateReceivings={mutateReceivings} setshowDeleteModal={setshowDeleteModal} setaddShippingCostModal={setaddShippingCostModal} setmarkReceivedModal={setmarkReceivedModal} />
+                <ReceivingTable
+                  tableData={receivings}
+                  pending={isLoading}
+                  mutateReceivings={mutateReceivings}
+                  setshowDeleteModal={setshowDeleteModal}
+                  setaddShippingCostModal={setaddShippingCostModal}
+                  setmarkReceivedModal={setmarkReceivedModal}
+                  seteditReceiving={seteditReceiving}
+                />
               </CardBody>
             </Card>
           </Container>
@@ -224,6 +246,7 @@ const Receiving = ({ session }: Props) => {
             }
           />
         )}
+        {editReceiving.show && <EditReceivingModal editReceiving={editReceiving} seteditReceiving={seteditReceiving} mutateReceivings={mutateReceivings} />}
       </React.Fragment>
     </div>
   )

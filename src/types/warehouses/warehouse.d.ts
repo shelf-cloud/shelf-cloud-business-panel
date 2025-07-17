@@ -10,11 +10,13 @@ export interface Warehouse {
   isSCDestination: boolean
   name: string
   type: string
+  shipTo: string
   address1: string
   address2: any
   zipcode: string
   city: string
   state: string
+  phone: string
   countryCode: string
   id3PL: string
   name3PL: string

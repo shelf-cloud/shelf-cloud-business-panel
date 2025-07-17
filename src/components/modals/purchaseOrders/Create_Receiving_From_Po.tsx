@@ -3,16 +3,40 @@ import router from 'next/router'
 import { useContext, useState } from 'react'
 
 import { SelectOptionType, SelectSingleValueType } from '@components/Common/SimpleSelect'
+import PrintReceivingLabel from '@components/receiving/labels/PrintReceivingLabel'
 import SelectSingleFilter from '@components/ui/filters/SelectSingleFilter'
 import AppContext from '@context/AppContext'
-import { FormatIntNumber } from '@lib/FormatNumbers'
-import { NoImageAdress } from '@lib/assetsConstants'
+import { useGenerateLabels } from '@hooks/pdfRender/useGenerateLabels'
+import { useReceivingsBoxes } from '@hooks/receivings/useReceivingsBoxes'
+import { useWarehouses } from '@hooks/warehouses/useWarehouse'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import {
+  Alert,
+  Button,
+  Col,
+  Form,
+  FormFeedback,
+  FormGroup,
+  Input,
+  Label,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  Nav,
+  NavItem,
+  NavLink,
+  Row,
+  Spinner,
+  TabContent,
+  TabPane,
+} from 'reactstrap'
 import useSWR from 'swr'
 import * as Yup from 'yup'
+
+import Create_Receiving_Packages_Tab from '../receivings/createReceiving/Create_Receiving_Packages_Tab'
+import Create_Receiving_Summary_Tab from '../receivings/createReceiving/Create_Receiving_Summary_Tab'
 
 type Props = {
   orderNumberStart: string
@@ -35,7 +59,9 @@ const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
 
 const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
   const { state, setShowCreateReceivingFromPo } = useContext(AppContext)
+  const { warehouses } = useWarehouses()
   const [loading, setloading] = useState(false)
+  const [activeTab, setactiveTab] = useState('summary')
 
   const { data: openReceivings }: { data?: OpenReceivings[] } = useSWR(
     state.user.businessId
@@ -49,10 +75,10 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
   )
 
   const validation = useFormik({
-    enableReinitialize: true,
-
+    enableReinitialize: false,
     initialValues: {
       orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
+      packingConfiguration: 'single',
       isNewReceiving: '',
       receivingIdToAdd: '',
     },
@@ -70,6 +96,8 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
     onSubmit: async (values) => {
       setloading(true)
 
+      const createReceiving = toast.loading('Creating Receiving...')
+
       // SHIPPING PRODUCTS
       let shippingProducts = [] as any
       Object.entries(state.receivingFromPo.items).forEach(([_poId, inventoryId]: any) =>
@@ -79,6 +107,8 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
             hasSplitting: item.hasSplitting,
             splitId: item.splitId,
             sku: item.sku,
+            name: item.title,
+            boxQty: item.boxQty,
             inventoryId: item.inventoryId,
             qty: Number(item.receivingQty),
             storeId: item.businessId,
@@ -94,51 +124,125 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
         Object.entries(inventoryId).map(([_inventoryId, item]: any) => {
           orderProducts.push({
             poId: item.poId,
+            poNumber: item.orderNumber,
+            orderNumber:
+              validation.values.isNewReceiving === 'true'
+                ? `${orderNumberStart}${validation.values.orderNumber}`
+                : openReceivings?.find((receiving) => receiving.id == parseInt(validation.values.receivingIdToAdd))?.orderNumber!,
             hasSplitting: item.hasSplitting,
             splitId: item.splitId,
             sku: item.sku,
             inventoryId: item.inventoryId,
             name: item.title,
-            boxQty: 0,
+            image: item.image,
+            boxQty: item.boxQty,
             quantity: Number(item.receivingQty),
             businessId: item.businessId,
             qtyReceived: 0,
+            suppliersName: item.suppliersName,
           })
         })
       )
 
-      const response = await axios.post(`/api/purchaseOrders/createReceivingFromPo?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      const isNewReceiving = values.isNewReceiving == 'true' ? true : false
+
+      const { data } = await axios.post(`/api/purchaseOrders/createReceivingFromPo?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
         shippingProducts,
         orderInfo: {
           orderNumber: values.orderNumber,
           orderProducts,
         },
         receivingItems: state.receivingFromPo.items,
-        isNewReceiving: values.isNewReceiving == 'true' ? true : false,
-        receivingIdToAdd: parseInt(values.receivingIdToAdd),
+        isNewReceiving: isNewReceiving,
+        receivingIdToAdd: isNewReceiving ? null : parseInt(values.receivingIdToAdd),
         warehouseId: state.receivingFromPo.warehouse.id,
+        finalBoxesConfiguration,
       })
 
-      if (!response.data.error) {
-        toast.success(response.data.msg)
+      if (!data.error) {
         setShowCreateReceivingFromPo(false)
+        toast.update(createReceiving, {
+          render: data.message,
+          type: 'success',
+          isLoading: false,
+          autoClose: 3000,
+        })
+        if (data.is3PL) {
+          updateInstance(
+            <PrintReceivingLabel
+              companyName={state.user.name}
+              prefix3PL={state.user.prefix3PL}
+              warehouse={warehouses?.find((w) => w.warehouseId === state.receivingFromPo.warehouse.id)!}
+              boxes={finalBoxesConfiguration}
+              orderBarcode={data.orderid3PL}
+            />
+          )
+        }
+        handleDownloadLabel()
         router.push('/receivings')
       } else {
-        toast.error(response.data.msg)
+        toast.update(createReceiving, {
+          render: data.message ?? 'Error creating Receiving',
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+        })
       }
       setloading(false)
     },
   })
 
-  const HandleAddProduct = (event: any) => {
+  const handleCreateReceiving = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
   }
 
+  const {
+    singleSkuPackages,
+    addNewSingleSkuBoxConfiguration,
+    removeSingleSkuBoxConfiguration,
+    changeUnitsPerBox,
+    changeQtyOfBoxes,
+    multiSkuPackages,
+    addNewMultiSkuBoxConfiguration,
+    removeMultiSkuBoxConfiguration,
+    addSkuToMultiSkuBox,
+    removeSkuFromMultiSkuBox,
+    setMixedSkuBoxesUsingMasterBoxes,
+    clearMultiSkuBoxes,
+    finalBoxesConfiguration,
+    hasBoxedErrors,
+  } = useReceivingsBoxes(
+    validation.values.packingConfiguration,
+    validation.values.isNewReceiving === 'true'
+      ? `${orderNumberStart}${validation.values.orderNumber}`
+      : openReceivings?.find((receiving) => receiving.id == parseInt(validation.values.receivingIdToAdd))?.orderNumber!
+  )
+
+  const { handleDownloadLabel, updateInstance } = useGenerateLabels({
+    pdfDocument: (
+      <PrintReceivingLabel
+        companyName={state.user.name}
+        prefix3PL={state.user.prefix3PL}
+        warehouse={warehouses?.find((w) => w.warehouseId === state.receivingFromPo.warehouse.id)!}
+        boxes={finalBoxesConfiguration}
+        orderBarcode={
+          validation.values.isNewReceiving === 'true'
+            ? `${orderNumberStart}${validation.values.orderNumber}`
+            : openReceivings?.find((receiving) => receiving.id == parseInt(validation.values.receivingIdToAdd))?.orderNumber!
+        }
+      />
+    ),
+    fileName:
+      validation.values.isNewReceiving === 'true'
+        ? `${orderNumberStart}${validation.values.orderNumber}`
+        : openReceivings?.find((receiving) => receiving.id == parseInt(validation.values.receivingIdToAdd))?.orderNumber!,
+  })
+
   return (
     <Modal
       fade={false}
-      size='lg'
+      size='xl'
       id='addPaymentToPoModal'
       isOpen={state.showCreateReceivingFromPo}
       toggle={() => {
@@ -158,9 +262,9 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
             Destination: <span className='text-primary'>{state.receivingFromPo.warehouse.name}</span>
           </p>
         </Row>
-        <Form onSubmit={HandleAddProduct}>
+        <Form onSubmit={handleCreateReceiving}>
           <Row>
-            <Col md={6}>
+            <Col xs={12} md={5}>
               <FormGroup>
                 <Label htmlFor='firstNameinput' className='form-label fs-7'>
                   *Transaction Number
@@ -170,7 +274,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                     {orderNumberStart}
                   </span>
                   <Input
-                    disabled={validation.values.isNewReceiving == 'false'}
+                    disabled={validation.values.isNewReceiving === 'false'}
                     type='text'
                     className='form-control fs-6'
                     id='orderNumber'
@@ -185,7 +289,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                 </div>
               </FormGroup>
             </Col>
-            <Col md={6}>
+            <Col xs={12} md={5}>
               <SelectSingleFilter
                 inputLabel='*Select Receiving Type'
                 inputName='isNewReceiving'
@@ -200,7 +304,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                 error={validation.errors.isNewReceiving}
               />
               {openReceivings && openReceivings.length <= 0 && <p className='text-muted fs-7'>{`No open receiving to ${state.receivingFromPo.warehouse.name}`}</p>}
-              {validation.values.isNewReceiving == 'false' && (
+              {validation.values.isNewReceiving === 'false' && (
                 <SelectSingleFilter
                   inputLabel='*Select Existing Receiving'
                   inputName='receivingIdToAdd'
@@ -219,95 +323,84 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
             </Col>
           </Row>
 
-          <Row>
-            <Col md={12}>
-              <table className='table table-sm align-middle table-responsive table-nowrap table-striped'>
-                <thead className='table-light'>
-                  <tr>
-                    <th scope='col'>PO Number</th>
-                    <th scope='col'>Supplier</th>
-                    <th scope='col'>Title / SKU</th>
-                    <th scope='col' className='text-center'>
-                      Total to Received
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className='fs-7'>
-                  {Object.entries(state.receivingFromPo.items)
-                    .sort(([_poIdA, inventoryIdA]: any, [_poIdB, inventoryIdB]: any) => {
-                      const supplerA = Object.values<any>(inventoryIdA)[0].suppliersName
-                      const supplerB = Object.values<any>(inventoryIdB)[0].suppliersName
-                      if (supplerA < supplerB) {
-                        return -1
-                      }
-                      if (supplerA > supplerB) {
-                        return 1
-                      }
-                      return 0
-                    })
-                    .map(([poId, inventoryId]: any) =>
-                      Object.entries(inventoryId).map(([inventoryId, item]: any) => (
-                        <tr key={`${poId}-${inventoryId}`}>
-                          <td>{item.orderNumber}</td>
-                          <td className='fw-bold fs-6'>{item.suppliersName}</td>
-                          <td className='text-center'>
-                            <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
-                              <div
-                                style={{
-                                  width: '100%',
-                                  maxWidth: '40px',
-                                  height: '50px',
-                                  margin: '0px',
-                                  position: 'relative',
-                                }}>
-                                <img
-                                  loading='lazy'
-                                  src={item.image ? item.image : NoImageAdress}
-                                  alt='product Image'
-                                  style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
-                                />
-                              </div>
-                              <div className='text-start'>
-                                <p className='text-nowrap m-0 fw-semibold'>{item.title}</p>
-                                <p className='text-nowrap m-0'>{item.sku}</p>
-                              </div>
-                            </div>
-                          </td>
-                          <td className='text-center'>{item.receivingQty}</td>
-                        </tr>
-                      ))
-                    )}
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td className='fw-bold fs-6 text-end'>Total</td>
-                    <td className='fw-bold fs-6 text-center'>
-                      {FormatIntNumber(
-                        state.currentRegion,
-                        Object.entries(state.receivingFromPo.items).reduce((total: number, po: [string, any]) => {
-                          const poTotal = Object.entries(po[1]).reduce((subtotal: number, inventoryId: [string, any]) => {
-                            return subtotal + inventoryId[1].receivingQty
-                          }, 0)
-                          return total + poTotal
-                        }, 0)
-                      )}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </Col>
+          <Nav className='nav-tabs border-bottom' role='tablist'>
+            <NavItem style={{ cursor: 'pointer' }}>
+              <NavLink
+                className={activeTab == 'summary' ? 'text-primary fw-semibold fs-6 border border-primary' : 'text-muted fs-6'}
+                onClick={() => {
+                  setactiveTab('summary')
+                }}
+                type='button'>
+                Summary
+              </NavLink>
+            </NavItem>
+            <NavItem style={{ cursor: 'pointer' }}>
+              <NavLink
+                className={activeTab == 'packages' ? 'text-primary fw-semibold fs-6 border border-primary' : 'text-muted fs-6'}
+                onClick={() => {
+                  setactiveTab('packages')
+                }}
+                type='button'>
+                Boxes
+              </NavLink>
+            </NavItem>
+          </Nav>
+
+          <TabContent activeTab={activeTab} className='pt-2 mb-3'>
+            <TabPane tabId='summary'>{activeTab == 'summary' && <Create_Receiving_Summary_Tab />}</TabPane>
+            <TabPane tabId='packages'>
+              {activeTab == 'packages' && (
+                <Create_Receiving_Packages_Tab
+                  packingConfiguration={validation.values.packingConfiguration}
+                  setPackingConfiguration={(field: string, value: string) => validation.setFieldValue(field, value)}
+                  singleSkuPackages={singleSkuPackages}
+                  addNewSingleSkuBoxConfiguration={addNewSingleSkuBoxConfiguration}
+                  removeSingleSkuBoxConfiguration={removeSingleSkuBoxConfiguration}
+                  changeUnitsPerBox={changeUnitsPerBox}
+                  changeQtyOfBoxes={changeQtyOfBoxes}
+                  multiSkuPackages={multiSkuPackages}
+                  addNewMultiSkuBoxConfiguration={addNewMultiSkuBoxConfiguration}
+                  removeMultiSkuBoxConfiguration={removeMultiSkuBoxConfiguration}
+                  addSkuToMultiSkuBox={addSkuToMultiSkuBox}
+                  removeSkuFromMultiSkuBox={removeSkuFromMultiSkuBox}
+                  setMixedSkuBoxesUsingMasterBoxes={setMixedSkuBoxesUsingMasterBoxes}
+                  clearMultiSkuBoxes={clearMultiSkuBoxes}
+                />
+              )}
+            </TabPane>
+          </TabContent>
+          <Row className='mb-2'>
+            {hasBoxedErrors.error && (
+              <Col xs={12} className='m-0'>
+                <Alert color='danger' className='fs-7 py-1 mb-2'>
+                  <i className='ri-error-warning-line me-3 align-middle fs-5' />
+                  {hasBoxedErrors.message}
+                </Alert>
+              </Col>
+            )}
           </Row>
           <Row md={12}>
-            <div className='text-end'>
-              <Button disabled={loading || Object.keys(state.receivingFromPo.items).length <= 0} type='submit' color='success' className='fs-7'>
-                {loading ? (
-                  <span>
-                    <Spinner color='light' size={'sm'} /> Creating...
-                  </span>
-                ) : (
-                  'Create Receiving'
-                )}
-              </Button>
+            <div className='d-flex justify-content-end align-items-center gap-2'>
+              {activeTab == 'summary' && (
+                <Button
+                  disabled={loading || Object.keys(state.receivingFromPo.items).length <= 0}
+                  type='button'
+                  className='fs-7 btn-soft-primary'
+                  onClick={() => setactiveTab('packages')}>
+                  Next Step
+                </Button>
+              )}
+              {activeTab == 'packages' && (
+                <Button disabled={loading || Object.keys(state.receivingFromPo.items).length <= 0 || hasBoxedErrors.error} type='submit' color='success' className='fs-7'>
+                  {loading ? (
+                    <span>
+                      <Spinner color='light' size={'sm'} /> Creating...
+                    </span>
+                  ) : (
+                    'Create Receiving'
+                  )}
+                </Button>
+              )}
             </div>
           </Row>
         </Form>

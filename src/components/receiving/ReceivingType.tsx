@@ -259,7 +259,7 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                       <th className='text-center' scope='col'>
                         Qty Received
                       </th>
-                      <th></th>
+                      {!data.boxes && <th></th>}
                     </tr>
                   </thead>
                   <tbody className='fs-7'>
@@ -270,26 +270,28 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                         <td className='text-muted'>{product.sku}</td>
                         <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.quantity))}</td>
                         <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.qtyReceived))}</td>
-                        <td>
-                          {(data.orderStatus == 'awaiting' || data.orderStatus == 'awaiting_shipment') && product.qtyReceived! <= 0 && (
-                            <i
-                              className='fs-5 text-danger las la-trash-alt'
-                              style={{ cursor: 'pointer' }}
-                              onClick={() =>
-                                setDeleteSKUModal({
-                                  show: true,
-                                  orderId: data.id,
-                                  orderNumber: data.orderNumber,
-                                  sku: product.sku,
-                                  title: product.name,
-                                  poNumber: product.poNumber ? product.poNumber : '',
-                                  poId: product.poId ? product.poId : 0,
-                                  isReceivingFromPo: data.isReceivingFromPo ? true : false,
-                                })
-                              }
-                            />
-                          )}
-                        </td>
+                        {!data.boxes && (
+                          <td>
+                            {(data.orderStatus == 'awaiting' || data.orderStatus == 'awaiting_shipment') && product.qtyReceived! <= 0 && (
+                              <i
+                                className='fs-5 text-danger las la-trash-alt'
+                                style={{ cursor: 'pointer' }}
+                                onClick={() =>
+                                  setDeleteSKUModal({
+                                    show: true,
+                                    orderId: data.id,
+                                    orderNumber: data.orderNumber,
+                                    sku: product.sku,
+                                    title: product.name,
+                                    poNumber: product.poNumber ? product.poNumber : '',
+                                    poId: product.poId ? product.poId : 0,
+                                    isReceivingFromPo: data.isReceivingFromPo ? true : false,
+                                  })
+                                }
+                              />
+                            )}
+                          </td>
+                        )}
                       </tr>
                     ))}
                     <tr>

@@ -1,10 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useContext, useState } from 'react'
-import { Button, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
-import { toast } from 'react-toastify'
-import axios from 'axios'
+import { useContext, useState } from 'react'
+
 import AppContext from '@context/AppContext'
 import { DeleteReceivingModalType } from '@pages/receivings'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import { Button, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
 
 type Props = {
   showDeleteModal: DeleteReceivingModalType
@@ -27,16 +28,16 @@ const Confirm_Delete_Receiving = ({ showDeleteModal, setshowDeleteModal, mutateR
 
   const handleDeleteReceiving = async () => {
     setIsLoading(true)
-    const response = await axios.post(`/api/receivings/deleteReceiving?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+    const { data } = await axios.post(`/api/receivings/deleteReceiving?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
       orderId: orderId,
       orderNumber: orderNumber,
     })
-    if (!response.data.error) {
+    if (!data.error) {
       mutateReceivings()
-      toast.success(response.data.msg)
+      toast.success(data.message)
       handleClose()
     } else {
-      toast.error(response.data.msg)
+      toast.error(data.message)
     }
     setIsLoading(false)
   }

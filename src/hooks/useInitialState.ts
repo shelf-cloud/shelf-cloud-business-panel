@@ -3,10 +3,11 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
 import { Split } from '@typesTs/purchaseOrders'
+//constants
+import { CreateReceivingItems } from '@typesTs/purchaseOrders/createReceiving'
 import axios from 'axios'
 import useSWR from 'swr'
 
-//constants
 import {
   layoutModeTypes,
   layoutPositionTypes,
@@ -23,6 +24,7 @@ export interface UserType {
   businessId: string
   name: string
   role: string
+  prefix3PL: string
   hasShelfCloudUsa: boolean
   hasShelfCloudEu: boolean
   defaultRegion: string
@@ -141,7 +143,7 @@ export const initialState = {
       id: 0,
       name: '',
     },
-    items: {} as any,
+    items: {} as CreateReceivingItems,
   },
   showCreateReceivingFromPo: false,
   modalAddPaymentToPoDetails: {},

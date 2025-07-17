@@ -23,8 +23,8 @@ export interface PurchaseOrderItem {
   asin: string
   barcode: string
   image: string
-  note?: string
-  boxQty?: number
+  note: string
+  boxQty: number
   sellerCost?: number
   itemVolume: number
 }

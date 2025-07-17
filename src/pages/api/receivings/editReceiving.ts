@@ -4,18 +4,19 @@ import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 import { getServerSession } from 'next-auth'
 
-const deleteReceiving: NextApiHandler = async (request, response) => {
+const deleteSkufromReceiving: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)
   if (session == null) {
     response.status(401).end()
 
     return
   }
+
   axios
     .post(
-      `${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/receivings/deleteReceiving-v3.php?businessId=${request.query.businessId}`,
+      `${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/receivings/editReceiving.php?businessId=${request.query.businessId}`,
       {
-        poInfo: request.body,
+        receivingInfo: request.body,
       },
       {
         headers: {
@@ -50,4 +51,4 @@ const deleteReceiving: NextApiHandler = async (request, response) => {
     })
 }
 
-export default deleteReceiving
+export default deleteSkufromReceiving

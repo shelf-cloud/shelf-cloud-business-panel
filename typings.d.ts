@@ -436,6 +436,9 @@ export interface OrderRowType {
   totalIndividualUnits?: number
   isReceivingFromPo?: boolean
   receivingShippingCost: number | null
+  isShipjoyCreated: boolean
+  id3PL: string
+  boxes?: FinalBoxConfiguration[]
 }
 
 export interface ShipmentOrderItem {
@@ -458,6 +461,11 @@ export interface ShipmentOrderItem {
   state?: string
   hasSplitting?: boolean
   splitId?: number
+  image?: string
+  orderNumber?: string
+  inventoryId?: number
+  suppliersName?: string
+  boxQty?: number
 }
 
 export interface KitChildren {
