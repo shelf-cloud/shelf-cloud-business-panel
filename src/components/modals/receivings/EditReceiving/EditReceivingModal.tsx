@@ -81,7 +81,7 @@ const EditReceivingModal = ({ editReceiving, seteditReceiving, mutateReceivings 
       deletedSku,
       isReceivingFromPo: order.isReceivingFromPo,
       warehouseId: order.warehouseId,
-      $orderid3PL: order.id3PL,
+      orderid3PL: order.id3PL,
     })
 
     if (!data.error) {
@@ -96,7 +96,29 @@ const EditReceivingModal = ({ editReceiving, seteditReceiving, mutateReceivings 
         autoClose: 3000,
       })
 
-      handleDownloadLabel()
+      if (order.id3PL) {
+        downloadPDF(
+          <PrintReceivingLabel
+            companyName={state.user.name}
+            prefix3PL={state.user.prefix3PL}
+            warehouse={warehouses?.find((w) => w.warehouseId === order.warehouseId)!}
+            boxes={packingConfiguration !== 'current' ? finalBoxesConfiguration : boxes || []}
+            orderBarcode={order.id3PL}
+          />,
+          order.orderNumber
+        )
+      } else {
+        downloadPDF(
+          <PrintReceivingLabel
+            companyName={state.user.name}
+            prefix3PL={state.user.prefix3PL}
+            warehouse={warehouses?.find((w) => w.warehouseId === order.warehouseId)!}
+            boxes={packingConfiguration !== 'current' ? finalBoxesConfiguration : boxes || []}
+            orderBarcode={order.orderNumber}
+          />,
+          order.orderNumber
+        )
+      }
       mutateReceivings && mutateReceivings()
     } else {
       toast.update(updateReceiving, {
@@ -110,18 +132,7 @@ const EditReceivingModal = ({ editReceiving, seteditReceiving, mutateReceivings 
     setloading(false)
   }
 
-  const { handleDownloadLabel } = useGenerateLabels({
-    pdfDocument: (
-      <PrintReceivingLabel
-        companyName={state.user.name}
-        prefix3PL={state.user.prefix3PL}
-        warehouse={warehouses?.find((w) => w.warehouseId === order.warehouseId)!}
-        boxes={packingConfiguration !== 'current' ? finalBoxesConfiguration : boxes || []}
-        orderBarcode={order.orderNumber}
-      />
-    ),
-    fileName: order.orderNumber,
-  })
+  const { downloadPDF } = useGenerateLabels()
 
   return (
     <Modal

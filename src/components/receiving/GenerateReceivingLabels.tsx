@@ -11,28 +11,25 @@ type Props = {
   finalBoxesConfiguration: FinalBoxConfiguration[]
   orderBarcode: string
   fileName: string
+  warehouseId: number
 }
 
-const GenerateReceivingLabels = ({ finalBoxesConfiguration, orderBarcode, fileName, children }: PropsWithChildren<Props>) => {
+const GenerateReceivingLabels = ({ finalBoxesConfiguration, orderBarcode, fileName, warehouseId, children }: PropsWithChildren<Props>) => {
   const { state } = useContext(AppContext)
   const { warehouses } = useWarehouses()
-  const { handleDownloadLabel } = useGenerateLabels({
-    pdfDocument: warehouses ? (
+  const { downloadPDF } = useGenerateLabels()
+
+  const handleDownload = () => {
+    downloadPDF(
       <PrintReceivingLabel
         companyName={state.user.name}
         prefix3PL={state.user.prefix3PL}
-        warehouse={warehouses?.find((w) => w.warehouseId === state.receivingFromPo.warehouse.id)!}
+        warehouse={warehouses?.find((w) => w.warehouseId === warehouseId)!}
         boxes={finalBoxesConfiguration}
         orderBarcode={orderBarcode}
-      />
-    ) : (
-      <div>Loading...</div>
-    ),
-    fileName: fileName,
-  })
-
-  const handleDownload = () => {
-    handleDownloadLabel()
+      />,
+      fileName
+    )
   }
 
   return warehouses ? <div onClick={handleDownload}>{children}</div> : null

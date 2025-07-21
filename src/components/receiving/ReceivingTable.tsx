@@ -181,7 +181,11 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
               {row.boxes && (
                 <>
                   <DropdownItem header>Labels</DropdownItem>
-                  <GenerateReceivingLabels finalBoxesConfiguration={row.boxes} orderBarcode={row.isShipjoyCreated ? row.id3PL : row.orderNumber} fileName={row.orderNumber}>
+                  <GenerateReceivingLabels
+                    finalBoxesConfiguration={row.boxes}
+                    orderBarcode={row.isShipjoyCreated && row.id3PL ? row.id3PL : row.orderNumber}
+                    fileName={row.orderNumber}
+                    warehouseId={row.warehouseId}>
                     <DropdownItem>
                       <i className='las la-toilet-paper label-icon align-middle me-2 fs-5 text-muted' />
                       <span className='fw-normal text-dark'>Receiving Labels</span>

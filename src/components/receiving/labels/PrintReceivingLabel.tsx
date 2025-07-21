@@ -164,7 +164,7 @@ export const ReceivingStyles = StyleSheet.create({
   },
   barcodeSection: {
     width: '100%',
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
   },

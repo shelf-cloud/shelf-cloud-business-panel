@@ -1,6 +1,7 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+
 import { ReorderingPointsProduct, ReorderingPointsResponse } from '@typesTs/reorderingPoints/reorderingPoints'
 import axios from 'axios'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
 
@@ -16,7 +17,26 @@ export type RPProductUpdateConfig = {
   buffer: number
   sellerCost: number
 }
-export const useRPProductsInfo = ({ sessionToken, session, state, searchValue, urgency, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, brand, category, showHidden, setField, sortingDirectionAsc, isSplitting }: any) => {
+export const useRPProductsInfo = ({
+  sessionToken,
+  session,
+  state,
+  searchValue,
+  urgency,
+  grossmin,
+  grossmax,
+  profitmin,
+  profitmax,
+  unitsmin,
+  unitsmax,
+  supplier,
+  brand,
+  category,
+  showHidden,
+  setField,
+  sortingDirectionAsc,
+  isSplitting,
+}: any) => {
   const [productsData, setProductsData] = useState<ReorderingPointsResponse>({})
   const controllerRef = useRef<AbortController | null>(null)
 
@@ -30,7 +50,9 @@ export const useRPProductsInfo = ({ sessionToken, session, state, searchValue, u
   }, [])
 
   const { isValidating: isLoadingProductsData } = useSWR(
-    session && state.user.businessId ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reorderingPoints/getReorderingPointsProducts?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
+    session && state.user.businessId
+      ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reorderingPoints/getReorderingPointsProducts?region=${state.currentRegion}&businessId=${state.user.businessId}`
+      : null,
     async (endPoint: string) => {
       try {
         const response = await axios.get<ReorderingPointsResponse>(endPoint, {
@@ -140,7 +162,10 @@ export const useRPProductsInfo = ({ sessionToken, session, state, searchValue, u
         return newProductsData
       }
       if (orderQty > newProductsData[sku].boxQty) {
-        newProductsData[sku].orderSplits[splitIndex] = { order: orderQty, orderAdjusted: newProductsData[sku].boxQty === 0 ? orderQty : newProductsData[sku].boxQty * Math.ceil(orderQty / newProductsData[sku].boxQty) }
+        newProductsData[sku].orderSplits[splitIndex] = {
+          order: orderQty,
+          orderAdjusted: newProductsData[sku].boxQty === 0 ? orderQty : newProductsData[sku].boxQty * Math.ceil(orderQty / newProductsData[sku].boxQty),
+        }
         newProductsData[sku].order = Object.values(newProductsData[sku].orderSplits).reduce((total, split) => total + split.order, 0)
         newProductsData[sku].orderAdjusted = Object.values(newProductsData[sku].orderSplits).reduce((total, split) => total + split.orderAdjusted, 0)
         return newProductsData
@@ -198,11 +223,14 @@ export const useRPProductsInfo = ({ sessionToken, session, state, searchValue, u
             isLoading: true,
           })
           const newForecast = await axios
-            .get(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reorderingPoints/getForecastSingle?region=${state.currentRegion}&businessId=${state.user.businessId}&sku=${sku}`, {
-              headers: {
-                Authorization: `Bearer ${sessionToken}`,
-              },
-            })
+            .get(
+              `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reorderingPoints/getForecastSingle?region=${state.currentRegion}&businessId=${state.user.businessId}&sku=${sku}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${sessionToken}`,
+                },
+              }
+            )
             .then(({ data }: { data: ReorderingPointsResponse }) => {
               if (!data[sku]) return { error: true, message: 'Error saving product config' }
 
@@ -309,7 +337,24 @@ export const useRPProductsInfo = ({ sessionToken, session, state, searchValue, u
       })
     }
 
-    if (['daysRemaining', 'warehouseQty', 'fbaQty', 'productionQty', 'receiving', 'sellerCost', 'leadTime', 'boxQty', 'adjustedForecast', 'order', 'orderAdjusted', 'totalSCForecast', 'totalFBAForecast', 'totalAWDForecast'].includes(field)) {
+    if (
+      [
+        'daysRemaining',
+        'warehouseQty',
+        'fbaQty',
+        'productionQty',
+        'receiving',
+        'sellerCost',
+        'leadTime',
+        'boxQty',
+        'adjustedForecast',
+        'order',
+        'orderAdjusted',
+        'totalSCForecast',
+        'totalFBAForecast',
+        'totalAWDForecast',
+      ].includes(field)
+    ) {
       return rows.sort((a, b) => {
         const aField = a[field as keyof ReorderingPointsProduct]!
         const bField = b[field as keyof ReorderingPointsProduct]!
@@ -353,8 +398,12 @@ export const useRPProductsInfo = ({ sessionToken, session, state, searchValue, u
 
     if (['ExponentialSmoothing', 'AutoREG', 'VAR', 'Naive', 'ARDL', 'ARDL_seasonal'].includes(field)) {
       return rows.sort((a, b) => {
-        const aField = Object.values(a.forecast[field as keyof ReorderingPointsProduct]!).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) - (a.warehouseQty + a.fbaQty + a.productionQty + a.receiving)
-        const bField = Object.values(b.forecast[field as keyof ReorderingPointsProduct]!).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) - (b.warehouseQty + b.fbaQty + b.productionQty + b.receiving)
+        const aField =
+          Object.values(a.forecast[field as keyof ReorderingPointsProduct]!).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
+          (a.warehouseQty + a.fbaQty + a.productionQty + a.receiving)
+        const bField =
+          Object.values(b.forecast[field as keyof ReorderingPointsProduct]!).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
+          (b.warehouseQty + b.fbaQty + b.productionQty + b.receiving)
         if (aField > bField) {
           return direction ? 1 : -1
         } else if (aField < bField) {
@@ -432,7 +481,34 @@ export const useRPProductsInfo = ({ sessionToken, session, state, searchValue, u
     }
 
     return []
-  }, [productsData, urgency, handleSortingList, setField, sortingDirectionAsc, searchValue, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, brand, category, showHidden])
+  }, [
+    productsData,
+    urgency,
+    handleSortingList,
+    setField,
+    sortingDirectionAsc,
+    searchValue,
+    grossmin,
+    grossmax,
+    profitmin,
+    profitmax,
+    unitsmin,
+    unitsmax,
+    supplier,
+    brand,
+    category,
+    showHidden,
+  ])
 
-  return { productsData: filterDataTable, isLoadingProductsData, handleOrderQty, handleSplitsOrderQty, handleUseAdjustedQty, handleNewVisibilityState, handleSaveProductConfig, handleUrgencyRange }
+  return {
+    completeProductData: productsData,
+    productsData: filterDataTable,
+    isLoadingProductsData,
+    handleOrderQty,
+    handleSplitsOrderQty,
+    handleUseAdjustedQty,
+    handleNewVisibilityState,
+    handleSaveProductConfig,
+    handleUrgencyRange,
+  }
 }

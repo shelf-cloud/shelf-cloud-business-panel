@@ -167,18 +167,39 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
           isLoading: false,
           autoClose: 3000,
         })
+
         if (data.is3PL) {
-          updateInstance(
+          downloadPDF(
             <PrintReceivingLabel
               companyName={state.user.name}
               prefix3PL={state.user.prefix3PL}
               warehouse={warehouses?.find((w) => w.warehouseId === state.receivingFromPo.warehouse.id)!}
               boxes={finalBoxesConfiguration}
               orderBarcode={data.orderid3PL}
-            />
+            />,
+            validation.values.isNewReceiving === 'true'
+              ? `${orderNumberStart}${validation.values.orderNumber}`
+              : openReceivings?.find((receiving) => receiving.id == parseInt(validation.values.receivingIdToAdd))?.orderNumber!
+          )
+        } else {
+          downloadPDF(
+            <PrintReceivingLabel
+              companyName={state.user.name}
+              prefix3PL={state.user.prefix3PL}
+              warehouse={warehouses?.find((w) => w.warehouseId === state.receivingFromPo.warehouse.id)!}
+              boxes={finalBoxesConfiguration}
+              orderBarcode={
+                validation.values.isNewReceiving === 'true'
+                  ? `${orderNumberStart}${validation.values.orderNumber}`
+                  : openReceivings?.find((receiving) => receiving.id == parseInt(validation.values.receivingIdToAdd))?.orderNumber!
+              }
+            />,
+            validation.values.isNewReceiving === 'true'
+              ? `${orderNumberStart}${validation.values.orderNumber}`
+              : openReceivings?.find((receiving) => receiving.id == parseInt(validation.values.receivingIdToAdd))?.orderNumber!
           )
         }
-        handleDownloadLabel()
+
         router.push('/receivings')
       } else {
         toast.update(createReceiving, {
@@ -219,25 +240,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
       : openReceivings?.find((receiving) => receiving.id == parseInt(validation.values.receivingIdToAdd))?.orderNumber!
   )
 
-  const { handleDownloadLabel, updateInstance } = useGenerateLabels({
-    pdfDocument: (
-      <PrintReceivingLabel
-        companyName={state.user.name}
-        prefix3PL={state.user.prefix3PL}
-        warehouse={warehouses?.find((w) => w.warehouseId === state.receivingFromPo.warehouse.id)!}
-        boxes={finalBoxesConfiguration}
-        orderBarcode={
-          validation.values.isNewReceiving === 'true'
-            ? `${orderNumberStart}${validation.values.orderNumber}`
-            : openReceivings?.find((receiving) => receiving.id == parseInt(validation.values.receivingIdToAdd))?.orderNumber!
-        }
-      />
-    ),
-    fileName:
-      validation.values.isNewReceiving === 'true'
-        ? `${orderNumberStart}${validation.values.orderNumber}`
-        : openReceivings?.find((receiving) => receiving.id == parseInt(validation.values.receivingIdToAdd))?.orderNumber!,
-  })
+  const { downloadPDF } = useGenerateLabels()
 
   return (
     <Modal

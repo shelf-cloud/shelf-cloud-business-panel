@@ -1,30 +1,31 @@
-import React, { useCallback, useContext, useMemo, useState } from 'react'
-import { Card, CardBody, Collapse, Container, Row, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledButtonDropdown } from 'reactstrap'
 import { GetServerSideProps } from 'next'
-import { getSession } from '@auth/client'
 import Head from 'next/head'
-import BreadCrumb from '@components/Common/BreadCrumb'
-import moment from 'moment'
-import FilterReorderingPoints from '@components/ui/FilterReorderingPoints'
-import FilterByDates from '@components/FilterByDates'
 import { useRouter } from 'next/router'
-import AppContext from '@context/AppContext'
-import axios from 'axios'
-import { toast } from 'react-toastify'
-import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
-import ReorderingPointsTable from '@components/reorderingPoints/ReorderingPointsTable'
-import ReorderingPointsSalesModal from '@components/modals/reorderingPoints/ReorderingPointsSalesModal'
-import ReorderingPointsSettings from '@components/reorderingPoints/ReorderingPointsSettings'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
+
+import { getSession } from '@auth/client'
+import BreadCrumb from '@components/Common/BreadCrumb'
+import FilterByDates from '@components/FilterByDates'
 import ReorderingPointsCreatePOModal from '@components/modals/reorderingPoints/ReorderingPointsCreatePOModal'
-import { useRPProductsInfo } from '@hooks/reorderingPoints/useRPProductsInfo'
-import { useRPProductConfig } from '@hooks/reorderingPoints/useRPProductConfig'
+import ReorderingPointsSalesModal from '@components/modals/reorderingPoints/ReorderingPointsSalesModal'
+import InputModal from '@components/modals/shared/inputModal'
 import RPEditProductConfigOffCanvas from '@components/reorderingPoints/RPEditProductConfigOffCanvas'
+import ReorderingPointsSettings from '@components/reorderingPoints/ReorderingPointsSettings'
+import ReorderingPointsSummary from '@components/reorderingPoints/ReorderingPointsSummary'
+import ReorderingPointsTable from '@components/reorderingPoints/ReorderingPointsTable'
+import FilterReorderingPoints from '@components/ui/FilterReorderingPoints'
+import SearchInput from '@components/ui/SearchInput'
+import AppContext from '@context/AppContext'
 import { useMarketplaces } from '@hooks/marketplaces/useMarketplaces'
+import { useRPProductConfig } from '@hooks/reorderingPoints/useRPProductConfig'
+import { useRPProductsInfo } from '@hooks/reorderingPoints/useRPProductsInfo'
 import { useRPSplits } from '@hooks/reorderingPoints/useRPSplits'
 import { useInputModal } from '@hooks/ui/useInputModal'
-import InputModal from '@components/modals/shared/inputModal'
-import ReorderingPointsSummary from '@components/reorderingPoints/ReorderingPointsSummary'
-import SearchInput from '@components/ui/SearchInput'
+import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
+import axios from 'axios'
+import moment from 'moment'
+import { toast } from 'react-toastify'
+import { Card, CardBody, Collapse, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from 'reactstrap'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -81,7 +82,17 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
   const [splits, setsplits] = useState({ isSplitting: false, splitsQty: 2 })
 
   // PRODUCTS INFO
-  const { productsData, isLoadingProductsData, handleOrderQty, handleSplitsOrderQty, handleUseAdjustedQty, handleNewVisibilityState, handleSaveProductConfig, handleUrgencyRange } = useRPProductsInfo({
+  const {
+    completeProductData,
+    productsData,
+    isLoadingProductsData,
+    handleOrderQty,
+    handleSplitsOrderQty,
+    handleUseAdjustedQty,
+    handleNewVisibilityState,
+    handleSaveProductConfig,
+    handleUrgencyRange,
+  } = useRPProductsInfo({
     sessionToken,
     session,
     state,
@@ -224,12 +235,12 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
       totalVolume: number
       products: { [key: string]: ReorderingPointsProduct }
     }
-    if (!productsData || Object.values(productsData).length === 0) {
+    if (!completeProductData || Object.values(completeProductData).length === 0) {
       setSelectedSupplier('')
       return orderSummary
     }
 
-    for (const item of Object.values(productsData)) {
+    for (const item of Object.values(completeProductData)) {
       if (item.order <= 0) continue
       orderSummary.totalQty += item.useOrderAdjusted ? item.orderAdjusted : item.order
       orderSummary.totalCost += item.useOrderAdjusted ? item.orderAdjusted * item.sellerCost : item.order * item.sellerCost
@@ -239,7 +250,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
 
     if (orderSummary.totalQty <= 0) setSelectedSupplier('')
     return orderSummary
-  }, [productsData])
+  }, [completeProductData])
 
   const orderHasSplitswithZeroQty = useMemo(() => {
     if (splits.isSplitting) {
@@ -289,7 +300,13 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
                     onClick={() => setFilterOpen(!filterOpen)}>
                     Filters
                   </button>
-                  <FilterByDates shipmentsStartDate={startDate} setShipmentsStartDate={setStartDate} setShipmentsEndDate={setEndDate} shipmentsEndDate={endDate} handleChangeDatesFromPicker={handleChangeDatesFromPicker} />
+                  <FilterByDates
+                    shipmentsStartDate={startDate}
+                    setShipmentsStartDate={setStartDate}
+                    setShipmentsEndDate={setEndDate}
+                    shipmentsEndDate={endDate}
+                    handleChangeDatesFromPicker={handleChangeDatesFromPicker}
+                  />
                   {selectedRows.length > 0 && (
                     <UncontrolledButtonDropdown>
                       <DropdownToggle className='btn btn-info fs-7 py-2' caret>
@@ -386,7 +403,18 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
           />
         )}
         <RPEditProductConfigOffCanvas rpProductConfig={rpProductConfig} setRPProductConfig={setRPProductConfig} handleSaveProductConfig={handleSaveProductConfig} />
-        <InputModal isOpen={isOpen} headerText='Edit Split Name' primaryText='Enter new split name' confirmText='Save' loadingText='Saving...' value={value} onChange={setValue} isLoading={isLoading} handleSubmit={handleSubmit} onClose={closeModal} />
+        <InputModal
+          isOpen={isOpen}
+          headerText='Edit Split Name'
+          primaryText='Enter new split name'
+          confirmText='Save'
+          loadingText='Saving...'
+          value={value}
+          onChange={setValue}
+          isLoading={isLoading}
+          handleSubmit={handleSubmit}
+          onClose={closeModal}
+        />
       </React.Fragment>
     </div>
   )

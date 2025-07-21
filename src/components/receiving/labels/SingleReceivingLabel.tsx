@@ -55,25 +55,25 @@ const SingleReceivingLabel = ({ boxNumber, data, warehouse, totalBoxes, companyN
           </View>
           <View style={ReceivingStyles.addressRow}>
             <Text style={ReceivingStyles.addressLabel}>Ship To:</Text>
-            <Text style={ReceivingStyles.addressValue}>{warehouse?.name}</Text>
+            <Text style={ReceivingStyles.addressValue}>{warehouse.name}</Text>
           </View>
           <View style={ReceivingStyles.addressRow}>
             <Text style={ReceivingStyles.addressLabel}></Text>
-            <Text style={ReceivingStyles.addressValue}>{warehouse?.address1}</Text>
+            <Text style={ReceivingStyles.addressValue}>{warehouse.address1}</Text>
           </View>
           <View style={ReceivingStyles.addressRow}>
             <Text style={ReceivingStyles.addressLabel}></Text>
-            <Text style={ReceivingStyles.addressValue}>{warehouse?.address2}</Text>
+            <Text style={ReceivingStyles.addressValue}>{warehouse.address2}</Text>
           </View>
           <View style={ReceivingStyles.addressRow}>
             <Text style={ReceivingStyles.addressLabel}></Text>
             <Text style={ReceivingStyles.addressValue}>
-              {warehouse?.city}, {warehouse?.state} {warehouse?.zipcode}
+              {warehouse.city}, {warehouse.state} {warehouse.zipcode}
             </Text>
           </View>
           <View style={ReceivingStyles.addressRow}>
             <Text style={ReceivingStyles.addressLabel}></Text>
-            <Text style={ReceivingStyles.addressValue}>{warehouse?.phone}</Text>
+            <Text style={ReceivingStyles.addressValue}>{warehouse.phone}</Text>
           </View>
         </View>
 
@@ -94,7 +94,7 @@ const SingleReceivingLabel = ({ boxNumber, data, warehouse, totalBoxes, companyN
             ))}
           </View>
 
-          {data.items.length === 1 && (
+          {data.items.length === 1 && !isShipjoy && (
             <View style={ReceivingStyles.qrSection}>
               <Image style={ReceivingStyles.qrCode} src={qrCodeUrl} />
               <Text style={ReceivingStyles.qrLabel}>Internal use only</Text>
@@ -119,6 +119,7 @@ const SingleReceivingLabel = ({ boxNumber, data, warehouse, totalBoxes, companyN
         {barcodeUrl && (
           <View style={ReceivingStyles.barcodeSection}>
             <Image style={ReceivingStyles.barcode} src={barcodeUrl} />
+            <Text style={ReceivingStyles.footerText}>{orderBarcode}</Text>
           </View>
         )}
       </View>
