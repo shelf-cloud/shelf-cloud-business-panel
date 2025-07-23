@@ -221,29 +221,6 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
           <Card className='mb-3'>
             <CardHeader className='py-2 d-flex flex-row justify-content-between'>
               <h5 className='fw-semibold m-0'>Products</h5>
-              {!data.isReceivingFromPo && data.orderStatus !== 'received' && (
-                <div className='d-flex flex-row justify-content-end gap-3 align-items-center'>
-                  <i
-                    className='las la-edit fs-4 text-primary m-0 p-0'
-                    style={{ cursor: 'pointer' }}
-                    onClick={() =>
-                      setshowEditOrderQty({
-                        show: true,
-                        receivingId: data.id,
-                        orderNumber: data.orderNumber,
-                        receivingItems: data.orderItems,
-                      })
-                    }
-                  />
-                  <i
-                    className='fs-4 text-success las la-plus-circle'
-                    style={{ cursor: 'pointer' }}
-                    onClick={() =>
-                      setAddSkuToReceiving({ show: true, receivingId: data.id, orderNumber: data.orderNumber, receivingItems: data.orderItems.map((item) => item.sku) })
-                    }
-                  />
-                </div>
-              )}
             </CardHeader>
             <CardBody>
               <div className='table-responsive'>
