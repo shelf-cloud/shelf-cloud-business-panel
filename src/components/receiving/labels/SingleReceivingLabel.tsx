@@ -14,11 +14,12 @@ type Props = {
   boxNumber: number
   totalBoxes: number
   orderBarcode: string
+  isManualReceiving: boolean
 }
 
 const chars = 'Place this Label Securely Outside Box'.split('').reverse()
 
-const SingleReceivingLabel = ({ boxNumber, data, warehouse, totalBoxes, companyName, prefix3PL, orderBarcode }: Props) => {
+const SingleReceivingLabel = ({ boxNumber, data, warehouse, totalBoxes, companyName, prefix3PL, orderBarcode, isManualReceiving }: Props) => {
   const isShipjoy = warehouse?.name3PL === 'shipjoy'
   const fromCompany = isShipjoy ? 'Onix Electronics LLC' : companyName
   const qrCodeUrl = generateQRCode(data.items[0].sku, data.items[0].quantity)
@@ -106,10 +107,12 @@ const SingleReceivingLabel = ({ boxNumber, data, warehouse, totalBoxes, companyN
       {/* Footer */}
       <View style={ReceivingStyles.footer}>
         <View style={ReceivingStyles.footerRow}>
-          <View style={ReceivingStyles.footerColumn}>
-            <Text style={ReceivingStyles.footerLabel}>PO Number:</Text>
-            <Text style={ReceivingStyles.footerText}>{data.items[0].poNumber}</Text>
-          </View>
+          {!isManualReceiving && (
+            <View style={ReceivingStyles.footerColumn}>
+              <Text style={ReceivingStyles.footerLabel}>PO Number:</Text>
+              <Text style={ReceivingStyles.footerText}>{data.items[0].poNumber}</Text>
+            </View>
+          )}
           <View style={ReceivingStyles.footerColumn}>
             <Text style={ReceivingStyles.footerLabel}>Receiving #:</Text>
             <Text style={ReceivingStyles.footerText}>{data.items[0].orderNumber}</Text>

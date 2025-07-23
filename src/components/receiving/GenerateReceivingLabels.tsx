@@ -12,9 +12,10 @@ type Props = {
   orderBarcode: string
   fileName: string
   warehouseId: number
+  isManualReceiving: boolean
 }
 
-const GenerateReceivingLabels = ({ finalBoxesConfiguration, orderBarcode, fileName, warehouseId, children }: PropsWithChildren<Props>) => {
+const GenerateReceivingLabels = ({ finalBoxesConfiguration, orderBarcode, fileName, warehouseId, isManualReceiving, children }: PropsWithChildren<Props>) => {
   const { state } = useContext(AppContext)
   const { warehouses } = useWarehouses()
   const { downloadPDF } = useGenerateLabels()
@@ -27,6 +28,7 @@ const GenerateReceivingLabels = ({ finalBoxesConfiguration, orderBarcode, fileNa
         warehouse={warehouses?.find((w) => w.warehouseId === warehouseId)!}
         boxes={finalBoxesConfiguration}
         orderBarcode={orderBarcode}
+        isManualReceiving={isManualReceiving}
       />,
       fileName
     )

@@ -2,41 +2,38 @@
 import { useContext } from 'react'
 
 import AppContext from '@context/AppContext'
+import { ReceivingInventory } from '@hooks/receivings/useReceivingInventory'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
-import { ShipmentOrderItem } from '@typings'
+import { sortStringsLocaleCompare } from '@lib/helperFunctions'
 import { Col } from 'reactstrap'
 
 type Props = {
-  orderItems: ShipmentOrderItem[]
-  handleDeleteItem: (poId: number, sku: string, quantity: number, inventoryId: number, splitId: number | undefined) => void
-  isReceivingFromPo: boolean
+  orderProducts: ReceivingInventory[]
 }
 
-const Edit_Receiving_Summary_Tab = ({ orderItems, handleDeleteItem, isReceivingFromPo }: Props) => {
+const Create_Manual_Receiving_Boxes_Box = ({ orderProducts }: Props) => {
   const { state } = useContext(AppContext)
   return (
-    <div className='overflow-auto'>
-      <Col md={12}>
+    <div>
+      <div className='d-flex flex-row justify-content-between align-items-center gap-3 mb-2'>
+        <p className='m-0 fw-bold fs-5'>All Products in 1 Box</p>
+      </div>
+      <Col md={12} className='overflow-auto'>
         <table className='table table-sm align-middle table-responsive table-nowrap table-striped'>
           <thead className='table-light'>
-            <tr key='edit-receiving-summary-header'>
-              {isReceivingFromPo && <th scope='col'>PO Number</th>}
-              <th scope='col'>Supplier</th>
+            <tr>
               <th scope='col'>Title / SKU</th>
               <th scope='col' className='text-center'>
                 Total to Received
               </th>
-              <th></th>
             </tr>
           </thead>
           <tbody className='fs-7'>
-            {orderItems
-              .sort((itemA, itemB) => (itemA.poNumber ? itemA.poNumber!.localeCompare(itemB.poNumber!) : itemA.sku.localeCompare(itemB.sku)))
+            {orderProducts
+              .sort((itemA, itemB) => sortStringsLocaleCompare(itemA.sku, itemB.sku))
               .map((item) => (
-                <tr key={`${item.poId}-${item.inventoryId}`}>
-                  {isReceivingFromPo && <td>{item.poNumber}</td>}
-                  <td className='fw-bold fs-6'>{item.suppliersName}</td>
+                <tr key={`${item.inventoryId}`}>
                   <td className='text-center'>
                     <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
                       <div
@@ -60,28 +57,18 @@ const Edit_Receiving_Summary_Tab = ({ orderItems, handleDeleteItem, isReceivingF
                     </div>
                   </td>
                   <td className='text-center'>{item.quantity}</td>
-                  <td>
-                    <i
-                      className='fs-4 text-danger las la-trash-alt'
-                      style={{ cursor: 'pointer' }}
-                      onClick={() => handleDeleteItem(item.poId!, item.sku, item.quantity, item.inventoryId!, item.splitId)}
-                    />
-                  </td>
                 </tr>
               ))}
-            <tr key='edit-receiving-summary-total-footer' className='bg-light'>
-              {isReceivingFromPo && <td></td>}
-              <td></td>
+            <tr>
               <td className='fw-bold fs-6 text-end'>Total</td>
               <td className='fw-bold fs-6 text-center'>
                 {FormatIntNumber(
                   state.currentRegion,
-                  orderItems.reduce((total: number, item) => {
-                    return total + item.quantity
+                  orderProducts.reduce((subtotal: number, item) => {
+                    return subtotal + item.quantity
                   }, 0)
                 )}
               </td>
-              <td></td>
             </tr>
           </tbody>
         </table>
@@ -90,4 +77,4 @@ const Edit_Receiving_Summary_Tab = ({ orderItems, handleDeleteItem, isReceivingF
   )
 }
 
-export default Edit_Receiving_Summary_Tab
+export default Create_Manual_Receiving_Boxes_Box

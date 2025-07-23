@@ -9,9 +9,10 @@ import { Col } from 'reactstrap'
 
 type Props = {
   orderItems: ShipmentOrderItem[]
+  isReceivingFromPo: boolean
 }
 
-const Edit_Receiving_Boxes_Box = ({ orderItems }: Props) => {
+const Edit_Receiving_Boxes_Box = ({ orderItems, isReceivingFromPo }: Props) => {
   const { state } = useContext(AppContext)
   return (
     <div>
@@ -21,8 +22,12 @@ const Edit_Receiving_Boxes_Box = ({ orderItems }: Props) => {
       <Col md={12} className='overflow-auto'>
         <table className='table table-sm align-middle table-responsive table-nowrap table-striped'>
           <thead className='table-light'>
-            <tr>
-              <th scope='col'>PO Number</th>
+            <tr key='edit-receiving-boxes-box-total-header'>
+              {isReceivingFromPo && (
+                <th scope='col' className='text-start'>
+                  PO Numbers
+                </th>
+              )}
               <th scope='col'>Supplier</th>
               <th scope='col'>Title / SKU</th>
               <th scope='col' className='text-center'>
@@ -32,10 +37,10 @@ const Edit_Receiving_Boxes_Box = ({ orderItems }: Props) => {
           </thead>
           <tbody className='fs-7'>
             {orderItems
-              .sort((itemA, itemB) => itemA.poNumber!.localeCompare(itemB.poNumber!))
+              .sort((itemA, itemB) => (isReceivingFromPo ? itemA.poNumber!.localeCompare(itemB.poNumber!) : itemA.sku.localeCompare(itemB.sku)))
               .map((item) => (
                 <tr key={`${item.poId}-${item.inventoryId}`}>
-                  <td>{item.poNumber}</td>
+                  {isReceivingFromPo && <td>{item.poNumber}</td>}
                   <td className='fw-bold fs-6'>{item.suppliersName}</td>
                   <td className='text-center'>
                     <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
@@ -62,8 +67,8 @@ const Edit_Receiving_Boxes_Box = ({ orderItems }: Props) => {
                   <td className='text-center'>{item.quantity}</td>
                 </tr>
               ))}
-            <tr>
-              <td></td>
+            <tr key='edit-receiving-boxes-box-total-footer'>
+              {isReceivingFromPo && <td></td>}
               <td></td>
               <td className='fw-bold fs-6 text-end'>Total</td>
               <td className='fw-bold fs-6 text-center'>

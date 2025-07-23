@@ -14,9 +14,10 @@ type Props = {
     (e: React.FocusEvent<any>): void
     <T = any>(fieldOrEvent: T): T extends string ? (e: any) => void : void
   }
+  onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void
 }
 
-const InputNumberForm = ({ inputName, value, isInvalid, placeholder, handleChange, handleBlur }: Props) => {
+const InputNumberForm = ({ inputName, value, isInvalid, placeholder, handleChange, handleBlur, onFocus }: Props) => {
   return (
     <Input
       type='number'
@@ -31,6 +32,7 @@ const InputNumberForm = ({ inputName, value, isInvalid, placeholder, handleChang
       onBlur={handleBlur}
       value={value}
       invalid={isInvalid}
+      onFocus={onFocus}
     />
   )
 }

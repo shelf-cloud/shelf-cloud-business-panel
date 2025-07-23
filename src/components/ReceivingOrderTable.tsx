@@ -1,71 +1,31 @@
 /* eslint-disable @next/next/no-img-element */
-/* eslint-disable react-hooks/exhaustive-deps */
-import { wholesaleProductRow } from '@typings'
-import React, { useContext } from 'react'
+import { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
-import { Button } from 'reactstrap'
+import { ReceivingInventory } from '@hooks/receivings/useReceivingInventory'
+import { FormatIntNumber } from '@lib/FormatNumbers'
+import { NoImageAdress } from '@lib/assetsConstants'
+import { sortNumbers, sortStringsCaseInsensitive } from '@lib/helperFunctions'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
-import { NoImageAdress } from '@lib/assetsConstants'
-import { sortStringsCaseInsensitive } from '@lib/helperFunctions'
+import { Button } from 'reactstrap'
 
 type Props = {
-  allData: wholesaleProductRow[]
-  filteredItems: wholesaleProductRow[]
-  setAllData: (allData: wholesaleProductRow[]) => void
+  data: ReceivingInventory[]
   pending: boolean
+  handleOrderQty: (value: number, sku: string) => void
 }
 
-const ReceivingOrderTable = ({ allData, filteredItems, setAllData, pending }: Props) => {
-  const { state, setModalProductInfo }: any = useContext(AppContext)
-
-  const handleOrderQty = (value: string, sku: string) => {
-    if (Number(value) == 0 || value == '') {
-      const newData: any = allData.map((item) => {
-        if (item.sku === sku) {
-          item.orderQty = ''
-          return item
-        } else {
-          return item
-        }
-      })
-
-      setAllData(newData)
-      return
-    }
-    const newData: any = allData.map((item) => {
-      if (item.sku === sku) {
-        item.orderQty = value
-        return item
-      } else {
-        return item
-      }
-    })
-    setAllData(newData)
-  }
-
-  const quantitySort = (rowA: wholesaleProductRow, rowB: wholesaleProductRow) => {
-    const a = Number(rowA.quantity.quantity)
-    const b = Number(rowB.quantity.quantity)
-
-    if (a > b) {
-      return 1
-    }
-
-    if (b > a) {
-      return -1
-    }
-
-    return 0
-  }
+const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
+  const { state, setModalProductInfo } = useContext(AppContext)
 
   const conditionalRowStyles = [
     {
-      when: (row: wholesaleProductRow) => Number(row.orderQty) > 0,
+      when: (row: ReceivingInventory) => row.quantity > 0,
       classNames: ['bg-success bg-opacity-25'],
     },
     {
-      when: (row: wholesaleProductRow) => Number(row.orderQty) < 0,
+      when: (row: ReceivingInventory) => row.quantity < 0,
       classNames: ['bg-danger bg-opacity-25'],
     },
   ]
@@ -73,13 +33,13 @@ const ReceivingOrderTable = ({ allData, filteredItems, setAllData, pending }: Pr
   const columns: any = [
     {
       name: <span className='fw-bold fs-6'>Image</span>,
-      selector: (row: wholesaleProductRow) => {
+      selector: (row: ReceivingInventory) => {
         return (
           <div
             style={{
-              width: '50px',
-              height: '60px',
-              margin: '2px 0px',
+              width: '40px',
+              height: '35px',
+              margin: '8px 0px',
               position: 'relative',
             }}>
             <img
@@ -98,23 +58,45 @@ const ReceivingOrderTable = ({ allData, filteredItems, setAllData, pending }: Pr
     },
     {
       name: <span className='fw-bold fs-6'>Title</span>,
-      selector: (row: wholesaleProductRow) => <span className='fs-7 fw-semibold'>{row.title}</span>,
+      selector: (row: ReceivingInventory) => <span className='fs-7 fw-semibold'>{row.title}</span>,
       sortable: true,
       wrap: true,
       grow: 1.5,
-      sortFunction: (rowA: wholesaleProductRow, rowB: wholesaleProductRow) => sortStringsCaseInsensitive(rowA.title, rowB.title),
+      sortFunction: (rowA: ReceivingInventory, rowB: ReceivingInventory) => sortStringsCaseInsensitive(rowA.title, rowB.title),
     },
     {
       name: <span className='fw-bold fs-6'>SKU</span>,
-      selector: (row: wholesaleProductRow) => <span className='fs-7'>{row.sku}</span>,
+      selector: (row: ReceivingInventory) => <span className='fs-7'>{row.sku}</span>,
       sortable: true,
       wrap: false,
-      compact: false,
-      sortFunction: (rowA: wholesaleProductRow, rowB: wholesaleProductRow) => sortStringsCaseInsensitive(rowA.sku, rowB.sku),
+      compact: true,
+      sortFunction: (rowA: ReceivingInventory, rowB: ReceivingInventory) => sortStringsCaseInsensitive(rowA.sku, rowB.sku),
     },
     {
-      name: <span className='fw-bold fs-6'>Inventory</span>,
-      selector: (cell: any) => {
+      name: <span className='fw-bold fs-6'>Supplier</span>,
+      selector: (row: ReceivingInventory) => <span className='fs-7'>{row.suppliersName}</span>,
+      sortable: true,
+      wrap: false,
+      compact: true,
+      sortFunction: (rowA: ReceivingInventory, rowB: ReceivingInventory) => sortStringsCaseInsensitive(rowA.suppliersName, rowB.suppliersName),
+    },
+    {
+      name: (
+        <span className='fw-bold fs-6 text-center'>
+          Master Box <br />
+          <span className='fs-7'>(Units/Box)</span>
+        </span>
+      ),
+      selector: (row: ReceivingInventory) => <span className='fs-7'>{FormatIntNumber(state.currentRegion, row.boxQty)}</span>,
+      sortable: true,
+      center: true,
+      wrap: false,
+      compact: true,
+      sortFunction: (rowA: ReceivingInventory, rowB: ReceivingInventory) => sortNumbers(rowA.boxQty, rowB.boxQty),
+    },
+    {
+      name: <span className='fw-bold fs-6 text-center'>Inventory</span>,
+      selector: (row: ReceivingInventory) => {
         return (
           <Button
             color='info'
@@ -122,41 +104,47 @@ const ReceivingOrderTable = ({ allData, filteredItems, setAllData, pending }: Pr
             size='sm'
             className='btn btn-ghost-info'
             onClick={() => {
-              setModalProductInfo(cell.quantity.inventoryId, state.user.businessId, cell.quantity.sku)
+              setModalProductInfo(row.inventoryId, row.sku)
             }}>
-            {cell.quantity.quantity}
+            {FormatIntNumber(state.currentRegion, row.inventoryQuantity)}
           </Button>
         )
       },
       sortable: true,
       compact: true,
       center: true,
-      sortFunction: quantitySort,
+      sortFunction: (rowA: ReceivingInventory, rowB: ReceivingInventory) => sortNumbers(rowA.inventoryQuantity, rowB.inventoryQuantity),
     },
     {
-      name: <span className='fw-bold fs-6'>Qty To Receive</span>,
-      selector: (row: wholesaleProductRow) => {
+      name: (
+        <span className='fw-bold fs-6 text-center'>
+          Receiving <br /> Quantity
+        </span>
+      ),
+      selector: (row: ReceivingInventory) => {
         return (
           <>
             <DebounceInput
               type='number'
-              minLength={1}
-              debounceTimeout={300}
+              minLength={0}
+              debounceTimeout={200}
               className='form-control fs-7'
               placeholder={'Receiving Qty...'}
-              value={row.orderQty}
+              value={row.quantity}
+              onFocus={(e: React.FocusEvent<HTMLInputElement>) => e.target.select()}
               onChange={(e) => {
-                if (Number(e.target.value) < 0) {
+                const inputValue = e.target.value === '' ? 0 : parseInt(e.target.value)
+                if (inputValue < 0) {
                   document.getElementById(`Error-${row.sku}`)!.style.display = 'block'
-                  handleOrderQty(e.target.value, row.sku)
+                  handleOrderQty(inputValue, row.sku)
                 } else {
                   document.getElementById(`Error-${row.sku}`)!.style.display = 'none'
-                  handleOrderQty(e.target.value, row.sku)
+                  handleOrderQty(inputValue, row.sku)
                 }
               }}
               min={0}
             />
-            <span className='fs-6 fw-normal text-danger' id={`Error-${row.sku}`} style={{ display: 'none' }}>
+            <span className='fs-7 fw-normal text-danger' id={`Error-${row.sku}`} style={{ display: 'none' }}>
               Quantity Error
             </span>
           </>
@@ -164,13 +152,13 @@ const ReceivingOrderTable = ({ allData, filteredItems, setAllData, pending }: Pr
       },
       sortable: false,
       center: true,
-      compact: false,
+      compact: true,
     },
   ]
 
   return (
     <>
-      <DataTable columns={columns} data={filteredItems} progressPending={pending} striped={true} defaultSortFieldId={2} conditionalRowStyles={conditionalRowStyles} dense />
+      <DataTable columns={columns} data={data} progressPending={pending} striped={true} defaultSortFieldId={2} conditionalRowStyles={conditionalRowStyles} dense />
     </>
   )
 }

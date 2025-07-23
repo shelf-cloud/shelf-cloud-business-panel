@@ -4,9 +4,10 @@ import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   boxes: FinalBoxConfiguration[]
+  isReceivingFromPo: boolean
 }
 
-const Current_Box_Configuration = ({ boxes }: Props) => {
+const Current_Box_Configuration = ({ boxes, isReceivingFromPo }: Props) => {
   return (
     <div className='overflow-auto'>
       <table className='table table-sm align-middle table-responsive table-striped fs-7'>
@@ -18,16 +19,18 @@ const Current_Box_Configuration = ({ boxes }: Props) => {
                   Box {index + 1}
                 </td>
               </tr>
-              <tr>
+              <tr key={`box-${index}-items`}>
                 <table className='table table-sm align-middle table-responsive table-striped fs-7'>
                   <thead className='table-light'>
                     <tr key={`box-${index}-header`}>
                       <th scope='col' className='text-start px-3'>
                         Title / SKU
                       </th>
-                      <th scope='col' className='text-start'>
-                        PO Numbers
-                      </th>
+                      {isReceivingFromPo && (
+                        <th scope='col' className='text-start'>
+                          PO Numbers
+                        </th>
+                      )}
                       <th scope='col' className='text-center px-3'>
                         Quantity
                       </th>
@@ -58,7 +61,7 @@ const Current_Box_Configuration = ({ boxes }: Props) => {
                             </div>
                           </div>
                         </td>
-                        <td className='text-start'>{item.poNumber}</td>
+                        {isReceivingFromPo && <td className='text-start'>{item.poNumber}</td>}
                         <td className='text-center px-3'>{item.quantity}</td>
                       </tr>
                     ))}

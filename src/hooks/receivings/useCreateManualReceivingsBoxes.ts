@@ -1,37 +1,20 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { ShipmentOrderItem } from '@typings'
+import { ReceivingInventory } from './useReceivingInventory'
+import { FinalBoxConfiguration } from './useReceivingsBoxes'
 
-export type FinalBoxConfiguration = {
-  items: {
-    poId: string
-    sku: string
-    quantity: number
-    inventoryId: number
+export type ManualSingleSkuBoxes = {
+  [sku: string]: {
     receiving: number
     name: string
+    inventoryId: number
     image: string
     boxQty: number
-    poNumber: string
-    orderNumber: string
-  }[]
-}
-
-export type SingleSkuBoxes = {
-  [poId: string]: {
-    [sku: string]: {
-      receiving: number
-      name: string
-      inventoryId: number
-      image: string
-      poNumber: string
-      boxQty: number
-      boxes: { unitsPerBox: number; qtyOfBoxes: number }[]
-    }
+    boxes: { unitsPerBox: number; qtyOfBoxes: number }[]
   }
 }
 
-export type MultiSkuBoxes = {
+export type ManualMultiSkuBoxes = {
   [sku: string]: {
     receiving: number
     quantity: number
@@ -39,12 +22,10 @@ export type MultiSkuBoxes = {
     inventoryId: number
     image: string
     boxQty: number
-    poNumber: string
-    poId: string
   }
 }
 
-export interface AddSKUToMultiSKUBoxType {
+export interface ManualAddSKUToMultiSKUBoxType {
   boxIndex: number
   sku: string
   quantity: number
@@ -52,43 +33,36 @@ export interface AddSKUToMultiSKUBoxType {
   name: string
   inventoryId: number
   image: string
-  poId: string
   boxQty: number
-  poNumber: string
 }
 
-export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], packingConfiguration: string, receivingOrderNumber: string) => {
+export const useCreateManualReceivingsBoxes = (receivingItems: ReceivingInventory[], packingConfiguration: string, receivingOrderNumber: string) => {
   // SINGLE SKU PACKAGES_____________________
-  const [singleSkuPackages, setsingleSkuPackages] = useState<SingleSkuBoxes>(() => {
-    const packages = {} as SingleSkuBoxes
+  const [singleSkuPackages, setsingleSkuPackages] = useState<ManualSingleSkuBoxes>(() => {
+    const packages = {} as ManualSingleSkuBoxes
 
     for (const item of receivingItems) {
-      const { sku, boxQty, quantity, poId, name, inventoryId, poNumber, image } = item
-
-      if (!packages[poId!]) {
-        packages[poId!] = {}
-      }
+      const { sku, boxQty, quantity, name, inventoryId, image } = item
 
       const boxes = Math.floor(quantity / boxQty!)
       let boxedQty = quantity
 
-      packages[poId!][sku] = {
+      packages[sku] = {
         receiving: quantity,
         name: name,
         inventoryId: inventoryId!,
         image: image!,
-        poNumber: poNumber!,
         boxQty: boxQty!,
         boxes: [],
       }
 
       if (quantity <= boxQty!) {
-        packages[poId!][sku].boxes.push({
+        packages[sku].boxes.push({
           unitsPerBox: quantity,
           qtyOfBoxes: 1,
         })
       } else {
-        packages[poId!][sku].boxes.push({
+        packages[sku].boxes.push({
           unitsPerBox: boxQty!,
           qtyOfBoxes: boxes,
         })
@@ -96,7 +70,7 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
         boxedQty -= boxQty! * boxes
 
         if (boxedQty > 0) {
-          packages[poId!][sku].boxes.push({
+          packages[sku].boxes.push({
             unitsPerBox: boxedQty,
             qtyOfBoxes: 1,
           })
@@ -108,34 +82,29 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
   })
 
   useEffect(() => {
-    const packages = {} as SingleSkuBoxes
+    const packages = {} as ManualSingleSkuBoxes
     for (const item of receivingItems) {
-      const { sku, boxQty, quantity, poId, name, inventoryId, image, poNumber } = item
-
-      if (!packages[poId!]) {
-        packages[poId!] = {}
-      }
+      const { sku, boxQty, quantity, name, inventoryId, image } = item
 
       const boxes = Math.floor(quantity / boxQty!)
       let boxedQty = quantity
 
-      packages[poId!][sku] = {
+      packages[sku] = {
         receiving: quantity,
         name: name,
         inventoryId: inventoryId!,
         image: image!,
-        poNumber: poNumber!,
         boxQty: boxQty!,
         boxes: [],
       }
 
       if (quantity <= boxQty!) {
-        packages[poId!][sku].boxes.push({
+        packages[sku].boxes.push({
           unitsPerBox: quantity,
           qtyOfBoxes: 1,
         })
       } else {
-        packages[poId!][sku].boxes.push({
+        packages[sku].boxes.push({
           unitsPerBox: boxQty!,
           qtyOfBoxes: boxes,
         })
@@ -143,7 +112,7 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
         boxedQty -= boxQty! * boxes
 
         if (boxedQty > 0) {
-          packages[poId!][sku].boxes.push({
+          packages[sku].boxes.push({
             unitsPerBox: boxedQty,
             qtyOfBoxes: 1,
           })
@@ -154,9 +123,9 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
   }, [receivingItems])
 
   // ADD NEW SINGLE SKU BOX CONFIGURATION
-  const addNewSingleSkuBoxConfiguration = useCallback((poId: string, sku: string) => {
+  const addNewSingleSkuBoxConfiguration = useCallback((sku: string) => {
     setsingleSkuPackages((prev) => {
-      prev[poId][sku].boxes.push({
+      prev[sku].boxes.push({
         unitsPerBox: 0,
         qtyOfBoxes: 0,
       })
@@ -165,36 +134,36 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
   }, [])
 
   // REMOVE SINGLE SKU BOX CONFIGURATION
-  const removeSingleSkuBoxConfiguration = useCallback((poId: string, sku: string, index: number) => {
+  const removeSingleSkuBoxConfiguration = useCallback((sku: string, index: number) => {
     setsingleSkuPackages((prev) => {
-      const updatedBoxes = prev[poId][sku].boxes.filter((_, i) => i !== index)
+      const updatedBoxes = prev[sku].boxes.filter((_, i) => i !== index)
       if (updatedBoxes.length === 0) {
-        delete prev[poId][sku]
+        delete prev[sku]
       } else {
-        prev[poId][sku].boxes = updatedBoxes
+        prev[sku].boxes = updatedBoxes
       }
       return { ...prev }
     })
   }, [])
 
   // CHANGE UNITS PER BOX
-  const changeUnitsPerBox = useCallback((poId: string, sku: string, index: number, value: number) => {
+  const changeUnitsPerBox = useCallback((sku: string, index: number, value: number) => {
     setsingleSkuPackages((prev) => {
-      prev[poId][sku].boxes[index].unitsPerBox = value
+      prev[sku].boxes[index].unitsPerBox = value
       return { ...prev }
     })
   }, [])
 
   // CHANGE QTY OF BOXES
-  const changeQtyOfBoxes = useCallback((poId: string, sku: string, index: number, value: number) => {
+  const changeQtyOfBoxes = useCallback((sku: string, index: number, value: number) => {
     setsingleSkuPackages((prev) => {
-      prev[poId][sku].boxes[index].qtyOfBoxes = value
+      prev[sku].boxes[index].qtyOfBoxes = value
       return { ...prev }
     })
   }, [])
 
   // MULTI SKU PACKAGES_____________________
-  const [multiSkuPackages, setmultiSkuPackages] = useState<MultiSkuBoxes[]>([])
+  const [multiSkuPackages, setmultiSkuPackages] = useState<ManualMultiSkuBoxes[]>([])
 
   // ADD NEW EMPTY BOX CONFIGURATION
   const addNewMultiSkuBoxConfiguration = useCallback(() => {
@@ -207,7 +176,7 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
   }, [])
 
   // ADD SKU TO MULTI SKU BOX
-  const addSkuToMultiSkuBox = useCallback(({ boxIndex, sku, quantity, receiving, name, inventoryId, image, poId, boxQty, poNumber }: AddSKUToMultiSKUBoxType) => {
+  const addSkuToMultiSkuBox = useCallback(({ boxIndex, sku, quantity, receiving, name, inventoryId, image, boxQty }: ManualAddSKUToMultiSKUBoxType) => {
     setmultiSkuPackages((prev) => {
       const updatedPackages = [...prev]
       if (!updatedPackages[boxIndex]) {
@@ -222,9 +191,7 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
           name,
           inventoryId,
           image,
-          poId,
           boxQty,
-          poNumber,
         }
       }
       return updatedPackages
@@ -249,10 +216,10 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
 
   // SET MIXED SKU BOXES USING MASTER BOXES
   const setMixedSkuBoxesUsingMasterBoxes = useCallback(() => {
-    const packages = [] as MultiSkuBoxes[]
+    const packages = [] as ManualMultiSkuBoxes[]
 
     for (const item of receivingItems) {
-      const { sku, boxQty, quantity, poNumber, image, inventoryId, name, poId } = item
+      const { sku, boxQty, quantity, image, inventoryId, name } = item
       const boxes = Math.ceil(quantity / boxQty!)
       let boxedQty = quantity
 
@@ -264,9 +231,7 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
             name: name,
             inventoryId: inventoryId!,
             image: image!,
-            poId: poId!.toString(),
             boxQty: boxQty!,
-            poNumber: poNumber!,
           },
         })
 
@@ -281,30 +246,26 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
     const finalBoxes = [] as FinalBoxConfiguration[]
     switch (packingConfiguration) {
       case 'single':
-        for (const poId in singleSkuPackages) {
-          for (const sku in singleSkuPackages[poId]) {
-            const item = singleSkuPackages[poId][sku]
-            for (const box of item.boxes) {
-              const { qtyOfBoxes, unitsPerBox } = box
+        for (const sku in singleSkuPackages) {
+          const item = singleSkuPackages[sku]
+          for (const box of item.boxes) {
+            const { qtyOfBoxes, unitsPerBox } = box
 
-              for (let i = 0; i < qtyOfBoxes; i++) {
-                finalBoxes.push({
-                  items: [
-                    {
-                      poId,
-                      sku,
-                      quantity: unitsPerBox,
-                      inventoryId: item.inventoryId,
-                      receiving: item.receiving,
-                      name: item.name,
-                      image: item.image,
-                      boxQty: item.boxQty,
-                      poNumber: item.poNumber,
-                      orderNumber: receivingOrderNumber,
-                    },
-                  ],
-                })
-              }
+            for (let i = 0; i < qtyOfBoxes; i++) {
+              finalBoxes.push({
+                items: [
+                  {
+                    sku,
+                    quantity: unitsPerBox,
+                    inventoryId: item.inventoryId,
+                    receiving: item.receiving,
+                    name: item.name,
+                    image: item.image,
+                    boxQty: item.boxQty,
+                    orderNumber: receivingOrderNumber,
+                  },
+                ],
+              })
             }
           }
         }
@@ -319,8 +280,6 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
             name: item.name,
             image: item.image,
             boxQty: item.boxQty,
-            poNumber: item.poNumber,
-            poId: item.poId,
             orderNumber: receivingOrderNumber,
           }))
           finalBoxes.push({
@@ -332,10 +291,9 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
         const allItems = []
 
         for (const item of receivingItems) {
-          const { sku, boxQty, quantity, poNumber, image, inventoryId, name, poId } = item
+          const { sku, boxQty, quantity, image, inventoryId, name } = item
 
           allItems.push({
-            poId: poId!.toString(),
             sku,
             quantity: quantity,
             inventoryId: inventoryId!,
@@ -343,7 +301,6 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
             name: name,
             image: image!,
             boxQty: boxQty!,
-            poNumber: poNumber!,
             orderNumber: receivingOrderNumber,
           })
         }
@@ -353,33 +310,29 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
         })
         return finalBoxes
       default:
-        for (const poId in singleSkuPackages) {
-          for (const sku in singleSkuPackages[poId]) {
-            const item = singleSkuPackages[poId][sku]
-            for (const box of item.boxes) {
-              const { qtyOfBoxes, unitsPerBox } = box
-
-              for (let i = 0; i < qtyOfBoxes; i++) {
-                finalBoxes.push({
-                  items: [
-                    {
-                      poId,
-                      sku,
-                      quantity: unitsPerBox,
-                      inventoryId: item.inventoryId,
-                      receiving: item.receiving,
-                      name: item.name,
-                      image: item.image,
-                      boxQty: item.boxQty,
-                      poNumber: item.poNumber,
-                      orderNumber: receivingOrderNumber,
-                    },
-                  ],
-                })
-              }
+        for (const sku in singleSkuPackages) {
+          const item = singleSkuPackages[sku]
+          for (const box of item.boxes) {
+            const { qtyOfBoxes, unitsPerBox } = box
+            const items = []
+            for (let i = 0; i < qtyOfBoxes; i++) {
+              items.push({
+                sku,
+                quantity: unitsPerBox,
+                inventoryId: item.inventoryId,
+                receiving: item.receiving,
+                name: item.name,
+                image: item.image,
+                boxQty: item.boxQty,
+                orderNumber: receivingOrderNumber,
+              })
             }
+            finalBoxes.push({
+              items,
+            })
           }
         }
+
         return finalBoxes
     }
   }, [packingConfiguration, receivingOrderNumber, singleSkuPackages, multiSkuPackages, receivingItems])
@@ -388,15 +341,15 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
     switch (packingConfiguration) {
       case 'single':
         for (const item of receivingItems) {
-          const { sku, quantity, orderNumber, poId } = item
-          const singleSku = singleSkuPackages[poId!]?.[sku]
+          const { sku, quantity } = item
+          const singleSku = singleSkuPackages[sku]
           const totalUnitsBoxed = singleSku?.boxes.reduce((acc, box) => acc + box.qtyOfBoxes * box.unitsPerBox, 0) || 0
           if (totalUnitsBoxed !== quantity) {
-            return { error: true, message: `Total units boxed for SKU ${sku} in PO ${orderNumber} does not match receiving quantity.` }
+            return { error: true, message: `Total units boxed for SKU ${sku} does not match receiving quantity.` }
           }
           for (const box of singleSku.boxes) {
             if (box.unitsPerBox <= 0 || box.qtyOfBoxes <= 0) {
-              return { error: true, message: `Invalid box configuration for SKU ${sku} in PO ${orderNumber}.` }
+              return { error: true, message: `Invalid box configuration for SKU ${sku}.` }
             }
           }
         }
@@ -421,15 +374,15 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
         }
 
         for (const item of receivingItems) {
-          const { sku, quantity, orderNumber, poId } = item
-          const multiSkuBoxes = multiSkuPackages.filter((box) => box[sku] && box[sku].poId === poId!.toString())
-          const totalUnitsBoxed = multiSkuBoxes.reduce((acc, box) => acc + box[sku].quantity, 0)
+          const { sku, quantity } = item
+          const ManualMultiSkuBoxes = multiSkuPackages.filter((box) => box[sku])
+          const totalUnitsBoxed = ManualMultiSkuBoxes.reduce((acc, box) => acc + box[sku].quantity, 0)
           if (totalUnitsBoxed !== quantity) {
-            return { error: true, message: `Total units boxed for SKU ${sku} in PO ${orderNumber} does not match receiving quantity.` }
+            return { error: true, message: `Total units boxed for SKU ${sku} does not match receiving quantity.` }
           }
-          for (const box of multiSkuBoxes) {
+          for (const box of ManualMultiSkuBoxes) {
             if (box[sku].quantity <= 0) {
-              return { error: true, message: `Invalid box configuration for SKU ${sku} in PO ${orderNumber}.` }
+              return { error: true, message: `Invalid box configuration for SKU ${sku}.` }
             }
           }
         }

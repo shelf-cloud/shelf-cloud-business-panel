@@ -30,7 +30,7 @@ type Props = {
 
 const EditReceivingModal = ({ editReceiving, seteditReceiving, mutateReceivings }: Props) => {
   const { show, order } = editReceiving
-  const { warehouseName, orderNumber, orderItems, isShipjoyCreated, id3PL, boxes } = order
+  const { warehouseName, orderNumber, orderItems, isShipjoyCreated, id3PL, boxes, isReceivingFromPo } = order
   const { state } = useContext(AppContext)
   const { warehouses } = useWarehouses()
   const [loading, setloading] = useState(false)
@@ -58,7 +58,7 @@ const EditReceivingModal = ({ editReceiving, seteditReceiving, mutateReceivings 
 
   const handleDeleteItem = (poId: number, sku: string, quantity: number, inventoryId: number, splitId: number | undefined) => {
     setdeletedSku((prev) => [...prev, { poId, sku, inventoryId, splitId, quantity }])
-    const newOrderItems = orderItems.filter((item) => item.poId! !== poId || item.sku !== sku)
+    const newOrderItems = orderItems.filter((item) => (isReceivingFromPo ? item.poId! !== poId || item.sku !== sku : item.inventoryId !== inventoryId))
     seteditReceiving({
       ...editReceiving,
       order: {
@@ -104,6 +104,7 @@ const EditReceivingModal = ({ editReceiving, seteditReceiving, mutateReceivings 
             warehouse={warehouses?.find((w) => w.warehouseId === order.warehouseId)!}
             boxes={packingConfiguration !== 'current' ? finalBoxesConfiguration : boxes || []}
             orderBarcode={order.id3PL}
+            isManualReceiving={!isReceivingFromPo}
           />,
           order.orderNumber
         )
@@ -115,6 +116,7 @@ const EditReceivingModal = ({ editReceiving, seteditReceiving, mutateReceivings 
             warehouse={warehouses?.find((w) => w.warehouseId === order.warehouseId)!}
             boxes={packingConfiguration !== 'current' ? finalBoxesConfiguration : boxes || []}
             orderBarcode={order.orderNumber}
+            isManualReceiving={!isReceivingFromPo}
           />,
           order.orderNumber
         )
@@ -193,7 +195,9 @@ const EditReceivingModal = ({ editReceiving, seteditReceiving, mutateReceivings 
         </Nav>
 
         <TabContent activeTab={activeTab} className='pt-2 mb-3'>
-          <TabPane tabId='summary'>{activeTab == 'summary' && <Edit_Receiving_Summary_Tab orderItems={orderItems} handleDeleteItem={handleDeleteItem} />}</TabPane>
+          <TabPane tabId='summary'>
+            {activeTab == 'summary' && <Edit_Receiving_Summary_Tab orderItems={orderItems} handleDeleteItem={handleDeleteItem} isReceivingFromPo={isReceivingFromPo!} />}
+          </TabPane>
           <TabPane tabId='packages'>
             {activeTab == 'packages' && (
               <Edit_Receiving_Packages_Tab
@@ -214,6 +218,7 @@ const EditReceivingModal = ({ editReceiving, seteditReceiving, mutateReceivings 
                 removeSkuFromMultiSkuBox={removeSkuFromMultiSkuBox}
                 setMixedSkuBoxesUsingMasterBoxes={setMixedSkuBoxesUsingMasterBoxes}
                 clearMultiSkuBoxes={clearMultiSkuBoxes}
+                isReceivingFromPo={isReceivingFromPo!}
               />
             )}
           </TabPane>

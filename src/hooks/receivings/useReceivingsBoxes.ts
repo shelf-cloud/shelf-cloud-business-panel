@@ -4,7 +4,7 @@ import AppContext from '@context/AppContext'
 
 export type FinalBoxConfiguration = {
   items: {
-    poId: string
+    poId?: string
     sku: string
     quantity: number
     inventoryId: number
@@ -12,7 +12,7 @@ export type FinalBoxConfiguration = {
     name: string
     image: string
     boxQty: number
-    poNumber: string
+    poNumber?: string
     orderNumber: string
   }[]
 }

@@ -10,14 +10,22 @@ type Props = {
   removeSingleSkuBoxConfiguration: (poId: string, sku: string, index: number) => void
   changeUnitsPerBox: (poId: string, sku: string, index: number, value: number) => void
   changeQtyOfBoxes: (poId: string, sku: string, index: number, value: number) => void
+  isReceivingFromPo: boolean
 }
 
-const Edit_Receiving_Boxes_Single = ({ singleSkuPackages, addNewSingleSkuBoxConfiguration, removeSingleSkuBoxConfiguration, changeUnitsPerBox, changeQtyOfBoxes }: Props) => {
+const Edit_Receiving_Boxes_Single = ({
+  singleSkuPackages,
+  addNewSingleSkuBoxConfiguration,
+  removeSingleSkuBoxConfiguration,
+  changeUnitsPerBox,
+  changeQtyOfBoxes,
+  isReceivingFromPo,
+}: Props) => {
   return (
     <div className='overflow-auto'>
       <table className='table table-sm align-middle table-responsive table-striped fs-7'>
         <thead className='table-light'>
-          <tr>
+          <tr key='edit-receiving-boxes-single-header'>
             <th scope='col'>Title / SKU</th>
             <th scope='col' className='text-start'>
               Quantity
@@ -60,7 +68,7 @@ const Edit_Receiving_Boxes_Single = ({ singleSkuPackages, addNewSingleSkuBoxConf
                         <div className='text-start'>
                           <p className='text-nowrap m-0 fw-semibold'>{sku}</p>
                           <p className='text-nowrap m-0'>{item.name}</p>
-                          <p className='text-nowrap m-0 text-muted'>PO: {item.poNumber}</p>
+                          {isReceivingFromPo && <p className='text-nowrap m-0 text-muted'>PO: {item.poNumber}</p>}
                         </div>
                       </div>
                     </td>

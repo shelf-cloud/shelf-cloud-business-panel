@@ -1,28 +1,29 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useContext, useMemo } from 'react'
-import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
-import { Product } from '@typings'
-import axios from 'axios'
 import Head from 'next/head'
-import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from 'reactstrap'
-import BreadCrumb from '@components/Common/BreadCrumb'
-import { getSession } from '@auth/client'
-import useSWR, { useSWRConfig } from 'swr'
-import ProductsTable from '@components/ProductsTable'
-import InventoryBinsModal from '@components/InventoryBinsModal'
 // import { CSVLink } from 'react-csv'
 import Link from 'next/link'
-import ExportProductsTemplate from '@components/products/ExportProductsTemplate'
-import { DebounceInput } from 'react-debounce-input'
-import FilterProducts from '@components/ui/FilterProducts'
 import { useRouter } from 'next/router'
-import ExportBlankTemplate from '@components/products/ExportBlankTemplate'
-import ImportProductsFileModal from '@components/modals/products/ImportProductsFileModal'
-import ExportProductsFile from '@components/products/ExportProductsFile'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
+
+import { getSession } from '@auth/client'
+import BreadCrumb from '@components/Common/BreadCrumb'
+import InventoryBinsModal from '@components/InventoryBinsModal'
+import ProductsTable from '@components/ProductsTable'
 import CloneProductModal from '@components/modals/products/CloneProductModal'
+import ImportProductsFileModal from '@components/modals/products/ImportProductsFileModal'
+import ExportBlankTemplate from '@components/products/ExportBlankTemplate'
+import ExportProductsFile from '@components/products/ExportProductsFile'
+import ExportProductsTemplate from '@components/products/ExportProductsTemplate'
 import ProductsWidgets from '@components/products/ProductsWidgets'
+import FilterProducts from '@components/ui/FilterProducts'
+import AppContext from '@context/AppContext'
+import { Product } from '@typings'
+import axios from 'axios'
+import { DebounceInput } from 'react-debounce-input'
+import { toast } from 'react-toastify'
+import { Button, Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from 'reactstrap'
+import useSWR, { useSWRConfig } from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -117,11 +118,11 @@ const Products = ({ session }: Props) => {
     }
   }, [allData, searchValue, brand, supplier, category, condition])
 
-  const changeProductState = async (inventoryId: number, businessId: number, sku: string) => {
+  const changeProductState = async (inventoryId: number, sku: string) => {
     const confirmationResponse = confirm(`Are you sure you want to set Inactive: ${sku}`)
 
     if (confirmationResponse) {
-      const response = await axios.post(`/api/setStateToProduct?region=${state.currentRegion}&businessId=${businessId}&inventoryId=${inventoryId}`, {
+      const response = await axios.post(`/api/setStateToProduct?region=${state.currentRegion}&businessId=${state.user.businessId}&inventoryId=${inventoryId}`, {
         newState: 0,
         sku,
       })
@@ -178,7 +179,16 @@ const Products = ({ session }: Props) => {
               <Col lg={12}>
                 <Row className='d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-2 flex-md-row justify-content-md-between align-items-md-center'>
                   <div className='w-auto d-flex flex-row align-items-center justify-content-between gap-2'>
-                    <FilterProducts brands={data?.brands} suppliers={data?.suppliers} categories={data?.categories} brand={brand} supplier={supplier} category={category} condition={condition} activeTab={true} />
+                    <FilterProducts
+                      brands={data?.brands}
+                      suppliers={data?.suppliers}
+                      categories={data?.categories}
+                      brand={brand}
+                      supplier={supplier}
+                      category={category}
+                      condition={condition}
+                      activeTab={true}
+                    />
                     <Link href={'/AddProduct'}>
                       <Button color='primary' size='sm' className='fs-7 text-nowrap'>
                         <i className='mdi mdi-plus-circle label-icon align-middle fs-5 me-2' />
@@ -284,7 +294,15 @@ const Products = ({ session }: Props) => {
         </div>
       </React.Fragment>
       {state.showInventoryBinsModal && <InventoryBinsModal />}
-      {importModalDetails.show && <ImportProductsFileModal importModalDetails={importModalDetails} setimportModalDetails={setimportModalDetails} brands={data?.brands} suppliers={data?.suppliers} categories={data?.categories} />}
+      {importModalDetails.show && (
+        <ImportProductsFileModal
+          importModalDetails={importModalDetails}
+          setimportModalDetails={setimportModalDetails}
+          brands={data?.brands}
+          suppliers={data?.suppliers}
+          categories={data?.categories}
+        />
+      )}
       {cloneProductModal.isOpen && <CloneProductModal cloneProductModal={cloneProductModal} setcloneProductModal={setcloneProductModal} />}
     </div>
   )

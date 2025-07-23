@@ -3,26 +3,26 @@ import { useState } from 'react'
 import { SelectSingleValueType } from '@components/Common/SimpleSelect'
 import SelectSingleFilter from '@components/ui/filters/SelectSingleFilter'
 import InputNumberForm from '@components/ui/forms/InputNumberForm'
-import { AddSKUToMultiSKUBoxType, MultiSkuBoxes } from '@hooks/receivings/useReceivingsBoxes'
+import { ManualAddSKUToMultiSKUBoxType, ManualMultiSkuBoxes } from '@hooks/receivings/useCreateManualReceivingsBoxes'
+import { ReceivingInventory } from '@hooks/receivings/useReceivingInventory'
 import { NoImageAdress } from '@lib/assetsConstants'
-import { ShipmentOrderItem } from '@typings'
+import { sortStringsLocaleCompare } from '@lib/helperFunctions'
 import { Badge, Button, Col, Collapse, Label, Row } from 'reactstrap'
 
 /* eslint-disable @next/next/no-img-element */
 type Props = {
-  orderItems: ShipmentOrderItem[]
-  multiSkuPackages: MultiSkuBoxes[]
+  orderProducts: ReceivingInventory[]
+  multiSkuPackages: ManualMultiSkuBoxes[]
   addNewMultiSkuBoxConfiguration: () => void
   removeMultiSkuBoxConfiguration: (index: number) => void
-  addSkuToMultiSkuBox: (info: AddSKUToMultiSKUBoxType) => void
+  addSkuToMultiSkuBox: (info: ManualAddSKUToMultiSKUBoxType) => void
   removeSkuFromMultiSkuBox: (index: number, sku: string) => void
   setMixedSkuBoxesUsingMasterBoxes: () => void
   clearMultiSkuBoxes: () => void
-  isReceivingFromPo: boolean
 }
 
-const Edit_Receiving_Boxes_Multi = ({
-  orderItems,
+const Create_Manual_Receiving_Boxes_Multi = ({
+  orderProducts,
   multiSkuPackages,
   setMixedSkuBoxesUsingMasterBoxes,
   addNewMultiSkuBoxConfiguration,
@@ -30,26 +30,23 @@ const Edit_Receiving_Boxes_Multi = ({
   addSkuToMultiSkuBox,
   removeSkuFromMultiSkuBox,
   clearMultiSkuBoxes,
-  isReceivingFromPo,
 }: Props) => {
   const [allCollapse, setallCollapse] = useState(false)
   const [addSkuToBox, setaddSkuToBox] = useState({
     boxIndex: -1,
-    poId: '',
     sku: '',
     quantity: 0,
     receiving: 0,
     name: '',
     inventoryId: 0,
     image: '',
-    poNumber: '',
     boxQty: 0,
   })
   const [errorAddingSKU, seterrorAddingSKU] = useState<string | null>(null)
 
   const handleAddSkuToBox = () => {
     seterrorAddingSKU(null)
-    const { boxIndex, sku, quantity, name, inventoryId, image, receiving, poId, poNumber, boxQty } = addSkuToBox
+    const { boxIndex, sku, quantity, name, inventoryId, image, receiving, boxQty } = addSkuToBox
     if (boxIndex < 0 || !sku) {
       seterrorAddingSKU('Please select an SKU and a box.')
       return
@@ -60,17 +57,15 @@ const Edit_Receiving_Boxes_Multi = ({
       return
     }
 
-    addSkuToMultiSkuBox({ boxIndex, sku, quantity, name, inventoryId, image, receiving, poId, poNumber, boxQty })
+    addSkuToMultiSkuBox({ boxIndex, sku, quantity, name, inventoryId, image, receiving, boxQty })
     setaddSkuToBox({
       boxIndex: -1,
-      poId: '',
       sku: '',
       quantity: 0,
       receiving: 0,
       name: '',
       inventoryId: 0,
       image: '',
-      poNumber: '',
       boxQty: 0,
     })
   }
@@ -95,8 +90,8 @@ const Edit_Receiving_Boxes_Multi = ({
           </Button>
         </div>
         <div className='fs-7 d-flex flex-column gap-2 py-2'>
-          {orderItems
-            .sort((itemA, itemB) => (isReceivingFromPo ? itemA.poNumber!.localeCompare(itemB.poNumber!) : itemA.sku.localeCompare(itemB.sku)))
+          {orderProducts
+            .sort((itemA, itemB) => sortStringsLocaleCompare(itemA.sku, itemB.sku))
             .map((item) => {
               const alreadyBoxed = multiSkuPackages.reduce((acc, box) => {
                 if (!box[item.sku]) return acc
@@ -105,7 +100,7 @@ const Edit_Receiving_Boxes_Multi = ({
 
               const pendingToBoxed = item.quantity - alreadyBoxed
               return (
-                <div key={`${item.poId}-${item.inventoryId}`} className='d-flex flex-row justify-content-between align-items-center gap-3 border rounded py-2 px-2'>
+                <div key={`${item.inventoryId}`} className='d-flex flex-row justify-content-between align-items-center gap-3 border rounded py-2 px-2'>
                   <div className='text-center'>
                     <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
                       <div
@@ -125,8 +120,7 @@ const Edit_Receiving_Boxes_Multi = ({
                       </div>
                       <div className='text-start'>
                         <p className='text-nowrap m-0 fw-semibold'>{item.sku}</p>
-                        {isReceivingFromPo && <p className='text-nowrap m-0 text-muted'>PO: {item.poNumber}</p>}
-                        <p className='text-nowrap m-0'>Receiving: {item.quantity}</p>
+                        <p className='text-nowrap m-0 fw-normal'>{item.name}</p>
                       </div>
                     </div>
                   </div>
@@ -153,17 +147,13 @@ const Edit_Receiving_Boxes_Multi = ({
                 inputName='select-sku-add-multi-sku'
                 placeholder='Choose SKU'
                 selected={(() => {
-                  const item = orderItems.find((item) =>
-                    isReceivingFromPo ? item.inventoryId == addSkuToBox.inventoryId && item.poId! == parseInt(addSkuToBox.poId) : item.inventoryId == addSkuToBox.inventoryId
-                  )!
-                  return item
-                    ? { value: item.inventoryId!, label: item.sku, description: isReceivingFromPo ? `PO: ${item.poNumber} // ${addSkuToBox.poId}` : item.name }
-                    : { value: '', label: 'Choose SKU...' }
+                  const item = orderProducts.find((item) => item.inventoryId === addSkuToBox.inventoryId)
+                  return item ? { value: item.inventoryId, label: item.sku, description: item.name } : { value: '', label: 'Choose SKU...' }
                 })()}
                 options={(() => {
                   const skuList = [] as any[]
-                  orderItems
-                    .sort((itemA, itemB) => (isReceivingFromPo ? itemA.poNumber!.localeCompare(itemB.poNumber!) : itemA.sku.localeCompare(itemB.sku)))
+                  orderProducts
+                    .sort((itemA, itemB) => sortStringsLocaleCompare(itemA.sku, itemB.sku))
                     .forEach((item) => {
                       const alreadyBoxed = multiSkuPackages.reduce((acc, box) => {
                         if (!box[item.sku]) return acc
@@ -174,27 +164,22 @@ const Edit_Receiving_Boxes_Multi = ({
                       skuList.push({
                         value: item.inventoryId,
                         label: item.sku,
-                        description: isReceivingFromPo ? `PO: ${item.poNumber} // ${item.poId}` : item.name,
+                        description: item.name,
                       })
                     })
 
                   return skuList
                 })()}
                 handleSelect={(option: SelectSingleValueType) => {
-                  const poId = option?.description?.split(' // ')[1]
-                  const item = orderItems.find((item) =>
-                    isReceivingFromPo ? item.inventoryId == option!.value && item.poId! == parseInt(poId!) : item.inventoryId == option!.value
-                  )!
+                  const item = orderProducts.find((item) => item.inventoryId === option?.value)!
                   setaddSkuToBox((prev) => ({
                     ...prev,
-                    poId: poId!,
                     sku: item.sku,
-                    name: item.title || item.name,
+                    name: item.title,
                     receiving: item.quantity,
-                    inventoryId: item.inventoryId!,
+                    inventoryId: item.inventoryId,
                     image: item.image!,
-                    poNumber: item.poNumber!,
-                    boxQty: item.boxQty!,
+                    boxQty: item.boxQty,
                   }))
                 }}
               />
@@ -234,7 +219,6 @@ const Edit_Receiving_Boxes_Multi = ({
                 value={addSkuToBox.quantity}
                 isInvalid={false}
                 placeholder='Quantity'
-                onFocus={(e: React.FocusEvent<HTMLInputElement>) => e.target.select()}
                 handleChange={(e: React.ChangeEvent<HTMLInputElement>) => setaddSkuToBox((prev) => ({ ...prev, quantity: Number(e.target.value) }))}
                 handleBlur={() => {}}
               />
@@ -309,4 +293,4 @@ const Edit_Receiving_Boxes_Multi = ({
   )
 }
 
-export default Edit_Receiving_Boxes_Multi
+export default Create_Manual_Receiving_Boxes_Multi

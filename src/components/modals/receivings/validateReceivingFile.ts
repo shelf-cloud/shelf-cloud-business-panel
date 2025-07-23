@@ -1,6 +1,6 @@
 import * as Yup from 'yup'
 
-const RECEIVING_FILE_HEADERS = ['Sku', 'Quantity to Receive']
+const RECEIVING_FILE_HEADERS = ['Sku', 'Receiving Quantity']
 
 const RECEIVING_FILE_HEADERS_LENGTH = 2
 
@@ -16,12 +16,12 @@ export const validateReceivingFile = async (resultValues: any, validSkuList: str
 
   const headerRow = resultValues[0] as any
   if (headerRow.length !== RECEIVING_FILE_HEADERS_LENGTH) {
-    errorsList.push({ errorLine: 0, errorMessage: 'Columns not matching file type.', value: 'Missing Columns' })
+    errorsList.push({ errorLine: 0, errorMessage: 'Columns not matching file template.', value: 'Missing Columns' })
     return errorsList
   }
 
   if (headerRow.join(',') !== RECEIVING_FILE_HEADERS.join(',')) {
-    errorsList.push({ errorLine: 0, errorMessage: 'Columns not matching file type.', value: 'Invalid Columns' })
+    errorsList.push({ errorLine: 0, errorMessage: 'Columns not matching file template.', value: 'Invalid Columns' })
     return errorsList
   }
 

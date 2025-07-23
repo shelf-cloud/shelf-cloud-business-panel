@@ -1,21 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useContext, useMemo } from 'react'
-import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
+
+import { getSession } from '@auth/client'
+import BreadCrumb from '@components/Common/BreadCrumb'
+import EditProductModal from '@components/EditProductModal'
+import InventoryBinsModal from '@components/InventoryBinsModal'
+import ProductsTable from '@components/ProductsTable'
+import FilterProducts from '@components/ui/FilterProducts'
+import AppContext from '@context/AppContext'
 import { Product } from '@typings'
 import axios from 'axios'
-import Head from 'next/head'
+import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
 import { Card, CardBody, CardHeader, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from 'reactstrap'
-import BreadCrumb from '@components/Common/BreadCrumb'
-import { getSession } from '@auth/client'
 import useSWR, { useSWRConfig } from 'swr'
-import ProductsTable from '@components/ProductsTable'
-import InventoryBinsModal from '@components/InventoryBinsModal'
-import EditProductModal from '@components/EditProductModal'
-import { useRouter } from 'next/router'
-import { DebounceInput } from 'react-debounce-input'
-import FilterProducts from '@components/ui/FilterProducts'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -102,11 +103,11 @@ const InactiveProducts = ({ session }: Props) => {
     }
   }, [allData, searchValue, brand, supplier, category, condition])
 
-  const changeProductState = async (inventoryId: number, businessId: number, sku: string) => {
+  const changeProductState = async (inventoryId: number, sku: string) => {
     const confirmationResponse = confirm(`Are you sure you want to set Active: ${sku}`)
 
     if (confirmationResponse) {
-      const response = await axios.post(`/api/setStateToProduct?region=${state.currentRegion}&businessId=${businessId}&inventoryId=${inventoryId}`, {
+      const response = await axios.post(`/api/setStateToProduct?region=${state.currentRegion}&businessId=${state.user.businessId}&inventoryId=${inventoryId}`, {
         newState: 1,
         sku,
       })
@@ -161,7 +162,16 @@ const InactiveProducts = ({ session }: Props) => {
                     <Col lg={12}>
                       <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-3 flex-md-row justify-content-md-between align-items-md-center'>
                         <div className='w-auto d-flex flex-row align-items-center justify-content-between gap-3'>
-                          <FilterProducts brands={data?.brands} suppliers={data?.suppliers} categories={data?.categories} brand={brand} supplier={supplier} category={category} condition={condition} activeTab={false} />
+                          <FilterProducts
+                            brands={data?.brands}
+                            suppliers={data?.suppliers}
+                            categories={data?.categories}
+                            brand={brand}
+                            supplier={supplier}
+                            category={category}
+                            condition={condition}
+                            activeTab={false}
+                          />
                           {selectedRows.length > 0 && (
                             <UncontrolledButtonDropdown>
                               <DropdownToggle className='btn btn-info fs-6 py-2' caret>
@@ -194,7 +204,10 @@ const InactiveProducts = ({ session }: Props) => {
                                 onChange={(e) => setSearchValue(e.target.value)}
                               />
                               <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
-                              <span className='d-flex align-items-center justify-content-center input_background_white' style={{ cursor: 'pointer' }} onClick={() => setSearchValue('')}>
+                              <span
+                                className='d-flex align-items-center justify-content-center input_background_white'
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => setSearchValue('')}>
                                 <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
                               </span>
                             </div>

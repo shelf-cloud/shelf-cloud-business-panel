@@ -27,7 +27,7 @@ type Props = {
 }
 
 const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setError, setHasQtyError, setSelectedRows, toggledClearRows, setinboundFBAHistoryModal }: Props) => {
-  const { state, setModalProductInfo }: any = useContext(AppContext)
+  const { state, setModalProductInfo } = useContext(AppContext)
   const [skusWithError, setSkusWithError] = useState<{ [key: string]: boolean }>({})
 
   useEffect(() => {
@@ -558,7 +558,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
               className='btn btn-ghost-info fs-7'
               id={`reservedMasterQty${CleanSpecialCharacters(cell.sku)}`}
               onClick={() => {
-                setModalProductInfo(cell.inventoryId, state.user.businessId, cell.sku)
+                setModalProductInfo(cell.inventoryId, cell.sku)
               }}>
               {FormatIntNumber(state.currentRegion, cell.quantity < 0 ? 0 : cell.quantity)}
             </Button>

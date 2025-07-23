@@ -1,9 +1,8 @@
-import React from 'react'
 import ExcelJS from 'exceljs'
 
 const COLUMNS = [
   { key: 'sku', header: 'Sku', width: 12 },
-  { key: 'quantity', header: 'Quantity to Receive', width: 20 },
+  { key: 'quantity', header: 'Receiving Quantity', width: 20 },
 ]
 
 const blankProducts = Array(50).fill({

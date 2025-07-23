@@ -1,13 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { wholesaleProductRow } from '@typings'
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+
 import AppContext from '@context/AppContext'
-import { Button, FormFeedback, UncontrolledTooltip } from 'reactstrap'
-import DataTable from 'react-data-table-component'
-import { DebounceInput } from 'react-debounce-input'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { NoImageAdress } from '@lib/assetsConstants'
+import { wholesaleProductRow } from '@typings'
+import DataTable from 'react-data-table-component'
+import { DebounceInput } from 'react-debounce-input'
+import { Button, FormFeedback, UncontrolledTooltip } from 'reactstrap'
 
 type Props = {
   allData: wholesaleProductRow[]
@@ -19,7 +20,7 @@ type Props = {
 }
 
 const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError, setHasQtyError }: Props) => {
-  const { state, setModalProductInfo }: any = useContext(AppContext)
+  const { setModalProductInfo } = useContext(AppContext)
   const [skusWithError, setSkusWithError] = useState<{ [key: string]: boolean }>({})
 
   useEffect(() => {
@@ -190,11 +191,7 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError,
             }}>
             <img
               loading='lazy'
-              src={
-                row.image
-                  ? row.image
-                  : NoImageAdress
-              }
+              src={row.image ? row.image : NoImageAdress}
               alt='product Image'
               style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
             />
@@ -296,7 +293,7 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError,
                 className='btn btn-ghost-info'
                 id={`reservedMasterQty${CleanSpecialCharacters(cell.sku)}`}
                 onClick={() => {
-                  setModalProductInfo(cell.quantity.inventoryId, state.user.businessId, cell.quantity.sku)
+                  setModalProductInfo(cell.quantity.inventoryId, cell.quantity.sku)
                 }}>
                 {cell.quantity.quantity}
               </Button>

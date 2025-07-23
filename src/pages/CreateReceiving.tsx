@@ -1,20 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useContext, useMemo } from 'react'
-import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
-import { WholesaleProduct, wholesaleProductRow } from '@typings'
-import axios from 'axios'
 import Head from 'next/head'
-import { Button, Card, CardBody, CardHeader, Col, Container, Row } from 'reactstrap'
-import BreadCrumb from '@components/Common/BreadCrumb'
+import React, { useContext, useMemo, useState } from 'react'
+
 import { getSession } from '@auth/client'
-import useSWR from 'swr'
+import BreadCrumb from '@components/Common/BreadCrumb'
 import InventoryBinsModal from '@components/InventoryBinsModal'
 import ReceivingOrderTable from '@components/ReceivingOrderTable'
 import ReceivingOrderModal from '@components/modals/receivings/ReceivingOrderModal'
-import { toast } from 'react-toastify'
-import { DebounceInput } from 'react-debounce-input'
 import ReceivingOrderModalUploading from '@components/modals/receivings/ReceivingOrderModalUploading'
+import AppContext from '@context/AppContext'
+import { useReceivingInventory } from '@hooks/receivings/useReceivingInventory'
+import { useWarehouses } from '@hooks/warehouses/useWarehouse'
+import { DebounceInput } from 'react-debounce-input'
+import { Button, Card, CardBody, CardHeader, Col, Container, Row } from 'reactstrap'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -41,61 +40,22 @@ type Props = {
   }
 }
 
-const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-
 const CreateWholeSaleOrder = ({ session }: Props) => {
   const { state, setWholeSaleOrderModal }: any = useContext(AppContext)
   const title = `Create Receiving Order | ${session?.user?.businessName}`
   const orderNumberStart = `${session?.user?.businessOrderStart.substring(0, 3).toUpperCase()}-`
-  const [pending, setPending] = useState(true)
-  const [allData, setAllData] = useState<wholesaleProductRow[]>([])
-  const [searchValue, setSearchValue] = useState<string>('')
+  useWarehouses()
 
+  const [searchValue, setSearchValue] = useState<string>('')
   const [receivingUploadingModal, setreceivingUploadingModal] = useState({
     show: false,
   })
 
-  const { data } = useSWR(state.user.businessId ? `/api/getReceivingInventory?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher, {
-    revalidateOnFocus: false,
-  })
+  const { filterReceivingInventory, receivingInventory, isLoading, handleOrderQty } = useReceivingInventory({ searchValue })
 
-  const filteredItems = useMemo(() => {
-    return allData.filter(
-      (item: wholesaleProductRow) =>
-        item?.title?.toLowerCase().includes(searchValue.toLowerCase()) || searchValue.split(' ').every((word) => item?.title?.toLowerCase().includes(word.toLowerCase())) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
-    )
-  }, [allData, searchValue])
-
-  useEffect(() => {
-    if (data?.error) {
-      setAllData([])
-      setPending(false)
-      toast.error(data?.message)
-    } else if (data) {
-      const list: wholesaleProductRow[] = []
-      data.forEach((product: WholesaleProduct) => {
-        const row = {
-          image: product.image,
-          title: product.title,
-          sku: product.sku,
-          quantity: {
-            quantity: product.quantity,
-            inventoryId: product.inventoryId,
-            businessId: product.businessId,
-            sku: product.sku,
-          },
-          orderQty: '',
-        }
-        list.push(row)
-      })
-      setAllData(list)
-      setPending(false)
-    }
-  }, [data])
-
-  const orderProducts = useMemo(() => {
-    return allData.filter((item: wholesaleProductRow) => Number(item?.orderQty) > 0)
-  }, [allData])
+  const receivingProducts = useMemo(() => {
+    return receivingInventory.filter((item) => Number(item?.quantity) > 0)
+  }, [receivingInventory])
 
   return (
     <div>
@@ -112,8 +72,10 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                   <CardHeader>
                     <div className='d-flex justify-content-between align-items-start'>
                       <div>
-                        <h3 className='fs-5 fw-semibold text-primary'>Total SKUs in Order: {orderProducts.length}</h3>
-                        <h5 className='fs-6 fw-normal text-primary'>Total Qty to Receive in Order: {orderProducts.reduce((total: number, item: wholesaleProductRow) => total + Number(item.orderQty), 0)}</h5>
+                        <h3 className='fs-5 fw-semibold text-primary'>Total SKUs in Order: {receivingProducts.length}</h3>
+                        <h5 className='fs-6 fw-normal text-primary'>
+                          Total Qty to Receive in Order: {receivingProducts.reduce((total: number, item) => total + item.quantity, 0)}
+                        </h5>
                       </div>
                       <div className='d-flex justify-content-end align-items-start gap-2'>
                         <Button className='fs-7 btn' color='info' onClick={() => setreceivingUploadingModal({ show: true })}>
@@ -152,7 +114,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                     </div>
                   </CardHeader>
                   <CardBody>
-                    <ReceivingOrderTable allData={allData} filteredItems={filteredItems} setAllData={setAllData} pending={pending} />
+                    <ReceivingOrderTable data={filterReceivingInventory} pending={isLoading} handleOrderQty={handleOrderQty} />
                   </CardBody>
                 </Card>
               </Col>
@@ -161,8 +123,15 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
         </div>
       </React.Fragment>
       {state.showInventoryBinsModal && <InventoryBinsModal />}
-      {state.showWholeSaleOrderModal && <ReceivingOrderModal orderNumberStart={orderNumberStart} orderProducts={orderProducts} />}
-      {receivingUploadingModal.show && <ReceivingOrderModalUploading orderNumberStart={orderNumberStart} skuList={allData} receivingUploadingModal={receivingUploadingModal} setreceivingUploadingModal={setreceivingUploadingModal} />}
+      {state.showWholeSaleOrderModal && <ReceivingOrderModal orderNumberStart={orderNumberStart} receivingProducts={receivingProducts} />}
+      {receivingUploadingModal.show && (
+        <ReceivingOrderModalUploading
+          orderNumberStart={orderNumberStart}
+          receivingInventory={receivingInventory}
+          receivingUploadingModal={receivingUploadingModal}
+          setreceivingUploadingModal={setreceivingUploadingModal}
+        />
+      )}
     </div>
   )
 }

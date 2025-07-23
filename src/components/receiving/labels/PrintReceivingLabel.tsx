@@ -182,9 +182,10 @@ type Props = {
   companyName: string
   prefix3PL: string
   orderBarcode: string
+  isManualReceiving?: boolean
 }
 
-const PrintReceivingLabel = ({ boxes, warehouse, companyName, prefix3PL, orderBarcode }: Props) => {
+const PrintReceivingLabel = ({ boxes, warehouse, companyName, prefix3PL, orderBarcode, isManualReceiving = false }: Props) => {
   return (
     <Document>
       {boxes.map((box, index) => {
@@ -199,6 +200,7 @@ const PrintReceivingLabel = ({ boxes, warehouse, companyName, prefix3PL, orderBa
               companyName={companyName}
               prefix3PL={prefix3PL}
               orderBarcode={orderBarcode}
+              isManualReceiving={isManualReceiving}
             />
           </Page>
         )

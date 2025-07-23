@@ -4,41 +4,35 @@ import Image from 'next/image'
 import MultiSkusPerBox from '@assets/images/multi-sku-per-box.png'
 import OneBoxAllSkus from '@assets/images/one-box-all-skus.png'
 import SingleSkuPerBox from '@assets/images/single-sku-per-box.png'
-import { AddSKUToMultiSKUBoxType, FinalBoxConfiguration, MultiSkuBoxes, SingleSkuBoxes } from '@hooks/receivings/useEditReceivingsBoxes'
-import { ShipmentOrderItem } from '@typings'
+import { ManualAddSKUToMultiSKUBoxType, ManualMultiSkuBoxes, ManualSingleSkuBoxes } from '@hooks/receivings/useCreateManualReceivingsBoxes'
+import { ReceivingInventory } from '@hooks/receivings/useReceivingInventory'
 import { Button, Col, Label, Row } from 'reactstrap'
 
-import Current_Box_Configuration from './Current_Box_Configuration'
-import Edit_Receiving_Boxes_Box from './Edit_Receiving_Boxes_Box'
-import Edit_Receiving_Boxes_Multi from './Edit_Receiving_Boxes_Multi'
-import Edit_Receiving_Boxes_Single from './Edit_Receiving_Boxes_Single'
+import Create_Manual_Receiving_Boxes_Box from './Create_Manual_Receiving_Boxes_Box'
+import Create_Manual_Receiving_Boxes_Multi from './Create_Manual_Receiving_Boxes_Multi'
+import Create_Manual_Receiving_Boxes_Single from './Create_Manual_Receiving_Boxes_Single'
 
 type Props = {
-  orderItems: ShipmentOrderItem[]
+  orderProducts: ReceivingInventory[]
   packingConfiguration: string
-  boxes: FinalBoxConfiguration[]
-  needsNewBoxConfiguration: boolean
   setPackingConfiguration: (field: string, value: string) => void
-  singleSkuPackages: SingleSkuBoxes
-  addNewSingleSkuBoxConfiguration: (poId: string, sku: string) => void
-  removeSingleSkuBoxConfiguration: (poId: string, sku: string, index: number) => void
-  changeUnitsPerBox: (poId: string, sku: string, index: number, value: number) => void
-  changeQtyOfBoxes: (poId: string, sku: string, index: number, value: number) => void
-  multiSkuPackages: MultiSkuBoxes[]
+  singleSkuPackages: ManualSingleSkuBoxes
+  addNewSingleSkuBoxConfiguration: (sku: string) => void
+  removeSingleSkuBoxConfiguration: (sku: string, index: number) => void
+  changeUnitsPerBox: (sku: string, index: number, value: number) => void
+  changeQtyOfBoxes: (sku: string, index: number, value: number) => void
+  multiSkuPackages: ManualMultiSkuBoxes[]
   addNewMultiSkuBoxConfiguration: () => void
   removeMultiSkuBoxConfiguration: (index: number) => void
-  addSkuToMultiSkuBox: (info: AddSKUToMultiSKUBoxType) => void
+  addSkuToMultiSkuBox: (info: ManualAddSKUToMultiSKUBoxType) => void
   removeSkuFromMultiSkuBox: (index: number, sku: string) => void
   setMixedSkuBoxesUsingMasterBoxes: () => void
   clearMultiSkuBoxes: () => void
-  isReceivingFromPo: boolean
 }
 
-const Edit_Receiving_Packages_Tab = ({
-  orderItems,
+const Create_Manual_Receiving_Packages_Tab = ({
+  orderProducts,
   packingConfiguration,
-  boxes,
-  needsNewBoxConfiguration,
   setPackingConfiguration,
   singleSkuPackages,
   addNewSingleSkuBoxConfiguration,
@@ -52,7 +46,6 @@ const Edit_Receiving_Packages_Tab = ({
   removeSkuFromMultiSkuBox,
   setMixedSkuBoxesUsingMasterBoxes,
   clearMultiSkuBoxes,
-  isReceivingFromPo,
 }: Props) => {
   return (
     <div>
@@ -61,17 +54,6 @@ const Edit_Receiving_Packages_Tab = ({
           *Select Box Distribution
         </Label>
         <Col xs={12} className='d-flex flex-row flex-wrap justify-content-start align-items-center gap-2'>
-          <Button
-            disabled={needsNewBoxConfiguration}
-            className='fs-7'
-            size='sm'
-            type='button'
-            color='primary'
-            outline={packingConfiguration !== 'current'}
-            onClick={() => setPackingConfiguration('packingConfiguration', 'current')}>
-            <Image src={MultiSkusPerBox} alt='Multi SKUs Per Box' width={30} height={30} className='me-2' />
-            Current Boxes
-          </Button>
           <Button
             className='fs-7'
             size='sm'
@@ -104,20 +86,18 @@ const Edit_Receiving_Packages_Tab = ({
           </Button>
         </Col>
       </Row>
-      {packingConfiguration === 'current' && <Current_Box_Configuration boxes={boxes || []} isReceivingFromPo={isReceivingFromPo} />}
       {packingConfiguration === 'single' && (
-        <Edit_Receiving_Boxes_Single
+        <Create_Manual_Receiving_Boxes_Single
           singleSkuPackages={singleSkuPackages}
           addNewSingleSkuBoxConfiguration={addNewSingleSkuBoxConfiguration}
           removeSingleSkuBoxConfiguration={removeSingleSkuBoxConfiguration}
           changeUnitsPerBox={changeUnitsPerBox}
           changeQtyOfBoxes={changeQtyOfBoxes}
-          isReceivingFromPo={isReceivingFromPo}
         />
       )}
       {packingConfiguration === 'multi' && (
-        <Edit_Receiving_Boxes_Multi
-          orderItems={orderItems}
+        <Create_Manual_Receiving_Boxes_Multi
+          orderProducts={orderProducts}
           multiSkuPackages={multiSkuPackages}
           addNewMultiSkuBoxConfiguration={addNewMultiSkuBoxConfiguration}
           removeMultiSkuBoxConfiguration={removeMultiSkuBoxConfiguration}
@@ -125,12 +105,11 @@ const Edit_Receiving_Packages_Tab = ({
           removeSkuFromMultiSkuBox={removeSkuFromMultiSkuBox}
           setMixedSkuBoxesUsingMasterBoxes={setMixedSkuBoxesUsingMasterBoxes}
           clearMultiSkuBoxes={clearMultiSkuBoxes}
-          isReceivingFromPo={isReceivingFromPo}
         />
       )}
-      {packingConfiguration === 'box' && <Edit_Receiving_Boxes_Box orderItems={orderItems} isReceivingFromPo={isReceivingFromPo} />}
+      {packingConfiguration === 'box' && <Create_Manual_Receiving_Boxes_Box orderProducts={orderProducts} />}
     </div>
   )
 }
 
-export default Edit_Receiving_Packages_Tab
+export default Create_Manual_Receiving_Packages_Tab

@@ -21,7 +21,7 @@ type CloneProductModal = {
 type Props = {
   tableData: Product[]
   pending: boolean
-  changeProductState: (inventoryId: number, businessId: number, sku: string) => {}
+  changeProductState: (inventoryId: number, sku: string) => {}
   setMsg: string
   icon: string
   activeText: string
@@ -31,7 +31,7 @@ type Props = {
 }
 
 const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, activeText, setSelectedRows, toggledClearRows, setcloneProductModal }: Props) => {
-  const { setModalProductInfo, state }: any = useContext(AppContext)
+  const { setModalProductInfo, state } = useContext(AppContext)
 
   const loadBarcode = (product: Product) => {
     var html = '<!DOCTYPE html><html><head>'
@@ -241,7 +241,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
               outline
               className='fs-7 btn btn-ghost-primary'
               onClick={() => {
-                setModalProductInfo(row.inventoryId, state.user.businessId, row.sku)
+                setModalProductInfo(row.inventoryId, row.sku)
               }}>
               {row.quantity}
             </Button>
@@ -274,22 +274,22 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
           <div className='fs-7' style={{ padding: '7px 0px' }}>
             <Row>
               <span>
-                Weight: {row.weight} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'lb' : 'kg')}
+                Weight: {row.weight} {state.currentRegion == 'us' ? 'lb' : 'kg'}
               </span>
             </Row>
             <Row>
               <span>
-                Length: {row.length} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
+                Length: {row.length} {state.currentRegion == 'us' ? 'in' : 'cm'}
               </span>
             </Row>
             <Row>
               <span>
-                Width: {row.width} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
+                Width: {row.width} {state.currentRegion == 'us' ? 'in' : 'cm'}
               </span>
             </Row>
             <Row>
               <span>
-                Height: {row.height} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
+                Height: {row.height} {state.currentRegion == 'us' ? 'in' : 'cm'}
               </span>
             </Row>
           </div>
@@ -306,22 +306,22 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
           <div className='fs-7' style={{ padding: '7px 5px 7px 0px' }}>
             <Row>
               <span>
-                Weight: {row.boxWeight} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'lb' : 'kg')}
+                Weight: {row.boxWeight} {state.currentRegion == 'us' ? 'lb' : 'kg'}
               </span>
             </Row>
             <Row>
               <span>
-                Length: {row.boxLength} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
+                Length: {row.boxLength} {state.currentRegion == 'us' ? 'in' : 'cm'}
               </span>
             </Row>
             <Row>
               <span>
-                Width: {row.boxWidth} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
+                Width: {row.boxWidth} {state.currentRegion == 'us' ? 'in' : 'cm'}
               </span>
             </Row>
             <Row>
               <span>
-                Height: {row.boxHeight} {state.currentRegion !== '' && (state.currentRegion == 'us' ? 'in' : 'cm')}
+                Height: {row.boxHeight} {state.currentRegion == 'us' ? 'in' : 'cm'}
               </span>
             </Row>
           </div>
@@ -373,7 +373,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
                 </DropdownItem>
               )}
               {(row.quantity == 0 || !row.activeState) && (
-                <DropdownItem className={'fs-7 ' + activeText} onClick={() => changeProductState(row.inventoryId, state.user.businessId, row.sku)}>
+                <DropdownItem className={'fs-7 ' + activeText} onClick={() => changeProductState(row.inventoryId, row.sku)}>
                   <i className={'fs-5 ' + icon}></i> {setMsg}
                 </DropdownItem>
               )}

@@ -95,7 +95,6 @@ export const initialState = {
   // MODAL - PRODUCT DETAILS
   modalProductInfo: {
     inventoryId: 0,
-    businessId: 0,
     sku: '',
   },
   showEditProductModal: false,
@@ -216,12 +215,11 @@ const useInitialState = () => {
     })
   }
 
-  const setModalProductInfo = (inventoryId: number, businessId: number, sku: string) => {
+  const setModalProductInfo = (inventoryId: number, sku: string) => {
     setState({
       ...state,
       modalProductInfo: {
         inventoryId,
-        businessId,
         sku,
       },
       showEditProductModal: false,
