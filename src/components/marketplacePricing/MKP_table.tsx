@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import { useContext } from 'react'
 
+import CopyTextToClipboard from '@components/ui/CopyTextToClipboard'
 import AppContext from '@context/AppContext'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
@@ -68,12 +69,15 @@ const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice,
       ),
       selector: (row: MKP_Product) => {
         return (
-          <Link href={`/product/${row.inventoryId}/${row.sku}`} target='_blank'>
-            <p className='m-0 fs-7 fw-semibold d-flex flex-row justify-content-start align-items-start'>{row.sku}</p>
-            <a>
-              <p className='fs-7 m-0 fw-semibold text-black'>{row.title}</p>
-            </a>
-          </Link>
+          <>
+            <div className='d-flex flex-row justify-content-start align-items-center'>
+              <Link href={`/product/${row.inventoryId}/${row.sku}`} target='_blank'>
+                <p className='m-0 fs-7 fw-semibold'>{row.sku}</p>
+              </Link>
+              <CopyTextToClipboard text={row.sku} label='SKU' />
+            </div>
+            <p className='fs-7 m-0 fw-semibold text-black'>{row.title}</p>
+          </>
         )
       },
       sortable: true,

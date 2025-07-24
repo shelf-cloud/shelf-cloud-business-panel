@@ -10,6 +10,7 @@ import DataTable from 'react-data-table-component'
 import { Button, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
 
 import TooltipComponent from './constants/Tooltip'
+import CopyTextToClipboard from './ui/CopyTextToClipboard'
 
 type CloneProductModal = {
   isOpen: boolean
@@ -164,8 +165,9 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
             <Link href={`/product/${row.inventoryId}/${row.sku}`}>
               <p className='fs-7 m-0 fw-semibold text-black'>{row.title}</p>
             </Link>
-            <p className='m-0 fs-7 d-flex flex-row justify-content-start align-items-start'>
-              {row.sku} {row.note != '' && <i className='ri-information-fill ms-2 fs-5 text-warning' id={`tooltip${row.inventoryId}`}></i>}
+            <p className='m-0 fs-7 d-flex flex-row justify-content-start align-items-center'>
+              {row.sku} <CopyTextToClipboard text={row.sku} label='SKU' />{' '}
+              {row.note != '' && <i className='ri-information-fill ms-2 fs-5 text-warning' id={`tooltip${row.inventoryId}`}></i>}
             </p>
             {row.note != '' && <TooltipComponent target={`tooltip${row.inventoryId}`} text={row.note} />}
           </>
@@ -189,17 +191,27 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       ),
       selector: (row: Product) => {
         return (
-          <div className='fs-7 d-flex flex-column justify-item-start gap-0'>
+          <div className='fs-7 d-flex flex-column justify-item-start gap-1'>
             {row.asin !== '' && (
-              <a className='m-0' href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank' rel='noopener noreferrer'>
-                {row.asin}
-              </a>
+              <div className='d-flex flex-row justify-content-start align-items-center'>
+                <a className='m-0' href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank' rel='noopener noreferrer'>
+                  {row.asin}
+                </a>
+                <CopyTextToClipboard text={row.asin} label='ASIN' />
+              </div>
             )}
-            {row.fnSku !== '' && <p className='m-0'>{row.fnSku}</p>}
+            {row.fnSku !== '' && (
+              <p className='m-0'>
+                {row.fnSku} <CopyTextToClipboard text={row.fnSku} label='FNSKU' />
+              </p>
+            )}
             {row.barcode !== '' && (
-              <a className='m-0 text-info' href='#' onClick={() => loadBarcode(row)}>
-                {row.barcode}
-              </a>
+              <div className='d-flex flex-row justify-content-start align-items-center'>
+                <a className='m-0 text-info' href='#' onClick={() => loadBarcode(row)}>
+                  {row.barcode}
+                </a>
+                <CopyTextToClipboard text={row.barcode} label='Barcode' />
+              </div>
             )}
           </div>
         )

@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import { useContext } from 'react'
 
+import CopyTextToClipboard from '@components/ui/CopyTextToClipboard'
 import AppContext from '@context/AppContext'
 import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
@@ -89,9 +90,12 @@ const MKP_table_ByMarketplace = ({
               />
             </div>
             <div className='w-100'>
-              <Link href={`/product/${row.inventoryId}/${row.sku}`}>
-                <p className='m-0 p-0 text-primary fw-semibold fs-7'>{row.sku}</p>
-              </Link>
+              <div className='d-flex flex-row justify-content-start align-items-center'>
+                <Link href={`/product/${row.inventoryId}/${row.sku}`}>
+                  <p className='m-0 p-0 text-primary fw-semibold fs-7'>{row.sku}</p>
+                </Link>
+                <CopyTextToClipboard text={row.sku} label='SKU' />
+              </div>
               <p className='m-0 p-0 text-black fw-semibold fs-7 text-wrap'>{row.title}</p>
               <span className='m-0 p-0 text-black fw-normal fs-7 d-flex flex-wrap justify-content-start align-items-center'>
                 {row.asin && (
