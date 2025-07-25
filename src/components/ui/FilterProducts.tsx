@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useRouter } from 'next/router'
-import React, { useEffect, useRef, useState } from 'react'
-import { Input } from 'reactstrap'
+import { useEffect, useRef, useState } from 'react'
+
+import SimpleSelect from '@components/Common/SimpleSelect'
 
 type Props = {
   brands: string[]
@@ -48,98 +49,72 @@ const FilterProducts = ({ brands, suppliers, categories, brand, supplier, catego
         </button>
         <div className={'dropdown-menu dropdown-menu-md px-4 py-3' + (openDatesMenu ? ' show' : '')}>
           <div className='d-flex flex-column justify-content-start gap-2'>
-            <span className='fw-semibold'>Brand:</span>
-            <div
-              className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto px-3 py-0 rounded-3'
-              style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
-              <Input
-                type='select'
-                className='border-0 fs-6 w-100'
-                id='type'
-                name='type'
-                value={brand}
-                onChange={(e) => {
-                  setOpenDatesMenu(false)
-                  activeTab ? router.replace(`/Products?brand=${e.target.value}&supplier=${supplier}&category=${category}&condition=${condition}`) : router.replace(`/InactiveProducts?brand=${e.target.value}&supplier=${supplier}&category=${category}&condition=${condition}`)
-                }}>
-                <option value='All'>All</option>
-                {brands?.map((brand) => (
-                  <option key={brand} value={brand}>
-                    {brand}
-                  </option>
-                ))}
-              </Input>
-            </div>
-            <span className='fw-semibold'>Suppliers:</span>
-            <div
-              className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto px-3 py-0 rounded-3'
-              style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
-              <Input
-                type='select'
-                className='border-0 fs-6 w-100'
-                id='type'
-                name='type'
-                value={supplier}
-                onChange={(e) => {
-                  setOpenDatesMenu(false)
-                  activeTab ? router.replace(`/Products?brand=${brand}&supplier=${e.target.value}&category=${category}&condition=${condition}`) : router.replace(`/InactiveProducts?brand=${brand}&supplier=${e.target.value}&category=${category}&condition=${condition}`)
-                }}>
-                <option value='All'>All</option>
-                {suppliers?.map((supplier) => (
-                  <option key={supplier} value={supplier}>
-                    {supplier}
-                  </option>
-                ))}
-              </Input>
-            </div>
-            <span className='fw-semibold'>Categories:</span>
-            <div
-              className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto px-3 py-0 rounded-3'
-              style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
-              <Input
-                type='select'
-                className='border-0 fs-6 w-100'
-                id='type'
-                name='type'
-                value={category}
-                onChange={(e) => {
-                  setOpenDatesMenu(false)
-                  activeTab ? router.replace(`/Products?brand=${brand}&supplier=${supplier}&category=${e.target.value}&condition=${condition}`) : router.replace(`/InactiveProducts?brand=${brand}&supplier=${supplier}&category=${e.target.value}&condition=${condition}`)
-                }}>
-                <option value='All'>All</option>
-                {categories?.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </Input>
-            </div>
-            <span className='fw-semibold'>Condition:</span>
-            <div
-              className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto px-3 py-0 rounded-3'
-              style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
-              <Input
-                type='select'
-                className='border-0 fs-6 w-100'
-                id='type'
-                name='type'
-                value={condition}
-                onChange={(e) => {
-                  setOpenDatesMenu(false)
-                  activeTab ? router.replace(`/Products?brand=${brand}&supplier=${supplier}&category=${category}&condition=${e.target.value}`) : router.replace(`/InactiveProducts?brand=${brand}&supplier=${supplier}&category=${category}&condition=${e.target.value}`)
-                }}>
-                <option value='All'>All</option>
-                <option value='New'>New</option>
-                <option value='Used'>Used</option>
-              </Input>
-            </div>
+            <span className='fw-semibold fs-7'>Brand:</span>
+            <SimpleSelect
+              selected={{ label: brand, value: brand }}
+              options={[{ label: 'All', value: 'All' }, ...brands?.map((brand) => ({ label: brand, value: brand }))]}
+              handleSelect={(option) => {
+                setOpenDatesMenu(false)
+                activeTab
+                  ? router.replace(`/Products?brand=${option?.value}&supplier=${supplier}&category=${category}&condition=${condition}`)
+                  : router.replace(`/InactiveProducts?brand=${option?.value}&supplier=${supplier}&category=${category}&condition=${condition}`)
+              }}
+              customStyle='sm'
+              placeholder={'Select Brand'}
+            />
+
+            <span className='fw-semibold fs-7'>Suppliers:</span>
+            <SimpleSelect
+              selected={{ label: supplier, value: supplier }}
+              options={[{ label: 'All', value: 'All' }, ...suppliers?.map((supplier) => ({ label: supplier, value: supplier }))]}
+              handleSelect={(option) => {
+                setOpenDatesMenu(false)
+                activeTab
+                  ? router.replace(`/Products?brand=${brand}&supplier=${option?.value}&category=${category}&condition=${condition}`)
+                  : router.replace(`/InactiveProducts?brand=${brand}&supplier=${option?.value}&category=${category}&condition=${condition}`)
+              }}
+              customStyle='sm'
+              placeholder={'Select Supplier'}
+            />
+            <span className='fw-semibold fs-7'>Categories:</span>
+            <SimpleSelect
+              selected={{ label: category, value: category }}
+              options={[{ label: 'All', value: 'All' }, ...categories?.map((category) => ({ label: category, value: category }))]}
+              handleSelect={(option) => {
+                setOpenDatesMenu(false)
+                activeTab
+                  ? router.replace(`/Products?brand=${brand}&supplier=${supplier}&category=${option?.value}&condition=${condition}`)
+                  : router.replace(`/InactiveProducts?brand=${brand}&supplier=${supplier}&category=${option?.value}&condition=${condition}`)
+              }}
+              customStyle='sm'
+              placeholder={'Select Category'}
+            />
+            <span className='fw-semibold fs-7'>Condition:</span>
+            <SimpleSelect
+              selected={{ label: condition, value: condition }}
+              options={[
+                { label: 'All', value: 'All' },
+                { label: 'New', value: 'New' },
+                { label: 'Used', value: 'Used' },
+              ]}
+              handleSelect={(option) => {
+                setOpenDatesMenu(false)
+                activeTab
+                  ? router.replace(`/Products?brand=${brand}&supplier=${supplier}&category=${category}&condition=${option?.value}`)
+                  : router.replace(`/InactiveProducts?brand=${brand}&supplier=${supplier}&category=${category}&condition=${option?.value}`)
+              }}
+              customStyle='sm'
+              placeholder={'Select Condition'}
+            />
             <span
               style={{ width: '100%', cursor: 'pointer', textAlign: 'right' }}
               onClick={() => {
-                activeTab ? router.replace(`/Products?brand=All&supplier=All&category=All&condition=All`) : router.replace(`/InactiveProducts?brand=All&supplier=All&category=All&condition=All`)
+                activeTab
+                  ? router.replace(`/Products?brand=All&supplier=All&category=All&condition=All`)
+                  : router.replace(`/InactiveProducts?brand=All&supplier=All&category=All&condition=All`)
                 setOpenDatesMenu(false)
               }}
-              className='fw-normal mt-2 text-muted'>
+              className='fw-normal mt-2 text-muted fs-7'>
               Clear All
             </span>
           </div>

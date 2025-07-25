@@ -103,7 +103,6 @@ export const initialState = {
   showEditKitModal: false,
   modalKitDetails: {
     kitId: 0,
-    businessId: 0,
     sku: '',
   },
   // MODAL - WHOLESALE ORDERS
@@ -234,12 +233,11 @@ const useInitialState = () => {
     })
   }
 
-  const setModalKitDetails = (kitId: number, businessId: number, sku: string) => {
+  const setModalKitDetails = (kitId: number, sku: string) => {
     setState({
       ...state,
       modalKitDetails: {
         kitId,
-        businessId,
         sku,
       },
       showEditKitModal: true,

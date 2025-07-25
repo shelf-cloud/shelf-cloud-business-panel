@@ -4,7 +4,7 @@ import Head from 'next/head'
 // import { CSVLink } from 'react-csv'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import React, { useContext, useState } from 'react'
 
 import { getSession } from '@auth/client'
 import BreadCrumb from '@components/Common/BreadCrumb'
@@ -17,13 +17,14 @@ import ExportProductsFile from '@components/products/ExportProductsFile'
 import ExportProductsTemplate from '@components/products/ExportProductsTemplate'
 import ProductsWidgets from '@components/products/ProductsWidgets'
 import FilterProducts from '@components/ui/FilterProducts'
+import SearchInput from '@components/ui/SearchInput'
 import AppContext from '@context/AppContext'
+import { useProducts } from '@hooks/products/useProducts'
 import { Product } from '@typings'
 import axios from 'axios'
-import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
 import { Button, Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from 'reactstrap'
-import useSWR, { useSWRConfig } from 'swr'
+import { useSWRConfig } from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -54,8 +55,7 @@ const Products = ({ session }: Props) => {
   const router = useRouter()
   const { brand, supplier, category, condition }: any = router.query
   const { mutate } = useSWRConfig()
-  const [pending, setPending] = useState(true)
-  const [allData, setAllData] = useState<Product[]>([])
+
   const [searchValue, setSearchValue] = useState<string>('')
   const [selectedRows, setSelectedRows] = useState<Product[]>([])
   const [toggledClearRows, setToggleClearRows] = useState(false)
@@ -68,55 +68,14 @@ const Products = ({ session }: Props) => {
     originalName: '',
     originalSku: '',
   })
-  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(state.user.businessId ? `/api/getBusinessInventory?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher, {
-    revalidateOnFocus: false,
+
+  const { products, isLoading, brands, suppliers, categories } = useProducts({
+    searchValue,
+    brand: brand || 'All',
+    supplier: supplier || 'All',
+    category: category || 'All',
+    condition: condition || 'All',
   })
-
-  useEffect(() => {
-    if (data?.error) {
-      setAllData([])
-      setPending(false)
-      toast.error(data?.message)
-    } else if (data) {
-      setAllData(data?.products)
-      setPending(false)
-    }
-  }, [data])
-
-  const filterDataTable = useMemo(() => {
-    if (!data?.products || data?.error) {
-      return []
-    }
-
-    if (searchValue === '') {
-      const newDataTable = allData?.filter(
-        (item: Product) =>
-          (brand === 'All' ? true : item.brand?.toLowerCase() === brand?.toLowerCase()) &&
-          (supplier === 'All' ? true : item.supplier?.toLowerCase() === supplier?.toLowerCase()) &&
-          (category === 'All' ? true : item.category?.toLowerCase() === category?.toLowerCase()) &&
-          (condition === 'All' ? true : item.itemCondition?.toLowerCase() === condition?.toLowerCase())
-      )
-      return newDataTable
-    }
-
-    if (searchValue !== '') {
-      const newDataTable = allData?.filter(
-        (item: Product) =>
-          (brand === 'All' ? true : item.brand?.toLowerCase() === brand?.toLowerCase()) &&
-          (supplier === 'All' ? true : item.supplier?.toLowerCase() === supplier?.toLowerCase()) &&
-          (category === 'All' ? true : item.category?.toLowerCase() === category?.toLowerCase()) &&
-          (condition === 'All' ? true : item.itemCondition?.toLowerCase() === condition?.toLowerCase()) &&
-          (item?.title?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            searchValue.split(' ').every((word) => item?.title?.toLowerCase().includes(word.toLowerCase())) ||
-            item?.sku?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item?.asin?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item?.fnSku?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item?.barcode?.toLowerCase().includes(searchValue.toLowerCase()))
-      )
-      return newDataTable
-    }
-  }, [allData, searchValue, brand, supplier, category, condition])
 
   const changeProductState = async (inventoryId: number, sku: string) => {
     const confirmationResponse = confirm(`Are you sure you want to set Inactive: ${sku}`)
@@ -180,9 +139,9 @@ const Products = ({ session }: Props) => {
                 <Row className='d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-2 flex-md-row justify-content-md-between align-items-md-center'>
                   <div className='w-auto d-flex flex-row align-items-center justify-content-between gap-2'>
                     <FilterProducts
-                      brands={data?.brands}
-                      suppliers={data?.suppliers}
-                      categories={data?.categories}
+                      brands={brands}
+                      suppliers={suppliers}
+                      categories={categories}
                       brand={brand}
                       supplier={supplier}
                       category={category}
@@ -195,32 +154,21 @@ const Products = ({ session }: Props) => {
                         Basic Product
                       </Button>
                     </Link>
-                    {/* <Button type='button' color='primary' className='fs-6 py-1' onClick={handleGetProductsDetailsTemplate}>
-                      <i className='mdi mdi-arrow-down-bold label-icon align-middle fs-5 me-2' />
-                      {loadingCsv ? <Spinner color='white' size={'sm'} /> : 'Export'}
-                    </Button> */}
-                    {/* <Link href={'/ProductsBulkEdit'} >
-                      <Button type='button' color='primary' className='fs-6 py-1'>
-                        <i className='mdi mdi-database-edit label-icon align-middle fs-5 me-2' />
-                        Bulk Edit
-                      </Button>
-                    </Link> */}
-                    {/* <CSVLink className='d-none' data={productsDetailsTemplate} filename={`${session?.user?.name.toUpperCase()}-Products-Details.csv`} ref={csvDownload} /> */}
                     <UncontrolledButtonDropdown>
                       <DropdownToggle className='fs-7' caret>
                         Bulk Actions
                       </DropdownToggle>
                       <DropdownMenu>
-                        {filterDataTable!.length > 0 && (
+                        {products.length > 0 && (
                           <ExportProductsTemplate
-                            products={selectedRows.length == 0 ? filterDataTable || [] : selectedRows}
+                            products={selectedRows.length == 0 ? products : selectedRows}
                             selected={selectedRows.length > 0 ? true : false}
-                            brands={data?.brands || []}
-                            suppliers={data?.suppliers || []}
-                            categories={data?.categories || []}
+                            brands={brands}
+                            suppliers={suppliers}
+                            categories={categories}
                           />
                         )}
-                        <ExportBlankTemplate brands={data?.brands || []} suppliers={data?.suppliers || []} categories={data?.categories || []} />
+                        <ExportBlankTemplate brands={brands || []} suppliers={suppliers || []} categories={categories || []} />
                         <DropdownItem
                           className='text-nowrap text-primary'
                           onClick={() =>
@@ -251,33 +199,13 @@ const Products = ({ session }: Props) => {
                       </UncontrolledButtonDropdown>
                     )}
                   </div>
-                  <div className='col-sm-12 col-md-3'>
-                    <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
-                      <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
-                        <DebounceInput
-                          type='text'
-                          minLength={2}
-                          debounceTimeout={500}
-                          className='form-control input_background_white fs-6'
-                          placeholder='Search...'
-                          id='search-options'
-                          value={searchValue}
-                          onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
-                          onChange={(e) => setSearchValue(e.target.value)}
-                        />
-                        <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
-                        <span className='d-flex align-items-center justify-content-center input_background_white' style={{ cursor: 'pointer' }} onClick={() => setSearchValue('')}>
-                          <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                  <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' minLength={2} />
                 </Row>
                 <Card>
                   <CardBody>
                     <ProductsTable
-                      tableData={filterDataTable || []}
-                      pending={pending}
+                      tableData={products || []}
+                      pending={isLoading}
                       changeProductState={changeProductState}
                       setMsg={'Set Inactive'}
                       icon={'las la-eye-slash align-middle fs-5 me-2'}
@@ -298,9 +226,9 @@ const Products = ({ session }: Props) => {
         <ImportProductsFileModal
           importModalDetails={importModalDetails}
           setimportModalDetails={setimportModalDetails}
-          brands={data?.brands}
-          suppliers={data?.suppliers}
-          categories={data?.categories}
+          brands={brands}
+          suppliers={suppliers}
+          categories={categories}
         />
       )}
       {cloneProductModal.isOpen && <CloneProductModal cloneProductModal={cloneProductModal} setcloneProductModal={setcloneProductModal} />}

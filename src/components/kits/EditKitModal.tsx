@@ -166,9 +166,7 @@ function EditKitModal({ mutateKits }: Props) {
         toggle={() => {
           setShowEditKitModal(!state.showEditKitModal)
         }}>
-        <h4 className='modal-title' id='EditKitModalLabel'>
-          Edit Kit: <span className='text-primary'>{state.modalKitDetails.sku}</span>
-        </h4>
+        Edit Kit: <span className='text-primary'>{state.modalKitDetails.sku}</span>
       </ModalHeader>
       <ModalBody>
         {!isLoading && !isValidating ? (
@@ -176,7 +174,7 @@ function EditKitModal({ mutateKits }: Props) {
             {({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => (
               <Form>
                 <Row>
-                  <h5 className='fs-5 mb-3 fw-bolder'>Kit Details</h5>
+                  <h4 className='fs-5 mb-3 fw-bolder'>Kit Details</h4>
                   <Col md={6} className='d-none'>
                     <FormGroup>
                       <Label htmlFor='kitId' className='form-label mb-1'>

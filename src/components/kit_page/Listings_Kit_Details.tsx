@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { NoImageAdress } from '@lib/assetsConstants'
 import { Listings } from '@typings'
-import React from 'react'
 
 type Props = {
   listings: Listings[]
@@ -12,7 +11,7 @@ const Listings_Kit_Details = ({ listings }: Props) => {
     <div className='py-1 w-100'>
       <table className='table table-sm'>
         <thead>
-          <tr className='text-center'>
+          <tr key={'listing-header'} className='text-center'>
             <th>Store SKU</th>
             <th>Channel</th>
             <th>Store</th>
@@ -20,8 +19,8 @@ const Listings_Kit_Details = ({ listings }: Props) => {
         </thead>
         <tbody>
           {listings.length > 0 ? (
-            listings.map((store) => (
-              <tr key={store.store} className='text-center'>
+            listings.map((store, index) => (
+              <tr key={`lisiting-${store.store}-${index}`} className='text-center'>
                 <td>{store.storeSku}</td>
                 <td>
                   <img
@@ -39,7 +38,7 @@ const Listings_Kit_Details = ({ listings }: Props) => {
               </tr>
             ))
           ) : (
-            <tr>
+            <tr key={'no-listings'}>
               <td>No Listings Mapped</td>
             </tr>
           )}

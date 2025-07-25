@@ -1,3 +1,9 @@
+import { GetServerSideProps } from 'next'
+import Head from 'next/head'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import React, { useContext, useState } from 'react'
+
 import { getSession } from '@auth/client'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import Activity_Kit_Details from '@components/kit_page/Activity_Kit_Details'
@@ -11,16 +17,11 @@ import Measure_Kit_Details from '@components/kit_page/Measure_Kit_Details'
 import SKU_Kit_details from '@components/kit_page/SKU_Kit_details'
 import Status_Kit_Details from '@components/kit_page/Status_Kit_Details'
 import ShipmentDetailsModal from '@components/modals/shipments/ShipmentDetailsModal'
+import CopyTextToClipboard from '@components/ui/CopyTextToClipboard'
 import AppContext from '@context/AppContext'
 import { ProductDetails } from '@typings'
 import axios from 'axios'
-import { GetServerSideProps } from 'next'
-import Head from 'next/head'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import React, { useContext, useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
-import { Button, Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, Spinner, TabContent, TabPane } from 'reactstrap'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -47,30 +48,24 @@ type Props = {
   }
 }
 
+const fetcher = async (endPoint: string) => await axios<ProductDetails>(endPoint).then((res) => res.data)
+
 const Kit_Page_Layout = ({}: Props) => {
   const router = useRouter()
   const { state }: any = useContext(AppContext)
   const { currentRegion, user, shipmentDetailModal } = state
   const { info } = router.query
-
-  const [loading, setloading] = useState(true)
-  const [productDetails, setProductDetails] = useState<ProductDetails | null>()
-
-  const fetcher = async (endPoint: string) => await axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(info![0] && user.businessId ? `/api/getKitPageDetails?region=${currentRegion}&inventoryId=${info![0]}&businessId=${user.businessId}` : null, fetcher)
-
-  useEffect(() => {
-    if (data?.error) {
-      setProductDetails(null)
-      setloading(false)
-      toast.error(data?.message)
-    } else if (data) {
-      setProductDetails(data)
-      setloading(false)
-    }
-  }, [data])
-
   const [activeTab, setActiveTab] = useState('1')
+
+  const { data: productDetails, isValidating: isLoading } = useSWR(
+    info![0] && user.businessId ? `/api/getKitPageDetails?region=${currentRegion}&inventoryId=${info![0]}&businessId=${user.businessId}` : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnMount: true,
+    }
+  )
+
   const tabChange = (tab: any) => {
     if (activeTab !== tab) setActiveTab(tab)
   }
@@ -86,7 +81,7 @@ const Kit_Page_Layout = ({}: Props) => {
           <Container fluid>
             <BreadCrumb title='Product Details' pageTitle='Inventory' />
             <Card className='fs-6'>
-              {!loading ? (
+              {!isLoading ? (
                 <>
                   <CardHeader className='d-flex flex-row justify-content-between align-items-start'>
                     <div>
@@ -103,17 +98,9 @@ const Kit_Page_Layout = ({}: Props) => {
                         </Button>
                       </Link>
                       <div className='mt-3'>
-                        <p className='fw-semibold fs-3'>
-                          <span className='text-muted fw-normal'>SKU:</span> {info![1]}{' '}
-                          <i
-                            className='ri-file-copy-line fs-4 my-0 mx-1 p-0 text-muted'
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => {
-                              navigator.clipboard.writeText(info![1])
-                              toast('SKU copied!')
-                            }}
-                          />
-                        </p>
+                        <div className='fw-semibold fs-3'>
+                          <span className='text-muted fw-normal'>SKU:</span> {info![1]} <CopyTextToClipboard text={info![1]} label='SKU' fontSize='fs-4' />
+                        </div>
                       </div>
                     </div>
                     <KitWidgets
@@ -279,8 +266,10 @@ const Kit_Page_Layout = ({}: Props) => {
                   </CardBody>
                 </>
               ) : (
-                <div className='w-100 px-4 py-4'>
-                  <p className='fs-3 fw-semibold'>Loading...</p>
+                <div className='w-100 h-100 px-4 py-4 d-flex justify-content-center align-items-center'>
+                  <div className='fs-4 fw-normal my-4 d-flex justify-content-center align-items-center gap-3'>
+                    <Spinner color='primary' size={'md'} /> Loading kit details...
+                  </div>
                 </div>
               )}
             </Card>

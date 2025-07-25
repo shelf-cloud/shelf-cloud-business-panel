@@ -3,12 +3,12 @@ import Link from 'next/link'
 import { useContext, useMemo, useState } from 'react'
 
 import { DeleteItemFromOrderType } from '@components/modals/purchaseOrders/Confirm_Delete_Item_From_PO'
+import CopyTextToClipboard from '@components/ui/CopyTextToClipboard'
 import AppContext from '@context/AppContext'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { PoItemArrivalHistory, PurchaseOrder, PurchaseOrderItem } from '@typesTs/purchaseOrders'
 import { DebounceInput } from 'react-debounce-input'
-import { toast } from 'react-toastify'
 import { UncontrolledTooltip } from 'reactstrap'
 
 type Props = {
@@ -50,7 +50,7 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
     <div className='table-responsive'>
       <table className='table table-sm align-middle table-borderless mb-0'>
         <thead className='table-light fs-7'>
-          <tr>
+          <tr key={`poItems-${data.poId}-header`}>
             <th scope='col' className='text-center'>
               Image
             </th>
@@ -166,14 +166,7 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
                           style={{ textDecoration: 'none' }}>
                           {product.asin}
                         </a>
-                        <i
-                          className='ri-file-copy-line fs-6 m-0 p-0 text-muted'
-                          style={{ cursor: 'pointer' }}
-                          onClick={() => {
-                            navigator.clipboard.writeText(product.asin)
-                            toast('ASIN copied!', { autoClose: 1000 })
-                          }}
-                        />
+                        <CopyTextToClipboard text={product.asin} label='ASIN' />
                       </div>
                     )}
                     {product.barcode && (
@@ -185,9 +178,12 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
                   </span>
                 </td>
                 <td className='text-center text-nowrap'>
-                  <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' rel='noopener noreferrer' className='text-black'>
-                    {product.sku}
-                  </Link>
+                  <div className='d-flex flex-row justify-content-start align-items-center gap-1'>
+                    <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' rel='noopener noreferrer' className='text-black'>
+                      {product.sku}
+                    </Link>
+                    <CopyTextToClipboard text={product.sku} label='SKU' />
+                  </div>
                 </td>
                 <td className='text-center text-nowrap'>{FormatCurrency(state.currentRegion, product.orderQty * product.sellerCost)}</td>
                 <td className='text-center text-nowrap'>{FormatIntNumber(state.currentRegion, product.orderQty)}</td>

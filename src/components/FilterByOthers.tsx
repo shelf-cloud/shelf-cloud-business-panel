@@ -32,6 +32,7 @@ const STATUS_OPTIONS = [
   { value: '', label: 'All' },
   { value: 'on_hold', label: 'On Hold' },
   { value: 'awaiting', label: 'Awaiting' },
+  { value: 'awaiting pickup', label: 'Awaiting Pickup' },
   { value: 'shipped', label: 'Shipped' },
   { value: 'cancelled', label: 'Cancelled' },
 ]

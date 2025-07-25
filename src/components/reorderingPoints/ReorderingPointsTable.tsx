@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useCallback, useContext } from 'react'
 
+import CopyTextToClipboard from '@components/ui/CopyTextToClipboard'
 import AppContext from '@context/AppContext'
 import { RPProductConfig } from '@hooks/reorderingPoints/useRPProductConfig'
 import { ExpandedRowProps } from '@hooks/reorderingPoints/useRPProductSale'
@@ -306,7 +307,7 @@ const ReorderingPointsTable = ({
       ),
       selector: (row: ReorderingPointsProduct) => {
         return (
-          <div className='my-1 d-flex flex-row justify-content-start align-items-center gap-2'>
+          <div className='my-2 mx-0 d-flex flex-row justify-content-start align-items-center gap-3'>
             <div
               style={{
                 width: '35px',
@@ -323,9 +324,12 @@ const ReorderingPointsTable = ({
               />
             </div>
             <div className='w-100'>
-              <Link href={`/product/${row.inventoryId}/${row.sku}`}>
-                <p className='m-0 p-0 text-primary fw-semibold fs-6'>{row.sku}</p>
-              </Link>
+              <div className='d-flex flex-row justify-content-start align-items-center gap-1'>
+                <Link href={`/product/${row.inventoryId}/${row.sku}`} target='_blank'>
+                  <p className='m-0 p-0 text-primary fw-semibold fs-6'>{row.sku}</p>
+                </Link>
+                <CopyTextToClipboard text={row.sku} label='SKU' />
+              </div>
               <p className='m-0 p-0 text-black fw-semibold fs-7 text-wrap'>{row.title}</p>
               <span className='m-0 p-0 text-black fw-normal fs-7 d-flex flex-wrap justify-content-start align-items-center'>
                 {row.asin && (
@@ -360,7 +364,7 @@ const ReorderingPointsTable = ({
       },
       sortable: false,
       left: true,
-      compact: false,
+      compact: true,
       minWidth: 'fit-content',
       width: '280px',
     },

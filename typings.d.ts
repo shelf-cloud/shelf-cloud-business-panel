@@ -592,6 +592,11 @@ export interface KitRow {
   length: number
   width: number
   height: number
+  boxweight: number
+  boxlength: number
+  boxwidth: number
+  boxheight: number
+  boxQty: number
   activeState: boolean
   children: Children[]
   note?: string

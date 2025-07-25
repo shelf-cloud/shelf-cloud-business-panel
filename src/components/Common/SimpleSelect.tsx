@@ -4,7 +4,7 @@ export type SelectOptionType = { value: string | number; label: string; descript
 export type SelectSingleValueType = SingleValue<SelectOptionType>
 
 type Props = {
-  selected: any
+  selected: SelectSingleValueType
   handleSelect: (option: SelectSingleValueType, actionMeta?: ActionMeta<SelectOptionType>) => void
   options: SelectOptionType[]
   customStyle?: 'sm' | 'base'
