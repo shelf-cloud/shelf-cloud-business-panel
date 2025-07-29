@@ -391,6 +391,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
           deliveryWindow: shipment.deliveryWindow,
           totalSpdFees: searchShipmentSPDFees(shipment.shipmentId),
           totalLtlFees: searchShipmentLTLFees(shipment),
+          carrier: '',
         }
       }),
       transportationSelections: Object.values(finalShippingCharges.shipments).map((shipment) => {
@@ -450,6 +451,16 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
       totalSpdFees: totalSPDFees,
       totalLtlFees: totalLTLFees,
       totalFees: placementOptionSelected.fees.reduce((total, fee) => total + fee.value.amount, 0) + totalSPDFees + totalLTLFees,
+    }
+
+    for (const transportation of confirmChargesInfo.transportationSelections) {
+      const { shipmentId, transportationOptionId } = transportation
+
+      const carrier = inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId].find(
+        (option) => option.transportationOptionId === transportationOptionId
+      )?.carrier.name!
+
+      confirmChargesInfo.shipments.find((s) => s.shipmentId === shipmentId)!.carrier = carrier || ''
     }
 
     handleNextStep(confirmChargesInfo)
