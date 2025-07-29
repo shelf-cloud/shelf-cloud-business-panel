@@ -20,7 +20,7 @@ type ProductsHookProps = {
   category: string
   condition: string
 }
-export const useProducts = ({ searchValue, brand, supplier, category, condition }: ProductsHookProps) => {
+export const useInactiveProducts = ({ searchValue, brand, supplier, category, condition }: ProductsHookProps) => {
   const { state } = useContext(AppContext)
   const controllerRef = useRef<AbortController | null>(null)
 
@@ -51,7 +51,7 @@ export const useProducts = ({ searchValue, brand, supplier, category, condition 
     data,
     isValidating,
     mutate: mutateProducts,
-  } = useSWR(state.user.businessId ? `/api/products/getInventory?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher, {
+  } = useSWR(state.user.businessId ? `/api/products/getInactiveInventory?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher, {
     revalidateOnFocus: false,
     revalidateOnMount: true,
   })

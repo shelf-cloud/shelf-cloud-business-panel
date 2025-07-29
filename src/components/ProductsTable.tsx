@@ -109,7 +109,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       sortable: true,
       wrap: true,
       compact: true,
-      minWidth: '180px',
+      minWidth: '200px',
       sortFunction: (rowA: Product, rowB: Product) => sortStringsCaseInsensitive(rowA.title.toLowerCase(), rowB.title.toLowerCase()),
     },
     {
