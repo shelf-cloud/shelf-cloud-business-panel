@@ -1,8 +1,10 @@
+import { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { Shipment } from '@typesTs/shipments/shipments'
-import React, { useContext } from 'react'
 import { Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
+
 type Props = {
   data: Shipment
 }
@@ -17,7 +19,7 @@ const ServiceType = ({ data }: Props) => {
             <Col xl={12}>
               <Card>
                 <CardHeader className='py-3'>
-                  <h5 className='fw-semibold m-0'>Order Comment</h5>
+                  <h5 className='fw-semibold m-0'>Service Comment</h5>
                 </CardHeader>
                 <CardBody>
                   <p>{data.extraComment}</p>

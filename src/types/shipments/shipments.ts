@@ -83,6 +83,7 @@ export interface Shipment {
   isIndividualUnits?: boolean
   totalIndividualUnits?: number
   isReceivingFromPo?: boolean
+  note: string
 }
 
 export interface ShipmentOrderItem {

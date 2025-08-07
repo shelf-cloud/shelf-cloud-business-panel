@@ -2,9 +2,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext } from 'react'
 
+import SCTooltip from '@components/ui/SCTooltip'
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
+import { AddNoteToShipmentModalType } from '@pages/Shipments'
 import { Shipment } from '@typesTs/shipments/shipments'
 import DataTable from 'react-data-table-component'
 import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
@@ -23,9 +25,10 @@ type Props = {
   sortBy: SortByType
   setSortBy: (prev: SortByType) => void
   handleGetShipmentBOL: (orderNumber: string, orderId: string, documentType: string) => Promise<void>
+  setaddNoteToShipmentModal: (prev: AddNoteToShipmentModalType) => void
 }
 
-const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipmentBOL }: Props) => {
+const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipmentBOL, setaddNoteToShipmentModal }: Props) => {
   const { state, setModalCreateReturnInfo, setShipmentDetailsModal }: any = useContext(AppContext)
 
   const columns: any = [
@@ -34,11 +37,19 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
       selector: (row: Shipment) => {
         return (
           <>
-            <div
-              className='fs-7 m-0 fw-semibold'
-              style={{ cursor: 'pointer' }}
-              onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
-              {row.orderNumber}
+            <div className='d-flex flex-row justify-content-start align-items-base gap-1'>
+              <div
+                className='fs-7 m-0 fw-semibold'
+                style={{ cursor: 'pointer' }}
+                onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
+                <span className='m-0'>{row.orderNumber}</span>
+              </div>
+              {row.note != '' && <i className='ri-information-fill fs-5 text-warning' id={`tooltip-shipment-note${row.orderId}`} />}
+              {row.note != '' && (
+                <SCTooltip target={`tooltip-shipment-note${row.orderId}`} placement='right' key={`tooltip-shipment-note${row.orderId}`}>
+                  <p className='fs-7 text-primary m-0 p-0'>{row.note}</p>
+                </SCTooltip>
+              )}
             </div>
             {row.poNumber && row.poNumber !== row.orderNumber && (
               <span className='m-0 fs-7 text-muted' style={{ opacity: '80%' }}>
@@ -332,6 +343,12 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                   {state.currentRegion == 'us' && row.orderStatus == 'shipped' && row.hasReturn == false && row.shipCountry == 'US' && (
                     <>
                       <DropdownItem header>Actions</DropdownItem>
+                      <DropdownItem onClick={() => setaddNoteToShipmentModal({ show: true, orderId: row.id, orderNumber: row.orderNumber, note: row.note ?? '' })}>
+                        <div>
+                          <i className='las la-clipboard label-icon align-middle me-2 fs-5' />
+                          <span className='fw-normal text-dark'>Shipment Note</span>
+                        </div>
+                      </DropdownItem>
                       <DropdownItem className='edit-item-btn' onClick={() => setModalCreateReturnInfo(row.businessId, row.id)}>
                         <i className='las la-reply label-icon align-middle fs-5 me-2' />
                         Create Return
@@ -364,6 +381,13 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                     <i className='ri-article-line align-middle me-2 fs-5 text-muted' />
                     <span className='fs-6 fw-normal text-dark'>View Details</span>
                   </DropdownItem>
+                  <DropdownItem header>Actions</DropdownItem>
+                  <DropdownItem onClick={() => setaddNoteToShipmentModal({ show: true, orderId: row.id, orderNumber: row.orderNumber, note: row.note ?? '' })}>
+                    <div>
+                      <i className='las la-clipboard label-icon align-middle me-2 fs-5' />
+                      <span className='fw-normal text-dark'>Shipment Note</span>
+                    </div>
+                  </DropdownItem>
                   <DropdownItem header>Documents</DropdownItem>
                   {row.carrierService.toLowerCase() === 'ltl' && (
                     <DropdownItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'bill_of_lading')}>
@@ -389,6 +413,13 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                   <DropdownItem onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
                     <i className='ri-article-line align-middle me-2 fs-5 text-muted' />
                     <span className='fs-6 fw-normal text-dark'>View Details</span>
+                  </DropdownItem>
+                  <DropdownItem header>Actions</DropdownItem>
+                  <DropdownItem onClick={() => setaddNoteToShipmentModal({ show: true, orderId: row.id, orderNumber: row.orderNumber, note: row.note ?? '' })}>
+                    <div>
+                      <i className='las la-clipboard label-icon align-middle me-2 fs-5' />
+                      <span className='fw-normal text-dark'>Shipment Note</span>
+                    </div>
                   </DropdownItem>
                   <DropdownItem header>Documents</DropdownItem>
                   {row.proofOfShipped != '' && row.proofOfShipped != null && (
@@ -437,6 +468,13 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                   <DropdownItem onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
                     <i className='ri-article-line align-middle me-2 fs-5 text-muted' />
                     <span className='fs-6 fw-normal text-dark'>View Details</span>
+                  </DropdownItem>
+                  <DropdownItem header>Actions</DropdownItem>
+                  <DropdownItem onClick={() => setaddNoteToShipmentModal({ show: true, orderId: row.id, orderNumber: row.orderNumber, note: row.note ?? '' })}>
+                    <div>
+                      <i className='las la-clipboard label-icon align-middle me-2 fs-5' />
+                      <span className='fw-normal text-dark'>Shipment Note</span>
+                    </div>
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>

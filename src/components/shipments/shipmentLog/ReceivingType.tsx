@@ -1,7 +1,8 @@
+import { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { Shipment, ShipmentOrderItem } from '@typesTs/shipments/shipments'
-import React, { useContext } from 'react'
 import { Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
 
 type Props = {
@@ -44,7 +45,7 @@ const ReceivingType = ({ data }: Props) => {
                     ))}
                     <tr className='bg-light'>
                       <td></td>
-                      <td className='text-start fs-6 fw-bold text-nowrap'>Total</td> 
+                      <td className='text-start fs-6 fw-bold text-nowrap'>Total</td>
                       <td className='text-center fw-semibold fs-6 text-primary'>{FormatIntNumber(state.currentRegion, Number(data.totalItems))}</td>
                       <td className='text-center fw-semibold fs-6 text-primary'>{FormatIntNumber(state.currentRegion, Number(data.totalReceivedItems))}</td>
                     </tr>

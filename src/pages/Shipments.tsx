@@ -8,6 +8,7 @@ import BreadCrumb from '@components/Common/BreadCrumb'
 import { SelectSingleValueType } from '@components/Common/SimpleSelect'
 import FilterByDates from '@components/FilterByDates'
 import FilterByOthers from '@components/FilterByOthers'
+import InputTextAreaModal from '@components/modals/shared/inputTextAreaModal'
 import ShipmentDetailsModal from '@components/modals/shipments/ShipmentDetailsModal'
 import ShipmentsTable from '@components/shipments/shipmentLog/ShipmentsTable'
 import SearchInput from '@components/ui/SearchInput'
@@ -46,6 +47,47 @@ type Props = {
   }
 }
 
+export type AddNoteToShipmentModalType = {
+  show: boolean
+  orderId: number
+  orderNumber: string
+  note: string
+}
+
+type AddNoteToShipmentType = {
+  currentRegion: string
+  businessId: string
+  orderId: number
+  value: number | string
+}
+
+const handleAddNoteToShipment = async ({ currentRegion, businessId, orderId, value }: AddNoteToShipmentType): Promise<{ error: boolean }> => {
+  const addNoteToShipment = toast.loading('Saving Note...')
+
+  const { data } = await axios.post(`/api/shipments/addNoteToShipment?region=${currentRegion}&businessId=${businessId}`, {
+    orderId,
+    note: value,
+  })
+
+  if (!data.error) {
+    toast.update(addNoteToShipment, {
+      render: data.message,
+      type: 'success',
+      isLoading: false,
+      autoClose: 3000,
+    })
+    return { error: false }
+  } else {
+    toast.update(addNoteToShipment, {
+      render: data.message,
+      type: 'error',
+      isLoading: false,
+      autoClose: 3000,
+    })
+    return { error: true }
+  }
+}
+
 const ITEMS_PER_PAGE = 100
 
 const fetcher = async (url: string) => {
@@ -64,6 +106,12 @@ const Shipments = ({ session }: Props) => {
   const [searchMarketplace, setSearchMarketplace] = useState<SelectSingleValueType>({ value: '', label: 'All Stores' })
   const [searchSku, setSearchSku] = useState<SelectSingleValueType>({ value: '', label: 'All' })
   const [carrierStatus, setcarrierStatus] = useState<SelectSingleValueType>({ value: '', label: 'All' })
+  const [addNoteToShipmentModal, setaddNoteToShipmentModal] = useState<AddNoteToShipmentModalType>({
+    show: false,
+    orderId: 0,
+    orderNumber: '',
+    note: '',
+  })
   const [sortBy, setSortBy] = useState({
     key: '',
     asc: false,
@@ -279,7 +327,14 @@ const Shipments = ({ session }: Props) => {
             </div>
             <Card>
               <CardBody>
-                <ShipmentsTable tableData={shipments} pending={isValidating && size === 1} sortBy={sortBy} setSortBy={setSortBy} handleGetShipmentBOL={handleGetShipmentBOL} />
+                <ShipmentsTable
+                  tableData={shipments}
+                  pending={isValidating && size === 1 && shipments.length === 0}
+                  sortBy={sortBy}
+                  setSortBy={setSortBy}
+                  handleGetShipmentBOL={handleGetShipmentBOL}
+                  setaddNoteToShipmentModal={setaddNoteToShipmentModal}
+                />
                 <div ref={lastInvoiceElementRef} style={{ height: '20px', marginTop: '10px' }}>
                   {isValidating && size > 1 && (
                     <p className='text-center'>
@@ -291,6 +346,49 @@ const Shipments = ({ session }: Props) => {
             </Card>
           </Container>
         </div>
+        {addNoteToShipmentModal.show && (
+          <InputTextAreaModal
+            isOpen={addNoteToShipmentModal.show}
+            headerText='Add Note to Shipment'
+            primaryText='Order Number:'
+            primaryTextSub={addNoteToShipmentModal.orderNumber}
+            descriptionText={`Enter a note for the shipment. This note will be saved with the shipment details.`}
+            confirmText='Save'
+            loadingText='Saving...'
+            placeholder='Enter your note here...'
+            initialValue={addNoteToShipmentModal.note}
+            handleSubmit={async (value) =>
+              await handleAddNoteToShipment({
+                currentRegion: state.currentRegion,
+                businessId: state.user.businessId,
+                orderId: addNoteToShipmentModal.orderId,
+                value,
+              }).then((res) => {
+                mutateShipments()
+                return res
+              })
+            }
+            handleClose={() =>
+              setaddNoteToShipmentModal({
+                show: false,
+                orderId: 0,
+                orderNumber: '',
+                note: '',
+              })
+            }
+            handleSubmitClearValue={async (value) =>
+              await handleAddNoteToShipment({
+                currentRegion: state.currentRegion,
+                businessId: state.user.businessId,
+                orderId: addNoteToShipmentModal.orderId,
+                value,
+              }).then((res) => {
+                mutateShipments()
+                return res
+              })
+            }
+          />
+        )}
       </React.Fragment>
       {shipmentDetailModal.show && <ShipmentDetailsModal mutateShipments={mutateShipments} />}
     </div>

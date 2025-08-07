@@ -1,15 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
+import { useContext } from 'react'
+
 import TooltipComponent from '@components/constants/Tooltip'
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
+import { NoImageAdress } from '@lib/assetsConstants'
 import { KitChildren, Shipment, ShipmentOrderItem } from '@typesTs/shipments/shipments'
 import moment from 'moment'
-import React, { useContext } from 'react'
 import { Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
+
 import ShipmentCarrierStatusBar from './ShipmentCarrierStatusBar'
 import ShipmentTrackingNumber from './ShipmentTrackingNumber'
-import { NoImageAdress } from '@lib/assetsConstants'
+
 type Props = {
   data: Shipment
 }
@@ -18,17 +21,14 @@ const FBAServiceFees = (data: Shipment, currentRegion: string) => {
   switch (true) {
     case !data.isIndividualUnits && data.carrierService == 'Parcel Boxes':
       return `${data.carrierService} - ${FormatCurrency(currentRegion, data.chargesFees.parcelBoxCost!)} per box`
-      break
     case !data.isIndividualUnits && data.carrierService == 'LTL':
       return `${data.carrierService} - ${FormatCurrency(currentRegion, data.chargesFees.palletCost!)} per pallet`
-      break
     case data.isIndividualUnits:
       return `
             ${data.carrierService} - ${FormatCurrency(currentRegion, data.chargesFees.individualUnitCost!)} per unit
             ${data.carrierService} - ${FormatCurrency(currentRegion, data.chargesFees.parcelBoxCost!)} per box
             ${data.carrierService} - ${FormatCurrency(currentRegion, data.chargesFees.palletCost!)} per pallet
             `
-      break
     default:
       return `Type of service...`
   }
