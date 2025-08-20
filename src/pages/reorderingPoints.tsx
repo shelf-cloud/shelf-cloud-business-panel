@@ -61,6 +61,7 @@ type FilterProps = {
   grossmax?: string
   profitmin?: string
   profitmax?: string
+  unitsrange?: string
   unitsmin?: string
   unitsmax?: string
   supplier?: string
@@ -73,7 +74,7 @@ type FilterProps = {
 const ReorderingPoints = ({ session, sessionToken }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
-  const { filters, urgency, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, brand, category, showHidden }: FilterProps = router.query
+  const { filters, urgency, grossmin, grossmax, profitmin, profitmax, unitsrange, unitsmin, unitsmax, supplier, brand, category, showHidden }: FilterProps = router.query
   const [startDate, setStartDate] = useState(moment().subtract(15, 'days').format('YYYY-MM-DD'))
   const [endDate, setEndDate] = useState(moment().format('YYYY-MM-DD'))
   const [setField, setsetField] = useState('urgency')
@@ -104,6 +105,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
     grossmax,
     profitmin,
     profitmax,
+    unitsrange,
     unitsmin,
     unitsmax,
     supplier,
@@ -159,6 +161,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
       grossmax: string,
       profitmin: string,
       profitmax: string,
+      unitsrange: string,
       unitsmin: string,
       unitsmax: string,
       supplier: string,
@@ -173,6 +176,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
       if (grossmax || grossmax !== '') filterString += `&grossmax=${grossmax}`
       if (profitmin || profitmin !== '') filterString += `&profitmin=${profitmin}`
       if (profitmax || profitmax !== '') filterString += `&profitmax=${profitmax}`
+      if (unitsrange || unitsrange !== '') filterString += `&unitsrange=${unitsrange}`
       if (unitsmin || unitsmin !== '') filterString += `&unitsmin=${unitsmin}`
       if (unitsmax || unitsmax !== '') filterString += `&unitsmax=${unitsmax}`
       if (supplier || supplier !== '') filterString += `&supplier=${supplier}`
@@ -348,6 +352,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
                   grossmax={grossmax !== undefined ? grossmax : ''}
                   profitmin={profitmin !== undefined ? profitmin : ''}
                   profitmax={profitmax !== undefined ? profitmax : ''}
+                  unitsrange={unitsrange !== undefined ? unitsrange : '30D'}
                   unitsmin={unitsmin !== undefined ? unitsmin : ''}
                   unitsmax={unitsmax !== undefined ? unitsmax : ''}
                   supplier={supplier !== undefined ? supplier : ''}

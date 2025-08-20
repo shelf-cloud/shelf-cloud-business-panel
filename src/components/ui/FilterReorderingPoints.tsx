@@ -1,11 +1,14 @@
-import React, { memo, useContext } from 'react'
+import { useRouter } from 'next/router'
+import { memo, useContext } from 'react'
+
+import SimpleSelect, { SelectSingleValueType } from '@components/Common/SimpleSelect'
+import AppContext from '@context/AppContext'
+import { Form, Formik } from 'formik'
 import { Button, Card, CardBody, Col, FormGroup, Input, InputGroup, InputGroupText, Label, Row } from 'reactstrap'
 import * as Yup from 'yup'
-import { Formik, Form } from 'formik'
-import AppContext from '@context/AppContext'
+
 import SelectDropDown from './SelectDropDown'
 import SelectMultipleDropDown from './SelectMultipleDropDown'
-import { useRouter } from 'next/router'
 
 type Props = {
   urgency: string
@@ -13,6 +16,7 @@ type Props = {
   grossmax: string
   profitmin: string
   profitmax: string
+  unitsrange: string
   unitsmin: string
   unitsmax: string
   supplier: string
@@ -29,6 +33,7 @@ type Props = {
     grossmax: string,
     profitmin: string,
     profitmax: string,
+    unitsrange: string,
     unitsmin: string,
     unitsmax: string,
     supplier: string,
@@ -47,12 +52,22 @@ const URGENCY_STATES = {
   '0': { label: 'No Alert', icon: 'mdi mdi-alert-octagon', color: 'text-success' },
 }
 
+const UNITS_DAYS_RANGES = {
+  '30D': { label: '30 Days', value: '30D' },
+  '60D': { label: '60 Days', value: '60D' },
+  '90D': { label: '90 Days', value: '90D' },
+  '120D': { label: '120 Days', value: '120D' },
+  '180D': { label: '180 Days', value: '180D' },
+  '365D': { label: '365 Days', value: '365D' },
+}
+
 const FilterReorderingPoints = ({
   urgency,
   grossmin,
   grossmax,
   profitmin,
   profitmax,
+  unitsrange,
   unitsmin,
   unitsmax,
   supplier,
@@ -75,6 +90,7 @@ const FilterReorderingPoints = ({
     grossRevenueMax: grossmax,
     netProfitMin: profitmin,
     netProfitMax: profitmax,
+    unitsRange: unitsrange,
     unitsSoldMin: unitsmin,
     unitsSoldMax: unitsmax,
     supplier: supplier,
@@ -96,6 +112,7 @@ const FilterReorderingPoints = ({
       values.grossRevenueMax,
       values.netProfitMin,
       values.netProfitMax,
+      values.unitsRange,
       values.unitsSoldMin,
       values.unitsSoldMax,
       values.supplier,
@@ -113,6 +130,7 @@ const FilterReorderingPoints = ({
       grossRevenueMax: '',
       netProfitMin: '',
       netProfitMax: '',
+      unitsrange: '',
       unitsSoldMin: '',
       unitsSoldMax: '',
       supplier: '',
@@ -159,7 +177,7 @@ const FilterReorderingPoints = ({
                           min={0}
                           onChange={handleChange}
                           onBlur={handleBlur}
-                          value={values.grossRevenueMin || ''}
+                          value={values.grossRevenueMin}
                           invalid={touched.grossRevenueMin && errors.grossRevenueMin ? true : false}
                         />
                       </InputGroup>
@@ -176,7 +194,7 @@ const FilterReorderingPoints = ({
                           min={values.grossRevenueMin}
                           onChange={handleChange}
                           onBlur={handleBlur}
-                          value={values.grossRevenueMax || ''}
+                          value={values.grossRevenueMax}
                           invalid={touched.grossRevenueMax && errors.grossRevenueMax ? true : false}
                         />
                       </InputGroup>
@@ -202,7 +220,7 @@ const FilterReorderingPoints = ({
                           min={0}
                           onChange={handleChange}
                           onBlur={handleBlur}
-                          value={values.netProfitMin || ''}
+                          value={values.netProfitMin}
                           invalid={touched.netProfitMin && errors.netProfitMin ? true : false}
                         />
                       </InputGroup>
@@ -219,19 +237,29 @@ const FilterReorderingPoints = ({
                           min={values.grossRevenueMin}
                           onChange={handleChange}
                           onBlur={handleBlur}
-                          value={values.netProfitMax || ''}
+                          value={values.netProfitMax}
                           invalid={touched.netProfitMax && errors.netProfitMax ? true : false}
                         />
                       </InputGroup>
                     </div>
                   </FormGroup>
                 </Col>
-                <Col xs={12} md={3}>
+                <Col xs={12} md={4}>
                   <FormGroup className='createOrder_inputs'>
                     <Label htmlFor='lastNameinput' className='form-label'>
                       Units Sold
                     </Label>
                     <div className='d-flex flex-row justify-content-between align-items-center gap-2'>
+                      <Col xs={4}>
+                        <SimpleSelect
+                          selected={UNITS_DAYS_RANGES[values.unitsRange as keyof typeof UNITS_DAYS_RANGES]}
+                          handleSelect={(option: SelectSingleValueType) => {
+                            handleChange({ target: { name: 'unitsRange', value: option!.value } })
+                          }}
+                          customStyle='sm'
+                          options={Object.values(UNITS_DAYS_RANGES)}
+                        />
+                      </Col>
                       <Input
                         type='number'
                         className='form-control fs-6 m-0'
@@ -243,7 +271,7 @@ const FilterReorderingPoints = ({
                         min={0}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        value={values.unitsSoldMin || ''}
+                        value={values.unitsSoldMin}
                         invalid={touched.unitsSoldMin && errors.unitsSoldMin ? true : false}
                       />
                       <Input
@@ -257,7 +285,7 @@ const FilterReorderingPoints = ({
                         min={values.grossRevenueMin}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        value={values.unitsSoldMax || ''}
+                        value={values.unitsSoldMax}
                         invalid={touched.unitsSoldMax && errors.unitsSoldMax ? true : false}
                       />
                     </div>

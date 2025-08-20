@@ -27,6 +27,7 @@ export const useRPProductsInfo = ({
   grossmax,
   profitmin,
   profitmax,
+  unitsrange,
   unitsmin,
   unitsmax,
   supplier,
@@ -446,8 +447,8 @@ export const useRPProductsInfo = ({
           (grossmax !== undefined && grossmax !== '' ? item.grossRevenue <= parseFloat(grossmax!) : true) &&
           (profitmin !== undefined && profitmin !== '' ? item.grossRevenue - item.expenses >= parseFloat(profitmin!) : true) &&
           (profitmax !== undefined && profitmax !== '' ? item.grossRevenue - item.expenses <= parseFloat(profitmax!) : true) &&
-          (unitsmin !== undefined && unitsmin !== '' ? item.unitsSold >= parseInt(unitsmin!) : true) &&
-          (unitsmax !== undefined && unitsmax !== '' ? item.unitsSold <= parseInt(unitsmax!) : true) &&
+          (unitsmin !== undefined && unitsmin !== '' ? item.totalUnitsSold[unitsrange] >= parseInt(unitsmin!) : true) &&
+          (unitsmax !== undefined && unitsmax !== '' ? item.totalUnitsSold[unitsrange] <= parseInt(unitsmax!) : true) &&
           (supplier !== undefined && supplier !== '' ? item.supplier.toLowerCase() === supplier.toLowerCase() : true) &&
           (brand !== undefined && brand !== '' ? item.brand.toLowerCase() === brand.toLowerCase() : true) &&
           (category !== undefined && category !== '' ? item.category.toLowerCase() === category.toLowerCase() : true) &&
@@ -464,8 +465,8 @@ export const useRPProductsInfo = ({
           (grossmax !== undefined && grossmax !== '' ? item.grossRevenue <= parseFloat(grossmax!) : true) &&
           (profitmin !== undefined && profitmin !== '' ? item.grossRevenue - item.expenses >= parseFloat(profitmin!) : true) &&
           (profitmax !== undefined && profitmax !== '' ? item.grossRevenue - item.expenses <= parseFloat(profitmax!) : true) &&
-          (unitsmin !== undefined && unitsmin !== '' ? item.unitsSold >= parseInt(unitsmin!) : true) &&
-          (unitsmax !== undefined && unitsmax !== '' ? item.unitsSold <= parseInt(unitsmax!) : true) &&
+          (unitsmin !== undefined && unitsmin !== '' ? item.totalUnitsSold[unitsrange] >= parseInt(unitsmin!) : true) &&
+          (unitsmax !== undefined && unitsmax !== '' ? item.totalUnitsSold[unitsrange] <= parseInt(unitsmax!) : true) &&
           (supplier !== undefined && supplier !== '' ? item.supplier.toLowerCase() === supplier.toLowerCase() : true) &&
           (brand !== undefined && brand !== '' ? item.brand.toLowerCase() === brand.toLowerCase() : true) &&
           (category !== undefined && category !== '' ? item.category.toLowerCase() === category.toLowerCase() : true) &&
@@ -492,6 +493,7 @@ export const useRPProductsInfo = ({
     grossmax,
     profitmin,
     profitmax,
+    unitsrange,
     unitsmin,
     unitsmax,
     supplier,
