@@ -1,18 +1,20 @@
-import React, { useState, useContext, useMemo } from 'react'
-import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
-import axios from 'axios'
 import Head from 'next/head'
-import { Button, Card, CardBody, Col, Container, Input, Row } from 'reactstrap'
-import BreadCrumb from '@components/Common/BreadCrumb'
-import { getSession } from '@auth/client'
-import { toast } from 'react-toastify'
-import useSWR from 'swr'
-import ReturnUnsellablesTable from '@components/returns/ReturnUnsellablesTable'
-import { UnsellablesType } from '@typesTs/returns/unsellables'
 import Link from 'next/link'
-import FilterUnsellables from '@components/returns/FilterUnsellables'
+import React, { useContext, useMemo, useState } from 'react'
+
+import { getSession } from '@auth/client'
+import BreadCrumb from '@components/Common/BreadCrumb'
 import ExportUnsellables from '@components/returns/ExportUnsellables'
+import FilterUnsellables from '@components/returns/FilterUnsellables'
+import ReturnUnsellablesTable from '@components/returns/ReturnUnsellablesTable'
+import SearchInput from '@components/ui/SearchInput'
+import AppContext from '@context/AppContext'
+import { UnsellablesType } from '@typesTs/returns/unsellables'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import { Button, Card, CardBody, Col, Container, Row } from 'reactstrap'
+import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -91,9 +93,9 @@ const Unsellables = ({ session }: Props) => {
             searchValue.split(' ').every((word) => item?.title?.toLowerCase().includes(word.toLowerCase())) ||
             item.sku.toLowerCase().includes(searchValue.toLowerCase()) ||
             item.barcode.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item.orderNumber.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item.returnRMA.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item.returnReason.toLowerCase().includes(searchValue.toLowerCase()))
+            item.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.returnRMA?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.returnReason?.toLowerCase().includes(searchValue.toLowerCase()))
       )
     }
   }, [allData, searchValue, searchStatus, searchReason])
@@ -125,22 +127,7 @@ const Unsellables = ({ session }: Props) => {
                     <FilterUnsellables searchStatus={searchStatus} setSearchStatus={setSearchStatus} searchReason={searchReason} setSearchReason={setSearchReason} />
                     <ExportUnsellables unsellables={filterDataTable || allData} />
                   </div>
-                  <div className='col-sm-12 col-md-3'>
-                    <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
-                      <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
-                        <Input type='text' className='form-control input_background_white' placeholder='Search...' id='search-options' value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
-                        <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
-                        <span
-                          className='d-flex align-items-center justify-content-center input_background_white'
-                          style={{
-                            cursor: 'pointer',
-                          }}
-                          onClick={() => setSearchValue('')}>
-                          <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                  <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' />
                 </Row>
                 <Card>
                   <CardBody>

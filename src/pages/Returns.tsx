@@ -1,22 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useContext, useMemo } from 'react'
-import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
-import axios from 'axios'
 import Head from 'next/head'
-import { Button, Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from 'reactstrap'
-import BreadCrumb from '@components/Common/BreadCrumb'
+import Link from 'next/link'
+import React, { useContext, useMemo, useState } from 'react'
+
 import { getSession } from '@auth/client'
+import BreadCrumb from '@components/Common/BreadCrumb'
+import FilterByDates from '@components/FilterByDates'
+import ExportReturns from '@components/returns/ExportReturns'
+import FilterReturns from '@components/returns/FilterReturns'
+import ReturnRMATable from '@components/returns/ReturnRMATable'
+import SearchInput from '@components/ui/SearchInput'
+import AppContext from '@context/AppContext'
+import { ReturnList, ReturnOrder, ReturnType } from '@typesTs/returns/returns'
+import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import FilterByDates from '@components/FilterByDates'
-import FilterReturns from '@components/returns/FilterReturns'
-import { ReturnList, ReturnOrder, ReturnType } from '@typesTs/returns/returns'
-import ReturnRMATable from '@components/returns/ReturnRMATable'
+import { Button, Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from 'reactstrap'
 import useSWR, { useSWRConfig } from 'swr'
-import Link from 'next/link'
-import ExportReturns from '@components/returns/ExportReturns'
-import SearchInput from '@components/ui/SearchInput'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -122,7 +123,9 @@ const Returns = ({ session, sessionToken }: Props) => {
                 returnOrder?.trackingNumber?.toLowerCase().includes(searchValue.toLowerCase()) ||
                 returnOrder?.orderItems?.some(
                   (item) =>
-                    item?.name?.toLowerCase().includes(searchValue.toLowerCase()) || searchValue.split(' ').every((word) => item?.name?.toLowerCase().includes(word.toLowerCase())) || item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
+                    item?.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                    searchValue.split(' ').every((word) => item?.name?.toLowerCase().includes(word.toLowerCase())) ||
+                    item?.sku?.toLowerCase().includes(searchValue.toLowerCase())
                 ))
           )
       )
@@ -145,7 +148,9 @@ const Returns = ({ session, sessionToken }: Props) => {
 
     if (!response.data.error) {
       toast.success(response.data.message)
-      mutate(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/shipments/getReturnOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`)
+      mutate(
+        `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/shipments/getReturnOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`
+      )
     } else {
       toast.error(response.data.message)
     }
@@ -170,7 +175,9 @@ const Returns = ({ session, sessionToken }: Props) => {
         setToggleClearRows(!toggledClearRows)
         setSelectedRows([])
         toast.success(response.data.message)
-        mutate(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/shipments/getReturnOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`)
+        mutate(
+          `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/shipments/getReturnOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`
+        )
       } else {
         toast.error(response.data.message)
       }
@@ -202,7 +209,14 @@ const Returns = ({ session, sessionToken }: Props) => {
                     shipmentsEndDate={shipmentsEndDate}
                     handleChangeDatesFromPicker={handleChangeDatesFromPicker}
                   />
-                  <FilterReturns searchStatus={searchStatus} setSearchStatus={setSearchStatus} searchReason={searchReason} setSearchReason={setSearchReason} searchMarketplace={searchMarketplace} setSearchMarketplace={setSearchMarketplace} />
+                  <FilterReturns
+                    searchStatus={searchStatus}
+                    setSearchStatus={setSearchStatus}
+                    searchReason={searchReason}
+                    setSearchReason={setSearchReason}
+                    searchMarketplace={searchMarketplace}
+                    setSearchMarketplace={setSearchMarketplace}
+                  />
                   <Link href='/returns/Unsellables'>
                     <Button color='primary' className='fs-7'>
                       Unsellables
@@ -229,7 +243,7 @@ const Returns = ({ session, sessionToken }: Props) => {
                     </UncontrolledButtonDropdown>
                   )}
                 </div>
-                <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' minLength={3} />
+                <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' minLength={2} />
               </Row>
               <Card>
                 <CardBody>
