@@ -1,11 +1,12 @@
 import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
 
-import { SelectSingleValueType } from '@components/Common/SimpleSelect'
+import SimpleSelect, { SelectSingleValueType } from '@components/Common/SimpleSelect'
 import UploadFileDropzone from '@components/ui/UploadFileDropzone'
 import SelectSingleFilter from '@components/ui/filters/SelectSingleFilter'
 import AppContext from '@context/AppContext'
 import { Supplier, useSuppliers } from '@hooks/suppliers/useSuppliers'
+import { useWarehouses } from '@hooks/warehouses/useWarehouse'
 import axios from 'axios'
 import { Form, Formik } from 'formik'
 import Papa from 'papaparse'
@@ -31,9 +32,11 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
   const [showerrorResponse, setShowErrorResponse] = useState(false)
   const [errorResponse, setErrorResponse] = useState([]) as any
   const { suppliers } = useSuppliers()
+  const { warehouses, isLoading } = useWarehouses()
 
   const initialValues = {
     orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
+    destinationSC: { value: '', label: 'Select ...' },
     supplier: '',
     date: '',
   }
@@ -43,6 +46,12 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
       .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ... Nor White Spaces`)
       .max(50, 'Order Number is to Long')
       .required('Required Order Number'),
+    destinationSC: Yup.object().shape({
+      value: Yup.number().when([], {
+        is: () => !false,
+        then: Yup.number().required('Destination Required'),
+      }),
+    }),
     supplier: Yup.string().required('Required Supplier'),
     date: Yup.date().required('Required Date'),
   })
@@ -83,11 +92,13 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
     setShowErrorLines(false)
     setShowErrorResponse(false)
     setErrorResponse([])
+
     if (selectedFiles.length == 0) {
       setErrorFile(true)
       setLoading(false)
       return
     }
+
     Papa.parse(selectedFiles[0], {
       complete: async function (results, _file) {
         const resultValues = results.data as any
@@ -99,10 +110,17 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
             return
           }
 
+          const hasSplitting = false
+          const selectedWarehouse = warehouses.find((w) => w.warehouseId === parseInt(values.destinationSC.value))
+
           const response = await axios.post(`/api/purchaseOrders/addPoFromFile?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
             ...values,
             resultValues,
+            destinationSC: hasSplitting ? 0 : warehouses?.find((w) => w.warehouseId === parseInt(values.destinationSC.value))?.isSCDestination ? 1 : 0,
+            warehouseId: hasSplitting ? 0 : parseInt(values.destinationSC.value),
+            name3PL: hasSplitting ? null : selectedWarehouse?.name3PL,
           })
+
           if (!response.data.error) {
             if (organizeBy == 'suppliers') {
               mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
@@ -196,6 +214,21 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                       {touched.orderNumber && errors.orderNumber ? <FormFeedback type='invalid'>{errors.orderNumber}</FormFeedback> : null}
                     </div>
                   </FormGroup>
+
+                  <div className='mb-2'>
+                    <Label className='form-label mb-1 fs-7'>*Destination</Label>
+                    <SimpleSelect
+                      options={warehouses?.map((w) => ({ value: `${w.warehouseId}`, label: w.name })) || []}
+                      selected={values.destinationSC}
+                      handleSelect={(selected) => {
+                        handleChange({ target: { name: 'destinationSC', value: selected } })
+                      }}
+                      placeholder={isLoading ? 'Loading...' : 'Select ...'}
+                      customStyle='sm'
+                    />
+                    {errors.destinationSC && touched.destinationSC ? <div className='m-0 p-0 text-danger fs-7'>*{errors.destinationSC.value}</div> : null}
+                  </div>
+
                   <SelectSingleFilter
                     inputLabel={'*Supplier'}
                     inputName={'supplier'}
@@ -208,7 +241,7 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                     error={errors.supplier}
                   />
                   <FormGroup className='mb-1'>
-                    <Label htmlFor='firstNameinput' className='form-label'>
+                    <Label htmlFor='firstNameinput' className='form-label mb-1 fs-7'>
                       *Date
                     </Label>
                     <Input

@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
 
-import { SelectSingleValueType } from '@components/Common/SimpleSelect'
+import SimpleSelect, { SelectSingleValueType } from '@components/Common/SimpleSelect'
 import SelectSingleFilter from '@components/ui/filters/SelectSingleFilter'
 import AppContext from '@context/AppContext'
 import { useSuppliers } from '@hooks/suppliers/useSuppliers'
+import { useWarehouses } from '@hooks/warehouses/useWarehouse'
 import axios from 'axios'
 import { Form, Formik } from 'formik'
 import { toast } from 'react-toastify'
@@ -26,9 +27,11 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
   const { mutate } = useSWRConfig()
   const [loading, setLoading] = useState(false)
   const { suppliers } = useSuppliers()
+  const { warehouses, isLoading } = useWarehouses()
 
   const initialValues = {
     orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
+    destinationSC: { value: '', label: 'Select ...' },
     supplier: '',
     date: '',
   }
@@ -38,6 +41,12 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
       .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ... Nor White Spaces`)
       .max(50, 'Order Number is to Long')
       .required('Required Order Number'),
+    destinationSC: Yup.object().shape({
+      value: Yup.number().when([], {
+        is: () => !false,
+        then: Yup.number().required('Destination Required'),
+      }),
+    }),
     supplier: Yup.string().required('Required Supplier'),
     date: Yup.date().required('Required Date'),
   })
@@ -45,9 +54,16 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
   const handleSubmit = async (values: any) => {
     setLoading(true)
 
+    const hasSplitting = false
+    const selectedWarehouse = warehouses.find((w) => w.warehouseId === parseInt(values.destinationSC.value))
+
     const response = await axios.post(`/api/purchaseOrders/addPoManually?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
       ...values,
+      destinationSC: hasSplitting ? 0 : warehouses?.find((w) => w.warehouseId === parseInt(values.destinationSC.value))?.isSCDestination ? 1 : 0,
+      warehouseId: hasSplitting ? 0 : parseInt(values.destinationSC.value),
+      name3PL: hasSplitting ? null : selectedWarehouse?.name3PL,
     })
+
     if (!response.data.error) {
       mutate('/api/getuser')
       if (organizeBy == 'suppliers') {
@@ -122,9 +138,23 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
                     error={errors.supplier}
                   />
                 </Col>
-                <Col md={6}>
+                <Col md={6} className='py-1'>
+                  <div className='mb-2'>
+                    <Label className='form-label mb-1 fs-7'>*Destination</Label>
+                    <SimpleSelect
+                      options={warehouses?.map((w) => ({ value: `${w.warehouseId}`, label: w.name })) || []}
+                      selected={values.destinationSC}
+                      handleSelect={(selected) => {
+                        handleChange({ target: { name: 'destinationSC', value: selected } })
+                      }}
+                      placeholder={isLoading ? 'Loading...' : 'Select ...'}
+                      customStyle='sm'
+                    />
+                    {errors.destinationSC && touched.destinationSC ? <div className='m-0 p-0 text-danger fs-7'>*{errors.destinationSC.value}</div> : null}
+                  </div>
+
                   <FormGroup className='mb-1'>
-                    <Label htmlFor='firstNameinput' className='form-label'>
+                    <Label htmlFor='firstNameinput' className='form-label mb-1 fs-7'>
                       *Date
                     </Label>
                     <Input
