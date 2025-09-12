@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useRef, useState } from 'react'
 
-import SimpleSelect, { SelectSingleValueType } from '@components/Common/SimpleSelect'
+import SimpleSelectWithImage, { SelectSingleValueType } from '@components/Common/SimpleSelectWithImage'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap'
@@ -14,6 +14,7 @@ type Channels = {
 
 type Props = {
   selected: string
+  defaultLogo: string
   setLogo: (selected: SelectSingleValueType) => void
 }
 
@@ -22,7 +23,7 @@ const fetcher = async (endPoint: string) => {
   return data.channels
 }
 
-const AssignNewMarketplaceLogo = ({ selected, setLogo }: Props) => {
+const AssignNewMarketplaceLogo = ({ selected, defaultLogo, setLogo }: Props) => {
   const { state }: any = useContext(AppContext)
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const AssignNewMarketplaceLogoContainer = useRef<HTMLDivElement | null>(null)
@@ -57,13 +58,13 @@ const AssignNewMarketplaceLogo = ({ selected, setLogo }: Props) => {
           <div className='d-flex flex-column justify-content-start gap-2'>
             <span className='fs-7 fw-normal'>Set custom Logo:</span>
             {channels ? (
-              <SimpleSelect
+              <SimpleSelectWithImage
                 selected={channels.find((option) => option.value === selected) ?? { value: '', label: 'Default Logo' }}
                 handleSelect={(option) => {
                   setLogo(option)
                   setOpenDatesMenu(false)
                 }}
-                options={[{ value: '', label: 'Default Logo' }, ...channels]}
+                options={[{ value: '', label: 'Default Logo', imageUrl: defaultLogo }, ...channels]}
               />
             ) : (
               <div>Loading...</div>

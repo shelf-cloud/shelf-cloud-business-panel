@@ -1,8 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 import { useContext, useEffect, useState } from 'react'
 
+import { SelectSingleValueType } from '@components/Common/SimpleSelect'
+import UploadFileModal, { HandleSubmitParams } from '@components/modals/shared/UploadFileModal'
 import AppContext from '@context/AppContext'
-import { FormatCurrency } from '@lib/FormatNumbers'
+import { FormatBytes, FormatCurrency } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { sortNumbers, sortStringsCaseInsensitive } from '@lib/helperFunctions'
 import { MarketplaceFees, MarketplaceFeesResponse } from '@typesTs/marketplaces/marketplaceManager'
@@ -15,6 +17,7 @@ import useSWR, { useSWRConfig } from 'swr'
 
 import AssignCommerceHubFileType from './AssignCommerceHubFileType'
 import AssignNewMarketplaceLogo from './AssignNewMarketplaceLogo'
+import { MARKETPLACE_NAME_LIST } from './constants'
 import { commerceHubFileTypeOptions } from './marketplaceConstants'
 
 type Props = {}
@@ -29,6 +32,81 @@ const MarketplacesFees = ({}: Props) => {
   const [isLoaded, setisLoaded] = useState(false)
   const [hasError, setHasError] = useState(false)
   const [updatingFees, setUpdatingFees] = useState(false)
+
+  const [uploadLogoImage, setuploadLogoImage] = useState({
+    isOpen: false,
+    headerText: 'Upload Marketplace Logo',
+    primaryText: 'Add New Marketplace Logo',
+    primaryTextSub: 'supported formats: PNG, JPG. Max size: 2MB.',
+    descriptionText: 'Upload a new logo for a marketplace. The image should be in PNG or JPG format and optimized for web use.',
+    uploadZoneText: 'Drag & drop a logo file here, or click to select one (PNG, JPG)',
+    confirmText: 'Upload',
+    loadingText: 'Uploading...',
+    select: { value: '', label: 'Select Marketplace' } as SelectSingleValueType,
+    selectedFiles: [] as any[],
+    acceptedFiles: {
+      'image/jpeg': [],
+      'image/png': [],
+    },
+    handleSelect: (selected: SelectSingleValueType) => {
+      setuploadLogoImage((prev) => ({ ...prev, select: selected }))
+    },
+    handleAcceptedFiles: (acceptedFiles: File[]) => {
+      acceptedFiles.map((file) =>
+        Object.assign(file, {
+          preview: URL.createObjectURL(file),
+          formattedSize: FormatBytes(file.size),
+        })
+      )
+      setuploadLogoImage((prev) => ({ ...prev, selectedFiles: acceptedFiles }))
+    },
+    handleClearFiles: () => {
+      setuploadLogoImage((prev) => ({ ...prev, selectedFiles: [] }))
+    },
+    handleSubmit: async ({ region, businessId, selectedFiles, marketplace }: HandleSubmitParams) => {
+      if (selectedFiles.length === 0) {
+        toast.error('Please select a file to upload')
+        return { error: false }
+      }
+
+      const uploadingAsset = toast.loading('Uploading logo...')
+
+      const formData = new FormData()
+      formData.append('assetType', 'marketplace')
+      formData.append('fileName', selectedFiles[0].name)
+      formData.append('fileType', selectedFiles[0].type.split('/')[1])
+      formData.append('file', selectedFiles[0])
+      formData.append('marketplaceName', marketplace!)
+
+      const { data } = await axios.post(`/api/assets/uploadNewAsset?region=${region}&businessId=${businessId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+
+      if (!data.error) {
+        toast.update(uploadingAsset, {
+          render: data.message,
+          type: 'success',
+          isLoading: false,
+          autoClose: 3000,
+        })
+        return { error: true }
+      } else {
+        toast.update(uploadingAsset, {
+          render: data.message ?? 'Error uploading logo',
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+        })
+        return { error: false }
+      }
+    },
+    handleClose: () => {
+      setuploadLogoImage((prev) => ({ ...prev, isOpen: false, select: { value: '', label: 'Select Marketplace' }, selectedFiles: [] }))
+    },
+  })
+
   const { data }: { data?: MarketplaceFeesResponse } = useSWR(
     state.user.businessId ? `/api/marketplaces/getMarketplacesFees?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
     fetcher,
@@ -86,6 +164,7 @@ const MarketplacesFees = ({}: Props) => {
             {showEditFields && (
               <AssignNewMarketplaceLogo
                 selected={row.aliasLogo ?? row.logoLink}
+                defaultLogo={row.logoLink}
                 setLogo={(selected) => setmarketplaceFees((prev) => ({ ...prev, [row.storeId]: { ...row, aliasLogo: selected!.value !== '' ? selected!.value : null } }))}
               />
             )}
@@ -309,23 +388,27 @@ const MarketplacesFees = ({}: Props) => {
 
   return (
     <>
-      <div className='text-end'>
+      <div className='d-flex flex-row justify-content-end align-items-center gap-3 mb-2'>
+        <Button color='primary' size='sm' onClick={() => setuploadLogoImage((prev) => ({ ...prev, isOpen: true }))}>
+          Add New Logo
+        </Button>
         {!showEditFields ? (
           <Button color='primary' size='sm' onClick={() => setshowEditFields(true)}>
             Edit
           </Button>
         ) : (
           <div className='d-flex flex-row justify-content-end align-items-center gap-3'>
-            <Button color='light' size='sm' onClick={() => setshowEditFields(false)}>
-              Cancel
-            </Button>
             <Button color='success' size='sm' disabled={hasError} onClick={handleUpdateMarketplaceFees}>
               {updatingFees ? <Spinner size={'sm'} color='white' /> : 'Save'}
+            </Button>
+            <Button color='light' size='sm' onClick={() => setshowEditFields(false)}>
+              Cancel
             </Button>
           </div>
         )}
       </div>
       <DataTable columns={columns} data={Object.values(marketplaceFees)} dense progressPending={isLoaded} striped={true} defaultSortFieldId={2} />
+      {uploadLogoImage.isOpen ? <UploadFileModal {...uploadLogoImage} showSelect options={MARKETPLACE_NAME_LIST.map((name) => ({ value: name, label: name }))} /> : null}
     </>
   )
 }

@@ -1,13 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useContext } from 'react'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { useRouter } from 'next/router'
+import { useContext, useState } from 'react'
+
 import AppContext from '@context/AppContext'
-import { toast } from 'react-toastify'
 import axios from 'axios'
 import { useFormik } from 'formik'
+import { toast } from 'react-toastify'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
 import * as Yup from 'yup'
-import { useRouter } from 'next/router'
 
 type CloneProductModal = {
   isOpen: boolean
@@ -29,10 +30,12 @@ const CloneProductModal = ({ cloneProductModal, setcloneProductModal }: Props) =
     initialValues: {
       title: cloneProductModal.originalName,
       sku: '',
+      upc: '',
     },
     validationSchema: Yup.object({
       title: Yup.string().max(100, 'Title is to Long.').required('Please Enter Your Title'),
-      sku: Yup.string().max(50, 'SKU is to Long.').notOneOf([cloneProductModal.originalSku], 'SKU cannot be the same as the original SKU').required('Please Enter Your Sku'),
+      sku: Yup.string().max(50, 'SKU is to Long.').notOneOf([cloneProductModal.originalSku], 'SKU cannot be the same as the original SKU').required('Please Enter Sku'),
+      upc: Yup.string().max(50, 'UPC is to Long.').required('Please Enter UPC'),
     }),
     onSubmit: async (values) => {
       setLoading(true)
@@ -43,6 +46,7 @@ const CloneProductModal = ({ cloneProductModal, setcloneProductModal }: Props) =
           .post(`/api/products/cloneProduct?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
             title: values.title,
             sku: values.sku,
+            upc: values.upc,
             originalId: cloneProductModal.originalId,
             originalSku: cloneProductModal.originalSku,
           })
@@ -147,6 +151,28 @@ const CloneProductModal = ({ cloneProductModal, setcloneProductModal }: Props) =
                   invalid={validation.touched.sku && validation.errors.sku ? true : false}
                 />
                 {validation.touched.sku && validation.errors.sku ? <FormFeedback type='invalid'>{validation.errors.sku}</FormFeedback> : null}
+              </FormGroup>
+            </Col>
+            <Col xs={12} md={6}>
+              <FormGroup className='mb-3'>
+                <Label htmlFor='lastNameinput' className='form-label'>
+                  *UPC
+                </Label>
+                <Input
+                  type='text'
+                  className='form-control fs-7 text-uppercase'
+                  placeholder='UPC...'
+                  id='upc'
+                  name='upc'
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase()
+                    validation.handleChange(e)
+                  }}
+                  onBlur={validation.handleBlur}
+                  value={validation.values.upc || ''}
+                  invalid={validation.touched.upc && validation.errors.upc ? true : false}
+                />
+                {validation.touched.upc && validation.errors.upc ? <FormFeedback type='invalid'>{validation.errors.upc}</FormFeedback> : null}
               </FormGroup>
             </Col>
             <Col md={12}>

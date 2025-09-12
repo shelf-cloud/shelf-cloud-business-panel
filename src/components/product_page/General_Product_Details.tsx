@@ -1,15 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useContext, useState } from 'react'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Row } from 'reactstrap'
-import * as Yup from 'yup'
+import { useContext, useState } from 'react'
+
+import UploadFileModal, { HandleSubmitParams } from '@components/modals/shared/UploadFileModal'
+import AppContext from '@context/AppContext'
+import { FormatBytes } from '@lib/FormatNumbers'
+import { NoImageAdress } from '@lib/assetsConstants'
+import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Row } from 'reactstrap'
 import { useSWRConfig } from 'swr'
-import axios from 'axios'
-import AppContext from '@context/AppContext'
-import Select_Product_Details from './Select_Product_Details'
+import * as Yup from 'yup'
+
 import Select_Condition_Product_Details from './Select_Condition_Product_Details'
-import { NoImageAdress } from '@lib/assetsConstants'
+import Select_Product_Details from './Select_Product_Details'
 
 type Props = {
   inventoryId?: number
@@ -52,12 +56,83 @@ const General_Product_Details = ({
   const { mutate } = useSWRConfig()
   const [showEditFields, setShowEditFields] = useState(false)
   const [isLoading, setisLoading] = useState(false)
+  const [uploadLogoImage, setuploadLogoImage] = useState({
+    isOpen: false,
+    headerText: 'Upload Product Image',
+    primaryText: 'Change Product Image',
+    primaryTextSub: 'supported formats: PNG, JPG. Max size: 2MB.',
+    descriptionText: 'Upload a new image for the product. The image should be in PNG or JPG format and optimized for web use.',
+    uploadZoneText: 'Drag & drop a product image file here, or click to select one (PNG, JPG)',
+    confirmText: 'Upload',
+    loadingText: 'Uploading...',
+    inventoryId: inventoryId || 0,
+    selectedFiles: [] as any[],
+    acceptedFiles: {
+      'image/jpeg': [],
+      'image/png': [],
+    },
+    handleAcceptedFiles: (acceptedFiles: File[]) => {
+      acceptedFiles.map((file) =>
+        Object.assign(file, {
+          preview: URL.createObjectURL(file),
+          formattedSize: FormatBytes(file.size),
+        })
+      )
+      setuploadLogoImage((prev) => ({ ...prev, selectedFiles: acceptedFiles }))
+    },
+    handleClearFiles: () => {
+      setuploadLogoImage((prev) => ({ ...prev, selectedFiles: [] }))
+    },
+    handleSubmit: async ({ region, businessId, selectedFiles }: HandleSubmitParams) => {
+      if (selectedFiles.length === 0) {
+        toast.error('Please select a file to upload')
+        return { error: false }
+      }
+
+      const uploadingAsset = toast.loading('Uploading Image...')
+
+      const formData = new FormData()
+      formData.append('assetType', 'product')
+      formData.append('fileName', selectedFiles[0].name)
+      formData.append('fileType', selectedFiles[0].type.split('/')[1])
+      formData.append('file', selectedFiles[0])
+      formData.append('inventoryId', uploadLogoImage.inventoryId.toString())
+
+      const { data } = await axios.post(`/api/assets/uploadNewAsset?region=${region}&businessId=${businessId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+
+      if (!data.error) {
+        toast.update(uploadingAsset, {
+          render: data.message,
+          type: 'success',
+          isLoading: false,
+          autoClose: 3000,
+        })
+        mutate(`/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${inventoryId}&businessId=${state.user.businessId}`)
+        return { error: true }
+      } else {
+        toast.update(uploadingAsset, {
+          render: data.message ?? 'Error uploading logo',
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+        })
+        return { error: false }
+      }
+    },
+    handleClose: () => {
+      setuploadLogoImage((prev) => ({ ...prev, isOpen: false, selectedFiles: [] }))
+    },
+  })
+
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
       inventoryId,
       sku,
-      image,
       title,
       description: description ?? '',
       brand: brand ?? '',
@@ -71,7 +146,6 @@ const General_Product_Details = ({
     },
     validationSchema: Yup.object({
       title: Yup.string().max(100, 'Title is to Long').required('Please enter product title'),
-      image: Yup.string().url(),
       description: Yup.string().max(300, 'Title is to Long'),
       brand: Yup.string().max(200, 'Title is to Long').required('Please enter product brand'),
       category: Yup.string().max(100, 'Title is to Long'),
@@ -110,7 +184,6 @@ const General_Product_Details = ({
     validation.setValues({
       inventoryId,
       sku,
-      image,
       title,
       description: description ?? '',
       brand: brand ?? '',
@@ -138,16 +211,27 @@ const General_Product_Details = ({
       <p className='fs-4 text-primary fw-semibold'>General</p>
       {!showEditFields ? (
         <div className='w-full d-flex flex-column justify-content-start align-items-start gap-4 flex-lg-row'>
-          <div
-            style={{
-              width: '30%',
-              height: 'auto',
-              margin: '2px 0px',
-              position: 'relative',
-              minWidth: '150px',
-              maxWidth: '200px',
-            }}>
-            <img loading='lazy' src={image ? image : NoImageAdress} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
+          <div className='d-flex flex-column justify-content-start align-items-start gap-2'>
+            <div
+              style={{
+                width: '30%',
+                height: 'auto',
+                margin: '2px 0px',
+                position: 'relative',
+                minWidth: '150px',
+                maxWidth: '200px',
+              }}>
+              <img
+                loading='lazy'
+                src={image ? image : NoImageAdress}
+                alt='product Image'
+                style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+              />
+            </div>
+            <Button className='d-flex align-items-center gap-2' color='primary' size='sm' onClick={() => setuploadLogoImage((prev) => ({ ...prev, isOpen: true }))}>
+              <i className='mdi mdi-cloud-upload fs-5 m-0 p-0' />
+              Image
+            </Button>
           </div>
           <div className='w-100'>
             <table className='table table-sm table-borderless'>
@@ -197,7 +281,7 @@ const General_Product_Details = ({
             </table>
           </div>
           <div>
-            <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i>
+            <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }} />
           </div>
         </div>
       ) : (
@@ -352,26 +436,6 @@ const General_Product_Details = ({
             </div>
             <Col md={12}>
               <FormGroup className='mb-3'>
-                <Label htmlFor='lastNameinput' className='form-label'>
-                  Product Image
-                </Label>
-                <Input
-                  type='text'
-                  className='form-control fs-6'
-                  placeholder='Image URL...'
-                  id='image'
-                  name='image'
-                  bsSize='sm'
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.image || ''}
-                  invalid={validation.touched.image && validation.errors.image ? true : false}
-                />
-                {validation.touched.image && validation.errors.image ? <FormFeedback type='invalid'>{validation.errors.image}</FormFeedback> : null}
-              </FormGroup>
-            </Col>
-            <Col md={12}>
-              <FormGroup className='mb-3'>
                 <Label htmlFor='note' className='form-label'>
                   Product Note
                 </Label>
@@ -403,6 +467,7 @@ const General_Product_Details = ({
           </Row>
         </Form>
       )}
+      {uploadLogoImage.isOpen ? <UploadFileModal {...uploadLogoImage} /> : null}
     </div>
   )
 }
