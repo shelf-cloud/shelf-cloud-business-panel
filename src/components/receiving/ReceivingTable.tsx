@@ -12,6 +12,7 @@ import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from
 
 import ShipmentExpandedDetail from '../ShipmentExpandedDetail'
 import GenerateReceivingLabels from './GenerateReceivingLabels'
+import ReceivingPackingSlip from './packing_slip/ReceivingPackingSlip'
 
 type Props = {
   tableData: OrderRowType[]
@@ -170,6 +171,7 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
                   <span className='fw-normal text-dark'>Shipping Cost</span>
                 </div>
               </DropdownItem>
+              {row.boxes ? <ReceivingPackingSlip receiving={row} /> : null}
               {!row.isReceivingFromPo && row.orderStatus !== 'received' && (
                 <DropdownItem>
                   <a href={row.proofOfShipped || '#'} target='blank' rel='noopener noreferrer' className='text-black'>
