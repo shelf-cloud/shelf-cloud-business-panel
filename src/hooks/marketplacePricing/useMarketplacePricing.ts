@@ -1,6 +1,7 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+
 import { MKP_Product, MKP_Response } from '@typesTs/marketplacePricing/marketplacePricing'
 import axios from 'axios'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
 
@@ -14,7 +15,6 @@ export type MKP_ExpandedRowProps = {
 }
 
 type Props = {
-  sessionToken: string
   session: any
   state: any
   storeId: string
@@ -37,7 +37,20 @@ const calculateNewProposedPrice = ({ totalCosts, commissionDecimal, marginDecima
   return Math.round(price * 100) / 100
 }
 
-export const useMarketplacePricing = ({ sessionToken, session, state, storeId, searchValue, setchangesMade, units1monthmin, units1monthmax, units1yearmin, units1yearmax, supplier, brand, category }: Props) => {
+export const useMarketplacePricing = ({
+  session,
+  state,
+  storeId,
+  searchValue,
+  setchangesMade,
+  units1monthmin,
+  units1monthmax,
+  units1yearmin,
+  units1yearmax,
+  supplier,
+  brand,
+  category,
+}: Props) => {
   const [productsInfo, setproductsInfo] = useState<MKP_Response>({})
   const controllerRef = useRef<AbortController | null>(null)
 
@@ -51,14 +64,11 @@ export const useMarketplacePricing = ({ sessionToken, session, state, storeId, s
   }, [])
 
   const { isValidating } = useSWR(
-    session && state.user.businessId ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/marketplaces/pricing/getMarketplacePricing?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
+    session && state.user.businessId ? `/api/marketplaces/pricing/getMarketplacePricing?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
     async (endPoint: string) => {
       try {
         const response = await axios.get<MKP_Response>(endPoint, {
           signal: controllerRef.current?.signal,
-          headers: {
-            Authorization: `Bearer ${sessionToken}`,
-          },
         })
         return response.data
       } catch (error) {
@@ -159,7 +169,14 @@ export const useMarketplacePricing = ({ sessionToken, session, state, storeId, s
           const product = updatedProducts[sku]
           const marketplace = product.marketplaces[storeId]
 
-          const totalCosts = product.sellerCost + product.inboundShippingCost + marketplace.shippingToMarketpalce + product.otherCosts + marketplace.storeOtherCosts + marketplace.fbaHandlingFee + marketplace.fixedFee
+          const totalCosts =
+            product.sellerCost +
+            product.inboundShippingCost +
+            marketplace.shippingToMarketpalce +
+            product.otherCosts +
+            marketplace.storeOtherCosts +
+            marketplace.fbaHandlingFee +
+            marketplace.fixedFee
           const marginDecimal = value / 100
           const commissionDecimal = marketplace.comissionFee / 100
 
@@ -200,7 +217,14 @@ export const useMarketplacePricing = ({ sessionToken, session, state, storeId, s
           for (const storeId in updatedProducts[sku].marketplaces) {
             const marketplace = product.marketplaces[storeId]
 
-            const totalCosts = product.sellerCost + product.inboundShippingCost + marketplace.shippingToMarketpalce + product.otherCosts + marketplace.storeOtherCosts + marketplace.fbaHandlingFee + marketplace.fixedFee
+            const totalCosts =
+              product.sellerCost +
+              product.inboundShippingCost +
+              marketplace.shippingToMarketpalce +
+              product.otherCosts +
+              marketplace.storeOtherCosts +
+              marketplace.fbaHandlingFee +
+              marketplace.fixedFee
             const marginDecimal = value / 100
             const commissionDecimal = marketplace.comissionFee / 100
 
@@ -248,7 +272,14 @@ export const useMarketplacePricing = ({ sessionToken, session, state, storeId, s
               const product = updatedProducts[sku]
               const marketplace = product.marketplaces[storeId]
 
-              const totalCosts = product.sellerCost + product.inboundShippingCost + marketplace.shippingToMarketpalce + product.otherCosts + marketplace.storeOtherCosts + marketplace.fbaHandlingFee + marketplace.fixedFee
+              const totalCosts =
+                product.sellerCost +
+                product.inboundShippingCost +
+                marketplace.shippingToMarketpalce +
+                product.otherCosts +
+                marketplace.storeOtherCosts +
+                marketplace.fbaHandlingFee +
+                marketplace.fixedFee
               const marginDecimal = value / 100
               const commissionDecimal = marketplace.comissionFee / 100
 

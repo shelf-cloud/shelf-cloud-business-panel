@@ -1,24 +1,23 @@
+import { GetServerSideProps } from 'next'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
+
 import { getSession } from '@auth/client'
 import BreadCrumb from '@components/Common/BreadCrumb'
-import ExportMarketplacePricing from '@components/marketplacePricing/exportMarketplacePricing'
 import MKP_Filters, { MKP_FiltersType } from '@components/marketplacePricing/MKP_Filters'
 import MKP_table from '@components/marketplacePricing/MKP_table'
 import MKP_table_ByMarketplace from '@components/marketplacePricing/MKP_table_ByMarketplace'
+import ExportMarketplacePricing from '@components/marketplacePricing/exportMarketplacePricing'
 import SearchInput from '@components/ui/SearchInput'
 import SelectMarketplaceDropDown from '@components/ui/SelectMarketplaceDropDown'
 import AppContext from '@context/AppContext'
 import { useMarketplacePricing } from '@hooks/marketplacePricing/useMarketplacePricing'
 import { useMarketplaces } from '@hooks/marketplaces/useMarketplaces'
 import { MKP_Product } from '@typesTs/marketplacePricing/marketplacePricing'
-import { GetServerSideProps } from 'next'
-import Head from 'next/head'
-import { useRouter } from 'next/router'
-import React, { useCallback, useContext, useMemo, useState } from 'react'
 import { Button, Card, CardBody, CardHeader, Collapse, Container, Nav, NavItem, Row, TabContent, TabPane } from 'reactstrap'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
-  const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
-
   const session = await getSession(context)
   if (session == null) {
     return {
@@ -29,12 +28,11 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
     }
   }
   return {
-    props: { session, sessionToken },
+    props: { session },
   }
 }
 
 type Props = {
-  sessionToken: string
   session: {
     user: {
       businessName: string
@@ -68,26 +66,40 @@ const filterProducts = (products: MKP_Product[], margin: string | undefined, mar
         const actualMargin =
           marketplace.actualPrice <= 0
             ? 0
-            : ((marketplace.actualPrice - marketplace.totalFees - product.sellerCost - product.inboundShippingCost - product.otherCosts - marketplace.shippingToMarketpalce - marketplace.storeOtherCosts) / marketplace.actualPrice) * 100
+            : ((marketplace.actualPrice -
+                marketplace.totalFees -
+                product.sellerCost -
+                product.inboundShippingCost -
+                product.otherCosts -
+                marketplace.shippingToMarketpalce -
+                marketplace.storeOtherCosts) /
+                marketplace.actualPrice) *
+              100
 
         const marginCondition =
           marginValue !== null && marginoperatorValue !== null
             ? marginoperator === '=='
               ? actualMargin === marginValue
               : marginoperator === '!='
-              ? actualMargin !== marginValue
-              : marginoperator === '>'
-              ? actualMargin > marginValue
-              : marginoperator === '<'
-              ? actualMargin < marginValue
-              : marginoperator === '>='
-              ? actualMargin >= marginValue
-              : marginoperator === '<='
-              ? actualMargin <= marginValue
-              : true
+                ? actualMargin !== marginValue
+                : marginoperator === '>'
+                  ? actualMargin > marginValue
+                  : marginoperator === '<'
+                    ? actualMargin < marginValue
+                    : marginoperator === '>='
+                      ? actualMargin >= marginValue
+                      : marginoperator === '<='
+                        ? actualMargin <= marginValue
+                        : true
             : true
 
-        return (showOnlyOnWatch === undefined || showOnlyOnWatch === '' ? true : showOnlyOnWatch === 'true' ? marketplace.proposedPrice > 0 && marketplace.proposedPrice !== marketplace.actualPrice : true) && marginCondition
+        return (
+          (showOnlyOnWatch === undefined || showOnlyOnWatch === ''
+            ? true
+            : showOnlyOnWatch === 'true'
+              ? marketplace.proposedPrice > 0 && marketplace.proposedPrice !== marketplace.actualPrice
+              : true) && marginCondition
+        )
       })
       .map((marketplace) => ({
         ...rest,
@@ -96,7 +108,7 @@ const filterProducts = (products: MKP_Product[], margin: string | undefined, mar
   })
 }
 
-const MarketplacePricing = ({ session, sessionToken }: Props) => {
+const MarketplacePricing = ({ session }: Props) => {
   const title = `Marketplace Pricing | ${session?.user?.businessName}`
   const { state } = useContext(AppContext)
   const router = useRouter()
@@ -107,8 +119,17 @@ const MarketplacePricing = ({ session, sessionToken }: Props) => {
   const [searchValue, setSearchValue] = useState<string>('')
   const [changesMade, setchangesMade] = useState(false)
   const [selectedMarketplace, setSelectedMarketplace] = useState({ storeId: '9999', name: 'All Marketplaces', logo: '' })
-  const { products, isLoadingProducts, handleOtherCosts, handleProposedPrice, handleSetSingleMargin, handleSetProductMargin, handleSaveProductsInfo, handleNotes, handleSetMarketplaceMargin } = useMarketplacePricing({
-    sessionToken,
+  const {
+    products,
+    isLoadingProducts,
+    handleOtherCosts,
+    handleProposedPrice,
+    handleSetSingleMargin,
+    handleSetProductMargin,
+    handleSaveProductsInfo,
+    handleNotes,
+    handleSetMarketplaceMargin,
+  } = useMarketplacePricing({
     session,
     state,
     storeId: selectedMarketplace.storeId,
@@ -235,7 +256,12 @@ const MarketplacePricing = ({ session, sessionToken }: Props) => {
                     </Button>
                   </NavItem>
                 </Nav>
-                <SelectMarketplaceDropDown selectionInfo={marketplaces || []} selected={selectedMarketplace} handleSelection={setSelectedMarketplace} showAllMarketsOption={activeTab === 'byProducts'} />
+                <SelectMarketplaceDropDown
+                  selectionInfo={marketplaces || []}
+                  selected={selectedMarketplace}
+                  handleSelection={setSelectedMarketplace}
+                  showAllMarketsOption={activeTab === 'byProducts'}
+                />
               </CardHeader>
               <CardBody>
                 <TabContent activeTab={activeTab}>

@@ -4,7 +4,7 @@ import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 import { getServerSession } from 'next-auth'
 
-const getMarketplacesFees: NextApiHandler = async (request, response) => {
+const getMarketplacePricing: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)
   if (session == null) {
     response.status(401).end()
@@ -12,8 +12,8 @@ const getMarketplacesFees: NextApiHandler = async (request, response) => {
     return
   }
 
-  axios(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/marketplaces/getMarketplacesFees.php?businessId=${request.query.businessId}`)
-    .then(async ({ data }) => {
+  axios(`${process.env.SHELFCLOUD_SERVER_URL}/marketplaces/pricing/getMarketplacePricing?region=${request.query.region}&businessId=${request.query.businessId}`)
+    .then(({ data }) => {
       response.json(data)
     })
     .catch((error) => {
@@ -22,7 +22,7 @@ const getMarketplacesFees: NextApiHandler = async (request, response) => {
         // that falls out of the range of 2xx
         response.json({
           error: true,
-          message: `Error Amazon API Integration ${error.response.data.error_description}, please try again later.`,
+          message: `Error Mapping, please try again later.`,
         })
       } else if (error.request) {
         // The request was made but no response was received
@@ -40,4 +40,4 @@ const getMarketplacesFees: NextApiHandler = async (request, response) => {
     })
 }
 
-export default getMarketplacesFees
+export default getMarketplacePricing
