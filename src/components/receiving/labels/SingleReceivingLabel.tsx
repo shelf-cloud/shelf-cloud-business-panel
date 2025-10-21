@@ -95,7 +95,7 @@ const SingleReceivingLabel = ({ boxNumber, data, warehouse, totalBoxes, companyN
             ))}
           </View>
 
-          {data.items.length === 1 && !isShipjoy && (
+          {data.items.length === 1 && (
             <View style={ReceivingStyles.qrSection}>
               <Image style={ReceivingStyles.qrCode} src={qrCodeUrl} />
               <Text style={ReceivingStyles.qrLabel}>Internal use only</Text>

@@ -324,9 +324,3 @@ const Create_Receiving_Boxes_Multi = ({
 }
 
 export default Create_Receiving_Boxes_Multi
-
-14880
-17768
-
-96
-423 + 30
