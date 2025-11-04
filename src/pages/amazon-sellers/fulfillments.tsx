@@ -1,21 +1,22 @@
-import React, { useContext, useMemo, useState } from 'react'
-import Head from 'next/head'
 import { GetServerSideProps } from 'next'
-import { getSession } from '@auth/client'
-import { Button, Card, CardBody, Col, Container, Row } from 'reactstrap'
-import BreadCrumb from '@components/Common/BreadCrumb'
-import { DebounceInput } from 'react-debounce-input'
-import AppContext from '@context/AppContext'
+import Head from 'next/head'
 import Link from 'next/link'
-import axios from 'axios'
-import useSWR, { mutate } from 'swr'
-import { toast } from 'react-toastify'
-import { ListInboundPlan } from '@typesTs/amazon/fulfillments/listInboundPlans'
+import React, { useContext, useMemo, useState } from 'react'
+
+import { getSession } from '@auth/client'
+import BreadCrumb from '@components/Common/BreadCrumb'
 import FulfillmentsTable from '@components/amazon/fulfillment/FulfillmentsTable'
-import AssignWorkflowId from '@components/modals/amazon/AssignWorkflowId'
 import MasterBoxHelp from '@components/amazon/offcanvas/MasterBoxHelp'
 import AssignFinishedWorkflowId from '@components/modals/amazon/AssignFinishedWorkflowId'
+import AssignWorkflowId from '@components/modals/amazon/AssignWorkflowId'
 import ConfirmCancelInboundPlan from '@components/modals/amazon/ConfirmCancelInboundPlan'
+import AppContext from '@context/AppContext'
+import { ListInboundPlan } from '@typesTs/amazon/fulfillments/listInboundPlans'
+import axios from 'axios'
+import { DebounceInput } from 'react-debounce-input'
+import { toast } from 'react-toastify'
+import { Button, Card, CardBody, Col, Container, Row } from 'reactstrap'
+import useSWR, { mutate } from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -73,7 +74,7 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
     skus: 0,
     units: 0,
   })
-  const title = `Send To Amazon | ${session?.user?.businessName}`
+  const title = `Fulfillments | ${session?.user?.businessName}`
 
   const controller = new AbortController()
   const signal = controller.signal
@@ -97,16 +98,25 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
         }
       })
   }
-  useSWR(session && state.user.businessId ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/listSellerInboundPlans/${state.currentRegion}/${state.user.businessId}` : null, fetcher, {
-    revalidateOnFocus: false,
-  })
+  useSWR(
+    session && state.user.businessId
+      ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/listSellerInboundPlans/${state.currentRegion}/${state.user.businessId}`
+      : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  )
 
   const filteredItems = useMemo(() => {
     if (searchValue === '') return allData
 
     if (searchValue !== '') {
       return allData.filter(
-        (item: ListInboundPlan) => item.name.toLowerCase().includes(searchValue.toLowerCase()) || item.status.toLowerCase().includes(searchValue.toLowerCase()) || item.destinationMarketplaces.toLowerCase().includes(searchValue.toLowerCase())
+        (item: ListInboundPlan) =>
+          item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item.status.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item.destinationMarketplaces.toLowerCase().includes(searchValue.toLowerCase())
       )
     }
 
@@ -116,7 +126,9 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
   const handleRepairFBAWorkflow = async (inboundPlanId: string) => {
     const repairFBAWorkflow = toast.loading('Retrying Inbound Plan...')
     try {
-      const response = await axios.get(`/api/amazon/fullfilments/repairFBAWorkflow?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`)
+      const response = await axios.get(
+        `/api/amazon/fullfilments/repairFBAWorkflow?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`
+      )
 
       if (!response.data.error) {
         toast.update(repairFBAWorkflow, {
@@ -204,8 +216,17 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
         </div>
       </React.Fragment>
       {cancelInboundPlanModal.show && <ConfirmCancelInboundPlan cancelInboundPlanModal={cancelInboundPlanModal} setcancelInboundPlanModal={setcancelInboundPlanModal} />}
-      {assignWorkflowIdModal.show && <AssignWorkflowId allData={allData} assignWorkflowIdModal={assignWorkflowIdModal} setassignWorkflowIdModal={setassignWorkflowIdModal} sessionToken={sessionToken} />}
-      {assignFinishedWorkflowIdModal.show && <AssignFinishedWorkflowId allData={allData} assignFinishedWorkflowIdModal={assignFinishedWorkflowIdModal} setassignFinishedWorkflowIdModal={setassignFinishedWorkflowIdModal} sessionToken={sessionToken} />}
+      {assignWorkflowIdModal.show && (
+        <AssignWorkflowId allData={allData} assignWorkflowIdModal={assignWorkflowIdModal} setassignWorkflowIdModal={setassignWorkflowIdModal} sessionToken={sessionToken} />
+      )}
+      {assignFinishedWorkflowIdModal.show && (
+        <AssignFinishedWorkflowId
+          allData={allData}
+          assignFinishedWorkflowIdModal={assignFinishedWorkflowIdModal}
+          setassignFinishedWorkflowIdModal={setassignFinishedWorkflowIdModal}
+          sessionToken={sessionToken}
+        />
+      )}
       <MasterBoxHelp isOpen={helpOffCanvasIsOpen} setHelpOffCanvasIsOpen={setHelpOffCanvasIsOpen} />
     </div>
   )

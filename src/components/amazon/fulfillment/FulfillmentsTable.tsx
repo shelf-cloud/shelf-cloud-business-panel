@@ -1,10 +1,11 @@
+import { useRouter } from 'next/router'
+import { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
 import { AMAZON_MARKETPLACES } from '@lib/AmzConstants'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { ListInboundPlan } from '@typesTs/amazon/fulfillments/listInboundPlans'
 import moment from 'moment'
-import { useRouter } from 'next/router'
-import React, { useContext } from 'react'
 import DataTable from 'react-data-table-component'
 import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from 'reactstrap'
 
@@ -54,17 +55,17 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
       grow: 1.8,
       style: {
         fontSize: '0.7rem',
-      }
+      },
     },
     {
-      name: <span className='fw-bold fs-6'>Marketpalce</span>,
-      selector: (row: ListInboundPlan) => AMAZON_MARKETPLACES[row.destinationMarketplaces].domain,
+      name: <span className='fw-bold fs-6'>Marketplace</span>,
+      selector: (row: ListInboundPlan) => AMAZON_MARKETPLACES[row.destinationMarketplaces]?.domain ?? 'Error Marketplace',
       sortable: true,
       center: true,
       compact: true,
       style: {
         fontSize: '0.7rem',
-      }
+      },
     },
     {
       name: <span className='fw-bold fs-6'>Date Created</span>,
@@ -85,31 +86,24 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
           case 'complete':
           case 'completed':
             return <span className='badge text-uppercase badge-soft-success p-2'>{` ${row.status} `}</span>
-            break
           case 'delivered':
           case 'creating':
             return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${row.status} `}</span>
-            break
           case 'assign':
           case 'working':
           case 'awaiting':
           case 'active':
             return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${row.status} `}</span>
-            break
           case 'ready to ship':
             return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${row.status} `}</span>
-            break
           case 'error':
             return <span className='badge text-uppercase badge-soft-danger p-2'>{` ${row.status} `}</span>
-            break
           case 'cancelled':
           case 'closed':
           case 'deleted':
             return <span className='badge text-uppercase badge-soft-dark p-2'> {row.status} </span>
-            break
           default:
             return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${row.status} `}</span>
-            break
         }
       },
       sortable: true,
@@ -129,7 +123,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
       compact: true,
       style: {
         fontSize: '0.7rem',
-      }
+      },
     },
     {
       name: <span className='fw-bold fs-6'>Units</span>,
@@ -143,7 +137,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
       compact: true,
       style: {
         fontSize: '0.7rem',
-      }
+      },
     },
     {
       name: <span className='fw-bold fs-6'>Action</span>,
@@ -154,7 +148,6 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
         switch (row.status.toLowerCase()) {
           case 'creating':
             return <></>
-            break
           case 'active':
           case 'assign':
           case 'working':
@@ -170,8 +163,8 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
                         row.amzFinished
                           ? router.push(`/amazon-sellers/fulfillment/sellerPortal/${row.inboundPlanId}`)
                           : row.fulfillmentType === 'Master Boxes'
-                          ? router.push(`/amazon-sellers/fulfillment/masterBoxes/${row.inboundPlanId}`)
-                          : router.push(`/amazon-sellers/fulfillment/individualUnits/${row.inboundPlanId}`)
+                            ? router.push(`/amazon-sellers/fulfillment/masterBoxes/${row.inboundPlanId}`)
+                            : router.push(`/amazon-sellers/fulfillment/individualUnits/${row.inboundPlanId}`)
                       }>
                       <div>
                         <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
@@ -235,7 +228,6 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
                 )}
               </UncontrolledDropdown>
             )
-            break
           case 'completed':
           case 'complete':
             return (
@@ -249,8 +241,8 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
                       row.amzFinished
                         ? router.push(`/amazon-sellers/fulfillment/sellerPortal/${row.inboundPlanId}`)
                         : row.fulfillmentType === 'Master Boxes'
-                        ? router.push(`/amazon-sellers/fulfillment/masterBoxes/${row.inboundPlanId}`)
-                        : router.push(`/amazon-sellers/fulfillment/individualUnits/${row.inboundPlanId}`)
+                          ? router.push(`/amazon-sellers/fulfillment/masterBoxes/${row.inboundPlanId}`)
+                          : router.push(`/amazon-sellers/fulfillment/individualUnits/${row.inboundPlanId}`)
                     }>
                     <div>
                       <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
@@ -283,7 +275,6 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
                 </DropdownMenu>
               </UncontrolledDropdown>
             )
-            break
           case 'error':
             return (
               <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
@@ -303,10 +294,8 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
                 </DropdownMenu>
               </UncontrolledDropdown>
             )
-            break
           default:
             return <></>
-            break
         }
       },
     },

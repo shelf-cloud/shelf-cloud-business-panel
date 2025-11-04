@@ -1,16 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useContext } from 'react'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
-import AppContext from '@context/AppContext'
-import axios from 'axios'
-import * as Yup from 'yup'
-import { useFormik } from 'formik'
-import { toast } from 'react-toastify'
 import router from 'next/router'
-import { AmazonFulfillmentSku, AmazonMarketplace } from '@typesTs/amazon/fulfillments'
-import useSWR from 'swr'
+import { useContext, useState } from 'react'
+
+import AppContext from '@context/AppContext'
 import { FormatIntNumber } from '@lib/FormatNumbers'
+import { AmazonFulfillmentSku, AmazonMarketplace } from '@typesTs/amazon/fulfillments'
+import axios from 'axios'
+import { useFormik } from 'formik'
 import moment from 'moment'
+import { toast } from 'react-toastify'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import useSWR from 'swr'
+import * as Yup from 'yup'
 
 type Props = {
   orderProducts: AmazonFulfillmentSku[]
@@ -55,7 +56,7 @@ const CreateMastBoxesInboundPlanModalManual = ({ orderProducts, showCreateInboun
   }
 
   const validation = useFormik({
-    enableReinitialize: true,
+    // enableReinitialize: true,
 
     initialValues: {
       inboundPlanName: `${state?.user?.name.substring(0, 3).toUpperCase()}-FBA-${moment().format('MM_DD_YYYY-hh_mma')}`,
