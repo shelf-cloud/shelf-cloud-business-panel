@@ -60,7 +60,7 @@ const Product_Page_Layout = ({}: Props) => {
   const [isLoading, setisLoading] = useState(true)
 
   const { data: productDetails } = useSWR(
-    info![0] && user.businessId ? `/api/getProductPageDetails?region=${currentRegion}&inventoryId=${info![0]}&businessId=${user.businessId}` : null,
+    info![0] && user.businessId ? `/api/products/getProductPageDetails?region=${currentRegion}&inventoryId=${info![0]}&businessId=${user.businessId}` : null,
     fetcher,
     {
       revalidateOnFocus: false,

@@ -1,18 +1,19 @@
+import { GetServerSideProps } from 'next'
+import Head from 'next/head'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
+
 import BreadCrumb from '@components/Common/BreadCrumb'
+import StorageChart from '@components/StorageChart'
 import StorageTable from '@components/StorageTable'
+import StorageWidgets from '@components/StorageWidgets'
 import AppContext from '@context/AppContext'
 import { StorageRowProduct } from '@typings'
 import axios from 'axios'
-import { GetServerSideProps } from 'next'
 import { getSession } from 'next-auth/react'
-import Head from 'next/head'
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import CountUp from 'react-countup'
+import { toast } from 'react-toastify'
 import { Button, Card, CardBody, CardHeader, Col, Container, Input, Row } from 'reactstrap'
 import useSWR from 'swr'
-import StorageWidgets from '@components/StorageWidgets'
-import { toast } from 'react-toastify'
-import StorageChart from '@components/StorageChart'
-import CountUp from 'react-countup'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -57,7 +58,7 @@ const Storage = ({ session }: Props) => {
   }, [allData, searchValue])
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(state.user.businessId ? `/api/getStorageInventory?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher)
+  const { data } = useSWR(state.user.businessId ? `/api/storage/getStorageInventory?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher)
 
   useEffect(() => {
     if (data?.error) {
@@ -92,7 +93,12 @@ const Storage = ({ session }: Props) => {
                         <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>Monthly Storage Fees</p>
                         <StorageChart storageInvoices={storageInvoices} storageDates={storageDates} />
                       </div>
-                      <StorageWidgets previousCharge={storageInvoices[storageInvoices.length - 1]} previousChargeDate={storageDates[storageDates.length - 1]} currentBalance={data?.dailyStorageBalance} binsUSed={data?.totalBinsUSed} />
+                      <StorageWidgets
+                        previousCharge={storageInvoices[storageInvoices.length - 1]}
+                        previousChargeDate={storageDates[storageDates.length - 1]}
+                        currentBalance={data?.dailyStorageBalance}
+                        binsUSed={data?.totalBinsUSed}
+                      />
                     </div>
                     <div className='d-flex flex-row justify-content-between'>
                       <div>
@@ -113,7 +119,14 @@ const Storage = ({ session }: Props) => {
                       </div>
                       <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
                         <div className='position-relative'>
-                          <Input type='text' className='form-control' placeholder='Search...' id='search-options' value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
+                          <Input
+                            type='text'
+                            className='form-control'
+                            placeholder='Search...'
+                            id='search-options'
+                            value={searchValue}
+                            onChange={(e) => setSearchValue(e.target.value)}
+                          />
                           <span className='mdi mdi-magnify search-widget-icon'></span>
                           <span className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none' id='search-close-options'></span>
                         </div>
