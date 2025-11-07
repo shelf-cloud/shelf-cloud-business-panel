@@ -177,8 +177,8 @@ const Shipments = ({ session }: Props) => {
     setEndDate('')
     setSearchType({ value: '', label: 'All' })
     setSearchStatus({ value: '', label: 'All' })
-    setSearchSku({ value: '', label: 'All' })
     setcarrierStatus({ value: '', label: 'All' })
+    setSearchSku({ value: '', label: 'All' })
     setSearchMarketplace({ value: '', label: 'All Stores' })
     setSize(1) // Reset to page 1
     mutateShipments() // Refetch the initial data set

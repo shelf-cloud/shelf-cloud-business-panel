@@ -40,7 +40,8 @@ const STATUS_OPTIONS = [
 const CARRIER_STATUS_OPTIONS = [
   { value: '', label: 'All' },
   { value: 'pending', label: 'Pending' },
-  // { value: 'in_transit', label: 'In Transit' },
+  // { value: 'Label created - Shipment Ready for UPS - Ready for pickup', label: 'Awaiting Pickup' },
+  { value: 'Ready for', label: 'Awaiting Pickup' },
   { value: 'delivered', label: 'Delivered' },
   { value: 'delay', label: 'Delayed' },
   { value: 'damage', label: 'Damaged' },
@@ -157,6 +158,7 @@ const FilterByOthers = ({
                   onClick={() => {
                     setSearchType({ value: '', label: 'All' })
                     setSearchStatus({ value: '', label: 'All' })
+                    setcarrierStatus({ value: '', label: 'All' })
                     setSearchSku({ value: '', label: 'All' })
                     setSearchMarketplace({ value: '', label: 'All Stores' })
                     setOpenFilters(false)
