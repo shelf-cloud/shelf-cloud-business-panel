@@ -1,7 +1,8 @@
+import { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
+
 import AppContext from '@context/AppContext'
 import { OrderRowType, ShipmentOrderItem } from '@typings'
 import axios from 'axios'
-import { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
 
@@ -43,11 +44,14 @@ export const useReceivings = ({ searchValue, startDate, endDate }: ReceiginsHook
     data: receivings,
     isValidating,
     mutate: mutateReceivings,
-
-  } = useSWR(state.user.businessId ? `/api/receivings/getReceivingOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${startDate}&endDate=${endDate}` : null, fetcher, {
-    revalidateOnFocus: false,
-    revalidateOnMount: true,
-  })
+  } = useSWR(
+    state.user.businessId ? `/api/receivings/getReceivingOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${startDate}&endDate=${endDate}` : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnMount: true,
+    }
+  )
 
   const filteredData = useMemo(() => {
     if (!receivings) return []
@@ -58,12 +62,16 @@ export const useReceivings = ({ searchValue, startDate, endDate }: ReceiginsHook
     return receivings.filter(
       (order) =>
         order?.orderNumber?.toLowerCase().includes(lowerCaseSearchValue) ||
+        order?.tag?.toLowerCase().includes(lowerCaseSearchValue) ||
         order?.orderStatus?.toLowerCase().includes(lowerCaseSearchValue) ||
         order?.orderType?.toLowerCase().includes(lowerCaseSearchValue) ||
         order?.shipName?.toLowerCase().includes(lowerCaseSearchValue) ||
         order?.trackingNumber?.toLowerCase().includes(lowerCaseSearchValue) ||
         order?.orderItems?.some(
-          (item: ShipmentOrderItem) => item.name.toLowerCase().includes(lowerCaseSearchValue) || searchValue.split(' ').every((word) => item?.name?.toLowerCase().includes(word.toLowerCase())) || item.sku.toLowerCase().includes(lowerCaseSearchValue)
+          (item: ShipmentOrderItem) =>
+            item.name.toLowerCase().includes(lowerCaseSearchValue) ||
+            searchValue.split(' ').every((word) => item?.name?.toLowerCase().includes(word.toLowerCase())) ||
+            item.sku.toLowerCase().includes(lowerCaseSearchValue)
         )
     )
   }, [receivings, searchValue])

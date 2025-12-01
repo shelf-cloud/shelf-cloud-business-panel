@@ -5,7 +5,7 @@ import SCTooltip from '@components/ui/SCTooltip'
 import AppContext from '@context/AppContext'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { sortNumbers, sortStringsLocaleCompare } from '@lib/helperFunctions'
-import { AddShippingCostModalType, DeleteReceivingModalType, EditReceivingType, MarkReceivedModalType } from '@pages/receivings'
+import { AddShippingCostModalType, AddTagToOrderType, DeleteReceivingModalType, EditReceivingType, MarkReceivedModalType } from '@pages/receivings'
 import { OrderRowType, ShipmentOrderItem } from '@typings'
 import DataTable from 'react-data-table-component'
 import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from 'reactstrap'
@@ -20,17 +20,28 @@ type Props = {
   mutateReceivings: () => void
   setshowDeleteModal: (prev: DeleteReceivingModalType) => void
   setaddShippingCostModal: (prev: AddShippingCostModalType) => void
+  setaddTagToOrder: (prev: AddTagToOrderType) => void
   setmarkReceivedModal: (prev: MarkReceivedModalType) => void
   seteditReceiving: (prev: EditReceivingType) => void
 }
 
-const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteModal, setaddShippingCostModal, setmarkReceivedModal, seteditReceiving }: Props) => {
+const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteModal, setaddShippingCostModal, setaddTagToOrder, setmarkReceivedModal, seteditReceiving }: Props) => {
   const { state } = useContext(AppContext)
 
   const columns: any = [
     {
       name: <span className='fw-bolder fs-6'>Receiving</span>,
-      selector: (row: OrderRowType) => <p className='m-0 p-0 fw-bold fs-7'>{row.orderNumber}</p>,
+      selector: (row: OrderRowType) => (
+        <div>
+          <p className='m-0 p-0 fw-semibold fs-7'>{row.orderNumber}</p>
+          {row.tag ? (
+            <small className='m-0 fs-7 fw-light text-muted d-flex flex-row align-items-center gap-1' id={`receivingTag-${row.id}`}>
+              <i className='las la-tag label-icon align-middle fs-6' />
+              <span className='text-primary fs-7'>{row.tag}</span>
+            </small>
+          ) : null}
+        </div>
+      ),
       sortable: true,
       wrap: true,
       grow: 2,
@@ -169,6 +180,12 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
                 <div>
                   <i className='las la-ship label-icon align-middle me-2 fs-5' />
                   <span className='fw-normal text-dark'>Shipping Cost</span>
+                </div>
+              </DropdownItem>
+              <DropdownItem onClick={() => setaddTagToOrder({ show: true, orderId: row.id, orderNumber: row.orderNumber, tag: row.tag ?? '' })}>
+                <div>
+                  <i className='las la-tag label-icon align-middle me-2 fs-5' />
+                  <span className='fw-normal text-dark'>Add Tag</span>
                 </div>
               </DropdownItem>
               {row.boxes ? <ReceivingPackingSlip receiving={row} /> : null}

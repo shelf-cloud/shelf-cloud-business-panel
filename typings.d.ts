@@ -381,6 +381,7 @@ export interface OrderRowType {
   warehouseName: string
   isSCDestination: boolean
   trackingNumber: string
+  tag: string | null
   pickpackCharge: number
   shippingCharge: number
   labeling: number

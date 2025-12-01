@@ -4,23 +4,26 @@ import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 import { getServerSession } from 'next-auth'
 
-const getReceivingOrders: NextApiHandler = async (request, response) => {
+const addShippingCostToReceiving: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)
-
   if (session == null) {
     response.status(401).end()
 
     return
   }
 
-  axios(
-    `${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/receivings/getReceivingOrders.php?businessId=${request.query.businessId}&startDate=${request.query.startDate}&endDate=${request.query.endDate}`,
-    {
-      headers: {
-        Authorization: `Bearer ${process.env.TARS_API_AUTH_TOKEN}`,
+  axios
+    .post(
+      `${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/receivings/addTagToOrder.php?businessId=${request.query.businessId}`,
+      {
+        orderInfo: request.body,
       },
-    }
-  )
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.TARS_API_AUTH_TOKEN}`,
+        },
+      }
+    )
     .then(({ data }) => {
       response.json(data)
     })
@@ -48,4 +51,4 @@ const getReceivingOrders: NextApiHandler = async (request, response) => {
     })
 }
 
-export default getReceivingOrders
+export default addShippingCostToReceiving

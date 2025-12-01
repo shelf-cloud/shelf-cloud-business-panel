@@ -10,6 +10,7 @@ import Confirm_Delete_Receiving from '@components/modals/receivings/Confirm_Dele
 import EditReceivingModal from '@components/modals/receivings/EditReceiving/EditReceivingModal'
 import ConfirmActionModal from '@components/modals/shared/ConfirmActionModal'
 import InputNumberModal from '@components/modals/shared/inputNumberModal'
+import InputTextModal from '@components/modals/shared/inputTextModal'
 import ReceivingTable from '@components/receiving/ReceivingTable'
 import SearchInput from '@components/ui/SearchInput'
 import AppContext from '@context/AppContext'
@@ -60,6 +61,13 @@ export type AddShippingCostModalType = {
   shippingCost: number | string
 }
 
+export type AddTagToOrderType = {
+  show: boolean
+  orderId: number
+  orderNumber: string
+  tag: string
+}
+
 export type AddShippingCostToReceivingType = {
   currentRegion: string
   businessId: string
@@ -76,6 +84,21 @@ const handleAddShippingCostToReceiving = async ({ currentRegion, businessId, ord
   const { data } = await axios.post(`/api/receivings/addShippingCostToReceiving?region=${currentRegion}&businessId=${businessId}`, {
     orderId,
     shippingCost: value,
+  })
+
+  if (!data.error) {
+    toast.success(data.message)
+    return { error: false }
+  } else {
+    toast.error(data.message)
+    return { error: true }
+  }
+}
+
+const handleAddTagToOrder = async ({ currentRegion, businessId, orderId, value }: AddShippingCostToReceivingType): Promise<{ error: boolean }> => {
+  const { data } = await axios.post(`/api/receivings/addTagToOrder?region=${currentRegion}&businessId=${businessId}`, {
+    orderId,
+    tag: value,
   })
 
   if (!data.error) {
@@ -120,6 +143,13 @@ const Receiving = ({ session }: Props) => {
     orderId: 0,
     orderNumber: '',
     shippingCost: 0,
+  })
+
+  const [addTagToOrder, setaddTagToOrder] = useState<AddTagToOrderType>({
+    show: false,
+    orderId: 0,
+    orderNumber: '',
+    tag: '',
   })
 
   const [markReceivedModal, setmarkReceivedModal] = useState<MarkReceivedModalType>({
@@ -172,6 +202,7 @@ const Receiving = ({ session }: Props) => {
                   mutateReceivings={mutateReceivings}
                   setshowDeleteModal={setshowDeleteModal}
                   setaddShippingCostModal={setaddShippingCostModal}
+                  setaddTagToOrder={setaddTagToOrder}
                   setmarkReceivedModal={setmarkReceivedModal}
                   seteditReceiving={seteditReceiving}
                 />
@@ -248,6 +279,49 @@ const Receiving = ({ session }: Props) => {
         )}
         {editReceiving.show && <EditReceivingModal editReceiving={editReceiving} seteditReceiving={seteditReceiving} mutateReceivings={mutateReceivings} />}
       </React.Fragment>
+      {addTagToOrder.show && (
+        <InputTextModal
+          isOpen={addTagToOrder.show}
+          headerText='Add Tag to Receiving'
+          primaryText='Receiving:'
+          primaryTextSub={addTagToOrder.orderNumber}
+          descriptionText={`Enter a tag to associate with this receiving.`}
+          confirmText='Save'
+          loadingText='Saving...'
+          placeholder='Tag'
+          initialValue={addTagToOrder.tag}
+          handleSubmit={async (value) =>
+            await handleAddTagToOrder({
+              currentRegion: state.currentRegion,
+              businessId: state.user.businessId,
+              orderId: addTagToOrder.orderId,
+              value,
+            }).then((res) => {
+              mutateReceivings()
+              return res
+            })
+          }
+          handleClose={() =>
+            setaddTagToOrder({
+              show: false,
+              orderId: 0,
+              orderNumber: '',
+              tag: '',
+            })
+          }
+          handleSubmitClearValue={async (value) =>
+            await handleAddTagToOrder({
+              currentRegion: state.currentRegion,
+              businessId: state.user.businessId,
+              orderId: addTagToOrder.orderId,
+              value,
+            }).then((res) => {
+              mutateReceivings()
+              return res
+            })
+          }
+        />
+      )}
     </div>
   )
 }
