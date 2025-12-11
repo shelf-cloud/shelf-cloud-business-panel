@@ -1,16 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 
 import { getSession } from '@auth/client'
 import BreadCrumb from '@components/Common/BreadCrumb'
+import { SelectSingleValueType } from '@components/Common/SimpleSelect'
 import FilterByDates from '@components/FilterByDates'
 import Confirm_Delete_Receiving from '@components/modals/receivings/Confirm_Delete_Receiving'
 import EditReceivingModal from '@components/modals/receivings/EditReceiving/EditReceivingModal'
 import ConfirmActionModal from '@components/modals/shared/ConfirmActionModal'
 import InputNumberModal from '@components/modals/shared/inputNumberModal'
 import InputTextModal from '@components/modals/shared/inputTextModal'
+import FilterReceivings from '@components/receiving/FilterReceivings'
 import ReceivingTable from '@components/receiving/ReceivingTable'
 import SearchInput from '@components/ui/SearchInput'
 import AppContext from '@context/AppContext'
@@ -20,7 +22,7 @@ import { OrderRowType } from '@typings'
 import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Card, CardBody, Container } from 'reactstrap'
+import { Button, Card, CardBody, Container } from 'reactstrap'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -126,11 +128,22 @@ const handleMarkAsReceived = async ({ currentRegion, businessId, orderId }: Omit
 
 const Receiving = ({ session }: Props) => {
   useWarehouses()
+  const title = `Receivings | ${session?.user?.businessName}`
+
   const { state } = useContext(AppContext)
   const [shipmentsStartDate, setShipmentsStartDate] = useState(moment().subtract(3, 'months').format('YYYY-MM-DD'))
   const [shipmentsEndDate, setShipmentsEndDate] = useState(moment().format('YYYY-MM-DD'))
   const [searchValue, setSearchValue] = useState<string>('')
-  const { receivings, isLoading, mutateReceivings } = useReceivings({ searchValue, startDate: shipmentsStartDate, endDate: shipmentsEndDate })
+  const [searchStatus, setSearchStatus] = useState<SelectSingleValueType>({ value: '', label: 'All' })
+  const [searchWarehouse, setSearchWarehouse] = useState<SelectSingleValueType>({ value: '', label: 'All' })
+
+  const { receivings, isLoading, mutateReceivings } = useReceivings({
+    searchValue,
+    searchStatus: searchStatus?.value,
+    searchWarehouse: searchWarehouse?.value,
+    startDate: shipmentsStartDate,
+    endDate: shipmentsEndDate,
+  })
 
   const [showDeleteModal, setshowDeleteModal] = useState<DeleteReceivingModalType>({
     show: false,
@@ -171,7 +184,12 @@ const Receiving = ({ session }: Props) => {
     }
   }
 
-  const title = `Receivings | ${session?.user?.businessName}`
+  const hasActiveFilters = useMemo(() => searchValue !== '' || searchStatus!.value !== '' || searchWarehouse!.value !== '', [searchValue, searchStatus, searchWarehouse])
+  const clearFilters = () => {
+    setSearchValue('')
+    setSearchStatus({ value: '', label: 'All' })
+    setSearchWarehouse({ value: '', label: 'All' })
+  }
 
   return (
     <div>
@@ -191,8 +209,12 @@ const Receiving = ({ session }: Props) => {
                   shipmentsEndDate={shipmentsEndDate}
                   handleChangeDatesFromPicker={handleChangeDatesFromPicker}
                 />
+                <FilterReceivings searchStatus={searchStatus} setSearchStatus={setSearchStatus} searchWarehouse={searchWarehouse} setSearchWarehouse={setSearchWarehouse} />
               </div>
               <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' />
+              <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='fs-7 text-nowrap' onClick={clearFilters}>
+                Clear Filters
+              </Button>
             </div>
             <Card>
               <CardBody className='fs-7'>

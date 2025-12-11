@@ -10,10 +10,12 @@ type GetReceivingsResponse = OrderRowType[]
 
 type ReceiginsHookProps = {
   searchValue: string
+  searchStatus: string | number | undefined
+  searchWarehouse: string | number | undefined
   startDate: string
   endDate: string
 }
-export const useReceivings = ({ searchValue, startDate, endDate }: ReceiginsHookProps) => {
+export const useReceivings = ({ searchValue, searchStatus, searchWarehouse, startDate, endDate }: ReceiginsHookProps) => {
   const { state } = useContext(AppContext)
   const controllerRef = useRef<AbortController | null>(null)
 
@@ -56,11 +58,21 @@ export const useReceivings = ({ searchValue, startDate, endDate }: ReceiginsHook
   const filteredData = useMemo(() => {
     if (!receivings) return []
 
-    if (searchValue === '') return receivings
+    if (!searchValue && !searchStatus && !searchWarehouse) return receivings
+
+    console.log('Filtering receivings with status:', searchStatus, 'and search value:', searchValue, 'and warehouse:', searchWarehouse)
 
     const lowerCaseSearchValue = searchValue.toLowerCase()
-    return receivings.filter(
-      (order) =>
+    const lowerStatus = searchStatus ? String(searchStatus).toLowerCase() : ''
+    const lowerWarehouse = searchWarehouse ? Number(searchWarehouse) : 0
+
+    return receivings.filter((order) => {
+      const matchesStatus = lowerStatus ? order.orderStatus.toLowerCase() === lowerStatus : true
+
+      const matchesWarehouse = lowerWarehouse ? order.warehouseId === lowerWarehouse : true
+
+      const matchesSearch =
+        !lowerCaseSearchValue ||
         order?.orderNumber?.toLowerCase().includes(lowerCaseSearchValue) ||
         order?.tag?.toLowerCase().includes(lowerCaseSearchValue) ||
         order?.orderStatus?.toLowerCase().includes(lowerCaseSearchValue) ||
@@ -71,10 +83,13 @@ export const useReceivings = ({ searchValue, startDate, endDate }: ReceiginsHook
           (item: ShipmentOrderItem) =>
             item.name.toLowerCase().includes(lowerCaseSearchValue) ||
             searchValue.split(' ').every((word) => item?.name?.toLowerCase().includes(word.toLowerCase())) ||
-            item.sku.toLowerCase().includes(lowerCaseSearchValue)
+            item.sku.toLowerCase().includes(lowerCaseSearchValue) ||
+            item.poNumber?.toLowerCase().includes(lowerCaseSearchValue)
         )
-    )
-  }, [receivings, searchValue])
+
+      return matchesStatus && matchesWarehouse && matchesSearch
+    })
+  }, [receivings, searchStatus, searchValue, searchWarehouse])
 
   return { receivings: filteredData, isLoading: isValidating && !receivings, mutateReceivings }
 }
