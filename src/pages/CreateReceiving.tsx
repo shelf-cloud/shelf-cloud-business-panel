@@ -41,7 +41,7 @@ type Props = {
 }
 
 const CreateWholeSaleOrder = ({ session }: Props) => {
-  const { state, setWholeSaleOrderModal }: any = useContext(AppContext)
+  const { state, setWholeSaleOrderModal } = useContext(AppContext)
   const title = `Create Receiving Order | ${session?.user?.businessName}`
   const orderNumberStart = `${session?.user?.businessOrderStart.substring(0, 3).toUpperCase()}-`
   useWarehouses()

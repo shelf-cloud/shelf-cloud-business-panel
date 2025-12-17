@@ -1,14 +1,14 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-// ALTER TABLE `dbpruebas` ADD `activeState` BOOLEAN NOT NULL DEFAULT TRUE AFTER `image`;
 import router from 'next/router'
 import { useContext, useState } from 'react'
 
 import SimpleSelect from '@components/Common/SimpleSelect'
+import { RECEIVING_SHIPMENT_TYPES } from '@components/constants/receivings'
 import PrintReceivingLabel from '@components/receiving/labels/PrintReceivingLabel'
 import AppContext from '@context/AppContext'
 import { useGenerateLabels } from '@hooks/pdfRender/useGenerateLabels'
 import { useCreateManualReceivingsBoxes } from '@hooks/receivings/useCreateManualReceivingsBoxes'
 import { ReceivingInventory } from '@hooks/receivings/useReceivingInventory'
+import { useFilterWarehousesByShipmentType } from '@hooks/warehouses/useFilterWarehousesByShipmentType'
 import { useWarehouses } from '@hooks/warehouses/useWarehouse'
 import axios from 'axios'
 import { useFormik } from 'formik'
@@ -55,6 +55,7 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
     initialValues: {
       orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
       packingConfiguration: 'single',
+      shipmentType: { value: '', label: 'Select ...' },
       destinationSC: { value: '', label: 'Select ...' },
     },
     validationSchema: Yup.object({
@@ -66,6 +67,12 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
         value: Yup.number().when([], {
           is: () => true,
           then: Yup.number().required('Destination Required'),
+        }),
+      }),
+      shipmentType: Yup.object().shape({
+        value: Yup.string().when([], {
+          is: () => true,
+          then: Yup.string().required('Shipment Type Required'),
         }),
       }),
     }),
@@ -197,6 +204,8 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
     hasBoxedErrors,
   } = useCreateManualReceivingsBoxes(receivingProducts, validation.values.packingConfiguration, `${orderNumberStart}${validation.values.orderNumber}`)
 
+  const { filteredWarehouses } = useFilterWarehousesByShipmentType(warehouses, validation.values.shipmentType.value)
+
   return (
     <Modal
       fade={false}
@@ -218,7 +227,7 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
         <Form onSubmit={HandleAddProduct}>
           <h5 className='fs-5 fw-bolder'>Receiving Details</h5>
           <Row>
-            <Col xs={12} md={5}>
+            <Col xs={12} md={4}>
               <FormGroup>
                 <Label htmlFor='orderNumber' className='form-label fs-7'>
                   *Transaction Number
@@ -242,10 +251,24 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
                 </div>
               </FormGroup>
             </Col>
-            <Col xs={12} md={5}>
+            <Col xs={12} md={4}>
+              <Label className='form-label fs-7'>*Shipment Type</Label>
+              <SimpleSelect
+                options={RECEIVING_SHIPMENT_TYPES}
+                selected={validation.values.shipmentType}
+                handleSelect={(selected) => {
+                  validation.setFieldValue('shipmentType', selected)
+                  validation.setFieldValue('destinationSC', { value: '', label: 'Select ...' })
+                }}
+                placeholder={'Select ...'}
+                customStyle='sm'
+              />
+              {validation.errors.shipmentType && validation.touched.shipmentType ? <div className='m-0 p-0 text-danger fs-7'>*{validation.errors.shipmentType.value}</div> : null}
+            </Col>
+            <Col xs={12} md={4}>
               <Label className='form-label fs-7'>*Select Destination</Label>
               <SimpleSelect
-                options={warehouses?.map((w) => ({ value: `${w.warehouseId}`, label: w.name })) || []}
+                options={filteredWarehouses}
                 selected={validation.values.destinationSC}
                 handleSelect={(selected) => {
                   validation.setFieldValue('destinationSC', selected)

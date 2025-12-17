@@ -27,8 +27,8 @@ const Create_Manual_Receiving_Summary_Tab = ({ orderProducts }: Props) => {
             </tr>
           </thead>
           <tbody className='fs-7'>
-            {orderProducts.map((item: any) => (
-              <tr key={`summary-item-${item.id}`}>
+            {orderProducts.map((item) => (
+              <tr key={`summary-item-${item.businessId}-${item.sku}`}>
                 <td className='text-center'>
                   <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
                     <div

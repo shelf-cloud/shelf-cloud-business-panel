@@ -230,7 +230,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
               <p className='m-0 p-0 mb-1 fw-bold fs-5'>Purchase Order</p>
               <p className='m-0 p-0 fw-normal fs-6'>Supplier: {selectedSupplier}</p>
             </ModalHeader>
-            <ModalBody className='overflow-auto'>
+            <ModalBody className='overflow-auto' style={{ minHeight: '40dvh' }}>
               <Row className='mb-2'>
                 <Col xs={12} md={5}>
                   <FormGroup className='createOrder_inputs'>
