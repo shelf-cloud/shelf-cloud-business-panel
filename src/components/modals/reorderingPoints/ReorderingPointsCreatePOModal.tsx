@@ -69,7 +69,6 @@ type Props = {
   splits: Splits
   splitNames: SplitNames
 }
-// const DESTINATION_OPTIONS = ['ShelfCloud Warehouse', 'Direct to Marketplace']
 
 function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier, showPOModal, setshowPOModal, username, splits, splitNames }: Props) {
   const { state } = useContext(AppContext)
@@ -88,9 +87,9 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
   const orderNumberStart = `${username.substring(0, 3).toUpperCase()}-`
 
   const validation = useFormik({
-    enableReinitialize: false,
+    enableReinitialize: true,
     initialValues: {
-      orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
+      orderNumber: state.currentRegion == 'us' ? `00${state.user.orderNumber.us}` : `00${state.user.orderNumber.eu}`,
       destinationSC: { value: '', label: 'Select ...' },
       shipmentType: { value: '', label: 'Select ...' },
       splitDestinations: splits.isSplitting ? Object.fromEntries(Array.from({ length: splits.splitsQty }, (_, index) => [index, { value: '', label: 'Select ...' }])) : {},
