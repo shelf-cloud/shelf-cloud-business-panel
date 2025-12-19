@@ -28,8 +28,6 @@ import { toast } from 'react-toastify'
 import { Card, CardBody, Collapse, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from 'reactstrap'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
-  const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
-
   const session = await getSession(context)
   if (session == null) {
     return {
@@ -40,12 +38,11 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
     }
   }
   return {
-    props: { session, sessionToken },
+    props: { session },
   }
 }
 
 type Props = {
-  sessionToken: string
   session: {
     user: {
       businessName: string
@@ -71,7 +68,7 @@ type FilterProps = {
   // show0Days?: string
 }
 
-const ReorderingPoints = ({ session, sessionToken }: Props) => {
+const ReorderingPoints = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
   const { filters, urgency, grossmin, grossmax, profitmin, profitmax, unitsrange, unitsmin, unitsmax, supplier, brand, category, showHidden }: FilterProps = router.query
@@ -94,7 +91,6 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
     handleSaveProductConfig,
     handleUrgencyRange,
   } = useRPProductsInfo({
-    sessionToken,
     session,
     state,
     startDate,
@@ -389,7 +385,7 @@ const ReorderingPoints = ({ session, sessionToken }: Props) => {
                   splitNames={splitNames}
                   setRPProductConfig={setRPProductConfig}
                   setValuesAndOpen={setValuesAndOpen}
-                  expandedRowProps={{ sessionToken, session, startDate, endDate }}
+                  expandedRowProps={{ session, startDate, endDate }}
                 />
               </CardBody>
             </Card>

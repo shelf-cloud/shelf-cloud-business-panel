@@ -1,10 +1,11 @@
-import React, { useContext } from 'react'
-import { Card, CardBody, CardHeader, Col, Spinner, UncontrolledTooltip } from 'reactstrap'
-import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
+import { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
-import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
-import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { ExpandedRowProps, useRPProductSales } from '@hooks/reorderingPoints/useRPProductSale'
+import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
+import { CleanSpecialCharacters } from '@lib/SkuFormatting'
+import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
+import { Card, CardBody, CardHeader, Col, Spinner, UncontrolledTooltip } from 'reactstrap'
 
 type Props = {
   data: ReorderingPointsProduct
@@ -13,8 +14,8 @@ type Props = {
 
 const ReorderingPointsSalesDetails = ({ data, expandedRowProps }: Props) => {
   const { state }: any = useContext(AppContext)
-  const { sessionToken, session, startDate, endDate } = expandedRowProps!
-  const { productSales, isLoadingProductsSales } = useRPProductSales({ sessionToken, session, state, startDate, endDate, sku: data.sku })
+  const { session, startDate, endDate } = expandedRowProps!
+  const { productSales, isLoadingProductsSales } = useRPProductSales({ session, state, startDate, endDate, sku: data.sku })
   return (
     <Col xs={4}>
       <Card>
@@ -65,7 +66,10 @@ const ReorderingPointsSalesDetails = ({ data, expandedRowProps }: Props) => {
                     <td className='text-end'>{FormatCurrency(state.currentRegion, productSales[data.sku].grossRevenue)}</td>
                     <td className='text-end'>
                       <i className='fs-6 me-1 text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={`salesTotalMsj${CleanSpecialCharacters(data.sku)}`} />
-                      <UncontrolledTooltip placement='top' target={`salesTotalMsj${CleanSpecialCharacters(data.sku)}`} innerClassName='bg-white border border-info border-opacity-50 p-2'>
+                      <UncontrolledTooltip
+                        placement='top'
+                        target={`salesTotalMsj${CleanSpecialCharacters(data.sku)}`}
+                        innerClassName='bg-white border border-info border-opacity-50 p-2'>
                         <p className='fs-7 text-primary m-0 p-0 mb-0'>{`Storage Cost: ${FormatCurrency(state.currentRegion, productSales[data.sku].storageCost)}`}</p>
                       </UncontrolledTooltip>
                       {FormatCurrency(state.currentRegion, productSales[data.sku].grossRevenue - productSales[data.sku].expenses - productSales[data.sku].storageCost)}

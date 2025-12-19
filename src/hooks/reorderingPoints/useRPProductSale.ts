@@ -1,12 +1,13 @@
+import { useEffect, useRef } from 'react'
+
 import { ReorderingPointsSalesResponse } from '@typesTs/reorderingPoints/reorderingPoints'
 import axios from 'axios'
-import { useEffect, useRef } from 'react'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
 
-export type ExpandedRowProps = { sessionToken: string; session: any; startDate: string; endDate: string }
+export type ExpandedRowProps = { session: any; startDate: string; endDate: string }
 
-export const useRPProductSales = ({ sessionToken, session, state, startDate, endDate, sku }: any) => {
+export const useRPProductSales = ({ session, state, startDate, endDate, sku }: any) => {
   const controllerRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
@@ -20,12 +21,7 @@ export const useRPProductSales = ({ sessionToken, session, state, startDate, end
 
   const fetcher = async (endPoint: string) => {
     try {
-      const response = await axios.get<ReorderingPointsSalesResponse>(endPoint, {
-        signal: controllerRef.current?.signal,
-        headers: {
-          Authorization: `Bearer ${sessionToken}`,
-        },
-      })
+      const response = await axios.get<ReorderingPointsSalesResponse>(endPoint)
       return response.data
     } catch (error) {
       if (!axios.isCancel(error)) {
@@ -37,7 +33,7 @@ export const useRPProductSales = ({ sessionToken, session, state, startDate, end
 
   const { data: productSales, isValidating: isLoadingProductsSales } = useSWR(
     session && state.user.businessId
-      ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reorderingPoints/getReorderingPointsSales?region=${state.currentRegion}&businessId=${state.user.businessId}&sku=${sku}&startDate=${startDate}&endDate=${endDate}`
+      ? `/api/reorderingPoints/get-reordering-points-sales?region=${state.currentRegion}&businessId=${state.user.businessId}&sku=${sku}&startDate=${startDate}&endDate=${endDate}`
       : null,
     fetcher,
     {

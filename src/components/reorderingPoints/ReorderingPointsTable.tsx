@@ -64,7 +64,7 @@ const ReorderingPointsTable = ({
   expandedRowProps,
 }: Props) => {
   const { state }: any = useContext(AppContext)
-  const { sessionToken, session, startDate, endDate } = expandedRowProps
+  const { session, startDate, endDate } = expandedRowProps
 
   const handleSelectedRows = ({ selectedRows }: { selectedRows: ReorderingPointsProduct[] }) => {
     setSelectedRows(selectedRows)
@@ -727,7 +727,7 @@ const ReorderingPointsTable = ({
         clearSelectedRows={toggledClearRows}
         expandableRows={true}
         expandableRowsComponent={ReorderingPointsExpandedDetails}
-        expandableRowsComponentProps={{ expandedRowProps: { sessionToken, session, state, startDate, endDate } }}
+        expandableRowsComponentProps={{ expandedRowProps: { session, state, startDate, endDate } }}
         pagination={filterDataTable.length > 100 ? true : false}
         paginationPerPage={50}
         paginationRowsPerPageOptions={[50, 100, 200, 500]}

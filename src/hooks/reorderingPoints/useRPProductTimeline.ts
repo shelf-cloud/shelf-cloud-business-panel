@@ -1,12 +1,13 @@
+import { useEffect, useRef } from 'react'
+
 import { ReorderingPointsTimelineResponse } from '@typesTs/reorderingPoints/reorderingPoints'
 import axios from 'axios'
-import { useEffect, useRef } from 'react'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
 
-export type ExpandedRowProps = { sessionToken: string; session: any; startDate: string; endDate: string }
+export type ExpandedRowProps = { session: any; startDate: string; endDate: string }
 
-export const useRPProductTimeline = ({ sessionToken, session, state, sku }: any) => {
+export const useRPProductTimeline = ({ session, state, sku }: any) => {
   const controllerRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
@@ -20,12 +21,7 @@ export const useRPProductTimeline = ({ sessionToken, session, state, sku }: any)
 
   const fetcher = async (endPoint: string) => {
     try {
-      const response = await axios.get<ReorderingPointsTimelineResponse>(endPoint, {
-        signal: controllerRef.current?.signal,
-        headers: {
-          Authorization: `Bearer ${sessionToken}`,
-        },
-      })
+      const response = await axios.get<ReorderingPointsTimelineResponse>(endPoint)
       return response.data
     } catch (error) {
       if (!axios.isCancel(error)) {
@@ -36,7 +32,7 @@ export const useRPProductTimeline = ({ sessionToken, session, state, sku }: any)
   }
 
   const { data: productTimeline, isValidating: isLoadingProductsTimeline } = useSWR(
-    session && state.user.businessId ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reorderingPoints/getReorderingPointsTimeline?region=${state.currentRegion}&businessId=${state.user.businessId}&sku=${sku}` : null,
+    session && state.user.businessId ? `/api/reorderingPoints/get-reordering-points-timeline?region=${state.currentRegion}&businessId=${state.user.businessId}&sku=${sku}` : null,
     fetcher,
     {
       revalidateOnFocus: false,

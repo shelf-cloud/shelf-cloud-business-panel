@@ -216,6 +216,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
           isLoading: false,
           autoClose: 3000,
         })
+        await axios.post(`/api/reorderingPoints/delete-reordering-points-cache?region=${state.currentRegion}&businessId=${state.user.businessId}`)
         mutate('/api/getuser')
         router.push('/purchaseOrders?status=pending&organizeBy=suppliers')
       } else {

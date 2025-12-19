@@ -18,7 +18,6 @@ export type RPProductUpdateConfig = {
   sellerCost: number
 }
 export const useRPProductsInfo = ({
-  sessionToken,
   session,
   state,
   searchValue,
@@ -51,16 +50,11 @@ export const useRPProductsInfo = ({
   }, [])
 
   const { isValidating: isLoadingProductsData } = useSWR(
-    session && state.user.businessId
-      ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reorderingPoints/getReorderingPointsProducts?region=${state.currentRegion}&businessId=${state.user.businessId}`
-      : null,
+    session && state.user.businessId ? `/api/reorderingPoints/get-reordering-points-products?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
     async (endPoint: string) => {
       try {
         const response = await axios.get<ReorderingPointsResponse>(endPoint, {
           signal: controllerRef.current?.signal,
-          headers: {
-            Authorization: `Bearer ${sessionToken}`,
-          },
         })
         return response.data
       } catch (error) {
@@ -224,14 +218,7 @@ export const useRPProductsInfo = ({
             isLoading: true,
           })
           const newForecast = await axios
-            .get(
-              `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reorderingPoints/getForecastSingle?region=${state.currentRegion}&businessId=${state.user.businessId}&sku=${sku}`,
-              {
-                headers: {
-                  Authorization: `Bearer ${sessionToken}`,
-                },
-              }
-            )
+            .get(`/api/reorderingPoints/get-single-product-forecast?region=${state.currentRegion}&businessId=${state.user.businessId}&sku=${sku}`)
             .then(({ data }: { data: ReorderingPointsResponse }) => {
               if (!data[sku]) return { error: true, message: 'Error saving product config' }
 
@@ -267,7 +254,7 @@ export const useRPProductsInfo = ({
         })
       }
     },
-    [sessionToken, state.currentRegion, state.user.businessId]
+    [state.currentRegion, state.user.businessId]
   )
 
   const handleUrgencyRange = useCallback(

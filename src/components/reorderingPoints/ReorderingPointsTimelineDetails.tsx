@@ -1,10 +1,13 @@
-import React, { useContext } from 'react'
-import { Card, CardBody, CardHeader, Col, Spinner } from 'reactstrap'
+import { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
-import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
-import ReorderingPointsTimeLine from './ReorderingPointsTimeLine'
 import { ExpandedRowProps } from '@hooks/reorderingPoints/useRPProductSale'
 import { useRPProductTimeline } from '@hooks/reorderingPoints/useRPProductTimeline'
+import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
+import { Card, CardBody, CardHeader, Col, Spinner } from 'reactstrap'
+
+import ReorderingPointsTimeLine from './ReorderingPointsTimeLine'
+
 type Props = {
   data: ReorderingPointsProduct
   expandedRowProps?: ExpandedRowProps
@@ -12,8 +15,8 @@ type Props = {
 
 const ReorderingPointsTimelineDetails = ({ data, expandedRowProps }: Props) => {
   const { state }: any = useContext(AppContext)
-  const { sessionToken, session } = expandedRowProps!
-  const { productTimeline, isLoadingProductsTimeline } = useRPProductTimeline({ sessionToken, session, state, sku: data.sku })
+  const { session } = expandedRowProps!
+  const { productTimeline, isLoadingProductsTimeline } = useRPProductTimeline({ session, state, sku: data.sku })
   return (
     <Col xs={8}>
       <Card>
@@ -22,7 +25,14 @@ const ReorderingPointsTimelineDetails = ({ data, expandedRowProps }: Props) => {
         </CardHeader>
         {!isLoadingProductsTimeline && productTimeline ? (
           <CardBody>
-            <ReorderingPointsTimeLine productTimeLine={productTimeline?.dateList ?? []} leadtime={data.leadTime} daysRemaining={data.daysRemaining} poDates={data.poDates} forecast={data.dailyTotalForecast} bestModel={data.forecastModel} />
+            <ReorderingPointsTimeLine
+              productTimeLine={productTimeline?.dateList ?? []}
+              leadtime={data.leadTime}
+              daysRemaining={data.daysRemaining}
+              poDates={data.poDates}
+              forecast={data.dailyTotalForecast}
+              bestModel={data.forecastModel}
+            />
           </CardBody>
         ) : (
           <CardBody>
