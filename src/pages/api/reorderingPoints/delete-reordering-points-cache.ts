@@ -4,7 +4,7 @@ import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 import { getServerSession } from 'next-auth'
 
-const getReorderingPointsProducts: NextApiHandler = async (request, response) => {
+const deleteReorderingPointsCache: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)
 
   const sessionToken = request.cookies['next-auth.session-token'] ? request.cookies['next-auth.session-token'] : request.cookies['__Secure-next-auth.session-token']
@@ -50,4 +50,4 @@ const getReorderingPointsProducts: NextApiHandler = async (request, response) =>
     })
 }
 
-export default getReorderingPointsProducts
+export default deleteReorderingPointsCache

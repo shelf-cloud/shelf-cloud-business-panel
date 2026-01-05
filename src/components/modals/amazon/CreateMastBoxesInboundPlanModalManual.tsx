@@ -37,10 +37,7 @@ const CreateMastBoxesInboundPlanModalManual = ({ orderProducts, showCreateInboun
   )
 
   const generateTabDelimitedFile = async (orderProducts: AmazonFulfillmentSku[], inboundPlanName: string) => {
-    const prepOwner = 'Seller'
-    const labelOwner = 'Seller'
-
-    let fileContent = `Please review the Example tab before you complete this sheet\n\nDefault prep owner\t${prepOwner}\nDefault labeling owner\t${labelOwner}\n\n\t\tOptional\t\tOptional: Use only for case-packed SKUs\nMerchant SKU\tQuantity\tPrep owner\tLabeling owner\tUnits per box\tNumber of boxes\tBox length (in)\tBox width (in)\tBox height (in)\tBox weight (lb)\n`
+    let fileContent = `Please review the Example tab before you complete this sheet\n\n\n\n\t\tOptional\t\tOptional: Use only for case-packed SKUs\nMerchant SKU\tQuantity\tExpiration date (MM/DD/YYYY)\tManufacturing lot code \tUnits per box\tNumber of boxes\tBox length (in)\tBox width (in)\tBox height (in)\tBox weight (lb)\n`
 
     for await (const product of orderProducts) {
       const sortedDimensions = [product.boxLength, product.boxWidth, product.boxHeight].sort((a, b) => b - a)
