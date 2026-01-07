@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useContext, useState } from 'react'
 
 import UnitsSoldDetailsModal from '@components/modals/marketplaces/unitsSoldDetailsModal'
+import CopyTextToClipboard from '@components/ui/CopyTextToClipboard'
 import AppContext from '@context/AppContext'
 import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
@@ -157,9 +158,13 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
               />
             </div>
             <div>
-              <Link href={`/product/${row.inventoryId}/${row.sku}`}>
-                <p className='m-0 p-0 text-primary fw-semibold fs-6'>{row.sku}</p>
-              </Link>
+              <div className='d-flex flex-row justify-content-start align-items-center fs-7'>
+                <Link href={`/product/${row.inventoryId}/${row.sku}`}>
+                  <p className='m-0 p-0 text-primary fw-semibold fs-6'>{row.sku}</p>
+                </Link>
+                <CopyTextToClipboard text={row.sku} label='SKU' />
+              </div>
+
               <p className='m-0 p-0 text-black fw-semibold fs-7 text-wrap'>{row.title}</p>
               <p className='m-0 p-0 text-black fw-normal fs-7 d-flex flex-row justify-content-start align-items-center'>
                 {row.asin && (
@@ -173,12 +178,13 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
                       style={{ textDecoration: 'none' }}>
                       {row.asin}
                     </a>
-                    <i className='ri-file-copy-line fs-6 my-0 ms-1 me-2 p-0 text-muted' style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(row.asin)} />
+                    <CopyTextToClipboard text={row.asin} label='ASIN' />
                   </>
                 )}
                 {row.barcode && (
                   <>
                     UPC:<span className='fw-light text-muted'>{row.barcode}</span>
+                    <CopyTextToClipboard text={row.barcode} label='UPC' />
                   </>
                 )}
               </p>
