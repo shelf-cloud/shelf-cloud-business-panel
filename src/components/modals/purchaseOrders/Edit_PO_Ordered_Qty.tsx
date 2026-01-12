@@ -1,14 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useContext, useState } from 'react'
-import { Button, Input, Modal, ModalBody, ModalHeader, Spinner } from 'reactstrap'
-import { toast } from 'react-toastify'
-import { useSWRConfig } from 'swr'
-import axios from 'axios'
 import { useRouter } from 'next/router'
+import { useContext, useState } from 'react'
+
 import AppContext from '@context/AppContext'
-import { PurchaseOrderItem, Split } from '@typesTs/purchaseOrders'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
+import { PurchaseOrderItem, Split } from '@typesTs/purchaseOrders'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import { Button, Input, Modal, ModalBody, ModalHeader, Spinner } from 'reactstrap'
+import { useSWRConfig } from 'swr'
 
 export type EditPurchaseOrderQtyType = {
   show: boolean
@@ -57,8 +58,7 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
     })
 
     if (!response.data.error) {
-      handleClose()
-      toast.success(response.data.msg)
+      axios.post(`/api/reorderingPoints/delete-reordering-points-cache?region=${state.currentRegion}&businessId=${state.user.businessId}`)
       if (organizeBy == 'suppliers') {
         mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
       } else if (organizeBy == 'orders') {
@@ -66,6 +66,8 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
       } else if (organizeBy == 'sku') {
         mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
       }
+      toast.success(response.data.msg)
+      handleClose()
     } else {
       toast.error(response.data.msg)
     }

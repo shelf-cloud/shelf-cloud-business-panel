@@ -1,13 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useContext } from 'react'
-import { Button, Modal, ModalBody, ModalHeader, Spinner } from 'reactstrap'
-import { toast } from 'react-toastify'
-import { useSWRConfig } from 'swr'
-import axios from 'axios'
 import { useRouter } from 'next/router'
+import { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { Split } from '@typesTs/purchaseOrders'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import { Button, Modal, ModalBody, ModalHeader, Spinner } from 'reactstrap'
+import { useSWRConfig } from 'swr'
 
 export type DeleteItemFromOrderType = {
   show: boolean
@@ -61,6 +62,7 @@ const Confirm_Delete_Item_From_PO = ({ showDeleteModal, setshowDeleteModal, load
     })
 
     if (!response.data.error) {
+      axios.post(`/api/reorderingPoints/delete-reordering-points-cache?region=${state.currentRegion}&businessId=${state.user.businessId}`)
       if (organizeBy == 'suppliers') {
         mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
       } else if (organizeBy == 'orders') {

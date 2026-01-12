@@ -65,6 +65,7 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
     })
 
     if (!response.data.error) {
+      axios.post(`/api/reorderingPoints/delete-reordering-points-cache?region=${state.currentRegion}&businessId=${state.user.businessId}`)
       mutate('/api/getuser')
       if (organizeBy == 'suppliers') {
         mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)

@@ -1,11 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useContext } from 'react'
-import { Button, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
-import { toast } from 'react-toastify'
-import { useSWRConfig } from 'swr'
-import axios from 'axios'
-import AppContext from '@context/AppContext'
 import { useRouter } from 'next/router'
+import { useContext } from 'react'
+
+import AppContext from '@context/AppContext'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import { Button, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { useSWRConfig } from 'swr'
 
 type Props = {
   showDeleteModal: {
@@ -40,6 +41,7 @@ const Confirm_Delete_Po = ({ showDeleteModal, setshowDeleteModal, loading, setLo
       orderNumber: orderNumber,
     })
     if (!response.data.error) {
+      axios.post(`/api/reorderingPoints/delete-reordering-points-cache?region=${state.currentRegion}&businessId=${state.user.businessId}`)
       if (organizeBy == 'suppliers') {
         mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
       } else if (organizeBy == 'orders') {

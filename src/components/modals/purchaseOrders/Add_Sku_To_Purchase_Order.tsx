@@ -1,17 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
-import AppContext from '@context/AppContext'
-import React, { useContext, useEffect, useMemo, useState } from 'react'
-import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
-import axios from 'axios'
-import { toast } from 'react-toastify'
-import { useSWRConfig } from 'swr'
 import { useRouter } from 'next/router'
+import { useContext, useEffect, useMemo, useState } from 'react'
+
+import SearchInput from '@components/ui/SearchInput'
+import AppContext from '@context/AppContext'
+import { SkuInListToAddToPo, useAddToPo } from '@hooks/purchaseOrders/useAddToPo'
+import { NoImageAdress } from '@lib/assetsConstants'
 import { SkuToAddPo } from '@typesTs/purchaseOrders'
+import axios from 'axios'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
-import { NoImageAdress } from '@lib/assetsConstants'
-import { SkuInListToAddToPo, useAddToPo } from '@hooks/purchaseOrders/useAddToPo'
-import SearchInput from '@components/ui/SearchInput'
+import { toast } from 'react-toastify'
+import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { useSWRConfig } from 'swr'
 
 const customStyles = {
   responsiveWrapper: {
@@ -75,7 +76,13 @@ const Add_Sku_To_Purchase_Order = ({}) => {
                 margin: '2px 0px',
                 position: 'relative',
               }}>
-              <img loading='lazy' src={row.image ? row.image : NoImageAdress} onError={(e) => (e.currentTarget.src = NoImageAdress)} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
+              <img
+                loading='lazy'
+                src={row.image ? row.image : NoImageAdress}
+                onError={(e) => (e.currentTarget.src = NoImageAdress)}
+                alt='product Image'
+                style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+              />
             </div>
             <div>
               <p className='m-0 p-0 fs-7 fw-semibold'>{row.title}</p>
@@ -120,7 +127,13 @@ const Add_Sku_To_Purchase_Order = ({}) => {
                 margin: '2px 0px',
                 position: 'relative',
               }}>
-              <img loading='lazy' src={row.image ? row.image : NoImageAdress} onError={(e) => (e.currentTarget.src = NoImageAdress)} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
+              <img
+                loading='lazy'
+                src={row.image ? row.image : NoImageAdress}
+                onError={(e) => (e.currentTarget.src = NoImageAdress)}
+                alt='product Image'
+                style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+              />
             </div>
             <div>
               <p className='m-0 p-0 fs-7 fw-semibold'>{row.title}</p>
@@ -209,6 +222,7 @@ const Add_Sku_To_Purchase_Order = ({}) => {
     })
 
     if (!response.data.error) {
+      axios.post(`/api/reorderingPoints/delete-reordering-points-cache?region=${currentRegion}&businessId=${user.businessId}`)
       if (organizeBy == 'suppliers') {
         mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${currentRegion}&businessId=${user.businessId}&status=${status}`)
       } else if (organizeBy == 'orders') {
@@ -248,7 +262,17 @@ const Add_Sku_To_Purchase_Order = ({}) => {
               <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='none' widths='col-12 col-md-7' />
             </Row>
             <Col sm={12} style={{ height: '60vh', overflowX: 'hidden', overflowY: 'auto' }}>
-              <DataTable columns={columnsSkuListToAdd} data={filterDataTable || []} progressPending={isLoading} striped={true} dense={true} fixedHeader={true} fixedHeaderScrollHeight='60vh' className='pb-4' customStyles={customStyles} />
+              <DataTable
+                columns={columnsSkuListToAdd}
+                data={filterDataTable || []}
+                progressPending={isLoading}
+                striped={true}
+                dense={true}
+                fixedHeader={true}
+                fixedHeaderScrollHeight='60vh'
+                className='pb-4'
+                customStyles={customStyles}
+              />
             </Col>
           </Col>
           <Col xs={12} md={6}>
@@ -256,7 +280,15 @@ const Add_Sku_To_Purchase_Order = ({}) => {
               <span className='fs-4 fw-semibold'>Selected SKUs to Add to Purchase Order</span>
             </Row>
             <Col sm={12} style={{ height: '60vh', overflowX: 'hidden', overflowY: 'auto' }}>
-              <DataTable columns={columnsSkuListAdded} data={skuToAddToPo || []} striped={true} dense={true} fixedHeader={true} fixedHeaderScrollHeight='60vh' customStyles={customStyles} />
+              <DataTable
+                columns={columnsSkuListAdded}
+                data={skuToAddToPo || []}
+                striped={true}
+                dense={true}
+                fixedHeader={true}
+                fixedHeaderScrollHeight='60vh'
+                customStyles={customStyles}
+              />
             </Col>
           </Col>
         </Row>

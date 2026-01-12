@@ -122,6 +122,7 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
           })
 
           if (!response.data.error) {
+            axios.post(`/api/reorderingPoints/delete-reordering-points-cache?region=${state.currentRegion}&businessId=${state.user.businessId}`)
             if (organizeBy == 'suppliers') {
               mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
             } else if (organizeBy == 'orders') {
