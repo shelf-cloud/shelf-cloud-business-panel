@@ -17,7 +17,7 @@ type Props = {
 
 const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilterOpen }: Props) => {
   const { listingsFilter, setListingsFilter } = useMarketplaceListingsQueries()
-  const { showHidden, showMapped, supplier, brand, category } = listingsFilter
+  const { showMKHidden, showMapped, showDiscontinued, supplier, brand, category } = listingsFilter
   const supplierOptionsList = supplierOptions.map((option) => ({ value: option, label: option }))
   const brandOptionsList = brandOptions.map((option) => ({ value: option, label: option }))
   const categoryOptionsList = categoryOptions.map((option) => ({ value: option, label: option }))
@@ -25,23 +25,27 @@ const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilter
   const router = useRouter()
 
   const initialValues = {
-    showHidden: showHidden,
+    showMKHidden: showMKHidden,
     showMapped: showMapped,
+    showDiscontinued: showDiscontinued,
     supplier: supplier,
     brand: brand,
     category: category,
   }
 
   const validationSchema = Yup.object({
-    showHidden: Yup.boolean(),
+    showMKHidden: Yup.boolean(),
+    showMapped: Yup.boolean(),
+    showDiscontinued: Yup.boolean(),
   })
 
   const handleSubmit = async (values: any) => {
     setListingsFilter({
       marketplace: router.query.marketplace ? (router.query.marketplace as string) : '',
       filters: 'true',
-      showHidden: values.showHidden,
+      showMKHidden: values.showMKHidden,
       showMapped: values.showMapped,
+      showDiscontinued: values.showDiscontinued,
       supplier: values.supplier,
       brand: values.brand,
       category: values.category,
@@ -53,15 +57,17 @@ const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilter
     setListingsFilter({
       marketplace: router.query.marketplace ? (router.query.marketplace as string) : '',
       filters: 'false',
-      showHidden: false,
+      showMKHidden: false,
       showMapped: false,
+      showDiscontinued: false,
       supplier: 'All',
       brand: 'All',
       category: 'All',
     })
     setValues({
-      showHidden: false,
+      showMKHidden: false,
       showMapped: false,
+      showDiscontinued: false,
       supplier: 'All',
       brand: 'All',
       category: 'All',
@@ -124,22 +130,32 @@ const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilter
               <Col md={12} className='d-flex flex-row flex-wrap justify-content-between align-items-center gap-3'>
                 <Col xs={12} md={7} className='d-flex flex-row flex-wrap justify-content-start align-items-center gap-4'>
                   <InputCheckFilter
-                    inputLabel='Show Hidden'
-                    inputName='showHidden'
-                    value={values.showHidden || false}
-                    isInvalid={touched.showHidden && errors.showHidden ? true : false}
-                    handleChange={(checked: boolean) => {
-                      setFieldValue('showHidden', checked)
-                    }}
-                    handleBlur={handleBlur}
-                  />
-                  <InputCheckFilter
                     inputLabel='Show Mapped'
                     inputName='showMapped'
                     value={values.showMapped || false}
                     isInvalid={touched.showMapped && errors.showMapped ? true : false}
                     handleChange={(checked: boolean) => {
                       setFieldValue('showMapped', checked)
+                    }}
+                    handleBlur={handleBlur}
+                  />
+                  <InputCheckFilter
+                    inputLabel='Show Marketplace Hidden'
+                    inputName='showMKHidden'
+                    value={values.showMKHidden || false}
+                    isInvalid={touched.showMKHidden && errors.showMKHidden ? true : false}
+                    handleChange={(checked: boolean) => {
+                      setFieldValue('showMKHidden', checked)
+                    }}
+                    handleBlur={handleBlur}
+                  />
+                  <InputCheckFilter
+                    inputLabel='Show Discontinued'
+                    inputName='showDiscontinued'
+                    value={values.showDiscontinued || false}
+                    isInvalid={touched.showDiscontinued && errors.showDiscontinued ? true : false}
+                    handleChange={(checked: boolean) => {
+                      setFieldValue('showDiscontinued', checked)
                     }}
                     handleBlur={handleBlur}
                   />

@@ -25,6 +25,7 @@ export type MarketplaceListingsProduct = {
   category: string | null
   isKit: boolean
   listings: MarketplaceListingsProductListing[]
+  showDiscontinued?: boolean
 }
 
 export interface MarketplaceListingsProductListing {
@@ -57,7 +58,7 @@ type SetSelectedVisibilityParams = {
 export const useMarketplaceListings = ({ searchValue, storeId }: MarketplaceListingsHookProps) => {
   const { state } = useContext(AppContext)
   const { listingsFilter } = useMarketplaceListingsQueries()
-  const { showHidden, showMapped, supplier, brand, category } = listingsFilter
+  const { showMKHidden, showMapped, showDiscontinued, supplier, brand, category } = listingsFilter
   const controllerRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
@@ -108,10 +109,11 @@ export const useMarketplaceListings = ({ searchValue, storeId }: MarketplaceList
             item?.fnSku?.toLowerCase().includes(searchValue.toLowerCase()) ||
             item?.barcode?.toLowerCase().includes(searchValue.toLowerCase())
           : true) &&
-        (showHidden ? true : item.listings.find((listing) => listing.storeId_true?.toString() === storeId)?.isHidden !== true) &&
-        (showMapped ? true : !item.listings.find((listing) => listing.storeId_true?.toString() === storeId))
+        (showMKHidden ? true : item.listings.find((listing) => listing.storeId_true?.toString() === storeId)?.isHidden !== true) &&
+        (showMapped ? true : !item.listings.find((listing) => listing.storeId_true?.toString() === storeId)) &&
+        (showDiscontinued ? true : !item.showDiscontinued)
     )
-  }, [data?.products, brand, supplier, category, searchValue, showHidden, showMapped, storeId])
+  }, [data?.products, brand, supplier, category, searchValue, showMKHidden, showMapped, showDiscontinued, storeId])
 
   const setSelectedVisibility = useCallback(
     async ({ products, storeId, visibility }: SetSelectedVisibilityParams) => {

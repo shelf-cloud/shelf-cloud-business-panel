@@ -4,8 +4,9 @@ export const useMarketplaceListingsQueries = () => {
   const [listingsFilter, setListingsFilter] = useQueryStates({
     marketplace: parseAsString.withDefault('').withOptions({ clearOnDefault: true }),
     filters: parseAsString.withDefault('false').withOptions({ clearOnDefault: true }),
-    showHidden: parseAsBoolean.withDefault(false).withOptions({ clearOnDefault: true }),
+    showMKHidden: parseAsBoolean.withDefault(false).withOptions({ clearOnDefault: true }),
     showMapped: parseAsBoolean.withDefault(false).withOptions({ clearOnDefault: true }),
+    showDiscontinued: parseAsBoolean.withDefault(false).withOptions({ clearOnDefault: true }),
     supplier: parseAsString.withDefault('All').withOptions({ clearOnDefault: true }),
     brand: parseAsString.withDefault('All').withOptions({ clearOnDefault: true }),
     category: parseAsString.withDefault('All').withOptions({ clearOnDefault: true }),
