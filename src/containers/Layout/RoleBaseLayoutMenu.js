@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useContext } from 'react'
-import AppContext from '@context/AppContext'
+import React, { useContext, useEffect, useState } from 'react'
+
 import { useSession } from '@auth/client'
+import AppContext from '@context/AppContext'
 
 const Navdata = () => {
   const { data: session } = useSession()
@@ -229,6 +230,12 @@ const Navdata = () => {
           id: 'marketplacePricing',
           label: 'Marketplace Pricing',
           link: '/marketplaces/marketplacePricing',
+          parentId: 'marketplaces',
+        },
+        'Marketplace Listings': {
+          id: 'marketplaceListings',
+          label: 'Marketplace Listings',
+          link: '/marketplaces/listings',
           parentId: 'marketplaces',
         },
       },
@@ -567,6 +574,10 @@ const Navdata = () => {
 
     if (state.user[state.currentRegion]?.showMarketpalcePricing) {
       menuItems[3].subItems?.unshift(modules.Marketplaces.subItems['Marketplace Pricing'])
+    }
+
+    if (state.user[state.currentRegion]?.showMarketplacesListings) {
+      menuItems[3].subItems?.unshift(modules.Marketplaces.subItems['Marketplace Listings'])
     }
   } else {
     menuItems = [modules.Dashboard]

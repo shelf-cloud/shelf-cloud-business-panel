@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
+import { useEffect, useRef, useState } from 'react'
 
 import { NoImageAdress } from '@lib/assetsConstants'
-import React, { useEffect, useRef, useState } from 'react'
 
 type Props = {
   selectionInfo: {
@@ -14,7 +14,7 @@ type Props = {
     name: string
     logo: string
   }
-  handleSelection: (prev: any) => void
+  handleSelection: ({ storeId, name, logo }: { storeId: string; name: string; logo: string }) => void
   showAllMarketsOption: boolean
 }
 
@@ -44,7 +44,7 @@ const SelectMarketplaceDropDown = ({ selectionInfo, selected, handleSelection, s
         data-bs-auto-close='outside'
         aria-expanded='false'
         onClick={() => setOpenDatesMenu(!openDatesMenu)}>
-        {selected.storeId === '9999' ? (
+        {selected.storeId === '9999' || selected.storeId === '' ? (
           <i className='las la-store-alt fs-5 m-0 p-0 text-primary' />
         ) : (
           <div
@@ -73,7 +73,7 @@ const SelectMarketplaceDropDown = ({ selectionInfo, selected, handleSelection, s
               className='d-flex flex-row justify-content-start gap-2 align-items-center'
               style={{ cursor: 'pointer' }}
               onClick={() => {
-                handleSelection((prev: any) => ({ ...prev, storeId: '9999', name: 'All Marketplaces', logo: '' }))
+                handleSelection({ storeId: '9999', name: 'All Marketplaces', logo: '' })
                 setOpenDatesMenu(false)
               }}>
               <i className='las la-store-alt fs-4 m-0 p-0 text-primary' />
@@ -86,7 +86,7 @@ const SelectMarketplaceDropDown = ({ selectionInfo, selected, handleSelection, s
               className='d-flex flex-row justify-content-start gap-2 align-items-center mb-1'
               style={{ cursor: 'pointer' }}
               onClick={() => {
-                handleSelection((prev: any) => ({ ...prev, storeId: option.storeId, name: option.name, logo: option.logo }))
+                handleSelection({ storeId: option.storeId, name: option.name, logo: option.logo })
                 setOpenDatesMenu(false)
               }}>
               {option.logo !== '' && (
