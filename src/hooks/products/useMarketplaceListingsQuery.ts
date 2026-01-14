@@ -5,6 +5,7 @@ export const useMarketplaceListingsQueries = () => {
     marketplace: parseAsString.withDefault('').withOptions({ clearOnDefault: true }),
     filters: parseAsString.withDefault('false').withOptions({ clearOnDefault: true }),
     showHidden: parseAsBoolean.withDefault(false).withOptions({ clearOnDefault: true }),
+    showMapped: parseAsBoolean.withDefault(false).withOptions({ clearOnDefault: true }),
     supplier: parseAsString.withDefault('All').withOptions({ clearOnDefault: true }),
     brand: parseAsString.withDefault('All').withOptions({ clearOnDefault: true }),
     category: parseAsString.withDefault('All').withOptions({ clearOnDefault: true }),

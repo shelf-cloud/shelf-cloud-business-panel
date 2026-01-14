@@ -17,7 +17,7 @@ type Props = {
 
 const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilterOpen }: Props) => {
   const { listingsFilter, setListingsFilter } = useMarketplaceListingsQueries()
-  const { showHidden, supplier, brand, category } = listingsFilter
+  const { showHidden, showMapped, supplier, brand, category } = listingsFilter
   const supplierOptionsList = supplierOptions.map((option) => ({ value: option, label: option }))
   const brandOptionsList = brandOptions.map((option) => ({ value: option, label: option }))
   const categoryOptionsList = categoryOptions.map((option) => ({ value: option, label: option }))
@@ -26,6 +26,7 @@ const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilter
 
   const initialValues = {
     showHidden: showHidden,
+    showMapped: showMapped,
     supplier: supplier,
     brand: brand,
     category: category,
@@ -40,6 +41,7 @@ const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilter
       marketplace: router.query.marketplace ? (router.query.marketplace as string) : '',
       filters: 'true',
       showHidden: values.showHidden,
+      showMapped: values.showMapped,
       supplier: values.supplier,
       brand: values.brand,
       category: values.category,
@@ -52,12 +54,14 @@ const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilter
       marketplace: router.query.marketplace ? (router.query.marketplace as string) : '',
       filters: 'false',
       showHidden: false,
+      showMapped: false,
       supplier: 'All',
       brand: 'All',
       category: 'All',
     })
     setValues({
       showHidden: false,
+      showMapped: false,
       supplier: 'All',
       brand: 'All',
       category: 'All',
@@ -120,12 +124,22 @@ const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilter
               <Col md={12} className='d-flex flex-row flex-wrap justify-content-between align-items-center gap-3'>
                 <Col xs={12} md={7} className='d-flex flex-row flex-wrap justify-content-start align-items-center gap-4'>
                   <InputCheckFilter
-                    inputLabel='Show Hidden Listings'
+                    inputLabel='Show Hidden'
                     inputName='showHidden'
                     value={values.showHidden || false}
                     isInvalid={touched.showHidden && errors.showHidden ? true : false}
                     handleChange={(checked: boolean) => {
                       setFieldValue('showHidden', checked)
+                    }}
+                    handleBlur={handleBlur}
+                  />
+                  <InputCheckFilter
+                    inputLabel='Show Mapped'
+                    inputName='showMapped'
+                    value={values.showMapped || false}
+                    isInvalid={touched.showMapped && errors.showMapped ? true : false}
+                    handleChange={(checked: boolean) => {
+                      setFieldValue('showMapped', checked)
                     }}
                     handleBlur={handleBlur}
                   />

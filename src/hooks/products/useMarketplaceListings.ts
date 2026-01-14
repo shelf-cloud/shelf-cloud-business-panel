@@ -57,7 +57,7 @@ type SetSelectedVisibilityParams = {
 export const useMarketplaceListings = ({ searchValue, storeId }: MarketplaceListingsHookProps) => {
   const { state } = useContext(AppContext)
   const { listingsFilter } = useMarketplaceListingsQueries()
-  const { showHidden, supplier, brand, category } = listingsFilter
+  const { showHidden, showMapped, supplier, brand, category } = listingsFilter
   const controllerRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
@@ -108,9 +108,10 @@ export const useMarketplaceListings = ({ searchValue, storeId }: MarketplaceList
             item?.fnSku?.toLowerCase().includes(searchValue.toLowerCase()) ||
             item?.barcode?.toLowerCase().includes(searchValue.toLowerCase())
           : true) &&
-        (showHidden ? true : item.listings.find((listing) => listing.storeId_true?.toString() === storeId)?.isHidden !== true)
+        (showHidden ? true : item.listings.find((listing) => listing.storeId_true?.toString() === storeId)?.isHidden !== true) &&
+        (showMapped ? true : !item.listings.find((listing) => listing.storeId_true?.toString() === storeId))
     )
-  }, [data?.products, brand, supplier, category, searchValue, showHidden, storeId])
+  }, [data?.products, brand, supplier, category, searchValue, showHidden, showMapped, storeId])
 
   const setSelectedVisibility = useCallback(
     async ({ products, storeId, visibility }: SetSelectedVisibilityParams) => {
