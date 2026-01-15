@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { useRouter } from 'next/router'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 
 import Confirm_Delete_Item_From_PO, { DeleteItemFromOrderType } from '@components/modals/purchaseOrders/Confirm_Delete_Item_From_PO'
 import Edit_PO_Ordered_Qty, { EditPurchaseOrderQtyType } from '@components/modals/purchaseOrders/Edit_PO_Ordered_Qty'
@@ -227,6 +227,41 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
     event.preventDefault()
     validationNote.handleSubmit()
   }
+
+  const handleReceiveAllPendingItems = () => {
+    data.poItems.forEach((item: PurchaseOrderItem) => {
+      const pendingQty = item.orderQty - item.receivedQty
+      if (pendingQty > 0) {
+        handlereceivingOrderFromPo(
+          data.hasSplitting ? data.splits[activeTab].destination.id : data.warehouseId,
+          data.hasSplitting ? data.splits[activeTab].destination.label : data.warehouseName,
+          data.poId,
+          data.orderNumber,
+          item.inventoryId,
+          item.sku,
+          item.title,
+          item.image,
+          data.businessId,
+          data.suppliersName,
+          pendingQty,
+          data.hasSplitting,
+          data.hasSplitting ? data.splits[activeTab].splitId : undefined,
+          item.boxQty
+        )
+      }
+    })
+  }
+
+  const hasPendingProducts = useMemo(() => {
+    const hasPendingReceiveItems = data.poItems.some((item: PurchaseOrderItem) => item.orderQty - item.inboundQty - item.receivedQty > 0)
+    const isDifferentWarehouse = () => {
+      if (state.receivingFromPo.warehouse.id === 0) return false
+      if (data.hasSplitting && activeTab === 'all') return false
+      return data.hasSplitting ? state.receivingFromPo.warehouse.id !== data.splits[activeTab].destination.id : state.receivingFromPo.warehouse.id !== data.warehouseId
+    }
+    return hasPendingReceiveItems && data.isOpen && !isDifferentWarehouse()
+  }, [data.poItems, data.isOpen, data.hasSplitting, data.splits, data.warehouseId, state.receivingFromPo.warehouse.id, activeTab])
+
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
       <Row>
@@ -450,7 +485,8 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                 <div className='d-flex flex-row justify-content-end gap-2 align-items-center'>
                   {data.poItems.length > 0 && (
                     <i
-                      className='las la-edit fs-4 text-primary m-0 p-0'
+                      id={`editPoItems-${data.poId}-${activeTab}`}
+                      className='mdi mdi-file-edit-outline fs-4 text-primary m-0 p-0'
                       style={{ cursor: 'pointer' }}
                       onClick={() =>
                         setshowEditOrderQty((prev) => {
@@ -467,11 +503,45 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                       }
                     />
                   )}
+                  {data.poItems.length > 0 && (
+                    <UncontrolledTooltip
+                      placement='top'
+                      target={`editPoItems-${data.poId}-${activeTab}`}
+                      popperClassName='bg-light shadow px-2 py-2 rounded-2'
+                      innerClassName='text-black bg-light p-0'>
+                      Edit PO items
+                    </UncontrolledTooltip>
+                  )}
                   <i
-                    className='fs-4 text-success las la-plus-circle'
+                    id={`addSkuToPo-${data.poId}-${activeTab}`}
+                    className='fs-4 text-success mdi mdi-plus-circle-outline'
                     style={{ cursor: 'pointer' }}
                     onClick={() => setModalAddSkuToPurchaseOrder(true, data.poId, data.orderNumber, data.suppliersName, data.hasSplitting, data.splits[activeTab] || undefined)}
                   />
+                  <UncontrolledTooltip
+                    placement='top'
+                    target={`addSkuToPo-${data.poId}-${activeTab}`}
+                    popperClassName='bg-light shadow px-2 py-2 rounded-2'
+                    innerClassName='text-black bg-light p-0'>
+                    Add SKU to PO
+                  </UncontrolledTooltip>
+                  {hasPendingProducts && (
+                    <>
+                      <i
+                        id={`receiveAllPendingItems-${data.poId}-${activeTab}`}
+                        className='fs-4 text-success mdi mdi-checkbox-multiple-marked-outline'
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => handleReceiveAllPendingItems()}
+                      />
+                      <UncontrolledTooltip
+                        placement='top'
+                        target={`receiveAllPendingItems-${data.poId}-${activeTab}`}
+                        popperClassName='bg-light shadow px-2 py-2 rounded-2'
+                        innerClassName='text-black bg-light p-0'>
+                        Receive all pending items
+                      </UncontrolledTooltip>
+                    </>
+                  )}
                 </div>
               )}
             </CardHeader>

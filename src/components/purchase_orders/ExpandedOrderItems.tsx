@@ -105,9 +105,9 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
                     <div
                       style={{
                         width: '100%',
-                        maxWidth: '60px',
+                        maxWidth: '40px',
                         height: '30px',
-                        margin: '2px 0px',
+                        margin: '2px 2px',
                         position: 'relative',
                       }}>
                       <img

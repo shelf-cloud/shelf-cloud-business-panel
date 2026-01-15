@@ -1,6 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
+import { useContext } from 'react'
+
 import InputNumberForm from '@components/ui/forms/InputNumberForm'
+import AppContext from '@context/AppContext'
 import { SingleSkuBoxes } from '@hooks/receivings/useReceivingsBoxes'
+import { FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { Button } from 'reactstrap'
 
@@ -13,6 +17,15 @@ type Props = {
 }
 
 const Create_Receiving_Boxes_Single = ({ singleSkuPackages, addNewSingleSkuBoxConfiguration, removeSingleSkuBoxConfiguration, changeUnitsPerBox, changeQtyOfBoxes }: Props) => {
+  const { state } = useContext(AppContext)
+
+  const totalBoxes = Object.entries(singleSkuPackages).reduce((totalPo, [_poId, skus]) => {
+    const totalSkus = Object.entries(skus).reduce((totalSku, [_sku, item]) => {
+      return totalSku + item.boxes.reduce((totalBox, box) => totalBox + box.qtyOfBoxes, 0)
+    }, 0)
+    return totalPo + totalSkus
+  }, 0)
+
   return (
     <div className='overflow-auto'>
       <table className='table table-sm align-middle table-responsive table-striped fs-7'>
@@ -150,6 +163,17 @@ const Create_Receiving_Boxes_Single = ({ singleSkuPackages, addNewSingleSkuBoxCo
             })
           )}
         </tbody>
+        <tfoot>
+          <tr>
+            <td colSpan={3} className='text-end'>
+              <span className='text-muted fst-italic'>Total Boxes</span>
+            </td>
+            <td className='text-center'>
+              <span>{FormatIntNumber(state.currentRegion, totalBoxes)}</span>
+            </td>
+            <td></td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   )
