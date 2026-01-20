@@ -6,6 +6,7 @@ import AppContext from '@context/AppContext'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { NoImageAdress } from '@lib/assetsConstants'
+import { sortBooleans, sortDates, sortNumbers, sortStringsLocaleCompare } from '@lib/helperFunctions'
 import { AmazonFulfillmentSku } from '@typesTs/amazon/fulfillments'
 import moment from 'moment'
 import DataTable from 'react-data-table-component'
@@ -117,61 +118,6 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
     }
   }
 
-  const caseInsensitiveSort = (rowA: string, rowB: string) => {
-    const a = rowA.toLowerCase()
-    const b = rowB.toLowerCase()
-
-    if (a > b) {
-      return 1
-    }
-
-    if (b > a) {
-      return -1
-    }
-
-    return 0
-  }
-
-  const quantitySort = (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => {
-    const a = Number(rowA.quantity)
-    const b = Number(rowB.quantity)
-
-    if (a > b) {
-      return 1
-    }
-
-    if (b > a) {
-      return -1
-    }
-
-    return 0
-  }
-
-  const typeSort = (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => {
-    const a = rowA.isKit!
-    const b = rowB.isKit!
-
-    if (a > b) {
-      return 1
-    }
-
-    if (b > a) {
-      return -1
-    }
-
-    return 0
-  }
-
-  const sortDates = (Adate: string, Bdate: string) => {
-    const a = moment(Adate)
-    const b = moment(Bdate)
-    if (a.isBefore(b)) {
-      return -1
-    } else {
-      return 1
-    }
-  }
-
   const handleSelectedRows = ({ selectedRows }: { selectedRows: AmazonFulfillmentSku[] }) => {
     setSelectedRows(selectedRows)
   }
@@ -198,7 +144,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
 
   const columns: any = [
     {
-      name: <span className='fw-bold fs-6'>Image</span>,
+      name: <span className='fw-bold fs-7'>Image</span>,
       selector: (row: AmazonFulfillmentSku) => {
         return (
           <Link href={row.isKit ? `/kit/${row.inventoryId}/${row.sku}` : `/product/${row.inventoryId}/${row.sku}`} target='blank' rel='noopener noreferrer' tabIndex={-1}>
@@ -226,7 +172,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       width: '80px',
     },
     {
-      name: <span className='fw-bold fs-6'>Amazon SKU Details</span>,
+      name: <span className='fw-bold fs-7'>Amazon SKU Details</span>,
       selector: (row: AmazonFulfillmentSku) => {
         if (row.isKit) {
           return (
@@ -323,10 +269,10 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       wrap: true,
       minWidth: 'fit-content',
       width: '300px',
-      sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => caseInsensitiveSort(rowA.product_name, rowB.product_name),
+      sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => sortStringsLocaleCompare(rowA.product_name, rowB.product_name),
     },
     {
-      name: <span className='fw-bold fs-6'>SC SKU</span>,
+      name: <span className='fw-bold fs-7'>SC SKU</span>,
       selector: (row: AmazonFulfillmentSku) => {
         return (
           <div className='text-center'>
@@ -440,11 +386,11 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       sortable: true,
       wrap: false,
       center: true,
-      sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => caseInsensitiveSort(rowA.shelfcloud_sku, rowB.shelfcloud_sku),
+      sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => sortStringsLocaleCompare(rowA.shelfcloud_sku, rowB.shelfcloud_sku),
       compact: true,
     },
     {
-      name: <span className='fw-bold fs-6'>Type</span>,
+      name: <span className='fw-bold fs-7'>Type</span>,
       selector: (cell: any) => {
         if (cell.isKit) {
           return <span className='badge text-uppercase badge-soft-info p-2'>kit</span>
@@ -455,10 +401,10 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       sortable: true,
       compact: true,
       center: true,
-      sortFunction: typeSort,
+      sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => sortBooleans(rowA.isKit, rowB.isKit),
     },
     {
-      name: <span className='fw-bold fs-6'>Amazon</span>,
+      name: <span className='fw-bold fs-7'>Amazon</span>,
       selector: (row: AmazonFulfillmentSku) => {
         return (
           <div className='d-flex flex-column justify-content-start align-items-start my-1 fs-7'>
@@ -499,7 +445,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
     {
       name: (
         <div>
-          <p className='m-0 mb-1 fw-bold fs-6 text-center'>FBA Sales</p>
+          <p className='m-0 mb-1 fw-bold fs-7 text-center'>FBA Sales</p>
         </div>
       ),
       selector: (row: AmazonFulfillmentSku) => {
@@ -544,7 +490,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       width: '140px',
     },
     {
-      name: <span className='fw-bold fs-6 text-center'>Warehouse Qty</span>,
+      name: <span className='fw-bold fs-7 text-center'>Warehouse Qty</span>,
       selector: (cell: AmazonFulfillmentSku) => {
         if (cell.isKit) {
           return <span className='text-info fs-7'>{FormatIntNumber(state.currentRegion, cell.quantity)}</span>
@@ -574,10 +520,10 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       wrap: false,
       width: '100px',
       minWidth: 'fit-content',
-      sortFunction: quantitySort,
+      sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => sortNumbers(rowA.quantity, rowB.quantity),
     },
     {
-      name: <span className='fw-bold fs-6'>Qty/Box</span>,
+      name: <span className='fw-bold fs-7'>Qty/Box</span>,
       selector: (row: AmazonFulfillmentSku) => row.boxQty,
       sortable: true,
       center: true,
@@ -589,7 +535,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       },
     },
     {
-      name: <span className='fw-bold fs-6 text-center'>Recommended Ship Date</span>,
+      name: <span className='fw-bold fs-7 text-center'>Recommended Ship Date</span>,
       selector: (row: AmazonFulfillmentSku) => (row.recommendedShipDate ? moment.utc(row.recommendedShipDate).local().format('MMM DD') : 'N/A'),
       sortable: true,
       center: true,
@@ -624,7 +570,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => sortDates(rowA.recommendedShipDate, rowB.recommendedShipDate),
     },
     {
-      name: <span className='fw-bold fs-6 text-center'>Recommended Replenishment</span>,
+      name: <span className='fw-bold fs-7 text-center'>Recommended Replenishment</span>,
       selector: (row: AmazonFulfillmentSku) => row.recommendedReplenishmentQty,
       sortable: true,
       center: true,
@@ -637,8 +583,8 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
     },
     {
       name: (
-        <span className='fw-bold fs-6 text-center'>
-          Order Qty <br /> (Master Boxes)
+        <span className='fw-bold fs-7 text-center'>
+          Order Qty <br /> <span className='text-nowrap'>(Master Boxes)</span>
         </span>
       ),
       selector: (row: AmazonFulfillmentSku) => {
@@ -688,9 +634,10 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       compact: true,
       width: '110px',
       minWidth: 'fit-content',
+      sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => sortNumbers(Number(rowA.orderQty), Number(rowB.orderQty)),
     },
     {
-      name: <span className='fw-bold fs-6 text-center'>Total To Amazon</span>,
+      name: <span className='fw-bold fs-7 text-center'>Total To Amazon</span>,
       selector: (row: AmazonFulfillmentSku) =>
         row.totalSendToAmazon > 0 ? (
           <div>

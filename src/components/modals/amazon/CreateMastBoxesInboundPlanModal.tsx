@@ -1,19 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useContext } from 'react'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
-import AppContext from '@context/AppContext'
-import axios from 'axios'
-import * as Yup from 'yup'
-import { useFormik } from 'formik'
-import { toast } from 'react-toastify'
 import router from 'next/router'
-import { AmazonFulfillmentSku, AmazonMarketplace } from '@typesTs/amazon/fulfillments'
-import useSWR from 'swr'
-import { FormatIntNumber } from '@lib/FormatNumbers'
-import moment from 'moment'
-import { Label_Prep_Owner_Options } from '@lib/AmzConstants'
+import { useContext, useState } from 'react'
+
 import SimpleSelect from '@components/Common/SimpleSelect'
 import ShippingSelectDate from '@components/amazon/fulfillment/fulfillment_page/ShippingSelectDate'
+import AppContext from '@context/AppContext'
+import { Label_Prep_Owner_Options } from '@lib/AmzConstants'
+import { FormatIntNumber } from '@lib/FormatNumbers'
+import { AmazonFulfillmentSku, AmazonMarketplace } from '@typesTs/amazon/fulfillments'
+import axios from 'axios'
+import { useFormik } from 'formik'
+import moment from 'moment'
+import { toast } from 'react-toastify'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import useSWR from 'swr'
+import * as Yup from 'yup'
 
 type Props = {
   orderProducts: AmazonFulfillmentSku[]
@@ -134,6 +135,7 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
               city: 'Miramar',
               companyName: `Shelf-Cloud / ${state.user.name}`,
               countryCode: 'US',
+              districtOrCounty: '',
               email: 'info@shelf-cloud.com',
               name: `Shelf-Cloud / ${state.user.name}`,
               phoneNumber: '7542432244',
@@ -246,6 +248,7 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
         }
       )
 
+      setloading(false)
       if (!response.data.error) {
         toast.update(creatingIndvUnitsPlan, {
           render: response.data.message,
@@ -265,7 +268,6 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
         })
         setcreatingErros(response.data.apiMessage.errors)
       }
-      setloading(false)
     },
   })
 

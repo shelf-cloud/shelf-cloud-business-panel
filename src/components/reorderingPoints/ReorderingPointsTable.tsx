@@ -408,10 +408,24 @@ const ReorderingPointsTable = ({
             ) : null}
           </span>
           {state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected && (
-            <span className={'fs-7 ' + (setField === 'fbaQty' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('fbaQty')}>
-              FBA{' '}
-              {setField === 'fbaQty' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
-            </span>
+            <>
+              <span className={'fs-7 ' + (setField === 'fbaQty' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('fbaQty')}>
+                FBA{' '}
+                {setField === 'fbaQty' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
+              </span>
+              {state.user[state.currentRegion]?.rpShowAWD && (
+                <span className={'fs-7 ' + (setField === 'awdQty' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('awdQty')}>
+                  AWD{' '}
+                  {setField === 'awdQty' ? (
+                    sortingDirectionAsc ? (
+                      <i className='ri-arrow-down-fill fs-7 text-primary' />
+                    ) : (
+                      <i className='ri-arrow-up-fill fs-7 text-primary' />
+                    )
+                  ) : null}
+                </span>
+              )}
+            </>
           )}
           <span className={'fs-7 ' + (setField === 'productionQty' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('productionQty')}>
             Production{' '}
@@ -432,10 +446,32 @@ const ReorderingPointsTable = ({
       selector: (row: ReorderingPointsProduct) => {
         return (
           <div>
-            <p className='m-0 p-0 text-center fs-7'>{row.warehouseQty}</p>
-            {state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected && <p className='m-0 p-0 text-center fs-7'>{row.fbaQty}</p>}
-            <p className='m-0 p-0 text-center fs-7'>{row.productionQty}</p>
-            <p className='m-0 p-0 text-center fs-7'>{row.receiving}</p>
+            <p className='m-0 p-0 text-end fs-7'>
+              <span className='text-muted fw-light'>Warehouse: </span>
+              <span className='fw-semibold'>{row.warehouseQty}</span>
+            </p>
+            {state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected && (
+              <>
+                <p className='m-0 p-0 text-end fs-7'>
+                  <span className='text-muted fw-light'>FBA: </span>
+                  <span className='fw-semibold'>{row.fbaQty}</span>
+                </p>
+                {state.user[state.currentRegion]?.rpShowAWD && (
+                  <p className='m-0 p-0 text-end fs-7'>
+                    <span className='text-muted fw-light'>AWD: </span>
+                    <span className='fw-semibold'>{row.awdQty}</span>
+                  </p>
+                )}
+              </>
+            )}
+            <p className='m-0 p-0 text-end fs-7'>
+              <span className='text-muted fw-light'>Prod: </span>
+              <span className='fw-semibold'>{row.productionQty}</span>
+            </p>
+            <p className='m-0 p-0 text-end fs-7'>
+              <span className='text-muted fw-light'>Receiving: </span>
+              <span className='fw-semibold'>{row.receiving}</span>
+            </p>
           </div>
         )
       },
@@ -460,7 +496,7 @@ const ReorderingPointsTable = ({
           ) : null}
         </span>
       ),
-      selector: (row: ReorderingPointsProduct) => FormatIntNumber(state.currentRegion, row.warehouseQty + row.fbaQty + row.productionQty + row.receiving),
+      selector: (row: ReorderingPointsProduct) => FormatIntNumber(state.currentRegion, row.warehouseQty + row.fbaQty + row.productionQty + row.receiving + row.awdQty),
       wrap: true,
       sortable: false,
       center: true,
@@ -560,9 +596,9 @@ const ReorderingPointsTable = ({
     {
       name: (
         <div className='text-center d-flex flex-column justify-content-center align-items-center py-1'>
-          <span className={'fs-7 fw-bold'}>Forecast</span>
+          {/* <span className={'fs-7 fw-bold'}>Forecast</span> */}
           <span className={'fs-7 ' + (setField === 'totalSCForecast' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('totalSCForecast')}>
-            Warehouses{' '}
+            Forecast{' '}
             {setField === 'totalSCForecast' ? (
               sortingDirectionAsc ? (
                 <i className='ri-arrow-down-fill fs-7 text-primary' />
@@ -571,7 +607,7 @@ const ReorderingPointsTable = ({
               )
             ) : null}
           </span>
-          {state.user[state.currentRegion]?.rpShowFBA && (
+          {/* {state.user[state.currentRegion]?.rpShowFBA && (
             <span
               className={'fs-7 ' + (setField === 'totalFBAForecast' ? 'fw-bold' : 'text-muted')}
               style={{ cursor: 'pointer' }}
@@ -600,7 +636,7 @@ const ReorderingPointsTable = ({
                 )
               ) : null}
             </span>
-          )}
+          )} */}
         </div>
       ),
       selector: (row: ReorderingPointsProduct) => {
@@ -609,7 +645,7 @@ const ReorderingPointsTable = ({
             <p className='m-0 p-0 text-center' id={'Recommended_Qty'}>
               {FormatIntNumber(state.currentRegion, row.totalSCForecast)}
             </p>
-            {state.user[state.currentRegion]?.rpShowFBA && (
+            {/* {state.user[state.currentRegion]?.rpShowFBA && (
               <p className='m-0 p-0 text-center' id={`forecast_${row.sku}`}>
                 {FormatIntNumber(state.currentRegion, row.totalFBAForecast)}
               </p>
@@ -618,7 +654,7 @@ const ReorderingPointsTable = ({
               <p className={'m-0 p-0 text-center ' + (!row.canSendToAWD ? 'text-danger text-decoration-line-through' : '')} id={`Adjustedforecast_${row.sku}`}>
                 {FormatIntNumber(state.currentRegion, row.totalAWDForecast)}
               </p>
-            )}
+            )} */}
           </div>
         )
       },

@@ -330,6 +330,7 @@ export const useRPProductsInfo = ({
         'daysRemaining',
         'warehouseQty',
         'fbaQty',
+        'awdQty',
         'productionQty',
         'receiving',
         'sellerCost',

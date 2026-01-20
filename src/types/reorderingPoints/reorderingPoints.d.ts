@@ -26,6 +26,7 @@ export interface ReorderingPointsProduct {
   hideReorderingPoints: boolean
   warehouseQty: number
   fbaQty: number
+  awdQty: number
   productionQty: number
   poDates: { [key: string]: number }
   receiving: number

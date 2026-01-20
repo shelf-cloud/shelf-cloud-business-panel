@@ -1,4 +1,5 @@
 import { KitRow, Product } from '@typings'
+import moment from 'moment'
 
 export const sortStringsLocaleCompare = (a: string, b: string) => a.localeCompare(b)
 
@@ -22,6 +23,26 @@ export const sortNumbers = (a: number, b: number) => {
     return -1
   }
   return 0
+}
+
+export const sortBooleans = (a: boolean, b: boolean) => {
+  if (a === b) {
+    return 0
+  }
+  if (a) {
+    return 1
+  }
+  return -1
+}
+
+export const sortDates = (Adate: string, Bdate: string) => {
+  const a = moment(Adate)
+  const b = moment(Bdate)
+  if (a.isBefore(b)) {
+    return -1
+  } else {
+    return 1
+  }
 }
 
 export const loadBarcode = (product: Product | KitRow) => {
