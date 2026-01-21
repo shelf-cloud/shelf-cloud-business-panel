@@ -27,6 +27,7 @@ export interface ReorderingPointsProduct {
   warehouseQty: number
   fbaQty: number
   awdQty: number
+  awdInboundQty: number
   productionQty: number
   poDates: { [key: string]: number }
   receiving: number

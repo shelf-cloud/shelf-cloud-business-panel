@@ -404,25 +404,25 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => sortBooleans(rowA.isKit, rowB.isKit),
     },
     {
-      name: <span className='fw-bold fs-7'>Amazon</span>,
+      name: <span className='fw-bold fs-7'>Amazon FBA</span>,
       selector: (row: AmazonFulfillmentSku) => {
         return (
           <div className='d-flex flex-column justify-content-start align-items-start my-1 fs-7'>
             <span className='m-0 p-0 fw-semibold'>
               <span className='text-muted fw-light'>Fulfillable: </span>
-              {row.afn_fulfillable_quantity}
+              {FormatIntNumber(state.currentRegion, row.afn_fulfillable_quantity)}
             </span>
             <span className='m-0 p-0 fw-semibold'>
               <span className='text-muted fw-light'>Reserved: </span>
-              {row.afn_reserved_quantity}
+              {FormatIntNumber(state.currentRegion, row.afn_reserved_quantity)}
             </span>
             <span className='m-0 p-0 fw-semibold'>
               <span className='text-muted fw-light'>Unsellable: </span>
-              {row.afn_unsellable_quantity}
+              {FormatIntNumber(state.currentRegion, row.afn_unsellable_quantity)}
             </span>
             <div className='m-0 p-0 fw-semibold d-flex flex-row justify-content-end align-items-center gap-1'>
               <span className='text-muted fw-light'>Inbound: </span>
-              {row.afn_inbound_receiving_quantity + row.afn_inbound_shipped_quantity + row.afn_inbound_working_quantity}
+              {FormatIntNumber(state.currentRegion, row.afn_inbound_receiving_quantity + row.afn_inbound_shipped_quantity + row.afn_inbound_working_quantity)}
               {row.fbaShipments.length > 0 && (
                 <Button
                   color='light'
@@ -441,6 +441,30 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       compact: true,
       width: '100px',
       minWidth: 'fit-content',
+      sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => sortNumbers(rowA.afn_fulfillable_quantity, rowB.afn_fulfillable_quantity),
+    },
+    {
+      name: <span className='fw-bold fs-7'>Amazon AWD</span>,
+      selector: (row: AmazonFulfillmentSku) => {
+        return (
+          <div className='d-flex flex-column justify-content-start align-items-start my-1 fs-7'>
+            <span className='m-0 p-0 fw-semibold'>
+              <span className='text-muted fw-light'>On Hand: </span>
+              {FormatIntNumber(state.currentRegion, row.awd_onHand_qty)}
+            </span>
+            <span className='m-0 p-0 fw-semibold'>
+              <span className='text-muted fw-light'>Inbound: </span>
+              {FormatIntNumber(state.currentRegion, row.awd_inbound_qty)}
+            </span>
+          </div>
+        )
+      },
+      sortable: true,
+      left: true,
+      compact: true,
+      width: '100px',
+      minWidth: 'fit-content',
+      sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => sortNumbers(rowA.awd_onHand_qty, rowB.awd_onHand_qty),
     },
     {
       name: (

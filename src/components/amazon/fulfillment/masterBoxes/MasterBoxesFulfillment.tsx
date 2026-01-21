@@ -1,30 +1,29 @@
-import { AmazonFulfillmentSku, AmzDimensions, Dimensions, FBAShipmentHisotry, FilterProps } from '@typesTs/amazon/fulfillments'
-import React, { useContext, useEffect, useMemo, useState } from 'react'
-import { DebounceInput } from 'react-debounce-input'
-import { Button, Col, Row, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledButtonDropdown } from 'reactstrap'
-import MasterBoxesTable from './MasterBoxesTable'
-import FilterListings from '../FilterListings'
 import { useRouter } from 'next/router'
+import { useContext, useEffect, useMemo, useState } from 'react'
+
 import AmazonFulfillmentDimensions from '@components/modals/amazon/AmazonFulfillmentDimensions'
 import CreateMastBoxesInboundPlanModal from '@components/modals/amazon/CreateMastBoxesInboundPlanModal'
 import CreateMastBoxesInboundPlanModalManual from '@components/modals/amazon/CreateMastBoxesInboundPlanModalManual'
-import { toast } from 'react-toastify'
-import { useSWRConfig } from 'swr'
-import axios from 'axios'
-import AppContext from '@context/AppContext'
 import InboundFBAHistoryModal from '@components/modals/amazon/InboundFBAHistoryModal'
+import SearchInput from '@components/ui/SearchInput'
+import AppContext from '@context/AppContext'
+import { AmazonFulfillmentSku, AmzDimensions, Dimensions, FBAShipmentHisotry, FilterProps } from '@typesTs/amazon/fulfillments'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import { Button, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from 'reactstrap'
+
+import FilterListings from '../FilterListings'
+import MasterBoxesTable from './MasterBoxesTable'
 
 type Props = {
   lisiting: AmazonFulfillmentSku[]
   pending: boolean
-  sessionToken: string
-  mutateLink: string
+  mutateFBASkus: () => void
 }
 
-const MasterBoxesFulfillment = ({ lisiting, pending, sessionToken, mutateLink }: Props) => {
+const MasterBoxesFulfillment = ({ lisiting, pending, mutateFBASkus }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
-  const { mutate } = useSWRConfig()
   const { filters, showHidden, showNotEnough, ShowNoShipDate, masterBoxVisibility }: FilterProps = router.query
   const [allData, setAllData] = useState<AmazonFulfillmentSku[]>([])
   const [searchValue, setSearchValue] = useState<string>('')
@@ -68,10 +67,10 @@ const MasterBoxesFulfillment = ({ lisiting, pending, sessionToken, mutateLink }:
               ? false
               : true
             : showNotEnough === 'false'
-            ? item.maxOrderQty <= 0
-              ? false
-              : true
-            : true) &&
+              ? item.maxOrderQty <= 0
+                ? false
+                : true
+              : true) &&
           (ShowNoShipDate === undefined || ShowNoShipDate === '' ? Boolean(item.recommendedShipDate) : ShowNoShipDate === 'false' ? Boolean(item.recommendedShipDate) : true) &&
           (masterBoxVisibility === undefined || masterBoxVisibility === '' ? item.showForMasterBoxes : masterBoxVisibility === 'false' ? item.showForMasterBoxes : true)
       )
@@ -86,10 +85,10 @@ const MasterBoxesFulfillment = ({ lisiting, pending, sessionToken, mutateLink }:
               ? false
               : true
             : showNotEnough === 'false'
-            ? item.maxOrderQty <= 0
-              ? false
-              : true
-            : true) &&
+              ? item.maxOrderQty <= 0
+                ? false
+                : true
+              : true) &&
           (ShowNoShipDate === undefined || ShowNoShipDate === '' ? Boolean(item.recommendedShipDate) : ShowNoShipDate === 'false' ? Boolean(item.recommendedShipDate) : true) &&
           (masterBoxVisibility === undefined || masterBoxVisibility === '' ? item.showForMasterBoxes : masterBoxVisibility === 'false' ? item.showForMasterBoxes : true) &&
           (item?.product_name?.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -131,7 +130,7 @@ const MasterBoxesFulfillment = ({ lisiting, pending, sessionToken, mutateLink }:
         isLoading: false,
         autoClose: 3000,
       })
-      mutate(mutateLink)
+      mutateFBASkus()
     } else {
       toast.update(changeMasterBoxVisibility, {
         render: response.data.message,
@@ -149,8 +148,8 @@ const MasterBoxesFulfillment = ({ lisiting, pending, sessionToken, mutateLink }:
 
   return (
     <>
-      <Row className='justify-content-between gap-2'>
-        <Col xs='12' lg='6' className='d-flex justify-content-start align-items-center gap-2'>
+      <Row className='justify-content-between gap-0'>
+        <Col xs='12' lg='8' className='d-flex flex-wrap justify-content-start align-items-center gap-2'>
           <Button disabled={error.length > 0 || hasQtyError} className='fs-7 text-nowrap' color='success' onClick={() => setShowCreateInboundPlanModal(true)}>
             Create Inbound Plan
           </Button>
@@ -185,40 +184,16 @@ const MasterBoxesFulfillment = ({ lisiting, pending, sessionToken, mutateLink }:
           </UncontrolledButtonDropdown>
         </Col>
         <Col xs='12' lg='4' className='d-flex justify-content-end align-items-center'>
-          <div className='flex-1'>
-            <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
-              <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
-                <DebounceInput
-                  type='text'
-                  minLength={3}
-                  debounceTimeout={300}
-                  className='form-control fs-6 bg-light pe-1'
-                  placeholder='Search...'
-                  id='search-options'
-                  value={searchValue}
-                  onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
-                  onChange={(e) => setSearchValue(e.target.value)}
-                />
-                <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
-                <span
-                  className='d-flex align-items-center justify-content-center bg-light'
-                  style={{
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => setSearchValue('')}>
-                  <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
-                </span>
-              </div>
-            </div>
-          </div>
+          <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='none' minLength={3} debounceTimeout={300} widths='col-12' />
         </Col>
       </Row>
       <div className='d-flex justify-content-start align-items-center gap-3 mt-3'>
-        <p className='m-0 p-0 text-primary text-uppercase'>
-          Total SKUs: <span className='fw-bold'>{orderProducts.length}</span>
+        <p className='m-0 p-0'>
+          Total SKUs: <span className='fw-semibold text-primary'>{orderProducts.length}</span>
         </p>
-        <p className='m-0 p-0 text-primary text-uppercase'>
-          Total Item Quantities: <span className='fw-bold'>{orderProducts.reduce((total: number, item: AmazonFulfillmentSku) => total + Number(item.totalSendToAmazon), 0)}</span>
+        <p className='m-0 p-0'>
+          Total Item Quantities:{' '}
+          <span className='fw-semibold text-primary'>{orderProducts.reduce((total: number, item: AmazonFulfillmentSku) => total + Number(item.totalSendToAmazon), 0)}</span>
         </p>
       </div>
       <MasterBoxesTable
@@ -239,7 +214,6 @@ const MasterBoxesFulfillment = ({ lisiting, pending, sessionToken, mutateLink }:
           showCreateInboundPlanModal={showCreateInboundPlanModal}
           setShowCreateInboundPlanModal={setShowCreateInboundPlanModal}
           setAllData={setAllData}
-          sessionToken={sessionToken}
         />
       )}
       {showCreateManualInboundPlanModal && (
@@ -247,7 +221,6 @@ const MasterBoxesFulfillment = ({ lisiting, pending, sessionToken, mutateLink }:
           orderProducts={orderProducts}
           showCreateInboundPlanModal={showCreateManualInboundPlanModal}
           setShowCreateInboundPlanModal={setShowCreateManualInboundPlanModal}
-          sessionToken={sessionToken}
         />
       )}
       {dimensionsModal.show && <AmazonFulfillmentDimensions dimensionsModal={dimensionsModal} setdimensionsModal={setdimensionsModal} />}

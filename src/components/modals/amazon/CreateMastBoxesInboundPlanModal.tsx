@@ -21,7 +21,6 @@ type Props = {
   showCreateInboundPlanModal: boolean
   setShowCreateInboundPlanModal: (showCreateInboundPlanModal: boolean) => void
   setAllData: (cb: (prev: AmazonFulfillmentSku[]) => AmazonFulfillmentSku[]) => void
-  sessionToken: string
 }
 
 type CreatingErros = {
@@ -30,7 +29,7 @@ type CreatingErros = {
   details: string
 }
 
-const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, setShowCreateInboundPlanModal, setAllData, sessionToken }: Props) => {
+const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, setShowCreateInboundPlanModal, setAllData }: Props) => {
   const { state }: any = useContext(AppContext)
   const [loading, setloading] = useState(false)
   const [creatingErros, setcreatingErros] = useState<CreatingErros[]>([])
@@ -99,154 +98,146 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
         }
       }
 
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/createInboundPlan/${state.currentRegion}/${state.user.businessId}`,
-        {
-          fulfillmentType: 'Master Boxes',
-          inboundPlan: {
-            contactInformation: {
-              email: 'info@shelf-cloud.com',
-              name: 'Jose Sanchez',
-              phoneNumber: '7542432244',
-            },
-            destinationMarketplaces: [values.marketplace],
-            items: orderProducts.map((product) => {
-              if (product.expiration === '' || product.expiration === undefined) {
-                return {
-                  labelOwner: product.labelOwner,
-                  msku: product.msku,
-                  prepOwner: product.prepOwner,
-                  quantity: product.totalSendToAmazon,
-                }
-              } else {
-                return {
-                  expiration: moment(product.expiration, 'MM/DD/YYYY').format('YYYY-MM-DD'),
-                  labelOwner: product.labelOwner,
-                  msku: product.msku,
-                  prepOwner: product.prepOwner,
-                  quantity: product.totalSendToAmazon,
-                }
+      const response = await axios.post(`/api/amazon/fullfilments/masterBoxes/createInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+        fulfillmentType: 'Master Boxes',
+        inboundPlan: {
+          contactInformation: {
+            email: 'info@shelf-cloud.com',
+            name: 'Jose Sanchez',
+            phoneNumber: '7542432244',
+          },
+          destinationMarketplaces: [values.marketplace],
+          items: orderProducts.map((product) => {
+            if (product.expiration === '' || product.expiration === undefined) {
+              return {
+                labelOwner: product.labelOwner,
+                msku: product.msku,
+                prepOwner: product.prepOwner,
+                quantity: product.totalSendToAmazon,
               }
-            }),
-            name: values.inboundPlanName,
-            sourceAddress: {
-              addressLine1: '9631 Premier Parkway',
-              addressLine2: '',
-              city: 'Miramar',
-              companyName: `Shelf-Cloud / ${state.user.name}`,
-              countryCode: 'US',
-              districtOrCounty: '',
-              email: 'info@shelf-cloud.com',
-              name: `Shelf-Cloud / ${state.user.name}`,
-              phoneNumber: '7542432244',
-              postalCode: '33025',
-              stateOrProvinceCode: 'FL',
-            },
-          },
-          skus_details,
-          steps: {
-            1: {
-              step: 'Inventory to Send',
-              complete: false,
-            },
-            2: {
-              step: 'Packing Info',
-              complete: false,
-            },
-            3: {
-              step: 'Shipping',
-              complete: false,
-            },
-            4: {
-              step: 'Box Labels',
-              complete: false,
-            },
-            5: {
-              step: 'Carrier and Pallet Info',
-              complete: false,
-            },
-            6: {
-              step: 'Tracking Details',
-              complete: false,
-            },
-          },
-          creationSteps: {
-            1: {
-              step: 'create',
-              complete: false,
-            },
-            2: {
-              step: 'generate packing Options',
-              complete: false,
-            },
-            3: {
-              step: 'list packing Options',
-              complete: false,
-            },
-            4: {
-              step: 'get packing groups info',
-              complete: false,
-            },
-            5: {
-              step: 'confirm packing options',
-              complete: false,
-            },
-            6: {
-              step: 'create pending picking and box plan',
-              complete: true,
-            },
-            7: {
-              step: 'complete pick and box plan',
-              complete: true,
-            },
-            8: {
-              step: 'set packing information',
-              complete: false,
-            },
-            9: {
-              step: 'generate palcement options',
-              complete: false,
-            },
-            10: {
-              step: 'list palcement options',
-              complete: false,
-            },
-            11: {
-              step: 'get placements shipment info',
-              complete: false,
-            },
-            12: {
-              step: 'generate transportation options',
-              complete: false,
-            },
-            13: {
-              step: 'list transportation options',
-              complete: false,
-            },
-            14: {
-              step: 'confirm placement option',
-              complete: false,
-            },
-            15: {
-              step: 'confirm transportation option',
-              complete: false,
-            },
-            16: {
-              step: 'create fba shipments and shelfcloud orders',
-              complete: false,
-            },
-            17: {
-              step: 'fba complete',
-              complete: false,
-            },
+            } else {
+              return {
+                expiration: moment(product.expiration, 'MM/DD/YYYY').format('YYYY-MM-DD'),
+                labelOwner: product.labelOwner,
+                msku: product.msku,
+                prepOwner: product.prepOwner,
+                quantity: product.totalSendToAmazon,
+              }
+            }
+          }),
+          name: values.inboundPlanName,
+          sourceAddress: {
+            addressLine1: '9631 Premier Parkway',
+            addressLine2: '',
+            city: 'Miramar',
+            companyName: `Shelf-Cloud / ${state.user.name}`,
+            countryCode: 'US',
+            districtOrCounty: '',
+            email: 'info@shelf-cloud.com',
+            name: `Shelf-Cloud / ${state.user.name}`,
+            phoneNumber: '7542432244',
+            postalCode: '33025',
+            stateOrProvinceCode: 'FL',
           },
         },
-        {
-          headers: {
-            Authorization: `Bearer ${sessionToken}`,
+        skus_details,
+        steps: {
+          1: {
+            step: 'Inventory to Send',
+            complete: false,
           },
-        }
-      )
+          2: {
+            step: 'Packing Info',
+            complete: false,
+          },
+          3: {
+            step: 'Shipping',
+            complete: false,
+          },
+          4: {
+            step: 'Box Labels',
+            complete: false,
+          },
+          5: {
+            step: 'Carrier and Pallet Info',
+            complete: false,
+          },
+          6: {
+            step: 'Tracking Details',
+            complete: false,
+          },
+        },
+        creationSteps: {
+          1: {
+            step: 'create',
+            complete: false,
+          },
+          2: {
+            step: 'generate packing Options',
+            complete: false,
+          },
+          3: {
+            step: 'list packing Options',
+            complete: false,
+          },
+          4: {
+            step: 'get packing groups info',
+            complete: false,
+          },
+          5: {
+            step: 'confirm packing options',
+            complete: false,
+          },
+          6: {
+            step: 'create pending picking and box plan',
+            complete: true,
+          },
+          7: {
+            step: 'complete pick and box plan',
+            complete: true,
+          },
+          8: {
+            step: 'set packing information',
+            complete: false,
+          },
+          9: {
+            step: 'generate palcement options',
+            complete: false,
+          },
+          10: {
+            step: 'list palcement options',
+            complete: false,
+          },
+          11: {
+            step: 'get placements shipment info',
+            complete: false,
+          },
+          12: {
+            step: 'generate transportation options',
+            complete: false,
+          },
+          13: {
+            step: 'list transportation options',
+            complete: false,
+          },
+          14: {
+            step: 'confirm placement option',
+            complete: false,
+          },
+          15: {
+            step: 'confirm transportation option',
+            complete: false,
+          },
+          16: {
+            step: 'create fba shipments and shelfcloud orders',
+            complete: false,
+          },
+          17: {
+            step: 'fba complete',
+            complete: false,
+          },
+        },
+      })
 
       setloading(false)
       if (!response.data.error) {

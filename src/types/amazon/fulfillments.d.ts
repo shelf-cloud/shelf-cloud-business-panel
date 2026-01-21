@@ -23,6 +23,8 @@ export interface AmazonFulfillmentSku {
   afn_inbound_receiving_quantity: number
   shelfcloud_sku: string
   shelfcloud_sku_id: number
+  awd_inbound_qty: number
+  awd_onHand_qty: number
   image: null | string
   brand: string | null
   show: number

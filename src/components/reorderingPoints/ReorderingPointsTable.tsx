@@ -368,32 +368,6 @@ const ReorderingPointsTable = ({
       minWidth: 'fit-content',
       width: '280px',
     },
-    // {
-    //   name: (
-    //     <div className='d-flex flex-column justify-content-center align-items-start'>
-    //       <span className={'fs-7 ' + (setField === 'supplier' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('supplier')}>
-    //         Supplier {setField === 'supplier' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
-    //       </span>
-    //       <span className={'fs-7 ' + (setField === 'brand' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('brand')}>
-    //         Brand {setField === 'brand' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
-    //       </span>
-    //     </div>
-    //   ),
-    //   selector: (row: ReorderingPointsProduct) => {
-    //     return (
-    //       <div>
-    //         <p className={'m-0 p-0 fs-7' + (row.supplier === '' ? ' text-muted fw-light fst-italic' : ' fw-semibold')}>{row.supplier === '' ? 'No supplier' : row.supplier}</p>
-    //         <p className={'m-0 p-0 fs-7' + (row.brand === '' ? ' text-muted fw-light fst-italic' : ' fw-semibold')}>{row.brand === '' ? 'No brand' : row.supplier}</p>
-    //       </div>
-    //     )
-    //   },
-    //   sortable: false,
-    //   wrap: true,
-    //   center: false,
-    //   compact: true,
-    //   width: '50px',
-    //   minWidth: 'fit-content',
-    // },
     {
       name: (
         <div className='text-center d-flex flex-column justify-content-center align-items-center py-1'>
@@ -407,26 +381,6 @@ const ReorderingPointsTable = ({
               )
             ) : null}
           </span>
-          {state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected && (
-            <>
-              <span className={'fs-7 ' + (setField === 'fbaQty' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('fbaQty')}>
-                FBA{' '}
-                {setField === 'fbaQty' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
-              </span>
-              {state.user[state.currentRegion]?.rpShowAWD && (
-                <span className={'fs-7 ' + (setField === 'awdQty' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('awdQty')}>
-                  AWD{' '}
-                  {setField === 'awdQty' ? (
-                    sortingDirectionAsc ? (
-                      <i className='ri-arrow-down-fill fs-7 text-primary' />
-                    ) : (
-                      <i className='ri-arrow-up-fill fs-7 text-primary' />
-                    )
-                  ) : null}
-                </span>
-              )}
-            </>
-          )}
           <span className={'fs-7 ' + (setField === 'productionQty' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('productionQty')}>
             Production{' '}
             {setField === 'productionQty' ? (
@@ -447,29 +401,15 @@ const ReorderingPointsTable = ({
         return (
           <div>
             <p className='m-0 p-0 text-end fs-7'>
-              <span className='text-muted fw-light'>Warehouse: </span>
+              <span className='text-muted fw-light'>On Hand: </span>
               <span className='fw-semibold'>{row.warehouseQty}</span>
             </p>
-            {state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected && (
-              <>
-                <p className='m-0 p-0 text-end fs-7'>
-                  <span className='text-muted fw-light'>FBA: </span>
-                  <span className='fw-semibold'>{row.fbaQty}</span>
-                </p>
-                {state.user[state.currentRegion]?.rpShowAWD && (
-                  <p className='m-0 p-0 text-end fs-7'>
-                    <span className='text-muted fw-light'>AWD: </span>
-                    <span className='fw-semibold'>{row.awdQty}</span>
-                  </p>
-                )}
-              </>
-            )}
             <p className='m-0 p-0 text-end fs-7'>
               <span className='text-muted fw-light'>Prod: </span>
               <span className='fw-semibold'>{row.productionQty}</span>
             </p>
             <p className='m-0 p-0 text-end fs-7'>
-              <span className='text-muted fw-light'>Receiving: </span>
+              <span className='text-muted fw-light'>Inbound: </span>
               <span className='fw-semibold'>{row.receiving}</span>
             </p>
           </div>
@@ -480,6 +420,72 @@ const ReorderingPointsTable = ({
       compact: true,
       // grow: 0,
     },
+    ...(state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected
+      ? [
+          {
+            name: (
+              <div className='text-center d-flex flex-column justify-content-center align-items-center py-1'>
+                {state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected && (
+                  <>
+                    <span className={'fs-7 ' + (setField === 'fbaQty' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('fbaQty')}>
+                      FBA{' '}
+                      {setField === 'fbaQty' ? (
+                        sortingDirectionAsc ? (
+                          <i className='ri-arrow-down-fill fs-7 text-primary' />
+                        ) : (
+                          <i className='ri-arrow-up-fill fs-7 text-primary' />
+                        )
+                      ) : null}
+                    </span>
+                    {state.user[state.currentRegion]?.rpShowAWD && (
+                      <span className={'fs-7 ' + (setField === 'awdQty' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('awdQty')}>
+                        AWD{' '}
+                        {setField === 'awdQty' ? (
+                          sortingDirectionAsc ? (
+                            <i className='ri-arrow-down-fill fs-7 text-primary' />
+                          ) : (
+                            <i className='ri-arrow-up-fill fs-7 text-primary' />
+                          )
+                        ) : null}
+                      </span>
+                    )}
+                  </>
+                )}
+              </div>
+            ),
+            selector: (row: ReorderingPointsProduct) => {
+              return (
+                <div>
+                  {state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected && (
+                    <>
+                      <p className='m-0 p-0 text-end fs-7'>
+                        <span className='text-muted fw-light'>FBA: </span>
+                        <span className='fw-semibold'>{row.fbaQty}</span>
+                      </p>
+                      {state.user[state.currentRegion]?.rpShowAWD && (
+                        <>
+                          <p className='m-0 p-0 text-end fs-7'>
+                            <span className='text-muted fw-light'>AWD: </span>
+                            <span className='fw-semibold'>{row.awdQty}</span>
+                          </p>
+                          <p className='m-0 p-0 text-end fs-7'>
+                            <span className='text-muted fw-light'>Inbound: </span>
+                            <span className='fw-semibold'>{row.awdInboundQty}</span>
+                          </p>
+                        </>
+                      )}
+                    </>
+                  )}
+                </div>
+              )
+            },
+            sortable: false,
+            center: true,
+            compact: true,
+            // grow: 0,
+          },
+        ]
+      : []),
     {
       name: (
         <span
@@ -496,7 +502,8 @@ const ReorderingPointsTable = ({
           ) : null}
         </span>
       ),
-      selector: (row: ReorderingPointsProduct) => FormatIntNumber(state.currentRegion, row.warehouseQty + row.fbaQty + row.productionQty + row.receiving + row.awdQty),
+      selector: (row: ReorderingPointsProduct) =>
+        FormatIntNumber(state.currentRegion, row.warehouseQty + row.fbaQty + row.productionQty + row.receiving + row.awdQty + row.awdInboundQty),
       wrap: true,
       sortable: false,
       center: true,

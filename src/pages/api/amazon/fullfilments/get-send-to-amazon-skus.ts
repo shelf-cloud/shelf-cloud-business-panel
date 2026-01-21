@@ -4,7 +4,7 @@ import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 import { getServerSession } from 'next-auth'
 
-const createInboundPlan: NextApiHandler = async (request, response) => {
+const getReorderingPointsProducts: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)
 
   const sessionToken = request.cookies['next-auth.session-token'] ? request.cookies['next-auth.session-token'] : request.cookies['__Secure-next-auth.session-token']
@@ -15,22 +15,12 @@ const createInboundPlan: NextApiHandler = async (request, response) => {
   }
 
   axios
-    .post(
-      `${process.env.SHELFCLOUD_SERVER_URL}/api/amz_workflow/createInboundPlan/${request.query.region}/${request.query.businessId}`,
-      {
-        fulfillmentType: request.body.fulfillmentType,
-        inboundPlan: request.body.inboundPlan,
-        skus_details: request.body.skus_details,
-        steps: request.body.steps,
-        creationSteps: request.body.creationSteps,
+    .get(`${process.env.SHELFCLOUD_SERVER_URL}/api/amz_workflow/getAmazonFbaSkus/${request.query.region}/${request.query.businessId}`, {
+      headers: {
+        Authorization: `Bearer ${sessionToken}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${sessionToken}`,
-        },
-      }
-    )
-    .then(({ data }) => {
+    })
+    .then(async ({ data }) => {
       response.json(data)
     })
     .catch((error) => {
@@ -57,4 +47,4 @@ const createInboundPlan: NextApiHandler = async (request, response) => {
     })
 }
 
-export default createInboundPlan
+export default getReorderingPointsProducts

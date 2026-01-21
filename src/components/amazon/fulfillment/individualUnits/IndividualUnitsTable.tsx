@@ -6,6 +6,7 @@ import AppContext from '@context/AppContext'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { NoImageAdress } from '@lib/assetsConstants'
+import { sortBooleans, sortDates, sortNumbers, sortStringsLocaleCompare } from '@lib/helperFunctions'
 import { AmazonFulfillmentSku } from '@typesTs/amazon/fulfillments'
 import moment from 'moment'
 import DataTable from 'react-data-table-component'
@@ -111,61 +112,6 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
           return rest
         })
       }
-    }
-  }
-
-  const caseInsensitiveSort = (rowA: string, rowB: string) => {
-    const a = rowA.toLowerCase()
-    const b = rowB.toLowerCase()
-
-    if (a > b) {
-      return 1
-    }
-
-    if (b > a) {
-      return -1
-    }
-
-    return 0
-  }
-
-  const quantitySort = (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => {
-    const a = Number(rowA.quantity)
-    const b = Number(rowB.quantity)
-
-    if (a > b) {
-      return 1
-    }
-
-    if (b > a) {
-      return -1
-    }
-
-    return 0
-  }
-
-  const typeSort = (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => {
-    const a = rowA.isKit!
-    const b = rowB.isKit!
-
-    if (a > b) {
-      return 1
-    }
-
-    if (b > a) {
-      return -1
-    }
-
-    return 0
-  }
-
-  const sortDates = (Adate: string, Bdate: string) => {
-    const a = moment(Adate)
-    const b = moment(Bdate)
-    if (a.isBefore(b)) {
-      return -1
-    } else {
-      return 1
     }
   }
 
@@ -316,7 +262,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
       wrap: true,
       minWidth: 'fit-content',
       width: '300px',
-      sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => caseInsensitiveSort(rowA.product_name, rowB.product_name),
+      sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => sortStringsLocaleCompare(rowA.product_name, rowB.product_name),
     },
     {
       name: <span className='fw-bold fs-6'>SC SKU</span>,
@@ -330,7 +276,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
       sortable: true,
       wrap: false,
       center: true,
-      sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => caseInsensitiveSort(rowA.shelfcloud_sku, rowB.shelfcloud_sku),
+      sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => sortStringsLocaleCompare(rowA.shelfcloud_sku, rowB.shelfcloud_sku),
       compact: true,
     },
     {
@@ -345,33 +291,33 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
       sortable: true,
       compact: true,
       center: true,
-      sortFunction: typeSort,
+      sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => sortBooleans(rowA.isKit, rowB.isKit),
     },
     {
-      name: <span className='fw-bold fs-6'>Amazon</span>,
+      name: <span className='fw-bold fs-7'>Amazon FBA</span>,
       selector: (row: AmazonFulfillmentSku) => {
         return (
           <div className='d-flex flex-column justify-content-start align-items-start my-1 fs-7'>
             <span className='m-0 p-0 fw-semibold'>
               <span className='text-muted fw-light'>Fulfillable: </span>
-              {row.afn_fulfillable_quantity}
+              {FormatIntNumber(state.currentRegion, row.afn_fulfillable_quantity)}
             </span>
             <span className='m-0 p-0 fw-semibold'>
               <span className='text-muted fw-light'>Reserved: </span>
-              {row.afn_reserved_quantity}
+              {FormatIntNumber(state.currentRegion, row.afn_reserved_quantity)}
             </span>
             <span className='m-0 p-0 fw-semibold'>
               <span className='text-muted fw-light'>Unsellable: </span>
-              {row.afn_unsellable_quantity}
+              {FormatIntNumber(state.currentRegion, row.afn_unsellable_quantity)}
             </span>
             <div className='m-0 p-0 fw-semibold d-flex flex-row justify-content-end align-items-center gap-1'>
               <span className='text-muted fw-light'>Inbound: </span>
-              {row.afn_inbound_receiving_quantity + row.afn_inbound_shipped_quantity + row.afn_inbound_working_quantity}
+              {FormatIntNumber(state.currentRegion, row.afn_inbound_receiving_quantity + row.afn_inbound_shipped_quantity + row.afn_inbound_working_quantity)}
               {row.fbaShipments.length > 0 && (
                 <Button
                   color='light'
                   outline
-                  className='btn btn-sm btn-icon btn-ghost-info'
+                  className='p-0 m-0 btn btn-sm btn-icon btn-ghost-info'
                   onClick={() => setinboundFBAHistoryModal({ show: true, sku: row.shelfcloud_sku, msku: row.msku, shipments: row.fbaShipments })}>
                   <i className='ri-information-fill p-0 m-0 fs-6 text-info' />
                 </Button>
@@ -385,6 +331,30 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
       compact: true,
       width: '100px',
       minWidth: 'fit-content',
+      sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => sortNumbers(rowA.afn_fulfillable_quantity, rowB.afn_fulfillable_quantity),
+    },
+    {
+      name: <span className='fw-bold fs-7'>Amazon AWD</span>,
+      selector: (row: AmazonFulfillmentSku) => {
+        return (
+          <div className='d-flex flex-column justify-content-start align-items-start my-1 fs-7'>
+            <span className='m-0 p-0 fw-semibold'>
+              <span className='text-muted fw-light'>On Hand: </span>
+              {FormatIntNumber(state.currentRegion, row.awd_onHand_qty)}
+            </span>
+            <span className='m-0 p-0 fw-semibold'>
+              <span className='text-muted fw-light'>Inbound: </span>
+              {FormatIntNumber(state.currentRegion, row.awd_inbound_qty)}
+            </span>
+          </div>
+        )
+      },
+      sortable: true,
+      left: true,
+      compact: true,
+      width: '100px',
+      minWidth: 'fit-content',
+      sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => sortNumbers(rowA.awd_onHand_qty, rowB.awd_onHand_qty),
     },
     {
       name: (
@@ -464,7 +434,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
       wrap: false,
       width: '100px',
       minWidth: 'fit-content',
-      sortFunction: quantitySort,
+      sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => sortNumbers(rowA.quantity, rowB.quantity),
     },
     {
       name: <span className='fw-bold fs-6 text-center'>Recommended Ship Date</span>,

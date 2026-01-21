@@ -1,26 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useContext } from 'react'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
-import AppContext from '@context/AppContext'
-import axios from 'axios'
-import * as Yup from 'yup'
-import { useFormik } from 'formik'
-import { toast } from 'react-toastify'
 import router from 'next/router'
-import { AmazonFulfillmentSku, AmazonMarketplace } from '@typesTs/amazon/fulfillments'
-import useSWR from 'swr'
-import { FormatIntNumber } from '@lib/FormatNumbers'
-import moment from 'moment'
-import { Label_Prep_Owner_Options } from '@lib/AmzConstants'
+import { useContext, useState } from 'react'
+
 import SimpleSelect from '@components/Common/SimpleSelect'
 import ShippingSelectDate from '@components/amazon/fulfillment/fulfillment_page/ShippingSelectDate'
+import AppContext from '@context/AppContext'
+import { Label_Prep_Owner_Options } from '@lib/AmzConstants'
+import { FormatIntNumber } from '@lib/FormatNumbers'
+import { AmazonFulfillmentSku, AmazonMarketplace } from '@typesTs/amazon/fulfillments'
+import axios from 'axios'
+import { useFormik } from 'formik'
+import moment from 'moment'
+import { toast } from 'react-toastify'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import useSWR from 'swr'
+import * as Yup from 'yup'
 
 type Props = {
   orderProducts: AmazonFulfillmentSku[]
   showCreateInboundPlanModal: boolean
   setShowCreateInboundPlanModal: (showCreateInboundPlanModal: boolean) => void
   setAllData: (cb: (prev: AmazonFulfillmentSku[]) => AmazonFulfillmentSku[]) => void
-  sessionToken: string
 }
 
 type CreatingErros = {
@@ -29,8 +29,8 @@ type CreatingErros = {
   details: string
 }
 
-const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, setShowCreateInboundPlanModal, setAllData, sessionToken }: Props) => {
-  const { state }: any = useContext(AppContext)
+const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanModal, setShowCreateInboundPlanModal, setAllData }: Props) => {
+  const { state } = useContext(AppContext)
   const [loading, setloading] = useState(false)
   const [creatingErros, setcreatingErros] = useState<CreatingErros[]>([])
   const TotalMasterBoxes = orderProducts.reduce((total: number, item: AmazonFulfillmentSku) => total + Number(item.orderQty), 0)
@@ -46,8 +46,6 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
   )
 
   const validation = useFormik({
-    // enableReinitialize: true,
-
     initialValues: {
       inboundPlanName: `${state?.user?.name.substring(0, 3).toUpperCase()}-FBA-${moment().format('MM_DD_YYYY-hh_mma')}`,
       marketplace: '',
@@ -99,154 +97,147 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
         }
       }
 
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/createIndUnitsInboundPlan/${state.currentRegion}/${state.user.businessId}`,
-        {
-          fulfillmentType: 'Individual Units',
-          inboundPlan: {
-            contactInformation: {
-              email: 'info@shelf-cloud.com',
-              name: 'Jose Sanchez',
-              phoneNumber: '7542432244',
-            },
-            destinationMarketplaces: [values.marketplace],
-            items: orderProducts.map((product) => {
-              if (product.expiration === '' || product.expiration === undefined) {
-                return {
-                  labelOwner: product.labelOwner,
-                  msku: product.msku,
-                  prepOwner: product.prepOwner,
-                  quantity: product.totalSendToAmazon,
-                }
-              } else {
-                return {
-                  expiration: moment(product.expiration, 'MM/DD/YYYY').format('YYYY-MM-DD'),
-                  labelOwner: product.labelOwner,
-                  msku: product.msku,
-                  prepOwner: product.prepOwner,
-                  quantity: product.totalSendToAmazon,
-                }
+      const response = await axios.post(`/api/amazon/fullfilments/individualUnits/createIndUnitsInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+        fulfillmentType: 'Individual Units',
+        inboundPlan: {
+          contactInformation: {
+            email: 'info@shelf-cloud.com',
+            name: 'Jose Sanchez',
+            phoneNumber: '7542432244',
+          },
+          destinationMarketplaces: [values.marketplace],
+          items: orderProducts.map((product) => {
+            if (product.expiration === '' || product.expiration === undefined) {
+              return {
+                labelOwner: product.labelOwner,
+                msku: product.msku,
+                prepOwner: product.prepOwner,
+                quantity: product.totalSendToAmazon,
               }
-            }),
-            name: values.inboundPlanName,
-            sourceAddress: {
-              addressLine1: '9631 Premier Parkway',
-              addressLine2: '',
-              city: 'Miramar',
-              companyName: `Shelf-Cloud / ${state.user.name}`,
-              countryCode: 'US',
-              email: 'info@shelf-cloud.com',
-              name: `Shelf-Cloud / ${state.user.name}`,
-              phoneNumber: '7542432244',
-              postalCode: '33025',
-              stateOrProvinceCode: 'FL',
-            },
-          },
-          skus_details,
-          steps: {
-            1: {
-              step: 'Inventory to Send',
-              complete: false,
-            },
-            2: {
-              step: 'Packing Info',
-              complete: false,
-            },
-            3: {
-              step: 'Shipping',
-              complete: false,
-            },
-            4: {
-              step: 'Box Labels',
-              complete: false,
-            },
-            5: {
-              step: 'Carrier and Pallet Info',
-              complete: false,
-            },
-            6: {
-              step: 'Tracking Details',
-              complete: false,
-            },
-          },
-          creationSteps: {
-            1: {
-              step: 'create',
-              complete: false,
-            },
-            2: {
-              step: 'generate packing Options',
-              complete: false,
-            },
-            3: {
-              step: 'list packing Options',
-              complete: false,
-            },
-            4: {
-              step: 'get packing groups info',
-              complete: false,
-            },
-            5: {
-              step: 'confirm packing options',
-              complete: false,
-            },
-            6: {
-              step: 'create pending picking and box plan',
-              complete: false,
-            },
-            7: {
-              step: 'complete pick and box plan',
-              complete: false,
-            },
-            8: {
-              step: 'set packing information',
-              complete: false,
-            },
-            9: {
-              step: 'generate palcement options',
-              complete: false,
-            },
-            10: {
-              step: 'list palcement options',
-              complete: false,
-            },
-            11: {
-              step: 'get placements shipment info',
-              complete: false,
-            },
-            12: {
-              step: 'generate transportation options',
-              complete: false,
-            },
-            13: {
-              step: 'list transportation options',
-              complete: false,
-            },
-            14: {
-              step: 'confirm placement option',
-              complete: false,
-            },
-            15: {
-              step: 'confirm transportation option',
-              complete: false,
-            },
-            16: {
-              step: 'create fba shipments and shelfcloud orders',
-              complete: false,
-            },
-            17: {
-              step: 'fba complete',
-              complete: false,
-            },
+            } else {
+              return {
+                expiration: moment(product.expiration, 'MM/DD/YYYY').format('YYYY-MM-DD'),
+                labelOwner: product.labelOwner,
+                msku: product.msku,
+                prepOwner: product.prepOwner,
+                quantity: product.totalSendToAmazon,
+              }
+            }
+          }),
+          name: values.inboundPlanName,
+          sourceAddress: {
+            addressLine1: '9631 Premier Parkway',
+            addressLine2: '',
+            city: 'Miramar',
+            companyName: `Shelf-Cloud / ${state.user.name}`,
+            countryCode: 'US',
+            email: 'info@shelf-cloud.com',
+            name: `Shelf-Cloud / ${state.user.name}`,
+            phoneNumber: '7542432244',
+            postalCode: '33025',
+            stateOrProvinceCode: 'FL',
           },
         },
-        {
-          headers: {
-            Authorization: `Bearer ${sessionToken}`,
+        skus_details,
+        steps: {
+          1: {
+            step: 'Inventory to Send',
+            complete: false,
           },
-        }
-      )
+          2: {
+            step: 'Packing Info',
+            complete: false,
+          },
+          3: {
+            step: 'Shipping',
+            complete: false,
+          },
+          4: {
+            step: 'Box Labels',
+            complete: false,
+          },
+          5: {
+            step: 'Carrier and Pallet Info',
+            complete: false,
+          },
+          6: {
+            step: 'Tracking Details',
+            complete: false,
+          },
+        },
+        creationSteps: {
+          1: {
+            step: 'create',
+            complete: false,
+          },
+          2: {
+            step: 'generate packing Options',
+            complete: false,
+          },
+          3: {
+            step: 'list packing Options',
+            complete: false,
+          },
+          4: {
+            step: 'get packing groups info',
+            complete: false,
+          },
+          5: {
+            step: 'confirm packing options',
+            complete: false,
+          },
+          6: {
+            step: 'create pending picking and box plan',
+            complete: false,
+          },
+          7: {
+            step: 'complete pick and box plan',
+            complete: false,
+          },
+          8: {
+            step: 'set packing information',
+            complete: false,
+          },
+          9: {
+            step: 'generate palcement options',
+            complete: false,
+          },
+          10: {
+            step: 'list palcement options',
+            complete: false,
+          },
+          11: {
+            step: 'get placements shipment info',
+            complete: false,
+          },
+          12: {
+            step: 'generate transportation options',
+            complete: false,
+          },
+          13: {
+            step: 'list transportation options',
+            complete: false,
+          },
+          14: {
+            step: 'confirm placement option',
+            complete: false,
+          },
+          15: {
+            step: 'confirm transportation option',
+            complete: false,
+          },
+          16: {
+            step: 'create fba shipments and shelfcloud orders',
+            complete: false,
+          },
+          17: {
+            step: 'fba complete',
+            complete: false,
+          },
+        },
+      })
 
+      setloading(false)
       if (!response.data.error) {
         toast.update(creatingIndvUnitsPlan, {
           render: response.data.message,
@@ -266,7 +257,6 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
         })
         setcreatingErros(response.data.apiMessage.errors)
       }
-      setloading(false)
     },
   })
 

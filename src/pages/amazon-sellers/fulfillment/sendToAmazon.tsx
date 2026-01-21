@@ -1,23 +1,23 @@
-import React, { useState, useContext } from 'react'
-import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
-import axios from 'axios'
-import Link from 'next/link'
 import Head from 'next/head'
-import { Button, Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap'
-import BreadCrumb from '@components/Common/BreadCrumb'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import React, { useContext, useRef, useState } from 'react'
+
 import { getSession } from '@auth/client'
+import BreadCrumb from '@components/Common/BreadCrumb'
 import InventoryBinsModal from '@components/InventoryBinsModal'
-import useSWR from 'swr'
-import { toast } from 'react-toastify'
-import { AmazonFulfillmentSku } from '@typesTs/amazon/fulfillments'
+import IndividualUnits from '@components/amazon/fulfillment/individualUnits/IndividualUnitsFulfillment'
 import MasterBoxesFulfillment from '@components/amazon/fulfillment/masterBoxes/MasterBoxesFulfillment'
 import MasterBoxHelp from '@components/amazon/offcanvas/MasterBoxHelp'
-import IndividualUnits from '@components/amazon/fulfillment/individualUnits/IndividualUnitsFulfillment'
-import { useRouter } from 'next/router'
+import AppContext from '@context/AppContext'
+import { AmazonFulfillmentSku } from '@typesTs/amazon/fulfillments'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import { Button, Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap'
+import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
-  const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
   const session = await getSession(context)
 
   if (session == null) {
@@ -29,12 +29,11 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
     }
   }
   return {
-    props: { session, sessionToken },
+    props: { session },
   }
 }
 
 type Props = {
-  sessionToken: string
   session: {
     user: {
       businessName: string
@@ -43,39 +42,36 @@ type Props = {
   }
 }
 
-const SendToAmazon = ({ session, sessionToken }: Props) => {
-  const { state }: any = useContext(AppContext)
+const SendToAmazon = ({ session }: Props) => {
+  const { state } = useContext(AppContext)
   const router = useRouter()
   const title = `Send To Amazon | ${session?.user?.businessName}`
-  const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<AmazonFulfillmentSku[]>([])
   const [helpOffCanvasIsOpen, setHelpOffCanvasIsOpen] = useState(false)
 
-  const controller = new AbortController()
-  const signal = controller.signal
-  const fetcher = (endPoint: string) => {
-    allData.length === 0 && setPending(true)
-    axios(endPoint, {
-      signal,
-      headers: {
-        Authorization: `Bearer ${sessionToken}`,
-      },
-    })
-      .then((res) => {
-        setAllData(res.data)
-        setPending(false)
-      })
-      .catch(({ error }) => {
-        if (axios.isCancel(error)) {
+  const controllerRef = useRef<AbortController | null>(null)
+  const { isValidating: isLoadingProducts, mutate: mutateFBASkus } = useSWR(
+    session && state.user.businessId ? `/api/amazon/fullfilments/get-send-to-amazon-skus?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
+    async (endPoint: string) => {
+      try {
+        const response = await axios.get(endPoint, {
+          signal: controllerRef.current?.signal,
+        })
+        return response.data
+      } catch (error) {
+        if (!axios.isCancel(error)) {
           toast.error('Error fetching shipment Log data')
           setAllData([])
-          setPending(false)
         }
-      })
-  }
-  useSWR(session && state.user.businessId ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/getAmazonFbaSkus/${state.currentRegion}/${state.user.businessId}` : null, fetcher, {
-    revalidateOnFocus: false,
-  })
+      }
+    },
+    {
+      revalidateOnFocus: false,
+      onSuccess: (data) => {
+        setAllData(data)
+      },
+    }
+  )
 
   const [activeTab, setActiveTab] = useState('1')
   const tabChange = (tab: any) => {
@@ -143,15 +139,10 @@ const SendToAmazon = ({ session, sessionToken }: Props) => {
                   <CardBody>
                     <TabContent activeTab={activeTab}>
                       <TabPane tabId='1'>
-                        <MasterBoxesFulfillment
-                          lisiting={allData}
-                          pending={pending}
-                          sessionToken={sessionToken}
-                          mutateLink={`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/getAmazonFbaSkus/${state.currentRegion}/${state.user.businessId}`}
-                        />
+                        <MasterBoxesFulfillment lisiting={allData} pending={isLoadingProducts} mutateFBASkus={mutateFBASkus} />
                       </TabPane>
                       <TabPane tabId='2'>
-                        <IndividualUnits lisiting={allData} pending={pending} sessionToken={sessionToken} />
+                        <IndividualUnits lisiting={allData} pending={isLoadingProducts} />
                       </TabPane>
                     </TabContent>
                   </CardBody>

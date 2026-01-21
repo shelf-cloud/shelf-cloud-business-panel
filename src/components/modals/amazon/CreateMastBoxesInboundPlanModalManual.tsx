@@ -17,7 +17,6 @@ type Props = {
   orderProducts: AmazonFulfillmentSku[]
   showCreateInboundPlanModal: boolean
   setShowCreateInboundPlanModal: (showCreateInboundPlanModal: boolean) => void
-  sessionToken: string
 }
 
 const CreateMastBoxesInboundPlanModalManual = ({ orderProducts, showCreateInboundPlanModal, setShowCreateInboundPlanModal }: Props) => {
@@ -244,6 +243,7 @@ const CreateMastBoxesInboundPlanModalManual = ({ orderProducts, showCreateInboun
         },
       })
 
+      setloading(false)
       if (!response.data.error) {
         generateTabDelimitedFile(orderProducts, values.inboundPlanName)
         setShowCreateInboundPlanModal(false)
@@ -263,7 +263,6 @@ const CreateMastBoxesInboundPlanModalManual = ({ orderProducts, showCreateInboun
           autoClose: 3000,
         })
       }
-      setloading(false)
     },
   })
 
