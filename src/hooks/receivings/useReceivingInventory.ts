@@ -19,7 +19,6 @@ export interface ReceivingInventory {
   image: string
   boxQty: number
   suppliersName: string
-  missingDimensions: boolean
 }
 type ReceivingInventoryHookProps = {
   searchValue: string

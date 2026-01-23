@@ -58,16 +58,8 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
     },
     {
       name: <span className='fw-semibold fs-6'>Title</span>,
-      selector: (row: ReceivingInventory) => (
-        <>
-          <p className='fs-7 m-0 p-0'>{row.title}</p>
-          {row.missingDimensions ? (
-            <span className='fs-7 fw-normal text-danger m-0 p-0' id={`Error-missing-dimensions-${row.sku}`}>
-              Item missing some dimensions
-            </span>
-          ) : null}
-        </>
-      ),
+      selector: (row: ReceivingInventory) => <p className='fs-7 m-0 p-0'>{row.title}</p>,
+
       sortable: true,
       wrap: true,
       grow: 1.5,
@@ -136,7 +128,6 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
             <DebounceInput
               type='number'
               minLength={0}
-              disabled={row.missingDimensions}
               debounceTimeout={200}
               className='form-control form-control-sm fs-6 mt-1'
               placeholder={'Receiving Qty...'}
