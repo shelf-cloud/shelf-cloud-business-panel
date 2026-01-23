@@ -1,22 +1,23 @@
 import { NextApiHandler } from 'next'
-import { getServerSession } from 'next-auth'
+
 import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
+import { getServerSession } from 'next-auth'
 
-const createNewProduct: NextApiHandler = async (request, response) => {
+const getBusinessSuppliersBrandsCategories: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)
-
   if (session == null) {
     response.status(401).end()
 
     return
   }
 
-  axios
-    .post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/createNewProduct.php?businessId=${request.query.businessId}`, {
-      productInfo: request.body.productInfo,
-    })
-    .then(({ data }) => {
+  axios(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/products/get-business-suppliers-brands-categories.php?businessId=${request.query.businessId}`, {
+    headers: {
+      Authorization: `Bearer ${process.env.TARS_API_AUTH_TOKEN}`,
+    },
+  })
+    .then(async ({ data }) => {
       response.json(data)
     })
     .catch((error) => {
@@ -25,13 +26,13 @@ const createNewProduct: NextApiHandler = async (request, response) => {
         // that falls out of the range of 2xx
         response.json({
           error: true,
-          message: `Error API Integration ${error.response.data.error_description}, please try again later.`,
+          message: `Error Amazon API Integration ${error.response.data.error_description}, please try again later.`,
         })
       } else if (error.request) {
         // The request was made but no response was received
         response.json({
           error: true,
-          message: 'No response from server',
+          message: 'Error from server please try again later.',
         })
       } else {
         // Something happened in setting up the request that triggered an Error
@@ -43,4 +44,4 @@ const createNewProduct: NextApiHandler = async (request, response) => {
     })
 }
 
-export default createNewProduct
+export default getBusinessSuppliersBrandsCategories

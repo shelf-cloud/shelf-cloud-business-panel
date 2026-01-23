@@ -1,13 +1,15 @@
-import React, { useContext, useState } from 'react'
-import { Button, Form, FormFeedback, Input } from 'reactstrap'
-import * as Yup from 'yup'
+import { useContext, useState } from 'react'
+
+import ProductOrderedModals from '@components/modals/productPage/ProductOrderedModals'
+import AppContext from '@context/AppContext'
+import { FormatIntNumber } from '@lib/FormatNumbers'
+import { AmazonFBA } from '@typings'
+import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
+import { Button, Form, FormFeedback, Input } from 'reactstrap'
 import { useSWRConfig } from 'swr'
-import axios from 'axios'
-import AppContext from '@context/AppContext'
-import { AmazonFBA } from '@typings'
-import ProductOrderedModals from '@components/modals/productPage/ProductOrderedModals'
+import * as Yup from 'yup'
 
 type Props = {
   inventoryId?: number
@@ -22,7 +24,7 @@ type Props = {
 }
 
 const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available, reserved, receiving, ordered, amazonFBA }: Props) => {
-  const { state }: any = useContext(AppContext)
+  const { state } = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [showEditFields, setShowEditFields] = useState(false)
   const [showEditButton, setShowEditButton] = useState({ display: 'none' })
@@ -68,6 +70,8 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
     })
     setShowEditFields(true)
   }
+
+  const hasAWDInventory = amazonFBA.reduce((total: number, listing: AmazonFBA) => total + listing.awd_onHand_qty + listing.awd_inbound_qty, 0) > 0
 
   return (
     <div className='px-3 py-1 border-bottom w-100'>
@@ -123,12 +127,12 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
                 </Form>
               )}
             </td>
-            <td className='text-success'>{available}</td>
-            <td className='text-danger'>{reserved}</td>
+            <td className='text-success'>{FormatIntNumber(state.currentRegion, available)}</td>
+            <td className='text-danger'>{FormatIntNumber(state.currentRegion, reserved)}</td>
             <td style={{ cursor: 'pointer' }} className='text-primary' onClick={() => setshowOrderedModal({ show: true, sku: sku! })}>
-              {ordered}
+              {FormatIntNumber(state.currentRegion, ordered)}
             </td>
-            <td>{receiving}</td>
+            <td>{FormatIntNumber(state.currentRegion, receiving)}</td>
           </tr>
         </tbody>
       </table>
@@ -148,28 +152,74 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
             <tr className='text-center'>
               <td className='fw-semibold'>Amazon FBA</td>
               <td>
-                {amazonFBA.reduce(
-                  (total: number, listing: AmazonFBA) =>
-                    total +
-                    (listing.afn_fulfillable_quantity +
-                      listing.afn_reserved_quantity +
-                      listing.afn_inbound_receiving_quantity +
-                      listing.afn_inbound_shipped_quantity +
-                      listing.afn_inbound_working_quantity),
-                  0
+                {FormatIntNumber(
+                  state.currentRegion,
+                  amazonFBA.reduce(
+                    (total: number, listing: AmazonFBA) =>
+                      total +
+                      (listing.afn_fulfillable_quantity +
+                        listing.afn_reserved_quantity +
+                        listing.afn_inbound_receiving_quantity +
+                        listing.afn_inbound_shipped_quantity +
+                        listing.afn_inbound_working_quantity),
+                    0
+                  )
                 )}
               </td>
-              <td>{amazonFBA.reduce((total: number, listing: AmazonFBA) => total + listing.afn_fulfillable_quantity, 0)}</td>
-              <td>{amazonFBA.reduce((total: number, listing: AmazonFBA) => total + listing.afn_reserved_quantity, 0)}</td>
-              <td>{amazonFBA.reduce((total: number, listing: AmazonFBA) => total + listing.afn_unsellable_quantity, 0)}</td>
               <td>
-                {amazonFBA.reduce(
-                  (total: number, listing: AmazonFBA) =>
-                    total + listing.afn_inbound_receiving_quantity + listing.afn_inbound_shipped_quantity + listing.afn_inbound_working_quantity,
-                  0
+                {FormatIntNumber(
+                  state.currentRegion,
+                  amazonFBA.reduce((total: number, listing: AmazonFBA) => total + listing.afn_fulfillable_quantity, 0)
+                )}
+              </td>
+              <td>
+                {FormatIntNumber(
+                  state.currentRegion,
+                  amazonFBA.reduce((total: number, listing: AmazonFBA) => total + listing.afn_reserved_quantity, 0)
+                )}
+              </td>
+              <td>
+                {FormatIntNumber(
+                  state.currentRegion,
+                  amazonFBA.reduce((total: number, listing: AmazonFBA) => total + listing.afn_unsellable_quantity, 0)
+                )}
+              </td>
+              <td>
+                {FormatIntNumber(
+                  state.currentRegion,
+                  amazonFBA.reduce(
+                    (total: number, listing: AmazonFBA) =>
+                      total + listing.afn_inbound_receiving_quantity + listing.afn_inbound_shipped_quantity + listing.afn_inbound_working_quantity,
+                    0
+                  )
                 )}
               </td>
             </tr>
+            {hasAWDInventory && (
+              <tr className='text-center'>
+                <td className='fw-semibold'>Amazon AWD</td>
+                <td>
+                  {FormatIntNumber(
+                    state.currentRegion,
+                    amazonFBA.reduce((total: number, listing: AmazonFBA) => total + listing.awd_onHand_qty + listing.awd_inbound_qty, 0)
+                  )}
+                </td>
+                <td>
+                  {FormatIntNumber(
+                    state.currentRegion,
+                    amazonFBA.reduce((total: number, listing: AmazonFBA) => total + listing.awd_onHand_qty, 0)
+                  )}
+                </td>
+                <td>0</td>
+                <td>0</td>
+                <td>
+                  {FormatIntNumber(
+                    state.currentRegion,
+                    amazonFBA.reduce((total: number, listing: AmazonFBA) => total + listing.awd_inbound_qty, 0)
+                  )}
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       )}

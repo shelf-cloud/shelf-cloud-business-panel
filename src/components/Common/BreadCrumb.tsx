@@ -1,5 +1,6 @@
-import React from 'react'
 import Link from 'next/link'
+import React from 'react'
+
 import { Col, Row } from 'reactstrap'
 
 type Props = {
@@ -13,7 +14,9 @@ const BreadCrumb = ({ title, pageTitle }: Props) => {
       <Row>
         <Col xs={12} className='px-0 mx-0'>
           <div className='w-100 page-title-box d-sm-flex align-items-center justify-content-between'>
-            <h4 className='mb-sm-0'>{title}</h4>
+            <h4 className='mb-sm-0 fw-semibold' style={{ textTransform: 'capitalize' }}>
+              {title}
+            </h4>
             <div className='page-title-right'>
               <ol className='breadcrumb m-0'>
                 <li className='breadcrumb-item'>

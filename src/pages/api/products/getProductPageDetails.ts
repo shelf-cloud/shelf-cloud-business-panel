@@ -6,9 +6,11 @@ import { getServerSession } from 'next-auth'
 
 const getProductDetails: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)
-  if (session == null) {
-    response.status(401).end()
 
+  const sessionToken = request.cookies['next-auth.session-token'] ? request.cookies['next-auth.session-token'] : request.cookies['__Secure-next-auth.session-token']
+
+  if (!session || !sessionToken) {
+    response.status(401).end('Session not found')
     return
   }
 
@@ -21,7 +23,11 @@ const getProductDetails: NextApiHandler = async (request, response) => {
     }
   )
     .then(async ({ data: dataSC }) => {
-      await axios(`${process.env.SHELFCLOUD_SERVER_URL}/amazon/listings/getAmazonSellerListingSKU/${request.query.region}/${request.query.businessId}/${dataSC.sku}`)
+      await axios(`${process.env.SHELFCLOUD_SERVER_URL}/amazon/listings/getAmazonSellerListingSKU/${request.query.region}/${request.query.businessId}/${dataSC.sku}`, {
+        headers: {
+          Authorization: `Bearer ${sessionToken}`,
+        },
+      })
         .then(async ({ data: dataFBA }) => {
           let data = {
             ...dataSC,

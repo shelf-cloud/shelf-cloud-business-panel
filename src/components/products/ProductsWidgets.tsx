@@ -1,9 +1,10 @@
+import { useContext, useState } from 'react'
+
 import ProductsInventoryTimelineModal from '@components/modals/products/ProductsInventoryTimeline'
 import AppContext from '@context/AppContext'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { FBAProductsWidgetResponse, ProductsWidgetsResponse } from '@typesTs/products/productsWidgets'
 import axios from 'axios'
-import React, { useContext, useState } from 'react'
 import CountUp from 'react-countup'
 import { Button, Card, CardBody, Col, Row } from 'reactstrap'
 import useSWR from 'swr'
@@ -24,6 +25,7 @@ const ProductsWidgets = ({}: Props) => {
     fetcher,
     {
       revalidateOnFocus: false,
+      revalidateOnMount: true,
     }
   )
 
@@ -34,6 +36,7 @@ const ProductsWidgets = ({}: Props) => {
     FBAfetcher,
     {
       revalidateOnFocus: false,
+      revalidateOnMount: true,
     }
   )
 

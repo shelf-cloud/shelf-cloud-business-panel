@@ -274,6 +274,8 @@ export interface AmazonFBA {
   afn_total_quantity: number
   afn_unsellable_quantity: number
   afn_warehouse_quantity: number
+  awd_onHand_qty: number
+  awd_inbound_qty: number
 }
 
 export interface ChildrenPage {

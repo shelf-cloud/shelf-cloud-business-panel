@@ -1,15 +1,24 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useState } from 'react'
 import { GetServerSideProps } from 'next'
-import axios from 'axios'
-import * as Yup from 'yup'
-import { useFormik } from 'formik'
 import Head from 'next/head'
-import { Button, Card, CardBody, Col, Container, Form, FormFeedback, FormGroup, Input, Label, Row } from 'reactstrap'
-import BreadCrumb from '@components/Common/BreadCrumb'
+import React, { useContext, useState } from 'react'
+
 import { getSession } from '@auth/client'
+import BreadCrumb from '@components/Common/BreadCrumb'
+import { SelectSingleValueType } from '@components/Common/SimpleSelectWithImage'
+import UploadFileModal, { HandleSubmitParams, UploadResponse } from '@components/modals/shared/UploadFileModal'
+import SelectSingleFilterWithCreation from '@components/ui/filters/SelectSingleFilterWithCreation'
 import AppContext from '@context/AppContext'
+import { useSuppliersBrandsCategories } from '@hooks/products/useSuppliersBrandsCategories'
+import { FormatBytes } from '@lib/FormatNumbers'
+import { NoImageAdress } from '@lib/assetsConstants'
+import axios from 'axios'
+import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
+import { Button, Card, CardBody, Col, Container, Form, FormFeedback, FormGroup, Input, Label, Row } from 'reactstrap'
+import * as Yup from 'yup'
+
 // import UploadProductsModal from '@components/UploadProductsModal'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -37,13 +46,15 @@ type Props = {
 }
 
 const AddProducts = ({ session }: Props) => {
-  const { state }: any = useContext(AppContext)
+  const { state } = useContext(AppContext)
   const title = `Add Product | ${session?.user?.businessName}`
-  const [useSameUnitDimensions, setUseSameUnitDimensions] = useState(false)
-  const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
 
+  const [useSameUnitDimensions, setUseSameUnitDimensions] = useState(false)
+
+  const { brands, suppliers, categories, addNewOption } = useSuppliersBrandsCategories()
+
+  const validation = useFormik({
+    enableReinitialize: true,
     initialValues: {
       title: '',
       sku: '',
@@ -51,6 +62,10 @@ const AddProducts = ({ session }: Props) => {
       asin: '',
       fnsku: '',
       barcode: '',
+      brand: '',
+      supplier: '',
+      category: '',
+      defaultPrice: '',
       weight: '',
       width: '',
       length: '',
@@ -74,25 +89,42 @@ const AddProducts = ({ session }: Props) => {
       asin: Yup.string().max(50, 'Asin is to Long'),
       fnsku: Yup.string().max(50, 'Fnsku is to Long'),
       barcode: Yup.string().max(50, 'barcode is to Long').required('Please Enter Your Barcode'),
-      weight: Yup.number().required('Please Enter Your Weight').positive('Value must be grater than 0'),
-      width: Yup.number().required('Please Enter Your Width').positive('Value must be grater than 0'),
-      length: Yup.number().required('Please Enter Your Length').positive('Value must be grater than 0'),
-      height: Yup.number().required('Please Enter Your Height').positive('Value must be grater than 0'),
-      boxweight: Yup.number().required('Please Enter Your Box Eeight').positive('Value must be grater than 0'),
-      boxwidth: Yup.number().required('Please Enter Your Box Width').positive('Value must be grater than 0'),
-      boxlength: Yup.number().required('Please Enter Your Box Length').positive('Value must be grater than 0'),
-      boxheight: Yup.number().required('Please Enter Your Box Height').positive('Value must be grater than 0'),
-      boxqty: Yup.number().required('Please Enter Your Box Qty').positive('Value must be grater than 0').integer('Only integers'),
+      brand: Yup.string(),
+      supplier: Yup.string(),
+      category: Yup.string(),
+      defaultPrice: Yup.number().default(0),
+      weight: Yup.number().default(0),
+      width: Yup.number().default(0),
+      length: Yup.number().default(0),
+      height: Yup.number().default(0),
+      boxweight: Yup.number().default(0),
+      boxwidth: Yup.number().default(0),
+      boxlength: Yup.number().default(0),
+      boxheight: Yup.number().default(0),
+      boxqty: Yup.number().integer('Only integers').default(0),
     }),
     onSubmit: async (values, { resetForm }) => {
-      const response = await axios.post(`api/createNewProduct?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      const loadingToast = toast.loading('Creating new product...')
+
+      const { data } = await axios.post(`/api/products/createNewProduct?region=${state?.currentRegion}&businessId=${state?.user.businessId}`, {
         productInfo: values,
       })
-      if (!response.data.error) {
-        toast.success(response.data.msg)
+      if (!data.error) {
+        toast.update(loadingToast, {
+          render: data.message,
+          type: 'success',
+          isLoading: false,
+          autoClose: 3000,
+        })
         resetForm()
+        uploadLogoImage.handleClearFiles()
       } else {
-        toast.error(response.data.msg)
+        toast.update(loadingToast, {
+          render: data.message ?? 'Error creating product',
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+        })
       }
     },
   })
@@ -123,6 +155,78 @@ const AddProducts = ({ session }: Props) => {
       validation.validateForm()
     }
   }
+
+  const [uploadLogoImage, setuploadLogoImage] = useState({
+    isOpen: false,
+    headerText: 'Upload Product Image',
+    primaryText: 'Add Product Image',
+    primaryTextSub: 'supported formats: PNG, JPG. Max size: 2MB.',
+    descriptionText: 'Upload image for the product. The image should be in PNG or JPG format and optimized for web use.',
+    uploadZoneText: 'Drag & drop a product image file here, or click to select one (PNG, JPG)',
+    confirmText: 'Upload',
+    loadingText: 'Uploading...',
+    selectedFiles: [] as any[],
+    acceptedFiles: {
+      'image/jpeg': [],
+      'image/png': [],
+    },
+    handleAcceptedFiles: (acceptedFiles: File[]) => {
+      acceptedFiles.map((file) =>
+        Object.assign(file, {
+          preview: URL.createObjectURL(file),
+          formattedSize: FormatBytes(file.size),
+        })
+      )
+      setuploadLogoImage((prev) => ({ ...prev, selectedFiles: acceptedFiles }))
+    },
+    handleClearFiles: () => {
+      setuploadLogoImage((prev) => ({ ...prev, selectedFiles: [] }))
+    },
+    handleSubmit: async ({ region, businessId, selectedFiles }: HandleSubmitParams) => {
+      if (selectedFiles.length === 0) {
+        toast.error('Please select a file to upload')
+        return { error: false }
+      }
+
+      const uploadingAsset = toast.loading('Uploading Image...')
+
+      const formData = new FormData()
+      formData.append('assetType', 'new-product')
+      formData.append('fileName', selectedFiles[0].name)
+      formData.append('fileType', selectedFiles[0].type.split('/')[1])
+      formData.append('file', selectedFiles[0])
+
+      const { data } = await axios.post<UploadResponse>(`/api/assets/uploadNewAsset?region=${region}&businessId=${businessId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+
+      if (!data.error) {
+        toast.update(uploadingAsset, {
+          render: data.message,
+          type: 'success',
+          isLoading: false,
+          autoClose: 3000,
+        })
+        if (data.url) {
+          validation.setFieldValue('image', data.url)
+        }
+        return { error: true }
+      } else {
+        toast.update(uploadingAsset, {
+          render: data.message ?? 'Error uploading logo',
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+        })
+        return { error: false }
+      }
+    },
+    handleClose: () => {
+      setuploadLogoImage((prev) => ({ ...prev, isOpen: false }))
+    },
+  })
   return (
     <div>
       <Head>
@@ -134,29 +238,17 @@ const AddProducts = ({ session }: Props) => {
           <Container fluid>
             <Card>
               <CardBody>
-                {/* <Col md={12}>
-                  <div className='text-end'>
-                    <Button
-                      type='submit'
-                      color='primary'
-                      className='fs-5 py-1 p3-1'
-                      onClick={() => setUploadProductsModal(true)}>
-                      <i className='mdi mdi-arrow-up-bold-circle label-icon align-middle fs-4 me-2' />
-                      Upload File
-                    </Button>
-                  </div>
-                </Col> */}
                 <Form onSubmit={HandleAddProduct}>
                   <Row>
-                    <h5 className='fs-5 m-3 fw-bolder'>Product Details</h5>
+                    <h5 className='fs-5 fw-bold text-primary'>Product Details</h5>
                     <Col md={6}>
                       <FormGroup className='mb-3'>
-                        <Label htmlFor='firstNameinput' className='form-label'>
+                        <Label htmlFor='firstNameinput' className='form-label fs-7'>
                           *Title
                         </Label>
                         <Input
                           type='text'
-                          className='form-control'
+                          className='form-control form-control-sm fs-6'
                           placeholder='Title...'
                           id='title'
                           name='title'
@@ -170,12 +262,12 @@ const AddProducts = ({ session }: Props) => {
                     </Col>
                     <Col md={6}>
                       <FormGroup className='mb-3'>
-                        <Label htmlFor='lastNameinput' className='form-label'>
+                        <Label htmlFor='lastNameinput' className='form-label fs-7'>
                           *SKU
                         </Label>
                         <Input
                           type='text'
-                          className='form-control'
+                          className='form-control form-control-sm fs-6'
                           placeholder='Sku...'
                           id='sku'
                           name='sku'
@@ -187,14 +279,14 @@ const AddProducts = ({ session }: Props) => {
                         {validation.touched.sku && validation.errors.sku ? <FormFeedback type='invalid'>{validation.errors.sku}</FormFeedback> : null}
                       </FormGroup>
                     </Col>
-                    <Col md={4}>
+                    <Col md={3}>
                       <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label'>
+                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
                           ASIN
                         </Label>
                         <Input
                           type='text'
-                          className='form-control'
+                          className='form-control form-control-sm fs-6'
                           placeholder='Asin...'
                           id='asin'
                           name='asin'
@@ -206,14 +298,14 @@ const AddProducts = ({ session }: Props) => {
                         {validation.touched.asin && validation.errors.asin ? <FormFeedback type='invalid'>{validation.errors.asin}</FormFeedback> : null}
                       </FormGroup>
                     </Col>
-                    <Col md={4}>
+                    <Col md={3}>
                       <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label'>
+                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
                           FNSKU
                         </Label>
                         <Input
                           type='text'
-                          className='form-control'
+                          className='form-control form-control-sm fs-6'
                           placeholder='Fnsku...'
                           id='fnsku'
                           name='fnsku'
@@ -225,14 +317,14 @@ const AddProducts = ({ session }: Props) => {
                         {validation.touched.fnsku && validation.errors.fnsku ? <FormFeedback type='invalid'>{validation.errors.fnsku}</FormFeedback> : null}
                       </FormGroup>
                     </Col>
-                    <Col md={4}>
+                    <Col md={3}>
                       <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label'>
+                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
                           UPC / Barcode
                         </Label>
                         <Input
                           type='text'
-                          className='form-control'
+                          className='form-control form-control-sm fs-6'
                           placeholder='Barcode...'
                           id='barcode'
                           name='barcode'
@@ -244,35 +336,189 @@ const AddProducts = ({ session }: Props) => {
                         {validation.touched.barcode && validation.errors.barcode ? <FormFeedback type='invalid'>{validation.errors.barcode}</FormFeedback> : null}
                       </FormGroup>
                     </Col>
-                    <Col md={12}>
-                      <FormGroup className='mb-3'>
-                        <Label htmlFor='lastNameinput' className='form-label'>
-                          Product Image
-                        </Label>
-                        <Input
-                          type='text'
-                          className='form-control'
-                          placeholder='Image URL...'
-                          id='image'
-                          name='image'
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.image || ''}
-                          invalid={validation.touched.image && validation.errors.image ? true : false}
-                        />
-                        {validation.touched.image && validation.errors.image ? <FormFeedback type='invalid'>{validation.errors.image}</FormFeedback> : null}
-                      </FormGroup>
-                    </Col>
-                    <div className='border mt-3 border-dashed'></div>
-                    <h5 className='fs-5 m-3 fw-bolder'>Unit Dimensions</h5>
                     <Col md={3}>
                       <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label'>
-                          *Weight {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(lb)' : '(kg)')}
+                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
+                          Selling Price {state?.currentRegion == 'us' ? '($)' : '(€)'}
                         </Label>
                         <Input
                           type='number'
-                          className='form-control'
+                          className='form-control form-control-sm fs-6'
+                          placeholder='Selling Price...'
+                          id='defaultPrice'
+                          name='defaultPrice'
+                          onChange={validation.handleChange}
+                          onBlur={validation.handleBlur}
+                          value={validation.values.defaultPrice || ''}
+                          invalid={validation.touched.defaultPrice && validation.errors.defaultPrice ? true : false}
+                        />
+                        {validation.touched.defaultPrice && validation.errors.defaultPrice ? <FormFeedback type='invalid'>{validation.errors.defaultPrice}</FormFeedback> : null}
+                      </FormGroup>
+                    </Col>
+
+                    {/* BRAND - SUPPLIERS - CATEGORY SELECT WITH CREATION COMPONENTS HERE */}
+                    <Col md={4}>
+                      <SelectSingleFilterWithCreation
+                        inputLabel='Brand'
+                        inputName='select-new-product-brand'
+                        placeholder='Select Brand...'
+                        selected={
+                          brands
+                            .map((brand) => {
+                              return { value: brand, label: brand }
+                            })
+                            .find((brand) => brand.value === validation.values['brand']) || { value: '', label: 'Select Brand...' }
+                        }
+                        options={[
+                          { value: '', label: 'Select Brand...' },
+                          ...brands.map((brand) => {
+                            return { value: brand, label: brand }
+                          }),
+                        ]}
+                        handleSelect={(option: SelectSingleValueType) => {
+                          validation.setFieldValue('brand', option?.value || '')
+                        }}
+                        validationSchema={Yup.object({
+                          name: Yup.string()
+                            .matches(/^[a-zA-Z0-9-\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
+                            .max(200, 'Name is to Long')
+                            .required(`Brand required`),
+                        })}
+                        submitAddNewOption={(values) => {
+                          return addNewOption({ addEndpoint: 'addNewBrand', values })
+                        }}
+                      />
+                    </Col>
+                    <Col md={4}>
+                      <SelectSingleFilterWithCreation
+                        inputLabel='Supplier'
+                        inputName='select-new-product-supplier'
+                        placeholder='Select Supplier...'
+                        selected={
+                          suppliers
+                            .map((supplier) => {
+                              return { value: supplier, label: supplier }
+                            })
+                            .find((supplier) => supplier.value === validation.values['supplier']) || { value: '', label: 'Select Supplier...' }
+                        }
+                        options={[
+                          { value: '', label: 'Select Supplier...' },
+                          ...suppliers.map((supplier) => {
+                            return { value: supplier, label: supplier }
+                          }),
+                        ]}
+                        handleSelect={(option: SelectSingleValueType) => {
+                          validation.setFieldValue('supplier', option?.value ?? '')
+                        }}
+                        validationSchema={Yup.object({
+                          name: Yup.string()
+                            .matches(/^[a-zA-Z0-9-\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
+                            .max(200, 'Name is to Long')
+                            .required(`Supplier required`),
+                        })}
+                        submitAddNewOption={(values) => {
+                          return addNewOption({ addEndpoint: 'addNewSupplier', values })
+                        }}
+                      />
+                    </Col>
+                    <Col md={4}>
+                      <SelectSingleFilterWithCreation
+                        inputLabel='Category'
+                        inputName='select-new-product-category'
+                        placeholder='Select Category...'
+                        selected={
+                          categories
+                            .map((category) => {
+                              return { value: category, label: category }
+                            })
+                            .find((category) => category.value === validation.values['category']) || { value: '', label: 'Select Category...' }
+                        }
+                        options={[
+                          { value: '', label: 'Select Category...' },
+                          ...categories.map((category) => {
+                            return { value: category, label: category }
+                          }),
+                        ]}
+                        handleSelect={(option: SelectSingleValueType) => {
+                          validation.setFieldValue('category', option?.value ?? '')
+                        }}
+                        validationSchema={Yup.object({
+                          name: Yup.string()
+                            .matches(/^[a-zA-Z0-9-\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
+                            .max(200, 'Name is to Long')
+                            .required(`Category required`),
+                        })}
+                        submitAddNewOption={(values) => {
+                          return addNewOption({ addEndpoint: 'addNewCategory', values })
+                        }}
+                      />
+                    </Col>
+
+                    {/* ADD PRODUCT IMAGE */}
+                    <Row className='align-items-center'>
+                      {validation.values.image && (
+                        <Col xs={2} md={1} style={{ minWidth: 'fit-content' }}>
+                          <div
+                            style={{
+                              width: '60px',
+                              height: '40px',
+                              margin: '0px',
+                              position: 'relative',
+                            }}>
+                            <img
+                              loading='lazy'
+                              src={validation.values.image}
+                              onError={(e) => (e.currentTarget.src = NoImageAdress)}
+                              alt='Image preview'
+                              style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+                              onLoad={() => {
+                                URL.revokeObjectURL(validation.values.image)
+                              }}
+                            />
+                          </div>
+                        </Col>
+                      )}
+                      <Col xs={10} md={9}>
+                        <FormGroup className='mb-0'>
+                          <Label htmlFor='lastNameinput' className='form-label fs-7'>
+                            Product Image
+                          </Label>
+                          <Input
+                            type='text'
+                            disabled={uploadLogoImage.selectedFiles.length > 0}
+                            className='form-control form-control-sm fs-6'
+                            placeholder='Image URL...'
+                            id='image'
+                            name='image'
+                            onChange={validation.handleChange}
+                            onBlur={validation.handleBlur}
+                            value={validation.values.image || ''}
+                            invalid={validation.touched.image && validation.errors.image ? true : false}
+                          />
+                          {validation.touched.image && validation.errors.image ? <FormFeedback type='invalid'>{validation.errors.image}</FormFeedback> : null}
+                        </FormGroup>
+                      </Col>
+                      <Col xs={4} md={2}>
+                        <Button className='d-flex align-items-center gap-2 m-0' color='primary' size='sm' onClick={() => setuploadLogoImage((prev) => ({ ...prev, isOpen: true }))}>
+                          <i className='mdi mdi-cloud-upload fs-5 m-0 p-0' />
+                          Image
+                        </Button>
+                      </Col>
+                    </Row>
+
+                    <div className='border mt-3 border-dashed'></div>
+
+                    {/* DIMENSIONS & WEIGHTS */}
+
+                    <h5 className='fs-5 mt-3 fw-bold text-primary'>Unit Dimensions</h5>
+                    <Col md={3}>
+                      <FormGroup className='mb-3'>
+                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
+                          Weight {state?.currentRegion == 'us' ? '(lb)' : '(kg)'}
+                        </Label>
+                        <Input
+                          type='number'
+                          className='form-control form-control-sm fs-6'
                           placeholder='Weight...'
                           id='weight'
                           name='weight'
@@ -286,12 +532,12 @@ const AddProducts = ({ session }: Props) => {
                     </Col>
                     <Col md={3}>
                       <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label'>
-                          *Width {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(in)' : '(cm)')}
+                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
+                          Width {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
                           type='number'
-                          className='form-control'
+                          className='form-control form-control-sm fs-6'
                           placeholder='Width...'
                           id='width'
                           name='width'
@@ -305,12 +551,12 @@ const AddProducts = ({ session }: Props) => {
                     </Col>
                     <Col md={3}>
                       <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label'>
-                          *Length {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(in)' : '(cm)')}
+                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
+                          Length {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
                           type='number'
-                          className='form-control'
+                          className='form-control form-control-sm fs-6'
                           placeholder='Length...'
                           id='length'
                           name='length'
@@ -324,12 +570,12 @@ const AddProducts = ({ session }: Props) => {
                     </Col>
                     <Col md={3}>
                       <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label'>
-                          *Height {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(in)' : '(cm)')}
+                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
+                          Height {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
                           type='number'
-                          className='form-control'
+                          className='form-control form-control-sm fs-6'
                           placeholder='Height...'
                           id='height'
                           name='height'
@@ -341,11 +587,15 @@ const AddProducts = ({ session }: Props) => {
                         {validation.touched.height && validation.errors.height ? <FormFeedback type='invalid'>{validation.errors.height}</FormFeedback> : null}
                       </FormGroup>
                     </Col>
+
                     <div className='border mt-3 border-dashed'></div>
-                    <div className='align-items-center d-flex'>
-                      <h5 className='fs-5 m-3 fw-bolder'>Box Dimensions</h5>
+
+                    {/* BOX DIMENSIONS & WEIGHTS */}
+
+                    <div className='align-items-baseline d-flex gap-3 justify-content-start mb-2'>
+                      <h5 className='fs-5 mt-3 fw-bold text-primary'>Box Dimensions</h5>
                       <div className='flex-shrink-0'>
-                        <div className='form-check form-switch form-switch-right form-switch-md'>
+                        <div className='form-check form-switch form-switch-right form-switch-sm'>
                           <Label className='form-label text-muted'>Same as unit dimensions</Label>
                           <Input className='form-check-input code-switcher' type='checkbox' checked={useSameUnitDimensions} onChange={handleBoxDimensionsCheckbox} />
                         </div>
@@ -353,12 +603,12 @@ const AddProducts = ({ session }: Props) => {
                     </div>
                     <Col md={3}>
                       <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label'>
-                          *Box Weight {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(lb)' : '(kg)')}
+                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
+                          Box Weight {state?.currentRegion == 'us' ? '(lb)' : '(kg)'}
                         </Label>
                         <Input
                           type='number'
-                          className='form-control'
+                          className='form-control form-control-sm fs-6'
                           placeholder='Box Weight...'
                           id='boxweight'
                           name='boxweight'
@@ -372,12 +622,12 @@ const AddProducts = ({ session }: Props) => {
                     </Col>
                     <Col md={3}>
                       <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label'>
-                          *Box Width {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(in)' : '(cm)')}
+                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
+                          Box Width {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
                           type='number'
-                          className='form-control'
+                          className='form-control form-control-sm fs-6'
                           placeholder='Box Width...'
                           id='boxwidth'
                           name='boxwidth'
@@ -391,12 +641,12 @@ const AddProducts = ({ session }: Props) => {
                     </Col>
                     <Col md={3}>
                       <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label'>
-                          *Box Length {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(in)' : '(cm)')}
+                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
+                          Box Length {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
                           type='number'
-                          className='form-control'
+                          className='form-control form-control-sm fs-6'
                           placeholder='Box Length...'
                           id='boxlength'
                           name='boxlength'
@@ -410,12 +660,12 @@ const AddProducts = ({ session }: Props) => {
                     </Col>
                     <Col md={3}>
                       <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label'>
-                          *Box Height {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(in)' : '(cm)')}
+                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
+                          Box Height {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
                           type='number'
-                          className='form-control'
+                          className='form-control form-control-sm fs-6'
                           placeholder='Box Height...'
                           id='boxheight'
                           name='boxheight'
@@ -429,12 +679,12 @@ const AddProducts = ({ session }: Props) => {
                     </Col>
                     <Col md={3}>
                       <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label'>
-                          *Box Quantity
+                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
+                          Box Quantity
                         </Label>
                         <Input
                           type='number'
-                          className='form-control'
+                          className='form-control form-control-sm fs-6'
                           placeholder='Box Qty...'
                           id='boxqty'
                           name='boxqty'
@@ -446,11 +696,12 @@ const AddProducts = ({ session }: Props) => {
                         {validation.touched.boxqty && validation.errors.boxqty ? <FormFeedback type='invalid'>{validation.errors.boxqty}</FormFeedback> : null}
                       </FormGroup>
                     </Col>
-                    <h5 className='fs-14 mb-3 text-muted'>*You must complete all required fields or you will not be able to create your product.</h5>
+
+                    <h5 className='fs-7 mb-3 text-muted fw-light'>*You must complete all required fields.</h5>
                     <Col md={12}>
                       <div className='text-end'>
                         <Button type='submit' className='btn btn-primary'>
-                          Add
+                          Add New Product
                         </Button>
                       </div>
                     </Col>
@@ -460,8 +711,8 @@ const AddProducts = ({ session }: Props) => {
             </Card>
           </Container>
         </div>
+        {uploadLogoImage.isOpen ? <UploadFileModal {...uploadLogoImage} /> : null}
       </React.Fragment>
-      {/* {state.showUploadProductsModal && <UploadProductsModal />} */}
     </div>
   )
 }

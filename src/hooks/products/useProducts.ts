@@ -41,7 +41,7 @@ export const useProducts = ({ searchValue, brand, supplier, category, condition 
       return response.data
     } catch (error) {
       if (!axios.isCancel(error)) {
-        toast.error((error as any)?.data?.message || 'Error fetching suppleirs data')
+        toast.error((error as any)?.data?.message || 'Error fetching products data')
         throw error
       }
     }

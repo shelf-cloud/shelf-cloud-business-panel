@@ -4,29 +4,26 @@ import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 import { getServerSession } from 'next-auth'
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-}
-
-const uploadNewAsset: NextApiHandler = async (request, response) => {
+const createNewProduct: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)
+  if (session == null) {
+    response.status(401).end()
 
-  const sessionToken = request.cookies['next-auth.session-token'] ? request.cookies['next-auth.session-token'] : request.cookies['__Secure-next-auth.session-token']
-
-  if (!session || !sessionToken) {
-    response.status(401).end('Session not found')
     return
   }
 
   axios
-    .post(`${process.env.SHELFCLOUD_SERVER_URL}/api/assets/uploadNewAsset/${request.query.region}/${request.query.businessId}`, request, {
-      headers: {
-        Authorization: `Bearer ${sessionToken}`,
-        'Content-Type': request.headers['content-type'], // Forward the original content-type header
+    .post(
+      `${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/products/createNewProduct.php?businessId=${request.query.businessId}`,
+      {
+        productInfo: request.body.productInfo,
       },
-    })
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.TARS_API_AUTH_TOKEN}`,
+        },
+      }
+    )
     .then(({ data }) => {
       response.json(data)
     })
@@ -36,13 +33,13 @@ const uploadNewAsset: NextApiHandler = async (request, response) => {
         // that falls out of the range of 2xx
         response.json({
           error: true,
-          message: `Error Amazon API Integration ${error.response.data.error_description}, please try again later.`,
+          message: `Error API Integration ${error.response.data.error_description}, please try again later.`,
         })
       } else if (error.request) {
         // The request was made but no response was received
         response.json({
           error: true,
-          message: 'Error from server please try again later.',
+          message: 'No response from server',
         })
       } else {
         // Something happened in setting up the request that triggered an Error
@@ -54,4 +51,4 @@ const uploadNewAsset: NextApiHandler = async (request, response) => {
     })
 }
 
-export default uploadNewAsset
+export default createNewProduct

@@ -10,12 +10,15 @@ import { Accept } from 'react-dropzone/.'
 import { toast } from 'react-toastify'
 import { Button, Card, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from 'reactstrap'
 
+export type UploadResponse = { error: boolean; message: string; url: string }
+
 export type HandleSubmitParams = {
   region: string
   businessId: string
   selectedFiles: any[]
   marketplace?: string
 }
+
 type Props = {
   isOpen: boolean
   headerText: string
@@ -89,10 +92,10 @@ const UploadFileModal = ({
       </ModalHeader>
       <ModalBody>
         <Row>
-          <p className='mb-2 fs-5 fw-semibold'>
+          <p className='mb-2 fs-6 fw-semibold'>
             {primaryText} {primaryTextSub && <span className='text-primary'>{primaryTextSub}</span>}
           </p>
-          {descriptionText && <p className='mb-1 fs-6 text-muted'>{descriptionText}</p>}
+          {descriptionText && <p className='mb-1 fs-7 text-muted'>{descriptionText}</p>}
           <div>
             <UploadFileDropzone accptedFiles={acceptedFiles} handleAcceptedFiles={handleAcceptedFiles} description={uploadZoneText} />
           </div>
