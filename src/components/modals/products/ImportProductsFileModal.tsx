@@ -1,14 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useContext } from 'react'
-import { Button, Card, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { useContext, useState } from 'react'
+
+import UploadFileDropzone from '@components/ui/UploadFileDropzone'
 import AppContext from '@context/AppContext'
-import { toast } from 'react-toastify'
 import axios from 'axios'
 import Papa from 'papaparse'
+import { toast } from 'react-toastify'
+import { Button, Card, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
 import * as Yup from 'yup'
-import { useSWRConfig } from 'swr'
-import UploadFileDropzone from '@components/ui/UploadFileDropzone'
 
 type Props = {
   brands: string[]
@@ -18,11 +18,11 @@ type Props = {
     show: boolean
   }
   setimportModalDetails: (prev: any) => void
+  mutateProducts: () => void
 }
 
-const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, brands, suppliers, categories }: Props) => {
+const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, brands, suppliers, categories, mutateProducts }: Props) => {
   const { state }: any = useContext(AppContext)
-  const { mutate } = useSWRConfig()
   const [selectedFiles, setselectedFiles] = useState([])
   const [errorFile, setErrorFile] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -51,7 +51,9 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
                   .max(50)
                   .required('SKU is required'),
               })
-              skuSchema.isValidSync({ sku: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: `SKU: Required - No Spaces - Invalid Special characters: " ' @ ~ , ...`, value: rowValues[v] })
+              skuSchema.isValidSync({ sku: rowValues[v] })
+                ? () => {}
+                : errorsList.push({ errorLine: i + 1, errorMessage: `SKU: Required - No Spaces - Invalid Special characters: " ' @ ~ , ...`, value: rowValues[v] })
               break
             // title
             case 1:
@@ -62,7 +64,9 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
                   .max(100)
                   .required('Title is required'),
               })
-              titleSchema.isValidSync({ title: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: `Title: Required - Invalid Special characters: " ' @ ~ , ...`, value: rowValues[v] })
+              titleSchema.isValidSync({ title: rowValues[v] })
+                ? () => {}
+                : errorsList.push({ errorLine: i + 1, errorMessage: `Title: Required - Invalid Special characters: " ' @ ~ , ...`, value: rowValues[v] })
               break
             // description
             case 2:
@@ -95,7 +99,9 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
                 const supplierSchema = Yup.object().shape({
                   supplier: Yup.string().oneOf(suppliers, 'Invalid Supplier'),
                 })
-                supplierSchema.isValidSync({ supplier: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Supplier: Value not match business suppliers', value: rowValues[v] })
+                supplierSchema.isValidSync({ supplier: rowValues[v] })
+                  ? () => {}
+                  : errorsList.push({ errorLine: i + 1, errorMessage: 'Supplier: Value not match business suppliers', value: rowValues[v] })
               }
               break
             // brand
@@ -104,7 +110,9 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
                 const brandSchema = Yup.object().shape({
                   brand: Yup.string().oneOf(brands, 'Invalid Brand'),
                 })
-                brandSchema.isValidSync({ brand: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Brand: Value not match business brands', value: rowValues[v] })
+                brandSchema.isValidSync({ brand: rowValues[v] })
+                  ? () => {}
+                  : errorsList.push({ errorLine: i + 1, errorMessage: 'Brand: Value not match business brands', value: rowValues[v] })
               }
               break
             // category
@@ -113,88 +121,108 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
                 const categorySchema = Yup.object().shape({
                   category: Yup.string().oneOf(categories, 'Invalid Category'),
                 })
-                categorySchema.isValidSync({ category: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Category: Value not match business categories', value: rowValues[v] })
+                categorySchema.isValidSync({ category: rowValues[v] })
+                  ? () => {}
+                  : errorsList.push({ errorLine: i + 1, errorMessage: 'Category: Value not match business categories', value: rowValues[v] })
               }
               break
             //weight
             case 9:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const weightSchema = Yup.object().shape({
-                  weight: Yup.number().min(0.001).required('Weight is required'),
+                  weight: Yup.number(),
                 })
-                weightSchema.isValidSync({ weight: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Weight: Required - Greater or Equal than 0', value: rowValues[v] })
+                weightSchema.isValidSync({ weight: rowValues[v] })
+                  ? () => {}
+                  : errorsList.push({ errorLine: i + 1, errorMessage: 'Weight: Required - Greater or Equal than 0', value: rowValues[v] })
               }
               break
             // length
             case 10:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const lengthSchema = Yup.object().shape({
-                  length: Yup.number().min(0.001).required('Length is required'),
+                  length: Yup.number(),
                 })
-                lengthSchema.isValidSync({ length: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Length: Required - Greater or Equal than 0', value: rowValues[v] })
+                lengthSchema.isValidSync({ length: rowValues[v] })
+                  ? () => {}
+                  : errorsList.push({ errorLine: i + 1, errorMessage: 'Length: Required - Greater or Equal than 0', value: rowValues[v] })
               }
               break
             // width
             case 11:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const widthSchema = Yup.object().shape({
-                  width: Yup.number().min(0.001).required('Width is required'),
+                  width: Yup.number(),
                 })
-                widthSchema.isValidSync({ width: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Width: Required - Greater or Equal than 0', value: rowValues[v] })
+                widthSchema.isValidSync({ width: rowValues[v] })
+                  ? () => {}
+                  : errorsList.push({ errorLine: i + 1, errorMessage: 'Width: Required - Greater or Equal than 0', value: rowValues[v] })
               }
               break
             // height
             case 12:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const heightSchema = Yup.object().shape({
-                  height: Yup.number().min(0.001).required('Height is required'),
+                  height: Yup.number(),
                 })
-                heightSchema.isValidSync({ height: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Height: Required - Greater or Equal than 0', value: rowValues[v] })
+                heightSchema.isValidSync({ height: rowValues[v] })
+                  ? () => {}
+                  : errorsList.push({ errorLine: i + 1, errorMessage: 'Height: Required - Greater or Equal than 0', value: rowValues[v] })
               }
               break
             // boxQuantity
             case 13:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const boxQuantitySchema = Yup.object().shape({
-                  boxQuantity: Yup.number().min(1).integer().required('Box Quantity is required'),
+                  boxQuantity: Yup.number().integer(),
                 })
-                boxQuantitySchema.isValidSync({ boxQuantity: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Box Quantity: Required - Integer - Greater or Equal than 0', value: rowValues[v] })
+                boxQuantitySchema.isValidSync({ boxQuantity: rowValues[v] })
+                  ? () => {}
+                  : errorsList.push({ errorLine: i + 1, errorMessage: 'Box Quantity: Required - Integer - Greater or Equal than 0', value: rowValues[v] })
               }
               break
             // box weight
             case 14:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const boxWeightSchema = Yup.object().shape({
-                  boxWeight: Yup.number().min(0.001).required('Box Weight is required'),
+                  boxWeight: Yup.number(),
                 })
-                boxWeightSchema.isValidSync({ boxWeight: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Box Weight: Required - Greater or Equal than 0', value: rowValues[v] })
+                boxWeightSchema.isValidSync({ boxWeight: rowValues[v] })
+                  ? () => {}
+                  : errorsList.push({ errorLine: i + 1, errorMessage: 'Box Weight: Required - Greater or Equal than 0', value: rowValues[v] })
               }
               break
             // box length
             case 15:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const boxLengthSchema = Yup.object().shape({
-                  boxLength: Yup.number().min(0.001).required('Box Length is required'),
+                  boxLength: Yup.number(),
                 })
-                boxLengthSchema.isValidSync({ boxLength: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Box Length: Required - Greater or Equal than 0', value: rowValues[v] })
+                boxLengthSchema.isValidSync({ boxLength: rowValues[v] })
+                  ? () => {}
+                  : errorsList.push({ errorLine: i + 1, errorMessage: 'Box Length: Required - Greater or Equal than 0', value: rowValues[v] })
               }
               break
             // box width
             case 16:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const boxWidthSchema = Yup.object().shape({
-                  boxWidth: Yup.number().min(0.001).required('Box Width is required'),
+                  boxWidth: Yup.number(),
                 })
-                boxWidthSchema.isValidSync({ boxWidth: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Box Width: Required - Greater or Equal than 0', value: rowValues[v] })
+                boxWidthSchema.isValidSync({ boxWidth: rowValues[v] })
+                  ? () => {}
+                  : errorsList.push({ errorLine: i + 1, errorMessage: 'Box Width: Required - Greater or Equal than 0', value: rowValues[v] })
               }
               break
             // box height
             case 17:
               if (rowValues[v] != null && rowValues[v] !== '') {
                 const boxHeightSchema = Yup.object().shape({
-                  boxHeight: Yup.number().min(0.001).required('Box Height is required'),
+                  boxHeight: Yup.number(),
                 })
-                boxHeightSchema.isValidSync({ boxHeight: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Box Height: Required - Greater or Equal than 0', value: rowValues[v] })
+                boxHeightSchema.isValidSync({ boxHeight: rowValues[v] })
+                  ? () => {}
+                  : errorsList.push({ errorLine: i + 1, errorMessage: 'Box Height: Required - Greater or Equal than 0', value: rowValues[v] })
               }
               break
             // activestate
@@ -279,7 +307,9 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
                 const sellerCostSchema = Yup.object().shape({
                   sellerCost: Yup.number().min(0),
                 })
-                sellerCostSchema.isValidSync({ sellerCost: parseFloat(rowValues[v]) }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Seller Cost', value: rowValues[v] })
+                sellerCostSchema.isValidSync({ sellerCost: parseFloat(rowValues[v]) })
+                  ? () => {}
+                  : errorsList.push({ errorLine: i + 1, errorMessage: 'Seller Cost', value: rowValues[v] })
               }
               break
             // inboundShippingCost
@@ -288,7 +318,9 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
                 const inboundShippingCostSchema = Yup.object().shape({
                   inboundShippingCost: Yup.number().min(0),
                 })
-                inboundShippingCostSchema.isValidSync({ inboundShippingCost: parseFloat(rowValues[v]) }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Inbound Shipping Cost', value: rowValues[v] })
+                inboundShippingCostSchema.isValidSync({ inboundShippingCost: parseFloat(rowValues[v]) })
+                  ? () => {}
+                  : errorsList.push({ errorLine: i + 1, errorMessage: 'Inbound Shipping Cost', value: rowValues[v] })
               }
               break
             // otherCosts
@@ -297,7 +329,9 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
                 const otherCostsSchema = Yup.object().shape({
                   otherCosts: Yup.number().min(0),
                 })
-                otherCostsSchema.isValidSync({ otherCosts: parseFloat(rowValues[v]) }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Other Costs', value: rowValues[v] })
+                otherCostsSchema.isValidSync({ otherCosts: parseFloat(rowValues[v]) })
+                  ? () => {}
+                  : errorsList.push({ errorLine: i + 1, errorMessage: 'Other Costs', value: rowValues[v] })
               }
               break
             // productionTime
@@ -306,7 +340,9 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
                 const productionTimeSchema = Yup.object().shape({
                   productionTime: Yup.number().min(0).integer(),
                 })
-                productionTimeSchema.isValidSync({ productionTime: parseInt(rowValues[v]) }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Production Time', value: rowValues[v] })
+                productionTimeSchema.isValidSync({ productionTime: parseInt(rowValues[v]) })
+                  ? () => {}
+                  : errorsList.push({ errorLine: i + 1, errorMessage: 'Production Time', value: rowValues[v] })
               }
               break
             // transitTime
@@ -315,7 +351,9 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
                 const transitTimeSchema = Yup.object().shape({
                   transitTime: Yup.number().min(0).integer(),
                 })
-                transitTimeSchema.isValidSync({ transitTime: parseInt(rowValues[v]) }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Transit Time', value: rowValues[v] })
+                transitTimeSchema.isValidSync({ transitTime: parseInt(rowValues[v]) })
+                  ? () => {}
+                  : errorsList.push({ errorLine: i + 1, errorMessage: 'Transit Time', value: rowValues[v] })
               }
               break
             // shippingToFBACost
@@ -324,7 +362,9 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
                 const shippingToFBACostSchema = Yup.object().shape({
                   shippingToFBACost: Yup.number().min(0),
                 })
-                shippingToFBACostSchema.isValidSync({ shippingToFBACost: parseFloat(rowValues[v]) }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Shipping To FBA Cost', value: rowValues[v] })
+                shippingToFBACostSchema.isValidSync({ shippingToFBACost: parseFloat(rowValues[v]) })
+                  ? () => {}
+                  : errorsList.push({ errorLine: i + 1, errorMessage: 'Shipping To FBA Cost', value: rowValues[v] })
               }
               break
             // buffer
@@ -339,9 +379,11 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
             // itemcondition
             case 32:
               const itemconditionSchema = Yup.object().shape({
-                itemcondition: Yup.string().oneOf(['New', 'Used'], 'Invalid Item Condition'),
+                itemcondition: Yup.string().oneOf(['New', 'Used'], 'Invalid Item Condition').default('New'),
               })
-              itemconditionSchema.isValidSync({ itemcondition: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Item Condition Valid values: New or Used', value: rowValues[v] })
+              itemconditionSchema.isValidSync({ itemcondition: rowValues[v] })
+                ? () => {}
+                : errorsList.push({ errorLine: i + 1, errorMessage: 'Item Condition Valid values: New or Used', value: rowValues[v] })
               break
             // image
             case 33:
@@ -358,7 +400,9 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
                 const recommendedDaysOfStockSchema = Yup.object().shape({
                   recommendedDaysOfStock: Yup.number().min(0).integer(),
                 })
-                recommendedDaysOfStockSchema.isValidSync({ recommendedDaysOfStock: parseInt(rowValues[v]) }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Days of Stock', value: rowValues[v] })
+                recommendedDaysOfStockSchema.isValidSync({ recommendedDaysOfStock: parseInt(rowValues[v]) })
+                  ? () => {}
+                  : errorsList.push({ errorLine: i + 1, errorMessage: 'Days of Stock', value: rowValues[v] })
               }
               break
             default:
@@ -394,7 +438,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
             productsInfo: results.data,
           })
           if (!response.data.error) {
-            mutate(`/api/getBusinessInventory?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+            mutateProducts()
             setShowErrorResponse(false)
             setErrorResponse([])
             toast.success('All products where added!')
@@ -488,7 +532,11 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
                 </div>
               )}
             </Dropzone> */}
-            <UploadFileDropzone accptedFiles={{ 'text/csv': ['.csv'] }} handleAcceptedFiles={handleAcceptedFiles} description={`Upload Products Details. Drop Only CSV files here or click to upload.`} />
+            <UploadFileDropzone
+              accptedFiles={{ 'text/csv': ['.csv'] }}
+              handleAcceptedFiles={handleAcceptedFiles}
+              description={`Upload Products Details. Drop Only CSV files here or click to upload.`}
+            />
           </Col>
           <Col md={6}>
             <span className='text-danger fw-semibold'>Warning:</span>

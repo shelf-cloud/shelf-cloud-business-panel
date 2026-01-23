@@ -151,7 +151,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       },
       sortable: false,
       compact: true,
-      // grow: 1,
+      minWidth: '130px',
     },
     {
       name: <span className='fw-bold fs-6'>Brand</span>,

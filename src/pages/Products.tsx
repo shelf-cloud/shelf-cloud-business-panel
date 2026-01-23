@@ -24,7 +24,6 @@ import { Product } from '@typings'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { Button, Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from 'reactstrap'
-import { useSWRConfig } from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -54,7 +53,6 @@ const Products = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
   const { brand, supplier, category, condition }: any = router.query
-  const { mutate } = useSWRConfig()
 
   const [searchValue, setSearchValue] = useState<string>('')
   const [selectedRows, setSelectedRows] = useState<Product[]>([])
@@ -69,7 +67,7 @@ const Products = ({ session }: Props) => {
     originalSku: '',
   })
 
-  const { products, isLoading, brands, suppliers, categories } = useProducts({
+  const { products, isLoading, brands, suppliers, categories, mutateProducts } = useProducts({
     searchValue,
     brand: brand || 'All',
     supplier: supplier || 'All',
@@ -87,7 +85,7 @@ const Products = ({ session }: Props) => {
       })
       if (!response.data.error) {
         toast.success(response.data.msg)
-        mutate(`/api/getBusinessInventory?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+        mutateProducts()
       } else {
         toast.error(response.data.msg)
       }
@@ -112,7 +110,7 @@ const Products = ({ session }: Props) => {
         setToggleClearRows(!toggledClearRows)
         setSelectedRows([])
         toast.success(response.data.msg)
-        mutate(`/api/getBusinessInventory?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+        mutateProducts()
       } else {
         toast.error(response.data.msg)
       }
@@ -229,6 +227,7 @@ const Products = ({ session }: Props) => {
           brands={brands}
           suppliers={suppliers}
           categories={categories}
+          mutateProducts={mutateProducts}
         />
       )}
       {cloneProductModal.isOpen && <CloneProductModal cloneProductModal={cloneProductModal} setcloneProductModal={setcloneProductModal} />}

@@ -15,7 +15,7 @@ import { KitRow } from '@typings'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { Button, Card, CardBody, Container } from 'reactstrap'
-import useSWR, { useSWRConfig } from 'swr'
+import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -46,7 +46,6 @@ const fetcher = (endPoint: string) => axios<KitRow[]>(endPoint).then((res) => re
 const Kits = ({ session }: Props) => {
   const { push } = useRouter()
   const { state }: any = useContext(AppContext)
-  const { mutate } = useSWRConfig()
   const [searchValue, setSearchValue] = useState('')
 
   useEffect(() => {
@@ -100,7 +99,7 @@ const Kits = ({ session }: Props) => {
     })
     if (!response.data.error) {
       toast.success(response.data.msg)
-      mutate(`/api/getBusinessInventory?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+      mutateKits()
     } else {
       toast.error(response.data.msg)
     }
