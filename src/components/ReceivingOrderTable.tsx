@@ -32,7 +32,7 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
 
   const columns: any = [
     {
-      name: <span className='fw-bold fs-6'>Image</span>,
+      name: <span className='fw-semibold fs-6'>Image</span>,
       selector: (row: ReceivingInventory) => {
         return (
           <div
@@ -57,15 +57,24 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
       width: '80px',
     },
     {
-      name: <span className='fw-bold fs-6'>Title</span>,
-      selector: (row: ReceivingInventory) => <span className='fs-7 fw-semibold'>{row.title}</span>,
+      name: <span className='fw-semibold fs-6'>Title</span>,
+      selector: (row: ReceivingInventory) => (
+        <>
+          <p className='fs-7 m-0 p-0'>{row.title}</p>
+          {row.missingDimensions ? (
+            <span className='fs-7 fw-normal text-danger m-0 p-0' id={`Error-missing-dimensions-${row.sku}`}>
+              Item missing some dimensions
+            </span>
+          ) : null}
+        </>
+      ),
       sortable: true,
       wrap: true,
       grow: 1.5,
       sortFunction: (rowA: ReceivingInventory, rowB: ReceivingInventory) => sortStringsCaseInsensitive(rowA.title, rowB.title),
     },
     {
-      name: <span className='fw-bold fs-6'>SKU</span>,
+      name: <span className='fw-semibold fs-6'>SKU</span>,
       selector: (row: ReceivingInventory) => <span className='fs-7'>{row.sku}</span>,
       sortable: true,
       wrap: false,
@@ -73,7 +82,7 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
       sortFunction: (rowA: ReceivingInventory, rowB: ReceivingInventory) => sortStringsCaseInsensitive(rowA.sku, rowB.sku),
     },
     {
-      name: <span className='fw-bold fs-6'>Supplier</span>,
+      name: <span className='fw-semibold fs-6'>Supplier</span>,
       selector: (row: ReceivingInventory) => <span className='fs-7'>{row.suppliersName}</span>,
       sortable: true,
       wrap: false,
@@ -82,7 +91,7 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
     },
     {
       name: (
-        <span className='fw-bold fs-6 text-center'>
+        <span className='fw-semibold fs-6 text-center'>
           Master Box <br />
           <span className='fs-7'>(Units/Box)</span>
         </span>
@@ -95,7 +104,7 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
       sortFunction: (rowA: ReceivingInventory, rowB: ReceivingInventory) => sortNumbers(rowA.boxQty, rowB.boxQty),
     },
     {
-      name: <span className='fw-bold fs-6 text-center'>Inventory</span>,
+      name: <span className='fw-semibold fs-6 text-center'>Inventory</span>,
       selector: (row: ReceivingInventory) => {
         return (
           <Button
@@ -117,7 +126,7 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
     },
     {
       name: (
-        <span className='fw-bold fs-6 text-center'>
+        <span className='fw-semibold fs-6 text-center'>
           Receiving <br /> Quantity
         </span>
       ),
@@ -127,8 +136,9 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
             <DebounceInput
               type='number'
               minLength={0}
+              disabled={row.missingDimensions}
               debounceTimeout={200}
-              className='form-control fs-7'
+              className='form-control form-control-sm fs-6 mt-1'
               placeholder={'Receiving Qty...'}
               value={row.quantity}
               onFocus={(e: React.FocusEvent<HTMLInputElement>) => e.target.select()}
