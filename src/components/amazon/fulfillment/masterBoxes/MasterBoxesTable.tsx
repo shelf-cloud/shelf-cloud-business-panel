@@ -688,7 +688,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
         data={filteredItems}
         progressPending={pending}
         striped={true}
-        defaultSortFieldId={9}
+        defaultSortFieldId={10}
         defaultSortAsc={true}
         conditionalRowStyles={conditionalRowStyles}
         selectableRows
