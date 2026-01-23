@@ -69,7 +69,9 @@ export const useReceivingsBoxes = (packingConfiguration: string, receivingOrderN
 
       for (const item of Object.values(items)) {
         const { sku, boxQty, receivingQty } = item
-        const boxes = Math.floor(receivingQty / boxQty)
+
+        const qtyPerBox = boxQty || 1
+        const boxes = Math.floor(receivingQty / qtyPerBox)
         let boxedQty = receivingQty
 
         packages[poId][sku] = {
@@ -78,23 +80,22 @@ export const useReceivingsBoxes = (packingConfiguration: string, receivingOrderN
           inventoryId: item.inventoryId,
           image: item.image,
           poNumber: item.orderNumber,
-          boxQty,
+          boxQty: qtyPerBox,
           boxes: [],
         }
 
-        if (receivingQty <= boxQty) {
+        if (receivingQty <= qtyPerBox) {
           packages[poId][sku].boxes.push({
             unitsPerBox: receivingQty,
             qtyOfBoxes: 1,
           })
         } else {
           packages[poId][sku].boxes.push({
-            unitsPerBox: boxQty,
+            unitsPerBox: qtyPerBox,
             qtyOfBoxes: boxes,
           })
 
-          boxedQty -= boxQty * boxes
-
+          boxedQty -= qtyPerBox * boxes
           if (boxedQty > 0) {
             packages[poId][sku].boxes.push({
               unitsPerBox: boxedQty,
@@ -177,7 +178,7 @@ export const useReceivingsBoxes = (packingConfiguration: string, receivingOrderN
           inventoryId,
           image,
           poId,
-          boxQty,
+          boxQty: boxQty || 1,
           poNumber,
         }
       }
@@ -208,24 +209,26 @@ export const useReceivingsBoxes = (packingConfiguration: string, receivingOrderN
     for (const [poId, items] of Object.entries(state.receivingFromPo.items)) {
       for (const item of Object.values(items)) {
         const { sku, boxQty, receivingQty, orderNumber, image, inventoryId, title } = item
-        const boxes = Math.ceil(receivingQty / boxQty)
+
+        const qtyPerBox = boxQty || 1
+        const boxes = Math.ceil(receivingQty / qtyPerBox)
         let boxedQty = receivingQty
 
         for (let i = 0; i < boxes; i++) {
           packages.push({
             [sku]: {
               receiving: receivingQty,
-              quantity: boxedQty >= boxQty ? boxQty : boxedQty,
+              quantity: boxedQty >= qtyPerBox ? qtyPerBox : boxedQty,
               name: title,
               inventoryId,
               image,
               poId,
-              boxQty,
+              boxQty: qtyPerBox,
               poNumber: orderNumber,
             },
           })
 
-          boxedQty -= boxQty
+          boxedQty -= qtyPerBox
         }
       }
     }
@@ -254,7 +257,7 @@ export const useReceivingsBoxes = (packingConfiguration: string, receivingOrderN
                       receiving: item.receiving,
                       name: item.name,
                       image: item.image,
-                      boxQty: item.boxQty,
+                      boxQty: item.boxQty || 1,
                       poNumber: item.poNumber,
                       orderNumber: receivingOrderNumber,
                     },
@@ -274,7 +277,7 @@ export const useReceivingsBoxes = (packingConfiguration: string, receivingOrderN
             receiving: item.receiving,
             name: item.name,
             image: item.image,
-            boxQty: item.boxQty,
+            boxQty: item.boxQty || 1,
             poNumber: item.poNumber,
             poId: item.poId,
             orderNumber: receivingOrderNumber,
@@ -298,7 +301,7 @@ export const useReceivingsBoxes = (packingConfiguration: string, receivingOrderN
               receiving: receivingQty,
               name: title,
               image: image,
-              boxQty,
+              boxQty: boxQty || 1,
               poNumber: orderNumber,
               orderNumber: receivingOrderNumber,
             })
@@ -324,7 +327,7 @@ export const useReceivingsBoxes = (packingConfiguration: string, receivingOrderN
                   receiving: item.receiving,
                   name: item.name,
                   image: item.image,
-                  boxQty: item.boxQty,
+                  boxQty: item.boxQty || 1,
                   poNumber: item.poNumber,
                   orderNumber: receivingOrderNumber,
                 })

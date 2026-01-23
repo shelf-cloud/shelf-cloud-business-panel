@@ -69,7 +69,8 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
         packages[poId!] = {}
       }
 
-      const boxes = Math.floor(quantity / boxQty!)
+      const qtyPerBox = boxQty || 1
+      const boxes = Math.floor(quantity / qtyPerBox)
       let boxedQty = quantity
 
       packages[poId!][sku] = {
@@ -78,23 +79,22 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
         inventoryId: inventoryId!,
         image: image!,
         poNumber: poNumber!,
-        boxQty: boxQty!,
+        boxQty: qtyPerBox,
         boxes: [],
       }
 
-      if (quantity <= boxQty!) {
+      if (quantity <= qtyPerBox) {
         packages[poId!][sku].boxes.push({
           unitsPerBox: quantity,
           qtyOfBoxes: 1,
         })
       } else {
         packages[poId!][sku].boxes.push({
-          unitsPerBox: boxQty!,
+          unitsPerBox: qtyPerBox,
           qtyOfBoxes: boxes,
         })
 
-        boxedQty -= boxQty! * boxes
-
+        boxedQty -= qtyPerBox * boxes
         if (boxedQty > 0) {
           packages[poId!][sku].boxes.push({
             unitsPerBox: boxedQty,
@@ -116,7 +116,8 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
         packages[poId!] = {}
       }
 
-      const boxes = Math.floor(quantity / boxQty!)
+      const qtyPerBox = boxQty || 1
+      const boxes = Math.floor(quantity / qtyPerBox)
       let boxedQty = quantity
 
       packages[poId!][sku] = {
@@ -125,23 +126,22 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
         inventoryId: inventoryId!,
         image: image!,
         poNumber: poNumber!,
-        boxQty: boxQty!,
+        boxQty: qtyPerBox,
         boxes: [],
       }
 
-      if (quantity <= boxQty!) {
+      if (quantity <= qtyPerBox) {
         packages[poId!][sku].boxes.push({
           unitsPerBox: quantity,
           qtyOfBoxes: 1,
         })
       } else {
         packages[poId!][sku].boxes.push({
-          unitsPerBox: boxQty!,
+          unitsPerBox: qtyPerBox,
           qtyOfBoxes: boxes,
         })
 
-        boxedQty -= boxQty! * boxes
-
+        boxedQty -= qtyPerBox * boxes
         if (boxedQty > 0) {
           packages[poId!][sku].boxes.push({
             unitsPerBox: boxedQty,
@@ -223,7 +223,7 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
           inventoryId,
           image,
           poId,
-          boxQty,
+          boxQty: boxQty || 1,
           poNumber,
         }
       }
@@ -253,24 +253,26 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
 
     for (const item of receivingItems) {
       const { sku, boxQty, quantity, poNumber, image, inventoryId, name, poId } = item
-      const boxes = Math.ceil(quantity / boxQty!)
+
+      const qtyPerBox = boxQty || 1
+      const boxes = Math.ceil(quantity / qtyPerBox)
       let boxedQty = quantity
 
       for (let i = 0; i < boxes; i++) {
         packages.push({
           [sku]: {
             receiving: quantity,
-            quantity: boxedQty >= boxQty! ? boxQty! : boxedQty,
+            quantity: boxedQty >= qtyPerBox ? qtyPerBox : boxedQty,
             name: name,
             inventoryId: inventoryId!,
             image: image!,
             poId: poId!.toString(),
-            boxQty: boxQty!,
+            boxQty: qtyPerBox,
             poNumber: poNumber!,
           },
         })
 
-        boxedQty -= boxQty!
+        boxedQty -= qtyPerBox
       }
     }
 
@@ -298,7 +300,7 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
                       receiving: item.receiving,
                       name: item.name,
                       image: item.image,
-                      boxQty: item.boxQty,
+                      boxQty: item.boxQty || 1,
                       poNumber: item.poNumber,
                       orderNumber: receivingOrderNumber,
                     },
@@ -318,7 +320,7 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
             receiving: item.receiving,
             name: item.name,
             image: item.image,
-            boxQty: item.boxQty,
+            boxQty: item.boxQty || 1,
             poNumber: item.poNumber,
             poId: item.poId,
             orderNumber: receivingOrderNumber,
@@ -342,7 +344,7 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
             receiving: quantity,
             name: name,
             image: image!,
-            boxQty: boxQty!,
+            boxQty: boxQty || 1,
             poNumber: poNumber!,
             orderNumber: receivingOrderNumber,
           })
@@ -370,7 +372,7 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
                       receiving: item.receiving,
                       name: item.name,
                       image: item.image,
-                      boxQty: item.boxQty,
+                      boxQty: item.boxQty || 1,
                       poNumber: item.poNumber,
                       orderNumber: receivingOrderNumber,
                     },

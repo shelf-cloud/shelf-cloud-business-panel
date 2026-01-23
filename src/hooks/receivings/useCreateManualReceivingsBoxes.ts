@@ -43,8 +43,8 @@ export const useCreateManualReceivingsBoxes = (receivingItems: ReceivingInventor
 
     for (const item of receivingItems) {
       const { sku, boxQty, quantity, name, inventoryId, image } = item
-
-      const boxes = Math.floor(quantity / boxQty!)
+      const qtyPerBox = boxQty || 1
+      const boxes = Math.floor(quantity / qtyPerBox)
       let boxedQty = quantity
 
       packages[sku] = {
@@ -52,23 +52,22 @@ export const useCreateManualReceivingsBoxes = (receivingItems: ReceivingInventor
         name: name,
         inventoryId: inventoryId!,
         image: image!,
-        boxQty: boxQty!,
+        boxQty: qtyPerBox,
         boxes: [],
       }
 
-      if (quantity <= boxQty!) {
+      if (quantity <= qtyPerBox) {
         packages[sku].boxes.push({
           unitsPerBox: quantity,
           qtyOfBoxes: 1,
         })
       } else {
         packages[sku].boxes.push({
-          unitsPerBox: boxQty!,
+          unitsPerBox: qtyPerBox,
           qtyOfBoxes: boxes,
         })
 
-        boxedQty -= boxQty! * boxes
-
+        boxedQty -= qtyPerBox * boxes
         if (boxedQty > 0) {
           packages[sku].boxes.push({
             unitsPerBox: boxedQty,
@@ -85,8 +84,8 @@ export const useCreateManualReceivingsBoxes = (receivingItems: ReceivingInventor
     const packages = {} as ManualSingleSkuBoxes
     for (const item of receivingItems) {
       const { sku, boxQty, quantity, name, inventoryId, image } = item
-
-      const boxes = Math.floor(quantity / boxQty!)
+      const qtyPerBox = boxQty || 1
+      const boxes = Math.floor(quantity / qtyPerBox)
       let boxedQty = quantity
 
       packages[sku] = {
@@ -94,23 +93,22 @@ export const useCreateManualReceivingsBoxes = (receivingItems: ReceivingInventor
         name: name,
         inventoryId: inventoryId!,
         image: image!,
-        boxQty: boxQty!,
+        boxQty: qtyPerBox,
         boxes: [],
       }
 
-      if (quantity <= boxQty!) {
+      if (quantity <= qtyPerBox) {
         packages[sku].boxes.push({
           unitsPerBox: quantity,
           qtyOfBoxes: 1,
         })
       } else {
         packages[sku].boxes.push({
-          unitsPerBox: boxQty!,
+          unitsPerBox: qtyPerBox,
           qtyOfBoxes: boxes,
         })
 
-        boxedQty -= boxQty! * boxes
-
+        boxedQty -= qtyPerBox * boxes
         if (boxedQty > 0) {
           packages[sku].boxes.push({
             unitsPerBox: boxedQty,
@@ -191,7 +189,7 @@ export const useCreateManualReceivingsBoxes = (receivingItems: ReceivingInventor
           name,
           inventoryId,
           image,
-          boxQty,
+          boxQty: boxQty || 1,
         }
       }
       return updatedPackages
@@ -220,22 +218,23 @@ export const useCreateManualReceivingsBoxes = (receivingItems: ReceivingInventor
 
     for (const item of receivingItems) {
       const { sku, boxQty, quantity, image, inventoryId, name } = item
-      const boxes = Math.ceil(quantity / boxQty!)
+      const qtyPerBox = boxQty || 1
+      const boxes = Math.ceil(quantity / qtyPerBox)
       let boxedQty = quantity
 
       for (let i = 0; i < boxes; i++) {
         packages.push({
           [sku]: {
             receiving: quantity,
-            quantity: boxedQty >= boxQty! ? boxQty! : boxedQty,
+            quantity: boxedQty >= qtyPerBox ? qtyPerBox : boxedQty,
             name: name,
             inventoryId: inventoryId!,
             image: image!,
-            boxQty: boxQty!,
+            boxQty: qtyPerBox,
           },
         })
 
-        boxedQty -= boxQty!
+        boxedQty -= qtyPerBox
       }
     }
 
@@ -261,7 +260,7 @@ export const useCreateManualReceivingsBoxes = (receivingItems: ReceivingInventor
                     receiving: item.receiving,
                     name: item.name,
                     image: item.image,
-                    boxQty: item.boxQty,
+                    boxQty: item.boxQty || 1,
                     orderNumber: receivingOrderNumber,
                   },
                 ],
@@ -279,7 +278,7 @@ export const useCreateManualReceivingsBoxes = (receivingItems: ReceivingInventor
             receiving: item.receiving,
             name: item.name,
             image: item.image,
-            boxQty: item.boxQty,
+            boxQty: item.boxQty || 1,
             orderNumber: receivingOrderNumber,
           }))
           finalBoxes.push({
@@ -300,7 +299,7 @@ export const useCreateManualReceivingsBoxes = (receivingItems: ReceivingInventor
             receiving: quantity,
             name: name,
             image: image!,
-            boxQty: boxQty!,
+            boxQty: boxQty || 1,
             orderNumber: receivingOrderNumber,
           })
         }
@@ -323,7 +322,7 @@ export const useCreateManualReceivingsBoxes = (receivingItems: ReceivingInventor
                 receiving: item.receiving,
                 name: item.name,
                 image: item.image,
-                boxQty: item.boxQty,
+                boxQty: item.boxQty || 1,
                 orderNumber: receivingOrderNumber,
               })
             }
