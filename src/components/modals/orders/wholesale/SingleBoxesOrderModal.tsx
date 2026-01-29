@@ -1,14 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useContext } from 'react'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
-import AppContext from '@context/AppContext'
-import axios from 'axios'
-import * as Yup from 'yup'
-import { useFormik } from 'formik'
-import { toast } from 'react-toastify'
-import { wholesaleProductRow } from '@typings'
 import router from 'next/router'
+import { useContext, useEffect, useState } from 'react'
+
+import { SelectSingleValueType } from '@components/Common/SimpleSelect'
+import { LABELS_SHIPMENT_TYPES } from '@components/orders/wholesale/constants'
+import SelectSingleFilter from '@components/ui/filters/SelectSingleFilter'
+import AppContext from '@context/AppContext'
+import { wholesaleProductRow } from '@typings'
+import axios from 'axios'
+import { useFormik } from 'formik'
 import moment from 'moment'
+import { toast } from 'react-toastify'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import * as Yup from 'yup'
 
 type Props = {
   orderNumberStart: string
@@ -30,9 +34,7 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
   }, [state.wholesaleOrderProducts])
 
   const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
-
+    enableReinitialize: false,
     initialValues: {
       orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
       type: 'Parcel Boxes',
@@ -58,7 +60,9 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
     onSubmit: async (values, { resetForm }) => {
       setloading(true)
 
-      const response = await axios.post(`api/createWholesaleOrderIndividualUnits?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      const loadingToast = toast.loading('Creating Order...')
+
+      const { data } = await axios.post(`/api/orders/createWholesaleOrderIndividualUnits?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
         shippingProducts: orderProducts.map((product) => {
           return {
             sku: product.sku,
@@ -117,13 +121,23 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
         },
       })
 
-      if (!response.data.error) {
+      if (!data.error) {
         setSingleBoxesOrderModal(false)
-        toast.success(response.data.msg)
+        toast.update(loadingToast, {
+          render: data.message,
+          type: 'success',
+          isLoading: false,
+          autoClose: 3000,
+        })
         resetForm()
         router.push('/Shipments')
       } else {
-        toast.error(response.data.msg)
+        toast.update(loadingToast, {
+          render: data.message ?? 'Error creating Purchase Order',
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+        })
       }
       setloading(false)
     },
@@ -154,20 +168,22 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
       <ModalBody>
         <Form onSubmit={HandleAddProduct}>
           <Row>
-            <h5 className='fs-5 m-3 fw-bolder text-primary'>Order Details</h5>
+            <p className='fs-4 fw-bold text-primary'>Order Details</p>
             <Col md={6}>
               <Col md={12}>
                 <FormGroup className='mb-3'>
-                  <Label htmlFor='firstNameinput' className='form-label'>
+                  <Label htmlFor='firstNameinput' className='form-label fs-7'>
                     *Order Number
                   </Label>
                   <div className='input-group'>
-                    <span className='input-group-text fw-semibold fs-5' id='basic-addon1'>
+                    <span className='input-group-text fw-semibold fs-5' style={{ padding: '0.2rem 0.9rem' }} id='bsnss-prefix'>
                       {orderNumberStart}
                     </span>
                     <Input
                       type='text'
-                      className='form-control'
+                      bsSize='sm'
+                      className='form-control fs-6'
+                      style={{ padding: '0.2rem 0.9rem' }}
                       id='orderNumber'
                       name='orderNumber'
                       onChange={validation.handleChange}
@@ -180,31 +196,35 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                 </FormGroup>
               </Col>
               <Col md={12}>
-                <Label htmlFor='firstNameinput' className='form-label'>
+                <Label htmlFor='firstNameinput' className='form-label fs-7'>
                   *Type of Shipment
                 </Label>
-                <div className='flex flex-row w-100 justify-content-start align-items-center pb-3'>
+                <div className='d-flex flex-row justify-content-start align-items-center pb-3 gap-3'>
                   <Button
                     type='button'
-                    className={'me-3 ' + (validation.values.type == 'Parcel Boxes' ? '' : 'text-muted')}
+                    className={validation.values.type == 'Parcel Boxes' ? '' : 'text-muted'}
                     color={validation.values.type == 'Parcel Boxes' ? 'primary' : 'light'}
                     onClick={() => validation.setFieldValue('type', 'Parcel Boxes')}>
                     Parcel Boxes
                   </Button>
-                  <Button type='button' className={'' + (validation.values.type == 'LTL' ? '' : 'text-muted')} color={validation.values.type == 'LTL' ? 'primary' : 'light'} onClick={() => validation.setFieldValue('type', 'LTL')}>
+                  <Button
+                    type='button'
+                    className={validation.values.type == 'LTL' ? '' : 'text-muted'}
+                    color={validation.values.type == 'LTL' ? 'primary' : 'light'}
+                    onClick={() => validation.setFieldValue('type', 'LTL')}>
                     Pallets
                   </Button>
                 </div>
               </Col>
               {validation.values.type == 'LTL' && (
-                <Col md={12}>
+                <Col md={6}>
                   <FormGroup className='mb-3'>
-                    <Label htmlFor='firstNameinput' className='form-label'>
+                    <Label htmlFor='firstNameinput' className='form-label fs-7'>
                       *How many Pallets will be used?
                     </Label>
                     <Input
                       type='number'
-                      className='form-control'
+                      className='form-control fs-6'
                       id='numberOfPallets'
                       name='numberOfPallets'
                       onChange={validation.handleChange}
@@ -212,22 +232,24 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                       value={validation.values.numberOfPallets || ''}
                       invalid={validation.touched.numberOfPallets && validation.errors.numberOfPallets ? true : false}
                     />
-                    {validation.touched.numberOfPallets && validation.errors.numberOfPallets ? <FormFeedback type='invalid'>{validation.errors.numberOfPallets}</FormFeedback> : null}
+                    {validation.touched.numberOfPallets && validation.errors.numberOfPallets ? (
+                      <FormFeedback type='invalid'>{validation.errors.numberOfPallets}</FormFeedback>
+                    ) : null}
                   </FormGroup>
                 </Col>
               )}
-              <Col md={12}>
-                <FormGroup className='mb-3'>
-                  <Label htmlFor='firstNameinput' className='form-label'>
-                    *Type of Shipment Payment
-                  </Label>
-                  <Input type='select' className='form-control' id='isThird' name='isThird' onChange={validation.handleChange} onBlur={validation.handleBlur} invalid={validation.touched.isThird && validation.errors.isThird ? true : false}>
-                    <option value=''>Choose a Type..</option>
-                    <option value='false'>Prepaid Shipping Label</option>
-                    <option value='true'>Shelf-Cloud Preferred Carrier</option>
-                  </Input>
-                  {validation.touched.isThird && validation.errors.isThird ? <FormFeedback type='invalid'>{validation.errors.isThird}</FormFeedback> : null}
-                </FormGroup>
+              <Col md={6}>
+                <SelectSingleFilter
+                  inputLabel={'*Select Shipment Type'}
+                  inputName={'isThird'}
+                  placeholder={'Select ...'}
+                  selected={{ value: validation.values.isThird, label: LABELS_SHIPMENT_TYPES.find((type) => type.value === validation.values.isThird)?.label || 'Select...' }}
+                  options={LABELS_SHIPMENT_TYPES || [{ value: '', label: '' }]}
+                  handleSelect={(option: SelectSingleValueType) => {
+                    validation.handleChange({ target: { name: 'isThird', value: option!.value } })
+                  }}
+                  error={validation.errors.isThird}
+                />
               </Col>
             </Col>
             <Col md={12}>
@@ -249,10 +271,10 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
               )}
             </Col>
             <Col md={12}>
-              <h5>Total SKUs in Order: {validation.values.hasProducts}</h5>
-              <span className='text-info fs-6 fw-light'>The distribution plan for boxes and items will be available after picking.</span>
+              <span className='text-info fs-6 fw-light'>*The distribution plan for boxes and items will be available after picking.</span>
+              <p className='fs-6 m-0'>Total SKUs in Order: {validation.values.hasProducts}</p>
               {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='text-light'>{validation.errors.hasProducts}</p> : null}
-              <table className='table align-middle table-responsive table-nowrap table-striped-columns'>
+              <table className='table align-middle table-responsive table-nowrap table-striped-columns table-sm'>
                 <thead>
                   <tr>
                     <th>SKU</th>
@@ -268,12 +290,14 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                       <td className='text-center'>{product.totalToShip}</td>
                     </tr>
                   ))}
+                </tbody>
+                <tfoot>
                   <tr key={'totalMasterBoxes'} style={{ backgroundColor: '#e5e5e5' }}>
                     <td className='fw-bold'>TOTAL</td>
                     <td className='fw-bold text-center'>{TotalMasterBoxes}</td>
                     <td className='fw-bold text-center'>{totalQuantityToShip}</td>
                   </tr>
-                </tbody>
+                </tfoot>
               </table>
             </Col>
             <Col md={12}>

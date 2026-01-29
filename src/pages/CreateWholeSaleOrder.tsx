@@ -1,17 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useContext } from 'react'
-import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
-import { WholesaleProduct, wholesaleProductRow } from '@typings'
-import axios from 'axios'
 import Head from 'next/head'
-import { Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap'
-import BreadCrumb from '@components/Common/BreadCrumb'
+import { useRouter } from 'next/router'
+import React, { useContext, useEffect, useState } from 'react'
+
 import { getSession } from '@auth/client'
+import BreadCrumb from '@components/Common/BreadCrumb'
 import InventoryBinsModal from '@components/InventoryBinsModal'
 import MasterBoxes from '@components/orders/wholesale/MasterBoxes'
 import SingleItems from '@components/orders/wholesale/SingleItems'
-import { useRouter } from 'next/router'
+import AppContext from '@context/AppContext'
+import { UserType } from '@hooks/useInitialState'
+import { WholesaleProduct, wholesaleProductRow } from '@typings'
+import axios from 'axios'
+import { Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -47,10 +49,10 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
   const [completeData, setCompleteData] = useState<wholesaleProductRow[]>([])
 
   useEffect(() => {
-    if (!state.user[state.currentRegion]?.showWholeSale) {
+    if (state.user && !state.user[state.currentRegion as keyof UserType]?.showWholeSale) {
       push('/')
     }
-  }, [])
+  }, [state.user, state.currentRegion])
 
   useEffect(() => {
     const bringWholesaleInv = async () => {

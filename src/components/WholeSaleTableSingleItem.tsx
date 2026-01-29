@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from 'react'
 import AppContext from '@context/AppContext'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { NoImageAdress } from '@lib/assetsConstants'
+import { sortBooleans, sortNumbers, sortStringsLocaleCompare } from '@lib/helperFunctions'
 import { wholesaleProductRow } from '@typings'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
@@ -112,51 +113,6 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
     }
   }
 
-  const caseInsensitiveSort = (rowA: wholesaleProductRow, rowB: wholesaleProductRow) => {
-    const a = rowA.title.toLowerCase()
-    const b = rowB.title.toLowerCase()
-
-    if (a > b) {
-      return 1
-    }
-
-    if (b > a) {
-      return -1
-    }
-
-    return 0
-  }
-
-  const quantitySort = (rowA: wholesaleProductRow, rowB: wholesaleProductRow) => {
-    const a = Number(rowA.quantity.quantity)
-    const b = Number(rowB.quantity.quantity)
-
-    if (a > b) {
-      return 1
-    }
-
-    if (b > a) {
-      return -1
-    }
-
-    return 0
-  }
-
-  const typeSort = (rowA: wholesaleProductRow, rowB: wholesaleProductRow) => {
-    const a = rowA.isKit!
-    const b = rowB.isKit!
-
-    if (a > b) {
-      return 1
-    }
-
-    if (b > a) {
-      return -1
-    }
-
-    return 0
-  }
-
   const conditionalRowStyles = [
     {
       when: (row: wholesaleProductRow) => Number(row.orderQty) > 0,
@@ -175,13 +131,13 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
 
   const columns: any = [
     {
-      name: <span className='fw-bold fs-5'>Image</span>,
+      name: <span className='fw-semibold fs-6'>Image</span>,
       selector: (row: wholesaleProductRow) => {
         return (
           <div
             style={{
-              width: '70px',
-              height: '60px',
+              width: '60px',
+              height: '40px',
               margin: '2px 0px',
               position: 'relative',
             }}>
@@ -201,7 +157,7 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
     },
     {
       name: (
-        <span className='fw-bold fs-5'>
+        <span className='fw-semibold fs-6'>
           Title
           <br />
           SKU
@@ -210,36 +166,35 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
       selector: (row: wholesaleProductRow) => {
         if (row.isKit) {
           return (
-            <div style={{ padding: '4px 0px' }}>
-              <p style={{ margin: '0px', fontWeight: '800' }}>{row.title}</p>
-              <p style={{ margin: '0px' }}>{row.sku}</p>
-              <ul style={{ margin: '0px' }}>
+            <div className='py-2'>
+              <p className='m-0 fw-semibold'>{row.title}</p>
+              <p className='m-0'>{row.sku}</p>
+              <ul className='m-0 ps-3'>
                 {row.children?.map((child) => (
-                  <li
-                    style={{ margin: '0px', fontSize: '10px' }}
-                    key={child.idInventory}>{`${child.title} | ${child.sku} | Available: ${child.available} | Used: ${child.qty}`}</li>
+                  <li className='m-0 fs-7 text-muted' key={child.idInventory}>{`${child.title} | ${child.sku} | Available: ${child.available} | Used: ${child.qty}`}</li>
                 ))}
               </ul>
             </div>
           )
         } else {
           return (
-            <div>
-              <p style={{ margin: '0px', fontWeight: '800' }}>{row.title}</p>
-              <p style={{ margin: '0px' }}>{row.sku}</p>
+            <div className='py-2'>
+              <p className='m-0 fw-semibold'>{row.title}</p>
+              <p className='m-0'>{row.sku}</p>
             </div>
           )
         }
       },
       sortable: true,
       wrap: true,
-      grow: 2,
-      sortFunction: caseInsensitiveSort,
+      minWidth: '250px',
+      grow: 2.5,
+      sortFunction: (rowA: wholesaleProductRow, rowB: wholesaleProductRow) => sortStringsLocaleCompare(rowA.title, rowB.title),
       //   compact: true,
     },
     {
       name: (
-        <span className='fw-bold fs-6'>
+        <span className='fw-semibold fs-6'>
           ASIN
           <br />
           UPC
@@ -250,9 +205,9 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
       selector: (row: wholesaleProductRow) => {
         return (
           <div>
-            <p style={{ margin: '0px' }}>{row.asin}</p>
-            <p style={{ margin: '0px' }}>{row.barcode}</p>
-            <p style={{ margin: '0px' }}>{row.fnSku}</p>
+            <p className='m-0 fs-7'>{row.asin}</p>
+            <p className='m-0 fs-7'>{row.barcode}</p>
+            <p className='m-0 fs-7'>{row.fnSku}</p>
           </div>
         )
       },
@@ -262,7 +217,7 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
       compact: true,
     },
     {
-      name: <span className='fw-bold fs-5'>Type</span>,
+      name: <span className='fw-semibold fs-6'>Type</span>,
       selector: (cell: any) => {
         if (cell.isKit) {
           return <span className='badge text-uppercase badge-soft-info p-2'>kit</span>
@@ -273,10 +228,10 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
       sortable: true,
       compact: true,
       center: true,
-      sortFunction: typeSort,
+      sortFunction: (a: wholesaleProductRow, b: wholesaleProductRow) => sortBooleans(a.isKit!, b.isKit!),
     },
     {
-      name: <span className='fw-bold fs-5'>Quantity</span>,
+      name: <span className='fw-semibold fs-6'>Quantity</span>,
       selector: (cell: any) => {
         if (cell.isKit) {
           return cell.quantity.quantity
@@ -303,11 +258,11 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
       sortable: true,
       compact: true,
       center: true,
-      sortFunction: quantitySort,
+      sortFunction: (a: wholesaleProductRow, b: wholesaleProductRow) => sortNumbers(a.quantity.quantity!, b.quantity.quantity!),
     },
     {
       name: (
-        <span className='fw-bold fs-5 text-center'>
+        <span className='fw-semibold fs-6 text-center'>
           Order Qty <br /> (Individual Units)
         </span>
       ),
@@ -319,7 +274,7 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
               minLength={1}
               debounceTimeout={300}
               disabled={(row?.quantity.quantity || 0) <= 0 ? true : false}
-              className='form-control'
+              className='form-control form-control-sm fs-6'
               placeholder={(row?.quantity.quantity || 0) <= 0 ? 'Not Enough Qty' : 'Order Qty...'}
               value={row.orderQty}
               onChange={async (e) => {
@@ -360,7 +315,7 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
       compact: true,
     },
     {
-      name: <span className='fw-bold fs-5'>Total To Ship</span>,
+      name: <span className='fw-semibold fs-6'>Total To Ship</span>,
       selector: (row: wholesaleProductRow) => Number(row.totalToShip).toFixed(0),
       sortable: true,
       center: true,
