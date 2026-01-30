@@ -14,18 +14,51 @@ export type GetMarketplaceListingsResponse = {
 
 export type MarketplaceListingsProduct = {
   inventoryId: number
-  sku: string
   title: string
+  sku: string
   asin: string
+  mfnSku: string
+  afnSku: string
   fnSku: string
   barcode: string
+  weight: number
+  length: number
+  width: number
+  height: number
+  boxQty: number
+  boxWeight: number
+  boxLength: number
+  boxWidth: number
+  boxHeight: number
   image: string
+  note: string
+  description: string
   brand: string | null
-  supplier: string | null
   category: string | null
-  isKit: boolean
+  htsCode: string
+  defaultPrice: number
+  msrp: number
+  map: number
+  floor: number
+  ceilling: number
+  supplier: string | null
+  sellerCost: number
+  inboundShippingCost: number
+  otherCosts: number
+  productionTime: number
+  transitTime: number
+  shippingToFBA: number
+  buffer: number
+  itemCondition: string
+  identifiers: MarketplaceListingsProductIdentifier[]
   listings: MarketplaceListingsProductListing[]
+  isKit: boolean
   showDiscontinued?: boolean
+}
+
+export interface MarketplaceListingsProductIdentifier {
+  type: string
+  value: string
 }
 
 export interface MarketplaceListingsProductListing {

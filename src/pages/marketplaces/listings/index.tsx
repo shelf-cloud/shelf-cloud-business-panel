@@ -6,6 +6,7 @@ import { getSession } from '@auth/client'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import MKL_Filters from '@components/marketplacesListings/MKL_Filters'
 import MarketplacesListingsTable from '@components/marketplacesListings/MarketpalcesListingsTable'
+import ExportProductListingsButton from '@components/marketplacesListings/exportProductListings/ExportProductListingsButton'
 import SearchInput from '@components/ui/SearchInput'
 import SelectMarketplaceDropDown from '@components/ui/SelectMarketplaceDropDown'
 import { useMarketplaces } from '@hooks/marketplaces/useMarketplaces'
@@ -89,6 +90,7 @@ const ProductsListings = ({ session }: Props) => {
                             {`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''} Selected`}
                           </DropdownToggle>
                           <DropdownMenu>
+                            <ExportProductListingsButton products={selectedRows} />
                             <DropdownItem
                               className='text-nowrap fs-7'
                               onClick={() =>
