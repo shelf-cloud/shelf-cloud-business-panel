@@ -210,7 +210,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       sortFunction: (rowA: Product, rowB: Product) => sortNumbers(rowA.quantity, rowB.quantity),
     },
     {
-      name: <span className='fw-bold fs-6'>Unit Dimensions</span>,
+      name: <span className='fw-bold fs-6'>Retail Package Dimensions</span>,
       sortable: false,
       compact: true,
       grow: 1.4,
@@ -242,7 +242,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       },
     },
     {
-      name: <span className='fw-bold fs-6'>Box Dimensions</span>,
+      name: <span className='fw-bold fs-6'>Master Carton Dimensions</span>,
       sortable: false,
       compact: true,
       grow: 1.4,
@@ -274,7 +274,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       },
     },
     {
-      name: <span className='fw-bold fs-6'>Qty/Box</span>,
+      name: <span className='fw-bold fs-6'>Qty/Carton</span>,
       selector: (row: Product) => row.boxQty,
       sortable: true,
       center: true,
