@@ -17,6 +17,7 @@ const Navdata = () => {
   const [isReports, setIsReports] = useState(false)
   const [isAmazon, setIsAmazon] = useState(false)
   const [isCommerceHub, setIsCommerceHub] = useState(false)
+  const [isIntegrations, setIsIntegrations] = useState(false)
   const [iscurrentState, setIscurrentState] = useState('Dashboard')
 
   const modules = {
@@ -333,6 +334,29 @@ const Navdata = () => {
         },
       },
     },
+    Integrations: {
+      section: {
+        id: 'integrations',
+        label: 'Integrations',
+        icon: 'mdi mdi-connection',
+        link: '#',
+        stateVariables: isIntegrations,
+        click: function (e) {
+          e.preventDefault()
+          setIsIntegrations(!isIntegrations)
+          setIscurrentState('Integrations')
+          updateIconSidebar(e)
+        },
+      },
+      subItems: {
+        'SPS Commerce': {
+          id: 'sps_commerce',
+          label: 'SPS Commerce',
+          link: '/integrations/sps_commerce',
+          parentId: 'integrations',
+        },
+      },
+    },
   }
 
   function updateIconSidebar(e) {
@@ -373,7 +397,10 @@ const Navdata = () => {
     if (iscurrentState !== 'Billing') {
       setIsBilling(false)
     }
-  }, [iscurrentState, isDashboard, isWarehouse, isShipments, isReceiving, isBilling, isMarketplaceses, isReports])
+    if (iscurrentState !== 'Integrations') {
+      setIsIntegrations(false)
+    }
+  }, [iscurrentState, isDashboard, isWarehouse, isShipments, isReceiving, isBilling, isMarketplaceses, isReports, isIntegrations])
 
   useEffect(() => {}, [state.user, session])
 
@@ -578,6 +605,14 @@ const Navdata = () => {
 
     if (state.user[state.currentRegion]?.showMarketplacesListings) {
       menuItems[3].subItems?.unshift(modules.Marketplaces.subItems['Marketplace Listings'])
+    }
+
+    if (state.user[state.currentRegion]?.showIntegrations) {
+      menuItems.push(modules.Integrations.section)
+      if (state.user[state.currentRegion]?.showSPSCommerce) {
+        if (menuItems[menuItems.length - 1].subItems === undefined) menuItems[menuItems.length - 1].subItems = []
+        menuItems[menuItems.length - 1].subItems.push(modules.Integrations.subItems['SPS Commerce'])
+      }
     }
   } else {
     menuItems = [modules.Dashboard]

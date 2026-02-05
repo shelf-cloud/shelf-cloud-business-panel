@@ -1,10 +1,11 @@
+import { GetServerSideProps } from 'next'
+import Head from 'next/head'
+import React, { useState } from 'react'
+
 import BreadCrumb from '@components/Common/BreadCrumb'
 import Integrations from '@components/integrations/integrations'
 import MarketplacesFees from '@components/marketplaceManager/MarketplaceFees'
-import { GetServerSideProps } from 'next'
 import { getSession } from 'next-auth/react'
-import Head from 'next/head'
-import React, { useState } from 'react'
 import { Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -76,7 +77,7 @@ const MarketplaceManager = ({ session, env }: Props) => {
                           type='button'>
                           <>
                             <i className='far fa-user'></i>
-                            Integrations
+                            Connections
                           </>
                         </NavLink>
                       </NavItem>
