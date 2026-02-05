@@ -5,6 +5,9 @@ const nextConfig = {
   images: {
     domains: ['electrostoregroup.com', 'cdn.shopify.com', 'm.media-amazon.com', 't3.ftcdn.net', 'images-na.ssl-images-amazon.com'],
   },
+  sassOptions: {
+    silenceDeprecations: ['import'],
+  },
 }
 
 module.exports = nextConfig
