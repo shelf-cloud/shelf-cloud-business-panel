@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-/* eslint-disable react-hooks/exhaustive-deps */
+ 
 import Link from 'next/link'
 import { useContext } from 'react'
 

@@ -1,5 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { memo, useContext, useEffect, useRef, useState } from 'react'
+ 
+import { memo, useContext, useEffect, useRef, useState } from 'react'
 
 import AppContext from '@context/AppContext'
 import { Input } from 'reactstrap'

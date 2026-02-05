@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 
 import FBAShipmentType from '@components/shipments/shipmentLog/FBAShipmentType'
 import ReceivingType from '@components/shipments/shipmentLog/ReceivingType'

@@ -41,13 +41,17 @@ type Props = {
 const Storage = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
   const title = `Inventory Log | ${session?.user?.businessName}`
-  const [pending, setPending] = useState(true)
-  const [allData, setAllData] = useState<StorageRowProduct[]>([])
-  const [storageInvoices, setStorageInvoices] = useState<any[]>([])
-  const [storageDates, setStorageDates] = useState<any[]>([])
   const [searchValue, setSearchValue] = useState<string>('')
 
+  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
+  const { data } = useSWR(state.user.businessId ? `/api/storage/getStorageInventory?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher)
+
+  const storageInvoices = data?.error ? [] : data?.storageFees || []
+  const storageDates = data?.error ? [] : data?.storageDate || []
+  const pending = !data
+
   const filteredItems = useMemo(() => {
+    const allData = data?.error ? [] : (data?.inventory as StorageRowProduct[]) || []
     return allData.filter(
       (item: StorageRowProduct) =>
         item?.title?.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -55,25 +59,13 @@ const Storage = ({ session }: Props) => {
         item?.sku?.toLowerCase().includes(searchValue.toLowerCase()) ||
         item?.bins?.some((bin) => bin.binName.toLowerCase().includes(searchValue.toLowerCase()))
     )
-  }, [allData, searchValue])
-
-  const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data } = useSWR(state.user.businessId ? `/api/storage/getStorageInventory?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher)
+  }, [data?.error, data?.inventory, searchValue])
 
   useEffect(() => {
     if (data?.error) {
-      setAllData([])
-      setStorageDates([])
-      setStorageInvoices([])
-      setPending(false)
       toast.error(data?.message)
-    } else if (data) {
-      setAllData(data.inventory)
-      setStorageInvoices(data.storageFees)
-      setStorageDates(data.storageDate)
-      setPending(false)
     }
-  }, [data])
+  }, [data?.error, data?.message])
 
   return (
     <div>

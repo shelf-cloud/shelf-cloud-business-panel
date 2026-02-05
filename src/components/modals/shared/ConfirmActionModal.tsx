@@ -1,5 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
-import React, { useState } from 'react'
+ 
+import { useState } from 'react'
 
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from 'reactstrap'
 

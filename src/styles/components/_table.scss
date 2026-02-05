@@ -2,6 +2,8 @@
 // _table.scss
 //
 
+@use 'sass:color';
+
 .table {
   th {
     font-weight: $font-weight-semibold;
@@ -62,7 +64,7 @@
   .table-#{$color} {
     &.table {
       > thead {
-        border-bottom-color: lighten($value, 10%) !important;
+        border-bottom-color: color.adjust($value, $lightness: 10%) !important;
       }
     }
   }

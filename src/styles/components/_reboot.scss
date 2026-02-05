@@ -2,6 +2,8 @@
 // reboot.scss
 //
 
+@use 'sass:color';
+
 html {
   position: relative;
   min-height: 100%;
@@ -70,7 +72,7 @@ strong {
 // mixing
 
 @function set-color-from-background($color) {
-  @if (lightness($color) > 70) {
+  @if (color.channel($color, 'lightness', $space: hsl) > 70) {
     @return $color-contrast-dark;
   } @else {
     @return $color-contrast-light;

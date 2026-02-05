@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 
 import CategoryTeamMembersHeader from '@components/settings/team_members/CategoryTeamMembersHeader'
 import AppContext from '@context/AppContext'

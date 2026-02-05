@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 
 import AppContext from '@context/AppContext'
 import axios from 'axios'
@@ -21,21 +21,18 @@ type Category = {
 const Categories = ({}: Props) => {
   const { mutate } = useSWRConfig()
   const { state }: any = useContext(AppContext)
-  const [loading, setloading] = useState(true)
-  const [categories, setCategories] = useState<Category[]>([])
-  const [showAddNewFields, setShowAddNewFields] = useState(false)
-  const [showEditFields, setShowEditFields] = useState(false)
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data } = useSWR(`/api/settings/getCategories?region=${state.currentRegion}&businessId=${state.user.businessId}`, fetcher)
-
+  const loading = !data
+  const categories = useMemo(() => {
+    if (data?.error) return [] as Category[]
+    return (data ?? []) as Category[]
+  }, [data])
+  const [showAddNewFields, setShowAddNewFields] = useState(false)
+  const [showEditFields, setShowEditFields] = useState(false)
   useEffect(() => {
     if (data?.error) {
-      setCategories([])
-      setloading(false)
       toast.error(data?.message)
-    } else if (data) {
-      setCategories(data)
-      setloading(false)
     }
   }, [data])
 

@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
 import { Spinner } from 'reactstrap'
 

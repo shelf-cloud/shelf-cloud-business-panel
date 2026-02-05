@@ -1,5 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable react-hooks/exhaustive-deps */
+ 
+ 
 import { useContext, useState } from 'react'
 
 import UploadFileDropzone from '@components/ui/UploadFileDropzone'

@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { FBAShipment } from '@typesTs/amazon/fbaShipments.interface'
 import ExcelJS from 'exceljs'
 import { toast } from 'react-toastify'

@@ -68,6 +68,11 @@ type FilterProps = {
   // show0Days?: string
 }
 
+type SelectedSupplierState = {
+  key: boolean
+  value: string
+}
+
 const ReorderingPoints = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
@@ -125,7 +130,7 @@ const ReorderingPoints = ({ session }: Props) => {
     initialValue: { id: '', text: '' },
   })
 
-  const [selectedSupplier, setSelectedSupplier] = useState<string>('')
+  const [selectedSupplierState, setSelectedSupplierState] = useState<SelectedSupplierState>({ key: false, value: '' })
   const [filterOpen, setFilterOpen] = useState(false)
   const [toggledClearRows, setToggleClearRows] = useState(false)
   const [selectedRows, setSelectedRows] = useState<ReorderingPointsProduct[]>([])
@@ -236,7 +241,6 @@ const ReorderingPoints = ({ session }: Props) => {
       products: { [key: string]: ReorderingPointsProduct }
     }
     if (!completeProductData || Object.values(completeProductData).length === 0) {
-      setSelectedSupplier('')
       return orderSummary
     }
 
@@ -248,9 +252,17 @@ const ReorderingPoints = ({ session }: Props) => {
       orderSummary.products[item.sku] = item
     }
 
-    if (orderSummary.totalQty <= 0) setSelectedSupplier('')
     return orderSummary
   }, [completeProductData])
+
+  const hasOrderProducts = Boolean(completeProductData && Object.values(completeProductData).length > 0 && reorderingPointsOrder.totalQty > 0)
+  const selectedSupplier = selectedSupplierState.key === hasOrderProducts ? selectedSupplierState.value : ''
+  const setSelectedSupplier = useCallback(
+    (value: string) => {
+      setSelectedSupplierState({ key: hasOrderProducts, value })
+    },
+    [hasOrderProducts]
+  )
 
   const orderHasSplitswithZeroQty = useMemo(() => {
     if (splits.isSplitting) {

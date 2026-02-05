@@ -1,6 +1,6 @@
 import { GetServerSideProps } from 'next'
 import Image from 'next/image'
-import React, { FormEventHandler, useRef } from 'react'
+import { FormEventHandler, useRef } from 'react'
 
 import { getSession } from '@auth/client'
 import axios from 'axios'

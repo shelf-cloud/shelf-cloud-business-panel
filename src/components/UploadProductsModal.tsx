@@ -1,5 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable react-hooks/exhaustive-deps */
+ 
+ 
 import router from 'next/router'
 import { useContext, useState } from 'react'
 

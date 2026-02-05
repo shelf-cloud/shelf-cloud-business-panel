@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React, { FormEventHandler, useState } from 'react'
+import { FormEventHandler, useState } from 'react'
 
 import ShelfCloudLogo from '@images/shelfcloud-blue-h.png'
 import axios from 'axios'

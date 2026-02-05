@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 
 import ProductOrderedModals from '@components/modals/productPage/ProductOrderedModals'
 import AppContext from '@context/AppContext'

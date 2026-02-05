@@ -1,4 +1,4 @@
-import React, { memo, useContext, useState } from 'react'
+import { memo, useContext, useState } from 'react'
 
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'

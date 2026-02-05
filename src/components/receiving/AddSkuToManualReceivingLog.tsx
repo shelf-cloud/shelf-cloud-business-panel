@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import { useContext, useMemo, useState } from 'react'
 
 import AppContext from '@context/AppContext'
 import { NoImageAdress } from '@lib/assetsConstants'
@@ -26,7 +26,6 @@ const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
 const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualReceiving, mutateReceivings }: Props) => {
   const { state }: any = useContext(AppContext)
   const [loading, setloading] = useState(false)
-  const [hasErrors, setHasErrors] = useState(false)
   const [searchValue, setSearchValue] = useState<any>('')
   const [skuToAddToPo, setSkuToAddToPo] = useState<SkuInListToAddToPo[]>([])
 
@@ -36,12 +35,9 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
     { revalidateOnFocus: false }
   )
 
-  useEffect(() => {
-    skuToAddToPo.length <= 0 ? setHasErrors(true) : setHasErrors(false)
-
-    if (skuToAddToPo.length > 0) {
-      skuToAddToPo.some((skus: SkuInListToAddToPo) => Number(skus.addQty) <= 0 || skus.addQty == '') ? setHasErrors(true) : setHasErrors(false)
-    }
+  const hasErrors = useMemo(() => {
+    if (skuToAddToPo.length <= 0) return true
+    return skuToAddToPo.some((skus: SkuInListToAddToPo) => Number(skus.addQty) <= 0 || skus.addQty == '')
   }, [skuToAddToPo])
 
   const filterDataTable = useMemo(() => {

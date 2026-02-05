@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 
 import { useSession } from '@auth/client'
 import { notificationsTagLinks } from '@components/constants/notifications'

@@ -1,4 +1,4 @@
-import React, { FormEventHandler, useRef, useState } from 'react'
+import { FormEventHandler, useRef, useState } from 'react'
 
 import axios from 'axios'
 import { toast } from 'react-toastify'

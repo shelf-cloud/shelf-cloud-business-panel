@@ -1,6 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+ 
 import { useRouter } from 'next/router'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Form, Formik } from 'formik'
 import { Button, Input, Label } from 'reactstrap'

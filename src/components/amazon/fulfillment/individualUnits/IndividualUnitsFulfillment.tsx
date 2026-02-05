@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import AmazonFulfillmentDimensions from '@components/modals/amazon/AmazonFulfillmentDimensions'
 import CreateIndvUnitsInboundPlanModal from '@components/modals/amazon/CreateIndvUnitsInboundPlanModal'
@@ -19,7 +19,7 @@ type Props = {
 const IndividualUnitsFulfillment = ({ lisiting, pending }: Props) => {
   const router = useRouter()
   const { filters, showHidden, showNotEnough, ShowNoShipDate }: FilterProps = router.query
-  const [allData, setAllData] = useState<AmazonFulfillmentSku[]>([])
+  const [editedState, setEditedState] = useState<{ source: AmazonFulfillmentSku[]; data: AmazonFulfillmentSku[] } | null>(null)
   const [searchValue, setSearchValue] = useState<string>('')
   const [hasQtyError, setHasQtyError] = useState(false)
   const [error, setError] = useState([])
@@ -42,11 +42,23 @@ const IndividualUnitsFulfillment = ({ lisiting, pending }: Props) => {
     shipments: [] as FBAShipmentHisotry[],
   })
 
-  useEffect(() => {
-    if (!pending) {
-      setAllData(JSON.parse(JSON.stringify(lisiting)))
-    }
+  const baseData = useMemo(() => {
+    if (pending) return [] as AmazonFulfillmentSku[]
+    return JSON.parse(JSON.stringify(lisiting)) as AmazonFulfillmentSku[]
   }, [pending, lisiting])
+
+  const allData = useMemo(() => {
+    if (editedState && editedState.source === lisiting) return editedState.data
+    return baseData
+  }, [editedState, lisiting, baseData])
+
+  const handleSetAllData = (updater: AmazonFulfillmentSku[] | ((prev: AmazonFulfillmentSku[]) => AmazonFulfillmentSku[])) => {
+    setEditedState((prev) => {
+      const previousData = prev && prev.source === lisiting ? prev.data : baseData
+      const nextData = typeof updater === 'function' ? updater(previousData) : updater
+      return { source: lisiting, data: nextData }
+    })
+  }
 
   const filteredItems = useMemo(() => {
     if (searchValue === '') {
@@ -112,7 +124,7 @@ const IndividualUnitsFulfillment = ({ lisiting, pending }: Props) => {
       <IndividualUnitsTable
         allData={allData}
         filteredItems={filteredItems}
-        setAllData={setAllData}
+        setAllData={handleSetAllData}
         pending={pending}
         setError={setError}
         setHasQtyError={setHasQtyError}
@@ -123,7 +135,7 @@ const IndividualUnitsFulfillment = ({ lisiting, pending }: Props) => {
           orderProducts={orderProducts}
           showCreateInboundPlanModal={showCreateInboundPlanModal}
           setShowCreateInboundPlanModal={setShowCreateInboundPlanModal}
-          setAllData={setAllData}
+          setAllData={handleSetAllData}
         />
       )}
       {dimensionsModal.show && <AmazonFulfillmentDimensions dimensionsModal={dimensionsModal} setdimensionsModal={setdimensionsModal} />}

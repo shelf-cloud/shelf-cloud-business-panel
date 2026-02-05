@@ -1,5 +1,3 @@
-import React from 'react'
-
 import Dropzone, { Accept } from 'react-dropzone'
 import { toast } from 'react-toastify'
 

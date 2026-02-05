@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 
 import { buildSplitTemplate, buildTemplate } from '@components/purchase_orders/helperFunctions'
 import AppContext from '@context/AppContext'

@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 
 import AmazonAdsAuthButton from '@components/amazon/AmazonAdsAuthButton'
 import AmazonAuthButton from '@components/amazon/AmazonAuthButton'

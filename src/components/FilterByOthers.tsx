@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+ 
 import { useContext, useEffect, useRef, useState } from 'react'
 
 import AppContext from '@context/AppContext'

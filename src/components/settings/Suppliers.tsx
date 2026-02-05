@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 
 import AppContext from '@context/AppContext'
 import axios from 'axios'
@@ -25,27 +25,26 @@ type Supplier = {
 const Suppliers = ({}: Props) => {
   const { mutate } = useSWRConfig()
   const { state }: any = useContext(AppContext)
-  const [loading, setloading] = useState(true)
-  const [suppliers, setSuppliers] = useState<Supplier[]>([])
-  const [countries, setcountries] = useState([])
-  const [validCountries, setValidCountries] = useState<string[]>([])
-  const [showAddNewFields, setShowAddNewFields] = useState(false)
-  const [showEditFields, setShowEditFields] = useState(false)
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data } = useSWR(`/api/settings/getSuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}`, fetcher)
-
+  const loading = !data
+  const suppliers = useMemo(() => {
+    if (data?.error) return [] as Supplier[]
+    return (data?.suppliers ?? []) as Supplier[]
+  }, [data])
+  const validCountries = useMemo(() => {
+    if (data?.error) return [] as string[]
+    return (data?.validCountries ?? []) as string[]
+  }, [data])
+  const countries = useMemo(() => {
+    if (data?.error) return [] as { name: string; code: string }[]
+    return (data?.countries ?? []) as { name: string; code: string }[]
+  }, [data])
+  const [showAddNewFields, setShowAddNewFields] = useState(false)
+  const [showEditFields, setShowEditFields] = useState(false)
   useEffect(() => {
     if (data?.error) {
-      setSuppliers([])
-      setValidCountries([])
-      setcountries([])
-      setloading(false)
       toast.error(data?.message)
-    } else if (data) {
-      setSuppliers(data.suppliers)
-      setValidCountries(data.validCountries)
-      setcountries(data.countries)
-      setloading(false)
     }
   }, [data])
 

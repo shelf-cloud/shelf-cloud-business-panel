@@ -1,5 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
-import React, { useContext, useState } from 'react'
+ 
+import { useContext, useState } from 'react'
 
 import { DeleteSKUFromReceivingModalType } from '@components/receiving/ReceivingType'
 import AppContext from '@context/AppContext'

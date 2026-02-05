@@ -342,7 +342,7 @@ export const useReceivingsBoxes = (packingConfiguration: string, receivingOrderN
     }
   }, [packingConfiguration, receivingOrderNumber, singleSkuPackages, multiSkuPackages, state.receivingFromPo.items])
 
-  const hasBoxedErrors = useMemo((): { error: boolean; message?: string } => {
+  const hasBoxedErrors = (() => {
     switch (packingConfiguration) {
       case 'single':
         for (const [poId, items] of Object.entries(state.receivingFromPo.items)) {
@@ -400,7 +400,7 @@ export const useReceivingsBoxes = (packingConfiguration: string, receivingOrderN
       default:
         return { error: false }
     }
-  }, [packingConfiguration, singleSkuPackages, multiSkuPackages, state.receivingFromPo.items])
+  })()
 
   return {
     singleSkuPackages,

@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic'
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'

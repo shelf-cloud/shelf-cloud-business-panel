@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { TeamMember } from '@typesTs/settings/team_members'
 import moment from 'moment'
 import DataTable from 'react-data-table-component'

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // ALTER TABLE `dbpruebas` ADD `activeState` BOOLEAN NOT NULL DEFAULT TRUE AFTER `image`;
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import AppContext from '@context/AppContext'
 import axios from 'axios'

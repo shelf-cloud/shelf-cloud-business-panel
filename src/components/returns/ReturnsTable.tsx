@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-/* eslint-disable react-hooks/exhaustive-deps */
+ 
 import React, { useContext } from 'react'
 
 import AppContext from '@context/AppContext'

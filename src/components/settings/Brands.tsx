@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 
 import AppContext from '@context/AppContext'
 import axios from 'axios'
@@ -22,22 +22,19 @@ type Brand = {
 const Brands = ({}: Props) => {
   const { mutate } = useSWRConfig()
   const { state }: any = useContext(AppContext)
-  const [loading, setloading] = useState(true)
-  const [brands, setBrands] = useState<Brand[]>([])
-  const [showAddNewFields, setShowAddNewFields] = useState(false)
-  const [showEditFields, setShowEditFields] = useState(false)
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data } = useSWR(`/api/settings/getBrands?region=${state.currentRegion}&businessId=${state.user.businessId}`, fetcher)
+  const loading = !data
+  const brands = useMemo(() => {
+    if (data?.error) return [] as Brand[]
+    return (data ?? []) as Brand[]
+  }, [data])
+  const [showAddNewFields, setShowAddNewFields] = useState(false)
+  const [showEditFields, setShowEditFields] = useState(false)
 
   useEffect(() => {
     if (data?.error) {
-      setBrands([])
-      setloading(false)
       toast.error(data?.message)
-    } else if (data) {
-      setBrands(data)
-
-      setloading(false)
     }
   }, [data])
 

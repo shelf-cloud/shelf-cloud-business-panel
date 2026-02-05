@@ -1,6 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
-import React from 'react'
-
+ 
 import moment from 'moment'
 import { Button, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
 

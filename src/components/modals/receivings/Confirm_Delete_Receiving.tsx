@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+ 
 import { useContext, useState } from 'react'
 
 import AppContext from '@context/AppContext'

@@ -2,6 +2,8 @@
 // _authentication.scss
 //
 
+@use 'sass:color';
+
 .auth-page-wrapper {
   .auth-page-content {
     padding-bottom: $footer-height;
@@ -35,7 +37,7 @@
   background-size: cover;
 
   .bg-overlay {
-    background: linear-gradient(to right, darken($primary, 6%), $primary);
+    background: linear-gradient(to right, color.adjust($primary, $lightness: -6%), $primary);
     opacity: 0.9;
   }
 

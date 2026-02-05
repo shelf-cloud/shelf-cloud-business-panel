@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 
 import { getSession } from '@auth/client'
 import BreadCrumb from '@components/Common/BreadCrumb'
@@ -46,11 +46,7 @@ const AmazonAuthRedirect = ({}: Props) => {
   const router = useRouter()
   const { spapi_oauth_code, selling_partner_id, state: amzState } = router.query
   const [loading, setloading] = useState(false)
-  const [expire, setexpire] = useState('')
-
-  useEffect(() => {
-    setexpire(moment().add(5, 'minutes').format('h:mm:mm A'))
-  }, [])
+  const [expire] = useState(() => moment().add(5, 'minutes').format('h:mm:mm A'))
 
   const authorizeSeller = async () => {
     setloading(true)

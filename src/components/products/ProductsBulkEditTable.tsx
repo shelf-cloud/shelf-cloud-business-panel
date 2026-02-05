@@ -1,6 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { ProductsDetails } from '@typesTs/products/products'
 import DataTable from 'react-data-table-component'
@@ -13,7 +11,18 @@ type Props = {
 const ProductsBulkEditTable = ({ tableData, pending }: Props) => {
   const [selectedCells, setSelectedCells] = useState(new Set())
   const [editCell, setEditCell] = useState('')
-  const [clipboard, _setClipboard] = useState([])
+
+  const copySelectedRows = useCallback(() => {
+    // const copiedData = selectedRows.map(row => JSON.stringify(row));
+    // setClipboard(copiedData);
+    // Optional: Copy to system clipboard
+    // navigator.clipboard.writeText(copiedData.join('\n'));
+  }, [])
+
+  const pasteToSelectedRows = useCallback(() => {
+    // Implement paste logic based on your requirements
+    // This might include updating the data array or handling the pasted data differently
+  }, [])
 
   useEffect(() => {
     const handleKeyDown = (event: any) => {
@@ -27,19 +36,7 @@ const ProductsBulkEditTable = ({ tableData, pending }: Props) => {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [selectedCells, clipboard])
-
-  const copySelectedRows = () => {
-    // const copiedData = selectedRows.map(row => JSON.stringify(row));
-    // setClipboard(copiedData);
-    // Optional: Copy to system clipboard
-    // navigator.clipboard.writeText(copiedData.join('\n'));
-  }
-
-  const pasteToSelectedRows = () => {
-    // Implement paste logic based on your requirements
-    // This might include updating the data array or handling the pasted data differently
-  }
+  }, [copySelectedRows, pasteToSelectedRows])
 
   const handleCellClick = (rowIndex: number, columnId: number) => {
     setEditCell(`${rowIndex}-${columnId}`)

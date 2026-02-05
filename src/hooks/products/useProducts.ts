@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useContext, useEffect, useRef } from 'react'
 
 import AppContext from '@context/AppContext'
 import { Product } from '@typings'
@@ -56,22 +56,21 @@ export const useProducts = ({ searchValue, brand, supplier, category, condition 
     revalidateOnMount: true,
   })
 
-  const filteredData = useMemo(() => {
+  const filteredData = (() => {
     if (!data?.products) return []
 
     if (searchValue === '') {
-      const newDataTable = data.products?.filter(
+      return data.products?.filter(
         (item: Product) =>
           (brand === 'All' ? true : item.brand?.toLowerCase() === brand?.toLowerCase()) &&
           (supplier === 'All' ? true : item.supplier?.toLowerCase() === supplier?.toLowerCase()) &&
           (category === 'All' ? true : item.category?.toLowerCase() === category?.toLowerCase()) &&
           (condition === 'All' ? true : item.itemCondition?.toLowerCase() === condition?.toLowerCase())
       )
-      return newDataTable
     }
 
     if (searchValue !== '') {
-      const newDataTable = data.products?.filter(
+      return data.products?.filter(
         (item: Product) =>
           (brand === 'All' ? true : item.brand?.toLowerCase() === brand?.toLowerCase()) &&
           (supplier === 'All' ? true : item.supplier?.toLowerCase() === supplier?.toLowerCase()) &&
@@ -84,11 +83,10 @@ export const useProducts = ({ searchValue, brand, supplier, category, condition 
             item?.fnSku?.toLowerCase().includes(searchValue.toLowerCase()) ||
             item?.barcode?.toLowerCase().includes(searchValue.toLowerCase()))
       )
-      return newDataTable
     }
 
     return data.products
-  }, [data?.products, searchValue, brand, supplier, category, condition])
+  })()
 
   return {
     products: filteredData,

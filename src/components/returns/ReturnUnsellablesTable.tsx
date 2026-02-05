@@ -1,6 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
-import React from 'react'
-
+ 
 import { UnsellablesType } from '@typesTs/returns/unsellables'
 import DataTable from 'react-data-table-component'
 

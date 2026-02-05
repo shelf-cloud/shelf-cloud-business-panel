@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { InboundPlan } from '@typesTs/amazon/fulfillments/fulfillment'
 
 type Props = {

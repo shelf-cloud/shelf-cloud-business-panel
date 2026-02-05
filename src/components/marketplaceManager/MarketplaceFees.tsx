@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useMemo, useState } from 'react'
 
 import { SelectSingleValueType } from '@components/Common/SimpleSelect'
 import UploadFileModal, { HandleSubmitParams } from '@components/modals/shared/UploadFileModal'
@@ -28,8 +28,7 @@ const MarketplacesFees = ({}: Props) => {
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [showEditFields, setshowEditFields] = useState(false)
-  const [marketplaceFees, setmarketplaceFees] = useState<{ [key: string]: MarketplaceFees }>({})
-  const [isLoaded, setisLoaded] = useState(false)
+  const [editedFeesState, setEditedFeesState] = useState<{ source: MarketplaceFeesResponse['marketplaceFees'] | undefined; data: { [key: string]: MarketplaceFees } } | null>(null)
   const [hasError, setHasError] = useState(false)
   const [updatingFees, setUpdatingFees] = useState(false)
 
@@ -115,13 +114,22 @@ const MarketplacesFees = ({}: Props) => {
     }
   )
 
-  useEffect(() => {
-    setisLoaded(true)
-    if (data?.marketplaceFees) {
-      setmarketplaceFees(data?.marketplaceFees!)
-      setisLoaded(false)
-    }
-  }, [data])
+  const baseMarketplaceFees = useMemo(() => data?.marketplaceFees ?? {}, [data])
+
+  const marketplaceFees = useMemo(() => {
+    if (editedFeesState && editedFeesState.source === data?.marketplaceFees) return editedFeesState.data
+    return baseMarketplaceFees
+  }, [editedFeesState, data?.marketplaceFees, baseMarketplaceFees])
+
+  const setmarketplaceFees = (updater: { [key: string]: MarketplaceFees } | ((prev: { [key: string]: MarketplaceFees }) => { [key: string]: MarketplaceFees })) => {
+    setEditedFeesState((prev) => {
+      const previousData = prev && prev.source === data?.marketplaceFees ? prev.data : baseMarketplaceFees
+      const nextData = typeof updater === 'function' ? updater(previousData) : updater
+      return { source: data?.marketplaceFees, data: nextData }
+    })
+  }
+
+  const isLoaded = !data?.marketplaceFees
 
   const handleUpdateMarketplaceFees = async () => {
     setUpdatingFees(true)

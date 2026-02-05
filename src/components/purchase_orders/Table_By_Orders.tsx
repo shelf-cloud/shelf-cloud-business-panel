@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 
 import Confirm_Delete_Po from '@components/modals/purchaseOrders/Confirm_Delete_Po'
 import AppContext from '@context/AppContext'

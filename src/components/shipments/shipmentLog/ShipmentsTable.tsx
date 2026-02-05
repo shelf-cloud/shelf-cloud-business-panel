@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-/* eslint-disable react-hooks/exhaustive-deps */
+ 
 import { useContext } from 'react'
 
 import SCTooltip from '@components/ui/SCTooltip'

@@ -1,6 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-import React from 'react'
-
 import { NoImageAdress } from '@lib/assetsConstants'
 import { InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
 import { Button, Card, CardBody, CardHeader, Col, Spinner } from 'reactstrap'

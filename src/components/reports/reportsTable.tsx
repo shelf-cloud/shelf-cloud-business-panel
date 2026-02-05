@@ -1,6 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React from 'react'
-
+ 
 import { ShelfCloudReportList } from '@typesTs/reports/reportsList'
 import moment from 'moment'
 import DataTable from 'react-data-table-component'

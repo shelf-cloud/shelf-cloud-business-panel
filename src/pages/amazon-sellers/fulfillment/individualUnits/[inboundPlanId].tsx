@@ -65,6 +65,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
     CarrierPalletInfo: false,
     trackingDetails: false,
   })
+  const [activeTab, setActiveTab] = useState('1')
   const title = `Inbound Plan Details | ${session?.user?.businessName}`
 
   const controller = new AbortController()
@@ -102,7 +103,6 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
     }
   )
 
-  const [activeTab, setActiveTab] = useState('1')
   const tabChange = (tab: any) => {
     if (activeTab !== tab) setActiveTab(tab)
   }

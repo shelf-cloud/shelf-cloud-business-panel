@@ -2,6 +2,8 @@
 // _team.scss
 //
 
+@use 'sass:color';
+
 //Bookmark
 .bookmark-icon {
   svg {
@@ -46,7 +48,7 @@
       position: absolute;
       width: 100%;
       height: 100%;
-      background: linear-gradient(to top, darken($primary, 25%), $primary);
+      background: linear-gradient(to top, color.adjust($primary, $lightness: -25%), $primary);
       opacity: 0.6;
     }
   }

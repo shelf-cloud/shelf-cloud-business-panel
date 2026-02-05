@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useContext, useEffect, useRef } from 'react'
 
 import AppContext from '@context/AppContext'
 import axios from 'axios'
@@ -126,7 +126,7 @@ export const useMarketplaceListings = ({ searchValue, storeId }: MarketplaceList
     revalidateOnMount: true,
   })
 
-  const filteredData = useMemo(() => {
+  const filteredData = (() => {
     if (!data?.products) return []
 
     return data.products?.filter(
@@ -146,7 +146,7 @@ export const useMarketplaceListings = ({ searchValue, storeId }: MarketplaceList
         (showMapped ? true : !item.listings.find((listing) => listing.storeId_true?.toString() === storeId)) &&
         (showDiscontinued ? true : !item.showDiscontinued)
     )
-  }, [data?.products, brand, supplier, category, searchValue, showMKHidden, showMapped, showDiscontinued, storeId])
+  })()
 
   const setSelectedVisibility = useCallback(
     async ({ products, storeId, visibility }: SetSelectedVisibilityParams) => {

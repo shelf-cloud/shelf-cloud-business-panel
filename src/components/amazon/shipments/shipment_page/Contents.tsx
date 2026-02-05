@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { CleanStatus } from '@lib/SkuFormatting'
 import { FBAShipment } from '@typesTs/amazon/fbaShipments.interface'
 import { Col } from 'reactstrap'

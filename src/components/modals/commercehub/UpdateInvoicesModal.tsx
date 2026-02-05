@@ -1,6 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+ 
 import router from 'next/router'
-import React, { useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 
 import UploadFileDropzone from '@components/ui/UploadFileDropzone'
 import AppContext from '@context/AppContext'

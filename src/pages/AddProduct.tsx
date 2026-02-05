@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-/* eslint-disable react-hooks/exhaustive-deps */
+ 
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import React, { useContext, useState } from 'react'

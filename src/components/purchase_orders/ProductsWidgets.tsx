@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 
 import PoBalanceListModal from '@components/modals/purchaseOrders/PoBalanceListModal'
 import AppContext from '@context/AppContext'

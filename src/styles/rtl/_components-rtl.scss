@@ -2,6 +2,8 @@
 // _components-rtl.scss
 //
 
+@use 'sass:color';
+
 ol,
 ul {
   padding-right: 0px;
@@ -514,11 +516,11 @@ ul {
     .ribbon-two-#{$color} {
       span {
         &:before {
-          border-right: 3px solid darken(($value), 15%);
+          border-right: 3px solid color.adjust($value, $lightness: -15%);
         }
 
         &:after {
-          border-left: 3px solid darken(($value), 15%);
+          border-left: 3px solid color.adjust($value, $lightness: -15%);
         }
       }
     }

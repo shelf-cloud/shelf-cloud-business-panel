@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { AMAZON_MARKETPLACES, AMAZON_MARKETPLACES_ID } from '@lib/AmzConstants'
 import { ProductPerformance } from '@typesTs/marketplaces/productPerformance'
 import ExcelJS from 'exceljs'

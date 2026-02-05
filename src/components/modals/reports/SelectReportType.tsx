@@ -1,5 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
-import React, { useEffect, useRef, useState } from 'react'
+ 
+import { useEffect, useRef, useState } from 'react'
 
 type Props = {
   showMappedCreateReport: {

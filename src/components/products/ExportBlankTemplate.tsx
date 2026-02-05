@@ -1,5 +1,3 @@
-import React from 'react'
-
 import ExcelJS from 'exceljs'
 import { DropdownItem } from 'reactstrap'
 

@@ -1,11 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 
 import { getSession } from '@auth/client'
 import BreadCrumb from '@components/Common/BreadCrumb'
-import InventoryBinsModal from '@components/InventoryBinsModal'
 import AppContext from '@context/AppContext'
 import { LogRowType } from '@typings'
 import axios from 'axios'
@@ -40,39 +38,31 @@ type Props = {
 
 const InventoryLogs = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
-  const [pending, setPending] = useState(true)
-  const [logData, setLogData] = useState<LogRowType[]>([])
   const [serachValue, setSerachValue] = useState('')
   const title = `Inventory Log | ${session?.user?.businessName}`
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data } = useSWR(state.user.businessId ? `/api/getBusinessInventoryLog?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher)
+  const pending = !data
+  const filteredData = useMemo(() => {
+    const allLogData = data?.error ? [] : (data as LogRowType[]) || []
+    if (!serachValue) return allLogData
+
+    const searchLower = serachValue.toLowerCase()
+    return allLogData.filter((log: any) => log.sku.toLowerCase().includes(searchLower) || log.details.toLowerCase().includes(searchLower))
+  }, [data, serachValue])
+
   useEffect(() => {
     if (data?.error) {
-      setLogData([])
-      setPending(false)
       toast.error(data?.message)
-    } else if (data) {
-      setLogData(data)
-      setPending(false)
     }
-  }, [data])
+  }, [data?.error, data?.message])
 
   const filterByText = (e: any) => {
-    if (e.target.value !== '') {
-      setSerachValue(e.target.value)
-      const filterTable = logData.filter(
-        (log: any) => log.sku.toLowerCase().includes(e.target.value.toLowerCase()) || log.details.toLowerCase().includes(e.target.value.toLowerCase())
-      )
-      setLogData(filterTable)
-    } else {
-      setSerachValue(e.target.value)
-      setLogData(data)
-    }
+    setSerachValue(e.target.value)
   }
   const clearSearch = () => {
     setSerachValue('')
-    setLogData(data)
   }
 
   const columns: any = [
@@ -92,7 +82,7 @@ const InventoryLogs = ({ session }: Props) => {
       name: <span className='fw-bolder fs-5'>Details</span>,
       selector: (row: { details: string }) => row.details,
       sortable: true,
-      center: true,
+      left: true,
     },
   ]
 
@@ -144,7 +134,7 @@ const InventoryLogs = ({ session }: Props) => {
                   <CardBody>
                     <DataTable
                       columns={columns}
-                      data={logData}
+                      data={filteredData}
                       progressPending={pending}
                       // pagination
                       striped={true}
@@ -158,7 +148,6 @@ const InventoryLogs = ({ session }: Props) => {
           </Container>
         </div>
       </React.Fragment>
-      <InventoryBinsModal />
     </div>
   )
 }

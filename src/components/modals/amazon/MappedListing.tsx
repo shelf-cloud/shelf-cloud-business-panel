@@ -1,5 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
-import React, { useContext } from 'react'
+ 
+import { useContext } from 'react'
 
 import AppContext from '@context/AppContext'
 import axios from 'axios'

@@ -1,5 +1,9 @@
 // Variables
 
+@use 'sass:color';
+@use 'sass:map';
+@use 'sass:string';
+
 //
 // custom-variables
 //
@@ -515,7 +519,9 @@ $spacers: (
   5: $spacer * 3,
 );
 
-$negative-spacers: if($enable-negative-margins, negativify-map($spacers), null);
+$negative-spacers: if(
+  sass($enable-negative-margins): negativify-map($spacers) ; else: null,
+);
 // scss-docs-end spacer-variables-maps
 
 // Position
@@ -548,7 +554,7 @@ $utilities-colors: $theme-colors-rgb;
 // scss-docs-end utilities-colors
 
 // scss-docs-start utilities-text-colors
-$utilities-text: map-merge(
+$utilities-text: map.merge(
   $utilities-colors,
   (
     'black': to-rgb($black),
@@ -560,7 +566,7 @@ $utilities-text-colors: map-loop($utilities-text, rgba-css-var, '$key', 'text');
 // scss-docs-end utilities-text-colors
 
 // scss-docs-start utilities-bg-colors
-$utilities-bg: map-merge(
+$utilities-bg: map.merge(
   $utilities-colors,
   (
     'black': to-rgb($black),
@@ -1334,7 +1340,7 @@ $dropdown-dark-link-color: $dropdown-dark-color;
 $dropdown-dark-link-hover-color: $white;
 $dropdown-dark-link-hover-bg: rgba($white, 0.15);
 $dropdown-dark-link-active-color: $white;
-$dropdown-dark-link-active-bg: lighten($dropdown-dark-bg, 5%);
+$dropdown-dark-link-active-bg: color.adjust($dropdown-dark-bg, $lightness: 5%);
 $dropdown-dark-link-disabled-color: $gray-500;
 $dropdown-dark-header-color: $gray-500;
 // scss-docs-end dropdown-dark-variables
@@ -1668,7 +1674,7 @@ $breadcrumb-margin-bottom: 1rem;
 $breadcrumb-bg: null;
 $breadcrumb-divider-color: $gray-600;
 $breadcrumb-active-color: $gray-600;
-$breadcrumb-divider: quote('\F0142');
+$breadcrumb-divider: string.quote('\F0142');
 $breadcrumb-divider-flipped: $breadcrumb-divider;
 $breadcrumb-border-radius: null;
 // scss-docs-end breadcrumb-variables

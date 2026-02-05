@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
@@ -40,30 +39,24 @@ type Props = {
 
 const Invoices = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
-  const [pending, setPending] = useState(true)
-  const [allData, setAllData] = useState([])
-  const [billingStatus, setBillingStatus] = useState([])
   const [searchValue, setSearchValue] = useState<any>('')
 
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data } = useSWR(state.user.businessId ? `/api/getBusinessInvoices?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher)
 
+  const billingStatus = data?.error ? [] : data?.billingStatus || []
+  const pending = !data
+
   const filteredItems = useMemo(() => {
+    const allData = data?.error ? [] : data?.invoices || []
     return allData.filter((item: InvoiceList) => item?.invoiceNumber?.toLowerCase().includes(searchValue.toLowerCase()))
-  }, [allData, searchValue])
+  }, [data, searchValue])
 
   useEffect(() => {
     if (data?.error) {
-      setAllData([])
-      setBillingStatus([])
-      setPending(false)
       toast.error(data?.message)
-    } else if (data) {
-      setAllData(data.invoices)
-      setBillingStatus(data.billingStatus)
-      setPending(false)
     }
-  }, [data])
+  }, [data?.error, data?.message])
 
   const title = `Invoices | ${session?.user?.businessName}`
   return (

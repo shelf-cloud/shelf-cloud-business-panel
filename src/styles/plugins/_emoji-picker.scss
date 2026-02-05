@@ -2,6 +2,8 @@
 // emoji-picker.scss
 //
 
+@use 'sass:color';
+
 .fg-emoji-picker {
   width: 250px !important;
   box-shadow: $box-shadow !important;
@@ -59,5 +61,5 @@
 }
 
 a.fg-emoji-picker-close-button {
-  background-color: darken($light, 4%) !important;
+  background-color: color.adjust($light, $lightness: -4%) !important;
 }

@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 
 import AppContext from '@context/AppContext'
 import { FormatIntNumber } from '@lib/FormatNumbers'
