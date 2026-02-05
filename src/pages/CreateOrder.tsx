@@ -1,22 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useState } from 'react'
 import { GetServerSideProps } from 'next'
-import axios from 'axios'
-import * as Yup from 'yup'
-import { Field, FieldArray, Formik, Form } from 'formik'
 import Head from 'next/head'
-import { Button, Card, CardBody, Col, Container, FormFeedback, FormGroup, Input, Label, Row, Spinner } from 'reactstrap'
-import BreadCrumb from '@components/Common/BreadCrumb'
-import { getSession } from '@auth/client'
-import AppContext from '@context/AppContext'
-import useSWR, { useSWRConfig } from 'swr'
-import { toast } from 'react-toastify'
 import router from 'next/router'
-import { DebounceInput } from 'react-debounce-input'
+import React, { useContext, useEffect, useState } from 'react'
+
+import { getSession } from '@auth/client'
+import BreadCrumb from '@components/Common/BreadCrumb'
 import SimpleSelect, { SelectOptionType } from '@components/Common/SimpleSelect'
 import ErrorInputLabel from '@components/ui/forms/ErrorInputLabel'
+import AppContext from '@context/AppContext'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
+import axios from 'axios'
+import { Field, FieldArray, Form, Formik } from 'formik'
 import { Session } from 'next-auth'
+import { DebounceInput } from 'react-debounce-input'
+import { toast } from 'react-toastify'
+import { Button, Card, CardBody, Col, Container, FormFeedback, FormGroup, Input, Label, Row, Spinner } from 'reactstrap'
+import useSWR, { useSWRConfig } from 'swr'
+import * as Yup from 'yup'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -282,7 +283,9 @@ const CreateOrder = ({ session }: Props) => {
       return
     }
     searchText = searchText.replace(/ /g, '%20')
-    await axios(`https://api.geoapify.com/v1/geocode/autocomplete?text=${searchText}&apiKey=e7137de1f9144ed8a7d24f041bb6e725&limit=3&lang=${state.currentRegion == 'us' ? 'en' : 'es'}`).then((res) => {
+    await axios(
+      `https://api.geoapify.com/v1/geocode/autocomplete?text=${searchText}&apiKey=e7137de1f9144ed8a7d24f041bb6e725&limit=3&lang=${state.currentRegion == 'us' ? 'en' : 'es'}`
+    ).then((res) => {
       setAutoCompleteAddress(res.data.features)
     })
   }
@@ -451,8 +454,8 @@ const CreateOrder = ({ session }: Props) => {
                                                           ? String(address.properties.state_code).toUpperCase()
                                                           : address.properties.county
                                                         : address.properties.state
-                                                        ? String(address.properties.state)
-                                                        : address.properties.county
+                                                          ? String(address.properties.state)
+                                                          : address.properties.county
                                                     values.country = String(address.properties.country_code).toUpperCase()
                                                     values.zipCode = address.properties.postcode
                                                     setAutoCompleteAddress([])

@@ -1,23 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useState } from 'react'
-import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
-import { Col, Container, Row } from 'reactstrap'
+import { useContext, useState } from 'react'
+
 import { getSession } from '@auth/client'
 import BreadCrumb from '@components/Common/BreadCrumb'
-import Widget from '@components/Widget'
-import axios from 'axios'
-import useSWR from 'swr'
 import DashboardHeader from '@components/DashboardHeader'
-import moment from 'moment'
+import InvoicesList from '@components/InvoicesList'
 import MostInvenotryList from '@components/MostInvenotryList'
 // import { Summary } from '@typings'
 import TotalChagesList from '@components/TotalChagesList'
-import InvoicesList from '@components/InvoicesList'
-import { toast } from 'react-toastify'
+import Widget from '@components/Widget'
 import SalesOverTime from '@components/dashboard/SalesOverTime'
 import SalesOverTimeLoading from '@components/dashboard/SalesOverTime-loading'
+import AppContext from '@context/AppContext'
+import axios from 'axios'
+import moment from 'moment'
+import { toast } from 'react-toastify'
+import { Col, Container, Row } from 'reactstrap'
+import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -57,9 +58,15 @@ const Home = ({ session, sessionToken }: Props) => {
       .catch(() => {
         toast.error('Error fetching Summary data')
       })
-  const { data: summary } = useSWR(state.user.businessId ? `/api/getBusinessSummary?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${dashboardStartDate}&endDate=${dashboardEndDate}` : null, fetcherSummary, {
-    revalidateOnFocus: false,
-  })
+  const { data: summary } = useSWR(
+    state.user.businessId
+      ? `/api/getBusinessSummary?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${dashboardStartDate}&endDate=${dashboardEndDate}`
+      : null,
+    fetcherSummary,
+    {
+      revalidateOnFocus: false,
+    }
+  )
 
   const fetcherSalesOverTime = (endPoint: string) =>
     axios(endPoint, {

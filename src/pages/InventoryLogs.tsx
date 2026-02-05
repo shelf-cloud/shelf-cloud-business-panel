@@ -1,17 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useContext } from 'react'
-import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
+import Head from 'next/head'
+import React, { useContext, useEffect, useState } from 'react'
+
+import { getSession } from '@auth/client'
+import BreadCrumb from '@components/Common/BreadCrumb'
+import InventoryBinsModal from '@components/InventoryBinsModal'
+import AppContext from '@context/AppContext'
 import { LogRowType } from '@typings'
 import axios from 'axios'
-import Head from 'next/head'
-import { Button, Card, CardBody, CardHeader, Col, Container, Input, Row } from 'reactstrap'
-import BreadCrumb from '@components/Common/BreadCrumb'
-import { getSession } from '@auth/client'
-import useSWR from 'swr'
-import InventoryBinsModal from '@components/InventoryBinsModal'
 import DataTable from 'react-data-table-component'
 import { toast } from 'react-toastify'
+import { Button, Card, CardBody, CardHeader, Col, Container, Input, Row } from 'reactstrap'
+import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -60,7 +61,9 @@ const InventoryLogs = ({ session }: Props) => {
   const filterByText = (e: any) => {
     if (e.target.value !== '') {
       setSerachValue(e.target.value)
-      const filterTable = logData.filter((log: any) => log.sku.toLowerCase().includes(e.target.value.toLowerCase()) || log.details.toLowerCase().includes(e.target.value.toLowerCase()))
+      const filterTable = logData.filter(
+        (log: any) => log.sku.toLowerCase().includes(e.target.value.toLowerCase()) || log.details.toLowerCase().includes(e.target.value.toLowerCase())
+      )
       setLogData(filterTable)
     } else {
       setSerachValue(e.target.value)

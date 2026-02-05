@@ -1,18 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
-import AppContext from '@context/AppContext'
-import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
-import { InboundPlan, PlacementOption } from '@typesTs/amazon/fulfillments/fulfillment'
-import moment from 'moment'
+import Image from 'next/image'
 import React, { useContext, useState } from 'react'
-import { Button, Card, CardBody, CardHeader, Col, Input, Label, Row } from 'reactstrap'
-import Image from "next/image"
+
 import boxIcon from '@assets/fulfillments/outbound_box.png'
 import palletIcon from '@assets/fulfillments/outbound_pallet.png'
+import AppContext from '@context/AppContext'
 import useEffectAfterMount from '@hooks/useEffectAfterMount'
-import { validateIfPlacementOptionHasSPD } from './shippingLTL/helperFunctions'
-import { NoImageAdress } from '@lib/assetsConstants'
+import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
 import { CleanStatus } from '@lib/SkuFormatting'
+import { NoImageAdress } from '@lib/assetsConstants'
+import { InboundPlan, PlacementOption } from '@typesTs/amazon/fulfillments/fulfillment'
+import moment from 'moment'
+import { Button, Card, CardBody, CardHeader, Col, Input, Label, Row } from 'reactstrap'
+
+import { validateIfPlacementOptionHasSPD } from './shippingLTL/helperFunctions'
 
 type Props = {
   inboundPlan: InboundPlan
@@ -102,12 +104,16 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                 <Card
                   key={placementOption.placementOptionId}
                   className={
-                    'mw-100 px-2 py-0 my-0 shadow-sm ' + ((placementOptionSelected.placementOptionId === placementOption.placementOptionId || inboundPlan.placementOptionId === placementOption.placementOptionId) && 'border border-3 border-success')
+                    'mw-100 px-2 py-0 my-0 shadow-sm ' +
+                    ((placementOptionSelected.placementOptionId === placementOption.placementOptionId || inboundPlan.placementOptionId === placementOption.placementOptionId) &&
+                      'border border-3 border-success')
                   }>
                   <CardBody>
                     <p className='mt-2 mb-1 p-0 fw-semibold fs-4'>
                       <span>{placementOption.shipmentIds.length}</span> {placementOption.shipmentIds.length > 1 ? 'Shipments' : 'Shipment'}
-                      {placementOptionSelected.placementOptionId === placementOption.placementOptionId && <i className={'ri-checkbox-circle-fill align-middle ms-2 fs-4 text-success'} />}
+                      {placementOptionSelected.placementOptionId === placementOption.placementOptionId && (
+                        <i className={'ri-checkbox-circle-fill align-middle ms-2 fs-4 text-success'} />
+                      )}
                     </p>
                     <p className='m-0 p-0 fs-7'>
                       Status: <span className='fw-bold text-info'>{placementOption.status}</span>
@@ -138,7 +144,15 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
       <div>
         <p className='fs-5 fw-bold'>Shipping mode</p>
         <div className='form-check form-switch form-switch-sm d-flex justify-content-start align-items-center gap-2 p-0 my-3'>
-          <Input className='form-check-input ms-0' type='checkbox' role='switch' id='showShippingMode' name='showShippingMode' disabled={true} checked={finalShippingCharges.sameShippingMode} />
+          <Input
+            className='form-check-input ms-0'
+            type='checkbox'
+            role='switch'
+            id='showShippingMode'
+            name='showShippingMode'
+            disabled={true}
+            checked={finalShippingCharges.sameShippingMode}
+          />
           <Label className='check-form-label m-0 fw-normal' for='showShippingMode'>
             Shipping mode will be same for all shipments
           </Label>
@@ -160,13 +174,20 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                     alt='box_icon'
                     className='object-contain'
                     style={{
-                      maxWidth: "100%",
-                      height: "auto"
-                    }} />
+                      maxWidth: '100%',
+                      height: 'auto',
+                    }}
+                  />
                 </div>
                 <div>
                   <p className='m-0 p-0 fs-7 fw-semibold'>Small Parcel Delivery (SPD)</p>
-                  <p className='m-0 p-0 fs-7'>{inboundPlan.totalSpdFees > 0 ? `Starting at ${FormatCurrency(state.currentRegion, inboundPlan.totalSpdFees)}` : <span className='text-danger fw-semibold'>Not Available</span>}</p>
+                  <p className='m-0 p-0 fs-7'>
+                    {inboundPlan.totalSpdFees > 0 ? (
+                      `Starting at ${FormatCurrency(state.currentRegion, inboundPlan.totalSpdFees)}`
+                    ) : (
+                      <span className='text-danger fw-semibold'>Not Available</span>
+                    )}
+                  </p>
                 </div>
               </CardBody>
             </Card>
@@ -185,14 +206,19 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                     alt='box_icon'
                     className='object-contain'
                     style={{
-                      maxWidth: "100%",
-                      height: "auto"
-                    }} />
+                      maxWidth: '100%',
+                      height: 'auto',
+                    }}
+                  />
                 </div>
                 <div>
                   <p className='m-0 p-0 fs-7 fw-semibold'>Less than and Full TruckLoad (LTL/FTL)</p>
                   <p className='m-0 p-0 fs-7'>
-                    {inboundPlan.totalLtlFees > 0 ? <>Estimates Starting at {FormatCurrency(state.currentRegion, inboundPlan.totalLtlFees)}</> : <span className='m-0 p-0 text-danger'>One or more shipments do not have LTL/FTL options.</span>}
+                    {inboundPlan.totalLtlFees > 0 ? (
+                      <>Estimates Starting at {FormatCurrency(state.currentRegion, inboundPlan.totalLtlFees)}</>
+                    ) : (
+                      <span className='m-0 p-0 text-danger'>One or more shipments do not have LTL/FTL options.</span>
+                    )}
                   </p>
                 </div>
               </CardBody>
@@ -212,16 +238,18 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                   <p className='m-0 p-0 fs-7'>Pickup cost is NOT Included with the rate</p>
                   <p className='m-0 p-0 fs-5 fw-bold'>
                     {(Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]).reduce((total, shipment) => {
-                      const subtotal = shipment.filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL').sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]?.quote?.cost
-                        .amount!
+                      const subtotal = shipment
+                        .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                        .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]?.quote?.cost.amount!
                       return total + subtotal
                     }, 0) || 0) > 0 ? (
                       FormatCurrency(
                         state.currentRegion,
                         inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]
                           ? Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId]).reduce((total, shipment) => {
-                              const subtotal = shipment.filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL').sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]
-                                ?.quote?.cost.amount!
+                              const subtotal = shipment
+                                .filter((option) => option.shippingSolution === 'AMAZON_PARTNERED_CARRIER' && option.shippingMode === 'GROUND_SMALL_PARCEL')
+                                .sort((a, b) => a.quote?.cost.amount! - b.quote?.cost.amount!)[0]?.quote?.cost.amount!
                               return total + subtotal
                             }, 0) || 0
                           : 0
@@ -241,7 +269,10 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
         <p className='fs-5 fw-bold'>Number of shipments: {placementOptionSelected.shipmentIds.length}</p>
         <div className='d-flex flex-row flex-wrap justify-content-start align-items-start gap-3'>
           {placementOptionSelected.shipmentIds.map((shipmentId, shipmentIndex) => (
-            <Card key={shipmentId} className='m-0 shadow-sm' style={{ width: 'fit-content', maxWidth: '430px', zIndex: placementOptionSelected.shipmentIds.length - shipmentIndex }}>
+            <Card
+              key={shipmentId}
+              className='m-0 shadow-sm'
+              style={{ width: 'fit-content', maxWidth: '430px', zIndex: placementOptionSelected.shipmentIds.length - shipmentIndex }}>
               <CardHeader>
                 <p className='m-0 p-0 fw-bold fs-6'>Shipment #{shipmentIndex + 1}</p>
                 <p className='m-0 p-0 fs-7 text-muted fw-light'>ID: {shipmentId}</p>
@@ -250,13 +281,17 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                 <p className='m-0 fs-7'>
                   <span className='text-primary'>Ship From: </span>
                   {inboundPlan.confirmedShipments[shipmentId]?.shipment.source.address.name}, {inboundPlan.confirmedShipments[shipmentId]?.shipment.source.address.addressLine1},{' '}
-                  {inboundPlan.confirmedShipments[shipmentId]?.shipment.source.address.city}, {inboundPlan.confirmedShipments[shipmentId]?.shipment.source.address.stateOrProvinceCode},{' '}
-                  {inboundPlan.confirmedShipments[shipmentId]?.shipment.source.address.postalCode}, {inboundPlan.confirmedShipments[shipmentId]?.shipment.source.address.countryCode}
+                  {inboundPlan.confirmedShipments[shipmentId]?.shipment.source.address.city},{' '}
+                  {inboundPlan.confirmedShipments[shipmentId]?.shipment.source.address.stateOrProvinceCode},{' '}
+                  {inboundPlan.confirmedShipments[shipmentId]?.shipment.source.address.postalCode},{' '}
+                  {inboundPlan.confirmedShipments[shipmentId]?.shipment.source.address.countryCode}
                 </p>
                 <p className='m-0 fs-7'>
                   <span className='text-primary'>Ship to: </span>
-                  {inboundPlan.confirmedShipments[shipmentId]?.shipment.destination.warehouseId} - {inboundPlan.confirmedShipments[shipmentId]?.shipment.destination.address.addressLine1},{' '}
-                  {inboundPlan.confirmedShipments[shipmentId]?.shipment.destination.address.city}, {inboundPlan.confirmedShipments[shipmentId]?.shipment.destination.address.stateOrProvinceCode},{' '}
+                  {inboundPlan.confirmedShipments[shipmentId]?.shipment.destination.warehouseId} -{' '}
+                  {inboundPlan.confirmedShipments[shipmentId]?.shipment.destination.address.addressLine1},{' '}
+                  {inboundPlan.confirmedShipments[shipmentId]?.shipment.destination.address.city},{' '}
+                  {inboundPlan.confirmedShipments[shipmentId]?.shipment.destination.address.stateOrProvinceCode},{' '}
                   {inboundPlan.confirmedShipments[shipmentId]?.shipment.destination.address.countryCode}
                 </p>
                 <p className='my-2 p-0 fw-semibold fs-7'>Shipment Contents</p>
@@ -313,7 +348,9 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                           </div>
                         )
                     )}
-                    {inboundPlan.confirmedShipments[shipmentId].shipmentItems.items.length > 3 && <p>+{inboundPlan.confirmedShipments[shipmentId].shipmentItems.items.length - 3}</p>}
+                    {inboundPlan.confirmedShipments[shipmentId].shipmentItems.items.length > 3 && (
+                      <p>+{inboundPlan.confirmedShipments[shipmentId].shipmentItems.items.length - 3}</p>
+                    )}
                   </div>
                 </div>
                 <div>
@@ -339,7 +376,10 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                           <tbody className='fs-7'>
                             <tr>
                               <td>
-                                Pallets: <span className='fw-semibold'>{FormatIntNumber(state.currentRegion, inboundPlan.confirmedShipments[shipmentId].shipmentPallets?.pallets!.length ?? 1)}</span>
+                                Pallets:{' '}
+                                <span className='fw-semibold'>
+                                  {FormatIntNumber(state.currentRegion, inboundPlan.confirmedShipments[shipmentId].shipmentPallets?.pallets!.length ?? 1)}
+                                </span>
                               </td>
                               <td>
                                 Total Weight:{' '}
@@ -359,7 +399,10 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                                 <span className='fw-semibold'>
                                   {FormatIntPercentage(
                                     state.currentRegion,
-                                    inboundPlan.confirmedShipments[shipmentId].shipmentPallets?.pallets!.reduce((total, box) => total + box.dimensions.width * box.dimensions.height * box.dimensions.length * box.quantity, 0)
+                                    inboundPlan.confirmedShipments[shipmentId].shipmentPallets?.pallets!.reduce(
+                                      (total, box) => total + box.dimensions.width * box.dimensions.height * box.dimensions.length * box.quantity,
+                                      0
+                                    )
                                   )}{' '}
                                   inch3
                                 </span>
@@ -371,15 +414,25 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                           </tbody>
                         </table>
                         <p className='m-0 mt-3 p-0 fs-7 text-start'>
-                          Carrier: <span className='fw-semibold'>{inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].carrier.alphaCode}</span>
+                          Carrier:{' '}
+                          <span className='fw-semibold'>{inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].carrier.alphaCode}</span>
                         </p>
                         <p className='m-0 p-0 fs-7 text-start'>
-                          Pick up: <span className='fw-semibold'>{moment(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].carrierAppointment?.startTime).format('LL')}</span>
+                          Pick up:{' '}
+                          <span className='fw-semibold'>
+                            {moment(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].carrierAppointment?.startTime).format('LL')}
+                          </span>
                         </p>
                         <p className='m-0 p-0 fs-7 text-end'>
                           {inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].quote?.cost.amount! > 0 ? (
                             <>
-                              Estimated Carrier Charges: <span className='fw-semibold'>{FormatCurrency(state.currentRegion, inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].quote?.cost.amount!)}</span>
+                              Estimated Carrier Charges:{' '}
+                              <span className='fw-semibold'>
+                                {FormatCurrency(
+                                  state.currentRegion,
+                                  inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].quote?.cost.amount!
+                                )}
+                              </span>
                             </>
                           ) : (
                             'Estimate Not Available'
@@ -417,9 +470,10 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                               alt='box_icon'
                               className='object-contain'
                               style={{
-                                maxWidth: "100%",
-                                height: "auto"
-                              }} />
+                                maxWidth: '100%',
+                                height: 'auto',
+                              }}
+                            />
                           </div>
                           <div>
                             <p className='m-0 p-0 fs-7 fw-semibold'>Small Parcel Delivery (SPD)</p>
@@ -457,15 +511,22 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                                 alt='box_icon'
                                 className='object-contain'
                                 style={{
-                                  maxWidth: "100%",
-                                  height: "auto"
-                                }} />
+                                  maxWidth: '100%',
+                                  height: 'auto',
+                                }}
+                              />
                             </div>
                             <div>
                               <p className='m-0 p-0 fs-7 fw-semibold'>Less than and Full TruckLoad (LTL/FTL)</p>
                               <p className='m-0 p-0 fs-7'>
                                 {inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].shippingMode.includes('LTL') ? (
-                                  <>Estimates Starting at {FormatCurrency(state.currentRegion, inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].quote?.cost.amount ?? 0)}</>
+                                  <>
+                                    Estimates Starting at{' '}
+                                    {FormatCurrency(
+                                      state.currentRegion,
+                                      inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].quote?.cost.amount ?? 0
+                                    )}
+                                  </>
                                 ) : (
                                   <span className='m-0 p-0 text-danger'>Not Available</span>
                                 )}
@@ -481,14 +542,23 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                           <div className='my-2 d-flex flex-column justify-content-start align-items-start gap-2'>
                             {/* CARRIER AMAZON PARTNERED */}
                             <div className='d-flex flex-row justify-content-start align-items-center gap-3'>
-                              <Input className='my-0' type='radio' id={`shippingCarrierAmazon-${shipmentId}`} name={`shippingCarrierAmazon-${shipmentId}`} checked={finalShippingCharges.sameShippingCarrier === 'amazon'} />
+                              <Input
+                                className='my-0'
+                                type='radio'
+                                id={`shippingCarrierAmazon-${shipmentId}`}
+                                name={`shippingCarrierAmazon-${shipmentId}`}
+                                checked={finalShippingCharges.sameShippingCarrier === 'amazon'}
+                              />
                               <div className={'' + (finalShippingCharges.sameShippingCarrier !== 'amazon' && 'text-muted')}>
                                 <p className='m-0 p-0 fs-7'>{`${inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].carrier.alphaCode} (${CleanStatus(
                                   inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].shippingSolution
                                 )})`}</p>
                                 <p className='m-0 p-0 fs-7 fw-bold'>
                                   {inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].shippingMode.includes('PARCEL') ? (
-                                    FormatCurrency(state.currentRegion, inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].quote?.cost.amount!)
+                                    FormatCurrency(
+                                      state.currentRegion,
+                                      inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].quote?.cost.amount!
+                                    )
                                   ) : (
                                     <span className='text-danger fw-semibold'>Not Available</span>
                                   )}
@@ -505,7 +575,10 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                               <tbody className='fs-7'>
                                 <tr>
                                   <td>
-                                    Pallets: <span className='fw-semibold'>{FormatIntNumber(state.currentRegion, inboundPlan.confirmedShipments[shipmentId].shipmentPallets?.pallets!.length ?? 1)}</span>
+                                    Pallets:{' '}
+                                    <span className='fw-semibold'>
+                                      {FormatIntNumber(state.currentRegion, inboundPlan.confirmedShipments[shipmentId].shipmentPallets?.pallets!.length ?? 1)}
+                                    </span>
                                   </td>
                                   <td>
                                     Total Weight:{' '}
@@ -525,7 +598,10 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                                     <span className='fw-semibold'>
                                       {FormatIntPercentage(
                                         state.currentRegion,
-                                        inboundPlan.confirmedShipments[shipmentId].shipmentPallets?.pallets!.reduce((total, box) => total + box.dimensions.width * box.dimensions.height * box.dimensions.length * box.quantity, 0)
+                                        inboundPlan.confirmedShipments[shipmentId].shipmentPallets?.pallets!.reduce(
+                                          (total, box) => total + box.dimensions.width * box.dimensions.height * box.dimensions.length * box.quantity,
+                                          0
+                                        )
                                       )}{' '}
                                       inch3
                                     </span>
@@ -547,14 +623,21 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                               Pick up:{' '}
                               <span className='fw-semibold'>
                                 {moment(
-                                  inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].carrierAppointment?.startTime || inboundPlan.confirmedShipments[shipmentId]?.shipment.dates.readyToShipWindow.start
+                                  inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].carrierAppointment?.startTime ||
+                                    inboundPlan.confirmedShipments[shipmentId]?.shipment.dates.readyToShipWindow.start
                                 ).format('LL')}
                               </span>
                             </p>
                             <p className='m-0 p-0 fs-7 text-end'>
                               {inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].quote?.cost.amount! > 0 ? (
                                 <>
-                                  Estimated Carrier Charges: <span className='fw-semibold'>{FormatCurrency(state.currentRegion, inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].quote?.cost.amount!)}</span>
+                                  Estimated Carrier Charges:{' '}
+                                  <span className='fw-semibold'>
+                                    {FormatCurrency(
+                                      state.currentRegion,
+                                      inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].quote?.cost.amount!
+                                    )}
+                                  </span>
                                 </>
                               ) : (
                                 'Estimate Not Available'
@@ -568,7 +651,10 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
 
                   {!finalShippingCharges.sameShippingMode && finalShippingCharges.shipments[shipmentId].shippingMode === 'SPD' && (
                     <div className='mt-3'>
-                      <p className='m-0 my-3 p-0 text-muted fs-7'>* The Amazon Partnered Carrier program offers discounted shipping rates, the convenience of buying and printing shipping labels when you create shipments, and automated tracking.</p>
+                      <p className='m-0 my-3 p-0 text-muted fs-7'>
+                        * The Amazon Partnered Carrier program offers discounted shipping rates, the convenience of buying and printing shipping labels when you create shipments,
+                        and automated tracking.
+                      </p>
                     </div>
                   )}
                 </div>
@@ -617,7 +703,7 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
         </Col>
       </Row>
     </div>
-  );
+  )
 }
 
 export default ShippingCompleted

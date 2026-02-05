@@ -1,12 +1,13 @@
+import React, { useContext, useState } from 'react'
+
 import AppContext from '@context/AppContext'
 import { Identifier } from '@typings'
-import React, { useContext, useState } from 'react'
-import * as Yup from 'yup'
-import { Field, FieldArray, Formik, Form } from 'formik'
-import { toast } from 'react-toastify'
-import { useSWRConfig } from 'swr'
 import axios from 'axios'
+import { Field, FieldArray, Form, Formik } from 'formik'
+import { toast } from 'react-toastify'
 import { Button, Col, FormFeedback, FormGroup, Input } from 'reactstrap'
+import { useSWRConfig } from 'swr'
+import * as Yup from 'yup'
 
 type Props = {
   inventoryId?: number
@@ -108,9 +109,7 @@ const Identifiers_Kit_Details = ({ inventoryId, sku, upc, asin, fnsku, identifie
                 ))}
             </tbody>
           </table>
-          <div className='text-end'>
-            {/* <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i> */}
-          </div>
+          <div className='text-end'>{/* <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i> */}</div>
         </div>
       ) : (
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => handleSubmit(values)}>

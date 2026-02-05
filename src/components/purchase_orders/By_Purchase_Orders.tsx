@@ -1,12 +1,14 @@
-import AppContext from '@context/AppContext'
-import axios from 'axios'
+import { useRouter } from 'next/router'
 import React, { useContext, useMemo, useState } from 'react'
+
+import SearchInput from '@components/ui/SearchInput'
+import AppContext from '@context/AppContext'
+import { PurchaseOrder, PurchaseOrderItem } from '@typesTs/purchaseOrders'
+import axios from 'axios'
 import { Col, Row } from 'reactstrap'
 import useSWR from 'swr'
+
 import Table_By_Orders from './Table_By_Orders'
-import { PurchaseOrder, PurchaseOrderItem } from '@typesTs/purchaseOrders'
-import { useRouter } from 'next/router'
-import SearchInput from '@components/ui/SearchInput'
 
 type Props = {}
 
@@ -18,9 +20,13 @@ const By_Purchase_Orders = ({}: Props) => {
   const { status }: any = router.query
   const [searchValue, setSearchValue] = useState<string>('')
 
-  const { data }: { data?: PurchaseOrder[] } = useSWR(state.user.businessId ? `/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}` : null, fetcher, {
-    revalidateOnFocus: false,
-  })
+  const { data }: { data?: PurchaseOrder[] } = useSWR(
+    state.user.businessId ? `/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}` : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  )
 
   const filterDataTable = useMemo(() => {
     if (searchValue === '') {

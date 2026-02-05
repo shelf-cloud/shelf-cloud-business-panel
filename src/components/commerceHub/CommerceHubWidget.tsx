@@ -1,11 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useContext, useMemo } from 'react'
+
 import AppContext from '@context/AppContext'
-import { Card, CardBody, Col } from 'reactstrap'
-import CountUp from 'react-countup'
-import { DashboardResponse } from '@typesTs/commercehub/dashboard'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
+import { DashboardResponse } from '@typesTs/commercehub/dashboard'
+import CountUp from 'react-countup'
+import { Card, CardBody, Col } from 'reactstrap'
 
 type Props = {
   summary: DashboardResponse

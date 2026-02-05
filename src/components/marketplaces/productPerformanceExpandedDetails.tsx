@@ -1,11 +1,13 @@
+import React, { useContext, useState } from 'react'
+
 import AppContext from '@context/AppContext'
+import { AMAZON_MARKETPLACES_ID } from '@lib/AmzConstants'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { Marketplace, ProductPerformance } from '@typesTs/marketplaces/productPerformance'
-import React, { useContext, useState } from 'react'
 import { ExpanderComponentProps } from 'react-data-table-component'
 import { Card, CardBody, CardHeader, Col, Collapse, Row } from 'reactstrap'
+
 import ProductPerformanceTimeline from './productPerformanceTimeline'
-import { AMAZON_MARKETPLACES_ID } from '@lib/AmzConstants'
 
 type Props = {
   data: ProductPerformance

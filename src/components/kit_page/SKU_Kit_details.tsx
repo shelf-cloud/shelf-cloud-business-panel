@@ -1,12 +1,13 @@
+import React, { useContext, useState } from 'react'
+
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
-import React, { useContext, useState } from 'react'
-import { UncontrolledTooltip, Button, Col, Form, FormFeedback, FormGroup, Input, Row } from 'reactstrap'
-import * as Yup from 'yup'
+import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Row, UncontrolledTooltip } from 'reactstrap'
 import { useSWRConfig } from 'swr'
-import axios from 'axios'
+import * as Yup from 'yup'
 
 type Props = {
   inventoryId?: number
@@ -115,9 +116,7 @@ const SKU_Kit_details = ({ inventoryId, sku, upc, defaultPrice, msrp, map, floor
                 <td>{FormatCurrency(state.currentRegion, floor)}</td>
                 <td>{FormatCurrency(state.currentRegion, ceilling)}</td>
                 <td>
-                  <div className='text-end'>
-                    {/* <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 text-primary m-0 p-0' style={{ cursor: 'pointer' }}></i> */}
-                  </div>
+                  <div className='text-end'>{/* <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 text-primary m-0 p-0' style={{ cursor: 'pointer' }}></i> */}</div>
                 </td>
               </tr>
             </tbody>

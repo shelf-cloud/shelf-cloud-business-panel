@@ -1,16 +1,17 @@
+import React from 'react'
+
 import { TeamMember } from '@typesTs/settings/team_members'
 import moment from 'moment'
-import React from 'react'
 import DataTable from 'react-data-table-component'
 import { Button } from 'reactstrap'
 
 type Props = {
-    teamMembers: TeamMember[]
-    handleManageUser: (user: TeamMember) => void
-    pending: boolean
+  teamMembers: TeamMember[]
+  handleManageUser: (user: TeamMember) => void
+  pending: boolean
 }
 
-const TeamMembersTable = ({teamMembers, handleManageUser, pending}: Props) => {
+const TeamMembersTable = ({ teamMembers, handleManageUser, pending }: Props) => {
   const columns: any = [
     {
       name: <span className='fw-bold fs-6'>Name</span>,
@@ -46,7 +47,7 @@ const TeamMembersTable = ({teamMembers, handleManageUser, pending}: Props) => {
     },
     {
       name: <span className='fw-bold fs-6'>Last Activity</span>,
-      selector: (row: TeamMember) => row.lastActive ? moment(row.lastActive).format('YYYY-MM-DD, h:mm:ss a') : 'No Activity',
+      selector: (row: TeamMember) => (row.lastActive ? moment(row.lastActive).format('YYYY-MM-DD, h:mm:ss a') : 'No Activity'),
       sortable: true,
       center: true,
       style: {

@@ -1,17 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useContext, useMemo } from 'react'
-import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
-import axios from 'axios'
 import Head from 'next/head'
-import { Button, Card, CardBody, CardHeader, Col, Container, Input, Row } from 'reactstrap'
-import BreadCrumb from '@components/Common/BreadCrumb'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
+
 import { getSession } from '@auth/client'
-import useSWR from 'swr'
-import InvoicesTable from '@components/InvoicesTable'
-import { InvoiceList } from '@typings'
-import { toast } from 'react-toastify'
+import BreadCrumb from '@components/Common/BreadCrumb'
 import InvoicesChart from '@components/InvoicesChart'
+import InvoicesTable from '@components/InvoicesTable'
+import AppContext from '@context/AppContext'
+import { InvoiceList } from '@typings'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import { Button, Card, CardBody, CardHeader, Col, Container, Input, Row } from 'reactstrap'
+import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -86,7 +87,14 @@ const Invoices = ({ session }: Props) => {
                         </div>
                         <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
                           <div className='position-relative'>
-                            <Input type='text' className='form-control' placeholder='Search...' id='search-options' value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
+                            <Input
+                              type='text'
+                              className='form-control'
+                              placeholder='Search...'
+                              id='search-options'
+                              value={searchValue}
+                              onChange={(e) => setSearchValue(e.target.value)}
+                            />
                             <span className='mdi mdi-magnify search-widget-icon'></span>
                             <span className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none' id='search-close-options'></span>
                           </div>

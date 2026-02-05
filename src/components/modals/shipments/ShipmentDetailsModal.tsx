@@ -1,3 +1,5 @@
+import React, { useContext } from 'react'
+
 import FBAShipmentType from '@components/shipments/shipmentLog/FBAShipmentType'
 import ReceivingType from '@components/shipments/shipmentLog/ReceivingType'
 import ReturnType from '@components/shipments/shipmentLog/ReturnType'
@@ -9,7 +11,6 @@ import AppContext from '@context/AppContext'
 import { Shipment, ShipmentDetialsResponse } from '@typesTs/shipments/shipments'
 import axios from 'axios'
 import moment from 'moment'
-import React, { useContext } from 'react'
 import { Modal, ModalBody, ModalHeader, Spinner } from 'reactstrap'
 import useSWR from 'swr'
 

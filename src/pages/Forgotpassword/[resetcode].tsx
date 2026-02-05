@@ -1,12 +1,14 @@
-import React, { FormEventHandler, useState } from 'react'
-import Image from "next/image"
-import ShelfCloudLogo from '@images/shelfcloud-blue-h.png'
-import { Button, Label, Spinner } from 'reactstrap'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { useFormik } from 'formik'
-import * as Yup from 'yup'
+import React, { FormEventHandler, useState } from 'react'
+
+import ShelfCloudLogo from '@images/shelfcloud-blue-h.png'
 import axios from 'axios'
+import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
+import { Button, Label, Spinner } from 'reactstrap'
+import * as Yup from 'yup'
+
 type Props = {}
 
 const ResetPasswordPage = ({}: Props) => {
@@ -63,10 +65,11 @@ const ResetPasswordPage = ({}: Props) => {
             src={ShelfCloudLogo}
             alt='ShelfCloud Logo'
             style={{
-              maxWidth: "100%",
-              height: "auto",
-              objectFit: "contain"
-            }} />
+              maxWidth: '100%',
+              height: 'auto',
+              objectFit: 'contain',
+            }}
+          />
         </div>
       </div>
       <div className='w-100 h-100 d-flex flex-column justify-content-center align-items-center'>
@@ -128,7 +131,7 @@ const ResetPasswordPage = ({}: Props) => {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export default ResetPasswordPage

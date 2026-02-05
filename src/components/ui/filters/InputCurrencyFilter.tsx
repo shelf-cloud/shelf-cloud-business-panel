@@ -1,5 +1,6 @@
-import AppContext from '@context/AppContext'
 import React, { useContext } from 'react'
+
+import AppContext from '@context/AppContext'
 import { Input, InputGroup, InputGroupText } from 'reactstrap'
 
 type Props = {
@@ -22,7 +23,20 @@ const InputCurrencyFilter = ({ inputName, value, isInvalid, handleChange, handle
   return (
     <InputGroup size='sm'>
       <InputGroupText className='fs-5 py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
-      <Input type='number' className='form-control fs-6 m-0' bsSize='sm' style={{ padding: '0.2rem 0.9rem' }} placeholder='Min' id={inputName} name={inputName} min={0} onChange={handleChange} onBlur={handleBlur} value={value} invalid={isInvalid} />
+      <Input
+        type='number'
+        className='form-control fs-6 m-0'
+        bsSize='sm'
+        style={{ padding: '0.2rem 0.9rem' }}
+        placeholder='Min'
+        id={inputName}
+        name={inputName}
+        min={0}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        value={value}
+        invalid={isInvalid}
+      />
     </InputGroup>
   )
 }

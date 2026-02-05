@@ -1,7 +1,9 @@
-import React, { useContext } from 'react'
-import AppContext from '@context/AppContext'
 import dynamic from 'next/dynamic'
-import { FormatIntNumber, FormatCurrency } from '@lib/FormatNumbers'
+import React, { useContext } from 'react'
+
+import AppContext from '@context/AppContext'
+import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
+
 const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 function ProductsQtyTimeline({ dates, dailyQty, dailySellerValue, dailyLandedValue }) {

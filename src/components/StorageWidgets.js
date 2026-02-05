@@ -1,9 +1,10 @@
-import React, { useContext } from 'react'
-import AppContext from '@context/AppContext'
-import { Card, CardBody, Col, Row } from 'reactstrap'
-import CountUp from 'react-countup'
 import Link from 'next/link'
+import React, { useContext } from 'react'
+
+import AppContext from '@context/AppContext'
 import moment from 'moment'
+import CountUp from 'react-countup'
+import { Card, CardBody, Col, Row } from 'reactstrap'
 
 const StorageWidgets = ({ previousCharge, previousChargeDate, currentBalance, binsUSed }) => {
   const { state } = useContext(AppContext)

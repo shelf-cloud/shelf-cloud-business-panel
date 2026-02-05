@@ -1,7 +1,8 @@
 import React from 'react'
-import { Col } from 'reactstrap'
+
 import { CleanStatus } from '@lib/SkuFormatting'
 import { FBAShipment } from '@typesTs/amazon/fbaShipments.interface'
+import { Col } from 'reactstrap'
 
 type Props = {
   shipmentDetails: FBAShipment

@@ -1,7 +1,8 @@
+import React, { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
 import { FormatIntPercentage } from '@lib/FormatNumbers'
 import { FBAShipment } from '@typesTs/amazon/fbaShipments.interface'
-import React, { useContext } from 'react'
 import { Col } from 'reactstrap'
 
 type Props = {

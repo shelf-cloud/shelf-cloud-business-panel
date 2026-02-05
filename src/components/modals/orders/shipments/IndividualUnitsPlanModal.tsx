@@ -1,8 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
+import { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { IndividualUnitsPlan } from '@typings'
-import { useContext } from 'react'
 import { Button, Col, Modal, ModalBody, ModalHeader } from 'reactstrap'
 
 type Props = {
@@ -160,7 +161,9 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
                           )
                       )
                     ) : (
-                      <td key={`empty-${box.boxId}`} className='text-center text-muted'>-</td>
+                      <td key={`empty-${box.boxId}`} className='text-center text-muted'>
+                        -
+                      </td>
                     )
                   )}
                 </tr>

@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useContext } from 'react'
-import { Button, Modal, ModalBody, ModalHeader, Spinner } from 'reactstrap'
+import React, { useContext, useState } from 'react'
+
 import AppContext from '@context/AppContext'
+import { Shipment } from '@typesTs/shipments/shipments'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Shipment } from '@typesTs/shipments/shipments'
+import { Button, Modal, ModalBody, ModalHeader, Spinner } from 'reactstrap'
 
 type Props = {
   data: Shipment

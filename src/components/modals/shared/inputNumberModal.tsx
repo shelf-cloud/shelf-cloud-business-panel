@@ -1,10 +1,11 @@
 import React, { memo, useContext, useState } from 'react'
-import { Button, Col, Form, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from 'reactstrap'
-import * as Yup from 'yup'
+
+import AppContext from '@context/AppContext'
+import { FormatCurrency } from '@lib/FormatNumbers'
 import { useFormik } from 'formik'
 import { DebounceInput } from 'react-debounce-input'
-import { FormatCurrency } from '@lib/FormatNumbers'
-import AppContext from '@context/AppContext'
+import { Button, Col, Form, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from 'reactstrap'
+import * as Yup from 'yup'
 
 type InputModalProps = {
   isOpen: boolean

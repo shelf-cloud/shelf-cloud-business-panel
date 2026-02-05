@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useContext, useState } from 'react'
+
 import AppContext from '@context/AppContext'
 import { FormatIntPercentage } from '@lib/FormatNumbers'
 import { InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
@@ -89,7 +90,10 @@ const TrackingDetails = ({ inboundPlan, handlePrintShipmentBillOfLading, watingR
                   <p>
                     Amazon Reference ID: <span className='fw-semibold'>{selectedShipment.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber ?? 'Pending'}</span>
                   </p>
-                  <Button disabled={watingRepsonse.printingLabel || !selectedShipment.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber} color='primary' onClick={() => handlePrintShipmentBillOfLading(selectedShipment.shipment.shipmentConfirmationId)}>
+                  <Button
+                    disabled={watingRepsonse.printingLabel || !selectedShipment.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber}
+                    color='primary'
+                    onClick={() => handlePrintShipmentBillOfLading(selectedShipment.shipment.shipmentConfirmationId)}>
                     {watingRepsonse.printingLabel ? (
                       <span>
                         <Spinner color='light' size={'sm'} className='me-1' /> Downloading BOL...

@@ -1,9 +1,11 @@
-import React, { useContext } from 'react'
-import AppContext from '@context/AppContext'
 import dynamic from 'next/dynamic'
+import React, { useContext } from 'react'
+
+import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { ApexOptions } from 'apexcharts'
 import moment from 'moment'
+
 const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 const TIMELINE = [

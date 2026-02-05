@@ -1,13 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react'
-import useSWR from 'swr'
-import axios from 'axios'
+
 import AppContext from '@context/AppContext'
-import { toast } from 'react-toastify'
-import DataTable from 'react-data-table-component'
-import { Button, Form, FormFeedback, FormGroup, Input, Label } from 'reactstrap'
-import * as Yup from 'yup'
+import axios from 'axios'
 import { useFormik } from 'formik'
+import DataTable from 'react-data-table-component'
+import { toast } from 'react-toastify'
+import { Button, Form, FormFeedback, FormGroup, Input, Label } from 'reactstrap'
+import useSWR from 'swr'
 import { useSWRConfig } from 'swr'
+import * as Yup from 'yup'
+
 type Props = {}
 
 type Brand = {
@@ -156,7 +158,7 @@ const Brands = ({}: Props) => {
         return (
           <div className='d-flex flex-row flex-nowrap justify-content-center align-items-center gap-4'>
             <i className='ri-pencil-fill fs-3 text-secondary' style={{ cursor: 'pointer' }} onClick={() => handleShowEditFields(row)} />
-            <i className='align-middle text-danger fs-3 las la-trash-alt' style={{ cursor: 'pointer' }} onClick={() => handleDeleteBrand(row.brandId)}/>
+            <i className='align-middle text-danger fs-3 las la-trash-alt' style={{ cursor: 'pointer' }} onClick={() => handleDeleteBrand(row.brandId)} />
           </div>
         )
       },

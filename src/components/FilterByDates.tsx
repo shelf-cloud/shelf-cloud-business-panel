@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import moment from 'moment'
 import React, { useEffect, useRef, useState } from 'react'
+
+import moment from 'moment'
 import Flatpickr from 'react-flatpickr'
 
 type Props = {

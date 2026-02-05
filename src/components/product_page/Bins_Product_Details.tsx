@@ -1,7 +1,8 @@
+import React, { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { ProductBins } from '@typings'
-import React, { useContext } from 'react'
 
 type Props = {
   bins: ProductBins[]

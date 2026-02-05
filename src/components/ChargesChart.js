@@ -1,7 +1,9 @@
-import React, { useContext } from 'react'
-import AppContext from '@context/AppContext'
 import dynamic from 'next/dynamic'
+import React, { useContext } from 'react'
+
+import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
+
 const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 function ChargesChart({ totalCharges }) {
@@ -15,11 +17,7 @@ function ChargesChart({ totalCharges }) {
         Number(totalCharges?.totallabeling),
         Number(totalCharges?.totalmanHour),
         Number(totalCharges?.totalextraCharge),
-        Number(
-          (totalCharges?.totalreceivingService || 0) +
-            (totalCharges?.totalreceivingPallets || 0) +
-            (totalCharges?.totalreceivingWrapService || 0)
-        ),
+        Number((totalCharges?.totalreceivingService || 0) + (totalCharges?.totalreceivingPallets || 0) + (totalCharges?.totalreceivingWrapService || 0)),
       ],
     },
   ]
@@ -81,14 +79,7 @@ function ChargesChart({ totalCharges }) {
       },
     },
     xaxis: {
-      categories: [
-        'Pick and Pack',
-        'Shipping',
-        'Labeling',
-        'Man Hours',
-        'Extra Charges',
-        'Receiving',
-      ],
+      categories: ['Pick and Pack', 'Shipping', 'Labeling', 'Man Hours', 'Extra Charges', 'Receiving'],
       max: Number(Math.max(...series[0].data) + 10),
       labels: {
         show: false,
@@ -109,7 +100,7 @@ function ChargesChart({ totalCharges }) {
     },
   }
 
-  return <ApexCharts options={options} series={series} type="bar" />
+  return <ApexCharts options={options} series={series} type='bar' />
 }
 
 export default ChargesChart

@@ -1,9 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
-import AppContext from '@context/AppContext'
-import { NoImageAdress } from '@lib/assetsConstants'
-import { FormatIntPercentage } from '@lib/FormatNumbers'
-import { ConfirmedShipments, InboundPlan } from '@typesTs/amazon/fulfillments/fulfillment'
 import React, { useContext, useState } from 'react'
+
+import AppContext from '@context/AppContext'
+import { FormatIntPercentage } from '@lib/FormatNumbers'
+import { NoImageAdress } from '@lib/assetsConstants'
+import { ConfirmedShipments, InboundPlan } from '@typesTs/amazon/fulfillments/fulfillment'
 import { Button, Card, CardBody, CardFooter, CardHeader, Spinner } from 'reactstrap'
 
 type Props = {

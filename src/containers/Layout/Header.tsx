@@ -1,8 +1,9 @@
 import React from 'react'
 
+import NotificationsPanel from '@components/Common/NotificationsPanel'
+
 //import Components
 import ProfileDropdown from '../../components/Common/ProfileDropdown'
-import NotificationsPanel from '@components/Common/NotificationsPanel'
 
 type Props = {
   headerClass: string
@@ -18,9 +19,7 @@ const Header = ({ headerClass }: Props) => {
 
     //For collapse horizontal menu
     if (document.documentElement.getAttribute('data-layout') === 'horizontal') {
-      document.body.classList.contains('menu')
-        ? document.body.classList.remove('menu')
-        : document.body.classList.add('menu')
+      document.body.classList.contains('menu') ? document.body.classList.remove('menu') : document.body.classList.add('menu')
     }
 
     //For collapse vertical menu
@@ -43,24 +42,17 @@ const Header = ({ headerClass }: Props) => {
 
     //Two column menu
     if (document.documentElement.getAttribute('data-layout') === 'twocolumn') {
-      document.body.classList.contains('twocolumn-panel')
-        ? document.body.classList.remove('twocolumn-panel')
-        : document.body.classList.add('twocolumn-panel')
+      document.body.classList.contains('twocolumn-panel') ? document.body.classList.remove('twocolumn-panel') : document.body.classList.add('twocolumn-panel')
     }
   }
   return (
     <React.Fragment>
-      <header id="page-topbar" className={headerClass}>
-        <div className="layout-width">
-          <div className="navbar-header">
-            <div className="d-flex">
-              <button
-                onClick={toogleMenuBtn}
-                type="button"
-                className="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger"
-                id="topnav-hamburger-icon"
-              >
-                <span className="hamburger-icon">
+      <header id='page-topbar' className={headerClass}>
+        <div className='layout-width'>
+          <div className='navbar-header'>
+            <div className='d-flex'>
+              <button onClick={toogleMenuBtn} type='button' className='btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger' id='topnav-hamburger-icon'>
+                <span className='hamburger-icon'>
                   <span></span>
                   <span></span>
                   <span></span>
@@ -68,7 +60,7 @@ const Header = ({ headerClass }: Props) => {
               </button>
             </div>
 
-            <div className="d-flex justify-content-end align-items-center gap-3 gap-md-4"> 
+            <div className='d-flex justify-content-end align-items-center gap-3 gap-md-4'>
               <NotificationsPanel />
               <ProfileDropdown />
             </div>

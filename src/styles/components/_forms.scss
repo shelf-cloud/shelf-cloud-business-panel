@@ -2,11 +2,11 @@
 // forms.scss
 //
 
-[type="tel"],
-[type="url"],
-[type="email"],
-[type="number"] {
-    &::placeholder {
-        text-align: left /*rtl: right*/;
-    }
+[type='tel'],
+[type='url'],
+[type='email'],
+[type='number'] {
+  &::placeholder {
+    text-align: left /*rtl: right*/;
+  }
 }

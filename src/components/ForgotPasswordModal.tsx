@@ -1,5 +1,6 @@
-import axios from 'axios'
 import React, { FormEventHandler, useRef, useState } from 'react'
+
+import axios from 'axios'
 import { toast } from 'react-toastify'
 import { Button, Label, Modal, ModalBody, ModalHeader, Spinner } from 'reactstrap'
 
@@ -47,15 +48,7 @@ const ForgotPasswordModal = ({ OpenForgotPassword, setOpenForgotPassword }: Prop
             <Label htmlFor='email' className='form-label'>
               Email Address
             </Label>
-            <input
-              type='email'
-              className='form-control'
-              id='email'
-              name='email'
-              placeholder='Enter your email'
-              required
-              ref={emailRef}
-            />
+            <input type='email' className='form-control' id='email' name='email' placeholder='Enter your email' required ref={emailRef} />
           </div>
           {showMessage && <p className='fs-6 text-danger'>{message}</p>}
           <div className='mt-4 d-flex flex-row justify-content-end align-items-start gap-3'>
@@ -65,7 +58,7 @@ const ForgotPasswordModal = ({ OpenForgotPassword, setOpenForgotPassword }: Prop
             <Button color='primary' disabled={loading} className='btn btn-primary fs-5' type='submit'>
               {loading ? (
                 <>
-                  <Spinner size="sm" color='light' role='status' aria-hidden='true' animation="border"/>
+                  <Spinner size='sm' color='light' role='status' aria-hidden='true' animation='border' />
                   <span className='ms-2'>Loading...</span>
                 </>
               ) : (

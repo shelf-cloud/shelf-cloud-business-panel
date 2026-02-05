@@ -1,5 +1,6 @@
-import { ManageUser } from '@typesTs/settings/team_members'
 import React from 'react'
+
+import { ManageUser } from '@typesTs/settings/team_members'
 import { Input } from 'reactstrap'
 
 type Props = {

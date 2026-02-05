@@ -1,19 +1,20 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { GetServerSideProps } from 'next'
-import { getSession } from '@auth/client'
-import AppContext from '@context/AppContext'
 import Head from 'next/head'
-import { Button, Card, CardBody, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, Spinner, UncontrolledButtonDropdown } from 'reactstrap'
-import BreadCrumb from '@components/Common/BreadCrumb'
-import axios from 'axios'
-import useSWR, { useSWRConfig } from 'swr'
-import { Listing, ListingsResponse } from '@typesTs/amazon/listings'
-import SellerListingTable from '@components/amazon/listings/SellerListingTable'
 import { useRouter } from 'next/router'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
+
+import { getSession } from '@auth/client'
+import BreadCrumb from '@components/Common/BreadCrumb'
+import SellerListingTable from '@components/amazon/listings/SellerListingTable'
+import FilterListings from '@components/ui/FilterListings'
+import AppContext from '@context/AppContext'
+import { Listing, ListingsResponse } from '@typesTs/amazon/listings'
+import axios from 'axios'
+import { CSVLink } from 'react-csv'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { CSVLink } from 'react-csv'
-import FilterListings from '@components/ui/FilterListings'
+import { Button, Card, CardBody, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, Spinner, UncontrolledButtonDropdown } from 'reactstrap'
+import useSWR, { useSWRConfig } from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -49,9 +50,13 @@ const Listings = ({ session }: Props) => {
   const [selectedRows, setSelectedRows] = useState<Listing[]>([])
   const [toggledClearRows, setToggleClearRows] = useState(false)
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
-  const { data }: { data?: ListingsResponse } = useSWR(state.user.businessId ? `/api/amazon/getAmazonSellerListings?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher, {
-    revalidateOnFocus: false,
-  })
+  const { data }: { data?: ListingsResponse } = useSWR(
+    state.user.businessId ? `/api/amazon/getAmazonSellerListings?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  )
 
   useEffect(() => {
     if (state.user) {
@@ -130,7 +135,9 @@ const Listings = ({ session }: Props) => {
   }
 
   const csvData = useMemo(() => {
-    const fileData: any[] = [['Title', 'SKU', 'AISN', 'FNSKU', 'Brand', 'Condition', 'Fulfillment Channel', 'Fulfillable', 'Reserved', 'Unsellable', 'inbound', 'ShelfCloud Mapped']]
+    const fileData: any[] = [
+      ['Title', 'SKU', 'AISN', 'FNSKU', 'Brand', 'Condition', 'Fulfillment Channel', 'Fulfillable', 'Reserved', 'Unsellable', 'inbound', 'ShelfCloud Mapped'],
+    ]
 
     filterDataTable?.forEach((item: Listing) =>
       fileData.push([

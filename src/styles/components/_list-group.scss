@@ -2,39 +2,37 @@
 // _list-group.scss
 //
 
+@each $color, $value in $theme-colors {
+  .list-group-fill-#{$color} {
+    background-color: $value;
+    border-color: $value;
+    color: $white;
 
-@each $color,
-$value in $theme-colors {
-    .list-group-fill-#{$color} {
-        background-color: $value;
+    .list-group-item {
+      &.active {
+        background-color: $value !important;
         border-color: $value;
-        color: $white;
-
-        .list-group-item {
-            &.active {
-                background-color: $value !important;
-                border-color: $value;
-            }
-        }
+      }
     }
+  }
 }
 
 .list-group-fill-light {
-    color: $dark !important;
+  color: $dark !important;
 }
 
 .list-group-item {
-    margin-bottom: 0px;
+  margin-bottom: 0px;
+  .list-text {
+    color: $text-muted;
+  }
+  &.active {
+    box-shadow: $element-shadow;
+    .list-title {
+      color: $white;
+    }
     .list-text {
-        color: $text-muted;
+      color: rgba($white, 0.5);
     }
-    &.active {
-        box-shadow: $element-shadow;
-        .list-title {
-            color: $white;
-        }
-        .list-text {
-            color: rgba($white, 0.50);
-        }
-    }
+  }
 }

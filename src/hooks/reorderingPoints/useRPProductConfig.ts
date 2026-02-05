@@ -1,5 +1,6 @@
-import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import { useState } from 'react'
+
+import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 
 export type RPProductConfig = {
   isOpen: boolean

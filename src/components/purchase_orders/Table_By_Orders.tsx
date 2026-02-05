@@ -1,12 +1,14 @@
 import React, { useContext, useState } from 'react'
+
+import Confirm_Delete_Po from '@components/modals/purchaseOrders/Confirm_Delete_Po'
+import AppContext from '@context/AppContext'
+import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
+import { sortNumbers } from '@lib/helperFunctions'
 import { PurchaseOrder, PurchaseOrderItem } from '@typesTs/purchaseOrders'
 import DataTable from 'react-data-table-component'
-import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
-import AppContext from '@context/AppContext'
-import Expanded_By_Orders from './Expanded_By_Orders'
 import { Badge, UncontrolledTooltip } from 'reactstrap'
-import Confirm_Delete_Po from '@components/modals/purchaseOrders/Confirm_Delete_Po'
-import { sortNumbers } from '@lib/helperFunctions'
+
+import Expanded_By_Orders from './Expanded_By_Orders'
 
 type Props = {
   filterDataTable: PurchaseOrder[]
@@ -79,13 +81,18 @@ const Table_By_Orders = ({ filterDataTable, pending }: Props) => {
           case row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) === 0:
             return 'Pending'
             break
-          case row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) < row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0):
+          case row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) <
+            row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0):
             return 'Partial Received'
             break
-          case row.isOpen && row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) === row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0):
+          case row.isOpen &&
+            row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) ===
+              row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0):
             return 'Total Received'
             break
-          case !row.isOpen && row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) === row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0):
+          case !row.isOpen &&
+            row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) ===
+              row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0):
             return 'Completed'
             break
           default:
@@ -108,12 +115,18 @@ const Table_By_Orders = ({ filterDataTable, pending }: Props) => {
           classNames: ['text-info'],
         },
         {
-          when: (row: PurchaseOrder) => row.isOpen && row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) === row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0),
+          when: (row: PurchaseOrder) =>
+            row.isOpen &&
+            row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) ===
+              row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0),
 
           classNames: ['text-danger'],
         },
         {
-          when: (row: PurchaseOrder) => !row.isOpen && row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) === row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0),
+          when: (row: PurchaseOrder) =>
+            !row.isOpen &&
+            row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) ===
+              row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0),
 
           classNames: ['text-success'],
         },
@@ -157,7 +170,10 @@ const Table_By_Orders = ({ filterDataTable, pending }: Props) => {
     {
       name: <span className='fw-bolder fs-6'></span>,
       selector: (row: PurchaseOrder) =>
-        row.isOpen && row.poPayments.length <= 0 && row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.inboundQty, 0) <= 0 && row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) <= 0 ? (
+        row.isOpen &&
+        row.poPayments.length <= 0 &&
+        row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.inboundQty, 0) <= 0 &&
+        row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) <= 0 ? (
           <>
             <i
               className='fs-4 text-danger las la-trash-alt'
@@ -190,7 +206,16 @@ const Table_By_Orders = ({ filterDataTable, pending }: Props) => {
 
   return (
     <>
-      <DataTable columns={columns} data={filterDataTable} progressPending={pending} striped={true} expandableRows expandableRowsComponent={Expanded_By_Orders} defaultSortFieldId={3} defaultSortAsc={false} />
+      <DataTable
+        columns={columns}
+        data={filterDataTable}
+        progressPending={pending}
+        striped={true}
+        expandableRows
+        expandableRowsComponent={Expanded_By_Orders}
+        defaultSortFieldId={3}
+        defaultSortAsc={false}
+      />
       {showDeleteModal.show && <Confirm_Delete_Po showDeleteModal={showDeleteModal} setshowDeleteModal={setshowDeleteModal} loading={loading} setLoading={setLoading} />}
     </>
   )

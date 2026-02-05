@@ -1,5 +1,6 @@
-import { TransportationOption } from '@typesTs/amazon/fulfillments/fulfillment'
 import React, { useEffect, useRef, useState } from 'react'
+
+import { TransportationOption } from '@typesTs/amazon/fulfillments/fulfillment'
 
 type Props = {
   id: string

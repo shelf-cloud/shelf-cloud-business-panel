@@ -1,13 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // import { GetServerSideProps } from 'next'
 // import { getSession } from '@auth/client'
-import React, { useContext, useEffect, useState } from 'react'
-import axios from 'axios'
-import AppContext from '@context/AppContext'
-import { Card, CardBody, CardHeader } from 'reactstrap'
 import Head from 'next/head'
-import { ProductsDetails } from '@typesTs/products/products'
+import React, { useContext, useEffect, useState } from 'react'
+
 import ProductsBulkEditTable from '@components/products/ProductsBulkEditTable'
+import AppContext from '@context/AppContext'
+import { ProductsDetails } from '@typesTs/products/products'
+import axios from 'axios'
+import { Card, CardBody, CardHeader } from 'reactstrap'
 
 type Props = {}
 

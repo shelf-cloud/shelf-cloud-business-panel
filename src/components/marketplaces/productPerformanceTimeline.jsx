@@ -1,17 +1,18 @@
-import React, { useContext, useState, useEffect } from 'react'
-import AppContext from '@context/AppContext'
 import dynamic from 'next/dynamic'
+import React, { useContext, useEffect, useState } from 'react'
+
+import AppContext from '@context/AppContext'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import moment from 'moment'
 import { Button } from 'reactstrap'
+
 const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 const ProductPerformanceTimeline = ({ productTimeLine }) => {
   const { state } = useContext(AppContext)
   const [grouping, setGrouping] = useState('daily')
 
-  useEffect(() => {
-  }, [grouping])
+  useEffect(() => {}, [grouping])
 
   const dailytimeLineSorted = Object.keys(productTimeLine)
     .sort()
@@ -96,8 +97,8 @@ const ProductPerformanceTimeline = ({ productTimeLine }) => {
     },
     legend: {
       onItemClick: {
-        toggleDataSeries: true
-      }
+        toggleDataSeries: true,
+      },
     },
     // plotOptions: {
     //   bar: {

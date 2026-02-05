@@ -1,126 +1,126 @@
 export interface ProductsPerformanceResponse {
-    [key: string]: ProductPerformance
+  [key: string]: ProductPerformance
 }
 
 export interface ProductPerformance {
-    inventoryId: number;
-    businessId: number;
-    business: string;
-    image: string;
-    title: string;
-    barcode: string;
-    sku: string;
-    asin: string;
-    fnSku: string;
-    grossRevenue: number;
-    expenses: number;
-    unitsSold: number;
-    basePrice: number;
-    totalTax: number;
-    taxCollected: number;
-    taxWithheld: number;
-    totalShipping: number;
-    totalMarketplacesFees: number;
-    reimbursements: number;
-    refunds: number;
-    refundsQty: number;
-    returns: number;
-    promos: number;
-    productCost: number;
-    productCostOfRefunds: number;
-    shippingCost: number;
-    storageCost: number;
-    fbaStorageCost: number;
-    sponsoredProducts: number;
-    displayAds: number;
-    keywordAds: number;
-    brand: string;
-    category: string;
-    supplier: string;
-    marketplaces: { [key: string]: Marketplace };
-    sellerCost: number;
-    inboundShippingCost: number;
-    otherCosts: number;
-    shippingToFBA: number;
-    shippingToFbaCost: number;
-    shippingToFbaCostOfRefunds: number;
-    shelfCloudCost: number
-    listings: Listing[];
-    datesArray: { [key: string]: ProductDatesArray };
+  inventoryId: number
+  businessId: number
+  business: string
+  image: string
+  title: string
+  barcode: string
+  sku: string
+  asin: string
+  fnSku: string
+  grossRevenue: number
+  expenses: number
+  unitsSold: number
+  basePrice: number
+  totalTax: number
+  taxCollected: number
+  taxWithheld: number
+  totalShipping: number
+  totalMarketplacesFees: number
+  reimbursements: number
+  refunds: number
+  refundsQty: number
+  returns: number
+  promos: number
+  productCost: number
+  productCostOfRefunds: number
+  shippingCost: number
+  storageCost: number
+  fbaStorageCost: number
+  sponsoredProducts: number
+  displayAds: number
+  keywordAds: number
+  brand: string
+  category: string
+  supplier: string
+  marketplaces: { [key: string]: Marketplace }
+  sellerCost: number
+  inboundShippingCost: number
+  otherCosts: number
+  shippingToFBA: number
+  shippingToFbaCost: number
+  shippingToFbaCostOfRefunds: number
+  shelfCloudCost: number
+  listings: Listing[]
+  datesArray: { [key: string]: ProductDatesArray }
 }
 
 export interface ProductDatesArray {
-    grossRevenue: number
-    expenses: number
-    unitsSold: number
+  grossRevenue: number
+  expenses: number
+  unitsSold: number
 }
 
 export interface Listing {
-    store: string;
-    channel: string;
-    storeSku: string;
+  store: string
+  channel: string
+  storeSku: string
 }
 
 export interface Marketplace {
-    marketplace: string;
-    name: string;
-    storeId: string,
-    totalUnitsSold: number;
-    comissionFee: number;
-    fixedFee: number;
-    fees: Fees;
+  marketplace: string
+  name: string
+  storeId: string
+  totalUnitsSold: number
+  comissionFee: number
+  fixedFee: number
+  fees: Fees
 }
 
 export interface Fees {
-    totalComission: number;
-    totalFixedFee: number;
-    totalShipping: number;
-    FBAPerOrderFulfillmentFee?: number
-    FBAPerUnitFulfillmentFee?: number
-    FBAWeightBasedFee?: number
-    Commission?: number
-    FixedClosingFee?: number
-    GiftwrapChargeback?: number
-    ShippingChargeback?: number
-    SalesTaxCollectionFee?: number
-    VariableClosingFee?: number
+  totalComission: number
+  totalFixedFee: number
+  totalShipping: number
+  FBAPerOrderFulfillmentFee?: number
+  FBAPerUnitFulfillmentFee?: number
+  FBAWeightBasedFee?: number
+  Commission?: number
+  FixedClosingFee?: number
+  GiftwrapChargeback?: number
+  ShippingChargeback?: number
+  SalesTaxCollectionFee?: number
+  VariableClosingFee?: number
 }
 
 export interface SummaryProductPerformance {
-    grossRevenue: number;
-    expenses: number;
-    unitsSold: number;
-    basePrice: number;
-    totalTax: number;
-    taxCollected: number;
-    taxWithheld: number;
-    totalShipping: number;
-    totalMarketplacesFees: number;
-    reimbursements: number;
-    refunds: number;
-    refundsQty: number;
-    returns: number;
-    promos: number;
-    productCost: number;
-    productCostOfRefunds: number;
-    shippingCost: number;
-    storageCost: number;
-    fbaStorageCost: number;
-    sponsoredProducts: number;
-    displayAds: number;
-    keywordAds: number;
-    marketplaces: { [key: string]: Marketplace };
-    sellerCost: number;
-    inboundShippingCost: number;
-    otherCosts: number;
-    shippingToFBA: number;
-    shippingToFbaCost: number;
-    shippingToFbaCostOfRefunds: number;
-    shelfCloudCost: number
-    datesArray: { [key: string]: ProductDatesArray };
-    totalExpenses: number;
-    totalCogs: number;
-    totalPPCCosts: number;
+  grossRevenue: number
+  expenses: number
+  unitsSold: number
+  basePrice: number
+  totalTax: number
+  taxCollected: number
+  taxWithheld: number
+  totalShipping: number
+  totalMarketplacesFees: number
+  reimbursements: number
+  refunds: number
+  refundsQty: number
+  returns: number
+  promos: number
+  productCost: number
+  productCostOfRefunds: number
+  shippingCost: number
+  storageCost: number
+  fbaStorageCost: number
+  sponsoredProducts: number
+  displayAds: number
+  keywordAds: number
+  marketplaces: { [key: string]: Marketplace }
+  sellerCost: number
+  inboundShippingCost: number
+  otherCosts: number
+  shippingToFBA: number
+  shippingToFbaCost: number
+  shippingToFbaCostOfRefunds: number
+  shelfCloudCost: number
+  datesArray: { [key: string]: ProductDatesArray }
+  totalExpenses: number
+  totalCogs: number
+  totalPPCCosts: number
 }
 
 // export interface ProductsPerformanceResponse {

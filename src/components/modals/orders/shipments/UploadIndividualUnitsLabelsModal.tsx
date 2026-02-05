@@ -1,14 +1,16 @@
-import AppContext from '@context/AppContext'
 import { useContext, useState } from 'react'
-import { Button, Card, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
-import { ref, uploadBytes } from 'firebase/storage'
-import { storage } from '@firebase'
-import { useSession } from 'next-auth/react'
-import moment from 'moment'
-import { toast } from 'react-toastify'
-import axios from 'axios'
-import { Shipment } from '@typesTs/shipments/shipments'
+
 import UploadFileDropzone from '@components/ui/UploadFileDropzone'
+import AppContext from '@context/AppContext'
+import { storage } from '@firebase'
+import { Shipment } from '@typesTs/shipments/shipments'
+import axios from 'axios'
+import { ref, uploadBytes } from 'firebase/storage'
+import moment from 'moment'
+import { useSession } from 'next-auth/react'
+import { toast } from 'react-toastify'
+import { Button, Card, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+
 type Props = {
   data: Shipment
   mutateShipment?: () => void
@@ -140,7 +142,11 @@ const UploadIndividualUnitsLabelsModal = ({ data, mutateShipment }: Props) => {
                   </div>
                 )}
               </Dropzone> */}
-              <UploadFileDropzone accptedFiles={undefined} handleAcceptedFiles={handleAcceptedFiles} description={`Upload Shipping Labels. Drop Only PDF files here or click to upload.`} />
+              <UploadFileDropzone
+                accptedFiles={undefined}
+                handleAcceptedFiles={handleAcceptedFiles}
+                description={`Upload Shipping Labels. Drop Only PDF files here or click to upload.`}
+              />
               <div className='list-unstyled mb-0' id='file-previews'>
                 {selectedFiles.map((f: any, i) => {
                   return (
@@ -186,7 +192,11 @@ const UploadIndividualUnitsLabelsModal = ({ data, mutateShipment }: Props) => {
                 //     </div>
                 //   )}
                 // </Dropzone>
-                <UploadFileDropzone accptedFiles={undefined} handleAcceptedFiles={handlePalletAcceptedFiles} description={`Upload Pallet Labels. Drop Only PDF files here or click to upload.`} />
+                <UploadFileDropzone
+                  accptedFiles={undefined}
+                  handleAcceptedFiles={handlePalletAcceptedFiles}
+                  description={`Upload Pallet Labels. Drop Only PDF files here or click to upload.`}
+                />
               )}
               <div className='list-unstyled mb-0' id='file-previews'>
                 {palletSelectedFiles.map((f: any, i) => {

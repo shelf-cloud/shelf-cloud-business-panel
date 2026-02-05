@@ -1,14 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useContext, useState } from 'react'
-import { signOut, useSession } from '@auth/client'
 import Image from 'next/image'
-import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import React, { useContext, useState } from 'react'
+
+import flag_of_SC from '@assets/images/avatar-shelfcloud.png'
 import flag_of_europe from '@assets/images/flag_of_europe.png'
 import flag_of_usa from '@assets/images/flag_of_usa.png'
-import flag_of_SC from '@assets/images/avatar-shelfcloud.png'
-import { useRouter } from 'next/router'
+import { signOut, useSession } from '@auth/client'
 import AppContext from '@context/AppContext'
+import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap'
 
 const ProfileDropdown = () => {
   const { data: session } = useSession()
@@ -23,7 +24,11 @@ const ProfileDropdown = () => {
   return (
     <React.Fragment>
       {session?.user?.businessName ? (
-        <Dropdown isOpen={isProfileDropdown} toggle={toggleProfileDropdown} className='d-flex align-items-center rounded-4 shadow' style={{ backgroundColor: 'rgba(239, 243, 246, 1)' }}>
+        <Dropdown
+          isOpen={isProfileDropdown}
+          toggle={toggleProfileDropdown}
+          className='d-flex align-items-center rounded-4 shadow'
+          style={{ backgroundColor: 'rgba(239, 243, 246, 1)' }}>
           <DropdownToggle tag='button' type='button' className='btn'>
             <span className='d-flex align-items-center justify-content-between gap-2'>
               <span className='text-end d-flex flex-column'>

@@ -1,12 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useContext } from 'react'
 import Link from 'next/link'
-import { Card, CardBody, CardHeader, Col } from 'reactstrap'
-import { FormatCurrency } from '@lib/FormatNumbers'
+import React, { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
+import { FormatCurrency } from '@lib/FormatNumbers'
+import { NoImageAdress } from '@lib/assetsConstants'
 import { DashboardResponse } from '@typesTs/commercehub/dashboard'
 import moment from 'moment'
-import { NoImageAdress } from '@lib/assetsConstants'
+import { Card, CardBody, CardHeader, Col } from 'reactstrap'
+
 import { getTotalPaid } from './helperFunctions'
 
 type Props = {
@@ -57,9 +59,7 @@ const CheckNumberTable = ({ summary }: Props) => {
                         </td>
                         <td>
                           {item.checkNumber ? (
-                            <Link
-                              href={`/commercehub/${item.storeName}/${item.checkNumber}`}
-                              className='fs-7 text-primary fw-normal'>
+                            <Link href={`/commercehub/${item.storeName}/${item.checkNumber}`} className='fs-7 text-primary fw-normal'>
                               {item.checkNumber}
                             </Link>
                           ) : (
@@ -70,7 +70,7 @@ const CheckNumberTable = ({ summary }: Props) => {
                         <td>{FormatCurrency(state.currentRegion, totalPaid)}</td>
                         <td className='text-danger'>{FormatCurrency(state.currentRegion, deductions)}</td>
                       </tr>
-                    );
+                    )
                   })}
                 </tbody>
               </table>
@@ -84,7 +84,7 @@ const CheckNumberTable = ({ summary }: Props) => {
         </Card>
       </Col>
     </React.Fragment>
-  );
+  )
 }
 
 export default CheckNumberTable

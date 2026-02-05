@@ -1,8 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
-import DataTable from 'react-data-table-component'
+
 import { ProductsDetails } from '@typesTs/products/products'
+import DataTable from 'react-data-table-component'
 
 type Props = {
   tableData: ProductsDetails[]

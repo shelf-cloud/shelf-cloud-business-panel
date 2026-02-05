@@ -1,7 +1,8 @@
 import { NextApiHandler } from 'next'
-import { getServerSession } from 'next-auth'
+
 import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
+import { getServerSession } from 'next-auth'
 
 const getRPSplits: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)

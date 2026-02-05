@@ -219,9 +219,9 @@
 }
 
 @each $color, $value in $theme-colors {
-  [data-simplebar-track="#{$color}"]{
-    .simplebar-scrollbar:before{
-      background: $value; 
+  [data-simplebar-track='#{$color}'] {
+    .simplebar-scrollbar:before {
+      background: $value;
     }
   }
 }

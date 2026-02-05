@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { Button, Form, Input } from 'reactstrap'
-import * as Yup from 'yup'
-import { useFormik } from 'formik'
-import { useSWRConfig } from 'swr'
-import axios from 'axios'
-import { toast } from 'react-toastify'
+
 import AppContext from '@context/AppContext'
+import axios from 'axios'
+import { useFormik } from 'formik'
+import { toast } from 'react-toastify'
+import { Button, Form, Input } from 'reactstrap'
+import { useSWRConfig } from 'swr'
+import * as Yup from 'yup'
 
 type Props = {
   inventoryId?: number
@@ -90,7 +91,7 @@ const Select_Product_Details = ({ inventoryId, type, addEndpoint, selectionInfo,
       ) : null}
       <div className={'dropdown-menu w-100 pt-3 px-4' + (openDatesMenu ? ' show' : '')}>
         <div className='d-flex flex-column justify-content-start'>
-          <div style={{maxHeight: '25vh', overflowY: 'scroll'}}>
+          <div style={{ maxHeight: '25vh', overflowY: 'scroll' }}>
             {selectionInfo?.map((option) => (
               <p
                 key={option}

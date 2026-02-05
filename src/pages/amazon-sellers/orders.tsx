@@ -1,19 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useMemo, useState } from 'react'
-import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
-import { getSession } from '@auth/client'
 import Head from 'next/head'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
+
+import { getSession } from '@auth/client'
 import BreadCrumb from '@components/Common/BreadCrumb'
-import { Card, CardBody, Col, Container, Row } from 'reactstrap'
-import moment from 'moment'
 import FilterByDates from '@components/FilterByDates'
-import axios from 'axios'
-import { DebounceInput } from 'react-debounce-input'
-import { FBAOrder } from '@typesTs/amazon/orders'
 import SellerFbaOrdersTable from '@components/amazon/orders/sellerFbaOrdersTable'
 import FilterFBAOrders from '@components/ui/FilterFBAOrders'
+import AppContext from '@context/AppContext'
+import { FBAOrder } from '@typesTs/amazon/orders'
+import axios from 'axios'
+import moment from 'moment'
+import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
+import { Card, CardBody, Col, Container, Row } from 'reactstrap'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -56,12 +57,15 @@ const Orders = ({ session, sessionToken }: Props) => {
 
     const getNewDateRange = async () => {
       setLoadingData(true)
-      await axios(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amazon/getSellerOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${startDate}&endDate=${endDate}`, {
-        signal,
-        headers: {
-          Authorization: `Bearer ${sessionToken}`,
-        },
-      })
+      await axios(
+        `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amazon/getSellerOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${startDate}&endDate=${endDate}`,
+        {
+          signal,
+          headers: {
+            Authorization: `Bearer ${sessionToken}`,
+          },
+        }
+      )
         .then((res) => {
           res.data.error ? setOrdersData([]) : setOrdersData(res.data.orders as FBAOrder[])
           setLoadingData(false)
@@ -93,9 +97,14 @@ const Orders = ({ session, sessionToken }: Props) => {
       const newDataTable = ordersData?.filter(
         (item) =>
           ((orderStatus === 'All' ? true : item.orderStatus === orderStatus) &&
-            (item.amazonOrderId.toLowerCase().includes(searchValue.toLowerCase()) || item.fulfillmentChannel.toLowerCase().includes(searchValue.toLowerCase()) || item.salesChannel.toLowerCase().includes(searchValue.toLowerCase()))) ||
+            (item.amazonOrderId.toLowerCase().includes(searchValue.toLowerCase()) ||
+              item.fulfillmentChannel.toLowerCase().includes(searchValue.toLowerCase()) ||
+              item.salesChannel.toLowerCase().includes(searchValue.toLowerCase()))) ||
           item.orderItems.some(
-            (orderItem) => orderItem.sku.toLowerCase().includes(searchValue.toLowerCase()) || orderItem.asin.toLowerCase().includes(searchValue.toLowerCase()) || orderItem?.shelfcloud_sku?.toLowerCase().includes(searchValue.toLowerCase())
+            (orderItem) =>
+              orderItem.sku.toLowerCase().includes(searchValue.toLowerCase()) ||
+              orderItem.asin.toLowerCase().includes(searchValue.toLowerCase()) ||
+              orderItem?.shelfcloud_sku?.toLowerCase().includes(searchValue.toLowerCase())
           )
       )
       return newDataTable
@@ -125,7 +134,13 @@ const Orders = ({ session, sessionToken }: Props) => {
                 <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-1 flex-md-row justify-content-md-end align-items-md-center px-3'>
                   <div className='app-search d-flex flex-row justify-content-between align-items-center p-0'>
                     <div className='d-flex flex-column justify-content-center align-items-end gap-2 flex-md-row justify-content-md-between align-items-md-center w-auto'>
-                      <FilterByDates shipmentsStartDate={startDate} setShipmentsStartDate={setStartDate} setShipmentsEndDate={setEndDate} shipmentsEndDate={endDate} handleChangeDatesFromPicker={handleChangeDatesFromPicker} />
+                      <FilterByDates
+                        shipmentsStartDate={startDate}
+                        setShipmentsStartDate={setStartDate}
+                        setShipmentsEndDate={setEndDate}
+                        shipmentsEndDate={endDate}
+                        handleChangeDatesFromPicker={handleChangeDatesFromPicker}
+                      />
                       <FilterFBAOrders orderStatus={orderStatus} setOrderStatus={setOrderStatus} />
                     </div>
                     <div className='col-sm-12 col-md-3'>

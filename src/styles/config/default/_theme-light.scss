@@ -1,9 +1,8 @@
 // :root CSS variables
 
 :root {
-
   // body
-  --#{$variable-prefix}body-bg : #{$body-bg};
+  --#{$variable-prefix}body-bg: #{$body-bg};
   --#{$variable-prefix}body-color: #{$body-color};
   --#{$variable-prefix}body-color-rgb: #{to-rgb($body-color)};
 
@@ -59,9 +58,9 @@
   --#{$variable-prefix}twocolumn-menu-bg-dark: #{lighten($primary, 2%)};
   --#{$variable-prefix}twocolumn-menu-item-color-dark: var(--#{$variable-prefix}vertical-menu-item-color-dark);
   --#{$variable-prefix}twocolumn-menu-item-active-color-dark: #{$white};
-  --#{$variable-prefix}twocolumn-menu-item-active-bg-dark: #{rgba($white, .15)};
+  --#{$variable-prefix}twocolumn-menu-item-active-bg-dark: #{rgba($white, 0.15)};
 
-  // boxed 
+  // boxed
   --#{$variable-prefix}boxed-body-bg: #{darken($body-bg, 4%)};
 
   // heading-color
@@ -109,9 +108,9 @@
   --#{$variable-prefix}progress-bg: #{$gray-200};
 
   // toast
-  --#{$variable-prefix}toast-background-color: #{rgba($white, .85)};
-  --#{$variable-prefix}toast-border-color: #{rgba($black, .1)};
-  --#{$variable-prefix}toast-header-border-color: #{rgba($black, .05)};
+  --#{$variable-prefix}toast-background-color: #{rgba($white, 0.85)};
+  --#{$variable-prefix}toast-border-color: #{rgba($black, 0.1)};
+  --#{$variable-prefix}toast-header-border-color: #{rgba($black, 0.05)};
 
   //list
   --#{$variable-prefix}list-group-hover-bg: #{$gray-100};

@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
-import { NoImageAdress } from '@lib/assetsConstants'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+
+import { NoImageAdress } from '@lib/assetsConstants'
 import { DebounceInput } from 'react-debounce-input'
 
 type Props = {

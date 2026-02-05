@@ -1,11 +1,12 @@
-import { InboundPlan } from '@typesTs/amazon/fulfillments/fulfillment'
 import React from 'react'
 
+import { InboundPlan } from '@typesTs/amazon/fulfillments/fulfillment'
+
 type Props = {
-    fulfillment: InboundPlan
+  fulfillment: InboundPlan
 }
 
-const ShippingPlacements = ({fulfillment}: Props) => {
+const ShippingPlacements = ({ fulfillment }: Props) => {
   return (
     <div className='w-100'>
       {fulfillment.packingOptions?.map((packingOption) => (

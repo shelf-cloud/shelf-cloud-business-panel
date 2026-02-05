@@ -1,5 +1,6 @@
-import { ChildrenPage } from '@typings'
 import React from 'react'
+
+import { ChildrenPage } from '@typings'
 
 type Props = {
   kitChildren: ChildrenPage[]

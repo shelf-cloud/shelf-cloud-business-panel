@@ -1,9 +1,10 @@
-import React, { useContext } from 'react'
-import AppContext from '@context/AppContext'
-import { Card, CardBody, Col, Row } from 'reactstrap'
-import CountUp from 'react-countup'
-import FeatherIcon from 'feather-icons-react'
 import Link from 'next/link'
+import React, { useContext } from 'react'
+
+import AppContext from '@context/AppContext'
+import FeatherIcon from 'feather-icons-react'
+import CountUp from 'react-countup'
+import { Card, CardBody, Col, Row } from 'reactstrap'
 
 const Widget = ({ summary }) => {
   const { state } = useContext(AppContext)

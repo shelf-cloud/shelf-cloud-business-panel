@@ -41,14 +41,14 @@
   padding-top: 21px;
 
   &::after {
-    background-color: rgba(255, 255, 255, 0.2); 
+    background-color: rgba(255, 255, 255, 0.2);
     top: 0;
     content: '';
     display: block;
     height: 2px;
     left: 50%;
     position: absolute;
-    transform: translate(-50%,0);
+    transform: translate(-50%, 0);
     width: 80%;
   }
   i {
@@ -72,9 +72,7 @@
 }
 
 .page-content {
-  padding: calc(#{$header-height} + #{$grid-gutter-width})
-    calc(#{$grid-gutter-width} / 2) $footer-height
-    calc(#{$grid-gutter-width} / 2);
+  padding: calc(#{$header-height} + #{$grid-gutter-width}) calc(#{$grid-gutter-width} / 2) $footer-height calc(#{$grid-gutter-width} / 2);
 }
 
 .navbar-menu {
@@ -136,7 +134,7 @@
         }
       }
 
-      &[data-bs-toggle=collapse] {
+      &[data-bs-toggle='collapse'] {
         &:after {
           display: block;
           content: '\F0142';
@@ -149,7 +147,7 @@
           color: $vertical-menu-title-color;
         }
 
-        &[aria-expanded=true] {
+        &[aria-expanded='true'] {
           color: $vertical-menu-item-active-color;
 
           .icon-dual {
@@ -183,8 +181,7 @@
       padding-left: 0.55rem;
 
       .nav-link {
-        padding: $vertical-menu-sub-item-padding-y
-          $vertical-menu-sub-item-padding-x !important;
+        padding: $vertical-menu-sub-item-padding-y $vertical-menu-sub-item-padding-x !important;
         color: $vertical-menu-sub-item-color;
         white-space: none;
         position: relative;
@@ -377,7 +374,7 @@
     display: none;
   }
 
-  &[data-sidebar-size=sm-hover] {
+  &[data-sidebar-size='sm-hover'] {
     .main-content {
       margin-left: $vertical-menu-width-sm;
 
@@ -536,8 +533,8 @@
     }
   }
 
-  &[data-sidebar-size=sm-hover],
-  &[data-sidebar-size=sm-hover-active] {
+  &[data-sidebar-size='sm-hover'],
+  &[data-sidebar-size='sm-hover-active'] {
     .navbar-header {
       @media (min-width: 1025px) {
         padding-left: $grid-gutter-width;
@@ -545,7 +542,7 @@
     }
   }
 
-  &[data-sidebar-size=sm-hover-active] {
+  &[data-sidebar-size='sm-hover-active'] {
     .navbar-brand-box {
       text-align: left;
     }
@@ -559,7 +556,7 @@
     }
   }
 
-  &[data-sidebar-size=sm] {
+  &[data-sidebar-size='sm'] {
     .logout_container {
       i {
         font-size: 22px;
@@ -744,7 +741,7 @@
     }
   }
 
-  &[data-sidebar-size=md] {
+  &[data-sidebar-size='md'] {
     @media (min-width: 768px) {
       .main-content {
         margin-left: $vertical-menu-width-md;
@@ -764,8 +761,7 @@
         .nav-link {
           display: block;
           text-align: center;
-          padding: $vertical-menu-sub-item-padding-y
-            $vertical-menu-sub-item-padding-x * 0.35;
+          padding: $vertical-menu-sub-item-padding-y $vertical-menu-sub-item-padding-x * 0.35;
 
           i {
             display: block;
@@ -781,7 +777,7 @@
             display: none !important;
           }
 
-          &[data-bs-toggle=collapse]:after {
+          &[data-bs-toggle='collapse']:after {
             position: relative;
             display: inline-block;
             right: 0;
@@ -789,7 +785,7 @@
           }
 
           &.menu-link {
-            &[data-bs-toggle=collapse]:after {
+            &[data-bs-toggle='collapse']:after {
               display: none;
             }
           }
@@ -838,12 +834,12 @@
           color: $vertical-menu-item-color-active;
         }
 
-        &[data-bs-toggle=collapse] {
+        &[data-bs-toggle='collapse'] {
           &:after {
             color: inherit;
           }
 
-          &[aria-expanded=true] {
+          &[aria-expanded='true'] {
             color: $vertical-menu-item-active-color-dark;
 
             &:after {
@@ -928,7 +924,7 @@
       }
     }
 
-    &[data-sidebar-size=sm] {
+    &[data-sidebar-size='sm'] {
       .navbar-brand-box {
         background: $vertical-menu-bg-dark;
       }
@@ -1060,7 +1056,7 @@
       }
     }
 
-    &[data-sidebar-size=sm] {
+    &[data-sidebar-size='sm'] {
       @media (min-width: 768px) {
         #layout-wrapper,
         .main-content {
@@ -1116,12 +1112,12 @@
 [dir='rtl'] {
   .navbar-menu {
     .navbar-nav {
-      .nav-link[data-bs-toggle=collapse] {
+      .nav-link[data-bs-toggle='collapse'] {
         &:after {
           transform: rotate(180deg);
         }
 
-        &[aria-expanded=true]:after {
+        &[aria-expanded='true']:after {
           transform: rotate(270deg);
         }
       }
@@ -1157,7 +1153,7 @@
         color: $vertical-menu-item-active-color-dark;
       }
 
-      &[data-bs-toggle=collapse] {
+      &[data-bs-toggle='collapse'] {
         &:after {
           color: inherit;
         }
@@ -1243,7 +1239,7 @@
     }
   }
 
-  &[data-sidebar-size=sm] {
+  &[data-sidebar-size='sm'] {
     .navbar-brand-box {
       background: $vertical-menu-bg-gradient;
     }
@@ -1318,35 +1314,19 @@
 }
 
 .bg-vertical-gradient {
-  background: linear-gradient(
-    to right,
-    var(--#{$variable-prefix}primary),
-    var(--#{$variable-prefix}success)
-  );
+  background: linear-gradient(to right, var(--#{$variable-prefix}primary), var(--#{$variable-prefix}success));
 }
 
 .bg-vertical-gradient-2 {
-  background: linear-gradient(
-    to right,
-    var(--#{$variable-prefix}info),
-    var(--#{$variable-prefix}secondary)
-  );
+  background: linear-gradient(to right, var(--#{$variable-prefix}info), var(--#{$variable-prefix}secondary));
 }
 
 .bg-vertical-gradient-3 {
-  background: linear-gradient(
-    to right,
-    var(--#{$variable-prefix}info),
-    var(--#{$variable-prefix}success)
-  );
+  background: linear-gradient(to right, var(--#{$variable-prefix}info), var(--#{$variable-prefix}success));
 }
 
 .bg-vertical-gradient-4 {
-  background: linear-gradient(
-    to right,
-    var(--#{$variable-prefix}dark),
-    var(--#{$variable-prefix}primary)
-  );
+  background: linear-gradient(to right, var(--#{$variable-prefix}dark), var(--#{$variable-prefix}primary));
 }
 
 //sidebar-images

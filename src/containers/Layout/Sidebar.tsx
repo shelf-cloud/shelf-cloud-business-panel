@@ -1,16 +1,17 @@
-import React, { useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import React, { useEffect } from 'react'
+
 import { signOut } from '@auth/client'
+import { Container } from 'reactstrap'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
+
 //import logo
 import ShelfCloudLogo from '../../assets/images/shelfcloud-white-h.png'
 import ShelfCloudLogoSolo from '../../assets/images/shelfcloud-white-solo.png'
-
 //Import Components
 import VerticalLayout from './VerticalLayout'
-import { Container } from 'reactstrap'
 
 type Props = {
   layoutType: string

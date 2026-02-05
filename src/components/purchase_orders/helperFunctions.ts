@@ -425,7 +425,10 @@ export const buildSplitTemplate = async ({ username, orderNumber, user, supplier
   totalValues[4] = 'TOTAL'
   totalValues[5] = totalQty
   for (let splitIndex = 0; splitIndex < splits!.splitsQty; splitIndex++) {
-    totalValues[6 + splitIndex] = Object.values(orderItems).reduce((acc, product) => acc + (product.useOrderAdjusted ? product.orderSplits[`${splitIndex}`].orderAdjusted : product.orderSplits[`${splitIndex}`].order), 0)
+    totalValues[6 + splitIndex] = Object.values(orderItems).reduce(
+      (acc, product) => acc + (product.useOrderAdjusted ? product.orderSplits[`${splitIndex}`].orderAdjusted : product.orderSplits[`${splitIndex}`].order),
+      0
+    )
   }
 
   const rowTotal = worksheet.addRow(totalValues)
@@ -571,7 +574,10 @@ export const buildTemplatePO = async ({ state, purchaseOrder }: ExcelPurchaseOrd
   worksheet.addRow([state.user.us.name, state.user.us.name])
   worksheet.addRow([state.user.us.contactName, state.user.us.contactName])
   worksheet.addRow([state.user.us.address, state.user.us.address])
-  worksheet.addRow([`${state.user.us.city}, ${state.user.us.state} ${state.user.us.zipcode} ${state.user.us.country}`, `${state.user.us.city}, ${state.user.us.state} ${state.user.us.zipcode} ${state.user.us.country}`])
+  worksheet.addRow([
+    `${state.user.us.city}, ${state.user.us.state} ${state.user.us.zipcode} ${state.user.us.country}`,
+    `${state.user.us.city}, ${state.user.us.state} ${state.user.us.zipcode} ${state.user.us.country}`,
+  ])
   worksheet.addRow([`Phone: ${state.user.us.phone}`, `Phone: ${state.user.us.phone}`])
 
   Array(2)
@@ -775,7 +781,10 @@ export const buildSplitsTemplatePO = async ({ state, purchaseOrder }: ExcelPurch
   worksheet.addRow([state.user.us.name, state.user.us.name])
   worksheet.addRow([state.user.us.contactName, state.user.us.contactName])
   worksheet.addRow([state.user.us.address, state.user.us.address])
-  worksheet.addRow([`${state.user.us.city}, ${state.user.us.state} ${state.user.us.zipcode} ${state.user.us.country}`, `${state.user.us.city}, ${state.user.us.state} ${state.user.us.zipcode} ${state.user.us.country}`])
+  worksheet.addRow([
+    `${state.user.us.city}, ${state.user.us.state} ${state.user.us.zipcode} ${state.user.us.country}`,
+    `${state.user.us.city}, ${state.user.us.state} ${state.user.us.zipcode} ${state.user.us.country}`,
+  ])
   worksheet.addRow([`Phone: ${state.user.us.phone}`, `Phone: ${state.user.us.phone}`])
 
   Array(2)

@@ -1,13 +1,14 @@
-import { AmzDimensions, Dimensions } from '@typesTs/amazon/fulfillments'
 import React, { useContext, useState } from 'react'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
-import * as Yup from 'yup'
-import { useFormik } from 'formik'
-import { toast } from 'react-toastify'
+
 import AppContext from '@context/AppContext'
 import { FormatIntPercentage } from '@lib/FormatNumbers'
+import { AmzDimensions, Dimensions } from '@typesTs/amazon/fulfillments'
 import axios from 'axios'
+import { useFormik } from 'formik'
+import { toast } from 'react-toastify'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
 import { useSWRConfig } from 'swr'
+import * as Yup from 'yup'
 
 type Props = {
   dimensionsModal: {
@@ -47,7 +48,14 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
         .required('Please enter Box Weight'),
       boxLength: Yup.number()
         .min(0.01)
-        .max((dimensionsModal.amazonDimensions.length.value > 25 || dimensionsModal.amazonDimensions.width.value > 25 || dimensionsModal.amazonDimensions.height.value > 25) || dimensionsModal.boxQty === 1 ? 150 : 25)
+        .max(
+          dimensionsModal.amazonDimensions.length.value > 25 ||
+            dimensionsModal.amazonDimensions.width.value > 25 ||
+            dimensionsModal.amazonDimensions.height.value > 25 ||
+            dimensionsModal.boxQty === 1
+            ? 150
+            : 25
+        )
         .required('Please enter Box Length'),
       boxWidth: Yup.number()
         .min(0.01)
@@ -109,7 +117,7 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
     event.preventDefault()
     validation.handleSubmit()
   }
-  
+
   return (
     <Modal
       fade={false}

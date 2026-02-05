@@ -1,9 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react'
-import { Button, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
-import SelectReportType from './SelectReportType'
+
 import moment from 'moment'
+import { Button, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+
 import SelectRangeDates from './SelectRangeDates'
+import SelectReportType from './SelectReportType'
 
 type Props = {
   showMappedCreateReport: {

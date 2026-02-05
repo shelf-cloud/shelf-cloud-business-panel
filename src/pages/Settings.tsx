@@ -1,9 +1,10 @@
+import Head from 'next/head'
+import React, { useState } from 'react'
+
 import BreadCrumb from '@components/Common/BreadCrumb'
 import Brands from '@components/settings/Brands'
 import Categories from '@components/settings/Categories'
 import Suppliers from '@components/settings/Suppliers'
-import Head from 'next/head'
-import React, { useState } from 'react'
 import { Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap'
 
 type Props = {}

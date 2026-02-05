@@ -1,10 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useContext } from 'react'
-import { Col, Modal, ModalBody, ModalHeader, Row } from 'reactstrap'
-import moment from 'moment'
+
 import AppContext from '@context/AppContext'
-import { PoBalance } from '@typesTs/purchaseOrders'
 import { FormatCurrency } from '@lib/FormatNumbers'
+import { PoBalance } from '@typesTs/purchaseOrders'
+import moment from 'moment'
+import { Col, Modal, ModalBody, ModalHeader, Row } from 'reactstrap'
 
 type Props = {
   poBalanceListModal: {
@@ -71,7 +72,9 @@ const PoBalanceListModal = ({ poBalanceListModal, poBalanceList, setpoBalanceLis
                   </tr>
                 ))}
                 <tr className='bg-light'>
-                  <td colSpan={3} className='fw-semibold text-end'>TOTAL</td>
+                  <td colSpan={3} className='fw-semibold text-end'>
+                    TOTAL
+                  </td>
                   <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, totalOrderValue)}</td>
                   <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, totalPaid)}</td>
                   <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, totalArrivedQtyValue)}</td>

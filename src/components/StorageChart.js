@@ -1,7 +1,9 @@
-import React, { useContext } from 'react'
-import AppContext from '@context/AppContext'
 import dynamic from 'next/dynamic'
+import React, { useContext } from 'react'
+
+import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
+
 const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 function StorageChart({ storageInvoices, storageDates }) {
@@ -23,7 +25,7 @@ function StorageChart({ storageInvoices, storageDates }) {
       curve: 'smooth',
     },
     markers: {
-        size: 4,
+      size: 4,
     },
     // plotOptions: {
     //   bar: {
@@ -77,7 +79,7 @@ function StorageChart({ storageInvoices, storageDates }) {
     },
     xaxis: {
       categories: storageDates,
-    //   max: Number(Math.max(...series[0].data) + 10),
+      //   max: Number(Math.max(...series[0].data) + 10),
       labels: {
         show: false,
       },

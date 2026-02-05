@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react'
-import { io, Socket } from 'socket.io-client'
-import { toast } from 'react-toastify'
+
 import { ToastNotificationUserBody } from '@typesTs/notifications'
+import { toast } from 'react-toastify'
+import { Socket, io } from 'socket.io-client'
 
 let socket: Socket | null = null // Global socket instance
 

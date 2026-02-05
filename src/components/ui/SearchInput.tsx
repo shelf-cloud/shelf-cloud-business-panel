@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { DebounceInput } from 'react-debounce-input'
 
 type Props = {
@@ -19,7 +20,9 @@ const BACKGROUND_COLORS = {
 const SearchInput = ({ searchValue, setSearchValue, background, minLength = 1, debounceTimeout = 500, placeholder = 'Search...', widths = 'col-12 col-md-4' }: Props) => {
   return (
     <div className={widths}>
-      <div className='col-12 d-flex flex-row flex-nowrap justify-content-around align-items-center rounded-3 overflow-hidden' style={{ border: '1px solid #E1E3E5', backgroundColor: BACKGROUND_COLORS[background] }}>
+      <div
+        className='col-12 d-flex flex-row flex-nowrap justify-content-around align-items-center rounded-3 overflow-hidden'
+        style={{ border: '1px solid #E1E3E5', backgroundColor: BACKGROUND_COLORS[background] }}>
         <span
           className='mdi mdi-magnify fs-4 m-0 ps-2 pe-0 py-0 text-muted'
           style={{

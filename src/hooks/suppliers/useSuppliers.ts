@@ -1,6 +1,7 @@
+import { useCallback, useContext, useEffect, useRef } from 'react'
+
 import AppContext from '@context/AppContext'
 import axios from 'axios'
-import { useCallback, useContext, useEffect, useRef } from 'react'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
 
@@ -38,10 +39,14 @@ export const useSuppliers = () => {
     }
   }, [])
 
-  const { data: suppliers, isValidating } = useSWR(state.user.businessId ? `/api/purchaseOrders/getSuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher, {
-    revalidateOnFocus: false,
-    revalidateOnMount: true,
-  })
+  const { data: suppliers, isValidating } = useSWR(
+    state.user.businessId ? `/api/purchaseOrders/getSuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnMount: true,
+    }
+  )
 
   return { suppliers: suppliers ?? [], isLoading: isValidating }
 }
