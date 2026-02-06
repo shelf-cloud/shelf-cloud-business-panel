@@ -8,10 +8,12 @@ import { Button } from 'reactstrap'
 type Props = {
   integrationInfo: SPSCommerceBusinessInfo
   items: SPSCommerceItem[]
+  warehouseId: string
+  disabled?: boolean
   color?: string
 }
 
-const GenerateSPSCommerceFileButton = ({ integrationInfo, items, color = 'primary' }: Props) => {
+const GenerateSPSCommerceFileButton = ({ integrationInfo, items, warehouseId, disabled = false, color = 'primary' }: Props) => {
   const generateFile = useCallback(async () => {
     const generatingDocument = toast.loading('Generating document...')
     try {
@@ -35,6 +37,7 @@ const GenerateSPSCommerceFileButton = ({ integrationInfo, items, color = 'primar
       worker.postMessage({
         integrationInfo,
         items,
+        warehouseId,
       })
 
       const currentDate = moment().format('YYYYMMDD')
@@ -68,10 +71,10 @@ const GenerateSPSCommerceFileButton = ({ integrationInfo, items, color = 'primar
       })
       return
     }
-  }, [integrationInfo, items])
+  }, [integrationInfo, items, warehouseId])
 
   return (
-    <Button color={color} size='sm' className='text-nowrap' onClick={generateFile}>
+    <Button color={color} size='sm' className='text-nowrap' onClick={generateFile} disabled={disabled}>
       <i className='mdi mdi-arrow-down-bold align-middle fs-5 me-2' />
       Generate File
     </Button>

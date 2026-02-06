@@ -7,6 +7,7 @@ type Props = {
   selected: SelectSingleValueType
   handleSelect: (option: SelectSingleValueType, actionMeta?: ActionMeta<SelectOptionType>) => void
   options: SelectOptionType[]
+  className?: string
   customStyle?: 'sm' | 'base'
   placeholder?: string
   hasError?: boolean
@@ -22,6 +23,7 @@ const customStyles: CustomStyles = {
   base: {
     control: (provided: any) => ({
       ...provided,
+      border: '1px solid #E1E3E5',
     }),
     valueContainer: (provided: any) => ({
       ...provided,
@@ -73,6 +75,7 @@ const SimpleSelect = ({
   selected,
   handleSelect,
   options,
+  className = '',
   customStyle = 'base',
   placeholder,
   hasError,
@@ -83,6 +86,7 @@ const SimpleSelect = ({
 }: Props) => {
   return (
     <Select
+      className={className}
       value={selected}
       placeholder={placeholder}
       onChange={handleSelect}
