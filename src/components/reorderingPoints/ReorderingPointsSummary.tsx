@@ -1,9 +1,10 @@
+import { memo, useContext } from 'react'
+
 import { Splits } from '@components/modals/reorderingPoints/ReorderingPointsCreatePOModal'
 import AppContext from '@context/AppContext'
 import { SplitNames } from '@hooks/reorderingPoints/useRPSplits'
 import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
-import React, { memo, useContext } from 'react'
 import { Button, Card, CardBody, Col, Row } from 'reactstrap'
 
 type Props = {
@@ -82,7 +83,12 @@ const ReorderingPointsSummary = ({ reorderingPointsOrder, selectedSupplier, erro
               </div>
             )}
             <div className='d-flex flex-column align-items-end justify-content-between gap-0 align-items-md-end '>
-              <Button type='button' disabled={error.length > 0 || Object.keys(reorderingPointsOrder.products).length === 0 || orderHasSplitswithZeroQty} className='fs-7' color='primary' onClick={() => setshowPOModal(true)}>
+              <Button
+                type='button'
+                disabled={error.length > 0 || Object.keys(reorderingPointsOrder.products).length === 0 || orderHasSplitswithZeroQty}
+                className='fs-7'
+                color='primary'
+                onClick={() => setshowPOModal(true)}>
                 Create Order
               </Button>
               {error.length > 0 && <p className='fs-7 text-danger m-0 p-0'>Error in some Products</p>}

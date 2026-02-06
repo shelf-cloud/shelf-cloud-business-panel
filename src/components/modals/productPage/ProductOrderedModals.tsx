@@ -1,11 +1,12 @@
-import React, { useState, useContext } from 'react'
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap'
-import DataTable from 'react-data-table-component'
+import { useContext, useState } from 'react'
+
 import AppContext from '@context/AppContext'
-import axios from 'axios'
-import useSWR from 'swr'
-import { ProductPO } from '@typesTs/products/productPOs'
 import { FormatIntNumber } from '@lib/FormatNumbers'
+import { ProductPO } from '@typesTs/products/productPOs'
+import axios from 'axios'
+import DataTable from 'react-data-table-component'
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap'
+import useSWR from 'swr'
 
 type Props = {
   showOrderedModal: { show: boolean; sku: string }

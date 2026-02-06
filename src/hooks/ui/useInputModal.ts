@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react'
+import { useCallback, useState } from 'react'
+
 import { toast } from 'react-toastify'
 
 export type SimpleInputModal = {

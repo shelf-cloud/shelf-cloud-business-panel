@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { NoImageAdress } from '@lib/assetsConstants'
 import { InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
-import React from 'react'
 import { Button, Col, Spinner } from 'reactstrap'
 
 type Props = {
@@ -39,11 +38,7 @@ const InventoryToSend = ({ inboundPlan, handleNextStep, watingRepsonse }: Props)
                       }}>
                       <img
                         loading='lazy'
-                        src={
-                          inboundPlan.skus_details[item.msku].image
-                            ? inboundPlan.skus_details[item.msku].image
-                            : NoImageAdress
-                        }
+                        src={inboundPlan.skus_details[item.msku].image ? inboundPlan.skus_details[item.msku].image : NoImageAdress}
                         alt='product Image'
                         style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                       />
@@ -58,11 +53,7 @@ const InventoryToSend = ({ inboundPlan, handleNextStep, watingRepsonse }: Props)
                       }}>
                       <img
                         loading='lazy'
-                        src={
-                          inboundPlan.skus_details[item.msku].image
-                            ? inboundPlan.skus_details[item.msku].image
-                            : NoImageAdress
-                        }
+                        src={inboundPlan.skus_details[item.msku].image ? inboundPlan.skus_details[item.msku].image : NoImageAdress}
                         alt='product Image'
                         style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                       />

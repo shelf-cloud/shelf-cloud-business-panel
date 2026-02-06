@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+ 
 /* eslint-disable @next/next/no-img-element */
 import Image from 'next/image'
 import { useContext, useEffect, useMemo, useState } from 'react'

@@ -1,15 +1,17 @@
+import { GetServerSideProps } from 'next'
+import Head from 'next/head'
+import Image from 'next/image'
+import React, { useContext } from 'react'
+
 import BreadCrumb from '@components/Common/BreadCrumb'
 import AppContext from '@context/AppContext'
-import { GetServerSideProps } from 'next'
-import { getSession } from 'next-auth/react'
-import Head from 'next/head'
-import React, { useContext } from 'react'
-import { Container, Row, Col, Card, CardBody, Input, FormGroup, Form, FormFeedback, Label, Button } from 'reactstrap'
-import * as Yup from 'yup'
-import { useFormik } from 'formik'
-import { toast } from 'react-toastify'
 import axios from 'axios'
-import Image from "next/image"
+import { useFormik } from 'formik'
+import { getSession } from 'next-auth/react'
+import { toast } from 'react-toastify'
+import { Button, Card, CardBody, Col, Container, Form, FormFeedback, FormGroup, Input, Label, Row } from 'reactstrap'
+import * as Yup from 'yup'
+
 import PlaneImage from '../assets/images/contactus-plane.png'
 import SquareImage from '../assets/images/contactus-square.png'
 
@@ -83,20 +85,22 @@ function ContactUs() {
                           src={PlaneImage}
                           alt='ShelfCloud Logo'
                           style={{
-                            maxWidth: "100%",
-                            height: "auto",
-                            objectFit: "contain"
-                          }} />
+                            maxWidth: '100%',
+                            height: 'auto',
+                            objectFit: 'contain',
+                          }}
+                        />
                       </div>
                       <div className='position-relative d-flex' style={{ width: '8%', minWidth: '40px' }}>
                         <Image
                           src={SquareImage}
                           alt='ShelfCloud Logo'
                           style={{
-                            maxWidth: "100%",
-                            height: "auto",
-                            objectFit: "contain"
-                          }} />
+                            maxWidth: '100%',
+                            height: 'auto',
+                            objectFit: 'contain',
+                          }}
+                        />
                       </div>
                     </div>
                     <Col md={9} className='mx-auto my-0'>
@@ -119,9 +123,7 @@ function ContactUs() {
                                 value={validation.values.companyName || ''}
                                 invalid={validation.touched.companyName && validation.errors.companyName ? true : false}
                               />
-                              {validation.touched.companyName && validation.errors.companyName ? (
-                                <FormFeedback type='invalid'>{validation.errors.companyName}</FormFeedback>
-                              ) : null}
+                              {validation.touched.companyName && validation.errors.companyName ? <FormFeedback type='invalid'>{validation.errors.companyName}</FormFeedback> : null}
                             </FormGroup>
                             <FormGroup className='mb-4'>
                               <Label htmlFor='firstNameinput' className='form-label'>
@@ -138,9 +140,7 @@ function ContactUs() {
                                 value={validation.values.email || ''}
                                 invalid={validation.touched.email && validation.errors.email ? true : false}
                               />
-                              {validation.touched.email && validation.errors.email ? (
-                                <FormFeedback type='invalid'>{validation.errors.email}</FormFeedback>
-                              ) : null}
+                              {validation.touched.email && validation.errors.email ? <FormFeedback type='invalid'>{validation.errors.email}</FormFeedback> : null}
                             </FormGroup>
                             <FormGroup className='mb-4'>
                               <Label htmlFor='firstNameinput' className='form-label'>
@@ -157,9 +157,7 @@ function ContactUs() {
                                 value={validation.values.subject || ''}
                                 invalid={validation.touched.subject && validation.errors.subject ? true : false}
                               />
-                              {validation.touched.subject && validation.errors.subject ? (
-                                <FormFeedback type='invalid'>{validation.errors.subject}</FormFeedback>
-                              ) : null}
+                              {validation.touched.subject && validation.errors.subject ? <FormFeedback type='invalid'>{validation.errors.subject}</FormFeedback> : null}
                             </FormGroup>
                           </Col>
                           <Col lg={6} className='h-auto d-flex flex-column justify-content-between pb-4'>
@@ -178,9 +176,7 @@ function ContactUs() {
                                 value={validation.values.message || ''}
                                 invalid={validation.touched.message && validation.errors.message ? true : false}
                               />
-                              {validation.touched.message && validation.errors.message ? (
-                                <FormFeedback type='invalid'>{validation.errors.message}</FormFeedback>
-                              ) : null}
+                              {validation.touched.message && validation.errors.message ? <FormFeedback type='invalid'>{validation.errors.message}</FormFeedback> : null}
                             </FormGroup>
                             <Button type='submit' className='form-control btn btn-primary fs-5 w-100'>
                               Submit
@@ -197,7 +193,7 @@ function ContactUs() {
         </div>
       </React.Fragment>
     </div>
-  );
+  )
 }
 
 export default ContactUs

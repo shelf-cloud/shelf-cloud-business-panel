@@ -1,5 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useRef, useState } from 'react'
+ 
+import { useEffect, useRef, useState } from 'react'
+
 import { Input } from 'reactstrap'
 
 type Props = {

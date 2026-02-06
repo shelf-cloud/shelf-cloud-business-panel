@@ -1,13 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react'
-import useSWR from 'swr'
-import axios from 'axios'
+import { useContext, useEffect, useMemo, useState } from 'react'
+
 import AppContext from '@context/AppContext'
-import { toast } from 'react-toastify'
-import DataTable from 'react-data-table-component'
-import { Button, Form, FormFeedback, FormGroup, Input, Label } from 'reactstrap'
-import * as Yup from 'yup'
+import axios from 'axios'
 import { useFormik } from 'formik'
+import DataTable from 'react-data-table-component'
+import { toast } from 'react-toastify'
+import { Button, Form, FormFeedback, FormGroup, Input, Label } from 'reactstrap'
+import useSWR from 'swr'
 import { useSWRConfig } from 'swr'
+import * as Yup from 'yup'
+
 type Props = {}
 
 type Category = {
@@ -19,21 +21,18 @@ type Category = {
 const Categories = ({}: Props) => {
   const { mutate } = useSWRConfig()
   const { state }: any = useContext(AppContext)
-  const [loading, setloading] = useState(true)
-  const [categories, setCategories] = useState<Category[]>([])
-  const [showAddNewFields, setShowAddNewFields] = useState(false)
-  const [showEditFields, setShowEditFields] = useState(false)
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data } = useSWR(`/api/settings/getCategories?region=${state.currentRegion}&businessId=${state.user.businessId}`, fetcher)
-
+  const loading = !data
+  const categories = useMemo(() => {
+    if (data?.error) return [] as Category[]
+    return (data ?? []) as Category[]
+  }, [data])
+  const [showAddNewFields, setShowAddNewFields] = useState(false)
+  const [showEditFields, setShowEditFields] = useState(false)
   useEffect(() => {
     if (data?.error) {
-      setCategories([])
-      setloading(false)
       toast.error(data?.message)
-    } else if (data) {
-      setCategories(data)
-      setloading(false)
     }
   }, [data])
 
@@ -118,7 +117,7 @@ const Categories = ({}: Props) => {
     })
     setShowEditFields(false)
   }
-  
+
   const handleDeleteCategory = async (categoryId: number) => {
     const response = await axios.delete(`/api/settings/deleteCategory?region=${state.currentRegion}&businessId=${state.user.businessId}&categoryId=${categoryId}`)
     if (!response.data.error) {
@@ -143,7 +142,7 @@ const Categories = ({}: Props) => {
         return (
           <div className='d-flex flex-row flex-nowrap justify-content-center align-items-center gap-4'>
             <i className='ri-pencil-fill fs-3 text-secondary' style={{ cursor: 'pointer' }} onClick={() => handleShowEditFields(row)} />
-            <i className='align-middle text-danger fs-2 las la-trash-alt' style={{ cursor: 'pointer' }} onClick={() => handleDeleteCategory(row.categoryId)}/>
+            <i className='align-middle text-danger fs-2 las la-trash-alt' style={{ cursor: 'pointer' }} onClick={() => handleDeleteCategory(row.categoryId)} />
           </div>
         )
       },

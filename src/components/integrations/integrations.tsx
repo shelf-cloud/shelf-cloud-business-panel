@@ -1,11 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useContext } from 'react'
-import AppContext from '@context/AppContext'
-import { Button, Card, CardBody, Col, Row } from 'reactstrap'
-import AmazonAuthButton from '@components/amazon/AmazonAuthButton'
+import { useContext } from 'react'
+
 import AmazonAdsAuthButton from '@components/amazon/AmazonAdsAuthButton'
+import AmazonAuthButton from '@components/amazon/AmazonAuthButton'
 import AmazonReconnectButton from '@components/amazon/AmazonReconnectButton'
+import AppContext from '@context/AppContext'
 import { NoImageAdress } from '@lib/assetsConstants'
+import { Button, Card, CardBody, Col, Row } from 'reactstrap'
 
 type Props = {
   env: string

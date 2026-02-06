@@ -1,5 +1,4 @@
 import { ReorderingPointsMarketplace } from '@typesTs/reorderingPoints/reorderingPoints'
-import React from 'react'
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap'
 
 type Props = {

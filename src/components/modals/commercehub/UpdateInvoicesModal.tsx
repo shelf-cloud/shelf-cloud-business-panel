@@ -1,16 +1,18 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useContext } from 'react'
-import { Button, Card, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
-import AppContext from '@context/AppContext'
-import axios from 'axios'
-import * as Yup from 'yup'
-import { toast } from 'react-toastify'
-import Papa from 'papaparse'
-import { useFormik } from 'formik'
-import { validateCitiBankLowesFile, validateHomeDepotFile, validateLowesFile } from './validateFileTypesInfo'
-import { CommerceHubStore } from '@typesTs/commercehub/invoices'
+ 
 import router from 'next/router'
+import { useContext, useState } from 'react'
+
 import UploadFileDropzone from '@components/ui/UploadFileDropzone'
+import AppContext from '@context/AppContext'
+import { CommerceHubStore } from '@typesTs/commercehub/invoices'
+import axios from 'axios'
+import { useFormik } from 'formik'
+import Papa from 'papaparse'
+import { toast } from 'react-toastify'
+import { Button, Card, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import * as Yup from 'yup'
+
+import { validateCitiBankLowesFile, validateHomeDepotFile, validateLowesFile } from './validateFileTypesInfo'
 
 type Props = {
   showUpdateInvoices: {
@@ -295,7 +297,11 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
                   </div>
                 )}
               </Dropzone> */}
-              <UploadFileDropzone accptedFiles={{ 'text/csv': ['.csv'] }} handleAcceptedFiles={handleAcceptedFiles} description={`Upload Products Details. Drop Only CSV files here or click to upload.`} />
+              <UploadFileDropzone
+                accptedFiles={{ 'text/csv': ['.csv'] }}
+                handleAcceptedFiles={handleAcceptedFiles}
+                description={`Upload Products Details. Drop Only CSV files here or click to upload.`}
+              />
             </Col>
           </Row>
           {errorFile && <p className='text-danger m-0'>You must Upload a CSV file to upload products.</p>}

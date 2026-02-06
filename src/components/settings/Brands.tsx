@@ -1,13 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react'
-import useSWR from 'swr'
-import axios from 'axios'
+import { useContext, useEffect, useMemo, useState } from 'react'
+
 import AppContext from '@context/AppContext'
-import { toast } from 'react-toastify'
-import DataTable from 'react-data-table-component'
-import { Button, Form, FormFeedback, FormGroup, Input, Label } from 'reactstrap'
-import * as Yup from 'yup'
+import axios from 'axios'
 import { useFormik } from 'formik'
+import DataTable from 'react-data-table-component'
+import { toast } from 'react-toastify'
+import { Button, Form, FormFeedback, FormGroup, Input, Label } from 'reactstrap'
+import useSWR from 'swr'
 import { useSWRConfig } from 'swr'
+import * as Yup from 'yup'
+
 type Props = {}
 
 type Brand = {
@@ -20,22 +22,19 @@ type Brand = {
 const Brands = ({}: Props) => {
   const { mutate } = useSWRConfig()
   const { state }: any = useContext(AppContext)
-  const [loading, setloading] = useState(true)
-  const [brands, setBrands] = useState<Brand[]>([])
-  const [showAddNewFields, setShowAddNewFields] = useState(false)
-  const [showEditFields, setShowEditFields] = useState(false)
   const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
   const { data } = useSWR(`/api/settings/getBrands?region=${state.currentRegion}&businessId=${state.user.businessId}`, fetcher)
+  const loading = !data
+  const brands = useMemo(() => {
+    if (data?.error) return [] as Brand[]
+    return (data ?? []) as Brand[]
+  }, [data])
+  const [showAddNewFields, setShowAddNewFields] = useState(false)
+  const [showEditFields, setShowEditFields] = useState(false)
 
   useEffect(() => {
     if (data?.error) {
-      setBrands([])
-      setloading(false)
       toast.error(data?.message)
-    } else if (data) {
-      setBrands(data)
-
-      setloading(false)
     }
   }, [data])
 
@@ -156,7 +155,7 @@ const Brands = ({}: Props) => {
         return (
           <div className='d-flex flex-row flex-nowrap justify-content-center align-items-center gap-4'>
             <i className='ri-pencil-fill fs-3 text-secondary' style={{ cursor: 'pointer' }} onClick={() => handleShowEditFields(row)} />
-            <i className='align-middle text-danger fs-3 las la-trash-alt' style={{ cursor: 'pointer' }} onClick={() => handleDeleteBrand(row.brandId)}/>
+            <i className='align-middle text-danger fs-3 las la-trash-alt' style={{ cursor: 'pointer' }} onClick={() => handleDeleteBrand(row.brandId)} />
           </div>
         )
       },

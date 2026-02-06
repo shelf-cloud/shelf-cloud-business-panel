@@ -1,9 +1,10 @@
-import React, { memo } from 'react'
-import { Button, Col, Form, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from 'reactstrap'
-import * as Yup from 'yup'
+import { memo } from 'react'
+
+import { SimpleInputModal } from '@hooks/ui/useInputModal'
 import { useFormik } from 'formik'
 import { DebounceInput } from 'react-debounce-input'
-import { SimpleInputModal } from '@hooks/ui/useInputModal'
+import { Button, Col, Form, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from 'reactstrap'
+import * as Yup from 'yup'
 
 type InputModalProps = {
   isOpen: boolean
@@ -21,7 +22,20 @@ type InputModalProps = {
   onClose: () => void
 }
 
-const InputModal = ({ isOpen, headerText, primaryText, confirmText, loadingText, placeholder = '', value, isLoading = false, minLength = 0, error, handleSubmit, onClose }: InputModalProps) => {
+const InputModal = ({
+  isOpen,
+  headerText,
+  primaryText,
+  confirmText,
+  loadingText,
+  placeholder = '',
+  value,
+  isLoading = false,
+  minLength = 0,
+  error,
+  handleSubmit,
+  onClose,
+}: InputModalProps) => {
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {

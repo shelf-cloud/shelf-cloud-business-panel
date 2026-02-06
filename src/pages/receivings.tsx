@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+ 
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import React, { useContext, useMemo, useState } from 'react'

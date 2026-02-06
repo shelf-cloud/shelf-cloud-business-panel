@@ -1,8 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
-import React from 'react'
+import { NoImageAdress } from '@lib/assetsConstants'
 import { InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
 import { Button, Card, CardBody, CardHeader, Col, Spinner } from 'reactstrap'
-import { NoImageAdress } from '@lib/assetsConstants'
 
 type Props = {
   inboundPlan: InboundPlan
@@ -50,11 +49,7 @@ const PackingInfo = ({ inboundPlan, handleNextStep, watingRepsonse }: Props) => 
                               }}>
                               <img
                                 loading='lazy'
-                                src={
-                                  inboundPlan.skus_details[item.msku].image
-                                    ? inboundPlan.skus_details[item.msku].image
-                                    : NoImageAdress
-                                }
+                                src={inboundPlan.skus_details[item.msku].image ? inboundPlan.skus_details[item.msku].image : NoImageAdress}
                                 alt='product Image'
                                 style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                               />

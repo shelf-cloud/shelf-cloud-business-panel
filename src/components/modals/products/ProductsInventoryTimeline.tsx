@@ -1,8 +1,7 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable react-hooks/exhaustive-deps */
-import React from 'react'
-import { Modal, ModalBody, ModalHeader } from 'reactstrap'
+ 
+ 
 import ProductsQtyTimeline from '@components/products/ProductsQtyTimeline'
+import { Modal, ModalBody, ModalHeader } from 'reactstrap'
 
 type Props = {
   dates: string[]

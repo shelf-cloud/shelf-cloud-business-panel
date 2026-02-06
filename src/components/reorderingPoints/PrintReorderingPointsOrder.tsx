@@ -1,10 +1,11 @@
+import { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
 import { SplitNames } from '@hooks/reorderingPoints/useRPSplits'
-import { NoImageAdress } from '@lib/assetsConstants'
 import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
+import { NoImageAdress } from '@lib/assetsConstants'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import moment from 'moment'
-import React, { useContext } from 'react'
 import { DropdownItem } from 'reactstrap'
 
 type Props = {
@@ -16,8 +17,8 @@ type Props = {
   }
   orderDetails: {
     orderNumber: string
-    destinationSC: { value: string; label: string; }
-    splitDestinations: { [k: string]: { value: string; label: string; } }
+    destinationSC: { value: string; label: string }
+    splitDestinations: { [k: string]: { value: string; label: string } }
   }
   selectedSupplier: string
   username: string
@@ -194,8 +195,8 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                                 ? (product.orderAdjusted * product.itemVolume) / 1728
                                 : (product.order * product.itemVolume) / 1728
                               : product.useOrderAdjusted
-                              ? (product.orderAdjusted * product.itemVolume) / 1000000
-                              : (product.order * product.itemVolume) / 1000000
+                                ? (product.orderAdjusted * product.itemVolume) / 1000000
+                                : (product.order * product.itemVolume) / 1000000
                           )} ${state.currentRegion === 'us' ? 'ft³' : 'm³'}</td>`
                         : ''
                     }
@@ -398,8 +399,8 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                             ? (product.orderAdjusted * product.itemVolume) / 1728
                             : (product.order * product.itemVolume) / 1728
                           : product.useOrderAdjusted
-                          ? (product.orderAdjusted * product.itemVolume) / 1000000
-                          : (product.order * product.itemVolume) / 1000000
+                            ? (product.orderAdjusted * product.itemVolume) / 1000000
+                            : (product.order * product.itemVolume) / 1000000
                       )} ${state.currentRegion === 'us' ? 'ft³' : 'm³'}</td>`
                     : ''
                 }
@@ -537,8 +538,8 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                                   ? (product.orderSplits[`${splitIndex}`].orderAdjusted * product.itemVolume) / 1728
                                   : (product.orderSplits[`${splitIndex}`].order * product.itemVolume) / 1728
                                 : product.useOrderAdjusted
-                                ? (product.orderSplits[`${splitIndex}`].orderAdjusted * product.itemVolume) / 1000000
-                                : (product.orderSplits[`${splitIndex}`].order * product.itemVolume) / 1000000
+                                  ? (product.orderSplits[`${splitIndex}`].orderAdjusted * product.itemVolume) / 1000000
+                                  : (product.orderSplits[`${splitIndex}`].order * product.itemVolume) / 1000000
                             )} ${state.currentRegion === 'us' ? 'ft³' : 'm³'}</td>`
                           : ''
                       }
@@ -546,7 +547,9 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                         printColumns.cost
                           ? `<td class='text-center text-nowrap'>${FormatCurrency(
                               state.currentRegion,
-                              product.useOrderAdjusted ? product.orderSplits[`${splitIndex}`].orderAdjusted * product.sellerCost : product.orderSplits[`${splitIndex}`].order * product.sellerCost
+                              product.useOrderAdjusted
+                                ? product.orderSplits[`${splitIndex}`].orderAdjusted * product.sellerCost
+                                : product.orderSplits[`${splitIndex}`].order * product.sellerCost
                             )}</td>`
                           : ''
                       }
@@ -564,7 +567,11 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                         <td class='text-end'>TOTAL</td>
                         <td class='text-center text-nowrap'>${FormatIntNumber(
                           state.currentRegion,
-                          Object.values(reorderingPointsOrder.products).reduce((total, product) => total + (product.useOrderAdjusted ? product.orderSplits[`${splitIndex}`].orderAdjusted : product.orderSplits[`${splitIndex}`].order), 0)
+                          Object.values(reorderingPointsOrder.products).reduce(
+                            (total, product) =>
+                              total + (product.useOrderAdjusted ? product.orderSplits[`${splitIndex}`].orderAdjusted : product.orderSplits[`${splitIndex}`].order),
+                            0
+                          )
                         )}</td>
                         ${
                           printColumns.volume
@@ -572,11 +579,19 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                                 state.currentRegion,
                                 state.currentRegion === 'us'
                                   ? Object.values(reorderingPointsOrder.products).reduce(
-                                      (total, product) => total + (product.useOrderAdjusted ? product.orderSplits[`${splitIndex}`].orderAdjusted * product.itemVolume : product.orderSplits[`${splitIndex}`].order * product.itemVolume),
+                                      (total, product) =>
+                                        total +
+                                        (product.useOrderAdjusted
+                                          ? product.orderSplits[`${splitIndex}`].orderAdjusted * product.itemVolume
+                                          : product.orderSplits[`${splitIndex}`].order * product.itemVolume),
                                       0
                                     ) / 1728
                                   : Object.values(reorderingPointsOrder.products).reduce(
-                                      (total, product) => total + (product.useOrderAdjusted ? product.orderSplits[`${splitIndex}`].orderAdjusted * product.itemVolume : product.orderSplits[`${splitIndex}`].order * product.itemVolume),
+                                      (total, product) =>
+                                        total +
+                                        (product.useOrderAdjusted
+                                          ? product.orderSplits[`${splitIndex}`].orderAdjusted * product.itemVolume
+                                          : product.orderSplits[`${splitIndex}`].order * product.itemVolume),
                                       0
                                     ) / 1000000
                               )} ${state.currentRegion === 'us' ? 'ft³' : 'm³'}</td>`
@@ -587,7 +602,11 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                             ? `<td class='text-center text-nowrap'>${FormatCurrency(
                                 state.currentRegion,
                                 Object.values(reorderingPointsOrder.products).reduce(
-                                  (total, product) => total + (product.useOrderAdjusted ? product.orderSplits[`${splitIndex}`].orderAdjusted * product.sellerCost : product.orderSplits[`${splitIndex}`].order * product.sellerCost),
+                                  (total, product) =>
+                                    total +
+                                    (product.useOrderAdjusted
+                                      ? product.orderSplits[`${splitIndex}`].orderAdjusted * product.sellerCost
+                                      : product.orderSplits[`${splitIndex}`].order * product.sellerCost),
                                   0
                                 )
                               )}</td>`

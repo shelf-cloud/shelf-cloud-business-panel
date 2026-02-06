@@ -1,7 +1,8 @@
 import { NextApiHandler } from 'next'
-import { getServerSession } from 'next-auth'
+
 import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
+import { getServerSession } from 'next-auth'
 
 const getInvoicedStorageDetails: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)
@@ -12,7 +13,9 @@ const getInvoicedStorageDetails: NextApiHandler = async (request, response) => {
   }
 
   axios
-    .get(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/storage/getInvoicedStorageDetails.php?businessId=${request.query.businessId}&startDate=${request.query.startDate}&endDate=${request.query.endDate}`)
+    .get(
+      `${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/storage/getInvoicedStorageDetails.php?businessId=${request.query.businessId}&startDate=${request.query.startDate}&endDate=${request.query.endDate}`
+    )
     .then(({ data }) => {
       response.json(data)
     })

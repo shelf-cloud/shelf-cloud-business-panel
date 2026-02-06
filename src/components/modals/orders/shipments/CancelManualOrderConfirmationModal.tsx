@@ -1,11 +1,12 @@
-/* eslint-disable @next/next/no-img-element */
-import React, { useContext, useState } from 'react'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
-import { toast } from 'react-toastify'
-import axios from 'axios'
+ 
+import { useContext, useState } from 'react'
+
 import AppContext from '@context/AppContext'
-import * as Yup from 'yup'
+import axios from 'axios'
 import { useFormik } from 'formik'
+import { toast } from 'react-toastify'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import * as Yup from 'yup'
 
 type Props = {
   showDeleteModal: {

@@ -1,9 +1,10 @@
-import React, { useContext } from 'react'
-import { DropdownItem } from 'reactstrap'
-import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
+import { useContext } from 'react'
+
+import { buildSplitTemplate, buildTemplate } from '@components/purchase_orders/helperFunctions'
 import AppContext from '@context/AppContext'
 import { SplitNames } from '@hooks/reorderingPoints/useRPSplits'
-import { buildSplitTemplate, buildTemplate } from '@components/purchase_orders/helperFunctions'
+import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
+import { DropdownItem } from 'reactstrap'
 
 type Props = {
   reorderingPointsOrder: {

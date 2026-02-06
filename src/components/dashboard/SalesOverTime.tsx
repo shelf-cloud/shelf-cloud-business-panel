@@ -1,12 +1,14 @@
 import React, { useContext } from 'react'
-// import Link from 'next/link'
-import { Card, CardBody, CardHeader, Col, UncontrolledTooltip } from 'reactstrap'
+
 import AppContext from '@context/AppContext'
+import { FormatCurrency } from '@lib/FormatNumbers'
+import { SalesOverTimeMarketplace, SalesOverTimeResponse } from '@typesTs/dashboard/salesOverTime'
 import moment from 'moment'
 import CountUp from 'react-countup'
+// import Link from 'next/link'
+import { Card, CardBody, CardHeader, Col, UncontrolledTooltip } from 'reactstrap'
+
 import SalesOverTimeTimeline from './SalesOverTimeTimeline'
-import { SalesOverTimeMarketplace, SalesOverTimeResponse } from '@typesTs/dashboard/salesOverTime'
-import { FormatCurrency } from '@lib/FormatNumbers'
 
 type Props = {
   salesOverTime: SalesOverTimeResponse

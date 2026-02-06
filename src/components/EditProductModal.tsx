@@ -1,26 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // ALTER TABLE `dbpruebas` ADD `activeState` BOOLEAN NOT NULL DEFAULT TRUE AFTER `image`;
-import React, { useState, useEffect, useContext } from 'react'
-import {
-  Button,
-  Col,
-  Form,
-  FormFeedback,
-  FormGroup,
-  Input,
-  Label,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  Row,
-  Spinner,
-} from 'reactstrap'
+import { useContext, useEffect, useState } from 'react'
+
 import AppContext from '@context/AppContext'
 import axios from 'axios'
-import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
 import { useSWRConfig } from 'swr'
+import * as Yup from 'yup'
 
 type Props = {}
 
@@ -68,18 +56,12 @@ function EditProductModal({}: Props) {
       boxwidth: Yup.number().required('Please Enter Your Box Width').positive('Value must be grater than 0'),
       boxlength: Yup.number().required('Please Enter Your Box Length').positive('Value must be grater than 0'),
       boxheight: Yup.number().required('Please Enter Your Box Height').positive('Value must be grater than 0'),
-      boxqty: Yup.number()
-        .required('Please Enter Your Box Qty')
-        .positive('Value must be grater than 0')
-        .integer('Only integers'),
+      boxqty: Yup.number().required('Please Enter Your Box Qty').positive('Value must be grater than 0').integer('Only integers'),
     }),
     onSubmit: async (values) => {
-      const response = await axios.post(
-        `api/updateProductDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`,
-        {
-          productInfo: values,
-        }
-      )
+      const response = await axios.post(`api/updateProductDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+        productInfo: values,
+      })
       if (!response.data.error) {
         toast.success(response.data.msg)
         mutate(`/api/getBusinessInventory?region=${state.currentRegion}&businessId=${state.user.businessId}`)
@@ -152,9 +134,7 @@ function EditProductModal({}: Props) {
                     value={validation.values.inventoryId || ''}
                     invalid={validation.touched.inventoryId && validation.errors.inventoryId ? true : false}
                   />
-                  {validation.touched.inventoryId && validation.errors.inventoryId ? (
-                    <FormFeedback type='invalid'>{validation.errors.inventoryId}</FormFeedback>
-                  ) : null}
+                  {validation.touched.inventoryId && validation.errors.inventoryId ? <FormFeedback type='invalid'>{validation.errors.inventoryId}</FormFeedback> : null}
                 </FormGroup>
               </Col>
               <Col md={6} className='d-none'>
@@ -173,9 +153,7 @@ function EditProductModal({}: Props) {
                     value={validation.values.businessId || ''}
                     invalid={validation.touched.businessId && validation.errors.businessId ? true : false}
                   />
-                  {validation.touched.businessId && validation.errors.businessId ? (
-                    <FormFeedback type='invalid'>{validation.errors.businessId}</FormFeedback>
-                  ) : null}
+                  {validation.touched.businessId && validation.errors.businessId ? <FormFeedback type='invalid'>{validation.errors.businessId}</FormFeedback> : null}
                 </FormGroup>
               </Col>
               <Col md={6}>
@@ -194,9 +172,7 @@ function EditProductModal({}: Props) {
                     value={validation.values.title || ''}
                     invalid={validation.touched.title && validation.errors.title ? true : false}
                   />
-                  {validation.touched.title && validation.errors.title ? (
-                    <FormFeedback type='invalid'>{validation.errors.title}</FormFeedback>
-                  ) : null}
+                  {validation.touched.title && validation.errors.title ? <FormFeedback type='invalid'>{validation.errors.title}</FormFeedback> : null}
                 </FormGroup>
               </Col>
               <Col md={6}>
@@ -216,9 +192,7 @@ function EditProductModal({}: Props) {
                     value={validation.values.sku || ''}
                     invalid={validation.touched.sku && validation.errors.sku ? true : false}
                   />
-                  {validation.touched.sku && validation.errors.sku ? (
-                    <FormFeedback type='invalid'>{validation.errors.sku}</FormFeedback>
-                  ) : null}
+                  {validation.touched.sku && validation.errors.sku ? <FormFeedback type='invalid'>{validation.errors.sku}</FormFeedback> : null}
                 </FormGroup>
               </Col>
               <Col md={4}>
@@ -237,9 +211,7 @@ function EditProductModal({}: Props) {
                     value={validation.values.asin || ''}
                     invalid={validation.touched.asin && validation.errors.asin ? true : false}
                   />
-                  {validation.touched.asin && validation.errors.asin ? (
-                    <FormFeedback type='invalid'>{validation.errors.asin}</FormFeedback>
-                  ) : null}
+                  {validation.touched.asin && validation.errors.asin ? <FormFeedback type='invalid'>{validation.errors.asin}</FormFeedback> : null}
                 </FormGroup>
               </Col>
               <Col md={4}>
@@ -258,9 +230,7 @@ function EditProductModal({}: Props) {
                     value={validation.values.fnsku || ''}
                     invalid={validation.touched.fnsku && validation.errors.fnsku ? true : false}
                   />
-                  {validation.touched.fnsku && validation.errors.fnsku ? (
-                    <FormFeedback type='invalid'>{validation.errors.fnsku}</FormFeedback>
-                  ) : null}
+                  {validation.touched.fnsku && validation.errors.fnsku ? <FormFeedback type='invalid'>{validation.errors.fnsku}</FormFeedback> : null}
                 </FormGroup>
               </Col>
               <Col md={4}>
@@ -280,9 +250,7 @@ function EditProductModal({}: Props) {
                     value={validation.values.barcode || ''}
                     invalid={validation.touched.barcode && validation.errors.barcode ? true : false}
                   />
-                  {validation.touched.barcode && validation.errors.barcode ? (
-                    <FormFeedback type='invalid'>{validation.errors.barcode}</FormFeedback>
-                  ) : null}
+                  {validation.touched.barcode && validation.errors.barcode ? <FormFeedback type='invalid'>{validation.errors.barcode}</FormFeedback> : null}
                 </FormGroup>
               </Col>
               <Col md={12}>
@@ -301,9 +269,7 @@ function EditProductModal({}: Props) {
                     value={validation.values.image || ''}
                     invalid={validation.touched.image && validation.errors.image ? true : false}
                   />
-                  {validation.touched.image && validation.errors.image ? (
-                    <FormFeedback type='invalid'>{validation.errors.image}</FormFeedback>
-                  ) : null}
+                  {validation.touched.image && validation.errors.image ? <FormFeedback type='invalid'>{validation.errors.image}</FormFeedback> : null}
                 </FormGroup>
               </Col>
               <Col md={12}>
@@ -322,9 +288,7 @@ function EditProductModal({}: Props) {
                     value={validation.values.note || ''}
                     invalid={validation.touched.note && validation.errors.note ? true : false}
                   />
-                  {validation.touched.image && validation.errors.image ? (
-                    <FormFeedback type='invalid'>{validation.errors.image}</FormFeedback>
-                  ) : null}
+                  {validation.touched.image && validation.errors.image ? <FormFeedback type='invalid'>{validation.errors.image}</FormFeedback> : null}
                 </FormGroup>
               </Col>
               {/* <div className="border mt-3 border-dashed"></div>
@@ -580,9 +544,7 @@ function EditProductModal({}: Props) {
                   ) : null}
                 </FormGroup>
               </Col> */}
-              <h5 className='fs-14 mb-3 text-muted'>
-                *You must complete all required fields or you will not be able to create your product.
-              </h5>
+              <h5 className='fs-14 mb-3 text-muted'>*You must complete all required fields or you will not be able to create your product.</h5>
               <Col md={12}>
                 <div className='text-end'>
                   <Button type='submit' color='primary' className='btn'>

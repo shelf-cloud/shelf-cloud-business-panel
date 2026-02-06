@@ -1,5 +1,4 @@
 import { Marketplace } from '@typesTs/marketplaces/productPerformance'
-import React from 'react'
 import DataTable from 'react-data-table-component'
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap'
 

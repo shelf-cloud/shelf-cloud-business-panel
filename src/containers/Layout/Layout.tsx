@@ -1,11 +1,12 @@
-import React, { useEffect, useState, ReactElement } from 'react'
+import { useRouter } from 'next/router'
+import React, { ReactElement, useEffect, useState } from 'react'
+
 import PropTypes from 'prop-types'
 
+import Footer from './Footer'
 //import Components
 import Header from './Header'
 import Sidebar from './Sidebar'
-import Footer from './Footer'
-import { useRouter } from 'next/router'
 
 interface Props {
   children: ReactElement
@@ -14,7 +15,7 @@ interface Props {
 const Layout = ({ children }: Props) => {
   const [headerClass, setHeaderClass] = useState('')
   const { pathname } = useRouter()
-  const noLayout = ['SignIn' , 'ContactForm', 'Forgotpassword', 'ProductsBulkEdit']
+  const noLayout = ['SignIn', 'ContactForm', 'Forgotpassword', 'ProductsBulkEdit']
 
   useEffect(() => {
     window.addEventListener('scroll', scrollNavigation, true)
@@ -34,10 +35,10 @@ const Layout = ({ children }: Props) => {
       {noLayout.includes(pathname.split('/')[1]) ? (
         <div>{children}</div>
       ) : (
-        <div id="layout-wrapper">
+        <div id='layout-wrapper'>
           <Header headerClass={headerClass} />
           <Sidebar layoutType={'vertical'} />
-          <div className="main-content">
+          <div className='main-content'>
             {children}
             <Footer />
           </div>

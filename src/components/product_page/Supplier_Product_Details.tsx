@@ -1,12 +1,13 @@
+import { useContext, useState } from 'react'
+
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
-import React, { useContext, useState } from 'react'
-import { UncontrolledTooltip, Button, Col, Form, FormFeedback, FormGroup, Input, Row } from 'reactstrap'
-import * as Yup from 'yup'
+import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Row, UncontrolledTooltip } from 'reactstrap'
 import { useSWRConfig } from 'swr'
-import axios from 'axios'
+import * as Yup from 'yup'
 
 type Props = {
   inventoryId?: number
@@ -306,7 +307,7 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
                   Cancel
                 </Button>
                 <Button disabled={isLoading} type='submit' color='primary' className='btn'>
-                {isLoading ? 'Saving...' : 'Save Changes'}
+                  {isLoading ? 'Saving...' : 'Save Changes'}
                 </Button>
               </div>
             </Col>

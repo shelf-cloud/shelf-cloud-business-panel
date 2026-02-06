@@ -1,7 +1,8 @@
+import { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
 import { LatestOrders } from '@typings'
 import moment from 'moment'
-import React, { useContext } from 'react'
 
 type Props = {
   latestOrders: LatestOrders[]

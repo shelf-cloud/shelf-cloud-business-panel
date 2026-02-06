@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { useRouter } from 'next/router'
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { useContext, useMemo, useState } from 'react'
 
 import SearchInput from '@components/ui/SearchInput'
 import AppContext from '@context/AppContext'
@@ -33,16 +33,12 @@ const Add_Sku_To_Purchase_Order = ({}) => {
   } = useContext(AppContext)
   const { show, poId, orderNumber, suppliersName, hasSplitting, split } = modalAddSkuToPurchaseOrder
   const [loading, setloading] = useState(false)
-  const [hasErrors, setHasErrors] = useState(false)
   const [searchValue, setSearchValue] = useState<any>('')
   const [skuToAddToPo, setSkuToAddToPo] = useState<SkuInListToAddToPo[]>([])
 
-  useEffect(() => {
-    skuToAddToPo.length <= 0 ? setHasErrors(true) : setHasErrors(false)
-
-    if (skuToAddToPo.length > 0) {
-      skuToAddToPo.some((skus: SkuInListToAddToPo) => Number(skus.addQty) <= 0 || skus.addQty == '') ? setHasErrors(true) : setHasErrors(false)
-    }
+  const hasErrors = useMemo(() => {
+    if (skuToAddToPo.length <= 0) return true
+    return skuToAddToPo.some((skus: SkuInListToAddToPo) => Number(skus.addQty) <= 0 || skus.addQty == '')
   }, [skuToAddToPo])
 
   const filterDataTable = useMemo(() => {

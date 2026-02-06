@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { SetStateAction, useCallback, useMemo, useState } from 'react'
 
 import { ShipmentOrderItem } from '@typings'
 
@@ -57,141 +57,135 @@ export interface AddSKUToMultiSKUBoxType {
   poNumber: string
 }
 
+type EditSingleSkuState = {
+  key: string
+  packages: SingleSkuBoxes
+}
+
+const buildSingleSkuPackages = (items: ShipmentOrderItem[]) => {
+  const packages = {} as SingleSkuBoxes
+
+  for (const item of items) {
+    const { sku, boxQty, quantity, poId, name, inventoryId, poNumber, image } = item
+
+    if (!packages[poId!]) {
+      packages[poId!] = {}
+    }
+
+    const qtyPerBox = boxQty || 1
+    const boxes = Math.floor(quantity / qtyPerBox)
+    let boxedQty = quantity
+
+    packages[poId!][sku] = {
+      receiving: quantity,
+      name: name,
+      inventoryId: inventoryId!,
+      image: image!,
+      poNumber: poNumber!,
+      boxQty: qtyPerBox,
+      boxes: [],
+    }
+
+    if (quantity <= qtyPerBox) {
+      packages[poId!][sku].boxes.push({
+        unitsPerBox: quantity,
+        qtyOfBoxes: 1,
+      })
+    } else {
+      packages[poId!][sku].boxes.push({
+        unitsPerBox: qtyPerBox,
+        qtyOfBoxes: boxes,
+      })
+
+      boxedQty -= qtyPerBox * boxes
+      if (boxedQty > 0) {
+        packages[poId!][sku].boxes.push({
+          unitsPerBox: boxedQty,
+          qtyOfBoxes: 1,
+        })
+      }
+    }
+  }
+
+  return packages
+}
+
+const getReceivingItemsKey = (items: ShipmentOrderItem[]) =>
+  items
+    .map((item) => `${item.poId || ''}:${item.sku}:${item.quantity}:${item.boxQty || 0}:${item.inventoryId || ''}:${item.name}:${item.image || ''}:${item.poNumber || ''}`)
+    .join('|')
+
 export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], packingConfiguration: string, receivingOrderNumber: string) => {
   // SINGLE SKU PACKAGES_____________________
-  const [singleSkuPackages, setsingleSkuPackages] = useState<SingleSkuBoxes>(() => {
-    const packages = {} as SingleSkuBoxes
-
-    for (const item of receivingItems) {
-      const { sku, boxQty, quantity, poId, name, inventoryId, poNumber, image } = item
-
-      if (!packages[poId!]) {
-        packages[poId!] = {}
-      }
-
-      const qtyPerBox = boxQty || 1
-      const boxes = Math.floor(quantity / qtyPerBox)
-      let boxedQty = quantity
-
-      packages[poId!][sku] = {
-        receiving: quantity,
-        name: name,
-        inventoryId: inventoryId!,
-        image: image!,
-        poNumber: poNumber!,
-        boxQty: qtyPerBox,
-        boxes: [],
-      }
-
-      if (quantity <= qtyPerBox) {
-        packages[poId!][sku].boxes.push({
-          unitsPerBox: quantity,
-          qtyOfBoxes: 1,
-        })
-      } else {
-        packages[poId!][sku].boxes.push({
-          unitsPerBox: qtyPerBox,
-          qtyOfBoxes: boxes,
-        })
-
-        boxedQty -= qtyPerBox * boxes
-        if (boxedQty > 0) {
-          packages[poId!][sku].boxes.push({
-            unitsPerBox: boxedQty,
-            qtyOfBoxes: 1,
-          })
-        }
-      }
-    }
-
-    return packages
-  })
-
-  useEffect(() => {
-    const packages = {} as SingleSkuBoxes
-    for (const item of receivingItems) {
-      const { sku, boxQty, quantity, poId, name, inventoryId, image, poNumber } = item
-
-      if (!packages[poId!]) {
-        packages[poId!] = {}
-      }
-
-      const qtyPerBox = boxQty || 1
-      const boxes = Math.floor(quantity / qtyPerBox)
-      let boxedQty = quantity
-
-      packages[poId!][sku] = {
-        receiving: quantity,
-        name: name,
-        inventoryId: inventoryId!,
-        image: image!,
-        poNumber: poNumber!,
-        boxQty: qtyPerBox,
-        boxes: [],
-      }
-
-      if (quantity <= qtyPerBox) {
-        packages[poId!][sku].boxes.push({
-          unitsPerBox: quantity,
-          qtyOfBoxes: 1,
-        })
-      } else {
-        packages[poId!][sku].boxes.push({
-          unitsPerBox: qtyPerBox,
-          qtyOfBoxes: boxes,
-        })
-
-        boxedQty -= qtyPerBox * boxes
-        if (boxedQty > 0) {
-          packages[poId!][sku].boxes.push({
-            unitsPerBox: boxedQty,
-            qtyOfBoxes: 1,
-          })
-        }
-      }
-    }
-    setsingleSkuPackages(packages)
-  }, [receivingItems])
+  const receivingItemsKey = useMemo(() => getReceivingItemsKey(receivingItems), [receivingItems])
+  const defaultSingleSkuPackages = useMemo(() => buildSingleSkuPackages(receivingItems), [receivingItems])
+  const [singleSkuState, setSingleSkuState] = useState<EditSingleSkuState>(() => ({
+    key: receivingItemsKey,
+    packages: defaultSingleSkuPackages,
+  }))
+  const singleSkuPackages = singleSkuState.key === receivingItemsKey ? singleSkuState.packages : defaultSingleSkuPackages
+  const setsingleSkuPackages = useCallback(
+    (value: SetStateAction<SingleSkuBoxes>) => {
+      setSingleSkuState((prev) => {
+        const basePackages = prev.key === receivingItemsKey ? prev.packages : defaultSingleSkuPackages
+        const nextPackages = typeof value === 'function' ? (value as (prev: SingleSkuBoxes) => SingleSkuBoxes)(basePackages) : value
+        return { key: receivingItemsKey, packages: nextPackages }
+      })
+    },
+    [defaultSingleSkuPackages, receivingItemsKey]
+  )
 
   // ADD NEW SINGLE SKU BOX CONFIGURATION
-  const addNewSingleSkuBoxConfiguration = useCallback((poId: string, sku: string) => {
-    setsingleSkuPackages((prev) => {
-      prev[poId][sku].boxes.push({
-        unitsPerBox: 0,
-        qtyOfBoxes: 0,
+  const addNewSingleSkuBoxConfiguration = useCallback(
+    (poId: string, sku: string) => {
+      setsingleSkuPackages((prev) => {
+        prev[poId][sku].boxes.push({
+          unitsPerBox: 0,
+          qtyOfBoxes: 0,
+        })
+        return { ...prev }
       })
-      return { ...prev }
-    })
-  }, [])
+    },
+    [setsingleSkuPackages]
+  )
 
   // REMOVE SINGLE SKU BOX CONFIGURATION
-  const removeSingleSkuBoxConfiguration = useCallback((poId: string, sku: string, index: number) => {
-    setsingleSkuPackages((prev) => {
-      const updatedBoxes = prev[poId][sku].boxes.filter((_, i) => i !== index)
-      if (updatedBoxes.length === 0) {
-        delete prev[poId][sku]
-      } else {
-        prev[poId][sku].boxes = updatedBoxes
-      }
-      return { ...prev }
-    })
-  }, [])
+  const removeSingleSkuBoxConfiguration = useCallback(
+    (poId: string, sku: string, index: number) => {
+      setsingleSkuPackages((prev) => {
+        const updatedBoxes = prev[poId][sku].boxes.filter((_, i) => i !== index)
+        if (updatedBoxes.length === 0) {
+          delete prev[poId][sku]
+        } else {
+          prev[poId][sku].boxes = updatedBoxes
+        }
+        return { ...prev }
+      })
+    },
+    [setsingleSkuPackages]
+  )
 
   // CHANGE UNITS PER BOX
-  const changeUnitsPerBox = useCallback((poId: string, sku: string, index: number, value: number) => {
-    setsingleSkuPackages((prev) => {
-      prev[poId][sku].boxes[index].unitsPerBox = value
-      return { ...prev }
-    })
-  }, [])
+  const changeUnitsPerBox = useCallback(
+    (poId: string, sku: string, index: number, value: number) => {
+      setsingleSkuPackages((prev) => {
+        prev[poId][sku].boxes[index].unitsPerBox = value
+        return { ...prev }
+      })
+    },
+    [setsingleSkuPackages]
+  )
 
   // CHANGE QTY OF BOXES
-  const changeQtyOfBoxes = useCallback((poId: string, sku: string, index: number, value: number) => {
-    setsingleSkuPackages((prev) => {
-      prev[poId][sku].boxes[index].qtyOfBoxes = value
-      return { ...prev }
-    })
-  }, [])
+  const changeQtyOfBoxes = useCallback(
+    (poId: string, sku: string, index: number, value: number) => {
+      setsingleSkuPackages((prev) => {
+        prev[poId][sku].boxes[index].qtyOfBoxes = value
+        return { ...prev }
+      })
+    },
+    [setsingleSkuPackages]
+  )
 
   // MULTI SKU PACKAGES_____________________
   const [multiSkuPackages, setmultiSkuPackages] = useState<MultiSkuBoxes[]>([])
@@ -386,7 +380,7 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
     }
   }, [packingConfiguration, receivingOrderNumber, singleSkuPackages, multiSkuPackages, receivingItems])
 
-  const hasBoxedErrors = useMemo((): { error: boolean; message?: string } => {
+  const hasBoxedErrors = (() => {
     switch (packingConfiguration) {
       case 'single':
         for (const item of receivingItems) {
@@ -442,7 +436,7 @@ export const useEditReceivingsBoxes = (receivingItems: ShipmentOrderItem[], pack
       default:
         return { error: false }
     }
-  }, [packingConfiguration, singleSkuPackages, multiSkuPackages, receivingItems])
+  })()
 
   return {
     singleSkuPackages,

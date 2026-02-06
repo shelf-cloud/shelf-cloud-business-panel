@@ -1,13 +1,14 @@
-import React, { useContext, useState } from 'react'
-import { Button, Form, FormFeedback, Input } from 'reactstrap'
-import * as Yup from 'yup'
-import { useFormik } from 'formik'
-import { toast } from 'react-toastify'
-import { useSWRConfig } from 'swr'
-import axios from 'axios'
+import { useContext, useState } from 'react'
+
+import ProductOrderedModals from '@components/modals/productPage/ProductOrderedModals'
 import AppContext from '@context/AppContext'
 import { AmazonFBA } from '@typings'
-import ProductOrderedModals from '@components/modals/productPage/ProductOrderedModals'
+import axios from 'axios'
+import { useFormik } from 'formik'
+import { toast } from 'react-toastify'
+import { Button, Form, FormFeedback, Input } from 'reactstrap'
+import { useSWRConfig } from 'swr'
+import * as Yup from 'yup'
 
 type Props = {
   inventoryId?: number

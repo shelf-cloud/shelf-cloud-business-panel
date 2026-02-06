@@ -8,7 +8,7 @@ File: Icons Css File
 */
 
 // Icons Scss
-@import "plugins/icons/materialdesignicons";
-@import "plugins/icons/boxicons";
-@import "plugins/icons/line-awesome";
-@import "plugins/icons/remixicon";
+@use 'plugins/icons/materialdesignicons';
+@use 'plugins/icons/boxicons';
+@use 'plugins/icons/line-awesome';
+@use 'plugins/icons/remixicon';

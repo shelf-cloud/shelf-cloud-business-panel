@@ -18,7 +18,20 @@ type Props = {
 const InputPercentageFilter = ({ inputName, value, isInvalid, error, handleChange, handleBlur }: Props) => {
   return (
     <InputGroup size='sm'>
-      <Input type='number' className='form-control fs-6 m-0' bsSize='sm' style={{ padding: '0.2rem 0.9rem' }} placeholder='Min' id={inputName} name={inputName} min={0} onChange={handleChange} onBlur={handleBlur} value={value} invalid={isInvalid} />
+      <Input
+        type='number'
+        className='form-control fs-6 m-0'
+        bsSize='sm'
+        style={{ padding: '0.2rem 0.9rem' }}
+        placeholder='Min'
+        id={inputName}
+        name={inputName}
+        min={0}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        value={value}
+        invalid={isInvalid}
+      />
       <InputGroupText className='fs-5 py-0'>%</InputGroupText>
       {isInvalid ? <FormFeedback type='invalid'>{error}</FormFeedback> : null}
     </InputGroup>

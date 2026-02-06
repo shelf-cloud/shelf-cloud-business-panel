@@ -1,5 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
-import React, { useState } from 'react'
+ 
+import { useState } from 'react'
+
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from 'reactstrap'
 
 type Props = {
@@ -15,7 +16,18 @@ type Props = {
   handleClose: () => void
 }
 
-const ConfirmActionModal = ({ isOpen, headerText, primaryText, primaryTextSub, descriptionText, confirmText, loadingText, isDeleteAction = false, handleSubmit, handleClose }: Props) => {
+const ConfirmActionModal = ({
+  isOpen,
+  headerText,
+  primaryText,
+  primaryTextSub,
+  descriptionText,
+  confirmText,
+  loadingText,
+  isDeleteAction = false,
+  handleSubmit,
+  handleClose,
+}: Props) => {
   const [isLoading, setisLoading] = useState(false)
 
   const handleConfirmAction = async () => {

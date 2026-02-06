@@ -1,16 +1,15 @@
-@import "./icons.scss";
-@import "../styles/config/default/bootstrap.scss";
-@import "../styles/config/default/app.scss";
-@import "../styles/config/default/custom.scss";
-@import "./shepherd.css";
-@import "./mermaid.min.css";
+@use './icons.scss';
+@use '../styles/config/default/bootstrap.scss';
+@use '../styles/config/default/app.scss' as *;
+@use '../styles/config/default/custom.scss';
+@import './shepherd.css';
+@import './mermaid.min.css';
 
-//RTL 
+//RTL
 // @import "./rtl/components-rtl";
 // @import "./rtl/layouts-rtl";
 // @import "./rtl/plugins-rtl";
 // @import "./rtl/pages-rtl";
-
 
 //Rigthsidebar offcanvas
 .offcanvas-header-dark {
@@ -24,7 +23,8 @@ body {
     outline: none !important;
     font-family: $font-family-primary;
   }
-  input, select{
+  input,
+  select {
     font-size: 16px !important;
   }
 }
@@ -33,7 +33,7 @@ body {
   object-fit: contain;
 }
 
-.trackingNumber_container{
+.trackingNumber_container {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -45,11 +45,11 @@ body {
   fill: black !important;
 }
 
-.createOrder_inputs{
+.createOrder_inputs {
   margin-bottom: 0.25rem !important;
 }
 
-.input_background_white{
+.input_background_white {
   background-color: #fff !important;
 }
 
@@ -100,11 +100,10 @@ body {
 }
 
 @media only screen and (min-width: 992px) {
-  .datePicker{
+  .datePicker {
     min-width: 100% !important;
   }
 }
-
 
 @include media-breakpoint-down(sm) {
   .fc-toolbar {
@@ -123,8 +122,8 @@ body {
 
   .fc {
     .fc-toolbar {
-      >* {
-        >* {
+      > * {
+        > * {
           float: none;
         }
       }
@@ -157,11 +156,10 @@ body {
 //   max-height: 43px !important;
 // }
 
-@each $color,
-$value in $theme-colors {
+@each $color, $value in $theme-colors {
   .simplebar-track-#{$color} {
     .simplebar-scrollbar:before {
-      background: $value  !important;
+      background: $value !important;
     }
   }
 }
@@ -210,7 +208,7 @@ $value in $theme-colors {
   .Toastify__close-button--light {
     color: $light;
   }
-  .Toastify__spinner{
+  .Toastify__spinner {
     border-color: #e0e0e0;
     border-right-color: #616161;
   }

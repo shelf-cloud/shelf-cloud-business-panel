@@ -67,11 +67,19 @@ self.onmessage = async (e) => {
             currency: marketplace.currency,
             actualPrice: marketplace.actualPrice,
             totalFees: marketplace.totalFees,
-            profit: marketplace.actualPrice - marketplace.totalFees - product.sellerCost - product.inboundShippingCost - marketplace.storeOtherCosts - marketplace.shippingToMarketpalce,
+            profit:
+              marketplace.actualPrice - marketplace.totalFees - product.sellerCost - product.inboundShippingCost - marketplace.storeOtherCosts - marketplace.shippingToMarketpalce,
             margin: parseFloat(
               (marketplace.actualPrice <= 0
                 ? 0
-                : ((marketplace.actualPrice - marketplace.totalFees - product.sellerCost - product.inboundShippingCost - marketplace.storeOtherCosts - marketplace.shippingToMarketpalce) / marketplace.actualPrice) * 100
+                : ((marketplace.actualPrice -
+                    marketplace.totalFees -
+                    product.sellerCost -
+                    product.inboundShippingCost -
+                    marketplace.storeOtherCosts -
+                    marketplace.shippingToMarketpalce) /
+                    marketplace.actualPrice) *
+                  100
               ).toFixed(2)
             ),
             proposedPrice: marketplace.proposedPrice,
@@ -95,7 +103,12 @@ self.onmessage = async (e) => {
       for await (const product of mkp_products) {
         const proposedMargin = parseFloat(
           (
-            ((product.proposedPrice - (product.proposedPrice * (product.comissionFee / 100) + product.fixedFee + product.fbaHandlingFee) - product.sellerCost - product.inboundShippingCost - product.storeOtherCosts - product.shippingToMarketpalce) /
+            ((product.proposedPrice -
+              (product.proposedPrice * (product.comissionFee / 100) + product.fixedFee + product.fbaHandlingFee) -
+              product.sellerCost -
+              product.inboundShippingCost -
+              product.storeOtherCosts -
+              product.shippingToMarketpalce) /
               product.proposedPrice) *
             100
           ).toFixed(2)
@@ -117,9 +130,19 @@ self.onmessage = async (e) => {
           currency: product.currency,
           actualPrice: product.actualPrice,
           totalFees: parseFloat(product.totalFees.toFixed(2)),
-          profit: parseFloat((product.actualPrice - product.totalFees - product.sellerCost - product.inboundShippingCost - product.storeOtherCosts - product.shippingToMarketpalce).toFixed(2)),
+          profit: parseFloat(
+            (product.actualPrice - product.totalFees - product.sellerCost - product.inboundShippingCost - product.storeOtherCosts - product.shippingToMarketpalce).toFixed(2)
+          ),
           margin:
-            product.actualPrice <= 0 ? 0 : parseFloat((((product.actualPrice - product.totalFees - product.sellerCost - product.inboundShippingCost - product.storeOtherCosts - product.shippingToMarketpalce) / product.actualPrice) * 100).toFixed(2)),
+            product.actualPrice <= 0
+              ? 0
+              : parseFloat(
+                  (
+                    ((product.actualPrice - product.totalFees - product.sellerCost - product.inboundShippingCost - product.storeOtherCosts - product.shippingToMarketpalce) /
+                      product.actualPrice) *
+                    100
+                  ).toFixed(2)
+                ),
           proposedPrice: product.proposedPrice,
           proposedFees: parseFloat((product.proposedPrice * (product.comissionFee / 100) + product.fixedFee + product.fbaHandlingFee).toFixed(2)),
           proposedProfit: parseFloat(

@@ -1,18 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
-import { useRouter } from 'next/router'
-import React, { useContext, useEffect, useState } from 'react'
 import { GetServerSideProps } from 'next'
-import { getSession } from '@auth/client'
 import Head from 'next/head'
-import { Button, Card, CardBody, Container, Spinner } from 'reactstrap'
+import Image from 'next/image'
+import { useRouter } from 'next/router'
+import React, { useContext, useState } from 'react'
+
+import { getSession } from '@auth/client'
 import BreadCrumb from '@components/Common/BreadCrumb'
-import axios from 'axios'
 import AppContext from '@context/AppContext'
-import Image from "next/image"
-import ShelfCloudLogoSolo from '../../assets/images/shelfcloud-blue-h-solo.png'
+import axios from 'axios'
 import moment from 'moment'
-import { useSWRConfig } from 'swr'
 import { toast } from 'react-toastify'
+import { Button, Card, CardBody, Container, Spinner } from 'reactstrap'
+import { useSWRConfig } from 'swr'
+
+import ShelfCloudLogoSolo from '../../assets/images/shelfcloud-blue-h-solo.png'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -44,11 +46,7 @@ const AmazonAdsAuthRedirect = ({}: Props) => {
   const router = useRouter()
   const { code } = router.query
   const [loading, setloading] = useState(false)
-  const [expire, setexpire] = useState('')
-
-  useEffect(() => {
-    setexpire(moment().add(5, 'minutes').format('h:mm:mm A'))
-  }, [])
+  const [expire] = useState(() => moment().add(5, 'minutes').format('h:mm:mm A'))
 
   const authorizeSeller = async () => {
     setloading(true)
@@ -92,10 +90,11 @@ const AmazonAdsAuthRedirect = ({}: Props) => {
                       src={ShelfCloudLogoSolo}
                       alt='ShelfCloud Logo'
                       style={{
-                        maxWidth: "100%",
-                        height: "auto",
-                        objectFit: "contain"
-                      }} />
+                        maxWidth: '100%',
+                        height: 'auto',
+                        objectFit: 'contain',
+                      }}
+                    />
                   </div>
                   <i className='las la-sync-alt text-muted fs-1'></i>
                   <div>
@@ -127,7 +126,7 @@ const AmazonAdsAuthRedirect = ({}: Props) => {
         </div>
       </React.Fragment>
     </div>
-  );
+  )
 }
 
 export default AmazonAdsAuthRedirect

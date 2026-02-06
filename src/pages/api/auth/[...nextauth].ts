@@ -15,22 +15,19 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.AUTH_SHIPNOVO_SECRET,
   providers: [
     CredentialsProvider({
-      id: "credentials",
-      type: "credentials",
+      id: 'credentials',
+      type: 'credentials',
       name: 'Credentials',
       credentials: {
         username: { label: 'Username', type: 'text', placeholder: 'jsmith' },
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, _req) {
-        const res = await fetch(
-          `${process.env.NEXTAUTH_URL}/api/auth/shipnovo`,
-          {
-            method: 'POST',
-            body: JSON.stringify(credentials),
-            headers: { 'Content-type': 'application/json' },
-          }
-        )
+        const res = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/shipnovo`, {
+          method: 'POST',
+          body: JSON.stringify(credentials),
+          headers: { 'Content-type': 'application/json' },
+        })
 
         const backData = await res.json()
 
@@ -47,15 +44,18 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async session({ session }) {
-      await axios.post(`${process.env.API_LOGIN_SERVICE}/getUserRole.php`, {
-        username: session?.user?.name
-      }).then((res) => {
-        session.user.role = res.data.role
-        session.user.businessId = res.data.businessId
-        session.user.businessName = res.data.businessName
-        session.user.businessOrderStart = res.data.businessOrderStart
-        session.user.profileName = res.data.profileName
-      }).catch((err) => console.log(err.message))
+      await axios
+        .post(`${process.env.API_LOGIN_SERVICE}/getUserRole.php`, {
+          username: session?.user?.name,
+        })
+        .then((res) => {
+          session.user.role = res.data.role
+          session.user.businessId = res.data.businessId
+          session.user.businessName = res.data.businessName
+          session.user.businessOrderStart = res.data.businessOrderStart
+          session.user.profileName = res.data.profileName
+        })
+        .catch((err) => console.log(err.message))
       return session
     },
     async redirect() {

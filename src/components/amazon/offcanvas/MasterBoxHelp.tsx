@@ -1,4 +1,3 @@
-import React from 'react'
 import { Offcanvas, OffcanvasBody, OffcanvasHeader } from 'reactstrap'
 
 type Props = {

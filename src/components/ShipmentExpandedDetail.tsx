@@ -1,6 +1,8 @@
-import { OrderRowType } from '@typings'
 import React from 'react'
+
+import { OrderRowType } from '@typings'
 import { ExpanderComponentProps } from 'react-data-table-component'
+
 import ReceivingType from './receiving/ReceivingType'
 
 type Props = {

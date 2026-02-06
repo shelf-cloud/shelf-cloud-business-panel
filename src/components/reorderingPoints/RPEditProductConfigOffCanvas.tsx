@@ -1,15 +1,27 @@
+import { useContext, useState } from 'react'
+
+import AppContext from '@context/AppContext'
 import { RPProductConfig } from '@hooks/reorderingPoints/useRPProductConfig'
-import React, { useContext, useState } from 'react'
+import { RPProductUpdateConfig } from '@hooks/reorderingPoints/useRPProductsInfo'
+import { useFormik } from 'formik'
 import { Button, Col, Form, Input, Label, Offcanvas, OffcanvasBody, OffcanvasHeader, Row, Spinner } from 'reactstrap'
 import * as Yup from 'yup'
-import { useFormik } from 'formik'
-import { RPProductUpdateConfig } from '@hooks/reorderingPoints/useRPProductsInfo'
-import AppContext from '@context/AppContext'
 
 type Props = {
   rpProductConfig: RPProductConfig
   setRPProductConfig: (cb: (prev: RPProductConfig) => RPProductConfig) => void
-  handleSaveProductConfig: ({ inventoryId, sku, leadTimeSC, leadTimeFBA, leadTimeAWD, daysOfStockSC, daysOfStockFBA, daysOfStockAWD, sellerCost, buffer }: RPProductUpdateConfig) => Promise<void>
+  handleSaveProductConfig: ({
+    inventoryId,
+    sku,
+    leadTimeSC,
+    leadTimeFBA,
+    leadTimeAWD,
+    daysOfStockSC,
+    daysOfStockFBA,
+    daysOfStockAWD,
+    sellerCost,
+    buffer,
+  }: RPProductUpdateConfig) => Promise<void>
 }
 
 const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, handleSaveProductConfig }: Props) => {

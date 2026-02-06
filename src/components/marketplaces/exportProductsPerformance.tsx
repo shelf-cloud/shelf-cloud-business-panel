@@ -1,8 +1,7 @@
-import React from 'react'
+import { AMAZON_MARKETPLACES, AMAZON_MARKETPLACES_ID } from '@lib/AmzConstants'
+import { ProductPerformance } from '@typesTs/marketplaces/productPerformance'
 import ExcelJS from 'exceljs'
 import { Button } from 'reactstrap'
-import { ProductPerformance } from '@typesTs/marketplaces/productPerformance'
-import { AMAZON_MARKETPLACES, AMAZON_MARKETPLACES_ID } from '@lib/AmzConstants'
 
 type Props = {
   products: ProductPerformance[]

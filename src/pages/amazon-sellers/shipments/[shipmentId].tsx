@@ -1,24 +1,25 @@
-import React, { useState, useContext } from 'react'
-import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import React, { useContext, useState } from 'react'
+
 import { getSession } from '@auth/client'
+import BreadCrumb from '@components/Common/BreadCrumb'
+import Contents from '@components/amazon/shipments/shipment_page/Contents'
+import Pallets from '@components/amazon/shipments/shipment_page/Pallets'
+import TrackShipment from '@components/amazon/shipments/shipment_page/TrackShipment'
+import TrackingEvents from '@components/amazon/shipments/shipment_page/TrackingEvents'
+import AppContext from '@context/AppContext'
+import { FormatCurrency } from '@lib/FormatNumbers'
+import { CleanStatus } from '@lib/SkuFormatting'
+import { FBAShipment, FBAShipmentsDetailsRepsonse } from '@typesTs/amazon/fbaShipments.interface'
+import { GetLabelsResponse, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
+import axios from 'axios'
+import moment from 'moment'
 import { toast } from 'react-toastify'
 import { Badge, Button, Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, Spinner, TabContent, TabPane } from 'reactstrap'
-import { useRouter } from 'next/router'
-import Link from 'next/link'
-import axios from 'axios'
 import useSWR from 'swr'
-import BreadCrumb from '@components/Common/BreadCrumb'
-import TrackShipment from '@components/amazon/shipments/shipment_page/TrackShipment'
-import moment from 'moment'
-import { FormatCurrency } from '@lib/FormatNumbers'
-import Contents from '@components/amazon/shipments/shipment_page/Contents'
-import { CleanStatus } from '@lib/SkuFormatting'
-import { GetLabelsResponse, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
-import TrackingEvents from '@components/amazon/shipments/shipment_page/TrackingEvents'
-import Pallets from '@components/amazon/shipments/shipment_page/Pallets'
-import { FBAShipment, FBAShipmentsDetailsRepsonse } from '@typesTs/amazon/fbaShipments.interface'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -84,9 +85,15 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
         }
       })
   }
-  useSWR(session && state.user.businessId ? `/api/amazon/shipments/getFBAShipmentDetails?region=${state.currentRegion}&businessId=${state.user.businessId}&shipmentId=${shipmentId}` : null, fetcher, {
-    revalidateOnFocus: false,
-  })
+  useSWR(
+    session && state.user.businessId
+      ? `/api/amazon/shipments/getFBAShipmentDetails?region=${state.currentRegion}&businessId=${state.user.businessId}&shipmentId=${shipmentId}`
+      : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  )
 
   const [activeTab, setActiveTab] = useState('1')
   const tabChange = (tab: any) => {
@@ -224,7 +231,8 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                           Total inbound placement service fees: <span className='fw-normal'>{FormatCurrency(state.currentRegion, shipmentDetails.totalPlacementFees)}</span>
                         </p>
                         <p className='m-0 p-0 fs-7 fw-semibold'>
-                          Amazon partnered carrier cost: <span className='fw-normal'>{FormatCurrency(state.currentRegion, shipmentDetails.totalSpdFees + shipmentDetails.totalLtlFees)}</span>
+                          Amazon partnered carrier cost:{' '}
+                          <span className='fw-normal'>{FormatCurrency(state.currentRegion, shipmentDetails.totalSpdFees + shipmentDetails.totalLtlFees)}</span>
                         </p>
                       </Col>
                     </Row>

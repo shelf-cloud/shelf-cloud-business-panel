@@ -1,8 +1,9 @@
+import { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { InvoiceFullDetails } from '@typings'
 import moment from 'moment'
-import React, { useContext } from 'react'
 import { Button } from 'reactstrap'
 
 type Props = {
@@ -164,14 +165,14 @@ function PrintInvoice({ invoiceDetails }: Props) {
                             <td colspan="3" style="text-align:right;">Subtotal</td>
                             <td id="totalTotal" style="display: block;text-align: left;overflow: auto;"><span style="width: 60%;float: left;text-align: right;">${FormatCurrency(
                               state.currentRegion,
-                              (invoiceDetails.invoice.totalCharge / 1.21)
+                              invoiceDetails.invoice.totalCharge / 1.21
                             )}</span></td>
                         </tr>
                         <tr style="font-weight: 700;">
                             <td colspan="3" style="text-align:right;">IVA 21%</td>
                             <td id="totalTotal" style="display: block;text-align: left;overflow: auto;"><span style="width: 60%;float: left;text-align: right;">${FormatCurrency(
                               state.currentRegion,
-                              ((invoiceDetails.invoice.totalCharge / 1.21) * 0.21)
+                              (invoiceDetails.invoice.totalCharge / 1.21) * 0.21
                             )}</span></td>
                         </tr>
                         <tr style="font-weight: 700;">

@@ -1,12 +1,14 @@
-import AppContext from '@context/AppContext'
-import axios from 'axios'
+import { useRouter } from 'next/router'
 import React, { useContext, useMemo, useState } from 'react'
+
+import SearchInput from '@components/ui/SearchInput'
+import AppContext from '@context/AppContext'
+import { PurchaseOrder, PurchaseOrderBySkus } from '@typesTs/purchaseOrders'
+import axios from 'axios'
 import { Col, Row } from 'reactstrap'
 import useSWR from 'swr'
-import { PurchaseOrder, PurchaseOrderBySkus } from '@typesTs/purchaseOrders'
+
 import Table_By_Sku from './Table_By_Sku'
-import { useRouter } from 'next/router'
-import SearchInput from '@components/ui/SearchInput'
 
 type Props = {}
 
@@ -18,9 +20,13 @@ const By_Sku = ({}: Props) => {
   const { status }: any = router.query
   const [searchValue, setSearchValue] = useState<string>('')
 
-  const { data }: { data?: PurchaseOrderBySkus[] } = useSWR(state.user.businessId ? `/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}` : null, fetcher, {
-    revalidateOnFocus: false,
-  })
+  const { data }: { data?: PurchaseOrderBySkus[] } = useSWR(
+    state.user.businessId ? `/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}` : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  )
 
   const filterDataTable = useMemo(() => {
     if (searchValue === '') {
@@ -39,8 +45,16 @@ const By_Sku = ({}: Props) => {
         ) {
           return newDataTable.push(po)
         }
-        if (po?.orders?.some((poInfo: PurchaseOrder) => poInfo?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) || poInfo?.suppliersName?.toLowerCase().includes(searchValue.toLowerCase()))) {
-          const filteredOrders = po?.orders?.filter((poInfo: PurchaseOrder) => poInfo?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) || poInfo?.suppliersName?.toLowerCase().includes(searchValue.toLowerCase()))
+        if (
+          po?.orders?.some(
+            (poInfo: PurchaseOrder) =>
+              poInfo?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) || poInfo?.suppliersName?.toLowerCase().includes(searchValue.toLowerCase())
+          )
+        ) {
+          const filteredOrders = po?.orders?.filter(
+            (poInfo: PurchaseOrder) =>
+              poInfo?.orderNumber?.toLowerCase().includes(searchValue.toLowerCase()) || poInfo?.suppliersName?.toLowerCase().includes(searchValue.toLowerCase())
+          )
           return newDataTable.push({
             sku: po.sku,
             title: po.title,

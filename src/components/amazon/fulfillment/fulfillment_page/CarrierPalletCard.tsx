@@ -1,13 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
-import AppContext from '@context/AppContext'
-import { FormatIntPercentage } from '@lib/FormatNumbers'
-import { ConfirmedShipments, InboundPlan } from '@typesTs/amazon/fulfillments/fulfillment'
-import React, { useContext, useState } from 'react'
-import { Button, Card, CardBody, CardFooter, CardHeader, Spinner } from 'reactstrap'
-import Image from "next/image"
+import Image from 'next/image'
+import { useContext, useState } from 'react'
+
 import boxIcon from '@assets/fulfillments/outbound_box.png'
 import palletIcon from '@assets/fulfillments/outbound_pallet.png'
+import AppContext from '@context/AppContext'
+import { FormatIntPercentage } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
+import { ConfirmedShipments, InboundPlan } from '@typesTs/amazon/fulfillments/fulfillment'
+import { Button, Card, CardBody, CardFooter, CardHeader, Spinner } from 'reactstrap'
 
 type Props = {
   inboundPlan: InboundPlan
@@ -93,11 +94,7 @@ const CarrierPalletCard = ({ inboundPlan, handleNextStep, shipment, shipmentInde
                     }}>
                     <img
                       loading='lazy'
-                      src={
-                        inboundPlan.skus_details[item.msku].image
-                          ? inboundPlan.skus_details[item.msku].image
-                          : NoImageAdress
-                      }
+                      src={inboundPlan.skus_details[item.msku].image ? inboundPlan.skus_details[item.msku].image : NoImageAdress}
                       alt='product Image'
                       style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                     />
@@ -124,9 +121,10 @@ const CarrierPalletCard = ({ inboundPlan, handleNextStep, shipment, shipmentInde
                   alt='box_icon'
                   className='object-contain'
                   style={{
-                    maxWidth: "100%",
-                    height: "auto"
-                  }} />
+                    maxWidth: '100%',
+                    height: 'auto',
+                  }}
+                />
               </div>
               <span className='fs-7 fw-semibold'>Small Parcel Delivery (SPD)</span>
             </div>
@@ -145,9 +143,10 @@ const CarrierPalletCard = ({ inboundPlan, handleNextStep, shipment, shipmentInde
                   alt='box_icon'
                   className='object-contain'
                   style={{
-                    maxWidth: "100%",
-                    height: "auto"
-                  }} />
+                    maxWidth: '100%',
+                    height: 'auto',
+                  }}
+                />
               </div>
               <span className='fs-7 fw-semibold'>Less than and full truckload (LTL/FTL)</span>
             </div>
@@ -182,7 +181,7 @@ const CarrierPalletCard = ({ inboundPlan, handleNextStep, shipment, shipmentInde
         )}
       </CardFooter>
     </Card>
-  );
+  )
 }
 
 export default CarrierPalletCard

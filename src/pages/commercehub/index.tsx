@@ -1,18 +1,19 @@
-import React, { useContext, useState } from 'react'
-import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
-import { Button, Col, Container, Row } from 'reactstrap'
-import BreadCrumb from '@components/Common/BreadCrumb'
+import React, { useContext, useState } from 'react'
+
 import { getSession } from '@auth/client'
-import axios from 'axios'
-import useSWR from 'swr'
-import { toast } from 'react-toastify'
-import CommerceHubWidget from '@components/commerceHub/CommerceHubWidget'
-import { DashboardResponse } from '@typesTs/commercehub/dashboard'
+import BreadCrumb from '@components/Common/BreadCrumb'
 import CheckNumberTable from '@components/commerceHub/CheckNumberTable'
+import CommerceHubWidget from '@components/commerceHub/CommerceHubWidget'
 import UpdateInvoicesModal from '@components/modals/commercehub/UpdateInvoicesModal'
+import AppContext from '@context/AppContext'
+import { DashboardResponse } from '@typesTs/commercehub/dashboard'
 import { CommerceHubStoresResponse } from '@typesTs/commercehub/invoices'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import { Button, Col, Container, Row } from 'reactstrap'
+import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -57,10 +58,14 @@ const Dashboard = ({ session }: Props) => {
     show: false,
   })
 
-  const { data: summary, mutate } = useSWR<DashboardResponse>(state.user.businessId ? `/api/commerceHub/getSummary?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcherSummary, {
-    revalidateOnFocus: false,
-    // revalidateOnMount: false,
-  })
+  const { data: summary, mutate } = useSWR<DashboardResponse>(
+    state.user.businessId ? `/api/commerceHub/getSummary?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
+    fetcherSummary,
+    {
+      revalidateOnFocus: false,
+      // revalidateOnMount: false,
+    }
+  )
 
   const { data: stores } = useSWR(state.user.businessId ? `/api/commerceHub/getStores?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcherStores, {
     revalidateOnFocus: false,
@@ -103,7 +108,9 @@ const Dashboard = ({ session }: Props) => {
             )}
           </Container>
         </div>
-        {showUpdateInvoices.show && <UpdateInvoicesModal showUpdateInvoices={showUpdateInvoices} setshowUpdateInvoices={setshowUpdateInvoices} stores={stores?.stores ?? []} mutate={mutate} />}
+        {showUpdateInvoices.show && (
+          <UpdateInvoicesModal showUpdateInvoices={showUpdateInvoices} setshowUpdateInvoices={setshowUpdateInvoices} stores={stores?.stores ?? []} mutate={mutate} />
+        )}
       </React.Fragment>
     </div>
   )

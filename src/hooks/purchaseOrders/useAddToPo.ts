@@ -1,7 +1,8 @@
+import { useCallback, useContext, useEffect, useRef } from 'react'
+
 import AppContext from '@context/AppContext'
 import { SkuToAddPo } from '@typesTs/purchaseOrders'
 import axios from 'axios'
-import { useCallback, useContext, useEffect, useRef } from 'react'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
 
@@ -39,7 +40,9 @@ export const useAddToPo = () => {
   }, [])
 
   const { data: skuList, isValidating } = useSWR(
-    state.user.businessId ? `/api/purchaseOrders/getSkusToAddToPo?region=${state.currentRegion}&businessId=${state.user.businessId}&supplier=${state.modalAddSkuToPurchaseOrder?.suppliersName}` : null,
+    state.user.businessId
+      ? `/api/purchaseOrders/getSkusToAddToPo?region=${state.currentRegion}&businessId=${state.user.businessId}&supplier=${state.modalAddSkuToPurchaseOrder?.suppliersName}`
+      : null,
     fetcher,
     {
       revalidateOnFocus: false,

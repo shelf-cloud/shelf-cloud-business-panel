@@ -1,10 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useContext } from 'react'
 import Link from 'next/link'
-import { Card, CardBody, CardHeader, Col } from 'reactstrap'
-import { ProductSummary } from '@typings'
-import { FormatIntNumber } from '@lib/FormatNumbers'
+import React, { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
+import { FormatIntNumber } from '@lib/FormatNumbers'
+import { ProductSummary } from '@typings'
+import { Card, CardBody, CardHeader, Col } from 'reactstrap'
 
 type Props = {
   products: ProductSummary[] | undefined
@@ -18,9 +19,7 @@ const MostInvenotryList = ({ products }: Props) => {
         <Card>
           <CardHeader className='align-items-center d-flex justify-content-between'>
             <h4 className='card-title mb-0 flex-grow-1'>Stock Inventory</h4>
-            <Link
-              href={'/Products?brand=All&supplier=All&category=All&condition=All'}
-              className='fs-6 text-primary fw-normal'>
+            <Link href={'/Products?brand=All&supplier=All&category=All&condition=All'} className='fs-6 text-primary fw-normal'>
               View All Products
             </Link>
           </CardHeader>
@@ -68,7 +67,7 @@ const MostInvenotryList = ({ products }: Props) => {
         </Card>
       </Col>
     </React.Fragment>
-  );
+  )
 }
 
 export default MostInvenotryList

@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { useContext, useMemo, useState } from 'react'
 
 import AmazonFulfillmentDimensions from '@components/modals/amazon/AmazonFulfillmentDimensions'
 import CreateMastBoxesInboundPlanModal from '@components/modals/amazon/CreateMastBoxesInboundPlanModal'
@@ -25,7 +25,7 @@ const MasterBoxesFulfillment = ({ lisiting, pending, mutateFBASkus }: Props) => 
   const { state }: any = useContext(AppContext)
   const router = useRouter()
   const { filters, showHidden, showNotEnough, ShowNoShipDate, masterBoxVisibility }: FilterProps = router.query
-  const [allData, setAllData] = useState<AmazonFulfillmentSku[]>([])
+  const [editedState, setEditedState] = useState<{ source: AmazonFulfillmentSku[]; data: AmazonFulfillmentSku[] } | null>(null)
   const [searchValue, setSearchValue] = useState<string>('')
   const [selectedRows, setSelectedRows] = useState<AmazonFulfillmentSku[]>([])
   const [toggledClearRows, setToggleClearRows] = useState(false)
@@ -51,11 +51,23 @@ const MasterBoxesFulfillment = ({ lisiting, pending, mutateFBASkus }: Props) => 
     shipments: [] as FBAShipmentHisotry[],
   })
 
-  useEffect(() => {
-    if (!pending) {
-      setAllData(JSON.parse(JSON.stringify(lisiting)))
-    }
+  const baseData = useMemo(() => {
+    if (pending) return [] as AmazonFulfillmentSku[]
+    return JSON.parse(JSON.stringify(lisiting)) as AmazonFulfillmentSku[]
   }, [pending, lisiting])
+
+  const allData = useMemo(() => {
+    if (editedState && editedState.source === lisiting) return editedState.data
+    return baseData
+  }, [editedState, lisiting, baseData])
+
+  const handleSetAllData = (updater: AmazonFulfillmentSku[] | ((prev: AmazonFulfillmentSku[]) => AmazonFulfillmentSku[])) => {
+    setEditedState((prev) => {
+      const previousData = prev && prev.source === lisiting ? prev.data : baseData
+      const nextData = typeof updater === 'function' ? updater(previousData) : updater
+      return { source: lisiting, data: nextData }
+    })
+  }
 
   const filteredItems = useMemo(() => {
     if (searchValue === '') {
@@ -199,7 +211,7 @@ const MasterBoxesFulfillment = ({ lisiting, pending, mutateFBASkus }: Props) => 
       <MasterBoxesTable
         allData={allData}
         filteredItems={filteredItems}
-        setAllData={setAllData}
+        setAllData={handleSetAllData}
         pending={pending}
         setError={setError}
         setHasQtyError={setHasQtyError}
@@ -213,7 +225,7 @@ const MasterBoxesFulfillment = ({ lisiting, pending, mutateFBASkus }: Props) => 
           orderProducts={orderProducts}
           showCreateInboundPlanModal={showCreateInboundPlanModal}
           setShowCreateInboundPlanModal={setShowCreateInboundPlanModal}
-          setAllData={setAllData}
+          setAllData={handleSetAllData}
         />
       )}
       {showCreateManualInboundPlanModal && (

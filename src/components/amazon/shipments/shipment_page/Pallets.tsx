@@ -1,10 +1,11 @@
-import React, { useContext } from 'react'
-import { Button, Col, Spinner } from 'reactstrap'
-import { FormatIntPercentage } from '@lib/FormatNumbers'
+import { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
+import { FormatIntPercentage } from '@lib/FormatNumbers'
 import { CleanStatus } from '@lib/SkuFormatting'
-import { WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
 import { FBAShipment } from '@typesTs/amazon/fbaShipments.interface'
+import { WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
+import { Button, Col, Spinner } from 'reactstrap'
 
 type Props = {
   shipmentDetails: FBAShipment

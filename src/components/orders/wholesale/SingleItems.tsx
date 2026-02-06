@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { useContext, useMemo, useState } from 'react'
 
 import WholeSaleTableSingleItem from '@components/WholeSaleTableSingleItem'
 import SingleBoxesOrderModal from '@components/modals/orders/wholesale/SingleBoxesOrderModal'
@@ -16,16 +16,28 @@ type Props = {
 
 const SingleItems = ({ completeData, pending, orderNumberStart }: Props) => {
   const { state, setSingleBoxesOrderModal } = useContext(AppContext)
-  const [allData, setAllData] = useState<wholesaleProductRow[]>([])
+  const [editedState, setEditedState] = useState<{ source: wholesaleProductRow[]; data: wholesaleProductRow[] } | null>(null)
   const [searchValue, setSearchValue] = useState<string>('')
   const [hasQtyError, setHasQtyError] = useState(false)
   const [error, setError] = useState([])
 
-  useEffect(() => {
-    if (!pending) {
-      setAllData(JSON.parse(JSON.stringify(completeData)))
-    }
+  const baseData = useMemo(() => {
+    if (pending) return [] as wholesaleProductRow[]
+    return JSON.parse(JSON.stringify(completeData)) as wholesaleProductRow[]
   }, [pending, completeData])
+
+  const allData = useMemo(() => {
+    if (editedState && editedState.source === completeData) return editedState.data
+    return baseData
+  }, [editedState, completeData, baseData])
+
+  const handleSetAllData = (updater: wholesaleProductRow[] | ((prev: wholesaleProductRow[]) => wholesaleProductRow[])) => {
+    setEditedState((prev) => {
+      const previousData = prev && prev.source === completeData ? prev.data : baseData
+      const nextData = typeof updater === 'function' ? updater(previousData) : updater
+      return { source: completeData, data: nextData }
+    })
+  }
 
   const filteredItems = useMemo(() => {
     if (searchValue === '') return allData
@@ -76,7 +88,14 @@ const SingleItems = ({ completeData, pending, orderNumberStart }: Props) => {
       <Col xs='12' className='d-flex justify-content-end align-items-center mb-2'>
         <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='none' minLength={3} debounceTimeout={300} widths='col-12 col-md-4' />
       </Col>
-      <WholeSaleTableSingleItem allData={allData} filteredItems={filteredItems} setAllData={setAllData} pending={pending} setError={setError} setHasQtyError={setHasQtyError} />
+      <WholeSaleTableSingleItem
+        allData={allData}
+        filteredItems={filteredItems}
+        setAllData={handleSetAllData}
+        pending={pending}
+        setError={setError}
+        setHasQtyError={setHasQtyError}
+      />
       {state.showSingleBoxesOrderModal && <SingleBoxesOrderModal orderNumberStart={orderNumberStart} orderProducts={orderProducts} />}
     </>
   )

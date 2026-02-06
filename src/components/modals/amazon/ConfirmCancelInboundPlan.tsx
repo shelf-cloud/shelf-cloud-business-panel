@@ -1,10 +1,11 @@
-/* eslint-disable @next/next/no-img-element */
-import React, { useContext, useState } from 'react'
-import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
-import { toast } from 'react-toastify'
-import { useSWRConfig } from 'swr'
-import axios from 'axios'
+ 
+import { useContext, useState } from 'react'
+
 import AppContext from '@context/AppContext'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { useSWRConfig } from 'swr'
 
 type Props = {
   cancelInboundPlanModal: {

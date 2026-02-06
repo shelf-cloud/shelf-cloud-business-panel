@@ -1,9 +1,10 @@
+import { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
-import { NoImageAdress } from '@lib/assetsConstants'
 import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
+import { NoImageAdress } from '@lib/assetsConstants'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import moment from 'moment'
-import React, { useContext } from 'react'
 import { DropdownItem } from 'reactstrap'
 
 type Props = {
@@ -97,8 +98,8 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                       <p class="text-capitalize mb-0 pb-0 fw-semibold">${state.user[state.currentRegion].name}</p>
                       <p class="mb-0 pb-0">${state.user[state.currentRegion].address}</p>
                       <p class="mb-0 pb-0">${state.user[state.currentRegion].city}, ${state.user[state.currentRegion].state} ${state.user[state.currentRegion].zipcode} ${
-      state.user[state.currentRegion].country
-    }</p>
+                        state.user[state.currentRegion].country
+                      }</p>
                       <a href="mailto:${state.user[state.currentRegion].email}" class="mb-0 pb-0">${state.user[state.currentRegion].email}</a>
                       <a class="mb-0 pb-0">${state.user[state.currentRegion].website}</a>
                       <p class="my-0 text-capitalize fw-semibold">Supplier: ${selectedSupplier}</p>`
@@ -122,8 +123,8 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                       <p class="mb-0 pb-0">${state.user[state.currentRegion].contactName}</p>
                       <p class="mb-0 pb-0">${state.user[state.currentRegion].address}</p>
                       <p class="mb-0 pb-0">${state.user[state.currentRegion].city}, ${state.user[state.currentRegion].state} ${state.user[state.currentRegion].zipcode} ${
-      state.user[state.currentRegion].country
-    }</p>
+                        state.user[state.currentRegion].country
+                      }</p>
                       <p class="mb-0 pb-0">Phone: ${state.user[state.currentRegion].phone}</p>
                       </div>
                     </div>
@@ -134,8 +135,8 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                         <p class="mb-0 pb-0">${state.user[state.currentRegion].contactName}</p>
                         <p class="mb-0 pb-0">${state.user[state.currentRegion].address}</p>
                         <p class="mb-0 pb-0">${state.user[state.currentRegion].city}, ${state.user[state.currentRegion].state} ${state.user[state.currentRegion].zipcode} ${
-      state.user[state.currentRegion].country
-    }</p>
+                          state.user[state.currentRegion].country
+                        }</p>
                         <p class="mb-0 pb-0">Phone: ${state.user[state.currentRegion].phone}</p>
                         </div>
                     </div>
@@ -196,8 +197,8 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
                                 ? product.orderAdjusted * product.itemVolume
                                 : (product.order * product.itemVolume) / 1728
                               : product.useOrderAdjusted
-                              ? product.orderAdjusted * product.itemVolume
-                              : (product.order * product.itemVolume) / 1000000
+                                ? product.orderAdjusted * product.itemVolume
+                                : (product.order * product.itemVolume) / 1000000
                           )} ${state.currentRegion === 'us' ? 'ft³' : 'm³'}</td>`
                         : ''
                     }

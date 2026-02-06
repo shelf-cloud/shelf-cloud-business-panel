@@ -1,3 +1,6 @@
+import Link from 'next/link'
+import { useContext } from 'react'
+
 import { useSession } from '@auth/client'
 import { notificationsTagLinks } from '@components/constants/notifications'
 import AppContext from '@context/AppContext'
@@ -5,8 +8,6 @@ import { useSocket } from '@hooks/useSocket'
 import { NotificationsPanelResponse } from '@typesTs/notifications'
 import axios from 'axios'
 import moment from 'moment'
-import Link from 'next/link'
-import React, { useContext } from 'react'
 import { toast } from 'react-toastify'
 import { Button, ButtonGroup, DropdownMenu, DropdownToggle, UncontrolledDropdown } from 'reactstrap'
 import useSWR from 'swr'
@@ -19,10 +20,14 @@ const NotificationsPanel = () => {
 
   const { state }: any = useContext(AppContext)
 
-  const { data: notifications, mutate } = useSWR(state.user.businessId ? `/api/notifications/getNotifications?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher, {
-    revalidateOnFocus: false,
-    refreshInterval: 1000 * 60 * 5,
-  })
+  const { data: notifications, mutate } = useSWR(
+    state.user.businessId ? `/api/notifications/getNotifications?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      refreshInterval: 1000 * 60 * 5,
+    }
+  )
 
   useSocket(userId, mutate) // ✅ Pass userId to useSocket
 
@@ -63,7 +68,9 @@ const NotificationsPanel = () => {
         <UncontrolledDropdown className='dropdown d-inline-block' direction='down'>
           <DropdownToggle tag='button' className='btn btn-primary btn-icon'>
             <i className='mdi mdi-bell fs-4' />
-            {notifications?.some((info) => !info.read) && <span className='badge bg-danger position-absolute top-0 start-100 translate-middle'>{notifications?.filter((info) => !info.read).length}</span>}
+            {notifications?.some((info) => !info.read) && (
+              <span className='badge bg-danger position-absolute top-0 start-100 translate-middle'>{notifications?.filter((info) => !info.read).length}</span>
+            )}
           </DropdownToggle>
           <DropdownMenu className='dropdown-menu-lg pt-0 mt-2' end style={{ minWidth: '200px' }}>
             <div className='bg-primary bg-pattern rounded-top d-flex flex-column justify-content-between align-items-baseline flex-md-row'>

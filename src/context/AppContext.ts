@@ -1,5 +1,6 @@
-import useInitialState, { initialState } from '@hooks/useInitialState'
 import React from 'react'
+
+import useInitialState, { initialState } from '@hooks/useInitialState'
 
 export type AppState = typeof initialState
 export type AppContextType = ReturnType<typeof useInitialState>

@@ -1,5 +1,6 @@
+import { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
-import React, { useContext } from 'react'
 
 type Props = {
   weight: number

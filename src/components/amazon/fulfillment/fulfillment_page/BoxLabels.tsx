@@ -1,6 +1,6 @@
 import { InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
-import React from 'react'
 import { Spinner } from 'reactstrap'
+
 import BoxLabelsCard from './BoxLabelsCard'
 
 type Props = {
@@ -26,13 +26,7 @@ const BoxLabels = ({ inboundPlan, handleNextStep, watingRepsonse }: Props) => {
           </p>
           <div className='d-flex flex-row flex-wrap justify-content-start align-items-start gap-3'>
             {Object.values(inboundPlan.confirmedShipments).map((shipment, shipmentIndex) => (
-              <BoxLabelsCard
-                key={shipment.shipmentId}
-                inboundPlan={inboundPlan}
-                handleNextStep={handleNextStep}
-                shipment={shipment}
-                shipmentIndex={shipmentIndex}
-              />
+              <BoxLabelsCard key={shipment.shipmentId} inboundPlan={inboundPlan} handleNextStep={handleNextStep} shipment={shipment} shipmentIndex={shipmentIndex} />
             ))}
           </div>
         </div>

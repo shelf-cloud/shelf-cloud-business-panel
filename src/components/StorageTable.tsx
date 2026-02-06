@@ -1,12 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
-/* eslint-disable react-hooks/exhaustive-deps */
-import { StorageRowProduct } from '@typings'
-import React, { useContext } from 'react'
-import DataTable from 'react-data-table-component'
-import StorageExpandedDetails from './StorageExpandedDetails'
-import { FormatCurrency } from '@lib/FormatNumbers'
+ 
+import { useContext } from 'react'
+
 import AppContext from '@context/AppContext'
+import { FormatCurrency } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
+import { StorageRowProduct } from '@typings'
+import DataTable from 'react-data-table-component'
+
+import StorageExpandedDetails from './StorageExpandedDetails'
 
 type Props = {
   tableData: StorageRowProduct[]
@@ -57,11 +59,7 @@ const StorageTable = ({ tableData, pending }: Props) => {
               margin: '2px 0px',
               position: 'relative',
             }}>
-            <img
-              src={row.image ? row.image : NoImageAdress}
-              alt='Product Image'
-              style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
-            />
+            <img src={row.image ? row.image : NoImageAdress} alt='Product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
           </div>
         )
       },

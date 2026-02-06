@@ -1,9 +1,11 @@
+import { useContext, useMemo } from 'react'
+
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { TransportationOption } from '@typesTs/amazon/fulfillments/fulfillment'
 import moment from 'moment'
-import React, { useContext, useMemo } from 'react'
 import Select from 'react-select'
+
 import { setLTLTransportationOption, setShipmentLTLTransportationOption } from './helperFunctions'
 
 type Props = {

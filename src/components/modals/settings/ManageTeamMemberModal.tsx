@@ -1,12 +1,13 @@
+import { useContext, useState } from 'react'
+
+import CategoryTeamMembersHeader from '@components/settings/team_members/CategoryTeamMembersHeader'
 import AppContext from '@context/AppContext'
-import React, { useContext, useState } from 'react'
-import { Button, Col, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from 'reactstrap'
+import { ManageUser, Modules } from '@typesTs/settings/team_members'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import { Button, Col, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from 'reactstrap'
 import { useSWRConfig } from 'swr'
 import useSWR from 'swr'
-import { ManageUser, Modules } from '@typesTs/settings/team_members'
-import CategoryTeamMembersHeader from '@components/settings/team_members/CategoryTeamMembersHeader'
 
 type Props = {
   manageUser: ManageUser

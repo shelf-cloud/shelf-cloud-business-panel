@@ -1,22 +1,23 @@
-import React, { useState, useContext } from 'react'
-import AppContext from '@context/AppContext'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
-import { getSession } from '@auth/client'
-import { toast } from 'react-toastify'
-import { Badge, Button, Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, Spinner, TabContent, TabPane } from 'reactstrap'
-import { useRouter } from 'next/router'
 import Link from 'next/link'
-import axios from 'axios'
-import useSWR from 'swr'
+import { useRouter } from 'next/router'
+import React, { useContext, useState } from 'react'
+
+import { getSession } from '@auth/client'
 import BreadCrumb from '@components/Common/BreadCrumb'
-import { GetLabelsResponse, InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
-import InventoryToSend from '@components/amazon/fulfillment/fulfillment_page/InventoryToSend'
 import BoxLabels from '@components/amazon/fulfillment/fulfillment_page/BoxLabels'
+import CarrierPalletInfo from '@components/amazon/fulfillment/fulfillment_page/CarrierPalletInfo'
+import InventoryToSend from '@components/amazon/fulfillment/fulfillment_page/InventoryToSend'
+import ShippingCompleted from '@components/amazon/fulfillment/fulfillment_page/ShippingCompleted'
 import TrackingDetails from '@components/amazon/fulfillment/fulfillment_page/TrackingDetails'
 import MasterBoxHelp from '@components/amazon/offcanvas/MasterBoxHelp'
-import CarrierPalletInfo from '@components/amazon/fulfillment/fulfillment_page/CarrierPalletInfo'
-import ShippingCompleted from '@components/amazon/fulfillment/fulfillment_page/ShippingCompleted'
+import AppContext from '@context/AppContext'
+import { GetLabelsResponse, InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import { Badge, Button, Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, Spinner, TabContent, TabPane } from 'reactstrap'
+import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -62,6 +63,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
     CarrierPalletInfo: false,
     trackingDetails: false,
   })
+  const [activeTab, setActiveTab] = useState('6')
   const title = `Inbound Plan Details | ${session?.user?.businessName}`
 
   const controller = new AbortController()
@@ -89,11 +91,16 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
         }
       })
   }
-  useSWR(session && state.user.businessId ? `/api/amazon/fullfilments/getSellerInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}` : null, fetcher, {
-    revalidateOnFocus: false,
-  })
+  useSWR(
+    session && state.user.businessId
+      ? `/api/amazon/fullfilments/getSellerInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}&inboundPlanId=${inboundPlanId}`
+      : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  )
 
-  const [activeTab, setActiveTab] = useState('6')
   const tabChange = (tab: any) => {
     if (activeTab !== tab) setActiveTab(tab)
   }
@@ -289,7 +296,9 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={'fs-5 fw-semibold ' + (activeTab == '1' ? 'text-primary' : inboundPlanDetails.steps[1].complete ? 'text-success opacity-50' : 'text-muted')}
+                              className={
+                                'fs-5 fw-semibold ' + (activeTab == '1' ? 'text-primary' : inboundPlanDetails.steps[1].complete ? 'text-success opacity-50' : 'text-muted')
+                              }
                               onClick={() => {
                                 tabChange('1')
                               }}
@@ -302,7 +311,9 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           </NavItem>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
-                              className={'fs-5 fw-semibold ' + (activeTab == '3' ? 'text-primary' : inboundPlanDetails.steps[3].complete ? 'text-success opacity-50' : 'text-muted')}
+                              className={
+                                'fs-5 fw-semibold ' + (activeTab == '3' ? 'text-primary' : inboundPlanDetails.steps[3].complete ? 'text-success opacity-50' : 'text-muted')
+                              }
                               onClick={() => {
                                 inboundPlanDetails?.steps[2]?.complete ? tabChange('3') : document.getElementById('btn_handleNextStepPacking')?.focus()
                               }}>
@@ -315,7 +326,9 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={'fs-5 fw-semibold ' + (activeTab == '4' ? 'text-primary' : inboundPlanDetails.steps[4].complete ? 'text-success opacity-50' : 'text-muted')}
+                              className={
+                                'fs-5 fw-semibold ' + (activeTab == '4' ? 'text-primary' : inboundPlanDetails.steps[4].complete ? 'text-success opacity-50' : 'text-muted')
+                              }
                               onClick={() => {
                                 inboundPlanDetails?.steps[3]?.complete ? tabChange('4') : document.getElementById('btn_handleNextShipping')?.focus()
                               }}
@@ -329,7 +342,9 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={'fs-5 fw-semibold ' + (activeTab == '5' ? 'text-primary' : inboundPlanDetails.steps[5].complete ? 'text-success opacity-50' : 'text-muted')}
+                              className={
+                                'fs-5 fw-semibold ' + (activeTab == '5' ? 'text-primary' : inboundPlanDetails.steps[5].complete ? 'text-success opacity-50' : 'text-muted')
+                              }
                               onClick={() => {
                                 inboundPlanDetails?.steps[4]?.complete ? tabChange('5') : document.getElementById('btn_handleNextShipping')?.focus()
                               }}
@@ -343,7 +358,9 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={'fs-5 fw-semibold ' + (activeTab == '6' ? 'text-primary' : inboundPlanDetails.steps[6].complete ? 'text-success opacity-50' : 'text-muted')}
+                              className={
+                                'fs-5 fw-semibold ' + (activeTab == '6' ? 'text-primary' : inboundPlanDetails.steps[6].complete ? 'text-success opacity-50' : 'text-muted')
+                              }
                               onClick={() => {
                                 inboundPlanDetails?.steps[5]?.complete ? tabChange('6') : document.getElementById('btn_handleNextShipping')?.focus()
                               }}
@@ -360,9 +377,21 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                             <InventoryToSend inboundPlan={inboundPlanDetails} watingRepsonse={watingRepsonse} />
                           </TabPane>
                           <TabPane tabId='3'>{inboundPlanDetails.steps[2].complete && <ShippingCompleted inboundPlan={inboundPlanDetails} />}</TabPane>
-                          <TabPane tabId='4'>{inboundPlanDetails.steps[3].complete && <BoxLabels inboundPlan={inboundPlanDetails} handleNextStep={handlePrintShipmentBoxesLabel} watingRepsonse={watingRepsonse} />}</TabPane>
-                          <TabPane tabId='5'>{inboundPlanDetails.steps[4].complete && <CarrierPalletInfo inboundPlan={inboundPlanDetails} handleNextStep={handlePrintShipmentPalletLabel} watingRepsonse={watingRepsonse} />}</TabPane>
-                          <TabPane tabId='6'>{inboundPlanDetails.steps[5].complete && <TrackingDetails inboundPlan={inboundPlanDetails} handlePrintShipmentBillOfLading={handlePrintShipmentBillOfLading} watingRepsonse={watingRepsonse} />}</TabPane>
+                          <TabPane tabId='4'>
+                            {inboundPlanDetails.steps[3].complete && (
+                              <BoxLabels inboundPlan={inboundPlanDetails} handleNextStep={handlePrintShipmentBoxesLabel} watingRepsonse={watingRepsonse} />
+                            )}
+                          </TabPane>
+                          <TabPane tabId='5'>
+                            {inboundPlanDetails.steps[4].complete && (
+                              <CarrierPalletInfo inboundPlan={inboundPlanDetails} handleNextStep={handlePrintShipmentPalletLabel} watingRepsonse={watingRepsonse} />
+                            )}
+                          </TabPane>
+                          <TabPane tabId='6'>
+                            {inboundPlanDetails.steps[5].complete && (
+                              <TrackingDetails inboundPlan={inboundPlanDetails} handlePrintShipmentBillOfLading={handlePrintShipmentBillOfLading} watingRepsonse={watingRepsonse} />
+                            )}
+                          </TabPane>
                         </TabContent>
                       </Col>
                     </Row>

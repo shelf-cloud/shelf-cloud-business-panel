@@ -1,17 +1,18 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import AppContext from '@context/AppContext'
-import React, { useContext, useMemo, useState } from 'react'
-import { Button, Card, CardBody, Col, Container, Input, Row } from 'reactstrap'
-import Head from 'next/head'
+ 
 import { GetServerSideProps } from 'next'
+import Head from 'next/head'
+import React, { useContext, useMemo, useState } from 'react'
+
 import { getSession } from '@auth/client'
 import BreadCrumb from '@components/Common/BreadCrumb'
+import CreateReportModal from '@components/modals/reports/createReportModal'
 import ReportsTable from '@components/reports/reportsTable'
+import AppContext from '@context/AppContext'
 import { ShelfCloudReportList } from '@typesTs/reports/reportsList'
 import axios from 'axios'
-import { toast } from 'react-toastify'
-import CreateReportModal from '@components/modals/reports/createReportModal'
 import moment from 'moment'
+import { toast } from 'react-toastify'
+import { Button, Card, CardBody, Col, Container, Input, Row } from 'reactstrap'
 import useSWR, { useSWRConfig } from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -61,7 +62,10 @@ const List = ({ session, sessionToken }: Props) => {
         Authorization: `Bearer ${sessionToken}`,
       },
     }).then((res) => res.data)
-  const { data }: { data?: ShelfCloudReportList[] } = useSWR(state.user.businessId ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reports/getReportList?region=${state.currentRegion}&businessId=${state.user.businessId}` : null, fetcher)
+  const { data }: { data?: ShelfCloudReportList[] } = useSWR(
+    state.user.businessId ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reports/getReportList?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
+    fetcher
+  )
 
   const handleDownloadReport = async (reportFileName: string) => {
     const reportUrlResponse = await axios(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reports/getReportUrl?reportFileName=${reportFileName}`, {
@@ -161,7 +165,14 @@ const List = ({ session, sessionToken }: Props) => {
                   <div className='col-sm-12 col-md-3'>
                     <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
                       <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
-                        <Input type='text' className='form-control input_background_white' placeholder='Search...' id='search-options' value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
+                        <Input
+                          type='text'
+                          className='form-control input_background_white'
+                          placeholder='Search...'
+                          id='search-options'
+                          value={searchValue}
+                          onChange={(e) => setSearchValue(e.target.value)}
+                        />
                         <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
                         <span
                           className='d-flex align-items-center justify-content-center input_background_white'
@@ -185,7 +196,9 @@ const List = ({ session, sessionToken }: Props) => {
           </Container>
         </div>
       </React.Fragment>
-      {showMappedCreateReport.show && <CreateReportModal showMappedCreateReport={showMappedCreateReport} setshowMappedCreateReport={setshowMappedCreateReport} handleCreateReport={handleCreateReport} />}
+      {showMappedCreateReport.show && (
+        <CreateReportModal showMappedCreateReport={showMappedCreateReport} setshowMappedCreateReport={setshowMappedCreateReport} handleCreateReport={handleCreateReport} />
+      )}
     </div>
   )
 }

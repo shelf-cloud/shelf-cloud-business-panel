@@ -1,5 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
-import React from 'react'
+ 
 import { InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
 import { Spinner } from 'reactstrap'
 

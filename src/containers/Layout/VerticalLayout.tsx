@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import React, { useState } from 'react'
+
+import PropTypes from 'prop-types'
 import { Collapse } from 'reactstrap'
+
 // import navdata from './LayoutMenuData'
 // import navdata from './LayoutMenuDataVideo'
 import navdata from './RoleBaseLayoutMenu'
-import { useRouter } from 'next/router'
 
 const VerticalLayout = () => {
   const navData = navdata().props.children
@@ -29,7 +31,10 @@ const VerticalLayout = () => {
                 <Link
                   href={item.link ? item.link : '/#'}
                   className={
-                    'nav-link menu-link rounded-top ' + (item?.subItems?.some((subItem: any) => pathname == subItem?.link.split('?')[0] || subItem?.childItems?.some((subitemChild: any) => pathname == subitemChild.link.split('?')[0])) && 'linkActive')
+                    'nav-link menu-link rounded-top ' +
+                    (item?.subItems?.some(
+                      (subItem: any) => pathname == subItem?.link.split('?')[0] || subItem?.childItems?.some((subitemChild: any) => pathname == subitemChild.link.split('?')[0])
+                    ) && 'linkActive')
                   }
                   onClick={(e) => {
                     item.click(e)
@@ -59,7 +64,11 @@ const VerticalLayout = () => {
                             <li className='nav-item w-100'>
                               <Link
                                 href={subItem.link ? subItem.link : '/#'}
-                                className={'nav-link menu-link w-100 ' + ((pathname == `${subItem.link.split('?')[0]}` || subItem?.childItems?.some((subitemChild: any) => pathname == subitemChild.link.split('?')[0])) && 'subLinkActive')}>
+                                className={
+                                  'nav-link menu-link w-100 ' +
+                                  ((pathname == `${subItem.link.split('?')[0]}` || subItem?.childItems?.some((subitemChild: any) => pathname == subitemChild.link.split('?')[0])) &&
+                                    'subLinkActive')
+                                }>
                                 {subItem.label}
                                 {subItem.badgeName ? (
                                   <span className={'badge badge-pill bg-' + subItem.badgeColor} data-key='t-new'>
@@ -80,7 +89,11 @@ const VerticalLayout = () => {
                                     setActualSubItemCollapsed(subItem.label)
                                   }
                                 }}
-                                className={'nav-link w-100 ' + ((pathname == `${subItem.link.split('?')[0]}` || subItem?.childItems?.some((subitemChild: any) => pathname == subitemChild.link.split('?')[0])) && 'linkActive')}
+                                className={
+                                  'nav-link w-100 ' +
+                                  ((pathname == `${subItem.link.split('?')[0]}` || subItem?.childItems?.some((subitemChild: any) => pathname == subitemChild.link.split('?')[0])) &&
+                                    'linkActive')
+                                }
                                 data-bs-toggle='collapse'
                                 aria-expanded={actualSubItemCollapsed == subItem.label ? true : false}>
                                 {subItem.label}
@@ -93,7 +106,9 @@ const VerticalLayout = () => {
                                       <React.Fragment key={key}>
                                         {!childItem.childItems ? (
                                           <li className='nav-item rounded'>
-                                            <Link href={childItem.link ? childItem.link : '/#'} className={'nav-link menu-link w-100 ' + (pathname == `${childItem.link.split('?')[0]}` && 'subLinkActiveChildren')}>
+                                            <Link
+                                              href={childItem.link ? childItem.link : '/#'}
+                                              className={'nav-link menu-link w-100 ' + (pathname == `${childItem.link.split('?')[0]}` && 'subLinkActiveChildren')}>
                                               {childItem.label}
                                             </Link>
                                           </li>

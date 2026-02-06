@@ -1,12 +1,16 @@
-import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 
 import { SelectOptionType, SelectSingleValueType } from '@components/Common/SimpleSelect'
-import SimpleSelectWithCreation from '@components/Common/SimpleSelectWithCreation'
 import { useFormik } from 'formik'
 import { Label } from 'reactstrap'
 import * as Yup from 'yup'
 
 import ErrorInputLabel from '../forms/ErrorInputLabel'
+
+const SimpleSelectWithCreation = dynamic(() => import('@components/Common/SimpleSelectWithCreation'), {
+  ssr: false,
+  loading: () => <div style={{ minHeight: '30px' }} />,
+})
 
 type Props = {
   inputLabel: string
@@ -21,12 +25,6 @@ type Props = {
 }
 
 const SelectSingleFilterWithCreation = ({ inputLabel, inputName, placeholder, options, selected, handleSelect, error, validationSchema, submitAddNewOption }: Props) => {
-  const [isMounted, setIsMounted] = useState(false)
-
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -46,23 +44,19 @@ const SelectSingleFilterWithCreation = ({ inputLabel, inputName, placeholder, op
       <Label htmlFor={inputLabel} className='form-label fs-7'>
         {inputLabel}
       </Label>
-      {isMounted ? (
-        <SimpleSelectWithCreation
-          selected={selected}
-          options={options}
-          handleSelect={handleSelect}
-          handleCreate={(newValue: string) => {
-            validation.setFieldValue('name', newValue).then(() => {
-              validation.handleSubmit()
-            })
-          }}
-          customStyle='sm'
-          placeholder={placeholder}
-          hasError={Boolean(error)}
-        />
-      ) : (
-        <div style={{ minHeight: '30px' }} />
-      )}
+      <SimpleSelectWithCreation
+        selected={selected}
+        options={options}
+        handleSelect={handleSelect}
+        handleCreate={(newValue: string) => {
+          validation.setFieldValue('name', newValue).then(() => {
+            validation.handleSubmit()
+          })
+        }}
+        customStyle='sm'
+        placeholder={placeholder}
+        hasError={Boolean(error)}
+      />
       <ErrorInputLabel error={error} />
       {validation.touched.name && validation.errors.name ? <span className='text-danger m-0 p-0 fs-7'>{validation.errors.name}</span> : null}
     </div>

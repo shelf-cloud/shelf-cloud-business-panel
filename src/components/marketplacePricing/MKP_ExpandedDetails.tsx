@@ -1,14 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useContext } from 'react'
-import DataTable, { ExpanderComponentProps } from 'react-data-table-component'
-import { Card } from 'reactstrap'
-import { MKP_Marketplaces, MKP_Product } from '@typesTs/marketplacePricing/marketplacePricing'
+
 import AppContext from '@context/AppContext'
+import { MKP_ExpandedRowProps } from '@hooks/marketplacePricing/useMarketplacePricing'
 import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
-import { DebounceInput } from 'react-debounce-input'
-import { MKP_ExpandedRowProps } from '@hooks/marketplacePricing/useMarketplacePricing'
 import { sortNumbers } from '@lib/helperFunctions'
+import { MKP_Marketplaces, MKP_Product } from '@typesTs/marketplacePricing/marketplacePricing'
+import DataTable, { ExpanderComponentProps } from 'react-data-table-component'
+import { DebounceInput } from 'react-debounce-input'
+import { Card } from 'reactstrap'
 
 type Props = {
   data: MKP_Product
@@ -31,7 +32,13 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
                 margin: '0px',
                 position: 'relative',
               }}>
-              <img loading='lazy' src={row.logo ?? NoImageAdress} onError={(e) => (e.currentTarget.src = NoImageAdress)} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
+              <img
+                loading='lazy'
+                src={row.logo ?? NoImageAdress}
+                onError={(e) => (e.currentTarget.src = NoImageAdress)}
+                alt='product Image'
+                style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+              />
             </div>
             <span className='m-0 p-0 fs-7 text-muted text-wrap'>{row.name}</span>
           </div>
@@ -44,13 +51,15 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
     },
     {
       name: <span className='fw-semibold text-center fs-7'>On Watch</span>,
-      selector: (row: MKP_Marketplaces) => (row.proposedPrice > 0 && row.proposedPrice !== row.actualPrice ? <i className='mdi mdi-eye label-icon align-middle fs-5 me-2 text-primary' /> : null),
+      selector: (row: MKP_Marketplaces) =>
+        row.proposedPrice > 0 && row.proposedPrice !== row.actualPrice ? <i className='mdi mdi-eye label-icon align-middle fs-5 me-2 text-primary' /> : null,
       sortable: true,
       center: true,
       compact: true,
       minWidth: '50px',
       with: 'fit-content',
-      sortFunction: (rowA: MKP_Marketplaces, rowB: MKP_Marketplaces) => sortNumbers(rowA.proposedPrice > 0 && rowA.proposedPrice !== rowA.actualPrice ? 1 : 0, rowB.proposedPrice > 0 && rowB.proposedPrice !== rowB.actualPrice ? 1 : 0),
+      sortFunction: (rowA: MKP_Marketplaces, rowB: MKP_Marketplaces) =>
+        sortNumbers(rowA.proposedPrice > 0 && rowA.proposedPrice !== rowA.actualPrice ? 1 : 0, rowB.proposedPrice > 0 && rowB.proposedPrice !== rowB.actualPrice ? 1 : 0),
     },
     {
       name: <span className='fw-semibold text-center fs-7'>1 Month Sales</span>,
@@ -131,7 +140,8 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
     },
     {
       name: <span className='fw-semibold text-center fs-7'>Profit</span>,
-      selector: (row: MKP_Marketplaces) => FormatCurrency(state.currentRegion, row.actualPrice - row.totalFees - data.sellerCost - data.inboundShippingCost - row.storeOtherCosts - row.shippingToMarketpalce),
+      selector: (row: MKP_Marketplaces) =>
+        FormatCurrency(state.currentRegion, row.actualPrice - row.totalFees - data.sellerCost - data.inboundShippingCost - row.storeOtherCosts - row.shippingToMarketpalce),
       sortable: true,
       center: true,
       compact: true,
@@ -143,7 +153,10 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
     {
       name: <span className='fw-semibold text-center fs-7'>Margin</span>,
       selector: (row: MKP_Marketplaces) => {
-        const actualMargin = row.actualPrice <= 0 ? 0 : ((row.actualPrice - row.totalFees - data.sellerCost - data.inboundShippingCost - row.storeOtherCosts - row.shippingToMarketpalce) / row.actualPrice) * 100
+        const actualMargin =
+          row.actualPrice <= 0
+            ? 0
+            : ((row.actualPrice - row.totalFees - data.sellerCost - data.inboundShippingCost - row.storeOtherCosts - row.shippingToMarketpalce) / row.actualPrice) * 100
         return <span className={actualMargin < 0 ? 'text-danger' : 'text-success'}>{`${FormatIntPercentage(state.currentRegion, actualMargin)} %`}</span>
       },
       sortable: true,
@@ -199,7 +212,15 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
     {
       name: <span className='fw-semibold text-center fs-7'>Profit</span>,
       selector: (row: MKP_Marketplaces) =>
-        FormatCurrency(state.currentRegion, row.proposedPrice - (row.proposedPrice * (row.comissionFee / 100) + row.fixedFee + row.fbaHandlingFee) - data.sellerCost - data.inboundShippingCost - row.storeOtherCosts - row.shippingToMarketpalce),
+        FormatCurrency(
+          state.currentRegion,
+          row.proposedPrice -
+            (row.proposedPrice * (row.comissionFee / 100) + row.fixedFee + row.fbaHandlingFee) -
+            data.sellerCost -
+            data.inboundShippingCost -
+            row.storeOtherCosts -
+            row.shippingToMarketpalce
+        ),
       sortable: true,
       center: true,
       compact: true,
@@ -212,7 +233,14 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       name: <span className='fw-semibold text-center fs-7'>Margin</span>,
       selector: (row: MKP_Marketplaces) => {
         const proposedMargin =
-          ((row.proposedPrice - (row.proposedPrice * (row.comissionFee / 100) + row.fixedFee + row.fbaHandlingFee) - data.sellerCost - data.inboundShippingCost - row.storeOtherCosts - row.shippingToMarketpalce) / row.proposedPrice) * 100
+          ((row.proposedPrice -
+            (row.proposedPrice * (row.comissionFee / 100) + row.fixedFee + row.fbaHandlingFee) -
+            data.sellerCost -
+            data.inboundShippingCost -
+            row.storeOtherCosts -
+            row.shippingToMarketpalce) /
+            row.proposedPrice) *
+          100
         return <span className={proposedMargin < 0 ? 'text-danger' : 'text-success'}>{`${FormatIntPercentage(state.currentRegion, proposedMargin)} %`}</span>
       },
       sortable: true,
@@ -301,7 +329,13 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
   return (
     <div className='p-2'>
       <Card>
-        <DataTable columns={columns} data={Object.values(data.marketplaces).filter((marketplace) => marketplace.unitsSold['1Y'] > 0) ?? []} striped={true} defaultSortFieldId={3} defaultSortAsc={false} />
+        <DataTable
+          columns={columns}
+          data={Object.values(data.marketplaces).filter((marketplace) => marketplace.unitsSold['1Y'] > 0) ?? []}
+          striped={true}
+          defaultSortFieldId={3}
+          defaultSortAsc={false}
+        />
       </Card>
     </div>
   )

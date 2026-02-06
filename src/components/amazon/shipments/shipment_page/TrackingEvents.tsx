@@ -1,6 +1,5 @@
 import { FBAShipment } from '@typesTs/amazon/fbaShipments.interface'
 import { WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
-import React from 'react'
 import { Button, Col, Spinner } from 'reactstrap'
 
 type Props = {
