@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
- 
 import Link from 'next/link'
 import { useContext } from 'react'
 
@@ -119,12 +118,16 @@ const SPSCommerceTable = ({ tableData, pending, setSelectedRows, toggledClearRow
       },
     },
     {
-      name: <span className='fw-bold fs-6'>Available</span>,
-      selector: (row: SPSCommerceItem) => FormatIntNumber(state.currentRegion, row.quantity),
+      name: <span className='fw-bold fs-6'>Total Available</span>,
+      selector: (row: SPSCommerceItem) => FormatIntNumber(state.currentRegion, row.quantity ? Object.values(row.quantity).reduce((acc, qty) => acc + qty, 0) : 0),
       sortable: true,
       compact: true,
       center: true,
-      sortFunction: (rowA: SPSCommerceItem, rowB: SPSCommerceItem) => sortNumbers(rowA.quantity, rowB.quantity),
+      sortFunction: (rowA: SPSCommerceItem, rowB: SPSCommerceItem) =>
+        sortNumbers(
+          Object.values(rowA.quantity).reduce((acc, qty) => acc + qty, 0),
+          Object.values(rowB.quantity).reduce((acc, qty) => acc + qty, 0)
+        ),
     },
     {
       name: <span className='fw-bold fs-6'>Should Update</span>,

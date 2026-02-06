@@ -3,7 +3,7 @@ import ExcelJS from 'exceljs'
 import moment from 'moment'
 
 self.onmessage = async (e) => {
-  const { integrationInfo, items }: { integrationInfo: SPSCommerceBusinessInfo; items: SPSCommerceItem[] } = e.data
+  const { integrationInfo, items, warehouseId }: { integrationInfo: SPSCommerceBusinessInfo; items: SPSCommerceItem[]; warehouseId: string } = e.data
 
   try {
     const currentDate = moment().format('YYYYMMDD')
@@ -57,13 +57,13 @@ self.onmessage = async (e) => {
         '',
         currentDate,
         integrationInfo['VENDOR NUMBER'],
-        integrationInfo['REPORTING LOCATION NAME'],
-        integrationInfo['REPORTING LOCATION NUMBER'],
+        integrationInfo.locations[warehouseId]['REPORTING LOCATION NAME'],
+        integrationInfo.locations[warehouseId]['REPORTING LOCATION NUMBER'],
         item.sku,
         item.integrationSku,
         item.barcode,
         item.title,
-        item.quantity,
+        item.quantity[warehouseId] || 0,
         integrationInfo['QUANTITY AVAILABLE FOR SALE UOM'],
         currentDate,
         '',

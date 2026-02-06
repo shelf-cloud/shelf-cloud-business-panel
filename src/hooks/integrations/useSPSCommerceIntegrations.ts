@@ -8,6 +8,7 @@ import useSWR from 'swr'
 type SPSCommerceResponse = {
   error?: boolean
   integration: Integration
+  warehouses: { [warehouseId: string]: SPSCommerceWarehouse }
 }
 
 export interface Integration {
@@ -17,9 +18,15 @@ export interface Integration {
 
 export interface SPSCommerceBusinessInfo {
   'VENDOR NUMBER': string
-  'REPORTING LOCATION NAME': string
-  'REPORTING LOCATION NUMBER': string
+  locations: SPSCommerceLocations
   'QUANTITY AVAILABLE FOR SALE UOM': string
+}
+
+export interface SPSCommerceLocations {
+  [locationId: string]: {
+    'REPORTING LOCATION NAME': string
+    'REPORTING LOCATION NUMBER': string
+  }
 }
 
 export interface SPSCommerceItem {
@@ -30,12 +37,33 @@ export interface SPSCommerceItem {
   integrationSku: string
   shouldUpdate: boolean
   note: string | null
-  quantity: number
+  quantity: SPSCommerceItemQuantity
   title: string
   sku: string
   barcode: string
   image: string
   description: string
+}
+
+type SPSCommerceItemQuantity = { [warehouseId: string]: number }
+
+export interface SPSCommerceWarehouse {
+  name: string
+  shipTo: string
+  address1: string
+  address2: string
+  zipcode: string
+  city: string
+  state: string
+  countryCode: string
+  phone: string
+  isActive: boolean
+  isSCDestination: boolean
+  hasInventory: boolean
+  id3PL: any
+  is3PL: boolean
+  name3PL: string
+  goflowId: string
 }
 
 export const useSPSCommerceIntegrations = () => {
@@ -76,6 +104,7 @@ export const useSPSCommerceIntegrations = () => {
 
   return {
     integrationInfo: data?.integration.businessInfo,
+    warehouses: data?.warehouses,
     items: data?.integration.items || [],
     isLoading: isValidating,
   }
