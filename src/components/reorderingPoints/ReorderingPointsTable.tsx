@@ -16,6 +16,8 @@ import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
 import { Badge, Button, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
 
+import DownloadProductMD from './DownloadProductMD'
+
 const ReorderingPointsExpandedDetails = dynamic(() => import('./ReorderingPointsExpandedDetails'), {
   ssr: false,
 })
@@ -737,6 +739,7 @@ const ReorderingPointsTable = ({
                 <i className='ri-settings-3-line align-middle me-2 fs-5 text-black'></i>
                 <span className='fs-7 fw-normal text-dark'>Edit Config</span>
               </DropdownItem>
+              <DownloadProductMD product={row} />
               <DropdownItem
                 className='edit-item-btn'
                 onClick={() => {
