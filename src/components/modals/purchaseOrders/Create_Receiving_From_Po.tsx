@@ -1,4 +1,3 @@
- 
 import router from 'next/router'
 import { useContext, useState } from 'react'
 
@@ -32,7 +31,7 @@ import {
   TabContent,
   TabPane,
 } from 'reactstrap'
-import useSWR from 'swr'
+import useSWR, { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
 import Create_Receiving_Packages_Tab from '../receivings/createReceiving/Create_Receiving_Packages_Tab'
@@ -59,6 +58,7 @@ const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
 
 const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
   const { state, setShowCreateReceivingFromPo } = useContext(AppContext)
+  const { mutate } = useSWRConfig()
   const { warehouses } = useWarehouses()
   const [loading, setloading] = useState(false)
   const [activeTab, setactiveTab] = useState('summary')
@@ -200,6 +200,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
           )
         }
 
+        await mutate('/api/getuser')
         router.push('/receivings')
       } else {
         toast.update(createReceiving, {
