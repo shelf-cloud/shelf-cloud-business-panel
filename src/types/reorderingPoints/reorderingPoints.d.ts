@@ -25,12 +25,14 @@ export interface ReorderingPointsProduct {
   daysOfStockAWD: number
   hideReorderingPoints: boolean
   warehouseQty: number
+  productionQty: number
+  receiving: number
   fbaQty: number
+  fbaInboundQty: number
   awdQty: number
   awdInboundQty: number
-  productionQty: number
+  productionFBA: number
   poDates: { [key: string]: number }
-  receiving: number
   sellerCost: number
   leadTime: number
   leadTimeSC: number

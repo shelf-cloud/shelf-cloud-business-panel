@@ -464,6 +464,10 @@ const ReorderingPointsTable = ({
                         <span className='text-muted fw-light'>FBA: </span>
                         <span className='fw-semibold'>{row.fbaQty}</span>
                       </p>
+                      <p className='m-0 p-0 text-end fs-7'>
+                        <span className='text-muted fw-light'>Inbound: </span>
+                        <span className='fw-semibold'>{row.fbaInboundQty}</span>
+                      </p>
                       {state.user[state.currentRegion]?.rpShowAWD && (
                         <>
                           <p className='m-0 p-0 text-end fs-7'>
