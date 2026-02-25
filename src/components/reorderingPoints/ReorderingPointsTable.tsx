@@ -509,7 +509,7 @@ const ReorderingPointsTable = ({
         </span>
       ),
       selector: (row: ReorderingPointsProduct) =>
-        FormatIntNumber(state.currentRegion, row.warehouseQty + row.fbaQty + row.productionQty + row.receiving + row.awdQty + row.awdInboundQty),
+        FormatIntNumber(state.currentRegion, row.warehouseQty + row.productionQty + row.receiving + row.fbaQty + row.fbaInboundQty + row.awdQty + row.awdInboundQty),
       wrap: true,
       sortable: false,
       center: true,
