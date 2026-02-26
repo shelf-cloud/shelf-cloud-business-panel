@@ -13,7 +13,7 @@ self.onmessage = async (e) => {
     worksheet.addRow('')
     worksheet.addRow(['', 'Fields in BOLD TYPE are required. Hover mouse over a column head to see a description of the column contents.'])
     worksheet.addRow(['H', '', '', '', '', '', '', 'I', 'I', 'I', '', 'I', '', '', 'I', '']).hidden = true
-    worksheet.addRow(['1', '', '4', '', '', '', '', '', '', '', '', '', '', '', '', '']).hidden = true
+    worksheet.addRow(['1', '=+#REF!+1', '4', '', '', '', '', '=+#REF!+1', '=+#REF!+1', '=+#REF!+1', '', '=+#REF!+1', '', '', '=+#REF!+1', '']).hidden = true
     worksheet.addRow([
       'CATALOG ID',
       'INVENTORY REFERENCE #',
@@ -31,25 +31,44 @@ self.onmessage = async (e) => {
       'ON-ORDER QUANTITY UOM',
       'ON-ORDER QUANTITY AVAILABLE TO SHIP DATE',
       'UPC QUALIFIER',
-    ]).font = { bold: true }
+    ])
+
+    worksheet.getCell('H3').font = { bold: true }
+    worksheet.getCell('I3').font = { bold: true }
+
+    worksheet.getCell('A4').font = { bold: true }
+    worksheet.getCell('C4').font = { bold: true }
+    worksheet.getCell('H4').font = { bold: true }
+    worksheet.getCell('I4').font = { bold: true }
+
+    worksheet.getCell('B5').font = { bold: true }
+    worksheet.getCell('C5').font = { bold: true }
+    worksheet.getCell('D5').font = { bold: true }
+    worksheet.getCell('F5').font = { bold: true }
+    worksheet.getCell('G5').font = { bold: true }
+    worksheet.getCell('I5').font = { bold: true }
+    worksheet.getCell('J5').font = { bold: true }
+    worksheet.getCell('K5').font = { bold: true }
+    worksheet.getCell('L5').font = { bold: true }
 
     worksheet.columns = [
-      { hidden: true },
+      { hidden: true, width: 15.72 },
+      { width: 31.53 },
+      { width: 20.72 },
+      { width: 26.17 },
+      { width: 20.72 },
+      { width: 24.44 },
+      { width: 23.26 },
+      { width: 20.72 },
+      { width: 47.81 },
+      { width: 20.72 },
       { width: 20 },
       { width: 20 },
       { width: 20 },
       { width: 20 },
       { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
+      { width: 17.72 },
+      { width: 9.17 },
     ]
 
     items.forEach((item) => {

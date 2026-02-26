@@ -96,6 +96,7 @@ const ProductsListings = ({ session }: Props) => {
                                   items={selectedRows}
                                   warehouseId={warehouse?.value.toString() || ''}
                                   color='ghost'
+                                  disabled={!warehouse?.value}
                                 />
                               )}
                             </DropdownItem>
