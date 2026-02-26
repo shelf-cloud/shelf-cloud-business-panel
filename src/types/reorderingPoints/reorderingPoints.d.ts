@@ -29,9 +29,10 @@ export interface ReorderingPointsProduct {
   receiving: number
   fbaQty: number
   fbaInboundQty: number
+  fbaProduction: number
   awdQty: number
   awdInboundQty: number
-  productionFBA: number
+  awdProduction: number
   poDates: { [key: string]: number }
   sellerCost: number
   leadTime: number
@@ -63,6 +64,8 @@ export interface ReorderingPointsProduct {
   totalAWDForecast: number
   monthlyForecast: { [year: string]: { [month: string]: { unitsSoldSC: number; daysWithStockSC: number; unitsSoldFBA: number; daysWithStockFBA: number } } }
   canSendToAWD: boolean
+  totalAIForecast_1: { model: string; analysis: string; forecast: number }
+  totalAIForecast_2: { model: string; analysis: string; forecast: number }
   comment?: string
 }
 

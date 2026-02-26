@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useCallback, useContext } from 'react'
 
+import TooltipComponent from '@components/constants/Tooltip'
 import CopyTextToClipboard from '@components/ui/CopyTextToClipboard'
 import AppContext from '@context/AppContext'
 import { RPProductConfig } from '@hooks/reorderingPoints/useRPProductConfig'
@@ -465,6 +466,10 @@ const ReorderingPointsTable = ({
                         <span className='fw-semibold'>{row.fbaQty}</span>
                       </p>
                       <p className='m-0 p-0 text-end fs-7'>
+                        <span className='text-muted fw-light'>Prod: </span>
+                        <span className='fw-semibold'>{row.fbaProduction + row.fbaInboundQty}</span>
+                      </p>
+                      <p className='m-0 p-0 text-end fs-7'>
                         <span className='text-muted fw-light'>Inbound: </span>
                         <span className='fw-semibold'>{row.fbaInboundQty}</span>
                       </p>
@@ -620,6 +625,19 @@ const ReorderingPointsTable = ({
               )
             ) : null}
           </span>
+          <span
+            className={'fs-7 ' + (setField === 'totalAIForecast_1' ? 'fw-bold' : 'text-muted')}
+            style={{ cursor: 'pointer' }}
+            onClick={() => handleSetSorting('totalAIForecast_1')}>
+            AI{' '}
+            {setField === 'totalAIForecast_1' ? (
+              sortingDirectionAsc ? (
+                <i className='ri-arrow-down-fill fs-7 text-primary' />
+              ) : (
+                <i className='ri-arrow-up-fill fs-7 text-primary' />
+              )
+            ) : null}
+          </span>
           {/* {state.user[state.currentRegion]?.rpShowFBA && (
             <span
               className={'fs-7 ' + (setField === 'totalFBAForecast' ? 'fw-bold' : 'text-muted')}
@@ -658,6 +676,17 @@ const ReorderingPointsTable = ({
             <p className='m-0 p-0 text-center' id={'Recommended_Qty'}>
               {FormatIntNumber(state.currentRegion, row.totalSCForecast)}
             </p>
+            {row.totalAIForecast_1.model && (
+              <p className='m-0 p-0 text-center d-flex justify-content-center align-items-center' id={'ai_recommended_Qty'}>
+                {FormatIntNumber(state.currentRegion, row.totalAIForecast_1.forecast)}
+                {row.totalAIForecast_1.analysis && (
+                  <>
+                    <i className='ri-information-fill ms-1 fs-6 text-info' id={`ai_forecast_model_1_${row.sku}`}></i>
+                    <TooltipComponent target={`ai_forecast_model_1_${row.sku}`} text={row.totalAIForecast_1.analysis} />
+                  </>
+                )}
+              </p>
+            )}
             {/* {state.user[state.currentRegion]?.rpShowFBA && (
               <p className='m-0 p-0 text-center' id={`forecast_${row.sku}`}>
                 {FormatIntNumber(state.currentRegion, row.totalFBAForecast)}

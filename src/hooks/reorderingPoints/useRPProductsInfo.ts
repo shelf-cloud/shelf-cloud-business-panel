@@ -403,6 +403,20 @@ export const useRPProductsInfo = ({
       })
     }
 
+    if (['totalAIForecast_1'].includes(field)) {
+      return rows.sort((a, b) => {
+        const aField = a.totalAIForecast_1.forecast
+        const bField = b.totalAIForecast_1.forecast
+        if (aField > bField) {
+          return direction ? 1 : -1
+        } else if (aField < bField) {
+          return direction ? -1 : 1
+        } else {
+          return 0
+        }
+      })
+    }
+
     return rows.sort((a, b) => {
       if (a.urgency > b.urgency) {
         return !direction ? 1 : -1
