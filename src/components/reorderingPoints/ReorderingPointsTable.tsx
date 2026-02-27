@@ -676,7 +676,7 @@ const ReorderingPointsTable = ({
             <p className='m-0 p-0 text-center' id={'Recommended_Qty'}>
               {FormatIntNumber(state.currentRegion, row.totalSCForecast)}
             </p>
-            {row.totalAIForecast_1.model && (
+            {state.user.us.useAiForecast && row.totalAIForecast_1.model && (
               <p className='m-0 p-0 text-center d-flex justify-content-center align-items-center' id={'ai_recommended_Qty'}>
                 {FormatIntNumber(state.currentRegion, row.totalAIForecast_1.forecast)}
                 {row.totalAIForecast_1.analysis && (

@@ -7,6 +7,7 @@ import { getSession } from '@auth/client'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import FilterByDates from '@components/FilterByDates'
 import ReorderingPointsCreatePOModal from '@components/modals/reorderingPoints/ReorderingPointsCreatePOModal'
+import ReorderingPointsPromptModal from '@components/modals/reorderingPoints/ReorderingPointsPromtpModal'
 import ReorderingPointsSalesModal from '@components/modals/reorderingPoints/ReorderingPointsSalesModal'
 import InputModal from '@components/modals/shared/inputModal'
 import RPEditProductConfigOffCanvas from '@components/reorderingPoints/RPEditProductConfigOffCanvas'
@@ -25,7 +26,7 @@ import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoi
 import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Card, CardBody, Collapse, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from 'reactstrap'
+import { Button, Card, CardBody, Collapse, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from 'reactstrap'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -74,7 +75,7 @@ type SelectedSupplierState = {
 }
 
 const ReorderingPoints = ({ session }: Props) => {
-  const { state }: any = useContext(AppContext)
+  const { state } = useContext(AppContext)
   const router = useRouter()
   const { filters, urgency, grossmin, grossmax, profitmin, profitmax, unitsrange, unitsmin, unitsmax, supplier, brand, category, showHidden }: FilterProps = router.query
   const [startDate, setStartDate] = useState(moment().subtract(15, 'days').format('YYYY-MM-DD'))
@@ -141,6 +142,9 @@ const ReorderingPoints = ({ session }: Props) => {
     title: '',
     totalUnitsSold: {},
     marketplaces: {},
+  })
+  const [promptModal, setPromptModal] = useState({
+    show: false,
   })
 
   const [showPOModal, setshowPOModal] = useState(false)
@@ -340,15 +344,23 @@ const ReorderingPoints = ({ session }: Props) => {
                     </UncontrolledButtonDropdown>
                   )}
                   {state?.user?.us && (
-                    <ReorderingPointsSettings
-                      initialHighAlert={state?.user?.us?.rphighAlertMax}
-                      initialMediumAlert={state?.user?.us?.rpmediumAlertMax}
-                      initialLowAlert={state?.user?.us?.rplowAlertMax}
-                      handleUrgencyRange={handleUrgencyRange}
-                      canSplit={state?.user?.us?.rpCanSplit}
-                      splits={splits}
-                      setsplits={setsplits}
-                    />
+                    <>
+                      <ReorderingPointsSettings
+                        initialHighAlert={state?.user?.us?.rphighAlertMax}
+                        initialMediumAlert={state?.user?.us?.rpmediumAlertMax}
+                        initialLowAlert={state?.user?.us?.rplowAlertMax}
+                        handleUrgencyRange={handleUrgencyRange}
+                        canSplit={state?.user?.us?.rpCanSplit}
+                        splits={splits}
+                        setsplits={setsplits}
+                      />
+                      {state.user.us.canEditPrompt ? (
+                        <Button onClick={() => setPromptModal({ show: true })} className='d-flex flex-row justify-content-start align-items-center gap-1'>
+                          <i className='las la-brain fs-4 m-0 p-0' />
+                          Prompt
+                        </Button>
+                      ) : null}
+                    </>
                   )}
                 </div>
                 <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' minLength={3} />
@@ -415,6 +427,7 @@ const ReorderingPoints = ({ session }: Props) => {
             splitNames={splitNames}
           />
         )}
+        {promptModal.show && <ReorderingPointsPromptModal promptModal={promptModal} setPromptModal={setPromptModal} />}
         <RPEditProductConfigOffCanvas rpProductConfig={rpProductConfig} setRPProductConfig={setRPProductConfig} handleSaveProductConfig={handleSaveProductConfig} />
         <InputModal
           isOpen={isOpen}

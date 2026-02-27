@@ -62,6 +62,8 @@ export interface RegionInfoTypeUS {
   showCommerceHub: boolean
   showPPWithNoSCFees: boolean
   showMarketpalcePricing: boolean
+  useAiForecast: boolean
+  canEditPrompt: boolean
   rpShowFBA: boolean
   rpShowAWD: boolean
   rpCanSplit: boolean

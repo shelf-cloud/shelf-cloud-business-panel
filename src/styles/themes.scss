@@ -87,6 +87,16 @@ body {
   text-align: center;
 }
 
+.prompt-content {
+  pre {
+    text-wrap: auto;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+  }
+}
+
 // //Calendar
 .fc-direction-ltr .fc-daygrid-event.fc-event-end,
 .fc-direction-rtl .fc-daygrid-event.fc-event-start {
