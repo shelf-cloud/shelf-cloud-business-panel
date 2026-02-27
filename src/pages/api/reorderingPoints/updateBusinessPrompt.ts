@@ -18,7 +18,7 @@ const updateBusinessPrompt: NextApiHandler = async (request, response) => {
     .post(
       `${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/reorderingPoints/update-business-prompt.php?businessId=${request.query.businessId}`,
       {
-        prompt: request.body.prompt,
+        businessRules: request.body.businessRules,
       },
       {
         headers: {

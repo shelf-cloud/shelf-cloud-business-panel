@@ -53,9 +53,7 @@ function ReorderingPointsPromptModal({ promptModal, setPromptModal }: Props) {
 
     startTransition(async () => {
       try {
-        const { data } = await axios.post('/api/reorderingPoints/updateBusinessRules', {
-          businessId,
-          region,
+        const { data } = await axios.post(`/api/reorderingPoints/updateBusinessPrompt?region=${region}&businessId=${businessId}`, {
           businessRules: updatedBusinessRules,
         })
         if (!data.success) {
