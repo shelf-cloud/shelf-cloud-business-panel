@@ -112,11 +112,11 @@ function ReorderingPointsPromptModal({ promptModal, setPromptModal }: Props) {
         ) : data?.prompt ? (
           <div className='d-flex flex-column gap-3' style={{ minWidth: 0, width: '100%' }}>
             {[
-              { label: 'General', content: snarkdown(data.prompt.general) },
+              // { label: 'General', content: snarkdown(data.prompt.general) },
               { label: 'Objective', content: snarkdown(data.prompt.objective) },
               { label: 'Core Rules', content: snarkdown(data.prompt.corerules) },
-              { label: 'Restrictions', content: snarkdown(data.prompt.restrctions) },
-              { label: 'Output', content: snarkdown(data.prompt.output) },
+              // { label: 'Restrictions', content: snarkdown(data.prompt.restrctions) },
+              // { label: 'Output', content: snarkdown(data.prompt.output) },
             ].map(({ label, content }) => (
               <div key={label} className='border rounded p-3 shadow-sm' style={{ minWidth: 0, overflow: 'hidden' }}>
                 <p className='fw-semibold text-secondary text-uppercase mb-2' style={{ fontSize: '0.7rem', letterSpacing: '0.06em' }}>
