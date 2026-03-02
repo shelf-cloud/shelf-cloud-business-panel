@@ -460,32 +460,37 @@ const ReorderingPointsTable = ({
               return (
                 <div>
                   {state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected && (
-                    <>
+                    <div className='my-1'>
                       <p className='m-0 p-0 text-end fs-7'>
-                        <span className='text-muted fw-light'>FBA: </span>
+                        <span className='text-muted fw-bold'>FBA: </span>
                         <span className='fw-semibold'>{row.fbaQty}</span>
                       </p>
                       <p className='m-0 p-0 text-end fs-7'>
                         <span className='text-muted fw-light'>Prod: </span>
-                        <span className='fw-semibold'>{row.fbaProduction + row.fbaInboundQty}</span>
+                        <span className='fw-semibold'>{row.fbaProduction}</span>
                       </p>
                       <p className='m-0 p-0 text-end fs-7'>
                         <span className='text-muted fw-light'>Inbound: </span>
                         <span className='fw-semibold'>{row.fbaInboundQty}</span>
                       </p>
+                      {state.user[state.currentRegion]?.rpShowAWD && <hr className='my-1 mx-0 opacity-50' style={{ borderColor: '#6c757d' }} />}
                       {state.user[state.currentRegion]?.rpShowAWD && (
                         <>
                           <p className='m-0 p-0 text-end fs-7'>
-                            <span className='text-muted fw-light'>AWD: </span>
+                            <span className='text-muted fw-bold'>AWD: </span>
                             <span className='fw-semibold'>{row.awdQty}</span>
                           </p>
                           <p className='m-0 p-0 text-end fs-7'>
                             <span className='text-muted fw-light'>Inbound: </span>
                             <span className='fw-semibold'>{row.awdInboundQty}</span>
                           </p>
+                          <p className='m-0 p-0 text-end fs-7'>
+                            <span className='text-muted fw-light'>Prod: </span>
+                            <span className='fw-semibold'>{row.awdProduction}</span>
+                          </p>
                         </>
                       )}
-                    </>
+                    </div>
                   )}
                 </div>
               )
@@ -514,7 +519,10 @@ const ReorderingPointsTable = ({
         </span>
       ),
       selector: (row: ReorderingPointsProduct) =>
-        FormatIntNumber(state.currentRegion, row.warehouseQty + row.productionQty + row.receiving + row.fbaQty + row.fbaInboundQty + row.awdQty + row.awdInboundQty),
+        FormatIntNumber(
+          state.currentRegion,
+          row.warehouseQty + row.productionQty + row.receiving + row.fbaQty + row.fbaInboundQty + row.fbaProduction + row.awdQty + row.awdInboundQty + row.awdProduction
+        ),
       wrap: true,
       sortable: false,
       center: true,
