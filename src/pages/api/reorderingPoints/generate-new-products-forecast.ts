@@ -4,7 +4,7 @@ import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 import { getServerSession } from 'next-auth'
 
-const getSingleProductForecast: NextApiHandler = async (request, response) => {
+const generateNewProductsForecast: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)
 
   const sessionToken = request.cookies['next-auth.session-token'] ? request.cookies['next-auth.session-token'] : request.cookies['__Secure-next-auth.session-token']
@@ -16,7 +16,7 @@ const getSingleProductForecast: NextApiHandler = async (request, response) => {
 
   axios
     .post(
-      `${process.env.SHELFCLOUD_SERVER_URL}/api/reorderingPoints/getForecastSingle?region=${request.query.region}&businessId=${request.query.businessId}`,
+      `${process.env.SHELFCLOUD_SERVER_URL}/api/reorderingPoints/generate_new_products_forecast?region=${request.query.region}&businessId=${request.query.businessId}`,
       {
         skus: request.body.skus,
         productIds: request.body.productIds,
@@ -54,4 +54,4 @@ const getSingleProductForecast: NextApiHandler = async (request, response) => {
     })
 }
 
-export default getSingleProductForecast
+export default generateNewProductsForecast

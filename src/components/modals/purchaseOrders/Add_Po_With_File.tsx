@@ -5,6 +5,7 @@ import SimpleSelect, { SelectSingleValueType } from '@components/Common/SimpleSe
 import UploadFileDropzone from '@components/ui/UploadFileDropzone'
 import SelectSingleFilter from '@components/ui/filters/SelectSingleFilter'
 import AppContext from '@context/AppContext'
+import { useRPNewForecast } from '@hooks/reorderingPoints/useRPNewForcast'
 import { Supplier, useSuppliers } from '@hooks/suppliers/useSuppliers'
 import { useWarehouses } from '@hooks/warehouses/useWarehouse'
 import axios from 'axios'
@@ -33,6 +34,7 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
   const [errorResponse, setErrorResponse] = useState([]) as any
   const { suppliers } = useSuppliers()
   const { warehouses, isLoading } = useWarehouses()
+  const { generate_new_forecast_products } = useRPNewForecast()
 
   const initialValues = {
     orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
@@ -122,7 +124,10 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
           })
 
           if (!response.data.error) {
-            axios.post(`/api/reorderingPoints/delete-reordering-points-cache?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+            generate_new_forecast_products({
+              skus: response.data.skus ?? [],
+              productIds: response.data.productIds ?? [],
+            })
             if (organizeBy == 'suppliers') {
               mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
             } else if (organizeBy == 'orders') {

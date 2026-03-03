@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useContext } from 'react'
 
 import AppContext from '@context/AppContext'
+import { useRPNewForecast } from '@hooks/reorderingPoints/useRPNewForcast'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { Split } from '@typesTs/purchaseOrders'
 import axios from 'axios'
@@ -36,6 +37,8 @@ const Confirm_Delete_Item_From_PO = ({ showDeleteModal, setshowDeleteModal, load
   const { status, organizeBy } = router.query
   const { mutate } = useSWRConfig()
 
+  const { generate_new_forecast_products } = useRPNewForecast()
+
   const handleClose = () => {
     setshowDeleteModal({
       show: false,
@@ -62,7 +65,10 @@ const Confirm_Delete_Item_From_PO = ({ showDeleteModal, setshowDeleteModal, load
     })
 
     if (!response.data.error) {
-      axios.post(`/api/reorderingPoints/delete-reordering-points-cache?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+      generate_new_forecast_products({
+        skus: [sku],
+        productIds: [inventoryId],
+      })
       if (organizeBy == 'suppliers') {
         mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
       } else if (organizeBy == 'orders') {

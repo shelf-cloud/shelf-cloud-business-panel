@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
 
 import AppContext from '@context/AppContext'
+import { useRPNewForecast } from '@hooks/reorderingPoints/useRPNewForcast'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { PurchaseOrderItem, Split } from '@typesTs/purchaseOrders'
@@ -36,6 +37,8 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
   const [newOrderedQtyItems, setnewOrderedQtyItems] = useState(structuredClone(poItems))
   const [error, setError] = useState(false)
 
+  const { generate_new_forecast_products } = useRPNewForecast()
+
   const handleClose = () => {
     setshowEditOrderQty({
       show: false,
@@ -58,7 +61,10 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
     })
 
     if (!response.data.error) {
-      axios.post(`/api/reorderingPoints/delete-reordering-points-cache?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+      generate_new_forecast_products({
+        skus: newOrderedQtyItems.map((item) => item.sku),
+        productIds: newOrderedQtyItems.map((item) => item.inventoryId),
+      })
       if (organizeBy == 'suppliers') {
         mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
       } else if (organizeBy == 'orders') {

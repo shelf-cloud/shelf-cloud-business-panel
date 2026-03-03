@@ -7,6 +7,7 @@ import { RECEIVING_SHIPMENT_TYPES } from '@components/constants/receivings'
 import DownloadExcelReorderingPointsOrder from '@components/reorderingPoints/DownloadExcelReorderingPointsOrder'
 import PrintReorderingPointsOrder from '@components/reorderingPoints/PrintReorderingPointsOrder'
 import AppContext from '@context/AppContext'
+import { useRPNewForecast } from '@hooks/reorderingPoints/useRPNewForcast'
 import { SplitNames } from '@hooks/reorderingPoints/useRPSplits'
 import { useFilterWarehousesByShipmentType } from '@hooks/warehouses/useFilterWarehousesByShipmentType'
 import { useWarehouses } from '@hooks/warehouses/useWarehouse'
@@ -83,6 +84,8 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
     volume: true,
     cost: true,
   })
+
+  const { generate_new_forecast_products } = useRPNewForecast()
 
   const orderNumberStart = `${username.substring(0, 3).toUpperCase()}-`
 
@@ -216,9 +219,15 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
           isLoading: false,
           autoClose: 3000,
         })
-        await axios.post(`/api/reorderingPoints/delete-reordering-points-cache?region=${state.currentRegion}&businessId=${state.user.businessId}`)
-        await mutate('/api/getuser')
-        router.push('/purchaseOrders?status=pending&organizeBy=suppliers')
+
+        generate_new_forecast_products({
+          skus: poItems.map((item) => item.sku),
+          productIds: poItems.map((item) => item.inventoryId),
+        })
+
+        await mutate('/api/getuser').then(() => {
+          router.push('/purchaseOrders?status=pending&organizeBy=suppliers')
+        })
       } else {
         toast.update(createNewPurchaseOrder, {
           render: response.data.message ?? 'Error creating Purchase Order',

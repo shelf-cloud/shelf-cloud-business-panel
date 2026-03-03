@@ -1,6 +1,10 @@
 export interface ReorderingPointsResponse {
-  [key: string]: ReorderingPointsProduct
+  error: boolean
+  message?: string
+  data?: { [key: string]: ReorderingPointsProduct }
 }
+
+export type ReorderingPointsForecastProducts = { [key: string]: ReorderingPointsProduct }
 
 export interface ReorderingPointsProduct {
   inventoryId: number

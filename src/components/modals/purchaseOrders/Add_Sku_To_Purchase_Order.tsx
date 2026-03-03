@@ -5,6 +5,7 @@ import { useContext, useMemo, useState } from 'react'
 import SearchInput from '@components/ui/SearchInput'
 import AppContext from '@context/AppContext'
 import { SkuInListToAddToPo, useAddToPo } from '@hooks/purchaseOrders/useAddToPo'
+import { useRPNewForecast } from '@hooks/reorderingPoints/useRPNewForcast'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { SkuToAddPo } from '@typesTs/purchaseOrders'
 import axios from 'axios'
@@ -35,6 +36,8 @@ const Add_Sku_To_Purchase_Order = ({}) => {
   const [loading, setloading] = useState(false)
   const [searchValue, setSearchValue] = useState<any>('')
   const [skuToAddToPo, setSkuToAddToPo] = useState<SkuInListToAddToPo[]>([])
+
+  const { generate_new_forecast_products } = useRPNewForecast()
 
   const hasErrors = useMemo(() => {
     if (skuToAddToPo.length <= 0) return true
@@ -218,7 +221,10 @@ const Add_Sku_To_Purchase_Order = ({}) => {
     })
 
     if (!response.data.error) {
-      axios.post(`/api/reorderingPoints/delete-reordering-points-cache?region=${currentRegion}&businessId=${user.businessId}`)
+      generate_new_forecast_products({
+        skus: skuToAddToPo.map((item) => item.sku) ?? [],
+        productIds: skuToAddToPo.map((item) => item.inventoryId) ?? [],
+      })
       if (organizeBy == 'suppliers') {
         mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${currentRegion}&businessId=${user.businessId}&status=${status}`)
       } else if (organizeBy == 'orders') {

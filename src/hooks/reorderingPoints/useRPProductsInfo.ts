@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-import { ReorderingPointsProduct, ReorderingPointsResponse } from '@typesTs/reorderingPoints/reorderingPoints'
+import { ReorderingPointsForecastProducts, ReorderingPointsProduct, ReorderingPointsResponse } from '@typesTs/reorderingPoints/reorderingPoints'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
@@ -37,7 +37,7 @@ export const useRPProductsInfo = ({
   sortingDirectionAsc,
   isSplitting,
 }: any) => {
-  const [productsData, setProductsData] = useState<ReorderingPointsResponse>({})
+  const [productsData, setProductsData] = useState<ReorderingPointsForecastProducts>({})
   const controllerRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
@@ -69,7 +69,11 @@ export const useRPProductsInfo = ({
       revalidateOnMount: true,
       revalidateIfStale: false,
       revalidateOnReconnect: false,
-      onSuccess: (data) => {
+      onSuccess: ({ data, error, message }) => {
+        if (!data || error || !data) {
+          toast.error(message || 'Error fetching product performance data')
+          return
+        }
         setProductsData(data)
       },
     }
@@ -218,13 +222,17 @@ export const useRPProductsInfo = ({
             isLoading: true,
           })
           const newForecast = await axios
-            .get(`/api/reorderingPoints/get-single-product-forecast?region=${state.currentRegion}&businessId=${state.user.businessId}&sku=${sku}`)
+            .post(`/api/reorderingPoints/get-single-product-forecast?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+              skus: [sku],
+              productIds: [inventoryId],
+            })
             .then(({ data }: { data: ReorderingPointsResponse }) => {
-              if (!data[sku]) return { error: true, message: 'Error saving product config' }
+              const { error, data: forecastData } = data
+              if (error || !forecastData) return { error: true, message: 'Error saving product config' }
 
               setProductsData((prevData) => {
                 const newProductsData = { ...prevData }
-                newProductsData[sku] = data[sku]
+                newProductsData[sku] = forecastData[sku]
                 return newProductsData
               })
               return { error: false, message: `SKU ${sku}: Forecast Updated` }

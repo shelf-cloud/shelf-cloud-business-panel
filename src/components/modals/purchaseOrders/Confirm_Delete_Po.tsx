@@ -1,8 +1,8 @@
- 
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
 
 import AppContext from '@context/AppContext'
+import { useRPNewForecast } from '@hooks/reorderingPoints/useRPNewForcast'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { Button, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
@@ -25,6 +25,7 @@ const Confirm_Delete_Po = ({ showDeleteModal, setshowDeleteModal, loading, setLo
   const { status, organizeBy } = router.query
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
+  const { generate_new_forecast_products } = useRPNewForecast()
 
   const handleClose = () => {
     setshowDeleteModal({
@@ -36,12 +37,15 @@ const Confirm_Delete_Po = ({ showDeleteModal, setshowDeleteModal, loading, setLo
 
   const handleDeletePO = async () => {
     setLoading(true)
-    const response = await axios.post(`/api/purchaseOrders/deletePo?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+    const { data } = await axios.post(`/api/purchaseOrders/deletePo?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
       poId: poId,
       orderNumber: orderNumber,
     })
-    if (!response.data.error) {
-      axios.post(`/api/reorderingPoints/delete-reordering-points-cache?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+    if (!data.error) {
+      generate_new_forecast_products({
+        skus: data.skus ?? [],
+        productIds: data.productIds ?? [],
+      })
       if (organizeBy == 'suppliers') {
         mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
       } else if (organizeBy == 'orders') {
@@ -49,14 +53,14 @@ const Confirm_Delete_Po = ({ showDeleteModal, setshowDeleteModal, loading, setLo
       } else if (organizeBy == 'sku') {
         mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
       }
-      toast.success(response.data.msg)
+      toast.success(data.msg)
       setshowDeleteModal({
         show: false,
         poId: 0,
         orderNumber: '',
       })
     } else {
-      toast.error(response.data.msg)
+      toast.error(data.msg)
     }
     setLoading(false)
   }
