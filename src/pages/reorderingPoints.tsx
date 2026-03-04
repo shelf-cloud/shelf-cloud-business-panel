@@ -95,6 +95,7 @@ const ReorderingPoints = ({ session }: Props) => {
     handleUseAdjustedQty,
     handleNewVisibilityState,
     handleSaveProductConfig,
+    handleRegenerateForecast,
     handleUrgencyRange,
   } = useRPProductsInfo({
     session,
@@ -409,6 +410,7 @@ const ReorderingPoints = ({ session }: Props) => {
                   splitNames={splitNames}
                   setRPProductConfig={setRPProductConfig}
                   setValuesAndOpen={setValuesAndOpen}
+                  handleRegenerateForecast={handleRegenerateForecast}
                   expandedRowProps={{ session, startDate, endDate }}
                 />
               </CardBody>

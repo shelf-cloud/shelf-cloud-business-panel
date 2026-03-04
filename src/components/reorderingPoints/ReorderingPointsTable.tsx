@@ -42,6 +42,7 @@ type Props = {
   splitNames: SplitNames
   setRPProductConfig: (prev: RPProductConfig) => void
   setValuesAndOpen: (newValue: SimpleInputModal) => void
+  handleRegenerateForecast: ({ inventoryId, sku }: { inventoryId: number; sku: string }) => void
   expandedRowProps: ExpandedRowProps
 }
 
@@ -64,6 +65,7 @@ const ReorderingPointsTable = ({
   splitNames,
   setRPProductConfig,
   setValuesAndOpen,
+  handleRegenerateForecast,
   expandedRowProps,
 }: Props) => {
   const { state }: any = useContext(AppContext)
@@ -590,9 +592,10 @@ const ReorderingPointsTable = ({
       },
       wrap: false,
       sortable: false,
-      center: true,
+      left: true,
       compact: true,
       minWidth: 'fit-content',
+      width: '130px',
     },
     {
       name: (
@@ -633,49 +636,6 @@ const ReorderingPointsTable = ({
               )
             ) : null}
           </span>
-          <span
-            className={'fs-7 ' + (setField === 'totalAIForecast_1' ? 'fw-bold' : 'text-muted')}
-            style={{ cursor: 'pointer' }}
-            onClick={() => handleSetSorting('totalAIForecast_1')}>
-            AI{' '}
-            {setField === 'totalAIForecast_1' ? (
-              sortingDirectionAsc ? (
-                <i className='ri-arrow-down-fill fs-7 text-primary' />
-              ) : (
-                <i className='ri-arrow-up-fill fs-7 text-primary' />
-              )
-            ) : null}
-          </span>
-          {/* {state.user[state.currentRegion]?.rpShowFBA && (
-            <span
-              className={'fs-7 ' + (setField === 'totalFBAForecast' ? 'fw-bold' : 'text-muted')}
-              style={{ cursor: 'pointer' }}
-              onClick={() => handleSetSorting('totalFBAForecast')}>
-              FBA{' '}
-              {setField === 'totalFBAForecast' ? (
-                sortingDirectionAsc ? (
-                  <i className='ri-arrow-down-fill fs-7 text-primary' />
-                ) : (
-                  <i className='ri-arrow-up-fill fs-7 text-primary' />
-                )
-              ) : null}
-            </span>
-          )}
-          {state.user[state.currentRegion]?.rpShowAWD && (
-            <span
-              className={'fs-7 ' + (setField === 'totalAWDForecast' ? 'fw-bold' : 'text-muted')}
-              style={{ cursor: 'pointer' }}
-              onClick={() => handleSetSorting('totalAWDForecast')}>
-              AWD{' '}
-              {setField === 'totalAWDForecast' ? (
-                sortingDirectionAsc ? (
-                  <i className='ri-arrow-down-fill fs-7 text-primary' />
-                ) : (
-                  <i className='ri-arrow-up-fill fs-7 text-primary' />
-                )
-              ) : null}
-            </span>
-          )} */}
         </div>
       ),
       selector: (row: ReorderingPointsProduct) => {
@@ -684,27 +644,6 @@ const ReorderingPointsTable = ({
             <p className='m-0 p-0 text-center' id={'Recommended_Qty'}>
               {FormatIntNumber(state.currentRegion, row.totalSCForecast)}
             </p>
-            {state.user.us.useAiForecast && row.totalAIForecast_1.model && (
-              <p className='m-0 p-0 text-center d-flex justify-content-center align-items-center' id={'ai_recommended_Qty'}>
-                {FormatIntNumber(state.currentRegion, row.totalAIForecast_1.forecast)}
-                {row.totalAIForecast_1.analysis && (
-                  <>
-                    <i className='ri-information-fill ms-1 fs-6 text-info' id={`ai_forecast_model_1_${row.sku}`}></i>
-                    <TooltipComponent target={`ai_forecast_model_1_${row.sku}`} text={row.totalAIForecast_1.analysis} />
-                  </>
-                )}
-              </p>
-            )}
-            {/* {state.user[state.currentRegion]?.rpShowFBA && (
-              <p className='m-0 p-0 text-center' id={`forecast_${row.sku}`}>
-                {FormatIntNumber(state.currentRegion, row.totalFBAForecast)}
-              </p>
-            )}
-            {state.user[state.currentRegion]?.rpShowAWD && (
-              <p className={'m-0 p-0 text-center ' + (!row.canSendToAWD ? 'text-danger text-decoration-line-through' : '')} id={`Adjustedforecast_${row.sku}`}>
-                {FormatIntNumber(state.currentRegion, row.totalAWDForecast)}
-              </p>
-            )} */}
           </div>
         )
       },
@@ -712,6 +651,51 @@ const ReorderingPointsTable = ({
       center: true,
       compact: true,
     },
+    state.user.us.useAiForecast
+      ? {
+          name: (
+            <div className='text-center d-flex flex-column justify-content-center align-items-center py-1'>
+              <span
+                className={'fs-7 ' + (setField === 'totalAIForecast_1' ? 'fw-bold' : 'text-muted')}
+                style={{ cursor: 'pointer' }}
+                onClick={() => handleSetSorting('totalAIForecast_1')}>
+                AI{' '}
+                {setField === 'totalAIForecast_1' ? (
+                  sortingDirectionAsc ? (
+                    <i className='ri-arrow-down-fill fs-7 text-primary' />
+                  ) : (
+                    <i className='ri-arrow-up-fill fs-7 text-primary' />
+                  )
+                ) : null}
+              </span>
+            </div>
+          ),
+          selector: (row: ReorderingPointsProduct) => {
+            return (
+              <div className='fs-7'>
+                {row.totalAIForecast_1.model ? (
+                  <p className='m-0 p-0 text-center d-flex justify-content-center align-items-center' id={'ai_recommended_Qty'}>
+                    {FormatIntNumber(state.currentRegion, row.totalAIForecast_1.forecast)}
+                    {row.totalAIForecast_1.analysis && (
+                      <>
+                        <i className='ri-information-fill ms-1 fs-6 text-info' id={`ai_forecast_model_1_${row.sku}`}></i>
+                        <TooltipComponent target={`ai_forecast_model_1_${row.sku}`} text={row.totalAIForecast_1.analysis} />
+                      </>
+                    )}
+                  </p>
+                ) : (
+                  <p className='m-0 p-0 text-center text-danger' id={'ai_recommended_Qty'}>
+                    Error
+                  </p>
+                )}
+              </div>
+            )
+          },
+          sortable: false,
+          center: true,
+          compact: true,
+        }
+      : null,
     ...orderSplitsColumns(splits.isSplitting, splits.splitsQty),
     {
       name: (
@@ -780,6 +764,12 @@ const ReorderingPointsTable = ({
                 <i className='ri-settings-3-line align-middle me-2 fs-5 text-black'></i>
                 <span className='fs-7 fw-normal text-dark'>Edit Config</span>
               </DropdownItem>
+              {state.user.us.useAiForecast ? (
+                <DropdownItem className='edit-item-btn' onClick={() => handleRegenerateForecast({ inventoryId: row.inventoryId, sku: row.sku })}>
+                  <i className='mdi mdi-reload align-middle me-2 fs-5 text-primary'></i>
+                  <span className='fs-7 fw-normal text-dark'>Regenerate Forecast</span>
+                </DropdownItem>
+              ) : null}
               <DownloadProductMD product={row} />
               <DropdownItem
                 className='edit-item-btn'

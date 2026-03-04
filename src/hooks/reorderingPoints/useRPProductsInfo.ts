@@ -265,6 +265,49 @@ export const useRPProductsInfo = ({
     [state.currentRegion, state.user.businessId]
   )
 
+  const handleRegenerateForecast = useCallback(
+    async ({ inventoryId, sku }: { inventoryId: number; sku: string }) => {
+      const updatingProductConfig = toast.loading('Regenerating Forecast...')
+
+      const response = await axios
+        .post(`/api/reorderingPoints/get-single-product-forecast?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+          skus: [sku],
+          productIds: [inventoryId],
+        })
+        .then(({ data }: { data: ReorderingPointsResponse }) => {
+          const { error, data: forecastData } = data
+          if (error || !forecastData) return { error: true, message: 'Error generating forecast.' }
+
+          setProductsData((prevData) => {
+            const newProductsData = { ...prevData }
+            newProductsData[sku] = forecastData[sku]
+            return newProductsData
+          })
+          return { error: false, message: `SKU ${sku}: Forecast Updated.` }
+        })
+        .catch(() => {
+          return { error: true, message: 'Error generating forecast.' }
+        })
+
+      if (response.error) {
+        toast.update(updatingProductConfig, {
+          render: response.message,
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+        })
+      } else {
+        toast.update(updatingProductConfig, {
+          render: `SKU ${sku}: Forecast Updated`,
+          type: 'success',
+          isLoading: false,
+          autoClose: 3000,
+        })
+      }
+    },
+    [state.currentRegion, state.user.businessId]
+  )
+
   const handleUrgencyRange = useCallback(
     async (highAlertMax: number, mediumAlertMax: number, lowAlertMax: number) => {
       setProductsData((prevData) => {
@@ -521,6 +564,7 @@ export const useRPProductsInfo = ({
     handleUseAdjustedQty,
     handleNewVisibilityState,
     handleSaveProductConfig,
+    handleRegenerateForecast,
     handleUrgencyRange,
   }
 }
