@@ -33,4 +33,8 @@ export const notificationsTagLinks: NotificationTagLinks = {
     link: '/Invoices',
     title: 'Invoices',
   },
+  forecast_generated: {
+    link: '/reorderingPoints?filters=true&urgency=[2,3]',
+    title: 'Reordering Points',
+  },
 }

@@ -25,5 +25,6 @@ export type NotificationTag =
   | 'receiving_log'
   | 'reports_ready'
   | 'billing_invoices'
+  | 'forecast_generated'
 
 export type NotificationTagLinks = { [key in NotificationTag]: { title: string; link: string } }

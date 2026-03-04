@@ -3,8 +3,8 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useCallback, useContext } from 'react'
 
-import TooltipComponent from '@components/constants/Tooltip'
 import CopyTextToClipboard from '@components/ui/CopyTextToClipboard'
+import SCTooltip from '@components/ui/SCTooltip'
 import AppContext from '@context/AppContext'
 import { RPProductConfig } from '@hooks/reorderingPoints/useRPProductConfig'
 import { ExpandedRowProps } from '@hooks/reorderingPoints/useRPProductSale'
@@ -651,51 +651,52 @@ const ReorderingPointsTable = ({
       center: true,
       compact: true,
     },
-    state.user.us.useAiForecast
-      ? {
-          name: (
-            <div className='text-center d-flex flex-column justify-content-center align-items-center py-1'>
-              <span
-                className={'fs-7 ' + (setField === 'totalAIForecast_1' ? 'fw-bold' : 'text-muted')}
-                style={{ cursor: 'pointer' }}
-                onClick={() => handleSetSorting('totalAIForecast_1')}>
-                AI{' '}
-                {setField === 'totalAIForecast_1' ? (
-                  sortingDirectionAsc ? (
-                    <i className='ri-arrow-down-fill fs-7 text-primary' />
-                  ) : (
-                    <i className='ri-arrow-up-fill fs-7 text-primary' />
-                  )
-                ) : null}
-              </span>
-            </div>
-          ),
-          selector: (row: ReorderingPointsProduct) => {
-            return (
-              <div className='fs-7'>
-                {row.totalAIForecast_1.model ? (
-                  <p className='m-0 p-0 text-center d-flex justify-content-center align-items-center' id={'ai_recommended_Qty'}>
-                    {FormatIntNumber(state.currentRegion, row.totalAIForecast_1.forecast)}
-                    {row.totalAIForecast_1.analysis && (
-                      <>
-                        <i className='ri-information-fill ms-1 fs-6 text-info' id={`ai_forecast_model_1_${row.sku}`}></i>
-                        <TooltipComponent target={`ai_forecast_model_1_${row.sku}`} text={row.totalAIForecast_1.analysis} />
-                      </>
-                    )}
-                  </p>
-                ) : (
-                  <p className='m-0 p-0 text-center text-danger' id={'ai_recommended_Qty'}>
-                    Error
-                  </p>
+    {
+      name: (
+        <div className='text-center d-flex flex-column justify-content-center align-items-center py-1'>
+          <span
+            className={'fs-7 ' + (setField === 'totalAIForecast_1' ? 'fw-bold' : 'text-muted')}
+            style={{ cursor: 'pointer' }}
+            onClick={() => handleSetSorting('totalAIForecast_1')}>
+            AI{' '}
+            {setField === 'totalAIForecast_1' ? (
+              sortingDirectionAsc ? (
+                <i className='ri-arrow-down-fill fs-7 text-primary' />
+              ) : (
+                <i className='ri-arrow-up-fill fs-7 text-primary' />
+              )
+            ) : null}
+          </span>
+        </div>
+      ),
+      selector: (row: ReorderingPointsProduct) => {
+        if (!state.user[state.currentRegion]?.useAiForecast) return <p className='text-center fs-7 text-muted'>Disabled</p>
+        return (
+          <div className='fs-7'>
+            {row.totalAIForecast_1.model ? (
+              <p className='m-0 p-0 text-center d-flex justify-content-center align-items-center' id={'ai_recommended_Qty'}>
+                {FormatIntNumber(state.currentRegion, row.totalAIForecast_1.forecast)}
+                {row.totalAIForecast_1.analysis && (
+                  <>
+                    <i className='ri-information-fill ms-1 fs-6 text-info' id={`ai_forecast_model_1_${row.sku}`}></i>
+                    <SCTooltip target={`ai_forecast_model_1_${row.sku}`} placement='right' key={`ai_forecast_model_1_${row.sku}`}>
+                      <p className='fs-7 text-primary m-0 p-0'>{row.totalAIForecast_1.analysis}</p>
+                    </SCTooltip>
+                  </>
                 )}
-              </div>
-            )
-          },
-          sortable: false,
-          center: true,
-          compact: true,
-        }
-      : null,
+              </p>
+            ) : (
+              <p className='m-0 p-0 text-center text-danger' id={'ai_recommended_Qty'}>
+                Error
+              </p>
+            )}
+          </div>
+        )
+      },
+      sortable: false,
+      center: true,
+      compact: true,
+    },
     ...orderSplitsColumns(splits.isSplitting, splits.splitsQty),
     {
       name: (
