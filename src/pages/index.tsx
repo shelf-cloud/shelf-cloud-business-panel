@@ -1,4 +1,3 @@
- 
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { useContext, useState } from 'react'
@@ -12,8 +11,10 @@ import MostInvenotryList from '@components/MostInvenotryList'
 import TotalChagesList from '@components/TotalChagesList'
 import Widget from '@components/Widget'
 import SalesOverTime from '@components/dashboard/SalesOverTime'
+import SalesOverTimeError from '@components/dashboard/SalesOverTime-error'
 import SalesOverTimeLoading from '@components/dashboard/SalesOverTime-loading'
 import AppContext from '@context/AppContext'
+import { SalesOverTimeResponse } from '@typesTs/dashboard/salesOverTime'
 import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
@@ -21,8 +22,6 @@ import { Col, Container, Row } from 'reactstrap'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
-  const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
-
   const session = await getSession(context)
 
   if (session == null) {
@@ -34,30 +33,36 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
     }
   }
   return {
-    props: { session, sessionToken },
+    props: { session },
   }
 }
 
 type Props = {
-  sessionToken: string
   session: {
     user: {
       name: string
     }
   }
 }
+const fetcherSummary = (endPoint: string) =>
+  axios(endPoint)
+    .then((res) => res.data)
+    .catch(() => {
+      toast.error('Error fetching Summary data')
+    })
 
-const Home = ({ session, sessionToken }: Props) => {
+const fetcherSalesOverTime = (endPoint: string) =>
+  axios<SalesOverTimeResponse>(endPoint)
+    .then((res) => (res.data.error ? { error: true } : res.data))
+    .catch(() => {
+      toast.error('Error fetching Sales Over Time data')
+    })
+
+const Home = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
   const [dashboardStartDate, setDashboardStartDate] = useState(moment().subtract(30, 'days').format('YYYY-MM-DD'))
   const [dashboardEndDate, setDashboardEndDate] = useState(moment().format('YYYY-MM-DD'))
 
-  const fetcherSummary = (endPoint: string) =>
-    axios(endPoint)
-      .then((res) => res.data)
-      .catch(() => {
-        toast.error('Error fetching Summary data')
-      })
   const { data: summary } = useSWR(
     state.user.businessId
       ? `/api/getBusinessSummary?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${dashboardStartDate}&endDate=${dashboardEndDate}`
@@ -68,20 +73,8 @@ const Home = ({ session, sessionToken }: Props) => {
     }
   )
 
-  const fetcherSalesOverTime = (endPoint: string) =>
-    axios(endPoint, {
-      headers: {
-        Authorization: `Bearer ${sessionToken}`,
-      },
-    })
-      .then((res) => res.data)
-      .catch(() => {
-        toast.error('Error fetching Sales Over Time data')
-      })
-  const { data: salesOverTime } = useSWR(
-    session && state.user.businessId
-      ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/orders/getSalesOverTime?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${dashboardStartDate}&endDate=${dashboardEndDate}&storeId=9999`
-      : null,
+  const { data: salesOverTime, isValidating: isLoadingSalesOverTime } = useSWR(
+    session && state.user.businessId ? `/api/home/get-sales-over-time?region=${state.currentRegion}&businessId=${state.user.businessId}&storeId=9999` : null,
     fetcherSalesOverTime,
     { revalidateOnFocus: false }
   )
@@ -115,7 +108,13 @@ const Home = ({ session, sessionToken }: Props) => {
                   </Row>
                   <Row>
                     <Col md={7}>
-                      {salesOverTime ? <SalesOverTime salesOverTime={salesOverTime} /> : <SalesOverTimeLoading />}
+                      {isLoadingSalesOverTime ? (
+                        <SalesOverTimeLoading />
+                      ) : salesOverTime?.error ? (
+                        <SalesOverTimeError />
+                      ) : salesOverTime ? (
+                        <SalesOverTime salesOverTime={salesOverTime} />
+                      ) : null}
                       {summary && <MostInvenotryList products={summary?.mostInventory} />}
                     </Col>
                     <Col md={5}>

@@ -38,7 +38,7 @@ const TIMELINE = [
 const CUURENTHOUR = moment().format('h A')
 
 type Props = {
-  salesOverTime: { [key: string]: { [key: string]: number } }
+  salesOverTime?: { [key: string]: { [key: string]: number } }
 }
 const SalesOverTimeTimeline = ({ salesOverTime }: Props) => {
   const { state }: any = useContext(AppContext)
@@ -49,12 +49,12 @@ const SalesOverTimeTimeline = ({ salesOverTime }: Props) => {
     {
       name: 'Today',
       type: 'line',
-      data: salesOverTime[TODAY] ? Object?.values(salesOverTime[TODAY]).slice(0, currentHourIndex + 1) : [],
+      data: salesOverTime?.[TODAY] ? Object?.values(salesOverTime?.[TODAY]).slice(0, currentHourIndex + 1) : [],
     },
     {
       name: 'Yesterday',
       type: 'area',
-      data: salesOverTime[YESTERDAY] ? Object?.values(salesOverTime[YESTERDAY]) : [],
+      data: salesOverTime?.[YESTERDAY] ? Object?.values(salesOverTime?.[YESTERDAY]) : [],
     },
   ]
 

@@ -1,6 +1,7 @@
 export interface SalesOverTimeResponse {
-  orders: { [key: string]: { [key: string]: number } }
-  marketplaces: { [key: string]: SalesOverTimeMarketplace }
+  error?: boolean
+  orders?: { [key: string]: { [key: string]: number } }
+  marketplaces?: { [key: string]: SalesOverTimeMarketplace }
 }
 
 export interface SalesOverTimeMarketplace {

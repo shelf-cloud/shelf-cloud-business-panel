@@ -24,7 +24,7 @@ export interface BusinessPrompt {
   general: string
   objective: string
   corerules: string
-  restrctions: string
+  restrictions: string
   output: string
   businessrules: string
 }
@@ -115,7 +115,7 @@ function ReorderingPointsPromptModal({ promptModal, setPromptModal }: Props) {
               // { label: 'General', content: snarkdown(data.prompt.general) },
               { label: 'Objective', content: snarkdown(data.prompt.objective) },
               { label: 'Core Rules', content: snarkdown(data.prompt.corerules) },
-              // { label: 'Restrictions', content: snarkdown(data.prompt.restrctions) },
+              // { label: 'Restrictions', content: snarkdown(data.prompt.restrictions) },
               // { label: 'Output', content: snarkdown(data.prompt.output) },
             ].map(({ label, content }) => (
               <div key={label} className='border rounded p-3 shadow-sm' style={{ minWidth: 0, overflow: 'hidden' }}>

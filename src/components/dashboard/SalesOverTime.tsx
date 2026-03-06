@@ -16,12 +16,12 @@ type Props = {
 
 const SalesOverTime = ({ salesOverTime }: Props) => {
   const { state }: any = useContext(AppContext)
-  const currentDate = moment.utc().local().format('YYYY-MM-DD')
-  const previousDate = moment.utc().local().subtract(1, 'days').format('YYYY-MM-DD')
-  const totalToday = salesOverTime?.orders[currentDate] ? Object.values(salesOverTime?.orders[currentDate]).reduce((a, b) => a + b, 0) : 0
-  const totalYesterday = salesOverTime?.orders[previousDate] ? Object.values(salesOverTime?.orders[previousDate]).reduce((a, b) => a + b, 0) : 0
+  const currentDate = moment().startOf('day').format('YYYY-MM-DD')
+  const previousDate = moment().startOf('day').subtract(1, 'days').format('YYYY-MM-DD')
+  const totalToday = salesOverTime?.orders?.[currentDate] ? Object.values(salesOverTime?.orders[currentDate]).reduce((a, b) => a + b, 0) : 0
+  const totalYesterday = salesOverTime?.orders?.[previousDate] ? Object.values(salesOverTime?.orders[previousDate]).reduce((a, b) => a + b, 0) : 0
 
-  const currentSortedMarketplaces = Object.values(salesOverTime.marketplaces)
+  const currentSortedMarketplaces = Object.values(salesOverTime?.marketplaces || {})
     .sort((a, b) => {
       if (a.salesOverTime[currentDate] > b.salesOverTime[currentDate]) {
         return -1
@@ -33,7 +33,7 @@ const SalesOverTime = ({ salesOverTime }: Props) => {
     })
     .filter((marketplace: SalesOverTimeMarketplace) => marketplace.salesOverTime[currentDate] > 0)
 
-  const previousSortedMarketplaces = Object.values(salesOverTime.marketplaces)
+  const previousSortedMarketplaces = Object.values(salesOverTime?.marketplaces || {})
     .sort((a, b) => {
       if (a.salesOverTime[previousDate] > b.salesOverTime[previousDate]) {
         return -1
@@ -152,7 +152,7 @@ const SalesOverTime = ({ salesOverTime }: Props) => {
                 </table>
               </UncontrolledTooltip>
             </div>
-            <SalesOverTimeTimeline salesOverTime={salesOverTime.orders} />
+            <SalesOverTimeTimeline salesOverTime={salesOverTime?.orders} />
           </CardBody>
         </Card>
       </Col>
