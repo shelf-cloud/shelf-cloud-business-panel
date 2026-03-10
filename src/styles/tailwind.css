@@ -1,0 +1,64 @@
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme) prefix(tw);
+@import "tailwindcss/utilities.css" layer(utilities) prefix(tw);
+
+@custom-variant dark (&:where([data-layout-mode='dark'], [data-layout-mode='dark'] *));
+
+:root {
+  --background: var(--vz-body-bg, var(--bs-body-bg, #f3f3f9));
+  --foreground: var(--vz-body-color, var(--bs-body-color, #495057));
+  --card: var(--vz-card-bg, #ffffff);
+  --card-foreground: var(--vz-heading-color, var(--bs-body-color, #343a40));
+  --popover: var(--vz-dropdown-bg, var(--vz-card-bg, #ffffff));
+  --popover-foreground: var(--vz-dropdown-link-color, var(--bs-body-color, #343a40));
+  --primary: var(--bs-primary, #4481fd);
+  --primary-foreground: #ffffff;
+  --secondary: var(--bs-secondary, #3577f1);
+  --secondary-foreground: #ffffff;
+  --muted: var(--vz-light, #f3f6f9);
+  --muted-foreground: var(--bs-secondary-color, #878a99);
+  --accent: color-mix(in srgb, var(--bs-primary, #4481fd) 12%, var(--vz-card-bg, #ffffff));
+  --accent-foreground: var(--vz-heading-color, #343a40);
+  --destructive: var(--bs-danger, #f06548);
+  --destructive-foreground: #ffffff;
+  --border: var(--vz-border-color, var(--bs-border-color, #e9ebec));
+  --input: var(--vz-input-bg, #ffffff);
+  --input-border: var(--vz-input-border, var(--vz-border-color, #ced4da));
+  --ring: color-mix(in srgb, var(--bs-primary, #4481fd) 45%, transparent);
+  --radius: 0.75rem;
+}
+
+@theme inline {
+  --font-sans: "Poppins", sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 0.25rem);
+  --radius-md: calc(var(--radius) - 0.125rem);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 0.25rem);
+
+  --shadow-xs: 0 1px 2px 0 rgb(15 23 42 / 0.06);
+  --shadow-sm: 0 6px 18px -12px rgb(15 23 42 / 0.22);
+  --shadow-md: 0 16px 40px -24px rgb(15 23 42 / 0.28);
+}

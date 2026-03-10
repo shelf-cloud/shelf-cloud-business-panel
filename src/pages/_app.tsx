@@ -10,6 +10,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
 
 import '../styles/themes.scss'
+import '../styles/tailwind.css'
 
 function MyApp({
   Component,

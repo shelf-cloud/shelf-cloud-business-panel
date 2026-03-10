@@ -70,6 +70,7 @@ export interface ReorderingPointsProduct {
   canSendToAWD: boolean
   totalAIForecast_1: { model: string; analysis: string; forecast: number }
   totalAIForecast_2: { model: string; analysis: string; forecast: number }
+  totalAIForecast_3: { model: string; analysis: string; forecast: number }
   comment?: string
 }
 
