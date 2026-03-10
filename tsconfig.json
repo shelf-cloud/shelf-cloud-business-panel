@@ -72,6 +72,9 @@
       ],
       "@shadcn/*": [
         "components/shadcn/*"
+      ],
+      "@features/*": [
+        "features/*"
       ]
     }
   },

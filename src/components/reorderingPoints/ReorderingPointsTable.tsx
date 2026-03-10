@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { useCallback, useContext } from 'react'
+import { useCallback, useContext, useState } from 'react'
 
 import CopyTextToClipboard from '@components/ui/CopyTextToClipboard'
 import SCTooltip from '@components/ui/SCTooltip'
@@ -18,6 +18,7 @@ import { DebounceInput } from 'react-debounce-input'
 import { Badge, Button, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
 
 import DownloadProductMD from './DownloadProductMD'
+import RPAIForecastDrawer from '@features/reordering-points/RPAIForecastDrawer'
 
 const ReorderingPointsExpandedDetails = dynamic(() => import('./ReorderingPointsExpandedDetails'), {
   ssr: false,
@@ -70,6 +71,7 @@ const ReorderingPointsTable = ({
 }: Props) => {
   const { state }: any = useContext(AppContext)
   const { session, startDate, endDate } = expandedRowProps
+  const [aiForecastProduct, setAIForecastProduct] = useState<ReorderingPointsProduct | null>(null)
 
   const handleSelectedRows = ({ selectedRows }: { selectedRows: ReorderingPointsProduct[] }) => {
     setSelectedRows(selectedRows)
@@ -771,6 +773,12 @@ const ReorderingPointsTable = ({
                   <span className='fs-7 fw-normal text-dark'>Regenerate Forecast</span>
                 </DropdownItem>
               ) : null}
+              {state.user.us.useAiForecast ? (
+                <DropdownItem className='edit-item-btn' onClick={() => setAIForecastProduct(row)}>
+                  <i className='las la-brain align-middle me-2 fs-5 text-info'></i>
+                  <span className='fs-7 fw-normal text-dark'>AI Forecast Details</span>
+                </DropdownItem>
+              ) : null}
               <DownloadProductMD product={row} />
               <DropdownItem
                 className='edit-item-btn'
@@ -818,6 +826,12 @@ const ReorderingPointsTable = ({
         }}
         conditionalRowStyles={conditionalRowStyles}
         customStyles={customStyles}
+      />
+      <RPAIForecastDrawer
+        product={aiForecastProduct}
+        isOpen={aiForecastProduct !== null}
+        onClose={() => setAIForecastProduct(null)}
+        region={state.currentRegion}
       />
     </div>
   )
