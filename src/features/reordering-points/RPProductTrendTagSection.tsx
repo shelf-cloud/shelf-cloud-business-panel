@@ -1,21 +1,20 @@
 import { useCallback, useState } from 'react'
 
 import { Badge } from '@components/shadcn/ui/badge'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@components/shadcn/ui/select'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@components/shadcn/ui/select'
 import { Separator } from '@components/shadcn/ui/separator'
 import { Switch } from '@components/shadcn/ui/switch'
 import { RPProductTrendTagUpdate } from '@hooks/reorderingPoints/useRPProductsInfo'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import { useFormik } from 'formik'
 import { TrendingUpDownIcon } from 'lucide-react'
-import * as Yup from 'yup'
+
+import { PRODUCT_TREND_OPTIONS, ProductTrendOption, productTrendFormSchema } from './productTrendTagForm'
 
 type Props = {
   product: ReorderingPointsProduct
-  onSave: (data: RPProductTrendTagUpdate) => Promise<void>
+  onSave: (data: RPProductTrendTagUpdate) => void
 }
-
-const TREND_OPTIONS = ['Normal', 'Low Sales', 'Seasonal'] as const
 
 const RPProductTrendTagSection = ({ product, onSave }: Props) => {
   const [saving, setSaving] = useState(false)
@@ -24,13 +23,10 @@ const RPProductTrendTagSection = ({ product, onSave }: Props) => {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      bsnssTrend: (trendTag?.bsnssTrend || 'Normal') as 'Normal' | 'Low Sales' | 'Seasonal',
+      bsnssTrend: (trendTag?.bsnssTrend || 'Normal') as ProductTrendOption,
       useAITrend: trendTag?.useAITrend ?? true,
     },
-    validationSchema: Yup.object({
-      bsnssTrend: Yup.string().oneOf(['Normal', 'Low Sales', 'Seasonal'], 'Invalid trend').required('Required'),
-      useAITrend: Yup.boolean().required(),
-    }),
+    validationSchema: productTrendFormSchema,
     onSubmit: async (values) => {
       setSaving(true)
       try {
@@ -38,7 +34,7 @@ const RPProductTrendTagSection = ({ product, onSave }: Props) => {
           inventoryId: product.inventoryId,
           sku: product.sku,
           productTrendTag: {
-            aiTrend: trendTag?.aiTrend ?? '',
+            aiTrend: trendTag?.aiTrend ?? 'Normal',
             analysis: trendTag?.analysis ?? '',
             bsnssTrend: values.bsnssTrend,
             useAITrend: values.useAITrend,
@@ -70,7 +66,7 @@ const RPProductTrendTagSection = ({ product, onSave }: Props) => {
   )
 
   return (
-    <div className='tw:px-4 tw:pt-4'>
+    <div className='tw:mb-4'>
       <div className='tw:rounded-lg tw:border tw:border-border tw:bg-card tw:p-3'>
         {/* Section header */}
         <div className='tw:flex tw:items-center tw:justify-between tw:mb-3'>
@@ -115,11 +111,13 @@ const RPProductTrendTagSection = ({ product, onSave }: Props) => {
                 <SelectValue placeholder='Select trend' />
               </SelectTrigger>
               <SelectContent className='tw:z-1050'>
-                {TREND_OPTIONS.map((opt) => (
-                  <SelectItem key={opt} value={opt}>
-                    {opt}
-                  </SelectItem>
-                ))}
+                <SelectGroup>
+                  {PRODUCT_TREND_OPTIONS.map((opt) => (
+                    <SelectItem key={opt} value={opt}>
+                      {opt}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
               </SelectContent>
             </Select>
             {formik.touched.bsnssTrend && formik.errors.bsnssTrend && <span className='tw:text-xs tw:text-destructive'>{formik.errors.bsnssTrend}</span>}

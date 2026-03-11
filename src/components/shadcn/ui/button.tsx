@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { Slot } from '@radix-ui/react-slot'
-import { cva, type VariantProps } from 'class-variance-authority'
+import { type VariantProps, cva } from 'class-variance-authority'
 
 import { cn } from '@/lib/shadcn/utils'
 
@@ -15,19 +15,19 @@ const buttonVariants = cva(
         outline: 'tw:border tw:border-border tw:bg-background tw:!text-foreground tw:hover:bg-accent tw:hover:!text-accent-foreground',
         ghost: 'tw:!text-foreground tw:hover:bg-accent tw:hover:!text-accent-foreground',
         link: 'tw:!text-primary tw:underline-offset-4 tw:hover:underline',
-        destructive: 'tw:bg-destructive tw:!text-destructive-foreground tw:shadow-xs tw:hover:bg-destructive/90'
+        destructive: 'tw:bg-destructive tw:!text-destructive-foreground tw:shadow-xs tw:hover:bg-destructive/90',
       },
       size: {
-        default: 'tw:h-9 tw:px-4 tw:py-2',
-        sm: 'tw:h-8 tw:rounded-md tw:px-3 tw:text-xs',
+        default: 'tw:h-9 tw:px-4 tw:py-2 tw:!rounded-xs',
+        sm: 'tw:h-8 tw:!rounded-xs tw:px-3 tw:text-xs',
         lg: 'tw:h-10 tw:rounded-md tw:px-8',
-        icon: 'tw:size-9'
-      }
+        icon: 'tw:size-9',
+      },
     },
     defaultVariants: {
       variant: 'default',
-      size: 'default'
-    }
+      size: 'default',
+    },
   }
 )
 
@@ -36,10 +36,12 @@ type ButtonProps = React.ComponentProps<'button'> &
     asChild?: boolean
   }
 
-function Button({ className, variant, size, asChild = false, type = 'button', ...props }: ButtonProps) {
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({ className, variant, size, asChild = false, type = 'button', ...props }, ref) => {
   const Comp = asChild ? Slot : 'button'
 
-  return <Comp className={cn(buttonVariants({ variant, size, className }))} type={type} {...props} />
-}
+  return <Comp ref={ref} className={cn(buttonVariants({ variant, size, className }))} type={type} {...props} />
+})
+
+Button.displayName = 'Button'
 
 export { Button, buttonVariants }

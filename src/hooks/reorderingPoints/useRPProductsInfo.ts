@@ -5,6 +5,8 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
 
+import { useRPNewForecast } from './useRPNewForcast'
+
 export type RPProductUpdateConfig = {
   inventoryId: number
   sku: string
@@ -16,6 +18,10 @@ export type RPProductUpdateConfig = {
   daysOfStockAWD: number
   buffer: number
   sellerCost: number
+}
+export type RPProductsTrendTagBulkResult = {
+  status: 'success' | 'error'
+  message: string
 }
 
 export type RPProductTrendTagUpdate = {
@@ -46,6 +52,7 @@ export const useRPProductsInfo = ({
 }: any) => {
   const [productsData, setProductsData] = useState<ReorderingPointsForecastProducts>({})
   const controllerRef = useRef<AbortController | null>(null)
+  const { generate_new_forecast_products } = useRPNewForecast()
 
   useEffect(() => {
     controllerRef.current = new AbortController()
@@ -354,14 +361,89 @@ export const useRPProductsInfo = ({
     [state.currentRegion, state.user.businessId]
   )
 
-  const handleSaveProductTrendTag = useCallback(
+  const saveProductTrendTags = useCallback(
+    async (products: RPProductTrendTagUpdate[]): Promise<RPProductsTrendTagBulkResult> => {
+      if (products.length === 0) {
+        return {
+          status: 'error',
+          message: 'No products selected.',
+        }
+      }
+
+      const isSingleProduct = products.length === 1
+      const updatingTrendTag = toast.loading(isSingleProduct ? 'Updating Product Trend Tag...' : 'Updating Product Trend Tags...')
+
+      try {
+        const { data } = await axios.post(`/api/reorderingPoints/setNewProductTrendTag?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+          products,
+        })
+
+        if (data.error) {
+          throw new Error(data.message || 'Error updating product trend tag')
+        }
+
+        setProductsData((prevData) => {
+          const newProductsData = { ...prevData }
+
+          for (const product of products) {
+            if (!newProductsData[product.sku]) continue
+
+            newProductsData[product.sku] = {
+              ...newProductsData[product.sku],
+              productTrendTag: {
+                aiTrend: newProductsData[product.sku].productTrendTag?.aiTrend ?? product.productTrendTag.aiTrend,
+                analysis: newProductsData[product.sku].productTrendTag?.analysis ?? product.productTrendTag.analysis,
+                bsnssTrend: product.productTrendTag.bsnssTrend,
+                useAITrend: product.productTrendTag.useAITrend,
+              },
+            }
+          }
+
+          return newProductsData
+        })
+
+        toast.update(updatingTrendTag, {
+          render: isSingleProduct ? `${products[0].sku} trend saved` : `${products.length} product trend tags saved`,
+          type: 'success',
+          isLoading: false,
+          autoClose: 3000,
+        })
+
+        generate_new_forecast_products({
+          skus: products.map((product) => product.sku),
+          productIds: products.map((product) => product.inventoryId),
+        })
+
+        return {
+          status: 'success',
+          message: isSingleProduct ? `${products[0].sku} trend saved` : `${products.length} product trend tags saved`,
+        }
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Error updating trend tag'
+
+        toast.update(updatingTrendTag, {
+          render: message,
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+        })
+        return {
+          status: 'error',
+          message,
+        }
+      }
+    },
+    [generate_new_forecast_products, state.currentRegion, state.user.businessId]
+  )
+
+  const saveSingleProductTrendTag = useCallback(
     async ({ inventoryId, sku, productTrendTag }: RPProductTrendTagUpdate) => {
       const updatingTrendTag = toast.loading('Updating Product Trend Tag...')
 
       try {
         const response = await axios
           .post(`/api/reorderingPoints/setNewProductTrendTag?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-            product: { inventoryId, sku, productTrendTag },
+            products: [{ inventoryId, sku, productTrendTag }],
           })
           .then(({ data }) => {
             if (data.error) {
@@ -426,6 +508,31 @@ export const useRPProductsInfo = ({
       }
     },
     [state.currentRegion, state.user.businessId]
+  )
+
+  const handleSaveProductsTrendTagBulk = useCallback(
+    async (selectedProducts: ReorderingPointsProduct[], bsnssTrend: ProductTrendTag['bsnssTrend']) => {
+      return saveProductTrendTags(
+        selectedProducts.map((product) => ({
+          inventoryId: product.inventoryId,
+          sku: product.sku,
+          productTrendTag: {
+            aiTrend: product.productTrendTag?.aiTrend ?? 'Normal',
+            analysis: product.productTrendTag?.analysis ?? '',
+            bsnssTrend,
+            useAITrend: false,
+          },
+        }))
+      )
+    },
+    [saveProductTrendTags]
+  )
+
+  const handleSaveProductTrendTag = useCallback(
+    async ({ inventoryId, sku, productTrendTag }: RPProductTrendTagUpdate) => {
+      return saveSingleProductTrendTag({ inventoryId, sku, productTrendTag })
+    },
+    [saveSingleProductTrendTag]
   )
 
   // FILTERING TABLE
@@ -647,6 +754,7 @@ export const useRPProductsInfo = ({
     handleSaveProductConfig,
     handleRegenerateForecast,
     handleUrgencyRange,
+    handleSaveProductsTrendTagBulk,
     handleSaveProductTrendTag,
   }
 }

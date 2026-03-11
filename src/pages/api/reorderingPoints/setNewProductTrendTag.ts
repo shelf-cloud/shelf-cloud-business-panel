@@ -17,7 +17,7 @@ const setNewProductTrendTag: NextApiHandler = async (request, response) => {
     .post(
       `${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/reorderingPoints/set-new-product-trend-tag.php?businessId=${request.query.businessId}`,
       {
-        product: request.body.product,
+        products: request.body.products,
       },
       {
         headers: {
