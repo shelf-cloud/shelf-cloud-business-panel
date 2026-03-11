@@ -16,7 +16,7 @@ type Props = {
   isOpen: boolean
   onClose: () => void
   region: string
-  onSave: (data: RPProductTrendTagUpdate) => Promise<void>
+  onSave: (data: RPProductTrendTagUpdate) => void
 }
 
 const RPAIForecastDrawer = ({ product, isOpen, onClose, region, onSave }: Props) => {
@@ -66,11 +66,10 @@ const RPAIForecastDrawer = ({ product, isOpen, onClose, region, onSave }: Props)
             </div>
           </DrawerHeader>
 
-          {/* PRODUCT TREND TAG */}
-          {product?.productTrendTag && <RPProductTrendTagSection product={product} onSave={onSave} />}
-
           {/* BODY */}
           <div className='tw:flex-1 tw:overflow-y-auto tw:px-4 tw:py-4'>
+            {/* PRODUCT TREND TAG */}
+            {product?.productTrendTag && <RPProductTrendTagSection product={product} onSave={onSave} />}
             <div className='tw:mb-4'>
               <h4 className='tw:text-sm tw:font-semibold tw:text-foreground tw:mb-0.5 tw:flex tw:items-center tw:gap-1.5'>
                 <i className='las la-brain tw:text-base tw:text-info' />

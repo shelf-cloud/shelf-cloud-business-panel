@@ -75,7 +75,7 @@ export interface ReorderingPointsProduct {
   comment?: string
 }
 
-export type ProductTrendTag = { aiTrend: 'Normal' | 'Low Sales' | 'Seasonal'; analysis: string; bsnssTrend: 'Normal' | 'Low Sales' | 'Seasonal'; useAITrend: boolean }
+export type ProductTrendTag = { aiTrend: 'Normal' | 'Low Sales'; analysis: string; bsnssTrend: 'Normal' | 'Low Sales' | 'Seasonal'; useAITrend: boolean }
 
 export interface DateList {
   unitsSold: number

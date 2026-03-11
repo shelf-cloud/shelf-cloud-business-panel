@@ -22,13 +22,17 @@ import { useRPProductConfig } from '@hooks/reorderingPoints/useRPProductConfig'
 import { useRPProductsInfo } from '@hooks/reorderingPoints/useRPProductsInfo'
 import { useRPSplits } from '@hooks/reorderingPoints/useRPSplits'
 import { useInputModal } from '@hooks/ui/useInputModal'
+import { Button as ShadcnButton } from '@shadcn/ui/button'
+import { DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenu as ShadcnDropdownMenu } from '@shadcn/ui/dropdown-menu'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import axios from 'axios'
+import { ChevronDownIcon } from 'lucide-react'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Collapse, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from 'reactstrap'
+import { Button, Card, CardBody, Collapse, Container, Row } from 'reactstrap'
 
 import RPAIForecastDrawer from '@/features/reordering-points/RPAIForecastDrawer'
+import RPBulkProductTrendTagDialog from '@/features/reordering-points/RPBulkProductTrendTagDialog'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -99,6 +103,7 @@ const ReorderingPoints = ({ session }: Props) => {
     handleSaveProductConfig,
     handleRegenerateForecast,
     handleUrgencyRange,
+    handleSaveProductsTrendTagBulk,
     handleSaveProductTrendTag,
   } = useRPProductsInfo({
     session,
@@ -153,6 +158,7 @@ const ReorderingPoints = ({ session }: Props) => {
 
   const [showPOModal, setshowPOModal] = useState(false)
   const [aiForecastProduct, setAIForecastProduct] = useState<ReorderingPointsProduct | null>(null)
+  const [isBulkTrendTagDialogOpen, setIsBulkTrendTagDialogOpen] = useState(false)
 
   // FILTER FUNCTIONS
   const handleChangeDatesFromPicker = (dateStr: string) => {
@@ -312,7 +318,7 @@ const ReorderingPoints = ({ session }: Props) => {
               <div className='d-flex flex-column justify-content-between align-items-start p-0 flex-md-row align-items-md-center gap-2'>
                 <div className='d-flex flex-row flex-wrap justify-content-start align-items-center gap-2 w-100'>
                   <button
-                    className={'btn dropdown-toggle fs-7 ' + (filters === 'true' ? 'btn-info' : 'btn-light')}
+                    className={'btn dropdown-toggle fs-7 ' + (filters === 'true' ? 'btn-primary' : 'btn-light')}
                     style={filters === 'true' ? {} : { backgroundColor: 'white', border: '1px solid #E1E3E5' }}
                     type='button'
                     data-bs-toggle='dropdown'
@@ -328,26 +334,6 @@ const ReorderingPoints = ({ session }: Props) => {
                     shipmentsEndDate={endDate}
                     handleChangeDatesFromPicker={handleChangeDatesFromPicker}
                   />
-                  {selectedRows.length > 0 && (
-                    <UncontrolledButtonDropdown>
-                      <DropdownToggle className='btn btn-info fs-7 py-2' caret>
-                        {`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''} Selected`}
-                      </DropdownToggle>
-                      <DropdownMenu>
-                        <DropdownItem className='text-nowrap fs-7' onClick={() => changeSelectedProductsState(false)}>
-                          <i className='mdi mdi-eye label-icon align-middle fs-5 me-2 text-primary' />
-                          Set Visible
-                        </DropdownItem>
-                        <DropdownItem className='text-nowrap fs-7' onClick={() => changeSelectedProductsState(true)}>
-                          <i className='mdi mdi-eye-off label-icon align-middle fs-5 me-2 text-danger' />
-                          Hide Selected
-                        </DropdownItem>
-                        <DropdownItem className='text-nowrap text-muted fs-7 text-end' onClick={clearAllSelectedRows}>
-                          Clear
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </UncontrolledButtonDropdown>
-                  )}
                   {state?.user?.us && (
                     <>
                       <ReorderingPointsSettings
@@ -366,6 +352,36 @@ const ReorderingPoints = ({ session }: Props) => {
                         </Button>
                       ) : null}
                     </>
+                  )}
+                  {selectedRows.length > 0 && (
+                    <ShadcnDropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <ShadcnButton>
+                          {`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''} Selected`}
+                          <ChevronDownIcon className='tw:size-3' />
+                        </ShadcnButton>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align='start'>
+                        <DropdownMenuGroup>
+                          <DropdownMenuItem onClick={() => setIsBulkTrendTagDialogOpen(true)}>
+                            <i className='las la-chart-line fs-5 text-info' />
+                            Set Product Trend Tag
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => changeSelectedProductsState(false)}>
+                            <i className='mdi mdi-eye fs-5 text-primary' />
+                            Set Visible
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => changeSelectedProductsState(true)}>
+                            <i className='mdi mdi-eye-off fs-5 text-danger' />
+                            Hide Selected
+                          </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuGroup>
+                          <DropdownMenuItem onClick={clearAllSelectedRows}>Clear</DropdownMenuItem>
+                        </DropdownMenuGroup>
+                      </DropdownMenuContent>
+                    </ShadcnDropdownMenu>
                   )}
                 </div>
                 <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' minLength={3} />
@@ -454,6 +470,16 @@ const ReorderingPoints = ({ session }: Props) => {
           onClose={() => setAIForecastProduct(null)}
           region={state.currentRegion}
           onSave={handleSaveProductTrendTag}
+        />
+        <RPBulkProductTrendTagDialog
+          isOpen={isBulkTrendTagDialogOpen}
+          onClose={() => setIsBulkTrendTagDialogOpen(false)}
+          onSuccess={() => {
+            setIsBulkTrendTagDialogOpen(false)
+            clearAllSelectedRows()
+          }}
+          products={selectedRows}
+          onSubmit={handleSaveProductsTrendTagBulk}
         />
       </React.Fragment>
     </div>

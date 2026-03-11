@@ -29,7 +29,7 @@ export const useRPNewForecast = () => {
     if (data.error) {
       toast.error(data.message || 'Error generating new forecast for products.')
     } else {
-      toast.success(data.message || 'New forecast generated products successfully.')
+      toast.success(data.message || 'New forecasts are being generated.')
     }
   }
 
