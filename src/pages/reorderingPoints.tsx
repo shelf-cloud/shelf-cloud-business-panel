@@ -28,6 +28,8 @@ import moment from 'moment'
 import { toast } from 'react-toastify'
 import { Button, Card, CardBody, Collapse, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from 'reactstrap'
 
+import RPAIForecastDrawer from '@/features/reordering-points/RPAIForecastDrawer'
+
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
   if (session == null) {
@@ -97,6 +99,7 @@ const ReorderingPoints = ({ session }: Props) => {
     handleSaveProductConfig,
     handleRegenerateForecast,
     handleUrgencyRange,
+    handleSaveProductTrendTag,
   } = useRPProductsInfo({
     session,
     state,
@@ -149,6 +152,7 @@ const ReorderingPoints = ({ session }: Props) => {
   })
 
   const [showPOModal, setshowPOModal] = useState(false)
+  const [aiForecastProduct, setAIForecastProduct] = useState<ReorderingPointsProduct | null>(null)
 
   // FILTER FUNCTIONS
   const handleChangeDatesFromPicker = (dateStr: string) => {
@@ -411,6 +415,7 @@ const ReorderingPoints = ({ session }: Props) => {
                   setRPProductConfig={setRPProductConfig}
                   setValuesAndOpen={setValuesAndOpen}
                   handleRegenerateForecast={handleRegenerateForecast}
+                  setAIForecastProduct={setAIForecastProduct}
                   expandedRowProps={{ session, startDate, endDate }}
                 />
               </CardBody>
@@ -442,6 +447,13 @@ const ReorderingPoints = ({ session }: Props) => {
           isLoading={isLoading}
           handleSubmit={handleSubmit}
           onClose={closeModal}
+        />
+        <RPAIForecastDrawer
+          product={aiForecastProduct}
+          isOpen={aiForecastProduct !== null}
+          onClose={() => setAIForecastProduct(null)}
+          region={state.currentRegion}
+          onSave={handleSaveProductTrendTag}
         />
       </React.Fragment>
     </div>

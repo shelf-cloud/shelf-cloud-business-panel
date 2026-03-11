@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { useCallback, useContext, useState } from 'react'
+import { useCallback, useContext } from 'react'
 
 import CopyTextToClipboard from '@components/ui/CopyTextToClipboard'
 import SCTooltip from '@components/ui/SCTooltip'
@@ -12,13 +12,14 @@ import { SplitNames } from '@hooks/reorderingPoints/useRPSplits'
 import { SimpleInputModal } from '@hooks/ui/useInputModal'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
+import { Badge as ShadcnBadge } from '@shadcn/ui/badge'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
+import { TrendingUpDownIcon } from 'lucide-react'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
 import { Badge, Button, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
 
 import DownloadProductMD from './DownloadProductMD'
-import RPAIForecastDrawer from '@features/reordering-points/RPAIForecastDrawer'
 
 const ReorderingPointsExpandedDetails = dynamic(() => import('./ReorderingPointsExpandedDetails'), {
   ssr: false,
@@ -44,6 +45,7 @@ type Props = {
   setRPProductConfig: (prev: RPProductConfig) => void
   setValuesAndOpen: (newValue: SimpleInputModal) => void
   handleRegenerateForecast: ({ inventoryId, sku }: { inventoryId: number; sku: string }) => void
+  setAIForecastProduct: (product: ReorderingPointsProduct | null) => void
   expandedRowProps: ExpandedRowProps
 }
 
@@ -67,11 +69,11 @@ const ReorderingPointsTable = ({
   setRPProductConfig,
   setValuesAndOpen,
   handleRegenerateForecast,
+  setAIForecastProduct,
   expandedRowProps,
 }: Props) => {
   const { state }: any = useContext(AppContext)
   const { session, startDate, endDate } = expandedRowProps
-  const [aiForecastProduct, setAIForecastProduct] = useState<ReorderingPointsProduct | null>(null)
 
   const handleSelectedRows = ({ selectedRows }: { selectedRows: ReorderingPointsProduct[] }) => {
     setSelectedRows(selectedRows)
@@ -364,6 +366,12 @@ const ReorderingPointsTable = ({
                 <Badge pill color='warning' className='fs-7 fw-normal'>
                   Hidden
                 </Badge>
+              )}
+              {(row.productTrendTag?.aiTrend || row.productTrendTag?.bsnssTrend) && (
+                <ShadcnBadge variant={'default'} className='tw:text-xs tw:mt-1'>
+                  <TrendingUpDownIcon className='tw:size-3 tw:mr-2' />
+                  {row.productTrendTag.useAITrend ? row.productTrendTag.aiTrend : row.productTrendTag.bsnssTrend}
+                </ShadcnBadge>
               )}
             </div>
           </div>
@@ -826,12 +834,6 @@ const ReorderingPointsTable = ({
         }}
         conditionalRowStyles={conditionalRowStyles}
         customStyles={customStyles}
-      />
-      <RPAIForecastDrawer
-        product={aiForecastProduct}
-        isOpen={aiForecastProduct !== null}
-        onClose={() => setAIForecastProduct(null)}
-        region={state.currentRegion}
       />
     </div>
   )
