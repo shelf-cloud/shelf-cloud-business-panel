@@ -9,6 +9,8 @@ import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoi
 import { useFormik } from 'formik'
 import { TrendingUpDownIcon } from 'lucide-react'
 
+import { Button } from '@/components/shadcn/ui/button'
+
 import { PRODUCT_TREND_OPTIONS, ProductTrendOption, productTrendFormSchema } from './productTrendTagForm'
 
 type Props = {
@@ -135,7 +137,7 @@ const RPProductTrendTagSection = ({ product, onSave }: Props) => {
           {/* Save button */}
           {hasChanges && (
             <div className='tw:flex tw:justify-end'>
-              <button type='submit' className='btn btn-primary btn-sm fs-7' disabled={saving}>
+              <Button type='submit' size={'sm'} disabled={saving}>
                 {saving ? (
                   <>
                     <i className='ri-loader-4-line tw:animate-spin tw:mr-1' />
@@ -144,7 +146,7 @@ const RPProductTrendTagSection = ({ product, onSave }: Props) => {
                 ) : (
                   'Save Changes'
                 )}
-              </button>
+              </Button>
             </div>
           )}
         </form>

@@ -29,7 +29,7 @@ import axios from 'axios'
 import { ChevronDownIcon } from 'lucide-react'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Collapse, Container, Row } from 'reactstrap'
+import { Card, CardBody, Collapse, Container, Row } from 'reactstrap'
 
 import RPAIForecastDrawer from '@/features/reordering-points/RPAIForecastDrawer'
 import RPBulkProductTrendTagDialog from '@/features/reordering-points/RPBulkProductTrendTagDialog'
@@ -317,16 +317,10 @@ const ReorderingPoints = ({ session }: Props) => {
             <Row className='d-flex flex-column justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-end align-items-md-center px-3'>
               <div className='d-flex flex-column justify-content-between align-items-start p-0 flex-md-row align-items-md-center gap-2'>
                 <div className='d-flex flex-row flex-wrap justify-content-start align-items-center gap-2 w-100'>
-                  <button
-                    className={'btn dropdown-toggle fs-7 ' + (filters === 'true' ? 'btn-primary' : 'btn-light')}
-                    style={filters === 'true' ? {} : { backgroundColor: 'white', border: '1px solid #E1E3E5' }}
-                    type='button'
-                    data-bs-toggle='dropdown'
-                    data-bs-auto-close='outside'
-                    aria-expanded='false'
-                    onClick={() => setFilterOpen(!filterOpen)}>
+                  <ShadcnButton variant={filters === 'true' ? 'default' : 'light'} onClick={() => setFilterOpen(!filterOpen)}>
                     Filters
-                  </button>
+                    <ChevronDownIcon className='tw:size-3' />
+                  </ShadcnButton>
                   <FilterByDates
                     shipmentsStartDate={startDate}
                     setShipmentsStartDate={setStartDate}
@@ -346,10 +340,10 @@ const ReorderingPoints = ({ session }: Props) => {
                         setsplits={setsplits}
                       />
                       {state.user.us.canEditPrompt ? (
-                        <Button onClick={() => setPromptModal({ show: true })} className='d-flex flex-row justify-content-start align-items-center gap-1'>
+                        <ShadcnButton onClick={() => setPromptModal({ show: true })} className='d-flex flex-row justify-content-start align-items-center gap-1'>
                           <i className='las la-brain fs-4 m-0 p-0' />
                           Prompt
-                        </Button>
+                        </ShadcnButton>
                       ) : null}
                     </>
                   )}

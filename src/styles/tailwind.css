@@ -6,32 +6,77 @@
 @custom-variant dark (&:where([data-layout-mode='dark'], [data-layout-mode='dark'] *));
 
 :root {
-  --background: var(--vz-body-bg, var(--bs-body-bg, #f3f3f9));
+  /* Foundation */
+  --background: var(--vz-body-bg, var(--bs-body-bg, #eff3f6));
   --foreground: var(--vz-body-color, var(--bs-body-color, #495057));
-  --card: var(--vz-card-bg, #ffffff);
+  --card: var(--vz-card-bg, var(--bs-card-bg, #ffffff));
   --card-foreground: var(--vz-heading-color, var(--bs-body-color, #343a40));
   --popover: var(--vz-dropdown-bg, var(--vz-card-bg, #ffffff));
   --popover-foreground: var(--vz-dropdown-link-color, var(--bs-body-color, #343a40));
+  --border: var(--vz-border-color, var(--bs-border-color, #e9ebec));
+  --input: var(--vz-input-bg, var(--bs-body-bg, #ffffff));
+  --input-border: var(--vz-input-border, var(--vz-border-color, #ced4da));
+  --radius: var(--bs-border-radius, 0.25rem);
+
+  /* Semantic colors */
   --primary: var(--bs-primary, #4481fd);
-  --primary-foreground: #ffffff;
+  --primary-foreground: var(--bs-white, #ffffff);
   --secondary: var(--bs-secondary, #3577f1);
-  --secondary-foreground: #ffffff;
+  --secondary-foreground: var(--bs-white, #ffffff);
+  --success: var(--bs-success, #0ab39c);
+  --success-foreground: var(--bs-white, #ffffff);
+  --info: var(--bs-info, #299cdb);
+  --info-foreground: var(--bs-white, #ffffff);
+  --warning: var(--bs-warning, #f7b84b);
+  --warning-foreground: var(--bs-gray-900, #343a40);
+  --destructive: var(--bs-danger, #f06548);
+  --destructive-foreground: var(--bs-white, #ffffff);
+  --light: var(--vz-light, var(--bs-light, #f3f6f9));
+  --dark: var(--vz-dark, var(--bs-dark, #212529));
   --muted: var(--vz-light, #f3f6f9);
   --muted-foreground: var(--bs-secondary-color, #878a99);
   --accent: color-mix(in srgb, var(--bs-primary, #4481fd) 12%, var(--vz-card-bg, #ffffff));
   --accent-foreground: var(--vz-heading-color, #343a40);
-  --destructive: var(--bs-danger, #f06548);
-  --destructive-foreground: #ffffff;
-  --border: var(--vz-border-color, var(--bs-border-color, #e9ebec));
-  --input: var(--vz-input-bg, #ffffff);
-  --input-border: var(--vz-input-border, var(--vz-border-color, #ced4da));
-  --ring: color-mix(in srgb, var(--bs-primary, #4481fd) 45%, transparent);
-  --radius: 0.75rem;
+
+  /* Focus/interaction */
+  --ring: var(--bs-focus-ring-color, color-mix(in srgb, var(--bs-primary, #4481fd) 45%, transparent));
+
+  /* Bootstrap-aligned utility colors (for direct Tailwind use) */
+  --blue: var(--bs-blue, #3577f1);
+  --indigo: var(--bs-indigo, #4481fd);
+  --purple: var(--bs-purple, #6559cc);
+  --pink: var(--bs-pink, #f672a7);
+  --red: var(--bs-red, #f06548);
+  --orange: var(--bs-orange, #f1963b);
+  --yellow: var(--bs-yellow, #f7b84b);
+  --green: var(--bs-green, #0ab39c);
+  --teal: var(--bs-teal, #02a8b5);
+  --cyan: var(--bs-cyan, #299cdb);
+  --gray: var(--bs-gray-600, #878a99);
+  --gray-dark: var(--bs-gray-800, #343a40);
+
+  /* Bootstrap gray scale (for design parity) */
+  --gray-100: var(--bs-gray-100, #f3f6f9);
+  --gray-200: var(--bs-gray-200, #eff2f7);
+  --gray-300: var(--bs-gray-300, #e9ebec);
+  --gray-400: var(--bs-gray-400, #ced4da);
+  --gray-500: var(--bs-gray-500, #adb5bd);
+  --gray-600: var(--bs-gray-600, #878a99);
+  --gray-700: var(--bs-gray-700, #495057);
+  --gray-800: var(--bs-gray-800, #343a40);
+  --gray-900: var(--bs-gray-900, #212529);
+
+  /* Shadows */
+  --shadow-xs: var(--bs-box-shadow-sm, 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075));
+  --shadow-sm: var(--bs-box-shadow, 0 1px 2px rgba(56, 65, 74, 0.15));
+  --shadow-md: var(--bs-box-shadow-lg, 0 5px 10px rgba(30, 32, 37, 0.12));
+  --shadow-lg: var(--bs-dropdown-box-shadow, 0 5px 10px rgba(30, 32, 37, 0.12));
 }
 
 @theme inline {
-  --font-sans: "Poppins", sans-serif;
-  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --font-sans: var(--bs-body-font-family, "Poppins", sans-serif);
+  --font-serif: var(--bs-font-serif, "Georgia", "Times New Roman", serif);
+  --font-mono: var(--bs-font-monospace, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -43,6 +88,16 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-light: var(--light);
+  --color-light-foreground: var(--foreground);
+  --color-dark: var(--dark);
+  --color-dark-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
@@ -51,14 +106,38 @@
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
+  --color-input-border: var(--input-border);
   --color-ring: var(--ring);
 
-  --radius-sm: calc(var(--radius) - 0.25rem);
-  --radius-md: calc(var(--radius) - 0.125rem);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 0.25rem);
+  --color-blue: var(--blue);
+  --color-indigo: var(--indigo);
+  --color-purple: var(--purple);
+  --color-pink: var(--pink);
+  --color-red: var(--red);
+  --color-orange: var(--orange);
+  --color-yellow: var(--yellow);
+  --color-green: var(--green);
+  --color-teal: var(--teal);
+  --color-cyan: var(--cyan);
+  --color-gray: var(--gray);
+  --color-gray-dark: var(--gray-dark);
+  --color-gray-100: var(--gray-100);
+  --color-gray-200: var(--gray-200);
+  --color-gray-300: var(--gray-300);
+  --color-gray-400: var(--gray-400);
+  --color-gray-500: var(--gray-500);
+  --color-gray-600: var(--gray-600);
+  --color-gray-700: var(--gray-700);
+  --color-gray-800: var(--gray-800);
+  --color-gray-900: var(--gray-900);
 
-  --shadow-xs: 0 1px 2px 0 rgb(15 23 42 / 0.06);
-  --shadow-sm: 0 6px 18px -12px rgb(15 23 42 / 0.22);
-  --shadow-md: 0 16px 40px -24px rgb(15 23 42 / 0.28);
+  --radius-sm: var(--bs-border-radius-sm, 0.2rem);
+  --radius-md: var(--bs-border-radius, 0.25rem);
+  --radius-lg: var(--bs-border-radius-lg, 0.3rem);
+  --radius-xl: var(--bs-border-radius-2xl, calc(var(--radius-lg) + 0.45rem));
+
+  --shadow-xs: var(--bs-box-shadow-sm, 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075));
+  --shadow-sm: var(--bs-box-shadow, 0 1px 2px rgba(56, 65, 74, 0.15));
+  --shadow-md: var(--bs-box-shadow-lg, 0 5px 10px rgba(30, 32, 37, 0.12));
+  --shadow-lg: var(--bs-dropdown-box-shadow, 0 5px 10px rgba(30, 32, 37, 0.12));
 }

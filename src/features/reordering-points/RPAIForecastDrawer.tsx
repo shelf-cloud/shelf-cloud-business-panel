@@ -4,8 +4,10 @@ import { Separator } from '@components/shadcn/ui/separator'
 import { RPProductTrendTagUpdate } from '@hooks/reorderingPoints/useRPProductsInfo'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
+import { XIcon } from 'lucide-react'
 import { Drawer as DrawerPrimitive } from 'vaul'
 
+import { Button } from '@/components/shadcn/ui/button'
 import { cn } from '@/lib/shadcn/utils'
 
 import RPAIForecastModelCard from './RPAIForecastModelCard'
@@ -59,9 +61,9 @@ const RPAIForecastDrawer = ({ product, isOpen, onClose, region, onSave }: Props)
                 </div>
               </div>
               <DrawerClose asChild>
-                <button className='tw:shrink-0 tw:rounded-md tw:p-1.5 tw:text-muted-foreground tw:hover:bg-muted tw:hover:text-foreground tw:transition-colors' aria-label='Close'>
-                  <i className='ri-close-line tw:text-lg' />
-                </button>
+                <Button variant={'outline'} size={'icon'} aria-label='Close'>
+                  <XIcon className='tw:size-5' />
+                </Button>
               </DrawerClose>
             </div>
           </DrawerHeader>
@@ -99,7 +101,9 @@ const RPAIForecastDrawer = ({ product, isOpen, onClose, region, onSave }: Props)
           <DrawerFooter className='tw:border-t tw:border-border tw:pt-3 tw:pb-4'>
             <div className='tw:flex tw:justify-end'>
               <DrawerClose asChild>
-                <button className='btn btn-light btn-sm fs-7'>Close</button>
+                <Button variant={'muted'} aria-label='Close'>
+                  Close
+                </Button>
               </DrawerClose>
             </div>
           </DrawerFooter>

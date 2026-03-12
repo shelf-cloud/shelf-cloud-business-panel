@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 
+import { Button as ShadcnButton } from '@shadcn/ui/button'
 import { Form, Formik } from 'formik'
+import { ChevronDownIcon } from 'lucide-react'
 import { Button, Col, Input, InputGroup, InputGroupText, Label } from 'reactstrap'
 import * as Yup from 'yup'
 
@@ -80,17 +82,10 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
 
   return (
     <div ref={rpSettings} className='dropdown'>
-      <button
-        className='btn btn-light dropdown-toggle d-flex flex-row justify-content-start align-items-center gap-0'
-        style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }}
-        type='button'
-        data-bs-toggle='dropdown'
-        data-bs-auto-close='outside'
-        aria-expanded='false'
-        onClick={() => setOpenDatesMenu(!openDatesMenu)}>
+      <ShadcnButton variant='light' onClick={() => setOpenDatesMenu(!openDatesMenu)}>
         <i className='las la-cog fs-4 m-0 p-0 text-primary' />
-        {/* <span className='fw-semibold m-0 p-0'></span> */}
-      </button>
+        <ChevronDownIcon className='tw:size-3' />
+      </ShadcnButton>
       <div className={'dropdown-menu dropdown-menu-xl px-2 pt-3 pb-1' + (openDatesMenu ? ' show' : '')} style={{ minWidth: '300px' }}>
         {canSplit && (
           <div className='mb-3 px-2'>
