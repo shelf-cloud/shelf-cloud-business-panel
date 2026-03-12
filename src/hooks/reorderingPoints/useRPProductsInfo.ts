@@ -45,6 +45,7 @@ export const useRPProductsInfo = ({
   supplier,
   brand,
   category,
+  trendTag,
   showHidden,
   setField,
   sortingDirectionAsc,
@@ -693,6 +694,9 @@ export const useRPProductsInfo = ({
           (supplier !== undefined && supplier !== '' ? item.supplier.toLowerCase() === supplier.toLowerCase() : true) &&
           (brand !== undefined && brand !== '' ? item.brand.toLowerCase() === brand.toLowerCase() : true) &&
           (category !== undefined && category !== '' ? item.category.toLowerCase() === category.toLowerCase() : true) &&
+          (trendTag !== undefined && trendTag !== ''
+            ? (item.productTrendTag.useAITrend ? item.productTrendTag.aiTrend.toLowerCase() : item.productTrendTag.bsnssTrend.toLowerCase()) === trendTag.toLowerCase()
+            : true) &&
           (showHidden === undefined || showHidden === '' ? !item.hideReorderingPoints : showHidden === 'false' ? !item.hideReorderingPoints : true)
         // (show0Days === undefined || show0Days === '' ? item.daysRemaining > 0 : show0Days === 'false' ? item.daysRemaining > 0 : true)
       )
@@ -711,6 +715,9 @@ export const useRPProductsInfo = ({
           (supplier !== undefined && supplier !== '' ? item.supplier.toLowerCase() === supplier.toLowerCase() : true) &&
           (brand !== undefined && brand !== '' ? item.brand.toLowerCase() === brand.toLowerCase() : true) &&
           (category !== undefined && category !== '' ? item.category.toLowerCase() === category.toLowerCase() : true) &&
+          (trendTag !== undefined && trendTag !== ''
+            ? (item.productTrendTag.useAITrend ? item.productTrendTag.aiTrend.toLowerCase() : item.productTrendTag.bsnssTrend.toLowerCase()) === trendTag.toLowerCase()
+            : true) &&
           (showHidden === undefined || showHidden === '' ? !item.hideReorderingPoints : showHidden === 'false' ? !item.hideReorderingPoints : true) &&
           // (show0Days === undefined || show0Days === '' ? item.daysRemaining > 0 : show0Days === 'false' ? item.daysRemaining > 0 : true) &&
           (item.sku.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -740,6 +747,7 @@ export const useRPProductsInfo = ({
     supplier,
     brand,
     category,
+    trendTag,
     showHidden,
   ])
 
