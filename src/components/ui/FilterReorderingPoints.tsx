@@ -23,6 +23,7 @@ type Props = {
   brand: string
   category: string
   trendTag: string
+  ai_urgency: string
   showHidden: string
   // show0Days: string
   supplierOptions: string[]
@@ -41,6 +42,7 @@ type Props = {
     brand: string,
     category: string,
     trendTag: string,
+    ai_urgency: string,
     showHidden: string
     // show0Days: string
   ) => void
@@ -52,6 +54,12 @@ const URGENCY_STATES = {
   '2': { label: 'Medium Alert', icon: 'mdi mdi-alert-octagon', color: 'text-warning' },
   '1': { label: 'Low Alert', icon: 'mdi mdi-alert-octagon', color: 'text-info' },
   '0': { label: 'No Alert', icon: 'mdi mdi-alert-octagon', color: 'text-success' },
+}
+
+const AI_URGENCY_STATES = {
+  high: { label: 'High', icon: 'mdi mdi-alert-octagon', color: 'text-danger' },
+  medium: { label: 'Medium', icon: 'mdi mdi-alert-octagon', color: 'text-warning' },
+  low: { label: 'Low', icon: 'mdi mdi-alert-octagon', color: 'text-info' },
 }
 
 const UNITS_DAYS_RANGES = {
@@ -78,6 +86,7 @@ const FilterReorderingPoints = ({
   brand,
   category,
   trendTag,
+  ai_urgency,
   showHidden,
   // show0Days,
   supplierOptions,
@@ -102,6 +111,7 @@ const FilterReorderingPoints = ({
     brand: brand,
     category: category,
     trendTag: trendTag,
+    ai_urgency: ai_urgency,
     showHidden: showHidden,
     // show0Days: show0Days,
   }
@@ -125,6 +135,7 @@ const FilterReorderingPoints = ({
       values.brand,
       values.category,
       values.trendTag,
+      values.ai_urgency,
       values.showHidden
       // values.show0Days
     )
@@ -144,6 +155,7 @@ const FilterReorderingPoints = ({
       brand: '',
       category: '',
       trendTag: '',
+      ai_urgency: '',
       showHidden: '',
       // show0Days: '',
     })
@@ -336,6 +348,14 @@ const FilterReorderingPoints = ({
               </Row>
               <Col md={12} className='d-flex flex-row flex-wrap justify-content-between align-items-center gap-3 mt-2'>
                 <Col xs={12} md={7} className='d-flex flex-row flex-wrap justify-content-start align-items-center gap-4'>
+                  <Col xs={12} md={3}>
+                    <FormGroup className='createOrder_inputs'>
+                      <Label htmlFor='lastNameinput' className='form-label'>
+                        AI Urgency
+                      </Label>
+                      <SelectMultipleDropDown formValue={'ai_urgency'} selectionInfo={AI_URGENCY_STATES} selected={values.ai_urgency} handleSelection={setFieldValue} />
+                    </FormGroup>
+                  </Col>
                   <div className='form-check form-switch form-switch-right form-switch-md d-flex flex-row justify-content-start align-items-center'>
                     <Label className='form-label'>Show hidden products</Label>
                     <Input
@@ -351,21 +371,6 @@ const FilterReorderingPoints = ({
                       invalid={touched.showHidden && errors.showHidden ? true : false}
                     />
                   </div>
-                  {/* <div className='form-check form-switch form-switch-right form-switch-md d-flex flex-row justify-content-start align-items-center'>
-                  <Label className='form-label'>Show 0 days Remaining</Label>
-                  <Input
-                    className='form-check-input code-switcher'
-                    type='checkbox'
-                    id='show0Days'
-                    name='show0Days'
-                    checked={values.show0Days === 'true' ? true : false}
-                    onChange={(e) => {
-                      setFieldValue('show0Days', `${e.target.checked}`)
-                    }}
-                    onBlur={handleBlur}
-                    invalid={touched.show0Days && errors.show0Days ? true : false}
-                  />
-                </div> */}
                 </Col>
                 <Col xs={12} md={4}>
                   <div className='d-flex flewx-row justify-content-end align-items-center gap-3'>

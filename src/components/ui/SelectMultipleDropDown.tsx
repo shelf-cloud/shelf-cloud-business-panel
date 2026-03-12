@@ -1,33 +1,57 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+
+export type SelectMultipleOption = {
+  label: string
+  icon: string
+  color: string
+}
+
+export type SelectMultipleOptions = Record<string, SelectMultipleOption>
 
 type Props = {
   formValue: string
-  selectionInfo: {
-    [key: string]: {
-      label: string
-      icon: string
-      color: string
-    }
-  }
-  selected: string
+  selectionInfo: SelectMultipleOptions
+  selected?: string
   handleSelection: (field: string, value: any, shouldValidate?: boolean | undefined) => void
 }
+
+const parseSelectedValues = (selected?: string): string[] => {
+  if (!selected) {
+    return []
+  }
+
+  try {
+    const parsedValue = JSON.parse(selected)
+
+    if (!Array.isArray(parsedValue)) {
+      return []
+    }
+
+    return parsedValue.map((value) => String(value))
+  } catch {
+    return []
+  }
+}
+
+const serializeSelectedValues = (values: string[]) => JSON.stringify(values.map((value) => (/^-?\d+$/.test(value) ? Number(value) : value)))
 
 const SelectMultipleDropDown = ({ formValue, selectionInfo, selected, handleSelection }: Props) => {
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const selectMultiple = useRef<HTMLDivElement | null>(null)
 
-  const selectedParsed: number[] = selected !== undefined ? JSON.parse(selected) : []
+  const selectedParsed = useMemo(() => parseSelectedValues(selected), [selected])
 
   useEffect(() => {
-    if (document) {
-      document.addEventListener('click', (e: any) => {
-        if (selectMultiple.current) {
-          if (!selectMultiple.current.contains(e.target)) {
-            setOpenDatesMenu(false)
-          }
-        }
-      })
+    const handleClickOutside = (event: MouseEvent) => {
+      if (selectMultiple.current && !selectMultiple.current.contains(event.target as Node)) {
+        setOpenDatesMenu(false)
+      }
+    }
+
+    document.addEventListener('click', handleClickOutside)
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside)
     }
   }, [])
 
@@ -35,7 +59,14 @@ const SelectMultipleDropDown = ({ formValue, selectionInfo, selected, handleSele
     <div ref={selectMultiple} className='dropdown mb-3'>
       <div className='btn-group w-100 form-control form-control-sm p-0' onClick={() => setOpenDatesMenu(!openDatesMenu)}>
         <button type='button' disabled className='btn btn-light btn-sm py-0 fs-6 w-100 text-start' style={{ backgroundColor: 'white', opacity: '100%' }}>
-          {selectedParsed.length === 0 ? <span className='text-muted'>Select</span> : selectedParsed.map((value) => `${selectionInfo[value].label}, `)}
+          {selectedParsed.length === 0 ? (
+            <span className='text-muted'>Select</span>
+          ) : (
+            selectedParsed
+              .map((value) => selectionInfo[value]?.label)
+              .filter(Boolean)
+              .join(', ')
+          )}
         </button>
         <button
           type='button'
@@ -54,11 +85,11 @@ const SelectMultipleDropDown = ({ formValue, selectionInfo, selected, handleSele
             {Object.entries(selectionInfo)?.map(([value, option]) => (
               <p
                 key={value}
-                className={'m-0 mb-2 ' + (selectedParsed.includes(parseInt(value)) ? 'fw-bold' : '')}
+                className={'m-0 mb-2 ' + (selectedParsed.includes(value) ? 'fw-bold' : '')}
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
-                  const newSelected = selectedParsed.includes(parseInt(value)) ? selectedParsed.filter((item) => item !== parseInt(value)) : [...selectedParsed, parseInt(value)]
-                  handleSelection(formValue, `[${newSelected.toString()}]`)
+                  const newSelected = selectedParsed.includes(value) ? selectedParsed.filter((item) => item !== value) : [...selectedParsed, value]
+                  handleSelection(formValue, serializeSelectedValues(newSelected))
                 }}>
                 {option.icon && <i className={`${option.icon} ${option.color}`} />}
                 {`${option.label}`}
