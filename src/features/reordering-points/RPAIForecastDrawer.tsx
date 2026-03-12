@@ -89,7 +89,7 @@ const RPAIForecastDrawer = ({ product, isOpen, onClose, region, onSave }: Props)
               <div className='tw:flex tw:flex-col tw:gap-0'>
                 {visibleModels.map((m, idx) => (
                   <div key={m.modelNumber}>
-                    <RPAIForecastModelCard modelNumber={m.modelNumber} model={m.model} analysis={m.analysis} forecast={m.forecast} region={region} />
+                    <RPAIForecastModelCard modelNumber={m.modelNumber} model={m.model} analysis={m.analysis} forecast={m.forecast} region={region} productForecast={m} />
                     {idx < visibleModels.length - 1 && <Separator className='tw:my-2' />}
                   </div>
                 ))}

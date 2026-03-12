@@ -15,6 +15,7 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import { Badge as ShadcnBadge } from '@shadcn/ui/badge'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import { TrendingUpDownIcon } from 'lucide-react'
+import moment from 'moment'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
 import { Button, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
@@ -686,22 +687,71 @@ const ReorderingPointsTable = ({
         return (
           <div className='fs-7'>
             {row.totalAIForecast_1.model ? (
-              <p className='m-0 p-0 text-center d-flex justify-content-center align-items-center' id={'ai_recommended_Qty'}>
-                {FormatIntNumber(state.currentRegion, row.totalAIForecast_1.forecast)}
+              <div className='d-flex flex-row justify-content-center align-items-center gap-2'>
+                <p className='m-0 p-0 text-center'>{FormatIntNumber(state.currentRegion, row.totalAIForecast_1.forecast)}</p>
                 {row.totalAIForecast_1.analysis && (
                   <>
-                    <i className='ri-information-fill ms-1 fs-6 text-info' id={`ai_forecast_model_1_${row.sku}`}></i>
+                    <i className='ri-information-fill m-0 fs-5 text-info' id={`ai_forecast_model_1_${row.sku}`}></i>
                     <SCTooltip target={`ai_forecast_model_1_${row.sku}`} placement='right' key={`ai_forecast_model_1_${row.sku}`}>
                       <p className='fs-7 text-primary m-0 p-0'>{row.totalAIForecast_1.analysis}</p>
                     </SCTooltip>
                   </>
                 )}
-              </p>
+              </div>
             ) : (
               <p className='m-0 p-0 text-center text-danger' id={'ai_recommended_Qty'}>
                 Error
               </p>
             )}
+          </div>
+        )
+      },
+      sortable: false,
+      center: true,
+      compact: true,
+    },
+    {
+      name: (
+        <div className='text-center d-flex flex-column justify-content-center align-items-center gap-1'>
+          <span className={'fs-7 ' + (setField === 'ai_urgency' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('ai_urgency')}>
+            AI Urgency{' '}
+            {setField === 'ai_urgency' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
+          </span>
+        </div>
+      ),
+      selector: (row: ReorderingPointsProduct) => {
+        var color: string = 'text-primary'
+        switch (row.totalAIForecast_1.urgencyTag) {
+          case 'High':
+            color = 'text-danger'
+            break
+          case 'Medium':
+            color = 'text-warning'
+            break
+          case 'Low':
+            color = 'text-info'
+            break
+          default:
+            color = 'text-success'
+            break
+        }
+        return (
+          <div className='d-flex flex-column justify-content-center align-items-center gap-1'>
+            <i className={`mdi mdi-alert-octagon fs-3 m-0 p-0 ${color}`} />
+
+            <div className='d-flex flex-row justify-content-center align-items-center gap-1'>
+              <span
+                className={
+                  'm-0 p-0 text-center fs-7' + (row.totalAIForecast_1.daysUntilNextOrder <= 0 ? ' text-danger fw-semibold' : '')
+                }>{`${FormatIntNumber(state.currentRegion, row.totalAIForecast_1.daysUntilNextOrder)} ${row.totalAIForecast_1.daysUntilNextOrder == 1 ? 'day' : 'days'}`}</span>
+              <i className='fs-5 text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={`AI_DaysToOrderIcon-${row.sku}`} />
+              <UncontrolledTooltip placement='top' target={`AI_DaysToOrderIcon-${row.sku}`} innerClassName='bg-white border border-info border-opacity-50 p-2'>
+                <p className='fs-7 text-primary m-0 p-0 mb-0'>{row.totalAIForecast_1.notes}</p>
+              </UncontrolledTooltip>
+            </div>
+            <div>
+              <span className='fs-7 tw:text-muted-foreground'>{moment(row.totalAIForecast_1.recommendedOrderDate).format('DD MMM YYYY')}</span>
+            </div>
           </div>
         )
       },
