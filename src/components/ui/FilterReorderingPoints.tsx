@@ -22,6 +22,7 @@ type Props = {
   supplier: string
   brand: string
   category: string
+  trendTag: string
   showHidden: string
   // show0Days: string
   supplierOptions: string[]
@@ -39,6 +40,7 @@ type Props = {
     supplier: string,
     brand: string,
     category: string,
+    trendTag: string,
     showHidden: string
     // show0Days: string
   ) => void
@@ -61,6 +63,8 @@ const UNITS_DAYS_RANGES = {
   '365D': { label: '365 Days', value: '365D' },
 }
 
+const TREND_TAGS = ['Normal', 'Low Sales', 'Seasonal']
+
 const FilterReorderingPoints = ({
   urgency,
   grossmin,
@@ -73,6 +77,7 @@ const FilterReorderingPoints = ({
   supplier,
   brand,
   category,
+  trendTag,
   showHidden,
   // show0Days,
   supplierOptions,
@@ -96,6 +101,7 @@ const FilterReorderingPoints = ({
     supplier: supplier,
     brand: brand,
     category: category,
+    trendTag: trendTag,
     showHidden: showHidden,
     // show0Days: show0Days,
   }
@@ -118,6 +124,7 @@ const FilterReorderingPoints = ({
       values.supplier,
       values.brand,
       values.category,
+      values.trendTag,
       values.showHidden
       // values.show0Days
     )
@@ -136,6 +143,7 @@ const FilterReorderingPoints = ({
       supplier: '',
       brand: '',
       category: '',
+      trendTag: '',
       showHidden: '',
       // show0Days: '',
     })
@@ -295,7 +303,7 @@ const FilterReorderingPoints = ({
               <Row className='mt-2'>
                 <Col md={3}>
                   <FormGroup className='createOrder_inputs'>
-                    <Label htmlFor='lastNameinput' className='form-label'>
+                    <Label htmlFor='supplier' className='form-label'>
                       Suppliers
                     </Label>
                     <SelectDropDown formValue={'supplier'} selectionInfo={supplierOptions} selected={values.supplier} handleSelection={setFieldValue} />
@@ -303,7 +311,7 @@ const FilterReorderingPoints = ({
                 </Col>
                 <Col md={3}>
                   <FormGroup className='createOrder_inputs'>
-                    <Label htmlFor='lastNameinput' className='form-label'>
+                    <Label htmlFor='brand' className='form-label'>
                       Brands
                     </Label>
                     <SelectDropDown formValue={'brand'} selectionInfo={brandOptions} selected={values.brand} handleSelection={setFieldValue} />
@@ -311,14 +319,22 @@ const FilterReorderingPoints = ({
                 </Col>
                 <Col md={3}>
                   <FormGroup className='createOrder_inputs'>
-                    <Label htmlFor='lastNameinput' className='form-label'>
+                    <Label htmlFor='category' className='form-label'>
                       Categories
                     </Label>
                     <SelectDropDown formValue={'category'} selectionInfo={categoryOptions} selected={values.category} handleSelection={setFieldValue} />
                   </FormGroup>
                 </Col>
+                <Col md={3}>
+                  <FormGroup className='createOrder_inputs'>
+                    <Label htmlFor='trendTag' className='form-label'>
+                      Trend Tag
+                    </Label>
+                    <SelectDropDown formValue={'trendTag'} selectionInfo={TREND_TAGS} selected={values.trendTag} handleSelection={setFieldValue} />
+                  </FormGroup>
+                </Col>
               </Row>
-              <Col md={12} className='d-flex flex-row flex-wrap justify-content-between align-items-center gap-3'>
+              <Col md={12} className='d-flex flex-row flex-wrap justify-content-between align-items-center gap-3 mt-2'>
                 <Col xs={12} md={7} className='d-flex flex-row flex-wrap justify-content-start align-items-center gap-4'>
                   <div className='form-check form-switch form-switch-right form-switch-md d-flex flex-row justify-content-start align-items-center'>
                     <Label className='form-label'>Show hidden products</Label>

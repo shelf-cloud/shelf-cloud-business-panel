@@ -72,6 +72,7 @@ type FilterProps = {
   brand?: string
   category?: string
   showHidden?: string
+  trendTag?: string
   // show0Days?: string
 }
 
@@ -83,7 +84,7 @@ type SelectedSupplierState = {
 const ReorderingPoints = ({ session }: Props) => {
   const { state } = useContext(AppContext)
   const router = useRouter()
-  const { filters, urgency, grossmin, grossmax, profitmin, profitmax, unitsrange, unitsmin, unitsmax, supplier, brand, category, showHidden }: FilterProps = router.query
+  const { filters, urgency, grossmin, grossmax, profitmin, profitmax, unitsrange, unitsmin, unitsmax, supplier, brand, category, trendTag, showHidden }: FilterProps = router.query
   const [startDate, setStartDate] = useState(moment().subtract(15, 'days').format('YYYY-MM-DD'))
   const [endDate, setEndDate] = useState(moment().format('YYYY-MM-DD'))
   const [setField, setsetField] = useState('urgency')
@@ -122,6 +123,7 @@ const ReorderingPoints = ({ session }: Props) => {
     supplier,
     brand,
     category,
+    trendTag,
     showHidden,
     setField,
     sortingDirectionAsc,
@@ -183,6 +185,7 @@ const ReorderingPoints = ({ session }: Props) => {
       supplier: string,
       brand: string,
       category: string,
+      trendTag: string,
       showHidden: string
       // show0Days: string
     ) => {
@@ -198,6 +201,7 @@ const ReorderingPoints = ({ session }: Props) => {
       if (supplier || supplier !== '') filterString += `&supplier=${supplier}`
       if (brand || brand !== '') filterString += `&brand=${brand}`
       if (category || category !== '') filterString += `&category=${category}`
+      if (trendTag || trendTag !== '') filterString += `&trendTag=${trendTag}`
       if (showHidden || showHidden !== '') filterString += `&showHidden=${showHidden}`
       // if (show0Days || show0Days !== '') filterString += `&show0Days=${show0Days}`
       router.push(filterString, undefined, { shallow: true })
@@ -393,6 +397,7 @@ const ReorderingPoints = ({ session }: Props) => {
                   supplier={supplier !== undefined ? supplier : ''}
                   brand={brand !== undefined ? brand : ''}
                   category={category !== undefined ? category : ''}
+                  trendTag={trendTag !== undefined ? trendTag : ''}
                   showHidden={showHidden !== undefined || showHidden === '' ? showHidden : 'false'}
                   // show0Days={show0Days !== undefined || show0Days === '' ? show0Days : 'false'}
                   supplierOptions={suppliers}

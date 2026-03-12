@@ -17,7 +17,7 @@ import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoi
 import { TrendingUpDownIcon } from 'lucide-react'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
-import { Badge, Button, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
+import { Button, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
 
 import DownloadProductMD from './DownloadProductMD'
 
@@ -362,17 +362,19 @@ const ReorderingPointsTable = ({
                   </div>
                 )}
               </span>
-              {row.hideReorderingPoints && (
-                <Badge pill color='warning' className='fs-7 fw-normal'>
-                  Hidden
-                </Badge>
-              )}
-              {(row.productTrendTag?.aiTrend || row.productTrendTag?.bsnssTrend) && (
-                <ShadcnBadge variant={'default'} className='tw:text-xs tw:mt-1'>
-                  <TrendingUpDownIcon className='tw:size-3 tw:mr-2' />
-                  {row.productTrendTag.useAITrend ? row.productTrendTag.aiTrend : row.productTrendTag.bsnssTrend}
-                </ShadcnBadge>
-              )}
+              <div className='tw:flex tw:flex-row tw:justify-start tw:items-center gap-1 tw:mt-1'>
+                {(row.productTrendTag?.aiTrend || row.productTrendTag?.bsnssTrend) && (
+                  <ShadcnBadge variant={'default'} className='tw:text-xs'>
+                    <TrendingUpDownIcon className='tw:size-3 tw:mr-2' />
+                    {row.productTrendTag.useAITrend ? row.productTrendTag.aiTrend : row.productTrendTag.bsnssTrend}
+                  </ShadcnBadge>
+                )}
+                {row.hideReorderingPoints && (
+                  <ShadcnBadge variant={'warning'} className='tw:text-xs'>
+                    Hidden
+                  </ShadcnBadge>
+                )}
+              </div>
             </div>
           </div>
         )
