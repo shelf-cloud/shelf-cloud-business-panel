@@ -68,11 +68,22 @@ export interface ReorderingPointsProduct {
   totalAWDForecast: number
   monthlyForecast: { [year: string]: { [month: string]: { unitsSoldSC: number; daysWithStockSC: number; unitsSoldFBA: number; daysWithStockFBA: number } } }
   canSendToAWD: boolean
-  totalAIForecast_1: { model: string; analysis: string; forecast: number }
-  totalAIForecast_2: { model: string; analysis: string; forecast: number }
-  totalAIForecast_3: { model: string; analysis: string; forecast: number }
+  totalAIForecast_1: AIForecastForProduct
+  totalAIForecast_2: AIForecastForProduct
+  totalAIForecast_3: AIForecastForProduct
   productTrendTag: ProductTrendTag
   comment?: string
+}
+
+export type AIForecastForProduct = {
+  model: string
+  analysis: string
+  forecast: number
+  daysUntilNextOrder: number
+  recommendedOrderDate: string
+  urgencyTag: 'High' | 'Medium' | 'Low'
+  stockoutRiskDate?: string
+  notes?: string
 }
 
 export type ProductTrendTag = { aiTrend: 'Normal' | 'Low Sales'; analysis: string; bsnssTrend: 'Normal' | 'Low Sales' | 'Seasonal'; useAITrend: boolean }

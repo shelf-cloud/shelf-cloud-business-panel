@@ -19,7 +19,7 @@ const SCTooltip = ({ target, placement = 'auto', title, children }: Props) => {
     <UncontrolledTooltip
       placement={placement}
       target={target}
-      popperClassName='bg-white border border-primary border-opacity-50 shadow px-1 py-2 rounded-2 fs-7'
+      popperClassName='bg-white border border-primary border-opacity-50 shadow px-1 py-2 rounded-2 fs-7 tw:cursor-pointer'
       style={{ display: 'inline-table' }}
       innerClassName='fs-7 bg-white p-0 position-relative'>
       {title && <p className='fs-6 text-primary m-0 p-0 fw-bold text-start mb-2'>{title}</p>}

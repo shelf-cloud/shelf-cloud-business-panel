@@ -30,6 +30,19 @@ export type RPProductTrendTagUpdate = {
   productTrendTag: ProductTrendTag
 }
 
+const checkUgerncyTagNumber = (urgency: string) => {
+  switch (urgency) {
+    case 'High':
+      return 3
+    case 'Medium':
+      return 2
+    case 'Low':
+      return 1
+    default:
+      return 0
+  }
+}
+
 export const useRPProductsInfo = ({
   session,
   state,
@@ -647,6 +660,20 @@ export const useRPProductsInfo = ({
       return rows.sort((a, b) => {
         const aField = a.totalAIForecast_1.forecast
         const bField = b.totalAIForecast_1.forecast
+        if (aField > bField) {
+          return direction ? 1 : -1
+        } else if (aField < bField) {
+          return direction ? -1 : 1
+        } else {
+          return 0
+        }
+      })
+    }
+
+    if (['ai_urgency'].includes(field)) {
+      return rows.sort((a, b) => {
+        const aField = checkUgerncyTagNumber(a.totalAIForecast_1.urgencyTag)
+        const bField = checkUgerncyTagNumber(b.totalAIForecast_1.urgencyTag)
         if (aField > bField) {
           return direction ? 1 : -1
         } else if (aField < bField) {
