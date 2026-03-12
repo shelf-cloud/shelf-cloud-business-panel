@@ -1,18 +1,12 @@
 import { FormGroup, Label } from 'reactstrap'
 
-import SelectMultipleDropDown from '../SelectMultipleDropDown'
+import SelectMultipleDropDown, { SelectMultipleOptions } from '../SelectMultipleDropDown'
 
 type Props = {
   inputLabel: string
   inputName: string
   value: string
-  selectionInfo: {
-    [key: string]: {
-      label: string
-      icon: string
-      color: string
-    }
-  }
+  selectionInfo: SelectMultipleOptions
   selected: string
   handleSelection: (field: string, value: any, shouldValidate?: boolean | undefined) => void
 }
