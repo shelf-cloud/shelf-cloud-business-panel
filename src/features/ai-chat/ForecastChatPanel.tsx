@@ -89,15 +89,15 @@ const ForecastChatPanel = ({ businessId, region, chatSessionKey, modelNumber, pr
   }
 
   return (
-    <div className='tw:grid tw:min-h-0 tw:h-full tw:flex-1 tw:gap-1 tw:overflow-auto tw:lg:grid-cols-[minmax(280px,35%)_minmax(0,100%)] tw:py-3'>
-      <div className='tw:flex tw:min-h-0 tw:min-w-0 tw:flex-col tw:gap-2 tw:pr-1'>
+    <div className='tw:grid tw:h-full tw:flex-1 tw:gap-1 tw:overflow-auto tw:lg:grid-cols-[minmax(280px,35%)_minmax(0,100%)] tw:py-3'>
+      <div className='tw:flex tw:min-h-0 tw:flex-col tw:gap-2 tw:pr-1'>
         <Card
-          className='tw:overflow-y-auto tw:border-border/70 tw:bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,252,0.94))] tw:shadow-sm!'
+          className='tw:overflow-y-auto tw:border-border/70 tw:bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,252,0.94))] tw:shadow-md!'
           style={{ scrollbarWidth: 'thin' }}>
-          <CardHeader className='tw:px-4 tw:pt-4 tw:pb-3'>
+          <CardHeader className='tw:px-4'>
             <div className='tw:flex tw:flex-wrap tw:items-start tw:justify-between tw:gap-1'>
               <div className='tw:space-y-1'>
-                <CardTitle className='tw:text-md! tw:font-semibold!'>Forecast Analysis</CardTitle>
+                <CardTitle className='tw:text-base tw:font-semibold!'>Forecast Analysis</CardTitle>
                 <CardDescription className='tw:text-xs'>
                   Continuation of the saved forecast result for this model. Follow-up answers explain the existing decision and label hypotheticals clearly.
                 </CardDescription>
@@ -105,7 +105,7 @@ const ForecastChatPanel = ({ businessId, region, chatSessionKey, modelNumber, pr
             </div>
           </CardHeader>
           <CardContent className='tw:px-4 tw:pb-4'>
-            <div className='tw:grid tw:grid-cols-2 tw:gap-3 tw:text-xs'>
+            <div className='tw:grid tw:grid-cols-2 tw:gap-2 tw:text-xs'>
               <div>
                 <p className='tw:mb-1! tw:flex tw:items-center tw:gap-2 tw:text-xs tw:font-semibold tw:uppercase tw:tracking-[0.08em] tw:text-muted-foreground'>
                   <Clock3 className='tw:size-3.5' />
@@ -148,10 +148,10 @@ const ForecastChatPanel = ({ businessId, region, chatSessionKey, modelNumber, pr
         </Card>
 
         <Card
-          className='tw:overflow-y-auto tw:border-border/70 tw:bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,252,0.94))] tw:shadow-sm!'
+          className='tw:overflow-y-auto tw:border-border/70 tw:bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,252,0.94))] tw:shadow-md!'
           style={{ scrollbarWidth: 'thin' }}>
-          <CardHeader className='tw:px-4 tw:pt-4 tw:pb-0'>
-            <CardTitle className='tw:text-md! tw:font-semibold!'>Starter Prompts</CardTitle>
+          <CardHeader className='tw:px-4'>
+            <CardTitle className='tw:text-base! tw:font-semibold!'>Starter Prompts</CardTitle>
             <CardDescription className='tw:text-xs'>Use one of these to inspect the saved forecast faster.</CardDescription>
           </CardHeader>
           <CardContent className='tw:min-w-0 tw:px-4 tw:pb-4'>
@@ -162,18 +162,18 @@ const ForecastChatPanel = ({ businessId, region, chatSessionKey, modelNumber, pr
 
       <div className='tw:flex tw:min-h-0 tw:min-w-0 tw:flex-col'>
         <Card
-          className='tw:flex tw:min-h-0 tw:flex-1 tw:flex-col tw:border-border/70 tw:bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,252,0.94))] tw:shadow-md!'
+          className='tw:flex tw:min-h-fit! tw:flex-1 tw:flex-col tw:border-border/70 tw:bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,252,0.94))] tw:shadow-md! tw:gap-1'
           style={{ scrollbarWidth: 'thin' }}>
-          <CardHeader className='tw:px-4 tw:pt-4 tw:pb-2'>
+          <CardHeader className='tw:px-4'>
             <div className='tw:flex tw:items-center tw:justify-between tw:gap-3'>
               <div>
-                <CardTitle className='tw:text-md! tw:font-semibold!'>Chat</CardTitle>
+                <CardTitle className='tw:text-base! tw:font-semibold!'>Chat</CardTitle>
                 <CardDescription className='tw:text-xs'>Ask follow-up questions about the saved forecast or test hypothetical scenarios.</CardDescription>
               </div>
               <Badge variant={isStreaming ? 'default' : 'secondary'}>{isStreaming ? 'Analyzing' : 'Ready'}</Badge>
             </div>
           </CardHeader>
-          <CardContent className='tw:flex tw:min-h-0 tw:flex-1 tw:flex-col tw:gap-2 tw:px-4 tw:pb-4'>
+          <CardContent className='tw:flex tw:min-h-0 tw:flex-1 tw:flex-col tw:gap-2 tw:px-4'>
             {error && (
               <div className='tw:rounded-2xl tw:border tw:border-destructive/30 tw:bg-destructive/5 tw:p-3 tw:text-sm tw:text-destructive'>
                 <p className='tw:m-0'>The forecast chat could not respond right now. Please try again.</p>

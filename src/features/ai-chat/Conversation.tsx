@@ -16,7 +16,7 @@ type Props = {
 const Conversation = ({ messages, isStreaming, bottomRef }: Props) => {
   return (
     <ScrollArea
-      className='tw:min-h-36 tw:flex-1 tw:rounded-2xl tw:border tw:border-border tw:bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(248,250,252,0.88))] tw:shadow-sm!'
+      className='tw:min-h-36 tw:max-h-full tw:flex-1 tw:rounded-2xl tw:border tw:border-border tw:bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(248,250,252,0.88))] tw:shadow-sm!'
       style={{ scrollbarWidth: 'thin' }}>
       <div className='tw:flex tw:flex-col tw:gap-3 tw:p-2'>
         {messages.map((message) => (

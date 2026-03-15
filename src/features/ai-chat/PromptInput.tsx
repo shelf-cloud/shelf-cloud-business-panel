@@ -51,7 +51,7 @@ const PromptInput = ({ value, disabled, isStreaming, onChange, onSubmit, onStop 
           </Button>
         </div>
       </div>
-      <p className='tw:m-0 tw:text-xs tw:text-muted-foreground'>Press Enter to send. Use Shift+Enter for a new line.</p>
+      <p className='tw:m-0! tw:text-xs tw:text-muted-foreground'>Press Enter to send. Use Shift+Enter for a new line.</p>
     </form>
   )
 }
