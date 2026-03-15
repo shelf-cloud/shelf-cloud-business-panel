@@ -164,6 +164,7 @@ const ReorderingPoints = ({ session }: Props) => {
   const [showPOModal, setshowPOModal] = useState(false)
   const [aiForecastProduct, setAIForecastProduct] = useState<ReorderingPointsProduct | null>(null)
   const [isBulkTrendTagDialogOpen, setIsBulkTrendTagDialogOpen] = useState(false)
+  const currentRegionSettings = (state.user as any)?.[state.currentRegion]
 
   // FILTER FUNCTIONS
   const handleChangeDatesFromPicker = (dateStr: string) => {
@@ -474,7 +475,15 @@ const ReorderingPoints = ({ session }: Props) => {
           isOpen={aiForecastProduct !== null}
           onClose={() => setAIForecastProduct(null)}
           region={state.currentRegion}
+          businessId={state.user.businessId}
           onSave={handleSaveProductTrendTag}
+          urgencyThresholds={{
+            rpShowFBA: currentRegionSettings?.rpShowFBA ?? true,
+            rpShowAWD: currentRegionSettings?.rpShowAWD ?? true,
+            highAlertMax: currentRegionSettings?.rphighAlertMax ?? 20,
+            mediumAlertMax: currentRegionSettings?.rpmediumAlertMax ?? 30,
+            lowAlertMax: currentRegionSettings?.rplowAlertMax ?? 45,
+          }}
         />
         <RPBulkProductTrendTagDialog
           isOpen={isBulkTrendTagDialogOpen}

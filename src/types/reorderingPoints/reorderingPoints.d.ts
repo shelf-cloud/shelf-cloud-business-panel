@@ -66,7 +66,11 @@ export interface ReorderingPointsProduct {
   totalSCForecast: number
   totalFBAForecast: number
   totalAWDForecast: number
-  monthlyForecast: { [year: string]: { [month: string]: { unitsSoldSC: number; daysWithStockSC: number; unitsSoldFBA: number; daysWithStockFBA: number } } }
+  monthlyForecast: { [year: string]: { [month: string]: ReorderingPointsMonthlyForecastValue } }
+  warehousePODates: {
+    warehouse: { [date: string]: number | null }
+    fba: { [date: string]: number | null }
+  }
   canSendToAWD: boolean
   totalAIForecast_1: AIForecastForProduct
   totalAIForecast_2: AIForecastForProduct
@@ -75,14 +79,31 @@ export interface ReorderingPointsProduct {
   comment?: string
 }
 
+export interface ReorderingPointsMonthlyForecastValue {
+  unitsSoldSC: number
+  daysWithStockSC: number
+  ordersSC: number
+  unitsSoldFBA: number
+  daysWithStockFBA: number
+  ordersFBA: number
+}
+
+export interface Urgency {
+  rpShowFBA: boolean
+  rpShowAWD: boolean
+  highAlertMax: number
+  mediumAlertMax: number
+  lowAlertMax: number
+}
+
 export type AIForecastForProduct = {
   model: string
   analysis: string
   forecast: number
   daysUntilNextOrder: number
   recommendedOrderDate: string
-  urgencyTag: 'High' | 'Medium' | 'Low'
-  stockoutRiskDate?: string
+  urgencyTag: 'High' | 'Medium' | 'Low' | 'high' | 'medium' | 'low'
+  stockoutRiskDate?: string | null
   notes?: string
 }
 

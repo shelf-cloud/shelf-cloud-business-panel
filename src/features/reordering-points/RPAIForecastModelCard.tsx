@@ -3,15 +3,19 @@ import { Card, CardContent, CardHeader } from '@components/shadcn/ui/card'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import moment from 'moment'
 
+import { Button } from '@/components/shadcn/ui/button'
 import { AIForecastForProduct } from '@/types/reorderingPoints/reorderingPoints'
 
+import { ForecastChatModelNumber } from '@/features/ai-chat/types'
+
 type Props = {
-  modelNumber: 1 | 2 | 3
+  modelNumber: ForecastChatModelNumber
   model: string
   analysis: string
   forecast: number
   region: string
   productForecast: AIForecastForProduct
+  onAnalyze: (modelNumber: ForecastChatModelNumber, productForecast: AIForecastForProduct) => void
 }
 
 const BADGE_VARIANTS: Record<number, 'default' | 'secondary' | 'outline'> = {
@@ -26,7 +30,7 @@ const ACCENT_COLORS: Record<number, string> = {
   3: '#9ca3af',
 }
 
-const RPAIForecastModelCard = ({ modelNumber, model, analysis, forecast, region, productForecast }: Props) => {
+const RPAIForecastModelCard = ({ modelNumber, model, analysis, forecast, region, productForecast, onAnalyze }: Props) => {
   if (!model || !analysis) return null
 
   return (
@@ -66,6 +70,11 @@ const RPAIForecastModelCard = ({ modelNumber, model, analysis, forecast, region,
             <p className='tw:my-0!'>Notes</p>
             <span className='tw:text-xs tw:text-muted-foreground'>{productForecast.notes}</span>
           </div>
+        </div>
+        <div className='tw:flex tw:justify-end'>
+          <Button variant='outline' size='sm' onClick={() => onAnalyze(modelNumber, productForecast)}>
+            Analyze with AI
+          </Button>
         </div>
       </CardContent>
     </Card>
