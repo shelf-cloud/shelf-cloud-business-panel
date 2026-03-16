@@ -13,9 +13,12 @@
   "iconLibrary": "lucide",
   "aliases": {
     "components": "@/components",
+    "utils": "@/lib/shadcn/utils",
     "ui": "@shadcn/ui",
-    "hooks": "@/hooks",
     "lib": "@/lib",
-    "utils": "@/lib/shadcn/utils"
+    "hooks": "@/hooks"
+  },
+  "registries": {
+    "@ai-elements": "https://ai-sdk.dev/elements/api/registry/{name}.json"
   }
 }

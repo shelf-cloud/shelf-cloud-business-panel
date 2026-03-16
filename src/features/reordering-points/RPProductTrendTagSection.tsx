@@ -10,6 +10,7 @@ import { useFormik } from 'formik'
 import { TrendingUpDownIcon } from 'lucide-react'
 
 import { Button } from '@/components/shadcn/ui/button'
+import { Card, CardContent } from '@/components/shadcn/ui/card'
 
 import { PRODUCT_TREND_OPTIONS, ProductTrendOption, productTrendFormSchema } from './productTrendTagForm'
 
@@ -69,88 +70,90 @@ const RPProductTrendTagSection = ({ product, onSave }: Props) => {
 
   return (
     <div className='tw:mb-4'>
-      <div className='tw:rounded-lg tw:border tw:border-border tw:bg-card tw:p-3'>
-        {/* Section header */}
-        <div className='tw:flex tw:items-center tw:justify-between tw:mb-3'>
-          <h4 className='tw:text-sm tw:font-semibold tw:text-foreground tw:m-0 tw:flex tw:items-center tw:gap-1.5'>
-            <TrendingUpDownIcon className='tw:size-4 tw:text-info' />
-            Active Product Trend
-          </h4>
-          {activeTrend && (
-            <Badge className='tw:text-xs'>
-              <TrendingUpDownIcon className='tw:size-3 tw:mr-1' />
-              {activeTrend}
-            </Badge>
-          )}
-        </div>
-
-        {/* AI Trend display — read-only */}
-        {trendTag?.aiTrend && (
-          <div className='tw:mb-3'>
-            <div className='tw:flex tw:items-center tw:gap-2 tw:mb-1.5'>
-              <span className='tw:text-xs tw:font-medium tw:text-muted-foreground'>AI Trend</span>
-              <Badge variant={'secondary'} className='tw:text-xs'>
-                {trendTag.aiTrend}
+      <Card className='tw:border-border tw:shadow-md! tw:gap-2!'>
+        <CardContent className='tw:p-4'>
+          {/* Section header */}
+          <div className='tw:flex tw:items-center tw:justify-between tw:mb-3'>
+            <h4 className='tw:text-sm tw:font-semibold tw:text-foreground tw:m-0 tw:flex tw:items-center tw:gap-1.5'>
+              <TrendingUpDownIcon className='tw:size-4 tw:text-info' />
+              Active Product Trend
+            </h4>
+            {activeTrend && (
+              <Badge className='tw:text-xs'>
+                <TrendingUpDownIcon className='tw:size-3 tw:mr-1' />
+                {activeTrend}
               </Badge>
-            </div>
-            {trendTag.analysis && (
-              <div className='tw:border-l-2 tw:pl-3 tw:py-1' style={{ borderColor: '#4481FD' }}>
-                <p className='tw:text-xs tw:text-muted-foreground tw:leading-relaxed tw:m-0'>{trendTag.analysis}</p>
-              </div>
             )}
           </div>
-        )}
 
-        <Separator className='tw:my-3' />
-
-        {/* Editable form */}
-        <form onSubmit={formik.handleSubmit}>
-          {/* Business Trend Select */}
-          <div className='tw:flex tw:flex-col tw:gap-1.5 tw:mb-3'>
-            <label className='tw:text-xs tw:font-medium tw:text-muted-foreground'>Business Trend</label>
-            <Select value={formik.values.bsnssTrend} onValueChange={handleSelectChange}>
-              <SelectTrigger size='sm' className='tw:w-full'>
-                <SelectValue placeholder='Select trend' />
-              </SelectTrigger>
-              <SelectContent className='tw:z-1050'>
-                <SelectGroup>
-                  {PRODUCT_TREND_OPTIONS.map((opt) => (
-                    <SelectItem key={opt} value={opt}>
-                      {opt}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-            {formik.touched.bsnssTrend && formik.errors.bsnssTrend && <span className='tw:text-xs tw:text-destructive'>{formik.errors.bsnssTrend}</span>}
-          </div>
-
-          {/* Use AI Trend Switch */}
-          <div className='tw:flex tw:items-center tw:justify-between tw:mb-3'>
-            <div className='tw:flex tw:flex-col tw:gap-0.5'>
-              <span className='tw:text-xs tw:font-medium tw:text-foreground'>Use AI Trend</span>
-              <span className='tw:text-xs tw:text-muted-foreground'>When enabled, AI trend overrides business trend</span>
-            </div>
-            <Switch checked={formik.values.useAITrend} onCheckedChange={handleSwitchChange} />
-          </div>
-
-          {/* Save button */}
-          {hasChanges && (
-            <div className='tw:flex tw:justify-end'>
-              <Button type='submit' size={'sm'} disabled={saving}>
-                {saving ? (
-                  <>
-                    <i className='ri-loader-4-line tw:animate-spin tw:mr-1' />
-                    Saving...
-                  </>
-                ) : (
-                  'Save Changes'
-                )}
-              </Button>
+          {/* AI Trend display — read-only */}
+          {trendTag?.aiTrend && (
+            <div className='tw:mb-3'>
+              <div className='tw:flex tw:items-center tw:gap-2 tw:mb-1.5'>
+                <span className='tw:text-xs tw:font-medium tw:text-muted-foreground'>AI Trend</span>
+                <Badge variant={'secondary'} className='tw:text-xs'>
+                  {trendTag.aiTrend}
+                </Badge>
+              </div>
+              {trendTag.analysis && (
+                <div className='tw:border-l-2 tw:pl-3 tw:py-1' style={{ borderColor: '#4481FD' }}>
+                  <p className='tw:text-xs tw:text-muted-foreground tw:leading-relaxed tw:m-0'>{trendTag.analysis}</p>
+                </div>
+              )}
             </div>
           )}
-        </form>
-      </div>
+
+          <Separator className='tw:my-3' />
+
+          {/* Editable form */}
+          <form onSubmit={formik.handleSubmit}>
+            {/* Business Trend Select */}
+            <div className='tw:flex tw:flex-col tw:gap-1.5 tw:mb-3'>
+              <label className='tw:text-xs tw:font-medium tw:text-muted-foreground'>Business Trend</label>
+              <Select value={formik.values.bsnssTrend} onValueChange={handleSelectChange}>
+                <SelectTrigger size='sm' className='tw:w-full tw:border tw:border-border tw:bg-transparent tw:rounded-md'>
+                  <SelectValue placeholder='Select trend' />
+                </SelectTrigger>
+                <SelectContent className='tw:z-1050'>
+                  <SelectGroup>
+                    {PRODUCT_TREND_OPTIONS.map((opt) => (
+                      <SelectItem key={opt} value={opt}>
+                        {opt}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              {formik.touched.bsnssTrend && formik.errors.bsnssTrend && <span className='tw:text-xs tw:text-destructive'>{formik.errors.bsnssTrend}</span>}
+            </div>
+
+            {/* Use AI Trend Switch */}
+            <div className='tw:flex tw:items-center tw:justify-between tw:mb-3'>
+              <div className='tw:flex tw:flex-col tw:gap-0.5'>
+                <span className='tw:text-xs tw:font-medium tw:text-foreground'>Use AI Trend</span>
+                <span className='tw:text-xs tw:text-muted-foreground'>When enabled, AI trend overrides business trend</span>
+              </div>
+              <Switch checked={formik.values.useAITrend} onCheckedChange={handleSwitchChange} />
+            </div>
+
+            {/* Save button */}
+            {hasChanges && (
+              <div className='tw:flex tw:justify-end'>
+                <Button type='submit' size={'sm'} disabled={saving}>
+                  {saving ? (
+                    <>
+                      <i className='ri-loader-4-line tw:animate-spin tw:mr-1' />
+                      Saving...
+                    </>
+                  ) : (
+                    'Save Changes'
+                  )}
+                </Button>
+              </div>
+            )}
+          </form>
+        </CardContent>
+      </Card>
     </div>
   )
 }

@@ -1,17 +1,21 @@
 import { Badge } from '@components/shadcn/ui/badge'
 import { Card, CardContent, CardHeader } from '@components/shadcn/ui/card'
 import { FormatIntNumber } from '@lib/FormatNumbers'
+import { Sparkles } from 'lucide-react'
 import moment from 'moment'
 
+import { Button } from '@/components/shadcn/ui/button'
+import { ForecastChatModelNumber } from '@/features/ai-chat/types'
 import { AIForecastForProduct } from '@/types/reorderingPoints/reorderingPoints'
 
 type Props = {
-  modelNumber: 1 | 2 | 3
+  modelNumber: ForecastChatModelNumber
   model: string
   analysis: string
   forecast: number
   region: string
   productForecast: AIForecastForProduct
+  onAnalyze: (modelNumber: ForecastChatModelNumber, productForecast: AIForecastForProduct) => void
 }
 
 const BADGE_VARIANTS: Record<number, 'default' | 'secondary' | 'outline'> = {
@@ -26,20 +30,20 @@ const ACCENT_COLORS: Record<number, string> = {
   3: '#9ca3af',
 }
 
-const RPAIForecastModelCard = ({ modelNumber, model, analysis, forecast, region, productForecast }: Props) => {
+const RPAIForecastModelCard = ({ modelNumber, model, analysis, forecast, region, productForecast, onAnalyze }: Props) => {
   if (!model || !analysis) return null
 
   return (
-    <Card className='tw:border-border tw:shadow-none'>
-      <CardHeader className='tw:pb-3 tw:pt-4 tw:px-4'>
+    <Card className='tw:border-border tw:shadow-md! tw:gap-2!'>
+      <CardHeader className='tw:px-4'>
         <div className='tw:flex tw:flex-row tw:items-center tw:gap-2 tw:flex-wrap'>
-          <Badge variant={BADGE_VARIANTS[modelNumber]}>Model {modelNumber}</Badge>
+          <Badge variant={BADGE_VARIANTS[modelNumber]}>Model</Badge>
           <code className='tw:text-xs tw:bg-muted tw:text-muted-foreground tw:px-2 tw:py-0.5 tw:rounded-md tw:font-mono tw:border tw:border-border' title='Model algorithm'>
             {model}
           </code>
         </div>
       </CardHeader>
-      <CardContent className='tw:px-4 tw:pb-4 tw:pt-0 tw:flex tw:flex-col tw:gap-3'>
+      <CardContent className='tw:px-4 tw:pb-2 tw:flex tw:flex-col tw:gap-3'>
         <div className='tw:flex tw:flex-row tw:items-baseline tw:gap-1'>
           <span className='tw:text-3xl tw:font-bold tw:text-foreground tw:tabular-nums'>{FormatIntNumber(region, forecast)}</span>
           <span className='tw:text-sm tw:text-muted-foreground'>units</span>
@@ -66,6 +70,12 @@ const RPAIForecastModelCard = ({ modelNumber, model, analysis, forecast, region,
             <p className='tw:my-0!'>Notes</p>
             <span className='tw:text-xs tw:text-muted-foreground'>{productForecast.notes}</span>
           </div>
+        </div>
+        <div className='tw:flex tw:justify-end'>
+          <Button variant='secondary' size='sm' onClick={() => onAnalyze(modelNumber, productForecast)}>
+            <Sparkles className='tw:size-3.5 tw:shrink-0' />
+            Analyze with AI
+          </Button>
         </div>
       </CardContent>
     </Card>

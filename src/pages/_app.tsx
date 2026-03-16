@@ -9,8 +9,10 @@ import { NuqsAdapter } from 'nuqs/adapters/next/pages'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
 
+import { TooltipProvider } from '@/components/shadcn/ui/tooltip'
+
 import '../styles/themes.scss'
-import '../styles/tailwind.css'
+import '../styles/z_tailwind.css'
 
 function MyApp({
   Component,
@@ -24,9 +26,11 @@ function MyApp({
       <AppContext.Provider value={initialState}>
         <ToastContainer />
         <NuqsAdapter>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <TooltipProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </TooltipProvider>
         </NuqsAdapter>
       </AppContext.Provider>
     </SessionProvider>
