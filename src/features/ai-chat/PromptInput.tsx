@@ -29,24 +29,24 @@ const PromptInput = ({ value, disabled, isStreaming, onChange, onSubmit, onStop 
 
   return (
     <form onSubmit={handleSubmit} className='tw:space-y-2'>
-      <div className='tw:flex tw:items-end tw:gap-3'>
+      <div className='tw:flex tw:items-end tw:gap-2'>
         <Textarea
           value={value}
           onChange={(event) => onChange(event.target.value)}
           onKeyDown={handleKeyDown}
           disabled={disabled}
           rows={1}
-          className='tw:min-h-14 tw:h-auto tw:flex-1 tw:resize-none tw:rounded-2xl tw:border-border/80 tw:bg-white'
+          className='tw:min-h-14 tw:h-auto tw:flex-1 tw:resize-none tw:rounded-2xl tw:border-border/80'
           placeholder='Ask why this forecast was produced, what assumptions mattered most, or test a hypothetical scenario.'
           aria-label='Forecast chat prompt'
         />
         <div className='tw:flex tw:shrink-0 tw:items-center tw:gap-2'>
           {isStreaming && (
-            <Button size={'icon'} type='button' variant='outline' onClick={onStop}>
+            <Button size={'icon'} className='tw:rounded-full!' type='button' variant='outline' onClick={onStop}>
               <StopCircleIcon className='tw:size-5' />
             </Button>
           )}
-          <Button size={'icon'} type='submit' disabled={disabled || value.trim().length === 0}>
+          <Button size={'icon'} className='tw:rounded-full!' type='submit' disabled={disabled || value.trim().length === 0}>
             <SendHorizonal className='tw:size-5' />
           </Button>
         </div>

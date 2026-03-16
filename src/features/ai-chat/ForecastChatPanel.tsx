@@ -104,7 +104,7 @@ const ForecastChatPanel = ({ businessId, region, chatSessionKey, modelNumber, pr
               </div>
             </div>
           </CardHeader>
-          <CardContent className='tw:px-4 tw:pb-4'>
+          <CardContent className='tw:px-4'>
             <div className='tw:grid tw:grid-cols-2 tw:gap-2 tw:text-xs'>
               <div>
                 <p className='tw:mb-1! tw:flex tw:items-center tw:gap-2 tw:text-xs tw:font-semibold tw:uppercase tw:tracking-[0.08em] tw:text-muted-foreground'>
@@ -141,7 +141,7 @@ const ForecastChatPanel = ({ businessId, region, chatSessionKey, modelNumber, pr
             <Separator className='tw:my-4' />
             <div className='tw:space-y-2'>
               <p className='tw:m-0 tw:text-xs tw:font-semibold tw:uppercase tw:text-muted-foreground'>Original forecast summary</p>
-              <p className='tw:m-0 tw:text-xs tw:leading-5 tw:text-foreground'>{selectedForecast.analysis}</p>
+              <p className='tw:m-0 tw:text-xs tw:text-foreground'>{selectedForecast.analysis}</p>
               {selectedForecast.notes ? <p className='tw:m-0 tw:text-xs tw:text-muted-foreground'>{selectedForecast.notes}</p> : null}
             </div>
           </CardContent>
@@ -154,7 +154,7 @@ const ForecastChatPanel = ({ businessId, region, chatSessionKey, modelNumber, pr
             <CardTitle className='tw:text-base! tw:font-semibold!'>Starter Prompts</CardTitle>
             <CardDescription className='tw:text-xs'>Use one of these to inspect the saved forecast faster.</CardDescription>
           </CardHeader>
-          <CardContent className='tw:min-w-0 tw:px-4 tw:pb-4'>
+          <CardContent className='tw:min-w-0 tw:px-4'>
             <StarterPrompts prompts={FORECAST_CHAT_STARTER_PROMPTS} disabled={isStreaming} onSelect={(prompt) => void handleSubmit(prompt)} />
           </CardContent>
         </Card>
@@ -162,7 +162,7 @@ const ForecastChatPanel = ({ businessId, region, chatSessionKey, modelNumber, pr
 
       <div className='tw:flex tw:min-h-0 tw:min-w-0 tw:flex-col'>
         <Card
-          className='tw:flex tw:min-h-fit! tw:flex-1 tw:flex-col tw:border-border/70 tw:bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,252,0.94))] tw:shadow-md! tw:gap-1'
+          className='tw:flex tw:min-h-0 tw:flex-1 tw:flex-col tw:border-border/70 tw:bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,252,0.94))] tw:shadow-md! tw:gap-1'
           style={{ scrollbarWidth: 'thin' }}>
           <CardHeader className='tw:px-4'>
             <div className='tw:flex tw:items-center tw:justify-between tw:gap-3'>

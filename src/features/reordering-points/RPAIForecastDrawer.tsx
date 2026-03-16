@@ -127,7 +127,7 @@ const RPAIForecastDrawer = ({ product, isOpen, onClose, region, businessId, onSa
                       <p className='tw:text-sm tw:text-muted-foreground tw:m-0'>No AI forecast data available for this product.</p>
                     </div>
                   ) : (
-                    <div className='tw:flex tw:flex-col tw:gap-0'>
+                    <div className='tw:flex tw:flex-col tw:gap-0 tw:pb-4'>
                       {visibleModels.map((m, idx) => (
                         <div key={m.modelNumber}>
                           <RPAIForecastModelCard
