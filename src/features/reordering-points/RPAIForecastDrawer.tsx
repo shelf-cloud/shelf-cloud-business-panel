@@ -37,6 +37,7 @@ type SelectedForecastChat = {
 
 const RPAIForecastDrawer = ({ product, isOpen, onClose, region, businessId, onSave, urgencyThresholds }: Props) => {
   const [selectedForecastChat, setSelectedForecastChat] = useState<SelectedForecastChat | null>(null)
+  const [isChatLeftColumnOpen, setIsChatLeftColumnOpen] = useState(true)
 
   const models = product
     ? [
@@ -50,7 +51,23 @@ const RPAIForecastDrawer = ({ product, isOpen, onClose, region, businessId, onSa
   const sanitizedProduct = useMemo(() => (product ? buildProductPrompt(product, urgencyThresholds) : null), [product, urgencyThresholds])
   const activeSelectedForecastChat = selectedForecastChat?.inventoryId === product?.inventoryId ? selectedForecastChat : null
 
+  const handleOpenForecastChat = (modelNumber: ForecastChatModelNumber, forecast: ForecastChatSelectedForecast) => {
+    setIsChatLeftColumnOpen(true)
+    setSelectedForecastChat({
+      inventoryId: product?.inventoryId ?? 0,
+      sessionKey: Date.now(),
+      modelNumber,
+      forecast,
+    })
+  }
+
+  const handleBackToForecasts = () => {
+    setIsChatLeftColumnOpen(true)
+    setSelectedForecastChat(null)
+  }
+
   const handleClose = () => {
+    setIsChatLeftColumnOpen(true)
     setSelectedForecastChat(null)
     onClose()
   }
@@ -62,9 +79,13 @@ const RPAIForecastDrawer = ({ product, isOpen, onClose, region, businessId, onSa
         <DrawerPrimitive.Content
           data-slot='drawer-content'
           className={cn(
-            'tw:fixed tw:z-1045 tw:flex tw:flex-col tw:border-border tw:bg-background tw:text-foreground tw:shadow-xl',
-            'tw:inset-y-0 tw:right-0 tw:w-full tw:border-l tw:h-full',
-            activeSelectedForecastChat ? 'tw:lg:max-w-[min(92vw,1180px)] tw:xl:max-w-[min(60vw,1320px)]' : 'tw:sm:max-w-lg'
+            'tw:fixed tw:z-1045 tw:flex tw:h-full tw:flex-col tw:border-border tw:bg-background tw:text-foreground tw:shadow-xl tw:transition-[max-width] tw:duration-200 tw:ease-out',
+            'tw:inset-y-0 tw:right-0 tw:w-full tw:border-l',
+            activeSelectedForecastChat
+              ? isChatLeftColumnOpen
+                ? 'tw:lg:max-w-[min(92vw,1180px)] tw:xl:max-w-[min(60vw,1320px)]'
+                : 'tw:lg:max-w-[min(72vw,860px)] tw:xl:max-w-[min(35vw,980px)]'
+              : 'tw:sm:max-w-lg'
           )}>
           {/* HEADER */}
           <DrawerHeader className='tw:border-b tw:border-border tw:pb-1'>
@@ -107,6 +128,8 @@ const RPAIForecastDrawer = ({ product, isOpen, onClose, region, businessId, onSa
                 product={sanitizedProduct}
                 selectedForecast={activeSelectedForecastChat.forecast}
                 urgencyThresholds={urgencyThresholds}
+                isLeftColumnOpen={isChatLeftColumnOpen}
+                onToggleLeftColumn={() => setIsChatLeftColumnOpen((current) => !current)}
               />
             ) : (
               <>
@@ -137,14 +160,7 @@ const RPAIForecastDrawer = ({ product, isOpen, onClose, region, businessId, onSa
                             forecast={m.forecast}
                             region={region}
                             productForecast={m}
-                            onAnalyze={(modelNumber, forecast) =>
-                              setSelectedForecastChat({
-                                inventoryId: product?.inventoryId ?? 0,
-                                sessionKey: Date.now(),
-                                modelNumber,
-                                forecast,
-                              })
-                            }
+                            onAnalyze={handleOpenForecastChat}
                           />
                           {idx < visibleModels.length - 1 && <Separator className='tw:my-2' />}
                         </div>
@@ -161,7 +177,7 @@ const RPAIForecastDrawer = ({ product, isOpen, onClose, region, businessId, onSa
             <div className='tw:flex tw:justify-between tw:gap-3'>
               <div>
                 {activeSelectedForecastChat ? (
-                  <Button variant='outline' aria-label='Back to forecasts' onClick={() => setSelectedForecastChat(null)}>
+                  <Button variant='outline' aria-label='Back to forecasts' onClick={handleBackToForecasts}>
                     <ArrowLeftIcon className='tw:size-4' />
                     Back to forecasts
                   </Button>
