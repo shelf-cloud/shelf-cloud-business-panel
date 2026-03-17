@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
- 
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import React, { useContext, useState } from 'react'
@@ -18,6 +17,8 @@ import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
 import { Button, Card, CardBody, Col, Container, Form, FormFeedback, FormGroup, Input, Label, Row } from 'reactstrap'
 import * as Yup from 'yup'
+
+import { useRPNewForecast } from '@/hooks/reorderingPoints/useRPNewForcast'
 
 // import UploadProductsModal from '@components/UploadProductsModal'
 
@@ -48,7 +49,7 @@ type Props = {
 const AddProducts = ({ session }: Props) => {
   const { state } = useContext(AppContext)
   const title = `Add Product | ${session?.user?.businessName}`
-
+  const { generate_new_forecast_products } = useRPNewForecast()
   const [useSameUnitDimensions, setUseSameUnitDimensions] = useState(false)
 
   const { brands, suppliers, categories, addNewOption } = useSuppliersBrandsCategories()
@@ -109,7 +110,11 @@ const AddProducts = ({ session }: Props) => {
       const { data } = await axios.post(`/api/products/createNewProduct?region=${state?.currentRegion}&businessId=${state?.user.businessId}`, {
         productInfo: values,
       })
-      if (!data.error) {
+      if (!data.error && data.inventoryId) {
+        generate_new_forecast_products({
+          skus: [values.sku],
+          productIds: [data.inventoryId],
+        })
         toast.update(loadingToast, {
           render: data.message,
           type: 'success',
