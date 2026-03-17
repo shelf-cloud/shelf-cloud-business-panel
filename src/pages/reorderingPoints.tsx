@@ -25,10 +25,8 @@ import { useInputModal } from '@hooks/ui/useInputModal'
 import { Button as ShadcnButton } from '@shadcn/ui/button'
 import { DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenu as ShadcnDropdownMenu } from '@shadcn/ui/dropdown-menu'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
-import axios from 'axios'
 import { ChevronDownIcon } from 'lucide-react'
 import moment from 'moment'
-import { toast } from 'react-toastify'
 import { Card, CardBody, Collapse, Container, Row } from 'reactstrap'
 
 import RPAIForecastDrawer from '@/features/reordering-points/RPAIForecastDrawer'
@@ -217,10 +215,10 @@ const ReorderingPoints = ({ session }: Props) => {
   )
 
   // TABLE FUNCTIONS
-  const clearAllSelectedRows = () => {
+  const clearAllSelectedRows = useCallback(() => {
     setToggleClearRows(!toggledClearRows)
     setSelectedRows([])
-  }
+  }, [toggledClearRows])
 
   const handleSetSorting = (field: string) => {
     setsetField(field)
@@ -235,26 +233,13 @@ const ReorderingPoints = ({ session }: Props) => {
       const confirmationResponse = confirm(`Are you sure you want to ${newState ? 'Hide' : 'Show'} Selected Products?`)
 
       if (confirmationResponse) {
-        const response = await axios.post(`/api/reorderingPoints/setNewShowingStatusReorderingPoints?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-          newState,
-          selectedRows: selectedRows.map((item) => {
-            return {
-              inventoryId: item.inventoryId,
-              sku: item.sku,
-            }
-          }),
-        })
-        if (!response.data.error) {
-          setToggleClearRows(!toggledClearRows)
-          setSelectedRows([])
-          toast.success(response.data.msg)
-          await handleNewVisibilityState(selectedRows, newState)
-        } else {
-          toast.error(response.data.msg)
+        const updateResponse = await handleNewVisibilityState(selectedRows, newState)
+        if (!updateResponse.error) {
+          clearAllSelectedRows()
         }
       }
     },
-    [handleNewVisibilityState, selectedRows, state.currentRegion, state.user.businessId, toggledClearRows]
+    [clearAllSelectedRows, handleNewVisibilityState, selectedRows]
   )
 
   // REORDERING POINTS ORDER SUMMARY

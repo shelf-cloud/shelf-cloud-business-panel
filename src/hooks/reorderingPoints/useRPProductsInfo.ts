@@ -210,15 +210,87 @@ export const useRPProductsInfo = ({
     })
   }, [])
 
-  const handleNewVisibilityState = useCallback(async (selectedRows: ReorderingPointsProduct[], newState: boolean) => {
-    setProductsData((prevData) => {
-      const newProductsData = { ...prevData }
-      for (const item of selectedRows) {
-        newProductsData[item.sku].hideReorderingPoints = newState
+  const handleNewVisibilityState = useCallback(
+    async (selectedRows: ReorderingPointsProduct[], newState: boolean) => {
+      const updatingProductVisibility = toast.loading('Updating Product Visibility...')
+
+      const response = await axios
+        .post(`/api/reorderingPoints/setNewShowingStatusReorderingPoints?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+          newState,
+          selectedRows: selectedRows.map((item) => {
+            return {
+              inventoryId: item.inventoryId,
+              sku: item.sku,
+            }
+          }),
+        })
+        .then(({ data }) => {
+          if (data.error) {
+            toast.error(data.msg)
+            return { error: true, message: data.msg }
+          }
+          toast.update(updatingProductVisibility, {
+            render: data.msg,
+            type: 'success',
+            isLoading: true,
+          })
+          setProductsData((prevData) => {
+            const newProductsData = { ...prevData }
+            for (const item of selectedRows) {
+              newProductsData[item.sku].hideReorderingPoints = newState
+            }
+            return newProductsData
+          })
+        })
+        .then(async () => {
+          toast.update(updatingProductVisibility, {
+            render: `Updating ${selectedRows.length} Products Forecast...`,
+            type: 'success',
+            isLoading: true,
+          })
+          const newForecast = await axios
+            .post(`/api/reorderingPoints/get-single-product-forecast?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+              skus: selectedRows.map((item) => item.sku),
+              productIds: selectedRows.map((item) => item.inventoryId),
+            })
+            .then(({ data }: { data: ReorderingPointsResponse }) => {
+              const { error, data: forecastData } = data
+              if (error || !forecastData) return { error: true, message: 'Error updating SKUs visibility' }
+
+              setProductsData((prevData) => {
+                const newProductsData = { ...prevData }
+                for (const item of selectedRows) {
+                  newProductsData[item.sku] = forecastData[item.sku]
+                }
+                return newProductsData
+              })
+              return { error: false, message: `SKUs Visibility Updated` }
+            })
+            .catch(() => {
+              return { error: true, message: 'Error updating SKUs visibility.' }
+            })
+          return newForecast
+        })
+
+      if (response.error) {
+        toast.update(updatingProductVisibility, {
+          render: response.message,
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+        })
+      } else {
+        toast.update(updatingProductVisibility, {
+          render: response.message,
+          type: 'success',
+          isLoading: false,
+          autoClose: 3000,
+        })
       }
-      return newProductsData
-    })
-  }, [])
+      return response
+    },
+    [state.currentRegion, state.user.businessId]
+  )
 
   const handleSaveProductConfig = useCallback(
     async ({ inventoryId, sku, leadTimeSC, leadTimeFBA, leadTimeAWD, daysOfStockSC, daysOfStockFBA, daysOfStockAWD, buffer, sellerCost }: RPProductUpdateConfig) => {
