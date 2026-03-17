@@ -6,20 +6,21 @@ export const DEFAULT_FORECAST_MODEL_ID = MODEL_OPTIONS['openai-4.1nano'].id
 
 const MODEL_OPTION_VALUES = Object.values(MODEL_OPTIONS)
 
-const normalizeModelValue = (value?: string | null) => value?.trim().toLowerCase()
+// const normalizeModelValue = (value?: string | null) => value?.trim().toLowerCase()
 
-export const resolveForecastModelId = (modelValue?: string | null) => {
-  const normalizedModelValue = normalizeModelValue(modelValue)
+export const resolveForecastModelId = (_modelValue?: string | null) => {
+  return MODEL_OPTIONS['openai-5.3-chat'].id
+  // const normalizedModelValue = normalizeModelValue(modelValue)
 
-  if (!normalizedModelValue) {
-    return DEFAULT_FORECAST_MODEL_ID
-  }
+  // if (!normalizedModelValue) {
+  //   return DEFAULT_FORECAST_MODEL_ID
+  // }
 
-  const matchedModel = Object.entries(MODEL_OPTIONS).find(([key, option]) => {
-    return [key, option.id, option.name].some((candidate) => normalizeModelValue(candidate) === normalizedModelValue)
-  })
+  // const matchedModel = Object.entries(MODEL_OPTIONS).find(([key, option]) => {
+  //   return [key, option.id, option.name].some((candidate) => normalizeModelValue(candidate) === normalizedModelValue)
+  // })
 
-  return matchedModel?.[1].id ?? DEFAULT_FORECAST_MODEL_ID
+  // return matchedModel?.[1].id ?? DEFAULT_FORECAST_MODEL_ID
 }
 
 export const getForecastModelMetadata = (modelValue?: string | null) => {
