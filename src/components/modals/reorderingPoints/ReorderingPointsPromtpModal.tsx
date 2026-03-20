@@ -7,26 +7,13 @@ import { Button, Input, Modal, ModalBody, ModalFooter, ModalHeader } from 'react
 import snarkdown from 'snarkdown'
 import useSWR from 'swr'
 
+import { BusinessPromptResponse } from '@/features/reordering-points/business-prompt'
+
 type Props = {
   promptModal: {
     show: boolean
   }
   setPromptModal: (prev: any) => void
-}
-
-export type BusinessPromptResponse = {
-  error: boolean
-  message?: string
-  prompt: BusinessPrompt | null
-}
-
-export interface BusinessPrompt {
-  general: string
-  objective: string
-  corerules: string
-  restrictions: string
-  output: string
-  businessrules: string
 }
 
 const fetcher = async (endPoint: string) => axios.get<BusinessPromptResponse>(endPoint).then((response) => response.data)

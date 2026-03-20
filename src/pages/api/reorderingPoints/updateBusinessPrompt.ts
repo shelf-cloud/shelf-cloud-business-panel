@@ -4,6 +4,8 @@ import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 import { getServerSession } from 'next-auth'
 
+import { clear_bssnss_system_prompt_cache } from '@/features/reordering-points/ai-helpers'
+
 const updateBusinessPrompt: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)
 
@@ -27,6 +29,13 @@ const updateBusinessPrompt: NextApiHandler = async (request, response) => {
       }
     )
     .then(({ data }) => {
+      if (typeof request.query.region === 'string' && typeof request.query.businessId === 'string') {
+        clear_bssnss_system_prompt_cache({
+          region: request.query.region,
+          businessId: request.query.businessId,
+        })
+      }
+
       response.json(data)
     })
     .catch((error) => {

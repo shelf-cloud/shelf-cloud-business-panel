@@ -34,6 +34,5 @@ export const generate_bsnss_agent = async ({ modelId = DEFAULT_FORECAST_MODEL_ID
     model: modelId,
     instructions: systemPrompt,
     maxOutputTokens: 1200,
-    temperature: 0.1,
   })
 }

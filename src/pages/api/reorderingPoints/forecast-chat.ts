@@ -58,7 +58,7 @@ const forecastChat: NextApiHandler = async (request, response) => {
       modelId: resolvedModelId,
       systemPrompt: FORECAST_CHAT_SYSTEM_PROMPT,
     })
-    const { originalMessages, prompt } = await buildForecastChatPrompt(context, messages)
+    const { originalMessages, prompt } = await buildForecastChatPrompt(context, messages, tenant.region ?? 'us', tenant.businessId)
     const modelMessages = await convertToModelMessages(originalMessages)
     const hiddenContextMessages = prompt.slice(0, prompt.length - modelMessages.length)
     const result = await agent.stream({

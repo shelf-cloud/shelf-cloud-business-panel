@@ -1,7 +1,6 @@
 import { ModelMessage, UIMessage, convertToModelMessages, validateUIMessages } from 'ai'
 
-import { SYSTEM_PROMPT } from '@/features/reordering-points/constants'
-
+import { get_bssnss_system_prompt } from '../reordering-points/ai-helpers'
 import { buildForecastSeedSummary, createForecastSeedMessage, pruneForecastChatMessages } from './helpers'
 import { ForecastChatContext, ForecastChatRequestMessage } from './types'
 
@@ -24,11 +23,11 @@ Rules:
 - If the user asks for changes to the forecast, explain how the forecast would likely change based on the provided context, but do not change the saved forecast.
 - If asked for something that is not related to the product, the forecast, or the provided context, respond that you can only answer questions related to the provided context.`
 
-const createHiddenContextMessages = (context: ForecastChatContext, rebuiltProductPrompt: ForecastChatContext['product']): ModelMessage[] => {
+const createHiddenContextMessages = (context: ForecastChatContext, rebuiltProductPrompt: ForecastChatContext['product'], systemPrompt: string): ModelMessage[] => {
   return [
     {
       role: 'user',
-      content: `Original forecast system prompt used by the backend:\n${SYSTEM_PROMPT}`,
+      content: `Original forecast system prompt used by the backend:\n${systemPrompt}`,
     },
     {
       role: 'user',
@@ -64,7 +63,7 @@ export const createVisibleChatMessages = (context: ForecastChatContext, requestM
   ]
 }
 
-export const buildForecastChatPrompt = async (context: ForecastChatContext, requestMessages: ForecastChatRequestMessage[]) => {
+export const buildForecastChatPrompt = async (context: ForecastChatContext, requestMessages: ForecastChatRequestMessage[], region: string, businessId: string) => {
   const rebuiltProductPrompt = context.product
   const visibleMessages = createVisibleChatMessages(context, requestMessages)
   const validatedMessages = await validateUIMessages({
@@ -72,9 +71,11 @@ export const buildForecastChatPrompt = async (context: ForecastChatContext, requ
   })
   const visibleModelMessages = await convertToModelMessages(validatedMessages)
 
+  const systemPrompt = await get_bssnss_system_prompt({ region: region, businessId: businessId })
+
   return {
     originalMessages: validatedMessages,
-    prompt: [...createHiddenContextMessages(context, rebuiltProductPrompt), ...visibleModelMessages],
+    prompt: [...createHiddenContextMessages(context, rebuiltProductPrompt, systemPrompt), ...visibleModelMessages],
     rebuiltProductPrompt,
     seedSummary: buildForecastSeedSummary(context),
   }

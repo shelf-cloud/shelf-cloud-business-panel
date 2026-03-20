@@ -4,6 +4,8 @@ import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 import { getServerSession } from 'next-auth'
 
+import { BusinessPromptResponse } from '@/features/reordering-points/business-prompt'
+
 const getBusinessPrompt: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)
 
@@ -15,7 +17,7 @@ const getBusinessPrompt: NextApiHandler = async (request, response) => {
   }
 
   axios
-    .get(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/reorderingPoints/get-business-prompt.php?businessId=${request.query.businessId}`, {
+    .get<BusinessPromptResponse>(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/reorderingPoints/get-business-prompt.php?businessId=${request.query.businessId}`, {
       headers: {
         Authorization: `Bearer ${process.env.TARS_API_AUTH_TOKEN}`,
       },

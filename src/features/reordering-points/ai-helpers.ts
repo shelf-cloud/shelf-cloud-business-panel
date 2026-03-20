@@ -1,8 +1,31 @@
 import { type ToolLoopAgent } from 'ai'
+import axios from 'axios'
 
 import { ReorderingPointsProduct, Urgency } from '@/types/reorderingPoints/reorderingPoints'
 
 import { AIModelForecastResult, AIModelProductTrendResult, ReorderInput } from './ai-schema'
+import { BusinessPromptResponse, build_bsnss_system_prompt } from './business-prompt'
+
+const BSSNSS_SYSTEM_PROMPT_CACHE_TTL_MS = 5 * 60 * 1000
+
+type BssnssSystemPromptCacheEntry = {
+  value?: string
+  expiresAt: number
+  pending?: Promise<string>
+}
+
+const bssnssSystemPromptCache = new Map<string, BssnssSystemPromptCacheEntry>()
+
+const getBssnssSystemPromptCacheKey = ({ region, businessId }: { region: string; businessId: string }) => `RP_SystemPrompt${region}:${businessId}`
+
+export const clear_bssnss_system_prompt_cache = ({ region, businessId }: { region?: string; businessId?: string } = {}) => {
+  if (!region || !businessId) {
+    bssnssSystemPromptCache.clear()
+    return
+  }
+
+  bssnssSystemPromptCache.delete(getBssnssSystemPromptCacheKey({ region, businessId }))
+}
 
 export type GetAIModelForecastInBulkResult = {
   status: string
@@ -170,17 +193,63 @@ export const get_product_trend_tag = async (
   }
 }
 
-// export const get_bssnss_system_prompt = async ({ businessUniqId }: { businessUniqId: string }) => {
-//   const bsnssPrompt = await getBusinessReorderingPointsPrompt({ businessId: businessUniqId })
+export const get_bssnss_system_prompt = async ({ region, businessId }: { region: string; businessId: string }) => {
+  const cacheKey = getBssnssSystemPromptCacheKey({ region, businessId })
+  const cachedEntry = bssnssSystemPromptCache.get(cacheKey)
 
-//   let bsnss_systemPrompt = `${bsnssPrompt.prompt.general}\n\n${bsnssPrompt.prompt.objective}\n\n${CONTEXT}\n\n${DATA_STRUCTURE_DESCRIPTION}\n\n${bsnssPrompt.prompt.corerules}\n\n`
+  if (cachedEntry?.value && cachedEntry.expiresAt > Date.now()) {
+    return cachedEntry.value
+  }
 
-//   if (bsnssPrompt.prompt.businessrules) bsnss_systemPrompt += `Business Specific Rules:\n${bsnssPrompt.prompt.businessrules}`
+  if (cachedEntry?.pending) {
+    return cachedEntry.pending
+  }
 
-//   bsnss_systemPrompt += `\n\n${bsnssPrompt.prompt.restrictions}\n\n${bsnssPrompt.prompt.output}`
+  const pending = (async () => {
+    try {
+      const { data } = await axios.get<BusinessPromptResponse>(
+        `${process.env.API_DOMAIN_SERVICES}/${region}/api/reorderingPoints/get-business-prompt.php?businessId=${businessId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.TARS_API_AUTH_TOKEN}`,
+          },
+        }
+      )
 
-//   return bsnss_systemPrompt
-// }
+      const resolvedPrompt = build_bsnss_system_prompt(data.prompt)
+
+      bssnssSystemPromptCache.set(cacheKey, {
+        value: resolvedPrompt,
+        expiresAt: Date.now() + BSSNSS_SYSTEM_PROMPT_CACHE_TTL_MS,
+      })
+
+      return resolvedPrompt
+    } catch (error) {
+      console.error('get_bssnss_system_prompt_error', {
+        region,
+        businessId,
+        message: error instanceof Error ? error.message : 'Unknown error',
+      })
+
+      const fallbackPrompt = cachedEntry?.value ?? build_bsnss_system_prompt(null)
+
+      bssnssSystemPromptCache.set(cacheKey, {
+        value: fallbackPrompt,
+        expiresAt: Date.now() + BSSNSS_SYSTEM_PROMPT_CACHE_TTL_MS,
+      })
+
+      return fallbackPrompt
+    }
+  })()
+
+  bssnssSystemPromptCache.set(cacheKey, {
+    value: cachedEntry?.value,
+    expiresAt: cachedEntry?.expiresAt ?? 0,
+    pending,
+  })
+
+  return pending
+}
 
 export const buildProductPrompt = (product: ReorderingPointsProduct, urgencyThresholds: Urgency): ReorderInput => {
   const {
@@ -215,7 +284,7 @@ export const buildProductPrompt = (product: ReorderingPointsProduct, urgencyThre
     sku: sku,
     title: title,
     asin: asin,
-    unitsPerCase: boxQty,
+    unitsPerCase: boxQty > 0 ? boxQty : 1,
     sellerCost: sellerCost,
 
     leadTimeDaysFromSellerToWarehouse: leadTimeSC,
