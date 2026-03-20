@@ -1,19 +1,16 @@
-import { Product } from '@typings'
+import { CONDITIONS, blankProducts, columns, columnsInfo, columnsInfoBlankData, columnsReferenceData } from '@components/products/TemplateInfo'
 import ExcelJS from 'exceljs'
-import { DropdownItem } from 'reactstrap'
 
-import { CONDITIONS, columns, columnsInfo, columnsInfoData, columnsReferenceData } from './TemplateInfo'
-
-type Props = {
-  products: Product[]
+type ExportBlankTemplateMessage = {
   brands: string[]
   suppliers: string[]
   categories: string[]
-  selected: boolean
 }
 
-const ExportProductsTemplate = ({ products, brands, suppliers, categories, selected }: Props) => {
-  const buildTemplate = async () => {
+self.onmessage = async (event: MessageEvent<ExportBlankTemplateMessage>) => {
+  const { brands, suppliers, categories } = event.data
+
+  try {
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('Product Details Template')
     const worksheetInfo = workbook.addWorksheet('ReferenceData')
@@ -28,49 +25,12 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
     worksheetInfo.getColumn('categories').values = ['Categories', ...categories]
     worksheetInfo.getColumn('conditions').values = CONDITIONS
 
-    for (const columnData of columnsInfoData) {
+    for (const columnData of columnsInfoBlankData) {
       worksheetColumns.addRow(columnData)
     }
 
-    for (const product of products) {
-      worksheet.addRow({
-        sku: product.sku,
-        title: product.title,
-        description: product.description,
-        asin: product.asin,
-        fnsku: product.fnSku,
-        barcode: `'${product.barcode}`,
-        supplier: product.supplier,
-        brand: product.brand,
-        category: product.category,
-        weight: product.weight,
-        length: product.length,
-        width: product.width,
-        height: product.height,
-        boxQty: product.boxQty,
-        boxWeight: product.boxWeight,
-        boxLength: product.boxLength,
-        boxWidth: product.boxWidth,
-        boxHeight: product.boxHeight,
-        // activeState: product.activeState,
-        note: product.note,
-        htsCode: product.htsCode,
-        defaultPrice: product.defaultPrice,
-        msrp: product.msrp,
-        map: product.map,
-        floor: product.floor,
-        ceilling: product.ceilling,
-        sellerCost: product.sellerCost,
-        inboundShippingCost: product.inboundShippingCost,
-        otherCosts: product.otherCosts,
-        productionTime: product.productionTime,
-        transitTime: product.transitTime,
-        shippingToFBACost: product.shippingToFBA,
-        buffer: product.buffer,
-        itemCondition: product.itemCondition,
-        image: product.image,
-        recommendedDaysOfStock: product.recommendedDaysOfStock,
-      })
+    for (const blank of blankProducts) {
+      worksheet.addRow(blank)
     }
 
     worksheetColumns.protect('xmQC!zpH-3ZX', {
@@ -107,7 +67,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       formatColumns: true,
       formatRows: false,
       insertColumns: false,
-      insertRows: false,
+      insertRows: true,
       insertHyperlinks: true,
       deleteColumns: false,
       deleteRows: true,
@@ -116,15 +76,20 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       pivotTables: true,
     })
 
-    worksheet.getColumn('sku').eachCell((cell) => {
-      cell.fill = {
-        type: 'pattern',
-        pattern: 'lightGray',
+    worksheet.getColumn('sku').eachCell({ includeEmpty: true }, (cell) => {
+      cell.dataValidation = {
+        type: 'textLength',
+        operator: 'between',
+        showErrorMessage: true,
+        allowBlank: false,
+        formulae: [5, 100],
+        errorTitle: 'Invalid input',
+        error: 'Sku must be between 5 and 100 characters. No white space allowed. No special characters allowed',
       }
-      cell.protection = { locked: true }
+      cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('title').eachCell((cell) => {
+    worksheet.getColumn('title').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'textLength',
         operator: 'between',
@@ -137,7 +102,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('description').eachCell((cell) => {
+    worksheet.getColumn('description').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'textLength',
         operator: 'between',
@@ -150,7 +115,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('asin').eachCell((cell) => {
+    worksheet.getColumn('asin').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'textLength',
         operator: 'between',
@@ -163,7 +128,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('fnsku').eachCell((cell) => {
+    worksheet.getColumn('fnsku').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'textLength',
         operator: 'between',
@@ -176,7 +141,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('barcode').eachCell((cell) => {
+    worksheet.getColumn('barcode').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'textLength',
         operator: 'equal',
@@ -186,14 +151,11 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
         errorTitle: 'Invalid input',
         error: 'Barcode is required. Barcode must be 12 characters',
       }
-      cell.fill = {
-        type: 'pattern',
-        pattern: 'lightGray',
-      }
-      cell.protection = { locked: true }
+      cell.numFmt = "'000000000000"
+      cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('supplier').eachCell((cell) => {
+    worksheet.getColumn('supplier').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'list',
         allowBlank: true,
@@ -204,7 +166,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('brand').eachCell((cell) => {
+    worksheet.getColumn('brand').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'list',
         allowBlank: true,
@@ -215,7 +177,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('category').eachCell((cell) => {
+    worksheet.getColumn('category').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'list',
         allowBlank: true,
@@ -226,11 +188,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('weight').eachCell((cell) => {
-      cell.fill = {
-        type: 'pattern',
-        pattern: 'lightGray',
-      }
+    worksheet.getColumn('weight').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThan',
@@ -240,14 +198,10 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
         errorTitle: 'Invalid input',
         error: 'Weight must be greater than 0',
       }
-      cell.protection = { locked: true }
+      cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('length').eachCell((cell) => {
-      cell.fill = {
-        type: 'pattern',
-        pattern: 'lightGray',
-      }
+    worksheet.getColumn('length').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThan',
@@ -257,14 +211,10 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
         errorTitle: 'Invalid input',
         error: 'Length must be greater than 0',
       }
-      cell.protection = { locked: true }
+      cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('width').eachCell((cell) => {
-      cell.fill = {
-        type: 'pattern',
-        pattern: 'lightGray',
-      }
+    worksheet.getColumn('width').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThan',
@@ -275,14 +225,10 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
         errorTitle: 'Invalid input',
         error: 'Width must be greater than 0',
       }
-      cell.protection = { locked: true }
+      cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('height').eachCell((cell) => {
-      cell.fill = {
-        type: 'pattern',
-        pattern: 'lightGray',
-      }
+    worksheet.getColumn('height').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThan',
@@ -292,14 +238,10 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
         errorTitle: 'Invalid input',
         error: 'Height must be greater than 0',
       }
-      cell.protection = { locked: true }
+      cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('boxQty').eachCell((cell) => {
-      cell.fill = {
-        type: 'pattern',
-        pattern: 'lightGray',
-      }
+    worksheet.getColumn('boxQty').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'whole',
         operator: 'greaterThan',
@@ -309,14 +251,10 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
         errorTitle: 'Invalid input',
         error: 'Box Quantity must be integer and greater than 0',
       }
-      cell.protection = { locked: true }
+      cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('boxWeight').eachCell((cell) => {
-      cell.fill = {
-        type: 'pattern',
-        pattern: 'lightGray',
-      }
+    worksheet.getColumn('boxWeight').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThan',
@@ -326,14 +264,10 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
         errorTitle: 'Invalid input',
         error: 'Box Weight must be greater than 0',
       }
-      cell.protection = { locked: true }
+      cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('boxLength').eachCell((cell) => {
-      cell.fill = {
-        type: 'pattern',
-        pattern: 'lightGray',
-      }
+    worksheet.getColumn('boxLength').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThan',
@@ -343,14 +277,10 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
         errorTitle: 'Invalid input',
         error: 'Box Length must be greater than 0',
       }
-      cell.protection = { locked: true }
+      cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('boxWidth').eachCell((cell) => {
-      cell.fill = {
-        type: 'pattern',
-        pattern: 'lightGray',
-      }
+    worksheet.getColumn('boxWidth').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThan',
@@ -360,14 +290,10 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
         errorTitle: 'Invalid input',
         error: 'Box Width must be greater than 0',
       }
-      cell.protection = { locked: true }
+      cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('boxHeight').eachCell((cell) => {
-      cell.fill = {
-        type: 'pattern',
-        pattern: 'lightGray',
-      }
+    worksheet.getColumn('boxHeight').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThan',
@@ -377,19 +303,10 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
         errorTitle: 'Invalid input',
         error: 'Box Height must be greater than 0',
       }
-      cell.protection = { locked: true }
+      cell.protection = { locked: false }
     })
 
-    // worksheet.getColumn('activeState').eachCell((cell) => {
-    //   cell.dataValidation = {
-    //     type: 'list',
-    //     allowBlank: false,
-    //     formulae: ['"True,False"'],
-    //   }
-    //   cell.protection = { locked: false }
-    // })
-
-    worksheet.getColumn('note').eachCell((cell) => {
+    worksheet.getColumn('note').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'textLength',
         operator: 'between',
@@ -415,7 +332,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('defaultPrice').eachCell((cell) => {
+    worksheet.getColumn('defaultPrice').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThanOrEqual',
@@ -428,7 +345,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('msrp').eachCell((cell) => {
+    worksheet.getColumn('msrp').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThanOrEqual',
@@ -441,7 +358,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('map').eachCell((cell) => {
+    worksheet.getColumn('map').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThanOrEqual',
@@ -454,7 +371,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('floor').eachCell((cell) => {
+    worksheet.getColumn('floor').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThanOrEqual',
@@ -467,7 +384,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('ceilling').eachCell((cell) => {
+    worksheet.getColumn('ceilling').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThanOrEqual',
@@ -480,7 +397,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('sellerCost').eachCell((cell) => {
+    worksheet.getColumn('sellerCost').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThanOrEqual',
@@ -493,7 +410,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('inboundShippingCost').eachCell((cell) => {
+    worksheet.getColumn('inboundShippingCost').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThanOrEqual',
@@ -506,7 +423,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('otherCosts').eachCell((cell) => {
+    worksheet.getColumn('otherCosts').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThanOrEqual',
@@ -519,7 +436,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('productionTime').eachCell((cell) => {
+    worksheet.getColumn('productionTime').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'whole',
         operator: 'greaterThanOrEqual',
@@ -532,7 +449,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('transitTime').eachCell((cell) => {
+    worksheet.getColumn('transitTime').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'whole',
         operator: 'greaterThanOrEqual',
@@ -545,7 +462,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('shippingToFBACost').eachCell((cell) => {
+    worksheet.getColumn('shippingToFBACost').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'decimal',
         operator: 'greaterThanOrEqual',
@@ -558,7 +475,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('buffer').eachCell((cell) => {
+    worksheet.getColumn('buffer').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'whole',
         operator: 'greaterThanOrEqual',
@@ -571,7 +488,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('itemCondition').eachCell((cell) => {
+    worksheet.getColumn('itemCondition').eachCell({ includeEmpty: true }, (cell) => {
       cell.dataValidation = {
         type: 'list',
         allowBlank: false,
@@ -580,7 +497,7 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: false }
     })
 
-    worksheet.getColumn('image').eachCell((cell) => {
+    worksheet.getColumn('image').eachCell({ includeEmpty: true }, (cell) => {
       cell.protection = { locked: false }
     })
 
@@ -597,28 +514,9 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
       cell.protection = { locked: false }
     })
 
-    workbook.xlsx.writeBuffer().then((buffer) => {
-      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
-      const url = window.URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = 'Product Details Template.xlsx'
-      a.click()
-    })
+    const buffer = await workbook.xlsx.writeBuffer()
+    self.postMessage({ buffer, error: null })
+  } catch (error: any) {
+    self.postMessage({ buffer: null, error: error.message })
   }
-  const exportExcelFile = async () => {
-    await new Promise<void>((resolve) => {
-      buildTemplate()
-      resolve()
-    })
-  }
-
-  return (
-    <DropdownItem className='text-nowrap text-info' onClick={exportExcelFile}>
-      <i className='mdi mdi-arrow-down-bold label-icon align-middle fs-6 me-2' />
-      {selected ? 'Export Selected Products Template' : 'Export All Products Template'}
-    </DropdownItem>
-  )
 }
-
-export default ExportProductsTemplate

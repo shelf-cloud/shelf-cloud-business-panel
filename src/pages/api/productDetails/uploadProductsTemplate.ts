@@ -14,9 +14,17 @@ const uploadProductsTemplate: NextApiHandler = async (request, response) => {
   }
 
   axios
-    .post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/productDetails/uploadProductsTemplate.php?businessId=${request.query.businessId}`, {
-      productsInfo: request.body.productsInfo,
-    })
+    .post(
+      `${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/productDetails/uploadProductsTemplate.php?businessId=${request.query.businessId}`,
+      {
+        productsInfo: request.body.productsInfo,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.TARS_API_AUTH_TOKEN}`,
+        },
+      }
+    )
     .then(({ data }) => {
       response.json(data)
     })
