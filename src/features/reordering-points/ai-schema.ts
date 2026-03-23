@@ -50,25 +50,25 @@ export type ReorderInput = {
     last365days: number
   }
 
-  dailyInfo: Array<{
-    date: string // YYYY-MM-DD
-    warehouseSoldUnits: number
-    warehouseStock: number
-    warehouseOrders: number
-    fbaSoldUnits: number
-    fbaStock: number
-    fbaOrders: number
-  }>
-
-  // monthly: Array<{
-  //   month: string // YYYY-MM
+  // dailyInfo: Array<{
+  //   date: string // YYYY-MM-DD
   //   warehouseSoldUnits: number
-  //   warehouseDaysWithStock: number
+  //   warehouseStock: number
   //   warehouseOrders: number
   //   fbaSoldUnits: number
-  //   fbaDaysWithStock: number
+  //   fbaStock: number
   //   fbaOrders: number
   // }>
+
+  monthly: Array<{
+    month: string // YYYY-MM
+    warehouseSoldUnits: number
+    warehouseDaysWithStock: number
+    warehouseOrders: number
+    fbaSoldUnits: number
+    fbaDaysWithStock: number
+    fbaOrders: number
+  }>
 
   urgencyThresholds: {
     high: number

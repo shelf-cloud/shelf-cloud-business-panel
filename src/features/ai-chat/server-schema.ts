@@ -66,28 +66,28 @@ const reorderInputSchema = z.object({
     last180days: z.number().finite().min(0),
     last365days: z.number().finite().min(0),
   }),
-  dailyInfo: z.array(
-    z.object({
-      date: z.string().min(1).max(10),
-      warehouseSoldUnits: z.number().finite().min(0),
-      warehouseStock: z.number().finite().min(0),
-      warehouseOrders: z.number().finite().min(0),
-      fbaSoldUnits: z.number().finite().min(0),
-      fbaStock: z.number().finite().min(0),
-      fbaOrders: z.number().finite().min(0),
-    })
-  ),
-  // monthly: z.array(
+  // dailyInfo: z.array(
   //   z.object({
-  //     month: z.string().min(1).max(10),
+  //     date: z.string().min(1).max(10),
   //     warehouseSoldUnits: z.number().finite().min(0),
-  //     warehouseDaysWithStock: z.number().finite().min(0),
+  //     warehouseStock: z.number().finite().min(0),
   //     warehouseOrders: z.number().finite().min(0),
   //     fbaSoldUnits: z.number().finite().min(0),
-  //     fbaDaysWithStock: z.number().finite().min(0),
+  //     fbaStock: z.number().finite().min(0),
   //     fbaOrders: z.number().finite().min(0),
   //   })
   // ),
+  monthly: z.array(
+    z.object({
+      month: z.string().min(1).max(10),
+      warehouseSoldUnits: z.number().finite().min(0),
+      warehouseDaysWithStock: z.number().finite().min(0),
+      warehouseOrders: z.number().finite().min(0),
+      fbaSoldUnits: z.number().finite().min(0),
+      fbaDaysWithStock: z.number().finite().min(0),
+      fbaOrders: z.number().finite().min(0),
+    })
+  ),
   urgencyThresholds: z.object({
     high: z.number().int().min(0).max(365),
     medium: z.number().int().min(0).max(365),
