@@ -272,7 +272,7 @@ export const buildProductPrompt = (product: ReorderingPointsProduct, urgencyThre
     awdQty,
     awdInboundQty,
     totalUnitsSold,
-    monthlyForecast,
+    dailyForecast,
     warehousePODates,
     productTrendTag,
   } = product
@@ -329,21 +329,34 @@ export const buildProductPrompt = (product: ReorderingPointsProduct, urgencyThre
       last180days: totalUnitsSold['180D'],
       last365days: totalUnitsSold['365D'],
     },
-    monthly: Object.entries(monthlyForecast)
-      .sort(([yearA], [yearB]) => parseInt(yearA) - parseInt(yearB))
-      .flatMap(([year, months]) =>
-        Object.entries(months)
-          .sort(([monthA], [monthB]) => parseInt(monthA) - parseInt(monthB))
-          .map(([month, values]) => ({
-            month: `${year}-${month}`,
-            warehouseSoldUnits: values.unitsSoldSC,
-            warehouseDaysWithStock: values.daysWithStockSC,
-            warehouseOrders: values.ordersSC,
-            fbaSoldUnits: values.unitsSoldFBA,
-            fbaDaysWithStock: values.daysWithStockFBA,
-            fbaOrders: values.ordersFBA,
-          }))
-      ),
+
+    dailyInfo: Object.entries(dailyForecast)
+      .sort(([dateA], [dateB]) => new Date(dateA).getTime() - new Date(dateB).getTime())
+      .map(([date, values]) => ({
+        date: date,
+        warehouseSoldUnits: values.unitsSoldSC,
+        warehouseStock: values.daysWithStockSC,
+        warehouseOrders: values.ordersSC,
+        fbaSoldUnits: values.unitsSoldFBA,
+        fbaStock: values.daysWithStockFBA,
+        fbaOrders: values.ordersFBA,
+      })),
+
+    // monthly: Object.entries(monthlyForecast)
+    //   .sort(([yearA], [yearB]) => parseInt(yearA) - parseInt(yearB))
+    //   .flatMap(([year, months]) =>
+    //     Object.entries(months)
+    //       .sort(([monthA], [monthB]) => parseInt(monthA) - parseInt(monthB))
+    //       .map(([month, values]) => ({
+    //         month: `${year}-${month}`,
+    //         warehouseSoldUnits: values.unitsSoldSC,
+    //         warehouseDaysWithStock: values.daysWithStockSC,
+    //         warehouseOrders: values.ordersSC,
+    //         fbaSoldUnits: values.unitsSoldFBA,
+    //         fbaDaysWithStock: values.daysWithStockFBA,
+    //         fbaOrders: values.ordersFBA,
+    //       }))
+    //   ),
 
     urgencyThresholds: {
       high: highAlertMax ?? 20,

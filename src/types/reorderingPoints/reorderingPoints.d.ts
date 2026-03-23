@@ -67,6 +67,7 @@ export interface ReorderingPointsProduct {
   totalFBAForecast: number
   totalAWDForecast: number
   monthlyForecast: { [year: string]: { [month: string]: ReorderingPointsMonthlyForecastValue } }
+  dailyForecast: DailyForecast
   warehousePODates: {
     warehouse: { [date: string]: number | null }
     fba: { [date: string]: number | null }
@@ -77,6 +78,10 @@ export interface ReorderingPointsProduct {
   totalAIForecast_3: AIForecastForProduct
   productTrendTag: ProductTrendTag
   comment?: string
+}
+
+export type DailyForecast = {
+  [date: string]: { unitsSoldSC: number; daysWithStockSC: number; ordersSC: number; unitsSoldFBA: number; daysWithStockFBA: number; ordersFBA: number }
 }
 
 export interface ReorderingPointsMonthlyForecastValue {

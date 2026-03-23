@@ -53,7 +53,7 @@ You will receive a JSON object with these fields:
 - **Purchase orders**: purchaseOrders.ToWarehouse and purchaseOrders.ToFBA — arrays of {OrderDate, quantity}. These are the **same** pipeline as production quantities; do not double-count.
 - **Inventory**: warehouseQty, warehouseInboundQty, warehouseProductionQty, fbaQty, fbaInboundQty, fbaProductionQty, awdQty, awdInboundQty, awdProductionQty
 - **Aggregate sales**: totalsSales.last30days through last365days
-- **Monthly detail**: array of {month, warehouseSoldUnits, warehouseDaysWithStock, warehouseOrders, fbaSoldUnits, fbaDaysWithStock, fbaOrders}
+- **Daily detail**: array of {date, warehouseSoldUnits, warehouseDaysWithStock, warehouseOrders, fbaSoldUnits, fbaDaysWithStock, fbaOrders}
 - **Urgency thresholds**: urgencyThresholds.high, urgencyThresholds.medium, urgencyThresholds.low — numeric values representing the reorder point thresholds for high, medium, and low urgency classifications.`
 
 export const CONTEXT = `

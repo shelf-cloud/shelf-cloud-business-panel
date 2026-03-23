@@ -13,6 +13,8 @@ const normalizeUrgencyTag = (value?: string | null) => {
       return 'Medium'
     case 'low':
       return 'Low'
+    case 'none':
+      return 'None'
     default:
       return 'Unknown'
   }
