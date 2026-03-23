@@ -60,6 +60,7 @@ const AI_URGENCY_STATES = {
   high: { label: 'High', icon: 'mdi mdi-alert-octagon', color: 'text-danger' },
   medium: { label: 'Medium', icon: 'mdi mdi-alert-octagon', color: 'text-warning' },
   low: { label: 'Low', icon: 'mdi mdi-alert-octagon', color: 'text-info' },
+  none: { label: 'None', icon: 'mdi mdi-alert-octagon', color: 'text-success' },
 }
 
 const UNITS_DAYS_RANGES = {

@@ -19,7 +19,7 @@ const selectedForecastSchema = z.object({
   forecast: z.number().int().min(0),
   daysUntilNextOrder: z.number().int().min(0),
   recommendedOrderDate: z.string().min(1).max(40),
-  urgencyTag: z.enum(['High', 'Medium', 'Low', 'high', 'medium', 'low']),
+  urgencyTag: z.enum(['high', 'medium', 'low', 'none']),
   stockoutRiskDate: z.string().max(40).nullable().optional(),
   notes: z.string().max(4000).optional(),
 })
@@ -92,15 +92,16 @@ const urgencyThresholdSchema = z.object({
   lowAlertMax: z.number().int().min(0).max(365),
 })
 
-export const forecastChatRequestSchema = z.object({
-  context: z.object({
-    modelNumber: z.union([z.literal(1), z.literal(2), z.literal(3)]),
-    selectedForecast: selectedForecastSchema,
-    product: reorderInputSchema,
-    urgencyThresholds: urgencyThresholdSchema,
-  }),
-  messages: z.array(requestMessageSchema).max(FORECAST_CHAT_MAX_MESSAGES_SCHEMA),
-})
+export const forecastChatRequestSchema = z
+  .object({
+    context: z.object({
+      modelNumber: z.union([z.literal(1), z.literal(2), z.literal(3)]),
+      selectedForecast: selectedForecastSchema,
+      product: reorderInputSchema,
+      urgencyThresholds: urgencyThresholdSchema,
+    }),
+    messages: z.array(requestMessageSchema).max(FORECAST_CHAT_MAX_MESSAGES_SCHEMA),
+  })
   .superRefine((value, ctx) => {
     const { highAlertMax, mediumAlertMax, lowAlertMax } = value.context.urgencyThresholds
 

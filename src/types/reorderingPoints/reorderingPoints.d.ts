@@ -102,7 +102,7 @@ export type AIForecastForProduct = {
   forecast: number
   daysUntilNextOrder: number
   recommendedOrderDate: string
-  urgencyTag: 'High' | 'Medium' | 'Low' | 'high' | 'medium' | 'low'
+  urgencyTag: 'high' | 'medium' | 'low' | 'none'
   stockoutRiskDate?: string | null
   notes?: string
 }

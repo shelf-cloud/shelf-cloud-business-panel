@@ -72,7 +72,7 @@ export const ReorderOutputSchema = z.object({
   quantityToOrder: z.number().int().nonnegative(),
   daysUntilNextOrder: z.number().int().nonnegative(),
   recommendedOrderDate: z.string(),
-  urgencyTag: z.enum(['High', 'Medium', 'Low']),
+  urgencyTag: z.enum(['high', 'medium', 'low', 'none']),
   stockoutRiskDate: z.string().nullable(),
   notes: z.string(),
 })

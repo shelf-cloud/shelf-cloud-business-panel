@@ -721,17 +721,18 @@ const ReorderingPointsTable = ({
       ),
       selector: (row: ReorderingPointsProduct) => {
         var color: string = 'text-primary'
-        var shouldNotOrder: boolean = row.totalAIForecast_1.forecast <= 0 && row.totalAIForecast_1.daysUntilNextOrder <= 0
-
-        switch (row.totalAIForecast_1.urgencyTag) {
-          case 'High':
+        switch (row.totalAIForecast_1.urgencyTag.toLowerCase()) {
+          case 'high':
             color = 'text-danger'
             break
-          case 'Medium':
+          case 'medium':
             color = 'text-warning'
             break
-          case 'Low':
+          case 'low':
             color = 'text-info'
+            break
+          case 'none':
+            color = 'text-success'
             break
           default:
             color = 'text-success'
@@ -746,13 +747,15 @@ const ReorderingPointsTable = ({
               <span
                 className={
                   'm-0 p-0 text-center fs-7'
-                }>{`${FormatIntNumber(state.currentRegion, shouldNotOrder ? 365 : row.totalAIForecast_1.daysUntilNextOrder)} ${row.totalAIForecast_1.daysUntilNextOrder == 1 ? 'day' : 'days'}`}</span>
+                }>{`${FormatIntNumber(state.currentRegion, row.totalAIForecast_1.daysUntilNextOrder)} ${row.totalAIForecast_1.daysUntilNextOrder == 1 ? 'day' : 'days'}`}</span>
               <i className='fs-5 text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={`AI_DaysToOrderIcon-${row.sku}`} />
               <UncontrolledTooltip placement='top' target={`AI_DaysToOrderIcon-${row.sku}`} innerClassName='bg-white border border-info border-opacity-50 p-2'>
                 <p className='fs-7 text-primary m-0 p-0 mb-0'>{row.totalAIForecast_1.notes}</p>
               </UncontrolledTooltip>
             </div>
-            <div>{!shouldNotOrder && <span className='fs-7 tw:text-muted-foreground'>{moment(row.totalAIForecast_1.recommendedOrderDate).format('DD MMM YYYY')}</span>}</div>
+            <div>
+              <span className='fs-7 tw:text-muted-foreground'>{moment(row.totalAIForecast_1.recommendedOrderDate).format('DD MMM YYYY')}</span>
+            </div>
           </div>
         )
       },
