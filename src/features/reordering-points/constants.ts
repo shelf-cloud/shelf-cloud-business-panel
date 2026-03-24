@@ -43,18 +43,25 @@ export const URGENCY_THRESHOLDS = {
 
 export const DATA_STRUCTURE_DESCRIPTION = `
 ## Input Data Structure
-
-You will receive a JSON object with these fields:
-
-- **Forecast Method metadata**: forecastingMethod, what method should be used for forecasting (e.g., "Normal" or "Low Sales" or "Seasonal") based on demand pattern analysis.
-- **SKU metadata**: sku, title, asin, unitsPerCase, sellerCost
-- **Lead times**: leadTimeDaysFromSellerToWarehouse, leadTimeDaysFromWarehouseToFBA, leadTimeDaysFromSellerToFBA, leadTimeDaysFromSellerToAWD
-- **Coverage targets**: warehouseTargetDaysAfterLeadTime, fbaTargetDaysAfterLeadTime, awdTargetDaysAfterLeadTime
-- **Purchase orders**: purchaseOrders.ToWarehouse and purchaseOrders.ToFBA — arrays of {OrderDate, quantity}. These are the **same** pipeline as production quantities; do not double-count.
-- **Inventory**: warehouseQty, warehouseInboundQty, warehouseProductionQty, fbaQty, fbaInboundQty, fbaProductionQty, awdQty, awdInboundQty, awdProductionQty
-- **Aggregate sales**: totalsSales.last30days through last365days
-- **Daily detail**: array of {date, warehouseSoldUnits, warehouseDaysWithStock, warehouseOrders, fbaSoldUnits, fbaDaysWithStock, fbaOrders}
-- **Urgency thresholds**: urgencyThresholds.high, urgencyThresholds.medium, urgencyThresholds.low — numeric values representing the reorder point thresholds for high, medium, and low urgency classifications.`
+You will receive a JSON object with the following fields. Field paths are literal — use nested JSON paths exactly as provided, especially inventory.* and purchaseOrders.*. Ignore any extra input fields not listed here.
+forecastingMethod: "Normal", "Low Sales", or "Seasonal"
+sku, title, asin, unitsPerCase, sellerCost: SKU metadata
+leadTimeDaysFromSellerToWarehouse: Lead time to Warehouse
+leadTimeDaysFromSellerToFBA: Lead time to FBA
+leadTimeDaysFromSellerToAWD: Lead time to AWD
+warehouseTargetDaysAfterLeadTime: Coverage target for Warehouse
+fbaTargetDaysAfterLeadTime: Coverage target for FBA
+awdTargetDaysAfterLeadTime: Coverage target for AWD
+purchaseOrders.ToWarehouse[]: Array of {OrderDate, quantity} — authoritative confirmed PO totals to Warehouse
+purchaseOrders.ToFBA[]: Array of {OrderDate, quantity} — authoritative confirmed PO totals to FBA
+inventory.warehouseQty, fbaQty, awdQty: Current on-hand inventory by location
+inventory.warehouseInboundQty, fbaInboundQty, awdInboundQty: Stage-status pipeline views (NOT additional units — never add these on top of purchaseOrders.*)
+inventory.warehouseProductionQty, fbaProductionQty, awdProductionQty: Stage-status pipeline views (same rule)
+totalsSales.last30days through last365days: Aggregate sales windows
+Monthly detail array: {month, warehouseSoldUnits, warehouseDaysWithStock, warehouseOrders, fbaSoldUnits, fbaDaysWithStock, fbaOrders}
+supplierReviewCycleDays: Integer: 14 or 30. Default to 14 if missing.
+Critical non-duplication rule: purchaseOrders.ToWarehouse and purchaseOrders.ToFBA are the authoritative confirmed PO totals. inventory.*InboundQty and inventory.ProductionQty are stage-status views of that same PO pipeline — they are NOT additional units and must NEVER be added on top of purchaseOrders..
+AWD pipeline: If AWD purchase-order arrays are not provided, treat AWD pipeline as coming only from inventory.awdInboundQty and inventory.awdProductionQty.`
 
 export const CONTEXT = `
   ## CONTEXT

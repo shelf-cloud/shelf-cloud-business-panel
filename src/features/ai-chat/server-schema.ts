@@ -88,11 +88,11 @@ const reorderInputSchema = z.object({
       fbaOrders: z.number().finite().min(0),
     })
   ),
-  urgencyThresholds: z.object({
-    high: z.number().int().min(0).max(365),
-    medium: z.number().int().min(0).max(365),
-    low: z.number().int().min(0).max(365),
-  }),
+  // urgencyThresholds: z.object({
+  //   high: z.number().int().min(0).max(365),
+  //   medium: z.number().int().min(0).max(365),
+  //   low: z.number().int().min(0).max(365),
+  // }),
 })
 
 const urgencyThresholdSchema = z.object({
@@ -132,17 +132,17 @@ export const forecastChatRequestSchema = z
       })
     }
 
-    if (
-      value.context.product.urgencyThresholds.high !== highAlertMax ||
-      value.context.product.urgencyThresholds.medium !== mediumAlertMax ||
-      value.context.product.urgencyThresholds.low !== lowAlertMax
-    ) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['context', 'urgencyThresholds'],
-        message: 'Forecast prompt urgency thresholds must match the chat context urgency thresholds.',
-      })
-    }
+    // if (
+    //   value.context.product.urgencyThresholds.high !== highAlertMax ||
+    //   value.context.product.urgencyThresholds.medium !== mediumAlertMax ||
+    //   value.context.product.urgencyThresholds.low !== lowAlertMax
+    // ) {
+    //   ctx.addIssue({
+    //     code: z.ZodIssueCode.custom,
+    //     path: ['context', 'urgencyThresholds'],
+    //     message: 'Forecast prompt urgency thresholds must match the chat context urgency thresholds.',
+    //   })
+    // }
   })
 
 export type ForecastChatParsedRequest = z.infer<typeof forecastChatRequestSchema>

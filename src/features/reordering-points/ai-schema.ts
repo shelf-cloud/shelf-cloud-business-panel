@@ -70,11 +70,11 @@ export type ReorderInput = {
     fbaOrders: number
   }>
 
-  urgencyThresholds: {
-    high: number
-    medium: number
-    low: number
-  }
+  // urgencyThresholds: {
+  //   high: number
+  //   medium: number
+  //   low: number
+  // }
 }
 
 export const ReorderOutputSchema = z.object({

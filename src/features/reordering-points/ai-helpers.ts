@@ -251,7 +251,7 @@ export const get_bssnss_system_prompt = async ({ region, businessId }: { region:
   return pending
 }
 
-export const buildProductPrompt = (product: ReorderingPointsProduct, urgencyThresholds: Urgency): ReorderInput => {
+export const buildProductPrompt = (product: ReorderingPointsProduct, _urgencyThresholds: Urgency): ReorderInput => {
   const {
     sku,
     title,
@@ -276,8 +276,6 @@ export const buildProductPrompt = (product: ReorderingPointsProduct, urgencyThre
     warehousePODates,
     productTrendTag,
   } = product
-
-  const { highAlertMax, mediumAlertMax, lowAlertMax } = urgencyThresholds
 
   return {
     forecastingMethod: productTrendTag.useAITrend ? (productTrendTag.aiTrend ?? 'Normal') : (productTrendTag.bsnssTrend ?? 'Normal'),
@@ -358,11 +356,11 @@ export const buildProductPrompt = (product: ReorderingPointsProduct, urgencyThre
           }))
       ),
 
-    urgencyThresholds: {
-      high: highAlertMax ?? 20,
-      medium: mediumAlertMax ?? 30,
-      low: lowAlertMax ?? 40,
-    },
+    // urgencyThresholds: {
+    //   high: highAlertMax ?? 20,
+    //   medium: mediumAlertMax ?? 30,
+    //   low: lowAlertMax ?? 40,
+    // },
   }
 }
 
