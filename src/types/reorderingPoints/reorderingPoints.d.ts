@@ -107,10 +107,12 @@ export type AIForecastForProduct = {
   forecast: number
   daysUntilNextOrder: number
   recommendedOrderDate: string
-  urgencyTag: 'high' | 'medium' | 'low' | 'none'
+  urgencyTag: UrgencyTag
   stockoutRiskDate?: string | null
   notes?: string
 }
+
+export type UrgencyTag = 'high' | 'medium' | 'low' | 'none'
 
 export type ProductTrendTag = { aiTrend: 'Normal' | 'Low Sales'; analysis: string; bsnssTrend: 'Normal' | 'Low Sales' | 'Seasonal'; useAITrend: boolean }
 

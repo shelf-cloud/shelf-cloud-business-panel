@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-import { ProductTrendTag, ReorderingPointsForecastProducts, ReorderingPointsProduct, ReorderingPointsResponse } from '@typesTs/reorderingPoints/reorderingPoints'
+import { ProductTrendTag, ReorderingPointsForecastProducts, ReorderingPointsProduct, ReorderingPointsResponse, UrgencyTag } from '@typesTs/reorderingPoints/reorderingPoints'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
@@ -30,14 +30,16 @@ export type RPProductTrendTagUpdate = {
   productTrendTag: ProductTrendTag
 }
 
-const checkUgerncyTagNumber = (urgency: string) => {
+const checkUgerncyTagNumber = (urgency: UrgencyTag) => {
   switch (urgency) {
-    case 'High':
+    case 'high':
       return 3
-    case 'Medium':
+    case 'medium':
       return 2
-    case 'Low':
+    case 'low':
       return 1
+    case 'none':
+      return 0
     default:
       return 0
   }
