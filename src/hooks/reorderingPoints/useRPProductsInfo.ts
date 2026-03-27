@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-import { ProductTrendTag, ReorderingPointsForecastProducts, ReorderingPointsProduct, ReorderingPointsResponse, UrgencyTag } from '@typesTs/reorderingPoints/reorderingPoints'
+import { ProductTrendTag, ReorderingPointsForecastProducts, ReorderingPointsProduct, ReorderingPointsResponse } from '@typesTs/reorderingPoints/reorderingPoints'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
@@ -30,20 +30,20 @@ export type RPProductTrendTagUpdate = {
   productTrendTag: ProductTrendTag
 }
 
-const checkUgerncyTagNumber = (urgency: UrgencyTag) => {
-  switch (urgency) {
-    case 'high':
-      return 3
-    case 'medium':
-      return 2
-    case 'low':
-      return 1
-    case 'none':
-      return 0
-    default:
-      return 0
-  }
-}
+// const checkUgerncyTagNumber = (urgency: UrgencyTag) => {
+//   switch (urgency) {
+//     case 'high':
+//       return 3
+//     case 'medium':
+//       return 2
+//     case 'low':
+//       return 1
+//     case 'none':
+//       return 0
+//     default:
+//       return 0
+//   }
+// }
 
 export const useRPProductsInfo = ({
   session,
@@ -747,8 +747,8 @@ export const useRPProductsInfo = ({
 
     if (['ai_urgency'].includes(field)) {
       return rows.sort((a, b) => {
-        const aField = checkUgerncyTagNumber(a.totalAIForecast_1.urgencyTag)
-        const bField = checkUgerncyTagNumber(b.totalAIForecast_1.urgencyTag)
+        const aField = a.totalAIForecast_1.daysUntilNextOrder
+        const bField = b.totalAIForecast_1.daysUntilNextOrder
         if (aField > bField) {
           return direction ? 1 : -1
         } else if (aField < bField) {
