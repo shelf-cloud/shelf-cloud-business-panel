@@ -1,4 +1,4 @@
-import { CONTEXT, DATA_STRUCTURE_DESCRIPTION, SYSTEM_PROMPT } from './constants'
+import { DATA_STRUCTURE_DESCRIPTION, SYSTEM_PROMPT, getContext } from './constants'
 
 export type BusinessPromptResponse = {
   error: boolean
@@ -20,7 +20,7 @@ export const build_bsnss_system_prompt = (prompt: BusinessPrompt | null | undefi
     return SYSTEM_PROMPT
   }
 
-  let bsnssSystemPrompt = `${prompt.general}\n\n${prompt.objective}\n\n${CONTEXT}\n\n${DATA_STRUCTURE_DESCRIPTION}\n\n${prompt.corerules}\n\n`
+  let bsnssSystemPrompt = `${prompt.general}\n\n${prompt.objective}\n\n${getContext()}\n\n${DATA_STRUCTURE_DESCRIPTION}\n\n${prompt.corerules}\n\n`
 
   if (prompt.businessrules) {
     bsnssSystemPrompt += `Business Specific Rules (HARD): This rules should override general rules that conflict with them.\n${prompt.businessrules}`

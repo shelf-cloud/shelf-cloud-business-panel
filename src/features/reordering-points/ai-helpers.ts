@@ -1,3 +1,4 @@
+import { encode } from '@toon-format/toon'
 import { type ToolLoopAgent } from 'ai'
 import axios from 'axios'
 
@@ -365,7 +366,17 @@ export const buildProductPrompt = (product: ReorderingPointsProduct, _urgencyThr
 }
 
 export const buildUserMessage = (input: ReorderInput) => {
-  return `Product Reordering Data (JSON): ${JSON.stringify(input)}`
+  const toon = encode(input, {
+    indent: 2,
+    delimiter: ',',
+    keyFolding: 'off',
+    flattenDepth: Infinity,
+  })
+  return `Product Reordering Data:\n
+  \`\`\`toon\n
+  ${toon}\n
+  \`\`\`
+  `
 }
 
 export const safeParseJson = (input: string) => {

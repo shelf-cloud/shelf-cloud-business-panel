@@ -6,7 +6,7 @@ import { DropdownItem } from 'reactstrap'
 import useSWR from 'swr'
 
 import AppContext from '@/context/AppContext'
-import { buildProductPrompt } from '@/features/reordering-points/ai-helpers'
+import { buildProductPrompt, buildUserMessage } from '@/features/reordering-points/ai-helpers'
 import { BusinessPromptResponse, build_bsnss_system_prompt } from '@/features/reordering-points/business-prompt'
 
 type Props = {
@@ -36,7 +36,8 @@ const DownloadProductMD = ({ product }: Props) => {
 
   const markdown = useMemo(() => {
     if (!resolvedPrompt) return ''
-    return `${resolvedPrompt}\n\nProduct Reordering Data (JSON): ${JSON.stringify(porductPrompt, null, 2)}`
+    const productMessage = buildUserMessage(porductPrompt)
+    return `${resolvedPrompt}\n\n${productMessage}`
   }, [resolvedPrompt, porductPrompt])
 
   const fileName = `${product.sku}-reordering-points.md`
