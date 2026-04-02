@@ -1,8 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo } from 'react'
 
 import AppContext from '@context/AppContext'
+import { validateFulfillmentWarehouseUsage } from '@features/amazon/fulfillmentQuantityValidation'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { NoImageAdress } from '@lib/assetsConstants'
@@ -17,9 +18,9 @@ import { Button, FormFeedback, UncontrolledTooltip } from 'reactstrap'
 type Props = {
   allData: AmazonFulfillmentSku[]
   filteredItems: AmazonFulfillmentSku[]
-  setAllData: (allData: AmazonFulfillmentSku[]) => void
+  setAllData: (allData: AmazonFulfillmentSku[] | ((prev: AmazonFulfillmentSku[]) => AmazonFulfillmentSku[])) => void
   pending: boolean
-  setError: (skus: any) => void
+  setHasInputError: (hasInputError: boolean) => void
   setHasQtyError: (hasQtyError: boolean) => void
   setdimensionsModal: (dimensionsModal: any) => void
   setSelectedRows: (selectedRows: AmazonFulfillmentSku[]) => void
@@ -27,100 +28,95 @@ type Props = {
   setinboundFBAHistoryModal: (prev: any) => void
 }
 
-const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setError, setHasQtyError, setSelectedRows, toggledClearRows, setinboundFBAHistoryModal }: Props) => {
+const MasterBoxesTable = ({
+  allData,
+  filteredItems,
+  setAllData,
+  pending,
+  setHasInputError,
+  setHasQtyError,
+  setSelectedRows,
+  toggledClearRows,
+  setinboundFBAHistoryModal,
+}: Props) => {
   const { state, setModalProductInfo } = useContext(AppContext)
-  const [skusWithError, setSkusWithError] = useState<{ [key: string]: boolean }>({})
 
   useEffect(() => {
-    Object.keys(skusWithError).length > 0 && setHasQtyError(true)
-    return () => {
-      setHasQtyError(false)
-    }
-  }, [skusWithError, setHasQtyError])
+    return () => setHasInputError(false)
+  }, [setHasInputError])
+
+  useEffect(() => {
+    return () => setHasQtyError(false)
+  }, [setHasQtyError])
 
   const handleOrderQty = (value: string, msku: string, qtyBox: number) => {
-    if (Number(value) == 0 || value == '') {
-      const newData: any = allData.map((item) => {
-        if (item.msku === msku) {
-          item.orderQty = ''
-          item.totalSendToAmazon = 0
+    setAllData((previousData) =>
+      previousData.map((item) => {
+        if (item.msku !== msku) {
           return item
-        } else {
-          return item
+        }
+
+        if (value === '' || Number(value) === 0) {
+          return {
+            ...item,
+            orderQty: '',
+            totalSendToAmazon: 0,
+          }
+        }
+
+        return {
+          ...item,
+          orderQty: value,
+          totalSendToAmazon: Number(value) * qtyBox,
         }
       })
-
-      setAllData(newData)
-      return
-    }
-    const totalQtyShip = Number(value) * qtyBox
-    const newData: any = allData.map((item) => {
-      if (item.msku === msku) {
-        item.orderQty = value
-        item.totalSendToAmazon = totalQtyShip
-        return item
-      } else {
-        return item
-      }
-    })
-    setAllData(newData)
-  }
-
-  const checkQtyError = async (msku: string, shelfcloud_sku: string, addingQtyisKit: boolean) => {
-    let currentQtyInOrder = {} as { [key: string]: number }
-    let maxOrderQty = {} as { [key: string]: number }
-
-    if (addingQtyisKit) {
-      for await (const item of allData) {
-        if (item.msku === msku) {
-          for await (const child of item.children!) {
-            if (!currentQtyInOrder[child.sku]) currentQtyInOrder[child.sku] = 0
-            currentQtyInOrder[child.sku] += parseInt(item.orderQty) > 0 ? child.qty * parseInt(item.orderQty) * item.boxQty! : 0
-
-            for await (const item of allData) {
-              if (!item.isKit && item.shelfcloud_sku === child.sku) {
-                currentQtyInOrder[child.sku] += parseInt(item.orderQty) > 0 ? parseInt(item.orderQty) * item.boxQty! : 0
-                maxOrderQty[child.sku] = item.quantity!
-              }
-            }
-          }
-        }
-      }
-    } else {
-      currentQtyInOrder[shelfcloud_sku] = 0
-      maxOrderQty[shelfcloud_sku] = 0
-
-      for await (const item of allData) {
-        if (item.isKit) {
-          for await (const child of item.children!) {
-            if (child.sku === shelfcloud_sku) {
-              currentQtyInOrder[shelfcloud_sku] += parseInt(item.orderQty) > 0 ? child.qty * parseInt(item.orderQty) * item.boxQty! : 0
-            }
-          }
-        } else {
-          if (item.shelfcloud_sku === shelfcloud_sku) {
-            currentQtyInOrder[shelfcloud_sku] += parseInt(item.orderQty) > 0 ? parseInt(item.orderQty) * item.boxQty! : 0
-            maxOrderQty[shelfcloud_sku] = item.quantity!
-          }
-        }
-      }
-    }
-
-    for (const [currentSku, qty] of Object.entries(currentQtyInOrder)) {
-      if (qty > maxOrderQty[currentSku]) {
-        setSkusWithError((prev: any) => ({ ...prev, [currentSku]: true }))
-      } else {
-        setSkusWithError((prev: any) => {
-          const { [currentSku]: x, ...rest } = prev
-          return rest
-        })
-      }
-    }
+    )
   }
 
   const handleSelectedRows = ({ selectedRows }: { selectedRows: AmazonFulfillmentSku[] }) => {
     setSelectedRows(selectedRows)
   }
+
+  const { exceededSkus, missingAvailabilitySkus } = useMemo(() => validateFulfillmentWarehouseUsage(allData, 'master-boxes'), [allData])
+
+  const rowValidationByMsku = useMemo(() => {
+    return allData.reduce(
+      (validationByMsku, row) => {
+        const numericOrderQty = Number(row.orderQty)
+        const hasQuantityValue = row.orderQty !== ''
+        const hasPositiveOrderQty = numericOrderQty > 0
+        const hasInvalidBoxQty = !Number.isInteger(Number(row.boxQty)) || Number(row.boxQty) <= 0
+        const hasInvalidChildQty = row.isKit && (row.children ?? []).some((child) => !Number.isInteger(Number(child.qty)) || Number(child.qty) <= 0)
+        const hasInputError =
+          (hasPositiveOrderQty && row.hasError) ||
+          (hasQuantityValue && (numericOrderQty < 0 || !Number.isInteger(numericOrderQty) || numericOrderQty > row.maxOrderQty)) ||
+          (hasPositiveOrderQty && hasInvalidBoxQty) ||
+          (hasPositiveOrderQty && row.isKit && (!(row.children && row.children?.length > 0) || hasInvalidChildQty))
+        const hasExceededQtyError = row.isKit ? (row.children ?? []).some((child) => Boolean(exceededSkus[child.sku])) : Boolean(exceededSkus[row.shelfcloud_sku])
+        const hasMissingAvailabilityError = row.isKit && hasPositiveOrderQty ? (row.children ?? []).some((child) => Boolean(missingAvailabilitySkus[child.sku])) : false
+
+        validationByMsku[row.msku] = {
+          hasInputError,
+          hasExceededQtyError,
+          hasMissingAvailabilityError,
+        }
+
+        return validationByMsku
+      },
+      {} as Record<string, { hasInputError: boolean; hasExceededQtyError: boolean; hasMissingAvailabilityError: boolean }>
+    )
+  }, [allData, exceededSkus, missingAvailabilitySkus])
+
+  const hasInputError = useMemo(() => Object.values(rowValidationByMsku).some((rowValidation) => rowValidation.hasInputError), [rowValidationByMsku])
+  const hasQtyError = useMemo(() => Object.keys(exceededSkus).length > 0 || Object.keys(missingAvailabilitySkus).length > 0, [exceededSkus, missingAvailabilitySkus])
+
+  useEffect(() => {
+    setHasInputError(hasInputError)
+  }, [hasInputError, setHasInputError])
+
+  useEffect(() => {
+    setHasQtyError(hasQtyError)
+  }, [hasQtyError, setHasQtyError])
 
   const conditionalRowStyles = [
     {
@@ -132,12 +128,10 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
       classNames: ['bg-success bg-opacity-25'],
     },
     {
-      when: (row: AmazonFulfillmentSku) =>
-        Number(row.orderQty) < 0 ||
-        !Number.isInteger(Number(row.orderQty)) ||
-        parseInt(row.orderQty) > row.maxOrderQty! ||
-        skusWithError[row.shelfcloud_sku] === true ||
-        row.hasError,
+      when: (row: AmazonFulfillmentSku) => {
+        const rowValidation = rowValidationByMsku[row.msku]
+        return Boolean(rowValidation?.hasInputError || rowValidation?.hasExceededQtyError || rowValidation?.hasMissingAvailabilityError)
+      },
       classNames: ['bg-danger bg-opacity-25'],
     },
   ]
@@ -612,6 +606,7 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
         </span>
       ),
       selector: (row: AmazonFulfillmentSku) => {
+        const rowValidation = rowValidationByMsku[row.msku]
         return (
           <>
             <DebounceInput
@@ -623,33 +618,19 @@ const MasterBoxesTable = ({ allData, filteredItems, setAllData, pending, setErro
               placeholder={row?.maxOrderQty! <= 0 ? 'Not Enough Qty' : 'Order Qty...'}
               value={row.orderQty}
               onClick={(e: any) => e.target.select()}
-              onChange={async (e) => {
-                if (Number(e.target.value) < 0 || !Number.isInteger(Number(e.target.value)) || parseInt(e.target.value) > row.maxOrderQty!) {
-                  document.getElementById(`Error-${row.msku}`)!.style.display = 'block'
-                  setError((prev: string[]) => [...prev, row.msku])
-                  handleOrderQty(e.target.value, row.msku, row?.boxQty || 0)
-                  await checkQtyError(row.msku, row.shelfcloud_sku, row.isKit!)
-                } else {
-                  document.getElementById(`Error-${row.msku}`)!.style.display = 'none'
-                  setError((prev: string[]) => prev.filter((msku) => msku !== row.msku))
-                  handleOrderQty(e.target.value, row.msku, row?.boxQty || 0)
-                  await checkQtyError(row.msku, row.shelfcloud_sku, row.isKit!)
-                }
+              onChange={(e) => {
+                handleOrderQty(e.target.value, row.msku, row?.boxQty || 0)
               }}
               max={row.maxOrderQty}
-              invalid={Number(row.orderQty) > row.maxOrderQty! ? true : false}
+              invalid={Boolean(rowValidation?.hasInputError)}
             />
-            {Number(row.orderQty) > row.maxOrderQty! ? (
-              <FormFeedback className='text-start' type='invalid'>
-                Not enough Master Boxes!
+            {rowValidation?.hasInputError ? (
+              <FormFeedback className='text-start fs-7' type='invalid'>
+                Quantity Error
               </FormFeedback>
             ) : null}
-            <span className='fs-6 fw-normal text-danger' id={`Error-${row.msku}`} style={{ display: 'none' }}>
-              Quantity Error
-            </span>
-            <span className='fs-6 fw-normal text-danger text-wrap' id={`ErrorQty-${row.msku}`} style={skusWithError[row.shelfcloud_sku] === true ? {} : { display: 'none' }}>
-              Quantity Exceeded
-            </span>
+            {rowValidation?.hasExceededQtyError ? <span className='fs-7 fw-normal text-danger text-wrap'>Quantity Exceeded</span> : null}
+            {rowValidation?.hasMissingAvailabilityError ? <span className='fs-7 fw-normal text-danger text-wrap'>Unable to verify available warehouse quantity</span> : null}
           </>
         )
       },

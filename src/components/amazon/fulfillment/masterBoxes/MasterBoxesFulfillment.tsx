@@ -30,7 +30,7 @@ const MasterBoxesFulfillment = ({ lisiting, pending, mutateFBASkus }: Props) => 
   const [selectedRows, setSelectedRows] = useState<AmazonFulfillmentSku[]>([])
   const [toggledClearRows, setToggleClearRows] = useState(false)
   const [hasQtyError, setHasQtyError] = useState(false)
-  const [error, setError] = useState([])
+  const [hasInputError, setHasInputError] = useState(false)
   const [showCreateInboundPlanModal, setShowCreateInboundPlanModal] = useState<boolean>(false)
   const [showCreateManualInboundPlanModal, setShowCreateManualInboundPlanModal] = useState<boolean>(false)
   const [dimensionsModal, setdimensionsModal] = useState({
@@ -91,27 +91,33 @@ const MasterBoxesFulfillment = ({ lisiting, pending, mutateFBASkus }: Props) => 
     if (searchValue !== '') {
       return allData.filter(
         (item: AmazonFulfillmentSku) =>
-          (showHidden === undefined || showHidden === '' ? Boolean(item.show) : showHidden === 'false' ? Boolean(item.show) : true) &&
-          (showNotEnough === undefined || showNotEnough === ''
-            ? item.maxOrderQty <= 0
-              ? false
-              : true
-            : showNotEnough === 'false'
+          ((showHidden === undefined || showHidden === '' ? Boolean(item.show) : showHidden === 'false' ? Boolean(item.show) : true) &&
+            (showNotEnough === undefined || showNotEnough === ''
               ? item.maxOrderQty <= 0
                 ? false
                 : true
-              : true) &&
-          (ShowNoShipDate === undefined || ShowNoShipDate === '' ? Boolean(item.recommendedShipDate) : ShowNoShipDate === 'false' ? Boolean(item.recommendedShipDate) : true) &&
-          (masterBoxVisibility === undefined || masterBoxVisibility === '' ? item.showForMasterBoxes : masterBoxVisibility === 'false' ? item.showForMasterBoxes : true) &&
-          (item?.product_name?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            searchValue.split(' ').every((word) => item?.product_name?.toLowerCase().includes(word.toLowerCase())) ||
-            searchValue.split(' ').every((word) => item?.title?.toLowerCase().includes(word.toLowerCase())) ||
-            item?.sku?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            searchValue.split(' ').every((word) => item?.sku?.toLowerCase().includes(word.toLowerCase())) ||
-            item?.shelfcloud_sku?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item?.asin?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item?.barcode?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item?.fnsku?.toLowerCase().includes(searchValue.toLowerCase()))
+              : showNotEnough === 'false'
+                ? item.maxOrderQty <= 0
+                  ? false
+                  : true
+                : true) &&
+            (ShowNoShipDate === undefined || ShowNoShipDate === '' ? Boolean(item.recommendedShipDate) : ShowNoShipDate === 'false' ? Boolean(item.recommendedShipDate) : true) &&
+            (masterBoxVisibility === undefined || masterBoxVisibility === '' ? item.showForMasterBoxes : masterBoxVisibility === 'false' ? item.showForMasterBoxes : true) &&
+            (item?.product_name?.toLowerCase().includes(searchValue.toLowerCase()) ||
+              searchValue.split(' ').every((word) => item?.product_name?.toLowerCase().includes(word.toLowerCase())) ||
+              searchValue.split(' ').every((word) => item?.title?.toLowerCase().includes(word.toLowerCase())) ||
+              item?.sku?.toLowerCase().includes(searchValue.toLowerCase()) ||
+              searchValue.split(' ').every((word) => item?.sku?.toLowerCase().includes(word.toLowerCase())) ||
+              item?.shelfcloud_sku?.toLowerCase().includes(searchValue.toLowerCase()) ||
+              item?.asin?.toLowerCase().includes(searchValue.toLowerCase()) ||
+              item?.barcode?.toLowerCase().includes(searchValue.toLowerCase()) ||
+              item?.fnsku?.toLowerCase().includes(searchValue.toLowerCase()))) ||
+          (item.children
+            ? item?.children?.some(
+                (child) =>
+                  searchValue.split(' ').every((word) => child?.title?.toLowerCase().includes(word.toLowerCase())) || child?.sku?.toLowerCase().includes(searchValue.toLowerCase())
+              )
+            : false)
       )
     }
 
@@ -162,10 +168,10 @@ const MasterBoxesFulfillment = ({ lisiting, pending, mutateFBASkus }: Props) => 
     <>
       <Row className='justify-content-between gap-0'>
         <Col xs='12' lg='8' className='d-flex flex-wrap justify-content-start align-items-center gap-2'>
-          <Button disabled={error.length > 0 || hasQtyError} className='fs-7 text-nowrap' color='success' onClick={() => setShowCreateInboundPlanModal(true)}>
+          <Button disabled={hasInputError || hasQtyError} className='fs-7 text-nowrap' color='success' onClick={() => setShowCreateInboundPlanModal(true)}>
             Create Inbound Plan
           </Button>
-          <Button disabled={error.length > 0 || hasQtyError} className='fs-7 text-nowrap' color='secondary' onClick={() => setShowCreateManualInboundPlanModal(true)}>
+          <Button disabled={hasInputError || hasQtyError} className='fs-7 text-nowrap' color='secondary' onClick={() => setShowCreateManualInboundPlanModal(true)}>
             Create Manual Inbound Plan
           </Button>
           <FilterListings
@@ -213,7 +219,7 @@ const MasterBoxesFulfillment = ({ lisiting, pending, mutateFBASkus }: Props) => 
         filteredItems={filteredItems}
         setAllData={handleSetAllData}
         pending={pending}
-        setError={setError}
+        setHasInputError={setHasInputError}
         setHasQtyError={setHasQtyError}
         setdimensionsModal={setdimensionsModal}
         setSelectedRows={setSelectedRows}

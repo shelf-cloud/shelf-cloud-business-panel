@@ -3,6 +3,7 @@ import router from 'next/router'
 import { useContext, useState } from 'react'
 
 import AppContext from '@context/AppContext'
+import { validateFulfillmentWarehouseUsage } from '@features/amazon/fulfillmentQuantityValidation'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { AmazonFulfillmentSku, AmazonMarketplace } from '@typesTs/amazon/fulfillments'
 import axios from 'axios'
@@ -17,6 +18,18 @@ type Props = {
   orderProducts: AmazonFulfillmentSku[]
   showCreateInboundPlanModal: boolean
   setShowCreateInboundPlanModal: (showCreateInboundPlanModal: boolean) => void
+}
+
+const getValidationFailureMessage = (validationResult: ReturnType<typeof validateFulfillmentWarehouseUsage>) => {
+  const exceededMessages = Object.entries(validationResult.exceededSkus).map(
+    ([sku, details]) => `${sku}: requested ${details.requestedQty}, available ${details.availableQty} (${details.contributors.join(', ')})`
+  )
+  const missingMessages = Object.entries(validationResult.missingAvailabilitySkus).map(
+    ([sku, details]) => `${sku}: availability unavailable (${details.contributors.join(', ')})`
+  )
+  const previewMessages = [...exceededMessages, ...missingMessages].slice(0, 3)
+
+  return `Unable to create inbound plan. ${previewMessages.join(' | ')}`
 }
 
 const CreateMastBoxesInboundPlanModalManual = ({ orderProducts, showCreateInboundPlanModal, setShowCreateInboundPlanModal }: Props) => {
@@ -70,6 +83,13 @@ const CreateMastBoxesInboundPlanModalManual = ({ orderProducts, showCreateInboun
       hasProducts: Yup.number().min(1, 'To create an order, you must add at least one product'),
     }),
     onSubmit: async (values, { resetForm }) => {
+      const validationResult = validateFulfillmentWarehouseUsage(orderProducts, 'master-boxes')
+      if (Object.keys(validationResult.exceededSkus).length > 0 || Object.keys(validationResult.missingAvailabilitySkus).length > 0) {
+        setloading(false)
+        toast.error(getValidationFailureMessage(validationResult))
+        return
+      }
+
       setloading(true)
       const creatingIndvUnitsPlan = toast.loading('Generating New Inbound Plan...')
 
