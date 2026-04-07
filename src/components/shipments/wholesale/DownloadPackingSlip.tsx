@@ -2,11 +2,23 @@ import { Shipment } from '@typesTs/shipments/shipments'
 import ExcelJS from 'exceljs'
 import { DropdownItem } from 'reactstrap'
 
+import { shelf_cloud_blue_h, shelf_cloud_signature } from '@/lib/assetsConstants'
+
 type Props = {
   order: Shipment
 }
 
 const DownloadPackingSlip = ({ order }: Props) => {
+  const fetchAssetAsArrayBuffer = async (assetPath: string) => {
+    const response = await fetch(assetPath)
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch asset: ${assetPath}`)
+    }
+
+    return response.arrayBuffer()
+  }
+
   const buildTemplate = async (logo: ArrayBuffer, signature: ArrayBuffer) => {
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet(`Packing Slip`)
@@ -333,34 +345,9 @@ const DownloadPackingSlip = ({ order }: Props) => {
     })
   }
   const downloadPackingSlip = async () => {
-    const logo = await fetch(
-      'https://firebasestorage.googleapis.com/v0/b/shelf-cloud-bucket.appspot.com/o/brand%2Fshelfcloud-blue-h.png?alt=media&token=6536dd7b-383b-4e4f-9160-893d91c0ca09'
-    )
-      .then((response) => {
-        return response.blob()
-      })
-      .then((imgBlob) => {
-        return imgBlob.arrayBuffer()
-      })
-      .catch((error) => {
-        console.error('Error fetching the image:', error)
-        return null
-      })
+    const [logo, signature] = await Promise.all([fetchAssetAsArrayBuffer(shelf_cloud_blue_h), fetchAssetAsArrayBuffer(shelf_cloud_signature)])
 
-    const signature = await fetch(
-      'https://firebasestorage.googleapis.com/v0/b/shelf-cloud-bucket.appspot.com/o/operations%2Fonix_signature.png?alt=media&token=17f47b7f-0bf4-4087-a1a4-850b57985bb1'
-    )
-      .then((response) => {
-        return response.blob()
-      })
-      .then((imgBlob) => {
-        return imgBlob.arrayBuffer()
-      })
-      .catch((error) => {
-        console.error('Error fetching the image:', error)
-      })
-
-    await buildTemplate(logo!, signature!)
+    await buildTemplate(logo, signature)
   }
 
   return (

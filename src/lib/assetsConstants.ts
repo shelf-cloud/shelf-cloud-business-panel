@@ -1,1 +1,8 @@
-export const NoImageAdress = 'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.webp?alt=media&token=5a57b9bd-443f-4b69-8fc9-b8ee35cd7252'
+import shelfCloudBlueH from '@images/shelfcloud-blue-h.png'
+import shelfCloudSignature from '@images/onix_signature.png'
+
+export const NoImageAdress = 'https://cdn.shelf-cloud.com/shelf-cloud/assets/images/marketplaces/onix-no-image.png'
+
+export const shelf_cloud_blue_h = shelfCloudBlueH.src
+
+export const shelf_cloud_signature = shelfCloudSignature.src
