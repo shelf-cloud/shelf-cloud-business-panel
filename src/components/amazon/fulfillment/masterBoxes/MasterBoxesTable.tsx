@@ -83,13 +83,12 @@ const MasterBoxesTable = ({
     return allData.reduce(
       (validationByMsku, row) => {
         const numericOrderQty = Number(row.orderQty)
-        const hasQuantityValue = row.orderQty !== ''
         const hasPositiveOrderQty = numericOrderQty > 0
         const hasInvalidBoxQty = !Number.isInteger(Number(row.boxQty)) || Number(row.boxQty) <= 0
         const hasInvalidChildQty = row.isKit && (row.children ?? []).some((child) => !Number.isInteger(Number(child.qty)) || Number(child.qty) <= 0)
         const hasInputError =
           (hasPositiveOrderQty && row.hasError) ||
-          (hasQuantityValue && (numericOrderQty < 0 || !Number.isInteger(numericOrderQty) || numericOrderQty > row.maxOrderQty)) ||
+          (hasPositiveOrderQty && (numericOrderQty < 0 || !Number.isInteger(numericOrderQty) || numericOrderQty > row.maxOrderQty)) ||
           (hasPositiveOrderQty && hasInvalidBoxQty) ||
           (hasPositiveOrderQty && row.isKit && (!(row.children && row.children?.length > 0) || hasInvalidChildQty))
         const hasExceededQtyError = row.isKit ? (row.children ?? []).some((child) => Boolean(exceededSkus[child.sku])) : Boolean(exceededSkus[row.shelfcloud_sku])

@@ -66,12 +66,11 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
     return allData.reduce(
       (validationByMsku, row) => {
         const numericOrderQty = Number(row.orderQty)
-        const hasQuantityValue = row.orderQty !== ''
         const hasPositiveOrderQty = numericOrderQty > 0
         const hasInvalidChildQty = row.isKit && (row.children ?? []).some((child) => !Number.isInteger(Number(child.qty)) || Number(child.qty) <= 0)
         const hasInputError =
           (hasPositiveOrderQty && row.hasIndividualUnitsDimensionsError) ||
-          (hasQuantityValue && (numericOrderQty < 0 || !Number.isInteger(numericOrderQty) || (!row.isKit && numericOrderQty > row.quantity))) ||
+          (hasPositiveOrderQty && (numericOrderQty < 0 || !Number.isInteger(numericOrderQty) || (!row.isKit && numericOrderQty > row.quantity))) ||
           (hasPositiveOrderQty && row.isKit && (!(row.children && row.children?.length > 0) || hasInvalidChildQty))
         const hasExceededQtyError = row.isKit ? (row.children ?? []).some((child) => Boolean(exceededSkus[child.sku])) : Boolean(exceededSkus[row.shelfcloud_sku])
         const hasMissingAvailabilityError = row.isKit && hasPositiveOrderQty ? (row.children ?? []).some((child) => Boolean(missingAvailabilitySkus[child.sku])) : false

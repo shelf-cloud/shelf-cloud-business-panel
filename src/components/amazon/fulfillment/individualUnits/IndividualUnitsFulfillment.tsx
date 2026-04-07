@@ -105,7 +105,11 @@ const IndividualUnitsFulfillment = ({ lisiting, pending }: Props) => {
     <>
       <Row className='justify-content-between gap-0'>
         <Col xs='12' lg='8' className='d-flex flex-wrap justify-content-start align-items-center gap-2'>
-          <Button disabled={hasInputError || hasQtyError} className='fs-7 text-nowrap' color='success' onClick={() => setShowCreateInboundPlanModal(true)}>
+          <Button
+            disabled={orderProducts.length === 0 || hasInputError || hasQtyError}
+            className='fs-7 text-nowrap'
+            color='success'
+            onClick={() => setShowCreateInboundPlanModal(true)}>
             Create Inbound Plan
           </Button>
           <FilterListings
