@@ -1,12 +1,11 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
 import router from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 
 import AppContext from '@context/AppContext'
-import { storage } from '@firebase'
 import { wholesaleProductRow } from '@typings'
 import axios from 'axios'
-import { ref, uploadBytes } from 'firebase/storage'
 import { useFormik } from 'formik'
 import moment from 'moment'
 import { useSession } from 'next-auth/react'
@@ -14,7 +13,11 @@ import { toast } from 'react-toastify'
 import { Button, Card, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
 import * as Yup from 'yup'
 
+import { FormatBytes } from '@/lib/FormatNumbers'
+import { NoImageAdress } from '@/lib/assetsConstants'
+
 import { SelectSingleValueType } from './Common/SimpleSelect'
+import { FileWithPreview, HandleSubmitParams } from './modals/shared/UploadFileModal'
 import { LABELS_SHIPMENT_TYPES } from './orders/wholesale/constants'
 import UploadFileDropzone from './ui/UploadFileDropzone'
 import SelectSingleFilter from './ui/filters/SelectSingleFilter'
@@ -23,11 +26,143 @@ type Props = {
   orderNumberStart: string
   orderProducts: wholesaleProductRow[]
 }
+
 const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
   const { data: session } = useSession()
   const { state, setWholeSaleOrderModal } = useContext(AppContext)
-  const [selectedFiles, setselectedFiles] = useState([])
-  const [palletSelectedFiles, setPalletSelectedFiles] = useState([])
+
+  const [orderLabel, setOrderLabel] = useState({
+    files: [] as FileWithPreview[],
+    acceptedFiles: {
+      'application/pdf': ['.pdf'],
+    },
+    multiple: false,
+    maxFiles: 1,
+    maxSize: 5000000,
+    handleAcceptedFiles: (acceptedFiles: File[]) => {
+      acceptedFiles.map((file) =>
+        Object.assign(file, {
+          preview: URL.createObjectURL(file),
+          formattedSize: FormatBytes(file.size),
+        })
+      )
+      setOrderLabel((prev) => ({ ...prev, files: acceptedFiles as FileWithPreview[] }))
+    },
+    handleUploadFiles: async ({ region, businessId, selectedFiles, fileName }: HandleSubmitParams & { fileName: string }) => {
+      if (selectedFiles.length === 0) {
+        toast.error('Please select a file to upload')
+        return { error: false }
+      }
+
+      const uploadingAsset = toast.loading('Uploading Order Labels...')
+
+      const formData = new FormData()
+      formData.append('assetType', 'labels')
+      formData.append('fileName', fileName)
+      formData.append('fileType', selectedFiles[0].type.split('/')[1])
+      formData.append('file', selectedFiles[0])
+
+      const { data } = await axios.post(`/api/assets/uploadNewAsset?region=${region}&businessId=${businessId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+
+      if (!data.error) {
+        toast.update(uploadingAsset, {
+          render: data.message,
+          type: 'success',
+          isLoading: false,
+          autoClose: 3000,
+        })
+        return { error: false }
+      } else {
+        toast.update(uploadingAsset, {
+          render: data.message ?? 'Error uploading order labels',
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+        })
+        return { error: true }
+      }
+    },
+    handleDeleteFile: (fileIndex: number) => {
+      setOrderLabel((prev) => ({
+        ...prev,
+        files: prev.files.filter((_, index) => index !== fileIndex),
+      }))
+    },
+    handleClearFiles: () => {
+      setOrderLabel((prev) => ({ ...prev, files: [] }))
+    },
+  })
+
+  const [orderPalletLabel, setOrderPalletLabel] = useState({
+    files: [] as FileWithPreview[],
+    acceptedFiles: {
+      'application/pdf': ['.pdf'],
+    },
+    multiple: false,
+    maxFiles: 1,
+    maxSize: 5000000,
+    handleAcceptedFiles: (acceptedFiles: File[]) => {
+      acceptedFiles.map((file) =>
+        Object.assign(file, {
+          preview: URL.createObjectURL(file),
+          formattedSize: FormatBytes(file.size),
+        })
+      )
+      setOrderPalletLabel((prev) => ({ ...prev, files: acceptedFiles as FileWithPreview[] }))
+    },
+    handleUploadFiles: async ({ region, businessId, selectedFiles, fileName }: HandleSubmitParams & { fileName: string }) => {
+      if (selectedFiles.length === 0) {
+        toast.error('Please select a file to upload')
+        return { error: false }
+      }
+
+      const uploadingAsset = toast.loading('Uploading Pallet Labels...')
+
+      const formData = new FormData()
+      formData.append('assetType', 'labels')
+      formData.append('fileName', fileName)
+      formData.append('fileType', selectedFiles[0].type.split('/')[1])
+      formData.append('file', selectedFiles[0])
+
+      const { data } = await axios.post(`/api/assets/uploadNewAsset?region=${region}&businessId=${businessId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+
+      if (!data.error) {
+        toast.update(uploadingAsset, {
+          render: data.message,
+          type: 'success',
+          isLoading: false,
+          autoClose: 3000,
+        })
+        return { error: false }
+      } else {
+        toast.update(uploadingAsset, {
+          render: data.message ?? 'Error uploading pallet labels',
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+        })
+        return { error: true }
+      }
+    },
+    handleDeleteFile: (fileIndex: number) => {
+      setOrderPalletLabel((prev) => ({
+        ...prev,
+        files: prev.files.filter((_, index) => index !== fileIndex),
+      }))
+    },
+    handleClearFiles: () => {
+      setOrderPalletLabel((prev) => ({ ...prev, files: [] }))
+    },
+  })
+
   const [errorFile, setErrorFile] = useState(false)
   const [errorPalletFile, setErrorPalletFile] = useState(false)
   const [loading, setloading] = useState(false)
@@ -73,33 +208,61 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
 
       const loadingToast = toast.loading('Creating Order...')
 
-      if (values.isThird == 'false' && selectedFiles.length == 0) {
+      if (values.isThird == 'false' && orderLabel.files.length == 0) {
         setErrorFile(true)
         setloading(false)
+        toast.update(loadingToast, {
+          render: 'Error creating Wholesale Order. Please upload the FBA Labels.',
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+        })
         return
       }
       setErrorFile(false)
 
-      if (values.type == 'LTL' && palletSelectedFiles.length == 0) {
+      if (values.type == 'LTL' && orderPalletLabel.files.length == 0) {
         setErrorPalletFile(true)
         setloading(false)
+        toast.update(loadingToast, {
+          render: 'Error creating Wholesale Order. Please upload the Pallet Labels.',
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+        })
         return
       }
       setErrorPalletFile(false)
 
       const docTime = moment().format('DD-MM-YYYY-HH-mm-ss-a')
+      const order_label_name_file = `order-labels-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
+      const order_pallet_label_name_file = `order-pallet-labels-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`
 
       if (values.isThird == 'false') {
-        const storageRef = ref(storage, `shelf-cloud/etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`)
-        await uploadBytes(storageRef, selectedFiles[0]).then((_snapshot) => {
-          toast.success('Successfully uploaded Shipping labels!')
+        const uploadResult = await orderLabel.handleUploadFiles({
+          region: state.currentRegion,
+          businessId: state.user.businessId,
+          selectedFiles: orderLabel.files,
+          fileName: order_label_name_file,
         })
+        if (uploadResult.error) {
+          setErrorFile(true)
+          setloading(false)
+          return
+        }
 
         if (values.type == 'LTL') {
-          const storageRef = ref(storage, `shelf-cloud/pallet-etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf`)
-          await uploadBytes(storageRef, palletSelectedFiles[0]).then((_snapshot) => {
-            toast.success('Successfully uploaded Pallet labels!')
+          const uploadPalletResult = await orderPalletLabel.handleUploadFiles({
+            region: state.currentRegion,
+            businessId: state.user.businessId,
+            selectedFiles: orderPalletLabel.files,
+            fileName: order_pallet_label_name_file,
           })
+          if (uploadPalletResult.error) {
+            setErrorPalletFile(true)
+            setloading(false)
+            return
+          }
         }
       }
 
@@ -136,8 +299,8 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
           numberOfPallets: values.type == 'LTL' ? values.numberOfPallets : 0,
           isthird: values.isThird == 'true' ? true : false,
           thirdInfo: values.isThird == 'true' ? values.thirdInfo : '',
-          labelsName: values.isThird == 'false' ? `etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf` : '',
-          palletLabels: values.isThird == 'false' && values.type == 'LTL' ? `pallet-etiquetas-fba-${session?.user?.name}-${state.currentRegion}-${docTime}.pdf` : '',
+          labelsName: values.isThird == 'false' ? order_label_name_file : '',
+          palletLabels: values.isThird == 'false' && values.type == 'LTL' ? order_pallet_label_name_file : '',
           orderProducts: orderProducts.map((product) => {
             return {
               sku: product.sku,
@@ -175,7 +338,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
         router.push('/Shipments')
       } else {
         toast.update(loadingToast, {
-          render: data.message ?? 'Error creating Purchase Order',
+          render: data.message ?? 'Error creating Wholesale Order',
           type: 'error',
           isLoading: false,
           autoClose: 3000,
@@ -188,36 +351,6 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
   const HandleAddProduct = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
-  }
-
-  function handleAcceptedFiles(files: any) {
-    files.map((file: any) =>
-      Object.assign(file, {
-        preview: URL.createObjectURL(file),
-        formattedSize: formatBytes(file.size),
-      })
-    )
-    setselectedFiles(files)
-  }
-
-  function handlePalletAcceptedFiles(files: any) {
-    files.map((file: any) =>
-      Object.assign(file, {
-        preview: URL.createObjectURL(file),
-        formattedSize: formatBytes(file.size),
-      })
-    )
-    setPalletSelectedFiles(files)
-  }
-
-  function formatBytes(bytes: any, decimals = 2) {
-    if (bytes === 0) return '0 Bytes'
-    const k = 1024
-    const dm = decimals < 0 ? 0 : decimals
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
   }
 
   return (
@@ -328,25 +461,59 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
               <Row>
                 <Col>
                   <UploadFileDropzone
-                    accptedFiles={undefined}
-                    handleAcceptedFiles={handleAcceptedFiles}
+                    accptedFiles={orderLabel.acceptedFiles}
+                    handleAcceptedFiles={orderLabel.handleAcceptedFiles}
                     description={`Upload Shipping Labels. Drop Only PDF files here or click to upload.`}
                   />
                   <div className='list-unstyled mb-0' id='file-previews'>
-                    {selectedFiles.map((f: any, i) => {
+                    {orderLabel.files.map((file, i) => {
                       return (
                         <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
                           <div className='p-2'>
                             <Row className='align-items-center'>
-                              <Col className='d-flex justify-content-between align-items-center'>
+                              <Col className='d-flex justify-content-between align-items-center gap-2'>
+                                {file.type === 'application/pdf' ? (
+                                  <div className='relative overflow-hidden rounded border' style={{ width: '60px', height: '60px' }}>
+                                    <iframe
+                                      src={file.preview ? file.preview : NoImageAdress}
+                                      onError={(e) => (e.currentTarget.src = NoImageAdress)}
+                                      width='400px'
+                                      height='220px'
+                                      style={{
+                                        border: 'none',
+                                        zoom: 0.35,
+                                        pointerEvents: 'none',
+                                      }}
+                                    />
+                                  </div>
+                                ) : (
+                                  <div
+                                    style={{
+                                      width: '50px',
+                                      height: '50px',
+                                      margin: '0px',
+                                      position: 'relative',
+                                    }}>
+                                    <img
+                                      loading='lazy'
+                                      src={file.preview ? file.preview : NoImageAdress}
+                                      onError={(e) => (e.currentTarget.src = NoImageAdress)}
+                                      alt='File preview'
+                                      style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+                                      onLoad={() => {
+                                        URL.revokeObjectURL(file.preview)
+                                      }}
+                                    />
+                                  </div>
+                                )}
                                 <div>
-                                  <p className='text-muted font-weight-bold m-0'>{f.name}</p>
-                                  <p className='mb-0'>
-                                    <strong>{f.formattedSize}</strong>
+                                  <p className='text-muted m-0 fs-7'>{file.name}</p>
+                                  <p className='mb-0 fs-7'>
+                                    <strong>{file.formattedSize}</strong>
                                   </p>
                                 </div>
                                 <div>
-                                  <Button color='light' className='btn-icon' onClick={() => setselectedFiles([])}>
+                                  <Button color='light' className='btn-icon' onClick={orderLabel.handleClearFiles}>
                                     <i className=' ri-close-line' />
                                   </Button>
                                 </div>
@@ -361,43 +528,61 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                 </Col>
                 <Col>
                   {validation.values.type == 'LTL' && (
-                    // <Dropzone
-                    //   multiple={false}
-                    //   onDrop={(acceptedFiles) => {
-                    //     handlePalletAcceptedFiles(acceptedFiles)
-                    //   }}>
-                    //   {({ getRootProps }) => (
-                    //     <div className='dropzone dz-clickable cursor-pointer'>
-                    //       <div className='dz-message needsclick' {...getRootProps()}>
-                    //         <div className='mb-3'>
-                    //           <i className='display-4 text-muted ri-upload-cloud-2-fill' />
-                    //         </div>
-                    //         <h4>Upload Pallet Labels. Drop Only PDF files here or click to upload.</h4>
-                    //       </div>
-                    //     </div>
-                    //   )}
-                    // </Dropzone>
                     <UploadFileDropzone
-                      accptedFiles={undefined}
-                      handleAcceptedFiles={handlePalletAcceptedFiles}
+                      accptedFiles={orderPalletLabel.acceptedFiles}
+                      handleAcceptedFiles={orderPalletLabel.handleAcceptedFiles}
                       description={`Upload Pallet Labels. Drop Only PDF files here or click to upload.`}
                     />
                   )}
                   <div className='list-unstyled mb-0' id='file-previews'>
-                    {palletSelectedFiles.map((f: any, i) => {
+                    {orderPalletLabel.files.map((file: any, i) => {
                       return (
                         <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
                           <div className='p-2'>
                             <Row className='align-items-center'>
-                              <Col className='d-flex justify-content-between align-items-center'>
+                              <Col className='d-flex justify-content-between align-items-center gap-2'>
+                                {file.type === 'application/pdf' ? (
+                                  <div className='relative overflow-hidden rounded border' style={{ width: '60px', height: '60px' }}>
+                                    <iframe
+                                      src={file.preview ? file.preview : NoImageAdress}
+                                      onError={(e) => (e.currentTarget.src = NoImageAdress)}
+                                      width='400px'
+                                      height='220px'
+                                      style={{
+                                        border: 'none',
+                                        zoom: 0.35,
+                                        pointerEvents: 'none',
+                                      }}
+                                    />
+                                  </div>
+                                ) : (
+                                  <div
+                                    style={{
+                                      width: '50px',
+                                      height: '50px',
+                                      margin: '0px',
+                                      position: 'relative',
+                                    }}>
+                                    <img
+                                      loading='lazy'
+                                      src={file.preview ? file.preview : NoImageAdress}
+                                      onError={(e) => (e.currentTarget.src = NoImageAdress)}
+                                      alt='File preview'
+                                      style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+                                      onLoad={() => {
+                                        URL.revokeObjectURL(file.preview)
+                                      }}
+                                    />
+                                  </div>
+                                )}
                                 <div>
-                                  <p className='text-muted font-weight-bold m-0'>{f.name}</p>
-                                  <p className='mb-0'>
-                                    <strong>{f.formattedSize}</strong>
+                                  <p className='text-muted font-weight-bold m-0 fs-7'>{file.name}</p>
+                                  <p className='mb-0 fs-7'>
+                                    <strong>{file.formattedSize}</strong>
                                   </p>
                                 </div>
                                 <div>
-                                  <Button color='light' className='btn-icon' onClick={() => setPalletSelectedFiles([])}>
+                                  <Button color='light' className='btn-icon' onClick={orderPalletLabel.handleClearFiles}>
                                     <i className=' ri-close-line' />
                                   </Button>
                                 </div>

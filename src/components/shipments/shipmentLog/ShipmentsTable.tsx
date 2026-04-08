@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
- 
 import { useContext } from 'react'
 
 import SCTooltip from '@components/ui/SCTooltip'
@@ -432,23 +431,15 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                   )}
                   {row.labelsName != '' && (
                     <DropdownItem className='edit-item-btn'>
-                      <a
-                        className='text-black'
-                        href={`https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/shelf-cloud%2F${row.labelsName}?alt=media&token=837cdbcf-11ab-4555-9697-50f1c6a3d0e3`}
-                        target='blank'
-                        rel='noopener noreferrer'>
+                      <a className='text-black' href={row.labelsName} target='blank' rel='noopener noreferrer'>
                         <i className='las la-toilet-paper label-icon align-middle fs-3 me-2' />
-                        FBA Labels
+                        Shipping Labels
                       </a>
                     </DropdownItem>
                   )}
                   {row.palletLabelsName != '' && (
                     <DropdownItem className='edit-item-btn'>
-                      <a
-                        className='text-black'
-                        href={`https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/shelf-cloud%2F${row.palletLabelsName}?alt=media&token=837cdbcf-11ab-4555-9697-50f1c6a3d0e3`}
-                        target='blank'
-                        rel='noopener noreferrer'>
+                      <a className='text-black' href={row.palletLabelsName} target='blank' rel='noopener noreferrer'>
                         <i className='las la-toilet-paper label-icon align-middle fs-3 me-2' />
                         Pallet Labels
                       </a>

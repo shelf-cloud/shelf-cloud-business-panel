@@ -1,4 +1,3 @@
- 
 /* eslint-disable @next/next/no-img-element */
 import { useContext, useState } from 'react'
 
@@ -11,6 +10,8 @@ import { toast } from 'react-toastify'
 import { Button, Card, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from 'reactstrap'
 
 export type UploadResponse = { error: boolean; message: string; url: string }
+
+export type FileWithPreview = File & { preview: string; formattedSize: string }
 
 export type HandleSubmitParams = {
   region: string
