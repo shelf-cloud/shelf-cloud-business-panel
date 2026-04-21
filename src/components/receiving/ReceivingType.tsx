@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+import Link from 'next/link'
 import { useContext, useEffect, useState } from 'react'
 
 // import Animation from '@components/Common/Animation'
@@ -7,8 +9,11 @@ import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { OrderRowType, ShipmentOrderItem } from '@typings'
 import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
 
+import { NoImageAdress } from '@/lib/assetsConstants'
+
 import TooltipComponent from '../constants/Tooltip'
 import Confirm_Delete_Item_From_Receiving from '../modals/receivings/Confirm_Delete_Item_From_Receiving'
+import CopyTextToClipboard from '../ui/CopyTextToClipboard'
 import AddSkuToManualReceivingLog from './AddSkuToManualReceivingLog'
 import EditManualReceivingLog from './EditManualReceivingLog'
 
@@ -225,11 +230,17 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
             <CardBody>
               <div className='table-responsive'>
                 <table className='table table-sm align-middle table-borderless mb-0'>
-                  <thead className='table-light'>
+                  <thead className='table-light fs-7'>
                     <tr>
+                      <th scope='col' className='text-center'>
+                        Image
+                      </th>
                       <th scope='col'>Title</th>
                       {data.orderItems.some((product: ShipmentOrderItem) => (product.poNumber ? true : false)) && <th scope='col'>PO</th>}
                       <th scope='col'>Sku</th>
+                      <th className='text-center' scope='col'>
+                        Available
+                      </th>
                       <th className='text-center' scope='col'>
                         Qty
                       </th>
@@ -242,9 +253,41 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                   <tbody className='fs-7'>
                     {data.orderItems.map((product: ShipmentOrderItem, key) => (
                       <tr key={key} className='border-bottom py-2 w-100'>
-                        <td className='fw-semibold'>{product.name || ''}</td>
+                        <td className='text-center'>
+                          <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' rel='noopener noreferrer' className='text-black'>
+                            <div
+                              style={{
+                                width: '100%',
+                                maxWidth: '40px',
+                                height: '30px',
+                                margin: '2px 2px',
+                                position: 'relative',
+                              }}>
+                              <img
+                                loading='lazy'
+                                src={product.image ? product.image : NoImageAdress}
+                                onError={(e) => (e.currentTarget.src = NoImageAdress)}
+                                alt='product Image'
+                                style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
+                              />
+                            </div>
+                          </Link>
+                        </td>
+                        <td className='fw-semibold'>
+                          <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' rel='noopener noreferrer' className='text-black'>
+                            {product.name}
+                          </Link>
+                        </td>
                         {product.poNumber && <td className='fw-normal text-nowrap'>{product.poNumber}</td>}
-                        <td className='text-muted'>{product.sku}</td>
+                        <td className='text-muted'>
+                          <div className='d-flex flex-row justify-content-start align-items-center gap-1'>
+                            <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' rel='noopener noreferrer' className='text-black'>
+                              {product.sku}
+                            </Link>
+                            <CopyTextToClipboard text={product.sku} label='SKU' />
+                          </div>
+                        </td>
+                        <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.available))}</td>
                         <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.quantity))}</td>
                         <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.qtyReceived))}</td>
                         {!data.boxes && (
@@ -272,9 +315,11 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                       </tr>
                     ))}
                     <tr>
-                      <td className='text-start fs-6 fw-bold text-nowrap'>Total</td>
+                      <td></td>
+                      <td></td>
                       {data.orderItems.some((product: ShipmentOrderItem) => (product.poNumber ? true : false)) && <td></td>}
                       <td></td>
+                      <td className='text-center fs-6 fw-bold text-nowrap'>Total</td>
                       <td className='text-center fw-semibold fs-6 text-primary'>{FormatIntNumber(state.currentRegion, Number(data.totalItems))}</td>
                       <td className='text-center fw-semibold fs-6 text-primary'>{FormatIntNumber(state.currentRegion, Number(data.totalReceivedItems))}</td>
                     </tr>

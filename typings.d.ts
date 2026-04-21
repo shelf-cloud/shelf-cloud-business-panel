@@ -469,6 +469,7 @@ export interface ShipmentOrderItem {
   inventoryId?: number
   suppliersName?: string
   boxQty?: number
+  available?: number
 }
 
 export interface KitChildren {
