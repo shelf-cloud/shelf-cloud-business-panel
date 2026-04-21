@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 
 // import Animation from '@components/Common/Animation'
 import AppContext from '@context/AppContext'
@@ -38,9 +38,17 @@ export type DeleteSKUFromReceivingModalType = {
   isReceivingFromPo: boolean
 }
 
+type ProductsSortKey = 'sku' | 'available' | 'quantity' | 'qtyReceived'
+type ProductsSortDirection = 'asc' | 'desc'
+type ProductsSortState = {
+  key: ProductsSortKey | null
+  direction: ProductsSortDirection
+}
+
 const ReceivingType = ({ data, mutateReceivings }: Props) => {
   const { state }: any = useContext(AppContext)
   const [serviceFee, setServiceFee] = useState('')
+  const [productsSort, setProductsSort] = useState<ProductsSortState>({ key: null, direction: 'asc' })
 
   const [deleteSKUModal, setDeleteSKUModal] = useState<DeleteSKUFromReceivingModalType>({
     show: false,
@@ -99,6 +107,57 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
   }, [data, state.currentRegion])
 
   const OrderId = CleanSpecialCharacters(data.orderId!)
+  const hasPONumber = useMemo(() => data.orderItems.some((product: ShipmentOrderItem) => Boolean(product.poNumber)), [data.orderItems])
+  const sortedOrderItems = useMemo(() => {
+    if (!productsSort.key) return data.orderItems
+
+    const sortKey = productsSort.key
+    const directionMultiplier = productsSort.direction === 'asc' ? 1 : -1
+
+    return [...data.orderItems].sort((productA: ShipmentOrderItem, productB: ShipmentOrderItem) => {
+      if (sortKey === 'sku') {
+        return (productA.sku ?? '').localeCompare(productB.sku ?? '') * directionMultiplier
+      }
+
+      return (Number(productA[sortKey] ?? 0) - Number(productB[sortKey] ?? 0)) * directionMultiplier
+    })
+  }, [data.orderItems, productsSort.direction, productsSort.key])
+
+  const handleProductsSort = (key: ProductsSortKey) => {
+    setProductsSort((currentSort) => ({
+      key,
+      direction: currentSort.key === key && currentSort.direction === 'asc' ? 'desc' : 'asc',
+    }))
+  }
+
+  const getProductsSortLabel = (key: ProductsSortKey) => {
+    if (productsSort.key !== key) return 'Sort'
+
+    return productsSort.direction === 'asc' ? 'Sorted ascending' : 'Sorted descending'
+  }
+
+  const getProductsSortIcon = (key: ProductsSortKey) => {
+    if (productsSort.key !== key) return 'ri-arrow-up-down-line'
+
+    return productsSort.direction === 'asc' ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'
+  }
+
+  const getProductsAriaSort = (key: ProductsSortKey) => {
+    if (productsSort.key !== key) return 'none'
+
+    return productsSort.direction === 'asc' ? 'ascending' : 'descending'
+  }
+
+  const renderSortableHeader = (key: ProductsSortKey, label: string, className = '') => (
+    <button
+      type='button'
+      className={`btn btn-link btn-sm p-0 border-0 text-decoration-none text-dark fw-semibold fs-7 d-inline-flex align-items-center gap-1 ${className}`}
+      aria-label={`${getProductsSortLabel(key)} by ${label}`}
+      onClick={() => handleProductsSort(key)}>
+      <span>{label}</span>
+      <i className={`${getProductsSortIcon(key)} fs-6 lh-1`} aria-hidden='true' />
+    </button>
+  )
 
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
@@ -236,23 +295,25 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                         Image
                       </th>
                       <th scope='col'>Title</th>
-                      {data.orderItems.some((product: ShipmentOrderItem) => (product.poNumber ? true : false)) && <th scope='col'>PO</th>}
-                      <th scope='col'>Sku</th>
-                      <th className='text-center' scope='col'>
-                        Available
+                      {hasPONumber && <th scope='col'>PO</th>}
+                      <th scope='col' aria-sort={getProductsAriaSort('sku')}>
+                        {renderSortableHeader('sku', 'Sku')}
                       </th>
-                      <th className='text-center' scope='col'>
-                        Qty
+                      <th className='text-center' scope='col' aria-sort={getProductsAriaSort('available')}>
+                        {renderSortableHeader('available', 'Available', 'justify-content-center')}
                       </th>
-                      <th className='text-center' scope='col'>
-                        Qty Received
+                      <th className='text-center' scope='col' aria-sort={getProductsAriaSort('quantity')}>
+                        {renderSortableHeader('quantity', 'Qty', 'justify-content-center')}
+                      </th>
+                      <th className='text-center' scope='col' aria-sort={getProductsAriaSort('qtyReceived')}>
+                        {renderSortableHeader('qtyReceived', 'Qty Received', 'justify-content-center')}
                       </th>
                       {!data.boxes && <th></th>}
                     </tr>
                   </thead>
                   <tbody className='fs-7'>
-                    {data.orderItems.map((product: ShipmentOrderItem, key) => (
-                      <tr key={key} className='border-bottom py-2 w-100'>
+                    {sortedOrderItems.map((product: ShipmentOrderItem, key) => (
+                      <tr key={`${product.orderItemId || product.sku}-${product.splitId ?? key}`} className='border-bottom py-2 w-100'>
                         <td className='text-center'>
                           <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' rel='noopener noreferrer' className='text-black'>
                             <div
@@ -278,7 +339,7 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                             {product.name}
                           </Link>
                         </td>
-                        {product.poNumber && <td className='fw-normal text-nowrap'>{product.poNumber}</td>}
+                        {hasPONumber && <td className='fw-normal text-nowrap'>{product.poNumber || ''}</td>}
                         <td className='text-muted'>
                           <div className='d-flex flex-row justify-content-start align-items-center gap-1'>
                             <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' rel='noopener noreferrer' className='text-black'>
@@ -317,7 +378,7 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                     <tr>
                       <td></td>
                       <td></td>
-                      {data.orderItems.some((product: ShipmentOrderItem) => (product.poNumber ? true : false)) && <td></td>}
+                      {hasPONumber && <td></td>}
                       <td></td>
                       <td className='text-center fs-6 fw-bold text-nowrap'>Total</td>
                       <td className='text-center fw-semibold fs-6 text-primary'>{FormatIntNumber(state.currentRegion, Number(data.totalItems))}</td>

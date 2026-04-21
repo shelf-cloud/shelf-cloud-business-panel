@@ -1,40 +1,30 @@
 {
   "version": 1,
   "skills": {
-    "ai-elements": {
-      "source": "vercel/ai-elements",
+    "ai-sdk": {
+      "source": "vercel/ai",
       "sourceType": "github",
-      "computedHash": "84f3a2a57fa71ae5061786280987575d673792d6dda9a63941efb2795b83543a"
+      "computedHash": "81af098a4ce6f0e323c1bd02b8e79df3bbaed57cbf1c4060f58ddc95de5545a1"
     },
-    "frontend-design": {
-      "source": "anthropics/skills",
-      "sourceType": "github",
-      "computedHash": "063a0e6448123cd359ad0044cc46b0e490cc7964d45ef4bb9fd842bd2ffbca67"
-    },
-    "next-best-practices": {
+    "next-upgrade": {
       "source": "vercel-labs/next-skills",
       "sourceType": "github",
-      "computedHash": "515ba75178bd44875812d9a560bdf14651f86709f89cf1d4f209638e879807f3"
+      "computedHash": "e3aeb1f9e8a68d24df0c1c2e3c8ab97ede09a7251a2c76988318d02254346979"
     },
-    "shadcn": {
-      "source": "shadcn-ui/ui",
+    "nodejs-backend-patterns": {
+      "source": "wshobson/agents",
       "sourceType": "github",
-      "computedHash": "91c02eb706f046fb9d6a061efbb96496e4be751b5b14c283cf82baaa50f3a985"
+      "computedHash": "c6a99966c2565acc388e574039127abc770bb9a3338be761e421e16f023f702b"
     },
-    "ui-ux-pro-max": {
-      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+    "nodejs-best-practices": {
+      "source": "sickn33/antigravity-awesome-skills",
       "sourceType": "github",
-      "computedHash": "0a413bf988d06481f69bb81df2070741c3ba12dd9f1be2706d57f259c905992d"
+      "computedHash": "8d2d50c3512cddb15b8d2794b7f18ff69895ea48c8b78bc9feb6b1d9edaa2a9e"
     },
-    "vercel-react-best-practices": {
-      "source": "vercel-labs/agent-skills",
+    "typescript-advanced-types": {
+      "source": "wshobson/agents",
       "sourceType": "github",
-      "computedHash": "3462ec83f862abb2d532953df33a4dbf87f4616849da5d4b5cc7c13601aaf997"
-    },
-    "web-design-guidelines": {
-      "source": "vercel-labs/agent-skills",
-      "sourceType": "github",
-      "computedHash": "a6a44d5498f7e8f68289902f3dedfc6f38ae0cee1e96527c80724cf27f727c2a"
+      "computedHash": "3a3be8c925f96ac4e1280db28a01677e7ca5197f3792de2bbf35ab3bb324b6dd"
     }
   }
 }
