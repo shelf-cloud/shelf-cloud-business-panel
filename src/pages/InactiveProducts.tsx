@@ -1,4 +1,3 @@
- 
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -17,6 +16,8 @@ import { Product } from '@typings'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from 'reactstrap'
+
+import { useRPNewForecast } from '@/hooks/reorderingPoints/useRPNewForcast'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -59,6 +60,8 @@ const InactiveProducts = ({ session }: Props) => {
     condition: condition || '',
   })
 
+  const { generate_new_forecast_products } = useRPNewForecast()
+
   const changeProductState = async (inventoryId: number, sku: string) => {
     const confirmationResponse = confirm(`Are you sure you want to set Active: ${sku}`)
 
@@ -68,6 +71,10 @@ const InactiveProducts = ({ session }: Props) => {
         sku,
       })
       if (!response.data.error) {
+        generate_new_forecast_products({
+          skus: [sku],
+          productIds: [inventoryId],
+        })
         toast.success(response.data.msg)
         mutateProducts()
       } else {
@@ -87,6 +94,10 @@ const InactiveProducts = ({ session }: Props) => {
         selectedRows,
       })
       if (!response.data.error) {
+        generate_new_forecast_products({
+          skus: selectedRows.map((item) => item.sku) ?? [],
+          productIds: selectedRows.map((item) => item.inventoryId) ?? [],
+        })
         setToggleClearRows(!toggledClearRows)
         setSelectedRows([])
         toast.success(response.data.msg)
