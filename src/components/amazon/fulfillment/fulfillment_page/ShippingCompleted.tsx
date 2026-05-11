@@ -1,4 +1,3 @@
- 
 /* eslint-disable @next/next/no-img-element */
 import Image from 'next/image'
 import { useContext, useState } from 'react'
@@ -341,7 +340,7 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                             }}>
                             <img
                               loading='lazy'
-                              src={inboundPlan.skus_details[item.msku].image ? inboundPlan.skus_details[item.msku].image : NoImageAdress}
+                              src={inboundPlan.skus_details[item.msku]?.image ? inboundPlan.skus_details[item.msku]?.image : NoImageAdress}
                               alt='product Image'
                               style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                             />

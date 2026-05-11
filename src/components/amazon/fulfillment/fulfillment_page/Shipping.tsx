@@ -1,4 +1,3 @@
- 
 /* eslint-disable @next/next/no-img-element */
 import Image from 'next/image'
 import { useContext, useEffect, useMemo, useState } from 'react'
@@ -889,7 +888,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                     }}>
                                     <img
                                       loading='lazy'
-                                      src={inboundPlan.skus_details[item.msku].image ? inboundPlan.skus_details[item.msku].image : NoImageAdress}
+                                      src={inboundPlan.skus_details[item.msku]?.image ? inboundPlan.skus_details[item.msku]?.image : NoImageAdress}
                                       alt='product Image'
                                       style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                                     />

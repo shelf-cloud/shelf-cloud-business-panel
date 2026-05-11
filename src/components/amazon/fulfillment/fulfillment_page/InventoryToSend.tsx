@@ -38,7 +38,7 @@ const InventoryToSend = ({ inboundPlan, handleNextStep, watingRepsonse }: Props)
                       }}>
                       <img
                         loading='lazy'
-                        src={inboundPlan.skus_details[item.msku].image ? inboundPlan.skus_details[item.msku].image : NoImageAdress}
+                        src={inboundPlan.skus_details[item.msku]?.image ? inboundPlan.skus_details[item.msku]?.image : NoImageAdress}
                         alt='product Image'
                         style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                       />
@@ -53,16 +53,16 @@ const InventoryToSend = ({ inboundPlan, handleNextStep, watingRepsonse }: Props)
                       }}>
                       <img
                         loading='lazy'
-                        src={inboundPlan.skus_details[item.msku].image ? inboundPlan.skus_details[item.msku].image : NoImageAdress}
+                        src={inboundPlan.skus_details[item.msku]?.image ? inboundPlan.skus_details[item.msku]?.image : NoImageAdress}
                         alt='product Image'
                         style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                       />
                     </div>
                     <div>
-                      <p className='m-0 p-0 text-primary'>{inboundPlan.skus_details[item.msku].title}</p>
-                      <p className='m-0 p-0 fw-semibold'>{`SC SKU: ${inboundPlan.skus_details[item.msku].shelfcloud_sku}`}</p>
+                      <p className='m-0 p-0 text-primary'>{inboundPlan.skus_details[item.msku]?.title}</p>
+                      <p className='m-0 p-0 fw-semibold'>{`SC SKU: ${inboundPlan.skus_details[item.msku]?.shelfcloud_sku}`}</p>
                       <p className='m-0 p-0'>{`MSKU: ${item.msku}`}</p>
-                      <p className='m-0 p-0'>{`ASIN: ${inboundPlan.skus_details[item.msku].asin}`}</p>
+                      <p className='m-0 p-0'>{`ASIN: ${inboundPlan.skus_details[item.msku]?.asin}`}</p>
                     </div>
                   </div>
                 </td>
@@ -71,38 +71,38 @@ const InventoryToSend = ({ inboundPlan, handleNextStep, watingRepsonse }: Props)
                     <>
                       <p className='m-0 p-0 text-nowrap'>
                         <span className='text-muted'>Box Weight:</span>
-                        {` ${inboundPlan.skus_details[item.msku].boxWeight} lbs`}
+                        {` ${inboundPlan.skus_details[item.msku]?.boxWeight} lbs`}
                       </p>
                       <p className='m-0 p-0 text-nowrap'>
                         <span className='text-muted'>Box Width:</span>
-                        {` ${inboundPlan.skus_details[item.msku].boxWidth} in`}
+                        {` ${inboundPlan.skus_details[item.msku]?.boxWidth} in`}
                       </p>
                       <p className='m-0 p-0 text-nowrap'>
                         <span className='text-muted'>Box Height:</span>
-                        {` ${inboundPlan.skus_details[item.msku].boxHeight} in`}
+                        {` ${inboundPlan.skus_details[item.msku]?.boxHeight} in`}
                       </p>
                       <p className='m-0 p-0 text-nowrap'>
                         <span className='text-muted'>Box Length:</span>
-                        {` ${inboundPlan.skus_details[item.msku].boxLength} in`}
+                        {` ${inboundPlan.skus_details[item.msku]?.boxLength} in`}
                       </p>
                     </>
                   ) : (
                     <>
                       <p className='m-0 p-0 text-nowrap'>
                         <span className='text-muted'>Weight:</span>
-                        {` ${inboundPlan.skus_details[item.msku].weight} lbs`}
+                        {` ${inboundPlan.skus_details[item.msku]?.weight} lbs`}
                       </p>
                       <p className='m-0 p-0 text-nowrap'>
                         <span className='text-muted'>Width:</span>
-                        {` ${inboundPlan.skus_details[item.msku].width} in`}
+                        {` ${inboundPlan.skus_details[item.msku]?.width} in`}
                       </p>
                       <p className='m-0 p-0 text-nowrap'>
                         <span className='text-muted'>Height:</span>
-                        {` ${inboundPlan.skus_details[item.msku].height} in`}
+                        {` ${inboundPlan.skus_details[item.msku]?.height} in`}
                       </p>
                       <p className='m-0 p-0 text-nowrap'>
                         <span className='text-muted'>Length:</span>
-                        {` ${inboundPlan.skus_details[item.msku].length} in`}
+                        {` ${inboundPlan.skus_details[item.msku]?.length} in`}
                       </p>
                     </>
                   )}
@@ -111,7 +111,7 @@ const InventoryToSend = ({ inboundPlan, handleNextStep, watingRepsonse }: Props)
                   {inboundPlan.fulfillmentType === 'Master Boxes' && (
                     <p className='m-0 p-0 text-nowrap'>
                       <span className='text-muted'>Unit per box:</span>
-                      {` ${inboundPlan.skus_details[item.msku].boxQty}`}
+                      {` ${inboundPlan.skus_details[item.msku]?.boxQty}`}
                     </p>
                   )}
                   <p className='m-0 p-0 text-nowrap'>
@@ -131,7 +131,7 @@ const InventoryToSend = ({ inboundPlan, handleNextStep, watingRepsonse }: Props)
                   {inboundPlan.fulfillmentType === 'Master Boxes' && (
                     <p className='m-0 p-0 text-nowrap'>
                       <span className='text-muted'>Boxes:</span>
-                      {` ${inboundPlan.skus_details[item.msku].boxes}`}
+                      {` ${inboundPlan.skus_details[item.msku]?.boxes}`}
                     </p>
                   )}
                 </td>

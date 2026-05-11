@@ -94,7 +94,7 @@ const CarrierPalletCard = ({ inboundPlan, handleNextStep, shipment, shipmentInde
                     }}>
                     <img
                       loading='lazy'
-                      src={inboundPlan.skus_details[item.msku].image ? inboundPlan.skus_details[item.msku].image : NoImageAdress}
+                      src={inboundPlan.skus_details[item.msku]?.image ? inboundPlan.skus_details[item.msku]?.image : NoImageAdress}
                       alt='product Image'
                       style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                     />
