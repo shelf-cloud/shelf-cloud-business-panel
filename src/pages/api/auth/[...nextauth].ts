@@ -1,6 +1,6 @@
 import axios from 'axios'
-import NextAuth from 'next-auth'
 import type { NextAuthOptions } from 'next-auth'
+import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
 export const authOptions: NextAuthOptions = {
@@ -55,7 +55,7 @@ export const authOptions: NextAuthOptions = {
           session.user.businessOrderStart = res.data.businessOrderStart
           session.user.profileName = res.data.profileName
         })
-        .catch((err) => console.log(err.message))
+        .catch(() => {})
       return session
     },
     async redirect() {

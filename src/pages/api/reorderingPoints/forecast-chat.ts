@@ -72,8 +72,6 @@ const forecastChat: NextApiHandler = async (request, response) => {
       }),
     })
   } catch (error) {
-    console.error('forecast-chat-error', error)
-
     if (!response.headersSent) {
       response.status(500).json({
         error: true,
