@@ -12,6 +12,8 @@ import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Row } from 'r
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
+import { useRPNewForecast } from '@/hooks/reorderingPoints/useRPNewForcast'
+
 import Select_Condition_Product_Details from './Select_Condition_Product_Details'
 import Select_Product_Details from './Select_Product_Details'
 
@@ -111,6 +113,10 @@ const General_Product_Details = ({
           isLoading: false,
           autoClose: 3000,
         })
+        generate_new_forecast_products({
+          skus: [sku || ''],
+          productIds: [inventoryId || 0],
+        })
         mutate(`/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${inventoryId}&businessId=${state.user.businessId}`)
         return { error: true }
       } else {
@@ -128,6 +134,7 @@ const General_Product_Details = ({
     },
   })
 
+  const { generate_new_forecast_products } = useRPNewForecast()
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -165,6 +172,10 @@ const General_Product_Details = ({
         productInfo: values,
       })
       if (!response.data.error) {
+        generate_new_forecast_products({
+          skus: [sku || ''],
+          productIds: [inventoryId || 0],
+        })
         toast.success(response.data.msg)
         mutate(`/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${inventoryId}&businessId=${state.user.businessId}`)
         setShowEditFields(false)

@@ -9,6 +9,8 @@ import { Button, Col, Form, FormFeedback, FormGroup, Input, Row, UncontrolledToo
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
+import { useRPNewForecast } from '@/hooks/reorderingPoints/useRPNewForcast'
+
 type Props = {
   inventoryId?: number
   sku?: string
@@ -25,6 +27,8 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
   const { mutate } = useSWRConfig()
   const [showEditFields, setShowEditFields] = useState(false)
   const [isLoading, setisLoading] = useState(false)
+
+  const { generate_new_forecast_products } = useRPNewForecast()
 
   const landedCost = sellerCost + inboundShippingCost + otherCosts || 0
   const totalLeadTime = productionTime + transitTime
@@ -55,6 +59,10 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
         productInfo: values,
       })
       if (!response.data.error) {
+        generate_new_forecast_products({
+          skus: [sku || ''],
+          productIds: [inventoryId || 0],
+        })
         toast.success(response.data.msg)
         mutate(`/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${inventoryId}&businessId=${state.user.businessId}`)
         setShowEditFields(false)
