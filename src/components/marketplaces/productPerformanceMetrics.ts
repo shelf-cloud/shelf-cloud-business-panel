@@ -18,7 +18,7 @@ export const getProductMargin = (product: ProductPerformance, selectedMarketplac
 
 export const getProductRoi = (product: ProductPerformance, selectedMarketplaceStoreId: MarketplaceStoreId) => {
   const netExpenses = getProductNetExpenses(product, selectedMarketplaceStoreId)
-  const investmentExpenses = netExpenses + product.reimbursements
+  const investmentExpenses = netExpenses
 
   if (investmentExpenses <= 0) return null
 
@@ -29,7 +29,7 @@ export const getProductRoi = (product: ProductPerformance, selectedMarketplaceSt
 
 export const getProductsTotalRoi = (products: ProductPerformance[], selectedMarketplaceStoreId: MarketplaceStoreId) => {
   const grossRevenue = products.reduce((total, product) => total + product.grossRevenue, 0)
-  const investmentExpenses = products.reduce((total, product) => total + getProductNetExpenses(product, selectedMarketplaceStoreId) + product.reimbursements, 0)
+  const investmentExpenses = products.reduce((total, product) => total + getProductNetExpenses(product, selectedMarketplaceStoreId), 0)
 
   if (investmentExpenses <= 0) return null
 
