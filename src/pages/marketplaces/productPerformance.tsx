@@ -257,7 +257,13 @@ const Profits = ({ session, sessionToken }: Props) => {
                     handleSelection={setSelectedMarketplace}
                     showAllMarketsOption
                   />
-                  <ExportProductsPerformance products={filterDataTable || []} marketpalces={data?.marketplaces || []} startDate={startDate} endDate={endDate} />
+                  <ExportProductsPerformance
+                    products={filterDataTable || []}
+                    marketpalces={data?.marketplaces || []}
+                    startDate={startDate}
+                    endDate={endDate}
+                    selectedMarketplaceStoreId={selectedMarketplace.storeId}
+                  />
                   <Button color='info' className='fs-7' onClick={() => setsummaryModal({ show: true })}>
                     PP Summary
                   </Button>

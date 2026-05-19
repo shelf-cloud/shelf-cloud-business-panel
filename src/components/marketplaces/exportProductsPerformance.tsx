@@ -3,10 +3,13 @@ import { ProductPerformance } from '@typesTs/marketplaces/productPerformance'
 import ExcelJS from 'exceljs'
 import { Button } from 'reactstrap'
 
+import { getProductMargin, getProductNetProfit, getProductRoi } from './productPerformanceMetrics'
+
 type Props = {
   products: ProductPerformance[]
   startDate: string
   endDate: string
+  selectedMarketplaceStoreId: string
   marketpalces: {
     storeId: string
     name: string
@@ -14,7 +17,7 @@ type Props = {
   }[]
 }
 
-const ExportProductsPerformance = ({ products, startDate, endDate, marketpalces }: Props) => {
+const ExportProductsPerformance = ({ products, startDate, endDate, selectedMarketplaceStoreId, marketpalces }: Props) => {
   const buildTemplate = async () => {
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('Product Performance')
@@ -71,6 +74,8 @@ const ExportProductsPerformance = ({ products, startDate, endDate, marketpalces 
     }
 
     for (const product of products) {
+      const productRoi = getProductRoi(product, selectedMarketplaceStoreId)
+
       worksheet.addRow({
         sku: product.sku,
         title: product.title,
@@ -80,9 +85,9 @@ const ExportProductsPerformance = ({ products, startDate, endDate, marketpalces 
         category: product.category,
         grossRevenue: product.grossRevenue,
         expenses: product.expenses,
-        profit: product.grossRevenue - product.expenses,
-        margin: product.grossRevenue === 0 ? 0 : ((product.grossRevenue - product.expenses) / product.grossRevenue) * 100,
-        roi: product.grossRevenue === 0 ? 0 : ((product.grossRevenue - product.expenses) / product.expenses) * 100,
+        profit: getProductNetProfit(product, selectedMarketplaceStoreId),
+        margin: getProductMargin(product, selectedMarketplaceStoreId),
+        roi: productRoi === null ? 'N/A' : productRoi,
         refundQty: product.refundsQty,
         unitsSold: product.unitsSold,
         basePrice: product.basePrice,

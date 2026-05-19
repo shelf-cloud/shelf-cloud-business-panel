@@ -273,6 +273,7 @@ const ProductPerformanceNoFees = ({ session, sessionToken }: Props) => {
                     marketpalces={data?.marketplaces || []}
                     startDate={filterDates.startDate}
                     endDate={filterDates.endDate}
+                    selectedMarketplaceStoreId={selectedMarketplace.storeId}
                   />
                   <Button color='info' onClick={() => setsummaryModal({ show: true })}>
                     PP Summary

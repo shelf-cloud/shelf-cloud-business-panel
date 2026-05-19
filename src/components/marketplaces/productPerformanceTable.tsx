@@ -12,6 +12,7 @@ import DataTable from 'react-data-table-component'
 import { Button } from 'reactstrap'
 
 import ProductPerformanceExpandedDetails from './productPerformanceExpandedDetails'
+import { getProductMargin, getProductNetExpenses, getProductNetProfit, getProductRoi, getProductsTotalRoi } from './productPerformanceMetrics'
 
 type Props = {
   tableData: ProductPerformance[]
@@ -33,18 +34,12 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
     marketplacesData: {} as { [key: string]: Marketplace },
   })
   const totalGrossRevenue = tableData.reduce((total: number, product: ProductPerformance) => total + product.grossRevenue, 0)
-  const totalExpenses =
-    selectedMarketplace.storeId === '9999'
-      ? tableData.reduce((total: number, product: ProductPerformance) => total + product.expenses + product.storageCost, 0)
-      : tableData.reduce((total: number, product: ProductPerformance) => total + product.expenses, 0)
+  const totalExpenses = tableData.reduce((total: number, product: ProductPerformance) => total + getProductNetExpenses(product, selectedMarketplace.storeId), 0)
 
-  const totalProfit =
-    selectedMarketplace.storeId === '9999'
-      ? tableData.reduce((total: number, product: ProductPerformance) => total + (product.grossRevenue - (product.expenses + product.storageCost)), 0)
-      : tableData.reduce((total: number, product: ProductPerformance) => total + (product.grossRevenue - product.expenses), 0)
+  const totalProfit = tableData.reduce((total: number, product: ProductPerformance) => total + getProductNetProfit(product, selectedMarketplace.storeId), 0)
 
-  const totalMargin = ((totalGrossRevenue - totalExpenses) / totalGrossRevenue) * 100
-  const totalRoi = ((totalGrossRevenue - totalExpenses) / totalExpenses) * 100
+  const totalMargin = totalGrossRevenue === 0 ? 0 : ((totalGrossRevenue - totalExpenses) / totalGrossRevenue) * 100
+  const totalRoi = getProductsTotalRoi(tableData, selectedMarketplace.storeId)
 
   const caseInsensitiveSort = (rowA: ProductPerformance, rowB: ProductPerformance) => {
     const a = rowA.sku.toLowerCase()
@@ -69,8 +64,8 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
     return 0
   }
   const sortExpenses = (rowA: ProductPerformance, rowB: ProductPerformance) => {
-    const a = rowA.expenses
-    const b = rowB.expenses
+    const a = getProductNetExpenses(rowA, selectedMarketplace.storeId)
+    const b = getProductNetExpenses(rowB, selectedMarketplace.storeId)
     if (a > b) {
       return 1
     }
@@ -80,8 +75,8 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
     return 0
   }
   const sortProfit = (rowA: ProductPerformance, rowB: ProductPerformance) => {
-    const a = rowA?.grossRevenue - rowA?.expenses
-    const b = rowB?.grossRevenue - rowB?.expenses
+    const a = getProductNetProfit(rowA, selectedMarketplace.storeId)
+    const b = getProductNetProfit(rowB, selectedMarketplace.storeId)
     if (a > b) {
       return 1
     }
@@ -91,8 +86,8 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
     return 0
   }
   const sortMargin = (rowA: ProductPerformance, rowB: ProductPerformance) => {
-    const a = rowA?.grossRevenue === 0 ? 0 : ((rowA?.grossRevenue - rowA?.expenses) / rowA?.grossRevenue) * 100
-    const b = rowB?.grossRevenue === 0 ? 0 : ((rowB?.grossRevenue - rowB?.expenses) / rowB?.grossRevenue) * 100
+    const a = getProductMargin(rowA, selectedMarketplace.storeId)
+    const b = getProductMargin(rowB, selectedMarketplace.storeId)
     if (a > b) {
       return 1
     }
@@ -102,8 +97,11 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
     return 0
   }
   const sortRoi = (rowA: ProductPerformance, rowB: ProductPerformance) => {
-    const a = rowA?.expenses === 0 ? 0 : ((rowA.grossRevenue - rowA?.expenses) / rowA?.expenses) * 100
-    const b = rowB?.expenses === 0 ? 0 : ((rowB.grossRevenue - rowB?.expenses) / rowB?.expenses) * 100
+    const a = getProductRoi(rowA, selectedMarketplace.storeId)
+    const b = getProductRoi(rowB, selectedMarketplace.storeId)
+    if (a === null && b === null) return 0
+    if (a === null) return 1
+    if (b === null) return -1
     if (a > b) {
       return 1
     }
@@ -233,11 +231,11 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
       name: (
         <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
           <span className='fw-semibold fs-6'>Expenses</span>
-          <span className={'fw-normal fs-5 ' + (totalExpenses > 0 ? 'text-primary' : 'text-danger')}>{FormatCurrency(state.currentRegion, totalExpenses)}</span>
+          <span className={'fw-normal fs-5 ' + (totalExpenses > 0 ? 'text-danger' : 'text-primary')}>{FormatCurrency(state.currentRegion, totalExpenses)}</span>
         </div>
       ),
       selector: (row: ProductPerformance) => {
-        return <span>{FormatCurrency(state.currentRegion, selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)}</span>
+        return <span>{FormatCurrency(state.currentRegion, getProductNetExpenses(row, selectedMarketplace.storeId))}</span>
       },
       center: true,
       sortable: true,
@@ -252,11 +250,9 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
         </div>
       ),
       selector: (row: ProductPerformance) => {
-        return (
-          <span className={row?.grossRevenue - (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses) >= 0 ? 'text-black' : 'text-danger'}>
-            {FormatCurrency(state.currentRegion, row?.grossRevenue - (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses))}
-          </span>
-        )
+        const netProfit = getProductNetProfit(row, selectedMarketplace.storeId)
+
+        return <span className={netProfit >= 0 ? 'text-black' : 'text-danger'}>{FormatCurrency(state.currentRegion, netProfit)}</span>
       },
       center: true,
       sortable: true,
@@ -271,23 +267,12 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
         </div>
       ),
       selector: (row: ProductPerformance) => {
-        if (row?.grossRevenue === 0) {
+        const margin = getProductMargin(row, selectedMarketplace.storeId)
+
+        if (row.grossRevenue === 0) {
           return <span>0%</span>
         } else {
-          return (
-            <span
-              className={
-                ((row?.grossRevenue - (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) / row?.grossRevenue) * 100 >= 0
-                  ? 'text-black'
-                  : 'text-danger'
-              }>
-              {FormatIntPercentage(
-                state.currentRegion,
-                ((row?.grossRevenue - (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) / row?.grossRevenue) * 100
-              )}
-              %
-            </span>
-          )
+          return <span className={margin >= 0 ? 'text-black' : 'text-danger'}>{FormatIntPercentage(state.currentRegion, margin)}%</span>
         }
       },
       center: true,
@@ -299,33 +284,17 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
       name: (
         <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
           <span className='fw-semibold fs-6'>ROI</span>
-          <span className={'fw-normal fs-5 ' + (totalRoi > 0 ? 'text-primary' : 'text-danger')}>{FormatIntPercentage(state.currentRegion, totalRoi)}%</span>
+          <span className={'fw-normal fs-5 ' + (totalRoi === null ? 'text-muted' : totalRoi > 0 ? 'text-primary' : 'text-danger')}>
+            {totalRoi === null ? 'N/A' : `${FormatIntPercentage(state.currentRegion, totalRoi)}%`}
+          </span>
         </div>
       ),
       selector: (row: ProductPerformance) => {
-        if (row?.expenses + row.productCost + row.shippingCost == 0) {
-          return <span>0%</span>
-        } else {
-          return (
-            <span
-              className={
-                ((row.grossRevenue - (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) /
-                  (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) *
-                  100 >=
-                0
-                  ? 'text-black'
-                  : 'text-danger'
-              }>
-              {FormatIntPercentage(
-                state.currentRegion,
-                ((row.grossRevenue - (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) /
-                  (selectedMarketplace.storeId === '9999' ? row?.expenses + row?.storageCost : row?.expenses)) *
-                  100
-              )}
-              %
-            </span>
-          )
-        }
+        const roi = getProductRoi(row, selectedMarketplace.storeId)
+
+        if (roi === null) return <span className='text-muted'>N/A</span>
+
+        return <span className={roi >= 0 ? 'text-black' : 'text-danger'}>{FormatIntPercentage(state.currentRegion, roi)}%</span>
       },
       center: true,
       sortable: true,

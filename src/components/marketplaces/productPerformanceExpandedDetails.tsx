@@ -9,6 +9,7 @@ import { Card, CardBody, CardHeader, Col, Collapse, Row } from 'reactstrap'
 
 import { cn } from '@/lib/shadcn/utils'
 
+import { getProductNetExpenses, isAllMarketplacesStore } from './productPerformanceMetrics'
 import ProductPerformanceTimeline from './productPerformanceTimeline'
 
 type Props = {
@@ -25,7 +26,7 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
   const [showRefundCogs, setShowRefundCogs] = useState(false)
   const [showPPCCosts, setShowPPCCosts] = useState(false)
 
-  const totalExpenses = selectedMarketplaceStoreId === 9999 ? data.expenses + data.storageCost : data.expenses
+  const totalExpenses = getProductNetExpenses(data, selectedMarketplaceStoreId)
   const totalCogs = data.productCost + data.shippingToFbaCost
   const totalPPCCosts = data.sponsoredProducts + data.displayAds
 
@@ -181,7 +182,7 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                         <td className={'fw-light text-end text-black'}>{FormatCurrency(state.currentRegion, data.shelfCloudCost)}</td>
                       </tr>
                     )}
-                    {data.storageCost > 0 && selectedMarketplaceStoreId === '9999' && (
+                    {data.storageCost > 0 && isAllMarketplacesStore(selectedMarketplaceStoreId) && (
                       <tr className='border-bottom pb-2'>
                         <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Storage Cost</td>
                         <td className={'fw-light text-end text-black'}>{FormatCurrency(state.currentRegion, data.storageCost)}</td>
