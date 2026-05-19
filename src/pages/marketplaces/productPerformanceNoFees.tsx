@@ -1,4 +1,3 @@
- 
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -16,6 +15,7 @@ import AppContext from '@context/AppContext'
 import { ProductPerformance, ProductsPerformanceResponse } from '@typesTs/marketplaces/productPerformance'
 import axios from 'axios'
 import moment from 'moment'
+import { useQueryState } from 'nuqs'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
 import { Button, Card, CardBody, Collapse, Container, Row, Spinner } from 'reactstrap'
@@ -79,7 +79,12 @@ const ProductPerformanceNoFees = ({ session, sessionToken }: Props) => {
   const { state }: any = useContext(AppContext)
   const router = useRouter()
   const { filters, grossmin, grossmax, profitmin, profitmax, unitsmin, unitsmax, supplier, brand, category, showWithSales }: FilterProps = router.query
-  const [searchValue, setSearchValue] = useState<string>('')
+
+  const [searchValue, setSearchValue] = useQueryState('search', {
+    defaultValue: '',
+    clearOnDefault: true,
+  })
+
   const [filterOpen, setFilterOpen] = useState(false)
   const [loadingData, setLoadingData] = useState(true)
   // const [startDate, setStartDate] = useState(moment().subtract(15, 'days').format('YYYY-MM-DD'))

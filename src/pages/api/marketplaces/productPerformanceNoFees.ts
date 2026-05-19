@@ -4,21 +4,32 @@ import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 import { getServerSession } from 'next-auth'
 
-const productPerformance: NextApiHandler = async (request, response) => {
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+}
+
+const productPerformanceNOFees: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)
 
-  if (session == null) {
+  const sessionToken = request.cookies['next-auth.session-token'] ? request.cookies['next-auth.session-token'] : request.cookies['__Secure-next-auth.session-token']
+
+  if (!session || !sessionToken) {
     response.status(401).end('Session not found')
     return
   }
 
   axios
-    .get(`${process.env.SHELFCLOUD_SERVER_URL}/marketplaces/products/getProductsPerformance`, {
-      params: {
-        ...request.query,
-      },
-    })
-    .then(async ({ data }) => {
+    .get(
+      `${process.env.SHELFCLOUD_SERVER_URL}/marketplaces/products/getProductsPerformanceNoSCFees?region=${request.query.region}&businessId=${request.query.businessId}&startDate=${request.query.startDate}&endDate=${request.query.endDate}&storeId=${request.query.storeId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${sessionToken}`,
+        },
+      }
+    )
+    .then(({ data }) => {
       response.json(data)
     })
     .catch((error) => {
@@ -45,4 +56,4 @@ const productPerformance: NextApiHandler = async (request, response) => {
     })
 }
 
-export default productPerformance
+export default productPerformanceNOFees

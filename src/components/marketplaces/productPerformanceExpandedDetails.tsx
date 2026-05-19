@@ -7,6 +7,8 @@ import { Marketplace, ProductPerformance } from '@typesTs/marketplaces/productPe
 import { ExpanderComponentProps } from 'react-data-table-component'
 import { Card, CardBody, CardHeader, Col, Collapse, Row } from 'reactstrap'
 
+import { cn } from '@/lib/shadcn/utils'
+
 import ProductPerformanceTimeline from './productPerformanceTimeline'
 
 type Props = {
@@ -75,7 +77,7 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                     {/* EXPENSES */}
                     <tr className='border-bottom pb-2' onClick={() => setShowMarketplacesFees(!showMarketplacesFees)} style={{ cursor: 'pointer' }}>
                       <td className='dropdown-toggle text-black d-flex flex-row justify-content-start align-items-start fw-semibold'>Marketplaces Fees</td>
-                      <td className={'fw-normal text-end text-black'}>-{FormatCurrency(state.currentRegion, data.totalMarketplacesFees)}</td>
+                      <td className={'fw-normal text-end text-black'}>{FormatCurrency(state.currentRegion, data.totalMarketplacesFees)}</td>
                     </tr>
                     <tr>
                       <td className='p-0' colSpan={2}>
@@ -164,42 +166,42 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                     {data.refunds > 0 && (
                       <tr className='border-bottom pb-2'>
                         <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Refunds</td>
-                        <td className={'fw-light text-end text-black'}>-{FormatCurrency(state.currentRegion, data.refunds)}</td>
+                        <td className={'fw-light text-end text-black'}>{FormatCurrency(state.currentRegion, data.refunds)}</td>
                       </tr>
                     )}
                     {data.promos > 0 && (
                       <tr className='border-bottom pb-2'>
                         <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Promos</td>
-                        <td className={'fw-light text-end text-black'}>-{FormatCurrency(state.currentRegion, data.promos)}</td>
+                        <td className={'fw-light text-end text-black'}>{FormatCurrency(state.currentRegion, data.promos)}</td>
                       </tr>
                     )}
                     {data.shelfCloudCost > 0 && (
                       <tr className='border-bottom pb-2'>
                         <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Pick & Pack</td>
-                        <td className={'fw-light text-end text-black'}>-{FormatCurrency(state.currentRegion, data.shelfCloudCost)}</td>
+                        <td className={'fw-light text-end text-black'}>{FormatCurrency(state.currentRegion, data.shelfCloudCost)}</td>
                       </tr>
                     )}
                     {data.storageCost > 0 && selectedMarketplaceStoreId === '9999' && (
                       <tr className='border-bottom pb-2'>
                         <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Storage Cost</td>
-                        <td className={'fw-light text-end text-black'}>-{FormatCurrency(state.currentRegion, data.storageCost)}</td>
+                        <td className={'fw-light text-end text-black'}>{FormatCurrency(state.currentRegion, data.storageCost)}</td>
                       </tr>
                     )}
                     {data.fbaStorageCost > 0 && (
                       <tr className='border-bottom pb-2'>
                         <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>FBA Storage Cost</td>
-                        <td className={'fw-light text-end text-black'}>-{FormatCurrency(state.currentRegion, data.fbaStorageCost)}</td>
+                        <td className={'fw-light text-end text-black'}>{FormatCurrency(state.currentRegion, data.fbaStorageCost)}</td>
                       </tr>
                     )}
                     {data.shippingCost > 0 && (
                       <tr className='border-bottom pb-2'>
                         <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Shipping Cost</td>
-                        <td className={'fw-light text-end text-black'}>-{FormatCurrency(state.currentRegion, data.shippingCost)}</td>
+                        <td className={'fw-light text-end text-black'}>{FormatCurrency(state.currentRegion, data.shippingCost)}</td>
                       </tr>
                     )}
                     <tr className='border-bottom' onClick={() => setShowPPCCosts(!showPPCCosts)} style={{ cursor: 'pointer' }}>
                       <td className='dropdown-toggle text-black d-flex flex-row justify-content-start align-items-start fw-normal'>PPC Costs</td>
-                      <td className={'fw-normal text-end text-black'}>-{FormatCurrency(state.currentRegion, totalPPCCosts)}</td>
+                      <td className={'fw-normal text-end text-black'}>{FormatCurrency(state.currentRegion, totalPPCCosts)}</td>
                     </tr>
                     <tr>
                       <td className='p-0' colSpan={2}>
@@ -217,7 +219,7 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                     </tr>
                     <tr className='border-bottom' onClick={() => setShowCogs(!showCogs)} style={{ cursor: 'pointer' }}>
                       <td className='dropdown-toggle text-black d-flex flex-row justify-content-start align-items-start fw-normal'>COGS</td>
-                      <td className={'fw-normal text-end text-black'}>-{FormatCurrency(state.currentRegion, totalCogs)}</td>
+                      <td className={'fw-normal text-end text-black'}>{FormatCurrency(state.currentRegion, totalCogs)}</td>
                     </tr>
                     <tr>
                       <td className='p-0' colSpan={2}>
@@ -254,12 +256,12 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                     {data.reimbursements !== 0 && (
                       <tr className='border-bottom pb-2'>
                         <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Reimbursements</td>
-                        <td className={'fw-normal text-end text-black'}>{FormatCurrency(state.currentRegion, data.reimbursements)}</td>
+                        <td className={'fw-normal text-end text-black'}>-{FormatCurrency(state.currentRegion, data.reimbursements)}</td>
                       </tr>
                     )}
                     <tr>
                       <td className='text-black d-flex flex-row justify-content-start align-items-start fw-bold fs-5'>Expenses</td>
-                      <td className={'fw-bold text-end text-danger fs-5'}>-{FormatCurrency(state.currentRegion, totalExpenses)}</td>
+                      <td className={cn('fw-bold text-end fs-5', totalExpenses >= 0 ? 'text-danger' : 'text-primary')}>{FormatCurrency(state.currentRegion, totalExpenses)}</td>
                     </tr>
                     <tr className='border-top border-dark'>
                       <td className='fw-bold fs-5'>Net Profit</td>
