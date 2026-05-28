@@ -9,11 +9,16 @@ import { convertLabelZPLToPDF } from '@lib/convertZPLToPDF'
 import { OrderItem, ReturnOrder } from '@typesTs/returns/returns'
 import axios from 'axios'
 import { useFormik } from 'formik'
+import { ImagesIcon } from 'lucide-react'
 import { ExpanderComponentProps } from 'react-data-table-component'
 import { toast } from 'react-toastify'
 import { Button, Card, CardBody, CardHeader, Col, Form, FormFeedback, FormGroup, Input, Label, Row, Spinner } from 'reactstrap'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
+
+import { Button as ShadcnButton } from '../shadcn/ui/button'
+import ShowBiggerImageDialog, { SelectedUnsellableImage } from './ShowBiggerImageDialog'
+import ShowReturnItemImagesDialog from './ShowReturnItemImagesDialog'
 
 type Props = {
   data: ReturnOrder
@@ -27,6 +32,9 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
   const [showEditNote, setShowEditNote] = useState(false)
   const OrderId = CleanSpecialCharacters(data.orderId!)
   const [loadingLabel, setLoadingLabel] = useState(false)
+
+  const [imagesDialogItem, setImagesDialogItem] = useState<OrderItem | null>(null)
+  const [selectedImage, setSelectedImage] = useState<SelectedUnsellableImage | null>(null)
 
   const serviceFee = useMemo(() => {
     if (data.chargesFees) {
@@ -122,6 +130,21 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
     validationNote.handleSubmit()
   }
 
+  const openImagesDialog = (item: OrderItem) => {
+    setImagesDialogItem(item)
+    setSelectedImage(null)
+  }
+
+  const resetImagesDialog = () => {
+    setImagesDialogItem(null)
+    setSelectedImage(null)
+  }
+
+  const handleImagesDialogOpenChange = (isOpen: boolean) => {
+    if (!isOpen) {
+      resetImagesDialog()
+    }
+  }
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
       <Row>
@@ -249,6 +272,7 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                     <tr>
                       <th scope='col'>Title</th>
                       <th scope='col'>Sku</th>
+                      <th></th>
                       <th scope='col'>Condition</th>
                       <th className='text-center' scope='col'>
                         Qty Received
@@ -260,11 +284,19 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                       <tr key={key} className='border-bottom py-2'>
                         <td className='w-50 fw-semibold'>{product.title ? product.title : product.name}</td>
                         <td className='text-muted'>{product.sku}</td>
+                        <td>
+                          {product.images && product.images.length > 0 ? (
+                            <ShadcnButton type='button' variant={'ghost'} size={'icon'} className='tw:text-xs' onClick={() => openImagesDialog(product)} aria-label='View item images'>
+                              <ImagesIcon className='tw:size-4' />
+                            </ShadcnButton>
+                          ) : null}
+                        </td>
                         <td className='text-muted text-capitalize'>{product.state}</td>
                         <td className='text-center'>{product.qtyReceived ? product.qtyReceived : product.quantity}</td>
                       </tr>
                     ))}
                     <tr>
+                      <td></td>
                       <td></td>
                       <td></td>
                       <td className='text-start fs-6 fw-bold text-nowrap'>Total</td>
@@ -298,6 +330,13 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
           )}
         </Col>
       </Row>
+      <ShowReturnItemImagesDialog
+        imagesDialogItem={imagesDialogItem}
+        imagesDialogImages={imagesDialogItem?.images || []}
+        handleImagesDialogOpenChange={handleImagesDialogOpenChange}
+        setSelectedImage={setSelectedImage}
+      />
+      <ShowBiggerImageDialog selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
     </div>
   )
 }

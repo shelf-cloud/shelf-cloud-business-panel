@@ -11,4 +11,5 @@ export interface UnsellablesType {
   converted: boolean
   dispose: boolean
   date: string
+  images?: string[]
 }

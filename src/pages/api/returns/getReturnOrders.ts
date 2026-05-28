@@ -4,7 +4,7 @@ import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 import { getServerSession } from 'next-auth'
 
-const getReturnUnsellables: NextApiHandler = async (request, response) => {
+const getReturnOrders: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)
 
   const sessionToken = request.cookies['next-auth.session-token'] ? request.cookies['next-auth.session-token'] : request.cookies['__Secure-next-auth.session-token']
@@ -15,11 +15,14 @@ const getReturnUnsellables: NextApiHandler = async (request, response) => {
   }
 
   axios
-    .get(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/returns/getReturnUnsellables.php?businessId=${request.query.businessId}`, {
-      headers: {
-        Authorization: `Bearer ${process.env.TARS_API_AUTH_TOKEN}`,
-      },
-    })
+    .get(
+      `${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/returns/getReturnOrders.php?businessId=${request.query.businessId}&startDate=${request.query.startDate}&endDate=${request.query.endDate}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.TARS_API_AUTH_TOKEN}`,
+        },
+      }
+    )
     .then(({ data }) => {
       response.json(data)
     })
@@ -47,4 +50,4 @@ const getReturnUnsellables: NextApiHandler = async (request, response) => {
     })
 }
 
-export default getReturnUnsellables
+export default getReturnOrders

@@ -16,9 +16,10 @@ import { toast } from 'react-toastify'
 import { Button, Card, CardBody, Col, Container, Row } from 'reactstrap'
 import useSWR from 'swr'
 
-export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
-  const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
+import ShowBiggerImageDialog, { SelectedUnsellableImage } from '@/components/returns/ShowBiggerImageDialog'
+import ShowReturnImagesDialog from '@/components/returns/ShowReturnImagesDialog'
 
+export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
 
   if (session == null) {
@@ -30,12 +31,11 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
     }
   }
   return {
-    props: { session, sessionToken },
+    props: { session },
   }
 }
 
 type Props = {
-  sessionToken: string
   session: {
     user: {
       businessName: string
@@ -44,9 +44,13 @@ type Props = {
 }
 
 const Unsellables = ({ session }: Props) => {
+  const title = `Return Unsellables | ${session?.user?.businessName}`
+
   const { state }: any = useContext(AppContext)
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<UnsellablesType[]>([])
+  const [imagesDialogItem, setImagesDialogItem] = useState<UnsellablesType | null>(null)
+  const [selectedImage, setSelectedImage] = useState<SelectedUnsellableImage | null>(null)
   const [searchValue, setSearchValue] = useState<string>('')
   const [searchStatus, setSearchStatus] = useState<string>('')
   const [searchReason, setSearchReason] = useState<string>('')
@@ -100,7 +104,22 @@ const Unsellables = ({ session }: Props) => {
     }
   }, [allData, searchValue, searchStatus, searchReason])
 
-  const title = `Return Unsellables | ${session?.user?.businessName}`
+  const openImagesDialog = (item: UnsellablesType) => {
+    setImagesDialogItem(item)
+    setSelectedImage(null)
+  }
+
+  const resetImagesDialog = () => {
+    setImagesDialogItem(null)
+    setSelectedImage(null)
+  }
+
+  const handleImagesDialogOpenChange = (isOpen: boolean) => {
+    if (!isOpen) {
+      resetImagesDialog()
+    }
+  }
+
   return (
     <div>
       <Head>
@@ -131,13 +150,20 @@ const Unsellables = ({ session }: Props) => {
                 </Row>
                 <Card>
                   <CardBody>
-                    <ReturnUnsellablesTable filterDataTable={filterDataTable || []} pending={pending} />
+                    <ReturnUnsellablesTable filterDataTable={filterDataTable || []} pending={pending} openImagesDialog={openImagesDialog} />
                   </CardBody>
                 </Card>
               </Col>
             </Row>
           </Container>
         </div>
+        <ShowReturnImagesDialog
+          imagesDialogItem={imagesDialogItem}
+          imagesDialogImages={imagesDialogItem?.images || []}
+          handleImagesDialogOpenChange={handleImagesDialogOpenChange}
+          setSelectedImage={setSelectedImage}
+        />
+        <ShowBiggerImageDialog selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
       </React.Fragment>
     </div>
   )

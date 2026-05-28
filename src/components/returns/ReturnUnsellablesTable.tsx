@@ -1,28 +1,17 @@
- 
 import { UnsellablesType } from '@typesTs/returns/unsellables'
+import { EllipsisVerticalIcon, ImagesIcon } from 'lucide-react'
 import DataTable from 'react-data-table-component'
+
+import { Button } from '../shadcn/ui/button'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../shadcn/ui/dropdown-menu'
 
 type Props = {
   filterDataTable: UnsellablesType[]
   pending: boolean
+  openImagesDialog: (item: UnsellablesType) => void
 }
 
-const ReturnUnsellablesTable = ({ filterDataTable, pending }: Props) => {
-  // const caseInsensitiveSort = (rowA: UnsellablesType, rowB: UnsellablesType) => {
-  //   const a = rowA.title.toLowerCase()
-  //   const b = rowB.title.toLowerCase()
-
-  //   if (a > b) {
-  //     return 1
-  //   }
-
-  //   if (b > a) {
-  //     return -1
-  //   }
-
-  //   return 0
-  // }
-
+const ReturnUnsellablesTable = ({ filterDataTable, pending, openImagesDialog }: Props) => {
   const conditionalRowStyles = [
     {
       when: (row: UnsellablesType) => row.converted && !row.dispose,
@@ -116,10 +105,35 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending }: Props) => {
       name: <span className='fw-bolder text-center fs-6'>Unsellable Barcode</span>,
       selector: (row: UnsellablesType) => row.barcode,
       sortable: true,
-      wrap: true,
-      center: true,
+      wrap: false,
+      left: true,
+      compact: true,
       style: {
         fontSize: '0.7rem',
+      },
+    },
+    {
+      name: <span className='fw-bold fs-6'></span>,
+      sortable: false,
+      compact: true,
+      center: true,
+      cell: (row: UnsellablesType) => {
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant='ghost' className='tw:data-[state=open]:bg-muted tw:text-muted-foreground tw:flex tw:size-8' size='icon'>
+                <EllipsisVerticalIcon />
+                <span className='sr-only'>Open actions menu</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align='end' className='tw:w-38 tw:rounded-md'>
+              <DropdownMenuItem className='tw:text-xs' onSelect={() => openImagesDialog(row)}>
+                <ImagesIcon className='tw:mr-2 tw:size-4' />
+                Images
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )
       },
     },
   ]

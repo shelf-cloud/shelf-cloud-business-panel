@@ -86,4 +86,5 @@ export interface OrderItem {
   qtyReceived: number
   name?: string
   quantity: number
+  images?: string[]
 }

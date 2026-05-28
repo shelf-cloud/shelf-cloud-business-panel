@@ -1,4 +1,3 @@
- 
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -17,11 +16,9 @@ import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
 import { Button, Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from 'reactstrap'
-import useSWR, { useSWRConfig } from 'swr'
+import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
-  const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
-
   const session = await getSession(context)
 
   if (session == null) {
@@ -33,12 +30,11 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
     }
   }
   return {
-    props: { session, sessionToken },
+    props: { session },
   }
 }
 
 type Props = {
-  sessionToken: string
   session: {
     user: {
       businessName: string
@@ -46,10 +42,9 @@ type Props = {
   }
 }
 
-const Returns = ({ session, sessionToken }: Props) => {
+const Returns = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
-  const { mutate } = useSWRConfig()
-  const [shipmentsStartDate, setShipmentsStartDate] = useState(moment().subtract(3, 'months').format('YYYY-MM-DD'))
+  const [shipmentsStartDate, setShipmentsStartDate] = useState(moment().subtract(2, 'months').format('YYYY-MM-DD'))
   const [shipmentsEndDate, setShipmentsEndDate] = useState(moment().format('YYYY-MM-DD'))
   const [pending, setPending] = useState(true)
   const [allData, setAllData] = useState<ReturnList>({})
@@ -65,9 +60,6 @@ const Returns = ({ session, sessionToken }: Props) => {
   const fetcher = (endPoint: string) => {
     axios(endPoint, {
       signal,
-      headers: {
-        Authorization: `Bearer ${sessionToken}`,
-      },
     })
       .then((res) => {
         setAllData(res.data)
@@ -75,15 +67,15 @@ const Returns = ({ session, sessionToken }: Props) => {
       })
       .catch(({ error }) => {
         if (axios.isCancel(error)) {
-          toast.error('Error fetching shipment Log data')
+          toast.error('Error fetching returns Log data')
           setAllData({})
           setPending(false)
         }
       })
   }
-  useSWR(
+  const { mutate } = useSWR(
     session && state.user.businessId
-      ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/shipments/getReturnOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`
+      ? `/api/returns/getReturnOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`
       : null,
     fetcher,
     {
@@ -148,9 +140,7 @@ const Returns = ({ session, sessionToken }: Props) => {
 
     if (!response.data.error) {
       toast.success(response.data.message)
-      mutate(
-        `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/shipments/getReturnOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`
-      )
+      mutate()
     } else {
       toast.error(response.data.message)
     }
@@ -175,9 +165,7 @@ const Returns = ({ session, sessionToken }: Props) => {
         setToggleClearRows(!toggledClearRows)
         setSelectedRows([])
         toast.success(response.data.message)
-        mutate(
-          `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/shipments/getReturnOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`
-        )
+        mutate()
       } else {
         toast.error(response.data.message)
       }
@@ -250,7 +238,7 @@ const Returns = ({ session, sessionToken }: Props) => {
                   <ReturnRMATable
                     filterDataTable={filterDataTable || []}
                     pending={pending}
-                    apiMutateLink={`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/shipments/getReturnOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`}
+                    apiMutateLink={`/api/returns/getReturnOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&startDate=${shipmentsStartDate}&endDate=${shipmentsEndDate}`}
                     handleReturnStateChange={handleReturnStateChange}
                     setSelectedRows={setSelectedRows}
                     toggledClearRows={toggledClearRows}
