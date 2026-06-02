@@ -197,16 +197,18 @@ const PurchaseOrderActionsDropdown = ({ purchaseOrder }: Props) => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    {warehouses.map((warehouse: Warehouse) => (
-                      <SelectItem key={warehouse.warehouseId} value={String(warehouse.warehouseId)}>
-                        {warehouse.name}
-                      </SelectItem>
-                    ))}
+                    {warehouses
+                      .filter((warehouse: Warehouse) => warehouse.isActive && !warehouse.id3PL)
+                      .map((warehouse: Warehouse) => (
+                        <SelectItem key={warehouse.warehouseId} value={String(warehouse.warehouseId)}>
+                          {warehouse.name}
+                        </SelectItem>
+                      ))}
                   </SelectGroup>
                 </SelectContent>
               </Select>
               <FieldDescription>
-                Current destination: <span className='tw:font-medium'>{purchaseOrder.warehouseName}</span>
+                Current destination: <span className='tw:font-medium tw:text-primary'>{purchaseOrder.warehouseName}</span>
               </FieldDescription>
             </Field>
           </FieldGroup>

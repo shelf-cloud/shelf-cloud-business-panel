@@ -13,17 +13,11 @@ const updatePoDestination: NextApiHandler = async (request, response) => {
   }
 
   axios
-    .post(
-      `${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/purchaseOrders/update-po-destination.php?businessId=${request.query.businessId}`,
-      {
-        poInfo: request.body,
+    .post(`${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/purchaseOrders/update-po-destination.php?businessId=${request.query.businessId}`, request.body, {
+      headers: {
+        Authorization: `Bearer ${process.env.TARS_API_AUTH_TOKEN}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.TARS_API_AUTH_TOKEN}`,
-        },
-      }
-    )
+    })
     .then(({ data }) => {
       response.json(data)
     })
