@@ -1,15 +1,15 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 
-import Confirm_Delete_Po from '@components/modals/purchaseOrders/Confirm_Delete_Po'
 import AppContext from '@context/AppContext'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { sortNumbers } from '@lib/helperFunctions'
 import { PurchaseOrder, PurchaseOrderBySuppliers, PurchaseOrderItem } from '@typesTs/purchaseOrders'
 import DataTable from 'react-data-table-component'
 import { ExpanderComponentProps } from 'react-data-table-component'
-import { Badge, Card, UncontrolledTooltip } from 'reactstrap'
+import { Badge, Card } from 'reactstrap'
 
 import Expanded_By_Orders from './Expanded_By_Orders'
+import PurchaseOrderActionsDropdown from './PurchaseOrderActionsDropdown'
 
 type Props = {
   data: PurchaseOrderBySuppliers
@@ -17,12 +17,6 @@ type Props = {
 
 const Table_By_Suppliers_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySuppliers>> = ({ data }: Props) => {
   const { state }: any = useContext(AppContext)
-  const [loading, setLoading] = useState(false)
-  const [showDeleteModal, setshowDeleteModal] = useState({
-    show: false,
-    poId: 0,
-    orderNumber: '',
-  })
   const columns: any = [
     {
       name: <span className='fw-bolder fs-6'>Order Number</span>,
@@ -165,34 +159,7 @@ const Table_By_Suppliers_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBy
     },
     {
       name: <span className='fw-bolder fs-6'></span>,
-      selector: (row: PurchaseOrder) =>
-        row.isOpen &&
-        row.poPayments.length <= 0 &&
-        row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.inboundQty, 0) <= 0 &&
-        row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) <= 0 ? (
-          <>
-            <i
-              className='fs-4 text-danger las la-trash-alt'
-              style={{ cursor: 'pointer' }}
-              id={`deletePo${row.poId}`}
-              onClick={() =>
-                setshowDeleteModal((prev) => {
-                  return {
-                    ...prev,
-                    show: true,
-                    poId: row.poId,
-                    orderNumber: row.orderNumber,
-                  }
-                })
-              }
-            />
-            <UncontrolledTooltip placement='top' target={`deletePo${row.poId}`} popperClassName='bg-white shadow px-1 pt-1 rounded-2' innerClassName='text-black bg-white p-0'>
-              <p className='fs-6 text-danger m-0 p-0 mb-0'>Delete PO</p>
-            </UncontrolledTooltip>
-          </>
-        ) : (
-          <></>
-        ),
+      selector: (row: PurchaseOrder) => <PurchaseOrderActionsDropdown purchaseOrder={row} />,
       sortable: false,
       center: true,
       compact: true,
@@ -204,7 +171,6 @@ const Table_By_Suppliers_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBy
       <Card>
         <DataTable columns={columns} data={data.orders} striped={true} expandableRows expandableRowsComponent={Expanded_By_Orders} defaultSortFieldId={2} defaultSortAsc={false} />
       </Card>
-      {showDeleteModal.show && <Confirm_Delete_Po showDeleteModal={showDeleteModal} setshowDeleteModal={setshowDeleteModal} loading={loading} setLoading={setLoading} />}
     </div>
   )
 }
