@@ -1,10 +1,8 @@
- 
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 // import { CSVLink } from 'react-csv'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 
 import { getSession } from '@auth/client'
 import BreadCrumb from '@components/Common/BreadCrumb'
@@ -19,9 +17,13 @@ import AppContext from '@context/AppContext'
 import ExportBlankTemplate from '@features/products/add-products/ExportBlankTemplate'
 import ExportProductsFile from '@features/products/add-products/ExportProductsFile'
 import ExportProductsTemplate from '@features/products/add-products/ExportProductsTemplate'
+import { getProductsForStateChange } from '@hooks/products/productFilters'
+import type { ProductStateValue, ProductStatusFilter } from '@hooks/products/productFilters'
 import { useProducts } from '@hooks/products/useProducts'
-import { Product } from '@typings'
+import { useRPNewForecast } from '@hooks/reorderingPoints/useRPNewForcast'
+import type { Product } from '@typings'
 import axios from 'axios'
+import { parseAsString, parseAsStringLiteral, useQueryStates } from 'nuqs'
 import { toast } from 'react-toastify'
 import { Button, Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from 'reactstrap'
 
@@ -41,6 +43,16 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   }
 }
 
+const productStatusFilters = ['All', 'Active', 'Inactive'] as const satisfies readonly ProductStatusFilter[]
+
+const productFilterParsers = {
+  brand: parseAsString.withDefault('All').withOptions({ clearOnDefault: true }),
+  supplier: parseAsString.withDefault('All').withOptions({ clearOnDefault: true }),
+  category: parseAsString.withDefault('All').withOptions({ clearOnDefault: true }),
+  condition: parseAsString.withDefault('All').withOptions({ clearOnDefault: true }),
+  status: parseAsStringLiteral(productStatusFilters).withDefault('Active').withOptions({ clearOnDefault: true }),
+}
+
 type Props = {
   session: {
     user: {
@@ -51,8 +63,10 @@ type Props = {
 
 const Products = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
-  const router = useRouter()
-  const { brand, supplier, category, condition }: any = router.query
+  const [
+    { brand: brandFilter, supplier: supplierFilter, category: categoryFilter, condition: conditionFilter, status: statusFilter },
+    setProductFilters,
+  ] = useQueryStates(productFilterParsers)
 
   const [searchValue, setSearchValue] = useState<string>('')
   const [selectedRows, setSelectedRows] = useState<Product[]>([])
@@ -69,21 +83,33 @@ const Products = ({ session }: Props) => {
 
   const { products, isLoading, brands, suppliers, categories, mutateProducts } = useProducts({
     searchValue,
-    brand: brand || 'All',
-    supplier: supplier || 'All',
-    category: category || 'All',
-    condition: condition || 'All',
+    brand: brandFilter,
+    supplier: supplierFilter,
+    category: categoryFilter,
+    condition: conditionFilter,
+    status: statusFilter,
   })
 
-  const changeProductState = async (inventoryId: number, sku: string) => {
-    const confirmationResponse = confirm(`Are you sure you want to set Inactive: ${sku}`)
+  const { generate_new_forecast_products } = useRPNewForecast()
+  const selectedRowsToSetInactive = useMemo(() => getProductsForStateChange(selectedRows, 0), [selectedRows])
+  const selectedRowsToSetActive = useMemo(() => getProductsForStateChange(selectedRows, 1), [selectedRows])
+
+  const changeProductState = async (newState: ProductStateValue, inventoryId: number, sku: string) => {
+    const actionLabel = newState === 1 ? 'Active' : 'Inactive'
+    const confirmationResponse = confirm(`Are you sure you want to set ${actionLabel}: ${sku}`)
 
     if (confirmationResponse) {
       const response = await axios.post(`/api/setStateToProduct?region=${state.currentRegion}&businessId=${state.user.businessId}&inventoryId=${inventoryId}`, {
-        newState: 0,
+        newState,
         sku,
       })
       if (!response.data.error) {
+        if (newState === 1) {
+          generate_new_forecast_products({
+            skus: [sku],
+            productIds: [inventoryId],
+          })
+        }
         toast.success(response.data.msg)
         mutateProducts()
       } else {
@@ -91,22 +117,36 @@ const Products = ({ session }: Props) => {
       }
     }
   }
-  const changeSelectedProductsState = async () => {
+  const changeSelectedProductsState = async (newState: ProductStateValue) => {
     if (selectedRows.length <= 0) return
 
-    if (selectedRows.some((item) => item?.quantity > 0)) {
+    const productsToUpdate = getProductsForStateChange(selectedRows, newState)
+
+    if (productsToUpdate.length <= 0 && newState === 0) {
       toast.warning('Only products with 0 stock can be set as Inactive.')
       return
     }
 
-    const confirmationResponse = confirm(`Are you sure you want to set Inactive Selected Products?`)
+    if (productsToUpdate.length <= 0 && newState === 1) {
+      toast.warning('Only inactive products can be set as Active.')
+      return
+    }
+
+    const actionLabel = newState === 1 ? 'Active' : 'Inactive'
+    const confirmationResponse = confirm(`Are you sure you want to set ${actionLabel} Selected Products?`)
 
     if (confirmationResponse) {
       const response = await axios.post(`/api/products/setStateToSelectedProducts?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        newState: 0,
-        selectedRows,
+        newState,
+        selectedRows: productsToUpdate,
       })
       if (!response.data.error) {
+        if (newState === 1) {
+          generate_new_forecast_products({
+            skus: productsToUpdate.map((item) => item.sku) ?? [],
+            productIds: productsToUpdate.map((item) => item.inventoryId) ?? [],
+          })
+        }
         setToggleClearRows(!toggledClearRows)
         setSelectedRows([])
         toast.success(response.data.msg)
@@ -140,11 +180,12 @@ const Products = ({ session }: Props) => {
                       brands={brands}
                       suppliers={suppliers}
                       categories={categories}
-                      brand={brand}
-                      supplier={supplier}
-                      category={category}
-                      condition={condition}
-                      activeTab={true}
+                      brand={brandFilter}
+                      supplier={supplierFilter}
+                      category={categoryFilter}
+                      condition={conditionFilter}
+                      status={statusFilter}
+                      setProductFilters={setProductFilters}
                     />
                     <Link href={'/AddProduct'}>
                       <Button color='primary' size='sm' className='fs-7 text-nowrap'>
@@ -186,10 +227,18 @@ const Products = ({ session }: Props) => {
                         </DropdownToggle>
                         <DropdownMenu>
                           <ExportProductsFile products={selectedRows} />
-                          <DropdownItem className='text-nowrap text-danger' onClick={changeSelectedProductsState}>
-                            <i className='mdi mdi-eye-off label-icon align-middle fs-6 me-2' />
-                            Set Inactive
-                          </DropdownItem>
+                          {selectedRowsToSetActive.length > 0 && (
+                            <DropdownItem className='text-nowrap text-success' onClick={() => changeSelectedProductsState(1)}>
+                              <i className='mdi mdi-eye label-icon align-middle fs-6 me-2' />
+                              Set Active
+                            </DropdownItem>
+                          )}
+                          {selectedRowsToSetInactive.length > 0 && (
+                            <DropdownItem className='text-nowrap text-danger' onClick={() => changeSelectedProductsState(0)}>
+                              <i className='mdi mdi-eye-off label-icon align-middle fs-6 me-2' />
+                              Set Inactive
+                            </DropdownItem>
+                          )}
                           <DropdownItem className='text-nowrap text-end fs-6 text-muted' onClick={clearAllSelectedRows}>
                             Clear All
                           </DropdownItem>
@@ -205,9 +254,6 @@ const Products = ({ session }: Props) => {
                       tableData={products || []}
                       pending={isLoading}
                       changeProductState={changeProductState}
-                      setMsg={'Set Inactive'}
-                      icon={'las la-eye-slash align-middle fs-5 me-2'}
-                      activeText={'text-danger'}
                       setSelectedRows={setSelectedRows}
                       toggledClearRows={toggledClearRows}
                       setcloneProductModal={setcloneProductModal}

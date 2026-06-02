@@ -88,7 +88,7 @@ const Product_Page_Layout = ({}: Props) => {
                 <>
                   <CardHeader className='d-flex flex-column justify-content-between align-items-start flex-lg-row'>
                     <div>
-                      <Link href={'/Products?brand=All&supplier=All&category=All&condition=All'}>
+                      <Link href={'/Products?brand=All&supplier=All&category=All&condition=All&status=All'}>
                         <Button color='primary' outline style={{ cursor: 'pointer' }}>
                           <span className='icon-on fs-7'>
                             <i className='ri-arrow-left-line align-bottom me-1' />

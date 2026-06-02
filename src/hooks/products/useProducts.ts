@@ -1,10 +1,13 @@
-import { useCallback, useContext, useEffect, useRef } from 'react'
+import { useCallback, useContext, useMemo } from 'react'
 
 import AppContext from '@context/AppContext'
-import { Product } from '@typings'
+import type { Product } from '@typings'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
+
+import { filterProducts } from './productFilters'
+import type { ProductStatusFilter } from './productFilters'
 
 type GetProductsResponse = {
   products: Product[]
@@ -19,25 +22,14 @@ type ProductsHookProps = {
   supplier: string
   category: string
   condition: string
+  status: ProductStatusFilter
 }
-export const useProducts = ({ searchValue, brand, supplier, category, condition }: ProductsHookProps) => {
+export const useProducts = ({ searchValue, brand, supplier, category, condition, status }: ProductsHookProps) => {
   const { state } = useContext(AppContext)
-  const controllerRef = useRef<AbortController | null>(null)
-
-  useEffect(() => {
-    controllerRef.current = new AbortController()
-    return () => {
-      if (controllerRef.current) {
-        controllerRef.current.abort()
-      }
-    }
-  }, [])
 
   const fetcher = useCallback(async (endPoint: string) => {
     try {
-      const response = await axios.get<GetProductsResponse>(endPoint, {
-        signal: controllerRef.current?.signal,
-      })
+      const response = await axios.get<GetProductsResponse>(endPoint)
       return response.data
     } catch (error) {
       if (!axios.isCancel(error)) {
@@ -56,37 +48,20 @@ export const useProducts = ({ searchValue, brand, supplier, category, condition 
     revalidateOnMount: true,
   })
 
-  const filteredData = (() => {
-    if (!data?.products) return []
+  const fetchedProducts = data?.products
 
-    if (searchValue === '') {
-      return data.products?.filter(
-        (item: Product) =>
-          (brand === 'All' ? true : item.brand?.toLowerCase() === brand?.toLowerCase()) &&
-          (supplier === 'All' ? true : item.supplier?.toLowerCase() === supplier?.toLowerCase()) &&
-          (category === 'All' ? true : item.category?.toLowerCase() === category?.toLowerCase()) &&
-          (condition === 'All' ? true : item.itemCondition?.toLowerCase() === condition?.toLowerCase())
-      )
-    }
+  const filteredData = useMemo(() => {
+    if (!fetchedProducts) return []
 
-    if (searchValue !== '') {
-      return data.products?.filter(
-        (item: Product) =>
-          (brand === 'All' ? true : item.brand?.toLowerCase() === brand?.toLowerCase()) &&
-          (supplier === 'All' ? true : item.supplier?.toLowerCase() === supplier?.toLowerCase()) &&
-          (category === 'All' ? true : item.category?.toLowerCase() === category?.toLowerCase()) &&
-          (condition === 'All' ? true : item.itemCondition?.toLowerCase() === condition?.toLowerCase()) &&
-          (item?.title?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            searchValue.split(' ').every((word) => item?.title?.toLowerCase().includes(word.toLowerCase())) ||
-            item?.sku?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item?.asin?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item?.fnSku?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item?.barcode?.toLowerCase().includes(searchValue.toLowerCase()))
-      )
-    }
-
-    return data.products
-  })()
+    return filterProducts(fetchedProducts, {
+      searchValue,
+      brand,
+      supplier,
+      category,
+      condition,
+      status,
+    })
+  }, [brand, category, condition, fetchedProducts, searchValue, status, supplier])
 
   return {
     products: filteredData,

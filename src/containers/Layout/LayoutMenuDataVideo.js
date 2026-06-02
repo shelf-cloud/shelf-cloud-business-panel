@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 
 import AppContext from '@context/AppContext'
-import moment from 'moment'
 
 const Navdata = () => {
   const { state } = useContext(AppContext)
@@ -89,13 +88,7 @@ const Navdata = () => {
         {
           id: 'products',
           label: 'Products',
-          link: '/Products?brand=All&supplier=All&category=All&condition=All',
-          parentId: 'warehouse',
-        },
-        {
-          id: 'inactive',
-          label: 'Inactive Products',
-          link: '/InactiveProducts?brand=All&supplier=All&category=All&condition=All',
+          link: '/Products?brand=All&supplier=All&category=All&condition=All&status=Active',
           parentId: 'warehouse',
         },
         {

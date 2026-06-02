@@ -1,16 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
- 
 import Link from 'next/link'
 import { useContext } from 'react'
 
 import AppContext from '@context/AppContext'
+import type { ProductStateValue } from '@hooks/products/productFilters'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { loadBarcode, sortNumbers, sortStringsCaseInsensitive } from '@lib/helperFunctions'
-import { Product } from '@typings'
+import type { Product } from '@typings'
 import DataTable from 'react-data-table-component'
-import { Button, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
+import { Badge, Button, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
 
 import CopyTextToClipboard from './ui/CopyTextToClipboard'
 import SCTooltip from './ui/SCTooltip'
@@ -25,16 +25,13 @@ type CloneProductModal = {
 type Props = {
   tableData: Product[]
   pending: boolean
-  changeProductState: (inventoryId: number, sku: string) => {}
-  setMsg: string
-  icon: string
-  activeText: string
+  changeProductState: (newState: ProductStateValue, inventoryId: number, sku: string) => Promise<void>
   setSelectedRows: (selectedRows: Product[]) => void
   toggledClearRows: boolean
   setcloneProductModal?: (prev: CloneProductModal) => void
 }
 
-const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, activeText, setSelectedRows, toggledClearRows, setcloneProductModal }: Props) => {
+const ProductsTable = ({ tableData, pending, changeProductState, setSelectedRows, toggledClearRows, setcloneProductModal }: Props) => {
   const { setModalProductInfo, state } = useContext(AppContext)
 
   const handleSelectedRows = ({ selectedRows }: { selectedRows: Product[] }) => {
@@ -152,6 +149,15 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
       sortable: false,
       compact: true,
       minWidth: '130px',
+    },
+    {
+      name: <span className='fw-bold fs-6'>Status</span>,
+      selector: (row: Product) => (row.activeState ? 'Active' : 'Inactive'),
+      sortable: true,
+      compact: true,
+      width: '90px',
+      cell: (row: Product) => <Badge color={row.activeState ? 'success' : 'secondary'}>{row.activeState ? 'Active' : 'Inactive'}</Badge>,
+      sortFunction: (rowA: Product, rowB: Product) => sortNumbers(Number(rowA.activeState), Number(rowB.activeState)),
     },
     {
       name: <span className='fw-bold fs-6'>Brand</span>,
@@ -317,9 +323,14 @@ const ProductsTable = ({ tableData, pending, changeProductState, setMsg, icon, a
                   </div>
                 </DropdownItem>
               )}
-              {(row.quantity == 0 || !row.activeState) && (
-                <DropdownItem className={'fs-7 ' + activeText} onClick={() => changeProductState(row.inventoryId, row.sku)}>
-                  <i className={'fs-5 ' + icon}></i> {setMsg}
+              {row.activeState && Number(row.quantity) === 0 && (
+                <DropdownItem className='fs-7 text-danger' onClick={() => changeProductState(0, row.inventoryId, row.sku)}>
+                  <i className='fs-5 las la-eye-slash align-middle me-2'></i> Set Inactive
+                </DropdownItem>
+              )}
+              {!row.activeState && (
+                <DropdownItem className='fs-7 text-success' onClick={() => changeProductState(1, row.inventoryId, row.sku)}>
+                  <i className='fs-5 las la-eye align-bottom me-2'></i> Set Active
                 </DropdownItem>
               )}
             </DropdownMenu>

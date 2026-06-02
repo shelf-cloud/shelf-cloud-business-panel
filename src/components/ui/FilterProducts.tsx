@@ -1,8 +1,17 @@
- 
-import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 
 import SimpleSelect from '@components/Common/SimpleSelect'
+import type { ProductStatusFilter } from '@hooks/products/productFilters'
+
+type ProductFilterQuery = {
+  brand: string
+  supplier: string
+  category: string
+  condition: string
+  status: ProductStatusFilter
+}
+
+type SetProductFilters = (nextFilters: Partial<{ [Key in keyof ProductFilterQuery]: ProductFilterQuery[Key] | null }>) => void | Promise<URLSearchParams>
 
 type Props = {
   brands: string[]
@@ -12,23 +21,29 @@ type Props = {
   supplier: string
   category: string
   condition: string
-  activeTab: boolean
+  status: ProductStatusFilter
+  setProductFilters: SetProductFilters
 }
 
-const FilterProducts = ({ brands, suppliers, categories, brand, supplier, category, condition, activeTab }: Props) => {
-  const router = useRouter()
+const FilterProducts = ({ brands, suppliers, categories, brand, supplier, category, condition, status, setProductFilters }: Props) => {
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const FilterProductsContainer = useRef<HTMLDivElement | null>(null)
 
+  const updateProductFilters = (nextFilters: Partial<ProductFilterQuery>) => {
+    setProductFilters(nextFilters)
+  }
+
   useEffect(() => {
-    if (document) {
-      document.addEventListener('click', (e: any) => {
-        if (FilterProductsContainer.current) {
-          if (!FilterProductsContainer.current.contains(e.target)) {
-            setOpenDatesMenu(false)
-          }
-        }
-      })
+    const handleDocumentClick = (event: MouseEvent) => {
+      if (FilterProductsContainer.current && !FilterProductsContainer.current.contains(event.target as Node)) {
+        setOpenDatesMenu(false)
+      }
+    }
+
+    document.addEventListener('click', handleDocumentClick)
+
+    return () => {
+      document.removeEventListener('click', handleDocumentClick)
     }
   }, [])
 
@@ -55,9 +70,7 @@ const FilterProducts = ({ brands, suppliers, categories, brand, supplier, catego
               options={[{ label: 'All', value: 'All' }, ...brands?.map((brand) => ({ label: brand, value: brand }))]}
               handleSelect={(option) => {
                 setOpenDatesMenu(false)
-                activeTab
-                  ? router.replace(`/Products?brand=${option?.value}&supplier=${supplier}&category=${category}&condition=${condition}`)
-                  : router.replace(`/InactiveProducts?brand=${option?.value}&supplier=${supplier}&category=${category}&condition=${condition}`)
+                updateProductFilters({ brand: String(option?.value || 'All') })
               }}
               customStyle='sm'
               placeholder={'Select Brand'}
@@ -69,9 +82,7 @@ const FilterProducts = ({ brands, suppliers, categories, brand, supplier, catego
               options={[{ label: 'All', value: 'All' }, ...suppliers?.map((supplier) => ({ label: supplier, value: supplier }))]}
               handleSelect={(option) => {
                 setOpenDatesMenu(false)
-                activeTab
-                  ? router.replace(`/Products?brand=${brand}&supplier=${option?.value}&category=${category}&condition=${condition}`)
-                  : router.replace(`/InactiveProducts?brand=${brand}&supplier=${option?.value}&category=${category}&condition=${condition}`)
+                updateProductFilters({ supplier: String(option?.value || 'All') })
               }}
               customStyle='sm'
               placeholder={'Select Supplier'}
@@ -82,9 +93,7 @@ const FilterProducts = ({ brands, suppliers, categories, brand, supplier, catego
               options={[{ label: 'All', value: 'All' }, ...categories?.map((category) => ({ label: category, value: category }))]}
               handleSelect={(option) => {
                 setOpenDatesMenu(false)
-                activeTab
-                  ? router.replace(`/Products?brand=${brand}&supplier=${supplier}&category=${option?.value}&condition=${condition}`)
-                  : router.replace(`/InactiveProducts?brand=${brand}&supplier=${supplier}&category=${option?.value}&condition=${condition}`)
+                updateProductFilters({ category: String(option?.value || 'All') })
               }}
               customStyle='sm'
               placeholder={'Select Category'}
@@ -99,19 +108,30 @@ const FilterProducts = ({ brands, suppliers, categories, brand, supplier, catego
               ]}
               handleSelect={(option) => {
                 setOpenDatesMenu(false)
-                activeTab
-                  ? router.replace(`/Products?brand=${brand}&supplier=${supplier}&category=${category}&condition=${option?.value}`)
-                  : router.replace(`/InactiveProducts?brand=${brand}&supplier=${supplier}&category=${category}&condition=${option?.value}`)
+                updateProductFilters({ condition: String(option?.value || 'All') })
               }}
               customStyle='sm'
               placeholder={'Select Condition'}
             />
+            <span className='fw-semibold fs-7'>Status:</span>
+            <SimpleSelect
+              selected={{ label: status, value: status }}
+              options={[
+                { label: 'All', value: 'All' },
+                { label: 'Active', value: 'Active' },
+                { label: 'Inactive', value: 'Inactive' },
+              ]}
+              handleSelect={(option) => {
+                setOpenDatesMenu(false)
+                updateProductFilters({ status: (option?.value || 'All') as ProductStatusFilter })
+              }}
+              customStyle='sm'
+              placeholder={'Select Status'}
+            />
             <span
               style={{ width: '100%', cursor: 'pointer', textAlign: 'right' }}
               onClick={() => {
-                activeTab
-                  ? router.replace(`/Products?brand=All&supplier=All&category=All&condition=All`)
-                  : router.replace(`/InactiveProducts?brand=All&supplier=All&category=All&condition=All`)
+                setProductFilters({ brand: null, supplier: null, category: null, condition: null, status: null })
                 setOpenDatesMenu(false)
               }}
               className='fw-normal mt-2 text-muted fs-7'>
