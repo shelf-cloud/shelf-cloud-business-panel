@@ -1,5 +1,7 @@
  
-import { memo, useContext, useEffect, useRef, useState } from 'react'
+import { memo, useContext, useRef, useState } from 'react'
+
+import { useClickOutside } from '@hooks/useClickOutside'
 
 import AppContext from '@context/AppContext'
 import { Input } from 'reactstrap'
@@ -18,17 +20,7 @@ const FilterReturns = ({ searchStatus, setSearchStatus, searchReason, setSearchR
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const filterByOthersContainer = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    if (document) {
-      document.addEventListener('click', (e: any) => {
-        if (filterByOthersContainer.current) {
-          if (!filterByOthersContainer.current.contains(e.target)) {
-            setOpenDatesMenu(false)
-          }
-        }
-      })
-    }
-  }, [])
+  useClickOutside(filterByOthersContainer, () => setOpenDatesMenu(false))
 
   return (
     <div

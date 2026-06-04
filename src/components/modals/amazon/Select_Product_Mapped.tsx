@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
+
+import { useClickOutside } from '@hooks/useClickOutside'
 
 import { NoImageAdress } from '@lib/assetsConstants'
 import { DebounceInput } from 'react-debounce-input'
@@ -32,17 +34,7 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
   const [searchValue, setSearchValue] = useState<any>('')
   const selectProductMappedDiv = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    if (document) {
-      document.addEventListener('click', (e: any) => {
-        if (selectProductMappedDiv.current) {
-          if (!selectProductMappedDiv.current.contains(e.target)) {
-            setOpenSelectionList(false)
-          }
-        }
-      })
-    }
-  }, [])
+  useClickOutside(selectProductMappedDiv, () => setOpenSelectionList(false))
 
   const filterSelectionList = useMemo(() => {
     if (!data) {

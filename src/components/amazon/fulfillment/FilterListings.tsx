@@ -1,6 +1,8 @@
  
 import { useRouter } from 'next/router'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
+
+import { useClickOutside } from '@hooks/useClickOutside'
 
 import { Form, Formik } from 'formik'
 import { Button, Input, Label } from 'reactstrap'
@@ -26,17 +28,7 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, ma
     masterBoxVisibility: masterBoxVisibility,
   }
 
-  useEffect(() => {
-    if (document) {
-      document.addEventListener('click', (e: any) => {
-        if (filterByOthersContainer.current) {
-          if (!filterByOthersContainer.current.contains(e.target)) {
-            setOpenFilters(false)
-          }
-        }
-      })
-    }
-  }, [])
+  useClickOutside(filterByOthersContainer, () => setOpenFilters(false))
 
   const handleApplyFilters = (showHidden: string, showNotEnough: string, ShowNoShipDate: string, masterBoxVisibility: string) => {
     let filterString = `/amazon-sellers/fulfillment/sendToAmazon?filters=true`

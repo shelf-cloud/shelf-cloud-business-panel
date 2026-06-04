@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
+
+import { useClickOutside } from '@hooks/useClickOutside'
 
 type Props = {
   selected: string
@@ -16,17 +18,7 @@ const Select_Condition_Kit_Details = ({ selected, handleSelection, errorMessage 
   const [selectedOption, setSelectedOption] = useState(selected)
   const selectCondition = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    if (document) {
-      document.addEventListener('click', (e: any) => {
-        if (selectCondition.current) {
-          if (!selectCondition.current.contains(e.target)) {
-            setOpenDatesMenu(false)
-          }
-        }
-      })
-    }
-  }, [])
+  useClickOutside(selectCondition, () => setOpenDatesMenu(false))
 
   return (
     <div ref={selectCondition} className='dropdown mb-3'>

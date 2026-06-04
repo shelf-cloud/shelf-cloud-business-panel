@@ -19,13 +19,19 @@ type Props = {
 
 const Sidebar = ({}: Props) => {
   useEffect(() => {
-    var verticalOverlay = document.getElementsByClassName('vertical-overlay')
-    if (verticalOverlay) {
-      verticalOverlay[0].addEventListener('click', function () {
-        document.body.classList.remove('vertical-sidebar-enable')
-      })
+    const verticalOverlay = document.getElementsByClassName('vertical-overlay')[0]
+    const closeSidebar = () => {
+      document.body.classList.remove('vertical-sidebar-enable')
     }
-  })
+
+    if (verticalOverlay) {
+      verticalOverlay.addEventListener('click', closeSidebar)
+    }
+
+    return () => {
+      verticalOverlay?.removeEventListener('click', closeSidebar)
+    }
+  }, [])
 
   // const addEventListenerOnSmHoverMenu = () => {
   //   // add listener Sidebar Hover icon on change layout from setting

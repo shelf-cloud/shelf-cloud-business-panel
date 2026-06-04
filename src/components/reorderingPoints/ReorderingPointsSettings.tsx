@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 
+import { useClickOutside } from '@hooks/useClickOutside'
 import { Button as ShadcnButton } from '@shadcn/ui/button'
 import { Form, Formik } from 'formik'
 import { ChevronDownIcon } from 'lucide-react'
@@ -20,17 +21,7 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const rpSettings = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    if (document) {
-      document.addEventListener('click', (e: any) => {
-        if (rpSettings.current) {
-          if (!rpSettings.current.contains(e.target)) {
-            setOpenDatesMenu(false)
-          }
-        }
-      })
-    }
-  }, [])
+  useClickOutside(rpSettings, () => setOpenDatesMenu(false))
 
   const initialValues = {
     highAlertMax: initialHighAlert,

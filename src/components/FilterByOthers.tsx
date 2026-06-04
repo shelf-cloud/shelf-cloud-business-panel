@@ -1,5 +1,7 @@
  
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
+
+import { useClickOutside } from '@hooks/useClickOutside'
 
 import AppContext from '@context/AppContext'
 import { useSkus } from '@hooks/products/useSkus'
@@ -64,17 +66,7 @@ const FilterByOthers = ({
   const filterByOthersContainer = useRef<HTMLDivElement | null>(null)
   const { skus } = useSkus()
 
-  useEffect(() => {
-    if (document) {
-      document.addEventListener('click', (e: any) => {
-        if (filterByOthersContainer.current) {
-          if (!filterByOthersContainer.current.contains(e.target)) {
-            setOpenFilters(false)
-          }
-        }
-      })
-    }
-  }, [])
+  useClickOutside(filterByOthersContainer, () => setOpenFilters(false))
 
   return (
     <>

@@ -1,5 +1,7 @@
  
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
+
+import { useClickOutside } from '@hooks/useClickOutside'
 
 import { Input } from 'reactstrap'
 
@@ -14,17 +16,7 @@ const FilterUnsellables = ({ searchStatus, setSearchStatus, searchReason, setSea
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const filterByOthersContainer = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    if (document) {
-      document.addEventListener('click', (e: any) => {
-        if (filterByOthersContainer.current) {
-          if (!filterByOthersContainer.current.contains(e.target)) {
-            setOpenDatesMenu(false)
-          }
-        }
-      })
-    }
-  }, [])
+  useClickOutside(filterByOthersContainer, () => setOpenDatesMenu(false))
 
   return (
     <div

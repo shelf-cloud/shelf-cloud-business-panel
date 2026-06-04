@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
+
+import { useClickOutside } from '@hooks/useClickOutside'
 
 type Props = {
   formValue: string
@@ -12,17 +14,7 @@ const SelectDropDown = ({ formValue, selectionInfo, selected, handleSelection, e
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const selectDropDownElement = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    if (document) {
-      document.addEventListener('click', (e: any) => {
-        if (selectDropDownElement.current) {
-          if (!selectDropDownElement.current.contains(e.target)) {
-            setOpenDatesMenu(false)
-          }
-        }
-      })
-    }
-  }, [])
+  useClickOutside(selectDropDownElement, () => setOpenDatesMenu(false))
 
   return (
     <div ref={selectDropDownElement} className='dropdown mb-0'>

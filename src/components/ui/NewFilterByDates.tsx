@@ -1,5 +1,7 @@
  
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
+
+import { useClickOutside } from '@hooks/useClickOutside'
 
 import moment from 'moment'
 import Flatpickr from 'react-flatpickr'
@@ -18,17 +20,7 @@ const NewFilterByDates = ({ filterDates, setfilterDates, handleChangeDatesFromPi
   const [selectedDateFilter, setSelectedDateFilter] = useState('picker')
   const filterByDates = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    if (document) {
-      document.addEventListener('click', (e: any) => {
-        if (filterByDates.current) {
-          if (!filterByDates.current.contains(e.target)) {
-            setOpenDatesMenu(false)
-          }
-        }
-      })
-    }
-  }, [])
+  useClickOutside(filterByDates, () => setOpenDatesMenu(false))
 
   return (
     <div ref={filterByDates} className='dropdown'>

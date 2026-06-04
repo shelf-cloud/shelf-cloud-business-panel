@@ -1,5 +1,7 @@
  
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
+
+import { useClickOutside } from '@hooks/useClickOutside'
 
 import { Input } from 'reactstrap'
 
@@ -12,17 +14,7 @@ const FilterCheckNumber = ({ type, setInvoiceType }: Props) => {
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const FilterCheckNumberContainer = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    if (document) {
-      document.addEventListener('click', (e: any) => {
-        if (FilterCheckNumberContainer.current) {
-          if (!FilterCheckNumberContainer.current.contains(e.target)) {
-            setOpenDatesMenu(false)
-          }
-        }
-      })
-    }
-  }, [])
+  useClickOutside(FilterCheckNumberContainer, () => setOpenDatesMenu(false))
 
   return (
     <div

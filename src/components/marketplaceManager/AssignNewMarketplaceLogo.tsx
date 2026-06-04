@@ -1,5 +1,7 @@
  
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
+
+import { useClickOutside } from '@hooks/useClickOutside'
 
 import SimpleSelectWithImage, { SelectSingleValueType } from '@components/Common/SimpleSelectWithImage'
 import AppContext from '@context/AppContext'
@@ -36,17 +38,7 @@ const AssignNewMarketplaceLogo = ({ selected, defaultLogo, setLogo }: Props) => 
     }
   )
 
-  useEffect(() => {
-    if (document) {
-      document.addEventListener('click', (e: any) => {
-        if (AssignNewMarketplaceLogoContainer.current) {
-          if (!AssignNewMarketplaceLogoContainer.current.contains(e.target)) {
-            setOpenDatesMenu(false)
-          }
-        }
-      })
-    }
-  }, [])
+  useClickOutside(AssignNewMarketplaceLogoContainer, () => setOpenDatesMenu(false))
 
   return (
     <Dropdown isOpen={openDatesMenu} toggle={() => setOpenDatesMenu(!openDatesMenu)} direction='end'>

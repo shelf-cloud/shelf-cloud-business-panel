@@ -18,17 +18,21 @@ const Layout = ({ children }: Props) => {
   const noLayout = ['SignIn', 'ContactForm', 'Forgotpassword', 'ProductsBulkEdit']
 
   useEffect(() => {
-    window.addEventListener('scroll', scrollNavigation, true)
-  })
-
-  function scrollNavigation() {
-    var scrollup = document.documentElement.scrollTop
-    if (scrollup > 50) {
-      setHeaderClass('topbar-shadow')
-    } else {
-      setHeaderClass('')
+    const scrollNavigation = () => {
+      const scrollup = document.documentElement.scrollTop
+      if (scrollup > 50) {
+        setHeaderClass('topbar-shadow')
+      } else {
+        setHeaderClass('')
+      }
     }
-  }
+
+    window.addEventListener('scroll', scrollNavigation, true)
+
+    return () => {
+      window.removeEventListener('scroll', scrollNavigation, true)
+    }
+  }, [])
 
   return (
     <React.Fragment>

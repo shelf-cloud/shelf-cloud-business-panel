@@ -1,4 +1,6 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
+
+import { useClickOutside } from '@hooks/useClickOutside'
 
 import AppContext from '@context/AppContext'
 import axios from 'axios'
@@ -30,17 +32,7 @@ const Select_Kit_Details = ({ inventoryId, type, addEndpoint, selectionInfo, sel
   const [selectedOption, setSelectedOption] = useState(selected)
   const selectKitDetails = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    if (document) {
-      document.addEventListener('click', (e: any) => {
-        if (selectKitDetails.current) {
-          if (!selectKitDetails.current.contains(e.target)) {
-            setOpenDatesMenu(false)
-          }
-        }
-      })
-    }
-  }, [])
+  useClickOutside(selectKitDetails, () => setOpenDatesMenu(false))
 
   const validation = useFormik({
     enableReinitialize: true,

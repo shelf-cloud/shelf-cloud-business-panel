@@ -1,5 +1,7 @@
  
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
+
+import { useClickOutside } from '@hooks/useClickOutside'
 
 type Props = {
   showMappedCreateReport: {
@@ -18,17 +20,7 @@ const SelectReportType = ({ showMappedCreateReport, setshowMappedCreateReport }:
   const [openSelectionList, setOpenSelectionList] = useState(false)
   const selectProductMappedDiv = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    if (document) {
-      document.addEventListener('click', (e: any) => {
-        if (selectProductMappedDiv.current) {
-          if (!selectProductMappedDiv.current.contains(e.target)) {
-            setOpenSelectionList(false)
-          }
-        }
-      })
-    }
-  }, [])
+  useClickOutside(selectProductMappedDiv, () => setOpenSelectionList(false))
 
   return (
     <div ref={selectProductMappedDiv} className='dropdown mb-3'>

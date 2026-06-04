@@ -1,6 +1,8 @@
  
 import { useRouter } from 'next/router'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
+
+import { useClickOutside } from '@hooks/useClickOutside'
 
 import { Input } from 'reactstrap'
 
@@ -15,17 +17,7 @@ const FilterListings = ({ showHidden, condition, mapped }: Props) => {
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const FilterListingsContainer = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    if (document) {
-      document.addEventListener('click', (e: any) => {
-        if (FilterListingsContainer.current) {
-          if (!FilterListingsContainer.current.contains(e.target)) {
-            setOpenDatesMenu(false)
-          }
-        }
-      })
-    }
-  }, [])
+  useClickOutside(FilterListingsContainer, () => setOpenDatesMenu(false))
 
   return (
     <div

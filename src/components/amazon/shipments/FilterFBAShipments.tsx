@@ -1,5 +1,7 @@
  
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
+
+import { useClickOutside } from '@hooks/useClickOutside'
 
 import SimpleSelect, { SelectSingleValueType } from '@components/Common/SimpleSelect'
 import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle, Input, Label } from 'reactstrap'
@@ -34,17 +36,7 @@ const FilterFBAShipments = ({ filters, setfilters }: Props) => {
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const FilterFBAShipmentsContainer = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    if (document) {
-      document.addEventListener('click', (e: any) => {
-        if (FilterFBAShipmentsContainer.current) {
-          if (!FilterFBAShipmentsContainer.current.contains(e.target)) {
-            setOpenDatesMenu(false)
-          }
-        }
-      })
-    }
-  }, [])
+  useClickOutside(FilterFBAShipmentsContainer, () => setOpenDatesMenu(false))
 
   return (
     <ButtonGroup>

@@ -1,5 +1,7 @@
  
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
+
+import { useClickOutside } from '@hooks/useClickOutside'
 
 import { SelectSingleValueType } from '@components/Common/SimpleSelect'
 import SelectSingleFilter from '@components/ui/filters/SelectSingleFilter'
@@ -29,17 +31,7 @@ const FilterReceivings = ({ searchStatus, setSearchStatus, searchWarehouse, setS
     [warehouses]
   )
 
-  useEffect(() => {
-    if (document) {
-      document.addEventListener('click', (e: any) => {
-        if (filterByOthersContainer.current) {
-          if (!filterByOthersContainer.current.contains(e.target)) {
-            setOpenFilters(false)
-          }
-        }
-      })
-    }
-  }, [])
+  useClickOutside(filterByOthersContainer, () => setOpenFilters(false))
 
   return (
     <>

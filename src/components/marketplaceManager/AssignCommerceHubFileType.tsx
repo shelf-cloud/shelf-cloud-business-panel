@@ -1,5 +1,7 @@
  
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
+
+import { useClickOutside } from '@hooks/useClickOutside'
 
 import SimpleSelect, { SelectOptionType, SelectSingleValueType } from '@components/Common/SimpleSelect'
 import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap'
@@ -14,17 +16,7 @@ const AssignCommerceHubFileType = ({ selected, setSelected, options }: Props) =>
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const AssignCommerceHubFileTypeContainer = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    if (document) {
-      document.addEventListener('click', (e: any) => {
-        if (AssignCommerceHubFileTypeContainer.current) {
-          if (!AssignCommerceHubFileTypeContainer.current.contains(e.target)) {
-            setIsDialogOpen(false)
-          }
-        }
-      })
-    }
-  }, [])
+  useClickOutside(AssignCommerceHubFileTypeContainer, () => setIsDialogOpen(false))
 
   return (
     <Dropdown isOpen={isDialogOpen} toggle={() => setIsDialogOpen(!isDialogOpen)} direction='end'>

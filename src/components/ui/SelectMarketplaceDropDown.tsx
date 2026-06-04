@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
+
+import { useClickOutside } from '@hooks/useClickOutside'
 
 import { NoImageAdress } from '@lib/assetsConstants'
 
@@ -22,17 +24,7 @@ const SelectMarketplaceDropDown = ({ selectionInfo, selected, handleSelection, s
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const selectMarketplace = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    if (document) {
-      document.addEventListener('click', (e: any) => {
-        if (selectMarketplace.current) {
-          if (!selectMarketplace.current.contains(e.target)) {
-            setOpenDatesMenu(false)
-          }
-        }
-      })
-    }
-  }, [])
+  useClickOutside(selectMarketplace, () => setOpenDatesMenu(false))
 
   return (
     <div ref={selectMarketplace} className='dropdown'>

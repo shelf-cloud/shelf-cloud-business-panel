@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
+
+import { useClickOutside } from '@hooks/useClickOutside'
 
 import { TransportationOption } from '@typesTs/amazon/fulfillments/fulfillment'
 
@@ -14,17 +16,7 @@ const SelectShippingCarrier = ({ id, selectionInfo, disabled, selected, handleSe
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const selectCarrier = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    if (document) {
-      document.addEventListener('click', (e: any) => {
-        if (selectCarrier.current) {
-          if (!selectCarrier.current.contains(e.target)) {
-            setOpenDatesMenu(false)
-          }
-        }
-      })
-    }
-  }, [])
+  useClickOutside(selectCarrier, () => setOpenDatesMenu(false))
 
   return (
     <div id={id} ref={selectCarrier} className='dropdown mb-0 w-100'>

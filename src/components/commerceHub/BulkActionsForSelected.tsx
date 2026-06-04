@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
+
+import { useClickOutside } from '@hooks/useClickOutside'
 
 import SimpleSelect, { SelectSingleValueType } from '@components/Common/SimpleSelect'
 import { Button, ButtonGroup, Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap'
@@ -15,17 +17,7 @@ const BulkActionsForSelected = ({ selectedRows, clearSelected, statusOptions, ch
   const FilterCommerceHubInvoicesContainer = useRef<HTMLDivElement | null>(null)
   const [selectedStatus, setselectedStatus] = useState<SelectSingleValueType>({ value: '', label: 'Select Status' })
 
-  useEffect(() => {
-    if (document) {
-      document.addEventListener('click', (e: any) => {
-        if (FilterCommerceHubInvoicesContainer.current) {
-          if (!FilterCommerceHubInvoicesContainer.current.contains(e.target)) {
-            setOpenDatesMenu(false)
-          }
-        }
-      })
-    }
-  }, [])
+  useClickOutside(FilterCommerceHubInvoicesContainer, () => setOpenDatesMenu(false))
 
   const handleApplyNewStatus = () => {
     changeSelectedStatus(String(selectedStatus!.value))

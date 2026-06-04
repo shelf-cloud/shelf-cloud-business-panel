@@ -27,14 +27,17 @@ export const useSocket = (userId: string | null, mutate: () => void) => {
     socket.emit('register', panelUserId)
 
     // ✅ Listen for notifications
-    socket.on('notification', (data: ToastNotificationUserBody) => {
+    const handleNotification = (data: ToastNotificationUserBody) => {
       if (data.needToast) showToastByType(data)
       mutate()
       //   setNotifications((prev) => [...prev, data.message])
-    })
+    }
+
+    socket.on('notification', handleNotification)
 
     return () => {
       if (socket) {
+        socket.off('notification', handleNotification)
         socket.disconnect() // ✅ Disconnect socket when user logs out
         socket = null
       }

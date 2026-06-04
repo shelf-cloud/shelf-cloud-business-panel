@@ -1,5 +1,7 @@
  
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
+
+import { useClickOutside } from '@hooks/useClickOutside'
 
 import SimpleSelect, { SelectOptionType, SelectSingleValueType } from '@components/Common/SimpleSelect'
 import { CommerceHubStore } from '@typesTs/commercehub/invoices'
@@ -27,17 +29,7 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions,
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const FilterCommerceHubInvoicesContainer = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    if (document) {
-      document.addEventListener('click', (e: any) => {
-        if (FilterCommerceHubInvoicesContainer.current) {
-          if (!FilterCommerceHubInvoicesContainer.current.contains(e.target)) {
-            setOpenDatesMenu(false)
-          }
-        }
-      })
-    }
-  }, [])
+  useClickOutside(FilterCommerceHubInvoicesContainer, () => setOpenDatesMenu(false))
 
   const handleDaysOverdueValue = useMemo(() => {
     if (daysOverdue === undefined || daysOverdue === 0) {
