@@ -79,12 +79,12 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
     },
   })
 
-  const HandleAddProduct = (event: any) => {
+  const handleAddProduct = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
   }
 
-  const HandleDeletePayment = async () => {
+  const handleDeletePayment = async () => {
     setloading(true)
 
     const response = await axios.post(`/api/purchaseOrders/deletePaymentToPo?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
@@ -150,7 +150,7 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
         Edit Payment
       </ModalHeader>
       <ModalBody>
-        <Form onSubmit={HandleAddProduct}>
+        <Form onSubmit={handleAddProduct}>
           <Row md={12}>
             <h5 className='fs-5 mb-4 fw-semibold text-primary'>
               PO: <span className='fw-semibold text-black'>{editPaymentModal.orderNumber}</span>
@@ -219,7 +219,7 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
           </Row>
           <Row md={12}>
             <div className='d-flex justify-content-between align-items-center'>
-              <Button disabled={loading} type='button' color='danger' className='btn fs-7' onClick={HandleDeletePayment}>
+              <Button disabled={loading} type='button' color='danger' className='btn fs-7' onClick={handleDeletePayment}>
                 {loading ? <Spinner color='light' /> : 'Delete'}
               </Button>
               <Button disabled={loading} type='submit' color='success' className='btn fs-7'>

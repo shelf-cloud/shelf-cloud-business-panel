@@ -143,7 +143,7 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
     },
   })
 
-  const HandleAddProduct = (event: any) => {
+  const handleAddProduct = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
   }
@@ -166,7 +166,7 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
         WholeSale Order with Individual Units
       </ModalHeader>
       <ModalBody>
-        <Form onSubmit={HandleAddProduct}>
+        <Form onSubmit={handleAddProduct}>
           <Row>
             <p className='fs-4 fw-bold text-primary'>Order Details</p>
             <Col md={6}>

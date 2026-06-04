@@ -57,7 +57,7 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
     },
   })
 
-  const HandleAddProduct = (event: any) => {
+  const handleAddProduct = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
   }
@@ -79,7 +79,7 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
       <table className='table table-sm table-striped align-middle'>
         <thead className='table-light'>
           <tr className='text-center'>
-            <th></th>
+            <th scope='col' aria-label='Inventory source'></th>
             <th>On Hand</th>
             <th>Buffer</th>
             <th>Available</th>
@@ -97,11 +97,13 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
                 <div className='d-flex flex-row justify-content-center align-items-center gap-1'>
                   {buffer}
                   <div className='text-end' style={showEditButton}>
-                    <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i>
+                    <button type='button' aria-label='Edit buffer inventory' className='btn btn-link m-0 p-0 border-0 text-primary' onClick={handleShowEditFields}>
+                      <i className='ri-pencil-fill fs-5 m-0 p-0' />
+                    </button>
                   </div>
                 </div>
               ) : (
-                <Form onSubmit={HandleAddProduct}>
+                <Form onSubmit={handleAddProduct}>
                   <div className='d-flex flex-row justify-content-center align-items-center gap-1 align-middle'>
                     <div>
                       <Input
@@ -119,7 +121,9 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
                       />
                       {validation.touched.buffer && validation.errors.buffer ? <FormFeedback type='invalid'>{validation.errors.buffer}</FormFeedback> : null}
                     </div>
-                    <i className='fs-3 text-muted mdi mdi-close-circle' style={{ cursor: 'pointer' }} onClick={() => setShowEditFields(false)} />
+                    <button type='button' aria-label='Cancel editing buffer inventory' className='btn btn-link m-0 p-0 border-0 text-muted' onClick={() => setShowEditFields(false)}>
+                      <i className='fs-3 mdi mdi-close-circle' />
+                    </button>
                     <Button type='submit' color='muted' className='btn btn-sm m-0 p-0'>
                       <i className='fs-3 text-success ri-checkbox-circle-fill' />
                     </Button>
@@ -129,8 +133,14 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
             </td>
             <td className='text-success'>{FormatIntNumber(state.currentRegion, available)}</td>
             <td className='text-danger'>{FormatIntNumber(state.currentRegion, reserved)}</td>
-            <td style={{ cursor: 'pointer' }} className='text-primary' onClick={() => setshowOrderedModal({ show: true, sku: sku! })}>
-              {FormatIntNumber(state.currentRegion, ordered)}
+            <td>
+              <button
+                type='button'
+                className='btn btn-link p-0 border-0 text-primary text-decoration-none'
+                onClick={() => setshowOrderedModal({ show: true, sku: sku! })}
+              >
+                {FormatIntNumber(state.currentRegion, ordered)}
+              </button>
             </td>
             <td>{FormatIntNumber(state.currentRegion, receiving)}</td>
           </tr>
@@ -140,7 +150,7 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
         <table className='table table-sm table-striped align-middle'>
           <thead className='table-light'>
             <tr className='text-center'>
-              <th></th>
+              <th scope='col' aria-label='Fulfillment channel'></th>
               <th>Total</th>
               <th>Fulfillable</th>
               <th>Reserved</th>

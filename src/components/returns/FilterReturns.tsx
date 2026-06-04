@@ -123,8 +123,9 @@ const FilterReturns = ({ searchStatus, setSearchStatus, searchReason, setSearchR
                 ))}
               </Input>
             </div>
-            <span
-              style={{ width: '100%', cursor: 'pointer', textAlign: 'right' }}
+            <button
+              type='button'
+              style={{ width: '100%', textAlign: 'right' }}
               onClick={() => {
                 // setSearchType('')
                 setSearchStatus('')
@@ -132,9 +133,9 @@ const FilterReturns = ({ searchStatus, setSearchStatus, searchReason, setSearchR
                 setSearchReason('')
                 setOpenDatesMenu(false)
               }}
-              className='fw-normal fs-7 mt-2'>
+              className='btn btn-link p-0 border-0 text-decoration-none text-reset fw-normal fs-7 mt-2'>
               Clear All
-            </span>
+            </button>
           </div>
         </div>
       </div>

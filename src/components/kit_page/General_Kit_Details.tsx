@@ -71,7 +71,7 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
     },
   })
 
-  const HandleAddProduct = (event: any) => {
+  const handleAddProduct = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
   }
@@ -114,7 +114,7 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
               minWidth: '150px',
               maxWidth: '200px',
             }}>
-            <img loading='lazy' src={image ? image : NoImageAdress} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
+            <img loading='lazy' src={image ? image : NoImageAdress} alt='Kit' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
           </div>
           <div className='w-100'>
             <table className='table table-sm table-borderless'>
@@ -155,7 +155,7 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
           <div>{/* <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i> */}</div>
         </div>
       ) : (
-        <Form onSubmit={HandleAddProduct}>
+        <Form onSubmit={handleAddProduct}>
           <Row>
             <Col md={6}>
               <FormGroup className='mb-3'>

@@ -113,7 +113,7 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
     },
   })
 
-  const HandleAddProduct = (event: any) => {
+  const handleAddProduct = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
   }
@@ -167,7 +167,7 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
           ShelfCloud SKU: <span className='text-black fw-semibold'>{dimensionsModal.scSKU}</span>
         </p>
 
-        <Form onSubmit={HandleAddProduct}>
+        <Form onSubmit={handleAddProduct}>
           <Row className='my-3'>
             <Col md={3}>
               <FormGroup className='mb-3'>

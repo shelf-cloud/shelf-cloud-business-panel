@@ -59,7 +59,7 @@ const SKU_Kit_details = ({ inventoryId, sku, upc, defaultPrice, msrp, map, floor
     },
   })
 
-  const HandleAddProduct = (event: any) => {
+  const handleAddProduct = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
   }
@@ -103,7 +103,7 @@ const SKU_Kit_details = ({ inventoryId, sku, upc, defaultPrice, msrp, map, floor
                 <UncontrolledTooltip placement='top' target='maxSalePriceHead' innerClassName='bg-white text-primary shadow'>
                   {`Maximum Sale Price`}
                 </UncontrolledTooltip>
-                <th></th>
+                <th scope='col' aria-label='SKU row actions'></th>
               </tr>
             </thead>
             <tbody>
@@ -123,7 +123,7 @@ const SKU_Kit_details = ({ inventoryId, sku, upc, defaultPrice, msrp, map, floor
           </table>
         </div>
       ) : (
-        <Form onSubmit={HandleAddProduct}>
+        <Form onSubmit={handleAddProduct}>
           <Row>
             <table className='table table-sm table-borderless'>
               <thead>

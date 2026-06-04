@@ -151,6 +151,7 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
             name='showShippingMode'
             disabled={true}
             checked={finalShippingCharges.sameShippingMode}
+            aria-checked={finalShippingCharges.sameShippingMode}
           />
           <Label className='check-form-label m-0 fw-normal' for='showShippingMode'>
             Shipping mode will be same for all shipments
@@ -341,7 +342,7 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                             <img
                               loading='lazy'
                               src={inboundPlan.skus_details[item.msku]?.image ? inboundPlan.skus_details[item.msku]?.image : NoImageAdress}
-                              alt='product Image'
+                              alt={item.msku || 'SKU'}
                               style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                             />
                           </div>

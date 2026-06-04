@@ -134,7 +134,7 @@ const AddProducts = ({ session }: Props) => {
     },
   })
 
-  const HandleAddProduct = (event: any) => {
+  const handleAddProduct = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
   }
@@ -243,7 +243,7 @@ const AddProducts = ({ session }: Props) => {
           <Container fluid>
             <Card>
               <CardBody>
-                <Form onSubmit={HandleAddProduct}>
+                <Form onSubmit={handleAddProduct}>
                   <Row>
                     <h5 className='fs-5 fw-bold text-primary'>Product Details</h5>
                     <Col md={6}>
@@ -474,7 +474,7 @@ const AddProducts = ({ session }: Props) => {
                               loading='lazy'
                               src={validation.values.image}
                               onError={(e) => (e.currentTarget.src = NoImageAdress)}
-                              alt='Image preview'
+                              alt='Product preview'
                               style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                               onLoad={() => {
                                 URL.revokeObjectURL(validation.values.image)

@@ -79,7 +79,7 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
     },
   })
 
-  const HandleAddProduct = (event: any) => {
+  const handleAddProduct = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
   }
@@ -96,7 +96,7 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
           </p>
           <p className='fs-6 m-0 p-0 fw-semibold'>{rpProductConfig.product.title}</p>
           <p className='fs-7 text-muted'>Here you can edit some configurations related to the product to adjust the forecast.</p>
-          <Form onSubmit={HandleAddProduct}>
+          <Form onSubmit={handleAddProduct}>
             <h5 className='fs-5 fw-bold'>Warehouse</h5>
             <Row>
               <Col xs={12} md={10}>

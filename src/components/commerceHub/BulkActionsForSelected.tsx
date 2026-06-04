@@ -47,16 +47,17 @@ const BulkActionsForSelected = ({ selectedRows, clearSelected, statusOptions, ch
                   Apply
                 </Button>
               </div>
-              <span
-                style={{ width: '100%', cursor: 'pointer', textAlign: 'right' }}
+              <button
+                type='button'
+                style={{ width: '100%', textAlign: 'right' }}
                 onClick={() => {
                   clearSelected()
                   setselectedStatus({ value: '', label: 'Select Status' })
                   setOpenDatesMenu(false)
                 }}
-                className='text-muted mt-2 fs-7'>
+                className='btn btn-link p-0 border-0 text-decoration-none text-muted mt-2 fs-7'>
                 Clear All
-              </span>
+              </button>
             </div>
           </div>
         </DropdownMenu>

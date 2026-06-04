@@ -20,49 +20,49 @@ const SelectShippingCarrier = ({ id, selectionInfo, disabled, selected, handleSe
 
   return (
     <div id={id} ref={selectCarrier} className='dropdown mb-0 w-100'>
-      <div
-        className={'btn-group w-100 form-control form-control-sm p-0 border border-2 ' + (!disabled && selected == '' ? 'border-danger' : 'border-primary')}
+      <button
+        type='button'
+        className={'btn-group w-100 form-control form-control-sm p-0 bg-transparent border border-2 ' + (!disabled && selected == '' ? 'border-danger' : 'border-primary')}
         onClick={() => (disabled ? null : setOpenDatesMenu(!openDatesMenu))}
+        disabled={disabled}
         style={{ cursor: 'pointer' }}>
-        <button type='button' className='btn btn-light btn-sm py-0 fs-7 w-100 text-start' style={{ backgroundColor: disabled ? 'lightgrey' : 'white', opacity: '100%' }}>
+        <span className='btn btn-light btn-sm py-0 fs-7 w-100 text-start' style={{ backgroundColor: disabled ? 'lightgrey' : 'white', opacity: '100%' }}>
           {selected == '' ? <span className='text-muted'>Select</span> : selected}
-        </button>
-        <button
-          type='button'
-          disabled
+        </span>
+        <span
           className='btn btn-light btn-sm dropdown-toggle fs-6 dropdown-toggle dropdown-toggle-split'
           style={{ backgroundColor: disabled ? 'lightgrey' : 'white', maxWidth: '35px' }}
           data-bs-toggle='dropdown'
           data-bs-auto-close='outside'
           aria-expanded='false'>
           <span className='visually-hidden'>Toggle Dropdown</span>
-        </button>
-      </div>
+        </span>
+      </button>
       <div id={`${id}-menu`} className={'dropdown-menu w-100 py-3 px-4' + (openDatesMenu ? ' show' : '')}>
         <div className='d-flex flex-column justify-content-start'>
           <div style={{ maxHeight: '25vh', overflowY: 'scroll', scrollbarWidth: 'none' }}>
             {selectionInfo?.map((option) => (
-              <p
+              <button
+                type='button'
                 key={`${option.carrier.alphaCode}-${option.transportationOptionId}-${option.shipmentId}`}
-                className={'m-0 mb-2 fs-7 ' + (selected == `${option.carrier.name}` ? 'fw-bold' : '')}
-                style={{ cursor: 'pointer' }}
+                className={'btn btn-link d-block p-0 border-0 text-start text-decoration-none text-reset fs-7 mb-2 ' + (selected == `${option.carrier.name}` ? 'fw-bold' : '')}
                 onClick={() => {
                   handleSelection(option.carrier.name, option.carrier.alphaCode!, option.transportationOptionId)
                   setOpenDatesMenu(false)
                 }}>
                 {option.carrier.name}
-              </p>
+              </button>
             ))}
           </div>
-          <p
-            className={'mt-2 mb-0 text-muted text-end fs-7'}
-            style={{ cursor: 'pointer' }}
+          <button
+            type='button'
+            className={'btn btn-link p-0 border-0 text-decoration-none text-muted text-end fs-7'}
             onClick={() => {
               handleSelection('', '', '')
               setOpenDatesMenu(false)
             }}>
             Clear
-          </p>
+          </button>
         </div>
       </div>
     </div>

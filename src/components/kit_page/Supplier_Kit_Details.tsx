@@ -61,7 +61,7 @@ const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCos
     },
   })
 
-  const HandleAddProduct = (event: any) => {
+  const handleAddProduct = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
   }
@@ -101,7 +101,7 @@ const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCos
                   {`Total Days from Production and Transit`}
                 </UncontrolledTooltip>
                 <th>Shipping To FBA Cost</th>
-                <th></th>
+                <th scope='col' aria-label='Supplier row actions'></th>
               </tr>
             </thead>
             <tbody>
@@ -118,7 +118,9 @@ const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCos
                 <td className={shippingToFBA ? '' : 'text-muted fw-light fst-italic'}>{shippingToFBA ? FormatCurrency(state.currentRegion, shippingToFBA) : 'No Cost'}</td>
                 <td>
                   <div className='text-end'>
-                    <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i>
+                    <button type='button' aria-label='Edit supplier details' onClick={handleShowEditFields} className='btn btn-link p-0 border-0'>
+                      <i className='ri-pencil-fill fs-5 m-0 p-0 text-primary'></i>
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -126,7 +128,7 @@ const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCos
           </table>
         </div>
       ) : (
-        <Form onSubmit={HandleAddProduct}>
+        <Form onSubmit={handleAddProduct}>
           <Row>
             <table className='table table-sm table-borderless'>
               <thead>

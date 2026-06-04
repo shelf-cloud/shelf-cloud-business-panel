@@ -39,7 +39,8 @@ const SelectMarketplaceDropDown = ({ selectionInfo, selected, handleSelection, s
         {selected.storeId === '9999' || selected.storeId === '' ? (
           <i className='las la-store-alt fs-5 m-0 p-0 text-primary' />
         ) : (
-          <div
+          <span
+            className='d-inline-block flex-shrink-0'
             style={{
               width: '16px',
               height: '16px',
@@ -50,39 +51,40 @@ const SelectMarketplaceDropDown = ({ selectionInfo, selected, handleSelection, s
               loading='lazy'
               src={selected.logo ? selected.logo : NoImageAdress}
               onError={(e) => (e.currentTarget.src = NoImageAdress)}
-              alt='product Image'
+              alt={selected.name ? `${selected.name} logo` : 'Marketplace logo'}
               style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
             />
-          </div>
+          </span>
         )}
         <span className='fw-semibold m-0 p-0 fs-7'>{selected?.name}</span>
       </button>
       <div className={'dropdown-menu w-100 py-3 ps-3 pe-1' + (openDatesMenu ? ' show' : '')} style={{ minWidth: '280px' }}>
         <div className='w-100 d-flex flex-column justify-content-start align-items-start gap-2' style={{ maxHeight: '25vh', overflowY: 'scroll', scrollbarWidth: 'thin' }}>
           {showAllMarketsOption && (
-            <div
+            <button
+              type='button'
               key={'9999'}
-              className='d-flex flex-row justify-content-start gap-2 align-items-center'
-              style={{ cursor: 'pointer' }}
+              className='btn btn-link p-0 border-0 text-decoration-none text-reset d-flex flex-row justify-content-start gap-2 align-items-center'
               onClick={() => {
                 handleSelection({ storeId: '9999', name: 'All Marketplaces', logo: '' })
                 setOpenDatesMenu(false)
               }}>
               <i className='las la-store-alt fs-4 m-0 p-0 text-primary' />
               <span className={'m-0 p-0 text-nowrap ' + (selected.storeId === '9999' ? 'fw-semibold' : '')}>All Marketplaces</span>
-            </div>
+            </button>
           )}
           {selectionInfo?.map((option) => (
-            <div
+            <button
+              type='button'
               key={option.storeId}
-              className='d-flex flex-row justify-content-start gap-2 align-items-center mb-1'
-              style={{ cursor: 'pointer' }}
+              className='btn btn-link p-0 border-0 text-decoration-none text-reset d-flex flex-row justify-content-start gap-2 align-items-center mb-1'
               onClick={() => {
                 handleSelection({ storeId: option.storeId, name: option.name, logo: option.logo })
                 setOpenDatesMenu(false)
               }}>
               {option.logo !== '' && (
-                <div
+                <span
+                  className='d-inline-block flex-shrink-0'
                   style={{
                     width: '20px',
                     height: '20px',
@@ -93,13 +95,13 @@ const SelectMarketplaceDropDown = ({ selectionInfo, selected, handleSelection, s
                     loading='lazy'
                     src={option.logo ? option.logo : NoImageAdress}
                     onError={(e) => (e.currentTarget.src = NoImageAdress)}
-                    alt='product Image'
+                    alt={option.name ? `${option.name} logo` : 'Marketplace logo'}
                     style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                   />
-                </div>
+                </span>
               )}
               <span className={'m-0 p-0 text-nowrap ' + (String(selected.storeId) === option.storeId ? 'fw-bold' : '')}>{option.name}</span>
-            </div>
+            </button>
           ))}
         </div>
       </div>

@@ -93,10 +93,10 @@ const Sidebar = ({}: Props) => {
               </ul>
             </Container>
           </SimpleBar>
-          <div className='logout_container' onClick={() => signOut()}>
+          <button type='button' className='logout_container border-0 bg-transparent' onClick={() => signOut()}>
             <i className='mdi mdi-logout'></i>
             <span>Logout</span>
-          </div>
+          </button>
         </React.Fragment>
       </div>
       <div className='vertical-overlay'></div>

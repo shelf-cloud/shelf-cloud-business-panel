@@ -22,53 +22,51 @@ const Select_Condition_Product_Details = ({ selected, handleSelection, errorMess
 
   return (
     <div ref={selectCondition} className='dropdown mb-3'>
-      <div className='btn-group w-100' style={errorMessage ? styles.error : styles.noError} onClick={() => setOpenDatesMenu(!openDatesMenu)}>
-        <button type='button' disabled className='btn btn-light btn-sm form-control fs-6 w-100 text-start' style={{ backgroundColor: 'white', opacity: '100%' }}>
+      <button type='button' className='btn-group w-100 p-0 bg-transparent' style={errorMessage ? styles.error : styles.noError} onClick={() => setOpenDatesMenu(!openDatesMenu)}>
+        <span className='btn btn-light btn-sm form-control fs-6 w-100 text-start' style={{ backgroundColor: 'white', opacity: '100%' }}>
           {selected == '' ? `Select...` : selected}
-        </button>
-        <button
-          type='button'
-          disabled
+        </span>
+        <span
           className='btn btn-light btn-sm dropdown-toggle form-control fs-6dropdown-toggle dropdown-toggle-split'
           style={{ backgroundColor: 'white', maxWidth: '35px' }}
           data-bs-toggle='dropdown'
           data-bs-auto-close='outside'
           aria-expanded='false'>
           <span className='visually-hidden'>Toggle Dropdown</span>
-        </button>
-      </div>
+        </span>
+      </button>
       <div className={'dropdown-menu w-100 pt-3 px-4' + (openDatesMenu ? ' show' : '')}>
         <div className='d-flex flex-column justify-content-start'>
-          <p
+          <button
+            type='button'
             key={'New'}
-            className={'m-0 mb-3 ' + (selectedOption == 'New' ? 'fw-bold' : '')}
-            style={{ cursor: 'pointer' }}
+            className={'btn btn-link p-0 border-0 text-start text-decoration-none text-reset mb-3 ' + (selectedOption == 'New' ? 'fw-bold' : '')}
             onClick={() => {
               setSelectedOption('New')
               handleSelection('New')
             }}>
             New
-          </p>
-          <p
+          </button>
+          <button
+            type='button'
             key={'Like New'}
-            className={'m-0 mb-3 ' + (selectedOption == 'Like New' ? 'fw-bold' : '')}
-            style={{ cursor: 'pointer' }}
+            className={'btn btn-link p-0 border-0 text-start text-decoration-none text-reset mb-3 ' + (selectedOption == 'Like New' ? 'fw-bold' : '')}
             onClick={() => {
               setSelectedOption('Like New')
               handleSelection('Like New')
             }}>
             Like New
-          </p>
-          <p
+          </button>
+          <button
+            type='button'
             key={'Used'}
-            className={'m-0 mb-3 ' + (selectedOption == 'Used' ? 'fw-bold' : '')}
-            style={{ cursor: 'pointer' }}
+            className={'btn btn-link p-0 border-0 text-start text-decoration-none text-reset mb-3 ' + (selectedOption == 'Used' ? 'fw-bold' : '')}
             onClick={() => {
               setSelectedOption('Used')
               handleSelection('Used')
             }}>
             Used
-          </p>
+          </button>
         </div>
       </div>
     </div>

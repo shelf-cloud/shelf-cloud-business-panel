@@ -218,12 +218,12 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
     },
   })
 
-  const HandleChangePONumber = (event: any) => {
+  const handleChangePONumber = (event: any) => {
     event.preventDefault()
     validationPONumber.handleSubmit()
   }
 
-  const HandleAddComment = (event: any) => {
+  const handleAddComment = (event: any) => {
     event.preventDefault()
     validationNote.handleSubmit()
   }
@@ -279,21 +279,23 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                         <td className='text-muted text-nowrap'>PO Number:</td>
                         <td className='fw-semibold w-100'>
                           {data.orderNumber}{' '}
-                          <i
-                            className={'las la-edit fs-5 text-primary m-0 p-0 ' + (editPONumber && 'd-none')}
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => seteditPONumber(true)}
-                          />
+                          <button
+                            type='button'
+                            aria-label='Edit PO number'
+                            className={'btn btn-link border-0 bg-transparent text-primary m-0 p-0 ' + (editPONumber && 'd-none')}
+                            onClick={() => seteditPONumber(true)}>
+                            <i className='las la-edit fs-5 m-0 p-0' />
+                          </button>
                         </td>
                       </tr>
                     )}
                     {editPONumber && (
                       <tr>
                         <td colSpan={2}>
-                          <Form onSubmit={HandleChangePONumber}>
+                          <Form onSubmit={handleChangePONumber}>
                             <Col md={12}>
                               <FormGroup>
-                                <Label htmlFor='note' className='form-label'>
+                                <Label htmlFor='orderNumber' className='form-label'>
                                   New PO Number:
                                 </Label>
                                 <div className='input-group mb-2'>
@@ -302,6 +304,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                                   </span>
                                   <Input
                                     type='text'
+                                    aria-label='New PO number'
                                     className='form-control fs-7'
                                     id='orderNumber'
                                     name='orderNumber'
@@ -340,16 +343,22 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                     </tr>
                     <tr>
                       <td className='text-muted text-nowrap'>Note:</td>
-                      <td></td>
+                      <td aria-label='Note value'></td>
                     </tr>
                   </tbody>
                 </table>
                 <p className='m-0 px-1 fs-7'>{data.note}</p>
                 <p className='text-end m-0 px-1'>
-                  <i className={'las la-edit fs-4 text-primary m-0 p-0 ' + (showEditNote && 'd-none')} style={{ cursor: 'pointer' }} onClick={() => setShowEditNote(true)}></i>
+                  <button
+                    type='button'
+                    aria-label='Edit PO note'
+                    className={'btn btn-link border-0 bg-transparent text-primary m-0 p-0 ' + (showEditNote && 'd-none')}
+                    onClick={() => setShowEditNote(true)}>
+                    <i className='las la-edit fs-4 m-0 p-0' />
+                  </button>
                 </p>
                 {showEditNote && (
-                  <Form onSubmit={HandleAddComment}>
+                  <Form onSubmit={handleAddComment}>
                     <Col md={12}>
                       <FormGroup className='m-0'>
                         <Label htmlFor='note' className='form-label'>
@@ -388,7 +397,13 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
               <CardHeader className='py-2 d-flex flex-row justify-content-between'>
                 <h5 className='fw-semibold m-0'>Payment History</h5>{' '}
                 {data.isOpen && (
-                  <i className='fs-4 text-success las la-plus-circle' style={{ cursor: 'pointer' }} onClick={() => setModalAddPaymentToPoDetails(data.poId, data.orderNumber)} />
+                  <button
+                    type='button'
+                    aria-label='Add payment'
+                    className='btn btn-link border-0 bg-transparent text-success m-0 p-0'
+                    onClick={() => setModalAddPaymentToPoDetails(data.poId, data.orderNumber)}>
+                    <i className='fs-4 las la-plus-circle' />
+                  </button>
                 )}
               </CardHeader>
               <CardBody className='pt-0 px-0'>
@@ -409,9 +424,10 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                         <td className='text-center'>{payment.date}</td>
                         <td className='d-flex justify-content-start align-items-center gap-2'>
                           <span>{FormatCurrency(state.currentRegion, payment.amount)}</span>
-                          <i
-                            className='las la-edit fs-5 text-primary m-0 p-0'
-                            style={{ cursor: 'pointer' }}
+                          <button
+                            type='button'
+                            aria-label='Edit payment'
+                            className='btn btn-link border-0 bg-transparent text-primary m-0 p-0'
                             onClick={() =>
                               setEditPaymentModal({
                                 show: true,
@@ -422,8 +438,9 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                                 comment: payment.comment ?? '',
                                 paymentIndex: key,
                               })
-                            }
-                          />
+                            }>
+                            <i className='las la-edit fs-5 m-0 p-0' />
+                          </button>
                           {payment.comment && (
                             <>
                               <i className='ri-information-fill m-0 p-0 fs-5 text-info' id={`paymentComment${data.orderNumber}-${key}-${payment.date}`} />
@@ -465,14 +482,19 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                   <>
                     <p className='m-0 my-1 p-0 fs-7 text-muted fw-normal'>Split Destinations:</p>
                     <Nav className='m-0 d-flex flex-row justify-content-start align-items-center gap-2 fs-7' role='tablist'>
-                      <NavItem style={{ cursor: 'pointer' }} onClick={() => setactiveTab('all')}>
-                        <Button color={activeTab === 'all' ? 'primary' : 'light'} size='sm' className='fs-7'>
+                      <NavItem>
+                        <Button type='button' color={activeTab === 'all' ? 'primary' : 'light'} size='sm' className='fs-7' onClick={() => setactiveTab('all')}>
                           All Splits
                         </Button>
                       </NavItem>
                       {Object.values(data.splits).map((split) => (
-                        <NavItem key={`splitId-${split.splitId}`} style={{ cursor: 'pointer' }} onClick={() => setactiveTab(`${split.splitId}`)}>
-                          <Button color={activeTab === `${split.splitId}` ? 'primary' : 'light'} size='sm' className='fs-7'>
+                        <NavItem key={`splitId-${split.splitId}`}>
+                          <Button
+                            type='button'
+                            color={activeTab === `${split.splitId}` ? 'primary' : 'light'}
+                            size='sm'
+                            className='fs-7'
+                            onClick={() => setactiveTab(`${split.splitId}`)}>
                             {split.splitName}
                           </Button>
                         </NavItem>
@@ -484,10 +506,11 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
               {(!data.hasSplitting || (data.hasSplitting && activeTab !== 'all')) && data.isOpen && (
                 <div className='d-flex flex-row justify-content-end gap-2 align-items-center'>
                   {data.poItems.length > 0 && (
-                    <i
+                    <button
+                      type='button'
+                      aria-label='Edit PO items'
                       id={`editPoItems-${data.poId}-${activeTab}`}
-                      className='mdi mdi-file-edit-outline fs-4 text-primary m-0 p-0'
-                      style={{ cursor: 'pointer' }}
+                      className='btn btn-link border-0 bg-transparent text-primary m-0 p-0'
                       onClick={() =>
                         setshowEditOrderQty((prev) => {
                           return {
@@ -500,8 +523,9 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                             split: data.splits[activeTab] || undefined,
                           }
                         })
-                      }
-                    />
+                      }>
+                      <i className='mdi mdi-file-edit-outline fs-4 m-0 p-0' />
+                    </button>
                   )}
                   {data.poItems.length > 0 && (
                     <UncontrolledTooltip
@@ -512,12 +536,14 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                       Edit PO items
                     </UncontrolledTooltip>
                   )}
-                  <i
+                  <button
+                    type='button'
+                    aria-label='Add SKU to PO'
                     id={`addSkuToPo-${data.poId}-${activeTab}`}
-                    className='fs-4 text-success mdi mdi-plus-circle-outline'
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => setModalAddSkuToPurchaseOrder(true, data.poId, data.orderNumber, data.suppliersName, data.hasSplitting, data.splits[activeTab] || undefined)}
-                  />
+                    className='btn btn-link border-0 bg-transparent text-success m-0 p-0'
+                    onClick={() => setModalAddSkuToPurchaseOrder(true, data.poId, data.orderNumber, data.suppliersName, data.hasSplitting, data.splits[activeTab] || undefined)}>
+                    <i className='fs-4 mdi mdi-plus-circle-outline' />
+                  </button>
                   <UncontrolledTooltip
                     placement='top'
                     target={`addSkuToPo-${data.poId}-${activeTab}`}
@@ -527,12 +553,14 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                   </UncontrolledTooltip>
                   {hasPendingProducts && (
                     <>
-                      <i
+                      <button
+                        type='button'
+                        aria-label='Receive all pending items'
                         id={`receiveAllPendingItems-${data.poId}-${activeTab}`}
-                        className='fs-4 text-success mdi mdi-checkbox-multiple-marked-outline'
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => handleReceiveAllPendingItems()}
-                      />
+                        className='btn btn-link border-0 bg-transparent text-success m-0 p-0'
+                        onClick={() => handleReceiveAllPendingItems()}>
+                        <i className='fs-4 mdi mdi-checkbox-multiple-marked-outline' />
+                      </button>
                       <UncontrolledTooltip
                         placement='top'
                         target={`receiveAllPendingItems-${data.poId}-${activeTab}`}

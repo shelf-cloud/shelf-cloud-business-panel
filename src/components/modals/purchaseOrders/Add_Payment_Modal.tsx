@@ -57,7 +57,7 @@ const Add_Payment_Modal = ({}: Props) => {
     },
   })
 
-  const HandleAddProduct = (event: any) => {
+  const handleAddProduct = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
   }
@@ -79,7 +79,7 @@ const Add_Payment_Modal = ({}: Props) => {
         Add Payment
       </ModalHeader>
       <ModalBody>
-        <Form onSubmit={HandleAddProduct}>
+        <Form onSubmit={handleAddProduct}>
           <Row md={12}>
             <h5 className='fs-5 mb-4 fw-semibold'>
               PO: <span className='fw-semibold text-primary'>{state.modalAddPaymentToPoDetails?.orderNumber}</span>

@@ -139,9 +139,9 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, ma
                   </div>
                 </div>
                 <div className='w-full d-flex justify-content-between align-items-center mt-4'>
-                  <span onClick={() => handleClearFilters(setValues)} className='fw-normal m-0 fs-7' style={{ cursor: 'pointer' }}>
+                  <button type='button' onClick={() => handleClearFilters(setValues)} className='btn btn-link p-0 border-0 text-decoration-none text-reset fw-normal m-0 fs-7'>
                     Clear All
-                  </span>
+                  </button>
                   <Button color='primary' type='submit' size='sm'>
                     Apply
                   </Button>

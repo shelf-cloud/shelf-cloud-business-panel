@@ -78,17 +78,18 @@ const FilterUnsellables = ({ searchStatus, setSearchStatus, searchReason, setSea
                 <option value='Other'>Other</option>
               </Input>
             </div>
-            <span
-              style={{ width: '100%', cursor: 'pointer', textAlign: 'right' }}
+            <button
+              type='button'
+              style={{ width: '100%', textAlign: 'right' }}
               onClick={() => {
                 // setSearchType('')
                 setSearchStatus('')
                 setSearchReason('')
                 setOpenDatesMenu(false)
               }}
-              className='fw-normal fs-7 mt-2'>
+              className='btn btn-link p-0 border-0 text-decoration-none text-reset fw-normal fs-7 mt-2'>
               Clear All
-            </span>
+            </button>
           </div>
         </div>
       </div>

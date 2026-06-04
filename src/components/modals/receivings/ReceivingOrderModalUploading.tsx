@@ -228,7 +228,7 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
     },
   })
 
-  const HandleAddProduct = (event: any) => {
+  const handleAddProduct = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
   }
@@ -317,7 +317,7 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
         Create Receiving by Uploading File
       </ModalHeader>
       <ModalBody>
-        <Form onSubmit={HandleAddProduct}>
+        <Form onSubmit={handleAddProduct}>
           <Row>
             <h5 className='fs-5 fw-bolder'>Order Details</h5>
             <p className='m-0 mb-2 fs-7'>

@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Image from 'next/image'
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { useContext, useMemo, useState } from 'react'
 
 import boxIcon from '@assets/fulfillments/outbound_box.png'
 import palletIcon from '@assets/fulfillments/outbound_pallet.png'
@@ -47,7 +47,6 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
       : inboundPlan.placementOptions.find((placementOption) => inboundPlan.placementOptionId === placementOption.placementOptionId)!
   )
   const [deliveryWindowOptions, setdeliveryWindowOptions] = useState<DeliveryWindowsOptions>({})
-  const [shippingHasErrors, setshippingHasErrors] = useState(true)
   const [finalShippingCharges, setfinalShippingCharges] = useState({
     inboundPlanId: inboundPlan.inboundPlanId,
     sameShipDate: true,
@@ -293,29 +292,25 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
     return 0
   }, [placementOptionSelected, finalShippingCharges, inboundPlan.transportationOptions])
 
-  useEffect(() => {
+  const shippingHasErrors = useMemo(() => {
     if (Object.values(finalShippingCharges.shipments).length === 0) {
-      setshippingHasErrors(true)
-      return
+      return true
     }
 
     if (finalShippingCharges.shipDate === '') {
-      setshippingHasErrors(true)
-      return
+      return true
     }
 
     if (finalShippingCharges.sameShippingMode) {
       if (finalShippingCharges.shippingMode === 'SPD') {
         if (finalShippingCharges.sameShippingCarrier === 'amazon') {
           if (totalSPDFees === 0) {
-            setshippingHasErrors(true)
-            return
+            return true
           }
         }
         if (finalShippingCharges.sameShippingCarrier === 'non-amazon') {
           if (finalShippingCharges.nonAmazonCarrier === '' || Object.values(finalShippingCharges.shipments).some((shipment) => shipment.deliveryWindow === '')) {
-            setshippingHasErrors(true)
-            return
+            return true
           }
         }
       }
@@ -330,12 +325,11 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
             (finalShippingCharges.nonAmazonCarrier === '' || shipment.deliveryWindow === '')
         )
       ) {
-        setshippingHasErrors(true)
-        return
+        return true
       }
     }
 
-    setshippingHasErrors(false)
+    return false
   }, [finalShippingCharges, totalSPDFees])
 
   const searchShipmentSPDFees = (shipmentId: string) => {
@@ -595,6 +589,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                     name='showShippingMode'
                     disabled={inboundPlan.steps[3].complete}
                     checked={finalShippingCharges.sameShippingMode}
+                    aria-checked={finalShippingCharges.sameShippingMode}
                     onChange={() => {
                       setfinalShippingCharges((prev) => {
                         return {
@@ -889,7 +884,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                     <img
                                       loading='lazy'
                                       src={inboundPlan.skus_details[item.msku]?.image ? inboundPlan.skus_details[item.msku]?.image : NoImageAdress}
-                                      alt='product Image'
+                                      alt={item.msku || 'SKU'}
                                       style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                                     />
                                   </div>

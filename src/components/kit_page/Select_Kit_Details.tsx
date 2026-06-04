@@ -61,21 +61,19 @@ const Select_Kit_Details = ({ inventoryId, type, addEndpoint, selectionInfo, sel
 
   return (
     <div ref={selectKitDetails} className='dropdown mb-3'>
-      <div className='btn-group w-100' style={errorMessage ? styles.error : styles.noError} onClick={() => setOpenDatesMenu(!openDatesMenu)}>
-        <button type='button' disabled className='btn btn-light btn-sm form-control fs-6 w-100 text-start' style={{ backgroundColor: 'white', opacity: '100%' }}>
+      <button type='button' className='btn-group w-100 p-0 bg-transparent' style={errorMessage ? styles.error : styles.noError} onClick={() => setOpenDatesMenu(!openDatesMenu)}>
+        <span className='btn btn-light btn-sm form-control fs-6 w-100 text-start' style={{ backgroundColor: 'white', opacity: '100%' }}>
           {selected == '' ? `Select...` : selected}
-        </button>
-        <button
-          type='button'
-          disabled
+        </span>
+        <span
           className='btn btn-light btn-sm dropdown-toggle form-control fs-6dropdown-toggle dropdown-toggle-split'
           style={{ backgroundColor: 'white', maxWidth: '35px' }}
           data-bs-toggle='dropdown'
           data-bs-auto-close='outside'
           aria-expanded='false'>
           <span className='visually-hidden'>Toggle Dropdown</span>
-        </button>
-      </div>
+        </span>
+      </button>
       {errorMessage ? (
         <p className='text-danger p-0' style={{ fontSize: '0.875em', marginTop: '0.25rem' }}>
           {errorMessage}
@@ -85,16 +83,16 @@ const Select_Kit_Details = ({ inventoryId, type, addEndpoint, selectionInfo, sel
         <div className='d-flex flex-column justify-content-start'>
           <div style={{ maxHeight: '25vh', overflowY: 'scroll' }}>
             {selectionInfo?.map((option) => (
-              <p
+              <button
+                type='button'
                 key={option}
-                className={'m-0 mb-2 ' + (selectedOption == `${option}` ? 'fw-bold' : '')}
-                style={{ cursor: 'pointer' }}
+                className={'btn btn-link d-block p-0 border-0 text-start text-decoration-none text-reset mb-2 ' + (selectedOption == `${option}` ? 'fw-bold' : '')}
                 onClick={() => {
                   setSelectedOption(`${option}`)
                   handleSelection(type, `${option}`)
                 }}>
                 {`- ${option}`}
-              </p>
+              </button>
             ))}
           </div>
           <hr className='dropdown-divider' />

@@ -182,7 +182,7 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
     },
   })
 
-  const HandleAddProduct = (event: any) => {
+  const handleAddProduct = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
   }
@@ -224,7 +224,7 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
         Create Manual Receiving
       </ModalHeader>
       <ModalBody>
-        <Form onSubmit={HandleAddProduct}>
+        <Form onSubmit={handleAddProduct}>
           <h5 className='fs-5 fw-bolder'>Receiving Details</h5>
           <Row>
             <Col xs={12} md={4}>

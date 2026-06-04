@@ -145,8 +145,9 @@ const FilterByOthers = ({
                   </>
                 )}
 
-                <span
-                  style={{ width: '100%', cursor: 'pointer', textAlign: 'right' }}
+                <button
+                  type='button'
+                  style={{ width: '100%', textAlign: 'right' }}
                   onClick={() => {
                     setSearchType({ value: '', label: 'All' })
                     setSearchStatus({ value: '', label: 'All' })
@@ -155,9 +156,9 @@ const FilterByOthers = ({
                     setSearchMarketplace({ value: '', label: 'All Stores' })
                     setOpenFilters(false)
                   }}
-                  className='text-muted mt-2 fs-7'>
+                  className='btn btn-link p-0 border-0 text-decoration-none text-muted mt-2 fs-7'>
                   Clear All
-                </span>
+                </button>
               </div>
             </div>
           </DropdownMenu>

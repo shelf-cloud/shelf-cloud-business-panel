@@ -81,7 +81,7 @@ const CloneProductModal = ({ cloneProductModal, setcloneProductModal }: Props) =
     },
   })
 
-  const HandleAddProduct = (event: any) => {
+  const handleAddProduct = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
   }
@@ -104,7 +104,7 @@ const CloneProductModal = ({ cloneProductModal, setcloneProductModal }: Props) =
         Clone Product
       </ModalHeader>
       <ModalBody>
-        <Form onSubmit={HandleAddProduct}>
+        <Form onSubmit={handleAddProduct}>
           <Row>
             <p className='m-0 fw-bold fs-5 text-primary'>Cloning From:</p>
             <p className='m-0 fw-light'>{cloneProductModal.originalName}</p>

@@ -63,21 +63,19 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
           <p className='px-3 m-0 py-0 fs-5 fw-semibold'>{showMappedListingModal.currentSkuMapped}</p>
         </div>
       ) : (
-        <div className='btn-group w-100' onClick={() => setOpenSelectionList(!openSelectionList)}>
-          <button type='button' disabled className='btn btn-light btn-sm form-control fs-6 w-100 text-start' style={{ backgroundColor: 'white', opacity: '100%' }}>
+        <button type='button' className='btn-group w-100 p-0 border-0 bg-transparent' onClick={() => setOpenSelectionList(!openSelectionList)}>
+          <span className='btn btn-light btn-sm form-control fs-6 w-100 text-start' style={{ backgroundColor: 'white', opacity: '100%' }}>
             {showMappedListingModal.shelfCloudSku == '' ? `Select...` : showMappedListingModal.shelfCloudSku}
-          </button>
-          <button
-            type='button'
-            disabled
+          </span>
+          <span
             className='btn btn-light btn-sm dropdown-toggle form-control fs-6dropdown-toggle dropdown-toggle-split'
             style={{ backgroundColor: 'white', maxWidth: '35px' }}
             data-bs-toggle='dropdown'
             data-bs-auto-close='outside'
             aria-expanded='false'>
             <span className='visually-hidden'>Toggle Dropdown</span>
-          </button>
-        </div>
+          </span>
+        </button>
       )}
       <div className={'dropdown-menu w-100 py-3 px-3' + (openSelectionList ? ' show' : '')}>
         <div className='w-100 mb-3'>
@@ -95,14 +93,14 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
                 onChange={(e) => setSearchValue(e.target.value)}
               />
               <span className='mdi mdi-magnify search-widget-icon fs-5'></span>
-              <span
+              <button
+                type='button'
+                aria-label='Clear search'
                 className='d-flex align-items-center justify-content-center input_background_white'
-                style={{
-                  cursor: 'pointer',
-                }}
+                style={{ border: 0 }}
                 onClick={() => setSearchValue('')}>
                 <i className='mdi mdi-window-close fs-5 m-0 px-2 py-0 text-muted' />
-              </span>
+              </button>
             </div>
           </div>
         </div>
@@ -110,10 +108,10 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
         <div className='d-flex flex-column justify-content-start'>
           <div style={{ maxHeight: '30vh', overflowY: 'scroll' }}>
             {filterSelectionList?.map((option) => (
-              <div
+              <button
+                type='button'
                 key={`${option.sku}-${option.inventoryId}`}
-                className={'m-0 py-2 px-1 d-flex flex-row gap-2 ' + (showMappedListingModal.shelfCloudSku == `${option.sku}` ? 'bg-light' : '')}
-                style={{ cursor: 'pointer' }}
+                className={'btn btn-link w-100 border-0 text-start text-decoration-none text-reset m-0 py-2 px-1 d-flex flex-row gap-2 ' + (showMappedListingModal.shelfCloudSku == `${option.sku}` ? 'bg-light' : '')}
                 onClick={() => {
                   setshowMappedListingModal((prev: any) => {
                     return {
@@ -125,7 +123,8 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
                   })
                   setOpenSelectionList(false)
                 }}>
-                <div
+                <span
+                  className='d-inline-block flex-shrink-0'
                   style={{
                     width: '50px',
                     height: '40px',
@@ -136,16 +135,16 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
                     loading='lazy'
                     src={option.image ? option.image : NoImageAdress}
                     onError={(e) => (e.currentTarget.src = NoImageAdress)}
-                    alt='product Image'
+                    alt={option.title || option.sku || 'Catalog item'}
                     style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                   />
-                </div>
-                <div>
-                  <p className='fs-7 m-0 p-0 fw-bold'>{option.sku}</p>
-                  <p className='fs-7 fw-semibold text-primary m-0 p-0'>{option.isKit ? 'Kit' : 'Product'}</p>
-                  <p className='fs-7 text-muted m-0 p-0'>{option.title}</p>
-                </div>
-              </div>
+                </span>
+                <span className='d-inline-flex flex-column'>
+                  <span className='fs-7 m-0 p-0 fw-bold'>{option.sku}</span>
+                  <span className='fs-7 fw-semibold text-primary m-0 p-0'>{option.isKit ? 'Kit' : 'Product'}</span>
+                  <span className='fs-7 text-muted m-0 p-0'>{option.title}</span>
+                </span>
+              </button>
             ))}
           </div>
         </div>

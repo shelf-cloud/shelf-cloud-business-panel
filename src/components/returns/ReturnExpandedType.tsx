@@ -125,7 +125,7 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
     },
   })
 
-  const HandleAddComment = (event: any) => {
+  const handleAddComment = (event: any) => {
     event.preventDefault()
     validationNote.handleSubmit()
   }
@@ -219,11 +219,17 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
             <Card>
               <CardHeader className='py-3 d-flex justify-content-between align-items-center'>
                 <h5 className='fw-semibold m-0'>Order Comment</h5>
-                <i className={'las la-edit fs-3 text-primary m-0 p-0 ' + (showEditNote && 'd-none')} style={{ cursor: 'pointer' }} onClick={() => setShowEditNote(true)}></i>
+                <button
+                  type='button'
+                  aria-label='Edit order comment'
+                  className={'btn btn-link border-0 bg-transparent text-primary m-0 p-0 ' + (showEditNote && 'd-none')}
+                  onClick={() => setShowEditNote(true)}>
+                  <i className='las la-edit fs-3 m-0 p-0' />
+                </button>
               </CardHeader>
               <CardBody>
                 {showEditNote ? (
-                  <Form onSubmit={HandleAddComment}>
+                  <Form onSubmit={handleAddComment}>
                     <Col md={12}>
                       <FormGroup className='m-0'>
                         <Label htmlFor='comment' className='form-label'>
@@ -272,7 +278,7 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                     <tr>
                       <th scope='col'>Title</th>
                       <th scope='col'>Sku</th>
-                      <th></th>
+                      <th scope='col' aria-label='Item images'></th>
                       <th scope='col'>Condition</th>
                       <th className='text-center' scope='col'>
                         Qty Received
@@ -296,9 +302,7 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                       </tr>
                     ))}
                     <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
+                      <td colSpan={3} aria-label='Total label spacer'></td>
                       <td className='text-start fs-6 fw-bold text-nowrap'>Total</td>
                       <td className='text-center fs-6 text-primary'>
                         {data.orderItems.reduce((total, item: OrderItem) => total + (item.qtyReceived ? item.qtyReceived : item.quantity), 0)}

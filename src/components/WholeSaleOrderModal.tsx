@@ -348,7 +348,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
     },
   })
 
-  const HandleAddProduct = (event: any) => {
+  const handleAddProduct = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
   }
@@ -371,7 +371,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
         WholeSale Order with Master Boxes
       </ModalHeader>
       <ModalBody>
-        <Form onSubmit={HandleAddProduct}>
+        <Form onSubmit={handleAddProduct}>
           <Row>
             <p className='fs-4 fw-bold text-primary'>Order Details</p>
             <Col md={6}>
@@ -475,6 +475,8 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                                 {file.type === 'application/pdf' ? (
                                   <div className='relative overflow-hidden rounded border' style={{ width: '60px', height: '60px' }}>
                                     <iframe
+                                      title={`Shipping label preview for ${file.name}`}
+                                      sandbox=''
                                       src={file.preview ? file.preview : NoImageAdress}
                                       onError={(e) => (e.currentTarget.src = NoImageAdress)}
                                       width='400px'
@@ -544,6 +546,8 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                                 {file.type === 'application/pdf' ? (
                                   <div className='relative overflow-hidden rounded border' style={{ width: '60px', height: '60px' }}>
                                     <iframe
+                                      title={`Pallet label preview for ${file.name}`}
+                                      sandbox=''
                                       src={file.preview ? file.preview : NoImageAdress}
                                       onError={(e) => (e.currentTarget.src = NoImageAdress)}
                                       width='400px'
@@ -639,7 +643,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                 </tbody>
                 <tfoot>
                   <tr key={'totalMasterBoxes'} style={{ backgroundColor: '#e5e5e5' }}>
-                    <td></td>
+                    <td aria-label='Total label spacer'></td>
                     <td className='fw-bold text-center'>TOTAL</td>
                     <td className='fw-bold text-center'>{TotalMasterBoxes}</td>
                     <td className='fw-bold text-center'>{totalQuantityToShip}</td>

@@ -40,9 +40,9 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
       </button>
       <div className={'dropdown-menu dropdown-menu-md px-4 py-3' + (openDatesMenu ? ' show' : '')}>
         <div className='d-flex flex-column justify-content-start'>
-          <p
-            className={selectedDateFilter == 'today' ? 'fw-bold' : ''}
-            style={{ cursor: 'pointer' }}
+          <button
+            type='button'
+            className={'btn btn-link p-0 border-0 text-start text-decoration-none text-reset ' + (selectedDateFilter == 'today' ? 'fw-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('today')
               setshowMappedCreateReport((prev: any) => {
@@ -55,10 +55,10 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
               setOpenDatesMenu(false)
             }}>
             Today
-          </p>
-          <p
-            className={selectedDateFilter == 'yesterday' ? 'fw-bold' : ''}
-            style={{ cursor: 'pointer' }}
+          </button>
+          <button
+            type='button'
+            className={'btn btn-link p-0 border-0 text-start text-decoration-none text-reset ' + (selectedDateFilter == 'yesterday' ? 'fw-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('yesterday')
               setshowMappedCreateReport((prev: any) => {
@@ -71,10 +71,10 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
               setOpenDatesMenu(false)
             }}>
             Yesterday
-          </p>
-          <p
-            className={selectedDateFilter == 'thisweek' ? 'fw-bold' : ''}
-            style={{ cursor: 'pointer' }}
+          </button>
+          <button
+            type='button'
+            className={'btn btn-link p-0 border-0 text-start text-decoration-none text-reset ' + (selectedDateFilter == 'thisweek' ? 'fw-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('thisweek')
               setshowMappedCreateReport((prev: any) => {
@@ -87,10 +87,10 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
               setOpenDatesMenu(false)
             }}>
             This Week
-          </p>
-          <p
-            className={selectedDateFilter == 'lastweek' ? 'fw-bold' : ''}
-            style={{ cursor: 'pointer' }}
+          </button>
+          <button
+            type='button'
+            className={'btn btn-link p-0 border-0 text-start text-decoration-none text-reset ' + (selectedDateFilter == 'lastweek' ? 'fw-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('lastweek')
               setshowMappedCreateReport((prev: any) => {
@@ -103,10 +103,10 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
               setOpenDatesMenu(false)
             }}>
             Last Week
-          </p>
-          <p
-            className={selectedDateFilter == 'past7days' ? 'fw-bold' : ''}
-            style={{ cursor: 'pointer' }}
+          </button>
+          <button
+            type='button'
+            className={'btn btn-link p-0 border-0 text-start text-decoration-none text-reset ' + (selectedDateFilter == 'past7days' ? 'fw-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('past7days')
               setshowMappedCreateReport((prev: any) => {
@@ -119,10 +119,10 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
               setOpenDatesMenu(false)
             }}>
             Past 7 Days
-          </p>
-          <p
-            className={selectedDateFilter == 'thismonth' ? 'fw-bold' : ''}
-            style={{ cursor: 'pointer' }}
+          </button>
+          <button
+            type='button'
+            className={'btn btn-link p-0 border-0 text-start text-decoration-none text-reset ' + (selectedDateFilter == 'thismonth' ? 'fw-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('thismonth')
               setshowMappedCreateReport((prev: any) => {
@@ -135,10 +135,10 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
               setOpenDatesMenu(false)
             }}>
             This Month
-          </p>
-          <p
-            className={selectedDateFilter == 'past3days' ? 'fw-bold' : ''}
-            style={{ cursor: 'pointer' }}
+          </button>
+          <button
+            type='button'
+            className={'btn btn-link p-0 border-0 text-start text-decoration-none text-reset ' + (selectedDateFilter == 'past3days' ? 'fw-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('past3days')
               setshowMappedCreateReport((prev: any) => {
@@ -151,10 +151,10 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
               setOpenDatesMenu(false)
             }}>
             Past 30 Days
-          </p>
-          <p
-            className={selectedDateFilter == 'lastmonth' ? 'fw-bold' : ''}
-            style={{ cursor: 'pointer' }}
+          </button>
+          <button
+            type='button'
+            className={'btn btn-link p-0 border-0 text-start text-decoration-none text-reset ' + (selectedDateFilter == 'lastmonth' ? 'fw-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('lastmonth')
               setshowMappedCreateReport((prev: any) => {
@@ -167,10 +167,10 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
               setOpenDatesMenu(false)
             }}>
             Last Month
-          </p>
-          <p
-            className={selectedDateFilter == 'yeartodate' ? 'fw-bold' : ''}
-            style={{ cursor: 'pointer' }}
+          </button>
+          <button
+            type='button'
+            className={'btn btn-link p-0 border-0 text-start text-decoration-none text-reset ' + (selectedDateFilter == 'yeartodate' ? 'fw-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('yeartodate')
               setshowMappedCreateReport((prev: any) => {
@@ -183,10 +183,10 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
               setOpenDatesMenu(false)
             }}>
             Year to Date
-          </p>
-          <p
-            className={selectedDateFilter == 'lastyear' ? 'fw-bold' : ''}
-            style={{ cursor: 'pointer' }}
+          </button>
+          <button
+            type='button'
+            className={'btn btn-link p-0 border-0 text-start text-decoration-none text-reset ' + (selectedDateFilter == 'lastyear' ? 'fw-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('lastyear')
               setshowMappedCreateReport((prev: any) => {
@@ -199,7 +199,7 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
               setOpenDatesMenu(false)
             }}>
             Last Year
-          </p>
+          </button>
           <span className='fw-light text-muted fs-7 pb-1 border-top pt-1'>Select Range:</span>
           <Flatpickr
             className={'border-0 fs-6 w-100 py-2 px-2' + (selectedDateFilter == 'picker' ? ' fw-bold' : '')}

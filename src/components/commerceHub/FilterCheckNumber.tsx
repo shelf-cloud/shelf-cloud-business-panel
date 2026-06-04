@@ -52,15 +52,16 @@ const FilterCheckNumber = ({ type, setInvoiceType }: Props) => {
                 <option value='deductions'>Deductions</option>
               </Input>
             </div>
-            <span
-              style={{ width: '100%', cursor: 'pointer', textAlign: 'right' }}
+            <button
+              type='button'
+              style={{ width: '100%', textAlign: 'right' }}
               onClick={() => {
                 setInvoiceType('all')
                 setOpenDatesMenu(false)
               }}
-              className='text-muted mt-2 fs-7'>
+              className='btn btn-link p-0 border-0 text-decoration-none text-muted mt-2 fs-7'>
               Clear All
-            </span>
+            </button>
           </div>
         </div>
       </div>

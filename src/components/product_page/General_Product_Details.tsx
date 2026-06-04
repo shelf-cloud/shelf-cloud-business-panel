@@ -186,7 +186,7 @@ const General_Product_Details = ({
     },
   })
 
-  const HandleAddProduct = (event: any) => {
+  const handleAddProduct = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
   }
@@ -235,7 +235,7 @@ const General_Product_Details = ({
               <img
                 loading='lazy'
                 src={image ? image : NoImageAdress}
-                alt='product Image'
+                alt='Product'
                 style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
               />
             </div>
@@ -292,11 +292,13 @@ const General_Product_Details = ({
             </table>
           </div>
           <div>
-            <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }} />
+            <button type='button' aria-label='Edit product details' onClick={handleShowEditFields} className='btn btn-link p-0 border-0'>
+              <i className='ri-pencil-fill fs-5 m-0 p-0 text-primary' />
+            </button>
           </div>
         </div>
       ) : (
-        <Form onSubmit={HandleAddProduct}>
+        <Form onSubmit={handleAddProduct}>
           <Row>
             <Col md={6}>
               <FormGroup className='mb-3'>

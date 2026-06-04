@@ -91,7 +91,7 @@ function EditProductModal({}: Props) {
     }
   }, [state.currentRegion, state.user.businessId, state.modalProductDetails.inventoryId])
 
-  const HandleAddProduct = (event: any) => {
+  const handleAddProduct = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
   }
@@ -115,7 +115,7 @@ function EditProductModal({}: Props) {
       </ModalHeader>
       <ModalBody>
         {!loading && (
-          <Form onSubmit={HandleAddProduct}>
+          <Form onSubmit={handleAddProduct}>
             <Row>
               <h5 className='fs-5 m-3 fw-bolder'>Product Details</h5>
               <Col md={6} className='d-none'>

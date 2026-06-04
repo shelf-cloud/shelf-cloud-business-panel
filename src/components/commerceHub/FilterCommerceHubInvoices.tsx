@@ -107,8 +107,9 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions,
                   )}
                 </>
               )}
-              <span
-                style={{ width: '100%', cursor: 'pointer', textAlign: 'right' }}
+              <button
+                type='button'
+                style={{ width: '100%', textAlign: 'right' }}
                 onClick={() => {
                   setfilters(() => ({
                     onlyOverdue: false,
@@ -119,9 +120,9 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions,
                   }))
                   setOpenDatesMenu(false)
                 }}
-                className='text-muted mt-2 fs-7'>
+                className='btn btn-link p-0 border-0 text-decoration-none text-muted mt-2 fs-7'>
                 Clear All
-              </span>
+              </button>
             </div>
           </div>
         </DropdownMenu>

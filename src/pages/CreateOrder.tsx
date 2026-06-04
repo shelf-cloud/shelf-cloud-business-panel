@@ -316,6 +316,7 @@ const CreateOrder = ({ session }: Props) => {
                                 type='checkbox'
                                 role='switch'
                                 id='SwitchCheck4'
+                                aria-checked={isPickUpOrder}
                                 onChange={async (e) => {
                                   await handlePickUpOrder(values, !isPickUpOrder)
                                   handleChange(e)
@@ -788,7 +789,7 @@ const CreateOrder = ({ session }: Props) => {
                               <table className='table table-hover align-middle table-nowrap'>
                                 <thead>
                                   <tr>
-                                    <th scope='col' className='py-1 fs-5 m-0 fw-semibold text-center bg-primary text-white'></th>
+                                    <th scope='col' aria-label='Product row actions' className='py-1 fs-5 m-0 fw-semibold text-center bg-primary text-white'></th>
                                     <th scope='col' className='py-1 fs-5 m-0 fw-semibold text-center bg-primary text-white'>
                                       SKU
                                     </th>
@@ -815,9 +816,10 @@ const CreateOrder = ({ session }: Props) => {
                                             <td className='col-1' style={{ minWidth: '50px' }}>
                                               {index > 0 ? (
                                                 <Row className='w-100 d-flex flex-row flex-nowrap justify-content-center gap-1 align-items-center mb-0'>
-                                                  <i
-                                                    className='fs-3 text-success las la-plus-circle m-0 p-0 w-auto'
-                                                    style={{ cursor: 'pointer' }}
+                                                  <button
+                                                    type='button'
+                                                    aria-label='Add product row'
+                                                    className='btn btn-link border-0 bg-transparent text-success m-0 p-0 w-auto'
                                                     onClick={() =>
                                                       push({
                                                         sku: '',
@@ -825,15 +827,23 @@ const CreateOrder = ({ session }: Props) => {
                                                         qty: 1,
                                                         price: '0',
                                                       })
-                                                    }
-                                                  />
-                                                  <i className='text-danger fs-3 las la-minus-circle m-0 p-0 w-auto' style={{ cursor: 'pointer' }} onClick={() => remove(index)} />
+                                                    }>
+                                                    <i className='fs-3 las la-plus-circle m-0 p-0' />
+                                                  </button>
+                                                  <button
+                                                    type='button'
+                                                    aria-label='Remove product row'
+                                                    className='btn btn-link border-0 bg-transparent text-danger m-0 p-0 w-auto'
+                                                    onClick={() => remove(index)}>
+                                                    <i className='fs-3 las la-minus-circle m-0 p-0' />
+                                                  </button>
                                                 </Row>
                                               ) : (
                                                 <Row className='w-100 d-flex flex-row flex-nowrap justify-content-center gap-0 align-items-center mb-0'>
-                                                  <i
-                                                    className='fs-3 text-success las la-plus-circle m-0 p-0 w-auto'
-                                                    style={{ cursor: 'pointer' }}
+                                                  <button
+                                                    type='button'
+                                                    aria-label='Add product row'
+                                                    className='btn btn-link border-0 bg-transparent text-success m-0 p-0 w-auto'
                                                     onClick={() =>
                                                       push({
                                                         sku: '',
@@ -841,8 +851,9 @@ const CreateOrder = ({ session }: Props) => {
                                                         qty: 1,
                                                         price: '0',
                                                       })
-                                                    }
-                                                  />
+                                                    }>
+                                                    <i className='fs-3 las la-plus-circle m-0 p-0' />
+                                                  </button>
                                                 </Row>
                                               )}
                                             </td>

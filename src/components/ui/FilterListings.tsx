@@ -74,15 +74,16 @@ const FilterListings = ({ showHidden, condition, mapped }: Props) => {
                 <option value='Not Mapped'>Not Mapped</option>
               </Input>
             </div>
-            <span
-              style={{ width: '100%', cursor: 'pointer', textAlign: 'right' }}
+            <button
+              type='button'
+              style={{ width: '100%', textAlign: 'right' }}
               onClick={() => {
                 router.replace(`/amazon-sellers/listings?showHidden=${parseInt(showHidden)}&condition=All&mapped=All`)
                 setOpenDatesMenu(false)
               }}
-              className='fw-normal mt-2'>
+              className='btn btn-link p-0 border-0 text-decoration-none text-reset fw-normal mt-2'>
               Clear All
-            </span>
+            </button>
           </div>
         </div>
       </div>

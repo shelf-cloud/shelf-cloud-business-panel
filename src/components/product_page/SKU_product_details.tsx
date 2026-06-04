@@ -72,7 +72,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
     },
   })
 
-  const HandleAddProduct = (event: any) => {
+  const handleAddProduct = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
   }
@@ -118,7 +118,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                 <UncontrolledTooltip placement='top' target='maxSalePriceHead' innerClassName='bg-white text-primary shadow'>
                   {`Maximum Sale Price`}
                 </UncontrolledTooltip>
-                <th></th>
+                <th scope='col' aria-label='SKU row actions'></th>
               </tr>
             </thead>
             <tbody className='fs-7'>
@@ -133,7 +133,9 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                 <td>{FormatCurrency(state.currentRegion, ceilling)}</td>
                 <td>
                   <div className='text-end'>
-                    <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 text-primary m-0 p-0' style={{ cursor: 'pointer' }}></i>
+                    <button type='button' aria-label='Edit SKU details' onClick={handleShowEditFields} className='btn btn-link p-0 border-0'>
+                      <i className='ri-pencil-fill fs-5 text-primary m-0 p-0'></i>
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -141,7 +143,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
           </table>
         </div>
       ) : (
-        <Form onSubmit={HandleAddProduct}>
+        <Form onSubmit={handleAddProduct}>
           <Row>
             <table className='table table-sm table-borderless'>
               <thead>

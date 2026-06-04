@@ -58,7 +58,7 @@ const CancelManualOrderConfirmationModal = ({ showDeleteModal, setshowDeleteModa
     },
   })
 
-  const HandleCancelOrder = (event: any) => {
+  const handleCancelOrder = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
   }
@@ -96,7 +96,7 @@ const CancelManualOrderConfirmationModal = ({ showDeleteModal, setshowDeleteModa
             Order Number: <span className='fs-4 fw-bold text-black'>{showDeleteModal.orderNumber}</span>
           </h5>
           <Row md={12} className='mt-4'>
-            <Form onSubmit={HandleCancelOrder}>
+            <Form onSubmit={handleCancelOrder}>
               <Col md={12}>
                 <div className='mb-3 d-flex gap-2'>
                   <Label className='form-check-label' for='notify'>

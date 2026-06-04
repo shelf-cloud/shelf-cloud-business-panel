@@ -67,8 +67,9 @@ const FilterFBAShipments = ({ filters, setfilters }: Props) => {
                   onChange={(e) => setfilters((prev: FBAFiltersType) => ({ ...prev, showOnlyMissingQty: e.target.checked }))}
                 />
               </div>
-              <span
-                style={{ width: '100%', cursor: 'pointer', textAlign: 'right' }}
+              <button
+                type='button'
+                style={{ width: '100%', textAlign: 'right' }}
                 onClick={() => {
                   setfilters(() => ({
                     status: { value: 'all', label: 'All' },
@@ -76,9 +77,9 @@ const FilterFBAShipments = ({ filters, setfilters }: Props) => {
                   }))
                   setOpenDatesMenu(false)
                 }}
-                className='text-muted mt-2 fs-7'>
+                className='btn btn-link p-0 border-0 text-decoration-none text-muted mt-2 fs-7'>
                 Clear All
-              </span>
+              </button>
             </div>
           </div>
         </DropdownMenu>

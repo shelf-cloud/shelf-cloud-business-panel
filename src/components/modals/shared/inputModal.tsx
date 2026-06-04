@@ -49,7 +49,7 @@ const InputModal = ({
     },
   })
 
-  const HandleAddProduct = (event: any) => {
+  const handleAddProduct = (event: any) => {
     event.preventDefault()
     validation.handleSubmit()
   }
@@ -58,7 +58,7 @@ const InputModal = ({
       <ModalHeader toggle={onClose} className='modal-title' id='myModalLabel'>
         {headerText}
       </ModalHeader>
-      <Form onSubmit={HandleAddProduct}>
+      <Form onSubmit={handleAddProduct}>
         <ModalBody>
           <Row>
             <h5 className='fs-5 mb-0 fw-semibold text-primary'>{primaryText}</h5>
