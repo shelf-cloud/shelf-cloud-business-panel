@@ -1,4 +1,3 @@
- 
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import React, { useContext, useMemo, useState } from 'react'
@@ -8,6 +7,8 @@ import BreadCrumb from '@components/Common/BreadCrumb'
 import CreateReportModal from '@components/modals/reports/createReportModal'
 import ReportsTable from '@components/reports/reportsTable'
 import AppContext from '@context/AppContext'
+import { PRODUCTS_REPORT_TYPE, buildCreateReportRequest, getSelectedReportProducts } from '@features/reports/reportHelpers'
+import { useSkus } from '@hooks/products/useSkus'
 import { ShelfCloudReportList } from '@typesTs/reports/reportsList'
 import axios from 'axios'
 import moment from 'moment'
@@ -16,8 +17,6 @@ import { Button, Card, CardBody, Col, Container, Input, Row } from 'reactstrap'
 import useSWR, { useSWRConfig } from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
-  const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
-
   const session = await getSession(context)
 
   if (session == null) {
@@ -29,12 +28,11 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
     }
   }
   return {
-    props: { session, sessionToken },
+    props: { session },
   }
 }
 
 type Props = {
-  sessionToken: string
   session: {
     user: {
       businessName: string
@@ -43,9 +41,12 @@ type Props = {
   }
 }
 
-const List = ({ session, sessionToken }: Props) => {
+const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
+
+const List = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
+  const { skus } = useSkus()
   const [searchValue, setSearchValue] = useState<any>('')
   const [showMappedCreateReport, setshowMappedCreateReport] = useState({
     show: false,
@@ -53,37 +54,31 @@ const List = ({ session, sessionToken }: Props) => {
     reportType: '',
     startDate: moment().subtract(30, 'days').format('YYYY-MM-DD'),
     endDate: moment().format('YYYY-MM-DD'),
+    productsSelected: '[]',
   })
+
   const title = `Report List | ${session?.user?.businessName}`
 
-  const fetcher = (endPoint: string) =>
-    axios(endPoint, {
-      headers: {
-        Authorization: `Bearer ${sessionToken}`,
-      },
-    }).then((res) => res.data)
-  const { data }: { data?: ShelfCloudReportList[] } = useSWR(
-    state.user.businessId ? `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reports/getReportList?region=${state.currentRegion}&businessId=${state.user.businessId}` : null,
-    fetcher
-  )
+  const reportListUrl = state.user.businessId ? `/api/reports/get-report-list?region=${state.currentRegion}&businessId=${state.user.businessId}` : null
+  const { data }: { data?: ShelfCloudReportList[] } = useSWR(reportListUrl, fetcher)
 
   const handleDownloadReport = async (reportFileName: string) => {
-    const reportUrlResponse = await axios(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reports/getReportUrl?reportFileName=${reportFileName}`, {
-      headers: {
-        Authorization: `Bearer ${sessionToken}`,
-      },
-    })
-      .then((res) => {
-        return res.data
-      })
-      .catch(() => {
-        toast.error('Error fetching reports')
-      })
+    try {
+      const queryParams = new URLSearchParams({ reportFileName })
+      const reportUrlResponse = await axios(`/api/reports/get-report-url?${queryParams.toString()}`)
 
-    const a = document.createElement('a')
-    a.href = reportUrlResponse.url
-    a.download = 'Product Details Template.xlsx'
-    a.click()
+      if (!reportUrlResponse.data?.url) {
+        toast.error('Error fetching reports')
+        return
+      }
+
+      const a = document.createElement('a')
+      a.href = reportUrlResponse.data.url
+      a.download = 'Product Details Template.xlsx'
+      a.click()
+    } catch {
+      toast.error('Error fetching reports')
+    }
   }
 
   const handleCreateReport = async () => {
@@ -91,41 +86,57 @@ const List = ({ session, sessionToken }: Props) => {
       toast.error('Please select Report Type and Date Range')
       return
     }
+    const selectedProducts = getSelectedReportProducts(skus, showMappedCreateReport.productsSelected)
+
+    if (showMappedCreateReport.reportType === PRODUCTS_REPORT_TYPE && selectedProducts.length === 0) {
+      toast.error('Please select at least one SKU')
+      return
+    }
+
     setshowMappedCreateReport((prev: any) => {
       return {
         ...prev,
         loading: true,
       }
     })
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reports/createReport/${showMappedCreateReport.reportType}?region=${state.currentRegion}&businessId=${state.user.businessId}&businessName=${session?.user?.businessOrderStart}&startDate=${showMappedCreateReport.startDate}&endDate=${showMappedCreateReport.endDate}`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${sessionToken}`,
-        },
+
+    try {
+      const request = buildCreateReportRequest({
+        reportType: showMappedCreateReport.reportType,
+        region: state.currentRegion,
+        businessId: state.user.businessId,
+        businessName: session?.user?.businessName,
+        startDate: showMappedCreateReport.startDate,
+        endDate: showMappedCreateReport.endDate,
+        products: selectedProducts,
+      })
+      const response = await axios.post('/api/reports/request-new-report', { url: request.url, data: request.body })
+
+      if (response.data.error) {
+        toast.error(response.data.message)
+        return
       }
-    )
-    if (!response.data.error) {
+
       setshowMappedCreateReport((prev: any) => {
         return {
           ...prev,
           show: false,
-          loading: false,
           reportType: '',
+          productsSelected: '[]',
         }
       })
       toast.success(response.data.message)
-      mutate(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/reports/getReportList?region=${state.currentRegion}&businessId=${state.user.businessId}`)
-    } else {
-      toast.error(response.data.message)
+      if (reportListUrl) mutate(reportListUrl)
+    } catch {
+      toast.error('Error creating report')
+    } finally {
+      setshowMappedCreateReport((prev: any) => {
+        return {
+          ...prev,
+          loading: false,
+        }
+      })
     }
-    setshowMappedCreateReport((prev: any) => {
-      return {
-        ...prev,
-        loading: false,
-      }
-    })
   }
 
   const reportList = useMemo(() => {
@@ -155,6 +166,7 @@ const List = ({ session, sessionToken }: Props) => {
                           return {
                             ...prev,
                             show: true,
+                            productsSelected: '[]',
                           }
                         })
                       }>

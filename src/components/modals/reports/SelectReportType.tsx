@@ -1,7 +1,5 @@
- 
-import { useRef, useState } from 'react'
-
-import { useClickOutside } from '@hooks/useClickOutside'
+import { PRODUCTS_REPORT_TYPE, SHIPMENTS_REPORT_TYPE } from '@features/reports/reportHelpers'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@shadcn/ui/select'
 
 type Props = {
   showMappedCreateReport: {
@@ -10,62 +8,42 @@ type Props = {
     reportType: string
     startDate: string
     endDate: string
+    productsSelected: string
   }
   setshowMappedCreateReport: (prev: any) => void
 }
 
-const REPORT_TYPE_LIST = [{ reportType: 'shipmentsReport', reportTypeTile: 'Shipments Report' }]
+const REPORT_TYPE_LIST = [
+  { reportType: SHIPMENTS_REPORT_TYPE, reportTypeTile: 'Shipments Report' },
+  { reportType: PRODUCTS_REPORT_TYPE, reportTypeTile: 'Products Sales/Inventory Report' },
+]
 
 const SelectReportType = ({ showMappedCreateReport, setshowMappedCreateReport }: Props) => {
-  const [openSelectionList, setOpenSelectionList] = useState(false)
-  const selectProductMappedDiv = useRef<HTMLDivElement | null>(null)
-
-  useClickOutside(selectProductMappedDiv, () => setOpenSelectionList(false))
-
   return (
-    <div ref={selectProductMappedDiv} className='dropdown mb-3'>
-      <button
-        type='button'
-        className='btn-group w-100 p-0 bg-transparent'
-        onClick={() => setOpenSelectionList(!openSelectionList)}
-        style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }}>
-        <span className='btn btn-light btn-sm form-control fs-6 w-100 text-start' style={{ backgroundColor: 'white', opacity: '100%' }}>
-          {showMappedCreateReport.reportType == '' ? `Select...` : showMappedCreateReport.reportType}
-        </span>
-        <span
-          className='btn btn-light btn-md dropdown-toggle form-control fs-6dropdown-toggle dropdown-toggle-split'
-          style={{ backgroundColor: 'white', maxWidth: '35px' }}
-          data-bs-toggle='dropdown'
-          data-bs-auto-close='outside'
-          aria-expanded='false'>
-          <span className='visually-hidden'>Toggle Dropdown</span>
-        </span>
-      </button>
-
-      <div className={'dropdown-menu w-100 py-3 ps-3' + (openSelectionList ? ' show' : '')}>
-        <div className='d-flex flex-column justify-content-start'>
-          <div style={{ maxHeight: '30vh', overflowY: 'scroll', scrollbarWidth: 'none' }}>
-            {REPORT_TYPE_LIST?.map((option) => (
-              <button
-                type='button'
-                key={option.reportType}
-                className={'btn btn-link w-100 border-0 text-start text-decoration-none text-reset m-0 py-2 ps-1 d-flex flex-row gap-2 ' + (showMappedCreateReport.reportType == `${option.reportType}` ? 'bg-light' : '')}
-                onClick={() => {
-                  setshowMappedCreateReport((prev: any) => {
-                    return {
-                      ...prev,
-                      reportType: option.reportType,
-                    }
-                  })
-                  setOpenSelectionList(false)
-                }}>
-                <span className='fs-6 m-0 p-0'>{option.reportTypeTile}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
+    <Select
+      value={showMappedCreateReport.reportType}
+      onValueChange={(reportType) => {
+        setshowMappedCreateReport((prev: any) => {
+          return {
+            ...prev,
+            reportType,
+            productsSelected: reportType === PRODUCTS_REPORT_TYPE ? prev.productsSelected : '[]',
+          }
+        })
+      }}>
+      <SelectTrigger className='tw:mb-3 tw:w-full tw:border tw:border-border'>
+        <SelectValue placeholder='Select...' />
+      </SelectTrigger>
+      <SelectContent className='tw:z-1050'>
+        <SelectGroup>
+          {REPORT_TYPE_LIST.map((option) => (
+            <SelectItem key={option.reportType} value={option.reportType}>
+              {option.reportTypeTile}
+            </SelectItem>
+          ))}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
   )
 }
 

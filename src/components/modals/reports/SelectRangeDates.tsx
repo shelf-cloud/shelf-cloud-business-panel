@@ -1,8 +1,6 @@
- 
 import { useRef, useState } from 'react'
 
 import { useClickOutside } from '@hooks/useClickOutside'
-
 import moment from 'moment'
 import Flatpickr from 'react-flatpickr'
 
@@ -13,6 +11,7 @@ type Props = {
     reportType: string
     startDate: string
     endDate: string
+    productsSelected: string
   }
   setshowMappedCreateReport: (prev: any) => void
   handleChangeDatesFromPicker: (dateStr: string) => void
@@ -36,10 +35,10 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
         aria-expanded='false'
         onClick={() => setOpenDatesMenu(!openDatesMenu)}>
         <i className='las la-calendar fs-3 m-0 p-0 text-primary' />
-        <span className='fw-semibold m-0 p-0'>{`${showMappedCreateReport.startDate} -> ${showMappedCreateReport.endDate}`}</span>
+        <span className='fw-semibold m-0 p-0 tw:text-xs'>{`${showMappedCreateReport.startDate} -> ${showMappedCreateReport.endDate}`}</span>
       </button>
       <div className={'dropdown-menu dropdown-menu-md px-4 py-3' + (openDatesMenu ? ' show' : '')}>
-        <div className='d-flex flex-column justify-content-start'>
+        <div className='d-flex flex-column justify-content-start gap-1'>
           <button
             type='button'
             className={'btn btn-link p-0 border-0 text-start text-decoration-none text-reset ' + (selectedDateFilter == 'today' ? 'fw-bold' : '')}
@@ -200,7 +199,7 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
             }}>
             Last Year
           </button>
-          <span className='fw-light text-muted fs-7 pb-1 border-top pt-1'>Select Range:</span>
+          <span className='fw-light text-muted fs-7 pb-0 border-top pt-1'>Select Range:</span>
           <Flatpickr
             className={'border-0 fs-6 w-100 py-2 px-2' + (selectedDateFilter == 'picker' ? ' fw-bold' : '')}
             options={{
