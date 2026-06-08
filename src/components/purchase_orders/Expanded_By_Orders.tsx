@@ -1,4 +1,3 @@
- 
 import { useRouter } from 'next/router'
 import React, { useContext, useMemo, useState } from 'react'
 
@@ -230,7 +229,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
 
   const handleReceiveAllPendingItems = () => {
     data.poItems.forEach((item: PurchaseOrderItem) => {
-      const pendingQty = item.orderQty - item.receivedQty
+      const pendingQty = item.orderQty - item.receivedQty - item.inboundQty
       if (pendingQty > 0) {
         handlereceivingOrderFromPo(
           data.hasSplitting ? data.splits[activeTab].destination.id : data.warehouseId,
