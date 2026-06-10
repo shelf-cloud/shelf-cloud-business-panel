@@ -3,7 +3,6 @@ import { useMemo, useState } from 'react'
 
 import { Drawer, DrawerClose, DrawerDescription, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerPortal, DrawerTitle } from '@components/shadcn/ui/drawer'
 import { Separator } from '@components/shadcn/ui/separator'
-import { RPProductTrendTagUpdate } from '@hooks/reorderingPoints/useRPProductsInfo'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import { ArrowLeftIcon, XIcon } from 'lucide-react'
@@ -15,8 +14,7 @@ import { ForecastChatModelNumber, ForecastChatSelectedForecast, ForecastChatUrge
 import { cn } from '@/lib/shadcn/utils'
 
 import RPAIForecastModelCard from './RPAIForecastModelCard'
-import RPProductTrendTagSection from './RPProductTrendTagSection'
-import { buildProductPrompt } from './ai-helpers'
+import { buildProductPrompt_v2 } from './ai-helpers-v2'
 
 type Props = {
   product: ReorderingPointsProduct | null
@@ -24,7 +22,6 @@ type Props = {
   onClose: () => void
   region: string
   businessId: string
-  onSave: (data: RPProductTrendTagUpdate) => void
   urgencyThresholds: ForecastChatUrgencyThresholds
 }
 
@@ -35,20 +32,14 @@ type SelectedForecastChat = {
   forecast: ForecastChatSelectedForecast
 }
 
-const RPAIForecastDrawer = ({ product, isOpen, onClose, region, businessId, onSave, urgencyThresholds }: Props) => {
+const RPAIForecastDrawer = ({ product, isOpen, onClose, region, businessId, urgencyThresholds }: Props) => {
   const [selectedForecastChat, setSelectedForecastChat] = useState<SelectedForecastChat | null>(null)
   const [isChatLeftColumnOpen, setIsChatLeftColumnOpen] = useState(true)
 
-  const models = product
-    ? [
-        { modelNumber: 1 as const, ...product.totalAIForecast_1 },
-        { modelNumber: 2 as const, ...product.totalAIForecast_2 },
-        { modelNumber: 3 as const, ...product.totalAIForecast_3 },
-      ]
-    : []
+  const models = product ? [{ modelNumber: 1 as const, ...product.totalAIForecast_1 }] : []
 
   const visibleModels = models.filter((m) => m.model && m.analysis)
-  const sanitizedProduct = useMemo(() => (product ? buildProductPrompt(product, urgencyThresholds) : null), [product, urgencyThresholds])
+  const sanitizedProduct = useMemo(() => (product ? buildProductPrompt_v2(product) : null), [product])
   const activeSelectedForecastChat = selectedForecastChat?.inventoryId === product?.inventoryId ? selectedForecastChat : null
 
   const handleOpenForecastChat = (modelNumber: ForecastChatModelNumber, forecast: ForecastChatSelectedForecast) => {
@@ -83,8 +74,8 @@ const RPAIForecastDrawer = ({ product, isOpen, onClose, region, businessId, onSa
             'tw:inset-y-0 tw:right-0 tw:w-full tw:border-l',
             activeSelectedForecastChat
               ? isChatLeftColumnOpen
-                ? 'tw:lg:max-w-[min(92vw,1180px)] tw:xl:max-w-[min(60vw,1320px)]'
-                : 'tw:lg:max-w-[min(72vw,860px)] tw:xl:max-w-[min(35vw,980px)]'
+                ? 'tw:lg:max-w-[min(92vw)] tw:xl:max-w-[min(80vw)]'
+                : 'tw:lg:max-w-[min(75vw)] tw:xl:max-w-[min(35vw)]'
               : 'tw:sm:max-w-lg'
           )}>
           {/* HEADER */}
@@ -135,7 +126,7 @@ const RPAIForecastDrawer = ({ product, isOpen, onClose, region, businessId, onSa
               <>
                 {/* PRODUCT TREND TAG */}
                 <div className='tw:overflow-y-auto'>
-                  {product?.productTrendTag && <RPProductTrendTagSection product={product} onSave={onSave} />}
+                  {/* {product?.productTrendTag && <RPProductTrendTagSection product={product} onSave={onSave} />} */}
                   <div className='tw:mb-4'>
                     <h4 className='tw:text-sm tw:font-semibold tw:text-foreground tw:mb-0.5 tw:flex tw:items-center tw:gap-1.5'>
                       <i className='las la-brain tw:text-base tw:text-info' />
@@ -144,7 +135,7 @@ const RPAIForecastDrawer = ({ product, isOpen, onClose, region, businessId, onSa
                     <p className='tw:text-xs tw:text-muted-foreground tw:m-0'>Comparison of all AI forecast models used for this product.</p>
                   </div>
 
-                  {visibleModels.length === 0 ? (
+                  {visibleModels.length === 0 || !product ? (
                     <div className='tw:flex tw:flex-col tw:items-center tw:justify-center tw:gap-2 tw:py-12 tw:text-center'>
                       <i className='las la-robot tw:text-4xl tw:text-muted-foreground' />
                       <p className='tw:text-sm tw:text-muted-foreground tw:m-0'>No AI forecast data available for this product.</p>
@@ -159,6 +150,7 @@ const RPAIForecastDrawer = ({ product, isOpen, onClose, region, businessId, onSa
                             analysis={m.analysis}
                             forecast={m.forecast}
                             region={region}
+                            product={product}
                             productForecast={m}
                             onAnalyze={handleOpenForecastChat}
                           />

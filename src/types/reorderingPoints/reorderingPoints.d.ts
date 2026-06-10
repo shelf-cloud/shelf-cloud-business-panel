@@ -74,9 +74,9 @@ export interface ReorderingPointsProduct {
   }
   canSendToAWD: boolean
   totalAIForecast_1: AIForecastForProduct
-  totalAIForecast_2: AIForecastForProduct
-  totalAIForecast_3: AIForecastForProduct
-  productTrendTag: ProductTrendTag
+  // totalAIForecast_2: AIForecastForProduct
+  // totalAIForecast_3: AIForecastForProduct
+  productTrendTag?: ProductTrendTag
   comment?: string
 }
 
@@ -104,12 +104,12 @@ export interface Urgency {
 export type AIForecastForProduct = {
   model: string
   analysis: string
-  forecast: number
-  daysUntilNextOrder: number
-  recommendedOrderDate: string
-  urgencyTag: UrgencyTag
-  stockoutRiskDate?: string | null
-  notes?: string
+  forecast: number[]
+  // daysUntilNextOrder: number
+  // recommendedOrderDate: string
+  // urgencyTag: UrgencyTag
+  // stockoutRiskDate?: string | null
+  // notes?: string
 }
 
 export type UrgencyTag = 'high' | 'medium' | 'low' | 'none'

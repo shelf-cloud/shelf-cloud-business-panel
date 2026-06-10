@@ -30,7 +30,6 @@ import moment from 'moment'
 import { Card, CardBody, Collapse, Container, Row } from 'reactstrap'
 
 import RPAIForecastDrawer from '@/features/reordering-points/RPAIForecastDrawer'
-import RPBulkProductTrendTagDialog from '@/features/reordering-points/RPBulkProductTrendTagDialog'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -99,8 +98,6 @@ const ReorderingPoints = ({ session }: Props) => {
     handleSaveProductConfig,
     handleRegenerateForecast,
     handleUrgencyRange,
-    handleSaveProductsTrendTagBulk,
-    handleSaveProductTrendTag,
   } = useRPProductsInfo({
     session,
     state,
@@ -156,7 +153,6 @@ const ReorderingPoints = ({ session }: Props) => {
 
   const [showPOModal, setshowPOModal] = useState(false)
   const [aiForecastProduct, setAIForecastProduct] = useState<ReorderingPointsProduct | null>(null)
-  const [isBulkTrendTagDialogOpen, setIsBulkTrendTagDialogOpen] = useState(false)
   const currentRegionSettings = (state.user as any)?.[state.currentRegion]
 
   // FILTER FUNCTIONS
@@ -344,10 +340,10 @@ const ReorderingPoints = ({ session }: Props) => {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align='start'>
                         <DropdownMenuGroup>
-                          <DropdownMenuItem onClick={() => setIsBulkTrendTagDialogOpen(true)}>
+                          {/* <DropdownMenuItem onClick={() => setIsBulkTrendTagDialogOpen(true)}>
                             <i className='las la-chart-line fs-5 text-info' />
                             Set Product Trend Tag
-                          </DropdownMenuItem>
+                          </DropdownMenuItem> */}
                           <DropdownMenuItem onClick={() => changeSelectedProductsState(false)}>
                             <i className='mdi mdi-eye fs-5 text-primary' />
                             Set Visible
@@ -453,7 +449,6 @@ const ReorderingPoints = ({ session }: Props) => {
           onClose={() => setAIForecastProduct(null)}
           region={state.currentRegion}
           businessId={state.user.businessId}
-          onSave={handleSaveProductTrendTag}
           urgencyThresholds={{
             rpShowFBA: currentRegionSettings?.rpShowFBA ?? true,
             rpShowAWD: currentRegionSettings?.rpShowAWD ?? true,
@@ -462,7 +457,7 @@ const ReorderingPoints = ({ session }: Props) => {
             lowAlertMax: currentRegionSettings?.rplowAlertMax ?? 45,
           }}
         />
-        <RPBulkProductTrendTagDialog
+        {/* <RPBulkProductTrendTagDialog
           isOpen={isBulkTrendTagDialogOpen}
           onClose={() => setIsBulkTrendTagDialogOpen(false)}
           onSuccess={() => {
@@ -471,7 +466,7 @@ const ReorderingPoints = ({ session }: Props) => {
           }}
           products={selectedRows}
           onSubmit={handleSaveProductsTrendTagBulk}
-        />
+        /> */}
       </React.Fragment>
     </div>
   )

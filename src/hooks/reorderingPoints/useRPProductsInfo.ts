@@ -5,7 +5,7 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
 
-import { useRPNewForecast } from './useRPNewForcast'
+import { getAIForecastTotal, getProductAIForecastUrgency } from '@/lib/getAIForecastUrgency'
 
 export type RPProductUpdateConfig = {
   inventoryId: number
@@ -60,7 +60,6 @@ export const useRPProductsInfo = ({
   supplier,
   brand,
   category,
-  trendTag,
   ai_urgency,
   showHidden,
   setField,
@@ -69,7 +68,6 @@ export const useRPProductsInfo = ({
 }: any) => {
   const [productsData, setProductsData] = useState<ReorderingPointsForecastProducts>({})
   const controllerRef = useRef<AbortController | null>(null)
-  const { generate_new_forecast_products } = useRPNewForecast()
 
   useEffect(() => {
     controllerRef.current = new AbortController()
@@ -450,179 +448,179 @@ export const useRPProductsInfo = ({
     [state.currentRegion, state.user.businessId]
   )
 
-  const saveProductTrendTags = useCallback(
-    async (products: RPProductTrendTagUpdate[]): Promise<RPProductsTrendTagBulkResult> => {
-      if (products.length === 0) {
-        return {
-          status: 'error',
-          message: 'No products selected.',
-        }
-      }
+  // const saveProductTrendTags = useCallback(
+  //   async (products: RPProductTrendTagUpdate[]): Promise<RPProductsTrendTagBulkResult> => {
+  //     if (products.length === 0) {
+  //       return {
+  //         status: 'error',
+  //         message: 'No products selected.',
+  //       }
+  //     }
 
-      const isSingleProduct = products.length === 1
-      const updatingTrendTag = toast.loading(isSingleProduct ? 'Updating Product Trend Tag...' : 'Updating Product Trend Tags...')
+  //     const isSingleProduct = products.length === 1
+  //     const updatingTrendTag = toast.loading(isSingleProduct ? 'Updating Product Trend Tag...' : 'Updating Product Trend Tags...')
 
-      try {
-        const { data } = await axios.post(`/api/reorderingPoints/setNewProductTrendTag?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-          products,
-        })
+  //     try {
+  //       const { data } = await axios.post(`/api/reorderingPoints/setNewProductTrendTag?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+  //         products,
+  //       })
 
-        if (data.error) {
-          throw new Error(data.message || 'Error updating product trend tag')
-        }
+  //       if (data.error) {
+  //         throw new Error(data.message || 'Error updating product trend tag')
+  //       }
 
-        setProductsData((prevData) => {
-          const newProductsData = { ...prevData }
+  //       setProductsData((prevData) => {
+  //         const newProductsData = { ...prevData }
 
-          for (const product of products) {
-            if (!newProductsData[product.sku]) continue
+  //         for (const product of products) {
+  //           if (!newProductsData[product.sku]) continue
 
-            newProductsData[product.sku] = {
-              ...newProductsData[product.sku],
-              productTrendTag: {
-                aiTrend: newProductsData[product.sku].productTrendTag?.aiTrend ?? product.productTrendTag.aiTrend,
-                analysis: newProductsData[product.sku].productTrendTag?.analysis ?? product.productTrendTag.analysis,
-                bsnssTrend: product.productTrendTag.bsnssTrend,
-                useAITrend: product.productTrendTag.useAITrend,
-              },
-            }
-          }
+  //           newProductsData[product.sku] = {
+  //             ...newProductsData[product.sku],
+  //             productTrendTag: {
+  //               aiTrend: newProductsData[product.sku].productTrendTag?.aiTrend ?? product.productTrendTag.aiTrend,
+  //               analysis: newProductsData[product.sku].productTrendTag?.analysis ?? product.productTrendTag.analysis,
+  //               bsnssTrend: product.productTrendTag.bsnssTrend,
+  //               useAITrend: product.productTrendTag.useAITrend,
+  //             },
+  //           }
+  //         }
 
-          return newProductsData
-        })
+  //         return newProductsData
+  //       })
 
-        toast.update(updatingTrendTag, {
-          render: isSingleProduct ? `${products[0].sku} trend saved` : `${products.length} product trend tags saved`,
-          type: 'success',
-          isLoading: false,
-          autoClose: 3000,
-        })
+  //       toast.update(updatingTrendTag, {
+  //         render: isSingleProduct ? `${products[0].sku} trend saved` : `${products.length} product trend tags saved`,
+  //         type: 'success',
+  //         isLoading: false,
+  //         autoClose: 3000,
+  //       })
 
-        generate_new_forecast_products({
-          skus: products.map((product) => product.sku),
-          productIds: products.map((product) => product.inventoryId),
-        })
+  //       generate_new_forecast_products({
+  //         skus: products.map((product) => product.sku),
+  //         productIds: products.map((product) => product.inventoryId),
+  //       })
 
-        return {
-          status: 'success',
-          message: isSingleProduct ? `${products[0].sku} trend saved` : `${products.length} product trend tags saved`,
-        }
-      } catch (error) {
-        const message = error instanceof Error ? error.message : 'Error updating trend tag'
+  //       return {
+  //         status: 'success',
+  //         message: isSingleProduct ? `${products[0].sku} trend saved` : `${products.length} product trend tags saved`,
+  //       }
+  //     } catch (error) {
+  //       const message = error instanceof Error ? error.message : 'Error updating trend tag'
 
-        toast.update(updatingTrendTag, {
-          render: message,
-          type: 'error',
-          isLoading: false,
-          autoClose: 3000,
-        })
-        return {
-          status: 'error',
-          message,
-        }
-      }
-    },
-    [generate_new_forecast_products, state.currentRegion, state.user.businessId]
-  )
+  //       toast.update(updatingTrendTag, {
+  //         render: message,
+  //         type: 'error',
+  //         isLoading: false,
+  //         autoClose: 3000,
+  //       })
+  //       return {
+  //         status: 'error',
+  //         message,
+  //       }
+  //     }
+  //   },
+  //   [generate_new_forecast_products, state.currentRegion, state.user.businessId]
+  // )
 
-  const saveSingleProductTrendTag = useCallback(
-    async ({ inventoryId, sku, productTrendTag }: RPProductTrendTagUpdate) => {
-      const updatingTrendTag = toast.loading('Updating Product Trend Tag...')
+  // const saveSingleProductTrendTag = useCallback(
+  //   async ({ inventoryId, sku, productTrendTag }: RPProductTrendTagUpdate) => {
+  //     const updatingTrendTag = toast.loading('Updating Product Trend Tag...')
 
-      try {
-        const response = await axios
-          .post(`/api/reorderingPoints/setNewProductTrendTag?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-            products: [{ inventoryId, sku, productTrendTag }],
-          })
-          .then(({ data }) => {
-            if (data.error) {
-              throw new Error(data.message || 'Error updating product trend tag')
-            }
-            toast.update(updatingTrendTag, {
-              render: `${sku} trend saved`,
-              type: 'success',
-            })
-            setProductsData((prevData) => {
-              const newProductsData = { ...prevData }
-              newProductsData[sku].productTrendTag.bsnssTrend = productTrendTag.bsnssTrend
-              newProductsData[sku].productTrendTag.useAITrend = productTrendTag.useAITrend
-              return newProductsData
-            })
-          })
-          .then(async () => {
-            toast.update(updatingTrendTag, {
-              render: `Generating New ${sku} Forecast`,
-              type: 'success',
-              isLoading: true,
-            })
-            const newForecast = await axios
-              .post(`/api/reorderingPoints/get-single-product-forecast?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-                skus: [sku],
-                productIds: [inventoryId],
-              })
-              .then(({ data }: { data: ReorderingPointsResponse }) => {
-                const { error, data: forecastData } = data
-                if (error || !forecastData) return { error: true, message: 'Error saving product forecast' }
+  //     try {
+  //       const response = await axios
+  //         .post(`/api/reorderingPoints/setNewProductTrendTag?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+  //           products: [{ inventoryId, sku, productTrendTag }],
+  //         })
+  //         .then(({ data }) => {
+  //           if (data.error) {
+  //             throw new Error(data.message || 'Error updating product trend tag')
+  //           }
+  //           toast.update(updatingTrendTag, {
+  //             render: `${sku} trend saved`,
+  //             type: 'success',
+  //           })
+  //           setProductsData((prevData) => {
+  //             const newProductsData = { ...prevData }
+  //             newProductsData[sku].productTrendTag.bsnssTrend = productTrendTag.bsnssTrend
+  //             newProductsData[sku].productTrendTag.useAITrend = productTrendTag.useAITrend
+  //             return newProductsData
+  //           })
+  //         })
+  //         .then(async () => {
+  //           toast.update(updatingTrendTag, {
+  //             render: `Generating New ${sku} Forecast`,
+  //             type: 'success',
+  //             isLoading: true,
+  //           })
+  //           const newForecast = await axios
+  //             .post(`/api/reorderingPoints/get-single-product-forecast?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+  //               skus: [sku],
+  //               productIds: [inventoryId],
+  //             })
+  //             .then(({ data }: { data: ReorderingPointsResponse }) => {
+  //               const { error, data: forecastData } = data
+  //               if (error || !forecastData) return { error: true, message: 'Error saving product forecast' }
 
-                setProductsData((prevData) => {
-                  const newProductsData = { ...prevData }
-                  newProductsData[sku] = forecastData[sku]
-                  return newProductsData
-                })
-                return { error: false, message: `SKU ${sku}: Forecast Updated` }
-              })
-              .catch(() => {
-                return { error: true, message: 'Error saving product forecast.' }
-              })
-            return newForecast
-          })
+  //               setProductsData((prevData) => {
+  //                 const newProductsData = { ...prevData }
+  //                 newProductsData[sku] = forecastData[sku]
+  //                 return newProductsData
+  //               })
+  //               return { error: false, message: `SKU ${sku}: Forecast Updated` }
+  //             })
+  //             .catch(() => {
+  //               return { error: true, message: 'Error saving product forecast.' }
+  //             })
+  //           return newForecast
+  //         })
 
-        if (response.error) {
-          throw new Error(response.message || 'Error updating product trend tag')
-        } else {
-          toast.update(updatingTrendTag, {
-            render: `SKU ${sku}: Forecast Updated`,
-            type: 'success',
-            isLoading: false,
-            autoClose: 3000,
-          })
-        }
-      } catch (error) {
-        toast.update(updatingTrendTag, {
-          render: error instanceof Error ? error.message : 'Error updating trend tag',
-          type: 'error',
-          isLoading: false,
-          autoClose: 3000,
-        })
-      }
-    },
-    [state.currentRegion, state.user.businessId]
-  )
+  //       if (response.error) {
+  //         throw new Error(response.message || 'Error updating product trend tag')
+  //       } else {
+  //         toast.update(updatingTrendTag, {
+  //           render: `SKU ${sku}: Forecast Updated`,
+  //           type: 'success',
+  //           isLoading: false,
+  //           autoClose: 3000,
+  //         })
+  //       }
+  //     } catch (error) {
+  //       toast.update(updatingTrendTag, {
+  //         render: error instanceof Error ? error.message : 'Error updating trend tag',
+  //         type: 'error',
+  //         isLoading: false,
+  //         autoClose: 3000,
+  //       })
+  //     }
+  //   },
+  //   [state.currentRegion, state.user.businessId]
+  // )
 
-  const handleSaveProductsTrendTagBulk = useCallback(
-    async (selectedProducts: ReorderingPointsProduct[], bsnssTrend: ProductTrendTag['bsnssTrend']) => {
-      return saveProductTrendTags(
-        selectedProducts.map((product) => ({
-          inventoryId: product.inventoryId,
-          sku: product.sku,
-          productTrendTag: {
-            aiTrend: product.productTrendTag?.aiTrend ?? 'Normal',
-            analysis: product.productTrendTag?.analysis ?? '',
-            bsnssTrend,
-            useAITrend: false,
-          },
-        }))
-      )
-    },
-    [saveProductTrendTags]
-  )
+  // const handleSaveProductsTrendTagBulk = useCallback(
+  //   async (selectedProducts: ReorderingPointsProduct[], bsnssTrend: ProductTrendTag['bsnssTrend']) => {
+  //     return saveProductTrendTags(
+  //       selectedProducts.map((product) => ({
+  //         inventoryId: product.inventoryId,
+  //         sku: product.sku,
+  //         productTrendTag: {
+  //           aiTrend: product.productTrendTag?.aiTrend ?? 'Normal',
+  //           analysis: product.productTrendTag?.analysis ?? '',
+  //           bsnssTrend,
+  //           useAITrend: false,
+  //         },
+  //       }))
+  //     )
+  //   },
+  //   [saveProductTrendTags]
+  // )
 
-  const handleSaveProductTrendTag = useCallback(
-    async ({ inventoryId, sku, productTrendTag }: RPProductTrendTagUpdate) => {
-      return saveSingleProductTrendTag({ inventoryId, sku, productTrendTag })
-    },
-    [saveSingleProductTrendTag]
-  )
+  // const handleSaveProductTrendTag = useCallback(
+  //   async ({ inventoryId, sku, productTrendTag }: RPProductTrendTagUpdate) => {
+  //     return saveSingleProductTrendTag({ inventoryId, sku, productTrendTag })
+  //   },
+  //   [saveSingleProductTrendTag]
+  // )
 
   // FILTERING TABLE
 
@@ -733,8 +731,8 @@ export const useRPProductsInfo = ({
 
     if (['totalAIForecast_1'].includes(field)) {
       return rows.sort((a, b) => {
-        const aField = a.totalAIForecast_1.forecast
-        const bField = b.totalAIForecast_1.forecast
+        const aField = getAIForecastTotal(a.totalAIForecast_1)
+        const bField = getAIForecastTotal(b.totalAIForecast_1)
         if (aField > bField) {
           return direction ? 1 : -1
         } else if (aField < bField) {
@@ -747,8 +745,8 @@ export const useRPProductsInfo = ({
 
     if (['ai_urgency'].includes(field)) {
       return rows.sort((a, b) => {
-        const aField = a.totalAIForecast_1.daysUntilNextOrder
-        const bField = b.totalAIForecast_1.daysUntilNextOrder
+        const aField = getProductAIForecastUrgency(a).remainingDays
+        const bField = getProductAIForecastUrgency(b).remainingDays
         if (aField > bField) {
           return direction ? 1 : -1
         } else if (aField < bField) {
@@ -797,10 +795,7 @@ export const useRPProductsInfo = ({
           (supplier !== undefined && supplier !== '' ? item.supplier.toLowerCase() === supplier.toLowerCase() : true) &&
           (brand !== undefined && brand !== '' ? item.brand.toLowerCase() === brand.toLowerCase() : true) &&
           (category !== undefined && category !== '' ? item.category.toLowerCase() === category.toLowerCase() : true) &&
-          (trendTag !== undefined && trendTag !== ''
-            ? (item.productTrendTag.useAITrend ? item.productTrendTag.aiTrend.toLowerCase() : item.productTrendTag.bsnssTrend.toLowerCase()) === trendTag.toLowerCase()
-            : true) &&
-          (ai_urgency !== undefined && ai_urgency !== '[]' ? aiUrgencyParsed.includes(item.totalAIForecast_1.urgencyTag.toLowerCase()) : true) &&
+          (ai_urgency !== undefined && ai_urgency !== '[]' ? aiUrgencyParsed.includes(getProductAIForecastUrgency(item).urgencyTag) : true) &&
           (showHidden === undefined || showHidden === '' ? !item.hideReorderingPoints : showHidden === 'false' ? !item.hideReorderingPoints : true)
         // (show0Days === undefined || show0Days === '' ? item.daysRemaining > 0 : show0Days === 'false' ? item.daysRemaining > 0 : true)
       )
@@ -819,10 +814,7 @@ export const useRPProductsInfo = ({
           (supplier !== undefined && supplier !== '' ? item.supplier.toLowerCase() === supplier.toLowerCase() : true) &&
           (brand !== undefined && brand !== '' ? item.brand.toLowerCase() === brand.toLowerCase() : true) &&
           (category !== undefined && category !== '' ? item.category.toLowerCase() === category.toLowerCase() : true) &&
-          (trendTag !== undefined && trendTag !== ''
-            ? (item.productTrendTag.useAITrend ? item.productTrendTag.aiTrend.toLowerCase() : item.productTrendTag.bsnssTrend.toLowerCase()) === trendTag.toLowerCase()
-            : true) &&
-          (ai_urgency !== undefined && ai_urgency !== '[]' ? aiUrgencyParsed.includes(item.totalAIForecast_1.urgencyTag.toLowerCase()) : true) &&
+          (ai_urgency !== undefined && ai_urgency !== '[]' ? aiUrgencyParsed.includes(getProductAIForecastUrgency(item).urgencyTag) : true) &&
           (showHidden === undefined || showHidden === '' ? !item.hideReorderingPoints : showHidden === 'false' ? !item.hideReorderingPoints : true) &&
           // (show0Days === undefined || show0Days === '' ? item.daysRemaining > 0 : show0Days === 'false' ? item.daysRemaining > 0 : true) &&
           (item.sku.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -852,7 +844,6 @@ export const useRPProductsInfo = ({
     supplier,
     brand,
     category,
-    trendTag,
     ai_urgency,
     showHidden,
   ])
@@ -868,7 +859,5 @@ export const useRPProductsInfo = ({
     handleSaveProductConfig,
     handleRegenerateForecast,
     handleUrgencyRange,
-    handleSaveProductsTrendTagBulk,
-    handleSaveProductTrendTag,
   }
 }

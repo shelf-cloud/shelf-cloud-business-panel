@@ -1,4 +1,12 @@
-export const MODEL_OPTIONS = {
+export type MODEL_OPTION = {
+  name: string
+  id: string
+  reasoning?: Reasoning
+}
+
+export type Reasoning = 'none' | 'low' | 'medium' | 'high'
+
+export const MODEL_OPTIONS: { [model: string]: MODEL_OPTION } = {
   'claude-sonnet-4.6': {
     name: 'Claude Sonnet 4.6',
     id: 'anthropic/claude-sonnet-4.6',
@@ -7,25 +15,23 @@ export const MODEL_OPTIONS = {
     name: 'OpenAI GPT-4.1 Nano',
     id: 'openai/gpt-4.1-nano',
   },
-  'openai-5.3-chat': {
-    name: 'OpenAI GPT-5.3 Chat',
-    id: 'openai/gpt-5.3-chat',
+  'openai-5.4-nano': {
+    name: 'OpenAI GPT-5.4 Nano',
+    id: 'openai/gpt-5.4-nano',
+    // reasoning: 'medium',
   },
-  'gemini-3.1-flash-lite-preview': {
-    name: 'Google Gemini 3.1 Flash Lite Preview',
-    id: 'google/gemini-3.1-flash-lite-preview',
+  'openai-4.1-mini': {
+    name: 'OpenAI GPT-4.1 Mini',
+    id: 'openai/gpt-4.1-mini',
   },
-  'minimax-m2.1': {
-    name: 'Minimax M2.1',
-    id: 'minimax/minimax-m2.1',
+  'openai-5.4': {
+    name: 'OpenAI GPT-5.4',
+    id: 'openai/gpt-5.4',
   },
-  'kimi-k2-moonshot': {
-    name: 'Moonshot Kimi-K2 Thinking',
-    id: 'moonshotai/kimi-k2-thinking',
-  },
-  'xai-grok-4.1-fast-non-reasoning': {
-    name: 'XAI Grok 4.1 Fast',
-    id: 'xai/grok-4.1-fast-non-reasoning',
+  'openai-5.5': {
+    name: 'OpenAI GPT-5.5',
+    id: 'openai/gpt-5.5',
+    reasoning: 'none',
   },
 }
 

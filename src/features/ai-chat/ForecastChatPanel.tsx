@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { useChat } from '@ai-sdk/react'
 import { DefaultChatTransport } from 'ai'
-import { AlertTriangle, CalendarClock, ChevronLeftIcon, ChevronRightIcon, Clock3, ShieldAlert } from 'lucide-react'
+import { ChevronLeftIcon, ChevronRightIcon, Clock3 } from 'lucide-react'
 
 import { Badge } from '@/components/shadcn/ui/badge'
 import { Button } from '@/components/shadcn/ui/button'
@@ -13,12 +13,12 @@ import { Separator } from '@/components/shadcn/ui/separator'
 import { FormatIntNumber } from '@/lib/FormatNumbers'
 import { cn } from '@/lib/shadcn/utils'
 
-import { ReorderInput } from '../reordering-points/ai-schema'
+import { ReorderInput_v2 } from '../reordering-points/ai-helpers-v2'
 import Conversation from './Conversation'
 import PromptInput from './PromptInput'
 import StarterPrompts from './StarterPrompts'
 import { FORECAST_CHAT_STARTER_PROMPTS } from './constants'
-import { createForecastSeedMessage, getForecastChatId, getForecastSeedMessageId, getUrgencyBadgeVariant, toForecastChatRequestMessages } from './helpers'
+import { createForecastSeedMessage, getForecastChatId, getForecastSeedMessageId, toForecastChatRequestMessages } from './helpers'
 import { ForecastChatContext, ForecastChatModelNumber, ForecastChatSelectedForecast, ForecastChatUrgencyThresholds } from './types'
 
 type Props = {
@@ -26,7 +26,7 @@ type Props = {
   region: string
   chatSessionKey: number
   modelNumber: ForecastChatModelNumber
-  product: ReorderInput
+  product: ReorderInput_v2
   selectedForecast: ForecastChatSelectedForecast
   urgencyThresholds: ForecastChatUrgencyThresholds
   isLeftColumnOpen: boolean
@@ -91,10 +91,16 @@ const ForecastChatPanel = ({ businessId, region, chatSessionKey, modelNumber, pr
     }
   }
 
+  const forecastValue = Array.isArray(selectedForecast.forecast) ? selectedForecast.forecast.reduce((total, value) => total + Number(value || 0), 0) : selectedForecast.forecast
+  const monthlyForecast = selectedForecast.forecast.map((value, index) => ({
+    label: `M${index + 1}`,
+    value,
+  }))
+
   return (
     <div
       className={cn(
-        'tw:grid tw:h-full tw:flex-1 tw:gap-1 tw:overflow-auto tw:py-3 tw:transition-all tw:duration-200 tw:ease-out',
+        'tw:grid tw:h-full tw:flex-1 tw:gap-2 tw:overflow-auto tw:py-3 tw:transition-all tw:duration-200 tw:ease-out',
         isLeftColumnOpen ? 'tw:lg:grid-cols-[minmax(280px,35%)_minmax(0,100%)]' : 'tw:grid-cols-1'
       )}>
       {isLeftColumnOpen ? (
@@ -104,7 +110,7 @@ const ForecastChatPanel = ({ businessId, region, chatSessionKey, modelNumber, pr
             style={{ scrollbarWidth: 'thin' }}>
             <CardHeader className='tw:px-4'>
               <div className='tw:flex tw:flex-wrap tw:items-start tw:justify-between tw:gap-1'>
-                <div className='tw:space-y-1'>
+                <div className='tw:flex tw:flex-col tw:gap-1'>
                   <CardTitle className='tw:text-base tw:font-semibold!'>Forecast Analysis</CardTitle>
                   <CardDescription className='tw:text-xs'>
                     Continuation of the saved forecast result for this model. Follow-up answers explain the existing decision and label hypotheticals clearly.
@@ -113,44 +119,26 @@ const ForecastChatPanel = ({ businessId, region, chatSessionKey, modelNumber, pr
               </div>
             </CardHeader>
             <CardContent className='tw:px-4'>
-              <div className='tw:grid tw:grid-cols-2 tw:gap-2 tw:text-xs'>
-                <div>
+              <div className='tw:flex tw:flex-col tw:gap-3 tw:text-xs'>
+                <div className='tw:rounded-md tw:border tw:border-border tw:bg-muted/30 tw:p-3'>
                   <p className='tw:mb-1! tw:flex tw:items-center tw:gap-2 tw:text-xs tw:font-semibold tw:uppercase tw:tracking-[0.08em] tw:text-muted-foreground'>
-                    <Clock3 className='tw:size-3.5' />
-                    Quantity
+                    <Clock3 className='tw:size-3.5' />6 Month Forecast
                   </p>
-                  <p className='tw:m-0! tw:text-base tw:font-semibold tw:text-foreground'>{FormatIntNumber(region, selectedForecast.forecast)} units</p>
+                  <p className='tw:m-0! tw:text-base tw:font-semibold tw:text-foreground'>{FormatIntNumber(region, forecastValue)} units</p>
                 </div>
-                <div>
-                  <p className='tw:mb-1! tw:flex tw:items-center tw:gap-2 tw:text-xs tw:font-semibold tw:uppercase tw:tracking-[0.08em] tw:text-muted-foreground'>
-                    <ShieldAlert className='tw:size-3.5' />
-                    Urgency
-                  </p>
-                  <div className='tw:flex tw:flex-wrap tw:items-center tw:gap-2'>
-                    <Badge variant={getUrgencyBadgeVariant(selectedForecast.urgencyTag)}>{selectedForecast.urgencyTag}</Badge>
-                    <span className='tw:text-xs tw:text-foreground'>{selectedForecast.daysUntilNextOrder}d to order</span>
-                  </div>
-                </div>
-                <div>
-                  <p className='tw:mb-1! tw:flex tw:items-center tw:gap-2 tw:text-xs tw:font-semibold tw:uppercase tw:tracking-[0.08em] tw:text-muted-foreground'>
-                    <CalendarClock className='tw:size-3.5' />
-                    Order date
-                  </p>
-                  <p className='tw:m-0! tw:text-xs tw:font-medium tw:text-foreground'>{selectedForecast.recommendedOrderDate}</p>
-                </div>
-                <div>
-                  <p className='tw:mb-1! tw:flex tw:items-center tw:gap-2 tw:text-xs tw:font-semibold tw:uppercase tw:tracking-[0.08em] tw:text-muted-foreground'>
-                    <AlertTriangle className='tw:size-3.5' />
-                    Stockout risk
-                  </p>
-                  <p className='tw:m-0! tw:text-xs tw:font-medium tw:text-foreground'>{selectedForecast.stockoutRiskDate ?? 'Not projected'}</p>
+                <div className='tw:grid tw:grid-cols-3 tw:gap-2'>
+                  {monthlyForecast.map((month) => (
+                    <div key={month.label} className='tw:rounded-md tw:border tw:border-border tw:bg-background tw:p-2'>
+                      <p className='tw:m-0! tw:text-[11px] tw:font-medium tw:text-muted-foreground'>{month.label}</p>
+                      <p className='tw:m-0! tw:text-sm tw:font-semibold tw:text-foreground'>{FormatIntNumber(region, month.value)}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
               <Separator className='tw:my-4' />
-              <div className='tw:space-y-2'>
+              <div className='tw:flex tw:flex-col tw:gap-2'>
                 <p className='tw:m-0 tw:text-xs tw:font-semibold tw:uppercase tw:text-muted-foreground'>Original forecast summary</p>
                 <p className='tw:m-0 tw:text-xs tw:text-foreground'>{selectedForecast.analysis}</p>
-                {selectedForecast.notes ? <p className='tw:m-0 tw:text-xs tw:text-muted-foreground'>{selectedForecast.notes}</p> : null}
               </div>
             </CardContent>
           </Card>
@@ -195,9 +183,9 @@ const ForecastChatPanel = ({ businessId, region, chatSessionKey, modelNumber, pr
           </CardHeader>
           <CardContent className='tw:flex tw:min-h-0 tw:flex-1 tw:flex-col tw:gap-2 tw:px-4'>
             {error && (
-              <div className='tw:rounded-2xl tw:border tw:border-destructive/30 tw:bg-destructive/5 tw:p-3 tw:text-sm tw:text-destructive'>
-                <p className='tw:m-0'>The forecast chat could not respond right now. Please try again.</p>
-                <Button variant='ghost' size='sm' className='tw:mt-2 tw:h-auto tw:px-0 tw:text-destructive' onClick={() => clearError()}>
+              <div className='tw:rounded-2xl tw:border tw:border-destructive/30 tw:bg-destructive/5 tw:p-3 tw:text-xs tw:text-destructive tw:space-y-2'>
+                <p className='tw:m-0!'>The forecast chat could not respond right now. Please try again.</p>
+                <Button variant='ghost' size='sm' onClick={() => clearError()}>
                   Dismiss
                 </Button>
               </div>

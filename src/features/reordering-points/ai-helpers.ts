@@ -1,8 +1,7 @@
 import { encode } from '@toon-format/toon'
-import { type ToolLoopAgent } from 'ai'
 import axios from 'axios'
 
-import { ReorderingPointsProduct, Urgency } from '@/types/reorderingPoints/reorderingPoints'
+import type { ReorderingPointsProduct, Urgency } from '@/types/reorderingPoints/reorderingPoints'
 
 import { AIModelForecastResult, AIModelProductTrendResult, ReorderInput } from './ai-schema'
 import { BusinessPromptResponse, build_bsnss_system_prompt } from './business-prompt'
@@ -40,76 +39,76 @@ export type GetAIForecastForProductResult = {
   analysis?: AIModelForecastResult['analysis']
 }
 
-export const get_ai_forecast_for_product = async (
-  product: ReorderingPointsProduct,
-  agent: ToolLoopAgent,
-  modelUsed: string,
-  urgencyThresholds: Urgency
-): Promise<GetAIForecastForProductResult> => {
-  const { sku, urgency } = product
+// export const get_ai_forecast_for_product = async (
+//   product: ReorderingPointsProduct,
+//   agent: ToolLoopAgent,
+//   modelUsed: string,
+//   urgencyThresholds: Urgency
+// ): Promise<GetAIForecastForProductResult> => {
+//   const { sku, urgency } = product
 
-  const productInput = buildProductPrompt(product, urgencyThresholds)
+//   const productInput = buildProductPrompt(product, urgencyThresholds)
 
-  let aiForecast: AIModelForecastResult = { error: false, analysis: undefined }
+//   let aiForecast: AIModelForecastResult = { error: false, analysis: undefined }
 
-  try {
-    const productPrompt = buildUserMessage(productInput)
+//   try {
+//     const productPrompt = buildUserMessage(productInput)
 
-    // Attempt 1: full payload
-    const first = await agent.generate({
-      prompt: productPrompt,
-    })
-    let analysisResult = safeParseJson(first.text)
+//     // Attempt 1: full payload
+//     const first = await agent.generate({
+//       prompt: productPrompt,
+//     })
+//     let analysisResult = safeParseJson(first.text)
 
-    // Attempt 2: compact payload if parse failed OR model hit length
-    let secondFinishReason: string | undefined
-    let secondText = ''
-    if (analysisResult.error || first.finishReason === 'length') {
-      const second = await agent.generate({
-        prompt: productPrompt,
-      })
-      secondFinishReason = second.finishReason
-      secondText = second.text
-      analysisResult = safeParseJson(second.text)
-    }
+//     // Attempt 2: compact payload if parse failed OR model hit length
+//     let secondFinishReason: string | undefined
+//     let secondText = ''
+//     if (analysisResult.error || first.finishReason === 'length') {
+//       const second = await agent.generate({
+//         prompt: productPrompt,
+//       })
+//       secondFinishReason = second.finishReason
+//       secondText = second.text
+//       analysisResult = safeParseJson(second.text)
+//     }
 
-    if (analysisResult.error) {
-      const diagnostic = [
-        `AI Forecasting - JSON parse error for SKU ${sku} - URG:${urgency}`,
-        `firstFinishReason:${String(first.finishReason)}`,
-        secondFinishReason ? `secondFinishReason:${String(secondFinishReason)}` : '',
-        `firstTextLen:${first.text?.length || 0}`,
-        secondText ? `secondTextLen:${secondText.length}` : '',
-        `firstPreview:${previewText(first.text)}`,
-        secondText ? `secondPreview:${previewText(secondText)}` : '',
-      ]
-        .filter(Boolean)
-        .join(' | ')
+//     if (analysisResult.error) {
+//       const diagnostic = [
+//         `AI Forecasting - JSON parse error for SKU ${sku} - URG:${urgency}`,
+//         `firstFinishReason:${String(first.finishReason)}`,
+//         secondFinishReason ? `secondFinishReason:${String(secondFinishReason)}` : '',
+//         `firstTextLen:${first.text?.length || 0}`,
+//         secondText ? `secondTextLen:${secondText.length}` : '',
+//         `firstPreview:${previewText(first.text)}`,
+//         secondText ? `secondPreview:${previewText(secondText)}` : '',
+//       ]
+//         .filter(Boolean)
+//         .join(' | ')
 
-      throw new Error(diagnostic)
-    }
+//       throw new Error(diagnostic)
+//     }
 
-    aiForecast = { error: false, analysis: analysisResult.parsed } as AIModelForecastResult
+//     aiForecast = { error: false, analysis: analysisResult.parsed } as AIModelForecastResult
 
-    if (aiForecast.error || !aiForecast.analysis) {
-      throw new Error(`AI Forecasting error for SKU ${sku} - URG:${urgency}: ${aiForecast.message || 'Unknown error'}`)
-    }
+//     if (aiForecast.error || !aiForecast.analysis) {
+//       throw new Error(`AI Forecasting error for SKU ${sku} - URG:${urgency}: ${aiForecast.message || 'Unknown error'}`)
+//     }
 
-    return {
-      error: false,
-      analysis: aiForecast.analysis,
-      modelUsed,
-    }
-  } catch (error) {
-    const err = error as any
+//     return {
+//       error: false,
+//       analysis: aiForecast.analysis,
+//       modelUsed,
+//     }
+//   } catch (error) {
+//     const err = error as any
 
-    return {
-      error: true,
-      message: err?.message ?? 'Unknown error',
-      modelUsed,
-    }
-  }
-}
+//     return {
+//       error: true,
+//       message: err?.message ?? 'Unknown error',
+//       modelUsed,
+//     }
+//   }
+// }
 
 export type GetAIModelProductTrendInBulkResult = {
   status: string
@@ -123,76 +122,76 @@ export type GetAIModelProductTrendResult = {
   trend?: AIModelProductTrendResult['trend']
 }
 
-export const get_product_trend_tag = async (
-  product: ReorderingPointsProduct,
-  agent: ToolLoopAgent,
-  modelUsed: string,
-  urgencyThresholds: Urgency
-): Promise<GetAIModelProductTrendResult> => {
-  const { sku } = product
+// export const get_product_trend_tag = async (
+//   product: ReorderingPointsProduct,
+//   agent: ToolLoopAgent,
+//   modelUsed: string,
+//   urgencyThresholds: Urgency
+// ): Promise<GetAIModelProductTrendResult> => {
+//   const { sku } = product
 
-  const productInput = buildProductPrompt(product, urgencyThresholds)
+//   const productInput = buildProductPrompt(product, urgencyThresholds)
 
-  let aiForecast: AIModelProductTrendResult = { error: false, trend: undefined }
+//   let aiForecast: AIModelProductTrendResult = { error: false, trend: undefined }
 
-  try {
-    const productPrompt = buildUserMessage(productInput)
+//   try {
+//     const productPrompt = buildUserMessage(productInput)
 
-    // Attempt 1: full payload
-    const first = await agent.generate({
-      prompt: productPrompt,
-    })
-    let analysisResult = safeParseJson(first.text)
+//     // Attempt 1: full payload
+//     const first = await agent.generate({
+//       prompt: productPrompt,
+//     })
+//     let analysisResult = safeParseJson(first.text)
 
-    // Attempt 2: compact payload if parse failed OR model hit length
-    let secondFinishReason: string | undefined
-    let secondText = ''
-    if (analysisResult.error || first.finishReason === 'length') {
-      const second = await agent.generate({
-        prompt: productPrompt,
-      })
-      secondFinishReason = second.finishReason
-      secondText = second.text
-      analysisResult = safeParseJson(second.text)
-    }
+//     // Attempt 2: compact payload if parse failed OR model hit length
+//     let secondFinishReason: string | undefined
+//     let secondText = ''
+//     if (analysisResult.error || first.finishReason === 'length') {
+//       const second = await agent.generate({
+//         prompt: productPrompt,
+//       })
+//       secondFinishReason = second.finishReason
+//       secondText = second.text
+//       analysisResult = safeParseJson(second.text)
+//     }
 
-    if (analysisResult.error) {
-      const diagnostic = [
-        `AI Sales Trend - JSON parse error for SKU ${sku}`,
-        `firstFinishReason:${String(first.finishReason)}`,
-        secondFinishReason ? `secondFinishReason:${String(secondFinishReason)}` : '',
-        `firstTextLen:${first.text?.length || 0}`,
-        secondText ? `secondTextLen:${secondText.length}` : '',
-        `firstPreview:${previewText(first.text)}`,
-        secondText ? `secondPreview:${previewText(secondText)}` : '',
-      ]
-        .filter(Boolean)
-        .join(' | ')
+//     if (analysisResult.error) {
+//       const diagnostic = [
+//         `AI Sales Trend - JSON parse error for SKU ${sku}`,
+//         `firstFinishReason:${String(first.finishReason)}`,
+//         secondFinishReason ? `secondFinishReason:${String(secondFinishReason)}` : '',
+//         `firstTextLen:${first.text?.length || 0}`,
+//         secondText ? `secondTextLen:${secondText.length}` : '',
+//         `firstPreview:${previewText(first.text)}`,
+//         secondText ? `secondPreview:${previewText(secondText)}` : '',
+//       ]
+//         .filter(Boolean)
+//         .join(' | ')
 
-      throw new Error(diagnostic)
-    }
+//       throw new Error(diagnostic)
+//     }
 
-    aiForecast = { error: false, trend: analysisResult.parsed } as AIModelProductTrendResult
+//     aiForecast = { error: false, trend: analysisResult.parsed } as AIModelProductTrendResult
 
-    if (aiForecast.error || !aiForecast.trend) {
-      throw new Error(`AI Sales Trend error for SKU ${sku}: ${aiForecast.message || 'Unknown error'}`)
-    }
+//     if (aiForecast.error || !aiForecast.trend) {
+//       throw new Error(`AI Sales Trend error for SKU ${sku}: ${aiForecast.message || 'Unknown error'}`)
+//     }
 
-    return {
-      error: false,
-      trend: aiForecast.trend,
-      modelUsed,
-    }
-  } catch (error) {
-    const err = error as any
+//     return {
+//       error: false,
+//       trend: aiForecast.trend,
+//       modelUsed,
+//     }
+//   } catch (error) {
+//     const err = error as any
 
-    return {
-      error: true,
-      message: err?.message ?? 'Unknown error',
-      modelUsed,
-    }
-  }
-}
+//     return {
+//       error: true,
+//       message: err?.message ?? 'Unknown error',
+//       modelUsed,
+//     }
+//   }
+// }
 
 export const get_bssnss_system_prompt = async ({ region, businessId }: { region: string; businessId: string }) => {
   const cacheKey = getBssnssSystemPromptCacheKey({ region, businessId })
@@ -275,11 +274,11 @@ export const buildProductPrompt = (product: ReorderingPointsProduct, _urgencyThr
     totalUnitsSold,
     monthlyForecast,
     warehousePODates,
-    productTrendTag,
+    forecastModel,
   } = product
 
   return {
-    forecastingMethod: productTrendTag.useAITrend ? (productTrendTag.aiTrend ?? 'Normal') : (productTrendTag.bsnssTrend ?? 'Normal'),
+    forecastingMethod: forecastModel || 'Normal',
     sku: sku,
     title: title,
     asin: asin,
@@ -329,18 +328,6 @@ export const buildProductPrompt = (product: ReorderingPointsProduct, _urgencyThr
       last365days: totalUnitsSold['365D'],
     },
 
-    // dailyInfo: Object.entries(dailyForecast)
-    //   .sort(([dateA], [dateB]) => new Date(dateA).getTime() - new Date(dateB).getTime())
-    //   .map(([date, values]) => ({
-    //     date: date,
-    //     warehouseSoldUnits: values.unitsSoldSC,
-    //     warehouseStock: values.daysWithStockSC,
-    //     warehouseOrders: values.ordersSC,
-    //     fbaSoldUnits: values.unitsSoldFBA,
-    //     fbaStock: values.daysWithStockFBA,
-    //     fbaOrders: values.ordersFBA,
-    //   })),
-
     monthly: Object.entries(monthlyForecast)
       .sort(([yearA], [yearB]) => parseInt(yearA) - parseInt(yearB))
       .flatMap(([year, months]) =>
@@ -356,12 +343,6 @@ export const buildProductPrompt = (product: ReorderingPointsProduct, _urgencyThr
             fbaOrders: values.ordersFBA,
           }))
       ),
-
-    // urgencyThresholds: {
-    //   high: highAlertMax ?? 20,
-    //   medium: mediumAlertMax ?? 30,
-    //   low: lowAlertMax ?? 40,
-    // },
   }
 }
 

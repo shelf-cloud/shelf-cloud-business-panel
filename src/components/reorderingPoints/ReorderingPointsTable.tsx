@@ -14,13 +14,11 @@ import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { Badge as ShadcnBadge } from '@shadcn/ui/badge'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
-import { TrendingUpDownIcon } from 'lucide-react'
-import moment from 'moment'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
 import { Button, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
 
-import DownloadProductMD from './DownloadProductMD'
+import { getAIForecastTotal, getProductAIForecastUrgency } from '@/lib/getAIForecastUrgency'
 
 const ReorderingPointsExpandedDetails = dynamic(() => import('./ReorderingPointsExpandedDetails'), {
   ssr: false,
@@ -364,12 +362,12 @@ const ReorderingPointsTable = ({
                 )}
               </span>
               <div className='tw:flex tw:flex-row tw:justify-start tw:items-center gap-1 tw:mt-1'>
-                {(row.productTrendTag?.aiTrend || row.productTrendTag?.bsnssTrend) && (
+                {/* {(row.productTrendTag?.aiTrend || row.productTrendTag?.bsnssTrend) && (
                   <ShadcnBadge variant={'default'} className='tw:text-xs'>
                     <TrendingUpDownIcon className='tw:size-3 tw:mr-2' />
                     {row.productTrendTag.useAITrend ? row.productTrendTag.aiTrend : row.productTrendTag.bsnssTrend}
                   </ShadcnBadge>
-                )}
+                )} */}
                 {row.hideReorderingPoints && (
                   <ShadcnBadge variant={'warning'} className='tw:text-xs'>
                     Hidden
@@ -671,7 +669,7 @@ const ReorderingPointsTable = ({
             className={'fs-7 ' + (setField === 'totalAIForecast_1' ? 'fw-bold' : 'text-muted')}
             style={{ cursor: 'pointer' }}
             onClick={() => handleSetSorting('totalAIForecast_1')}>
-            AI{' '}
+            AI 6 Month Forecast{' '}
             {setField === 'totalAIForecast_1' ? (
               sortingDirectionAsc ? (
                 <i className='ri-arrow-down-fill fs-7 text-primary' />
@@ -684,11 +682,13 @@ const ReorderingPointsTable = ({
       ),
       selector: (row: ReorderingPointsProduct) => {
         if (!state.user[state.currentRegion]?.useAiForecast) return <p className='text-center fs-7 text-muted'>Disabled</p>
+        const forecastValue = getAIForecastTotal(row.totalAIForecast_1)
+
         return (
           <div className='fs-7'>
             {row.totalAIForecast_1.model ? (
               <div className='d-flex flex-row justify-content-center align-items-center gap-2'>
-                <p className='m-0 p-0 text-center'>{FormatIntNumber(state.currentRegion, row.totalAIForecast_1.forecast)}</p>
+                <p className='m-0 p-0 text-center'>{FormatIntNumber(state.currentRegion, forecastValue)}</p>
                 {row.totalAIForecast_1.analysis && (
                   <>
                     <i className='ri-information-fill m-0 fs-5 text-info' id={`ai_forecast_model_1_${row.sku}`}></i>
@@ -720,41 +720,21 @@ const ReorderingPointsTable = ({
         </div>
       ),
       selector: (row: ReorderingPointsProduct) => {
-        var color: string = 'text-primary'
-        switch (row.totalAIForecast_1.urgencyTag.toLowerCase()) {
-          case 'high':
-            color = 'text-danger'
-            break
-          case 'medium':
-            color = 'text-warning'
-            break
-          case 'low':
-            color = 'text-info'
-            break
-          case 'none':
-            color = 'text-success'
-            break
-          default:
-            color = 'text-success'
-            break
-        }
+        const aiUrgency = getProductAIForecastUrgency(row)
 
         return (
           <div className='d-flex flex-column justify-content-center align-items-center gap-1'>
-            <i className={`mdi mdi-alert-octagon fs-3 m-0 p-0 ${color}`} />
+            <i className={`mdi mdi-alert-octagon fs-3 m-0 p-0 ${aiUrgency.color}`} />
 
             <div className='d-flex flex-row justify-content-center align-items-center gap-1'>
-              <span
-                className={
-                  'm-0 p-0 text-center fs-7'
-                }>{`${FormatIntNumber(state.currentRegion, row.totalAIForecast_1.daysUntilNextOrder)} ${row.totalAIForecast_1.daysUntilNextOrder == 1 ? 'day' : 'days'}`}</span>
+              <span className={`m-0 p-0 text-center fs-7 ${aiUrgency.color}${aiUrgency.urgency === 3 ? ' fw-semibold' : ''}`}>{`${FormatIntNumber(
+                state.currentRegion,
+                aiUrgency.remainingDays
+              )} ${aiUrgency.remainingDays == 1 ? 'day' : 'days'}`}</span>
               <i className='fs-5 text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={`AI_DaysToOrderIcon-${row.sku}`} />
               <UncontrolledTooltip placement='top' target={`AI_DaysToOrderIcon-${row.sku}`} innerClassName='bg-white border border-info border-opacity-50 p-2'>
-                <p className='fs-7 text-primary m-0 p-0 mb-0'>{row.totalAIForecast_1.notes}</p>
+                <p className='fs-7 text-primary m-0 p-0 mb-0'>{`Projected days of stock based on current inventory, lead time (${FormatIntNumber(state.currentRegion, row.leadTimeSC + row.daysOfStockSC)} days), and the next 6 months of AI forecasted sales.`}</p>
               </UncontrolledTooltip>
-            </div>
-            <div>
-              <span className='fs-7 tw:text-muted-foreground'>{moment(row.totalAIForecast_1.recommendedOrderDate).format('DD MMM YYYY')}</span>
             </div>
           </div>
         )
@@ -843,7 +823,7 @@ const ReorderingPointsTable = ({
                   <span className='fs-7 fw-normal text-dark'>AI Forecast Details</span>
                 </DropdownItem>
               ) : null}
-              <DownloadProductMD product={row} />
+              {/* <DownloadProductMD product={row} /> */}
               <DropdownItem
                 className='edit-item-btn'
                 onClick={() => {

@@ -3,31 +3,6 @@ import { UIMessage } from 'ai'
 import { FORECAST_CHAT_MAX_MESSAGE_COUNT, FORECAST_CHAT_SEED_MESSAGE_PREFIX } from './constants'
 import { ForecastChatContext, ForecastChatModelNumber, ForecastChatRequestMessage } from './types'
 
-const normalizeUrgencyTag = (value?: string | null) => {
-  const normalizedValue = value?.trim().toLowerCase()
-
-  switch (normalizedValue) {
-    case 'high':
-      return 'High'
-    case 'medium':
-      return 'Medium'
-    case 'low':
-      return 'Low'
-    case 'none':
-      return 'None'
-    default:
-      return 'Unknown'
-  }
-}
-
-const formatDateValue = (value?: string | null) => {
-  if (!value) {
-    return 'Not projected'
-  }
-
-  return value
-}
-
 export const getForecastChatId = (sku: string, modelNumber: ForecastChatModelNumber) => {
   return `forecast-chat-${sku}-${modelNumber}`
 }
@@ -37,14 +12,14 @@ export const getForecastSeedMessageId = (sku: string, modelNumber: ForecastChatM
 }
 
 export const buildForecastSeedSummary = ({ modelNumber, product, selectedForecast }: ForecastChatContext) => {
-  const urgencyTag = normalizeUrgencyTag(selectedForecast.urgencyTag)
+  const monthlyForecast = selectedForecast.forecast.map((value, index) => `Month ${index + 1}: ${value}`).join(', ')
+  const forecastTotal = selectedForecast.forecast.reduce((total, value) => total + Number(value || 0), 0)
 
   return [
     `Saved forecast continuation for SKU ${product.sku} using Model ${modelNumber}${selectedForecast.model ? ` (${selectedForecast.model})` : ''}.`,
-    `Recommended quantity: ${selectedForecast.forecast} units. Urgency: ${urgencyTag}. Order in ${selectedForecast.daysUntilNextOrder} day${selectedForecast.daysUntilNextOrder === 1 ? '' : 's'} on ${selectedForecast.recommendedOrderDate}.`,
-    `Stockout risk date: ${formatDateValue(selectedForecast.stockoutRiskDate)}.`,
+    `Total 6-month sales forecast: ${forecastTotal} units.`,
+    `Monthly forecast breakdown: ${monthlyForecast}.`,
     `Original analysis: ${selectedForecast.analysis}`,
-    selectedForecast.notes ? `Notes: ${selectedForecast.notes}` : '',
   ]
     .filter(Boolean)
     .join('\n')
@@ -91,15 +66,4 @@ export const getMessageText = (message: UIMessage) => {
     .filter((part): part is Extract<(typeof message.parts)[number], { type: 'text' }> => part.type === 'text')
     .map((part) => part.text)
     .join('\n')
-}
-
-export const getUrgencyBadgeVariant = (urgencyTag?: string | null): 'destructive' | 'warning' | 'secondary' => {
-  switch (normalizeUrgencyTag(urgencyTag)) {
-    case 'High':
-      return 'destructive'
-    case 'Medium':
-      return 'warning'
-    default:
-      return 'secondary'
-  }
 }

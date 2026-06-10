@@ -20,7 +20,7 @@ const Message = ({ message }: Props) => {
   }
 
   return (
-    <div className={cn('tw:flex tw:gap-2', isAssistant ? 'tw:justify-start' : 'tw:justify-end')}>
+    <div className={cn('tw:flex tw:min-w-0 tw:gap-2', isAssistant ? 'tw:justify-start' : 'tw:justify-end')}>
       {isAssistant && (
         <div className='tw:mt-1 tw:flex tw:size-8 tw:shrink-0 tw:items-center tw:justify-center tw:rounded-full tw:border tw:border-primary/20 tw:bg-primary/10 tw:text-primary'>
           <BotMessageSquare className='tw:size-4' />
@@ -28,11 +28,17 @@ const Message = ({ message }: Props) => {
       )}
       <div
         className={cn(
-          'tw:max-w-[88%] tw:rounded-2xl tw:px-4 tw:py-3 tw:text-sm tw:leading-6 tw:shadow-sm tw:select-text',
+          'tw:min-w-0 tw:max-w-[88%] tw:overflow-hidden tw:rounded-2xl tw:px-4 tw:py-3 tw:text-sm tw:leading-6 tw:shadow-sm tw:select-text',
           isAssistant ? 'tw:border tw:border-border tw:bg-background tw:text-foreground' : 'tw:bg-primary tw:text-primary-foreground'
         )}>
-        <p className='tw:m-0 tw:whitespace-pre-wrap tw:wrap-break-word tw:text-xs! tw:select-text' dangerouslySetInnerHTML={{ __html: snarkdown(text) }} />
-        <div className='tw:mt-2 tw:flex tw:justify-end tw:select-none'>
+        <div
+          className={cn(
+            'tw:min-w-0 tw:max-w-full tw:whitespace-pre-wrap tw:break-words tw:text-xs! tw:select-text tw:[overflow-wrap:anywhere]',
+            'tw:[&_*]:max-w-full tw:[&_a]:break-all tw:[&_code]:whitespace-pre-wrap tw:[&_code]:break-words tw:[&_li]:pl-1 tw:[&_ol]:my-2 tw:[&_ol]:list-decimal tw:[&_ol]:pl-5 tw:[&_p]:my-2 tw:[&_pre]:overflow-x-auto tw:[&_pre]:whitespace-pre-wrap tw:[&_ul]:my-2 tw:[&_ul]:list-disc tw:[&_ul]:pl-5'
+          )}
+          dangerouslySetInnerHTML={{ __html: snarkdown(text) }}
+        />
+        <div className='tw:mt-0 tw:flex tw:justify-end tw:select-none'>
           <CopyTextToClipboard
             text={text}
             label='message'

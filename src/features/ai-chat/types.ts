@@ -1,13 +1,10 @@
 import { AIForecastForProduct, ReorderingPointsMonthlyForecastValue, ReorderingPointsProduct, Urgency } from '@/types/reorderingPoints/reorderingPoints'
 
-import { ReorderInput } from '../reordering-points/ai-schema'
+import { ReorderInput_v2 } from '../reordering-points/ai-helpers-v2'
 
 export type ForecastChatModelNumber = 1 | 2 | 3
 
-export type ForecastChatSelectedForecast = Pick<
-  AIForecastForProduct,
-  'model' | 'analysis' | 'forecast' | 'daysUntilNextOrder' | 'recommendedOrderDate' | 'urgencyTag' | 'stockoutRiskDate' | 'notes'
->
+export type ForecastChatSelectedForecast = Pick<AIForecastForProduct, 'model' | 'analysis' | 'forecast'>
 
 export type ForecastChatProductSnapshot = Pick<
   ReorderingPointsProduct,
@@ -31,7 +28,7 @@ export type ForecastChatProductSnapshot = Pick<
   | 'awdQty'
   | 'awdInboundQty'
   | 'totalUnitsSold'
-  | 'productTrendTag'
+  // | 'productTrendTag'
 > & {
   monthlyForecast: { [year: string]: { [month: string]: ReorderingPointsMonthlyForecastValue } }
   warehousePODates: {
@@ -45,7 +42,7 @@ export type ForecastChatUrgencyThresholds = Pick<Urgency, 'rpShowFBA' | 'rpShowA
 export type ForecastChatContext = {
   modelNumber: ForecastChatModelNumber
   selectedForecast: ForecastChatSelectedForecast
-  product: ReorderInput
+  product: ReorderInput_v2
   urgencyThresholds: ForecastChatUrgencyThresholds
 }
 

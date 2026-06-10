@@ -9,7 +9,7 @@ const MODEL_OPTION_VALUES = Object.values(MODEL_OPTIONS)
 // const normalizeModelValue = (value?: string | null) => value?.trim().toLowerCase()
 
 export const resolveForecastModelId = (_modelValue?: string | null) => {
-  return MODEL_OPTIONS['openai-5.3-chat'].id
+  return MODEL_OPTIONS['openai-5.5'].id
   // const normalizedModelValue = normalizeModelValue(modelValue)
 
   // if (!normalizedModelValue) {
