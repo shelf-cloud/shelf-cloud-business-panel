@@ -101,7 +101,7 @@ const ForecastChatPanel = ({ businessId, region, chatSessionKey, modelNumber, pr
     <div
       className={cn(
         'tw:grid tw:h-full tw:flex-1 tw:gap-2 tw:overflow-auto tw:py-3 tw:transition-all tw:duration-200 tw:ease-out',
-        isLeftColumnOpen ? 'tw:lg:grid-cols-[minmax(280px,35%)_minmax(0,100%)]' : 'tw:grid-cols-1'
+        isLeftColumnOpen ? 'tw:lg:grid-cols-[minmax(280px,30%)_minmax(0,100%)]' : 'tw:grid-cols-1'
       )}>
       {isLeftColumnOpen ? (
         <div className='tw:flex tw:min-h-0 tw:flex-col tw:gap-2 tw:pr-1'>

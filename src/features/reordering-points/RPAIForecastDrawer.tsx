@@ -76,7 +76,7 @@ const RPAIForecastDrawer = ({ product, isOpen, onClose, region, businessId, urge
               ? isChatLeftColumnOpen
                 ? 'tw:lg:max-w-[min(92vw)] tw:xl:max-w-[min(80vw)]'
                 : 'tw:lg:max-w-[min(75vw)] tw:xl:max-w-[min(35vw)]'
-              : 'tw:sm:max-w-lg'
+              : 'tw:sm:max-w-[min(40vw)]'
           )}>
           {/* HEADER */}
           <DrawerHeader className='tw:border-b tw:border-border tw:pb-1'>
@@ -125,7 +125,7 @@ const RPAIForecastDrawer = ({ product, isOpen, onClose, region, businessId, urge
             ) : (
               <>
                 {/* PRODUCT TREND TAG */}
-                <div className='tw:overflow-y-auto'>
+                <div className='tw:overflow-y-auto tw:px-2' style={{ scrollbarWidth: 'thin' }}>
                   {/* {product?.productTrendTag && <RPProductTrendTagSection product={product} onSave={onSave} />} */}
                   <div className='tw:mb-4'>
                     <h4 className='tw:text-sm tw:font-semibold tw:text-foreground tw:mb-0.5 tw:flex tw:items-center tw:gap-1.5'>

@@ -83,6 +83,7 @@ export const getAIForecastUrgency = ({
 
   let remainingStock = normalizedStock
   let elapsedDays = 0
+  let lastPositiveMonthlyForecast = 0
 
   for (const monthlyForecast of forecast) {
     if (monthlyForecast <= 0) {
@@ -90,6 +91,7 @@ export const getAIForecastUrgency = ({
       continue
     }
 
+    lastPositiveMonthlyForecast = monthlyForecast
     const dailyForecast = monthlyForecast / FORECAST_MONTH_DAYS
     const daysUntilStockout = remainingStock / dailyForecast
 
@@ -99,6 +101,13 @@ export const getAIForecastUrgency = ({
 
     remainingStock -= monthlyForecast
     elapsedDays += FORECAST_MONTH_DAYS
+  }
+
+  const dailyForecast = lastPositiveMonthlyForecast / FORECAST_MONTH_DAYS
+  const daysUntilStockout = remainingStock / dailyForecast
+
+  if (Number.isFinite(daysUntilStockout)) {
+    return buildUrgencyResult(Math.max(0, Math.ceil(elapsedDays + daysUntilStockout)), normalizedLeadTime)
   }
 
   return buildUrgencyResult(elapsedDays, normalizedLeadTime)

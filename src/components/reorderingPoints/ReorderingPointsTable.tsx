@@ -714,7 +714,7 @@ const ReorderingPointsTable = ({
       name: (
         <div className='text-center d-flex flex-column justify-content-center align-items-center gap-1'>
           <span className={'fs-7 ' + (setField === 'ai_urgency' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('ai_urgency')}>
-            AI Urgency{' '}
+            AI Remaining Days of Stock{' '}
             {setField === 'ai_urgency' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
           </span>
         </div>
