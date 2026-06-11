@@ -67,7 +67,7 @@ const ReorderingPointsTable = ({
   splitNames,
   setRPProductConfig,
   setValuesAndOpen,
-  handleRegenerateForecast,
+  // handleRegenerateForecast,
   setAIForecastProduct,
   expandedRowProps,
 }: Props) => {
@@ -811,12 +811,12 @@ const ReorderingPointsTable = ({
                 <i className='ri-settings-3-line align-middle me-2 fs-5 text-black'></i>
                 <span className='fs-7 fw-normal text-dark'>Edit Config</span>
               </DropdownItem>
-              {state.user.us.useAiForecast ? (
+              {/* {state.user.us.useAiForecast ? (
                 <DropdownItem className='edit-item-btn' onClick={() => handleRegenerateForecast({ inventoryId: row.inventoryId, sku: row.sku })}>
                   <i className='mdi mdi-reload align-middle me-2 fs-5 text-primary'></i>
                   <span className='fs-7 fw-normal text-dark'>Regenerate Forecast</span>
                 </DropdownItem>
-              ) : null}
+              ) : null} */}
               {state.user.us.useAiForecast ? (
                 <DropdownItem className='edit-item-btn' onClick={() => setAIForecastProduct(row)}>
                   <i className='las la-brain align-middle me-2 fs-5 text-info'></i>

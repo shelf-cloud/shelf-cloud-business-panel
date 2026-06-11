@@ -16,7 +16,7 @@ const generateNewProductsForecast: NextApiHandler = async (request, response) =>
 
   axios
     .post(
-      `${process.env.SHELFCLOUD_SERVER_URL}/api/reorderingPoints/generate_new_products_forecast?region=${request.query.region}&businessId=${request.query.businessId}`,
+      `${process.env.SHELFCLOUD_SERVER_URL}/api/reorderingPoints/generate_new_products_forecast_v2?region=${request.query.region}&businessId=${request.query.businessId}`,
       {
         skus: request.body.skus,
         productIds: request.body.productIds,
