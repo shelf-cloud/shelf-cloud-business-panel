@@ -7,8 +7,9 @@ import { CartesianGrid, Line, LineChart, ReferenceDot, ReferenceLine, XAxis, YAx
 
 import { Button } from '@/components/shadcn/ui/button'
 import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/shadcn/ui/chart'
-import { ForecastChatModelNumber } from '@/features/ai-chat/types'
+import type { ForecastChatModelNumber, ForecastChatUrgencyThresholds } from '@/features/ai-chat/types'
 import { getCurrentAIForecastStock, getProductAIForecastUrgency } from '@/lib/getAIForecastUrgency'
+import type { AIForecastUrgencyResult } from '@/lib/getAIForecastUrgency'
 import { AIForecastForProduct, ReorderingPointsProduct } from '@/types/reorderingPoints/reorderingPoints'
 
 type Props = {
@@ -19,6 +20,7 @@ type Props = {
   region: string
   product: ReorderingPointsProduct
   productForecast: AIForecastForProduct
+  urgencyThresholds: ForecastChatUrgencyThresholds
   onAnalyze: (modelNumber: ForecastChatModelNumber, productForecast: AIForecastForProduct) => void
 }
 
@@ -54,7 +56,8 @@ const EVENT_COLORS = {
   stockout: 'var(--destructive)',
 }
 
-const URGENCY_BADGE_VARIANTS: Record<'low' | 'medium' | 'high', 'secondary' | 'warning' | 'destructive'> = {
+const URGENCY_BADGE_VARIANTS: Record<AIForecastUrgencyResult['urgencyTag'], 'outline' | 'secondary' | 'warning' | 'destructive'> = {
+  none: 'outline',
   low: 'secondary',
   medium: 'warning',
   high: 'destructive',
@@ -105,11 +108,11 @@ const buildForecastChartData = ({ currentStock, forecast, startDate }: { current
   })
 }
 
-const RPAIForecastModelCard = ({ modelNumber, model, analysis, forecast, region, product, productForecast, onAnalyze }: Props) => {
+const RPAIForecastModelCard = ({ modelNumber, model, analysis, forecast, region, product, productForecast, urgencyThresholds, onAnalyze }: Props) => {
   if (!model || !analysis) return null
 
   const forecastValue = Array.isArray(forecast) ? forecast.reduce((total, value) => total + Number(value || 0), 0) : forecast
-  const aiUrgency = getProductAIForecastUrgency(product)
+  const aiUrgency = getProductAIForecastUrgency(product, urgencyThresholds)
   const currentStock = getCurrentAIForecastStock(product)
   const leadTimeDays = Math.max(0, Number(product.leadTimeSC + product.daysOfStockSC) || 0)
   const today = new Date()
@@ -140,8 +143,9 @@ const RPAIForecastModelCard = ({ modelNumber, model, analysis, forecast, region,
             <span className='tw:text-sm tw:font-semibold tw:text-foreground tw:tabular-nums'>{FormatIntNumber(region, currentStock)}</span>
           </div>
           <div className='tw:flex tw:flex-col tw:gap-1 tw:rounded-md tw:border tw:border-border tw:bg-muted/30 tw:p-2'>
-            <span className='tw:text-xs tw:font-medium tw:text-muted-foreground'>Remaining days</span>
-            <span className='tw:text-sm tw:font-semibold tw:text-foreground tw:tabular-nums'>{FormatIntNumber(region, aiUrgency.remainingDays)}</span>
+            <span className='tw:text-xs tw:font-medium tw:text-muted-foreground'>Days to order</span>
+            <span className='tw:text-sm tw:font-semibold tw:text-foreground tw:tabular-nums'>{FormatIntNumber(region, aiUrgency.daysToOrder)}</span>
+            <span className='tw:text-xs tw:text-muted-foreground tw:tabular-nums'>Stock: {FormatIntNumber(region, aiUrgency.remainingDays)} days</span>
           </div>
           <div className='tw:flex tw:flex-col tw:gap-1 tw:rounded-md tw:border tw:border-border tw:bg-muted/30 tw:p-2'>
             <span className='tw:text-xs tw:font-medium tw:text-muted-foreground'>Urgency</span>

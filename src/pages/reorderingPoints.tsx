@@ -81,7 +81,7 @@ const ReorderingPoints = ({ session }: Props) => {
     router.query
   const [startDate, setStartDate] = useState(moment().subtract(15, 'days').format('YYYY-MM-DD'))
   const [endDate, setEndDate] = useState(moment().format('YYYY-MM-DD'))
-  const [setField, setsetField] = useState('urgency')
+  const [setField, setsetField] = useState('ai_urgency')
   const [sortingDirectionAsc, setsortingDirectionAsc] = useState(true)
   const [searchValue, setSearchValue] = useState<string>('')
   const [splits, setsplits] = useState({ isSplitting: false, splitsQty: 2 })

@@ -16,7 +16,7 @@ const getSingleProductForecast: NextApiHandler = async (request, response) => {
 
   axios
     .post(
-      `${process.env.SHELFCLOUD_SERVER_URL}/api/reorderingPoints/getForecastSingle?region=${request.query.region}&businessId=${request.query.businessId}`,
+      `${process.env.SHELFCLOUD_SERVER_URL}/api/reorderingPoints/getForecastSingle_v2?region=${request.query.region}&businessId=${request.query.businessId}`,
       {
         skus: request.body.skus,
         productIds: request.body.productIds,

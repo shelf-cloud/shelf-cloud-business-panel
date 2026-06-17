@@ -5,7 +5,7 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
 
-import { getAIForecastTotal, getProductAIForecastUrgency } from '@/lib/getAIForecastUrgency'
+import { getAIForecastTotal, getCurrentAIForecastStock, getProductAIForecastUrgency } from '@/lib/getAIForecastUrgency'
 
 export type RPProductUpdateConfig = {
   inventoryId: number
@@ -68,6 +68,14 @@ export const useRPProductsInfo = ({
 }: any) => {
   const [productsData, setProductsData] = useState<ReorderingPointsForecastProducts>({})
   const controllerRef = useRef<AbortController | null>(null)
+  const aiUrgencyThresholds = useMemo(
+    () => ({
+      highAlertMax: state?.user?.us?.rphighAlertMax ?? 20,
+      mediumAlertMax: state?.user?.us?.rpmediumAlertMax ?? 30,
+      lowAlertMax: state?.user?.us?.rplowAlertMax ?? 45,
+    }),
+    [state?.user?.us?.rphighAlertMax, state?.user?.us?.rpmediumAlertMax, state?.user?.us?.rplowAlertMax]
+  )
 
   useEffect(() => {
     controllerRef.current = new AbortController()
@@ -624,155 +632,176 @@ export const useRPProductsInfo = ({
 
   // FILTERING TABLE
 
-  const handleSortingList = useCallback((rows: ReorderingPointsProduct[], field: string, direction: boolean) => {
-    if (['30D', '60D', '90D', '120D', '180D', '365D'].includes(field)) {
-      return rows.sort((a, b) => {
-        if (a.totalUnitsSold[field] > b.totalUnitsSold[field]) {
-          return direction ? 1 : -1
-        } else if (a.totalUnitsSold[field] < b.totalUnitsSold[field]) {
-          return direction ? -1 : 1
-        } else {
-          return 0
-        }
-      })
-    }
+  const handleSortingList = useCallback(
+    (rows: ReorderingPointsProduct[], field: string, direction: boolean) => {
+      if (['30D', '60D', '90D', '120D', '180D', '365D'].includes(field)) {
+        return rows.sort((a, b) => {
+          if (a.totalUnitsSold[field] > b.totalUnitsSold[field]) {
+            return direction ? 1 : -1
+          } else if (a.totalUnitsSold[field] < b.totalUnitsSold[field]) {
+            return direction ? -1 : 1
+          } else {
+            return 0
+          }
+        })
+      }
 
-    if (['sku', 'supplier', 'brand'].includes(field)) {
-      return rows.sort((a, b) => {
-        const aField = a[field as keyof ReorderingPointsProduct]!.toLocaleString().toLowerCase()
-        const bField = b[field as keyof ReorderingPointsProduct]!.toLocaleString().toLowerCase()
-        if (aField > bField) {
-          return direction ? 1 : -1
-        } else if (aField < bField) {
-          return direction ? -1 : 1
-        } else {
-          return 0
-        }
-      })
-    }
+      if (['sku', 'supplier', 'brand'].includes(field)) {
+        return rows.sort((a, b) => {
+          const aField = a[field as keyof ReorderingPointsProduct]!.toLocaleString().toLowerCase()
+          const bField = b[field as keyof ReorderingPointsProduct]!.toLocaleString().toLowerCase()
+          if (aField > bField) {
+            return direction ? 1 : -1
+          } else if (aField < bField) {
+            return direction ? -1 : 1
+          } else {
+            return 0
+          }
+        })
+      }
 
-    if (
-      [
-        'daysRemaining',
-        'warehouseQty',
-        'fbaQty',
-        'awdQty',
-        'productionQty',
-        'receiving',
-        'sellerCost',
-        'leadTime',
-        'boxQty',
-        'adjustedForecast',
-        'order',
-        'orderAdjusted',
-        'totalSCForecast',
-        'totalFBAForecast',
-        'totalAWDForecast',
-      ].includes(field)
-    ) {
-      return rows.sort((a, b) => {
-        const aField = a[field as keyof ReorderingPointsProduct]!
-        const bField = b[field as keyof ReorderingPointsProduct]!
-        if (aField > bField) {
-          return direction ? 1 : -1
-        } else if (aField < bField) {
-          return direction ? -1 : 1
-        } else {
-          return 0
-        }
-      })
-    }
+      if (
+        [
+          'daysRemaining',
+          'warehouseQty',
+          'fbaQty',
+          'awdQty',
+          'productionQty',
+          'receiving',
+          'sellerCost',
+          'leadTime',
+          'boxQty',
+          'adjustedForecast',
+          'order',
+          'orderAdjusted',
+          'totalSCForecast',
+          'totalFBAForecast',
+          'totalAWDForecast',
+        ].includes(field)
+      ) {
+        return rows.sort((a, b) => {
+          const aField = a[field as keyof ReorderingPointsProduct]!
+          const bField = b[field as keyof ReorderingPointsProduct]!
+          if (aField > bField) {
+            return direction ? 1 : -1
+          } else if (aField < bField) {
+            return direction ? -1 : 1
+          } else {
+            return 0
+          }
+        })
+      }
 
-    if (['totalOrdered'].includes(field)) {
-      return rows.sort((a, b) => {
-        const aField = a.useOrderAdjusted ? a.orderAdjusted : a.order
-        const bField = b.adjustedForecast ? b.orderAdjusted : b.order
-        if (aField > bField) {
-          return direction ? 1 : -1
-        } else if (aField < bField) {
-          return direction ? -1 : 1
-        } else {
-          return 0
-        }
-      })
-    }
+      if (['totalOrdered'].includes(field)) {
+        return rows.sort((a, b) => {
+          const aField = a.useOrderAdjusted ? a.orderAdjusted : a.order
+          const bField = b.adjustedForecast ? b.orderAdjusted : b.order
+          if (aField > bField) {
+            return direction ? 1 : -1
+          } else if (aField < bField) {
+            return direction ? -1 : 1
+          } else {
+            return 0
+          }
+        })
+      }
 
-    if (['totalInventory'].includes(field)) {
-      return rows.sort((a, b) => {
-        const aField = a.warehouseQty + a.fbaQty + a.productionQty + a.receiving
-        const bField = b.warehouseQty + b.fbaQty + b.productionQty + b.receiving
-        if (aField > bField) {
-          return direction ? 1 : -1
-        } else if (aField < bField) {
-          return direction ? -1 : 1
-        } else {
-          return 0
-        }
-      })
-    }
+      if (['totalInventory'].includes(field)) {
+        return rows.sort((a, b) => {
+          const aField = a.warehouseQty + a.fbaQty + a.productionQty + a.receiving
+          const bField = b.warehouseQty + b.fbaQty + b.productionQty + b.receiving
+          if (aField > bField) {
+            return direction ? 1 : -1
+          } else if (aField < bField) {
+            return direction ? -1 : 1
+          } else {
+            return 0
+          }
+        })
+      }
 
-    if (['ExponentialSmoothing', 'AutoREG', 'VAR', 'Naive', 'ARDL', 'ARDL_seasonal'].includes(field)) {
-      return rows.sort((a, b) => {
-        const aField =
-          Object.values(a.forecast[field as keyof ReorderingPointsProduct]!).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-          (a.warehouseQty + a.fbaQty + a.productionQty + a.receiving)
-        const bField =
-          Object.values(b.forecast[field as keyof ReorderingPointsProduct]!).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
-          (b.warehouseQty + b.fbaQty + b.productionQty + b.receiving)
-        if (aField > bField) {
-          return direction ? 1 : -1
-        } else if (aField < bField) {
-          return direction ? -1 : 1
-        } else {
-          return 0
-        }
-      })
-    }
+      if (['ExponentialSmoothing', 'AutoREG', 'VAR', 'Naive', 'ARDL', 'ARDL_seasonal'].includes(field)) {
+        return rows.sort((a, b) => {
+          const aField =
+            Object.values(a.forecast[field as keyof ReorderingPointsProduct]!).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
+            (a.warehouseQty + a.fbaQty + a.productionQty + a.receiving)
+          const bField =
+            Object.values(b.forecast[field as keyof ReorderingPointsProduct]!).reduce((total, unitsSold) => total + (unitsSold <= 0 ? 0 : unitsSold < 1 ? 1 : unitsSold), 0) -
+            (b.warehouseQty + b.fbaQty + b.productionQty + b.receiving)
+          if (aField > bField) {
+            return direction ? 1 : -1
+          } else if (aField < bField) {
+            return direction ? -1 : 1
+          } else {
+            return 0
+          }
+        })
+      }
 
-    if (['totalAIForecast_1'].includes(field)) {
-      return rows.sort((a, b) => {
-        const aField = getAIForecastTotal(a.totalAIForecast_1)
-        const bField = getAIForecastTotal(b.totalAIForecast_1)
-        if (aField > bField) {
-          return direction ? 1 : -1
-        } else if (aField < bField) {
-          return direction ? -1 : 1
-        } else {
-          return 0
-        }
-      })
-    }
+      if (['totalAIForecast_1'].includes(field)) {
+        return rows.sort((a, b) => {
+          const aField = getAIForecastTotal(a.totalAIForecast_1)
+          const bField = getAIForecastTotal(b.totalAIForecast_1)
+          if (aField > bField) {
+            return direction ? 1 : -1
+          } else if (aField < bField) {
+            return direction ? -1 : 1
+          } else {
+            return 0
+          }
+        })
+      }
 
-    if (['ai_urgency'].includes(field)) {
-      return rows.sort((a, b) => {
-        const aField = getProductAIForecastUrgency(a).remainingDays
-        const bField = getProductAIForecastUrgency(b).remainingDays
-        if (aField > bField) {
-          return direction ? 1 : -1
-        } else if (aField < bField) {
-          return direction ? -1 : 1
-        } else {
-          return 0
-        }
-      })
-    }
+      if (['ai_forecast_qty'].includes(field)) {
+        return rows.sort((a, b) => {
+          const aForecastValue = getAIForecastTotal(a.totalAIForecast_1)
+          const aCurrentStock = getCurrentAIForecastStock(a)
+          const bForecastValue = getAIForecastTotal(b.totalAIForecast_1)
+          const bCurrentStock = getCurrentAIForecastStock(b)
+          const aField = Math.max(aForecastValue - aCurrentStock, 0)
+          const bField = Math.max(bForecastValue - bCurrentStock, 0)
+          if (aField > bField) {
+            return direction ? 1 : -1
+          } else if (aField < bField) {
+            return direction ? -1 : 1
+          } else {
+            return 0
+          }
+        })
+      }
 
-    return rows.sort((a, b) => {
-      if (a.urgency > b.urgency) {
-        return !direction ? 1 : -1
-      } else if (a.urgency < b.urgency) {
-        return !direction ? -1 : 1
-      } else {
-        if (a.daysToOrder < b.daysToOrder) {
+      if (['ai_urgency'].includes(field)) {
+        return rows.sort((a, b) => {
+          const aField = getProductAIForecastUrgency(a, aiUrgencyThresholds).daysToOrder
+          const bField = getProductAIForecastUrgency(b, aiUrgencyThresholds).daysToOrder
+          if (aField > bField) {
+            return direction ? 1 : -1
+          } else if (aField < bField) {
+            return direction ? -1 : 1
+          } else {
+            return 0
+          }
+        })
+      }
+
+      return rows.sort((a, b) => {
+        if (a.urgency > b.urgency) {
           return !direction ? 1 : -1
-        } else if (a.daysToOrder > b.daysToOrder) {
+        } else if (a.urgency < b.urgency) {
           return !direction ? -1 : 1
         } else {
-          return 0
+          if (a.daysToOrder < b.daysToOrder) {
+            return !direction ? 1 : -1
+          } else if (a.daysToOrder > b.daysToOrder) {
+            return !direction ? -1 : 1
+          } else {
+            return 0
+          }
         }
-      }
-    })
-  }, [])
+      })
+    },
+    [aiUrgencyThresholds]
+  )
 
   const filterDataTable = useMemo(() => {
     if (!productsData || Object.values(productsData).length === 0) {
@@ -783,9 +812,11 @@ export const useRPProductsInfo = ({
     const sortedList = handleSortingList(Object.values(productsData), setField, sortingDirectionAsc)
 
     if (searchValue === '') {
-      return sortedList.filter(
-        (item: ReorderingPointsProduct) =>
-          (urgency !== undefined && urgency !== '[]' ? urgencyParsed.includes(item.urgency) : true) &&
+      return sortedList.filter((item: ReorderingPointsProduct) => {
+        const { urgency: itemUrgency } = getProductAIForecastUrgency(item, aiUrgencyThresholds)
+
+        return (
+          (urgency !== undefined && urgency !== '[]' ? urgencyParsed.includes(itemUrgency) : true) &&
           (grossmin !== undefined && grossmin !== '' ? item.grossRevenue >= parseFloat(grossmin!) : true) &&
           (grossmax !== undefined && grossmax !== '' ? item.grossRevenue <= parseFloat(grossmax!) : true) &&
           (profitmin !== undefined && profitmin !== '' ? item.grossRevenue - item.expenses >= parseFloat(profitmin!) : true) &&
@@ -795,16 +826,18 @@ export const useRPProductsInfo = ({
           (supplier !== undefined && supplier !== '' ? item.supplier.toLowerCase() === supplier.toLowerCase() : true) &&
           (brand !== undefined && brand !== '' ? item.brand.toLowerCase() === brand.toLowerCase() : true) &&
           (category !== undefined && category !== '' ? item.category.toLowerCase() === category.toLowerCase() : true) &&
-          (ai_urgency !== undefined && ai_urgency !== '[]' ? aiUrgencyParsed.includes(getProductAIForecastUrgency(item).urgencyTag) : true) &&
+          (ai_urgency !== undefined && ai_urgency !== '[]' ? aiUrgencyParsed.includes(getProductAIForecastUrgency(item, aiUrgencyThresholds).urgencyTag) : true) &&
           (showHidden === undefined || showHidden === '' ? !item.hideReorderingPoints : showHidden === 'false' ? !item.hideReorderingPoints : true)
-        // (show0Days === undefined || show0Days === '' ? item.daysRemaining > 0 : show0Days === 'false' ? item.daysRemaining > 0 : true)
-      )
+          // (show0Days === undefined || show0Days === '' ? item.daysRemaining > 0 : show0Days === 'false' ? item.daysRemaining > 0 : true)
+        )
+      })
     }
 
     if (searchValue !== '') {
-      return sortedList.filter(
-        (item: ReorderingPointsProduct) =>
-          (urgency !== undefined && urgency !== '[]' ? urgencyParsed.includes(item.urgency) : true) &&
+      return sortedList.filter((item: ReorderingPointsProduct) => {
+        const { urgency: itemUrgency } = getProductAIForecastUrgency(item, aiUrgencyThresholds)
+        return (
+          (urgency !== undefined && urgency !== '[]' ? urgencyParsed.includes(itemUrgency) : true) &&
           (grossmin !== undefined && grossmin !== '' ? item.grossRevenue >= parseFloat(grossmin!) : true) &&
           (grossmax !== undefined && grossmax !== '' ? item.grossRevenue <= parseFloat(grossmax!) : true) &&
           (profitmin !== undefined && profitmin !== '' ? item.grossRevenue - item.expenses >= parseFloat(profitmin!) : true) &&
@@ -814,7 +847,7 @@ export const useRPProductsInfo = ({
           (supplier !== undefined && supplier !== '' ? item.supplier.toLowerCase() === supplier.toLowerCase() : true) &&
           (brand !== undefined && brand !== '' ? item.brand.toLowerCase() === brand.toLowerCase() : true) &&
           (category !== undefined && category !== '' ? item.category.toLowerCase() === category.toLowerCase() : true) &&
-          (ai_urgency !== undefined && ai_urgency !== '[]' ? aiUrgencyParsed.includes(getProductAIForecastUrgency(item).urgencyTag) : true) &&
+          (ai_urgency !== undefined && ai_urgency !== '[]' ? aiUrgencyParsed.includes(getProductAIForecastUrgency(item, aiUrgencyThresholds).urgencyTag) : true) &&
           (showHidden === undefined || showHidden === '' ? !item.hideReorderingPoints : showHidden === 'false' ? !item.hideReorderingPoints : true) &&
           // (show0Days === undefined || show0Days === '' ? item.daysRemaining > 0 : show0Days === 'false' ? item.daysRemaining > 0 : true) &&
           (item.sku.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -823,7 +856,8 @@ export const useRPProductsInfo = ({
             searchValue.split(' ').every((word: string) => item?.title?.toLowerCase().includes(word.toLowerCase())) ||
             item.supplier.toLowerCase().includes(searchValue.toLowerCase()) ||
             item.brand.toLowerCase().includes(searchValue.toLowerCase()))
-      )
+        )
+      })
     }
 
     return []
@@ -845,6 +879,7 @@ export const useRPProductsInfo = ({
     brand,
     category,
     ai_urgency,
+    aiUrgencyThresholds,
     showHidden,
   ])
 

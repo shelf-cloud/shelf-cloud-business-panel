@@ -152,6 +152,7 @@ const RPAIForecastDrawer = ({ product, isOpen, onClose, region, businessId, urge
                             region={region}
                             product={product}
                             productForecast={m}
+                            urgencyThresholds={urgencyThresholds}
                             onAnalyze={handleOpenForecastChat}
                           />
                           {idx < visibleModels.length - 1 && <Separator className='tw:my-2' />}

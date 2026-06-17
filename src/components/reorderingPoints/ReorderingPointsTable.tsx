@@ -18,7 +18,7 @@ import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
 import { Button, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
 
-import { getAIForecastTotal, getProductAIForecastUrgency } from '@/lib/getAIForecastUrgency'
+import { getAIForecastTotal, getCurrentAIForecastStock, getProductAIForecastUrgency } from '@/lib/getAIForecastUrgency'
 
 const ReorderingPointsExpandedDetails = dynamic(() => import('./ReorderingPointsExpandedDetails'), {
   ssr: false,
@@ -67,12 +67,17 @@ const ReorderingPointsTable = ({
   splitNames,
   setRPProductConfig,
   setValuesAndOpen,
-  // handleRegenerateForecast,
+  handleRegenerateForecast,
   setAIForecastProduct,
   expandedRowProps,
 }: Props) => {
   const { state }: any = useContext(AppContext)
   const { session, startDate, endDate } = expandedRowProps
+  const aiUrgencyThresholds = {
+    highAlertMax: state?.user?.us?.rphighAlertMax ?? 20,
+    mediumAlertMax: state?.user?.us?.rpmediumAlertMax ?? 30,
+    lowAlertMax: state?.user?.us?.rplowAlertMax ?? 45,
+  }
 
   const handleSelectedRows = ({ selectedRows }: { selectedRows: ReorderingPointsProduct[] }) => {
     setSelectedRows(selectedRows)
@@ -241,61 +246,32 @@ const ReorderingPointsTable = ({
     {
       name: (
         <div className='text-center d-flex flex-column justify-content-center align-items-center gap-1'>
-          <span className={'fs-7 ' + (setField === 'urgency' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('urgency')}>
-            Urgency{' '}
-            {setField === 'urgency' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
-          </span>
-          <span className={'fs-7 ' + (setField === 'daysRemaining' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('daysRemaining')}>
-            Remaining Days{' '}
-            {setField === 'daysRemaining' ? (
-              sortingDirectionAsc ? (
-                <i className='ri-arrow-down-fill fs-7 text-primary' />
-              ) : (
-                <i className='ri-arrow-up-fill fs-7 text-primary' />
-              )
-            ) : null}
+          <span className={'fs-7 ' + (setField === 'ai_urgency' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('ai_urgency')}>
+            Urgency
+            <br />
+            Days To Order{' '}
+            {setField === 'ai_urgency' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
           </span>
         </div>
       ),
       selector: (row: ReorderingPointsProduct) => {
-        var color: string = 'text-primary'
-        switch (row.urgency) {
-          case 3:
-            color = 'text-danger'
-            break
-          case 2:
-            color = 'text-warning'
-            break
-          case 1:
-            color = 'text-info'
-            break
-          default:
-            color = 'text-success'
-            break
-        }
+        const aiUrgency = getProductAIForecastUrgency(row, aiUrgencyThresholds)
+
         return (
           <div className='d-flex flex-column justify-content-center align-items-center gap-1'>
-            <i className={`mdi mdi-alert-octagon fs-3 m-0 p-0 ${color}`} />
+            <i className={`mdi mdi-alert-octagon fs-3 m-0 p-0 ${aiUrgency.color}`} />
 
             <div className='d-flex flex-row justify-content-center align-items-center gap-1'>
-              <span
-                className={
-                  'm-0 p-0 text-center fs-7' + (row.daysToOrder <= 0 ? ' text-danger fw-semibold' : '')
-                }>{`${FormatIntNumber(state.currentRegion, row.daysToOrder)} ${row.daysToOrder == 1 ? 'day' : 'days'}`}</span>
-              <i className='fs-5 text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={'DaysToOrderIcon'} />
-              <UncontrolledTooltip placement='top' target={'DaysToOrderIcon'} innerClassName='bg-white border border-info border-opacity-50 p-2'>
-                <p className='fs-7 text-primary m-0 p-0 mb-0'>Remaining days to place order.</p>
-              </UncontrolledTooltip>
-            </div>
-
-            <div className='d-flex flex-row justify-content-center align-items-center gap-1'>
-              <span
-                className={
-                  'm-0 p-0 text-center fs-7' + (row.daysRemaining <= 0 ? ' text-danger fw-semibold' : '')
-                }>{`${FormatIntNumber(state.currentRegion, row.daysRemaining)} ${row.daysRemaining == 1 ? 'day' : 'days'}`}</span>
-              <i className='fs-5 text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={'DaysRemaining'} />
-              <UncontrolledTooltip placement='top' target={'DaysRemaining'} innerClassName='bg-white border border-info border-opacity-50 p-2'>
-                <p className='fs-7 text-primary m-0 p-0 mb-0'>Remaining days of stock.</p>
+              <span className={`m-0 p-0 text-center fs-7 ${aiUrgency.color}${aiUrgency.urgency === 3 ? ' fw-semibold' : ''}`}>{`${FormatIntNumber(
+                state.currentRegion,
+                aiUrgency.daysToOrder
+              )} ${aiUrgency.daysToOrder == 1 ? 'day' : 'days'}`}</span>
+              <i className='fs-5 text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={`AI_DaysToOrderIcon-${row.sku}`} />
+              <UncontrolledTooltip placement='top' target={`AI_DaysToOrderIcon-${row.sku}`} innerClassName='bg-white border border-info border-opacity-50 p-2'>
+                <p className='fs-7 text-primary m-0 p-0 mb-0'>{`Projected days left to place an order after lead time (${FormatIntNumber(
+                  state.currentRegion,
+                  row.leadTimeSC + row.daysOfStockSC
+                )} days). AI projected stock remaining: ${FormatIntNumber(state.currentRegion, aiUrgency.remainingDays)} days.`}</p>
               </UncontrolledTooltip>
             </div>
           </div>
@@ -304,9 +280,76 @@ const ReorderingPointsTable = ({
       sortable: false,
       center: true,
       compact: true,
-      // grow: 0,
-      // sortFunction: urgencySort,
     },
+    // {
+    //   name: (
+    //     <div className='text-center d-flex flex-column justify-content-center align-items-center gap-1'>
+    //       <span className={'fs-7 ' + (setField === 'urgency' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('urgency')}>
+    //         Urgency{' '}
+    //         {setField === 'urgency' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
+    //       </span>
+    //       <span className={'fs-7 ' + (setField === 'daysRemaining' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('daysRemaining')}>
+    //         Remaining Days{' '}
+    //         {setField === 'daysRemaining' ? (
+    //           sortingDirectionAsc ? (
+    //             <i className='ri-arrow-down-fill fs-7 text-primary' />
+    //           ) : (
+    //             <i className='ri-arrow-up-fill fs-7 text-primary' />
+    //           )
+    //         ) : null}
+    //       </span>
+    //     </div>
+    //   ),
+    //   selector: (row: ReorderingPointsProduct) => {
+    //     var color: string = 'text-primary'
+    //     switch (row.urgency) {
+    //       case 3:
+    //         color = 'text-danger'
+    //         break
+    //       case 2:
+    //         color = 'text-warning'
+    //         break
+    //       case 1:
+    //         color = 'text-info'
+    //         break
+    //       default:
+    //         color = 'text-success'
+    //         break
+    //     }
+    //     return (
+    //       <div className='d-flex flex-column justify-content-center align-items-center gap-1'>
+    //         <i className={`mdi mdi-alert-octagon fs-3 m-0 p-0 ${color}`} />
+
+    //         <div className='d-flex flex-row justify-content-center align-items-center gap-1'>
+    //           <span
+    //             className={
+    //               'm-0 p-0 text-center fs-7' + (row.daysToOrder <= 0 ? ' text-danger fw-semibold' : '')
+    //             }>{`${FormatIntNumber(state.currentRegion, row.daysToOrder)} ${row.daysToOrder == 1 ? 'day' : 'days'}`}</span>
+    //           <i className='fs-5 text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={'DaysToOrderIcon'} />
+    //           <UncontrolledTooltip placement='top' target={'DaysToOrderIcon'} innerClassName='bg-white border border-info border-opacity-50 p-2'>
+    //             <p className='fs-7 text-primary m-0 p-0 mb-0'>Remaining days to place order.</p>
+    //           </UncontrolledTooltip>
+    //         </div>
+
+    //         <div className='d-flex flex-row justify-content-center align-items-center gap-1'>
+    //           <span
+    //             className={
+    //               'm-0 p-0 text-center fs-7' + (row.daysRemaining <= 0 ? ' text-danger fw-semibold' : '')
+    //             }>{`${FormatIntNumber(state.currentRegion, row.daysRemaining)} ${row.daysRemaining == 1 ? 'day' : 'days'}`}</span>
+    //           <i className='fs-5 text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={'DaysRemaining'} />
+    //           <UncontrolledTooltip placement='top' target={'DaysRemaining'} innerClassName='bg-white border border-info border-opacity-50 p-2'>
+    //             <p className='fs-7 text-primary m-0 p-0 mb-0'>Remaining days of stock.</p>
+    //           </UncontrolledTooltip>
+    //         </div>
+    //       </div>
+    //     )
+    //   },
+    //   sortable: false,
+    //   center: true,
+    //   compact: true,
+    //   // grow: 0,
+    //   // sortFunction: urgencySort,
+    // },
     {
       name: (
         <span className={'w-100 fs-7 text-center ' + (setField === 'sku' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('sku')}>
@@ -635,25 +678,19 @@ const ReorderingPointsTable = ({
     },
     {
       name: (
-        <div className='text-center d-flex flex-column justify-content-center align-items-center py-1'>
-          {/* <span className={'fs-7 fw-bold'}>Forecast</span> */}
-          <span className={'fs-7 ' + (setField === 'totalSCForecast' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('totalSCForecast')}>
-            Forecast{' '}
-            {setField === 'totalSCForecast' ? (
-              sortingDirectionAsc ? (
-                <i className='ri-arrow-down-fill fs-7 text-primary' />
-              ) : (
-                <i className='ri-arrow-up-fill fs-7 text-primary' />
-              )
-            ) : null}
-          </span>
+        <div className='w-100 text-center d-flex flex-column justify-content-center align-items-center'>
+          <span className={'fs-7 text-muted'}>Lead Time </span>
+          <span className={'fs-7 text-muted'}>Safety Stock Days </span>
         </div>
       ),
       selector: (row: ReorderingPointsProduct) => {
         return (
-          <div className='fs-7'>
-            <p className='m-0 p-0 text-center' id={'Recommended_Qty'}>
-              {FormatIntNumber(state.currentRegion, row.totalSCForecast)}
+          <div className='fs-7 my-3'>
+            <p className='m-0 p-0 text-center font-semibold'>
+              {FormatIntNumber(state.currentRegion, row.leadTimeSC)} <span className='tw:text-muted-foreground tw:text-xs'>Days</span>
+            </p>
+            <p className='m-0 p-0 text-center font-semibold'>
+              {FormatIntNumber(state.currentRegion, row.daysOfStockSC)} <span className='tw:text-muted-foreground tw:text-xs'>Days</span>
             </p>
           </div>
         )
@@ -662,6 +699,35 @@ const ReorderingPointsTable = ({
       center: true,
       compact: true,
     },
+    // {
+    //   name: (
+    //     <div className='text-center d-flex flex-column justify-content-center align-items-center py-1'>
+    //       {/* <span className={'fs-7 fw-bold'}>Forecast</span> */}
+    //       <span className={'fs-7 ' + (setField === 'totalSCForecast' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('totalSCForecast')}>
+    //         Forecast{' '}
+    //         {setField === 'totalSCForecast' ? (
+    //           sortingDirectionAsc ? (
+    //             <i className='ri-arrow-down-fill fs-7 text-primary' />
+    //           ) : (
+    //             <i className='ri-arrow-up-fill fs-7 text-primary' />
+    //           )
+    //         ) : null}
+    //       </span>
+    //     </div>
+    //   ),
+    //   selector: (row: ReorderingPointsProduct) => {
+    //     return (
+    //       <div className='fs-7'>
+    //         <p className='m-0 p-0 text-center' id={'Recommended_Qty'}>
+    //           {FormatIntNumber(state.currentRegion, row.totalSCForecast)}
+    //         </p>
+    //       </div>
+    //     )
+    //   },
+    //   sortable: false,
+    //   center: true,
+    //   compact: true,
+    // },
     {
       name: (
         <div className='text-center d-flex flex-column justify-content-center align-items-center py-1'>
@@ -700,7 +766,7 @@ const ReorderingPointsTable = ({
               </div>
             ) : (
               <p className='m-0 p-0 text-center text-danger' id={'ai_recommended_Qty'}>
-                Error
+                No Forecast
               </p>
             )}
           </div>
@@ -712,30 +778,28 @@ const ReorderingPointsTable = ({
     },
     {
       name: (
-        <div className='text-center d-flex flex-column justify-content-center align-items-center gap-1'>
-          <span className={'fs-7 ' + (setField === 'ai_urgency' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('ai_urgency')}>
-            AI Remaining Days of Stock{' '}
-            {setField === 'ai_urgency' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
+        <div className='text-center d-flex flex-column justify-content-center align-items-center py-1'>
+          {/* <span className={'fs-7 fw-bold'}>Forecast</span> */}
+          <span className={'fs-7 ' + (setField === 'ai_forecast_qty' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('ai_forecast_qty')}>
+            Forecast{' '}
+            {setField === 'ai_forecast_qty' ? (
+              sortingDirectionAsc ? (
+                <i className='ri-arrow-down-fill fs-7 text-primary' />
+              ) : (
+                <i className='ri-arrow-up-fill fs-7 text-primary' />
+              )
+            ) : null}
           </span>
         </div>
       ),
       selector: (row: ReorderingPointsProduct) => {
-        const aiUrgency = getProductAIForecastUrgency(row)
-
+        const forecastValue = getAIForecastTotal(row.totalAIForecast_1)
+        const currentStock = getCurrentAIForecastStock(row)
         return (
-          <div className='d-flex flex-column justify-content-center align-items-center gap-1'>
-            <i className={`mdi mdi-alert-octagon fs-3 m-0 p-0 ${aiUrgency.color}`} />
-
-            <div className='d-flex flex-row justify-content-center align-items-center gap-1'>
-              <span className={`m-0 p-0 text-center fs-7 ${aiUrgency.color}${aiUrgency.urgency === 3 ? ' fw-semibold' : ''}`}>{`${FormatIntNumber(
-                state.currentRegion,
-                aiUrgency.remainingDays
-              )} ${aiUrgency.remainingDays == 1 ? 'day' : 'days'}`}</span>
-              <i className='fs-5 text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={`AI_DaysToOrderIcon-${row.sku}`} />
-              <UncontrolledTooltip placement='top' target={`AI_DaysToOrderIcon-${row.sku}`} innerClassName='bg-white border border-info border-opacity-50 p-2'>
-                <p className='fs-7 text-primary m-0 p-0 mb-0'>{`Projected days of stock based on current inventory, lead time (${FormatIntNumber(state.currentRegion, row.leadTimeSC + row.daysOfStockSC)} days), and the next 6 months of AI forecasted sales.`}</p>
-              </UncontrolledTooltip>
-            </div>
+          <div className='fs-7'>
+            <p className='m-0 p-0 text-center' id={'Recommended_Qty'}>
+              {FormatIntNumber(state.currentRegion, Math.max(forecastValue - currentStock, 0))}
+            </p>
           </div>
         )
       },
@@ -811,12 +875,12 @@ const ReorderingPointsTable = ({
                 <i className='ri-settings-3-line align-middle me-2 fs-5 text-black'></i>
                 <span className='fs-7 fw-normal text-dark'>Edit Config</span>
               </DropdownItem>
-              {/* {state.user.us.useAiForecast ? (
+              {state.user.us.useAiForecast ? (
                 <DropdownItem className='edit-item-btn' onClick={() => handleRegenerateForecast({ inventoryId: row.inventoryId, sku: row.sku })}>
                   <i className='mdi mdi-reload align-middle me-2 fs-5 text-primary'></i>
                   <span className='fs-7 fw-normal text-dark'>Regenerate Forecast</span>
                 </DropdownItem>
-              ) : null} */}
+              ) : null}
               {state.user.us.useAiForecast ? (
                 <DropdownItem className='edit-item-btn' onClick={() => setAIForecastProduct(row)}>
                   <i className='las la-brain align-middle me-2 fs-5 text-info'></i>
