@@ -17,7 +17,7 @@ export const buildForecastSeedSummary = ({ modelNumber, product, selectedForecas
 
   return [
     `Saved forecast continuation for SKU ${product.sku} using Model ${modelNumber}${selectedForecast.model ? ` (${selectedForecast.model})` : ''}.`,
-    `Total 6-month sales forecast: ${forecastTotal} units.`,
+    `Total 9-month sales forecast: ${forecastTotal} units.`,
     `Monthly forecast breakdown: ${monthlyForecast}.`,
     `Original analysis: ${selectedForecast.analysis}`,
   ]

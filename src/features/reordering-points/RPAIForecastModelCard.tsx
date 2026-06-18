@@ -8,6 +8,7 @@ import { CartesianGrid, Line, LineChart, ReferenceDot, ReferenceLine, XAxis, YAx
 import { Button } from '@/components/shadcn/ui/button'
 import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/shadcn/ui/chart'
 import type { ForecastChatModelNumber, ForecastChatUrgencyThresholds } from '@/features/ai-chat/types'
+import { FORECAST_HORIZON_DAYS, FORECAST_HORIZON_MONTHS, FORECAST_MONTH_DAYS } from '@/lib/aiForecastConstants'
 import { getCurrentAIForecastStock, getProductAIForecastUrgency } from '@/lib/getAIForecastUrgency'
 import type { AIForecastUrgencyResult } from '@/lib/getAIForecastUrgency'
 import { AIForecastForProduct, ReorderingPointsProduct } from '@/types/reorderingPoints/reorderingPoints'
@@ -35,9 +36,6 @@ const ACCENT_COLORS: Record<number, string> = {
   2: '#6c757d',
   3: '#9ca3af',
 }
-
-const FORECAST_MONTH_DAYS = 30
-const FORECAST_HORIZON_DAYS = 180
 
 const chartConfig = {
   stock: {
@@ -86,7 +84,7 @@ const TimelineMarkerLabel = ({ label, color, viewBox }: TimelineMarkerLabelProps
 }
 
 const buildForecastChartData = ({ currentStock, forecast, startDate }: { currentStock: number; forecast: number[]; startDate: Date }) => {
-  const normalizedForecast = Array.from({ length: 6 }, (_, index) => Math.max(0, Number(forecast[index]) || 0))
+  const normalizedForecast = Array.from({ length: FORECAST_HORIZON_MONTHS }, (_, index) => Math.max(0, Number(forecast[index]) || 0))
   let remainingStock = Math.max(0, Number(currentStock) || 0)
 
   return Array.from({ length: FORECAST_HORIZON_DAYS + 1 }, (_, day) => {
@@ -132,7 +130,7 @@ const RPAIForecastModelCard = ({ modelNumber, model, analysis, forecast, region,
         </div>
       </CardHeader>
       <CardContent className='tw:px-4 tw:pb-2 tw:flex tw:flex-col tw:gap-3'>
-        <span className='tw:text-sm tw:text-muted-foreground'>6 months forecast</span>
+        <span className='tw:text-sm tw:text-muted-foreground'>9 months forecast</span>
         <div className='tw:flex tw:flex-row tw:items-baseline tw:gap-1'>
           <span className='tw:text-3xl tw:font-bold tw:text-foreground tw:tabular-nums'>{FormatIntNumber(region, forecastValue)}</span>
           <span className='tw:text-sm tw:text-muted-foreground'>units</span>
@@ -162,7 +160,7 @@ const RPAIForecastModelCard = ({ modelNumber, model, analysis, forecast, region,
           <div className='tw:mb-2 tw:flex tw:flex-row tw:items-center tw:justify-between tw:gap-2'>
             <div className='tw:flex tw:flex-col tw:gap-0'>
               <span className='tw:text-sm tw:font-semibold tw:text-foreground'>Inventory Timeline</span>
-              <span className='tw:text-xs tw:text-muted-foreground'>6 month forecast from {format(today, 'dd MMM yyyy')}</span>
+              <span className='tw:text-xs tw:text-muted-foreground'>9 month forecast from {format(today, 'dd MMM yyyy')}</span>
             </div>
             <Badge variant='outline'>Monthly</Badge>
           </div>

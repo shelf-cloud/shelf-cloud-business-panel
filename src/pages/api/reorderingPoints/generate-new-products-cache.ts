@@ -4,37 +4,30 @@ import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 import { getServerSession } from 'next-auth'
 
-const setNewProductConfig: NextApiHandler = async (request, response) => {
+const generate_new_products_cache: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)
 
-  if (session == null) {
-    response.status(401).end()
+  const sessionToken = request.cookies['next-auth.session-token'] ? request.cookies['next-auth.session-token'] : request.cookies['__Secure-next-auth.session-token']
 
+  if (!session || !sessionToken) {
+    response.status(401).end('Session not found')
     return
   }
 
   axios
     .post(
-      `${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/reorderingPoints/setNewProductConfig.php?businessId=${request.query.businessId}`,
+      `${process.env.SHELFCLOUD_SERVER_URL}/api/reorderingPoints/generate_new_products_cache?region=${request.query.region}&businessId=${request.query.businessId}`,
       {
-        inventoryId: request.body.inventoryId,
-        orderFrequency: request.body.orderFrequency,
-        leadTimeSC: request.body.leadTimeSC,
-        leadTimeFBA: request.body.leadTimeFBA,
-        leadTimeAWD: request.body.leadTimeAWD,
-        daysOfStockSC: request.body.daysOfStockSC,
-        daysOfStockFBA: request.body.daysOfStockFBA,
-        daysOfStockAWD: request.body.daysOfStockAWD,
-        buffer: request.body.buffer,
-        sellerCost: request.body.sellerCost,
+        skus: request.body.skus,
+        productIds: request.body.productIds,
       },
       {
         headers: {
-          Authorization: `Bearer ${process.env.TARS_API_AUTH_TOKEN}`,
+          Authorization: `Bearer ${sessionToken}`,
         },
       }
     )
-    .then(({ data }) => {
+    .then(async ({ data }) => {
       response.json(data)
     })
     .catch((error) => {
@@ -43,7 +36,7 @@ const setNewProductConfig: NextApiHandler = async (request, response) => {
         // that falls out of the range of 2xx
         response.json({
           error: true,
-          message: `Error ${error.response.data.error_description}, please try again later.`,
+          message: `Error Amazon API Integration ${error.response.data.error_description}, please try again later.`,
         })
       } else if (error.request) {
         // The request was made but no response was received
@@ -61,4 +54,4 @@ const setNewProductConfig: NextApiHandler = async (request, response) => {
     })
 }
 
-export default setNewProductConfig
+export default generate_new_products_cache

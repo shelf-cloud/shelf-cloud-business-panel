@@ -24,6 +24,7 @@ export interface ReorderingPointsProduct {
   storageCost: number
   unitsSold: number
   recommendedDaysOfStock: number
+  orderFrequency: number
   daysOfStockSC: number
   daysOfStockFBA: number
   daysOfStockAWD: number

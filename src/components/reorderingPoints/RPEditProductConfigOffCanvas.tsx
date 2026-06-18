@@ -13,6 +13,7 @@ type Props = {
   handleSaveProductConfig: ({
     inventoryId,
     sku,
+    orderFrequency,
     leadTimeSC,
     leadTimeFBA,
     leadTimeAWD,
@@ -39,6 +40,7 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
+      orderFrequency: product.orderFrequency || 0,
       leadTimeSC: product.leadTimeSC,
       leadTimeFBA: product.leadTimeFBA || 0,
       leadTimeAWD: product.leadTimeAWD || 0,
@@ -49,6 +51,7 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
       sellerCost: product.sellerCost || 0,
     },
     validationSchema: Yup.object({
+      orderFrequency: Yup.number().min(0, 'Minimum of 0').required('Enter Order Frequency'),
       leadTimeSC: Yup.number().min(0, 'Minimum of 0').required('Enter Lead Time'),
       leadTimeFBA: Yup.number().min(0, 'Minimum of 0').required('Enter Lead Time'),
       leadTimeAWD: Yup.number().min(0, 'Minimum of 0').required('Enter Lead Time'),
@@ -63,6 +66,7 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
       await handleSaveProductConfig({
         inventoryId: product.inventoryId,
         sku: product.sku,
+        orderFrequency: values.orderFrequency,
         leadTimeSC: values.leadTimeSC,
         leadTimeFBA: values.leadTimeFBA,
         leadTimeAWD: values.leadTimeAWD,
@@ -98,6 +102,28 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
           <p className='fs-7 text-muted'>Here you can edit some configurations related to the product to adjust the forecast.</p>
           <Form onSubmit={handleAddProduct}>
             <h5 className='fs-5 fw-bold'>Warehouse</h5>
+            <Row>
+              <Col xs={12} md={10}>
+                <Label htmlFor='orderFrequency' className='fs-7 form-label'>
+                  Order Frequency (Weeks)
+                </Label>
+                <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
+                  <Input
+                    type='number'
+                    className='form-control fs-6'
+                    bsSize='sm'
+                    id='orderFrequency'
+                    name='orderFrequency'
+                    onChange={validation.handleChange}
+                    onBlur={validation.handleBlur}
+                    value={validation.values.orderFrequency}
+                    invalid={validation.touched.orderFrequency && validation.errors.orderFrequency ? true : false}
+                  />
+                  <span>Weeks</span>
+                </div>
+                {validation.touched.orderFrequency && validation.errors.orderFrequency ? <p className='m-0 p-0 fs-7 text-danger'>{validation.errors.orderFrequency}</p> : null}
+              </Col>
+            </Row>
             <Row>
               <Col xs={12} md={10}>
                 <Label htmlFor='leadTimeSC' className='fs-7 form-label'>

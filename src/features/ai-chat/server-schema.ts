@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { FORECAST_HORIZON_MONTHS } from '@/lib/aiForecastConstants'
+
 const FORECAST_CHAT_MAX_MESSAGES_SCHEMA = 24
 
 const textPartSchema = z.object({
@@ -16,7 +18,7 @@ const requestMessageSchema = z.object({
 const selectedForecastSchema = z.object({
   model: z.string().max(200),
   analysis: z.string().min(1).max(4000),
-  forecast: z.array(z.number().int().min(0)).length(6),
+  forecast: z.array(z.number().int().min(0)).length(FORECAST_HORIZON_MONTHS),
 })
 
 const dailyProductDataEntrySchema = z.object({

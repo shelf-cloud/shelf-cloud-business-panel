@@ -1,6 +1,6 @@
 import type { AIForecastForProduct, ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 
-const FORECAST_MONTH_DAYS = 30
+import { FORECAST_HORIZON_DAYS, FORECAST_MONTH_DAYS } from './aiForecastConstants'
 
 const DEFAULT_URGENCY_THRESHOLDS = {
   highAlertMax: 20,
@@ -32,6 +32,12 @@ const normalizeUrgencyThresholds = (thresholds?: AIForecastUrgencyThresholds | n
   mediumAlertMax: normalizeThresholdValue(thresholds?.mediumAlertMax, DEFAULT_URGENCY_THRESHOLDS.mediumAlertMax),
   lowAlertMax: normalizeThresholdValue(thresholds?.lowAlertMax, DEFAULT_URGENCY_THRESHOLDS.lowAlertMax),
 })
+
+const normalizeForecastValues = (aiForecast?: AIForecastForProduct | number[] | null) => {
+  const forecast = Array.isArray(aiForecast) ? aiForecast : aiForecast?.forecast
+
+  return Array.isArray(forecast) ? forecast.map((value) => Math.max(0, Number(value) || 0)) : []
+}
 
 const buildUrgencyResult = (forecast: number, remainingDays: number, leadTime: number, thresholds?: AIForecastUrgencyThresholds | null): AIForecastUrgencyResult => {
   const normalizedThresholds = normalizeUrgencyThresholds(thresholds)
@@ -87,11 +93,7 @@ const buildUrgencyResult = (forecast: number, remainingDays: number, leadTime: n
 }
 
 export const getAIForecastTotal = (aiForecast?: AIForecastForProduct | null) => {
-  if (!Array.isArray(aiForecast?.forecast)) {
-    return 0
-  }
-
-  return aiForecast.forecast.reduce((total, value) => total + Math.max(0, Number(value) || 0), 0)
+  return normalizeForecastValues(aiForecast).reduce((total, value) => total + value, 0)
 }
 
 export const getCurrentAIForecastStock = (product: ReorderingPointsProduct) => {
@@ -109,6 +111,36 @@ export const getCurrentAIForecastStock = (product: ReorderingPointsProduct) => {
   )
 }
 
+export const getAIForecastDemandBetweenDays = (forecast: number[] | AIForecastForProduct | null | undefined, startDay: number, durationDays: number) => {
+  const normalizedForecast = normalizeForecastValues(forecast)
+  const normalizedStartDay = Math.max(0, Number(startDay) || 0)
+  const normalizedDurationDays = Math.max(0, Number(durationDays) || 0)
+  const endDay = normalizedStartDay + normalizedDurationDays
+
+  if (normalizedForecast.length === 0 || normalizedDurationDays <= 0) {
+    return 0
+  }
+
+  return normalizedForecast.reduce((total, monthlyForecast, monthIndex) => {
+    const monthStartDay = monthIndex * FORECAST_MONTH_DAYS
+    const monthEndDay = monthStartDay + FORECAST_MONTH_DAYS
+    const overlapDays = Math.max(0, Math.min(endDay, monthEndDay) - Math.max(normalizedStartDay, monthStartDay))
+
+    return total + (monthlyForecast / FORECAST_MONTH_DAYS) * overlapDays
+  }, 0)
+}
+
+export const getProductAIForecastCoverageQty = (product: ReorderingPointsProduct) => {
+  const currentStock = getCurrentAIForecastStock(product)
+  const leadTimeDays = Math.max(0, Number(product.leadTimeSC) || 0)
+  const coverageDays = Math.max(0, Number(product.orderFrequency) || 0) * 7 + Math.max(0, Number(product.daysOfStockSC) || 0)
+  const leadTimeDemand = getAIForecastDemandBetweenDays(product.totalAIForecast_1, 0, leadTimeDays)
+  const remainingStockAtLeadTime = Math.max(0, currentStock - leadTimeDemand)
+  const coverageDemand = getAIForecastDemandBetweenDays(product.totalAIForecast_1, leadTimeDays, coverageDays)
+
+  return Math.max(0, Math.ceil(coverageDemand - remainingStockAtLeadTime))
+}
+
 export const getAIForecastUrgency = ({
   currentStock,
   leadTime,
@@ -123,14 +155,14 @@ export const getAIForecastUrgency = ({
   const normalizedLeadTime = Math.max(0, Number(leadTime) || 0)
   const normalizedStock = Math.max(0, Number(currentStock) || 0)
   const normalizedThresholds = normalizeUrgencyThresholds(thresholds)
-  const forecast = Array.isArray(aiForecast?.forecast) ? aiForecast.forecast.map((value) => Math.max(0, Number(value) || 0)) : []
+  const forecast = normalizeForecastValues(aiForecast)
   const totalForecast = forecast.reduce((total, value) => total + value, 0)
   if (normalizedStock <= 0) {
     return buildUrgencyResult(totalForecast, 0, normalizedLeadTime, normalizedThresholds)
   }
 
   if (forecast.length === 0 || forecast.every((value) => value === 0)) {
-    return buildUrgencyResult(totalForecast, Math.max(FORECAST_MONTH_DAYS * 6, normalizedLeadTime + normalizedThresholds.lowAlertMax + 1), normalizedLeadTime, normalizedThresholds)
+    return buildUrgencyResult(totalForecast, Math.max(FORECAST_HORIZON_DAYS, normalizedLeadTime + normalizedThresholds.lowAlertMax + 1), normalizedLeadTime, normalizedThresholds)
   }
 
   let remainingStock = normalizedStock

@@ -2,6 +2,7 @@ import { encode } from '@toon-format/toon'
 import { ToolLoopAgent } from 'ai'
 import { z } from 'zod'
 
+import { FORECAST_HORIZON_MONTHS } from '@/lib/aiForecastConstants'
 import { ReorderingPointsProduct } from '@/types/reorderingPoints/reorderingPoints'
 
 import { getContext } from './constants'
@@ -23,7 +24,7 @@ export type DailyProductDataEntry = {
 export const get_ai_v2_system_prompt = async () => {
   const general = `# Inventory Sales Forecasting Expert
     ## Role & Goal
-    You are an Analyst Forecast Expert. Given the product data lead time, current stock, and historical daily: warehouse units sold, warehouse daily stock, warehouse orders, FBA units sold, FBA daily stock, FBA orders, your primary objective is to make an accurate sales forecasts for the next 6 months.
+    You are an Analyst Forecast Expert. Given the product data lead time, current stock, and historical daily: warehouse units sold, warehouse daily stock, warehouse orders, FBA units sold, FBA daily stock, FBA orders, your primary objective is to make an accurate sales forecasts for the next 9 months.
     
     ## Analytical Integrity
     - Use only the provided structured data.
@@ -32,10 +33,10 @@ export const get_ai_v2_system_prompt = async () => {
     Return **only** a valid JSON object. No commentary, no bullet points, no tables, no code blocks, no clarifying questions.`
 
   const objective = `## Main Objective
-    Goal: return the most accurate sales forecast possible for the next 6 months.
+    Goal: return the most accurate sales forecast possible for the next 9 months.
     Given the provided Product Data, output:
     - a brief analysis (very short) of the product's sales trends, seasonality, demand patterns, and any relevant insights that can be derived from the data. This analysis should be concise and directly inform the forecast.
-    - a 6-month sales forecast for the product, based on the provided data and your analysis. an array of 6 integers, each representing the forecasted sales for the next 6 months respectively.`
+    - a 9-month sales forecast for the product, based on the provided data and your analysis. an array of 9 integers, each representing the forecasted sales for the next 9 months respectively.`
 
   let bsnss_systemPrompt = `${general}\n\n${objective}\n\n${getContext()}\n\n`
 
@@ -125,7 +126,7 @@ const get_single_ai_forecast_attempt = async ({ input, agent }: { input: Reorder
 
 export const ReorderOutputSchema = z.object({
   analysis: z.string().min(1),
-  forecast: z.array(z.number()).length(6),
+  forecast: z.array(z.number()).length(FORECAST_HORIZON_MONTHS),
 })
 
 export type ReorderOutput = z.infer<typeof ReorderOutputSchema>

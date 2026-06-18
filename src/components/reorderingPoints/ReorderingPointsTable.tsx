@@ -18,7 +18,7 @@ import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
 import { Button, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
 
-import { getAIForecastTotal, getCurrentAIForecastStock, getProductAIForecastUrgency } from '@/lib/getAIForecastUrgency'
+import { getAIForecastTotal, getProductAIForecastCoverageQty, getProductAIForecastUrgency } from '@/lib/getAIForecastUrgency'
 
 const ReorderingPointsExpandedDetails = dynamic(() => import('./ReorderingPointsExpandedDetails'), {
   ssr: false,
@@ -735,7 +735,7 @@ const ReorderingPointsTable = ({
             className={'fs-7 ' + (setField === 'totalAIForecast_1' ? 'fw-bold' : 'text-muted')}
             style={{ cursor: 'pointer' }}
             onClick={() => handleSetSorting('totalAIForecast_1')}>
-            AI 6 Month Forecast{' '}
+            AI 9 Month Forecast{' '}
             {setField === 'totalAIForecast_1' ? (
               sortingDirectionAsc ? (
                 <i className='ri-arrow-down-fill fs-7 text-primary' />
@@ -793,12 +793,11 @@ const ReorderingPointsTable = ({
         </div>
       ),
       selector: (row: ReorderingPointsProduct) => {
-        const forecastValue = getAIForecastTotal(row.totalAIForecast_1)
-        const currentStock = getCurrentAIForecastStock(row)
+        const forecastValue = getProductAIForecastCoverageQty(row)
         return (
           <div className='fs-7'>
             <p className='m-0 p-0 text-center' id={'Recommended_Qty'}>
-              {FormatIntNumber(state.currentRegion, Math.max(forecastValue - currentStock, 0))}
+              {FormatIntNumber(state.currentRegion, forecastValue)}
             </p>
           </div>
         )

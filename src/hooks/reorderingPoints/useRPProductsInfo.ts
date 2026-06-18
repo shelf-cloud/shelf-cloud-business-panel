@@ -5,11 +5,12 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
 
-import { getAIForecastTotal, getCurrentAIForecastStock, getProductAIForecastUrgency } from '@/lib/getAIForecastUrgency'
+import { getAIForecastTotal, getProductAIForecastCoverageQty, getProductAIForecastUrgency } from '@/lib/getAIForecastUrgency'
 
 export type RPProductUpdateConfig = {
   inventoryId: number
   sku: string
+  orderFrequency: number
   leadTimeSC: number
   leadTimeFBA: number
   leadTimeAWD: number
@@ -301,13 +302,26 @@ export const useRPProductsInfo = ({
   )
 
   const handleSaveProductConfig = useCallback(
-    async ({ inventoryId, sku, leadTimeSC, leadTimeFBA, leadTimeAWD, daysOfStockSC, daysOfStockFBA, daysOfStockAWD, buffer, sellerCost }: RPProductUpdateConfig) => {
+    async ({
+      inventoryId,
+      sku,
+      orderFrequency,
+      leadTimeSC,
+      leadTimeFBA,
+      leadTimeAWD,
+      daysOfStockSC,
+      daysOfStockFBA,
+      daysOfStockAWD,
+      buffer,
+      sellerCost,
+    }: RPProductUpdateConfig) => {
       const updatingProductConfig = toast.loading('Updating Product Config...')
 
       const response = await axios
         .post(`/api/reorderingPoints/setNewProductConfig?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
           inventoryId,
           sku,
+          orderFrequency,
           leadTimeSC,
           leadTimeFBA,
           leadTimeAWD,
@@ -317,21 +331,21 @@ export const useRPProductsInfo = ({
           buffer,
           sellerCost,
         })
-        .then(() =>
-          toast.update(updatingProductConfig, {
-            render: `${sku} Config saved`,
-            type: 'success',
-            isLoading: true,
-          })
-        )
+        // .then(() =>
+        //   toast.update(updatingProductConfig, {
+        //     render: `${sku} Config saved`,
+        //     type: 'success',
+        //     isLoading: true,
+        //   })
+        // )
         .then(async () => {
           toast.update(updatingProductConfig, {
-            render: `Generating New ${sku} Forecast`,
+            render: `Saving ${sku} changes`,
             type: 'success',
             isLoading: true,
           })
           const newForecast = await axios
-            .post(`/api/reorderingPoints/get-single-product-forecast?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+            .post(`/api/reorderingPoints/generate-new-products-cache?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
               skus: [sku],
               productIds: [inventoryId],
             })
@@ -364,7 +378,7 @@ export const useRPProductsInfo = ({
         })
       } else {
         toast.update(updatingProductConfig, {
-          render: `SKU ${sku}: Forecast Updated`,
+          render: `SKU ${sku}: Changes Saved`,
           type: 'success',
           isLoading: false,
           autoClose: 3000,
@@ -754,12 +768,8 @@ export const useRPProductsInfo = ({
 
       if (['ai_forecast_qty'].includes(field)) {
         return rows.sort((a, b) => {
-          const aForecastValue = getAIForecastTotal(a.totalAIForecast_1)
-          const aCurrentStock = getCurrentAIForecastStock(a)
-          const bForecastValue = getAIForecastTotal(b.totalAIForecast_1)
-          const bCurrentStock = getCurrentAIForecastStock(b)
-          const aField = Math.max(aForecastValue - aCurrentStock, 0)
-          const bField = Math.max(bForecastValue - bCurrentStock, 0)
+          const aField = getProductAIForecastCoverageQty(a)
+          const bField = getProductAIForecastCoverageQty(b)
           if (aField > bField) {
             return direction ? 1 : -1
           } else if (aField < bField) {

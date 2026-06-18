@@ -1,6 +1,7 @@
+import type { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import assert from 'node:assert/strict'
 
-import { getAIForecastUrgency } from './getAIForecastUrgency'
+import { getAIForecastDemandBetweenDays, getAIForecastUrgency, getProductAIForecastCoverageQty } from './getAIForecastUrgency'
 
 const thresholds = {
   highAlertMax: 20,
@@ -11,7 +12,7 @@ const thresholds = {
 const forecast = {
   model: 'test',
   analysis: 'test forecast',
-  forecast: [30, 30, 30, 30, 30, 30],
+  forecast: [30, 30, 30, 30, 30, 30, 30, 30, 30],
 }
 
 assert.deepEqual(
@@ -29,6 +30,36 @@ assert.deepEqual(
     color: 'text-warning',
   }
 )
+
+assert.equal(getAIForecastDemandBetweenDays([10, 20, 30], 15, 30), 15)
+assert.equal(getAIForecastDemandBetweenDays([10, 20, 30], 60, 60), 30)
+
+const createCoverageProduct = (overrides: Partial<ReorderingPointsProduct> = {}): ReorderingPointsProduct =>
+  ({
+    warehouseQty: 0,
+    productionQty: 0,
+    receiving: 0,
+    fbaQty: 0,
+    fbaInboundQty: 0,
+    fbaProduction: 0,
+    awdQty: 0,
+    awdInboundQty: 0,
+    awdProduction: 0,
+    leadTimeSC: 180,
+    orderFrequency: 4,
+    daysOfStockSC: 30,
+    totalAIForecast_1: {
+      model: 'test',
+      analysis: 'test forecast',
+      forecast: [10, 20, 30, 40, 50, 60, 70, 80, 90],
+    },
+    ...overrides,
+  }) as ReorderingPointsProduct
+
+assert.equal(getProductAIForecastCoverageQty(createCoverageProduct()), 145)
+assert.equal(getProductAIForecastCoverageQty(createCoverageProduct({ warehouseQty: 50 })), 145)
+assert.equal(getProductAIForecastCoverageQty(createCoverageProduct({ warehouseQty: 300 })), 55)
+assert.equal(getProductAIForecastCoverageQty(createCoverageProduct({ totalAIForecast_1: { ...forecast, forecast: [30, 30, 30] } })), 0)
 
 assert.deepEqual(
   getAIForecastUrgency({
@@ -77,8 +108,24 @@ assert.deepEqual(
   {
     urgency: 0,
     urgencyTag: 'none',
-    remainingDays: 180,
-    daysToOrder: 110,
+    remainingDays: 270,
+    daysToOrder: 200,
+    color: 'text-success',
+  }
+)
+
+assert.deepEqual(
+  getAIForecastUrgency({
+    currentStock: 210,
+    leadTime: 70,
+    aiForecast: forecast,
+    thresholds,
+  }),
+  {
+    urgency: 0,
+    urgencyTag: 'none',
+    remainingDays: 210,
+    daysToOrder: 140,
     color: 'text-success',
   }
 )
