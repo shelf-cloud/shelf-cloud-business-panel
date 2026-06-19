@@ -134,11 +134,10 @@ export const getProductAIForecastCoverageQty = (product: ReorderingPointsProduct
   const currentStock = getCurrentAIForecastStock(product)
   const leadTimeDays = Math.max(0, Number(product.leadTimeSC) || 0)
   const coverageDays = Math.max(0, Number(product.orderFrequency) || 0) * 7 + Math.max(0, Number(product.daysOfStockSC) || 0)
-  const leadTimeDemand = getAIForecastDemandBetweenDays(product.totalAIForecast_1, 0, leadTimeDays)
-  const remainingStockAtLeadTime = Math.max(0, currentStock - leadTimeDemand)
-  const coverageDemand = getAIForecastDemandBetweenDays(product.totalAIForecast_1, leadTimeDays, coverageDays)
+  const targetStockDays = leadTimeDays + coverageDays
+  const targetDemand = getAIForecastDemandBetweenDays(product.totalAIForecast_1, 0, targetStockDays)
 
-  return Math.max(0, Math.ceil(coverageDemand - remainingStockAtLeadTime))
+  return Math.max(0, Math.ceil(targetDemand - currentStock))
 }
 
 export const getAIForecastUrgency = ({

@@ -56,10 +56,34 @@ const createCoverageProduct = (overrides: Partial<ReorderingPointsProduct> = {})
     ...overrides,
   }) as ReorderingPointsProduct
 
-assert.equal(getProductAIForecastCoverageQty(createCoverageProduct()), 145)
-assert.equal(getProductAIForecastCoverageQty(createCoverageProduct({ warehouseQty: 50 })), 145)
+assert.equal(getProductAIForecastCoverageQty(createCoverageProduct()), 355)
+assert.equal(getProductAIForecastCoverageQty(createCoverageProduct({ warehouseQty: 50 })), 305)
 assert.equal(getProductAIForecastCoverageQty(createCoverageProduct({ warehouseQty: 300 })), 55)
-assert.equal(getProductAIForecastCoverageQty(createCoverageProduct({ totalAIForecast_1: { ...forecast, forecast: [30, 30, 30] } })), 0)
+assert.equal(getProductAIForecastCoverageQty(createCoverageProduct({ totalAIForecast_1: { ...forecast, forecast: [30, 30, 30] } })), 90)
+assert.equal(
+  getProductAIForecastCoverageQty(
+    createCoverageProduct({
+      warehouseQty: 7,
+      leadTimeSC: 104,
+      orderFrequency: 4,
+      daysOfStockSC: 30,
+      totalAIForecast_1: { ...forecast, forecast: [30, 30, 30, 30, 30, 30, 30, 30, 30] },
+    })
+  ),
+  155
+)
+assert.equal(
+  getProductAIForecastCoverageQty(
+    createCoverageProduct({
+      warehouseQty: 7,
+      leadTimeSC: 104,
+      orderFrequency: 12,
+      daysOfStockSC: 30,
+      totalAIForecast_1: { ...forecast, forecast: [30, 30, 30, 30, 30, 30, 30, 30, 30] },
+    })
+  ),
+  211
+)
 
 assert.deepEqual(
   getAIForecastUrgency({
