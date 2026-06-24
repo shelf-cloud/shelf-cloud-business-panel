@@ -5,6 +5,7 @@ import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { OrderItem, ReturnOrder, ReturnType } from '@typesTs/returns/returns'
+import { CameraIcon } from 'lucide-react'
 import DataTable from 'react-data-table-component'
 import { UncontrolledTooltip } from 'reactstrap'
 
@@ -87,9 +88,15 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
     {
       name: <span className='fw-bolder fs-6'>Orders Returned</span>,
       selector: (row: ReturnType) => {
+        const hasImage =
+          Object.values(row.returns).some((ret) => ret.proofImageUrl) ||
+          Object.values(row.returns).some((ret) => ret.orderItems.some((item) => item.images && item.images.length > 0))
         return (
           <>
-            <p className='fw-semibold fs-7 m-0 p-0'>{row.shipmentOrderNumber}</p>
+            <div className='tw:flex tw:items-center tw:justify-start tw:gap-1'>
+              <p className='fw-semibold fs-7 m-0 p-0'>{row.shipmentOrderNumber}</p>
+              {hasImage ? <CameraIcon className='tw:text-destructive tw:size-4' /> : null}
+            </div>
             <p className='text-muted fs-7 m-0 p-0'>
               {Object.values(row.returns)[0].orderNumber}
               {Object.values(row.returns).length > 1 && <span className='fs-7 text-danger'>{` +${Object.values(row.returns).length - 1}`}</span>}

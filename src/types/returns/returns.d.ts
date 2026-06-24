@@ -58,7 +58,7 @@ export interface ReturnOrder {
   manualChanges: boolean
   manualChangesShipping: boolean
   invoiced: boolean
-  proofOfShipped: null
+  proofImageUrl?: string
   isThird: boolean
   thirdInfo: null
   labelsName: string

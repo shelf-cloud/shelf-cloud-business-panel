@@ -2,12 +2,13 @@ import { UnsellablesType } from '@/types/returns/unsellables'
 
 import { Button } from '../shadcn/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../shadcn/ui/dialog'
+import type { SelectedUnsellableImage } from './ShowBiggerImageDialog'
 
 type Props = {
   imagesDialogItem: UnsellablesType | null
   imagesDialogImages: string[]
   handleImagesDialogOpenChange: (open: boolean) => void
-  setSelectedImage: (image: { url: string; alt: string } | null) => void
+  setSelectedImage: (image: SelectedUnsellableImage | null) => void
 }
 
 export const MAX_UNSELLABLE_IMAGES = 5
@@ -36,7 +37,7 @@ const ShowReturnImagesDialog = ({ imagesDialogItem, imagesDialogImages, handleIm
                   key={`${imagesDialogItem?.barcode}-${image}-${index}`}
                   type='button'
                   className='tw:focus-visible:ring-ring tw:relative tw:aspect-square tw:size-16 tw:overflow-hidden tw:rounded-md tw:border tw:p-0 tw:focus-visible:ring-2 tw:focus-visible:outline-none'
-                  onClick={() => setSelectedImage({ url: image, alt })}
+                  onClick={() => setSelectedImage({ images: imagesDialogImages, index })}
                   aria-label={`View ${alt}`}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={image} alt={alt} className='tw:h-full tw:w-full tw:object-cover' />

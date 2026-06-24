@@ -1,11 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
- 
 import React, { useContext } from 'react'
 
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { ReturnOrder, ReturnType } from '@typesTs/returns/returns'
+import { CameraIcon } from 'lucide-react'
 import DataTable, { ExpanderComponentProps } from 'react-data-table-component'
 import { ButtonGroup, Card, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledButtonDropdown, UncontrolledTooltip } from 'reactstrap'
 
@@ -79,7 +79,15 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
   const columns: any = [
     {
       name: <span className='fw-semibold fs-7 text-muted'>Returns Received</span>,
-      selector: (row: ReturnOrder) => <span className='fs-7 fw-semibold'>{row.orderNumber}</span>,
+      selector: (row: ReturnOrder) => {
+        const hasImage = row.orderItems.some((item) => Boolean(item.images?.length))
+        return (
+          <div className='tw:flex tw:items-center tw:justify-start tw:gap-1'>
+            <span className='fs-7 fw-semibold'>{row.orderNumber}</span>
+            {hasImage ? <CameraIcon className='tw:text-destructive tw:size-4' /> : null}
+          </div>
+        )
+      },
       sortable: true,
       wrap: true,
       grow: 1.7,

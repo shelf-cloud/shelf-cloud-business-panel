@@ -9,7 +9,7 @@ import { convertLabelZPLToPDF } from '@lib/convertZPLToPDF'
 import { OrderItem, ReturnOrder } from '@typesTs/returns/returns'
 import axios from 'axios'
 import { useFormik } from 'formik'
-import { ImagesIcon } from 'lucide-react'
+import { CameraIcon } from 'lucide-react'
 import { ExpanderComponentProps } from 'react-data-table-component'
 import { toast } from 'react-toastify'
 import { Button, Card, CardBody, CardHeader, Col, Form, FormFeedback, FormGroup, Input, Label, Row, Spinner } from 'reactstrap'
@@ -292,8 +292,14 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                         <td className='text-muted'>{product.sku}</td>
                         <td>
                           {product.images && product.images.length > 0 ? (
-                            <ShadcnButton type='button' variant={'ghost'} size={'icon'} className='tw:text-xs' onClick={() => openImagesDialog(product)} aria-label='View item images'>
-                              <ImagesIcon className='tw:size-4' />
+                            <ShadcnButton
+                              type='button'
+                              variant={'outline'}
+                              size={'icon'}
+                              className='tw:text-xs tw:rounded-lg!'
+                              onClick={() => openImagesDialog(product)}
+                              aria-label='View item images'>
+                              <CameraIcon className='tw:text-destructive tw:size-5' />
                             </ShadcnButton>
                           ) : null}
                         </td>
