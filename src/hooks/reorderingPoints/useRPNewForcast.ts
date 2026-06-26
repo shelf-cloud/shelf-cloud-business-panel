@@ -14,12 +14,12 @@ export const useRPNewForecast = () => {
 
   const generate_new_forecast_products = async ({ skus, productIds }: { skus: string[]; productIds: number[] }) => {
     if (skus.length === 0 || productIds.length === 0) {
-      toast.error('No SKUs or Product IDs provided for generating new forecast.')
+      toast.error('No SKUs or Product IDs provided for generating new cache.')
       return
     }
 
     const { data } = await axios.post<GenerateNewProductsForecastResponse>(
-      `/api/reorderingPoints/generate-new-products-forecast?region=${state.currentRegion}&businessId=${state.user.businessId}`,
+      `/api/reorderingPoints/generate-new-products-cache?region=${state.currentRegion}&businessId=${state.user.businessId}`,
       {
         skus,
         productIds,
@@ -27,9 +27,9 @@ export const useRPNewForecast = () => {
     )
 
     if (data.error) {
-      toast.error(data.message || 'Error generating new forecast for products.')
+      toast.error(data.message || 'Error generating new cache for products.')
     } else {
-      toast.success(data.message || 'New forecasts are being generated.')
+      toast.success(data.message || 'New cache generated.')
     }
   }
 
