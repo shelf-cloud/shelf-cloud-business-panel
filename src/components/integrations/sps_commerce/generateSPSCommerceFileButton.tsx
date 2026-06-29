@@ -3,14 +3,15 @@ import { useCallback } from 'react'
 import { type SPSCommerceBusinessInfo, type SPSCommerceItem } from '@hooks/integrations/useSPSCommerceIntegrations'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button } from 'reactstrap'
+
+import { Button, type ButtonProps } from '@/components/migration-ui'
 
 type Props = {
   integrationInfo: SPSCommerceBusinessInfo
   items: SPSCommerceItem[]
   warehouseId: string
   disabled?: boolean
-  color?: string
+  color?: ButtonProps['color']
 }
 
 const GenerateSPSCommerceFileButton = ({ integrationInfo, items, warehouseId, disabled = false, color = 'primary' }: Props) => {

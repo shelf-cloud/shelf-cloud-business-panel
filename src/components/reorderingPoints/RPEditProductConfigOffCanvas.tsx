@@ -4,8 +4,9 @@ import AppContext from '@context/AppContext'
 import { RPProductConfig } from '@hooks/reorderingPoints/useRPProductConfig'
 import { RPProductUpdateConfig } from '@hooks/reorderingPoints/useRPProductsInfo'
 import { useFormik } from 'formik'
-import { Button, Col, Form, Input, Label, Offcanvas, OffcanvasBody, OffcanvasHeader, Row, Spinner } from 'reactstrap'
 import * as Yup from 'yup'
+
+import { Button, Col, Form, Input, Label, Offcanvas, OffcanvasBody, OffcanvasHeader, Row, Spinner } from '@/components/migration-ui'
 
 type Props = {
   rpProductConfig: RPProductConfig

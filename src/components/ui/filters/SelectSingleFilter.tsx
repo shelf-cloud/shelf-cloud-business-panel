@@ -1,5 +1,6 @@
 import SimpleSelect, { SelectOptionType, SelectSingleValueType } from '@components/Common/SimpleSelect'
-import { Label } from 'reactstrap'
+
+import { Label } from '@/components/migration-ui'
 
 import ErrorInputLabel from '../forms/ErrorInputLabel'
 

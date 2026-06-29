@@ -1,6 +1,7 @@
 import { UnsellablesType } from '@typesTs/returns/unsellables'
 import ExcelJS from 'exceljs'
-import { Button } from 'reactstrap'
+
+import { Button } from '@/components/migration-ui'
 
 type Props = {
   unsellables: UnsellablesType[]

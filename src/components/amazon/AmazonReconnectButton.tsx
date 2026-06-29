@@ -3,7 +3,8 @@ import Link from 'next/link'
 import { useContext } from 'react'
 
 import AppContext from '@context/AppContext'
-import { Button } from 'reactstrap'
+
+import { Button } from '@/components/migration-ui'
 
 type Props = {}
 

@@ -12,7 +12,7 @@ import 'react-toastify/dist/ReactToastify.min.css'
 import { TooltipProvider } from '@/components/shadcn/ui/tooltip'
 
 import '../styles/themes.scss'
-import '../styles/z_tailwind.css'
+import '../styles/tailwind.css'
 
 function MyApp({
   Component,

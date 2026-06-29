@@ -2,7 +2,8 @@ import { useContext } from 'react'
 
 import AppContext from '@context/AppContext'
 import { PurchaseOrder } from '@typesTs/purchaseOrders'
-import { Button } from 'reactstrap'
+
+import { Button } from '@/components/migration-ui'
 
 import { buildSplitsTemplatePO, buildTemplatePO } from './helperFunctions'
 

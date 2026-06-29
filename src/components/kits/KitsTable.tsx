@@ -12,7 +12,8 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import { loadBarcode, sortNumbers, sortStringsCaseInsensitive } from '@lib/helperFunctions'
 import { KitRow } from '@typings'
 import DataTable from 'react-data-table-component'
-import { DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from 'reactstrap'
+
+import { DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from '@/components/migration-ui'
 
 import KitExpandedDetails from './KitExpandedDetails'
 

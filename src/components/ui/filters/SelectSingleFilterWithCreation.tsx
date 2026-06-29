@@ -2,8 +2,9 @@ import dynamic from 'next/dynamic'
 
 import { SelectOptionType, SelectSingleValueType } from '@components/Common/SimpleSelect'
 import { useFormik } from 'formik'
-import { Label } from 'reactstrap'
 import * as Yup from 'yup'
+
+import { Label } from '@/components/migration-ui'
 
 import ErrorInputLabel from '../forms/ErrorInputLabel'
 

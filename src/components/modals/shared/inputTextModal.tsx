@@ -2,8 +2,9 @@ import { memo, useState } from 'react'
 
 import { useFormik } from 'formik'
 import { DebounceInput } from 'react-debounce-input'
-import { Button, Col, Form, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from 'reactstrap'
 import * as Yup from 'yup'
+
+import { Button, Col, Form, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 
 type InputModalProps = {
   isOpen: boolean

@@ -1,6 +1,7 @@
 import { ReturnType } from '@typesTs/returns/returns'
 import ExcelJS from 'exceljs'
-import { Button } from 'reactstrap'
+
+import { Button } from '@/components/migration-ui'
 
 type Props = {
   returns: ReturnType[]

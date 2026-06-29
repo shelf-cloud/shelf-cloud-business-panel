@@ -1,7 +1,8 @@
 import { AMAZON_MARKETPLACES, AMAZON_MARKETPLACES_ID } from '@lib/AmzConstants'
 import { ProductPerformance } from '@typesTs/marketplaces/productPerformance'
 import ExcelJS from 'exceljs'
-import { Button } from 'reactstrap'
+
+import { Button } from '@/components/migration-ui'
 
 import { getProductMargin, getProductNetProfit, getProductRoi } from './productPerformanceMetrics'
 

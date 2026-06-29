@@ -1,4 +1,4 @@
-import { Input } from 'reactstrap'
+import { Input } from '@/components/migration-ui'
 
 type Props = {
   inputName: string
@@ -20,7 +20,7 @@ const InputNumberFilter = ({ inputName, value, isInvalid, placeholder, handleCha
   return (
     <Input
       type='number'
-      className='form-control fs-6 m-0'
+      className='fs-6 m-0'
       bsSize='sm'
       style={{ padding: '0.2rem 0.9rem' }}
       placeholder={placeholder}

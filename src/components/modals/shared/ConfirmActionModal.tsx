@@ -1,7 +1,7 @@
  
 import { useState } from 'react'
 
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 
 type Props = {
   isOpen: boolean

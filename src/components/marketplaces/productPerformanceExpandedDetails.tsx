@@ -5,8 +5,8 @@ import { AMAZON_MARKETPLACES_ID } from '@lib/AmzConstants'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { Marketplace, ProductPerformance } from '@typesTs/marketplaces/productPerformance'
 import { ExpanderComponentProps } from 'react-data-table-component'
-import { Card, CardBody, CardHeader, Col, Collapse, Row } from 'reactstrap'
 
+import { Card, CardBody, CardHeader, Col, Collapse, Row } from '@/components/migration-ui'
 import { cn } from '@/lib/shadcn/utils'
 
 import { getProductNetExpenses, isAllMarketplacesStore } from './productPerformanceMetrics'

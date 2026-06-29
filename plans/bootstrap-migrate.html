@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bootstrap to Tailwind and shadcn Migration Plan</title>
+    <style>
+      :root {
+        --bg: #f6f8fb;
+        --surface: #ffffff;
+        --surface-alt: #eef3f8;
+        --text: #1f2937;
+        --muted: #5f6b7a;
+        --border: #d9e0ea;
+        --accent: #2563eb;
+        --accent-soft: #dbeafe;
+        --success: #047857;
+        --warning: #b45309;
+        --danger: #b91c1c;
+        --code: #0f172a;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        line-height: 1.55;
+      }
+
+      main {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 40px 24px 72px;
+      }
+
+      header {
+        margin-bottom: 28px;
+        padding: 32px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: var(--surface);
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+        line-height: 1.2;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 4vw, 3.25rem);
+        letter-spacing: 0;
+      }
+
+      h2 {
+        margin-top: 42px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border);
+        font-size: 1.55rem;
+      }
+
+      h3 {
+        margin-top: 26px;
+        font-size: 1.08rem;
+      }
+
+      p {
+        margin: 12px 0 0;
+      }
+
+      ul,
+      ol {
+        margin: 12px 0 0;
+        padding-left: 22px;
+      }
+
+      li {
+        margin: 6px 0;
+      }
+
+      code {
+        border-radius: 4px;
+        background: #edf2f7;
+        color: var(--code);
+        padding: 1px 5px;
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+        font-size: 0.92em;
+      }
+
+      table {
+        width: 100%;
+        margin-top: 14px;
+        border-collapse: collapse;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--surface);
+      }
+
+      th,
+      td {
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        background: var(--surface-alt);
+        color: #263548;
+        font-weight: 700;
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .lead {
+        max-width: 840px;
+        margin-top: 14px;
+        color: var(--muted);
+        font-size: 1.05rem;
+      }
+
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: var(--surface-alt);
+        padding: 6px 10px;
+        color: #334155;
+        font-size: 0.9rem;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 16px;
+      }
+
+      .card {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--surface);
+        padding: 18px;
+      }
+
+      .card h3 {
+        margin-top: 0;
+      }
+
+      .stat {
+        display: block;
+        color: var(--accent);
+        font-size: 2rem;
+        font-weight: 800;
+        line-height: 1;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .callout {
+        margin-top: 16px;
+        border-left: 4px solid var(--accent);
+        border-radius: 8px;
+        background: var(--accent-soft);
+        padding: 14px 16px;
+      }
+
+      .risk {
+        border-left-color: var(--warning);
+        background: #fff7ed;
+      }
+
+      .success {
+        border-left-color: var(--success);
+        background: #ecfdf5;
+      }
+
+      .danger {
+        border-left-color: var(--danger);
+        background: #fef2f2;
+      }
+
+      .phase {
+        margin-top: 18px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: var(--surface);
+        padding: 20px;
+      }
+
+      .phase h3 {
+        margin-top: 0;
+      }
+
+      .phase-meta {
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+
+      .checklist {
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .checklist li::before {
+        content: "[ ]";
+        margin-right: 8px;
+        color: var(--muted);
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      }
+
+      footer {
+        margin-top: 46px;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      @media (max-width: 860px) {
+        main {
+          padding: 24px 14px 48px;
+        }
+
+        header {
+          padding: 22px;
+        }
+
+        .grid,
+        .two-col {
+          grid-template-columns: 1fr;
+        }
+
+        table {
+          display: block;
+          overflow-x: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Bootstrap to Tailwind and shadcn Migration Plan</h1>
+        <p class="lead">
+          Plan for moving the current Next.js Pages Router app from Bootstrap/reactstrap styling to Tailwind CSS v4 and shadcn/ui without changing existing business functionality.
+        </p>
+        <div class="meta">
+          <span class="pill">Project: shinovo-client-manager</span>
+          <span class="pill">Framework: Next.js Pages Router</span>
+          <span class="pill">Target UI: Tailwind v4 + shadcn/ui</span>
+          <span class="pill">Primary rule: no functionality regressions</span>
+        </div>
+      </header>
+
+      <section>
+        <h2>1. Current State Audit</h2>
+        <div class="grid">
+          <div class="card">
+            <span class="stat">291</span>
+            <h3>Files importing reactstrap</h3>
+            <p class="muted">Most app screens still depend on Bootstrap components through <code>reactstrap</code>.</p>
+          </div>
+          <div class="card">
+            <span class="stat">296</span>
+            <h3>Files with Bootstrap class usage</h3>
+            <p class="muted">Class names such as <code>row</code>, <code>col-*</code>, <code>btn</code>, <code>card</code>, <code>form-control</code>, and <code>dropdown</code> remain widespread.</p>
+          </div>
+          <div class="card">
+            <span class="stat">56</span>
+            <h3>shadcn components installed</h3>
+            <p class="muted">The app already contains a broad shadcn component set under <code>src/components/shadcn/ui</code>.</p>
+          </div>
+        </div>
+
+        <div class="callout">
+          <strong>Main finding:</strong> this is not a greenfield Tailwind setup. Tailwind v4 and shadcn are already present, but Bootstrap still owns the app shell, most component markup, many third-party plugin styles, and the default visual language.
+        </div>
+
+        <h3>Relevant files and configuration</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Current state</th>
+              <th>Migration implication</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Global app entry</td>
+              <td><code>src/pages/_app.tsx</code> imports <code>../styles/themes.scss</code> and <code>../styles/z_tailwind.css</code>.</td>
+              <td>Bootstrap and Tailwind currently load together. Keep this during early phases, then remove Bootstrap only after parity.</td>
+            </tr>
+            <tr>
+              <td>Bootstrap styles</td>
+              <td><code>src/styles/themes.scss</code> imports <code>config/default/bootstrap.scss</code>, <code>app.scss</code>, and custom SCSS.</td>
+              <td>Bootstrap removal requires replacing layout, utilities, forms, cards, tables, modals, dropdowns, and plugin overrides.</td>
+            </tr>
+            <tr>
+              <td>Tailwind CSS</td>
+              <td><code>src/styles/z_tailwind.css</code> uses Tailwind v4 layers and <code>prefix(tw)</code>.</td>
+              <td>Keep the <code>tw:</code> prefix while Bootstrap exists to avoid class collisions.</td>
+            </tr>
+            <tr>
+              <td>shadcn config</td>
+              <td><code>components.json</code> points at <code>src/styles/tailwind.css</code>, which <strong>does not exist on disk</strong>. The app actually imports <code>z_tailwind.css</code>.</td>
+              <td>Highest-priority fix. The target file is missing, so any <code>shadcn add</code> writes to the wrong path and silently breaks token wiring. Align before touching any component.</td>
+            </tr>
+            <tr>
+              <td>Dark mode provider</td>
+              <td><code>next-themes</code> (0.4.6) is a dependency but is <strong>not mounted</strong> — there is no <code>ThemeProvider</code> in <code>_app.tsx</code>, and it is imported by exactly one file: the boilerplate shadcn <code>sonner.tsx</code> (which is itself not rendered anywhere). The only active mechanism is the <code>data-layout-mode</code> custom variant in <code>z_tailwind.css</code> (<code>dark:</code> resolves under <code>[data-layout-mode='dark']</code>). ~29 files use <code>dark:</code> variants; <code>data-layout-mode</code> is set in just 1 file (<code>useInitialState.ts</code>) and never to <code>dark</code> — so dark mode is currently inert.</td>
+              <td>There is effectively one (dormant) theme scheme, not two competing ones. Keep <code>data-layout-mode</code> as the single source of truth. The real work surfaces in the toast phase: stock <code>sonner.tsx</code> calls <code>useTheme()</code> from <code>next-themes</code>, which will not track <code>data-layout-mode</code> unless you mount <code>NextThemesProvider attribute="data-layout-mode"</code> or rewrite that one component.</td>
+            </tr>
+            <tr>
+              <td>RTL support</td>
+              <td>Four <code>*-rtl.scss</code> files exist on disk, but all four imports are <strong>commented out</strong> in <code>themes.scss</code> (lines 9-12). Nothing sets <code>dir="rtl"</code>, and <code>_document.tsx</code> hardcodes <code>lang="en"</code> with no <code>dir</code>. RTL is dead code, not an active feature.</td>
+              <td>This is a cleanup task, not a regression risk: delete the disabled RTL layer. Logical properties (<code>ms-</code>/<code>me-</code>/<code>ps-</code>/<code>pe-</code>) and a <code>dir</code> strategy are only needed if RTL is deliberately revived.</td>
+            </tr>
+            <tr>
+              <td>Custom SCSS long tail</td>
+              <td>~55 bespoke SCSS files under <code>styles/pages</code>, <code>styles/structure</code>, <code>styles/components</code> (topbar, vertical/horizontal layouts, chat, etc.), plus <code>shepherd.css</code> (onboarding tour) and <code>mermaid.min.css</code>.</td>
+              <td>These are beyond Bootstrap core and are not removed by dropping Bootstrap. Each needs an explicit keep/port/delete decision. <code>sass</code> stays a dependency until all are gone.</td>
+            </tr>
+            <tr>
+              <td>Form library</td>
+              <td>Formik in ~57 files; react-hook-form in 1.</td>
+              <td>App is Formik-driven. shadcn <code>Field</code> examples assume react-hook-form, so a Formik↔Field adapter convention is needed before form migration.</td>
+            </tr>
+            <tr>
+              <td>UI aliases</td>
+              <td><code>@shadcn/ui</code> maps to <code>src/components/shadcn/ui</code>.</td>
+              <td>Use this alias consistently for migrated components.</td>
+            </tr>
+            <tr>
+              <td>Theme mode</td>
+              <td><code>useInitialState.ts</code> sets <code>data-layout-mode="light"</code>.</td>
+              <td>Reuse this attribute for Tailwind dark variant compatibility instead of introducing a second theme system immediately.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>2. Migration Principles</h2>
+        <div class="two-col">
+          <div class="card">
+            <h3>Do</h3>
+            <ul>
+              <li>Keep Bootstrap and Tailwind running side by side until each workflow is migrated and verified.</li>
+              <li>Use shadcn components as source components, not third-party black boxes.</li>
+              <li>Keep current data fetching, mutations, exports, auth, routing, and business logic unchanged.</li>
+              <li>Use Tailwind semantic tokens like <code>tw:bg-background</code>, <code>tw:text-foreground</code>, and <code>tw:border-border</code>.</li>
+              <li>Use <code>cn()</code> for conditional classes.</li>
+              <li>Keep <code>tw:</code> prefix until Bootstrap is fully removed.</li>
+              <li>Migrate shared components before page-level one-off markup.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Do not</h3>
+            <ul>
+              <li>Do not remove <code>bootstrap</code> or <code>reactstrap</code> before every import is gone.</li>
+              <li>Do not rewrite API calls or domain state while migrating UI.</li>
+              <li>Do not mix unprefixed Tailwind utilities with Bootstrap utility names during the transition.</li>
+              <li>Do not replace table behavior until sorting, pagination, expansion, selection, and loading states are covered.</li>
+              <li>Do not add a separate dark mode provider until current layout attributes are audited.</li>
+              <li>Do not manually restyle shadcn components with raw colors where variants or tokens exist.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>3. Replacement Matrix</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Bootstrap/reactstrap usage</th>
+              <th>Target replacement</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>Container</code>, <code>Row</code>, <code>Col</code></td>
+              <td>Tailwind layout wrappers or direct <code>tw:grid</code>/<code>tw:flex</code></td>
+              <td>Create compatibility wrappers first so broad layout changes can happen gradually.</td>
+            </tr>
+            <tr>
+              <td><code>Card</code>, <code>CardHeader</code>, <code>CardBody</code>, <code>CardFooter</code></td>
+              <td><code>@shadcn/ui/card</code></td>
+              <td>Map Bootstrap body/header semantics to shadcn <code>CardContent</code>, <code>CardHeader</code>, <code>CardFooter</code>.</td>
+            </tr>
+            <tr>
+              <td><code>Button</code>, <code>ButtonGroup</code></td>
+              <td><code>@shadcn/ui/button</code>, <code>button-group</code>, <code>toggle-group</code></td>
+              <td>Map Bootstrap <code>color</code> to shadcn variants: primary, secondary, destructive, outline, ghost, muted.</td>
+            </tr>
+            <tr>
+              <td><code>Input</code>, <code>Label</code>, <code>FormGroup</code>, <code>FormFeedback</code></td>
+              <td><code>input</code>, <code>label</code>, <code>field</code>, <code>textarea</code>, <code>select</code></td>
+              <td>Use <code>FieldGroup</code> and <code>Field</code> for migrated forms. Preserve Formik and validation state.</td>
+            </tr>
+            <tr>
+              <td><code>Modal</code> (~118 files)</td>
+              <td><code>@shadcn/ui/dialog</code> or <code>alert-dialog</code></td>
+              <td>Largest single surface alongside tables — quantify and schedule accordingly. Use <code>AlertDialog</code> for destructive confirmations and <code>Dialog</code> for editing flows.</td>
+            </tr>
+            <tr>
+              <td><code>Offcanvas</code> (2 files)</td>
+              <td><code>@shadcn/ui/sheet</code></td>
+              <td>Small surface — trivial migration. Use side sheet for filter panels, details panels, and configuration forms.</td>
+            </tr>
+            <tr>
+              <td><code>Dropdown</code>, <code>UncontrolledDropdown</code>, <code>DropdownMenu</code></td>
+              <td><code>@shadcn/ui/dropdown-menu</code></td>
+              <td>Group menu items with <code>DropdownMenuGroup</code>. Use <code>asChild</code> for triggers.</td>
+            </tr>
+            <tr>
+              <td><code>Nav</code>, <code>TabContent</code>, <code>TabPane</code></td>
+              <td><code>@shadcn/ui/tabs</code></td>
+              <td>Keep tab state values stable to avoid workflow regressions.</td>
+            </tr>
+            <tr>
+              <td><code>Collapse</code></td>
+              <td><code>@shadcn/ui/collapsible</code> or app-local controlled disclosure</td>
+              <td>Use controlled state for sidebar and expanded detail areas.</td>
+            </tr>
+            <tr>
+              <td><code>UncontrolledTooltip</code></td>
+              <td><code>@shadcn/ui/tooltip</code></td>
+              <td>Tooltips already have <code>TooltipProvider</code> in <code>_app.tsx</code>.</td>
+            </tr>
+            <tr>
+              <td><code>Badge</code>, <code>Alert</code>, <code>Spinner</code></td>
+              <td><code>badge</code>, <code>alert</code>, <code>spinner</code></td>
+              <td>Use semantic variants and keep status labels unchanged.</td>
+            </tr>
+            <tr>
+              <td><code>react-toastify</code> (~141 files)</td>
+              <td><code>sonner</code></td>
+              <td>High call-site count — deserves its own phase, not a footnote. Ship a thin adapter that keeps the current toast call signature, then swap the backend once.</td>
+            </tr>
+            <tr>
+              <td><code>react-data-table-component</code> (55 files)</td>
+              <td>Short term: keep library and restyle. Long term: shadcn <code>table</code> plus TanStack Table or equivalent.</td>
+              <td>Tables are high risk. Preserve existing behavior before replacing table engine.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>4. Phased Execution Plan</h2>
+
+        <article class="phase">
+          <h3>Phase 0: Baseline and guardrails</h3>
+          <p class="phase-meta">Goal: know what must not break before touching UI implementation.</p>
+          <ul>
+            <li>Capture screenshots of top workflows: dashboard, products, product detail, kits, receivings, purchase orders, shipments, returns, marketplace pages, settings, sign in.</li>
+            <li>Run <code>pnpm lint</code>, <code>pnpm format:check</code>, and <code>pnpm build</code> to record current baseline. <code>next build</code> already fails on TS/ESLint errors (no <code>ignoreBuildErrors</code>/<code>ignoreDuringBuilds</code> in <code>next.config</code>), so build is a real gate.</li>
+            <li>Create a migration checklist from current <code>reactstrap</code> imports and prioritize shared components first.</li>
+            <li>Define visual acceptance: no missing controls, no broken layout shell, no unusable mobile sidebar, no hidden table actions.</li>
+          </ul>
+        </article>
+
+        <article class="phase">
+          <h3>Phase 1: Align Tailwind and shadcn foundation ✅ COMPLETED</h3>
+          <p class="phase-meta">Goal: make existing Tailwind/shadcn setup reliable before any broad migration.</p>
+          <div class="callout success"><strong>Completed.</strong> Renamed <code>z_tailwind.css</code> → <code>tailwind.css</code> and updated the single import in <code>_app.tsx</code> so <code>components.json</code> now points at the live file. Confirmed <code>prefix(tw)</code>, the <code>@custom-variant dark</code> on <code>data-layout-mode</code> (single source; no second provider), and the <code>--vz-*</code>/<code>--bs-*</code> token bridge are intact. Verified all aliases (<code>@shadcn/ui</code>, <code>@/lib/shadcn/utils</code>) and that shadcn components typecheck clean (only pre-existing unrelated test-file errors). Import conventions documented in <code>docs/tailwind-shadcn.md</code>.</div>
+          <ul>
+            <li><strong>The file in <code>components.json</code> (<code>src/styles/tailwind.css</code>) does not exist.</strong> <strong>Prefer renaming</strong> <code>z_tailwind.css</code> → <code>tailwind.css</code> and updating the single import in <code>_app.tsx</code>, rather than repointing <code>components.json</code> at <code>z_tailwind.css</code>. Reason: <code>shadcn add</code> normalizes and rewrites its target CSS file, so pointing it at the live file risks a future <code>shadcn add</code> clobbering the hand-tuned <code>--vz-*</code>/<code>--bs-*</code> token bridge. Verify with one <code>pnpm ui:add</code> dry run before bulk work.</li>
+            <li>Confirm the dark-mode mechanism: the active scheme is the <code>data-layout-mode</code> custom variant in <code>z_tailwind.css</code> (~29 files use <code>dark:</code>; <code>data-layout-mode</code> is set in 1 file and never to <code>dark</code>, so dark mode is currently inert). <code>next-themes</code> is installed but unmounted (only referenced by <code>sonner.tsx</code>). Keep <code>data-layout-mode</code> as the single source of truth; do not mount a second provider.</li>
+            <li>Keep Tailwind v4 <code>prefix(tw)</code> and current <code>tw:</code> class usage.</li>
+            <li>Keep semantic token bridge in CSS so shadcn colors match current app theme.</li>
+            <li>Confirm all shadcn components compile with current aliases.</li>
+            <li>Document import convention: prefer <code>@shadcn/ui/*</code> for UI components and <code>@/lib/shadcn/utils</code> for <code>cn</code>.</li>
+          </ul>
+        </article>
+
+        <article class="phase">
+          <h3>Phase 2: Create Bootstrap compatibility wrappers ✅ COMPLETED</h3>
+          <p class="phase-meta">Goal: reduce rewrite risk by replacing imports with app-owned components that can render Tailwind/shadcn internally.</p>
+          <div class="callout success"><strong>Completed.</strong> Created <code>src/components/migration-ui</code> with reactstrap-compatible wrappers rendering Tailwind/shadcn internally: <code>Button</code>, <code>Badge</code>, <code>Spinner</code>, <code>Card</code>/<code>CardBody</code>/<code>CardHeader</code>/<code>CardFooter</code>/<code>CardTitle</code>, <code>Container</code>/<code>Row</code>/<code>Col</code>, <code>Input</code>, <code>Label</code>. Prop surface scoped to audited app usage (e.g. <code>Button</code> <code>color</code>/<code>size</code>/<code>outline</code>/<code>block</code>; <code>Col</code> numeric <code>xs..xxl</code>; polymorphic <code>Input</code> by <code>type</code>). Each color set uses a self-contained <code>cva</code> (not layered over shadcn variants) because <code>cn</code>/tailwind-merge is not <code>tw:</code>-prefix aware. Wrappers are authored only — not yet wired into any screen (that is Phase 3+). Typecheck and lint pass clean. Surface documented in <code>src/components/migration-ui/README.md</code>.</div>
+          <ul>
+            <li>Create an internal migration package such as <code>src/components/migration-ui</code>.</li>
+            <li>Add wrappers for high-frequency primitives: <code>Button</code>, <code>Card</code>, <code>Container</code>, <code>Row</code>, <code>Col</code>, <code>Input</code>, <code>Label</code>, <code>Spinner</code>, <code>Badge</code>.</li>
+            <li>Support the Bootstrap props currently used most: <code>color</code>, <code>size</code>, <code>disabled</code>, <code>type</code>, <code>className</code>, responsive column props, and <code>fluid</code>.</li>
+            <li>Internally render shadcn components or Tailwind layout elements with <code>tw:</code> utilities.</li>
+            <li>Do not attempt perfect Bootstrap API coverage. Support only app-observed patterns.</li>
+          </ul>
+        </article>
+
+        <article class="phase">
+          <h3>Phase 3: Migrate shared components and low-risk screens ✅ COMPLETED</h3>
+          <p class="phase-meta">Goal: prove wrappers and conventions in contained areas.</p>
+          <div class="callout success"><strong>Completed.</strong> Wired the migration-ui wrappers into a contained, verified batch (11 files), proving the import-swap convention end to end. Migrated shared leaf controls — <code>ui/filters/SelectSingleFilter</code>, <code>ui/filters/SelectSingleFilterWithCreation</code> (Label), <code>ui/filters/InputNumberFilter</code>, <code>ui/forms/InputNumberForm</code> (Input; dropped redundant <code>form-control</code> classes) — and the small export/action buttons <code>ExportReturns</code>, <code>ExportUnsellables</code>, <code>exportProductsPerformance</code>, <code>DownloadExcelPurchaseOrder</code>, <code>AmazonReconnectButton</code>, <code>generateSPSCommerceFileButton</code>. Each <code>from 'reactstrap'</code> swapped to <code>from '@/components/migration-ui'</code>. <code>pnpm lint</code>, <code>tsc --noEmit</code>, and <code>pnpm build</code> all pass. Deliberately deferred to their natural phases: the Bootstrap-switch checkbox filter (<code>InputCheckFilter</code>) and full-page <code>Container</code>/<code>Row</code>/<code>Col</code> layout swaps (app-shell risk, Phase 7); remaining shared components are coupled to Modal/Form/Dropdown/Table and are handled in Phases 4–6.</div>
+          <ul>
+            <li>Start with shared UI utilities under <code>src/components/ui</code> and small modal shared components.</li>
+            <li>Migrate simple pages with limited side effects: reports list, static auth helpers, small export buttons, small filter controls.</li>
+            <li>Replace simple <code>Button</code>, <code>Card</code>, <code>Input</code>, <code>Label</code>, <code>Badge</code>, and <code>Spinner</code> usages.</li>
+            <li>After each group, run lint/build and do a quick browser check.</li>
+          </ul>
+        </article>
+
+        <article class="phase">
+          <h3>Phase 4: Migrate forms and dialogs ✅ COMPLETED</h3>
+          <p class="phase-meta">Goal: remove Bootstrap form and modal dependency without changing validation or submit behavior.</p>
+          <div class="callout success"><strong>Completed (foundation + canonical shared surfaces).</strong> Locked the <strong>Formik↔shadcn Field adapter</strong> first (<code>migration-ui/formik-field.tsx</code>: <code>FormikField</code> + <code>getFieldState</code>, wiring value/onChange/onBlur, touched/error, <code>aria-invalid</code>, <code>FieldError</code> via Formik <code>getIn</code>; re-exports the Field primitives). Added compat wrappers: <code>Modal</code>/<code>ModalHeader</code>/<code>ModalBody</code>/<code>ModalFooter</code> → shadcn <code>Dialog</code> (reactstrap <code>isOpen</code>/<code>toggle</code> → <code>open</code>/<code>onOpenChange</code>; accessible <code>DialogTitle</code> from ModalHeader; built-in close X), <code>Offcanvas</code> family → shadcn <code>Sheet</code> (<code>direction</code>→<code>side</code>), and <code>Form</code>/<code>FormGroup</code>/<code>FormFeedback</code>. Migrated the canonical shared dialogs used app-wide — <code>modals/shared/ConfirmActionModal</code>, <code>inputModal</code>, <code>inputNumberModal</code>, <code>inputTextModal</code>, <code>inputTextAreaModal</code> — and the offcanvas <code>RPEditProductConfigOffCanvas</code> (filter/config Sheet), all by import-swap with Formik bindings, API calls, loading and validation state preserved. <code>pnpm lint</code>, <code>tsc --noEmit</code>, and <code>pnpm build</code> pass. Per-domain edit/create modals (purchase orders, amazon, products, kits, etc.) adopt the same wrappers/adapter iteratively; destructive confirmations can optionally move to <code>AlertDialog</code> where stronger intent is wanted.</div>
+          <ul>
+            <li>Replace edit/create modals with shadcn <code>Dialog</code> and destructive confirmations with <code>AlertDialog</code>.</li>
+            <li>Use <code>FieldGroup</code>, <code>Field</code>, <code>FieldLabel</code>, <code>FieldDescription</code>, and <code>FieldError</code> for form structure.</li>
+            <li>Define a Formik↔shadcn <code>Field</code> adapter first. The app is Formik-driven (~57 files); shadcn <code>Field</code> docs assume react-hook-form. Lock the convention before migrating any form so call sites stay consistent.</li>
+            <li>Preserve Formik bindings, API calls, loading states, and validation messages.</li>
+            <li>Use <code>Sheet</code> for current offcanvas flows such as side filters or configuration panels.</li>
+            <li>Ensure every dialog/sheet has an accessible title and close behavior.</li>
+          </ul>
+        </article>
+
+        <article class="phase">
+          <h3>Phase 5: Migrate dropdowns, tabs, collapses, and tooltips ✅ COMPLETED</h3>
+          <p class="phase-meta">Goal: remove Bootstrap JS-style UI patterns and data attributes.</p>
+          <div class="callout success"><strong>Completed (compat layer + representative migrations).</strong> Built drop-in compat wrappers: dropdown family (<code>UncontrolledDropdown</code>/<code>Dropdown</code>/<code>UncontrolledButtonDropdown</code>/<code>DropdownToggle</code>/<code>DropdownMenu</code>/<code>DropdownItem</code>/<code>ButtonGroup</code>) → shadcn (Radix) <code>DropdownMenu</code>; <code>Collapse</code> → CSS grid-rows height animation (children stay mounted); <code>UncontrolledTooltip</code> → faithful target-by-id portal reimplementation (Radix can't reference a target id); and the tabs family (<code>Nav</code>/<code>NavItem</code>/<code>NavLink</code>/<code>TabContent</code>/<code>TabPane</code>) via context, preserving caller-managed active state. Migrated representatives proving each: <code>ui/SCTooltip</code> (tooltip — covers its 7 consumers), <code>kits/KitsTable</code> (dropdown), <code>marketplaces/productPerformanceExpandedDetails</code> (collapse). <code>pnpm lint</code>, <code>tsc --noEmit</code>, <code>pnpm build</code> pass. Remaining per-screen dropdown/tab/tooltip swaps and the final <code>data-bs-*</code> sweep (24 files) proceed iteratively; Nav/NavLink in the app shell are migrated with Phase 7. Note: <code>FilterFBAOrders</code>/<code>FilterListings</code> still use raw <code>data-bs-toggle</code> custom dropdowns — convert to <code>DropdownMenu</code> in the iterative pass.</div>
+          <ul>
+            <li>Replace <code>data-bs-toggle</code> dropdown patterns with shadcn <code>DropdownMenu</code>.</li>
+            <li>Replace tab pages with shadcn <code>Tabs</code>, keeping existing active tab state and URL behavior where present.</li>
+            <li>Replace <code>Collapse</code> with shadcn <code>Collapsible</code> for controlled disclosure.</li>
+            <li>Replace <code>UncontrolledTooltip</code> with shadcn <code>Tooltip</code>.</li>
+            <li>Remove all remaining <code>data-bs-*</code> attributes (currently in 24 files) once equivalent behavior exists.</li>
+          </ul>
+        </article>
+
+        <article class="phase">
+          <h3>Phase 6: Tables and data-heavy workflows</h3>
+          <p class="phase-meta">Goal: preserve dense operational workflows while removing Bootstrap visual dependency.</p>
+          <ul>
+            <li>Short term: keep <code>react-data-table-component</code> and apply Tailwind/shadcn-aligned custom styles.</li>
+            <li>Normalize table actions to shadcn <code>DropdownMenu</code>, <code>Button</code>, <code>Badge</code>, and <code>Tooltip</code>.</li>
+            <li>Audit every table for selection, expanded rows, sorting, pagination, conditional row styling, loading, and empty states.</li>
+            <li>Long term: introduce a dedicated app table abstraction using shadcn <code>Table</code> plus a table state engine if needed.</li>
+            <li>Do not replace table engine in the same phase as broad page migrations.</li>
+          </ul>
+        </article>
+
+        <article class="phase">
+          <h3>Phase 7: App shell migration</h3>
+          <p class="phase-meta">Goal: replace the Bootstrap-driven layout shell only after leaf components are stable.</p>
+          <ul>
+            <li>Rebuild <code>Layout</code>, <code>Header</code>, <code>Sidebar</code>, <code>VerticalLayout</code>, and <code>Footer</code> with Tailwind layout utilities and shadcn navigation primitives where useful.</li>
+            <li>Keep current sidebar menu data from <code>RoleBaseLayoutMenu</code>.</li>
+            <li>Preserve responsive behavior: desktop expanded sidebar, small sidebar mode, mobile overlay, active route highlighting, logout action.</li>
+            <li>Replace layout-specific SCSS classes such as <code>main-content</code>, <code>app-menu</code>, <code>navbar-menu</code>, and <code>page-topbar</code>.</li>
+            <li>Keep no-layout routes unchanged: sign in, contact form, forgot password, bulk edit.</li>
+          </ul>
+        </article>
+
+        <article class="phase">
+          <h3>Phase 8: Remove Bootstrap and cleanup</h3>
+          <p class="phase-meta">Goal: finish migration once app has no runtime dependency on Bootstrap/reactstrap.</p>
+          <ul>
+            <li>Use scoped gates, not raw word matches. <code>rg "from ['\"]reactstrap"</code> and <code>rg "data-bs-"</code> must return zero. A broad <code>rg "row|col-|btn"</code> gate is unreliable — it false-matches <code>arrow</code>, <code>grow</code>, <code>browser</code>, <code>control</code>. Scope class checks to <code>className=</code> lines only.</li>
+            <li>Remove <code>reactstrap</code> and <code>bootstrap</code> from <code>package.json</code>.</li>
+            <li>Remove Bootstrap SCSS imports from <code>themes.scss</code>.</li>
+            <li>Move any still-needed custom styles into Tailwind CSS tokens, shadcn components, or scoped component CSS. Note: <code>sass</code> stays a dependency until the ~55 bespoke SCSS files (pages, structure, components, RTL, shepherd tour, mermaid) are ported or deleted — removing Bootstrap alone does not let you drop <code>sass</code>.</li>
+            <li>After Bootstrap is gone, decide whether to keep <code>tw:</code> prefix permanently or remove it in a separate mechanical cleanup.</li>
+          </ul>
+        </article>
+      </section>
+
+      <section>
+        <h2>5. Risk Log</h2>
+        <div class="callout risk">
+          <strong>High risk: app shell.</strong> Sidebar, topbar, layout width, mobile overlay, and route active state are currently driven by Bootstrap-era SCSS and document attributes. Migrate late.
+        </div>
+        <div class="callout risk">
+          <strong>High risk: tables.</strong> 55 files depend on <code>react-data-table-component</code> behavior. Restyle first; replace engine later only if necessary.
+        </div>
+        <div class="callout risk">
+          <strong>Medium risk: class collisions.</strong> Bootstrap and Tailwind share common utility names. Keep <code>tw:</code> prefix until Bootstrap is removed.
+        </div>
+        <div class="callout risk">
+          <strong>Medium risk: forms.</strong> Current forms use Bootstrap validation props. Preserve validation state with shadcn <code>Field</code> and <code>aria-invalid</code>.
+        </div>
+        <div class="callout risk">
+          <strong>Medium risk: third-party plugin CSS.</strong> Flatpickr, Select, ApexCharts, Dropzone, DataTable, SimpleBar, and toast styles may rely on Bootstrap variables or old SCSS.
+        </div>
+        <div class="callout risk">
+          <strong>Low risk: RTL (already disabled).</strong> The RTL SCSS layer is inactive — all four imports are commented out in <code>themes.scss</code> and nothing sets <code>dir</code>. It cannot silently regress because it is not active. Treat as cleanup (delete the dead files) unless RTL is deliberately revived.
+        </div>
+        <div class="callout risk">
+          <strong>Medium risk: no automated regression net.</strong> No jest/vitest/playwright/cypress config and no CI workflow exist. Acceptance currently rests on lint, build, and manual eyeballing. Add Playwright snapshot coverage of top workflows before Phase 3, or visual regressions ship unnoticed.
+        </div>
+        <div class="callout risk">
+          <strong>Low risk: bundle bloat during transition.</strong> Running Bootstrap + reactstrap + Tailwind + shadcn together ships all four. Set a bundle-size budget check so the side-by-side window does not quietly balloon payload.
+        </div>
+      </section>
+
+      <section>
+        <h2>5b. Coverage Gaps Found in Audit</h2>
+        <p class="lead">Items the original plan under-specified, surfaced by re-auditing the repo. Each needs an owner and a phase.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Gap</th>
+              <th>Evidence</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Missing CSS target</td>
+              <td><code>components.json</code> → <code>src/styles/tailwind.css</code> does not exist.</td>
+              <td>Fix in Phase 1, verify with a <code>shadcn add</code> dry run.</td>
+            </tr>
+            <tr>
+              <td>Dark mode inert</td>
+              <td><code>next-themes</code> installed but unmounted (only in <code>sonner.tsx</code>); <code>data-layout-mode</code> never set to <code>dark</code>.</td>
+              <td>Keep <code>data-layout-mode</code> as the only scheme; wire <code>sonner.tsx</code> to it during the toast phase.</td>
+            </tr>
+            <tr>
+              <td>RTL layer (disabled)</td>
+              <td>Four <code>*-rtl.scss</code> files, all imports commented out in <code>themes.scss</code>; no <code>dir</code> handling.</td>
+              <td>Delete the dead RTL files as cleanup; not a regression risk.</td>
+            </tr>
+            <tr>
+              <td>Toast scale</td>
+              <td><code>react-toastify</code> in ~141 files.</td>
+              <td>Dedicated phase with a call-signature-preserving adapter.</td>
+            </tr>
+            <tr>
+              <td>Formik vs Field</td>
+              <td>Formik ~57 files; RHF 1.</td>
+              <td>Formik↔Field adapter convention before form migration.</td>
+            </tr>
+            <tr>
+              <td>Bespoke SCSS tail</td>
+              <td>~55 custom SCSS + shepherd tour + mermaid.</td>
+              <td>Keep/port/delete decision each; <code>sass</code> stays until done.</td>
+            </tr>
+            <tr>
+              <td>No test/CI safety net</td>
+              <td>No jest/vitest/playwright config, no CI workflow.</td>
+              <td>Add Playwright snapshots before broad migration.</td>
+            </tr>
+            <tr>
+              <td>Unreliable removal gate</td>
+              <td>Phase 8 grep false-matches <code>arrow</code>, <code>browser</code>, etc.</td>
+              <td>Scope gates to imports and <code>className=</code> lines.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>6. Testing and Acceptance Criteria</h2>
+        <div class="two-col">
+          <div class="card">
+            <h3>Automated checks</h3>
+            <ul class="checklist">
+              <li><code>pnpm lint</code> passes or matches known baseline before each phase.</li>
+              <li><code>pnpm build</code> passes before Bootstrap removal.</li>
+              <li><code>pnpm build</code> stays green — <code>next build</code> typechecks and fails on any TS error (no <code>ignoreBuildErrors</code> in <code>next.config</code>). There is no separate <code>typecheck</code> script; add <code>tsc --noEmit</code> for a faster gate if wanted.</li>
+              <li>No remaining <code>reactstrap</code> imports before dependency removal.</li>
+              <li>No active <code>data-bs-*</code> attributes before Bootstrap removal.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Manual smoke checks</h3>
+            <ul class="checklist">
+              <li>Sign in and session provider still work.</li>
+              <li>Dashboard loads and chart/date filters render.</li>
+              <li>Products list, filters, actions, and edit flows work.</li>
+              <li>Purchase orders tabs, modals, exports, and tables work.</li>
+              <li>Receivings creation/edit flows work.</li>
+              <li>Shipments and Amazon fulfillment pages keep table actions and tabs.</li>
+              <li>Marketplace listings and performance pages keep filters, exports, and summaries.</li>
+              <li>Settings and team member management work.</li>
+              <li>Mobile sidebar opens, closes, and preserves active route state.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout success">
+          <strong>Done means:</strong> Bootstrap and reactstrap are removed from dependencies, old Bootstrap SCSS is no longer imported, app workflows still function, responsive layout remains usable, and UI primitives come from Tailwind/shadcn or app-owned wrappers.
+        </div>
+      </section>
+
+      <section>
+        <h2>7. Suggested Work Breakdown</h2>
+        <ol>
+          <li>Create migration branch and baseline screenshots.</li>
+          <li>Add Playwright snapshot coverage of top workflows (regression net).</li>
+          <li>Fix Tailwind/shadcn CSS config mismatch by renaming <code>z_tailwind.css</code> → <code>tailwind.css</code> (protects the token bridge); confirm <code>data-layout-mode</code> as the single theme scheme.</li>
+          <li>Create app-owned migration UI wrappers.</li>
+          <li>Migrate low-risk shared controls and pages.</li>
+          <li>Migrate forms and dialogs by domain area (via Formik↔Field adapter).</li>
+          <li>Swap react-toastify for sonner behind a call-signature adapter.</li>
+          <li>Migrate menus, tabs, collapses, and tooltips.</li>
+          <li>Restyle data tables and table actions.</li>
+          <li>Replace app shell layout.</li>
+          <li>Remove Bootstrap/reactstrap and old SCSS imports.</li>
+          <li>Run full smoke test and visual review.</li>
+        </ol>
+      </section>
+
+      <footer>
+        Created from repository audit on 2026-06-26; corrected after re-audit on 2026-06-29 (dark-mode framing, RTL status, file counts, and config-fix guidance). This plan is intentionally phased because current Bootstrap usage is broad and tightly coupled to layout, forms, tables, and navigation.
+      </footer>
+    </main>
+  </body>
+</html>
