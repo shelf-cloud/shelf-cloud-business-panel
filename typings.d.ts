@@ -165,6 +165,11 @@ export interface Product {
   buffer: number
   itemCondition: string
   identifiers: Identifier[] | null
+  hideReorderingPoints?: boolean
+  orderFrequency?: number
+  leadTimeSC?: number
+  daysOfStockSC?: number
+  manualLeadTime?: number
 }
 
 // PRODUCT DETAILS PAGE

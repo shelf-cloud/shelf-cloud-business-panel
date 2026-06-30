@@ -2,17 +2,169 @@ import { CONDITIONS, columns, columnsInfo, columnsInfoData, columnsReferenceData
 import { Product } from '@typings'
 import ExcelJS from 'exceljs'
 
+import { IDENTIFIER_TYPE_LABELS, PRODUCT_FEED_DEFINITIONS, ProductFeedType } from './productFeedDefinitions'
+
 type ExportProductsTemplateMessage = {
   products: Product[]
   brands: string[]
   suppliers: string[]
   categories: string[]
+  feedType?: ProductFeedType
+}
+
+const protectWorksheet = (worksheet: ExcelJS.Worksheet) =>
+  worksheet.protect('xmQC!zpH-3ZX', {
+    selectLockedCells: true,
+    formatCells: false,
+    formatColumns: true,
+    formatRows: false,
+    insertColumns: false,
+    insertRows: false,
+    insertHyperlinks: true,
+    deleteColumns: false,
+    deleteRows: true,
+    sort: true,
+    autoFilter: true,
+    pivotTables: true,
+  })
+
+const getIdentifierTypeLabel = (type: string) => (type === 'WalmartCode' ? 'Walmart Code' : type)
+
+const buildIdentifiersWorkbook = async (products: Product[]) => {
+  const workbook = new ExcelJS.Workbook()
+  const worksheet = workbook.addWorksheet(PRODUCT_FEED_DEFINITIONS.identifiers.worksheetName)
+  const worksheetInfo = workbook.addWorksheet('ReferenceData')
+
+  worksheet.columns = [
+    { key: 'sku', header: 'Sku' },
+    { key: 'identifierType', header: 'Identifier Type' },
+    { key: 'identifierValue', header: 'Identifier Value' },
+  ]
+  worksheetInfo.columns = [{ key: 'identifierTypes', header: 'Identifier Types' }]
+  worksheetInfo.getColumn('identifierTypes').values = ['Identifier Types', ...IDENTIFIER_TYPE_LABELS]
+
+  for (const product of products) {
+    for (const identifier of product.identifiers || []) {
+      worksheet.addRow({
+        sku: product.sku,
+        identifierType: getIdentifierTypeLabel(identifier.type),
+        identifierValue: identifier.value,
+      })
+    }
+  }
+
+  worksheet.getColumn('sku').eachCell((cell) => {
+    cell.fill = { type: 'pattern', pattern: 'lightGray' }
+    cell.protection = { locked: true }
+  })
+  worksheet.getColumn('identifierType').eachCell((cell) => {
+    cell.dataValidation = {
+      type: 'list',
+      allowBlank: false,
+      formulae: ['=ReferenceData!$A$2:$A$999'],
+      error: 'Please use the DropDown to select a valid value',
+      errorTitle: 'Invalid input',
+    }
+    cell.protection = { locked: false }
+  })
+  worksheet.getColumn('identifierValue').eachCell((cell) => {
+    cell.dataValidation = {
+      type: 'textLength',
+      operator: 'greaterThan',
+      showErrorMessage: true,
+      allowBlank: false,
+      formulae: [0],
+      errorTitle: 'Invalid input',
+      error: 'Identifier Value is required',
+    }
+    cell.protection = { locked: false }
+  })
+
+  await protectWorksheet(worksheet)
+  await protectWorksheet(worksheetInfo)
+
+  return workbook.xlsx.writeBuffer()
+}
+
+const buildReorderingPointWorkbook = async (products: Product[]) => {
+  const workbook = new ExcelJS.Workbook()
+  const worksheet = workbook.addWorksheet(PRODUCT_FEED_DEFINITIONS.reorderingPoint.worksheetName)
+  const worksheetInfo = workbook.addWorksheet('ReferenceData')
+
+  worksheet.columns = [
+    { key: 'sku', header: 'Sku' },
+    { key: 'isActive', header: 'isActive' },
+    { key: 'orderFrequency', header: 'orderFrequency' },
+    { key: 'leadTimeSC', header: 'leadTimeSC' },
+    { key: 'daysOfStockSC', header: 'daysOfStockSC' },
+    { key: 'manualLeadTime', header: 'manualLeadTime' },
+  ]
+  worksheetInfo.columns = [{ key: 'booleanValues', header: 'Boolean Values' }]
+  worksheetInfo.getColumn('booleanValues').values = ['Boolean Values', 'TRUE', 'FALSE']
+
+  for (const product of products) {
+    worksheet.addRow({
+      sku: product.sku,
+      isActive: product.hideReorderingPoints ? 'FALSE' : 'TRUE',
+      orderFrequency: product.orderFrequency ?? 0,
+      leadTimeSC: product.leadTimeSC ?? 0,
+      daysOfStockSC: product.daysOfStockSC ?? product.recommendedDaysOfStock ?? 0,
+      manualLeadTime: product.manualLeadTime ?? 0,
+    })
+  }
+
+  worksheet.getColumn('sku').eachCell((cell) => {
+    cell.fill = { type: 'pattern', pattern: 'lightGray' }
+    cell.protection = { locked: true }
+  })
+  worksheet.getColumn('isActive').eachCell((cell) => {
+    cell.dataValidation = {
+      type: 'list',
+      allowBlank: false,
+      formulae: ['=ReferenceData!$A$2:$A$3'],
+      error: 'Please use TRUE or FALSE',
+      errorTitle: 'Invalid input',
+    }
+    cell.protection = { locked: false }
+  })
+
+  for (const columnKey of ['orderFrequency', 'leadTimeSC', 'daysOfStockSC', 'manualLeadTime']) {
+    worksheet.getColumn(columnKey).eachCell((cell) => {
+      cell.dataValidation = {
+        type: 'decimal',
+        operator: 'greaterThanOrEqual',
+        allowBlank: false,
+        showErrorMessage: true,
+        formulae: [0],
+        errorTitle: 'Invalid input',
+        error: `${columnKey} must be greater than or equal to 0`,
+      }
+      cell.protection = { locked: false }
+    })
+  }
+
+  await protectWorksheet(worksheet)
+  await protectWorksheet(worksheetInfo)
+
+  return workbook.xlsx.writeBuffer()
 }
 
 self.onmessage = async (event: MessageEvent<ExportProductsTemplateMessage>) => {
-  const { products, brands, suppliers, categories } = event.data
+  const { products, brands, suppliers, categories, feedType = 'general' } = event.data
 
   try {
+    if (feedType === 'identifiers') {
+      const buffer = await buildIdentifiersWorkbook(products)
+      self.postMessage({ buffer, error: null })
+      return
+    }
+
+    if (feedType === 'reorderingPoint') {
+      const buffer = await buildReorderingPointWorkbook(products)
+      self.postMessage({ buffer, error: null })
+      return
+    }
+
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('Product Details Template')
     const worksheetInfo = workbook.addWorksheet('ReferenceData')
