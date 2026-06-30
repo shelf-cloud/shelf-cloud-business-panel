@@ -1,4 +1,4 @@
-import { FormGroup, Label } from 'reactstrap'
+import { FormGroup, Label } from '@/components/migration-ui'
 
 import SelectMultipleDropDown, { SelectMultipleOptions } from '../SelectMultipleDropDown'
 

@@ -27,7 +27,7 @@ import { DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuS
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import { ChevronDownIcon } from 'lucide-react'
 import moment from 'moment'
-import { Card, CardBody, Collapse, Container, Row } from 'reactstrap'
+import { Card, CardBody, Collapse, Container, Row } from '@/components/migration-ui'
 
 import RPAIForecastDrawer from '@/features/reordering-points/RPAIForecastDrawer'
 

@@ -7,7 +7,7 @@ import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 import * as Yup from 'yup'
 
 type CloneProductModal = {
@@ -119,7 +119,7 @@ const CloneProductModal = ({ cloneProductModal, setcloneProductModal }: Props) =
                 </Label>
                 <Input
                   type='text'
-                  className='form-control fs-7'
+                  className='fs-7'
                   placeholder='Title...'
                   id='title'
                   name='title'
@@ -138,7 +138,7 @@ const CloneProductModal = ({ cloneProductModal, setcloneProductModal }: Props) =
                 </Label>
                 <Input
                   type='text'
-                  className='form-control fs-7 text-uppercase'
+                  className='fs-7 text-uppercase'
                   placeholder='Sku...'
                   id='sku'
                   name='sku'
@@ -160,7 +160,7 @@ const CloneProductModal = ({ cloneProductModal, setcloneProductModal }: Props) =
                 </Label>
                 <Input
                   type='text'
-                  className='form-control fs-7 text-uppercase'
+                  className='fs-7 text-uppercase'
                   placeholder='UPC...'
                   id='upc'
                   name='upc'

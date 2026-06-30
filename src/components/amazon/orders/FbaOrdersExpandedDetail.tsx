@@ -4,7 +4,7 @@ import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { FBAOrder, FBAOrderItem } from '@typesTs/amazon/orders'
 import { ExpanderComponentProps } from 'react-data-table-component'
-import { Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, Row } from '@/components/migration-ui'
 
 type Props = {
   data: FBAOrder

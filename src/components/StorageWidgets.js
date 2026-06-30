@@ -4,7 +4,7 @@ import React, { useContext } from 'react'
 import AppContext from '@context/AppContext'
 import moment from 'moment'
 import CountUp from 'react-countup'
-import { Card, CardBody, Col, Row } from 'reactstrap'
+import { Card, CardBody, Col, Row } from '@/components/migration-ui'
 
 const StorageWidgets = ({ previousCharge, previousChargeDate, currentBalance, binsUSed }) => {
   const { state } = useContext(AppContext)

@@ -25,7 +25,7 @@ import type { Product } from '@typings'
 import axios from 'axios'
 import { parseAsString, parseAsStringLiteral, useQueryStates } from 'nuqs'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from 'reactstrap'
+import { Button, Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from '@/components/migration-ui'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)

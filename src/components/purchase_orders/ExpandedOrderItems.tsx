@@ -9,7 +9,7 @@ import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { PoItemArrivalHistory, PurchaseOrder, PurchaseOrderItem } from '@typesTs/purchaseOrders'
 import { DebounceInput } from 'react-debounce-input'
-import { UncontrolledTooltip } from 'reactstrap'
+import { UncontrolledTooltip } from '@/components/migration-ui'
 
 type Props = {
   activeTab: string

@@ -17,7 +17,7 @@ import AppContext from '@context/AppContext'
 import { GetLabelsResponse, InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Badge, Button, Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, Spinner, TabContent, TabPane } from 'reactstrap'
+import { Badge, Button, Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, Spinner, TabContent, TabPane } from '@/components/migration-ui'
 import useSWR, { useSWRConfig } from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

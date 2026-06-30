@@ -4,7 +4,7 @@ import { useRef, useState } from 'react'
 import { useClickOutside } from '@hooks/useClickOutside'
 
 import SimpleSelect, { SelectOptionType, SelectSingleValueType } from '@components/Common/SimpleSelect'
-import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap'
+import { Dropdown, DropdownMenu, DropdownToggle } from '@/components/migration-ui'
 
 type Props = {
   selected: SelectSingleValueType

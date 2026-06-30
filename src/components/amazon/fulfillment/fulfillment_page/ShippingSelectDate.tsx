@@ -2,7 +2,7 @@ import { useRef } from 'react'
 
 import moment from 'moment'
 import Flatpickr from 'react-flatpickr'
-import { Button } from 'reactstrap'
+import { Button } from '@/components/migration-ui'
 
 type Props = {
   id: string

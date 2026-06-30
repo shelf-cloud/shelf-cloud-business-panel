@@ -9,7 +9,7 @@ import { DeductionType } from '@typesTs/commercehub/deductions'
 import moment from 'moment'
 import DataTable from 'react-data-table-component'
 import { toast } from 'react-toastify'
-import { UncontrolledTooltip } from 'reactstrap'
+import { UncontrolledTooltip } from '@/components/migration-ui'
 
 type EditComment = {
   show: boolean

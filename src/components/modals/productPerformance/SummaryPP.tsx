@@ -5,7 +5,7 @@ import AppContext from '@context/AppContext'
 import { AMAZON_MARKETPLACES_ID } from '@lib/AmzConstants'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { Marketplace, ProductPerformance, SummaryProductPerformance } from '@typesTs/marketplaces/productPerformance'
-import { Button, Card, CardBody, CardHeader, Col, Collapse, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col, Collapse, Modal, ModalBody, ModalFooter, ModalHeader, Row } from '@/components/migration-ui'
 
 import { datesArraySummary, marketplacesSummary } from './helperFunctions'
 

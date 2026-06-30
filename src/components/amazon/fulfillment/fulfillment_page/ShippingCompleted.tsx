@@ -11,7 +11,9 @@ import { CleanStatus } from '@lib/SkuFormatting'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { InboundPlan, PlacementOption } from '@typesTs/amazon/fulfillments/fulfillment'
 import moment from 'moment'
-import { Button, Card, CardBody, CardHeader, Col, Input, Label, Row } from 'reactstrap'
+import { Input } from 'reactstrap'
+
+import { Button, Card, CardBody, CardHeader, Col, Label, Row } from '@/components/migration-ui'
 
 import { validateIfPlacementOptionHasSPD } from './shippingLTL/helperFunctions'
 

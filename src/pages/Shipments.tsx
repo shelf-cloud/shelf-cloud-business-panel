@@ -17,7 +17,7 @@ import { Shipment } from '@typesTs/shipments/shipments'
 import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Container, Spinner } from 'reactstrap'
+import { Button, Card, CardBody, Container, Spinner } from '@/components/migration-ui'
 import useSWRInfinite from 'swr/infinite'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

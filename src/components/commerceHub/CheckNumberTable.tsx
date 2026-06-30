@@ -7,7 +7,7 @@ import { FormatCurrency } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { DashboardResponse } from '@typesTs/commercehub/dashboard'
 import moment from 'moment'
-import { Card, CardBody, CardHeader, Col } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col } from '@/components/migration-ui'
 
 import { getTotalPaid } from './helperFunctions'
 

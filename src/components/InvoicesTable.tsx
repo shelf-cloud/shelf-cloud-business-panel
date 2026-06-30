@@ -7,7 +7,7 @@ import { FormatCurrency } from '@lib/FormatNumbers'
 import { InvoiceList } from '@typings'
 import moment from 'moment'
 import DataTable from 'react-data-table-component'
-import { Button } from 'reactstrap'
+import { Button } from '@/components/migration-ui'
 
 type Props = {
   filteredItems: InvoiceList[]

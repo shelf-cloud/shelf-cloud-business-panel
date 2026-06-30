@@ -1,7 +1,8 @@
 import React, { useContext } from 'react'
 
 import AppContext from '@context/AppContext'
-import { Input, InputGroup, InputGroupText } from 'reactstrap'
+
+import { Input, InputGroup, InputGroupText } from '@/components/migration-ui'
 
 type Props = {
   inputName: string
@@ -25,7 +26,7 @@ const InputCurrencyFilter = ({ inputName, value, isInvalid, handleChange, handle
       <InputGroupText className='fs-5 py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
       <Input
         type='number'
-        className='form-control fs-6 m-0'
+        className='fs-6 m-0'
         bsSize='sm'
         style={{ padding: '0.2rem 0.9rem' }}
         placeholder='Min'

@@ -16,7 +16,7 @@ import { getSession } from 'next-auth/react'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Card, CardBody, CardHeader, Container } from 'reactstrap'
+import { Card, CardBody, CardHeader, Container } from '@/components/migration-ui'
 import useSWR, { mutate } from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

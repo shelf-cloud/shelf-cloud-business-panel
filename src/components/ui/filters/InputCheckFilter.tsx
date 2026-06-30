@@ -1,6 +1,8 @@
 import React from 'react'
 
-import { Input, Label } from 'reactstrap'
+import { Input } from 'reactstrap'
+
+import { Label } from '@/components/migration-ui'
 
 type Props = {
   inputLabel: string

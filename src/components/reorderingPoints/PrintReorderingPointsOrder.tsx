@@ -6,7 +6,7 @@ import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/Forma
 import { NoImageAdress } from '@lib/assetsConstants'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import moment from 'moment'
-import { DropdownItem } from 'reactstrap'
+import { DropdownItem } from '@/components/migration-ui'
 
 type Props = {
   reorderingPointsOrder: {

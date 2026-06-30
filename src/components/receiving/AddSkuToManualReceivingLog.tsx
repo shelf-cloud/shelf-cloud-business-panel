@@ -8,7 +8,7 @@ import axios from 'axios'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 interface SkuInListToAddToPo extends SkuToAddPo {

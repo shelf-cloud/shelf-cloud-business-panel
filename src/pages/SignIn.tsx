@@ -11,7 +11,7 @@ import LinesImage from '@assets/images/signin-lines.png'
 import PuntosImage from '@assets/images/signin-puntos.png'
 import { getSession, signIn } from '@auth/client'
 import ForgotPasswordModal from '@components/ForgotPasswordModal'
-import { Button, Label } from 'reactstrap'
+import { Button, Label } from '@/components/migration-ui'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)

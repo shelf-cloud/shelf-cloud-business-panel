@@ -5,7 +5,7 @@ import AppContext from '@context/AppContext'
 import { SplitNames } from '@hooks/reorderingPoints/useRPSplits'
 import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
-import { Button, Card, CardBody, Col, Row } from 'reactstrap'
+import { Button, Card, CardBody, Col, Row } from '@/components/migration-ui'
 
 type Props = {
   reorderingPointsOrder: {

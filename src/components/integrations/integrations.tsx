@@ -6,7 +6,7 @@ import AmazonAuthButton from '@components/amazon/AmazonAuthButton'
 import AmazonReconnectButton from '@components/amazon/AmazonReconnectButton'
 import AppContext from '@context/AppContext'
 import { NoImageAdress } from '@lib/assetsConstants'
-import { Button, Card, CardBody, Col, Row } from 'reactstrap'
+import { Button, Card, CardBody, Col, Row } from '@/components/migration-ui'
 
 type Props = {
   env: string

@@ -8,7 +8,7 @@ import AppContext from '@context/AppContext'
 import { FormatIntPercentage } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { ConfirmedShipments, InboundPlan } from '@typesTs/amazon/fulfillments/fulfillment'
-import { Button, Card, CardBody, CardFooter, CardHeader, Spinner } from 'reactstrap'
+import { Button, Card, CardBody, CardFooter, CardHeader, Spinner } from '@/components/migration-ui'
 
 type Props = {
   inboundPlan: InboundPlan

@@ -4,7 +4,9 @@ import { useClickOutside } from '@hooks/useClickOutside'
 import { Button as ShadcnButton } from '@shadcn/ui/button'
 import { Form, Formik } from 'formik'
 import { ChevronDownIcon } from 'lucide-react'
-import { Button, Col, Input, InputGroup, InputGroupText, Label } from 'reactstrap'
+import { Input, InputGroup, InputGroupText } from 'reactstrap'
+
+import { Button, Col, Label } from '@/components/migration-ui'
 import * as Yup from 'yup'
 
 type Props = {

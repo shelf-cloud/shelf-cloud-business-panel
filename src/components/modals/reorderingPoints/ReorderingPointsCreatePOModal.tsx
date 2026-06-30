@@ -18,6 +18,8 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
+import { useSWRConfig } from 'swr'
+
 import {
   Button,
   Col,
@@ -35,8 +37,7 @@ import {
   Row,
   Spinner,
   UncontrolledButtonDropdown,
-} from 'reactstrap'
-import { useSWRConfig } from 'swr'
+} from '@/components/migration-ui'
 import * as Yup from 'yup'
 
 export type Splits = {
@@ -283,7 +284,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                   </span>
                   <Input
                     type='text'
-                    className='form-control fs-6'
+                    className='fs-6'
                     bsSize='sm'
                     style={{ padding: '0.2rem 0.9rem' }}
                     placeholder='Order Number...'

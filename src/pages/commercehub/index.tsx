@@ -12,7 +12,7 @@ import { DashboardResponse } from '@typesTs/commercehub/dashboard'
 import { CommerceHubStoresResponse } from '@typesTs/commercehub/invoices'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Col, Container, Row } from 'reactstrap'
+import { Button, Col, Container, Row } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

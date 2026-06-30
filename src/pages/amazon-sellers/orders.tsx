@@ -14,7 +14,7 @@ import axios from 'axios'
 import moment from 'moment'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Card, CardBody, Col, Container, Row } from 'reactstrap'
+import { Card, CardBody, Col, Container, Row } from '@/components/migration-ui'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']

@@ -5,7 +5,7 @@ import SimpleSelect, { SelectSingleValueType } from '@components/Common/SimpleSe
 import InputCheckFilter from '@components/ui/filters/InputCheckFilter'
 import { useMarketplaceListingsQueries } from '@hooks/products/useMarketplaceListingsQuery'
 import { Form, Formik } from 'formik'
-import { Button, Card, CardBody, Col, FormGroup, Label, Row } from 'reactstrap'
+import { Button, Card, CardBody, Col, FormGroup, Label, Row } from '@/components/migration-ui'
 import * as Yup from 'yup'
 
 type Props = {

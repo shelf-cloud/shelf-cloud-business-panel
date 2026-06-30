@@ -4,7 +4,7 @@ import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 
 type EditComment = {
   show: boolean

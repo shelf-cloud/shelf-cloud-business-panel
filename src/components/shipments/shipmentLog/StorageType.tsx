@@ -5,7 +5,7 @@ import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { StorageProduct } from '@typesTs/storage/storage'
-import { Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, Row } from '@/components/migration-ui'
 
 type Props = {
   data: { [inventoryId: string]: StorageProduct }

@@ -11,7 +11,7 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 import * as Yup from 'yup'
 
 type Props = {
@@ -182,7 +182,7 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     <Input
                       type='text'
                       bsSize='sm'
-                      className='form-control fs-6'
+                      className='fs-6'
                       style={{ padding: '0.2rem 0.9rem' }}
                       id='orderNumber'
                       name='orderNumber'
@@ -224,7 +224,7 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     </Label>
                     <Input
                       type='number'
-                      className='form-control fs-6'
+                      className='fs-6'
                       id='numberOfPallets'
                       name='numberOfPallets'
                       onChange={validation.handleChange}

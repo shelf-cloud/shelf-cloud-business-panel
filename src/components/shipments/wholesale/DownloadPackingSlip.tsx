@@ -1,6 +1,6 @@
 import { Shipment } from '@typesTs/shipments/shipments'
 import ExcelJS from 'exceljs'
-import { DropdownItem } from 'reactstrap'
+import { DropdownItem } from '@/components/migration-ui'
 
 import { shelf_cloud_blue_h, shelf_cloud_signature } from '@/lib/assetsConstants'
 

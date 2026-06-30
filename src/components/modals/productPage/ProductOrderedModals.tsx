@@ -5,7 +5,7 @@ import { FormatIntNumber } from '@lib/FormatNumbers'
 import { ProductPO } from '@typesTs/products/productPOs'
 import axios from 'axios'
 import DataTable from 'react-data-table-component'
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap'
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 type Props = {

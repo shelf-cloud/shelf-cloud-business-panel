@@ -5,7 +5,7 @@ import AppContext from '@context/AppContext'
 import { useRPNewForecast } from '@hooks/reorderingPoints/useRPNewForcast'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 import { useSWRConfig } from 'swr'
 
 type Props = {

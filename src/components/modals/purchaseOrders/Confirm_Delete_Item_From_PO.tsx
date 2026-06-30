@@ -8,7 +8,7 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import { Split } from '@typesTs/purchaseOrders'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Modal, ModalBody, ModalHeader, Spinner } from 'reactstrap'
+import { Button, Modal, ModalBody, ModalHeader, Spinner } from '@/components/migration-ui'
 import { useSWRConfig } from 'swr'
 
 export type DeleteItemFromOrderType = {

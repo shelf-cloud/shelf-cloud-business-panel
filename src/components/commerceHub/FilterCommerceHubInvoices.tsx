@@ -6,7 +6,9 @@ import { useClickOutside } from '@hooks/useClickOutside'
 import SimpleSelect, { SelectOptionType, SelectSingleValueType } from '@components/Common/SimpleSelect'
 import { CommerceHubStore } from '@typesTs/commercehub/invoices'
 import { DebounceInput } from 'react-debounce-input'
-import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle, Input, Label } from 'reactstrap'
+import { Input } from 'reactstrap'
+
+import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle, Label } from '@/components/migration-ui'
 
 export type InvoiceCommerceHubFiltersType = {
   onlyOverdue: boolean

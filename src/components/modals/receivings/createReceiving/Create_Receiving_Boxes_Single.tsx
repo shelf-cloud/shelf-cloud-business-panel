@@ -6,7 +6,7 @@ import AppContext from '@context/AppContext'
 import { SingleSkuBoxes } from '@hooks/receivings/useReceivingsBoxes'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
-import { Button } from 'reactstrap'
+import { Button } from '@/components/migration-ui'
 
 type Props = {
   singleSkuPackages: SingleSkuBoxes

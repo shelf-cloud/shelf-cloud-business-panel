@@ -5,7 +5,7 @@ import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { PoBalance } from '@typesTs/purchaseOrders'
 import moment from 'moment'
-import { Col, Modal, ModalBody, ModalHeader, Row } from 'reactstrap'
+import { Col, Modal, ModalBody, ModalHeader, Row } from '@/components/migration-ui'
 
 type Props = {
   poBalanceListModal: {

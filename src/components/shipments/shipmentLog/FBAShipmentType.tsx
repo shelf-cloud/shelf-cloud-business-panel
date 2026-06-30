@@ -8,7 +8,7 @@ import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { KitChildren, Shipment, ShipmentOrderItem } from '@typesTs/shipments/shipments'
 import moment from 'moment'
-import { Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, Row } from '@/components/migration-ui'
 
 import ShipmentCarrierStatusBar from './ShipmentCarrierStatusBar'
 import ShipmentTrackingNumber from './ShipmentTrackingNumber'

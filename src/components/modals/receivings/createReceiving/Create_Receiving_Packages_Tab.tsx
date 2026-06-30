@@ -5,7 +5,7 @@ import MultiSkusPerBox from '@assets/images/multi-sku-per-box.png'
 import OneBoxAllSkus from '@assets/images/one-box-all-skus.png'
 import SingleSkuPerBox from '@assets/images/single-sku-per-box.png'
 import { AddSKUToMultiSKUBoxType, MultiSkuBoxes, SingleSkuBoxes } from '@hooks/receivings/useReceivingsBoxes'
-import { Button, Col, Label, Row } from 'reactstrap'
+import { Button, Col, Label, Row } from '@/components/migration-ui'
 
 import Create_Receiving_Boxes_Box from './Create_Receiving_Boxes_Box'
 import Create_Receiving_Boxes_Multi from './Create_Receiving_Boxes_Multi'

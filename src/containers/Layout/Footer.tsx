@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Col, Container, Row } from 'reactstrap'
+import { Col, Container, Row } from '@/components/migration-ui'
 
 const Footer = () => {
   return (

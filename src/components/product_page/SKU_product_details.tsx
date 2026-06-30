@@ -5,7 +5,7 @@ import { FormatCurrency } from '@lib/FormatNumbers'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Row, UncontrolledTooltip } from 'reactstrap'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Row, UncontrolledTooltip } from '@/components/migration-ui'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -177,7 +177,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                       <Input
                         disabled
                         type='text'
-                        className='form-control fs-6'
+                        className='fs-6'
                         style={{ minWidth: '80px' }}
                         placeholder='sku...'
                         id='sku'
@@ -196,7 +196,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                       <Input
                         disabled
                         type='text'
-                        className='form-control fs-6'
+                        className='fs-6'
                         style={{ minWidth: '80px' }}
                         placeholder='upc...'
                         id='upc'
@@ -214,7 +214,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                     <FormGroup>
                       <Input
                         type='text'
-                        className='form-control fs-6'
+                        className='fs-6'
                         style={{ minWidth: '80px' }}
                         placeholder='HTS Code...'
                         id='htsCode'
@@ -232,7 +232,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                     <FormGroup>
                       <Input
                         type='number'
-                        className='form-control fs-6'
+                        className='fs-6'
                         placeholder='defaultPrice...'
                         id='defaultPrice'
                         name='defaultPrice'
@@ -250,7 +250,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                     <FormGroup>
                       <Input
                         type='number'
-                        className='form-control fs-6'
+                        className='fs-6'
                         placeholder='msrp...'
                         id='msrp'
                         name='msrp'
@@ -268,7 +268,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                     <FormGroup>
                       <Input
                         type='number'
-                        className='form-control fs-6'
+                        className='fs-6'
                         placeholder='map...'
                         id='map'
                         name='map'
@@ -286,7 +286,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                     <FormGroup>
                       <Input
                         type='number'
-                        className='form-control fs-6'
+                        className='fs-6'
                         placeholder='floor...'
                         id='floor'
                         name='floor'
@@ -304,7 +304,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                     <FormGroup>
                       <Input
                         type='number'
-                        className='form-control fs-6'
+                        className='fs-6'
                         placeholder='ceilling...'
                         id='ceilling'
                         name='ceilling'

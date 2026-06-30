@@ -6,7 +6,7 @@ import { FormatCurrency } from '@lib/FormatNumbers'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -93,7 +93,7 @@ const Add_Payment_Modal = ({}: Props) => {
                 </Label>
                 <Input
                   type='date'
-                  className='form-control fs-6'
+                  className='fs-6'
                   bsSize='sm'
                   id='paymentDate'
                   name='paymentDate'
@@ -113,7 +113,7 @@ const Add_Payment_Modal = ({}: Props) => {
                 <Input
                   type='number'
                   onWheel={(e: any) => e.currentTarget.blur()}
-                  className='form-control fs-6'
+                  className='fs-6'
                   bsSize='sm'
                   id='amount'
                   name='amount'
@@ -135,7 +135,7 @@ const Add_Payment_Modal = ({}: Props) => {
                 </Label>
                 <Input
                   type='textarea'
-                  className='form-control fs-6'
+                  className='fs-6'
                   bsSize='sm'
                   id='comment'
                   name='comment'

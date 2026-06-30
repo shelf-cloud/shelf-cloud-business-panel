@@ -1,6 +1,6 @@
 import { Marketplace } from '@typesTs/marketplaces/productPerformance'
 import DataTable from 'react-data-table-component'
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap'
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from '@/components/migration-ui'
 
 type Props = {
   showUnitsSoldDetailsModal: {

@@ -5,7 +5,7 @@ import { Identifier } from '@typings'
 import axios from 'axios'
 import { Field, FieldArray, Form, Formik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, FormFeedback, FormGroup, Input } from 'reactstrap'
+import { Button, Col, FormFeedback, FormGroup, Input } from '@/components/migration-ui'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -146,7 +146,7 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
                         <Input
                           disabled
                           type='text'
-                          className='form-control fs-6'
+                          className='fs-6'
                           style={{ minWidth: '150px', padding: '0.2rem 0.9rem' }}
                           placeholder='Upc...'
                           id='upc'
@@ -175,7 +175,7 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
                             <FormGroup className='createOrder_inputs'>
                               <Input
                                 type='text'
-                                className='form-control fs-6'
+                                className='fs-6'
                                 style={{ padding: '0.2rem 0.9rem' }}
                                 placeholder='Asin...'
                                 id='asin'
@@ -196,7 +196,7 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
                             <FormGroup className='createOrder_inputs'>
                               <Input
                                 type='text'
-                                className='form-control fs-6'
+                                className='fs-6'
                                 style={{ padding: '0.2rem 0.9rem' }}
                                 placeholder='FNSKU...'
                                 id='fnsku'
@@ -248,7 +248,7 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
                                   <FormGroup className='createOrder_inputs'>
                                     <Input
                                       type='text'
-                                      className='form-control align-middle fs-6'
+                                      className='align-middle fs-6'
                                       disabled={!IDENTIFIERS_TYPES[values.identifiers[index].type as keyof typeof IDENTIFIERS_TYPES].options.modified}
                                       style={{
                                         padding: '0.2rem 0.9rem',

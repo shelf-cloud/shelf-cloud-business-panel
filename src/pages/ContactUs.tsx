@@ -9,7 +9,7 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import { getSession } from 'next-auth/react'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Col, Container, Form, FormFeedback, FormGroup, Input, Label, Row } from 'reactstrap'
+import { Button, Card, CardBody, Col, Container, Form, FormFeedback, FormGroup, Input, Label, Row } from '@/components/migration-ui'
 import * as Yup from 'yup'
 
 import PlaneImage from '../assets/images/contactus-plane.png'
@@ -114,7 +114,6 @@ function ContactUs() {
                               </Label>
                               <Input
                                 type='text'
-                                className='form-control'
                                 placeholder='Company Name...'
                                 id='companyName'
                                 name='companyName'
@@ -131,7 +130,6 @@ function ContactUs() {
                               </Label>
                               <Input
                                 type='text'
-                                className='form-control'
                                 placeholder='Email Address...'
                                 id='email'
                                 name='email'
@@ -148,7 +146,6 @@ function ContactUs() {
                               </Label>
                               <Input
                                 type='text'
-                                className='form-control'
                                 placeholder='Subject...'
                                 id='subject'
                                 name='subject'
@@ -167,7 +164,7 @@ function ContactUs() {
                               </Label>
                               <Input
                                 type='textarea'
-                                className='form-control flex-grow-1 fs-5'
+                                className='flex-grow-1 fs-5'
                                 placeholder='Enter your message here'
                                 id='message'
                                 name='message'

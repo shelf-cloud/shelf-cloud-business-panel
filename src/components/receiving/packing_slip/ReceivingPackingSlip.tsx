@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import { OrderRowType } from '@typings'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { DropdownItem } from 'reactstrap'
+import { DropdownItem } from '@/components/migration-ui'
 
 type Props = {
   receiving: OrderRowType

@@ -10,7 +10,7 @@ import AppContext from '@context/AppContext'
 import { AmazonFulfillmentSku, AmzDimensions, Dimensions, FBAShipmentHisotry, FilterProps } from '@typesTs/amazon/fulfillments'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from 'reactstrap'
+import { Button, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from '@/components/migration-ui'
 
 import FilterListings from '../FilterListings'
 import MasterBoxesTable from './MasterBoxesTable'

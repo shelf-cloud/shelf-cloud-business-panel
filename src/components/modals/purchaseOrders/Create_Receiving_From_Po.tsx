@@ -11,6 +11,7 @@ import { useWarehouses } from '@hooks/warehouses/useWarehouse'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
+
 import {
   Alert,
   Button,
@@ -30,7 +31,7 @@ import {
   Spinner,
   TabContent,
   TabPane,
-} from 'reactstrap'
+} from '@/components/migration-ui'
 import useSWR, { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -280,7 +281,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                   <Input
                     disabled={validation.values.isNewReceiving === 'false'}
                     type='text'
-                    className='form-control fs-6'
+                    className='fs-6'
                     id='orderNumber'
                     name='orderNumber'
                     bsSize='sm'

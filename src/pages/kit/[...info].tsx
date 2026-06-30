@@ -21,7 +21,7 @@ import CopyTextToClipboard from '@components/ui/CopyTextToClipboard'
 import AppContext from '@context/AppContext'
 import { ProductDetails } from '@typings'
 import axios from 'axios'
-import { Button, Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, Spinner, TabContent, TabPane } from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, Spinner, TabContent, TabPane } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

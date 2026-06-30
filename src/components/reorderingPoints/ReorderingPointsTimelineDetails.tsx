@@ -4,7 +4,7 @@ import AppContext from '@context/AppContext'
 import { ExpandedRowProps } from '@hooks/reorderingPoints/useRPProductSale'
 import { useRPProductTimeline } from '@hooks/reorderingPoints/useRPProductTimeline'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
-import { Card, CardBody, CardHeader, Col, Spinner } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, Spinner } from '@/components/migration-ui'
 
 import ReorderingPointsTimeLine from './ReorderingPointsTimeLine'
 

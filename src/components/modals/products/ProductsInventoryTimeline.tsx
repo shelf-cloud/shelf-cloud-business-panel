@@ -1,7 +1,7 @@
  
  
 import ProductsQtyTimeline from '@components/products/ProductsQtyTimeline'
-import { Modal, ModalBody, ModalHeader } from 'reactstrap'
+import { Modal, ModalBody, ModalHeader } from '@/components/migration-ui'
 
 type Props = {
   dates: string[]

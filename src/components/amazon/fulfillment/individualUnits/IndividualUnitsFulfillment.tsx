@@ -6,7 +6,7 @@ import CreateIndvUnitsInboundPlanModal from '@components/modals/amazon/CreateInd
 import InboundFBAHistoryModal from '@components/modals/amazon/InboundFBAHistoryModal'
 import SearchInput from '@components/ui/SearchInput'
 import { AmazonFulfillmentSku, AmzDimensions, Dimensions, FBAShipmentHisotry, FilterProps } from '@typesTs/amazon/fulfillments'
-import { Button, Col, Row } from 'reactstrap'
+import { Button, Col, Row } from '@/components/migration-ui'
 
 import FilterListings from '../FilterListings'
 import IndividualUnitsTable from './IndividualUnitsTable'

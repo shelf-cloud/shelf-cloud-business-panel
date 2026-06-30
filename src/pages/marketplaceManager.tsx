@@ -6,7 +6,7 @@ import BreadCrumb from '@components/Common/BreadCrumb'
 import Integrations from '@components/integrations/integrations'
 import MarketplacesFees from '@components/marketplaceManager/MarketplaceFees'
 import { getSession } from 'next-auth/react'
-import { Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from '@/components/migration-ui'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)

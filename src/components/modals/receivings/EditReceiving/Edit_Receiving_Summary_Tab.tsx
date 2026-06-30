@@ -5,7 +5,7 @@ import AppContext from '@context/AppContext'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { ShipmentOrderItem } from '@typings'
-import { Col } from 'reactstrap'
+import { Col } from '@/components/migration-ui'
 
 type Props = {
   orderItems: ShipmentOrderItem[]

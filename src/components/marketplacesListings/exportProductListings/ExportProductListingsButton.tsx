@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import { MarketplaceListingsProduct } from '@hooks/products/useMarketplaceListings'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { DropdownItem } from 'reactstrap'
+import { DropdownItem } from '@/components/migration-ui'
 
 type Props = {
   products: MarketplaceListingsProduct[]

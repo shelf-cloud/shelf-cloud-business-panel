@@ -5,7 +5,7 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import DataTable from 'react-data-table-component'
 import { toast } from 'react-toastify'
-import { Button, Form, FormFeedback, FormGroup, Input, Label } from 'reactstrap'
+import { Button, Form, FormFeedback, FormGroup, Input, Label } from '@/components/migration-ui'
 import useSWR from 'swr'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
@@ -181,7 +181,7 @@ const Brands = ({}: Props) => {
               </Label>
               <Input
                 type='text'
-                className='form-control fs-6'
+                className='fs-6'
                 placeholder='Name...'
                 id='name'
                 name='name'
@@ -199,7 +199,7 @@ const Brands = ({}: Props) => {
               </Label>
               <Input
                 type='text'
-                className='form-control fs-6'
+                className='fs-6'
                 placeholder='Logo...'
                 id='logo'
                 name='logo'
@@ -231,7 +231,7 @@ const Brands = ({}: Props) => {
             </Label>
             <Input
               type='text'
-              className='form-control fs-6'
+              className='fs-6'
               placeholder='Name...'
               id='name'
               name='name'
@@ -249,7 +249,7 @@ const Brands = ({}: Props) => {
             </Label>
             <Input
               type='text'
-              className='form-control fs-6'
+              className='fs-6'
               placeholder='Logo...'
               id='logo'
               name='logo'

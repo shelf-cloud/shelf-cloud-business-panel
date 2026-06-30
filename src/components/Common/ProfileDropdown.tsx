@@ -9,7 +9,7 @@ import flag_of_europe from '@assets/images/flag_of_europe.png'
 import flag_of_usa from '@assets/images/flag_of_usa.png'
 import { signOut, useSession } from '@auth/client'
 import AppContext from '@context/AppContext'
-import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap'
+import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from '@/components/migration-ui'
 
 const ProfileDropdown = () => {
   const { data: session } = useSession()

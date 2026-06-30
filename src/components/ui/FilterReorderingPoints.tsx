@@ -4,7 +4,9 @@ import { memo, useContext } from 'react'
 import SimpleSelect, { SelectSingleValueType } from '@components/Common/SimpleSelect'
 import AppContext from '@context/AppContext'
 import { Form, Formik } from 'formik'
-import { Button, Card, CardBody, Col, FormGroup, Input, InputGroup, InputGroupText, Label, Row } from 'reactstrap'
+import { Input, InputGroup, InputGroupText } from 'reactstrap'
+
+import { Button, Card, CardBody, Col, FormGroup, Label, Row } from '@/components/migration-ui'
 import * as Yup from 'yup'
 
 import SelectDropDown from './SelectDropDown'

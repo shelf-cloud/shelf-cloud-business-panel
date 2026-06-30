@@ -15,7 +15,7 @@ import axios from 'axios'
 import moment from 'moment'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Container, Spinner } from 'reactstrap'
+import { Button, Card, CardBody, Container, Spinner } from '@/components/migration-ui'
 import useSWR from 'swr'
 import useSWRInfinite from 'swr/infinite'
 

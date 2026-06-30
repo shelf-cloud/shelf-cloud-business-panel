@@ -11,7 +11,7 @@ import { FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { loadBarcode, sortNumbers, sortStringsCaseInsensitive } from '@lib/helperFunctions'
 import { KitRow } from '@typings'
-import DataTable from 'react-data-table-component'
+import DataTable from '@components/Common/DataTableSC'
 
 import { DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from '@/components/migration-ui'
 

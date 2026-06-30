@@ -7,7 +7,7 @@ import { FormatIntNumber } from '@lib/FormatNumbers'
 import { ListInboundPlan } from '@typesTs/amazon/fulfillments/listInboundPlans'
 import moment from 'moment'
 import DataTable from 'react-data-table-component'
-import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from 'reactstrap'
+import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from '@/components/migration-ui'
 
 type Props = {
   filteredItems: ListInboundPlan[]

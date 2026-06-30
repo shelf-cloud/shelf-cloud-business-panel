@@ -3,7 +3,7 @@ import { useContext } from 'react'
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { StorageBin, StorageRowProduct } from '@typings'
-import { Card, CardBody, Col, Row } from 'reactstrap'
+import { Card, CardBody, Col, Row } from '@/components/migration-ui'
 
 type Props = {
   data: StorageRowProduct

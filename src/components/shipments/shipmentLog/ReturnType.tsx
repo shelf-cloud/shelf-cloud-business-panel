@@ -9,7 +9,7 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import { Shipment, ShipmentOrderItem } from '@typesTs/shipments/shipments'
 import axios from 'axios'
 import moment from 'moment'
-import { Button, Card, CardBody, CardHeader, Col, Row, Spinner } from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col, Row, Spinner } from '@/components/migration-ui'
 
 import ShipmentCarrierStatusBar from './ShipmentCarrierStatusBar'
 import ShipmentTrackingNumber from './ShipmentTrackingNumber'

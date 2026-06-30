@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import React from 'react'
 
-import { Container } from 'reactstrap'
+import { Container } from '@/components/migration-ui'
 
 const Animation = dynamic(() => import('@components/Common/Animation'), {
   ssr: false,

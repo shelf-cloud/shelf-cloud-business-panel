@@ -6,7 +6,7 @@ import { FormatIntNumber } from '@lib/FormatNumbers'
 import { FBAProductsWidgetResponse, ProductsWidgetsResponse } from '@typesTs/products/productsWidgets'
 import axios from 'axios'
 import CountUp from 'react-countup'
-import { Button, Card, CardBody, Col, Row } from 'reactstrap'
+import { Button, Card, CardBody, Col, Row } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 type Props = {}

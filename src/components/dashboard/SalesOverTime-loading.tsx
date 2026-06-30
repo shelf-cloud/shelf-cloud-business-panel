@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { Card, CardBody, CardHeader, Col, Spinner } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, Spinner } from '@/components/migration-ui'
 
 const SalesOverTimeLoading = () => {
   return (

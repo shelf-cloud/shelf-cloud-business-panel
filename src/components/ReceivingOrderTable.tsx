@@ -8,7 +8,7 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import { sortNumbers, sortStringsCaseInsensitive } from '@lib/helperFunctions'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
-import { Button } from 'reactstrap'
+import { Button } from '@/components/migration-ui'
 
 type Props = {
   data: ReceivingInventory[]

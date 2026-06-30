@@ -6,7 +6,7 @@ import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { DashboardResponse } from '@typesTs/commercehub/dashboard'
 import CountUp from 'react-countup'
-import { Card, CardBody, Col } from 'reactstrap'
+import { Card, CardBody, Col } from '@/components/migration-ui'
 
 type Props = {
   summary: DashboardResponse

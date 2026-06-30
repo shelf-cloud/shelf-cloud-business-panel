@@ -8,7 +8,7 @@ import { sortNumbers, sortStringsLocaleCompare } from '@lib/helperFunctions'
 import { AddShippingCostModalType, AddTagToOrderType, DeleteReceivingModalType, EditReceivingType, MarkReceivedModalType } from '@pages/receivings'
 import { OrderRowType, ShipmentOrderItem } from '@typings'
 import DataTable from 'react-data-table-component'
-import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from 'reactstrap'
+import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from '@/components/migration-ui'
 
 import ShipmentExpandedDetail from '../ShipmentExpandedDetail'
 import GenerateReceivingLabels from './GenerateReceivingLabels'

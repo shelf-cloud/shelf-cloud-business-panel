@@ -5,7 +5,7 @@ import { ExpandedRowProps, useRPProductSales } from '@hooks/reorderingPoints/use
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
-import { Card, CardBody, CardHeader, Col, Spinner, UncontrolledTooltip } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, Spinner, UncontrolledTooltip } from '@/components/migration-ui'
 
 type Props = {
   data: ReorderingPointsProduct

@@ -6,7 +6,7 @@ import { ReceivingInventory } from '@hooks/receivings/useReceivingInventory'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { sortStringsLocaleCompare } from '@lib/helperFunctions'
-import { Col } from 'reactstrap'
+import { Col } from '@/components/migration-ui'
 
 type Props = {
   orderProducts: ReceivingInventory[]

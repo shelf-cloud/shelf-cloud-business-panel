@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { Card, CardBody, CardHeader, Col } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col } from '@/components/migration-ui'
 
 const SalesOverTimeError = () => {
   return (

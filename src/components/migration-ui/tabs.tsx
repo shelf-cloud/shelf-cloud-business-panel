@@ -46,10 +46,12 @@ function NavItem({ className, tag, ...props }: NavItemProps) {
 export type NavLinkProps = React.ComponentProps<'a'> & {
   active?: boolean
   disabled?: boolean
+  /** reactstrap router-link target — accepted for parity, not applied (use href/onClick). */
+  to?: string
   tag?: React.ElementType
 }
 
-const NavLink = React.forwardRef<HTMLAnchorElement, NavLinkProps>(({ className, active, disabled, tag, ...props }, ref) => {
+const NavLink = React.forwardRef<HTMLAnchorElement, NavLinkProps>(({ className, active, disabled, to: _to, tag, ...props }, ref) => {
   const Comp: React.ElementType = tag ?? 'a'
   return (
     <Comp

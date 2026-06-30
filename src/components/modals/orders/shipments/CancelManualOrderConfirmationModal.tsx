@@ -5,7 +5,7 @@ import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 import * as Yup from 'yup'
 
 type Props = {
@@ -120,7 +120,7 @@ const CancelManualOrderConfirmationModal = ({ showDeleteModal, setshowDeleteModa
                     </Label>
                     <Input
                       type='select'
-                      className='form-control fs-6'
+                      className='fs-6'
                       placeholder='reason...'
                       id='reason'
                       name='reason'

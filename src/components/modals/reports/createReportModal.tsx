@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { PRODUCTS_REPORT_TYPE } from '@features/reports/reportHelpers'
 import { useSkus } from '@hooks/products/useSkus'
 import moment from 'moment'
-import { Button, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 
 import MultiSelectSearchInput, { MultiSelectItem } from '../shared/multi-select-search-input'
 import SelectRangeDates from './SelectRangeDates'

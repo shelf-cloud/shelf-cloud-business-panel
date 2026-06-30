@@ -6,7 +6,7 @@ import { useClickOutside } from '@hooks/useClickOutside'
 import { SelectSingleValueType } from '@components/Common/SimpleSelect'
 import SelectSingleFilter from '@components/ui/filters/SelectSingleFilter'
 import { useWarehouses } from '@hooks/warehouses/useWarehouse'
-import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap'
+import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle } from '@/components/migration-ui'
 
 type Props = {
   searchStatus: SelectSingleValueType

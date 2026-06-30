@@ -23,17 +23,25 @@ Form.displayName = 'MigrationForm'
 export type FormGroupProps = React.ComponentProps<'div'> & {
   /** reactstrap form-check layout flag. */
   check?: boolean
+  /** reactstrap inline form-check flag. */
+  inline?: boolean
   /** reactstrap row layout flag. */
   row?: boolean
   tag?: React.ElementType
 }
 
-function FormGroup({ className, check, row, tag, ...props }: FormGroupProps) {
+function FormGroup({ className, check, inline, row, tag, ...props }: FormGroupProps) {
   const Comp: React.ElementType = tag ?? 'div'
   return (
     <Comp
       data-slot='form-group'
-      className={cn('tw:mb-3', check && 'tw:flex tw:items-center tw:gap-2', row && 'tw:flex tw:flex-wrap', className)}
+      className={cn(
+        'tw:mb-3',
+        check && 'tw:flex tw:items-center tw:gap-2',
+        inline && 'tw:inline-flex tw:items-center tw:gap-2',
+        row && 'tw:flex tw:flex-wrap',
+        className
+      )}
       {...props}
     />
   )

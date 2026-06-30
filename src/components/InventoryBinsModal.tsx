@@ -4,7 +4,7 @@ import AppContext from '@context/AppContext'
 import axios from 'axios'
 import DataTable from 'react-data-table-component'
 // import { Product, RowType } from '@typings'
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap'
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 export interface InventoryBinsResponse {

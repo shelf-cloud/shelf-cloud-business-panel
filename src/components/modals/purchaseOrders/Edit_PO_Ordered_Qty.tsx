@@ -9,7 +9,7 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import { PurchaseOrderItem, Split } from '@typesTs/purchaseOrders'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Input, Modal, ModalBody, ModalHeader, Spinner } from 'reactstrap'
+import { Button, Input, Modal, ModalBody, ModalHeader, Spinner } from '@/components/migration-ui'
 import { useSWRConfig } from 'swr'
 
 export type EditPurchaseOrderQtyType = {
@@ -162,7 +162,7 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
                     <Input
                       type='number'
                       onWheel={(e) => e.currentTarget.blur()}
-                      className='form-control fs-6 m-0 mx-auto'
+                      className='fs-6 m-0 mx-auto'
                       style={{ maxWidth: '60px' }}
                       placeholder='Qty'
                       id='newOrderQty'

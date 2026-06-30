@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import AppContext from '@context/AppContext'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import moment, { min } from 'moment'
-import { Button } from 'reactstrap'
+import { Button } from '@/components/migration-ui'
 
 const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false })
 

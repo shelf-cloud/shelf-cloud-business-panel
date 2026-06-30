@@ -5,7 +5,7 @@ import { FormatIntPercentage } from '@lib/FormatNumbers'
 import { CleanStatus } from '@lib/SkuFormatting'
 import { FBAShipment } from '@typesTs/amazon/fbaShipments.interface'
 import { WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
-import { Button, Col, Spinner } from 'reactstrap'
+import { Button, Col, Spinner } from '@/components/migration-ui'
 
 type Props = {
   shipmentDetails: FBAShipment

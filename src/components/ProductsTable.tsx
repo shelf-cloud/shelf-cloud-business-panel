@@ -10,7 +10,7 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import { loadBarcode, sortNumbers, sortStringsCaseInsensitive } from '@lib/helperFunctions'
 import type { Product } from '@typings'
 import DataTable from 'react-data-table-component'
-import { Badge, Button, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
+import { Badge, Button, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown, UncontrolledTooltip } from '@/components/migration-ui'
 
 import CopyTextToClipboard from './ui/CopyTextToClipboard'
 import SCTooltip from './ui/SCTooltip'

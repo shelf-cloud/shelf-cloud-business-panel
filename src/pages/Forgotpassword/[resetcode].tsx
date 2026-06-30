@@ -6,7 +6,7 @@ import ShelfCloudLogo from '@images/shelfcloud-blue-h.png'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Label, Spinner } from 'reactstrap'
+import { Button, Label, Spinner } from '@/components/migration-ui'
 import * as Yup from 'yup'
 
 type Props = {}

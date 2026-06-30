@@ -6,7 +6,7 @@ import { sortNumbers } from '@lib/helperFunctions'
 import { PurchaseOrder, PurchaseOrderBySkus, PurchaseOrderItem } from '@typesTs/purchaseOrders'
 import DataTable from 'react-data-table-component'
 import { ExpanderComponentProps } from 'react-data-table-component'
-import { Badge, Card } from 'reactstrap'
+import { Badge, Card } from '@/components/migration-ui'
 
 import Expanded_By_Orders from './Expanded_By_Orders'
 import PurchaseOrderActionsDropdown from './PurchaseOrderActionsDropdown'

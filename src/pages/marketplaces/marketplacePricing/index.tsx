@@ -15,7 +15,7 @@ import AppContext from '@context/AppContext'
 import { useMarketplacePricing } from '@hooks/marketplacePricing/useMarketplacePricing'
 import { useMarketplaces } from '@hooks/marketplaces/useMarketplaces'
 import { MKP_Product } from '@typesTs/marketplacePricing/marketplacePricing'
-import { Button, Card, CardBody, CardHeader, Collapse, Container, Nav, NavItem, Row, TabContent, TabPane } from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Collapse, Container, Nav, NavItem, Row, TabContent, TabPane } from '@/components/migration-ui'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)

@@ -13,7 +13,7 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 import useSWR from 'swr'
 import * as Yup from 'yup'
 
@@ -396,7 +396,6 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                   <div className='input-group'>
                     <Input
                       type='text'
-                      className='form-control'
                       bsSize='sm'
                       id='orderNumber'
                       name='inboundPlanName'
@@ -418,7 +417,6 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                   </Label>
                   <Input
                     type='select'
-                    className='form-control'
                     bsSize='sm'
                     id='marketplace'
                     name='marketplace'
@@ -447,7 +445,6 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                   </Label>
                   <Input
                     type='select'
-                    className='form-control'
                     bsSize='sm'
                     id='shipFrom'
                     name='shipFrom'

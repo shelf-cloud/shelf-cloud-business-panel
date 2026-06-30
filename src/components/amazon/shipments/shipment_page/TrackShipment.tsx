@@ -3,7 +3,7 @@ import { useContext } from 'react'
 import AppContext from '@context/AppContext'
 import { FormatIntPercentage } from '@lib/FormatNumbers'
 import { FBAShipment } from '@typesTs/amazon/fbaShipments.interface'
-import { Col } from 'reactstrap'
+import { Col } from '@/components/migration-ui'
 
 type Props = {
   shipmentDetails: FBAShipment

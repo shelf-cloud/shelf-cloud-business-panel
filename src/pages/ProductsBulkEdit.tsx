@@ -8,7 +8,7 @@ import ProductsBulkEditTable from '@components/products/ProductsBulkEditTable'
 import AppContext from '@context/AppContext'
 import { ProductsDetails } from '@typesTs/products/products'
 import axios from 'axios'
-import { Card, CardBody, CardHeader } from 'reactstrap'
+import { Card, CardBody, CardHeader } from '@/components/migration-ui'
 
 type Props = {}
 

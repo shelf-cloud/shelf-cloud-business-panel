@@ -5,7 +5,7 @@ import AppContext from '@context/AppContext'
 import { Shipment } from '@typesTs/shipments/shipments'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Modal, ModalBody, ModalHeader, Spinner } from 'reactstrap'
+import { Button, Modal, ModalBody, ModalHeader, Spinner } from '@/components/migration-ui'
 
 type Props = {
   data: Shipment

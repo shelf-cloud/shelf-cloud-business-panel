@@ -1,4 +1,4 @@
-import { FormFeedback, Input, InputGroup, InputGroupText } from 'reactstrap'
+import { FormFeedback, Input, InputGroup, InputGroupText } from '@/components/migration-ui'
 
 type Props = {
   inputName: string
@@ -20,7 +20,7 @@ const InputPercentageFilter = ({ inputName, value, isInvalid, error, handleChang
     <InputGroup size='sm'>
       <Input
         type='number'
-        className='form-control fs-6 m-0'
+        className='fs-6 m-0'
         bsSize='sm'
         style={{ padding: '0.2rem 0.9rem' }}
         placeholder='Min'

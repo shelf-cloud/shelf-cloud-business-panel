@@ -3,7 +3,7 @@ import { useContext, useTransition } from 'react'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Input, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap'
+import { Button, Input, Modal, ModalBody, ModalFooter, ModalHeader } from '@/components/migration-ui'
 import snarkdown from 'snarkdown'
 import useSWR from 'swr'
 
@@ -122,7 +122,6 @@ function ReorderingPointsPromptModal({ promptModal, setPromptModal }: Props) {
               </p>
               <Input
                 type='textarea'
-                className='form-control'
                 rows={4}
                 placeholder={placeholderBusinessRules}
                 id='businessRules'

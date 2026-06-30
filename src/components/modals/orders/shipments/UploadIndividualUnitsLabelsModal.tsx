@@ -9,7 +9,7 @@ import { ref, uploadBytes } from 'firebase/storage'
 import moment from 'moment'
 import { useSession } from 'next-auth/react'
 import { toast } from 'react-toastify'
-import { Button, Card, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Card, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 
 type Props = {
   data: Shipment

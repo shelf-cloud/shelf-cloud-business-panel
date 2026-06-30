@@ -6,7 +6,7 @@ import OneBoxAllSkus from '@assets/images/one-box-all-skus.png'
 import SingleSkuPerBox from '@assets/images/single-sku-per-box.png'
 import { AddSKUToMultiSKUBoxType, FinalBoxConfiguration, MultiSkuBoxes, SingleSkuBoxes } from '@hooks/receivings/useEditReceivingsBoxes'
 import { ShipmentOrderItem } from '@typings'
-import { Button, Col, Label, Row } from 'reactstrap'
+import { Button, Col, Label, Row } from '@/components/migration-ui'
 
 import Current_Box_Configuration from './Current_Box_Configuration'
 import Edit_Receiving_Boxes_Box from './Edit_Receiving_Boxes_Box'

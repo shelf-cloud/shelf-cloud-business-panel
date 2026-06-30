@@ -14,7 +14,7 @@ import AppContext from '@context/AppContext'
 import { AmazonFulfillmentSku } from '@typesTs/amazon/fulfillments'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

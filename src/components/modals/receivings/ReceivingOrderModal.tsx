@@ -13,6 +13,7 @@ import { useWarehouses } from '@hooks/warehouses/useWarehouse'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
+
 import {
   Alert,
   Button,
@@ -32,7 +33,7 @@ import {
   Spinner,
   TabContent,
   TabPane,
-} from 'reactstrap'
+} from '@/components/migration-ui'
 import * as Yup from 'yup'
 
 import Create_Manual_Receiving_Packages_Tab from './createReceiving/Create_Manual_Receiving_Packages_Tab'
@@ -238,7 +239,7 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
                   </span>
                   <Input
                     type='text'
-                    className='form-control fs-6'
+                    className='fs-6'
                     id='orderNumber'
                     name='orderNumber'
                     bsSize='sm'

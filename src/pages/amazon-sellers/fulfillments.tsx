@@ -15,7 +15,7 @@ import { ListInboundPlan } from '@typesTs/amazon/fulfillments/listInboundPlans'
 import axios from 'axios'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Col, Container, Row } from 'reactstrap'
+import { Button, Card, CardBody, Col, Container, Row } from '@/components/migration-ui'
 import useSWR, { mutate } from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

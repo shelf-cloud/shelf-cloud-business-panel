@@ -7,7 +7,7 @@ import { CleanStatus } from '@lib/SkuFormatting'
 import { FBAShipmentHisotry } from '@typesTs/amazon/fulfillments'
 import axios from 'axios'
 import moment from 'moment'
-import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 import useSWRInfinite from 'swr/infinite'
 
 type ModalInfo = {

@@ -6,7 +6,7 @@ import InputNumberForm from '@components/ui/forms/InputNumberForm'
 import AppContext from '@context/AppContext'
 import { AddSKUToMultiSKUBoxType, MultiSkuBoxes } from '@hooks/receivings/useReceivingsBoxes'
 import { NoImageAdress } from '@lib/assetsConstants'
-import { Badge, Button, Col, Collapse, Label, Row } from 'reactstrap'
+import { Badge, Button, Col, Collapse, Label, Row } from '@/components/migration-ui'
 
 /* eslint-disable @next/next/no-img-element */
 type Props = {

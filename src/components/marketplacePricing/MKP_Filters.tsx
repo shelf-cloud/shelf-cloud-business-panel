@@ -7,7 +7,7 @@ import InputNumberFilter from '@components/ui/filters/InputNumberFilter'
 import InputPercentageFilter from '@components/ui/filters/InputPercentageFilter'
 import { COMPARE_NUMBER_OPERATORS } from '@components/ui/filters/constants'
 import { Form, Formik } from 'formik'
-import { Button, Card, CardBody, Col, FormFeedback, FormGroup, Label, Row } from 'reactstrap'
+import { Button, Card, CardBody, Col, FormFeedback, FormGroup, Label, Row } from '@/components/migration-ui'
 import * as Yup from 'yup'
 
 export type MKP_FiltersType = {

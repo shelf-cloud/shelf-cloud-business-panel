@@ -13,7 +13,7 @@ import axios from 'axios'
 import { CSVLink } from 'react-csv'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, Spinner, UncontrolledButtonDropdown } from 'reactstrap'
+import { Button, Card, CardBody, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, Spinner, UncontrolledButtonDropdown } from '@/components/migration-ui'
 import useSWR, { useSWRConfig } from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

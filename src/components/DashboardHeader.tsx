@@ -3,7 +3,7 @@ import React from 'react'
 
 import moment from 'moment'
 import Flatpickr from 'react-flatpickr'
-import { Col, Row } from 'reactstrap'
+import { Col, Row } from '@/components/migration-ui'
 
 type Props = {
   user: string

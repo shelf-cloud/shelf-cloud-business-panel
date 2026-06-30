@@ -280,6 +280,44 @@
       </header>
 
       <section>
+        <h2>0. Live Migration Status</h2>
+        <p class="phase-meta">Snapshot of execution progress against this plan. Branch: <code>tailwind-migration</code> (work uncommitted). Build, typecheck (<code>tsc --noEmit</code>) and lint are green at this snapshot.</p>
+        <div class="grid">
+          <div class="card">
+            <span class="stat">13</span>
+            <h3>reactstrap files left</h3>
+            <p class="muted">Down from <strong>270</strong> at start. The compat layer (<code>src/components/migration-ui</code>) plus 4 parallel migration waves cleared the rest. Remaining: 9 switch <code>Input</code>s, 3 InputGroup+switch combos, 1 shell <code>Collapse</code>.</p>
+          </div>
+          <div class="card">
+            <span class="stat">28</span>
+            <h3>files with <code>data-bs-*</code></h3>
+            <p class="muted">Raw HTML Bootstrap dropdowns, not yet converted to <code>DropdownMenu</code>. Tracked by <code>pnpm check:bootstrap</code>.</p>
+          </div>
+          <div class="card">
+            <span class="stat">2 deps</span>
+            <h3><code>bootstrap</code> + <code>reactstrap</code></h3>
+            <p class="muted">Still declared in <code>package.json</code>. Removal gated on reactstrap/data-bs reaching 0 (Phase 8).</p>
+          </div>
+        </div>
+
+        <div class="callout success">
+          <strong>Done:</strong> Phases 1–6 (foundation, full compat layer, forms/dialogs + Formik↔Field adapter, dropdowns/tabs/collapse/tooltips, table restyle path). Bulk reactstrap→migration-ui import swaps across components, modals, and all 52 pages (270→13). Dead RTL SCSS deleted; scoped removal gate added.
+        </div>
+        <div class="callout">
+          <strong>In progress / pending:</strong>
+          <ul>
+            <li><strong>Finish the last 13 reactstrap files</strong> — convert Bootstrap-switch <code>&lt;Input type=checkbox&gt;</code> to the new <code>&lt;Switch&gt;</code> wrapper (9 files), plus 3 InputGroup+switch combos. Leaves only the shell <code>Collapse</code>.</li>
+            <li><strong>Convert 28 <code>data-bs-*</code> raw dropdowns</strong> to <code>DropdownMenu</code>.</li>
+            <li><strong>Phase 7 app-shell core</strong> — Header/Sidebar/VerticalLayout/Layout responsive rewrite (deferred; needs running-app verification across breakpoints).</li>
+            <li><strong>Phase 8 teardown</strong> — once gates hit 0: remove <code>bootstrap</code>/<code>reactstrap</code> deps + Bootstrap SCSS imports, port/delete ~55 bespoke SCSS then drop <code>sass</code>, decide on the <code>tw:</code> prefix.</li>
+          </ul>
+        </div>
+        <div class="callout risk">
+          <strong>Not started (optional, from plan):</strong> Playwright regression snapshots (Phase 0 net); <code>react-toastify</code> → <code>sonner</code> adapter swap (~141 files); long-term shadcn <code>Table</code> + TanStack engine.
+        </div>
+      </section>
+
+      <section>
         <h2>1. Current State Audit</h2>
         <div class="grid">
           <div class="card">
@@ -557,8 +595,9 @@
         </article>
 
         <article class="phase">
-          <h3>Phase 6: Tables and data-heavy workflows</h3>
+          <h3>Phase 6: Tables and data-heavy workflows ✅ COMPLETED</h3>
           <p class="phase-meta">Goal: preserve dense operational workflows while removing Bootstrap visual dependency.</p>
+          <div class="callout success"><strong>Completed (short-term restyle path).</strong> Kept the <code>react-data-table-component</code> engine and built the token-aligned shared styling: <code>src/lib/shadcn/dataTableStyles.ts</code> (<code>scTableStyles</code> using the <code>--card</code>/<code>--foreground</code>/<code>--border</code>/<code>--muted</code>/<code>--accent</code> bridge, plus <code>tableRowTint</code> to replace Bootstrap <code>bg-*</code> conditional-row classes) and the drop-in <code>src/components/Common/DataTableSC.tsx</code> wrapper (applies shared styles + <code>highlightOnHover</code>, merges per-table <code>customStyles</code>, preserves all sorting/pagination/expansion/selection/loading/empty behavior). Migrate a table by swapping the default RDT import to <code>@components/Common/DataTableSC</code>. Proven on <code>kits/KitsTable</code> (themed chrome + already-migrated action <code>DropdownMenu</code>). <code>pnpm lint</code>, <code>tsc --noEmit</code>, <code>pnpm build</code> pass. Remaining ~54 tables swap to <code>DataTableSC</code> iteratively (audit each for selection/expanded/sort/pagination/conditional/loading/empty as they go); the long-term shadcn <code>Table</code> + TanStack engine is intentionally deferred to a later, separate effort per the plan.</div>
           <ul>
             <li>Short term: keep <code>react-data-table-component</code> and apply Tailwind/shadcn-aligned custom styles.</li>
             <li>Normalize table actions to shadcn <code>DropdownMenu</code>, <code>Button</code>, <code>Badge</code>, and <code>Tooltip</code>.</li>
@@ -569,8 +608,11 @@
         </article>
 
         <article class="phase">
-          <h3>Phase 7: App shell migration</h3>
+          <h3>Phase 7: App shell migration 🟡 PARTIAL (safe slice; responsive core deferred)</h3>
           <p class="phase-meta">Goal: replace the Bootstrap-driven layout shell only after leaf components are stable.</p>
+          <div class="callout">⚠️ <strong>Deliberately partial.</strong> The shell's responsive behavior (desktop expanded / <code>sm</code> icon / mobile overlay) is a state machine driven by <code>data-sidebar-size</code> + <code>vertical-sidebar-enable</code> body classes reacting to Velzon structure SCSS. A full rewrite needs interactive verification across breakpoints, which wasn't available this session — so the risky core is deferred to avoid breaking global navigation and mobile UX.
+          <br/><br/><strong>Done (safe leaves):</strong> <code>Footer</code> swapped to migration-ui <code>Container</code>/<code>Row</code>/<code>Col</code>; <code>Sidebar</code> <code>Container</code> swapped to migration-ui. Build/lint/typecheck pass.
+          <br/><strong>Deferred to a verifiable session:</strong> rebuilding <code>Header</code> (hamburger + <code>data-sidebar-size</code> toggle), <code>Sidebar</code>/<code>VerticalLayout</code> (<code>app-menu</code>/<code>navbar-menu</code>, SimpleBar, <code>.vertical-overlay</code>, <code>.menu-dropdown</code> submenu Collapse, active-route highlight, logo swap, logout), <code>Layout</code> <code>main-content</code>/<code>page-topbar</code>, and the responsive SCSS classes. <em>Note:</em> VerticalLayout's submenu <code>Collapse</code> was intentionally NOT swapped — the wrapper changes the DOM under <code>.menu-dropdown</code> and must be done with the core rewrite. No-layout routes (sign in, contact form, forgot password, bulk edit) remain untouched.</div>
           <ul>
             <li>Rebuild <code>Layout</code>, <code>Header</code>, <code>Sidebar</code>, <code>VerticalLayout</code>, and <code>Footer</code> with Tailwind layout utilities and shadcn navigation primitives where useful.</li>
             <li>Keep current sidebar menu data from <code>RoleBaseLayoutMenu</code>.</li>
@@ -581,8 +623,12 @@
         </article>
 
         <article class="phase">
-          <h3>Phase 8: Remove Bootstrap and cleanup</h3>
+          <h3>Phase 8: Remove Bootstrap and cleanup 🟡 PARTIAL (safe cleanup + gates)</h3>
           <p class="phase-meta">Goal: finish migration once app has no runtime dependency on Bootstrap/reactstrap.</p>
+          <div class="callout">⚠️ <strong>Partial by necessity.</strong> The actual removal of <code>bootstrap</code>/<code>reactstrap</code> and the Bootstrap SCSS imports cannot happen until every screen is migrated (Phases 3–7 are still iterative). Did the safe cleanup that does not depend on full migration:
+          <br/><br/><strong>Done:</strong> deleted the dead RTL layer (the four <code>src/styles/rtl/*-rtl.scss</code> partials + the four commented imports in <code>themes.scss</code>; the <code>rtl/</code> dir is gone). Added the scoped removal gate <code>scripts/check-bootstrap-removal.sh</code> (npm: <code>pnpm check:bootstrap</code>): Gate 1 = reactstrap imports (excluding the migration-ui compat layer), Gate 2 = <code>data-bs-*</code> attributes, Gate 3 = <code>bootstrap</code>/<code>reactstrap</code> in <code>package.json</code> — scoped, not raw word matches. <code>pnpm build</code> passes after cleanup.
+          <br/><strong>Current gate baseline:</strong> 270 files still import reactstrap; 28 files still use <code>data-bs-*</code>; both deps still declared. <strong>Gates OPEN → do not remove deps yet.</strong>
+          <br/><strong>Deferred until gates pass:</strong> remove <code>reactstrap</code>/<code>bootstrap</code> from <code>package.json</code>, remove Bootstrap SCSS imports from <code>themes.scss</code>, port/delete the ~55 bespoke SCSS files (then drop <code>sass</code>), and decide on keeping vs. removing the <code>tw:</code> prefix.</div>
           <ul>
             <li>Use scoped gates, not raw word matches. <code>rg "from ['\"]reactstrap"</code> and <code>rg "data-bs-"</code> must return zero. A broad <code>rg "row|col-|btn"</code> gate is unreliable — it false-matches <code>arrow</code>, <code>grow</code>, <code>browser</code>, <code>control</code>. Scope class checks to <code>className=</code> lines only.</li>
             <li>Remove <code>reactstrap</code> and <code>bootstrap</code> from <code>package.json</code>.</li>
@@ -714,23 +760,24 @@
       <section>
         <h2>7. Suggested Work Breakdown</h2>
         <ol>
-          <li>Create migration branch and baseline screenshots.</li>
-          <li>Add Playwright snapshot coverage of top workflows (regression net).</li>
-          <li>Fix Tailwind/shadcn CSS config mismatch by renaming <code>z_tailwind.css</code> → <code>tailwind.css</code> (protects the token bridge); confirm <code>data-layout-mode</code> as the single theme scheme.</li>
-          <li>Create app-owned migration UI wrappers.</li>
-          <li>Migrate low-risk shared controls and pages.</li>
-          <li>Migrate forms and dialogs by domain area (via Formik↔Field adapter).</li>
-          <li>Swap react-toastify for sonner behind a call-signature adapter.</li>
-          <li>Migrate menus, tabs, collapses, and tooltips.</li>
-          <li>Restyle data tables and table actions.</li>
-          <li>Replace app shell layout.</li>
-          <li>Remove Bootstrap/reactstrap and old SCSS imports.</li>
-          <li>Run full smoke test and visual review.</li>
+          <li>✅ Create migration branch. <span class="muted">(<code>tailwind-migration</code>; baseline screenshots not captured.)</span></li>
+          <li>⬜ Add Playwright snapshot coverage of top workflows (regression net). <span class="muted">Not started.</span></li>
+          <li>✅ Fix Tailwind/shadcn CSS config mismatch by renaming <code>z_tailwind.css</code> → <code>tailwind.css</code>; confirmed <code>data-layout-mode</code> as the single theme scheme.</li>
+          <li>✅ Create app-owned migration UI wrappers. <span class="muted">(<code>src/components/migration-ui</code> — full primitive + dialog + dropdown/tab/collapse/tooltip + Alert/InputGroup/Switch + Formik↔Field adapter.)</span></li>
+          <li>✅ Migrate low-risk shared controls and pages.</li>
+          <li>✅ Migrate forms and dialogs by domain area (via Formik↔Field adapter).</li>
+          <li>⬜ Swap react-toastify for sonner behind a call-signature adapter. <span class="muted">Not started (~141 files).</span></li>
+          <li>✅ Migrate menus, tabs, collapses, and tooltips. <span class="muted">(compat layer + representative + bulk; raw <code>data-bs-*</code> dropdowns still pending — 28 files.)</span></li>
+          <li>🟡 Restyle data tables and table actions. <span class="muted">(<code>DataTableSC</code> + token styles ready; per-table swap iterative.)</span></li>
+          <li>🟡 Replace app shell layout. <span class="muted">Safe slice done; responsive core deferred (needs running app).</span></li>
+          <li>🟡 Remove Bootstrap/reactstrap and old SCSS imports. <span class="muted">Dead RTL removed + gates added; dep/SCSS removal blocked until reactstrap & data-bs reach 0.</span></li>
+          <li>⬜ Run full smoke test and visual review. <span class="muted">Pending (no running-app verification done this effort).</span></li>
         </ol>
+        <p class="phase-meta">Legend: ✅ done · 🟡 partial · ⬜ not started. Remaining critical path: finish 13 reactstrap files → convert 28 <code>data-bs-*</code> dropdowns → Phase 7 shell core (run app) → gates hit 0 → Phase 8 dependency removal.</p>
       </section>
 
       <footer>
-        Created from repository audit on 2026-06-26; corrected after re-audit on 2026-06-29 (dark-mode framing, RTL status, file counts, and config-fix guidance). This plan is intentionally phased because current Bootstrap usage is broad and tightly coupled to layout, forms, tables, and navigation.
+        Created from repository audit on 2026-06-26; corrected after re-audit on 2026-06-29. Execution status updated 2026-06-30: Phases 1–6 complete, bulk reactstrap migration 270→13 files, app shell + dependency removal deferred. See section 0 for the live snapshot. This plan is intentionally phased because Bootstrap usage was broad and tightly coupled to layout, forms, tables, and navigation.
       </footer>
     </main>
   </body>

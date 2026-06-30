@@ -1,4 +1,4 @@
-import { Col, Row } from 'reactstrap'
+import { Col, Row } from '@/components/migration-ui'
 
 type Props = {
   active: boolean

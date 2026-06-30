@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { TotalChagres } from '@typings'
-import { Card, CardBody, CardHeader, Col } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col } from '@/components/migration-ui'
 
 import ChargesChart from './ChargesChart'
 

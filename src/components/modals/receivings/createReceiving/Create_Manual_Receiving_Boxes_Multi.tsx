@@ -7,7 +7,7 @@ import { ManualAddSKUToMultiSKUBoxType, ManualMultiSkuBoxes } from '@hooks/recei
 import { ReceivingInventory } from '@hooks/receivings/useReceivingInventory'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { sortStringsLocaleCompare } from '@lib/helperFunctions'
-import { Badge, Button, Col, Collapse, Label, Row } from 'reactstrap'
+import { Badge, Button, Col, Collapse, Label, Row } from '@/components/migration-ui'
 
 /* eslint-disable @next/next/no-img-element */
 type Props = {

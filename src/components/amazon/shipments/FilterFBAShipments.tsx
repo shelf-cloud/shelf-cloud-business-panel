@@ -4,7 +4,8 @@ import { useRef, useState } from 'react'
 import { useClickOutside } from '@hooks/useClickOutside'
 
 import SimpleSelect, { SelectSingleValueType } from '@components/Common/SimpleSelect'
-import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle, Input, Label } from 'reactstrap'
+import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle, Label } from '@/components/migration-ui'
+import { Input } from 'reactstrap'
 
 export type FBAFiltersType = {
   status: SelectSingleValueType

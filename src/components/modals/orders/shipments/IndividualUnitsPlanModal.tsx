@@ -4,7 +4,7 @@ import { useContext } from 'react'
 import AppContext from '@context/AppContext'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { IndividualUnitsPlan } from '@typings'
-import { Button, Col, Modal, ModalBody, ModalHeader } from 'reactstrap'
+import { Button, Col, Modal, ModalBody, ModalHeader } from '@/components/migration-ui'
 
 type Props = {
   individualUnitsPlan: IndividualUnitsPlan

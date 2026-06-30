@@ -31,9 +31,11 @@ export type SpinnerProps = Omit<React.ComponentProps<'svg'>, 'color'> & {
   size?: 'sm' | string
   /** reactstrap type ("border" | "grow") — accepted for API parity, no visual effect. */
   type?: string
+  /** reactstrap animation ("border" | "grow") — accepted for API parity, no visual effect. */
+  animation?: string
 }
 
-function Spinner({ className, color, size, type: _type, ...props }: SpinnerProps) {
+function Spinner({ className, color, size, type: _type, animation: _animation, ...props }: SpinnerProps) {
   return (
     <ShadcnSpinner
       className={cn(size === 'sm' ? 'tw:size-4' : 'tw:size-6', color ? colorClass[color] : undefined, className)}

@@ -15,6 +15,7 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import Papa from 'papaparse'
 import { toast } from 'react-toastify'
+
 import {
   Alert,
   Button,
@@ -35,7 +36,7 @@ import {
   Spinner,
   TabContent,
   TabPane,
-} from 'reactstrap'
+} from '@/components/migration-ui'
 import * as Yup from 'yup'
 
 import ExportBlankReceivingTemplate from './ExportBlankReceivingTemplate'
@@ -335,7 +336,7 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
                     </span>
                     <Input
                       type='text'
-                      className='form-control fs-6'
+                      className='fs-6'
                       id='orderNumber'
                       name='orderNumber'
                       bsSize='sm'

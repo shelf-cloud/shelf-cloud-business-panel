@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button } from 'reactstrap'
+import { Button } from '@/components/migration-ui'
 
 type Props = {
   products: any[]

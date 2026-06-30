@@ -24,6 +24,7 @@ import { cn } from '@/lib/shadcn/utils'
 export type DropdownRootProps = {
   children?: React.ReactNode
   className?: string
+  style?: React.CSSProperties
   /** controlled open state (reactstrap Dropdown). */
   isOpen?: boolean
   /** controlled toggle (reactstrap Dropdown). */
@@ -33,7 +34,7 @@ export type DropdownRootProps = {
   group?: boolean
 }
 
-function DropdownRoot({ children, className, isOpen, toggle, group }: DropdownRootProps) {
+function DropdownRoot({ children, className, style, isOpen, toggle, group }: DropdownRootProps) {
   const controlled = typeof isOpen === 'boolean'
   return (
     <RadixDropdownMenu
@@ -45,7 +46,9 @@ function DropdownRoot({ children, className, isOpen, toggle, group }: DropdownRo
             },
           }
         : {})}>
-      <div className={cn('tw:relative tw:inline-block', group && 'tw:inline-flex', className)}>{children}</div>
+      <div className={cn('tw:relative tw:inline-block', group && 'tw:inline-flex', className)} style={style}>
+        {children}
+      </div>
     </RadixDropdownMenu>
   )
 }
@@ -66,11 +69,14 @@ export type DropdownToggleProps = React.ComponentProps<'button'> & {
   caret?: boolean
   color?: string
   nav?: boolean
+  /** reactstrap split-button flag — accepted for parity, renders a single trigger. */
+  split?: boolean
+  size?: string
   tag?: React.ElementType
 }
 
 const DropdownToggle = React.forwardRef<HTMLButtonElement, DropdownToggleProps>(
-  ({ children, className, caret, color: _color, nav: _nav, tag, type, ...props }, ref) => {
+  ({ children, className, caret, color: _color, nav: _nav, split: _split, size: _size, tag, type, ...props }, ref) => {
     const Comp: React.ElementType = tag ?? 'button'
     const isButton = Comp === 'button'
     return (

@@ -6,7 +6,7 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Row } from 'reactstrap'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Row } from '@/components/migration-ui'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -164,7 +164,7 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
                 </Label>
                 <Input
                   type='text'
-                  className='form-control fs-6'
+                  className='fs-6'
                   placeholder='Title...'
                   id='title'
                   name='title'
@@ -184,7 +184,7 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
                 </Label>
                 <Input
                   type='text'
-                  className='form-control fs-6'
+                  className='fs-6'
                   placeholder='Description...'
                   id='description'
                   name='description'
@@ -256,7 +256,7 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
                 </Label>
                 <Input
                   type='text'
-                  className='form-control fs-6'
+                  className='fs-6'
                   placeholder='Image URL...'
                   id='image'
                   name='image'
@@ -276,7 +276,7 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
                 </Label>
                 <Input
                   type='textarea'
-                  className='form-control fs-6'
+                  className='fs-6'
                   placeholder=''
                   id='note'
                   name='note'

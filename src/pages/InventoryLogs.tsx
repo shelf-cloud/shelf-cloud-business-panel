@@ -9,7 +9,7 @@ import { LogRowType } from '@typings'
 import axios from 'axios'
 import DataTable from 'react-data-table-component'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, CardHeader, Col, Container, Input, Row } from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col, Container, Input, Row } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -122,7 +122,7 @@ const InventoryLogs = ({ session }: Props) => {
                   <CardHeader>
                     <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
                       <div className='position-relative'>
-                        <Input type='text' className='form-control' placeholder='Search...' id='search-options' value={serachValue} onChange={filterByText} />
+                        <Input type='text' placeholder='Search...' id='search-options' value={serachValue} onChange={filterByText} />
                         <span className='mdi mdi-magnify search-widget-icon'></span>
                         <span className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none' id='search-close-options'></span>
                       </div>

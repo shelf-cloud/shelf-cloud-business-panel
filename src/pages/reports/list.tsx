@@ -13,7 +13,7 @@ import { ShelfCloudReportList } from '@typesTs/reports/reportsList'
 import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Col, Container, Input, Row } from 'reactstrap'
+import { Button, Card, CardBody, Col, Container, Input, Row } from '@/components/migration-ui'
 import useSWR, { useSWRConfig } from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -179,7 +179,7 @@ const List = ({ session }: Props) => {
                       <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                         <Input
                           type='text'
-                          className='form-control input_background_white'
+                          className='input_background_white'
                           placeholder='Search...'
                           id='search-options'
                           value={searchValue}

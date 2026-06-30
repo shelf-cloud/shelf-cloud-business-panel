@@ -13,7 +13,7 @@ import { FBAShipment, FBAShipmentsRepsonse } from '@typesTs/amazon/fbaShipments.
 import axios from 'axios'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Container, Row } from 'reactstrap'
+import { Button, Card, CardBody, Container, Row } from '@/components/migration-ui'
 import useSWR, { mutate } from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

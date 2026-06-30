@@ -8,7 +8,7 @@ import AppContext from '@context/AppContext'
 import axios from 'axios'
 import Papa from 'papaparse'
 import { toast } from 'react-toastify'
-import { Button, Card, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Card, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 
 type Props = {}
 

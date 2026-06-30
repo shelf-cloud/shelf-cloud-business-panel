@@ -4,7 +4,7 @@ import { useContext, useState } from 'react'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 import { useSWRConfig } from 'swr'
 
 type Props = {

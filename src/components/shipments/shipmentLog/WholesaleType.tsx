@@ -7,7 +7,7 @@ import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { Shipment, ShipmentOrderItem } from '@typesTs/shipments/shipments'
-import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col, Row } from '@/components/migration-ui'
 
 import ShipmentCarrierStatusBar from './ShipmentCarrierStatusBar'
 import ShipmentTrackingNumber from './ShipmentTrackingNumber'

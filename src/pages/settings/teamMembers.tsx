@@ -11,7 +11,7 @@ import AppContext from '@context/AppContext'
 import { ManageUser, TeamMember } from '@typesTs/settings/team_members'
 import axios from 'axios'
 import { DebounceInput } from 'react-debounce-input'
-import { Button, Card, CardBody, Container } from 'reactstrap'
+import { Button, Card, CardBody, Container } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

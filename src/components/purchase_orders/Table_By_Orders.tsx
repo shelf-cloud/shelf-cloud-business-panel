@@ -5,7 +5,7 @@ import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { sortNumbers } from '@lib/helperFunctions'
 import { PurchaseOrder, PurchaseOrderItem } from '@typesTs/purchaseOrders'
 import DataTable from 'react-data-table-component'
-import { Badge } from 'reactstrap'
+import { Badge } from '@/components/migration-ui'
 
 import Expanded_By_Orders from './Expanded_By_Orders'
 import PurchaseOrderActionsDropdown from './PurchaseOrderActionsDropdown'

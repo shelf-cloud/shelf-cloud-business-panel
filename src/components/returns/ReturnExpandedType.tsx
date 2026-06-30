@@ -12,7 +12,7 @@ import { useFormik } from 'formik'
 import { CameraIcon } from 'lucide-react'
 import { ExpanderComponentProps } from 'react-data-table-component'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, CardHeader, Col, Form, FormFeedback, FormGroup, Input, Label, Row, Spinner } from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col, Form, FormFeedback, FormGroup, Input, Label, Row, Spinner } from '@/components/migration-ui'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -237,7 +237,7 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                         </Label>
                         <Input
                           type='textarea'
-                          className='form-control fs-6'
+                          className='fs-6'
                           placeholder=''
                           id='comment'
                           name='comment'

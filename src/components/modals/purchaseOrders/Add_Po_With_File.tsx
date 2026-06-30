@@ -12,7 +12,7 @@ import axios from 'axios'
 import { Form, Formik } from 'formik'
 import Papa from 'papaparse'
 import { toast } from 'react-toastify'
-import { Button, Card, Col, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Card, Col, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -208,7 +208,7 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                       </span>
                       <Input
                         type='text'
-                        className='form-control fs-6'
+                        className='fs-6'
                         id='orderNumber'
                         name='orderNumber'
                         bsSize='sm'
@@ -252,7 +252,7 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                     </Label>
                     <Input
                       type='date'
-                      className='form-control fs-6'
+                      className='fs-6'
                       id='date'
                       name='date'
                       bsSize='sm'

@@ -6,7 +6,7 @@ import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -126,7 +126,6 @@ function EditProductModal({}: Props) {
                   <Input
                     disabled
                     type='number'
-                    className='form-control'
                     id='inventoryId'
                     name='inventoryId'
                     onChange={validation.handleChange}
@@ -145,7 +144,6 @@ function EditProductModal({}: Props) {
                   <Input
                     disabled
                     type='number'
-                    className='form-control'
                     id='businessId'
                     name='businessId'
                     onChange={validation.handleChange}
@@ -163,7 +161,6 @@ function EditProductModal({}: Props) {
                   </Label>
                   <Input
                     type='text'
-                    className='form-control'
                     placeholder='Title...'
                     id='title'
                     name='title'
@@ -183,7 +180,6 @@ function EditProductModal({}: Props) {
                   <Input
                     disabled={true}
                     type='text'
-                    className='form-control'
                     placeholder='Sku...'
                     id='sku'
                     name='sku'
@@ -202,7 +198,6 @@ function EditProductModal({}: Props) {
                   </Label>
                   <Input
                     type='text'
-                    className='form-control'
                     placeholder='Asin...'
                     id='asin'
                     name='asin'
@@ -221,7 +216,6 @@ function EditProductModal({}: Props) {
                   </Label>
                   <Input
                     type='text'
-                    className='form-control'
                     placeholder='Fnsku...'
                     id='fnsku'
                     name='fnsku'
@@ -241,7 +235,6 @@ function EditProductModal({}: Props) {
                   <Input
                     disabled={true}
                     type='text'
-                    className='form-control'
                     placeholder='Barcode...'
                     id='barcode'
                     name='barcode'
@@ -260,7 +253,6 @@ function EditProductModal({}: Props) {
                   </Label>
                   <Input
                     type='text'
-                    className='form-control'
                     placeholder='Image URL...'
                     id='image'
                     name='image'
@@ -279,7 +271,6 @@ function EditProductModal({}: Props) {
                   </Label>
                   <Input
                     type='textarea'
-                    className='form-control'
                     placeholder=''
                     id='note'
                     name='note'
@@ -300,7 +291,6 @@ function EditProductModal({}: Props) {
                   </Label>
                   <Input
                     type="number"
-                    className="form-control"
                     placeholder="Weight..."
                     id="weight"
                     name="weight"
@@ -327,7 +317,6 @@ function EditProductModal({}: Props) {
                   </Label>
                   <Input
                     type="number"
-                    className="form-control"
                     placeholder="Width..."
                     id="width"
                     name="width"
@@ -354,7 +343,6 @@ function EditProductModal({}: Props) {
                   </Label>
                   <Input
                     type="number"
-                    className="form-control"
                     placeholder="Length..."
                     id="length"
                     name="length"
@@ -381,7 +369,6 @@ function EditProductModal({}: Props) {
                   </Label>
                   <Input
                     type="number"
-                    className="form-control"
                     placeholder="Height..."
                     id="height"
                     name="height"
@@ -410,7 +397,6 @@ function EditProductModal({}: Props) {
                   </Label>
                   <Input
                     type="number"
-                    className="form-control"
                     placeholder="Box Weight..."
                     id="boxweight"
                     name="boxweight"
@@ -439,7 +425,6 @@ function EditProductModal({}: Props) {
                   </Label>
                   <Input
                     type="number"
-                    className="form-control"
                     placeholder="Box Width..."
                     id="boxwidth"
                     name="boxwidth"
@@ -466,7 +451,6 @@ function EditProductModal({}: Props) {
                   </Label>
                   <Input
                     type="number"
-                    className="form-control"
                     placeholder="Box Length..."
                     id="boxlength"
                     name="boxlength"
@@ -495,7 +479,6 @@ function EditProductModal({}: Props) {
                   </Label>
                   <Input
                     type="number"
-                    className="form-control"
                     placeholder="Box Height..."
                     id="boxheight"
                     name="boxheight"
@@ -524,7 +507,6 @@ function EditProductModal({}: Props) {
                   </Label>
                   <Input
                     type="number"
-                    className="form-control"
                     placeholder="Box Qty..."
                     id="boxqty"
                     name="boxqty"

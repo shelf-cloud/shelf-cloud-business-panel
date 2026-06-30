@@ -11,7 +11,7 @@ import AppContext from '@context/AppContext'
 import { Shipment, ShipmentDetialsResponse } from '@typesTs/shipments/shipments'
 import axios from 'axios'
 import moment from 'moment'
-import { Modal, ModalBody, ModalHeader, Spinner } from 'reactstrap'
+import { Modal, ModalBody, ModalHeader, Spinner } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 type Props = {

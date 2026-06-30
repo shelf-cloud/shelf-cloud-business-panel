@@ -1,4 +1,4 @@
-import { Offcanvas, OffcanvasBody, OffcanvasHeader } from 'reactstrap'
+import { Offcanvas, OffcanvasBody, OffcanvasHeader } from '@/components/migration-ui'
 
 type Props = {
   isOpen: boolean

@@ -6,7 +6,7 @@ import { AmzDimensions, Dimensions } from '@typesTs/amazon/fulfillments'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -177,7 +177,6 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
                 <div className='input-group'>
                   <Input
                     type='number'
-                    className='form-control'
                     bsSize='sm'
                     id='boxLength'
                     name='boxLength'
@@ -198,7 +197,6 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
                 <div className='input-group'>
                   <Input
                     type='number'
-                    className='form-control'
                     bsSize='sm'
                     id='boxWidth'
                     name='boxWidth'
@@ -219,7 +217,6 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
                 <div className='input-group'>
                   <Input
                     type='number'
-                    className='form-control'
                     bsSize='sm'
                     id='boxHeight'
                     name='boxHeight'
@@ -240,7 +237,6 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
                 <div className='input-group'>
                   <Input
                     type='number'
-                    className='form-control'
                     bsSize='sm'
                     id='boxWeight'
                     name='boxWeight'

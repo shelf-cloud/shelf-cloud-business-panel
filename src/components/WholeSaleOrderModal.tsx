@@ -10,7 +10,7 @@ import { useFormik } from 'formik'
 import moment from 'moment'
 import { useSession } from 'next-auth/react'
 import { toast } from 'react-toastify'
-import { Button, Card, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Card, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 import * as Yup from 'yup'
 
 import { FormatBytes } from '@/lib/FormatNumbers'
@@ -387,7 +387,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     <Input
                       type='text'
                       bsSize='sm'
-                      className='form-control fs-6'
+                      className='fs-6'
                       style={{ padding: '0.2rem 0.9rem' }}
                       id='orderNumber'
                       name='orderNumber'
@@ -429,7 +429,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     </Label>
                     <Input
                       type='number'
-                      className='form-control form-control-sm fs-6'
+                      className='fs-6'
                       id='numberOfPallets'
                       name='numberOfPallets'
                       onChange={validation.handleChange}

@@ -2,7 +2,7 @@ import { useCallback, useContext, useMemo } from 'react'
 
 import type { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import axios from 'axios'
-import { DropdownItem } from 'reactstrap'
+import { DropdownItem } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 import AppContext from '@/context/AppContext'

@@ -1,5 +1,5 @@
 import { Children, KitRow } from '@typings'
-import { Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, Row } from '@/components/migration-ui'
 
 type Props = {
   data: KitRow

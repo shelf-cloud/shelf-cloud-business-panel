@@ -5,7 +5,7 @@ import { FormatCurrency } from '@lib/FormatNumbers'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Row, UncontrolledTooltip } from 'reactstrap'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Row, UncontrolledTooltip } from '@/components/migration-ui'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -155,7 +155,7 @@ const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCos
                     <FormGroup>
                       <Input
                         type='number'
-                        className='form-control fs-6'
+                        className='fs-6'
                         placeholder='Seller Cost...'
                         id='sellerCost'
                         name='sellerCost'
@@ -173,7 +173,7 @@ const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCos
                     <FormGroup>
                       <Input
                         type='number'
-                        className='form-control fs-6'
+                        className='fs-6'
                         placeholder='Shipping Cost...'
                         id='inboundShippingCost'
                         name='inboundShippingCost'
@@ -193,7 +193,7 @@ const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCos
                     <FormGroup>
                       <Input
                         type='number'
-                        className='form-control fs-6'
+                        className='fs-6'
                         placeholder='Other Cost...'
                         id='otherCosts'
                         name='otherCosts'
@@ -212,7 +212,7 @@ const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCos
                       <Input
                         disabled
                         type='number'
-                        className='form-control fs-6'
+                        className='fs-6'
                         placeholder='Seller Cost...'
                         id='landedCost'
                         name='landedCost'
@@ -228,7 +228,7 @@ const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCos
                     <FormGroup>
                       <Input
                         type='number'
-                        className='form-control fs-6'
+                        className='fs-6'
                         placeholder='Production...'
                         id='productionTime'
                         name='productionTime'
@@ -247,7 +247,7 @@ const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCos
                     <FormGroup>
                       <Input
                         type='number'
-                        className='form-control fs-6'
+                        className='fs-6'
                         placeholder='Transit...'
                         id='transitTime'
                         name='transitTime'
@@ -265,7 +265,7 @@ const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCos
                       <Input
                         disabled
                         type='number'
-                        className='form-control fs-6'
+                        className='fs-6'
                         placeholder='Transit...'
                         id='totalTime'
                         name='totalTime'
@@ -280,7 +280,7 @@ const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCos
                     <FormGroup>
                       <Input
                         type='number'
-                        className='form-control fs-6'
+                        className='fs-6'
                         placeholder='FBA Cost...'
                         id='shippingToFBA'
                         name='shippingToFBA'

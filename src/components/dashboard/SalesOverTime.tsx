@@ -6,7 +6,7 @@ import { SalesOverTimeMarketplace, SalesOverTimeResponse } from '@typesTs/dashbo
 import moment from 'moment'
 import CountUp from 'react-countup'
 // import Link from 'next/link'
-import { Card, CardBody, CardHeader, Col, UncontrolledTooltip } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, UncontrolledTooltip } from '@/components/migration-ui'
 
 import SalesOverTimeTimeline from './SalesOverTimeTimeline'
 

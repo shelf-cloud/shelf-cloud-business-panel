@@ -4,7 +4,7 @@ import React, { useContext } from 'react'
 import AppContext from '@context/AppContext'
 import moment from 'moment'
 import CountUp from 'react-countup'
-import { Card, CardBody, Col, Row, UncontrolledTooltip } from 'reactstrap'
+import { Card, CardBody, Col, Row, UncontrolledTooltip } from '@/components/migration-ui'
 
 const KitWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValue }) => {
   const { state } = useContext(AppContext)

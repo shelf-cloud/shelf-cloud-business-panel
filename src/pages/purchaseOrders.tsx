@@ -34,7 +34,7 @@ import {
   TabContent,
   TabPane,
   UncontrolledButtonDropdown,
-} from 'reactstrap'
+} from '@/components/migration-ui'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)

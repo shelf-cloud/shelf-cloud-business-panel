@@ -4,7 +4,7 @@ import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { InvoiceFullDetails } from '@typings'
 import moment from 'moment'
-import { Button } from 'reactstrap'
+import { Button } from '@/components/migration-ui'
 
 type Props = {
   invoiceDetails: InvoiceFullDetails

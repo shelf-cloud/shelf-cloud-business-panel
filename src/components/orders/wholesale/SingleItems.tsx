@@ -6,7 +6,7 @@ import SearchInput from '@components/ui/SearchInput'
 import AppContext from '@context/AppContext'
 import { RegionInfoTypeUS, UserType } from '@hooks/useInitialState'
 import { wholesaleProductRow } from '@typings'
-import { Button, Col } from 'reactstrap'
+import { Button, Col } from '@/components/migration-ui'
 
 type Props = {
   completeData: wholesaleProductRow[]

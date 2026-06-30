@@ -12,7 +12,7 @@ import axios from 'axios'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Button, Spinner } from 'reactstrap'
+import { Button, Spinner } from '@/components/migration-ui'
 import useSWR, { useSWRConfig } from 'swr'
 
 import AssignCommerceHubFileType from './AssignCommerceHubFileType'

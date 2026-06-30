@@ -8,7 +8,7 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import { sortNumbers, sortStringsLocaleCompare } from '@lib/helperFunctions'
 import { PurchaseOrder, PurchaseOrderBySkus, PurchaseOrderItem } from '@typesTs/purchaseOrders'
 import DataTable from 'react-data-table-component'
-import { Badge } from 'reactstrap'
+import { Badge } from '@/components/migration-ui'
 
 import Table_By_Skus_Orders from './Table_By_Skus_Orders'
 

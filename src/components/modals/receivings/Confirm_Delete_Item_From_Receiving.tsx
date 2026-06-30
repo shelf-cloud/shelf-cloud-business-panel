@@ -5,7 +5,7 @@ import { DeleteSKUFromReceivingModalType } from '@components/receiving/Receiving
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 
 type Props = {
   deleteSKUModal: DeleteSKUFromReceivingModalType

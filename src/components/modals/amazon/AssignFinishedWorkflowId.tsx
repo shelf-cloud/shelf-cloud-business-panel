@@ -10,7 +10,7 @@ import { ListInboundPlan } from '@typesTs/amazon/fulfillments/listInboundPlans'
 import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 import useSWR, { useSWRConfig } from 'swr'
 
 type Props = {

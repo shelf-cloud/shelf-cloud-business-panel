@@ -7,7 +7,7 @@ import AppContext from '@context/AppContext'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { Accept } from 'react-dropzone/.'
 import { toast } from 'react-toastify'
-import { Button, Card, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Card, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 
 export type UploadResponse = { error: boolean; message: string; url: string }
 

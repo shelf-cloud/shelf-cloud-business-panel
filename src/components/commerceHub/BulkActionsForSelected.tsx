@@ -3,7 +3,7 @@ import { useRef, useState } from 'react'
 import { useClickOutside } from '@hooks/useClickOutside'
 
 import SimpleSelect, { SelectSingleValueType } from '@components/Common/SimpleSelect'
-import { Button, ButtonGroup, Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap'
+import { Button, ButtonGroup, Dropdown, DropdownMenu, DropdownToggle } from '@/components/migration-ui'
 
 type Props = {
   selectedRows: any[]

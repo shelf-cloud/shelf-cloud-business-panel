@@ -15,7 +15,7 @@ import { ReturnList, ReturnOrder, ReturnType } from '@typesTs/returns/returns'
 import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from 'reactstrap'
+import { Button, Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

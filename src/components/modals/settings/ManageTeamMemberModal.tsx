@@ -5,7 +5,7 @@ import AppContext from '@context/AppContext'
 import { ManageUser, Modules } from '@typesTs/settings/team_members'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Col, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Col, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 import { useSWRConfig } from 'swr'
 import useSWR from 'swr'
 

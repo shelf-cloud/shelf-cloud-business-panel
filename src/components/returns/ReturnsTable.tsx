@@ -7,7 +7,7 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import { ReturnOrder, ReturnType } from '@typesTs/returns/returns'
 import { CameraIcon } from 'lucide-react'
 import DataTable, { ExpanderComponentProps } from 'react-data-table-component'
-import { ButtonGroup, Card, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledButtonDropdown, UncontrolledTooltip } from 'reactstrap'
+import { ButtonGroup, Card, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledButtonDropdown, UncontrolledTooltip } from '@/components/migration-ui'
 
 import ReturnExpandedType from './ReturnExpandedType'
 

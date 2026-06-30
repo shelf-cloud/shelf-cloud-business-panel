@@ -8,7 +8,7 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import { AddNoteToShipmentModalType } from '@pages/Shipments'
 import { Shipment } from '@typesTs/shipments/shipments'
 import DataTable from 'react-data-table-component'
-import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
+import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from '@/components/migration-ui'
 
 import DownloadPackingSlip from '../wholesale/DownloadPackingSlip'
 import NoShipmentsFound from './NoShipmentsFound'

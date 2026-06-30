@@ -2,7 +2,8 @@ import { useCallback } from 'react'
 
 import { Product } from '@typings'
 import { toast } from 'react-toastify'
-import { DropdownItem } from 'reactstrap'
+
+import { DropdownItem } from '@/components/migration-ui'
 
 type Props = {
   products: Product[]

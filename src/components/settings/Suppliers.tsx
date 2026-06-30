@@ -5,7 +5,7 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import DataTable from 'react-data-table-component'
 import { toast } from 'react-toastify'
-import { Button, Form, FormFeedback, FormGroup, Input, Label } from 'reactstrap'
+import { Button, Form, FormFeedback, FormGroup, Input, Label } from '@/components/migration-ui'
 import useSWR from 'swr'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
@@ -224,7 +224,7 @@ const Suppliers = ({}: Props) => {
               </Label>
               <Input
                 type='text'
-                className='form-control fs-6'
+                className='fs-6'
                 placeholder='Name...'
                 id='name'
                 name='name'
@@ -242,7 +242,7 @@ const Suppliers = ({}: Props) => {
               </Label>
               <Input
                 type='text'
-                className='form-control fs-6'
+                className='fs-6'
                 placeholder='Email...'
                 id='email'
                 name='email'
@@ -260,7 +260,7 @@ const Suppliers = ({}: Props) => {
               </Label>
               <Input
                 type='text'
-                className='form-control fs-6'
+                className='fs-6'
                 placeholder='Phone...'
                 id='phone'
                 name='phone'
@@ -278,7 +278,7 @@ const Suppliers = ({}: Props) => {
               </Label>
               <Input
                 type='text'
-                className='form-control fs-6'
+                className='fs-6'
                 placeholder='Address...'
                 id='address'
                 name='address'
@@ -296,7 +296,7 @@ const Suppliers = ({}: Props) => {
               </Label>
               <Input
                 type='text'
-                className='form-control fs-6'
+                className='fs-6'
                 placeholder='Address...'
                 id='country'
                 name='country'
@@ -344,7 +344,7 @@ const Suppliers = ({}: Props) => {
             </Label>
             <Input
               type='text'
-              className='form-control fs-6'
+              className='fs-6'
               placeholder='Name...'
               id='name'
               name='name'
@@ -362,7 +362,7 @@ const Suppliers = ({}: Props) => {
             </Label>
             <Input
               type='text'
-              className='form-control fs-6'
+              className='fs-6'
               placeholder='Email...'
               id='email'
               name='email'
@@ -380,7 +380,7 @@ const Suppliers = ({}: Props) => {
             </Label>
             <Input
               type='text'
-              className='form-control fs-6'
+              className='fs-6'
               placeholder='Phone...'
               id='phone'
               name='phone'
@@ -398,7 +398,7 @@ const Suppliers = ({}: Props) => {
             </Label>
             <Input
               type='text'
-              className='form-control fs-6'
+              className='fs-6'
               placeholder='Address...'
               id='address'
               name='address'
@@ -416,7 +416,7 @@ const Suppliers = ({}: Props) => {
             </Label>
             <Input
               type='text'
-              className='form-control fs-6'
+              className='fs-6'
               placeholder='Address...'
               id='country'
               name='country'

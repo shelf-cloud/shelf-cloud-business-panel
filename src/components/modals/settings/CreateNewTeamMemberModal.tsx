@@ -6,7 +6,7 @@ import { NewTeamMember } from '@typesTs/settings/team_members'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 import useSWR, { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -117,7 +117,6 @@ const CreateNewTeamMemberModal = ({ showModal, setShowModal }: Props) => {
                     </Label>
                     <Input
                       type='text'
-                      className='form-control'
                       placeholder='Name'
                       id='name'
                       name='name'
@@ -137,7 +136,6 @@ const CreateNewTeamMemberModal = ({ showModal, setShowModal }: Props) => {
                     </Label>
                     <Input
                       type='text'
-                      className='form-control'
                       placeholder='Email Address'
                       id='email'
                       name='email'

@@ -6,7 +6,7 @@ import { FormatIntNumber } from '@lib/FormatNumbers'
 import { ShipmentOrderItem } from '@typings'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Input, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Input, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 
 type Props = {
   showEditOrderQty: {
@@ -119,7 +119,7 @@ const EditManualReceivingLog = ({ showEditOrderQty, setshowEditOrderQty, mutateR
                       <Input
                         type='number'
                         onWheel={(e) => e.currentTarget.blur()}
-                        className='form-control fs-7 mx-auto text-center'
+                        className='fs-7 mx-auto text-center'
                         style={{ maxWidth: '80px' }}
                         placeholder='Qty'
                         id='newOrderQty'

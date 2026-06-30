@@ -4,7 +4,7 @@ import { useContext, useState } from 'react'
 import AppContext from '@context/AppContext'
 import { FormatIntPercentage } from '@lib/FormatNumbers'
 import { InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
-import { Button, Card, CardBody, Col, Spinner } from 'reactstrap'
+import { Button, Card, CardBody, Col, Spinner } from '@/components/migration-ui'
 
 type Props = {
   inboundPlan: InboundPlan

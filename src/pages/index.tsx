@@ -18,7 +18,7 @@ import { SalesOverTimeResponse } from '@typesTs/dashboard/salesOverTime'
 import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Col, Container, Row } from 'reactstrap'
+import { Col, Container, Row } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

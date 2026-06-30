@@ -1,6 +1,6 @@
 import { CleanStatus } from '@lib/SkuFormatting'
 import { FBAShipment } from '@typesTs/amazon/fbaShipments.interface'
-import { Col } from 'reactstrap'
+import { Col } from '@/components/migration-ui'
 
 type Props = {
   shipmentDetails: FBAShipment

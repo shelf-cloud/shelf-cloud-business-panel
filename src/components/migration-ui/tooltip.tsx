@@ -25,6 +25,17 @@ export type UncontrolledTooltipProps = {
   innerClassName?: string
   popperClassName?: string
   style?: React.CSSProperties
+  // reactstrap tooltip props accepted for API parity (no effect in this compat impl).
+  autohide?: boolean
+  flip?: boolean
+  fade?: boolean
+  trigger?: string
+  delay?: number | { show: number; hide: number }
+  boundary?: unknown
+  hideArrow?: boolean
+  container?: unknown
+  offset?: unknown
+  modifiers?: unknown
 }
 
 function basePlacement(placement: Placement): 'top' | 'bottom' | 'left' | 'right' {

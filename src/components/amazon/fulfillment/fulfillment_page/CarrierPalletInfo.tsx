@@ -1,6 +1,6 @@
  
 import { InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
-import { Spinner } from 'reactstrap'
+import { Spinner } from '@/components/migration-ui'
 
 import CarrierPalletCard from './CarrierPalletCard'
 

@@ -9,7 +9,7 @@ import { NotificationsPanelResponse } from '@typesTs/notifications'
 import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button, ButtonGroup, DropdownMenu, DropdownToggle, UncontrolledDropdown } from 'reactstrap'
+import { Button, ButtonGroup, DropdownMenu, DropdownToggle, UncontrolledDropdown } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 const fetcher = async (endPoint: string) => await axios.get<NotificationsPanelResponse>(endPoint).then((res) => res.data.notifications)

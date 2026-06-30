@@ -4,7 +4,7 @@ import { buildSplitTemplate, buildTemplate } from '@components/purchase_orders/h
 import AppContext from '@context/AppContext'
 import { SplitNames } from '@hooks/reorderingPoints/useRPSplits'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
-import { DropdownItem } from 'reactstrap'
+import { DropdownItem } from '@/components/migration-ui'
 
 type Props = {
   reorderingPointsOrder: {

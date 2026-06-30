@@ -13,7 +13,7 @@ import AppContext from '@context/AppContext'
 import { UserType } from '@hooks/useInitialState'
 import { WholesaleProduct, wholesaleProductRow } from '@typings'
 import axios from 'axios'
-import { Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from '@/components/migration-ui'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)

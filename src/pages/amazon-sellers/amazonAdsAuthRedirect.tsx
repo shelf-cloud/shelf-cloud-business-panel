@@ -11,7 +11,7 @@ import AppContext from '@context/AppContext'
 import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Container, Spinner } from 'reactstrap'
+import { Button, Card, CardBody, Container, Spinner } from '@/components/migration-ui'
 import { useSWRConfig } from 'swr'
 
 import ShelfCloudLogoSolo from '../../assets/images/shelfcloud-blue-h-solo.png'

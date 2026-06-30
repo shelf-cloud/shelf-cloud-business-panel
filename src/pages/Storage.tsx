@@ -12,7 +12,7 @@ import axios from 'axios'
 import { getSession } from 'next-auth/react'
 import CountUp from 'react-countup'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, CardHeader, Col, Container, Input, Row } from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col, Container, Input, Row } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -113,7 +113,6 @@ const Storage = ({ session }: Props) => {
                         <div className='position-relative'>
                           <Input
                             type='text'
-                            className='form-control'
                             placeholder='Search...'
                             id='search-options'
                             value={searchValue}

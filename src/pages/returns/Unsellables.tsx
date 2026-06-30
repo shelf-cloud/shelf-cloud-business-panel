@@ -13,7 +13,7 @@ import AppContext from '@context/AppContext'
 import { UnsellablesType } from '@typesTs/returns/unsellables'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Col, Container, Row } from 'reactstrap'
+import { Button, Card, CardBody, Col, Container, Row } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 import ShowBiggerImageDialog, { SelectedUnsellableImage } from '@/components/returns/ShowBiggerImageDialog'

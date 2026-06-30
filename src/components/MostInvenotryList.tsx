@@ -5,7 +5,7 @@ import React, { useContext } from 'react'
 import AppContext from '@context/AppContext'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { ProductSummary } from '@typings'
-import { Card, CardBody, CardHeader, Col } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col } from '@/components/migration-ui'
 
 type Props = {
   products: ProductSummary[] | undefined

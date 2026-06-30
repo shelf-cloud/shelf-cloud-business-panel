@@ -18,7 +18,7 @@ import moment from 'moment'
 import { useQueryState } from 'nuqs'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Collapse, Container, Row, Spinner } from 'reactstrap'
+import { Button, Card, CardBody, Collapse, Container, Row, Spinner } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

@@ -14,7 +14,7 @@ import AppContext from '@context/AppContext'
 import { KitRow } from '@typings'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Container } from 'reactstrap'
+import { Button, Card, CardBody, Container } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

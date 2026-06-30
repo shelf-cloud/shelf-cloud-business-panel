@@ -9,7 +9,7 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import Papa from 'papaparse'
 import { toast } from 'react-toastify'
-import { Button, Card, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Card, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 import * as Yup from 'yup'
 
 import { validateCitiBankLowesFile, validateHomeDepotFile, validateLowesFile } from './validateFileTypesInfo'
@@ -220,7 +220,7 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
                 </Label>
                 <Input
                   type='select'
-                  className='form-control fs-7'
+                  className='fs-7'
                   id='storeId'
                   name='storeId'
                   onChange={(e) => {

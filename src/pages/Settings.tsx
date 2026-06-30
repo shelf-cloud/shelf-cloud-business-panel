@@ -5,7 +5,7 @@ import BreadCrumb from '@components/Common/BreadCrumb'
 import Brands from '@components/settings/Brands'
 import Categories from '@components/settings/Categories'
 import Suppliers from '@components/settings/Suppliers'
-import { Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from '@/components/migration-ui'
 
 type Props = {}
 

@@ -7,7 +7,7 @@ import { CleanStatus } from '@lib/SkuFormatting'
 import { FBAShipment } from '@typesTs/amazon/fbaShipments.interface'
 import moment from 'moment'
 import DataTable from 'react-data-table-component'
-import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from 'reactstrap'
+import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from '@/components/migration-ui'
 
 import FBAShipmentPackingSlip from './FBAShipmentPackingSlip'
 

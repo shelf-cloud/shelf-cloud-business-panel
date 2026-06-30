@@ -13,7 +13,7 @@ import AppContext from '@context/AppContext'
 import { useReceivingInventory } from '@hooks/receivings/useReceivingInventory'
 import { useWarehouses } from '@hooks/warehouses/useWarehouse'
 import { DebounceInput } from 'react-debounce-input'
-import { Button, Card, CardBody, CardHeader, Col, Container, Row } from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col, Container, Row } from '@/components/migration-ui'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)

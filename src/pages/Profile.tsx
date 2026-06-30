@@ -10,7 +10,7 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import { getSession } from 'next-auth/react'
 import { toast } from 'react-toastify'
-import { Card, CardBody, CardHeader, Col, Container, Form, FormFeedback, FormGroup, Input, Label, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, Container, Form, FormFeedback, FormGroup, Input, Label, Nav, NavItem, NavLink, Row, TabContent, TabPane } from '@/components/migration-ui'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -164,7 +164,6 @@ const Profile = () => {
                                 </Label>
                                 <Input
                                   type='text'
-                                  className='form-control'
                                   placeholder='Company Name...'
                                   id='companyName'
                                   name='companyName'
@@ -185,7 +184,6 @@ const Profile = () => {
                                 </Label>
                                 <Input
                                   type='text'
-                                  className='form-control'
                                   placeholder='Email Address...'
                                   id='email'
                                   name='email'
@@ -221,7 +219,6 @@ const Profile = () => {
                                 </Label>
                                 <Input
                                   type='password'
-                                  className='form-control'
                                   placeholder='Enter Current Password'
                                   id='currentPassword'
                                   name='currentPassword'
@@ -243,7 +240,6 @@ const Profile = () => {
                                 </Label>
                                 <Input
                                   type='password'
-                                  className='form-control'
                                   placeholder='Enter New Password'
                                   id='newPassword1'
                                   name='newPassword1'
@@ -265,7 +261,6 @@ const Profile = () => {
                                 </Label>
                                 <Input
                                   type='password'
-                                  className='form-control'
                                   placeholder='Enter New Password'
                                   id='newPassword2'
                                   name='newPassword2'

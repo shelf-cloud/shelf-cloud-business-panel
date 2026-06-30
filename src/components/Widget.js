@@ -4,7 +4,7 @@ import React, { useContext } from 'react'
 import AppContext from '@context/AppContext'
 import FeatherIcon from 'feather-icons-react'
 import CountUp from 'react-countup'
-import { Card, CardBody, Col, Row } from 'reactstrap'
+import { Card, CardBody, Col, Row } from '@/components/migration-ui'
 
 const Widget = ({ summary }) => {
   const { state } = useContext(AppContext)

@@ -6,7 +6,7 @@ import { AmazonFBA } from '@typings'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Form, FormFeedback, Input } from 'reactstrap'
+import { Button, Form, FormFeedback, Input } from '@/components/migration-ui'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -103,7 +103,7 @@ const Inventory_Kit_Details = ({ inventoryId, sku, onhand, buffer, available, re
                     <div>
                       <Input
                         type='number'
-                        className='form-control fs-6 m-0'
+                        className='fs-6 m-0'
                         style={{ maxWidth: '60px' }}
                         placeholder='Buffer...'
                         id='buffer'

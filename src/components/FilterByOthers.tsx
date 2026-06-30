@@ -5,7 +5,7 @@ import { useClickOutside } from '@hooks/useClickOutside'
 
 import AppContext from '@context/AppContext'
 import { useSkus } from '@hooks/products/useSkus'
-import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap'
+import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle } from '@/components/migration-ui'
 
 import { SelectSingleValueType } from './Common/SimpleSelect'
 import SelectSingleFilter from './ui/filters/SelectSingleFilter'

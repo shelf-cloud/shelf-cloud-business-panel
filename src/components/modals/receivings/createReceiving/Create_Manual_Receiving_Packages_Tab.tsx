@@ -6,7 +6,7 @@ import OneBoxAllSkus from '@assets/images/one-box-all-skus.png'
 import SingleSkuPerBox from '@assets/images/single-sku-per-box.png'
 import { ManualAddSKUToMultiSKUBoxType, ManualMultiSkuBoxes, ManualSingleSkuBoxes } from '@hooks/receivings/useCreateManualReceivingsBoxes'
 import { ReceivingInventory } from '@hooks/receivings/useReceivingInventory'
-import { Button, Col, Label, Row } from 'reactstrap'
+import { Button, Col, Label, Row } from '@/components/migration-ui'
 
 import Create_Manual_Receiving_Boxes_Box from './Create_Manual_Receiving_Boxes_Box'
 import Create_Manual_Receiving_Boxes_Multi from './Create_Manual_Receiving_Boxes_Multi'

@@ -3,7 +3,7 @@ import React from 'react'
 import { ExpandedRowProps } from '@hooks/reorderingPoints/useRPProductSale'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import { ExpanderComponentProps } from 'react-data-table-component'
-import { Row } from 'reactstrap'
+import { Row } from '@/components/migration-ui'
 
 import ReorderingPointsSalesDetails from './ReorderingPointsSalesDetails'
 import ReorderingPointsTimelineDetails from './ReorderingPointsTimelineDetails'

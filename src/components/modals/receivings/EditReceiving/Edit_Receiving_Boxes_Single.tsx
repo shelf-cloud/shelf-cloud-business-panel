@@ -2,7 +2,7 @@
 import InputNumberForm from '@components/ui/forms/InputNumberForm'
 import { SingleSkuBoxes } from '@hooks/receivings/useReceivingsBoxes'
 import { NoImageAdress } from '@lib/assetsConstants'
-import { Button } from 'reactstrap'
+import { Button } from '@/components/migration-ui'
 
 type Props = {
   singleSkuPackages: SingleSkuBoxes

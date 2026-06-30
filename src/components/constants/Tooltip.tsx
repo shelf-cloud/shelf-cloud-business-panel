@@ -1,4 +1,4 @@
-import { UncontrolledTooltip } from 'reactstrap'
+import { UncontrolledTooltip } from '@/components/migration-ui'
 
 type Props = {
   target: string

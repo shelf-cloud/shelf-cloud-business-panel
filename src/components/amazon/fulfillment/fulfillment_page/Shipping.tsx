@@ -13,7 +13,9 @@ import axios from 'axios'
 import moment from 'moment'
 // import SelectShippingCarrier from './SelectShippingCarrier'
 import { toast } from 'react-toastify'
-import { Alert, Button, Card, CardBody, CardHeader, Col, Input, Label, Row, Spinner } from 'reactstrap'
+import { Input } from 'reactstrap'
+
+import { Alert, Button, Card, CardBody, CardHeader, Col, Label, Row, Spinner } from '@/components/migration-ui'
 
 import ShippingSelectDate from './ShippingSelectDate'
 import { regenerateFBAPlacementOptions } from './helperFunctions/fbaRegenerate'

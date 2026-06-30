@@ -5,7 +5,7 @@ import SearchInput from '@components/ui/SearchInput'
 import AppContext from '@context/AppContext'
 import { PurchaseOrder, PurchaseOrderItem } from '@typesTs/purchaseOrders'
 import axios from 'axios'
-import { Col, Row } from 'reactstrap'
+import { Col, Row } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 import Table_By_Orders from './Table_By_Orders'

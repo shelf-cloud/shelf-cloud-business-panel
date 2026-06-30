@@ -9,7 +9,7 @@ import { Invoice } from '@typesTs/commercehub/invoices'
 import moment from 'moment'
 import DataTable from 'react-data-table-component'
 import { toast } from 'react-toastify'
-import { Button, UncontrolledTooltip } from 'reactstrap'
+import { Button, UncontrolledTooltip } from '@/components/migration-ui'
 
 import { getTotalPaid, getTotalPending } from './helperFunctions'
 

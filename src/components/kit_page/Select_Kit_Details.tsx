@@ -6,7 +6,7 @@ import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Form, Input } from 'reactstrap'
+import { Button, Form, Input } from '@/components/migration-ui'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -102,7 +102,7 @@ const Select_Kit_Details = ({ inventoryId, type, addEndpoint, selectionInfo, sel
                 <div className='w-100'>
                   <Input
                     type='text'
-                    className='form-control fs-6'
+                    className='fs-6'
                     placeholder='Name...'
                     id='name'
                     name='name'

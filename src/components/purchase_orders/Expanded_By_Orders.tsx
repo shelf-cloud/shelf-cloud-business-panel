@@ -11,7 +11,7 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import { ExpanderComponentProps } from 'react-data-table-component'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, CardHeader, Col, Form, FormFeedback, FormGroup, Input, Label, Nav, NavItem, Row, UncontrolledTooltip } from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col, Form, FormFeedback, FormGroup, Input, Label, Nav, NavItem, Row, UncontrolledTooltip } from '@/components/migration-ui'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -304,7 +304,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                                   <Input
                                     type='text'
                                     aria-label='New PO number'
-                                    className='form-control fs-7'
+                                    className='fs-7'
                                     id='orderNumber'
                                     name='orderNumber'
                                     bsSize='sm'
@@ -365,7 +365,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                         </Label>
                         <Input
                           type='textarea'
-                          className='form-control fs-6'
+                          className='fs-6'
                           placeholder=''
                           id='note'
                           name='note'

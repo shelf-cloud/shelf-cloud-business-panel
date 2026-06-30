@@ -6,7 +6,7 @@ import { useClickOutside } from '@hooks/useClickOutside'
 import SimpleSelectWithImage, { SelectSingleValueType } from '@components/Common/SimpleSelectWithImage'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
-import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap'
+import { Dropdown, DropdownMenu, DropdownToggle } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 type Channels = {

@@ -15,7 +15,7 @@ import axios from 'axios'
 import moment from 'moment'
 import { getSession } from 'next-auth/react'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, CardHeader, Col, Container, Row } from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col, Container, Row } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

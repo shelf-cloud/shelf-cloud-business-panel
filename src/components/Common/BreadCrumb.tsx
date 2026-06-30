@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 
-import { Col, Row } from 'reactstrap'
+import { Col, Row } from '@/components/migration-ui'
 
 type Props = {
   title: string

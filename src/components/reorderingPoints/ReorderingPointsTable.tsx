@@ -16,7 +16,7 @@ import { Badge as ShadcnBadge } from '@shadcn/ui/badge'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
-import { Button, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from 'reactstrap'
+import { Button, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from '@/components/migration-ui'
 
 import { getAIForecastTotal, getProductAIForecastCoverageQty, getProductAIForecastUrgency } from '@/lib/getAIForecastUrgency'
 

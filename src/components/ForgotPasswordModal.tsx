@@ -2,7 +2,7 @@ import { FormEventHandler, useRef, useState } from 'react'
 
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Label, Modal, ModalBody, ModalHeader, Spinner } from 'reactstrap'
+import { Button, Label, Modal, ModalBody, ModalHeader, Spinner } from '@/components/migration-ui'
 
 type Props = {
   OpenForgotPassword: boolean

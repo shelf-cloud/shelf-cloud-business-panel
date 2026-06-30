@@ -3,7 +3,9 @@ import { useContext } from 'react'
 
 import AppContext from '@context/AppContext'
 import { Form, Formik } from 'formik'
-import { Button, Col, FormGroup, Input, InputGroup, InputGroupText, Label, Row } from 'reactstrap'
+import { Input, InputGroup, InputGroupText } from 'reactstrap'
+
+import { Button, Col, FormGroup, Label, Row } from '@/components/migration-ui'
 import * as Yup from 'yup'
 
 import SelectDropDown from './SelectDropDown'

@@ -1,5 +1,5 @@
 import { ReorderingPointsMarketplace } from '@typesTs/reorderingPoints/reorderingPoints'
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap'
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from '@/components/migration-ui'
 
 type Props = {
   salesModal: {

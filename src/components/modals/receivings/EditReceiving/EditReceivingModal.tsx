@@ -9,7 +9,8 @@ import { EditReceivingType } from '@pages/receivings'
 import { OrderRowType } from '@typings'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Alert, Button, Col, Modal, ModalBody, ModalHeader, Nav, NavItem, NavLink, Row, Spinner, TabContent, TabPane } from 'reactstrap'
+
+import { Alert, Button, Col, Modal, ModalBody, ModalHeader, Nav, NavItem, NavLink, Row, Spinner, TabContent, TabPane } from '@/components/migration-ui'
 
 import Edit_Receiving_Packages_Tab from './Edit_Receiving_Packages_Tab'
 import Edit_Receiving_Summary_Tab from './Edit_Receiving_Summary_Tab'

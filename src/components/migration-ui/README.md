@@ -59,6 +59,24 @@ const validation = useFormik({ /* ... */ })
   markup, using the `Form`/`FormGroup`/`FormFeedback` compat wrappers — adopt the
   adapter when a form's structure is actually reworked.
 
+## Tables (react-data-table-component)
+
+Short-term strategy: keep the `react-data-table-component` engine, restyle to
+tokens. Migrate a table by swapping its import:
+
+```diff
+- import DataTable from 'react-data-table-component'
++ import DataTable from '@components/Common/DataTableSC'
+```
+
+`DataTableSC` applies the shared `scTableStyles` (from `@/lib/shadcn/dataTableStyles`)
+and `highlightOnHover` by default; per-table `customStyles` merge over the shared
+styles. All behavior (sorting, pagination, expansion, selection, loading,
+conditional rows) is unchanged — only chrome is themed. For `conditionalRowStyles`,
+replace Bootstrap classes (`bg-success bg-opacity-25`) with `style: tableRowTint.success`.
+Normalize table action menus with the Dropdown family above (`DropdownMenu`, `DropdownItem`),
+status chips with `Badge`, and hints with `UncontrolledTooltip`.
+
 ## Conventions
 
 - Keep the `tw:` prefix on every utility (Bootstrap still loaded).

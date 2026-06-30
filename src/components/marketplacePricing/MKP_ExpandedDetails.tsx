@@ -9,7 +9,7 @@ import { sortNumbers } from '@lib/helperFunctions'
 import { MKP_Marketplaces, MKP_Product } from '@typesTs/marketplacePricing/marketplacePricing'
 import DataTable, { ExpanderComponentProps } from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
-import { Card } from 'reactstrap'
+import { Card } from '@/components/migration-ui'
 
 type Props = {
   data: MKP_Product

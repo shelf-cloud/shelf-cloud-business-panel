@@ -9,7 +9,7 @@ import { useCreateKit } from '@hooks/kits/useCreateKit'
 import axios from 'axios'
 import { Field, FieldArray, Form, Formik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
+import { Button, Col, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
 import useSWR from 'swr'
 import * as Yup from 'yup'
 
@@ -183,7 +183,7 @@ function EditKitModal({ mutateKits }: Props) {
                       <Input
                         disabled
                         type='number'
-                        className='form-control form-control-sm fs-6'
+                        className='fs-6'
                         id='kitId'
                         name='kitId'
                         onChange={handleChange}
@@ -201,7 +201,7 @@ function EditKitModal({ mutateKits }: Props) {
                       </Label>
                       <Input
                         type='text'
-                        className='form-control form-control-sm fs-6'
+                        className='fs-6'
                         placeholder='Title...'
                         id='title'
                         name='title'
@@ -220,7 +220,7 @@ function EditKitModal({ mutateKits }: Props) {
                       </Label>
                       <Input
                         type='text'
-                        className='form-control form-control-sm fs-6'
+                        className='fs-6'
                         placeholder='Sku...'
                         id='sku'
                         name='sku'
@@ -239,7 +239,7 @@ function EditKitModal({ mutateKits }: Props) {
                       </Label>
                       <Input
                         type='text'
-                        className='form-control form-control-sm fs-6'
+                        className='fs-6'
                         placeholder='Asin...'
                         id='asin'
                         name='asin'
@@ -258,7 +258,7 @@ function EditKitModal({ mutateKits }: Props) {
                       </Label>
                       <Input
                         type='text'
-                        className='form-control form-control-sm fs-6'
+                        className='fs-6'
                         placeholder='Fnsku...'
                         id='fnsku'
                         name='fnsku'
@@ -277,7 +277,7 @@ function EditKitModal({ mutateKits }: Props) {
                       </Label>
                       <Input
                         type='text'
-                        className='form-control form-control-sm fs-6'
+                        className='fs-6'
                         placeholder='Barcode...'
                         id='barcode'
                         name='barcode'
@@ -297,7 +297,7 @@ function EditKitModal({ mutateKits }: Props) {
                         </Label>
                         <Input
                           type='text'
-                          className='form-control form-control-sm fs-6'
+                          className='fs-6'
                           placeholder='Image URL...'
                           id='image'
                           name='image'
@@ -316,7 +316,7 @@ function EditKitModal({ mutateKits }: Props) {
                         </Label>
                         <Input
                           type='number'
-                          className='form-control form-control-sm fs-6'
+                          className='fs-6'
                           placeholder='Box Qty...'
                           id='boxqty'
                           name='boxqty'
@@ -336,7 +336,7 @@ function EditKitModal({ mutateKits }: Props) {
                       </Label>
                       <Input
                         type='textarea'
-                        className='form-control form-control-sm fs-6'
+                        className='fs-6'
                         placeholder=''
                         id='note'
                         name='note'
@@ -440,7 +440,7 @@ function EditKitModal({ mutateKits }: Props) {
                                           <FormGroup className='createOrder_inputs'>
                                             <Input
                                               type='text'
-                                              className='form-control form-control-sm fs-6'
+                                              className='fs-6'
                                               name={`children.${index}.title`}
                                               placeholder='Title...'
                                               readOnly
@@ -460,7 +460,7 @@ function EditKitModal({ mutateKits }: Props) {
                                           <FormGroup className='createOrder_inputs'>
                                             <Input
                                               type='text'
-                                              className='text-center form-control form-control-sm fs-6'
+                                              className='text-center fs-6'
                                               name={`children.${index}.qty`}
                                               placeholder='Qty...'
                                               onChange={handleChange}

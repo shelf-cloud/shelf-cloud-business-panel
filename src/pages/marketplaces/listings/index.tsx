@@ -12,7 +12,7 @@ import SelectMarketplaceDropDown from '@components/ui/SelectMarketplaceDropDown'
 import { useMarketplaces } from '@hooks/marketplaces/useMarketplaces'
 import { MarketplaceListingsProduct, useMarketplaceListings } from '@hooks/products/useMarketplaceListings'
 import { useMarketplaceListingsQueries } from '@hooks/products/useMarketplaceListingsQuery'
-import { Button, Card, CardBody, CardHeader, Col, Collapse, Container, DropdownItem, DropdownMenu, DropdownToggle, Label, Row, UncontrolledButtonDropdown } from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col, Collapse, Container, DropdownItem, DropdownMenu, DropdownToggle, Label, Row, UncontrolledButtonDropdown } from '@/components/migration-ui'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)

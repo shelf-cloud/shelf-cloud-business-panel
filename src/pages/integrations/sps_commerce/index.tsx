@@ -9,7 +9,7 @@ import SPSCommerceTable from '@components/integrations/sps_commerce/SPSCommerceT
 import GenerateSPSCommerceFileButton from '@components/integrations/sps_commerce/generateSPSCommerceFileButton'
 import SearchInput from '@components/ui/SearchInput'
 import { SPSCommerceItem, useSPSCommerceIntegrations } from '@hooks/integrations/useSPSCommerceIntegrations'
-import { Card, CardBody, CardHeader, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from '@/components/migration-ui'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)

@@ -5,7 +5,7 @@ import { FormEventHandler, useRef } from 'react'
 import { getSession } from '@auth/client'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Label } from 'reactstrap'
+import { Button, Label } from '@/components/migration-ui'
 
 import RightImage from '../assets/images/contactform-image-right.png'
 import ShelfCloudLogo from '../assets/images/shelfcloud-blue-h.png'

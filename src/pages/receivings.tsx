@@ -22,7 +22,7 @@ import { OrderRowType } from '@typings'
 import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Container } from 'reactstrap'
+import { Button, Card, CardBody, Container } from '@/components/migration-ui'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)

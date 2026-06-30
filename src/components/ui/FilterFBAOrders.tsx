@@ -3,7 +3,7 @@ import { useRef, useState } from 'react'
 
 import { useClickOutside } from '@hooks/useClickOutside'
 
-import { Input } from 'reactstrap'
+import { Input } from '@/components/migration-ui'
 
 type Props = {
   orderStatus: string

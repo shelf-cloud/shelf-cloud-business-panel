@@ -9,7 +9,7 @@ import { sortBooleans, sortNumbers, sortStringsLocaleCompare } from '@lib/helper
 import { wholesaleProductRow } from '@typings'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
-import { Button, FormFeedback, UncontrolledTooltip } from 'reactstrap'
+import { Button, FormFeedback, UncontrolledTooltip } from '@/components/migration-ui'
 
 type Props = {
   allData: wholesaleProductRow[]

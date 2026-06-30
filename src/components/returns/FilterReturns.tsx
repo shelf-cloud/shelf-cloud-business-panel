@@ -4,7 +4,7 @@ import { memo, useContext, useRef, useState } from 'react'
 import { useClickOutside } from '@hooks/useClickOutside'
 
 import AppContext from '@context/AppContext'
-import { Input } from 'reactstrap'
+import { Input } from '@/components/migration-ui'
 
 type Props = {
   searchStatus: string

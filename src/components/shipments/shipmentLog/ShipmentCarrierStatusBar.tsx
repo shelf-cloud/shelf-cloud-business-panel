@@ -1,4 +1,4 @@
-import { Card, CardBody } from 'reactstrap'
+import { Card, CardBody } from '@/components/migration-ui'
 
 type Props = {
   carrier: string

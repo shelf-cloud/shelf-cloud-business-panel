@@ -13,7 +13,7 @@ import { useCreateKit } from '@hooks/kits/useCreateKit'
 import axios from 'axios'
 import { Field, FieldArray, Form, Formik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Col, Container, FormFeedback, FormGroup, Input, Label, Row, Spinner } from 'reactstrap'
+import { Button, Card, CardBody, Col, Container, FormFeedback, FormGroup, Input, Label, Row, Spinner } from '@/components/migration-ui'
 import * as Yup from 'yup'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -180,7 +180,7 @@ const AddKit = ({ session }: Props) => {
                               </Label>
                               <Input
                                 type='text'
-                                className='form-control form-control-sm fs-6'
+                                className='fs-6'
                                 placeholder='Title...'
                                 id='title'
                                 name='title'
@@ -199,7 +199,7 @@ const AddKit = ({ session }: Props) => {
                               </Label>
                               <Input
                                 type='text'
-                                className='form-control form-control-sm fs-6'
+                                className='fs-6'
                                 placeholder='Sku...'
                                 id='sku'
                                 name='sku'
@@ -218,7 +218,7 @@ const AddKit = ({ session }: Props) => {
                               </Label>
                               <Input
                                 type='text'
-                                className='form-control form-control-sm fs-6'
+                                className='fs-6'
                                 placeholder='Asin...'
                                 id='asin'
                                 name='asin'
@@ -237,7 +237,7 @@ const AddKit = ({ session }: Props) => {
                               </Label>
                               <Input
                                 type='text'
-                                className='form-control form-control-sm fs-6'
+                                className='fs-6'
                                 placeholder='Fnsku...'
                                 id='fnsku'
                                 name='fnsku'
@@ -256,7 +256,7 @@ const AddKit = ({ session }: Props) => {
                               </Label>
                               <Input
                                 type='text'
-                                className='form-control form-control-sm fs-6'
+                                className='fs-6'
                                 placeholder='Barcode...'
                                 id='barcode'
                                 name='barcode'
@@ -275,7 +275,7 @@ const AddKit = ({ session }: Props) => {
                               </Label>
                               <Input
                                 type='text'
-                                className='form-control form-control-sm fs-6'
+                                className='fs-6'
                                 placeholder='Image URL...'
                                 id='image'
                                 name='image'
@@ -295,7 +295,7 @@ const AddKit = ({ session }: Props) => {
                               </Label>
                               <Input
                                 type='number'
-                                className='form-control form-control-sm fs-6'
+                                className='fs-6'
                                 placeholder='Weight...'
                                 id='weight'
                                 name='weight'
@@ -314,7 +314,7 @@ const AddKit = ({ session }: Props) => {
                               </Label>
                               <Input
                                 type='number'
-                                className='form-control form-control-sm fs-6'
+                                className='fs-6'
                                 placeholder='Width...'
                                 id='width'
                                 name='width'
@@ -333,7 +333,7 @@ const AddKit = ({ session }: Props) => {
                               </Label>
                               <Input
                                 type='number'
-                                className='form-control form-control-sm fs-6'
+                                className='fs-6'
                                 placeholder='Length...'
                                 id='length'
                                 name='length'
@@ -352,7 +352,7 @@ const AddKit = ({ session }: Props) => {
                               </Label>
                               <Input
                                 type='number'
-                                className='form-control form-control-sm fs-6'
+                                className='fs-6'
                                 placeholder='Height...'
                                 id='height'
                                 name='height'
@@ -372,7 +372,7 @@ const AddKit = ({ session }: Props) => {
                               </Label>
                               <Input
                                 type='number'
-                                className='form-control form-control-sm fs-6'
+                                className='fs-6'
                                 placeholder='Box Weight...'
                                 id='boxweight'
                                 name='boxweight'
@@ -391,7 +391,7 @@ const AddKit = ({ session }: Props) => {
                               </Label>
                               <Input
                                 type='number'
-                                className='form-control form-control-sm fs-6'
+                                className='fs-6'
                                 placeholder='Box Width...'
                                 id='boxwidth'
                                 name='boxwidth'
@@ -410,7 +410,7 @@ const AddKit = ({ session }: Props) => {
                               </Label>
                               <Input
                                 type='number'
-                                className='form-control form-control-sm fs-6'
+                                className='fs-6'
                                 placeholder='Box Length...'
                                 id='boxlength'
                                 name='boxlength'
@@ -429,7 +429,7 @@ const AddKit = ({ session }: Props) => {
                               </Label>
                               <Input
                                 type='number'
-                                className='form-control form-control-sm fs-6'
+                                className='fs-6'
                                 placeholder='Box Height...'
                                 id='boxheight'
                                 name='boxheight'
@@ -448,7 +448,7 @@ const AddKit = ({ session }: Props) => {
                               </Label>
                               <Input
                                 type='number'
-                                className='form-control form-control-sm fs-6'
+                                className='fs-6'
                                 placeholder='Box Qty...'
                                 id='boxqty'
                                 name='boxqty'
@@ -553,7 +553,7 @@ const AddKit = ({ session }: Props) => {
                                                   <FormGroup className='createOrder_inputs'>
                                                     <Input
                                                       type='text'
-                                                      className='form-control form-control-sm fs-6'
+                                                      className='fs-6'
                                                       name={`children.${index}.title`}
                                                       placeholder='Title...'
                                                       readOnly
@@ -573,7 +573,7 @@ const AddKit = ({ session }: Props) => {
                                                   <FormGroup className='createOrder_inputs'>
                                                     <Input
                                                       type='text'
-                                                      className='text-center form-control form-control-sm fs-6'
+                                                      className='text-center fs-6'
                                                       name={`children.${index}.qty`}
                                                       placeholder='Qty...'
                                                       onChange={handleChange}

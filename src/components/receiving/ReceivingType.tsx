@@ -7,7 +7,7 @@ import AppContext from '@context/AppContext'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { OrderRowType, ShipmentOrderItem } from '@typings'
-import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col, Row } from '@/components/migration-ui'
 
 import { NoImageAdress } from '@/lib/assetsConstants'
 

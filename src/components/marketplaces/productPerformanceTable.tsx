@@ -9,7 +9,7 @@ import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/Forma
 import { NoImageAdress } from '@lib/assetsConstants'
 import { Marketplace, ProductPerformance } from '@typesTs/marketplaces/productPerformance'
 import DataTable from 'react-data-table-component'
-import { Button } from 'reactstrap'
+import { Button } from '@/components/migration-ui'
 
 import ProductPerformanceExpandedDetails from './productPerformanceExpandedDetails'
 import { getProductMargin, getProductNetExpenses, getProductNetProfit, getProductRoi, getProductsTotalRoi } from './productPerformanceMetrics'

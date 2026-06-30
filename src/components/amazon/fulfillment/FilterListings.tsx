@@ -5,7 +5,9 @@ import { useRef, useState } from 'react'
 import { useClickOutside } from '@hooks/useClickOutside'
 
 import { Form, Formik } from 'formik'
-import { Button, Input, Label } from 'reactstrap'
+import { Input } from 'reactstrap'
+
+import { Button, Label } from '@/components/migration-ui'
 
 type Props = {
   filters: string

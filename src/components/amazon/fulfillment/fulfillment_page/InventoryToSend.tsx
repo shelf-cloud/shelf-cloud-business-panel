@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { NoImageAdress } from '@lib/assetsConstants'
 import { InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
-import { Button, Col, Spinner } from 'reactstrap'
+import { Button, Col, Spinner } from '@/components/migration-ui'
 
 type Props = {
   inboundPlan: InboundPlan

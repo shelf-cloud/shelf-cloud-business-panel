@@ -5,7 +5,7 @@ import AppContext from '@context/AppContext'
 import { InvoiceList } from '@typings'
 import moment from 'moment'
 import CountUp from 'react-countup'
-import { Button, Card, CardBody, CardHeader, Col } from 'reactstrap'
+import { Button, Card, CardBody, CardHeader, Col } from '@/components/migration-ui'
 
 type Props = {
   invoices: InvoiceList[] | undefined
