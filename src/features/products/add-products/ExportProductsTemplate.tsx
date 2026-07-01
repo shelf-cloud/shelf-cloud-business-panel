@@ -68,8 +68,8 @@ const ExportProductsTemplate = ({ products, brands, suppliers, categories, selec
   }, [brands, categories, products, suppliers])
 
   return (
-    <DropdownItem className='text-nowrap text-info' onClick={exportExcelFile}>
-      <i className='mdi mdi-arrow-down-bold label-icon align-middle fs-6 me-2' />
+    <DropdownItem className='tw:text-nowrap tw:text-info' onClick={exportExcelFile}>
+      <i className='mdi mdi-arrow-down-bold label-icon tw:align-middle tw:text-[13px] tw:me-2' />
       {selected ? 'Export Selected Products Template' : 'Export All Products Template'}
     </DropdownItem>
   )

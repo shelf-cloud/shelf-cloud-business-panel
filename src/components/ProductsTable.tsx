@@ -10,7 +10,7 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import { loadBarcode, sortNumbers, sortStringsCaseInsensitive } from '@lib/helperFunctions'
 import type { Product } from '@typings'
 import DataTable from 'react-data-table-component'
-import { Badge, Button, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown, UncontrolledTooltip } from '@/components/migration-ui'
+import { Badge, Button, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from '@/components/migration-ui'
 
 import CopyTextToClipboard from './ui/CopyTextToClipboard'
 import SCTooltip from './ui/SCTooltip'
@@ -40,7 +40,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setSelectedRows
 
   const columns: any = [
     {
-      name: <span className='fw-bold fs-6'></span>,
+      name: <span className='tw:font-bold tw:text-[13px]'></span>,
       selector: () => <></>,
       sortable: true,
       left: true,
@@ -49,7 +49,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setSelectedRows
       sortFunction: (rowA: Product, rowB: Product) => sortNumbers(Number(rowA.inventoryId), Number(rowB.inventoryId)),
     },
     {
-      name: <span className='fw-bold fs-6'>Image</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Image</span>,
       selector: (row: Product) => {
         return (
           <Link href={`/product/${row.inventoryId}/${row.sku}`}>
@@ -78,7 +78,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setSelectedRows
     },
     {
       name: (
-        <span className='fw-bold fs-6'>
+        <span className='tw:font-bold tw:text-[13px]'>
           Title
           <br />
           SKU
@@ -86,18 +86,18 @@ const ProductsTable = ({ tableData, pending, changeProductState, setSelectedRows
       ),
       selector: (row: Product) => {
         return (
-          <div className='fs-7 d-flex flex-column justify-content-start align-items-start gap-0 pe-2'>
-            <div className='d-flex flex-row justify-content-start align-items-center fs-7'>
+          <div className='tw:text-[11.2px] tw:flex tw:flex-col tw:justify-start tw:items-start tw:gap-0 tw:pe-2'>
+            <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:text-[11.2px]'>
               <Link href={`/product/${row.inventoryId}/${row.sku}`}>
-                <p className='m-0 p-0 text-primary fw-semibold fs-6'>{row.sku}</p>
+                <p className='tw:m-0 tw:p-0 tw:text-primary tw:font-semibold tw:text-[13px]'>{row.sku}</p>
               </Link>
               <CopyTextToClipboard text={row.sku} label='SKU' />{' '}
             </div>
-            <span className='m-0 p-0 text-black fw-semibold fs-7 text-wrap'>{row.title}</span>
-            {row.note != '' && <i className='ri-information-fill fs-5 text-warning' id={`tooltip${row.inventoryId}`} />}
+            <span className='tw:m-0 tw:p-0 tw:text-black tw:font-semibold tw:text-[11.2px] tw:text-wrap'>{row.title}</span>
+            {row.note != '' && <i className='ri-information-fill tw:text-[16.25px] tw:text-warning' id={`tooltip${row.inventoryId}`} />}
             {row.note != '' && (
               <SCTooltip target={`tooltip${row.inventoryId}`} placement='right' key={`tooltip${row.inventoryId}`}>
-                <p className='fs-7 text-primary m-0 p-0'>{row.note}</p>
+                <p className='tw:text-[11.2px] tw:text-primary tw:m-0 tw:p-0'>{row.note}</p>
               </SCTooltip>
             )}
           </div>
@@ -111,7 +111,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setSelectedRows
     },
     {
       name: (
-        <span className='fw-bold fs-6'>
+        <span className='tw:font-bold tw:text-[13px]'>
           ASIN
           <br />
           FNSKU
@@ -121,23 +121,23 @@ const ProductsTable = ({ tableData, pending, changeProductState, setSelectedRows
       ),
       selector: (row: Product) => {
         return (
-          <div className='fs-7 d-flex flex-column justify-item-start gap-1'>
+          <div className='tw:text-[11.2px] tw:flex tw:flex-col tw:justify-start tw:gap-1'>
             {row.asin !== '' && (
-              <div className='d-flex flex-row justify-content-start align-items-center'>
-                <a className='m-0' href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank' rel='noopener noreferrer'>
+              <div className='tw:flex tw:flex-row tw:justify-start tw:items-center'>
+                <a className='tw:m-0' href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank' rel='noopener noreferrer'>
                   {row.asin}
                 </a>
                 <CopyTextToClipboard text={row.asin} label='ASIN' />
               </div>
             )}
             {row.fnSku !== '' && (
-              <p className='m-0'>
+              <p className='tw:m-0'>
                 {row.fnSku} <CopyTextToClipboard text={row.fnSku} label='FNSKU' />
               </p>
             )}
             {row.barcode !== '' && (
-              <div className='d-flex flex-row justify-content-start align-items-center'>
-                <a className='m-0 text-info' href='#' onClick={() => loadBarcode(row)}>
+              <div className='tw:flex tw:flex-row tw:justify-start tw:items-center'>
+                <a className='tw:m-0 tw:text-info' href='#' onClick={() => loadBarcode(row)}>
                   {row.barcode}
                 </a>
                 <CopyTextToClipboard text={row.barcode} label='Barcode' />
@@ -151,7 +151,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setSelectedRows
       minWidth: '130px',
     },
     {
-      name: <span className='fw-bold fs-6'>Status</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Status</span>,
       selector: (row: Product) => (row.activeState ? 'Active' : 'Inactive'),
       sortable: true,
       compact: true,
@@ -160,7 +160,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setSelectedRows
       sortFunction: (rowA: Product, rowB: Product) => sortNumbers(Number(rowA.activeState), Number(rowB.activeState)),
     },
     {
-      name: <span className='fw-bold fs-6'>Brand</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Brand</span>,
       selector: (row: Product) => row.brand,
       sortable: true,
       left: true,
@@ -171,7 +171,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setSelectedRows
       },
     },
     {
-      name: <span className='fw-bold fs-6'>Supplier</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Supplier</span>,
       selector: (row: Product) => row.supplier,
       sortable: true,
       left: true,
@@ -183,14 +183,13 @@ const ProductsTable = ({ tableData, pending, changeProductState, setSelectedRows
       width: '100px',
     },
     {
-      name: <span className='fw-bold fs-6'>Quantity</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Quantity</span>,
       selector: (row: Product) => {
         return (
-          <div className='fs-7 d-flex flex-column justify-content-center align-items-center'>
+          <div className='tw:text-[11.2px] tw:flex tw:flex-col tw:justify-center tw:items-center'>
             <Button
-              color='primary'
-              outline
-              className='fs-7 btn btn-ghost-primary'
+              color='ghost'
+              className='tw:text-[11.2px] tw:!text-primary tw:hover:bg-[color-mix(in_srgb,var(--primary)_10%,transparent)]'
               onClick={() => {
                 setModalProductInfo(row.inventoryId, row.sku)
               }}>
@@ -198,7 +197,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setSelectedRows
             </Button>
             {row.reserved > 0 && (
               <>
-                <span className='text-danger' id={`reservedQty${CleanSpecialCharacters(row.sku)}`}>
+                <span className='tw:text-destructive' id={`reservedQty${CleanSpecialCharacters(row.sku)}`}>
                   -{row.reserved}
                 </span>
                 <UncontrolledTooltip placement='right' target={`reservedQty${CleanSpecialCharacters(row.sku)}`}>
@@ -216,71 +215,71 @@ const ProductsTable = ({ tableData, pending, changeProductState, setSelectedRows
       sortFunction: (rowA: Product, rowB: Product) => sortNumbers(rowA.quantity, rowB.quantity),
     },
     {
-      name: <span className='fw-bold fs-6'>Retail Package Dimensions</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Retail Package Dimensions</span>,
       sortable: false,
       compact: true,
       grow: 1.4,
       selector: (row: Product) => {
         return (
-          <div className='fs-7' style={{ padding: '7px 0px' }}>
-            <Row>
+          <div className='tw:text-[11.2px]' style={{ padding: '7px 0px' }}>
+            <div>
               <span>
                 Weight: {row.weight} {state.currentRegion == 'us' ? 'lb' : 'kg'}
               </span>
-            </Row>
-            <Row>
+            </div>
+            <div>
               <span>
                 Length: {row.length} {state.currentRegion == 'us' ? 'in' : 'cm'}
               </span>
-            </Row>
-            <Row>
+            </div>
+            <div>
               <span>
                 Width: {row.width} {state.currentRegion == 'us' ? 'in' : 'cm'}
               </span>
-            </Row>
-            <Row>
+            </div>
+            <div>
               <span>
                 Height: {row.height} {state.currentRegion == 'us' ? 'in' : 'cm'}
               </span>
-            </Row>
+            </div>
           </div>
         )
       },
     },
     {
-      name: <span className='fw-bold fs-6'>Master Carton Dimensions</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Master Carton Dimensions</span>,
       sortable: false,
       compact: true,
       grow: 1.4,
       selector: (row: Product) => {
         return (
-          <div className='fs-7' style={{ padding: '7px 5px 7px 0px' }}>
-            <Row>
+          <div className='tw:text-[11.2px]' style={{ padding: '7px 5px 7px 0px' }}>
+            <div>
               <span>
                 Weight: {row.boxWeight} {state.currentRegion == 'us' ? 'lb' : 'kg'}
               </span>
-            </Row>
-            <Row>
+            </div>
+            <div>
               <span>
                 Length: {row.boxLength} {state.currentRegion == 'us' ? 'in' : 'cm'}
               </span>
-            </Row>
-            <Row>
+            </div>
+            <div>
               <span>
                 Width: {row.boxWidth} {state.currentRegion == 'us' ? 'in' : 'cm'}
               </span>
-            </Row>
-            <Row>
+            </div>
+            <div>
               <span>
                 Height: {row.boxHeight} {state.currentRegion == 'us' ? 'in' : 'cm'}
               </span>
-            </Row>
+            </div>
           </div>
         )
       },
     },
     {
-      name: <span className='fw-bold fs-6'>Qty/Carton</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Qty/Carton</span>,
       selector: (row: Product) => row.boxQty,
       sortable: true,
       center: true,
@@ -290,20 +289,20 @@ const ProductsTable = ({ tableData, pending, changeProductState, setSelectedRows
       },
     },
     {
-      name: <span className='fw-bold fs-6'>Action</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Action</span>,
       sortable: false,
       compact: true,
       cell: (row: Product) => {
         return (
-          <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
-            <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
-              <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-1 py-0' style={{ color: '#919FAF' }}></i>
+          <UncontrolledDropdown className='tw:inline-block' direction='start'>
+            <DropdownToggle className='tw:m-0 tw:p-0 tw:bg-transparent tw:border tw:border-[rgba(68,129,253,0.06)] tw:rounded-md' tag='button'>
+              <i className='mdi mdi-dots-vertical tw:align-middle tw:text-[19.5px] tw:m-0 tw:px-1 tw:py-0' style={{ color: '#919FAF' }}></i>
             </DropdownToggle>
-            <DropdownMenu className='dropdown-menu-end' container={'body'}>
+            <DropdownMenu end container={'body'}>
               <DropdownItem className='edit-item-btn'>
                 <Link href={`/product/${row.inventoryId}/${row.sku}`}>
-                  <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
-                  <span className='fs-7 fw-normal text-dark'>View Details</span>
+                  <i className='ri-file-list-line tw:align-middle tw:me-2 tw:text-[16.25px] tw:text-[color:var(--bs-secondary-color)]'></i>
+                  <span className='tw:text-[11.2px] tw:font-normal tw:text-dark'>View Details</span>
                 </Link>
               </DropdownItem>
               <DropdownItem header>Actions</DropdownItem>
@@ -318,19 +317,19 @@ const ProductsTable = ({ tableData, pending, changeProductState, setSelectedRows
                     })
                   }>
                   <div>
-                    <i className='las la-copy label-icon align-middle fs-5 me-2' />
-                    <span className='fs-7 fw-normal text-dark'>Clone</span>
+                    <i className='las la-copy label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
+                    <span className='tw:text-[11.2px] tw:font-normal tw:text-dark'>Clone</span>
                   </div>
                 </DropdownItem>
               )}
               {row.activeState && Number(row.quantity) === 0 && (
-                <DropdownItem className='fs-7 text-danger' onClick={() => changeProductState(0, row.inventoryId, row.sku)}>
-                  <i className='fs-5 las la-eye-slash align-middle me-2'></i> Set Inactive
+                <DropdownItem className='tw:text-[11.2px] tw:text-destructive' onClick={() => changeProductState(0, row.inventoryId, row.sku)}>
+                  <i className='tw:text-[16.25px] las la-eye-slash tw:align-middle tw:me-2'></i> Set Inactive
                 </DropdownItem>
               )}
               {!row.activeState && (
-                <DropdownItem className='fs-7 text-success' onClick={() => changeProductState(1, row.inventoryId, row.sku)}>
-                  <i className='fs-5 las la-eye align-bottom me-2'></i> Set Active
+                <DropdownItem className='tw:text-[11.2px] tw:text-success' onClick={() => changeProductState(1, row.inventoryId, row.sku)}>
+                  <i className='tw:text-[16.25px] las la-eye tw:align-bottom tw:me-2'></i> Set Active
                 </DropdownItem>
               )}
             </DropdownMenu>

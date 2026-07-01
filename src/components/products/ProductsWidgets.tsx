@@ -41,39 +41,39 @@ const ProductsWidgets = ({}: Props) => {
   )
 
   return (
-    <Row className='mb-2 gy-2 gx-2'>
+    <Row className='tw:mb-2 tw:gap-y-2'>
       <Col xs={12} md={state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected ? 2 : 3}>
-        <Card className='card-animate mb-0'>
-          <CardBody className='py-2'>
-            <div className='d-flex align-items-center justify-content-between mb-1'>
-              <p className='text-capitalize fw-normal mb-0  text-nowrap' style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                <span className='text-primary fw-bold'>Total</span> Inventory Qty
+        <Card className='card-animate tw:mb-0'>
+          <CardBody className='tw:py-2'>
+            <div className='tw:flex tw:items-center tw:justify-between tw:mb-1'>
+              <p className='tw:capitalize tw:font-normal tw:mb-0 tw:text-nowrap' style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                <span className='tw:text-primary tw:font-bold'>Total</span> Inventory Qty
               </p>
-              <div className='flex-shrink-0'>{/* <h5 className={'fs-6 mb-0 fw-bold'}>{1762} SKUs</h5> */}</div>
+              <div className='tw:shrink-0'>{/* <h5 className={'fs-6 mb-0 fw-bold'}>{1762} SKUs</h5> */}</div>
             </div>
-            <div className='d-flex flex-row align-items-center justify-content-between flex-md-column align-items-md-start flex-lg-row align-items-lg-center'>
-              <h4 className='fs-5 fw-semibold mb-0'>
+            <div className='tw:flex tw:flex-row tw:items-center tw:justify-between tw:md:flex-col tw:md:items-start tw:lg:flex-row tw:lg:items-center'>
+              <h4 className='tw:text-[16.25px] tw:font-semibold tw:mb-0'>
                 <span className='counter-value'>
                   <CountUp start={0} separator={','} end={productsWidgets?.totalQty ?? 0} decimals={0} duration={1} />
                 </span>
               </h4>
-              <Button color='primary' size='sm' className='btn-icon m-0 p-0 h-100' onClick={() => setproductsQtyTimelineModal({ show: true })}>
-                <i className='ri-line-chart-fill fs-5 align-middle m-0 p-0' />
+              <Button color='primary' size='sm' className='tw:m-0 tw:p-0 tw:h-full' onClick={() => setproductsQtyTimelineModal({ show: true })}>
+                <i className='ri-line-chart-fill tw:text-[16.25px] tw:align-middle tw:m-0 tw:p-0' />
               </Button>
             </div>
           </CardBody>
         </Card>
       </Col>
       <Col xs={12} md={3}>
-        <Card className='card-animate mb-0'>
-          <CardBody className='py-2'>
-            <div className='d-flex align-items-center justify-content-between mb-2'>
-              <p className='text-capitalize fw-normal mb-0 text-nowrap' style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                <span className='text-primary fw-bold'>Seller Cost</span> Inventory Value
+        <Card className='card-animate tw:mb-0'>
+          <CardBody className='tw:py-2'>
+            <div className='tw:flex tw:items-center tw:justify-between tw:mb-2'>
+              <p className='tw:capitalize tw:font-normal tw:mb-0 tw:text-nowrap' style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                <span className='tw:text-primary tw:font-bold'>Seller Cost</span> Inventory Value
               </p>
             </div>
-            <div className='d-flex align-items-end justify-content-between'>
-              <h4 className='fs-5 fw-semibold mb-0'>
+            <div className='tw:flex tw:items-end tw:justify-between'>
+              <h4 className='tw:text-[16.25px] tw:font-semibold tw:mb-0'>
                 <span className='counter-value'>
                   <CountUp
                     start={0}
@@ -91,15 +91,15 @@ const ProductsWidgets = ({}: Props) => {
         </Card>
       </Col>
       <Col xs={12} md={3}>
-        <Card className='card-animate mb-0'>
-          <CardBody className='py-2'>
-            <div className='d-flex align-items-center justify-content-between mb-2'>
-              <p className='text-capitalize fw-normal mb-0 text-nowrap' style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                <span className='text-primary fw-bold'>Landed Cost</span> Inventory Value
+        <Card className='card-animate tw:mb-0'>
+          <CardBody className='tw:py-2'>
+            <div className='tw:flex tw:items-center tw:justify-between tw:mb-2'>
+              <p className='tw:capitalize tw:font-normal tw:mb-0 tw:text-nowrap' style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                <span className='tw:text-primary tw:font-bold'>Landed Cost</span> Inventory Value
               </p>
             </div>
-            <div className='d-flex align-items-end justify-content-between'>
-              <h4 className='fs-5 fw-semibold mb-0'>
+            <div className='tw:flex tw:items-end tw:justify-between'>
+              <h4 className='tw:text-[16.25px] tw:font-semibold tw:mb-0'>
                 <span className='counter-value'>
                   <CountUp
                     start={0}
@@ -128,24 +128,24 @@ const ProductsWidgets = ({}: Props) => {
       )}
       {state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected && (
         <Col xs={12} md={4}>
-          <Card className='card-animate mb-0'>
-            <CardBody className='py-2 overflow-hidden'>
+          <Card className='card-animate tw:mb-0'>
+            <CardBody className='tw:py-2 tw:overflow-hidden'>
               <div
-                className='d-flex flex-column align-items-start justify-content-between mb-1 flex-lg-row align-items-lg-center'
+                className='tw:flex tw:flex-col tw:items-start tw:justify-between tw:mb-1 tw:lg:flex-row tw:lg:items-center'
                 style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                <p className='text-capitalize fw-normal mb-0 text-nowrap'>
-                  <span className='text-primary fw-bold'>Amazon</span> FBA Inventory Value
+                <p className='tw:capitalize tw:font-normal tw:mb-0 tw:text-nowrap'>
+                  <span className='tw:text-primary tw:font-bold'>Amazon</span> FBA Inventory Value
                 </p>
-                <div className='flex-shrink-0'>
-                  <h5 className={'fs-6 mb-0 fw-bold'}>
-                    {FormatIntNumber(state.currentRegion, fbaProductsWidget?.totalQty ?? 0)} <span className='fs-7 fw-light text-muted'>Units</span>
+                <div className='tw:shrink-0'>
+                  <h5 className={'tw:text-[13px] tw:mb-0 tw:font-bold'}>
+                    {FormatIntNumber(state.currentRegion, fbaProductsWidget?.totalQty ?? 0)} <span className='tw:text-[11.2px] tw:font-light tw:text-[color:var(--bs-secondary-color)]'>Units</span>
                   </h5>
                 </div>
               </div>
               <div
-                className='d-flex flex-column align-items-start justify-content-between flex-lg-row align-items-lg-center gap-1'
+                className='tw:flex tw:flex-col tw:items-start tw:justify-between tw:lg:flex-row tw:lg:items-center tw:gap-1'
                 style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                <p className='fs-5 fw-semibold mb-0 text-nowrap'>
+                <p className='tw:text-[16.25px] tw:font-semibold tw:mb-0 tw:text-nowrap'>
                   <span className='counter-value'>
                     <CountUp
                       start={0}
@@ -157,9 +157,9 @@ const ProductsWidgets = ({}: Props) => {
                       duration={1}
                     />
                   </span>
-                  <span className='fs-7 fw-light text-muted'> Seller C.</span>
+                  <span className='tw:text-[11.2px] tw:font-light tw:text-[color:var(--bs-secondary-color)]'> Seller C.</span>
                 </p>
-                <p className='fs-5 fw-semibold mb-0 text-nowrap'>
+                <p className='tw:text-[16.25px] tw:font-semibold tw:mb-0 tw:text-nowrap'>
                   <span className='counter-value'>
                     <CountUp
                       start={0}
@@ -171,7 +171,7 @@ const ProductsWidgets = ({}: Props) => {
                       duration={1}
                     />
                   </span>
-                  <span className='fs-7 fw-light text-muted'> Landed C.</span>
+                  <span className='tw:text-[11.2px] tw:font-light tw:text-[color:var(--bs-secondary-color)]'> Landed C.</span>
                 </p>
               </div>
             </CardBody>

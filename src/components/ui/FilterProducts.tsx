@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 
 import SimpleSelect from '@components/Common/SimpleSelect'
 import type { ProductStatusFilter } from '@hooks/products/productFilters'
+import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle } from '@/components/migration-ui'
 
 type ProductFilterQuery = {
   brand: string
@@ -27,117 +28,102 @@ type Props = {
 
 const FilterProducts = ({ brands, suppliers, categories, brand, supplier, category, condition, status, setProductFilters }: Props) => {
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
-  const FilterProductsContainer = useRef<HTMLDivElement | null>(null)
 
   const updateProductFilters = (nextFilters: Partial<ProductFilterQuery>) => {
     setProductFilters(nextFilters)
   }
 
-  useEffect(() => {
-    const handleDocumentClick = (event: MouseEvent) => {
-      if (FilterProductsContainer.current && !FilterProductsContainer.current.contains(event.target as Node)) {
-        setOpenDatesMenu(false)
-      }
-    }
-
-    document.addEventListener('click', handleDocumentClick)
-
-    return () => {
-      document.removeEventListener('click', handleDocumentClick)
-    }
-  }, [])
-
   return (
-    <div
-      ref={FilterProductsContainer}
-      className='d-flex flex-column justify-content-center align-items-end gap-2 flex-md-row justify-content-md-between align-items-md-center w-auto'>
-      <div className='dropdown'>
-        <button
-          className='btn btn-light dropdown-toggle'
-          style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }}
-          type='button'
-          aria-expanded='false'
-          onClick={() => setOpenDatesMenu(!openDatesMenu)}>
-          Filters
-        </button>
-        <div className={'dropdown-menu dropdown-menu-md px-4 py-3' + (openDatesMenu ? ' show' : '')}>
-          <div className='d-flex flex-column justify-content-start gap-2'>
-            <span className='fw-semibold fs-7'>Brand:</span>
-            <SimpleSelect
-              selected={{ label: brand, value: brand }}
-              options={[{ label: 'All', value: 'All' }, ...brands?.map((brand) => ({ label: brand, value: brand }))]}
-              handleSelect={(option) => {
-                setOpenDatesMenu(false)
-                updateProductFilters({ brand: String(option?.value || 'All') })
-              }}
-              customStyle='sm'
-              placeholder={'Select Brand'}
-            />
+    <div className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:md:flex-row tw:md:justify-between tw:md:items-center tw:w-auto'>
+      <ButtonGroup>
+        <Dropdown isOpen={openDatesMenu} toggle={() => setOpenDatesMenu(!openDatesMenu)}>
+          <DropdownToggle
+            className='tw:inline-flex tw:h-9 tw:items-center tw:gap-2 tw:rounded-md tw:border tw:border-[#E1E3E5] tw:bg-white tw:px-3 tw:text-sm tw:font-semibold tw:text-foreground tw:whitespace-nowrap'
+            color='light'>
+            Filters
+          </DropdownToggle>
+          <DropdownMenu style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
+            <div className='tw:px-4 tw:py-3'>
+              <div className='tw:flex tw:flex-col tw:justify-start tw:gap-2'>
+                <span className='tw:font-semibold tw:text-[11.2px]'>Brand:</span>
+                <SimpleSelect
+                  selected={{ label: brand, value: brand }}
+                  options={[{ label: 'All', value: 'All' }, ...brands?.map((brand) => ({ label: brand, value: brand }))]}
+                  handleSelect={(option) => {
+                    setOpenDatesMenu(false)
+                    updateProductFilters({ brand: String(option?.value || 'All') })
+                  }}
+                  customStyle='sm'
+                  placeholder={'Select Brand'}
+                />
 
-            <span className='fw-semibold fs-7'>Suppliers:</span>
-            <SimpleSelect
-              selected={{ label: supplier, value: supplier }}
-              options={[{ label: 'All', value: 'All' }, ...suppliers?.map((supplier) => ({ label: supplier, value: supplier }))]}
-              handleSelect={(option) => {
-                setOpenDatesMenu(false)
-                updateProductFilters({ supplier: String(option?.value || 'All') })
-              }}
-              customStyle='sm'
-              placeholder={'Select Supplier'}
-            />
-            <span className='fw-semibold fs-7'>Categories:</span>
-            <SimpleSelect
-              selected={{ label: category, value: category }}
-              options={[{ label: 'All', value: 'All' }, ...categories?.map((category) => ({ label: category, value: category }))]}
-              handleSelect={(option) => {
-                setOpenDatesMenu(false)
-                updateProductFilters({ category: String(option?.value || 'All') })
-              }}
-              customStyle='sm'
-              placeholder={'Select Category'}
-            />
-            <span className='fw-semibold fs-7'>Condition:</span>
-            <SimpleSelect
-              selected={{ label: condition, value: condition }}
-              options={[
-                { label: 'All', value: 'All' },
-                { label: 'New', value: 'New' },
-                { label: 'Used', value: 'Used' },
-              ]}
-              handleSelect={(option) => {
-                setOpenDatesMenu(false)
-                updateProductFilters({ condition: String(option?.value || 'All') })
-              }}
-              customStyle='sm'
-              placeholder={'Select Condition'}
-            />
-            <span className='fw-semibold fs-7'>Status:</span>
-            <SimpleSelect
-              selected={{ label: status, value: status }}
-              options={[
-                { label: 'All', value: 'All' },
-                { label: 'Active', value: 'Active' },
-                { label: 'Inactive', value: 'Inactive' },
-              ]}
-              handleSelect={(option) => {
-                setOpenDatesMenu(false)
-                updateProductFilters({ status: (option?.value || 'All') as ProductStatusFilter })
-              }}
-              customStyle='sm'
-              placeholder={'Select Status'}
-            />
-            <span
-              style={{ width: '100%', cursor: 'pointer', textAlign: 'right' }}
-              onClick={() => {
-                setProductFilters({ brand: null, supplier: null, category: null, condition: null, status: null })
-                setOpenDatesMenu(false)
-              }}
-              className='fw-normal mt-2 text-muted fs-7'>
-              Clear All
-            </span>
-          </div>
-        </div>
-      </div>
+                <span className='tw:font-semibold tw:text-[11.2px]'>Suppliers:</span>
+                <SimpleSelect
+                  selected={{ label: supplier, value: supplier }}
+                  options={[{ label: 'All', value: 'All' }, ...suppliers?.map((supplier) => ({ label: supplier, value: supplier }))]}
+                  handleSelect={(option) => {
+                    setOpenDatesMenu(false)
+                    updateProductFilters({ supplier: String(option?.value || 'All') })
+                  }}
+                  customStyle='sm'
+                  placeholder={'Select Supplier'}
+                />
+                <span className='tw:font-semibold tw:text-[11.2px]'>Categories:</span>
+                <SimpleSelect
+                  selected={{ label: category, value: category }}
+                  options={[{ label: 'All', value: 'All' }, ...categories?.map((category) => ({ label: category, value: category }))]}
+                  handleSelect={(option) => {
+                    setOpenDatesMenu(false)
+                    updateProductFilters({ category: String(option?.value || 'All') })
+                  }}
+                  customStyle='sm'
+                  placeholder={'Select Category'}
+                />
+                <span className='tw:font-semibold tw:text-[11.2px]'>Condition:</span>
+                <SimpleSelect
+                  selected={{ label: condition, value: condition }}
+                  options={[
+                    { label: 'All', value: 'All' },
+                    { label: 'New', value: 'New' },
+                    { label: 'Used', value: 'Used' },
+                  ]}
+                  handleSelect={(option) => {
+                    setOpenDatesMenu(false)
+                    updateProductFilters({ condition: String(option?.value || 'All') })
+                  }}
+                  customStyle='sm'
+                  placeholder={'Select Condition'}
+                />
+                <span className='tw:font-semibold tw:text-[11.2px]'>Status:</span>
+                <SimpleSelect
+                  selected={{ label: status, value: status }}
+                  options={[
+                    { label: 'All', value: 'All' },
+                    { label: 'Active', value: 'Active' },
+                    { label: 'Inactive', value: 'Inactive' },
+                  ]}
+                  handleSelect={(option) => {
+                    setOpenDatesMenu(false)
+                    updateProductFilters({ status: (option?.value || 'All') as ProductStatusFilter })
+                  }}
+                  customStyle='sm'
+                  placeholder={'Select Status'}
+                />
+                <button
+                  type='button'
+                  style={{ width: '100%', textAlign: 'right' }}
+                  onClick={() => {
+                    setProductFilters({ brand: null, supplier: null, category: null, condition: null, status: null })
+                    setOpenDatesMenu(false)
+                  }}
+                  className='tw:p-0 tw:border-0 tw:bg-transparent tw:no-underline tw:text-[color:var(--bs-secondary-color)] tw:mt-2 tw:text-sm'>
+                  Clear All
+                </button>
+              </div>
+            </div>
+          </DropdownMenu>
+        </Dropdown>
+      </ButtonGroup>
     </div>
   )
 }
