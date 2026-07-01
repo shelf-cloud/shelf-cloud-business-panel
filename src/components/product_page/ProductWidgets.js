@@ -11,18 +11,18 @@ const ProductWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValu
   const currentMonthDays = moment().format('D') - 1
   return (
     <React.Fragment>
-      <Row className='gap-2'>
+      <Row className='tw:gap-2'>
         <Col>
-          <div className='shadow-none mb-0 ps-2'>
-            <div className='p-0'>
-              <div className='d-flex align-items-center'>
-                <div className='flex-grow-1 overflow-hidden'>
-                  <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>Inventory</p>
+          <div className='tw:shadow-none tw:mb-0 tw:ps-2'>
+            <div className='tw:p-0'>
+              <div className='tw:flex tw:items-center'>
+                <div className='tw:grow tw:overflow-hidden'>
+                  <p className='tw:uppercase tw:font-semibold tw:text-primary tw:truncate tw:mb-0'>Inventory</p>
                 </div>
               </div>
-              <div className='d-flex align-items-end justify-content-between mt-1'>
+              <div className='tw:flex tw:items-end tw:justify-between tw:mt-1'>
                 <div>
-                  <h4 className='fs-4 fw-semibold'>
+                  <h4 className='tw:text-[19.5px] tw:font-semibold'>
                     <span className='counter-value'>
                       <CountUp start={0} end={onhand} decimals={0} duration={1} />
                     </span>
@@ -33,16 +33,16 @@ const ProductWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValu
           </div>
         </Col>
         <Col>
-          <div className='shadow-none mb-0 border-start ps-2'>
-            <div className='p-0'>
-              <div className='d-flex align-items-center'>
-                <div className='flex-grow-1 overflow-hidden'>
-                  <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>Est. Storage Monthly Cost</p>
+          <div className='tw:shadow-none tw:mb-0 tw:border-l tw:border-[color:var(--border)] tw:ps-2'>
+            <div className='tw:p-0'>
+              <div className='tw:flex tw:items-center'>
+                <div className='tw:grow tw:overflow-hidden'>
+                  <p className='tw:uppercase tw:font-semibold tw:text-primary tw:truncate tw:mb-0'>Est. Storage Monthly Cost</p>
                 </div>
               </div>
-              <div className='d-flex align-items-end justify-content-between mt-1'>
+              <div className='tw:flex tw:items-end tw:justify-between tw:mt-1'>
                 <div>
-                  <h4 className='fs-4 fw-semibold'>
+                  <h4 className='tw:text-[19.5px] tw:font-semibold'>
                     <span className='counter-value'>
                       <CountUp
                         start={0}
@@ -61,16 +61,16 @@ const ProductWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValu
           </div>
         </Col>
         <Col>
-          <div className='shadow-none mb-0 border-start ps-2'>
-            <div className='p-0'>
-              <div className='d-flex align-items-center'>
-                <div className='flex-grow-1 overflow-hidden'>
-                  <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>Current Bins Used</p>
+          <div className='tw:shadow-none tw:mb-0 tw:border-l tw:border-[color:var(--border)] tw:ps-2'>
+            <div className='tw:p-0'>
+              <div className='tw:flex tw:items-center'>
+                <div className='tw:grow tw:overflow-hidden'>
+                  <p className='tw:uppercase tw:font-semibold tw:text-primary tw:truncate tw:mb-0'>Current Bins Used</p>
                 </div>
               </div>
-              <div className='d-flex align-items-end justify-content-between mt-1'>
+              <div className='tw:flex tw:items-end tw:justify-between tw:mt-1'>
                 <div>
-                  <h4 className='fs-4 fw-semibold'>
+                  <h4 className='tw:text-[19.5px] tw:font-semibold'>
                     <span className='counter-value'>
                       <CountUp
                         start={0}
@@ -89,17 +89,17 @@ const ProductWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValu
           </div>
         </Col>
         <Col>
-          <div className='shadow-none mb-0 border-start ps-2'>
-            <div className='p-0'>
-              <div className='d-flex align-items-center'>
-                <div className='flex-grow-1 overflow-hidden'>
-                  <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>Inventory Value</p>
+          <div className='tw:shadow-none tw:mb-0 tw:border-l tw:border-[color:var(--border)] tw:ps-2'>
+            <div className='tw:p-0'>
+              <div className='tw:flex tw:items-center'>
+                <div className='tw:grow tw:overflow-hidden'>
+                  <p className='tw:uppercase tw:font-semibold tw:text-primary tw:truncate tw:mb-0'>Inventory Value</p>
                 </div>
               </div>
-              <div className='d-flex align-items-end justify-content-between mt-1'>
+              <div className='tw:flex tw:items-end tw:justify-between tw:mt-1'>
                 <div>
                   {inventoryValue > 0 ? (
-                    <h4 className='fs-4 fw-semibold'>
+                    <h4 className='tw:text-[19.5px] tw:font-semibold'>
                       <span className='counter-value' id='inventoryValue'>
                         <CountUp
                           start={0}
@@ -111,12 +111,12 @@ const ProductWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValu
                           duration={1}
                         />
                       </span>
-                      <UncontrolledTooltip placement='bottom' target='inventoryValue' innerClassName='bg-white text-primary shadow'>
+                      <UncontrolledTooltip placement='bottom' target='inventoryValue' innerClassName='tw:bg-white tw:text-primary tw:shadow'>
                         {`Landed Cost * On Hand Inventory`}
                       </UncontrolledTooltip>
                     </h4>
                   ) : (
-                    <span className='fs-4 text-muted fw-light'>No Cost</span>
+                    <span className='tw:text-[19.5px] tw:text-[color:var(--bs-secondary-color)] tw:font-light'>No Cost</span>
                   )}
                 </div>
               </div>

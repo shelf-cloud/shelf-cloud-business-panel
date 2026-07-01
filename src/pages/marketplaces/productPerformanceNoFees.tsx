@@ -241,11 +241,11 @@ const ProductPerformanceNoFees = ({ session, sessionToken }: Props) => {
         <div className='page-content'>
           <BreadCrumb title='Product Performance NO SC Fees' pageTitle='Marketplaces' />
           <Container fluid>
-            <Row className='d-flex flex-column justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-end align-items-md-center px-3'>
-              <div className='app-search d-flex flex-column gap-2 justify-content-between align-items-center p-0 flex-lg-row gap-sm-2'>
-                <div className='d-flex flex-wrap justify-content-start align-items-center gap-2 w-100'>
+            <Row className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:mb-2 tw:md:flex-row tw:md:justify-end tw:md:items-center tw:px-3'>
+              <div className='tw:flex tw:flex-col tw:gap-2 tw:justify-between tw:items-center tw:p-0 tw:lg:flex-row'>
+                <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center tw:gap-2 tw:w-full'>
                   <button
-                    className={'btn dropdown-toggle ' + (filters === 'true' ? 'btn-info' : 'btn-light')}
+                    className={'tw:inline-flex tw:h-9 tw:items-center tw:gap-1 tw:rounded-md tw:px-3 tw:text-[11.2px] tw:font-semibold tw:whitespace-nowrap ' + (filters === 'true' ? 'tw:bg-info tw:text-info-foreground' : 'tw:bg-white tw:border tw:border-[#E1E3E5] tw:text-foreground')}
                     style={filters === 'true' ? {} : { backgroundColor: 'white', border: '1px solid #E1E3E5' }}
                     type='button'
                     aria-expanded='false'
@@ -277,34 +277,34 @@ const ProductPerformanceNoFees = ({ session, sessionToken }: Props) => {
                     PP Summary
                   </Button>
                 </div>
-                <div className='col-12 col-xl-3'>
-                  <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+                <div className='tw:w-full tw:xl:w-1/4'>
+                  <div className='tw:relative tw:flex tw:rounded-md tw:w-full tw:overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                     <DebounceInput
                       type='text'
                       minLength={3}
                       debounceTimeout={500}
-                      className='form-control input_background_white'
+                      className='tw:h-9 tw:w-full tw:border-0 tw:bg-white tw:px-3 tw:text-sm tw:outline-none'
                       placeholder='Search...'
                       id='search-options'
                       value={searchValue}
                       onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
                       onChange={(e) => setSearchValue(e.target.value)}
                     />
-                    <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
+                    <span className='mdi mdi-magnify tw:hidden'></span>
                     <span
-                      className='d-flex align-items-center justify-content-center input_background_white'
+                      className='tw:flex tw:items-center tw:justify-center tw:bg-white'
                       style={{
                         cursor: 'pointer',
                       }}
                       onClick={() => setSearchValue('')}>
-                      <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
+                      <i className='mdi mdi-window-close tw:text-[19.5px] tw:m-0 tw:px-2 tw:py-0 tw:text-[color:var(--bs-secondary-color)]' />
                     </span>
                   </div>
                 </div>
               </div>
-              <Collapse className='px-0' isOpen={filterOpen}>
-                <Card className='mb-0' style={{ zIndex: '999' }}>
-                  <CardBody className='w-100'>
+              <Collapse className='tw:px-0' isOpen={filterOpen}>
+                <Card className='tw:mb-0' style={{ zIndex: '999' }}>
+                  <CardBody className='tw:w-full'>
                     <FilterProfits
                       grossmin={grossmin !== undefined ? grossmin : ''}
                       grossmax={grossmax !== undefined ? grossmax : ''}
@@ -331,8 +331,8 @@ const ProductPerformanceNoFees = ({ session, sessionToken }: Props) => {
               <CardBody>
                 {loadingData ? (
                   <div>
-                    <p className='fw-bold fs-2'>Product Performance No SC Fees</p>
-                    <div className='fs-5 text-muted d-flex flex-row gap-3'>
+                    <p className='tw:font-bold tw:text-[26px]'>Product Performance No SC Fees</p>
+                    <div className='tw:text-[16.25px] tw:text-[color:var(--bs-secondary-color)] tw:flex tw:flex-row tw:gap-3'>
                       {`Loading Profit Report from ${selectedMarketplace.name} please wait...`}
                       <>
                         <Spinner color='primary' size={'sm'} />

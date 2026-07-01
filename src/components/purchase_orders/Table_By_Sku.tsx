@@ -22,10 +22,10 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
 
   const columns: any = [
     {
-      name: <span className='fw-bolder fs-6'>Image</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Image</span>,
       selector: (row: PurchaseOrderBySkus) => {
         return (
-          <Link href={`/product/${row.inventoryId}/${row.sku}`} target='blank' rel='noopener noreferrer' className='text-black'>
+          <Link href={`/product/${row.inventoryId}/${row.sku}`} target='blank' rel='noopener noreferrer' className='tw:!text-black'>
             <div
               style={{
                 width: '100%',
@@ -49,25 +49,25 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
       grow: 0,
     },
     {
-      name: <span className='fw-bolder fs-6'>Title</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Title</span>,
       selector: (row: PurchaseOrderBySkus) => {
         return (
           <>
-            <Link href={`/product/${row.inventoryId}/${row.sku}`} target='blank' rel='noopener noreferrer' className='text-black'>
-              <span className='fs-6 fw-semibold'>{row.title}</span>
+            <Link href={`/product/${row.inventoryId}/${row.sku}`} target='blank' rel='noopener noreferrer' className='tw:!text-black'>
+              <span className='tw:text-[13px] tw:font-semibold'>{row.title}</span>
             </Link>
             {row.asin && (
               <>
                 <br />
                 <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/exec/obidos/ASIN${row.asin}`} target='blank' rel='noopener noreferrer'>
-                  <span className='fs-7 fw-normal'>{row.asin}</span>
+                  <span className='tw:text-[11.2px] tw:font-normal'>{row.asin}</span>
                 </a>
               </>
             )}
             {row.barcode && (
               <>
                 <br />
-                <span className='text-muted fs-7 fw-normal'>{row.barcode}</span>
+                <span className='tw:text-[color:var(--bs-secondary-color)] tw:text-[11.2px] tw:font-normal'>{row.barcode}</span>
               </>
             )}
           </>
@@ -79,11 +79,11 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
       sortFunction: (rowA: PurchaseOrderBySkus, rowB: PurchaseOrderBySkus) => sortStringsLocaleCompare(rowA.title, rowB.title),
     },
     {
-      name: <span className='fw-bolder fs-6'>SKU</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>SKU</span>,
       selector: (row: PurchaseOrderBySkus) => {
         return (
-          <Link href={`/product/${row.inventoryId}/${row.sku}`} target='blank' rel='noopener noreferrer' className='text-black'>
-            <span className='fs-7'>{row.sku}</span>
+          <Link href={`/product/${row.inventoryId}/${row.sku}`} target='blank' rel='noopener noreferrer' className='tw:!text-black'>
+            <span className='tw:text-[11.2px]'>{row.sku}</span>
           </Link>
         )
       },
@@ -92,7 +92,7 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
       sortFunction: (rowA: PurchaseOrderBySkus, rowB: PurchaseOrderBySkus) => sortStringsLocaleCompare(rowA.sku, rowB.sku),
     },
     {
-      name: <span className='fw-bolder fs-6'>Ordered</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Ordered</span>,
       selector: (row: PurchaseOrderBySkus) => {
         const totalSkuOrdered = row.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
           const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
@@ -138,7 +138,7 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
         ),
     },
     {
-      name: <span className='fw-bolder fs-6'>Inbound</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Inbound</span>,
       selector: (row: PurchaseOrderBySkus) => {
         const totalSkuOrdered = row.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
           const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
@@ -184,7 +184,7 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
         ),
     },
     {
-      name: <span className='fw-bolder fs-6'>Arrived</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Arrived</span>,
       selector: (row: PurchaseOrderBySkus) => {
         const totalSkuOrdered = row.orders.reduce((totalOrdered: number, order: PurchaseOrder) => {
           const totalSku = order.poItems.reduce((subtotal: number, item: PurchaseOrderItem) => {
@@ -230,7 +230,7 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
         ),
     },
     {
-      name: <span className='fw-bolder fs-6'></span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'></span>,
       selector: (row: PurchaseOrderBySkus) => {
         const totalReceivingQty = Object.entries(state.receivingFromPo.items).reduce((total: number, po: [string, any]) => {
           const poTotal = Object.entries(po[1]).reduce((subtotal: number, inventoryId: [string, any]) => {
@@ -245,7 +245,7 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
 
         if (totalReceivingQty > 0) {
           return (
-            <Badge pill color='success' className='fs-7'>
+            <Badge pill color='success' className='tw:text-[11.2px]'>
               {FormatIntNumber(state.currentRegion, totalReceivingQty)}
             </Badge>
           )

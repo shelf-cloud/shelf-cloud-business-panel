@@ -5,7 +5,7 @@ import SearchInput from '@components/ui/SearchInput'
 import AppContext from '@context/AppContext'
 import { PurchaseOrder, PurchaseOrderBySkus } from '@typesTs/purchaseOrders'
 import axios from 'axios'
-import { Col, Row } from '@/components/migration-ui'
+import { Col } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 import Table_By_Sku from './Table_By_Sku'
@@ -73,9 +73,9 @@ const By_Sku = ({}: Props) => {
     <div>
       <React.Fragment>
         <Col xs={12}>
-          <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-0 flex-md-row justify-content-md-end align-items-md-center'>
+          <div className='tw:flex tw:flex-col-reverse tw:justify-center tw:items-end tw:gap-2 tw:mb-0 tw:md:flex-row tw:md:justify-end tw:md:items-center'>
             <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='none' />
-          </Row>
+          </div>
           <Table_By_Sku filterDataTable={filterDataTable || []} pending={data ? false : true} />
         </Col>
       </React.Fragment>

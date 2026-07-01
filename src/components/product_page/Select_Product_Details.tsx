@@ -60,31 +60,29 @@ const Select_Product_Details = ({ inventoryId, type, addEndpoint, selectionInfo,
   })
 
   return (
-    <div ref={selectProduct} className='dropdown mb-3'>
-      <button type='button' className='btn-group w-100 p-0 bg-transparent' style={errorMessage ? styles.error : styles.noError} onClick={() => setOpenDatesMenu(!openDatesMenu)}>
-        <span className='btn btn-light btn-sm form-control fs-6 w-100 text-start' style={{ backgroundColor: 'white', opacity: '100%' }}>
+    <div ref={selectProduct} className='tw:relative tw:mb-3'>
+      <button type='button' className='tw:flex tw:w-full tw:items-center tw:p-0 tw:bg-transparent tw:rounded-md' style={errorMessage ? styles.error : styles.noError} onClick={() => setOpenDatesMenu(!openDatesMenu)}>
+        <span className='tw:flex-1 tw:px-3 tw:py-[0.3rem] tw:text-[13px] tw:text-left' style={{ backgroundColor: 'white', opacity: '100%' }}>
           {selected == '' ? `Select...` : selected}
         </span>
-        <span
-          className='btn btn-light btn-sm dropdown-toggle form-control fs-6dropdown-toggle dropdown-toggle-split'
-          style={{ backgroundColor: 'white', maxWidth: '35px' }}
-          aria-expanded='false'>
-          <span className='visually-hidden'>Toggle Dropdown</span>
+        <span className='tw:flex tw:items-center tw:justify-center tw:px-2' style={{ backgroundColor: 'white', maxWidth: '35px' }} aria-expanded='false'>
+          <i className='mdi mdi-chevron-down tw:text-[16.25px]' />
+          <span className='tw:sr-only'>Toggle Dropdown</span>
         </span>
       </button>
       {errorMessage ? (
-        <p className='text-danger p-0' style={{ fontSize: '0.875em', marginTop: '0.25rem' }}>
+        <p className='tw:text-destructive tw:p-0' style={{ fontSize: '0.875em', marginTop: '0.25rem' }}>
           {errorMessage}
         </p>
       ) : null}
-      <div className={'dropdown-menu w-100 pt-3 px-4' + (openDatesMenu ? ' show' : '')}>
-        <div className='d-flex flex-column justify-content-start'>
+      <div className={'tw:absolute tw:z-10 tw:mt-1 tw:w-full tw:pt-3 tw:px-4 tw:bg-white tw:border tw:border-[#E1E3E5] tw:rounded-md tw:shadow ' + (openDatesMenu ? 'tw:block' : 'tw:hidden')}>
+        <div className='tw:flex tw:flex-col tw:justify-start'>
           <div style={{ maxHeight: '25vh', overflowY: 'scroll' }}>
             {selectionInfo?.map((option) => (
               <button
                 type='button'
                 key={option}
-                className={'btn btn-link d-block p-0 border-0 text-start text-decoration-none text-reset mb-2 ' + (selectedOption == `${option}` ? 'fw-bold' : '')}
+                className={'tw:block tw:p-0 tw:border-0 tw:bg-transparent tw:text-left tw:no-underline tw:text-inherit tw:mb-2 ' + (selectedOption == `${option}` ? 'tw:font-bold' : '')}
                 onClick={() => {
                   setSelectedOption(`${option}`)
                   handleSelection(type, `${option}`)
@@ -93,14 +91,14 @@ const Select_Product_Details = ({ inventoryId, type, addEndpoint, selectionInfo,
               </button>
             ))}
           </div>
-          <hr className='dropdown-divider' />
-          <div className='d-flex flex-column justify-content-start'>
+          <hr className='tw:my-2 tw:border-[color:var(--border)]' />
+          <div className='tw:flex tw:flex-col tw:justify-start'>
             <div>
-              <Form className='d-flex flex-row justify-content-between align-items-center w-100 gap-3 pb-2'>
-                <div className='w-100'>
+              <Form className='tw:flex tw:flex-row tw:justify-between tw:items-center tw:w-full tw:gap-3 tw:pb-2'>
+                <div className='tw:w-full'>
                   <Input
                     type='text'
-                    className='fs-6'
+                    className='tw:text-[13px]'
                     placeholder='Name...'
                     id='name'
                     name='name'
@@ -111,7 +109,7 @@ const Select_Product_Details = ({ inventoryId, type, addEndpoint, selectionInfo,
                     invalid={validation.touched.name && validation.errors.name ? true : false}
                   />
                 </div>
-                <div className='d-flex flex-row justify-content-end align-items-end gap-2 '>
+                <div className='tw:flex tw:flex-row tw:justify-end tw:items-end tw:gap-2'>
                   <Button
                     type='button'
                     onClick={(event) => {
@@ -119,13 +117,14 @@ const Select_Product_Details = ({ inventoryId, type, addEndpoint, selectionInfo,
                       validation.handleSubmit()
                     }}
                     color='primary'
-                    className='btn btn-sm m-0 text-nowrap'>
+                    size='sm'
+                    className='tw:m-0 tw:text-nowrap'>
                     Add New
                   </Button>
                 </div>
               </Form>
               {validation.touched.name && validation.errors.name ? (
-                <span className='text-danger m-0 p-0' style={{ fontSize: '12px' }}>
+                <span className='tw:text-destructive tw:m-0 tw:p-0' style={{ fontSize: '12px' }}>
                   {validation.errors.name}
                 </span>
               ) : null}

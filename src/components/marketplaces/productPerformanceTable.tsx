@@ -135,10 +135,10 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
 
   const columns: any = [
     {
-      name: <span className='fw-semibold fs-6'>Product</span>,
+      name: <span className='tw:font-semibold tw:text-[13px]'>Product</span>,
       selector: (row: ProductPerformance) => {
         return (
-          <div className='my-1 d-flex justify-content-between align-items-center gap-2'>
+          <div className='tw:my-1 tw:flex tw:justify-between tw:items-center tw:gap-2'>
             <div
               style={{
                 width: '30px',
@@ -156,15 +156,15 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
               />
             </div>
             <div>
-              <div className='d-flex flex-row justify-content-start align-items-center fs-7'>
+              <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:text-[11.2px]'>
                 <Link href={`/product/${row.inventoryId}/${row.sku}`}>
-                  <p className='m-0 p-0 text-primary fw-semibold fs-6'>{row.sku}</p>
+                  <p className='tw:m-0 tw:p-0 tw:text-primary tw:font-semibold tw:text-[13px]'>{row.sku}</p>
                 </Link>
                 <CopyTextToClipboard text={row.sku} label='SKU' />
               </div>
 
-              <p className='m-0 p-0 text-black fw-semibold fs-7 text-wrap'>{row.title}</p>
-              <p className='m-0 p-0 text-black fw-normal fs-7 d-flex flex-row justify-content-start align-items-center'>
+              <p className='tw:m-0 tw:p-0 tw:text-black tw:font-semibold tw:text-[11.2px] tw:text-wrap'>{row.title}</p>
+              <p className='tw:m-0 tw:p-0 tw:text-black tw:font-normal tw:text-[11.2px] tw:flex tw:flex-row tw:justify-start tw:items-center'>
                 {row.asin && (
                   <>
                     {`ASIN: `}
@@ -172,7 +172,7 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
                       href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`}
                       target='blank'
                       rel='noopener noreferrer'
-                      className='fw-light'
+                      className='tw:font-light'
                       style={{ textDecoration: 'none' }}>
                       {row.asin}
                     </a>
@@ -181,7 +181,7 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
                 )}
                 {row.barcode && (
                   <>
-                    UPC:<span className='fw-light text-muted'>{row.barcode}</span>
+                    UPC:<span className='tw:font-light tw:text-[color:var(--bs-secondary-color)]'>{row.barcode}</span>
                     <CopyTextToClipboard text={row.barcode} label='UPC' />
                   </>
                 )}
@@ -197,13 +197,13 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
       sortFunction: caseInsensitiveSort,
     },
     {
-      name: <span className='fw-semibold fs-6 text-center'>Supplier</span>,
+      name: <span className='tw:font-semibold tw:text-[13px] tw:text-center'>Supplier</span>,
       selector: (row: ProductPerformance) => {
         return (
           <>
-            <p className='w-100 m-0 p-0 text-start fs-7 fw-bold'>{row.supplier}</p>
-            <p className='w-100 m-0 p-0 text-start fs-7'>{row.brand}</p>
-            <p className='w-100 m-0 p-0 text-start fs-7'>{row.category}</p>
+            <p className='tw:w-full tw:m-0 tw:p-0 tw:text-left tw:text-[11.2px] tw:font-bold'>{row.supplier}</p>
+            <p className='tw:w-full tw:m-0 tw:p-0 tw:text-left tw:text-[11.2px]'>{row.brand}</p>
+            <p className='tw:w-full tw:m-0 tw:p-0 tw:text-left tw:text-[11.2px]'>{row.category}</p>
           </>
         )
       },
@@ -214,9 +214,9 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
     },
     {
       name: (
-        <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
-          <span className='fw-semibold fs-6'>Gross Revenue</span>
-          <span className={'fw-normal fs-5 ' + (totalGrossRevenue > 0 ? 'text-primary' : 'text-danger')}>{FormatCurrency(state.currentRegion, totalGrossRevenue)}</span>
+        <div className='tw:text-center tw:flex tw:flex-col tw:justify-center tw:items-center tw:gap-1'>
+          <span className='tw:font-semibold tw:text-[13px]'>Gross Revenue</span>
+          <span className={'tw:font-normal tw:text-[16.25px] ' + (totalGrossRevenue > 0 ? 'tw:text-primary' : 'tw:text-destructive')}>{FormatCurrency(state.currentRegion, totalGrossRevenue)}</span>
         </div>
       ),
       selector: (row: ProductPerformance) => {
@@ -229,9 +229,9 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
     },
     {
       name: (
-        <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
-          <span className='fw-semibold fs-6'>Expenses</span>
-          <span className={'fw-normal fs-5 ' + (totalExpenses > 0 ? 'text-danger' : 'text-primary')}>{FormatCurrency(state.currentRegion, totalExpenses)}</span>
+        <div className='tw:text-center tw:flex tw:flex-col tw:justify-center tw:items-center tw:gap-1'>
+          <span className='tw:font-semibold tw:text-[13px]'>Expenses</span>
+          <span className={'tw:font-normal tw:text-[16.25px] ' + (totalExpenses > 0 ? 'tw:text-destructive' : 'tw:text-primary')}>{FormatCurrency(state.currentRegion, totalExpenses)}</span>
         </div>
       ),
       selector: (row: ProductPerformance) => {
@@ -244,15 +244,15 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
     },
     {
       name: (
-        <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
-          <span className='fw-semibold fs-6'>Profit</span>
-          <span className={'fw-normal fs-5 ' + (totalProfit > 0 ? 'text-primary' : 'text-danger')}>{FormatCurrency(state.currentRegion, totalProfit)}</span>
+        <div className='tw:text-center tw:flex tw:flex-col tw:justify-center tw:items-center tw:gap-1'>
+          <span className='tw:font-semibold tw:text-[13px]'>Profit</span>
+          <span className={'tw:font-normal tw:text-[16.25px] ' + (totalProfit > 0 ? 'tw:text-primary' : 'tw:text-destructive')}>{FormatCurrency(state.currentRegion, totalProfit)}</span>
         </div>
       ),
       selector: (row: ProductPerformance) => {
         const netProfit = getProductNetProfit(row, selectedMarketplace.storeId)
 
-        return <span className={netProfit >= 0 ? 'text-black' : 'text-danger'}>{FormatCurrency(state.currentRegion, netProfit)}</span>
+        return <span className={netProfit >= 0 ? 'tw:text-black' : 'tw:text-destructive'}>{FormatCurrency(state.currentRegion, netProfit)}</span>
       },
       center: true,
       sortable: true,
@@ -261,9 +261,9 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
     },
     {
       name: (
-        <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
-          <span className='fw-semibold fs-6'>Margin</span>
-          <span className={'fw-normal fs-5 ' + (totalMargin > 0 ? 'text-primary' : 'text-danger')}>{FormatIntPercentage(state.currentRegion, totalMargin)}%</span>
+        <div className='tw:text-center tw:flex tw:flex-col tw:justify-center tw:items-center tw:gap-1'>
+          <span className='tw:font-semibold tw:text-[13px]'>Margin</span>
+          <span className={'tw:font-normal tw:text-[16.25px] ' + (totalMargin > 0 ? 'tw:text-primary' : 'tw:text-destructive')}>{FormatIntPercentage(state.currentRegion, totalMargin)}%</span>
         </div>
       ),
       selector: (row: ProductPerformance) => {
@@ -272,7 +272,7 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
         if (row.grossRevenue === 0) {
           return <span>0%</span>
         } else {
-          return <span className={margin >= 0 ? 'text-black' : 'text-danger'}>{FormatIntPercentage(state.currentRegion, margin)}%</span>
+          return <span className={margin >= 0 ? 'tw:text-black' : 'tw:text-destructive'}>{FormatIntPercentage(state.currentRegion, margin)}%</span>
         }
       },
       center: true,
@@ -282,9 +282,9 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
     },
     {
       name: (
-        <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
-          <span className='fw-semibold fs-6'>ROI</span>
-          <span className={'fw-normal fs-5 ' + (totalRoi === null ? 'text-muted' : totalRoi > 0 ? 'text-primary' : 'text-danger')}>
+        <div className='tw:text-center tw:flex tw:flex-col tw:justify-center tw:items-center tw:gap-1'>
+          <span className='tw:font-semibold tw:text-[13px]'>ROI</span>
+          <span className={'tw:font-normal tw:text-[16.25px] ' + (totalRoi === null ? 'tw:text-[color:var(--bs-secondary-color)]' : totalRoi > 0 ? 'tw:text-primary' : 'tw:text-destructive')}>
             {totalRoi === null ? 'N/A' : `${FormatIntPercentage(state.currentRegion, totalRoi)}%`}
           </span>
         </div>
@@ -292,9 +292,9 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
       selector: (row: ProductPerformance) => {
         const roi = getProductRoi(row, selectedMarketplace.storeId)
 
-        if (roi === null) return <span className='text-muted'>N/A</span>
+        if (roi === null) return <span className='tw:text-[color:var(--bs-secondary-color)]'>N/A</span>
 
-        return <span className={roi >= 0 ? 'text-black' : 'text-danger'}>{FormatIntPercentage(state.currentRegion, roi)}%</span>
+        return <span className={roi >= 0 ? 'tw:text-black' : 'tw:text-destructive'}>{FormatIntPercentage(state.currentRegion, roi)}%</span>
       },
       center: true,
       sortable: true,
@@ -303,10 +303,10 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
     },
     {
       name: (
-        <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
-          <span className='fw-semibold fs-6'>Refunds</span>
+        <div className='tw:text-center tw:flex tw:flex-col tw:justify-center tw:items-center tw:gap-1'>
+          <span className='tw:font-semibold tw:text-[13px]'>Refunds</span>
           <span
-            className={'fw-normal fs-5 ' + (tableData.reduce((total: number, product: ProductPerformance) => total + product.refundsQty, 0) > 0 ? 'text-primary' : 'text-muted')}>
+            className={'tw:font-normal tw:text-[16.25px] ' + (tableData.reduce((total: number, product: ProductPerformance) => total + product.refundsQty, 0) > 0 ? 'tw:text-primary' : 'tw:text-[color:var(--bs-secondary-color)]')}>
             {FormatIntNumber(
               state.currentRegion,
               tableData.reduce((total: number, product: ProductPerformance) => total + product.refundsQty, 0)
@@ -324,9 +324,9 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
     },
     {
       name: (
-        <div className='text-center d-flex flex-column justify-content-center align-item-center gap-1'>
-          <span className='fw-semibold fs-6'>Units Sold</span>
-          <span className='fw-normal fs-5 text-primary'>
+        <div className='tw:text-center tw:flex tw:flex-col tw:justify-center tw:items-center tw:gap-1'>
+          <span className='tw:font-semibold tw:text-[13px]'>Units Sold</span>
+          <span className='tw:font-normal tw:text-[16.25px] tw:text-primary'>
             {FormatIntNumber(
               state.currentRegion,
               tableData.reduce((total: number, product: ProductPerformance) => total + product.unitsSold, 0)
@@ -337,9 +337,8 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
       selector: (row: ProductPerformance) => {
         return (
           <Button
-            color='info'
-            outline
-            className='btn btn-ghost-info'
+            color='ghost'
+            className='tw:!text-info tw:hover:bg-[color-mix(in_srgb,var(--info)_10%,transparent)]'
             onClick={() =>
               setshowUnitsSoldDetailsModal({
                 showUnitsSoldDetailsModal: true,

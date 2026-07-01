@@ -27,24 +27,24 @@ const PurchaseOrdersWidgets = ({}: Props) => {
   )
 
   return (
-    <Row className='mb-2 gy-2 gx-1'>
+    <Row className='tw:mb-2 tw:gap-y-2'>
       <Col xs={12} md={3}>
-        <Card className='card-animate mb-0'>
-          <CardBody className='py-2 d-flex align-items-center justify-content-between gap-4'>
-            <div className='d-flex align-items-center justify-content-between mb-1'>
-              <p className='text-capitalize fw-normal mb-0  text-nowrap' style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                <span className='text-primary fw-bold'>PO</span> Balance
+        <Card className='card-animate tw:mb-0'>
+          <CardBody className='tw:py-2 tw:flex tw:items-center tw:justify-between tw:gap-4'>
+            <div className='tw:flex tw:items-center tw:justify-between tw:mb-1'>
+              <p className='tw:capitalize tw:font-normal tw:mb-0 tw:text-nowrap' style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                <span className='tw:text-primary tw:font-bold'>PO</span> Balance
               </p>
-              <div className='flex-shrink-0'>{/* <h5 className={'fs-6 mb-0 fw-bold'}>{1762} SKUs</h5> */}</div>
+              <div className='tw:shrink-0'>{/* <h5 className={'fs-6 mb-0 fw-bold'}>{1762} SKUs</h5> */}</div>
             </div>
-            <div className='d-flex flex-row align-items-center justify-content-between gap-2 flex-md-column align-items-md-start flex-lg-row align-items-lg-center'>
-              <h4 className='fs-5 fw-semibold mb-0'>
+            <div className='tw:flex tw:flex-row tw:items-center tw:justify-between tw:gap-2 tw:md:flex-col tw:md:items-start tw:lg:flex-row tw:lg:items-center'>
+              <h4 className='tw:text-[16.25px] tw:font-semibold tw:mb-0'>
                 <span className='counter-value'>
                   <CountUp start={0} prefix={'$'} separator={','} end={data?.balance ?? 0} decimals={2} duration={1} />
                 </span>
               </h4>
-              <Button className='btn-icon btn-primary btn-sm m-0' onClick={() => setpoBalanceListModal({ show: true })}>
-                <i className='ri-list-check fs-5 align-middle' />
+              <Button color='primary' size='sm' className='tw:m-0' onClick={() => setpoBalanceListModal({ show: true })}>
+                <i className='ri-list-check tw:text-[16.25px] tw:align-middle' />
               </Button>
             </div>
           </CardBody>

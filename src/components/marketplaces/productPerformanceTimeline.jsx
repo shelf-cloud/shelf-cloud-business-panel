@@ -236,7 +236,7 @@ const ProductPerformanceTimeline = ({ productTimeLine }) => {
   }
   return (
     <>
-      <div className='px-4 m-0 d-flex flex-row justify-content-start align-items-center gap-2'>
+      <div className='tw:px-4 tw:m-0 tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2'>
         <Button size='sm' color={grouping === 'daily' ? 'primary' : 'light'} onClick={() => setGrouping('daily')}>
           Daily
         </Button>

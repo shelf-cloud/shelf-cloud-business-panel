@@ -96,13 +96,13 @@ const PurchaseOrders = ({ session }: Props) => {
               <Col lg={12}>
                 <Card>
                   <CardHeader>
-                    <div className='d-flex flex-column justify-content-between align-items-end mt-0 mb-0 gap-3 flex-lg-row'>
-                      <div className='flex-1'>
-                        <p className='m-0 p-0 fs-7 text-muted fw-normal'>Organize Purchase Orders by:</p>
-                        <Nav className='pt-1 nav-tabs-custom rounded card-header-tabs border-bottom-0' role='tablist'>
+                    <div className='tw:flex tw:flex-col tw:justify-between tw:items-end tw:mt-0 tw:mb-0 tw:gap-3 tw:lg:flex-row'>
+                      <div className='tw:flex-1'>
+                        <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:text-[color:var(--bs-secondary-color)] tw:font-normal'>Organize Purchase Orders by:</p>
+                        <Nav className='tw:pt-1' role='tablist'>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
-                              className={organizeBy == 'suppliers' ? 'text-primary fw-semibold fs-5' : 'text-muted fs-5'}
+                              className={organizeBy == 'suppliers' ? 'tw:!text-primary tw:font-semibold tw:text-[16.25px]' : 'tw:!text-[color:var(--bs-secondary-color)] tw:text-[16.25px]'}
                               onClick={() => {
                                 router.replace(`/purchaseOrders?status=${status}&organizeBy=suppliers`, undefined, { shallow: true })
                               }}>
@@ -111,7 +111,7 @@ const PurchaseOrders = ({ session }: Props) => {
                           </NavItem>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
-                              className={organizeBy == 'orders' ? 'text-primary fw-semibold fs-5' : 'text-muted fs-5'}
+                              className={organizeBy == 'orders' ? 'tw:!text-primary tw:font-semibold tw:text-[16.25px]' : 'tw:!text-[color:var(--bs-secondary-color)] tw:text-[16.25px]'}
                               onClick={() => {
                                 router.replace(`/purchaseOrders?status=${status}&organizeBy=orders`, undefined, { shallow: true })
                               }}
@@ -121,7 +121,7 @@ const PurchaseOrders = ({ session }: Props) => {
                           </NavItem>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
-                              className={organizeBy == 'sku' ? 'text-primary fw-semibold fs-5' : 'text-muted fs-5'}
+                              className={organizeBy == 'sku' ? 'tw:!text-primary tw:font-semibold tw:text-[16.25px]' : 'tw:!text-[color:var(--bs-secondary-color)] tw:text-[16.25px]'}
                               onClick={() => {
                                 router.replace(`/purchaseOrders?status=${status}&organizeBy=sku`, undefined, { shallow: true })
                               }}
@@ -131,31 +131,33 @@ const PurchaseOrders = ({ session }: Props) => {
                           </NavItem>
                         </Nav>
                       </div>
-                      <div className='flex-1 w-auto d-flex flex-row flex-wrap align-items-end justify-content-start gap-2 justify-content-lg-end'>
+                      <div className='tw:flex-1 tw:w-auto tw:flex tw:flex-row tw:flex-wrap tw:items-end tw:justify-start tw:gap-2 tw:lg:justify-end'>
                         {status == 'pending' ? (
                           <Button
-                            className='fs-7 btn py-1 px-3 text-nowrap'
+                            className='tw:text-[11.2px] tw:py-1 tw:px-3 tw:text-nowrap'
                             color='info'
                             onClick={() => {
                               router.replace(`/purchaseOrders?status=all&organizeBy=${organizeBy}`)
                             }}>
-                            <i className='mdi mdi-eye label-icon align-middle fs-5 me-2' />
+                            <i className='mdi mdi-eye label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
                             Show Completed
                           </Button>
                         ) : (
                           <Button
-                            className='fs-7 btn py-1 px-3 text-nowrap'
+                            className='tw:text-[11.2px] tw:py-1 tw:px-3 tw:text-nowrap'
                             color='info'
                             onClick={() => {
                               router.replace(`/purchaseOrders?status=pending&organizeBy=${organizeBy}`)
                             }}>
-                            <i className='mdi mdi-eye-off label-icon align-middle fs-5 me-2' />
+                            <i className='mdi mdi-eye-off label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
                             Hide Completed
                           </Button>
                         )}
                         <UncontrolledButtonDropdown>
-                          <DropdownToggle className='fs-7 btn btn-primary py-1 px-3 text-nowrap' caret>
-                            <i className='mdi mdi-plus-circle label-icon align-middle fs-5 me-2' />
+                          <DropdownToggle
+                            caret
+                            className='tw:inline-flex tw:items-center tw:gap-1 tw:rounded-md tw:bg-primary tw:py-1 tw:px-3 tw:text-[11.2px] tw:font-medium tw:text-primary-foreground tw:whitespace-nowrap tw:shadow-xs tw:hover:bg-primary/90'>
+                            <i className='mdi mdi-plus-circle label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
                             Add Purchase Order
                           </DropdownToggle>
                           <DropdownMenu>
@@ -163,17 +165,13 @@ const PurchaseOrders = ({ session }: Props) => {
                             <DropdownItem onClick={() => setShowCreatePoManually(true)}>Manually</DropdownItem>
                           </DropdownMenu>
                         </UncontrolledButtonDropdown>
-                        {/* <Button className='btn fs-6 py-1 px-3' color='primary' onClick={() => setShowCreatePoFromFile(true)}>
-                          <i className='mdi mdi-plus-circle label-icon align-middle fs-5 me-2' />
-                          Add Purchase Order
-                        </Button> */}
                         <Button
                           color='primary'
-                          className='fs-7 btn py-1 px-3 text-nowrap'
+                          className='tw:text-[11.2px] tw:py-1 tw:px-3 tw:text-nowrap'
                           onClick={() => {
                             setShowCreateReceivingFromPo(true)
                           }}>
-                          <i className='mdi mdi-airplane-landing label-icon align-middle fs-5 me-2' />
+                          <i className='mdi mdi-airplane-landing label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
                           Create Receiving
                         </Button>
                       </div>

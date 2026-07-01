@@ -19,7 +19,7 @@ const Table_By_Suppliers_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBy
   const { state }: any = useContext(AppContext)
   const columns: any = [
     {
-      name: <span className='fw-bolder fs-6'>Order Number</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Order Number</span>,
       selector: (row: PurchaseOrder) => row.orderNumber,
       sortable: true,
       left: true,
@@ -30,13 +30,13 @@ const Table_By_Suppliers_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBy
       },
     },
     // {
-    //   name: <span className='fw-bolder fs-6'>Supplier</span>,
+    //   name: <span className='tw:font-extrabold tw:text-[13px]'>Supplier</span>,
     //   selector: (row: PurchaseOrder) => row.suppliersName,
     //   sortable: true,
     //   compact: true,
     // },
     {
-      name: <span className='fw-bolder fs-6'>Date Created</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Date Created</span>,
       selector: (row: PurchaseOrder) => row.date,
       sortable: true,
       center: true,
@@ -46,7 +46,7 @@ const Table_By_Suppliers_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBy
       },
     },
     {
-      name: <span className='fw-bolder fs-6'>Order Cost</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Order Cost</span>,
       selector: (row: PurchaseOrder) =>
         FormatCurrency(
           state.currentRegion,
@@ -65,7 +65,7 @@ const Table_By_Suppliers_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBy
       },
     },
     {
-      name: <span className='fw-bolder fs-6'>Status</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Status</span>,
       selector: (row: PurchaseOrder) => {
         switch (true) {
           case row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) === 0:
@@ -96,13 +96,13 @@ const Table_By_Suppliers_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBy
       conditionalCellStyles: [
         {
           when: (row: PurchaseOrder) => row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) === 0,
-          classNames: ['text-primary'],
+          classNames: ['tw:text-primary'],
         },
         {
           when: (row: PurchaseOrder) =>
             row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) > 0 &&
             row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) < row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0),
-          classNames: ['text-info'],
+          classNames: ['tw:text-info'],
         },
         {
           when: (row: PurchaseOrder) =>
@@ -110,7 +110,7 @@ const Table_By_Suppliers_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBy
             row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) ===
               row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0),
 
-          classNames: ['text-danger'],
+          classNames: ['tw:text-destructive'],
         },
         {
           when: (row: PurchaseOrder) =>
@@ -118,7 +118,7 @@ const Table_By_Suppliers_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBy
             row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) ===
               row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0),
 
-          classNames: ['text-success'],
+          classNames: ['tw:text-success'],
         },
       ],
       style: {
@@ -126,7 +126,7 @@ const Table_By_Suppliers_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBy
       },
     },
     {
-      name: <span className='fw-bolder fs-6'>Destination</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Destination</span>,
       selector: (row: PurchaseOrder) => row.warehouseName,
       sortable: true,
       left: true,
@@ -138,11 +138,11 @@ const Table_By_Suppliers_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBy
       },
     },
     {
-      name: <span className='fw-bolder fs-6'></span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'></span>,
       selector: (row: PurchaseOrder) =>
         state.receivingFromPo.items[row.poId] ? (
           <>
-            <Badge pill color='success' className='fs-7'>
+            <Badge pill color='success' className='tw:text-[11.2px]'>
               {FormatIntNumber(
                 state.currentRegion,
                 Object.entries(state.receivingFromPo.items[row.poId]).reduce((total: number, obj: [string, any]) => total + obj[1].receivingQty, 0)
@@ -158,7 +158,7 @@ const Table_By_Suppliers_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBy
       grow: 0,
     },
     {
-      name: <span className='fw-bolder fs-6'></span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'></span>,
       selector: (row: PurchaseOrder) => <PurchaseOrderActionsDropdown purchaseOrder={row} />,
       sortable: false,
       center: true,
@@ -167,7 +167,7 @@ const Table_By_Suppliers_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBy
     },
   ]
   return (
-    <div className='p-2'>
+    <div className='tw:p-2'>
       <Card>
         <DataTable columns={columns} data={data.orders} striped={true} expandableRows expandableRowsComponent={Expanded_By_Orders} defaultSortFieldId={2} defaultSortAsc={false} />
       </Card>

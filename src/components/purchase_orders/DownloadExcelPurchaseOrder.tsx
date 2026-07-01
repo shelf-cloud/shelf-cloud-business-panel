@@ -28,8 +28,8 @@ const DownloadExcelPurchaseOrder = ({ purchaseOrder }: Props) => {
   }
 
   return (
-    <Button color='primary' className='btn-label fs-7' onClick={() => (purchaseOrder.hasSplitting ? exportSplitExcelFile() : exportExcelFile())}>
-      <i className='mdi mdi-arrow-down-bold label-icon align-middle fs-5 me-2' />
+    <Button color='primary' className='tw:text-[11.2px]' onClick={() => (purchaseOrder.hasSplitting ? exportSplitExcelFile() : exportExcelFile())}>
+      <i className='mdi mdi-arrow-down-bold label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
       Download Excel
     </Button>
   )

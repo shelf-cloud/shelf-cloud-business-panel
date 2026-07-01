@@ -5,7 +5,7 @@ import SearchInput from '@components/ui/SearchInput'
 import AppContext from '@context/AppContext'
 import { PurchaseOrder, PurchaseOrderBySuppliers, PurchaseOrderItem } from '@typesTs/purchaseOrders'
 import axios from 'axios'
-import { Col, Row } from '@/components/migration-ui'
+import { Col } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 import Table_By_Suppliers from './Table_By_Suppliers'
@@ -79,9 +79,9 @@ const By_Suppliers = ({}: Props) => {
     <div>
       <React.Fragment>
         <Col xs={12}>
-          <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-end align-items-md-center'>
+          <div className='tw:flex tw:flex-col-reverse tw:justify-center tw:items-end tw:gap-2 tw:mb-2 tw:md:flex-row tw:md:justify-end tw:md:items-center'>
             <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='none' />
-          </Row>
+          </div>
           <Table_By_Suppliers filterDataTable={filterDataTable || []} pending={data ? false : true} />
         </Col>
       </React.Fragment>

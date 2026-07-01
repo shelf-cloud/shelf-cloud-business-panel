@@ -245,15 +245,15 @@ const AddProducts = ({ session }: Props) => {
               <CardBody>
                 <Form onSubmit={handleAddProduct}>
                   <Row>
-                    <h5 className='fs-5 fw-bold text-primary'>Product Details</h5>
+                    <h5 className='tw:text-[16.25px] tw:font-bold tw:text-primary'>Product Details</h5>
                     <Col md={6}>
-                      <FormGroup className='mb-3'>
-                        <Label htmlFor='firstNameinput' className='form-label fs-7'>
+                      <FormGroup>
+                        <Label htmlFor='firstNameinput' className='tw:text-[11.2px]'>
                           *Title
                         </Label>
                         <Input
                           type='text'
-                          className='form-control form-control-sm fs-6'
+                          bsSize='sm'
                           placeholder='Title...'
                           id='title'
                           name='title'
@@ -266,13 +266,13 @@ const AddProducts = ({ session }: Props) => {
                       </FormGroup>
                     </Col>
                     <Col md={6}>
-                      <FormGroup className='mb-3'>
-                        <Label htmlFor='lastNameinput' className='form-label fs-7'>
+                      <FormGroup>
+                        <Label htmlFor='lastNameinput' className='tw:text-[11.2px]'>
                           *SKU
                         </Label>
                         <Input
                           type='text'
-                          className='form-control form-control-sm fs-6'
+                          bsSize='sm'
                           placeholder='Sku...'
                           id='sku'
                           name='sku'
@@ -285,13 +285,13 @@ const AddProducts = ({ session }: Props) => {
                       </FormGroup>
                     </Col>
                     <Col md={3}>
-                      <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
+                      <FormGroup>
+                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
                           ASIN
                         </Label>
                         <Input
                           type='text'
-                          className='form-control form-control-sm fs-6'
+                          bsSize='sm'
                           placeholder='Asin...'
                           id='asin'
                           name='asin'
@@ -304,13 +304,13 @@ const AddProducts = ({ session }: Props) => {
                       </FormGroup>
                     </Col>
                     <Col md={3}>
-                      <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
+                      <FormGroup>
+                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
                           FNSKU
                         </Label>
                         <Input
                           type='text'
-                          className='form-control form-control-sm fs-6'
+                          bsSize='sm'
                           placeholder='Fnsku...'
                           id='fnsku'
                           name='fnsku'
@@ -323,13 +323,13 @@ const AddProducts = ({ session }: Props) => {
                       </FormGroup>
                     </Col>
                     <Col md={3}>
-                      <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
+                      <FormGroup>
+                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
                           UPC / Barcode
                         </Label>
                         <Input
                           type='text'
-                          className='form-control form-control-sm fs-6'
+                          bsSize='sm'
                           placeholder='Barcode...'
                           id='barcode'
                           name='barcode'
@@ -342,13 +342,13 @@ const AddProducts = ({ session }: Props) => {
                       </FormGroup>
                     </Col>
                     <Col md={3}>
-                      <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
+                      <FormGroup>
+                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
                           Selling Price {state?.currentRegion == 'us' ? '($)' : '(€)'}
                         </Label>
                         <Input
                           type='number'
-                          className='form-control form-control-sm fs-6'
+                          bsSize='sm'
                           placeholder='Selling Price...'
                           id='defaultPrice'
                           name='defaultPrice'
@@ -460,7 +460,7 @@ const AddProducts = ({ session }: Props) => {
                     </Col>
 
                     {/* ADD PRODUCT IMAGE */}
-                    <Row className='align-items-center'>
+                    <Row className='tw:items-center'>
                       {validation.values.image && (
                         <Col xs={2} md={1} style={{ minWidth: 'fit-content' }}>
                           <div
@@ -484,14 +484,14 @@ const AddProducts = ({ session }: Props) => {
                         </Col>
                       )}
                       <Col xs={10} md={9}>
-                        <FormGroup className='mb-0'>
-                          <Label htmlFor='lastNameinput' className='form-label fs-7'>
+                        <FormGroup className='tw:!mb-0'>
+                          <Label htmlFor='lastNameinput' className='tw:text-[11.2px]'>
                             Product Image
                           </Label>
                           <Input
                             type='text'
                             disabled={uploadLogoImage.selectedFiles.length > 0}
-                            className='form-control form-control-sm fs-6'
+                            bsSize='sm'
                             placeholder='Image URL...'
                             id='image'
                             name='image'
@@ -504,26 +504,26 @@ const AddProducts = ({ session }: Props) => {
                         </FormGroup>
                       </Col>
                       <Col xs={4} md={2}>
-                        <Button className='d-flex align-items-center gap-2 m-0' color='primary' size='sm' onClick={() => setuploadLogoImage((prev) => ({ ...prev, isOpen: true }))}>
-                          <i className='mdi mdi-cloud-upload fs-5 m-0 p-0' />
+                        <Button className='tw:flex tw:items-center tw:gap-2 tw:m-0' color='primary' size='sm' onClick={() => setuploadLogoImage((prev) => ({ ...prev, isOpen: true }))}>
+                          <i className='mdi mdi-cloud-upload tw:text-[16.25px] tw:m-0 tw:p-0' />
                           Image
                         </Button>
                       </Col>
                     </Row>
 
-                    <div className='border mt-3 border-dashed'></div>
+                    <div className='tw:mt-3 tw:border tw:border-dashed tw:border-[color:var(--border)]'></div>
 
                     {/* DIMENSIONS & WEIGHTS */}
 
-                    <h5 className='fs-5 mt-3 fw-bold text-primary'>Unit Dimensions</h5>
+                    <h5 className='tw:text-[16.25px] tw:mt-3 tw:font-bold tw:text-primary'>Unit Dimensions</h5>
                     <Col md={3}>
-                      <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
+                      <FormGroup>
+                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
                           Weight {state?.currentRegion == 'us' ? '(lb)' : '(kg)'}
                         </Label>
                         <Input
                           type='number'
-                          className='form-control form-control-sm fs-6'
+                          bsSize='sm'
                           placeholder='Weight...'
                           id='weight'
                           name='weight'
@@ -536,13 +536,13 @@ const AddProducts = ({ session }: Props) => {
                       </FormGroup>
                     </Col>
                     <Col md={3}>
-                      <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
+                      <FormGroup>
+                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
                           Width {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
                           type='number'
-                          className='form-control form-control-sm fs-6'
+                          bsSize='sm'
                           placeholder='Width...'
                           id='width'
                           name='width'
@@ -555,13 +555,13 @@ const AddProducts = ({ session }: Props) => {
                       </FormGroup>
                     </Col>
                     <Col md={3}>
-                      <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
+                      <FormGroup>
+                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
                           Length {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
                           type='number'
-                          className='form-control form-control-sm fs-6'
+                          bsSize='sm'
                           placeholder='Length...'
                           id='length'
                           name='length'
@@ -574,13 +574,13 @@ const AddProducts = ({ session }: Props) => {
                       </FormGroup>
                     </Col>
                     <Col md={3}>
-                      <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
+                      <FormGroup>
+                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
                           Height {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
                           type='number'
-                          className='form-control form-control-sm fs-6'
+                          bsSize='sm'
                           placeholder='Height...'
                           id='height'
                           name='height'
@@ -593,27 +593,27 @@ const AddProducts = ({ session }: Props) => {
                       </FormGroup>
                     </Col>
 
-                    <div className='border mt-3 border-dashed'></div>
+                    <div className='tw:mt-3 tw:border tw:border-dashed tw:border-[color:var(--border)]'></div>
 
                     {/* BOX DIMENSIONS & WEIGHTS */}
 
-                    <div className='align-items-baseline d-flex gap-3 justify-content-start mb-2'>
-                      <h5 className='fs-5 mt-3 fw-bold text-primary'>Box Dimensions</h5>
-                      <div className='flex-shrink-0'>
-                        <div className='form-check form-switch form-switch-right form-switch-sm'>
-                          <Label className='form-label text-muted'>Same as unit dimensions</Label>
+                    <div className='tw:items-baseline tw:flex tw:gap-3 tw:justify-start tw:mb-2'>
+                      <h5 className='tw:text-[16.25px] tw:mt-3 tw:font-bold tw:text-primary'>Box Dimensions</h5>
+                      <div className='tw:shrink-0'>
+                        <div className='tw:flex tw:items-center tw:gap-2'>
+                          <Label className='tw:text-[color:var(--bs-secondary-color)]'>Same as unit dimensions</Label>
                           <Switch checked={useSameUnitDimensions} onChange={handleBoxDimensionsCheckbox} />
                         </div>
                       </div>
                     </div>
                     <Col md={3}>
-                      <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
+                      <FormGroup>
+                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
                           Box Weight {state?.currentRegion == 'us' ? '(lb)' : '(kg)'}
                         </Label>
                         <Input
                           type='number'
-                          className='form-control form-control-sm fs-6'
+                          bsSize='sm'
                           placeholder='Box Weight...'
                           id='boxweight'
                           name='boxweight'
@@ -626,13 +626,13 @@ const AddProducts = ({ session }: Props) => {
                       </FormGroup>
                     </Col>
                     <Col md={3}>
-                      <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
+                      <FormGroup>
+                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
                           Box Width {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
                           type='number'
-                          className='form-control form-control-sm fs-6'
+                          bsSize='sm'
                           placeholder='Box Width...'
                           id='boxwidth'
                           name='boxwidth'
@@ -645,13 +645,13 @@ const AddProducts = ({ session }: Props) => {
                       </FormGroup>
                     </Col>
                     <Col md={3}>
-                      <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
+                      <FormGroup>
+                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
                           Box Length {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
                           type='number'
-                          className='form-control form-control-sm fs-6'
+                          bsSize='sm'
                           placeholder='Box Length...'
                           id='boxlength'
                           name='boxlength'
@@ -664,13 +664,13 @@ const AddProducts = ({ session }: Props) => {
                       </FormGroup>
                     </Col>
                     <Col md={3}>
-                      <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
+                      <FormGroup>
+                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
                           Box Height {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
                           type='number'
-                          className='form-control form-control-sm fs-6'
+                          bsSize='sm'
                           placeholder='Box Height...'
                           id='boxheight'
                           name='boxheight'
@@ -683,13 +683,13 @@ const AddProducts = ({ session }: Props) => {
                       </FormGroup>
                     </Col>
                     <Col md={3}>
-                      <FormGroup className='mb-3'>
-                        <Label htmlFor='compnayNameinput' className='form-label fs-7'>
+                      <FormGroup>
+                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
                           Box Quantity
                         </Label>
                         <Input
                           type='number'
-                          className='form-control form-control-sm fs-6'
+                          bsSize='sm'
                           placeholder='Box Qty...'
                           id='boxqty'
                           name='boxqty'
@@ -702,10 +702,10 @@ const AddProducts = ({ session }: Props) => {
                       </FormGroup>
                     </Col>
 
-                    <h5 className='fs-7 mb-3 text-muted fw-light'>*You must complete all required fields.</h5>
+                    <h5 className='tw:text-[11.2px] tw:mb-3 tw:text-[color:var(--bs-secondary-color)] tw:font-light'>*You must complete all required fields.</h5>
                     <Col md={12}>
-                      <div className='text-end'>
-                        <Button type='submit' className='btn btn-primary'>
+                      <div className='tw:text-right'>
+                        <Button type='submit' color='primary'>
                           Add New Product
                         </Button>
                       </div>

@@ -83,22 +83,22 @@ const Product_Page_Layout = ({}: Props) => {
         <div className='page-content'>
           <Container fluid>
             <BreadCrumb title='Product Details' pageTitle='Inventory' />
-            <Card className='fs-6'>
+            <Card className='tw:text-[13px]'>
               {!isLoading ? (
                 <>
-                  <CardHeader className='d-flex flex-column justify-content-between align-items-start flex-lg-row'>
+                  <CardHeader className='tw:flex tw:flex-col tw:justify-between tw:items-start tw:lg:flex-row'>
                     <div>
                       <Link href={'/Products?brand=All&supplier=All&category=All&condition=All&status=All'}>
                         <Button color='primary' outline style={{ cursor: 'pointer' }}>
-                          <span className='icon-on fs-7'>
-                            <i className='ri-arrow-left-line align-bottom me-1' />
+                          <span className='icon-on tw:text-[11.2px]'>
+                            <i className='ri-arrow-left-line tw:align-bottom tw:me-1' />
                             Products
                           </span>
                         </Button>
                       </Link>
-                      <div className='mt-3'>
-                        <div className='fw-semibold fs-3'>
-                          <span className='text-muted fs-4'>SKU:</span> {info![1]} <CopyTextToClipboard text={info![1]} label='SKU' fontSize='fs-4' />
+                      <div className='tw:mt-3'>
+                        <div className='tw:font-semibold tw:text-[22.75px]'>
+                          <span className='tw:text-[color:var(--bs-secondary-color)] tw:text-[19.5px]'>SKU:</span> {info![1]} <CopyTextToClipboard text={info![1]} label='SKU' fontSize='fs-4' />
                         </div>
                       </div>
                     </div>
@@ -111,7 +111,7 @@ const Product_Page_Layout = ({}: Props) => {
                   </CardHeader>
                   <CardBody>
                     <Row>
-                      <Col xs='12' md='12' lg='9' className='gap-2 d-flex flex-column overflow-auto'>
+                      <Col xs='12' md='12' lg='9' className='tw:gap-2 tw:flex tw:flex-col tw:overflow-auto'>
                         <General_Product_Details
                           inventoryId={productDetails?.inventoryId}
                           sku={productDetails?.sku}
@@ -130,10 +130,10 @@ const Product_Page_Layout = ({}: Props) => {
                           useExpireDate={productDetails?.useExpireDate ?? false}
                           expirationTime={productDetails?.expirationTime ?? 0}
                         />
-                        <Nav className='pt-2 border-bottom-0' role='tablist'>
+                        <Nav className='tw:pt-2' role='tablist'>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
-                              className={'fs-5 fw-semibold ' + (activeTab == '1' ? 'text-primary' : 'text-muted')}
+                              className={'tw:text-[16.25px] tw:font-semibold ' + (activeTab == '1' ? 'tw:!text-primary' : 'tw:!text-[color:var(--bs-secondary-color)]')}
                               onClick={() => {
                                 tabChange('1')
                               }}>
@@ -146,7 +146,7 @@ const Product_Page_Layout = ({}: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={'fs-5 fw-semibold ' + (activeTab == '2' ? 'text-primary' : 'text-muted')}
+                              className={'tw:text-[16.25px] tw:font-semibold ' + (activeTab == '2' ? 'tw:!text-primary' : 'tw:!text-[color:var(--bs-secondary-color)]')}
                               onClick={() => {
                                 tabChange('2')
                               }}
@@ -160,7 +160,7 @@ const Product_Page_Layout = ({}: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={'fs-5 fw-semibold ' + (activeTab == '3' ? 'text-primary' : 'text-muted')}
+                              className={'tw:text-[16.25px] tw:font-semibold ' + (activeTab == '3' ? 'tw:!text-primary' : 'tw:!text-[color:var(--bs-secondary-color)]')}
                               onClick={() => {
                                 tabChange('3')
                               }}
@@ -174,7 +174,7 @@ const Product_Page_Layout = ({}: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={'fs-5 fw-semibold ' + (activeTab == '4' ? 'text-primary' : 'text-muted')}
+                              className={'tw:text-[16.25px] tw:font-semibold ' + (activeTab == '4' ? 'tw:!text-primary' : 'tw:!text-[color:var(--bs-secondary-color)]')}
                               onClick={() => {
                                 tabChange('4')
                               }}
@@ -188,7 +188,7 @@ const Product_Page_Layout = ({}: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={'fs-5 fw-semibold ' + (activeTab == '5' ? 'text-primary' : 'text-muted')}
+                              className={'tw:text-[16.25px] tw:font-semibold ' + (activeTab == '5' ? 'tw:!text-primary' : 'tw:!text-[color:var(--bs-secondary-color)]')}
                               onClick={() => {
                                 tabChange('5')
                               }}
@@ -200,7 +200,7 @@ const Product_Page_Layout = ({}: Props) => {
                             </NavLink>
                           </NavItem>
                         </Nav>
-                        <TabContent activeTab={activeTab} className='pt-2 pb-4 border-bottom'>
+                        <TabContent activeTab={activeTab} className='tw:pt-2 tw:pb-4 tw:border-b tw:border-[color:var(--border)]'>
                           <TabPane tabId='1'>
                             <SKU_product_details
                               inventoryId={productDetails?.inventoryId}
@@ -265,7 +265,7 @@ const Product_Page_Layout = ({}: Props) => {
                           amazonFBA={productDetails?.amazonFBA ?? []}
                         />
                       </Col>
-                      <Col xs='12' md='12' lg='3' className='gap-4 d-flex flex-column'>
+                      <Col xs='12' md='12' lg='3' className='tw:gap-4 tw:flex tw:flex-col'>
                         <Status_Product_Details
                           active={productDetails?.activeState ?? true}
                           isKit={productDetails?.isKit ? true : false}
@@ -278,8 +278,8 @@ const Product_Page_Layout = ({}: Props) => {
                   </CardBody>
                 </>
               ) : (
-                <div className='w-100 h-100 px-4 py-4 d-flex justify-content-center align-items-center'>
-                  <div className='fs-4 fw-normal my-4 d-flex justify-content-center align-items-center gap-3'>
+                <div className='tw:w-full tw:h-full tw:px-4 tw:py-4 tw:flex tw:justify-center tw:items-center'>
+                  <div className='tw:text-[19.5px] tw:font-normal tw:my-4 tw:flex tw:justify-center tw:items-center tw:gap-3'>
                     <Spinner color='primary' size={'md'} /> Loading product details...
                   </div>
                 </div>

@@ -1,5 +1,3 @@
-import { Col, Row } from '@/components/migration-ui'
-
 type Props = {
   active: boolean
   isKit: boolean
@@ -8,22 +6,22 @@ type Props = {
 
 const Status_Product_Details = ({ active, isKit, inStock }: Props) => {
   return (
-    <div className='border-start ps-4 py-1 w-100'>
-      <p className='fs-4 text-primary fw-semibold'>Status</p>
-      <Row xs={1}>
-        <Col className='d-flex justify-content-start align-items-center'>
-          <i className={'ri-checkbox-circle-fill align-middle me-2 fs-4 ' + (active ? 'text-success' : 'text-muted')}></i>
-          <span className='fs-6 fw-bolder'>Active</span>
-        </Col>
-        <Col className='d-flex justify-content-start align-items-center mt-2'>
-          <i className={'align-middle me-2 fs-3 text-primary ' + (isKit ? 'las la-sitemap' : 'las la-box')}></i>
-          <span className='fs-6 fw-bolder'>{isKit ? 'Kit Product' : 'Standard Product'}</span>
-        </Col>
-        <Col className='d-flex justify-content-start align-items-center mt-2'>
-          <i className={'align-middle me-2 fs-4 ' + (inStock ? 'ri-checkbox-circle-fill text-success' : 'ri-error-warning-fill text-danger')}></i>
-          <span className='fs-6 fw-bolder'>{inStock ? 'In Stock' : 'Out Of Stock'}</span>
-        </Col>
-      </Row>
+    <div className='tw:border-l tw:border-[color:var(--border)] tw:ps-4 tw:py-1 tw:w-full'>
+      <p className='tw:text-[19.5px] tw:text-primary tw:font-semibold'>Status</p>
+      <div className='tw:flex tw:flex-col'>
+        <div className='tw:flex tw:justify-start tw:items-center'>
+          <i className={'ri-checkbox-circle-fill tw:align-middle tw:me-2 tw:text-[19.5px] ' + (active ? 'tw:text-success' : 'tw:text-[color:var(--bs-secondary-color)]')}></i>
+          <span className='tw:text-[13px] tw:font-extrabold'>Active</span>
+        </div>
+        <div className='tw:flex tw:justify-start tw:items-center tw:mt-2'>
+          <i className={'tw:align-middle tw:me-2 tw:text-[22.75px] tw:text-primary ' + (isKit ? 'las la-sitemap' : 'las la-box')}></i>
+          <span className='tw:text-[13px] tw:font-extrabold'>{isKit ? 'Kit Product' : 'Standard Product'}</span>
+        </div>
+        <div className='tw:flex tw:justify-start tw:items-center tw:mt-2'>
+          <i className={'tw:align-middle tw:me-2 tw:text-[19.5px] ' + (inStock ? 'ri-checkbox-circle-fill tw:text-success' : 'ri-error-warning-fill tw:text-destructive')}></i>
+          <span className='tw:text-[13px] tw:font-extrabold'>{inStock ? 'In Stock' : 'Out Of Stock'}</span>
+        </div>
+      </div>
     </div>
   )
 }

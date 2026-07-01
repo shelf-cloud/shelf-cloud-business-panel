@@ -118,15 +118,15 @@ const FilterProfits = ({
             <Row>
               <Col md={3}>
                 <FormGroup className='createOrder_inputs'>
-                  <Label htmlFor='lastNameinput' className='form-label'>
+                  <Label htmlFor='lastNameinput'>
                     Gross Revenue
                   </Label>
-                  <div className='d-flex flex-row justify-content-between align-items-center gap-2'>
+                  <div className='tw:flex tw:flex-row tw:justify-between tw:items-center tw:gap-2'>
                     <InputGroup size='sm'>
-                      <InputGroupText className='fs-5 py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
+                      <InputGroupText className='tw:text-[16.25px] tw:py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
                       <Input
                         type='number'
-                        className='form-control fs-6 m-0'
+                        className='tw:text-[13px] tw:m-0'
                         bsSize='sm'
                         style={{ padding: '0.2rem 0.9rem' }}
                         placeholder='Min'
@@ -140,10 +140,10 @@ const FilterProfits = ({
                       />
                     </InputGroup>
                     <InputGroup size='sm'>
-                      <InputGroupText className='fs-5 py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
+                      <InputGroupText className='tw:text-[16.25px] tw:py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
                       <Input
                         type='number'
-                        className='form-control fs-6 m-0'
+                        className='tw:text-[13px] tw:m-0'
                         bsSize='sm'
                         style={{ padding: '0.2rem 0.9rem' }}
                         placeholder='Max'
@@ -161,15 +161,15 @@ const FilterProfits = ({
               </Col>
               <Col md={3}>
                 <FormGroup className='createOrder_inputs'>
-                  <Label htmlFor='lastNameinput' className='form-label'>
+                  <Label htmlFor='lastNameinput'>
                     Net Profit
                   </Label>
-                  <div className='d-flex flex-row justify-content-between align-items-center gap-2'>
+                  <div className='tw:flex tw:flex-row tw:justify-between tw:items-center tw:gap-2'>
                     <InputGroup size='sm'>
-                      <InputGroupText className='fs-5 py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
+                      <InputGroupText className='tw:text-[16.25px] tw:py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
                       <Input
                         type='number'
-                        className='form-control fs-6 m-0'
+                        className='tw:text-[13px] tw:m-0'
                         bsSize='sm'
                         style={{ padding: '0.2rem 0.9rem' }}
                         placeholder='Min'
@@ -183,10 +183,10 @@ const FilterProfits = ({
                       />
                     </InputGroup>
                     <InputGroup size='sm'>
-                      <InputGroupText className='fs-5 py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
+                      <InputGroupText className='tw:text-[16.25px] tw:py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
                       <Input
                         type='number'
-                        className='form-control fs-6 m-0'
+                        className='tw:text-[13px] tw:m-0'
                         bsSize='sm'
                         style={{ padding: '0.2rem 0.9rem' }}
                         placeholder='Max'
@@ -204,13 +204,13 @@ const FilterProfits = ({
               </Col>
               <Col md={3}>
                 <FormGroup className='createOrder_inputs'>
-                  <Label htmlFor='lastNameinput' className='form-label'>
+                  <Label htmlFor='lastNameinput'>
                     Units Sold
                   </Label>
-                  <div className='d-flex flex-row justify-content-between align-items-center gap-2'>
+                  <div className='tw:flex tw:flex-row tw:justify-between tw:items-center tw:gap-2'>
                     <Input
                       type='number'
-                      className='form-control fs-6 m-0'
+                      className='tw:text-[13px] tw:m-0'
                       bsSize='sm'
                       style={{ padding: '0.2rem 0.9rem' }}
                       placeholder='Min'
@@ -224,7 +224,7 @@ const FilterProfits = ({
                     />
                     <Input
                       type='number'
-                      className='form-control fs-6 m-0'
+                      className='tw:text-[13px] tw:m-0'
                       bsSize='sm'
                       style={{ padding: '0.2rem 0.9rem' }}
                       placeholder='Max'
@@ -240,10 +240,10 @@ const FilterProfits = ({
                 </FormGroup>
               </Col>
             </Row>
-            <Row className='mt-2'>
+            <Row className='tw:mt-2'>
               <Col md={3}>
                 <FormGroup className='createOrder_inputs'>
-                  <Label htmlFor='lastNameinput' className='form-label'>
+                  <Label htmlFor='lastNameinput'>
                     Suppliers
                   </Label>
                   <SelectDropDown formValue={'supplier'} selectionInfo={supplierOptions} selected={values.supplier} handleSelection={setFieldValue} />
@@ -251,7 +251,7 @@ const FilterProfits = ({
               </Col>
               <Col md={3}>
                 <FormGroup className='createOrder_inputs'>
-                  <Label htmlFor='lastNameinput' className='form-label'>
+                  <Label htmlFor='lastNameinput'>
                     Brands
                   </Label>
                   <SelectDropDown formValue={'brand'} selectionInfo={brandOptions} selected={values.brand} handleSelection={setFieldValue} />
@@ -259,17 +259,17 @@ const FilterProfits = ({
               </Col>
               <Col md={3}>
                 <FormGroup className='createOrder_inputs'>
-                  <Label htmlFor='lastNameinput' className='form-label'>
+                  <Label htmlFor='lastNameinput'>
                     Categories
                   </Label>
                   <SelectDropDown formValue={'category'} selectionInfo={categoryOptions} selected={values.category} handleSelection={setFieldValue} />
                 </FormGroup>
               </Col>
             </Row>
-            <Col md={12} className='d-flex flewx-row justify-content-between align-items-center'>
+            <Col md={12} className='tw:flex tw:flex-row tw:justify-between tw:items-center'>
               <Col md={3}>
-                <div className='form-check form-switch form-switch-right form-switch-md d-flex flex-row justify-content-start align-items-center'>
-                  <Label className='form-label'>Show products with NO Sales</Label>
+                <div className='tw:flex tw:flex-row tw:justify-start tw:items-center'>
+                  <Label>Show products with NO Sales</Label>
                   <Switch
                     id='showWithSales'
                     name='showWithSales'
@@ -281,11 +281,11 @@ const FilterProfits = ({
                   />
                 </div>
               </Col>
-              <div className='d-flex flewx-row justify-content-end align-items-center gap-3'>
-                <Button type='button' color='light' className='fs-6 btn' onClick={() => handleClearFilters(setValues)}>
+              <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-3'>
+                <Button type='button' color='light' className='tw:text-[13px]' onClick={() => handleClearFilters(setValues)}>
                   Clear
                 </Button>
-                <Button type='submit' className='fs-6 btn bg-primary'>
+                <Button type='submit' className='tw:text-[13px]'>
                   Apply Filters
                 </Button>
               </div>
