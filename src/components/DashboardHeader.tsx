@@ -15,23 +15,23 @@ type Props = {
 const DashboardHeader = ({ user, startDate, endDate, handleChangeDates }: Props) => {
   return (
     <React.Fragment>
-      <Row className='mb-3 pb-1'>
+      <Row className='tw:mb-4 tw:pb-1'>
         <Col xs={12}>
-          <div className='d-flex align-items-lg-center flex-lg-row flex-column justify-content-between'>
+          <div className='tw:flex tw:flex-col tw:justify-between tw:lg:flex-row tw:lg:items-center'>
             <div>
-              <h4 className='fs-6 mb-1'>
-                Good Morning, <span className='text-capitalize'>{user}</span>
+              <h4 className='tw:text-[13px] tw:mb-1'>
+                Good Morning, <span className='tw:capitalize'>{user}</span>
               </h4>
-              <p className='fs-6 text-muted mb-0'>Here's what's happening with your Inventory today.</p>
+              <p className='tw:text-[13px] tw:text-[color:var(--bs-secondary-color)] tw:mb-0'>Here's what's happening with your Inventory today.</p>
             </div>
-            <div className='mt-3 mt-lg-0'>
+            <div className='tw:mt-4 tw:lg:mt-0'>
               <form action='#'>
                 <div
-                  className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto px-3 py-1 rounded-3 shadow'
+                  className='tw:flex tw:flex-row tw:items-center tw:justify-between tw:gap-2 tw:w-auto tw:px-4 tw:py-1 tw:rounded-[4.8px] tw:shadow-[0_1px_2px_rgba(56,65,74,0.15)]'
                   style={{ backgroundColor: 'white', minWidth: '230px' }}>
-                  <i className='ri-calendar-2-line fs-5' />
+                  <i className='ri-calendar-2-line tw:text-[16.25px]' />
                   <Flatpickr
-                    className='border-0 fs-6 w-100'
+                    className='tw:border-0 tw:text-[13px] tw:w-full'
                     options={{
                       mode: 'range',
                       dateFormat: 'd M y',

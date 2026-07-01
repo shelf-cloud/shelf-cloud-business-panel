@@ -228,7 +228,7 @@
         }
 
         .nav-link {
-          &[data-bs-toggle='collapse'][aria-expanded='true'] {
+          &[data-collapse-toggle][aria-expanded='true'] {
             color: $twocolumn-menu-item-active-color-dark;
 
             &:before {
@@ -300,7 +300,7 @@
         }
 
         .nav-link {
-          &[data-bs-toggle='collapse'][aria-expanded='true'] {
+          &[data-collapse-toggle][aria-expanded='true'] {
             color: $twocolumn-menu-item-active-color-dark;
 
             &:before {

@@ -5,17 +5,17 @@ const SalesOverTimeError = () => {
   return (
     <Col>
       <Card style={{ width: '100%', height: '426px' }}>
-        <CardHeader className='align-items-center d-flex justify-content-between'>
-          <h4 className='card-title mb-0 flex-grow-1'>Sales Over Time</h4>
-          <span className='fs-6 text-muted fw-normal'>
-            <i className='las la-clock fs-5 me-1'></i>
+        <CardHeader className='tw:flex tw:items-center tw:justify-between'>
+          <h4 className='tw:grow tw:mb-0 tw:text-[16px] tw:font-medium tw:text-[#212529]'>Sales Over Time</h4>
+          <span className='tw:text-[13px] tw:text-[color:var(--bs-secondary-color)] tw:font-normal'>
+            <i className='las la-clock tw:text-[16.25px] tw:me-1'></i>
             {moment().format('h:mm a')}
           </span>
         </CardHeader>
 
-        <CardBody className='d-flex flex-row justify-content-center align-items-center text-danger'>
-          <p className='fs-5 m-0 p-0 fw-normal'>
-            <i className='las la-exclamation-triangle fs-4 me-1'></i> Error loading sales data. Please try again later.
+        <CardBody className='tw:flex tw:flex-row tw:justify-center tw:items-center tw:text-destructive'>
+          <p className='tw:text-[16.25px] tw:m-0 tw:p-0 tw:font-normal'>
+            <i className='las la-exclamation-triangle tw:text-[19.5px] tw:me-1'></i> Error loading sales data. Please try again later.
           </p>
         </CardBody>
       </Card>

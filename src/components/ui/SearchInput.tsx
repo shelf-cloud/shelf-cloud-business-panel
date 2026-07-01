@@ -17,14 +17,14 @@ const BACKGROUND_COLORS = {
   white: '#fff',
 }
 
-const SearchInput = ({ searchValue, setSearchValue, background, minLength = 1, debounceTimeout = 500, placeholder = 'Search...', widths = 'col-12 col-md-4' }: Props) => {
+const SearchInput = ({ searchValue, setSearchValue, background, minLength = 1, debounceTimeout = 500, placeholder = 'Search...', widths = 'tw:w-full tw:md:w-1/3' }: Props) => {
   return (
     <div className={widths}>
       <div
-        className='col-12 d-flex flex-row flex-nowrap justify-content-around align-items-center rounded-3 overflow-hidden'
+        className='tw:w-full tw:h-9 tw:flex tw:flex-row tw:flex-nowrap tw:justify-around tw:items-center tw:rounded-[4.8px] tw:overflow-hidden'
         style={{ border: '1px solid #E1E3E5', backgroundColor: BACKGROUND_COLORS[background] }}>
         <span
-          className='mdi mdi-magnify fs-4 m-0 ps-2 pe-0 py-0 text-muted'
+          className='mdi mdi-magnify tw:text-lg tw:m-0 tw:ps-2 tw:pe-0 tw:py-0 tw:text-[color:var(--bs-secondary-color)]'
           style={{
             backgroundColor: BACKGROUND_COLORS[background],
           }}
@@ -33,7 +33,7 @@ const SearchInput = ({ searchValue, setSearchValue, background, minLength = 1, d
           type='text'
           minLength={minLength}
           debounceTimeout={debounceTimeout}
-          className='form-control form-control-sm border-0 fs-6 py-2'
+          className='tw:h-full tw:w-full tw:border-0 tw:bg-transparent tw:text-sm tw:text-foreground tw:outline-none'
           style={{
             backgroundColor: BACKGROUND_COLORS[background],
           }}
@@ -44,13 +44,13 @@ const SearchInput = ({ searchValue, setSearchValue, background, minLength = 1, d
           onChange={(e) => setSearchValue(e.target.value)}
         />
         <span
-          className='d-flex align-items-center justify-content-center'
+          className='tw:flex tw:items-center tw:justify-center'
           style={{
             cursor: 'pointer',
             backgroundColor: BACKGROUND_COLORS[background],
           }}
           onClick={() => setSearchValue('')}>
-          <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
+          <i className='mdi mdi-window-close tw:text-lg tw:m-0 tw:px-2 tw:py-0 tw:text-[color:var(--bs-secondary-color)]' />
         </span>
       </div>
     </div>

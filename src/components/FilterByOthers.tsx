@@ -72,12 +72,15 @@ const FilterByOthers = ({
     <>
       <ButtonGroup>
         <Dropdown isOpen={isFiltersOpen} toggle={() => setOpenFilters(!isFiltersOpen)}>
-          <DropdownToggle caret className='fs-7' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }} color='light'>
+          <DropdownToggle
+            caret
+            className='tw:inline-flex tw:h-9 tw:items-center tw:gap-2 tw:rounded-md tw:border tw:border-[#E1E3E5] tw:bg-white tw:px-3 tw:text-sm tw:font-semibold tw:text-foreground tw:whitespace-nowrap'
+            color='light'>
             Filters
           </DropdownToggle>
           <DropdownMenu style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
-            <div className={'px-4 py-3'}>
-              <div className='d-flex flex-column justify-content-start gap-2'>
+            <div className={'tw:px-4 tw:py-3'}>
+              <div className='tw:flex tw:flex-col tw:justify-start tw:gap-2'>
                 <SelectSingleFilter
                   inputLabel='Type'
                   inputName='type-filter'
@@ -156,7 +159,7 @@ const FilterByOthers = ({
                     setSearchMarketplace({ value: '', label: 'All Stores' })
                     setOpenFilters(false)
                   }}
-                  className='btn btn-link p-0 border-0 text-decoration-none text-muted mt-2 fs-7'>
+                  className='tw:p-0 tw:border-0 tw:bg-transparent tw:no-underline tw:text-[color:var(--bs-secondary-color)] tw:mt-2 tw:text-sm'>
                   Clear All
                 </button>
               </div>

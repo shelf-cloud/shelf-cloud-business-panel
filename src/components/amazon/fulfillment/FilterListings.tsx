@@ -1,13 +1,10 @@
- 
 import { useRouter } from 'next/router'
 import { useRef, useState } from 'react'
 
 import { useClickOutside } from '@hooks/useClickOutside'
-
 import { Form, Formik } from 'formik'
-import { Input } from 'reactstrap'
 
-import { Button, Label } from '@/components/migration-ui'
+import { Button, Label, Switch } from '@/components/migration-ui'
 
 type Props = {
   filters: string
@@ -66,22 +63,18 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, ma
           color={filters === 'true' ? 'info' : 'light'}
           className='dropdown-toggle fs-7'
           type='button'
-          data-bs-toggle='dropdown'
-          data-bs-auto-close='outside'
           aria-expanded='false'
           onClick={() => setOpenFilters(!OpenFilters)}>
           Filters
         </Button>
         <div className={'dropdown-menu dropdown-menu-md px-4 py-3' + (OpenFilters ? ' show' : '')}>
           <Formik initialValues={initialValues} onSubmit={(values) => handleSubmit(values)}>
-            {({ values, errors, touched, handleBlur, setFieldValue, setValues }) => (
+            {({ values, handleBlur, setFieldValue, setValues }) => (
               <Form>
                 <div className='d-flex flex-column justify-content-start gap-3'>
                   <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-end'>
                     <Label className='fw-normal fs-7 w-75'>Show hidden products</Label>
-                    <Input
-                      className='form-check-input code-switcher'
-                      type='checkbox'
+                    <Switch
                       id='showHidden'
                       name='showHidden'
                       checked={values.showHidden === 'true' ? true : false}
@@ -89,15 +82,12 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, ma
                         setFieldValue('showHidden', `${e.target.checked}`)
                       }}
                       onBlur={handleBlur}
-                      invalid={touched.showHidden && errors.showHidden ? true : false}
                     />
                   </div>
                   {masterBoxVisibility && (
                     <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-end'>
                       <Label className='fw-normal fs-7 w-75'>Show hidden visibility in Master Boxes</Label>
-                      <Input
-                        className='form-check-input code-switcher'
-                        type='checkbox'
+                      <Switch
                         id='masterBoxVisibility'
                         name='masterBoxVisibility'
                         checked={values.masterBoxVisibility === 'true' ? true : false}
@@ -105,15 +95,12 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, ma
                           setFieldValue('masterBoxVisibility', `${e.target.checked}`)
                         }}
                         onBlur={handleBlur}
-                        invalid={touched.masterBoxVisibility && errors.masterBoxVisibility ? true : false}
                       />
                     </div>
                   )}
                   <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-end'>
                     <Label className='fw-normal fs-7 w-75'>Show With Not Enough Qty</Label>
-                    <Input
-                      className='form-check-input code-switcher'
-                      type='checkbox'
+                    <Switch
                       id='showNotEnough'
                       name='showNotEnough'
                       checked={values.showNotEnough === 'true' ? true : false}
@@ -121,14 +108,11 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, ma
                         setFieldValue('showNotEnough', `${e.target.checked}`)
                       }}
                       onBlur={handleBlur}
-                      invalid={touched.showNotEnough && errors.showNotEnough ? true : false}
                     />
                   </div>
                   <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-end'>
                     <Label className='fw-normal fs-7 w-75'>Show With No Recommended Ship Date</Label>
-                    <Input
-                      className='form-check-input code-switcher'
-                      type='checkbox'
+                    <Switch
                       id='ShowNoShipDate'
                       name='ShowNoShipDate'
                       checked={values.ShowNoShipDate === 'true' ? true : false}
@@ -136,7 +120,6 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, ma
                         setFieldValue('ShowNoShipDate', `${e.target.checked}`)
                       }}
                       onBlur={handleBlur}
-                      invalid={touched.ShowNoShipDate && errors.ShowNoShipDate ? true : false}
                     />
                   </div>
                 </div>

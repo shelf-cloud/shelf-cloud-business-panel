@@ -28,8 +28,6 @@ const FilterListings = ({ showHidden, condition, mapped }: Props) => {
           className='btn btn-light dropdown-toggle'
           style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }}
           type='button'
-          data-bs-toggle='dropdown'
-          data-bs-auto-close='outside'
           aria-expanded='false'
           onClick={() => setOpenDatesMenu(!openDatesMenu)}>
           Filters

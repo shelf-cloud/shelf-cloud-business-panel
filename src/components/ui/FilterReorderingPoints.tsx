@@ -4,10 +4,9 @@ import { memo, useContext } from 'react'
 import SimpleSelect, { SelectSingleValueType } from '@components/Common/SimpleSelect'
 import AppContext from '@context/AppContext'
 import { Form, Formik } from 'formik'
-import { Input, InputGroup, InputGroupText } from 'reactstrap'
-
-import { Button, Card, CardBody, Col, FormGroup, Label, Row } from '@/components/migration-ui'
 import * as Yup from 'yup'
+
+import { Button, Card, CardBody, Col, FormGroup, Input, InputGroup, InputGroupText, Label, Row, Switch } from '@/components/migration-ui'
 
 import SelectDropDown from './SelectDropDown'
 import SelectMultipleDropDown from './SelectMultipleDropDown'
@@ -361,9 +360,7 @@ const FilterReorderingPoints = ({
                   </Col>
                   <div className='form-check form-switch form-switch-right form-switch-md d-flex flex-row justify-content-start align-items-center'>
                     <Label className='form-label'>Show hidden products</Label>
-                    <Input
-                      className='form-check-input code-switcher'
-                      type='checkbox'
+                    <Switch
                       id='showHidden'
                       name='showHidden'
                       checked={values.showHidden === 'true' ? true : false}
@@ -371,7 +368,6 @@ const FilterReorderingPoints = ({
                         setFieldValue('showHidden', `${e.target.checked}`)
                       }}
                       onBlur={handleBlur}
-                      invalid={touched.showHidden && errors.showHidden ? true : false}
                     />
                   </div>
                 </Col>

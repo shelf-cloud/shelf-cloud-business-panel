@@ -1,14 +1,11 @@
- 
 import { useMemo, useRef, useState } from 'react'
 
-import { useClickOutside } from '@hooks/useClickOutside'
-
 import SimpleSelect, { SelectOptionType, SelectSingleValueType } from '@components/Common/SimpleSelect'
+import { useClickOutside } from '@hooks/useClickOutside'
 import { CommerceHubStore } from '@typesTs/commercehub/invoices'
 import { DebounceInput } from 'react-debounce-input'
-import { Input } from 'reactstrap'
 
-import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle, Label } from '@/components/migration-ui'
+import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle, Label, Switch } from '@/components/migration-ui'
 
 export type InvoiceCommerceHubFiltersType = {
   onlyOverdue: boolean
@@ -77,9 +74,7 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions,
                 <>
                   <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-end'>
                     <Label className='fw-normal fs-7 w-75'>Show Only Overdue</Label>
-                    <Input
-                      className='form-check-input code-switcher'
-                      type='checkbox'
+                    <Switch
                       id='showOnlyOverdue'
                       name='showOnlyOverdue'
                       checked={filters.onlyOverdue}

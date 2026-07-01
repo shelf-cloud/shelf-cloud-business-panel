@@ -248,8 +248,6 @@ const ProductPerformanceNoFees = ({ session, sessionToken }: Props) => {
                     className={'btn dropdown-toggle ' + (filters === 'true' ? 'btn-info' : 'btn-light')}
                     style={filters === 'true' ? {} : { backgroundColor: 'white', border: '1px solid #E1E3E5' }}
                     type='button'
-                    data-bs-toggle='dropdown'
-                    data-bs-auto-close='outside'
                     aria-expanded='false'
                     onClick={() => setFilterOpen(!filterOpen)}>
                     Filters

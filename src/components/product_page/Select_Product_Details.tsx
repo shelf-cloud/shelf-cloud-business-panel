@@ -68,8 +68,6 @@ const Select_Product_Details = ({ inventoryId, type, addEndpoint, selectionInfo,
         <span
           className='btn btn-light btn-sm dropdown-toggle form-control fs-6dropdown-toggle dropdown-toggle-split'
           style={{ backgroundColor: 'white', maxWidth: '35px' }}
-          data-bs-toggle='dropdown'
-          data-bs-auto-close='outside'
           aria-expanded='false'>
           <span className='visually-hidden'>Toggle Dropdown</span>
         </span>

@@ -23,7 +23,7 @@ const customStyles: CustomStyles = {
   base: {
     control: (provided: any) => ({
       ...provided,
-      border: '1px solid #E1E3E5',
+      border: '1px solid var(--input-border)',
     }),
     valueContainer: (provided: any) => ({
       ...provided,
@@ -64,7 +64,7 @@ const getStyle = (customStyle: string, hasError: boolean) => {
       ...style,
       control: (provided: any, state: any) => ({
         ...style.control(provided, state),
-        borderColor: '#f06548',
+        borderColor: 'var(--destructive)',
       }),
     }
   }
@@ -113,8 +113,8 @@ const SimpleSelect = ({
       formatOptionLabel={(option: SelectOptionType, { context }: { context: 'menu' | 'value' }) => {
         if (context === 'menu') {
           return (
-            <div className='d-flex flex-column gap-0'>
-              <span className='fs-7'>{option.label}</span>
+            <div className='tw:flex tw:flex-col tw:gap-0'>
+              <span className='tw:text-sm'>{option.label}</span>
               {option.description && (
                 <small
                   style={{

@@ -1,8 +1,6 @@
 import React from 'react'
 
-import { Input } from 'reactstrap'
-
-import { Label } from '@/components/migration-ui'
+import { Label, Switch } from '@/components/migration-ui'
 
 type Props = {
   inputLabel: string
@@ -17,13 +15,11 @@ type Props = {
   }
 }
 
-const InputCheckFilter = ({ inputLabel, inputName, value, isInvalid, handleChange, handleBlur }: Props) => {
+const InputCheckFilter = ({ inputLabel, inputName, value, handleChange, handleBlur }: Props) => {
   return (
     <div className='form-check form-switch form-switch-right form-switch-md d-flex flex-row justify-content-start align-items-center'>
       <Label className='form-label'>{inputLabel}</Label>
-      <Input
-        className='form-check-input code-switcher'
-        type='checkbox'
+      <Switch
         id={inputName}
         name={inputName}
         checked={value}
@@ -31,7 +27,6 @@ const InputCheckFilter = ({ inputLabel, inputName, value, isInvalid, handleChang
           handleChange(e.target.checked)
         }}
         onBlur={handleBlur}
-        invalid={isInvalid}
       />
     </div>
   )

@@ -4,10 +4,9 @@ import { useClickOutside } from '@hooks/useClickOutside'
 import { Button as ShadcnButton } from '@shadcn/ui/button'
 import { Form, Formik } from 'formik'
 import { ChevronDownIcon } from 'lucide-react'
-import { Input, InputGroup, InputGroupText } from 'reactstrap'
-
-import { Button, Col, Label } from '@/components/migration-ui'
 import * as Yup from 'yup'
+
+import { Button, Col, Input, InputGroup, InputGroupText, Label, Switch } from '@/components/migration-ui'
 
 type Props = {
   initialHighAlert: number
@@ -90,15 +89,7 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
             <div className='mt-2 d-grid justify-content-between align-items-center gap-2' style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
               <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-start'>
                 <Label className='form-label'>Split Order</Label>
-                <Input
-                  disabled={!canSplit}
-                  className='form-check-input code-switcher'
-                  type='checkbox'
-                  id='showOnlyOverdue'
-                  name='showOnlyOverdue'
-                  checked={splits.isSplitting}
-                  onChange={(e) => handleIsSplitting(e)}
-                />
+                <Switch disabled={!canSplit} id='showOnlyOverdue' name='showOnlyOverdue' checked={splits.isSplitting} onChange={(e) => handleIsSplitting(e)} />
               </div>
               <InputGroup size='sm'>
                 <Input

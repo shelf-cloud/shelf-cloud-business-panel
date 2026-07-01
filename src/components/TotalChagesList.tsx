@@ -16,8 +16,8 @@ const TotalChagesList = ({ totalCharges }: Props) => {
     <React.Fragment>
       <Col>
         <Card>
-          <CardHeader className='align-items-center d-flex'>
-            <h4 className='card-title mb-0 flex-grow-1'>Total Charges</h4>
+          <CardHeader className='tw:flex tw:items-center'>
+            <h4 className='tw:grow tw:mb-0 tw:text-[16px] tw:font-medium tw:text-[#212529]'>Total Charges</h4>
           </CardHeader>
 
           <CardBody>

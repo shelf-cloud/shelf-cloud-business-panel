@@ -1,4 +1,3 @@
- 
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import router from 'next/router'
@@ -15,10 +14,10 @@ import { Field, FieldArray, Form, Formik } from 'formik'
 import { Session } from 'next-auth'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Input } from 'reactstrap'
-import { Button, Card, CardBody, Col, Container, FormFeedback, FormGroup, Label, Row, Spinner } from '@/components/migration-ui'
 import useSWR, { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
+
+import { Button, Card, CardBody, Col, Container, FormFeedback, FormGroup, Input, Label, Row, Spinner, Switch } from '@/components/migration-ui'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -312,12 +311,8 @@ const CreateOrder = ({ session }: Props) => {
                               <Label className='form-check-label' for='SwitchCheck4'>
                                 Select for Local PickUp
                               </Label>
-                              <Input
-                                className='form-check-input'
-                                type='checkbox'
-                                role='switch'
+                              <Switch
                                 id='SwitchCheck4'
-                                aria-checked={isPickUpOrder}
                                 onChange={async (e) => {
                                   await handlePickUpOrder(values, !isPickUpOrder)
                                   handleChange(e)

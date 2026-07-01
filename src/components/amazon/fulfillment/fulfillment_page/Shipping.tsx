@@ -13,9 +13,8 @@ import axios from 'axios'
 import moment from 'moment'
 // import SelectShippingCarrier from './SelectShippingCarrier'
 import { toast } from 'react-toastify'
-import { Input } from 'reactstrap'
 
-import { Alert, Button, Card, CardBody, CardHeader, Col, Label, Row, Spinner } from '@/components/migration-ui'
+import { Alert, Button, Card, CardBody, CardHeader, Col, Input, Label, Row, Spinner, Switch } from '@/components/migration-ui'
 
 import ShippingSelectDate from './ShippingSelectDate'
 import { regenerateFBAPlacementOptions } from './helperFunctions/fbaRegenerate'
@@ -583,15 +582,11 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
               <div>
                 <p className='fs-5 fw-bold'>Shipping mode</p>
                 <div className='form-check form-switch form-switch-sm d-flex justify-content-start align-items-center gap-2 p-0 my-3'>
-                  <Input
-                    className='form-check-input ms-0'
-                    type='checkbox'
-                    role='switch'
+                  <Switch
                     id='showShippingMode'
                     name='showShippingMode'
                     disabled={inboundPlan.steps[3].complete}
                     checked={finalShippingCharges.sameShippingMode}
-                    aria-checked={finalShippingCharges.sameShippingMode}
                     onChange={() => {
                       setfinalShippingCharges((prev) => {
                         return {

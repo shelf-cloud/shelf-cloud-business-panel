@@ -5,6 +5,24 @@
 
 @custom-variant dark (&:where([data-layout-mode='dark'], [data-layout-mode='dark'] *));
 
+/*
+ * Tailwind's preflight is intentionally not imported (it would clash with
+ * Bootstrap's reboot while both ship together). shadcn components use the bare
+ * `border` utility and rely on a default border-color; without preflight that
+ * falls back to currentColor (dark text), which is why shadcn-backed components
+ * showed a dark outline. Restore shadcn's default here. It lives in @layer base
+ * (specificity 0), so any explicit Bootstrap/component border-color still wins.
+ */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--border, currentColor);
+  }
+}
+
 :root {
   /* Foundation */
   --background: var(--vz-body-bg, var(--bs-body-bg, #eff3f6));

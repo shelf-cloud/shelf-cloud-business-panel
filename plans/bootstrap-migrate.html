@@ -284,19 +284,19 @@
         <p class="phase-meta">Snapshot of execution progress against this plan. Branch: <code>tailwind-migration</code> (work uncommitted). Build, typecheck (<code>tsc --noEmit</code>) and lint are green at this snapshot.</p>
         <div class="grid">
           <div class="card">
-            <span class="stat">13</span>
+            <span class="stat">0</span>
             <h3>reactstrap files left</h3>
-            <p class="muted">Down from <strong>270</strong> at start. The compat layer (<code>src/components/migration-ui</code>) plus 4 parallel migration waves cleared the rest. Remaining: 9 switch <code>Input</code>s, 3 InputGroup+switch combos, 1 shell <code>Collapse</code>.</p>
+            <p class="muted">Down from <strong>270</strong>. All cleared. <code>VerticalLayout</code> submenu <code>Collapse</code> replaced with a React-controlled <code>div.collapse.menu-dropdown.show</code> (faithful reactstrap DOM, minus JS animation). <code>reactstrap</code> <strong>removed from <code>package.json</code></strong> (−171 transitive deps). Gate 1 = 0; build green; app boots (SignIn 200, / 307 auth-redirect, no runtime errors).</p>
           </div>
           <div class="card">
-            <span class="stat">28</span>
+            <span class="stat">0</span>
             <h3>files with <code>data-bs-*</code></h3>
-            <p class="muted">Raw HTML Bootstrap dropdowns, not yet converted to <code>DropdownMenu</code>. Tracked by <code>pnpm check:bootstrap</code>.</p>
+            <p class="muted">Down from <strong>28</strong>. 23 React-controlled dropdowns had dead <code>data-bs-toggle</code>/<code>data-bs-auto-close</code> stripped. <code>VerticalLayout</code> submenu toggles moved to <code>data-collapse-toggle</code>; the structure SCSS caret selectors (<code>_vertical</code>/<code>_horizontal</code>/<code>_two-column</code>) renamed to <code>[data-collapse-toggle]</code>; dead <code>#collapseBgGradient</code> demo rule deleted. Gate 2 = 0. Tracked by <code>pnpm check:bootstrap</code>.</p>
           </div>
           <div class="card">
-            <span class="stat">2 deps</span>
-            <h3><code>bootstrap</code> + <code>reactstrap</code></h3>
-            <p class="muted">Still declared in <code>package.json</code>. Removal gated on reactstrap/data-bs reaching 0 (Phase 8).</p>
+            <span class="stat">1 dep</span>
+            <h3><code>bootstrap</code> (reactstrap removed)</h3>
+            <p class="muted"><code>reactstrap</code> is gone. <code>bootstrap</code> CSS remains load-bearing: <strong>371 files</strong> use Bootstrap utility classes and the Velzon theme SCSS is built on Bootstrap's scss (vars/mixins). Dropping <code>bootstrap</code> + <code>sass</code> = the full remaining visual migration.</p>
           </div>
         </div>
 
@@ -306,10 +306,10 @@
         <div class="callout">
           <strong>In progress / pending:</strong>
           <ul>
-            <li><strong>Finish the last 13 reactstrap files</strong> — convert Bootstrap-switch <code>&lt;Input type=checkbox&gt;</code> to the new <code>&lt;Switch&gt;</code> wrapper (9 files), plus 3 InputGroup+switch combos. Leaves only the shell <code>Collapse</code>.</li>
-            <li><strong>Convert 28 <code>data-bs-*</code> raw dropdowns</strong> to <code>DropdownMenu</code>.</li>
-            <li><strong>Phase 7 app-shell core</strong> — Header/Sidebar/VerticalLayout/Layout responsive rewrite (deferred; needs running-app verification across breakpoints).</li>
-            <li><strong>Phase 8 teardown</strong> — once gates hit 0: remove <code>bootstrap</code>/<code>reactstrap</code> deps + Bootstrap SCSS imports, port/delete ~55 bespoke SCSS then drop <code>sass</code>, decide on the <code>tw:</code> prefix.</li>
+            <li><strong>✅ Done — 12 of the last 13 reactstrap files</strong> converted Bootstrap-switch <code>&lt;Input type=checkbox&gt;</code> to the <code>&lt;Switch&gt;</code> wrapper (9 files) plus the 3 InputGroup+switch combos; radios/text/number swapped to migration-ui <code>Input</code>. Gate 1 now <strong>1 file</strong> (only the shell <code>Collapse</code> in <code>VerticalLayout</code>). Build/typecheck/lint green.</li>
+            <li><strong>✅ Done — 23 <code>data-bs-*</code> dropdowns cleared.</strong> Stripped dead <code>data-bs-toggle</code>/<code>data-bs-auto-close</code> (React-controlled already; no Bootstrap JS loaded). Gate 2 now <strong>5</strong> (VerticalLayout collapse + 4 structure SCSS — Phase 7/8). Build/typecheck/lint green.</li>
+            <li><strong>Phase 7 app-shell → Tailwind</strong> — Header/Sidebar/VerticalLayout/Layout/Footer + topbar/vertical/footer SCSS. <strong>Next up (staged true migration).</strong> Needs logged-in verification across breakpoints (desktop-expanded / sm icon / mobile overlay); the responsive state machine keys off <code>data-sidebar-size</code> (html) + <code>vertical-sidebar-enable</code> (body).</li>
+            <li><strong>Phase 8 teardown</strong> — <code>reactstrap</code> already removed. Remaining: migrate the 371 Bootstrap-utility-class files + Bootstrap-derived theme SCSS to Tailwind, then drop <code>bootstrap</code> + <code>sass</code> and decide on the <code>tw:</code> prefix. <strong>All-or-nothing on the CSS side</strong> — <code>bootstrap</code> can't be removed until every file is off Bootstrap classes.</li>
           </ul>
         </div>
         <div class="callout risk">
@@ -637,6 +637,20 @@
             <li>After Bootstrap is gone, decide whether to keep <code>tw:</code> prefix permanently or remove it in a separate mechanical cleanup.</li>
           </ul>
         </article>
+
+        <article class="phase">
+          <h3>Phase 9: Consolidate on shadcn + drop the <code>tw:</code> prefix ⬜ (end state)</h3>
+          <p class="phase-meta">Goal: single styling system (Tailwind, unprefixed) + single component library (shadcn, themed to Velzon); retire the migration-ui compat layer.</p>
+          <div class="callout success"><strong>Foundation started (2026-07-01).</strong> Theme token bridge in <code>tailwind.css</code> hardening: added the missing shadcn base rule <code>*{ border-color: var(--border) }</code> under <code>@layer base</code> — Tailwind preflight is intentionally not imported (Bootstrap coexistence), so shadcn's bare <code>border</code> utility was falling back to <code>currentColor</code> (dark #212529); it now resolves to the light Velzon <code>--border</code> (#e9ebec). Verified in-browser: <code>tw:border</code> default = rgb(233,235,236); Bootstrap's own borders (explicit color, higher specificity) unaffected. Also reconciled the migration-ui <code>Card</code> family to Velzon (border-0, 0.75rem radius, flat, 1rem padding, 1.5rem margin, light header/footer dividers) after finding shadcn Card's defaults (dark <code>--border</code>, inflated radius, 1.5rem padding) had drifted from the original.</div>
+          <p><strong>Why this is the right end state:</strong> the <code>tw:</code> prefix exists only to avoid class collisions with Bootstrap, and the self-contained migration-ui wrappers exist only because <code>tailwind-merge</code> is not <code>tw:</code>-prefix aware (so shadcn defaults can't be overridden via <code>className</code>). Both problems vanish once Bootstrap is gone.</p>
+          <ul>
+            <li>Prereq: Gate 3 complete (Bootstrap classes + SCSS removed). Only then remove <code>prefix(tw)</code> from <code>tailwind.css</code> and run a mechanical <code>tw:</code> → <code>&nbsp;</code> sweep — must come after Bootstrap, or unprefixed utilities collide.</li>
+            <li>With the prefix gone, <code>tailwind-merge</code> works normally → re-base the self-contained wrappers on shadcn, or codemod call sites to import shadcn directly and delete <code>migration-ui</code>.</li>
+            <li>Finish theming shadcn/Tailwind tokens to Velzon so components match by theme, not per-component override. Known gaps: <code>--radius</code> maps to <code>--bs-border-radius</code> (0.25rem) but cards use 0.75rem (shadcn single-radius scale vs Velzon mixed radii); shadcn structure (Card <code>py-6</code>/<code>gap-6</code>) still needs polish vs Velzon (1rem + dividers).</li>
+            <li>Spacing scale mismatch to resolve: Velzon uses Bootstrap's scale (<code>m-3</code>=1rem); Tailwind uses 0.25rem base (<code>p-4</code>=1rem). Adopt Tailwind-native values during migration, or remap Tailwind's spacing theme.</li>
+            <li>Audit remaining shadcn-backed wrappers (dropdown, modal, sheet, input, label) against their Bootstrap originals — same drift risk as the card.</li>
+          </ul>
+        </article>
       </section>
 
       <section>
@@ -767,10 +781,10 @@
           <li>✅ Migrate low-risk shared controls and pages.</li>
           <li>✅ Migrate forms and dialogs by domain area (via Formik↔Field adapter).</li>
           <li>⬜ Swap react-toastify for sonner behind a call-signature adapter. <span class="muted">Not started (~141 files).</span></li>
-          <li>✅ Migrate menus, tabs, collapses, and tooltips. <span class="muted">(compat layer + representative + bulk; raw <code>data-bs-*</code> dropdowns still pending — 28 files.)</span></li>
+          <li>✅ Migrate menus, tabs, collapses, and tooltips. <span class="muted">(compat layer + representative + bulk; raw <code>data-bs-*</code> dropdowns stripped — Gate 2 down to 5: VerticalLayout collapse + 4 structure SCSS.)</span></li>
           <li>🟡 Restyle data tables and table actions. <span class="muted">(<code>DataTableSC</code> + token styles ready; per-table swap iterative.)</span></li>
           <li>🟡 Replace app shell layout. <span class="muted">Safe slice done; responsive core deferred (needs running app).</span></li>
-          <li>🟡 Remove Bootstrap/reactstrap and old SCSS imports. <span class="muted">Dead RTL removed + gates added; dep/SCSS removal blocked until reactstrap & data-bs reach 0.</span></li>
+          <li>🟡 Remove Bootstrap/reactstrap and old SCSS imports. <span class="muted"><code>reactstrap</code> removed ✅; Gates 1 &amp; 2 = 0. <code>bootstrap</code>+<code>sass</code> removal blocked on migrating 371 Bootstrap-class files + theme SCSS (staged, shell first).</span></li>
           <li>⬜ Run full smoke test and visual review. <span class="muted">Pending (no running-app verification done this effort).</span></li>
         </ol>
         <p class="phase-meta">Legend: ✅ done · 🟡 partial · ⬜ not started. Remaining critical path: finish 13 reactstrap files → convert 28 <code>data-bs-*</code> dropdowns → Phase 7 shell core (run app) → gates hit 0 → Phase 8 dependency removal.</p>

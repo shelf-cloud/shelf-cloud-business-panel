@@ -28,8 +28,6 @@ const NewFilterByDates = ({ filterDates, setfilterDates, handleChangeDatesFromPi
         className='btn btn-light dropdown-toggle d-flex flex-row justify-content-start align-items-center gap-2'
         style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }}
         type='button'
-        data-bs-toggle='dropdown'
-        data-bs-auto-close='outside'
         aria-expanded='false'
         onClick={() => setOpenDatesMenu(!openDatesMenu)}>
         <i className='las la-calendar fs-4 m-0 p-0 text-primary' />

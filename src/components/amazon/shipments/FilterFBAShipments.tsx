@@ -1,11 +1,9 @@
- 
 import { useRef, useState } from 'react'
 
+import SimpleSelect, { SelectSingleValueType } from '@components/Common/SimpleSelect'
 import { useClickOutside } from '@hooks/useClickOutside'
 
-import SimpleSelect, { SelectSingleValueType } from '@components/Common/SimpleSelect'
-import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle, Label } from '@/components/migration-ui'
-import { Input } from 'reactstrap'
+import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle, Label, Switch } from '@/components/migration-ui'
 
 export type FBAFiltersType = {
   status: SelectSingleValueType
@@ -59,9 +57,7 @@ const FilterFBAShipments = ({ filters, setfilters }: Props) => {
               />
               <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-end'>
                 <Label className='fw-normal fs-7 w-75'>Show Only Missing Qty</Label>
-                <Input
-                  className='form-check-input code-switcher'
-                  type='checkbox'
+                <Switch
                   id='showOnlyOverdue'
                   name='showOnlyOverdue'
                   checked={filters.showOnlyMissingQty}

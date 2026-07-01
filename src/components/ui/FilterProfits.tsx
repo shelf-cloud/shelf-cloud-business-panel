@@ -3,10 +3,9 @@ import { useContext } from 'react'
 
 import AppContext from '@context/AppContext'
 import { Form, Formik } from 'formik'
-import { Input, InputGroup, InputGroupText } from 'reactstrap'
-
-import { Button, Col, FormGroup, Label, Row } from '@/components/migration-ui'
 import * as Yup from 'yup'
+
+import { Button, Col, FormGroup, Input, InputGroup, InputGroupText, Label, Row, Switch } from '@/components/migration-ui'
 
 import SelectDropDown from './SelectDropDown'
 
@@ -271,9 +270,7 @@ const FilterProfits = ({
               <Col md={3}>
                 <div className='form-check form-switch form-switch-right form-switch-md d-flex flex-row justify-content-start align-items-center'>
                   <Label className='form-label'>Show products with NO Sales</Label>
-                  <Input
-                    className='form-check-input code-switcher'
-                    type='checkbox'
+                  <Switch
                     id='showWithSales'
                     name='showWithSales'
                     checked={values.showWithSales === 'true' ? true : false}
@@ -281,7 +278,6 @@ const FilterProfits = ({
                       setFieldValue('showWithSales', `${e.target.checked}`)
                     }}
                     onBlur={handleBlur}
-                    invalid={touched.showWithSales && errors.showWithSales ? true : false}
                   />
                 </div>
               </Col>

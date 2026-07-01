@@ -15,10 +15,9 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Input } from 'reactstrap'
-import { Button, Card, CardBody, Col, Container, Form, FormFeedback, FormGroup, Label, Row } from '@/components/migration-ui'
 import * as Yup from 'yup'
 
+import { Button, Card, CardBody, Col, Container, Form, FormFeedback, FormGroup, Input, Label, Row, Switch } from '@/components/migration-ui'
 import { useRPNewForecast } from '@/hooks/reorderingPoints/useRPNewForcast'
 
 // import UploadProductsModal from '@components/UploadProductsModal'
@@ -603,7 +602,7 @@ const AddProducts = ({ session }: Props) => {
                       <div className='flex-shrink-0'>
                         <div className='form-check form-switch form-switch-right form-switch-sm'>
                           <Label className='form-label text-muted'>Same as unit dimensions</Label>
-                          <Input className='form-check-input code-switcher' type='checkbox' checked={useSameUnitDimensions} onChange={handleBoxDimensionsCheckbox} />
+                          <Switch checked={useSameUnitDimensions} onChange={handleBoxDimensionsCheckbox} />
                         </div>
                       </div>
                     </div>

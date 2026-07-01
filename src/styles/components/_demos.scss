@@ -105,21 +105,6 @@
   }
 }
 
-[data-bs-target='#collapseBgGradient'] {
-  &.active {
-    border-color: $primary !important;
-    &::before {
-      content: '\eb80';
-      font-family: remixicon;
-      position: absolute;
-      top: 2px;
-      right: 6px;
-      font-size: 16px;
-      color: $primary;
-    }
-  }
-}
-
 [data-layout-mode='dark'] {
   .colorscheme-cardradio {
     .form-check-label {

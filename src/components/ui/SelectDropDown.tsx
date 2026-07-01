@@ -29,8 +29,6 @@ const SelectDropDown = ({ formValue, selectionInfo, selected, handleSelection, e
         <span
           className='btn btn-light btn-sm dropdown-toggle fs-6 dropdown-toggle dropdown-toggle-split'
           style={{ backgroundColor: 'white', maxWidth: '35px' }}
-          data-bs-toggle='dropdown'
-          data-bs-auto-close='outside'
           aria-expanded='false'>
           <span className='visually-hidden'>Toggle Dropdown</span>
         </span>

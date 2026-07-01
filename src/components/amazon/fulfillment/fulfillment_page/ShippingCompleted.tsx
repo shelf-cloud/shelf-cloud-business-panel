@@ -11,9 +11,8 @@ import { CleanStatus } from '@lib/SkuFormatting'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { InboundPlan, PlacementOption } from '@typesTs/amazon/fulfillments/fulfillment'
 import moment from 'moment'
-import { Input } from 'reactstrap'
 
-import { Button, Card, CardBody, CardHeader, Col, Label, Row } from '@/components/migration-ui'
+import { Button, Card, CardBody, CardHeader, Col, Input, Label, Row, Switch } from '@/components/migration-ui'
 
 import { validateIfPlacementOptionHasSPD } from './shippingLTL/helperFunctions'
 
@@ -145,16 +144,7 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
       <div>
         <p className='fs-5 fw-bold'>Shipping mode</p>
         <div className='form-check form-switch form-switch-sm d-flex justify-content-start align-items-center gap-2 p-0 my-3'>
-          <Input
-            className='form-check-input ms-0'
-            type='checkbox'
-            role='switch'
-            id='showShippingMode'
-            name='showShippingMode'
-            disabled={true}
-            checked={finalShippingCharges.sameShippingMode}
-            aria-checked={finalShippingCharges.sameShippingMode}
-          />
+          <Switch id='showShippingMode' name='showShippingMode' disabled={true} checked={finalShippingCharges.sameShippingMode} />
           <Label className='check-form-label m-0 fw-normal' for='showShippingMode'>
             Shipping mode will be same for all shipments
           </Label>

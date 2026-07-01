@@ -1,5 +1,6 @@
 import { ManageUser } from '@typesTs/settings/team_members'
-import { Input } from 'reactstrap'
+
+import { Switch } from '@/components/migration-ui'
 
 type Props = {
   title: string
@@ -35,7 +36,7 @@ const CategoryTeamMembersHeader = ({ title, icon, checked, manageUser, setManage
         <span className='fw-semibold fs-5 capitalize'>{title}</span>
       </>
       <div className='form-check form-switch form-check-right form-check-success'>
-        <Input className='form-check-input' type='checkbox' checked={checked} onChange={handleChangePermissions} />
+        <Switch checked={checked} onChange={handleChangePermissions} />
       </div>
     </div>
   )

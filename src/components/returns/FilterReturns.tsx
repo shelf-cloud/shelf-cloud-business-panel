@@ -31,8 +31,6 @@ const FilterReturns = ({ searchStatus, setSearchStatus, searchReason, setSearchR
           className='btn btn-light dropdown-toggle fs-7'
           style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }}
           type='button'
-          data-bs-toggle='dropdown'
-          data-bs-auto-close='outside'
           aria-expanded='false'
           onClick={() => setOpenDatesMenu(!openDatesMenu)}>
           Filters
