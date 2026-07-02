@@ -35,8 +35,9 @@ const Pallets = ({ shipmentDetails, handlePrintShipmentBillOfLading, watingRepso
       </Col>
 
       <Col sm='12' lg='9'>
-        <table className='table table-bordered'>
-          <thead className='table-light'>
+        <div className='tw:overflow-x-auto'>
+        <table className='tw:w-full tw:align-middle tw:mb-0 tw:border tw:border-[color:var(--border)] tw:[&_td]:border-t tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+          <thead className='tw:bg-[color:var(--vz-light)]'>
             <tr>
               <th>Dimensions (IN)</th>
               <th>Weight (LB)</th>
@@ -57,6 +58,7 @@ const Pallets = ({ shipmentDetails, handlePrintShipmentBillOfLading, watingRepso
             ))}
           </tbody>
         </table>
+        </div>
       </Col>
     </div>
   )

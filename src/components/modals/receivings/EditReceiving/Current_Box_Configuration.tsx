@@ -10,18 +10,18 @@ type Props = {
 const Current_Box_Configuration = ({ boxes, isReceivingFromPo }: Props) => {
   return (
     <div className='tw:overflow-auto'>
-      <table className='table table-sm align-middle table-responsive table-striped tw:text-[11.2px]'>
+      <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)] tw:text-[11.2px]'>
         <tbody>
           {boxes.map((box, index) => (
             <>
               <tr key={`box-${index}`}>
-                <td colSpan={5} className='tw:text-left tw:ps-4 tw:text-[16.25px] tw:font-semibold bg-soft-primary'>
+                <td colSpan={5} className='tw:text-left tw:ps-4 tw:text-[16.25px] tw:font-semibold tw:bg-[color-mix(in_srgb,var(--primary)_10%,transparent)]'>
                   Box {index + 1}
                 </td>
               </tr>
               <tr key={`box-${index}-items`}>
-                <table className='table table-sm align-middle table-responsive table-striped tw:text-[11.2px]'>
-                  <thead className='table-light'>
+                <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)] tw:text-[11.2px]'>
+                  <thead className='tw:bg-[color:var(--vz-light)]'>
                     <tr key={`box-${index}-header`}>
                       <th scope='col' className='tw:text-left tw:px-4'>
                         Title / SKU

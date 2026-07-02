@@ -34,26 +34,26 @@ const ProductOrderedModals = ({ showOrderedModal, setshowOrderedModal }: Props) 
 
   const columns: any = [
     {
-      name: <span className='fw-bolder fs-6'>PO Number</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>PO Number</span>,
       selector: (row: ProductPO) => row.orderNumber,
       sortable: true,
       center: true,
       wrap: false,
     },
     {
-      name: <span className='fw-bolder fs-6'>Supplier</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Supplier</span>,
       selector: (row: ProductPO) => row.suppliersName,
       sortable: true,
       center: true,
     },
     {
-      name: <span className='fw-bolder fs-6'>Date</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Date</span>,
       selector: (row: ProductPO) => row.date,
       sortable: true,
       center: true,
     },
     {
-      name: <span className='fw-bolder fs-6'>Ordered</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Ordered</span>,
       selector: (row: ProductPO) =>
         FormatIntNumber(
           state.currentRegion,
@@ -63,7 +63,7 @@ const ProductOrderedModals = ({ showOrderedModal, setshowOrderedModal }: Props) 
       center: true,
     },
     {
-      name: <span className='fw-bolder fs-6'>Received</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Received</span>,
       selector: (row: ProductPO) =>
         FormatIntNumber(
           state.currentRegion,
@@ -73,7 +73,7 @@ const ProductOrderedModals = ({ showOrderedModal, setshowOrderedModal }: Props) 
       center: true,
     },
     {
-      name: <span className='fw-bolder fs-6'>Pending</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Pending</span>,
       selector: (row: ProductPO) =>
         FormatIntNumber(
           state.currentRegion,
@@ -96,10 +96,10 @@ const ProductOrderedModals = ({ showOrderedModal, setshowOrderedModal }: Props) 
         toggle={() => {
           setshowOrderedModal({ show: false, sku: '' })
         }}>
-        <p className='modal-title fs-3' id='myModalLabel'>
+        <p className='modal-title tw:text-[22.75px]' id='myModalLabel'>
           Open Purchase Orders
         </p>
-        <p className='fs-5'>SKU: {showOrderedModal.sku}</p>
+        <p className='tw:text-[16.25px]'>SKU: {showOrderedModal.sku}</p>
       </ModalHeader>
       <ModalBody>
         <DataTable columns={columns} data={Pos ?? []} progressPending={loading} striped={true} highlightOnHover={true} dense />

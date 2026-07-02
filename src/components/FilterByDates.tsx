@@ -37,7 +37,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
         className={
           'tw:absolute tw:z-50 tw:mt-1 tw:min-w-[16rem] tw:rounded-md tw:border tw:border-[#E1E3E5] tw:bg-white tw:px-4 tw:py-3 tw:shadow-md ' + (openDatesMenu ? 'tw:block' : 'tw:hidden')
         }>
-        <div className='d-flex flex-column justify-content-start'>
+        <div className='tw:flex tw:flex-col tw:justify-start'>
           <button
             type='button'
             className={'tw:p-0 tw:border-0 tw:bg-transparent tw:text-start tw:no-underline tw:text-foreground tw:text-sm tw:hover:text-primary ' + (selectedDateFilter == 'today' ? 'tw:font-bold' : '')}

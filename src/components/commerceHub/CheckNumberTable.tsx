@@ -22,12 +22,12 @@ const CheckNumberTable = ({ summary }: Props) => {
       <Col>
         <Card>
           <CardHeader className='tw:items-center tw:flex tw:justify-between'>
-            <h4 className='card-title tw:tw:mb-0 tw:grow'>Check Summary</h4>
+            <h4 className='card-title tw:mb-0 tw:grow'>Check Summary</h4>
           </CardHeader>
 
           <CardBody>
-            <div className='table-responsive table-card'>
-              <table className='table table-sm table-hover table-centered align-middle tw:mb-0'>
+            <div className='tw:overflow-x-auto'>
+              <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_tbody_tr:hover]:bg-[color:var(--vz-light)]'>
                 <thead>
                   <tr className='tw:font-semibold'>
                     <td>Store</td>
@@ -63,18 +63,18 @@ const CheckNumberTable = ({ summary }: Props) => {
                               {item.checkNumber}
                             </Link>
                           ) : (
-                            <span className='tw:text-[13px] mw-30 tw:text-[var(--bs-secondary-color)] tw:font-light tw:italic'>Pending</span>
+                            <span className='tw:text-[13px] tw:text-[var(--bs-secondary-color)] tw:font-light tw:italic'>Pending</span>
                           )}
                         </td>
                         <td>{moment.utc(item.checkDate).local().format('LL')}</td>
                         <td>{FormatCurrency(state.currentRegion, totalPaid)}</td>
-                        <td className='tw:tw:text-danger'>{FormatCurrency(state.currentRegion, deductions)}</td>
+                        <td className='tw:text-danger'>{FormatCurrency(state.currentRegion, deductions)}</td>
                       </tr>
                     )
                   })}
                 </tbody>
               </table>
-              <div className='tw:flex tw:justify-end align-item-center tw:px-4 tw:py-2'>
+              <div className='tw:flex tw:justify-end tw:items-center tw:px-4 tw:py-2'>
                 <Link href={`/commercehub/checkSummary`} className='tw:!text-primary tw:text-[11.2px]'>
                   View More
                 </Link>

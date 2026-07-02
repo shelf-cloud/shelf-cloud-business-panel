@@ -85,7 +85,9 @@ const ProductsListings = ({ session }: Props) => {
 
                       {selectedRows.length > 0 && (
                         <UncontrolledButtonDropdown>
-                          <DropdownToggle className='btn btn-primary tw:text-[11.2px] tw:py-2' caret>
+                          <DropdownToggle
+                            className='tw:inline-flex tw:h-9 tw:items-center tw:gap-2 tw:rounded-md tw:bg-primary tw:px-3 tw:text-[11.2px] tw:font-medium tw:text-primary-foreground tw:whitespace-nowrap tw:shadow-xs tw:hover:bg-primary/90'
+                            caret>
                             {`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''} Selected`}
                           </DropdownToggle>
                           <DropdownMenu>

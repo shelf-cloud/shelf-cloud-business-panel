@@ -404,7 +404,7 @@ const CreateOrder = ({ session }: Props) => {
                             {/* ADDRESS */}
 
                             <Col md={12}>
-                              <FormGroup className='createOrder_inputs relative'>
+                              <FormGroup className='createOrder_inputs tw:relative'>
                                 <Label htmlFor='adress1' className='form-label tw:mb-1'>
                                   *Address
                                 </Label>
@@ -426,7 +426,7 @@ const CreateOrder = ({ session }: Props) => {
                                 />
                                 {touched.adress1 && errors.adress1 ? <ErrorInputLabel error={errors.adress1} marginTop='mt-0' /> : null}
                                 {!isPickUpOrder && autoCompleteAddress?.length > 0 && (
-                                  <div className='absolute'>
+                                  <div className='tw:absolute'>
                                     <Card>
                                       <CardBody className='tw:flex tw:flex-col tw:gap-2'>
                                         {autoCompleteAddress?.map((address: any) => (
@@ -483,7 +483,7 @@ const CreateOrder = ({ session }: Props) => {
                                   </div>
                                 )}
                               </FormGroup>
-                              <FormGroup className='createOrder_inputs mt-2'>
+                              <FormGroup className='createOrder_inputs tw:mt-2'>
                                 <Input
                                   type='text'
                                   className='form-control form-control-sm tw:text-[13px]'
@@ -722,7 +722,7 @@ const CreateOrder = ({ session }: Props) => {
                                 </div>
                               </FormGroup>
                             </Col>
-                            <Col xs={12} md={6} className='mt-3'>
+                            <Col xs={12} md={6} className='tw:mt-4'>
                               <FormGroup className='createOrder_inputs'>
                                 <Label htmlFor='lastNameinput' className='form-label'>
                                   *Amount Paid
@@ -780,9 +780,9 @@ const CreateOrder = ({ session }: Props) => {
 
                         {/* TABLE OF PRODUCTS */}
                         <Row>
-                          <Col xs={12} className='mt-2'>
-                            <div className='table-responsive'>
-                              <table className='table table-hover align-middle table-nowrap'>
+                          <Col xs={12} className='tw:mt-2'>
+                            <div className='tw:overflow-x-auto'>
+                              <table className='tw:w-full tw:align-middle tw:whitespace-nowrap tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)]'>
                                 <thead>
                                   <tr>
                                     <th scope='col' aria-label='Product row actions' className='tw:py-1 tw:text-[16.25px] tw:m-0 tw:font-semibold tw:text-center tw:bg-primary tw:text-white'></th>

@@ -16,8 +16,8 @@ const Create_Receiving_Boxes_Box = ({}: Props) => {
         <p className='tw:m-0 tw:font-bold tw:text-[16.25px]'>All Products in 1 Box</p>
       </div>
       <Col md={12} className='tw:overflow-auto'>
-        <table className='table table-sm align-middle table-responsive table-nowrap table-striped'>
-          <thead className='table-light'>
+        <table className='tw:w-full tw:align-middle tw:mb-0 tw:whitespace-nowrap tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)]'>
+          <thead className='tw:bg-[color:var(--vz-light)]'>
             <tr>
               <th scope='col'>PO Number</th>
               <th scope='col'>Supplier</th>

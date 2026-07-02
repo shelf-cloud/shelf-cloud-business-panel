@@ -92,13 +92,13 @@ const CancelManualOrderConfirmationModal = ({ showDeleteModal, setshowDeleteModa
       </ModalHeader>
       <ModalBody>
         <Row>
-          <h5 className='fs-4 mb-0 fw-semibold text-primary'>
-            Order Number: <span className='fs-4 fw-bold text-black'>{showDeleteModal.orderNumber}</span>
+          <h5 className='tw:text-[19.5px] tw:mb-0 tw:font-semibold tw:text-primary'>
+            Order Number: <span className='tw:text-[19.5px] tw:font-bold tw:text-black'>{showDeleteModal.orderNumber}</span>
           </h5>
-          <Row md={12} className='mt-4'>
+          <Row md={12} className='tw:mt-6'>
             <Form onSubmit={handleCancelOrder}>
               <Col md={12}>
-                <div className='mb-3 d-flex gap-2'>
+                <div className='tw:mb-4 tw:flex tw:gap-2'>
                   <Label className='form-check-label' for='notify'>
                     Notify Marketplace
                   </Label>
@@ -114,13 +114,13 @@ const CancelManualOrderConfirmationModal = ({ showDeleteModal, setshowDeleteModa
                   {validation.touched.notify && validation.errors.notify ? <FormFeedback type='invalid'>{validation.errors.notify}</FormFeedback> : null}
                 </div>
                 <div>
-                  <FormGroup className='mb-3'>
+                  <FormGroup className='tw:mb-4'>
                     <Label htmlFor='reason' className='form-label'>
                       Reason
                     </Label>
                     <Input
                       type='select'
-                      className='fs-6'
+                      className='tw:text-[13px]'
                       placeholder='reason...'
                       id='reason'
                       name='reason'
@@ -140,7 +140,7 @@ const CancelManualOrderConfirmationModal = ({ showDeleteModal, setshowDeleteModa
                   </FormGroup>
                 </div>
               </Col>
-              <div className='text-end mt-2'>
+              <div className='tw:text-right tw:mt-2'>
                 <Button disabled={loading} type='submit' color='danger' className='btn'>
                   {loading ? <Spinner color='#fff' /> : 'Cancel'}
                 </Button>

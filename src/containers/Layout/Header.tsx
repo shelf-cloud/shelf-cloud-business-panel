@@ -50,8 +50,8 @@ const Header = ({ headerClass }: Props) => {
       <header id='page-topbar' className={headerClass}>
         <div className='layout-width'>
           <div className='navbar-header'>
-            <div className='d-flex'>
-              <button onClick={toogleMenuBtn} type='button' className='btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger' id='topnav-hamburger-icon'>
+            <div className='tw:flex'>
+              <button onClick={toogleMenuBtn} type='button' className='btn btn-sm tw:px-4 header-item vertical-menu-btn topnav-hamburger' id='topnav-hamburger-icon'>
                 <span className='hamburger-icon'>
                   <span></span>
                   <span></span>
@@ -60,7 +60,7 @@ const Header = ({ headerClass }: Props) => {
               </button>
             </div>
 
-            <div className='d-flex justify-content-end align-items-center gap-3 gap-md-4'>
+            <div className='tw:flex tw:justify-end tw:items-center tw:gap-4 tw:md:gap-6'>
               <NotificationsPanel />
               <ProfileDropdown />
             </div>

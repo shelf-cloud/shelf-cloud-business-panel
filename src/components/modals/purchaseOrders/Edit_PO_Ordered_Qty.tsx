@@ -86,43 +86,43 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
         Edit PO Quantities
       </ModalHeader>
       <ModalBody>
-        <p className='m-0 fs-5 fw-semibold'>
-          Purchase Order: <span className='text-primary'>{orderNumber}</span>
+        <p className='tw:m-0 tw:text-[16.25px] tw:font-semibold'>
+          Purchase Order: <span className='tw:text-primary'>{orderNumber}</span>
         </p>
         {hasSplitting && (
-          <p className='fs-5 fw-semibold'>
-            In Split: <span className='text-primary'>{split?.splitName}</span>
+          <p className='tw:text-[16.25px] tw:font-semibold'>
+            In Split: <span className='tw:text-primary'>{split?.splitName}</span>
           </p>
         )}
-        <div className='mt-2 table-responsive'>
-          <table className='table table-sm align-middle table-borderless mb-0'>
-            <thead className='table-light'>
+        <div className='tw:mt-2 tw:overflow-x-auto'>
+          <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+            <thead className='tw:bg-[color:var(--vz-light)]'>
               <tr>
-                <th scope='col' className='text-center'>
+                <th scope='col' className='tw:text-center'>
                   Image
                 </th>
                 <th scope='col'>Title</th>
-                <th className='text-center' scope='col'>
+                <th className='tw:text-center' scope='col'>
                   SKU
                 </th>
-                <th className='text-center' scope='col'>
+                <th className='tw:text-center' scope='col'>
                   Cost
                 </th>
-                <th className='text-center' scope='col'>
+                <th className='tw:text-center' scope='col'>
                   Ordered
                 </th>
-                <th className='text-center' scope='col'>
+                <th className='tw:text-center' scope='col'>
                   Inbound
                 </th>
-                <th className='text-center' scope='col'>
+                <th className='tw:text-center' scope='col'>
                   Arrived
                 </th>
               </tr>
             </thead>
-            <tbody className='fs-7'>
+            <tbody className='tw:text-[11.2px]'>
               {newOrderedQtyItems?.map((product: PurchaseOrderItem, key: number) => (
-                <tr key={`${key}-${product.sku}`} className='border-bottom py-2'>
-                  <td className='text-center'>
+                <tr key={`${key}-${product.sku}`} className='tw:border-b tw:py-2'>
+                  <td className='tw:text-center'>
                     <div
                       style={{
                         width: '100%',
@@ -140,29 +140,29 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
                       />
                     </div>
                   </td>
-                  <td className='fs-7 fw-semibold'>
+                  <td className='tw:text-[11.2px] tw:font-semibold'>
                     {product.title}
 
                     {product.asin && (
                       <>
                         <br />
-                        <span className='text-muted fs-7 fw-normal'>ASIN: {product.asin}</span>
+                        <span className='tw:text-[var(--bs-secondary-color)] tw:text-[11.2px] tw:font-normal'>ASIN: {product.asin}</span>
                       </>
                     )}
                     {product.barcode && (
                       <>
                         <br />
-                        <span className='text-muted fs-7 fw-normal'>UPC: {product.barcode}</span>
+                        <span className='tw:text-[var(--bs-secondary-color)] tw:text-[11.2px] tw:font-normal'>UPC: {product.barcode}</span>
                       </>
                     )}
                   </td>
-                  <td className='text-center text-nowrap'>{product.sku}</td>
-                  <td className='text-center text-nowrap'>{FormatCurrency(state.currentRegion, product.orderQty * product.sellerCost || 0)}</td>
-                  <td className='text-center text-nowrap'>
+                  <td className='tw:text-center tw:text-nowrap'>{product.sku}</td>
+                  <td className='tw:text-center tw:text-nowrap'>{FormatCurrency(state.currentRegion, product.orderQty * product.sellerCost || 0)}</td>
+                  <td className='tw:text-center tw:text-nowrap'>
                     <Input
                       type='number'
                       onWheel={(e) => e.currentTarget.blur()}
-                      className='fs-6 m-0 mx-auto'
+                      className='tw:text-[13px] tw:m-0 tw:mx-auto'
                       style={{ maxWidth: '60px' }}
                       placeholder='Qty'
                       id='newOrderQty'
@@ -185,19 +185,19 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
                       invalid={product.orderQty <= 0 || product.orderQty < product.receivedQty + product.inboundQty ? true : false}
                     />
                   </td>
-                  <td className='fs-6 text-center text-nowrap'>{FormatIntNumber(state.currentRegion, product.inboundQty)}</td>
-                  <td className='fs-6 text-center text-nowrap'>{FormatIntNumber(state.currentRegion, product.receivedQty)}</td>
+                  <td className='tw:text-[13px] tw:text-center tw:text-nowrap'>{FormatIntNumber(state.currentRegion, product.inboundQty)}</td>
+                  <td className='tw:text-[13px] tw:text-center tw:text-nowrap'>{FormatIntNumber(state.currentRegion, product.receivedQty)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
 
-        <div className='mt-3 d-flex justify-content-end align-items-center gap-2'>
-          <Button type='button' color='light' className='fs-7' onClick={handleClose}>
+        <div className='tw:mt-4 tw:flex tw:justify-end tw:items-center tw:gap-2'>
+          <Button type='button' color='light' className='tw:text-[11.2px]' onClick={handleClose}>
             Cancel
           </Button>
-          <Button disabled={loading || error ? true : false} type='button' color='success' className='fs-7' onClick={handleEditOrderedQtyFromPO}>
+          <Button disabled={loading || error ? true : false} type='button' color='success' className='tw:text-[11.2px]' onClick={handleEditOrderedQtyFromPO}>
             {loading ? (
               <span>
                 <Spinner color='light' size={'sm'} /> Saving...

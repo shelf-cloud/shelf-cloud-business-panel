@@ -39,7 +39,7 @@ const ProfileDropdown = () => {
                 state.currentRegion !== '' &&
                 (state.currentRegion == 'us' ? (
                   <Image
-                    className='rounded-circle header-profile-user'
+                    className='tw:rounded-full header-profile-user'
                     src={flag_of_usa}
                     width={25}
                     height={25}
@@ -51,7 +51,7 @@ const ProfileDropdown = () => {
                   />
                 ) : state.currentRegion == 'eu' ? (
                   <Image
-                    className='rounded-circle header-profile-user'
+                    className='tw:rounded-full header-profile-user'
                     src={flag_of_europe}
                     width={25}
                     height={25}
@@ -63,7 +63,7 @@ const ProfileDropdown = () => {
                   />
                 ) : (
                   <Image
-                    className='rounded-circle header-profile-user'
+                    className='tw:rounded-full header-profile-user'
                     src={flag_of_SC}
                     width={25}
                     height={25}
@@ -107,7 +107,7 @@ const ProfileDropdown = () => {
                 <div className='tw:align-middle tw:me-1' style={{ width: '15px', height: '15px' }}>
                   {state.currentRegion == 'eu' ? (
                     <Image
-                      className='rounded-circle header-profile-user'
+                      className='tw:rounded-full header-profile-user'
                       src={flag_of_usa}
                       width={16}
                       height={16}
@@ -119,7 +119,7 @@ const ProfileDropdown = () => {
                     />
                   ) : (
                     <Image
-                      className='rounded-circle header-profile-user'
+                      className='tw:rounded-full header-profile-user'
                       src={flag_of_europe}
                       width={16}
                       height={16}

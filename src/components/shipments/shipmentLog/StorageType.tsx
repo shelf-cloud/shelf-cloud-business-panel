@@ -26,9 +26,9 @@ const StorageType = ({ data, totalCharge }: Props) => {
                   <h5 className='tw:font-semibold tw:m-0'>Products</h5>
                 </CardHeader>
                 <CardBody>
-                  <div className='table-responsive'>
-                    <table className='table table-sm align-middle table-borderless mb-0'>
-                      <thead className='table-light'>
+                  <div className='tw:overflow-x-auto'>
+                    <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+                      <thead className='tw:bg-[color:var(--vz-light)]'>
                         <tr>
                           <th className='tw:text-center' scope='col'>
                             Image

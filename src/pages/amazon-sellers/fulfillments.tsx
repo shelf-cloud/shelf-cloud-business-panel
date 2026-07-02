@@ -161,8 +161,8 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
           <BreadCrumb title='Fulfillments' pageTitle='Amazon' />
           <Container fluid>
             {/* <Row className='tw:flex tw:flex-col-reverse tw:justify-center tw:items-end tw:gap-2 tw:mb-1 flex-md-row justify-content-md-end align-items-md-center tw:px-4'> */}
-            <Row className='tw:justify-between tw:tw:gap-2 tw:tw:mb-2 tw:tw:px-1'>
-              <Col xs='12' lg='6' className='tw:flex tw:justify-start tw:items-center tw:tw:gap-2'>
+            <Row className='tw:justify-between tw:gap-2 tw:mb-2 tw:px-1'>
+              <Col xs='12' lg='6' className='tw:flex tw:justify-start tw:items-center tw:gap-2'>
                 <Link href={'/amazon-sellers/fulfillment/sendToAmazon'}>
                   <Button>Start New</Button>
                 </Link>
@@ -173,7 +173,7 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
               </Col>
               <Col xs='12' lg='4' className='tw:flex tw:justify-end tw:items-center'>
                 <div className='flex-1'>
-                  <div className='app-search tw:flex tw:tw:flex-row tw:justify-between tw:items-center tw:tw:p-0'>
+                  <div className='app-search tw:flex tw:flex-row tw:justify-between tw:items-center tw:p-0'>
                     <div className='tw:relative tw:flex tw:rounded-lg tw:w-full tw:overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                       <DebounceInput
                         type='text'

@@ -469,7 +469,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
             <p className='tw:text-[16.25px] tw:font-bold'>Ship Date</p>
             <p className='tw:my-1 tw:mb-2 tw:p-0 tw:text-[11.2px]'>*Shipping date will be the same for all shipments</p>
             {inboundPlan.shipDate ? (
-              <div className='btn btn-sm tw:m-0 rounded border border-2 border-success' style={{ backgroundColor: 'white', cursor: 'default' }}>
+              <div className='btn btn-sm tw:m-0 tw:rounded tw:border tw:border-2 tw:border-success' style={{ backgroundColor: 'white', cursor: 'default' }}>
                 <span className='tw:text-[13px] tw:m-0 tw:p-4 tw:font-semibold'>{moment(inboundPlan.shipDate).format('MM/DD/YYYY')}</span>
               </div>
             ) : (
@@ -539,10 +539,10 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                             }
                           }}
                           className={
-                            'mw-100 tw:px-2 tw:py-0 tw:my-0 shadow-sm ' +
+                            'tw:max-w-full tw:px-2 tw:py-0 tw:my-0 tw:shadow-[0_0.125rem_0.25rem_rgba(0,0,0,0.075)] ' +
                             ((placementOptionSelected.placementOptionId === placementOption.placementOptionId ||
                               inboundPlan.placementOptionId === placementOption.placementOptionId) &&
-                              'border border-3 border-success')
+                              'tw:border tw:border-[3px] tw:border-success')
                           }
                           style={{ cursor: 'pointer' }}>
                           <CardBody>
@@ -631,7 +631,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                           return { ...prev, shippingMode: 'SPD', sameShippingCarrier: 'amazon', nonAmazonCarrier: '', nonAmazonAlphaCode: '' }
                         })
                       }}
-                      className={'shadow-sm ' + (finalShippingCharges.shippingMode === 'SPD' && 'border border-3 border-success')}
+                      className={'tw:shadow-[0_0.125rem_0.25rem_rgba(0,0,0,0.075)] ' + (finalShippingCharges.shippingMode === 'SPD' && 'tw:border tw:border-[3px] tw:border-success')}
                       style={{ cursor: 'pointer' }}>
                       <CardBody className='tw:flex tw:justify-start tw:items-center tw:gap-1'>
                         <div
@@ -689,7 +689,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                           return { ...prev, shippingMode: 'LTL', nonAmazonCarrier: '', nonAmazonAlphaCode: '' }
                         })
                       }
-                      className={'shadow-sm ' + (finalShippingCharges.shippingMode === 'LTL' && 'border border-3 border-success')}
+                      className={'tw:shadow-[0_0.125rem_0.25rem_rgba(0,0,0,0.075)] ' + (finalShippingCharges.shippingMode === 'LTL' && 'tw:border tw:border-[3px] tw:border-success')}
                       style={{ cursor: 'pointer' }}>
                       <CardBody className='tw:flex tw:justify-start tw:items-center tw:gap-1'>
                         <div
@@ -747,7 +747,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                             return { ...prev, sameShippingCarrier: 'amazon', nonAmazonCarrier: '', nonAmazonAlphaCode: '' }
                           })
                         }
-                        className={'tw:m-0 shadow-sm ' + (finalShippingCharges.sameShippingCarrier === 'amazon' && 'border border-3 border-success')}
+                        className={'tw:m-0 tw:shadow-[0_0.125rem_0.25rem_rgba(0,0,0,0.075)] ' + (finalShippingCharges.sameShippingCarrier === 'amazon' && 'tw:border tw:border-[3px] tw:border-success')}
                         style={{ cursor: 'pointer' }}>
                         <CardBody>
                           <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:font-semibold'>UPS (Amazon Partnered Carrier)*</p>
@@ -813,7 +813,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                   {placementOptionSelected.shipmentIds.map((shipmentId, shipmentIndex) => (
                     <Card
                       key={shipmentId}
-                      className='tw:m-0 shadow-sm'
+                      className='tw:m-0 tw:shadow-[0_0.125rem_0.25rem_rgba(0,0,0,0.075)]'
                       style={{ width: 'fit-content', maxWidth: '430px', zIndex: placementOptionSelected.shipmentIds.length - shipmentIndex }}>
                       <CardHeader>
                         <p className='tw:m-0 tw:p-0 tw:font-bold tw:text-[13px]'>Shipment #{shipmentIndex + 1}</p>
@@ -918,53 +918,55 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                             <>
                               <div className='tw:my-4'>
                                 <p className='tw:m-0 tw:p-0 tw:font-semibold tw:text-[11.2px]'>Pallet estimates:</p>
-                                <table className='table table-sm table-borderless table-responsive'>
-                                  <tbody className='tw:text-[11.2px]'>
-                                    <tr>
-                                      <td>
-                                        Pallets:{' '}
-                                        <span className='tw:font-semibold'>
-                                          {FormatIntNumber(
-                                            state.currentRegion,
-                                            inboundPlan.generateTransportationOptions[placementOptionSelected.placementOptionId][shipmentId]?.pallets!.length ?? 1
-                                          )}
-                                        </span>
-                                      </td>
-                                      <td>
-                                        Total Weight:{' '}
-                                        <span className='tw:font-semibold'>
-                                          {FormatIntPercentage(
-                                            state.currentRegion,
-                                            inboundPlan.generateTransportationOptions[placementOptionSelected.placementOptionId][shipmentId]?.pallets!.reduce(
-                                              (total, pallet) => total + pallet.weight.value,
-                                              0
-                                            )
-                                          )}{' '}
-                                          lb
-                                        </span>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td>Value: --</td>
-                                      <td>
-                                        Total Volume:{' '}
-                                        <span className='tw:font-semibold'>
-                                          {FormatIntPercentage(
-                                            state.currentRegion,
-                                            inboundPlan.shipments[shipmentId]?.shipmentBoxes.boxes.reduce(
-                                              (total, box) => total + box.dimensions.width * box.dimensions.height * box.dimensions.length * box.quantity,
-                                              0
-                                            )
-                                          )}{' '}
-                                          inch3
-                                        </span>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td>Frieght Class: --</td>
-                                    </tr>
-                                  </tbody>
-                                </table>
+                                <div className='tw:overflow-x-auto'>
+                                  <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+                                    <tbody className='tw:text-[11.2px]'>
+                                      <tr>
+                                        <td>
+                                          Pallets:{' '}
+                                          <span className='tw:font-semibold'>
+                                            {FormatIntNumber(
+                                              state.currentRegion,
+                                              inboundPlan.generateTransportationOptions[placementOptionSelected.placementOptionId][shipmentId]?.pallets!.length ?? 1
+                                            )}
+                                          </span>
+                                        </td>
+                                        <td>
+                                          Total Weight:{' '}
+                                          <span className='tw:font-semibold'>
+                                            {FormatIntPercentage(
+                                              state.currentRegion,
+                                              inboundPlan.generateTransportationOptions[placementOptionSelected.placementOptionId][shipmentId]?.pallets!.reduce(
+                                                (total, pallet) => total + pallet.weight.value,
+                                                0
+                                              )
+                                            )}{' '}
+                                            lb
+                                          </span>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td>Value: --</td>
+                                        <td>
+                                          Total Volume:{' '}
+                                          <span className='tw:font-semibold'>
+                                            {FormatIntPercentage(
+                                              state.currentRegion,
+                                              inboundPlan.shipments[shipmentId]?.shipmentBoxes.boxes.reduce(
+                                                (total, box) => total + box.dimensions.width * box.dimensions.height * box.dimensions.length * box.quantity,
+                                                0
+                                              )
+                                            )}{' '}
+                                            inch3
+                                          </span>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td>Frieght Class: --</td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
                                 <p className='tw:m-0 tw:mt-4 tw:p-0 tw:text-[11.2px] tw:text-right'>
                                   {inboundPlan.transportationOptions[placementOptionSelected.placementOptionId] &&
                                   Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId]).some(
@@ -1252,53 +1254,55 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                 <>
                                   <div className='tw:my-4'>
                                     <p className='tw:m-0 tw:p-0 tw:font-semibold tw:text-[11.2px]'>Pallet estimates:</p>
-                                    <table className='table table-sm table-borderless table-responsive'>
-                                      <tbody className='tw:text-[11.2px]'>
-                                        <tr>
-                                          <td>
-                                            Pallets:{' '}
-                                            <span className='tw:font-semibold'>
-                                              {FormatIntNumber(
-                                                state.currentRegion,
-                                                inboundPlan.generateTransportationOptions[placementOptionSelected.placementOptionId][shipmentId]?.pallets!.length ?? 1
-                                              )}
-                                            </span>
-                                          </td>
-                                          <td>
-                                            Total Weight:{' '}
-                                            <span className='tw:font-semibold'>
-                                              {FormatIntPercentage(
-                                                state.currentRegion,
-                                                inboundPlan.generateTransportationOptions[placementOptionSelected.placementOptionId][shipmentId]?.pallets!.reduce(
-                                                  (total, pallet) => total + pallet.weight.value,
-                                                  0
-                                                )
-                                              )}{' '}
-                                              lb
-                                            </span>
-                                          </td>
-                                        </tr>
-                                        <tr>
-                                          <td>Value: --</td>
-                                          <td>
-                                            Total Volume:{' '}
-                                            <span className='tw:font-semibold'>
-                                              {FormatIntPercentage(
-                                                state.currentRegion,
-                                                inboundPlan.shipments[shipmentId]?.shipmentBoxes.boxes.reduce(
-                                                  (total, box) => total + box.dimensions.width * box.dimensions.height * box.dimensions.length * box.quantity,
-                                                  0
-                                                )
-                                              )}{' '}
-                                              inch3
-                                            </span>
-                                          </td>
-                                        </tr>
-                                        <tr>
-                                          <td>Frieght Class: --</td>
-                                        </tr>
-                                      </tbody>
-                                    </table>
+                                    <div className='tw:overflow-x-auto'>
+                                      <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+                                        <tbody className='tw:text-[11.2px]'>
+                                          <tr>
+                                            <td>
+                                              Pallets:{' '}
+                                              <span className='tw:font-semibold'>
+                                                {FormatIntNumber(
+                                                  state.currentRegion,
+                                                  inboundPlan.generateTransportationOptions[placementOptionSelected.placementOptionId][shipmentId]?.pallets!.length ?? 1
+                                                )}
+                                              </span>
+                                            </td>
+                                            <td>
+                                              Total Weight:{' '}
+                                              <span className='tw:font-semibold'>
+                                                {FormatIntPercentage(
+                                                  state.currentRegion,
+                                                  inboundPlan.generateTransportationOptions[placementOptionSelected.placementOptionId][shipmentId]?.pallets!.reduce(
+                                                    (total, pallet) => total + pallet.weight.value,
+                                                    0
+                                                  )
+                                                )}{' '}
+                                                lb
+                                              </span>
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <td>Value: --</td>
+                                            <td>
+                                              Total Volume:{' '}
+                                              <span className='tw:font-semibold'>
+                                                {FormatIntPercentage(
+                                                  state.currentRegion,
+                                                  inboundPlan.shipments[shipmentId]?.shipmentBoxes.boxes.reduce(
+                                                    (total, box) => total + box.dimensions.width * box.dimensions.height * box.dimensions.length * box.quantity,
+                                                    0
+                                                  )
+                                                )}{' '}
+                                                inch3
+                                              </span>
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <td>Frieght Class: --</td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
                                     <p className='tw:m-0 tw:p-0 tw:font-semibold tw:text-[11.2px]'>Carrier:</p>
                                     <p className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>{`You'll select your LTL carrier in Step 4.`}</p>
                                   </div>
@@ -1440,7 +1444,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                   <p className='tw:text-[11.2px]'>Before we generate the shipping labels for you, take a moment to review the details and check that all is correct.</p>
                 </Col>
                 <Col xs='12' lg='4'>
-                  <table className='table table-sm tw:text-[11.2px]'>
+                  <table className='tw:w-full tw:align-middle tw:mb-0 tw:text-[11.2px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
                     <tbody>
                       <tr>
                         <td>Total prep and labeling fees:</td>

@@ -68,7 +68,7 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
             {showMappedListingModal.shelfCloudSku == '' ? `Select...` : showMappedListingModal.shelfCloudSku}
           </span>
           <span
-            className='btn btn-light btn-sm dropdown-toggle form-control fs-6dropdown-toggle dropdown-toggle-split'
+            className='btn btn-light btn-sm dropdown-toggle form-control tw:text-[13px] dropdown-toggle dropdown-toggle-split'
             style={{ backgroundColor: 'white', maxWidth: '35px' }}
             aria-expanded='false'>
             <span className='visually-hidden'>Toggle Dropdown</span>

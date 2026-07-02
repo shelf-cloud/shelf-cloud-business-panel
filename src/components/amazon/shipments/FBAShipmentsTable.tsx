@@ -221,34 +221,34 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
           case 'shipped':
           case 'ready_to_ship':
           case 'awaiting':
-            return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${CleanStatus(status)} `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-secondary)_10%,transparent)] tw:text-secondary tw:p-2'>{` ${CleanStatus(status)} `}</span>
             break
           case 'delivered':
-            return <span className='badge text-uppercase badge-soft-success p-2'>{` ${CleanStatus(status)} `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-success)_10%,transparent)] tw:text-success tw:p-2'>{` ${CleanStatus(status)} `}</span>
             break
           case 'working':
           case 'active':
           case 'unconfirmed':
           case 'reviewing':
-            return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${CleanStatus(status)} `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] tw:text-warning tw:p-2'>{` ${CleanStatus(status)} `}</span>
             break
           case 'in_transit':
           case 'checked_in':
           case 'receiving':
-            return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${CleanStatus(status)} `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-secondary)_10%,transparent)] tw:text-secondary tw:p-2'>{` ${CleanStatus(status)} `}</span>
             break
           case 'in_dispute':
           case 'error':
-            return <span className='badge text-uppercase badge-soft-danger p-2'>{` ${CleanStatus(status)} `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-danger)_10%,transparent)] tw:text-danger tw:p-2'>{` ${CleanStatus(status)} `}</span>
             break
           case 'cancelled':
           case 'manually_closed':
           case 'closed':
           case 'deleted':
-            return <span className='badge text-uppercase badge-soft-dark p-2'>{` ${CleanStatus(status)} `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-dark)_10%,transparent)] tw:text-dark tw:p-2'>{` ${CleanStatus(status)} `}</span>
             break
           default:
-            return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${CleanStatus(status)} `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-secondary)_10%,transparent)] tw:text-secondary tw:p-2'>{` ${CleanStatus(status)} `}</span>
             break
         }
       },

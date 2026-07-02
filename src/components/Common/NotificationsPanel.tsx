@@ -65,37 +65,37 @@ const NotificationsPanel = () => {
   return (
     <div className='notification-panel'>
       <ButtonGroup>
-        <UncontrolledDropdown className='dropdown d-inline-block' direction='down'>
+        <UncontrolledDropdown className='dropdown tw:inline-block' direction='down'>
           <DropdownToggle tag='button' className='btn btn-primary btn-icon'>
             <i className='mdi mdi-bell fs-4' />
             {notifications?.some((info) => !info.read) && (
               <span className='badge bg-danger position-absolute top-0 start-100 translate-middle'>{notifications?.filter((info) => !info.read).length}</span>
             )}
           </DropdownToggle>
-          <DropdownMenu className='dropdown-menu-lg pt-0 mt-2' end style={{ minWidth: '200px' }}>
-            <div className='bg-primary bg-pattern rounded-top d-flex flex-column justify-content-between align-items-baseline flex-md-row'>
-              <h6 className='fw-semibold text-white text-left p-3 fs-5'>Notifications</h6>
+          <DropdownMenu className='dropdown-menu-lg tw:pt-0 tw:mt-2' end style={{ minWidth: '200px' }}>
+            <div className='bg-primary bg-pattern tw:rounded-t tw:flex tw:flex-col tw:justify-between tw:items-baseline tw:md:flex-row'>
+              <h6 className='tw:font-semibold tw:text-white tw:text-left tw:p-4 tw:text-[16.25px]'>Notifications</h6>
               {notifications && notifications?.length > 0 && (
-                <Button color='ghost' className='text-white fs-7' size='sm' onClick={markNotificationsAsRead}>
+                <Button color='ghost' className='tw:text-white tw:text-[11.2px]' size='sm' onClick={markNotificationsAsRead}>
                   Mark as Read
                 </Button>
               )}
             </div>
             {notifications && notifications?.length > 0 ? (
-              <div className='d-flex flex-column gap-2 align-items-start w-100 overflow-auto px-3 py-2'>
+              <div className='tw:flex tw:flex-col tw:gap-2 tw:items-start tw:w-full tw:overflow-auto tw:px-4 tw:py-2'>
                 {notifications.map((info, index) => (
-                  <div key={info.id} className={`w-100 pb-1 ${index !== notifications.length - 1 ? 'border-bottom' : ''}`}>
-                    <p className='m-0 mb-1 fs-7 fw-semibold d-flex flex-row justify-content-between align-items-center'>
+                  <div key={info.id} className={`tw:w-full tw:pb-1 ${index !== notifications.length - 1 ? 'tw:border-b tw:border-[color:var(--border)]' : ''}`}>
+                    <p className='tw:m-0 tw:mb-1 tw:text-[11.2px] tw:font-semibold tw:flex tw:flex-row tw:justify-between tw:items-center'>
                       {info.title}
                       {!info.read && <i className='text-danger mdi mdi-alert-circle fs-6 me-1' />}
                     </p>
-                    <p className='m-0 text-muted fw-normal text-truncate' style={{ fontSize: '0.65rem' }}>
+                    <p className='tw:m-0 tw:text-[var(--bs-secondary-color)] tw:font-normal tw:truncate' style={{ fontSize: '0.65rem' }}>
                       {info.description}
                     </p>
-                    <span className='m-0 fw-normal d-column justify-content-start align-items-end gap-1 d-lg-flex' style={{ fontSize: '0.65rem' }}>
+                    <span className='tw:m-0 tw:font-normal tw:justify-start tw:items-end tw:gap-1 tw:lg:flex tw:lg:flex-row' style={{ fontSize: '0.65rem' }}>
                       {moment(info.created).fromNow()}
                       {info.tag && notificationsTagLinks[info.tag as keyof typeof notificationsTagLinks]?.link && (
-                        <Link href={notificationsTagLinks[info.tag as keyof typeof notificationsTagLinks].link} className='capitalize text-primary d-flex align-items-end gap-1'>
+                        <Link href={notificationsTagLinks[info.tag as keyof typeof notificationsTagLinks].link} className='tw:capitalize tw:!text-primary tw:flex tw:items-end tw:gap-1'>
                           {' • '}
                           {notificationsTagLinks[info.tag as keyof typeof notificationsTagLinks].title} <i className='ri-external-link-fill m-0 fs-7 text-primary' />
                         </Link>
@@ -105,9 +105,9 @@ const NotificationsPanel = () => {
                 ))}
               </div>
             ) : (
-              <div className='d-flex flex-column gap-2 align-items-start w-100 overflow-auto px-3 py-2'>
-                <div className='w-100 py-2'>
-                  <p className='m-0 fs-7 fw-normal text-muted'>Notifications will appear here</p>
+              <div className='tw:flex tw:flex-col tw:gap-2 tw:items-start tw:w-full tw:overflow-auto tw:px-4 tw:py-2'>
+                <div className='tw:w-full tw:py-2'>
+                  <p className='tw:m-0 tw:text-[11.2px] tw:font-normal tw:text-[var(--bs-secondary-color)]'>Notifications will appear here</p>
                 </div>
               </div>
             )}

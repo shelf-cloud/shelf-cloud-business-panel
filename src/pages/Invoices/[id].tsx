@@ -15,8 +15,9 @@ import axios from 'axios'
 import moment from 'moment'
 import { getSession } from 'next-auth/react'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, CardHeader, Col, Container, Row } from '@/components/migration-ui'
 import useSWR from 'swr'
+
+import { Button, Card, CardBody, CardHeader, Col, Container, Row } from '@/components/migration-ui'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -111,74 +112,76 @@ const InvoiceDetails = () => {
                         </div>
                       </CardHeader>
                       <CardBody>
-                        <table className='table tw:text-center table-striped-columns'>
-                          <thead className='tw:text-[16.25px]'>
-                            <tr>
-                              <th>ORDER #</th>
-                              <th>TYPE</th>
-                              <th>DATE CLOSED</th>
-                              <th>ORDER TOTAL CHARGE</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {invoiceDetails?.orders.map((order) => (
-                              <tr key={order.orderNumber}>
-                                <td
-                                  className='tw:text-primary'
-                                  style={{ cursor: 'pointer' }}
-                                  onClick={
-                                    order.orderType != 'Storage'
-                                      ? () => setShipmentDetailsModal(true, order.orderId, order.orderNumber, order.orderType, order.orderStatus, order.orderDate, false)
-                                      : () =>
-                                          setStorageFeesDetailsModal(
-                                            true,
-                                            order.orderNumber,
-                                            order.totalCharge,
-                                            order.orderType,
-                                            moment(order.closedDate).subtract(1, 'months').startOf('month').format('YYYY-MM-DD'),
-                                            moment(order.closedDate).subtract(1, 'months').endOf('month').format('YYYY-MM-DD')
-                                          )
-                                  }>
-                                  {order.orderNumber}
-                                </td>
-                                <td>{order.orderType}</td>
-                                <td>{moment(order.closedDate).format('LL')}</td>
-                                <td>{FormatCurrency(currentRegion, order.totalCharge)}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                          <tfoot className='tw:font-bold tw:text-[16.25px]'>
-                            {currentRegion == 'us' ? (
+                        <div className='tw:overflow-x-auto'>
+                          <table className='tw:w-full tw:align-middle tw:text-center tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)]'>
+                            <thead className='tw:text-[16.25px]'>
                               <tr>
-                                <td className='tw:text-right' colSpan={3}>
-                                  Total
-                                </td>
-                                <td>{FormatCurrency(currentRegion, Number(invoiceDetails?.invoice?.totalCharge))}</td>
+                                <th>ORDER #</th>
+                                <th>TYPE</th>
+                                <th>DATE CLOSED</th>
+                                <th>ORDER TOTAL CHARGE</th>
                               </tr>
-                            ) : (
-                              <>
-                                <tr>
-                                  <td className='tw:text-right' colSpan={3}>
-                                    SubTotal
+                            </thead>
+                            <tbody>
+                              {invoiceDetails?.orders.map((order) => (
+                                <tr key={order.orderNumber}>
+                                  <td
+                                    className='tw:text-primary'
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={
+                                      order.orderType != 'Storage'
+                                        ? () => setShipmentDetailsModal(true, order.orderId, order.orderNumber, order.orderType, order.orderStatus, order.orderDate, false)
+                                        : () =>
+                                            setStorageFeesDetailsModal(
+                                              true,
+                                              order.orderNumber,
+                                              order.totalCharge,
+                                              order.orderType,
+                                              moment(order.closedDate).subtract(1, 'months').startOf('month').format('YYYY-MM-DD'),
+                                              moment(order.closedDate).subtract(1, 'months').endOf('month').format('YYYY-MM-DD')
+                                            )
+                                    }>
+                                    {order.orderNumber}
                                   </td>
-                                  <td>{FormatCurrency(currentRegion, Number(invoiceDetails?.invoice?.totalCharge! / 1.21))}</td>
+                                  <td>{order.orderType}</td>
+                                  <td>{moment(order.closedDate).format('LL')}</td>
+                                  <td>{FormatCurrency(currentRegion, order.totalCharge)}</td>
                                 </tr>
-                                <tr>
-                                  <td className='tw:text-right' colSpan={3}>
-                                    IVA 21%
-                                  </td>
-                                  <td>{FormatCurrency(currentRegion, Number((invoiceDetails?.invoice?.totalCharge! / 1.21) * 0.21))}</td>
-                                </tr>
+                              ))}
+                            </tbody>
+                            <tfoot className='tw:font-bold tw:text-[16.25px]'>
+                              {currentRegion == 'us' ? (
                                 <tr>
                                   <td className='tw:text-right' colSpan={3}>
                                     Total
                                   </td>
-                                  <td>{FormatCurrency(currentRegion, Number(invoiceDetails?.invoice?.totalCharge!))}</td>
+                                  <td>{FormatCurrency(currentRegion, Number(invoiceDetails?.invoice?.totalCharge))}</td>
                                 </tr>
-                              </>
-                            )}
-                          </tfoot>
-                        </table>
+                              ) : (
+                                <>
+                                  <tr>
+                                    <td className='tw:text-right' colSpan={3}>
+                                      SubTotal
+                                    </td>
+                                    <td>{FormatCurrency(currentRegion, Number(invoiceDetails?.invoice?.totalCharge! / 1.21))}</td>
+                                  </tr>
+                                  <tr>
+                                    <td className='tw:text-right' colSpan={3}>
+                                      IVA 21%
+                                    </td>
+                                    <td>{FormatCurrency(currentRegion, Number((invoiceDetails?.invoice?.totalCharge! / 1.21) * 0.21))}</td>
+                                  </tr>
+                                  <tr>
+                                    <td className='tw:text-right' colSpan={3}>
+                                      Total
+                                    </td>
+                                    <td>{FormatCurrency(currentRegion, Number(invoiceDetails?.invoice?.totalCharge!))}</td>
+                                  </tr>
+                                </>
+                              )}
+                            </tfoot>
+                          </table>
+                        </div>
                       </CardBody>
                     </>
                   ) : (

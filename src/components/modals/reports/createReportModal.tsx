@@ -98,11 +98,11 @@ const CreateReportModal = ({ showMappedCreateReport, setshowMappedCreateReport, 
         <Row>
           <div className='tw:space-y-3'>
             <div>
-              <p className='fw-light text-muted fs-7 mb-1'>Select Report Type:</p>
+              <p className='tw:font-light tw:text-[var(--bs-secondary-color)] tw:text-[11.2px] tw:mb-1'>Select Report Type:</p>
               <SelectReportType showMappedCreateReport={showMappedCreateReport} setshowMappedCreateReport={setshowMappedCreateReport} />
             </div>
             <div>
-              <p className='fw-light text-muted fs-7 mb-1'>Select Report Date Range:</p>
+              <p className='tw:font-light tw:text-[var(--bs-secondary-color)] tw:text-[11.2px] tw:mb-1'>Select Report Date Range:</p>
               <SelectRangeDates
                 showMappedCreateReport={showMappedCreateReport}
                 setshowMappedCreateReport={setshowMappedCreateReport}
@@ -111,9 +111,9 @@ const CreateReportModal = ({ showMappedCreateReport, setshowMappedCreateReport, 
             </div>
             {showMappedCreateReport.reportType === PRODUCTS_REPORT_TYPE && (
               <div>
-                <p className='fw-light text-muted fs-7 mb-1'>Select SKUs:</p>
+                <p className='tw:font-light tw:text-[var(--bs-secondary-color)] tw:text-[11.2px] tw:mb-1'>Select SKUs:</p>
                 {isLoading ? (
-                  <div className='d-flex align-items-center gap-2 text-muted fs-6'>
+                  <div className='tw:flex tw:items-center tw:gap-2 tw:text-[var(--bs-secondary-color)] tw:text-[13px]'>
                     <Spinner color='primary' size={'sm'} />
                     Loading SKUs...
                   </div>
@@ -139,8 +139,8 @@ const CreateReportModal = ({ showMappedCreateReport, setshowMappedCreateReport, 
               </div>
             )}
           </div>
-          <Row md={12} className='mt-3'>
-            <div className='d-flex flex-row gap-3 justify-content-end'>
+          <Row md={12} className='tw:mt-4'>
+            <div className='tw:flex tw:flex-row tw:gap-4 tw:justify-end'>
               <Button
                 disabled={showMappedCreateReport.loading}
                 type='button'

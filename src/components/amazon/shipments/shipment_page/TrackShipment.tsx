@@ -14,8 +14,9 @@ const TrackShipment = ({ shipmentDetails }: Props) => {
   return (
     <div className='tw:my-4 tw:px-4'>
       <Col sm='12' lg='8'>
-        <table className='table table-bordered'>
-          <thead className='table-light'>
+        <div className='tw:overflow-x-auto'>
+        <table className='tw:w-full tw:align-middle tw:mb-0 tw:border tw:border-[color:var(--border)] tw:[&_td]:border-t tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+          <thead className='tw:bg-[color:var(--vz-light)]'>
             <tr>
               <th>Box #</th>
               <th>FBA Box Label #</th>
@@ -46,6 +47,7 @@ const TrackShipment = ({ shipmentDetails }: Props) => {
             ))}
           </tbody>
         </table>
+        </div>
       </Col>
     </div>
   )

@@ -210,8 +210,9 @@ const AssignWorkflowId = ({ assignWorkflowIdModal, setassignWorkflowIdModal, ses
           {!loadingWorflows ? (
             <Col xs={12}>
               <p className='tw:text-[16.25px] tw:font-semibold'>Amazon Active Workflows List</p>
-              <table className='table table-bordered table-responsive'>
-                <thead className='table-light'>
+              <div className='tw:overflow-x-auto'>
+              <table className='tw:w-full tw:align-middle tw:mb-0 tw:border tw:border-[color:var(--border)] tw:[&_td]:border-t tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+                <thead className='tw:bg-[color:var(--vz-light)]'>
                   <tr className='tw:text-center'>
                     <th>Date Created</th>
                     <th>Marketplace</th>
@@ -250,6 +251,7 @@ const AssignWorkflowId = ({ assignWorkflowIdModal, setassignWorkflowIdModal, ses
                     )}
                 </tbody>
               </table>
+              </div>
               <Row md={12} className=''>
                 <div className='tw:text-right tw:mt-2 tw:flex tw:flex-row tw:gap-6 tw:justify-end'>
                   <div className='tw:flex tw:flex-row tw:gap-4'>

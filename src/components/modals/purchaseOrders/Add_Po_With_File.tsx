@@ -198,17 +198,17 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
             <Form>
               <Row>
                 <Col md={6}>
-                  <FormGroup className='mb-1'>
+                  <FormGroup className='tw:mb-1'>
                     <Label htmlFor='firstNameinput' className='form-label'>
                       *Purchase Order Number
                     </Label>
                     <div className='input-group'>
-                      <span className='input-group-text fw-semibold fs-5 m-0 px-2 py-0' id='basic-addon1'>
+                      <span className='input-group-text tw:font-semibold tw:text-[16.25px] tw:m-0 tw:px-2 tw:py-0' id='basic-addon1'>
                         {orderNumberStart}
                       </span>
                       <Input
                         type='text'
-                        className='fs-6'
+                        className='tw:text-[13px]'
                         id='orderNumber'
                         name='orderNumber'
                         bsSize='sm'
@@ -221,8 +221,8 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                     </div>
                   </FormGroup>
 
-                  <div className='mb-2'>
-                    <Label className='form-label mb-1 fs-7'>*Destination</Label>
+                  <div className='tw:mb-2'>
+                    <Label className='form-label tw:mb-1 tw:text-[11.2px]'>*Destination</Label>
                     <SimpleSelect
                       options={warehouses?.map((w) => ({ value: `${w.warehouseId}`, label: w.name })) || []}
                       selected={values.destinationSC}
@@ -232,7 +232,7 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                       placeholder={isLoading ? 'Loading...' : 'Select ...'}
                       customStyle='sm'
                     />
-                    {errors.destinationSC && touched.destinationSC ? <div className='m-0 p-0 text-danger fs-7'>*{errors.destinationSC.value}</div> : null}
+                    {errors.destinationSC && touched.destinationSC ? <div className='tw:m-0 tw:p-0 tw:text-danger tw:text-[11.2px]'>*{errors.destinationSC.value}</div> : null}
                   </div>
 
                   <SelectSingleFilter
@@ -246,13 +246,13 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                     }}
                     error={errors.supplier}
                   />
-                  <FormGroup className='mb-1'>
-                    <Label htmlFor='firstNameinput' className='form-label mb-1 fs-7'>
+                  <FormGroup className='tw:mb-1'>
+                    <Label htmlFor='firstNameinput' className='form-label tw:mb-1 tw:text-[11.2px]'>
                       *Date
                     </Label>
                     <Input
                       type='date'
-                      className='fs-6'
+                      className='tw:text-[13px]'
                       id='date'
                       name='date'
                       bsSize='sm'
@@ -265,15 +265,15 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                   </FormGroup>
                   {showErrorLines &&
                     errorLines.map((error: any, index: number) => (
-                      <p key={`ErrorLine${index}`} className='text-danger m-0 p-0'>{`- Error in Line: ${error.errorLine} Value: ${error.value} Error: ${error.errorMessage}`}</p>
+                      <p key={`ErrorLine${index}`} className='tw:text-danger tw:m-0 tw:p-0'>{`- Error in Line: ${error.errorLine} Value: ${error.value} Error: ${error.errorMessage}`}</p>
                     ))}
-                  {showerrorResponse && errorResponse.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='text-danger m-0'>{`Error: ${error}`}</p>)}
+                  {showerrorResponse && errorResponse.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='tw:text-danger tw:m-0'>{`Error: ${error}`}</p>)}
                 </Col>
                 <Col md={6}>
-                  <p className='fs-6 fw-normal'>
+                  <p className='tw:text-[13px] tw:font-normal'>
                     You can import a Purchase Order by uploading a CSV file using the{' '}
                     <a
-                      className='text-primary'
+                      className='tw:!text-primary'
                       href={'https://docs.google.com/spreadsheets/d/15_8JObdU8ysyTPu-CkwdO5yOAioDJVq-/template/preview'}
                       target={'_blank'}
                       rel='noreferrer'>
@@ -288,12 +288,12 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                       handleAcceptedFiles(acceptedFiles)
                     }}>
                     {({ getRootProps }) => (
-                      <div className='dropzone dz-clickable cursor-pointer'>
+                      <div className='dropzone dz-clickable tw:cursor-pointer'>
                         <div className='dz-message needsclick' {...getRootProps()}>
-                          <div className='mb-3'>
+                          <div className='tw:mb-4'>
                             <i className='display-5 text-muted ri-upload-cloud-2-fill' />
                           </div>
-                          <h4 className='fs-6 px-3'>Upload Purchase Order Info. Drop Only CSV files here or click to upload.</h4>
+                          <h4 className='tw:text-[13px] tw:px-4'>Upload Purchase Order Info. Drop Only CSV files here or click to upload.</h4>
                         </div>
                       </div>
                     )}
@@ -304,16 +304,16 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                     description={`Upload Purchase Order Info. Drop Only CSV files here or click to upload.`}
                   />
                   <Col md={12}>
-                    <div className='list-unstyled mb-0' id='file-previews'>
+                    <div className='list-unstyled tw:mb-0' id='file-previews'>
                       {selectedFiles.map((f: any, i) => {
                         return (
-                          <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
-                            <div className='p-2'>
-                              <Row className='align-items-center'>
-                                <Col className='d-flex justify-content-between align-items-center'>
+                          <Card className='tw:mt-1 tw:mb-0 tw:shadow-none tw:border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
+                            <div className='tw:p-2'>
+                              <Row className='tw:items-center'>
+                                <Col className='tw:flex tw:justify-between tw:items-center'>
                                   <div>
-                                    <p className='text-muted font-weight-bold m-0'>{f.name}</p>
-                                    <p className='mb-0'>
+                                    <p className='tw:text-[var(--bs-secondary-color)] tw:font-bold tw:m-0'>{f.name}</p>
+                                    <p className='tw:mb-0'>
                                       <strong>{f.formattedSize}</strong>
                                     </p>
                                   </div>
@@ -329,14 +329,14 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                         )
                       })}
                     </div>
-                    {errorFile && <p className='text-danger m-0'>You must Upload a CSV file to upload purchase order.</p>}
+                    {errorFile && <p className='tw:text-danger tw:m-0'>You must Upload a CSV file to upload purchase order.</p>}
                   </Col>
                 </Col>
               </Row>
 
-              <Col md={12} className='mt-4'>
-                <div className='text-end'>
-                  <Button disabled={errorFile || showErrorLines || showerrorResponse} type='submit' color='success' className='fs-7'>
+              <Col md={12} className='tw:mt-6'>
+                <div className='tw:text-right'>
+                  <Button disabled={errorFile || showErrorLines || showerrorResponse} type='submit' color='success' className='tw:text-[11.2px]'>
                     {loading ? (
                       <span>
                         <Spinner color='light' size={'sm'} /> Creating...

@@ -469,11 +469,11 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     {orderLabel.files.map((file, i) => {
                       return (
                         <Card className='tw:mt-1 tw:mb-0 tw:shadow-none tw:border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
-                          <div className='p-2'>
+                          <div className='tw:p-2'>
                             <Row className='tw:items-center'>
                               <Col className='tw:flex tw:justify-between tw:items-center tw:gap-2'>
                                 {file.type === 'application/pdf' ? (
-                                  <div className='relative overflow-hidden rounded border' style={{ width: '60px', height: '60px' }}>
+                                  <div className='tw:relative tw:overflow-hidden tw:rounded tw:border' style={{ width: '60px', height: '60px' }}>
                                     <iframe
                                       title={`Shipping label preview for ${file.name}`}
                                       sandbox=''
@@ -540,11 +540,11 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     {orderPalletLabel.files.map((file: any, i) => {
                       return (
                         <Card className='tw:mt-1 tw:mb-0 tw:shadow-none tw:border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
-                          <div className='p-2'>
+                          <div className='tw:p-2'>
                             <Row className='tw:items-center'>
                               <Col className='tw:flex tw:justify-between tw:items-center tw:gap-2'>
                                 {file.type === 'application/pdf' ? (
-                                  <div className='relative overflow-hidden rounded border' style={{ width: '60px', height: '60px' }}>
+                                  <div className='tw:relative tw:overflow-hidden tw:rounded tw:border' style={{ width: '60px', height: '60px' }}>
                                     <iframe
                                       title={`Pallet label preview for ${file.name}`}
                                       sandbox=''
@@ -622,22 +622,23 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
             <Col md={12}>
               <p className='tw:text-[13px] tw:m-0'>Total SKUs in Order: {validation.values.hasProducts}</p>
               {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='tw:text-danger'>{validation.errors.hasProducts}</p> : null}
-              <table className='table align-middle table-responsive table-nowrap table-striped-columns table-sm'>
+              <div className='tw:overflow-x-auto'>
+              <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
                 <thead>
                   <tr>
                     <th>SKU</th>
-                    <th className='text-center'>Type</th>
-                    <th className='text-center'>Master Boxes</th>
-                    <th className='text-center'>Quantity</th>
+                    <th className='tw:text-center'>Type</th>
+                    <th className='tw:text-center'>Master Boxes</th>
+                    <th className='tw:text-center'>Quantity</th>
                   </tr>
                 </thead>
                 <tbody>
                   {orderProducts?.map((product, index: number) => (
                     <tr key={index}>
                       <td>{product.sku}</td>
-                      <td className='text-center'>{product.isKit ? 'Kit' : 'Product'}</td>
-                      <td className='text-center'>{product.orderQty}</td>
-                      <td className='text-center'>{product.totalToShip}</td>
+                      <td className='tw:text-center'>{product.isKit ? 'Kit' : 'Product'}</td>
+                      <td className='tw:text-center'>{product.orderQty}</td>
+                      <td className='tw:text-center'>{product.totalToShip}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -650,6 +651,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                   </tr>
                 </tfoot>
               </table>
+              </div>
             </Col>
             <Col md={12}>
               <div className='tw:text-right'>

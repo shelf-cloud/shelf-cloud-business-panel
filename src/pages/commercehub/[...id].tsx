@@ -316,21 +316,21 @@ const CheckNumberDetails = ({ session }: Props) => {
       selector: (row: Invoice) => {
         switch (row.status) {
           case 'paid':
-            return <span className='badge text-uppercase badge-soft-success p-2'>{` ${row.status} `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-success)_10%,transparent)] tw:text-success tw:p-2'>{` ${row.status} `}</span>
           case 'unpaid':
-            return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${row.status} `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] tw:text-warning tw:p-2'>{` ${row.status} `}</span>
           case 'closed':
           case 'resolved':
-            return <span className='badge text-uppercase badge-soft-dark p-2'>{` ${row.status} `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-dark)_10%,transparent)] tw:text-dark tw:p-2'>{` ${row.status} `}</span>
           case 'reviewing':
-            return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${row.status} `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] tw:text-warning tw:p-2'>{` ${row.status} `}</span>
           case 'pending':
-            return <span className='badge text-uppercase badge-soft-info p-2'>{` ${row.status} `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-info)_10%,transparent)] tw:text-info tw:p-2'>{` ${row.status} `}</span>
           default:
             if (row.checkTotal > 0) {
-              return <span className='badge text-uppercase badge-soft-success p-2'>{` Paid `}</span>
+              return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-success)_10%,transparent)] tw:text-success tw:p-2'>{` Paid `}</span>
             } else {
-              return <span className='badge text-uppercase badge-soft-info p-2'>{` pending `}</span>
+              return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-info)_10%,transparent)] tw:text-info tw:p-2'>{` pending `}</span>
             }
         }
       },

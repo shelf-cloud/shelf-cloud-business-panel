@@ -124,7 +124,10 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, ma
                   </div>
                 </div>
                 <div className='tw:w-full tw:flex tw:justify-between tw:items-center tw:mt-6'>
-                  <button type='button' onClick={() => handleClearFilters(setValues)} className='btn btn-link tw:p-0 tw:border-0 tw:no-underline tw:font-normal tw:m-0 tw:text-[11.2px]'>
+                  <button
+                    type='button'
+                    onClick={() => handleClearFilters(setValues)}
+                    className='tw:p-0 tw:border-0 tw:bg-transparent tw:no-underline tw:font-normal tw:m-0 tw:text-[11.2px] tw:text-[color:var(--bs-secondary-color)]'>
                     Clear All
                   </button>
                   <Button color='primary' type='submit' size='sm'>

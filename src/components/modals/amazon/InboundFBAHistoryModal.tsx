@@ -96,54 +96,56 @@ const InboundFBAHistoryModal = ({ inboundFBAHistoryModal, setinboundFBAHistoryMo
         id='myModalLabel'>
         FBA Shipment History
         <p className='tw:text-[16.25px] tw:mb-0 tw:font-semibold tw:text-[var(--bs-secondary-color)]'>
-          SKU: <span className='text-black'>{inboundFBAHistoryModal.sku}</span>
+          SKU: <span className='tw:text-black'>{inboundFBAHistoryModal.sku}</span>
         </p>
         <p className='tw:text-[13px] tw:m-0 tw:font-semibold tw:text-[var(--bs-secondary-color)]'>
-          FBA SKU: <span className='text-black'>{inboundFBAHistoryModal.msku}</span>
+          FBA SKU: <span className='tw:text-black'>{inboundFBAHistoryModal.msku}</span>
         </p>
       </ModalHeader>
       <ModalBody style={{ maxHeight: '70svh', scrollbarWidth: 'thin', overflowY: 'scroll' }}>
         <Row>
           <Col md={12} className='tw:mt-2'>
-            <table className='table table-striped table-bordered table-sm tw:text-nowrap overflow-auto'>
-              <thead className='table-light'>
-                <tr>
-                  <th>FBA</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                  <th className='tw:text-center'>Shipment</th>
-                  <th className='tw:text-center'>Received</th>
-                </tr>
-              </thead>
-              <tbody className='tw:text-[11.2px]'>
-                {newShipments.map((shipment, index: number) => (
-                  <tr key={index}>
-                    <td className='tw:text-left'>
-                      <Link href={`/amazon-sellers/shipments/${shipment.id}`} target='blank' rel='noopener noreferrer'>
-                        {shipment.shipmentId}
-                      </Link>
-                    </td>
-                    <td>{moment.utc(shipment.createdAt).local().format('MM/DD/YYYY')}</td>
-                    <td>{CleanStatus(shipment.status)}</td>
-                    <td className='tw:text-center'>{shipment.shipmentQty}</td>
-                    <td className='tw:text-center'>{shipment.receivedQty}</td>
+            <div className='tw:overflow-x-auto'>
+              <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:border tw:border-[color:var(--border)] tw:[&_td]:border-t tw:[&_td]:border-[color:var(--border)] tw:[&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)] tw:text-nowrap'>
+                <thead className='tw:bg-[color:var(--vz-light)]'>
+                  <tr>
+                    <th>FBA</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th className='tw:text-center'>Shipment</th>
+                    <th className='tw:text-center'>Received</th>
                   </tr>
-                ))}
-              </tbody>
-              {showMore && (
-                <tfoot>
-                  <tr ref={lastInvoiceElementRef}>
-                    <td colSpan={5}>
-                      {isValidating && (
-                        <p className='tw:text-center tw:text-[11.2px] tw:m-0'>
-                          <Spinner size='sm' color='primary' /> Loading more shipments...
-                        </p>
-                      )}
-                    </td>
-                  </tr>
-                </tfoot>
-              )}
-            </table>
+                </thead>
+                <tbody className='tw:text-[11.2px]'>
+                  {newShipments.map((shipment, index: number) => (
+                    <tr key={index}>
+                      <td className='tw:text-left'>
+                        <Link href={`/amazon-sellers/shipments/${shipment.id}`} target='blank' rel='noopener noreferrer'>
+                          {shipment.shipmentId}
+                        </Link>
+                      </td>
+                      <td>{moment.utc(shipment.createdAt).local().format('MM/DD/YYYY')}</td>
+                      <td>{CleanStatus(shipment.status)}</td>
+                      <td className='tw:text-center'>{shipment.shipmentQty}</td>
+                      <td className='tw:text-center'>{shipment.receivedQty}</td>
+                    </tr>
+                  ))}
+                </tbody>
+                {showMore && (
+                  <tfoot>
+                    <tr ref={lastInvoiceElementRef}>
+                      <td colSpan={5}>
+                        {isValidating && (
+                          <p className='tw:text-center tw:text-[11.2px] tw:m-0'>
+                            <Spinner size='sm' color='primary' /> Loading more shipments...
+                          </p>
+                        )}
+                      </td>
+                    </tr>
+                  </tfoot>
+                )}
+              </table>
+            </div>
             <div className='tw:flex tw:justify-end tw:items-center'>
               {!showMore && (
                 <Button color='info' outline size='sm' className='btn-ghost-info' onClick={() => setshowMore(true)}>

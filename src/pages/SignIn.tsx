@@ -11,6 +11,7 @@ import LinesImage from '@assets/images/signin-lines.png'
 import PuntosImage from '@assets/images/signin-puntos.png'
 import { getSession, signIn } from '@auth/client'
 import ForgotPasswordModal from '@components/ForgotPasswordModal'
+
 import { Button, Label } from '@/components/migration-ui'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -55,10 +56,10 @@ function SignIn({}: Props) {
         <meta name='description' content='Shelf Cloud All-in-One Fulfillment Platform' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <div className='vw-100 vh-100 d-flex '>
-        <div className='w-100 h-100 d-flex flex-column align-items-center justify-content-start' style={{ backgroundColor: '#FAFBFD' }}>
-          <div className='w-100 px-4 py-2 border-bottom h-fit'>
-            <div className='position-relative d-flex align-self-center h-100' style={{ width: '26%', minWidth: '220px' }}>
+      <div className='tw:w-screen tw:h-screen tw:flex'>
+        <div className='tw:w-full tw:h-full tw:flex tw:flex-col tw:items-center tw:justify-start' style={{ backgroundColor: '#FAFBFD' }}>
+          <div className='tw:w-full tw:px-6 tw:py-2 tw:border-b tw:h-fit'>
+            <div className='tw:relative tw:flex tw:self-center tw:h-full' style={{ width: '26%', minWidth: '220px' }}>
               <Image
                 src={ShelfCloudLogo}
                 alt='ShelfCloud Logo'
@@ -70,31 +71,39 @@ function SignIn({}: Props) {
               />
             </div>
           </div>
-          <div className='col-10 col-lg-8 h-fit m-auto d-flex justify-content-center align-items-center' style={{ backgroundColor: '#FAFBFD' }}>
-            <div className='w-75 d-flex flex-column justify-content-start align-items-center'>
-              <h2 className='w-100 text-center fw-semibold mb-3'>Sign in</h2>
-              <p className='w-100 text-center fs-5 mb-5'>
+          <div className='tw:w-10/12 tw:lg:w-8/12 tw:h-fit tw:m-auto tw:flex tw:justify-center tw:items-center' style={{ backgroundColor: '#FAFBFD' }}>
+            <div className='tw:w-3/4 tw:flex tw:flex-col tw:justify-start tw:items-center'>
+              <h2 className='tw:w-full tw:text-center tw:font-semibold tw:mb-4'>Sign in</h2>
+              <p className='tw:w-full tw:text-center tw:text-[16.25px] tw:mb-8'>
                 New user?{' '}
-                <a href={'https://www.shelf-cloud.com'} target='blank' rel='noopener noreferrer' className=' text-primary fw-semibold'>
+                <a href={'https://www.shelf-cloud.com'} target='blank' rel='noopener noreferrer' className='tw:!text-primary tw:font-semibold'>
                   Create an account
                 </a>
               </p>
-              <form onSubmit={handleSignInSubmit} className='w-100'>
-                <div className='mb-4 w-100'>
+              <form onSubmit={handleSignInSubmit} className='tw:w-full'>
+                <div className='tw:mb-6 tw:w-full'>
                   <Label htmlFor='username' className='form-label'>
                     Username
                   </Label>
                   <input type='text' className='form-control' id='username' name='username' placeholder='Enter username' required ref={usernameRef} />
                 </div>
-                <div className='mb-1 w-100'>
+                <div className='tw:mb-1 tw:w-full'>
                   <Label className='form-label' htmlFor='password-input'>
                     Password
                   </Label>
-                  <div className='position-relative auth-pass-inputgroup mb-3'>
-                    <input type={show ? 'text' : 'password'} className='form-control pe-5' placeholder='Enter password' id='password' required name='password' ref={passwordRef} />
+                  <div className='tw:relative auth-pass-inputgroup tw:mb-4'>
+                    <input
+                      type={show ? 'text' : 'password'}
+                      className='form-control tw:pe-12'
+                      placeholder='Enter password'
+                      id='password'
+                      required
+                      name='password'
+                      ref={passwordRef}
+                    />
                     <button
                       name='passwordVisibility'
-                      className='btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted'
+                      className='btn btn-link tw:absolute tw:right-0 tw:top-0 tw:no-underline tw:text-[var(--bs-secondary-color)]'
                       type='button'
                       id='password-addon'
                       onClick={() => setShow(!show)}>
@@ -102,32 +111,32 @@ function SignIn({}: Props) {
                     </button>
                   </div>
                 </div>
-                {query.error && <p className='m-0 p-0 mb-1 text-danger fs-6'>Verify your Sign In credentials!</p>}
-                <div className='w-100 text-end'>
-                  <a href='#' className='text-primary fs-6' onClick={() => setOpenForgotPassword(true)}>
+                {query.error && <p className='tw:m-0 tw:p-0 tw:mb-1 tw:text-danger tw:text-[13px]'>Verify your Sign In credentials!</p>}
+                <div className='tw:w-full tw:text-right'>
+                  <a href='#' className='tw:!text-primary tw:text-[13px]' onClick={() => setOpenForgotPassword(true)}>
                     Forgot password?
                   </a>
                 </div>
-                <div className='mt-4 w-100'>
-                  <Button color='primary' className='btn btn-primary w-100 fw-semibold fs-5' type='submit'>
+                <div className='tw:mt-6 tw:w-full'>
+                  <Button color='primary' className='btn btn-primary tw:w-full tw:font-semibold tw:text-[16.25px]' type='submit'>
                     Sign In
                   </Button>
                 </div>
               </form>
-              <p className='w-100 text-left fs-5 mt-3'>
+              <p className='tw:w-full tw:text-left tw:text-[16.25px] tw:mt-4'>
                 Have a question?{' '}
-                <Link href={'/ContactForm'} className='text-primary fw-semibold'>
+                <Link href={'/ContactForm'} className='tw:!text-primary tw:font-semibold'>
                   Contact Us
                 </Link>
               </p>
             </div>
           </div>
         </div>
-        <div className='d-none w-100 h-100 bg-primary d-lg-flex justify-content-center align-items-center'>
-          <div className='d-flex flex-column justify-content-center align-items-start' style={{ width: '65%' }}>
-            <h2 className='fs-1 fw-bold text-white text-start m-0 p-0 w-100 mb-3'>Welcome Back</h2>
-            <p className='fs-5 fw-light text-white text-start m-0 p-0 w-100 mb-3'>4 in 1 Cloud-Based Software Solutions for Small Business.</p>
-            <div className='position-relative text-start mb-3' style={{ width: '70px' }}>
+        <div className='tw:hidden tw:w-full tw:h-full tw:bg-primary tw:lg:flex tw:justify-center tw:items-center'>
+          <div className='tw:flex tw:flex-col tw:justify-center tw:items-start' style={{ width: '65%' }}>
+            <h2 className='tw:text-[22.75px] tw:font-bold tw:text-white tw:text-left tw:m-0 tw:p-0 tw:w-full tw:mb-4'>Welcome Back</h2>
+            <p className='tw:text-[16.25px] tw:font-light tw:text-white tw:text-left tw:m-0 tw:p-0 tw:w-full tw:mb-4'>4 in 1 Cloud-Based Software Solutions for Small Business.</p>
+            <div className='tw:relative tw:text-left tw:mb-4' style={{ width: '70px' }}>
               <Image
                 src={LinesImage}
                 alt='ShelfCloud Lines Image'
@@ -138,8 +147,8 @@ function SignIn({}: Props) {
                 }}
               />
             </div>
-            <div className='w-100 position-relative'>
-              <div className='position-relative text-start' style={{ width: '100%', zIndex: '9' }}>
+            <div className='tw:w-full tw:relative'>
+              <div className='tw:relative tw:text-left' style={{ width: '100%', zIndex: '9' }}>
                 <Image
                   src={RightImage}
                   alt='ShelfCloud Dashboard Image'
@@ -150,7 +159,7 @@ function SignIn({}: Props) {
                   }}
                 />
               </div>
-              <div className='position-absolute translate-middle' style={{ width: '45%', zIndex: '1', top: '85%', left: '95%' }}>
+              <div className='tw:absolute translate-middle' style={{ width: '45%', zIndex: '1', top: '85%', left: '95%' }}>
                 <Image
                   src={PuntosImage}
                   alt='ShelfCloud Background dots Image'

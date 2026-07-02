@@ -56,34 +56,33 @@ const SelectMultipleDropDown = ({ formValue, selectionInfo, selected, handleSele
   }, [])
 
   return (
-    <div ref={selectMultiple} className='dropdown mb-3'>
-      <div className='btn-group w-100 form-control form-control-sm p-0' onClick={() => setOpenDatesMenu(!openDatesMenu)}>
-        <button type='button' disabled className='btn btn-light btn-sm py-0 fs-6 w-100 text-start' style={{ backgroundColor: 'white', opacity: '100%' }}>
+    <div ref={selectMultiple} className='tw:relative tw:mb-4'>
+      <div
+        className='tw:flex tw:w-full tw:items-center tw:p-0 tw:bg-transparent tw:rounded-md tw:border tw:border-[#E1E3E5]'
+        style={{ cursor: 'pointer' }}
+        onClick={() => setOpenDatesMenu(!openDatesMenu)}>
+        <span className='tw:flex-1 tw:px-3 tw:py-[0.3rem] tw:text-[13px] tw:text-left' style={{ backgroundColor: 'white', opacity: '100%' }}>
           {selectedParsed.length === 0 ? (
-            <span className='text-muted'>Select</span>
+            <span className='tw:text-[color:var(--bs-secondary-color)]'>Select</span>
           ) : (
             selectedParsed
               .map((value) => selectionInfo[value]?.label)
               .filter(Boolean)
               .join(', ')
           )}
-        </button>
-        <button
-          type='button'
-          disabled
-          className='btn btn-light btn-sm dropdown-toggle fs-6dropdown-toggle dropdown-toggle-split'
-          style={{ backgroundColor: 'white', maxWidth: '35px' }}
-          aria-expanded='false'>
-          <span className='visually-hidden'>Toggle Dropdown</span>
-        </button>
+        </span>
+        <span className='tw:flex tw:items-center tw:justify-center tw:px-2' style={{ backgroundColor: 'white', maxWidth: '35px' }} aria-expanded='false'>
+          <i className='mdi mdi-chevron-down tw:text-[16.25px]' />
+          <span className='tw:sr-only'>Toggle Dropdown</span>
+        </span>
       </div>
-      <div className={'dropdown-menu w-100 py-3 px-4' + (openDatesMenu ? ' show' : '')}>
-        <div className='d-flex flex-column justify-content-start'>
+      <div className={'tw:absolute tw:z-10 tw:mt-1 tw:w-full tw:py-3 tw:px-4 tw:bg-white tw:border tw:border-[#E1E3E5] tw:rounded-md tw:shadow ' + (openDatesMenu ? 'tw:block' : 'tw:hidden')}>
+        <div className='tw:flex tw:flex-col tw:justify-start'>
           <div style={{ maxHeight: '25vh', overflowY: 'scroll', scrollbarWidth: 'thin' }}>
             {Object.entries(selectionInfo)?.map(([value, option]) => (
               <p
                 key={value}
-                className={'m-0 mb-2 ' + (selectedParsed.includes(value) ? 'fw-bold' : '')}
+                className={'tw:m-0 tw:mb-2 ' + (selectedParsed.includes(value) ? 'tw:font-bold' : '')}
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                   const newSelected = selectedParsed.includes(value) ? selectedParsed.filter((item) => item !== value) : [...selectedParsed, value]
@@ -95,7 +94,7 @@ const SelectMultipleDropDown = ({ formValue, selectionInfo, selected, handleSele
             ))}
           </div>
           <p
-            className={'mt-2 mb-0 text-muted text-end'}
+            className='tw:mt-2 tw:mb-0 tw:text-[color:var(--bs-secondary-color)] tw:text-right'
             style={{ cursor: 'pointer' }}
             onClick={() => {
               handleSelection(formValue, '[]')

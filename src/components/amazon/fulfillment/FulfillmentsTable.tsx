@@ -85,25 +85,25 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
         switch (row.status.toLowerCase()) {
           case 'complete':
           case 'completed':
-            return <span className='badge badge-soft-success tw:uppercase tw:p-2'>{` ${row.status} `}</span>
+            return <span className='badge tw:bg-[color-mix(in_srgb,var(--bs-success)_10%,transparent)] tw:text-success tw:uppercase tw:p-2'>{` ${row.status} `}</span>
           case 'delivered':
           case 'creating':
-            return <span className='badge badge-soft-secondary tw:uppercase tw:p-2'>{` ${row.status} `}</span>
+            return <span className='badge tw:bg-[color-mix(in_srgb,var(--bs-secondary)_10%,transparent)] tw:text-secondary tw:uppercase tw:p-2'>{` ${row.status} `}</span>
           case 'assign':
           case 'working':
           case 'awaiting':
           case 'active':
-            return <span className='badge badge-soft-warning tw:uppercase tw:p-2'>{` ${row.status} `}</span>
+            return <span className='badge tw:bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] tw:text-warning tw:uppercase tw:p-2'>{` ${row.status} `}</span>
           case 'ready to ship':
-            return <span className='badge badge-soft-secondary tw:uppercase tw:p-2'>{` ${row.status} `}</span>
+            return <span className='badge tw:bg-[color-mix(in_srgb,var(--bs-secondary)_10%,transparent)] tw:text-secondary tw:uppercase tw:p-2'>{` ${row.status} `}</span>
           case 'error':
-            return <span className='badge badge-soft-danger tw:uppercase tw:p-2'>{` ${row.status} `}</span>
+            return <span className='badge tw:bg-[color-mix(in_srgb,var(--bs-danger)_10%,transparent)] tw:text-danger tw:uppercase tw:p-2'>{` ${row.status} `}</span>
           case 'cancelled':
           case 'closed':
           case 'deleted':
-            return <span className='badge badge-soft-dark tw:uppercase tw:p-2'> {row.status} </span>
+            return <span className='badge tw:bg-[color-mix(in_srgb,var(--bs-dark)_10%,transparent)] tw:text-dark tw:uppercase tw:p-2'> {row.status} </span>
           default:
-            return <span className='badge badge-soft-secondary tw:uppercase tw:p-2'>{` ${row.status} `}</span>
+            return <span className='badge tw:bg-[color-mix(in_srgb,var(--bs-secondary)_10%,transparent)] tw:text-secondary tw:uppercase tw:p-2'>{` ${row.status} `}</span>
         }
       },
       sortable: true,
@@ -152,7 +152,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
           case 'assign':
           case 'working':
             return (
-              <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
+              <UncontrolledDropdown className='dropdown tw:inline-block' direction='start'>
                 <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
                   <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-1 py-0' style={{ color: '#919FAF' }}></i>
                 </DropdownToggle>
@@ -231,7 +231,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
           case 'completed':
           case 'complete':
             return (
-              <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
+              <UncontrolledDropdown className='dropdown tw:inline-block' direction='start'>
                 <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
                   <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-1 py-0' style={{ color: '#919FAF' }}></i>
                 </DropdownToggle>
@@ -277,7 +277,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
             )
           case 'error':
             return (
-              <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
+              <UncontrolledDropdown className='dropdown tw:inline-block' direction='start'>
                 <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
                   <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-1 py-0' style={{ color: '#919FAF' }}></i>
                 </DropdownToggle>

@@ -82,16 +82,16 @@ const InputTextModal = ({
       <Form onSubmit={handleSubmitForm}>
         <ModalBody>
           <Row>
-            <p className='fs-5 fw-semibold'>
-              {primaryText} {primaryTextSub && <span className='text-primary'>{primaryTextSub}</span>}
+            <p className='tw:text-[16.25px] tw:font-semibold'>
+              {primaryText} {primaryTextSub && <span className='tw:text-primary'>{primaryTextSub}</span>}
             </p>
-            {descriptionText && <p className='fs-7 text-muted'>{descriptionText}</p>}
-            <Col sm={12} className='d-flex flex-column justify-content-end align-items-end'>
-              <Col xs={12} className='text-end'>
+            {descriptionText && <p className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>{descriptionText}</p>}
+            <Col sm={12} className='tw:flex tw:flex-col tw:justify-end tw:items-end'>
+              <Col xs={12} className='tw:text-right'>
                 <DebounceInput
                   minLength={minLength}
                   debounceTimeout={200}
-                  className={`form-control form-control-sm fs-6 ${validation.errors.inputValue ? 'is-invalid' : ''}`}
+                  className={`form-control form-control-sm tw:text-[13px] ${validation.errors.inputValue ? 'is-invalid' : ''}`}
                   placeholder={placeholder}
                   id='inputValue'
                   name='inputValue'
@@ -105,23 +105,23 @@ const InputTextModal = ({
                     }
                   }}
                 />
-                {validation.touched.inputValue && validation.errors.inputValue ? <p className='m-0 p-0 fs-7 text-danger'>{validation.errors.inputValue}</p> : null}
+                {validation.touched.inputValue && validation.errors.inputValue ? <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:text-danger'>{validation.errors.inputValue}</p> : null}
               </Col>
             </Col>
           </Row>
         </ModalBody>
         <ModalFooter>
-          <div className='w-100 mt-2 d-flex flex-row gap-2 justify-content-between align-items-center'>
+          <div className='tw:w-full tw:mt-2 tw:flex tw:flex-row tw:gap-2 tw:justify-between tw:items-center'>
             <div>
-              <Button disabled={isLoading} type='button' color='danger' className='fs-7' onClick={handleClearValue}>
+              <Button disabled={isLoading} type='button' color='danger' className='tw:text-[11.2px]' onClick={handleClearValue}>
                 Clear Value
               </Button>
             </div>
-            <div className='d-flex flex-row gap-2 justify-content-end'>
-              <Button disabled={isLoading} type='button' color='light' className='fs-7' onClick={handleClose}>
+            <div className='tw:flex tw:flex-row tw:gap-2 tw:justify-end'>
+              <Button disabled={isLoading} type='button' color='light' className='tw:text-[11.2px]' onClick={handleClose}>
                 Cancel
               </Button>
-              <Button disabled={isLoading} type='submit' color='success' className='fs-7'>
+              <Button disabled={isLoading} type='submit' color='success' className='tw:text-[11.2px]'>
                 {isLoading ? (
                   <span>
                     <Spinner color='light' size={'sm'} /> {loadingText}

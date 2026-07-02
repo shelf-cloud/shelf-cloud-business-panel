@@ -44,13 +44,13 @@ function InventoryBinsModal() {
 
   const columns: any = [
     {
-      name: <span className='fw-bolder fs-6'>Bin</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Bin</span>,
       selector: (row: { binName: any }) => row.binName,
       sortable: true,
       center: true,
     },
     {
-      name: <span className='fw-bolder fs-6'>Quantity</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Quantity</span>,
       selector: (row: { qty: any }) => row.qty,
       sortable: true,
       center: true,
@@ -65,29 +65,29 @@ function InventoryBinsModal() {
         setshowInventoryBinsModal(!state.showInventoryBinsModal)
       }}>
       <ModalHeader
-        className='flex justify-content-between align-items-start'
+        className='tw:flex tw:justify-between tw:items-start'
         toggle={() => {
           setshowInventoryBinsModal(!state.showInventoryBinsModal)
         }}>
-        <p className='modal-title fs-4' id='myModalLabel'>
+        <p className='modal-title tw:text-[19.5px]' id='myModalLabel'>
           Warehouse Inventory
         </p>
-        <p className='fs-5'>
-          Sku: <span className='text-primary'>{state.modalProductInfo.sku}</span>
+        <p className='tw:text-[16.25px]'>
+          Sku: <span className='tw:text-primary'>{state.modalProductInfo.sku}</span>
         </p>
       </ModalHeader>
-      <ModalBody className='d-flex flex-column gap-3'>
-        {!data && isValidating && <p className='text-center fs-5 fw-bold'>Loading...</p>}
+      <ModalBody className='tw:flex tw:flex-col tw:gap-4'>
+        {!data && isValidating && <p className='tw:text-center tw:text-[16.25px] tw:font-bold'>Loading...</p>}
         {data && Object.values(data.warehouses).every((warehouse) => warehouse.bins.length === 0) && (
-          <p className='text-center fs-6 fw-normal'>No inventory quantities found for this product.</p>
+          <p className='tw:text-center tw:text-[13px] tw:font-normal'>No inventory quantities found for this product.</p>
         )}
         {data &&
           Object.values(data.warehouses).map((warehouse) => {
             if (!warehouse.bins || warehouse.bins.length === 0) return null
             return (
               <div key={warehouse.address}>
-                <h5 className='fw-bold mb-0'>{warehouse.name}</h5>
-                <p className='m-0 text-muted fs-7'>{warehouse.address}</p>
+                <h5 className='tw:font-bold tw:mb-0'>{warehouse.name}</h5>
+                <p className='tw:m-0 tw:text-[var(--bs-secondary-color)] tw:text-[11.2px]'>{warehouse.address}</p>
                 <DataTable columns={columns} data={warehouse.bins} progressPending={isValidating} striped={true} highlightOnHover={true} dense />
               </div>
             )

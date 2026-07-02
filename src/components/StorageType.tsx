@@ -17,9 +17,9 @@ const StorageTable = ({ data }: Props) => {
         <Col xl={12}>
           <Card>
             <CardBody>
-              <div className='table-responsive table-card'>
-                <table className='table table-sm align-middle tw:text-center table-bordered tw:mb-0'>
-                  <thead className='table-light tw:text-[var(--bs-secondary-color)]'>
+              <div className='tw:overflow-x-auto'>
+                <table className='tw:w-full tw:align-middle tw:text-center tw:mb-0 tw:border tw:border-[color:var(--border)] tw:[&_td]:border-t tw:[&_td]:border-[color:var(--border)] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+                  <thead className='tw:bg-[color:var(--vz-light)] tw:text-[var(--bs-secondary-color)]'>
                     <tr className='tw:text-[16.25px] tw:font-bold'>
                       <th scope='col'>Bin Name</th>
                       <th scope='col'>Bin Quantity</th>

@@ -13,8 +13,8 @@ const InventoryToSend = ({ inboundPlan, handleNextStep, watingRepsonse }: Props)
   return (
     <div className='tw:w-full tw:p-0'>
       <Col xs='12' className='tw:overflow-auto'>
-        <table className='table table-sm'>
-          <thead className='table-light'>
+        <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+          <thead className='tw:bg-[color:var(--vz-light)]'>
             <tr>
               <th>SKU Details</th>
               <th className='tw:text-nowrap'>Packing Details</th>

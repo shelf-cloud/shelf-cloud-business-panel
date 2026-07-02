@@ -274,20 +274,21 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
               <span className='tw:text-info tw:text-[13px] tw:font-light'>*The distribution plan for boxes and items will be available after picking.</span>
               <p className='tw:text-[13px] tw:m-0'>Total SKUs in Order: {validation.values.hasProducts}</p>
               {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='tw:text-white'>{validation.errors.hasProducts}</p> : null}
-              <table className='table align-middle table-responsive table-nowrap table-striped-columns table-sm'>
+              <div className='tw:overflow-x-auto'>
+              <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
                 <thead>
                   <tr>
                     <th>SKU</th>
-                    <th className='text-center'>Individual Units</th>
-                    <th className='text-center'>Total Qty To Ship</th>
+                    <th className='tw:text-center'>Individual Units</th>
+                    <th className='tw:text-center'>Total Qty To Ship</th>
                   </tr>
                 </thead>
                 <tbody>
                   {orderProducts?.map((product, index: number) => (
                     <tr key={index}>
                       <td>{product.sku}</td>
-                      <td className='text-center'>{product.orderQty}</td>
-                      <td className='text-center'>{product.totalToShip}</td>
+                      <td className='tw:text-center'>{product.orderQty}</td>
+                      <td className='tw:text-center'>{product.totalToShip}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -299,6 +300,7 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                   </tr>
                 </tfoot>
               </table>
+              </div>
             </Col>
             <Col md={12}>
               <div className='tw:text-right'>

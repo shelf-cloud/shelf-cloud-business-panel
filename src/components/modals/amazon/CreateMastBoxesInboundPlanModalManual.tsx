@@ -390,7 +390,8 @@ const CreateMastBoxesInboundPlanModalManual = ({ orderProducts, showCreateInboun
             <Col md={12}>
               <p className='tw:text-[16.25px] tw:mb-0 tw:p-0'>SKUs ready to send: {validation.values.hasProducts}</p>
               {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='tw:text-danger'>{validation.errors.hasProducts}</p> : null}
-              <table className='table align-middle table-sm table-responsive table-nowrap table-striped-columns'>
+              <div className='tw:overflow-x-auto'>
+              <table className='tw:w-full tw:align-middle tw:mb-0 tw:whitespace-nowrap tw:text-[13px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_tr>*:nth-child(odd)]:bg-[color:var(--vz-light)]'>
                 <thead>
                   <tr>
                     <th>SKU</th>
@@ -420,6 +421,7 @@ const CreateMastBoxesInboundPlanModalManual = ({ orderProducts, showCreateInboun
                   </tr>
                 </tbody>
               </table>
+              </div>
             </Col>
             <Col md={12}>
               <div className='tw:text-right'>

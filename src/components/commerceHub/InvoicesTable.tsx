@@ -261,23 +261,23 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       selector: (row: Invoice) => {
         if (row.checkNumber) {
           if (row.deductions < 0) {
-            return <span className='badge text-uppercase badge-soft-success p-2'>{` W/ Deductions `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-success)_10%,transparent)] tw:text-success tw:p-2'>{` W/ Deductions `}</span>
           } else {
-            return <span className='badge text-uppercase badge-soft-success p-2'>{` Paid `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-success)_10%,transparent)] tw:text-success tw:p-2'>{` Paid `}</span>
           }
         }
         switch (row.commerceHubStatus) {
           case 'paid':
-            return <span className='badge text-uppercase badge-soft-success p-2'>{` ${row.commerceHubStatus} `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-success)_10%,transparent)] tw:text-success tw:p-2'>{` ${row.commerceHubStatus} `}</span>
           case 'unpaid':
-            return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${row.commerceHubStatus} `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] tw:text-warning tw:p-2'>{` ${row.commerceHubStatus} `}</span>
           case 'closed':
           case 'resolved':
-            return <span className='badge text-uppercase badge-soft-dark p-2'>{` ${row.commerceHubStatus} `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-dark)_10%,transparent)] tw:text-dark tw:p-2'>{` ${row.commerceHubStatus} `}</span>
           case 'reviewing':
-            return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${row.commerceHubStatus} `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] tw:text-warning tw:p-2'>{` ${row.commerceHubStatus} `}</span>
           default:
-            return <span className='badge text-uppercase badge-soft-warning p-2'>{` Unpaid `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] tw:text-warning tw:p-2'>{` Unpaid `}</span>
         }
       },
       sortable: false,

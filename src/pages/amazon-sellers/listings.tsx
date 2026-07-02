@@ -168,9 +168,9 @@ const Listings = ({ session }: Props) => {
         <div className='page-content'>
           <BreadCrumb title='Amazon Listings' pageTitle='Amazon' />
           <Container fluid>
-            <Row className='tw:flex tw:flex-col-reverse tw:justify-center tw:items-end tw:tw:gap-2 tw:tw:mb-1 tw:md:tw:flex-row tw:md:justify-end tw:md:items-center tw:tw:px-6'>
-              <div className='app-search tw:flex tw:tw:flex-row tw:justify-between tw:items-center tw:tw:p-0'>
-                <div className='tw:flex tw:tw:flex-row tw:justify-start tw:items-center tw:tw:gap-6'>
+            <Row className='tw:flex tw:flex-col-reverse tw:justify-center tw:items-end tw:gap-2 tw:mb-1 tw:md:tw:flex-row tw:md:justify-end tw:md:items-center tw:px-6'>
+              <div className='app-search tw:flex tw:flex-row tw:justify-between tw:items-center tw:p-0'>
+                <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-6'>
                   <FilterListings showHidden={showHidden} condition={condition} mapped={mapped} />
                   <Button
                     size='sm'
@@ -191,26 +191,28 @@ const Listings = ({ session }: Props) => {
                     )}
                   </Button>
                   <CSVLink data={csvData} style={{ width: 'fit-content' }} filename={`${session?.user?.businessName?.toUpperCase()}-Amazon-FBA-Listings.csv`}>
-                    <Button color='primary' className='tw:text-[13px] tw:tw:py-1'>
+                    <Button color='primary' className='tw:text-[13px] tw:py-1'>
                       <i className='mdi mdi-arrow-down-bold label-icon align-middle fs-5 me-2' />
                       Export
                     </Button>
                   </CSVLink>
                   {selectedRows.length > 0 && (
                     <UncontrolledButtonDropdown>
-                      <DropdownToggle className='btn btn-info tw:text-[13px] tw:tw:py-2' caret>
+                      <DropdownToggle
+                        className='tw:inline-flex tw:h-9 tw:items-center tw:gap-2 tw:rounded-md tw:bg-info tw:px-3 tw:text-[13px] tw:font-medium tw:text-white tw:whitespace-nowrap tw:shadow-xs'
+                        caret>
                         {`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''} Selected`}
                       </DropdownToggle>
                       <DropdownMenu>
-                        <DropdownItem className='tw:tw:text-nowrap tw:tw:text-primary' onClick={setSelectedRowstoVisible}>
+                        <DropdownItem className='tw:text-nowrap tw:text-primary' onClick={setSelectedRowstoVisible}>
                           <i className='mdi mdi-eye label-icon align-middle fs-5 me-2' />
                           Set as Visible
                         </DropdownItem>
-                        <DropdownItem className='tw:tw:text-nowrap tw:tw:text-danger' onClick={setSelectedRowstoHidden}>
+                        <DropdownItem className='tw:text-nowrap tw:text-danger' onClick={setSelectedRowstoHidden}>
                           <i className='mdi mdi-eye-off label-icon align-middle fs-5 me-2' />
                           Set as Hidden
                         </DropdownItem>
-                        <DropdownItem className='tw:tw:text-nowrap tw:text-[13px] tw:text-right' onClick={clearAllSelectedRows}>
+                        <DropdownItem className='tw:text-nowrap tw:text-[13px] tw:text-right' onClick={clearAllSelectedRows}>
                           Clear Selection
                         </DropdownItem>
                       </DropdownMenu>

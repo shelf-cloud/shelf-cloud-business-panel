@@ -120,18 +120,18 @@ const MasterBoxesTable = ({
   const conditionalRowStyles = [
     {
       when: (row: AmazonFulfillmentSku) => Number(row.maxOrderQty) == 0,
-      classNames: ['bg-warning bg-opacity-25'],
+      classNames: ['tw:bg-warning/25'],
     },
     {
       when: (row: AmazonFulfillmentSku) => Number(row.orderQty) > 0,
-      classNames: ['tw:bg-success bg-opacity-25'],
+      classNames: ['tw:bg-success/25'],
     },
     {
       when: (row: AmazonFulfillmentSku) => {
         const rowValidation = rowValidationByMsku[row.msku]
         return Boolean(rowValidation?.hasInputError || rowValidation?.hasExceededQtyError || rowValidation?.hasMissingAvailabilityError)
       },
-      classNames: ['tw:bg-danger bg-opacity-25'],
+      classNames: ['tw:bg-danger/25'],
     },
   ]
 
@@ -171,7 +171,7 @@ const MasterBoxesTable = ({
           return (
             <div className='tw:flex tw:flex-col tw:justify-start tw:items-start tw:my-2'>
               <Link href={`/kit/${row.inventoryId}/${row.sku}`} style={{ cursor: 'pointer' }} target='blank' rel='noopener noreferrer' tabIndex={-1}>
-                <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:font-semibold text-black'>{row.title || `${row.product_name.substring(0, 80)}...`}</p>
+                <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:font-semibold tw:text-black'>{row.title || `${row.product_name.substring(0, 80)}...`}</p>
               </Link>
               <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center'>
                 <p className='tw:m-0 tw:p-0 tw:text-[11.2px]'>{`${row.msku}`}</p>
@@ -218,7 +218,7 @@ const MasterBoxesTable = ({
           return (
             <div className='tw:flex tw:flex-col tw:justify-start tw:items-start'>
               <Link href={`/product/${row.inventoryId}/${row.sku}`} style={{ cursor: 'pointer' }} target='blank' rel='noopener noreferrer' tabIndex={-1}>
-                <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:font-semibold text-black'>{row.title || `${row.product_name.substring(0, 80)}...`}</p>
+                <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:font-semibold tw:text-black'>{row.title || `${row.product_name.substring(0, 80)}...`}</p>
               </Link>
               <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center'>
                 <p className='tw:m-0 tw:p-0 tw:text-[11.2px]'>{`${row.msku}`}</p>
@@ -386,9 +386,9 @@ const MasterBoxesTable = ({
       name: <span className='tw:font-bold tw:text-[11.2px]'>Type</span>,
       selector: (cell: any) => {
         if (cell.isKit) {
-          return <span className='badge tw:uppercase badge-soft-info tw:p-2'>kit</span>
+          return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-info)_10%,transparent)] tw:text-info tw:p-2'>kit</span>
         } else {
-          return <span className='badge tw:uppercase badge-soft-primary tw:p-2'>product</span>
+          return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-primary)_10%,transparent)] tw:text-primary tw:p-2'>product</span>
         }
       },
       sortable: true,

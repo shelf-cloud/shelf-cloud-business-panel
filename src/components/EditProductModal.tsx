@@ -117,9 +117,9 @@ function EditProductModal({}: Props) {
         {!loading && (
           <Form onSubmit={handleAddProduct}>
             <Row>
-              <h5 className='fs-5 m-3 fw-bolder'>Product Details</h5>
-              <Col md={6} className='d-none'>
-                <FormGroup className='mb-3'>
+              <h5 className='tw:text-[16.25px] tw:m-4 tw:font-bold'>Product Details</h5>
+              <Col md={6} className='tw:hidden'>
+                <FormGroup className='tw:mb-4'>
                   <Label htmlFor='firstNameinput' className='form-label'>
                     *InventoryId
                   </Label>
@@ -136,8 +136,8 @@ function EditProductModal({}: Props) {
                   {validation.touched.inventoryId && validation.errors.inventoryId ? <FormFeedback type='invalid'>{validation.errors.inventoryId}</FormFeedback> : null}
                 </FormGroup>
               </Col>
-              <Col md={6} className='d-none'>
-                <FormGroup className='mb-3'>
+              <Col md={6} className='tw:hidden'>
+                <FormGroup className='tw:mb-4'>
                   <Label htmlFor='firstNameinput' className='form-label'>
                     *BusinessId
                   </Label>
@@ -155,7 +155,7 @@ function EditProductModal({}: Props) {
                 </FormGroup>
               </Col>
               <Col md={6}>
-                <FormGroup className='mb-3'>
+                <FormGroup className='tw:mb-4'>
                   <Label htmlFor='firstNameinput' className='form-label'>
                     *Title
                   </Label>
@@ -173,7 +173,7 @@ function EditProductModal({}: Props) {
                 </FormGroup>
               </Col>
               <Col md={6}>
-                <FormGroup className='mb-3'>
+                <FormGroup className='tw:mb-4'>
                   <Label htmlFor='lastNameinput' className='form-label'>
                     *SKU
                   </Label>
@@ -192,7 +192,7 @@ function EditProductModal({}: Props) {
                 </FormGroup>
               </Col>
               <Col md={4}>
-                <FormGroup className='mb-3'>
+                <FormGroup className='tw:mb-4'>
                   <Label htmlFor='compnayNameinput' className='form-label'>
                     ASIN
                   </Label>
@@ -210,7 +210,7 @@ function EditProductModal({}: Props) {
                 </FormGroup>
               </Col>
               <Col md={4}>
-                <FormGroup className='mb-3'>
+                <FormGroup className='tw:mb-4'>
                   <Label htmlFor='compnayNameinput' className='form-label'>
                     FNSKU
                   </Label>
@@ -228,7 +228,7 @@ function EditProductModal({}: Props) {
                 </FormGroup>
               </Col>
               <Col md={4}>
-                <FormGroup className='mb-3'>
+                <FormGroup className='tw:mb-4'>
                   <Label htmlFor='compnayNameinput' className='form-label'>
                     Barcode
                   </Label>
@@ -247,7 +247,7 @@ function EditProductModal({}: Props) {
                 </FormGroup>
               </Col>
               <Col md={12}>
-                <FormGroup className='mb-3'>
+                <FormGroup className='tw:mb-4'>
                   <Label htmlFor='lastNameinput' className='form-label'>
                     Product Image
                   </Label>
@@ -265,7 +265,7 @@ function EditProductModal({}: Props) {
                 </FormGroup>
               </Col>
               <Col md={12}>
-                <FormGroup className='mb-3'>
+                <FormGroup className='tw:mb-4'>
                   <Label htmlFor='lastNameinput' className='form-label'>
                     Product Note
                   </Label>
@@ -526,9 +526,9 @@ function EditProductModal({}: Props) {
                   ) : null}
                 </FormGroup>
               </Col> */}
-              <h5 className='fs-14 mb-3 text-muted'>*You must complete all required fields or you will not be able to create your product.</h5>
+              <h5 className='tw:text-[13px] tw:mb-4 tw:text-[var(--bs-secondary-color)]'>*You must complete all required fields or you will not be able to create your product.</h5>
               <Col md={12}>
-                <div className='text-end'>
+                <div className='tw:text-right'>
                   <Button type='submit' color='primary' className='btn'>
                     Save Changes
                   </Button>

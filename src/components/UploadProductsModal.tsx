@@ -169,12 +169,12 @@ const UploadProductsModal = ({}: Props) => {
         }}
         className='modal-title'
         id='myModalLabel'>
-        <p className='fs-3'>Import Products</p>
+        <p className='tw:text-[22.75px]'>Import Products</p>
       </ModalHeader>
       <ModalBody>
-        <p className='fs-5 fw-normal'>
+        <p className='tw:text-[16.25px] tw:font-normal'>
           You can import products in bulk by uploading a CSV file using the{' '}
-          <a className='text-primary' href={'https://docs.google.com/spreadsheets/d/19H7hs8kS6D5cysi3QmJTH0Hfpmjw7VuG/template/preview'} target='blank' rel='noopener noreferrer'>
+          <a className='tw:!text-primary' href={'https://docs.google.com/spreadsheets/d/19H7hs8kS6D5cysi3QmJTH0Hfpmjw7VuG/template/preview'} target='blank' rel='noopener noreferrer'>
             template
           </a>{' '}
           file.
@@ -191,9 +191,9 @@ const UploadProductsModal = ({}: Props) => {
                 toast.error(error[0].errors[0].message)
               }}>
               {({ getRootProps }) => (
-                <div className='dropzone dz-clickable cursor-pointer' {...getRootProps()}>
+                <div className='dropzone dz-clickable tw:cursor-pointer' {...getRootProps()}>
                   <div className='dz-message needsclick' {...getRootProps()}>
-                    <div className='mb-3'>
+                    <div className='tw:mb-4'>
                       <i className='display-4 text-muted ri-upload-cloud-2-fill' />
                     </div>
                     <h4>Upload Products Info. Drop Only CSV files here or click to upload.</h4>
@@ -208,16 +208,16 @@ const UploadProductsModal = ({}: Props) => {
             />
           </Col>
           <Col md={6}>
-            <div className='list-unstyled mb-0' id='file-previews'>
+            <div className='list-unstyled tw:mb-0' id='file-previews'>
               {selectedFiles.map((f: any, i) => {
                 return (
-                  <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
-                    <div className='p-2'>
-                      <Row className='align-items-center'>
-                        <Col className='d-flex justify-content-between align-items-center'>
+                  <Card className='tw:mt-1 tw:mb-0 tw:shadow-none tw:border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
+                    <div className='tw:p-2'>
+                      <Row className='tw:items-center'>
+                        <Col className='tw:flex tw:justify-between tw:items-center'>
                           <div>
-                            <p className='text-muted font-weight-bold m-0'>{f.name}</p>
-                            <p className='mb-0'>
+                            <p className='tw:text-[var(--bs-secondary-color)] tw:font-bold tw:m-0'>{f.name}</p>
+                            <p className='tw:mb-0'>
                               <strong>{f.formattedSize}</strong>
                             </p>
                           </div>
@@ -235,14 +235,14 @@ const UploadProductsModal = ({}: Props) => {
             </div>
           </Col>
         </Row>
-        {errorFile && <p className='text-danger m-0'>You must Upload a CSV file to upload products.</p>}
+        {errorFile && <p className='tw:text-danger tw:m-0'>You must Upload a CSV file to upload products.</p>}
         {showErrorLines &&
           errorLines.map((error: any, index: number) => (
-            <p key={`ErrorLine${index}`} className='text-danger m-0'>{`Error in Line: ${error.errorLine} Value: ${error.value} Error: ${error.errorMessage}`}</p>
+            <p key={`ErrorLine${index}`} className='tw:text-danger tw:m-0'>{`Error in Line: ${error.errorLine} Value: ${error.value} Error: ${error.errorMessage}`}</p>
           ))}
-        {showerrorResponse && errorResponse.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='text-danger m-0'>{`Error: ${error}`}</p>)}
+        {showerrorResponse && errorResponse.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='tw:text-danger tw:m-0'>{`Error: ${error}`}</p>)}
         <Col md={12}>
-          <div className='text-end'>
+          <div className='tw:text-right'>
             <Button type='button' color='success' className='btn' onClick={handleUploadProducts}>
               {loading ? <Spinner /> : 'Upload File'}
             </Button>

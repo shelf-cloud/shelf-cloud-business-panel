@@ -65,26 +65,26 @@ const SellerFbaOrdersTable = ({ tableData, pending }: Props) => {
       selector: (row: FBAOrder) => {
         switch (row.orderStatus) {
           case 'Shipped':
-            return <span className='badge text-uppercase badge-soft-success p-2 my-2'>{` ${row.orderStatus} `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-success)_10%,transparent)] tw:text-success tw:p-2 tw:my-2'>{` ${row.orderStatus} `}</span>
             break
           case 'Processed':
-            return <span className='badge text-uppercase badge-soft-secondary p-2 my-2'>{` ${row.orderStatus} `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-secondary)_10%,transparent)] tw:text-secondary tw:p-2 tw:my-2'>{` ${row.orderStatus} `}</span>
             break
           case 'Pending':
           case 'Unshipped':
           case 'PartiallyShipped':
           case 'InvoiceUnconfirmed':
-            return <span className='badge text-uppercase badge-soft-warning p-2 my-2'>{` ${row.orderStatus} `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] tw:text-warning tw:p-2 tw:my-2'>{` ${row.orderStatus} `}</span>
             break
           case 'PendingAvailability':
-            return <span className='badge text-uppercase badge-soft-danger p-2 my-2'>{` ${row.orderStatus} `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-danger)_10%,transparent)] tw:text-danger tw:p-2 tw:my-2'>{` ${row.orderStatus} `}</span>
             break
           case 'Unfulfillable':
           case 'Cancelled':
-            return <span className='badge text-uppercase badge-soft-dark p-2 my-2'>{` ${row.orderStatus} `}</span>
+            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-dark)_10%,transparent)] tw:text-dark tw:p-2 tw:my-2'>{` ${row.orderStatus} `}</span>
             break
           default:
-            return <span className='badge text-uppercase text-info bg-light p-2 my-2'>{` ${row.orderStatus} `}</span>
+            return <span className='badge tw:uppercase tw:text-info tw:bg-[color:var(--vz-light)] tw:p-2 tw:my-2'>{` ${row.orderStatus} `}</span>
         }
       },
       center: true,

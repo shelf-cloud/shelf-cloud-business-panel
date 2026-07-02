@@ -267,7 +267,7 @@ const Invoices = ({ session, sessionToken }: Props) => {
           <BreadCrumb title='Invoices' pageTitle='Commerce HUB' />
           <Container fluid>
             <div className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:mb-1 tw:lg:flex-row tw:md:justify-between tw:md:items-center tw:px-1'>
-              <div className='tw:w-full tw:flex tw:flex-col tw:justify-center tw:items-start tw:gap-2 tw:tw:mb-0 tw:lg:flex-row tw:lg:justify-start tw:lg:items-center tw:px-0'>
+              <div className='tw:w-full tw:flex tw:flex-col tw:justify-center tw:items-start tw:gap-2 tw:mb-0 tw:lg:flex-row tw:lg:justify-start tw:lg:items-center tw:px-0'>
                 <Button
                   color='primary'
                   className='tw:text-[11.2px] tw:text-nowrap'
@@ -289,7 +289,7 @@ const Invoices = ({ session, sessionToken }: Props) => {
                   />
                 )}
               </div>
-              <div className='tw:w-full tw:flex tw:flex-col-reverse tw:justify-center tw:items-start tw:gap-2 tw:tw:mb-0 tw:lg:flex-row tw:lg:justify-end tw:lg:items-center tw:px-0'>
+              <div className='tw:w-full tw:flex tw:flex-col-reverse tw:justify-center tw:items-start tw:gap-2 tw:mb-0 tw:lg:flex-row tw:lg:justify-end tw:lg:items-center tw:px-0'>
                 <div className='app-search tw:p-0 tw:w-full tw:lg:w-5/12'>
                   <div className='tw:relative tw:flex tw:rounded-lg tw:w-full tw:overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                     <DebounceInput
@@ -347,7 +347,7 @@ const Invoices = ({ session, sessionToken }: Props) => {
                 />
                 <div ref={lastInvoiceElementRef} style={{ height: '20px', marginTop: '10px' }}>
                   {isValidating && size > 1 && (
-                    <p className='tw:tw:text-center'>
+                    <p className='tw:text-center'>
                       <Spinner size='sm' color='primary' /> Loading more invoices...
                     </p>
                   )}

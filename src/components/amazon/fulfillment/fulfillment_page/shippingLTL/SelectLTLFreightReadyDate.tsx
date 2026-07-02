@@ -98,22 +98,24 @@ const SelectLTLFreightReadyDate = ({ shipmentId, selectedLTLTransportationOption
         <p className='tw:my-2 tw:p-0 tw:font-semibold tw:text-[11.2px]'>Carrier</p>
         <Select className='tw:text-[11.2px]' value={selectedCarrier} onChange={handleChangeCarrier} options={commonCarriers} />
       </div>
-      <table className='table table-sm table-borderless table-responsive tw:text-[11.2px]'>
-        <thead>
-          <tr>
-            <th>PCP Carrier</th>
-            <th>Mode</th>
-            <th>Cost</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{selectedLTLTransportationOption.ltlAlphaCode}</td>
-            <td>LTL</td>
-            <td>{FormatCurrency(state.currentRegion, selectedLTLTransportationOption.cost)}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div className='tw:overflow-x-auto'>
+        <table className='tw:w-full tw:align-middle tw:mb-0 tw:text-[11.2px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+          <thead className='tw:bg-[color:var(--vz-light)]'>
+            <tr>
+              <th>PCP Carrier</th>
+              <th>Mode</th>
+              <th>Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{selectedLTLTransportationOption.ltlAlphaCode}</td>
+              <td>LTL</td>
+              <td>{FormatCurrency(state.currentRegion, selectedLTLTransportationOption.cost)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }

@@ -131,9 +131,9 @@ const Orders = ({ session, sessionToken }: Props) => {
           <Container fluid>
             <Row>
               <Col lg={12}>
-                <Row className='tw:flex tw:flex-col-reverse tw:justify-center tw:items-end tw:tw:gap-2 tw:tw:mb-1 tw:md:tw:flex-row tw:md:justify-end tw:md:items-center tw:tw:px-6'>
-                  <div className='app-search tw:flex tw:tw:flex-row tw:justify-between tw:items-center tw:tw:p-0'>
-                    <div className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:tw:gap-2 tw:md:tw:flex-row tw:md:justify-between tw:md:items-center tw:tw:w-auto'>
+                <Row className='tw:flex tw:flex-col-reverse tw:justify-center tw:items-end tw:gap-2 tw:mb-1 tw:md:tw:flex-row tw:md:justify-end tw:md:items-center tw:px-6'>
+                  <div className='app-search tw:flex tw:flex-row tw:justify-between tw:items-center tw:p-0'>
+                    <div className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:md:tw:flex-row tw:md:justify-between tw:md:items-center tw:w-auto'>
                       <FilterByDates
                         shipmentsStartDate={startDate}
                         setShipmentsStartDate={setStartDate}

@@ -73,10 +73,10 @@ const AmazonAdsAuthRedirect = ({}: Props) => {
           <Container fluid>
             <BreadCrumb title='Amazon Auth' pageTitle='Amazon' />
             <Card className='tw:py-12'>
-              <CardBody className='tw:tw:text-center'>
-                <p className='tw:tw:text-primary tw:font-semibold fs-1'>ShelfCloud - Amazon Advertising Partner</p>
+              <CardBody className='tw:text-center'>
+                <p className='tw:text-primary tw:font-semibold tw:text-[40px]'>ShelfCloud - Amazon Advertising Partner</p>
                 <p className='tw:text-[var(--bs-secondary-color)] tw:font-normal tw:text-[22.75px]'>Integration</p>
-                <div className='tw:flex tw:tw:flex-row tw:justify-center tw:items-center tw:gap-6 tw:tw:mt-6 tw:mb-12'>
+                <div className='tw:flex tw:flex-row tw:justify-center tw:items-center tw:gap-6 tw:mt-6 tw:mb-12'>
                   <div
                     className='tw:relative'
                     style={{
@@ -112,14 +112,14 @@ const AmazonAdsAuthRedirect = ({}: Props) => {
                 </div>
 
                 <div className='tw:flex tw:flex-col tw:justify-center tw:items-center tw:gap-12'>
-                  <Button className='tw:tw:mt-2 tw:text-[16.25px]' color='primary' onClick={() => authorizeSeller()}>
+                  <Button className='tw:mt-2 tw:text-[16.25px]' color='primary' onClick={() => authorizeSeller()}>
                     {loading ? <Spinner color='#fff' /> : 'Authorize ShelfCloud'}
                   </Button>
-                  <Button className='tw:tw:mt-2 tw:text-[13px]' color='light' onClick={() => router.push('/')}>
+                  <Button className='tw:mt-2 tw:text-[13px]' color='light' onClick={() => router.push('/')}>
                     Cancel
                   </Button>
                 </div>
-                <p className='tw:text-[var(--bs-secondary-color)] tw:font-normal tw:text-[13px] tw:tw:mt-0'>Expire at: {expire}</p>
+                <p className='tw:text-[var(--bs-secondary-color)] tw:font-normal tw:text-[13px] tw:mt-0'>Expire at: {expire}</p>
               </CardBody>
             </Card>
           </Container>

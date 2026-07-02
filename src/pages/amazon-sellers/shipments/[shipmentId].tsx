@@ -192,7 +192,7 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                             </Badge>
                           </p>
                           <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)]'>
-                            Last Updated: <span className='text-black tw:font-semibold'>{moment(shipmentDetails.lastUpdated).format('LL')}</span>
+                            Last Updated: <span className='tw:text-black tw:font-semibold'>{moment(shipmentDetails.lastUpdated).format('LL')}</span>
                           </p>
                         </div>
                       </div>

@@ -49,8 +49,8 @@ function ReorderingPointsSalesModal({ salesModal, setSalesModal }: Props) {
           {/* 30 DAYS */}
           <div>
             <p className='tw:text-[16.25px] tw:font-bold tw:text-center'>30 Days</p>
-            <table className='table table-sm table-border table-nowrap tw:mb-0 tw:text-[11.2px]'>
-              <thead>
+            <table className='tw:w-full tw:align-middle tw:mb-0 tw:whitespace-nowrap tw:text-[11.2px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+              <thead className='tw:bg-[color:var(--vz-light)]'>
                 <tr>
                   <th>Marketpalce</th>
                   <th>Total Orders</th>
@@ -80,8 +80,8 @@ function ReorderingPointsSalesModal({ salesModal, setSalesModal }: Props) {
           {/* 60 DAYS */}
           <div>
             <p className='tw:text-[16.25px] tw:font-bold tw:text-center'>60 Days</p>
-            <table className='table table-sm table-border table-nowrap tw:mb-0 tw:text-[11.2px]'>
-              <thead>
+            <table className='tw:w-full tw:align-middle tw:mb-0 tw:whitespace-nowrap tw:text-[11.2px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+              <thead className='tw:bg-[color:var(--vz-light)]'>
                 <tr>
                   <th>Marketpalce</th>
                   <th>Total Orders</th>
@@ -111,8 +111,8 @@ function ReorderingPointsSalesModal({ salesModal, setSalesModal }: Props) {
           {/* 90 DAYS */}
           <div>
             <p className='tw:text-[16.25px] tw:font-bold tw:text-center'>90 Days</p>
-            <table className='table table-sm table-border table-nowrap tw:mb-0 tw:text-[11.2px]'>
-              <thead>
+            <table className='tw:w-full tw:align-middle tw:mb-0 tw:whitespace-nowrap tw:text-[11.2px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+              <thead className='tw:bg-[color:var(--vz-light)]'>
                 <tr>
                   <th>Marketpalce</th>
                   <th>Total Orders</th>
@@ -144,8 +144,8 @@ function ReorderingPointsSalesModal({ salesModal, setSalesModal }: Props) {
           {/* 120 DAYS */}
           <div>
             <p className='tw:text-[16.25px] tw:font-bold tw:text-center'>120 Days</p>
-            <table className='table table-sm table-border table-nowrap tw:mb-0 tw:text-[11.2px]'>
-              <thead>
+            <table className='tw:w-full tw:align-middle tw:mb-0 tw:whitespace-nowrap tw:text-[11.2px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+              <thead className='tw:bg-[color:var(--vz-light)]'>
                 <tr>
                   <th>Marketpalce</th>
                   <th>Total Orders</th>
@@ -175,8 +175,8 @@ function ReorderingPointsSalesModal({ salesModal, setSalesModal }: Props) {
           {/* 180 DAYS */}
           <div>
             <p className='tw:text-[16.25px] tw:font-bold tw:text-center'>180 Days</p>
-            <table className='table table-sm table-border table-nowrap tw:mb-0 tw:text-[11.2px]'>
-              <thead>
+            <table className='tw:w-full tw:align-middle tw:mb-0 tw:whitespace-nowrap tw:text-[11.2px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+              <thead className='tw:bg-[color:var(--vz-light)]'>
                 <tr>
                   <th>Marketpalce</th>
                   <th>Total Orders</th>
@@ -206,8 +206,8 @@ function ReorderingPointsSalesModal({ salesModal, setSalesModal }: Props) {
           {/* 365 DAYS */}
           <div>
             <p className='tw:text-[16.25px] tw:font-bold tw:text-center'>365 Days</p>
-            <table className='table table-sm table-border table-nowrap tw:mb-0 tw:text-[11.2px]'>
-              <thead>
+            <table className='tw:w-full tw:align-middle tw:mb-0 tw:whitespace-nowrap tw:text-[11.2px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+              <thead className='tw:bg-[color:var(--vz-light)]'>
                 <tr>
                   <th>Marketpalce</th>
                   <th>Total Orders</th>

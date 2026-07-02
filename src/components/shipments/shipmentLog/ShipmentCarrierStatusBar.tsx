@@ -54,14 +54,14 @@ const ShipmentCarrierStatusBar = ({ carrier, currentStatus }: Props) => {
       statusLabel = UPS_STATUS[currentStatus]
       statusIndex = UPS_STATUS_BAR.indexOf(statusLabel)
       return (
-        <Card className='mt-0 mb-3'>
-          <CardBody className='p-0' style={{ display: 'grid', gridTemplateColumns }}>
+        <Card className='tw:mt-0 tw:mb-4'>
+          <CardBody className='tw:p-0' style={{ display: 'grid', gridTemplateColumns }}>
             {UPS_STATUS_BAR.map((status, index) => (
               <div
                 key={index}
-                className={'text-center py-2' + (index <= statusIndex ? ' bg-primary bg-gradient' : '')}
+                className={'tw:text-center tw:py-2' + (index <= statusIndex ? ' bg-primary bg-gradient' : '')}
                 style={{ borderRadius: checkBorderRadius(index, statusIndex) }}>
-                <p className={'m-0 p-0 fs-7' + (index <= statusIndex ? ' fw-semibold text-white' : ' fw-semibold text-muted')}>{status}</p>
+                <p className={'tw:m-0 tw:p-0 tw:text-[11.2px]' + (index <= statusIndex ? ' tw:font-semibold tw:text-white' : ' tw:font-semibold tw:text-[var(--bs-secondary-color)]')}>{status}</p>
               </div>
             ))}
           </CardBody>
@@ -72,14 +72,14 @@ const ShipmentCarrierStatusBar = ({ carrier, currentStatus }: Props) => {
       statusLabel = FEDEX_STATUS[currentStatus]
       statusIndex = FEDEX_STATUS_BAR.indexOf(statusLabel)
       return (
-        <Card className='mt-0 mb-3'>
-          <CardBody className='p-0' style={{ display: 'grid', gridTemplateColumns }}>
+        <Card className='tw:mt-0 tw:mb-4'>
+          <CardBody className='tw:p-0' style={{ display: 'grid', gridTemplateColumns }}>
             {FEDEX_STATUS_BAR.map((status, index) => (
               <div
                 key={index}
-                className={'text-center py-2' + (index <= statusIndex ? ' bg-primary bg-gradient' : '')}
+                className={'tw:text-center tw:py-2' + (index <= statusIndex ? ' bg-primary bg-gradient' : '')}
                 style={{ borderRadius: checkBorderRadius(index, statusIndex) }}>
-                <p className={'m-0 p-0 fs-7' + (index <= statusIndex ? ' fw-semibold text-white' : ' fw-semibold text-muted')}>{status}</p>
+                <p className={'tw:m-0 tw:p-0 tw:text-[11.2px]' + (index <= statusIndex ? ' tw:font-semibold tw:text-white' : ' tw:font-semibold tw:text-[var(--bs-secondary-color)]')}>{status}</p>
               </div>
             ))}
           </CardBody>
@@ -90,14 +90,14 @@ const ShipmentCarrierStatusBar = ({ carrier, currentStatus }: Props) => {
       statusLabel = UPS_STATUS[currentStatus]
       statusIndex = UPS_STATUS_BAR.indexOf(statusLabel)
       return (
-        <Card className='mt-0 mb-3'>
-          <CardBody className='p-0' style={{ display: 'grid', gridTemplateColumns }}>
+        <Card className='tw:mt-0 tw:mb-4'>
+          <CardBody className='tw:p-0' style={{ display: 'grid', gridTemplateColumns }}>
             {UPS_STATUS_BAR.map((status, index) => (
               <div
                 key={index}
-                className={'text-center py-2' + (index <= statusIndex ? ' bg-primary bg-gradient' : '')}
+                className={'tw:text-center tw:py-2' + (index <= statusIndex ? ' bg-primary bg-gradient' : '')}
                 style={{ borderRadius: checkBorderRadius(index, statusIndex) }}>
-                <p className={'m-0 p-0 fs-7' + (index <= statusIndex ? ' fw-semibold text-white' : ' fw-semibold text-muted')}>{status}</p>
+                <p className={'tw:m-0 tw:p-0 tw:text-[11.2px]' + (index <= statusIndex ? ' tw:font-semibold tw:text-white' : ' tw:font-semibold tw:text-[var(--bs-secondary-color)]')}>{status}</p>
               </div>
             ))}
           </CardBody>

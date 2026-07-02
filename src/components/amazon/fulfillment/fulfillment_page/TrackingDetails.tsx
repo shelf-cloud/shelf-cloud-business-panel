@@ -24,7 +24,7 @@ const TrackingDetails = ({ inboundPlan, handlePrintShipmentBillOfLading, watingR
               {Object.values(inboundPlan.confirmedShipments).map((shipment, shipmentIndex) => (
                 <Card
                   key={shipment.shipmentId}
-                  className={'tw:m-0 shadow-sm ' + (selectedShipment.shipmentId === shipment.shipmentId && 'border border-3 border-success')}
+                  className={'tw:m-0 tw:shadow-[0_0.125rem_0.25rem_rgba(0,0,0,0.075)] ' + (selectedShipment.shipmentId === shipment.shipmentId && 'tw:border tw:border-[3px] tw:border-success')}
                   style={{ width: 'fit-content', maxWidth: '400px', zIndex: Object.values(inboundPlan.confirmedShipments).length - shipmentIndex }}
                   onClick={() => setselectedShipment(shipment)}>
                   <CardBody>
@@ -48,38 +48,40 @@ const TrackingDetails = ({ inboundPlan, handlePrintShipmentBillOfLading, watingR
             {selectedShipment.shipment.trackingDetails?.spdTrackingDetail?.spdTrackingItems.length > 0 && (
               <div className='tw:my-4 tw:px-2'>
                 <Col sm='12' lg='8'>
-                  <table className='table table-bordered'>
-                    <thead className='table-light'>
-                      <tr>
-                        <th>Box #</th>
-                        <th>FBA Box Label #</th>
-                        <th>Tracking ID #</th>
-                        <th>Status</th>
-                        <th>Weight (lb)</th>
-                        <th>Dimensions (in)</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {selectedShipment.shipment.trackingDetails?.spdTrackingDetail?.spdTrackingItems?.map((tracking, boxIndex) => (
-                        <tr key={tracking.boxId}>
-                          <td>{boxIndex + 1}</td>
-                          <td>{tracking.boxId}</td>
-                          <td>{tracking.trackingId}</td>
-                          <td className='tw:text-success tw:font-semibold'>Confirmed</td>
-                          <td>
-                            {selectedShipment.shipmentBoxes.boxes[boxIndex]?.weight.value
-                              ? FormatIntPercentage(state.currentRegion, selectedShipment.shipmentBoxes.boxes[boxIndex]?.weight.value)
-                              : 'N/A'}
-                          </td>
-                          <td>
-                            {selectedShipment.shipmentBoxes.boxes[boxIndex]?.dimensions.height
-                              ? `${selectedShipment.shipmentBoxes.boxes[boxIndex]?.dimensions.height} x ${selectedShipment.shipmentBoxes.boxes[boxIndex]?.dimensions.width} x ${selectedShipment.shipmentBoxes.boxes[boxIndex]?.dimensions.length}`
-                              : 'N/A'}
-                          </td>
+                  <div className='tw:overflow-x-auto'>
+                    <table className='tw:w-full tw:align-middle tw:mb-0 tw:border tw:border-[color:var(--border)] tw:[&_td]:border-t tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+                      <thead className='tw:bg-[color:var(--vz-light)]'>
+                        <tr>
+                          <th>Box #</th>
+                          <th>FBA Box Label #</th>
+                          <th>Tracking ID #</th>
+                          <th>Status</th>
+                          <th>Weight (lb)</th>
+                          <th>Dimensions (in)</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {selectedShipment.shipment.trackingDetails?.spdTrackingDetail?.spdTrackingItems?.map((tracking, boxIndex) => (
+                          <tr key={tracking.boxId}>
+                            <td>{boxIndex + 1}</td>
+                            <td>{tracking.boxId}</td>
+                            <td>{tracking.trackingId}</td>
+                            <td className='tw:text-success tw:font-semibold'>Confirmed</td>
+                            <td>
+                              {selectedShipment.shipmentBoxes.boxes[boxIndex]?.weight.value
+                                ? FormatIntPercentage(state.currentRegion, selectedShipment.shipmentBoxes.boxes[boxIndex]?.weight.value)
+                                : 'N/A'}
+                            </td>
+                            <td>
+                              {selectedShipment.shipmentBoxes.boxes[boxIndex]?.dimensions.height
+                                ? `${selectedShipment.shipmentBoxes.boxes[boxIndex]?.dimensions.height} x ${selectedShipment.shipmentBoxes.boxes[boxIndex]?.dimensions.width} x ${selectedShipment.shipmentBoxes.boxes[boxIndex]?.dimensions.length}`
+                                : 'N/A'}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </Col>
               </div>
             )}

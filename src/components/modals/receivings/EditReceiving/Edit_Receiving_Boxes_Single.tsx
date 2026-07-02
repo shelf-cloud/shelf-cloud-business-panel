@@ -23,8 +23,8 @@ const Edit_Receiving_Boxes_Single = ({
 }: Props) => {
   return (
     <div className='tw:overflow-auto'>
-      <table className='table table-sm align-middle table-responsive table-striped tw:text-[11.2px]'>
-        <thead className='table-light'>
+      <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)] tw:text-[11.2px]'>
+        <thead className='tw:bg-[color:var(--vz-light)]'>
           <tr key='edit-receiving-boxes-single-header'>
             <th scope='col'>Title / SKU</th>
             <th scope='col' className='tw:text-left'>

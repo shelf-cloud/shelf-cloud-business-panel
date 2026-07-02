@@ -16,8 +16,8 @@ const Create_Manual_Receiving_Summary_Tab = ({ orderProducts }: Props) => {
   return (
     <div className='tw:overflow-auto'>
       <Col md={12}>
-        <table className='table table-sm align-middle table-responsive table-nowrap table-striped'>
-          <thead className='table-light'>
+        <table className='tw:w-full tw:align-middle tw:mb-0 tw:whitespace-nowrap tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)]'>
+          <thead className='tw:bg-[color:var(--vz-light)]'>
             <tr key='manualReceivingSummaryTab-header'>
               <th scope='col'>Title / SKU</th>
               <th scope='col'>Supplier</th>

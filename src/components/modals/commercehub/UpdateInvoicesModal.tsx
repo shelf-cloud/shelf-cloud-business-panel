@@ -244,10 +244,10 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
                   <i className='ri-external-link-fill ms-1 fs-6 text-primary' />
                 </span>
               </p>
-              <div className='list-unstyled tw:mb-0' id='file-previews'>
+              <div className='tw:list-none tw:pl-0 tw:mb-0' id='file-previews'>
                 {selectedFiles.map((f: any, i) => {
                   return (
-                    <Card className='tw:mt-1 tw:mb-0 shadow-sm border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
+                    <Card className='tw:mt-1 tw:mb-0 tw:shadow-[0_0.125rem_0.25rem_rgba(0,0,0,0.075)] tw:border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
                       <div className='tw:p-2'>
                         <Row className='tw:items-center'>
                           <Col className='tw:flex tw:justify-between tw:items-center'>
@@ -310,7 +310,7 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
               <p className='tw:text-danger tw:m-0'>
                 There are <span className='tw:font-bold'>{errorLines.length}</span> errors in this file. Please review the following lines:
               </p>
-              <table className='table table-sm'>
+              <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
                 <thead>
                   <tr className='tw:text-danger'>
                     <th className='tw:text-center'>In Line</th>

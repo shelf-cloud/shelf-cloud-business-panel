@@ -117,7 +117,7 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions,
                   }))
                   setOpenDatesMenu(false)
                 }}
-                className='btn btn-link tw:p-0 border-0 tw:no-underline tw:text-[var(--bs-secondary-color)] tw:mt-2 tw:text-[11.2px]'>
+                className='btn btn-link tw:p-0 tw:border-0 tw:no-underline tw:text-[var(--bs-secondary-color)] tw:mt-2 tw:text-[11.2px]'>
                 Clear All
               </button>
             </div>

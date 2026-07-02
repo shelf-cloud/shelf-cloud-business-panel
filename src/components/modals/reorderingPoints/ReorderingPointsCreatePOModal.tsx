@@ -397,7 +397,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
           )}
           <span className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>*Select the columns you wish to print.</span>
           <div className='tw:flex tw:flex-row tw:justify-evenly tw:items-start'>
-            <table className='table table-bordered table-hover table-striped table-sm tw:mb-0'>
+            <table className='tw:w-full tw:align-middle tw:mb-0 tw:border tw:border-[color:var(--border)] tw:text-[11.2px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_th]:border tw:[&_th]:border-[color:var(--border)] tw:[&_td]:border tw:[&_td]:border-[color:var(--border)] tw:[&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)] tw:[&_tbody_tr:hover]:bg-[color-mix(in_srgb,var(--bs-light)_60%,transparent)]'>
               <thead>
                 <tr>
                   <th>SKU</th>

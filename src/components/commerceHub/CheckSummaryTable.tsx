@@ -86,7 +86,7 @@ const CheckSummaryTable = ({ filteredItems, pending, sortBy, setSortBy }: Props)
             />
           </div>
         ) : (
-          <span className='tw:text-[11.2px] mw-30 tw:text-[var(--bs-secondary-color)] tw:font-light tw:italic'>Pending</span>
+          <span className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)] tw:font-light tw:italic'>Pending</span>
         )
       },
       sortable: false,
@@ -112,7 +112,7 @@ const CheckSummaryTable = ({ filteredItems, pending, sortBy, setSortBy }: Props)
         </span>
       ),
       selector: (row: CheckSummaryType) => {
-        return <span className='tw:tw:text-center tw:text-[11.2px]'>{FormatCurrency(state.currentRegion, getTotalPaid(row.orderTotal, row.deductions, row.charges))}</span>
+        return <span className='tw:text-center tw:text-[11.2px]'>{FormatCurrency(state.currentRegion, getTotalPaid(row.orderTotal, row.deductions, row.charges))}</span>
       },
       sortable: false,
       left: true,

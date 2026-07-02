@@ -182,13 +182,13 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
               <DropdownItem onClick={() => setaddShippingCostModal({ show: true, orderId: row.id, orderNumber: row.orderNumber, shippingCost: row.receivingShippingCost ?? '' })}>
                 <div>
                   <i className='las la-ship label-icon align-middle tw:me-2 fs-5' />
-                  <span className='tw:font-normal tw:text-dark'>Shipping Cost</span>
+                  <span className='tw:font-normal tw:text-black'>Shipping Cost</span>
                 </div>
               </DropdownItem>
               <DropdownItem onClick={() => setaddTagToOrder({ show: true, orderId: row.id, orderNumber: row.orderNumber, tag: row.tag ?? '' })}>
                 <div>
                   <i className='las la-tag label-icon align-middle tw:me-2 fs-5' />
-                  <span className='tw:font-normal tw:text-dark'>Add Tag</span>
+                  <span className='tw:font-normal tw:text-black'>Add Tag</span>
                 </div>
               </DropdownItem>
               {row.boxes ? <ReceivingPackingSlip receiving={row} /> : null}
@@ -196,7 +196,7 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
                 <DropdownItem>
                   <a href={row.proofOfShipped || '#'} target='blank' rel='noopener noreferrer' className='tw:!text-black'>
                     <i className='las la-truck label-icon align-middle fs-5 tw:me-2' />
-                    <span className='tw:font-normal tw:text-dark'>Proof Of Received</span>
+                    <span className='tw:font-normal tw:text-black'>Proof Of Received</span>
                   </a>
                 </DropdownItem>
               )}
@@ -211,7 +211,7 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
                     isManualReceiving={!row.isReceivingFromPo}>
                     <DropdownItem>
                       <i className='las la-toilet-paper label-icon align-middle tw:me-2 fs-5 tw:text-[var(--bs-secondary-color)]' />
-                      <span className='tw:font-normal tw:text-dark'>Receiving Labels</span>
+                      <span className='tw:font-normal tw:text-black'>Receiving Labels</span>
                     </DropdownItem>
                   </GenerateReceivingLabels>
                 </>
@@ -220,13 +220,13 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
               {row.boxes && (
                 <DropdownItem onClick={() => seteditReceiving({ show: true, order: row })}>
                   <i className='las la-edit tw:text-primary label-icon align-middle tw:me-2 fs-5' />
-                  <span className='tw:font-normal tw:text-dark'>Edit Receiving</span>
+                  <span className='tw:font-normal tw:text-black'>Edit Receiving</span>
                 </DropdownItem>
               )}
               {!row.isSCDestination && row.orderStatus !== 'received' && (
                 <DropdownItem onClick={() => setmarkReceivedModal({ show: true, orderId: row.id, orderNumber: row.orderNumber })}>
                   <i className='las la-check-circle tw:text-success label-icon align-middle tw:me-2 fs-5' />
-                  <span className='tw:font-normal tw:text-dark'>Mark as Received</span>
+                  <span className='tw:font-normal tw:text-black'>Mark as Received</span>
                 </DropdownItem>
               )}
               {(row.orderStatus == 'awaiting' || row.orderStatus == 'awaiting_shipment') &&

@@ -225,7 +225,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
           <Container fluid>
             <Row className='tw:flex tw:flex-col-reverse tw:justify-center tw:items-end tw:gap-2 tw:mb-2 tw:md:flex-row tw:md:justify-end tw:md:items-center tw:px-4'>
               <div className='app-search tw:flex tw:flex-row tw:justify-between tw:items-center tw:p-0'>
-                <div className='tw:w-full tw:flex tw:flex-col tw:justify-center tw:items-start tw:gap-2 tw:tw:mb-0 tw:lg:flex-row tw:lg:justify-start tw:lg:items-center tw:px-0'>
+                <div className='tw:w-full tw:flex tw:flex-col tw:justify-center tw:items-start tw:gap-2 tw:mb-0 tw:lg:flex-row tw:lg:justify-start tw:lg:items-center tw:px-0'>
                   <FilterFBAShipments filters={filters} setfilters={setFilters} />
                   <Link href={'/amazon-sellers/fulfillments'}>
                     <Button className='tw:text-[11.2px] tw:text-nowrap'>
@@ -244,9 +244,9 @@ const Shipments = ({ session, sessionToken }: Props) => {
                     </Button>
                   </Link>
                 </div>
-                <div className='tw:w-full tw:flex tw:flex-col-reverse tw:justify-center tw:items-start tw:gap-2 tw:tw:mb-0 tw:lg:flex-row tw:lg:justify-end tw:lg:items-center tw:px-0'>
-                  <div className='app-search tw:p-0 col-sm-12 col-lg-5'>
-                    <div className='tw:relative tw:flex tw:rounded-lg tw:w-full overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+                <div className='tw:w-full tw:flex tw:flex-col-reverse tw:justify-center tw:items-start tw:gap-2 tw:mb-0 tw:lg:flex-row tw:lg:justify-end tw:lg:items-center tw:px-0'>
+                  <div className='app-search tw:p-0 tw:w-full tw:lg:w-5/12'>
+                    <div className='tw:relative tw:flex tw:rounded-lg tw:w-full tw:overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                       <DebounceInput
                         type='text'
                         minLength={3}

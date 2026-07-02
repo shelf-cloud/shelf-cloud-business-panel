@@ -61,9 +61,9 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
               <h5 className='tw:font-semibold tw:m-0'>Products</h5>
             </CardHeader>
             <CardBody>
-              <div className='table-responsive'>
-                <table className='table table-sm align-middle table-borderless tw:mb-0'>
-                  <thead className='table-light'>
+              <div className='tw:overflow-x-auto'>
+                <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+                  <thead className='tw:bg-[color:var(--vz-light)]'>
                     <tr>
                       <th scope='col'>Title</th>
                       <th scope='col'>Sku</th>
@@ -105,7 +105,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                 <h5 className='tw:font-semibold tw:m-0'>Shipping</h5>
               </CardHeader>
               <CardBody>
-                <table className='table table-sm table-borderless'>
+                <table className='tw:w-full tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
                   <tbody className='tw:text-[11.2px]'>
                     <tr>
                       <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>Service Requested:</td>

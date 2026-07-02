@@ -18,8 +18,8 @@ const ServiceType = ({ data }: Props) => {
           {data.extraComment != '' && (
             <Col xl={12}>
               <Card>
-                <CardHeader className='py-3'>
-                  <h5 className='fw-semibold m-0'>Service Comment</h5>
+                <CardHeader className='tw:py-4'>
+                  <h5 className='tw:font-semibold tw:m-0'>Service Comment</h5>
                 </CardHeader>
                 <CardBody>
                   <p>{data.extraComment}</p>
@@ -31,19 +31,19 @@ const ServiceType = ({ data }: Props) => {
         <Col xs={12} lg={4}>
           <Col xl={12}>
             <Card>
-              <CardHeader className='py-3'>
-                <h5 className='fw-semibold m-0'>Charge Details</h5>
+              <CardHeader className='tw:py-4'>
+                <h5 className='tw:font-semibold tw:m-0'>Charge Details</h5>
               </CardHeader>
               <CardBody>
-                <table className='table table-sm table-borderless table-nowrap mb-0'>
-                  <tbody className='fs-7'>
-                    <tr className='border-bottom pb-2'>
-                      <td className='text-muted'>Extra Charge</td>
-                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.extraCharge)}</td>
+                <table className='tw:w-full tw:whitespace-nowrap tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+                  <tbody className='tw:text-[11.2px]'>
+                    <tr className='tw:border-b tw:border-[color:var(--border)] tw:pb-2'>
+                      <td className='tw:text-[var(--bs-secondary-color)]'>Extra Charge</td>
+                      <td className='tw:font-semibold tw:text-end'>{FormatCurrency(state.currentRegion, data.extraCharge)}</td>
                     </tr>
                     <tr>
-                      <td className='fw-bold'>TOTAL</td>
-                      <td className='text-primary fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.totalCharge)}</td>
+                      <td className='tw:font-bold'>TOTAL</td>
+                      <td className='tw:text-primary tw:font-semibold tw:text-end'>{FormatCurrency(state.currentRegion, data.totalCharge)}</td>
                     </tr>
                   </tbody>
                 </table>

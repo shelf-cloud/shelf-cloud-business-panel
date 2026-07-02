@@ -461,7 +461,7 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
             <Col md={12} style={{ overflowX: 'auto', overflowY: 'hidden', position: 'relative' }}>
               <p className='tw:font-semibold tw:mb-0'>SKUs ready to send: {validation.values.hasProducts}</p>
               {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='tw:text-danger'>{validation.errors.hasProducts}</p> : null}
-              <table className='table align-middle table-sm table-responsive table-nowrap table-striped-columns'>
+              <table className='tw:w-full tw:align-middle tw:mb-0 tw:whitespace-nowrap tw:text-[13px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_tr>*:nth-child(odd)]:bg-[color:var(--vz-light)]'>
                 <thead>
                   <tr>
                     <th>SKU</th>

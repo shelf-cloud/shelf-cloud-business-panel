@@ -45,20 +45,20 @@ const ConfirmActionModal = ({
       </ModalHeader>
       <ModalBody>
         <Row>
-          <p className='mb-2 fs-5 fw-semibold'>
-            {primaryText} {primaryTextSub && <span className='text-primary'>{primaryTextSub}</span>}
+          <p className='tw:mb-2 tw:text-[16.25px] tw:font-semibold'>
+            {primaryText} {primaryTextSub && <span className='tw:text-primary'>{primaryTextSub}</span>}
           </p>
-          {descriptionText && <p className='mb-1 text-muted'>{descriptionText}</p>}
+          {descriptionText && <p className='tw:mb-1 tw:text-[var(--bs-secondary-color)]'>{descriptionText}</p>}
         </Row>
       </ModalBody>
       <ModalFooter>
-        <div className='w-100 d-flex flex-row gap-2 justify-content-between align-items-center'>
+        <div className='tw:w-full tw:flex tw:flex-row tw:gap-2 tw:justify-between tw:items-center'>
           <div></div>
-          <div className='d-flex flex-row gap-2 justify-content-end'>
-            <Button disabled={isLoading} type='button' color='light' className='fs-7' onClick={handleClose}>
+          <div className='tw:flex tw:flex-row tw:gap-2 tw:justify-end'>
+            <Button disabled={isLoading} type='button' color='light' className='tw:text-[11.2px]' onClick={handleClose}>
               Cancel
             </Button>
-            <Button disabled={isLoading} type='button' color={isDeleteAction ? 'danger' : 'success'} className='fs-7' onClick={handleConfirmAction}>
+            <Button disabled={isLoading} type='button' color={isDeleteAction ? 'danger' : 'success'} className='tw:text-[11.2px]' onClick={handleConfirmAction}>
               {isLoading ? (
                 <span>
                   <Spinner color='light' size={'sm'} /> {loadingText}

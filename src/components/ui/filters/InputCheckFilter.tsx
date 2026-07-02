@@ -17,7 +17,7 @@ type Props = {
 
 const InputCheckFilter = ({ inputLabel, inputName, value, handleChange, handleBlur }: Props) => {
   return (
-    <div className='form-check form-switch form-switch-right form-switch-md d-flex flex-row justify-content-start align-items-center'>
+    <div className='form-check form-switch form-switch-right form-switch-md tw:flex tw:flex-row tw:justify-start tw:items-center'>
       <Label className='form-label'>{inputLabel}</Label>
       <Switch
         id={inputName}

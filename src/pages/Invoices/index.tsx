@@ -10,8 +10,9 @@ import AppContext from '@context/AppContext'
 import { InvoiceList } from '@typings'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, CardHeader, Col, Container, Input, Row } from '@/components/migration-ui'
 import useSWR from 'swr'
+
+import { Button, Card, CardBody, CardHeader, Col, Container, Input, Row } from '@/components/migration-ui'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -74,21 +75,15 @@ const Invoices = ({ session }: Props) => {
                   <CardHeader>
                     {!pending && (
                       <>
-                        <div className='col-xs-12 col-sm-6 col-lg-5 col-xl-4 col-xxl-3'>
-                          <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>Billing Status</p>
+                        <div className='tw:w-full tw:sm:w-1/2 tw:lg:w-5/12 tw:xl:w-1/3 tw:2xl:w-1/4'>
+                          <p className='tw:uppercase tw:font-semibold tw:text-primary tw:truncate tw:mb-0'>Billing Status</p>
                           <InvoicesChart billingStatus={billingStatus} />
                         </div>
-                        <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
-                          <div className='position-relative'>
-                            <Input
-                              type='text'
-                              placeholder='Search...'
-                              id='search-options'
-                              value={searchValue}
-                              onChange={(e) => setSearchValue(e.target.value)}
-                            />
+                        <div className='app-search tw:flex tw:flex-row tw:justify-end tw:items-center tw:p-0'>
+                          <div className='tw:relative'>
+                            <Input type='text' placeholder='Search...' id='search-options' value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
                             <span className='mdi mdi-magnify search-widget-icon'></span>
-                            <span className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none' id='search-close-options'></span>
+                            <span className='mdi mdi-close-circle search-widget-icon search-widget-icon-close tw:hidden' id='search-close-options'></span>
                           </div>
                           <Button className='btn-soft-dark' onClick={() => setSearchValue('')}>
                             Clear

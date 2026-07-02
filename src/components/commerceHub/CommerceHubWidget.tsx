@@ -47,7 +47,7 @@ const CommerceHubWidget = ({ summary }: Props) => {
             <div className='tw:flex tw:items-center tw:justify-between'>
               <div className='tw:flex tw:flex-row tw:justify-start tw:items-center'>
                 <div className=''>
-                  <span className={'avatar-title tw:p-2 tw:text-[22.75px] bg-soft-primary rounded-4'}>
+                  <span className={'avatar-title tw:p-2 tw:text-[22.75px] tw:bg-[color-mix(in_srgb,var(--bs-primary)_18%,transparent)] tw:rounded-[1rem]'}>
                     <i className='bx bx-money-withdraw' style={{ color: '#39B0EC' }}></i>
                   </span>
                 </div>
@@ -82,7 +82,7 @@ const CommerceHubWidget = ({ summary }: Props) => {
             <div className='tw:flex tw:items-center tw:justify-between'>
               <div className='tw:flex tw:flex-row tw:justify-start tw:items-center'>
                 <div className=''>
-                  <span className={'avatar-title tw:p-2 tw:text-[22.75px] bg-soft-primary rounded-4'}>
+                  <span className={'avatar-title tw:p-2 tw:text-[22.75px] tw:bg-[color-mix(in_srgb,var(--bs-primary)_18%,transparent)] tw:rounded-[1rem]'}>
                     <i className='las la-file-invoice-dollar' style={{ color: '#4F6EED' }}></i>
                   </span>
                 </div>
@@ -105,8 +105,8 @@ const CommerceHubWidget = ({ summary }: Props) => {
       <Col xs={12}>
         <Card>
           <CardBody>
-            <div className='table-responsive table-card'>
-              <table className='table table-hover table-centered align-middle tw:mb-0'>
+            <div className='tw:overflow-x-auto'>
+              <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_tbody_tr:hover]:bg-[color:var(--vz-light)]'>
                 <thead>
                   <tr className='tw:font-semibold'>
                     <td>Store</td>

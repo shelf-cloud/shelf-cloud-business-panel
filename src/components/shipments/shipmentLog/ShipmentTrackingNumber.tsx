@@ -28,7 +28,7 @@ const ShipmentTrackingNumber = ({ orderStatus, orderType, trackingNumber, tracki
             }}
           />
           <a
-            className='fs-7 text-primary'
+            className='tw:text-[11.2px] tw:!text-primary'
             href={`${trackingLink}${trackingNumber}`}
             target='_blank'
             rel='noopener noreferrer'
@@ -50,7 +50,7 @@ const ShipmentTrackingNumber = ({ orderStatus, orderType, trackingNumber, tracki
               objectFit: 'contain',
             }}
           />
-          <p className='fs-7' style={{ margin: '0px' }}>
+          <p className='tw:text-[11.2px]' style={{ margin: '0px' }}>
             {trackingNumber}
           </p>
         </div>
@@ -69,7 +69,7 @@ const ShipmentTrackingNumber = ({ orderStatus, orderType, trackingNumber, tracki
             }}
           />
           <a
-            className='fs-7 text-primary'
+            className='tw:text-[11.2px] tw:!text-primary'
             href={`${trackingLink}${trackingNumber}`}
             target='_blank'
             rel='noopener noreferrer'
@@ -91,15 +91,15 @@ const ShipmentTrackingNumber = ({ orderStatus, orderType, trackingNumber, tracki
               objectFit: 'contain',
             }}
           />
-          <p className='fs-7' style={{ margin: '0px' }}>
+          <p className='tw:text-[11.2px]' style={{ margin: '0px' }}>
             {trackingNumber}
           </p>
         </div>
       )
     case trackingNumber == '':
-      return <span className='fs-7'>{trackingNumber}</span>
+      return <span className='tw:text-[11.2px]'>{trackingNumber}</span>
     default:
-      return <span className='fs-7'>{trackingNumber}</span>
+      return <span className='tw:text-[11.2px]'>{trackingNumber}</span>
   }
 }
 
