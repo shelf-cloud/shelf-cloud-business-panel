@@ -39,13 +39,13 @@ const FilterReceivings = ({ searchStatus, setSearchStatus, searchWarehouse, setS
         <Dropdown isOpen={isFiltersOpen} toggle={() => setOpenFilters(!isFiltersOpen)}>
           <DropdownToggle
             caret
-            className='tw:inline-flex tw:h-9 tw:items-center tw:gap-2 tw:rounded-md tw:border tw:border-[#E1E3E5] tw:bg-white tw:px-3 tw:text-sm tw:font-semibold tw:text-foreground tw:whitespace-nowrap'
+            className='inline-flex h-9 items-center gap-2 rounded-md border border-[#E1E3E5] bg-white px-3 text-sm font-semibold text-foreground whitespace-nowrap'
             color='light'>
             Filters
           </DropdownToggle>
           <DropdownMenu style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
-            <div className='tw:px-6 tw:py-4'>
-              <div className='tw:flex tw:flex-col tw:justify-start tw:gap-2'>
+            <div className='px-6 py-4'>
+              <div className='flex flex-col justify-start gap-2'>
                 <SelectSingleFilter
                   inputLabel='Status'
                   inputName='status-filter'
@@ -78,7 +78,7 @@ const FilterReceivings = ({ searchStatus, setSearchStatus, searchWarehouse, setS
                     setSearchWarehouse({ value: '', label: 'All' })
                     setOpenFilters(false)
                   }}
-                  className='tw:p-0 tw:border-0 tw:no-underline tw:text-[color:var(--bs-secondary-color)] tw:mt-2 tw:text-[11.2px]'>
+                  className='p-0 border-0 no-underline text-[color:var(--bs-secondary-color)] mt-2 text-[11.2px]'>
                   Clear All
                 </button>
               </div>

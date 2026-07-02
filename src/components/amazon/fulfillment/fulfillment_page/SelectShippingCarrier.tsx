@@ -19,31 +19,31 @@ const SelectShippingCarrier = ({ id, selectionInfo, disabled, selected, handleSe
   useClickOutside(selectCarrier, () => setOpenDatesMenu(false))
 
   return (
-    <div id={id} ref={selectCarrier} className='tw:relative tw:mb-0 tw:w-full'>
+    <div id={id} ref={selectCarrier} className='relative mb-0 w-full'>
       <button
         type='button'
-        className={'tw:flex tw:items-center tw:w-full tw:p-0 tw:bg-transparent tw:border tw:border-2 tw:rounded ' + (!disabled && selected == '' ? 'tw:border-danger' : 'tw:border-primary')}
+        className={'flex items-center w-full p-0 bg-transparent border border-2 rounded ' + (!disabled && selected == '' ? 'border-danger' : 'border-primary')}
         onClick={() => (disabled ? null : setOpenDatesMenu(!openDatesMenu))}
         disabled={disabled}
         style={{ cursor: 'pointer' }}>
-        <span className='tw:py-[0.3rem] tw:text-[11.2px] tw:w-full tw:text-left tw:px-2' style={{ backgroundColor: disabled ? 'lightgrey' : 'white', opacity: '100%' }}>
-          {selected == '' ? <span className='tw:text-[var(--bs-secondary-color)]'>Select</span> : selected}
+        <span className='py-[0.3rem] text-[11.2px] w-full text-left px-2' style={{ backgroundColor: disabled ? 'lightgrey' : 'white', opacity: '100%' }}>
+          {selected == '' ? <span className='text-[var(--bs-secondary-color)]'>Select</span> : selected}
         </span>
         <span
-          className='tw:flex tw:items-center tw:justify-center tw:text-[13px] tw:border-l tw:border-[color:var(--border)]'
+          className='flex items-center justify-center text-[13px] border-l border-[color:var(--border)]'
           style={{ backgroundColor: disabled ? 'lightgrey' : 'white', maxWidth: '35px', width: '35px', alignSelf: 'stretch' }}
           aria-expanded='false'>
-          <span className='tw:sr-only'>Toggle Dropdown</span>
+          <span className='sr-only'>Toggle Dropdown</span>
         </span>
       </button>
-      <div id={`${id}-menu`} className={'tw:absolute tw:z-10 tw:mt-1 tw:w-full tw:bg-white tw:border tw:border-[#E1E3E5] tw:rounded-md tw:shadow tw:py-4 tw:px-6 ' + (openDatesMenu ? 'tw:block' : 'tw:hidden')}>
-        <div className='tw:flex tw:flex-col tw:justify-start'>
+      <div id={`${id}-menu`} className={'absolute z-10 mt-1 w-full bg-white border border-[#E1E3E5] rounded-md shadow py-4 px-6 ' + (openDatesMenu ? 'block' : 'hidden')}>
+        <div className='flex flex-col justify-start'>
           <div style={{ maxHeight: '25vh', overflowY: 'scroll', scrollbarWidth: 'none' }}>
             {selectionInfo?.map((option) => (
               <button
                 type='button'
                 key={`${option.carrier.alphaCode}-${option.transportationOptionId}-${option.shipmentId}`}
-                className={'tw:text-reset tw:block tw:p-0 tw:border-0 tw:text-left tw:no-underline tw:text-[11.2px] tw:mb-2 tw:bg-transparent ' + (selected == `${option.carrier.name}` ? 'tw:font-bold' : '')}
+                className={'text-reset block p-0 border-0 text-left no-underline text-[11.2px] mb-2 bg-transparent ' + (selected == `${option.carrier.name}` ? 'font-bold' : '')}
                 onClick={() => {
                   handleSelection(option.carrier.name, option.carrier.alphaCode!, option.transportationOptionId)
                   setOpenDatesMenu(false)
@@ -54,7 +54,7 @@ const SelectShippingCarrier = ({ id, selectionInfo, disabled, selected, handleSe
           </div>
           <button
             type='button'
-            className={'tw:p-0 tw:border-0 tw:no-underline tw:text-[var(--bs-secondary-color)] tw:text-right tw:text-[11.2px] tw:bg-transparent tw:w-full'}
+            className={'p-0 border-0 no-underline text-[var(--bs-secondary-color)] text-right text-[11.2px] bg-transparent w-full'}
             onClick={() => {
               handleSelection('', '', '')
               setOpenDatesMenu(false)

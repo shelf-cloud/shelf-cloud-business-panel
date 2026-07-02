@@ -253,7 +253,7 @@ export const Persona: FC<PersonaProps> = memo(({ variant = 'obsidian', state = '
 
   return (
     <Component rive={rive} source={source}>
-      <RiveComponent className={cn('tw:size-16 tw:shrink-0', className)} />
+      <RiveComponent className={cn('size-16 shrink-0', className)} />
     </Component>
   )
 })

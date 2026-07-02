@@ -27,19 +27,19 @@ const ProfileDropdown = () => {
         <Dropdown
           isOpen={isProfileDropdown}
           toggle={toggleProfileDropdown}
-          className='tw:flex tw:items-center tw:rounded-[1rem] tw:shadow-sm'
+          className='flex items-center rounded-[1rem] shadow-sm'
           style={{ backgroundColor: 'rgba(239, 243, 246, 1)' }}>
           <DropdownToggle tag='button' type='button' className='btn'>
-            <span className='tw:flex tw:items-center tw:justify-between tw:gap-2'>
-              <span className='tw:text-right tw:flex tw:flex-col'>
-                <span className='tw:inline-block tw:text-[13px] tw:m-0 tw:font-medium user-name-text tw:capitalize'>{session?.user?.businessName}</span>
-                <span className='tw:inline-block tw:text-[11.2px] tw:m-0 tw:text-[var(--bs-secondary-color)] user-name-sub-text'>{state.currentRegion !== '' && (state.currentRegion == 'us' ? 'USA' : 'EUROPE')}</span>
+            <span className='flex items-center justify-between gap-2'>
+              <span className='text-right flex flex-col'>
+                <span className='inline-block text-[13px] m-0 font-medium user-name-text capitalize'>{session?.user?.businessName}</span>
+                <span className='inline-block text-[11.2px] m-0 text-[var(--bs-secondary-color)] user-name-sub-text'>{state.currentRegion !== '' && (state.currentRegion == 'us' ? 'USA' : 'EUROPE')}</span>
               </span>
               {state &&
                 state.currentRegion !== '' &&
                 (state.currentRegion == 'us' ? (
                   <Image
-                    className='tw:rounded-full header-profile-user'
+                    className='rounded-full header-profile-user'
                     src={flag_of_usa}
                     width={25}
                     height={25}
@@ -51,7 +51,7 @@ const ProfileDropdown = () => {
                   />
                 ) : state.currentRegion == 'eu' ? (
                   <Image
-                    className='tw:rounded-full header-profile-user'
+                    className='rounded-full header-profile-user'
                     src={flag_of_europe}
                     width={25}
                     height={25}
@@ -63,7 +63,7 @@ const ProfileDropdown = () => {
                   />
                 ) : (
                   <Image
-                    className='tw:rounded-full header-profile-user'
+                    className='rounded-full header-profile-user'
                     src={flag_of_SC}
                     width={25}
                     height={25}
@@ -77,37 +77,37 @@ const ProfileDropdown = () => {
             </span>
           </DropdownToggle>
           <DropdownMenu className='dropdown-menu-end' container={'body'} end>
-            <h6 className='dropdown-header tw:capitalize'>Welcome {session?.user?.profileName}</h6>
+            <h6 className='dropdown-header capitalize'>Welcome {session?.user?.profileName}</h6>
             {session?.user?.role === 'admin' && (
               <DropdownItem onClick={() => router.push('/Profile')}>
-                <i className='mdi mdi-account-circle tw:text-[color:var(--bs-secondary-color)] fs-16 tw:align-middle tw:me-1'></i>
-                <span className='tw:align-middle'>Profile</span>
+                <i className='mdi mdi-account-circle text-[color:var(--bs-secondary-color)] fs-16 align-middle me-1'></i>
+                <span className='align-middle'>Profile</span>
               </DropdownItem>
             )}
             {session?.user?.role === 'admin' && (
               <DropdownItem onClick={() => router.push('/settings/teamMembers')}>
-                <i className='ri-team-fill tw:text-[color:var(--bs-secondary-color)] fs-16 tw:align-middle tw:me-1'></i>
-                <span className='tw:align-middle'>Team Members</span>
+                <i className='ri-team-fill text-[color:var(--bs-secondary-color)] fs-16 align-middle me-1'></i>
+                <span className='align-middle'>Team Members</span>
               </DropdownItem>
             )}
             {session?.user?.role === 'admin' && (
               <DropdownItem onClick={() => router.push('/Settings')}>
-                <i className='mdi mdi-tools tw:text-[color:var(--bs-secondary-color)] fs-16 tw:align-middle tw:me-1'></i>
-                <span className='tw:align-middle'>Account Settings</span>
+                <i className='mdi mdi-tools text-[color:var(--bs-secondary-color)] fs-16 align-middle me-1'></i>
+                <span className='align-middle'>Account Settings</span>
               </DropdownItem>
             )}
             {session?.user?.role === 'admin' && (
               <DropdownItem onClick={() => router.push('/marketplaceManager')}>
-                <i className='mdi mdi-store tw:text-[color:var(--bs-secondary-color)] fs-16 tw:align-middle tw:me-1'></i>
-                <span className='tw:align-middle'>Marketplace Manager</span>
+                <i className='mdi mdi-store text-[color:var(--bs-secondary-color)] fs-16 align-middle me-1'></i>
+                <span className='align-middle'>Marketplace Manager</span>
               </DropdownItem>
             )}
             {state.user.hasShelfCloudEu == true && state.user.hasShelfCloudUsa == true && (
-              <DropdownItem className='tw:flex tw:justify-start tw:items-center' onClick={state.currentRegion == 'us' ? () => setRegion('eu') : () => setRegion('us')}>
-                <div className='tw:align-middle tw:me-1' style={{ width: '15px', height: '15px' }}>
+              <DropdownItem className='flex justify-start items-center' onClick={state.currentRegion == 'us' ? () => setRegion('eu') : () => setRegion('us')}>
+                <div className='align-middle me-1' style={{ width: '15px', height: '15px' }}>
                   {state.currentRegion == 'eu' ? (
                     <Image
-                      className='tw:rounded-full header-profile-user'
+                      className='rounded-full header-profile-user'
                       src={flag_of_usa}
                       width={16}
                       height={16}
@@ -119,7 +119,7 @@ const ProfileDropdown = () => {
                     />
                   ) : (
                     <Image
-                      className='tw:rounded-full header-profile-user'
+                      className='rounded-full header-profile-user'
                       src={flag_of_europe}
                       width={16}
                       height={16}
@@ -131,17 +131,17 @@ const ProfileDropdown = () => {
                     />
                   )}
                 </div>
-                <div className='tw:align-middle'>Change Location</div>
+                <div className='align-middle'>Change Location</div>
               </DropdownItem>
             )}
             <div className='dropdown-divider'></div>
             <DropdownItem onClick={() => router.push('/ContactUs')}>
-              <i className='mdi mdi-email-fast tw:text-[color:var(--bs-secondary-color)] fs-16 tw:align-middle tw:me-1'></i>
-              <span className='tw:align-middle'>Contact Us</span>
+              <i className='mdi mdi-email-fast text-[color:var(--bs-secondary-color)] fs-16 align-middle me-1'></i>
+              <span className='align-middle'>Contact Us</span>
             </DropdownItem>
             <DropdownItem onClick={() => signOut()}>
-              <i className='mdi mdi-logout tw:text-[color:var(--bs-secondary-color)] fs-16 tw:align-middle tw:me-1'></i>{' '}
-              <span className='tw:align-middle' data-key='t-logout'>
+              <i className='mdi mdi-logout text-[color:var(--bs-secondary-color)] fs-16 align-middle me-1'></i>{' '}
+              <span className='align-middle' data-key='t-logout'>
                 Logout
               </span>
             </DropdownItem>
@@ -149,7 +149,7 @@ const ProfileDropdown = () => {
         </Dropdown>
       ) : (
         <Link href={'/api/auth/signin'}>
-          <h5 className='tw:text-[16.25px] tw:font-semibold tw:text-primary' style={{ cursor: 'pointer' }}>
+          <h5 className='text-[16.25px] font-semibold text-primary' style={{ cursor: 'pointer' }}>
             Sign In
           </h5>
         </Link>

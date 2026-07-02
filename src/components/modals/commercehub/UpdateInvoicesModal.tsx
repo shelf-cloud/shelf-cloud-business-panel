@@ -198,29 +198,29 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
         }}
         className='modal-title'
         id='myModalLabel'>
-        <p className='tw:text-primary tw:text-[19.5px]'>Import File to Update Commerce Hub Invoices</p>
+        <p className='text-primary text-[19.5px]'>Import File to Update Commerce Hub Invoices</p>
       </ModalHeader>
       <ModalBody>
-        <div className='tw:mb-4'>
-          <p className='tw:m-0 tw:text-[16.25px] tw:font-bold'>Download Guide:</p>
-          <p className='tw:m-0 tw:mb-1 tw:text-[13px] tw:font-semibold'>
-            Lowes: <span className='tw:m-0 tw:text-[11.2px] tw:font-light'>{`Download  de Vendor Gateway -> Finance & Accounting -> INVOICES`}</span>
+        <div className='mb-4'>
+          <p className='m-0 text-[16.25px] font-bold'>Download Guide:</p>
+          <p className='m-0 mb-1 text-[13px] font-semibold'>
+            Lowes: <span className='m-0 text-[11.2px] font-light'>{`Download  de Vendor Gateway -> Finance & Accounting -> INVOICES`}</span>
           </p>
-          <p className='tw:m-0 tw:mb-1 tw:text-[13px] tw:font-semibold'>
+          <p className='m-0 mb-1 text-[13px] font-semibold'>
             Home Depot:{' '}
-            <span className='tw:m-0 tw:text-[11.2px] tw:font-light'>{`Download de Supplier Hub -> FINANCE AND ACCOUNTING -> Merch Payables Self-Service Portal -> Payments -> Remittance Advice`}</span>
+            <span className='m-0 text-[11.2px] font-light'>{`Download de Supplier Hub -> FINANCE AND ACCOUNTING -> Merch Payables Self-Service Portal -> Payments -> Remittance Advice`}</span>
           </p>
         </div>
         <Form onSubmit={handleUploadFile}>
-          <Row className='tw:mb-4'>
+          <Row className='mb-4'>
             <Col md={6}>
-              <FormGroup className='tw:mb-0'>
+              <FormGroup className='mb-0'>
                 <Label htmlFor='storeId' className='form-label'>
                   *Store
                 </Label>
                 <Input
                   type='select'
-                  className='tw:text-[11.2px]'
+                  className='text-[11.2px]'
                   id='storeId'
                   name='storeId'
                   onChange={(e) => {
@@ -238,22 +238,22 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
                 </Input>
                 {validation.touched.storeId && validation.errors.storeId ? <FormFeedback type='invalid'>{validation.errors.storeId}</FormFeedback> : null}
               </FormGroup>
-              <p className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)] tw:font-light tw:m-0'>
+              <p className='text-[11.2px] text-[var(--bs-secondary-color)] font-light m-0'>
                 {`You might need to configure in marketplace manager if you don't see a store.`}{' '}
-                <span onClick={() => router.push('/marketplaceManager')} className='tw:text-primary' style={{ cursor: 'pointer' }}>
-                  <i className='ri-external-link-fill tw:ms-1 tw:text-[13px] tw:text-primary' />
+                <span onClick={() => router.push('/marketplaceManager')} className='text-primary' style={{ cursor: 'pointer' }}>
+                  <i className='ri-external-link-fill ms-1 text-[13px] text-primary' />
                 </span>
               </p>
-              <div className='tw:list-none tw:pl-0 tw:mb-0' id='file-previews'>
+              <div className='list-none pl-0 mb-0' id='file-previews'>
                 {selectedFiles.map((f: any, i) => {
                   return (
-                    <Card className='tw:mt-1 tw:mb-0 tw:shadow-[0_0.125rem_0.25rem_rgba(0,0,0,0.075)] tw:border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
-                      <div className='tw:p-2'>
-                        <Row className='tw:items-center'>
-                          <Col className='tw:flex tw:justify-between tw:items-center'>
+                    <Card className='mt-1 mb-0 shadow-[0_0.125rem_0.25rem_rgba(0,0,0,0.075)] border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
+                      <div className='p-2'>
+                        <Row className='items-center'>
+                          <Col className='flex justify-between items-center'>
                             <div>
-                              <p className='tw:text-[var(--bs-secondary-color)] tw:font-bold tw:m-0'>{f.name}</p>
-                              <p className='tw:mb-0'>
+                              <p className='text-[var(--bs-secondary-color)] font-bold m-0'>{f.name}</p>
+                              <p className='mb-0'>
                                 <strong>{f.formattedSize}</strong>
                               </p>
                             </div>
@@ -304,35 +304,35 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
               />
             </Col>
           </Row>
-          {errorFile && <p className='tw:text-danger tw:m-0'>You must Upload a CSV file to upload products.</p>}
+          {errorFile && <p className='text-danger m-0'>You must Upload a CSV file to upload products.</p>}
           {showErrorLines && (
-            <div style={{ overflowY: 'scroll', height: '30vh', scrollbarWidth: 'none' }} className='tw:my-4'>
-              <p className='tw:text-danger tw:m-0'>
-                There are <span className='tw:font-bold'>{errorLines.length}</span> errors in this file. Please review the following lines:
+            <div style={{ overflowY: 'scroll', height: '30vh', scrollbarWidth: 'none' }} className='my-4'>
+              <p className='text-danger m-0'>
+                There are <span className='font-bold'>{errorLines.length}</span> errors in this file. Please review the following lines:
               </p>
-              <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+              <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                 <thead>
-                  <tr className='tw:text-danger'>
-                    <th className='tw:text-center'>In Line</th>
+                  <tr className='text-danger'>
+                    <th className='text-center'>In Line</th>
                     <th>Value</th>
                     <th>Error</th>
                   </tr>
                 </thead>
                 <tbody>
                   {errorLines.map((error: any, index: number) => (
-                    <tr key={`ErrorLine${index}`} className='tw:m-0'>
-                      <td className='tw:text-center'>{error.errorLine}</td>
-                      <td className='tw:text-wrap tw:w-1/4'>{error.value}</td>
-                      <td className='tw:text-wrap tw:w-full tw:ps-4'>- {error.errorMessage}</td>
+                    <tr key={`ErrorLine${index}`} className='m-0'>
+                      <td className='text-center'>{error.errorLine}</td>
+                      <td className='text-wrap w-1/4'>{error.value}</td>
+                      <td className='text-wrap w-full ps-4'>- {error.errorMessage}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           )}
-          {showerrorResponse && errorResponse?.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='tw:text-danger tw:m-0'>{`Error: ${error}`}</p>)}
+          {showerrorResponse && errorResponse?.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='text-danger m-0'>{`Error: ${error}`}</p>)}
           <Col md={12}>
-            <div className='tw:text-right'>
+            <div className='text-right'>
               <Button type='submit' color='success'>
                 {loading ? (
                   <span>

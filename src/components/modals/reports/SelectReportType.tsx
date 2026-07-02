@@ -31,10 +31,10 @@ const SelectReportType = ({ showMappedCreateReport, setshowMappedCreateReport }:
           }
         })
       }}>
-      <SelectTrigger className='tw:mb-3 tw:w-full tw:border tw:border-border'>
+      <SelectTrigger className='mb-3 w-full border border-border'>
         <SelectValue placeholder='Select...' />
       </SelectTrigger>
-      <SelectContent className='tw:z-1050'>
+      <SelectContent className='z-1050'>
         <SelectGroup>
           {REPORT_TYPE_LIST.map((option) => (
             <SelectItem key={option.reportType} value={option.reportType}>

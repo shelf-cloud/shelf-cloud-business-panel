@@ -19,11 +19,11 @@ const Table_By_Suppliers = ({ filterDataTable, pending }: Props) => {
   const columns: any = [
     {
       selector: (row: PurchaseOrderBySuppliers) => {
-        return <span className='tw:font-bold tw:text-[19.5px]'>{row.suppliersName}</span>
+        return <span className='font-bold text-[19.5px]'>{row.suppliersName}</span>
       },
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'></span>,
+      name: <span className='font-extrabold text-[13px]'></span>,
       selector: (row: PurchaseOrderBySuppliers) => {
         const totalReceivingQty = Object.entries(state.receivingFromPo.items).reduce((total: number, po: [string, any]) => {
           const poTotal = Object.entries(po[1]).reduce((subtotal: number, inventoryId: [string, any]) => {
@@ -38,7 +38,7 @@ const Table_By_Suppliers = ({ filterDataTable, pending }: Props) => {
 
         if (totalReceivingQty > 0) {
           return (
-            <Badge pill color='success' className='tw:text-[11.2px]'>
+            <Badge pill color='success' className='text-[11.2px]'>
               {FormatIntNumber(state.currentRegion, totalReceivingQty)}
             </Badge>
           )

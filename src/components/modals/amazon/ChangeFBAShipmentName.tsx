@@ -93,8 +93,8 @@ const ChangeFBAShipmentName = ({ editShipmentName, seteditShipmentName }: Props)
       </ModalHeader>
       <ModalBody>
         <Row>
-          <h5 className='tw:text-[19.5px] tw:mb-0 tw:font-semibold tw:text-primary'>Shipment:</h5>
-          <Col md={12} className='tw:mt-2'>
+          <h5 className='text-[19.5px] mb-0 font-semibold text-primary'>Shipment:</h5>
+          <Col md={12} className='mt-2'>
             <DebounceInput
               type='text'
               minLength={3}
@@ -107,7 +107,7 @@ const ChangeFBAShipmentName = ({ editShipmentName, seteditShipmentName }: Props)
               onChange={(e) => setshipmentName(e.target.value)}
             />
           </Col>
-          <div className='tw:mt-6 tw:flex tw:flex-row tw:gap-4 tw:justify-end'>
+          <div className='mt-6 flex flex-row gap-4 justify-end'>
             <Button
               disabled={isLoading}
               type='button'

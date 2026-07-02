@@ -7,18 +7,18 @@ import { Toggle as TogglePrimitive } from "radix-ui"
 import { cn } from "@/lib/shadcn/utils"
 
 const toggleVariants = cva(
-  "tw:inline-flex tw:appearance-none tw:items-center tw:justify-center tw:gap-2 tw:rounded-md tw:border-0 tw:bg-transparent tw:text-sm tw:font-medium tw:whitespace-nowrap tw:transition-[color,box-shadow,border-color,background-color] tw:outline-none tw:ring-0 tw:hover:bg-muted tw:hover:text-muted-foreground tw:focus-visible:ring-[3px] tw:focus-visible:ring-ring/50 tw:disabled:pointer-events-none tw:disabled:opacity-50 tw:data-[state=on]:bg-accent tw:data-[state=on]:text-accent-foreground tw:[&_svg]:pointer-events-none tw:[&_svg]:shrink-0 tw:[&_svg:not([class*=size-])]:size-4",
+  "inline-flex appearance-none items-center justify-center gap-2 rounded-md border-0 bg-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow,border-color,background-color] outline-none ring-0 hover:bg-muted hover:text-muted-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-4",
   {
     variants: {
       variant: {
-        default: "tw:bg-transparent",
+        default: "bg-transparent",
         outline:
-          "tw:border tw:border-input tw:bg-transparent tw:shadow-xs tw:focus-visible:border-ring tw:hover:bg-accent tw:hover:text-accent-foreground",
+          "border border-input bg-transparent shadow-xs focus-visible:border-ring hover:bg-accent hover:text-accent-foreground",
       },
       size: {
-        default: "tw:h-9 tw:min-w-9 tw:px-2",
-        sm: "tw:h-8 tw:min-w-8 tw:px-1.5",
-        lg: "tw:h-10 tw:min-w-10 tw:px-2.5",
+        default: "h-9 min-w-9 px-2",
+        sm: "h-8 min-w-8 px-1.5",
+        lg: "h-10 min-w-10 px-2.5",
       },
     },
     defaultVariants: {

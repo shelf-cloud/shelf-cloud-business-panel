@@ -79,13 +79,13 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
 
   const columns: any = [
     {
-      name: <span className='tw:font-semibold tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>Returns Received</span>,
+      name: <span className='font-semibold text-[11.2px] text-[var(--bs-secondary-color)]'>Returns Received</span>,
       selector: (row: ReturnOrder) => {
         const hasImage = row.orderItems.some((item) => Boolean(item.images?.length))
         return (
-          <div className='tw:flex tw:items-center tw:justify-start tw:gap-1'>
-            <span className='tw:text-[11.2px] tw:font-semibold'>{row.orderNumber}</span>
-            {hasImage ? <CameraIcon className='tw:text-destructive tw:size-4' /> : null}
+          <div className='flex items-center justify-start gap-1'>
+            <span className='text-[11.2px] font-semibold'>{row.orderNumber}</span>
+            {hasImage ? <CameraIcon className='text-destructive size-4' /> : null}
           </div>
         )
       },
@@ -96,23 +96,23 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
       sortFunction: orderNumber,
     },
     {
-      name: <span className='tw:font-semibold tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>Status</span>,
+      name: <span className='font-semibold text-[11.2px] text-[var(--bs-secondary-color)]'>Status</span>,
       selector: (row: ReturnOrder) => {
         switch (row.orderStatus) {
           case 'shipped':
           case 'received':
-            return <span className='tw:inline-block tw:rounded tw:uppercase tw:text-center tw:text-[9.75px] tw:font-bold tw:p-2 tw:bg-[color-mix(in_srgb,var(--success)_10%,transparent)] tw:text-success'>{` ${row.orderStatus} `}</span>
+            return <span className='inline-block rounded uppercase text-center text-[9.75px] font-bold p-2 bg-[color-mix(in_srgb,var(--success)_10%,transparent)] text-success'>{` ${row.orderStatus} `}</span>
           case 'Processed':
-            return <span className='tw:inline-block tw:rounded tw:uppercase tw:text-center tw:text-[9.75px] tw:font-bold tw:p-2 tw:bg-[color-mix(in_srgb,var(--secondary)_10%,transparent)] tw:text-secondary'>{` ${row.orderStatus} `}</span>
+            return <span className='inline-block rounded uppercase text-center text-[9.75px] font-bold p-2 bg-[color-mix(in_srgb,var(--secondary)_10%,transparent)] text-secondary'>{` ${row.orderStatus} `}</span>
           case 'awaiting_shipment':
           case 'awaiting':
-            return <span className='tw:inline-block tw:rounded tw:uppercase tw:text-center tw:text-[9.75px] tw:font-bold tw:p-2 tw:bg-[color-mix(in_srgb,var(--warning)_10%,transparent)] tw:text-warning'>{' awaiting '}</span>
+            return <span className='inline-block rounded uppercase text-center text-[9.75px] font-bold p-2 bg-[color-mix(in_srgb,var(--warning)_10%,transparent)] text-warning'>{' awaiting '}</span>
           case 'awaiting pickup':
-            return <span className='tw:inline-block tw:rounded tw:uppercase tw:text-center tw:text-[9.75px] tw:font-bold tw:p-2 tw:bg-[color-mix(in_srgb,var(--secondary)_10%,transparent)] tw:text-secondary'>{' awaiting pickup '}</span>
+            return <span className='inline-block rounded uppercase text-center text-[9.75px] font-bold p-2 bg-[color-mix(in_srgb,var(--secondary)_10%,transparent)] text-secondary'>{' awaiting pickup '}</span>
           case 'on_hold':
-            return <span className='tw:inline-block tw:rounded tw:uppercase tw:text-center tw:text-[9.75px] tw:font-bold tw:p-2 tw:bg-[color-mix(in_srgb,var(--danger)_10%,transparent)] tw:text-danger'>{' on hold '}</span>
+            return <span className='inline-block rounded uppercase text-center text-[9.75px] font-bold p-2 bg-[color-mix(in_srgb,var(--danger)_10%,transparent)] text-danger'>{' on hold '}</span>
           case 'cancelled':
-            return <span className='tw:inline-block tw:rounded tw:uppercase tw:text-center tw:text-[9.75px] tw:font-bold tw:p-2 tw:bg-[color-mix(in_srgb,var(--dark)_10%,transparent)] tw:text-dark'> {row.orderStatus} </span>
+            return <span className='inline-block rounded uppercase text-center text-[9.75px] font-bold p-2 bg-[color-mix(in_srgb,var(--dark)_10%,transparent)] text-dark'> {row.orderStatus} </span>
           default:
             break
         }
@@ -124,7 +124,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
       sortFunction: orderStatus,
     },
     {
-      name: <span className='tw:font-semibold tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>Reason</span>,
+      name: <span className='font-semibold text-[11.2px] text-[var(--bs-secondary-color)]'>Reason</span>,
       selector: (row: ReturnOrder) => row.returnReason,
       sortable: true,
       wrap: true,
@@ -135,7 +135,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
       },
     },
     {
-      name: <span className='tw:font-semibold tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>Marketplace</span>,
+      name: <span className='font-semibold text-[11.2px] text-[var(--bs-secondary-color)]'>Marketplace</span>,
       selector: (row: ReturnOrder) => {
         return (
           <>
@@ -163,7 +163,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
       sortFunction: orderMarketplace,
     },
     {
-      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>Return Date</span>,
+      name: <span className='font-semibold text-center text-[11.2px] text-[var(--bs-secondary-color)]'>Return Date</span>,
       selector: (row: ReturnOrder) => row.orderDate,
       sortable: true,
       wrap: true,
@@ -174,7 +174,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
       },
     },
     {
-      name: <span className='tw:font-semibold tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>Tracking Number</span>,
+      name: <span className='font-semibold text-[11.2px] text-[var(--bs-secondary-color)]'>Tracking Number</span>,
       selector: (row: ReturnOrder) => {
         let tracking
         {
@@ -200,7 +200,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
                     target='_blank'
                     rel='noopener noreferrer'
                     style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}
-                    className='tw:text-[11.2px]'>
+                    className='text-[11.2px]'>
                     {row.trackingNumber}
                   </a>
                 </div>
@@ -219,7 +219,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
                       objectFit: 'contain',
                     }}
                   />
-                  <p style={{ margin: '0px' }} className='tw:text-[11.2px]'>
+                  <p style={{ margin: '0px' }} className='text-[11.2px]'>
                     {row.trackingNumber}
                   </p>
                 </div>
@@ -243,7 +243,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
                     target='_blank'
                     rel='noopener noreferrer'
                     style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}
-                    className='tw:text-[11.2px]'>
+                    className='text-[11.2px]'>
                     {row.trackingNumber}
                   </a>
                 </div>
@@ -262,7 +262,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
                       objectFit: 'contain',
                     }}
                   />
-                  <p style={{ margin: '0px' }} className='tw:text-[11.2px]'>
+                  <p style={{ margin: '0px' }} className='text-[11.2px]'>
                     {row.trackingNumber}
                   </p>
                 </div>
@@ -284,7 +284,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
       compact: true,
     },
     {
-      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'># of Items</span>,
+      name: <span className='font-semibold text-center text-[11.2px] text-[var(--bs-secondary-color)]'># of Items</span>,
       selector: (row: ReturnOrder) => row.totalItems || '',
       sortable: true,
       wrap: true,
@@ -295,7 +295,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
       },
     },
     {
-      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>Charge</span>,
+      name: <span className='font-semibold text-center text-[11.2px] text-[var(--bs-secondary-color)]'>Charge</span>,
       selector: (row: ReturnOrder) => FormatCurrency(state.currentRegion, row.totalCharge),
       sortable: true,
       wrap: true,
@@ -307,15 +307,15 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
       },
     },
     {
-      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>Status</span>,
+      name: <span className='font-semibold text-center text-[11.2px] text-[var(--bs-secondary-color)]'>Status</span>,
       cell: (row: ReturnOrder) => {
         var returnStateBtn
         switch (row.returnState) {
           case 'complete':
-            returnStateBtn = <span className='tw:text-[11.2px] tw:capitalize tw:whitespace-nowrap tw:text-success tw:p-2'>{` ${row.returnState} `}</span>
+            returnStateBtn = <span className='text-[11.2px] capitalize whitespace-nowrap text-success p-2'>{` ${row.returnState} `}</span>
             break
           case 'pending':
-            returnStateBtn = <span className='tw:text-[11.2px] tw:capitalize tw:whitespace-nowrap tw:text-warning tw:p-2'>{` ${row.returnState} `}</span>
+            returnStateBtn = <span className='text-[11.2px] capitalize whitespace-nowrap text-warning p-2'>{` ${row.returnState} `}</span>
             break
           default:
             break
@@ -324,16 +324,16 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
           <ButtonGroup>
             <UncontrolledButtonDropdown>
               {returnStateBtn}
-              <DropdownToggle tag='button' className='tw:p-0 tw:m-0' split></DropdownToggle>
-              <DropdownMenu end={true} className='tw:shadow-md tw:p-0 tw:rounded'>
+              <DropdownToggle tag='button' className='p-0 m-0' split></DropdownToggle>
+              <DropdownMenu end={true} className='shadow-md p-0 rounded'>
                 {row.returnState !== 'pending' && (
-                  <DropdownItem className='tw:capitalize tw:text-[11.2px]' onClick={() => handleReturnStateChange!('pending', row.id)}>
-                    <i className='mdi mdi-backup-restore tw:text-[13px] tw:text-warning tw:align-middle tw:m-0 tw:p-0' /> pending
+                  <DropdownItem className='capitalize text-[11.2px]' onClick={() => handleReturnStateChange!('pending', row.id)}>
+                    <i className='mdi mdi-backup-restore text-[13px] text-warning align-middle m-0 p-0' /> pending
                   </DropdownItem>
                 )}
                 {row.returnState !== 'complete' && (
-                  <DropdownItem className='tw:capitalize tw:text-[11.2px]' onClick={() => handleReturnStateChange!('complete', row.id)}>
-                    <i className='mdi mdi-check-circle-outline tw:text-[13px] tw:text-success tw:align-middle tw:m-0 tw:p-0' /> complete
+                  <DropdownItem className='capitalize text-[11.2px]' onClick={() => handleReturnStateChange!('complete', row.id)}>
+                    <i className='mdi mdi-check-circle-outline text-[13px] text-success align-middle m-0 p-0' /> complete
                   </DropdownItem>
                 )}
               </DropdownMenu>
@@ -350,10 +350,10 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
   ]
 
   return (
-    <div className='tw:p-2 tw:bg-[var(--vz-light)]'>
-      <Card className='tw:py-2'>
+    <div className='p-2 bg-[var(--vz-light)]'>
+      <Card className='py-2'>
         <DataTable
-          className='tw:overflow-visible'
+          className='overflow-visible'
           columns={columns}
           data={Object.values(data.returns)}
           dense

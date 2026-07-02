@@ -23,24 +23,24 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
   useClickOutside(filterByDates, () => setOpenDatesMenu(false))
 
   return (
-    <div ref={filterByDates} className='tw:relative tw:inline-block'>
+    <div ref={filterByDates} className='relative inline-block'>
       <button
-        className='tw:inline-flex tw:h-9 tw:items-center tw:gap-2 tw:rounded-md tw:border tw:border-[#E1E3E5] tw:bg-white tw:px-3 tw:text-sm tw:font-semibold tw:text-foreground tw:whitespace-nowrap'
+        className='inline-flex h-9 items-center gap-2 rounded-md border border-[#E1E3E5] bg-white px-3 text-sm font-semibold text-foreground whitespace-nowrap'
         type='button'
         aria-expanded='false'
         onClick={() => setOpenDatesMenu(!openDatesMenu)}>
-        <i className='las la-calendar tw:text-base tw:text-primary' />
-        <span className='tw:m-0 tw:p-0'>{shipmentsStartDate !== '' || shipmentsEndDate !== '' ? `${shipmentsStartDate} -> ${shipmentsEndDate}` : 'Select Dates'}</span>
-        <ChevronDownIcon className='tw:size-4' />
+        <i className='las la-calendar text-base text-primary' />
+        <span className='m-0 p-0'>{shipmentsStartDate !== '' || shipmentsEndDate !== '' ? `${shipmentsStartDate} -> ${shipmentsEndDate}` : 'Select Dates'}</span>
+        <ChevronDownIcon className='size-4' />
       </button>
       <div
         className={
-          'tw:absolute tw:z-50 tw:mt-1 tw:min-w-[16rem] tw:rounded-md tw:border tw:border-[#E1E3E5] tw:bg-white tw:px-4 tw:py-3 tw:shadow-md ' + (openDatesMenu ? 'tw:block' : 'tw:hidden')
+          'absolute z-50 mt-1 min-w-[16rem] rounded-md border border-[#E1E3E5] bg-white px-4 py-3 shadow-md ' + (openDatesMenu ? 'block' : 'hidden')
         }>
-        <div className='tw:flex tw:flex-col tw:justify-start'>
+        <div className='flex flex-col justify-start'>
           <button
             type='button'
-            className={'tw:p-0 tw:border-0 tw:bg-transparent tw:text-start tw:no-underline tw:text-foreground tw:text-sm tw:hover:text-primary ' + (selectedDateFilter == 'today' ? 'tw:font-bold' : '')}
+            className={'p-0 border-0 bg-transparent text-start no-underline text-foreground text-sm hover:text-primary ' + (selectedDateFilter == 'today' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('today')
               setShipmentsStartDate(moment().format('YYYY-MM-DD'))
@@ -51,7 +51,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
           </button>
           <button
             type='button'
-            className={'tw:p-0 tw:border-0 tw:bg-transparent tw:text-start tw:no-underline tw:text-foreground tw:text-sm tw:hover:text-primary ' + (selectedDateFilter == 'yesterday' ? 'tw:font-bold' : '')}
+            className={'p-0 border-0 bg-transparent text-start no-underline text-foreground text-sm hover:text-primary ' + (selectedDateFilter == 'yesterday' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('yesterday')
               setShipmentsStartDate(moment().subtract(1, 'days').format('YYYY-MM-DD'))
@@ -62,7 +62,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
           </button>
           <button
             type='button'
-            className={'tw:p-0 tw:border-0 tw:bg-transparent tw:text-start tw:no-underline tw:text-foreground tw:text-sm tw:hover:text-primary ' + (selectedDateFilter == 'thisweek' ? 'tw:font-bold' : '')}
+            className={'p-0 border-0 bg-transparent text-start no-underline text-foreground text-sm hover:text-primary ' + (selectedDateFilter == 'thisweek' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('thisweek')
               setShipmentsStartDate(moment().startOf('week').format('YYYY-MM-DD'))
@@ -73,7 +73,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
           </button>
           <button
             type='button'
-            className={'tw:p-0 tw:border-0 tw:bg-transparent tw:text-start tw:no-underline tw:text-foreground tw:text-sm tw:hover:text-primary ' + (selectedDateFilter == 'lastweek' ? 'tw:font-bold' : '')}
+            className={'p-0 border-0 bg-transparent text-start no-underline text-foreground text-sm hover:text-primary ' + (selectedDateFilter == 'lastweek' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('lastweek')
               setShipmentsStartDate(moment().subtract(1, 'weeks').startOf('week').format('YYYY-MM-DD'))
@@ -84,7 +84,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
           </button>
           <button
             type='button'
-            className={'tw:p-0 tw:border-0 tw:bg-transparent tw:text-start tw:no-underline tw:text-foreground tw:text-sm tw:hover:text-primary ' + (selectedDateFilter == 'past7days' ? 'tw:font-bold' : '')}
+            className={'p-0 border-0 bg-transparent text-start no-underline text-foreground text-sm hover:text-primary ' + (selectedDateFilter == 'past7days' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('past7days')
               setShipmentsStartDate(moment().subtract(7, 'days').format('YYYY-MM-DD'))
@@ -95,7 +95,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
           </button>
           <button
             type='button'
-            className={'tw:p-0 tw:border-0 tw:bg-transparent tw:text-start tw:no-underline tw:text-foreground tw:text-sm tw:hover:text-primary ' + (selectedDateFilter == 'thismonth' ? 'tw:font-bold' : '')}
+            className={'p-0 border-0 bg-transparent text-start no-underline text-foreground text-sm hover:text-primary ' + (selectedDateFilter == 'thismonth' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('thismonth')
               setShipmentsStartDate(moment().startOf('month').format('YYYY-MM-DD'))
@@ -106,7 +106,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
           </button>
           <button
             type='button'
-            className={'tw:p-0 tw:border-0 tw:bg-transparent tw:text-start tw:no-underline tw:text-foreground tw:text-sm tw:hover:text-primary ' + (selectedDateFilter == 'past3days' ? 'tw:font-bold' : '')}
+            className={'p-0 border-0 bg-transparent text-start no-underline text-foreground text-sm hover:text-primary ' + (selectedDateFilter == 'past3days' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('past3days')
               setShipmentsStartDate(moment().subtract(1, 'months').format('YYYY-MM-DD'))
@@ -117,7 +117,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
           </button>
           <button
             type='button'
-            className={'tw:p-0 tw:border-0 tw:bg-transparent tw:text-start tw:no-underline tw:text-foreground tw:text-sm tw:hover:text-primary ' + (selectedDateFilter == 'lastmonth' ? 'tw:font-bold' : '')}
+            className={'p-0 border-0 bg-transparent text-start no-underline text-foreground text-sm hover:text-primary ' + (selectedDateFilter == 'lastmonth' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('lastmonth')
               setShipmentsStartDate(moment().subtract(1, 'months').startOf('month').format('YYYY-MM-DD'))
@@ -128,7 +128,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
           </button>
           <button
             type='button'
-            className={'tw:p-0 tw:border-0 tw:bg-transparent tw:text-start tw:no-underline tw:text-foreground tw:text-sm tw:hover:text-primary ' + (selectedDateFilter == 'yeartodate' ? 'tw:font-bold' : '')}
+            className={'p-0 border-0 bg-transparent text-start no-underline text-foreground text-sm hover:text-primary ' + (selectedDateFilter == 'yeartodate' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('yeartodate')
               setShipmentsStartDate(moment().startOf('year').format('YYYY-MM-DD'))
@@ -139,7 +139,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
           </button>
           <button
             type='button'
-            className={'tw:p-0 tw:border-0 tw:bg-transparent tw:text-start tw:no-underline tw:text-foreground tw:text-sm tw:hover:text-primary ' + (selectedDateFilter == 'lastyear' ? 'tw:font-bold' : '')}
+            className={'p-0 border-0 bg-transparent text-start no-underline text-foreground text-sm hover:text-primary ' + (selectedDateFilter == 'lastyear' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('lastyear')
               setShipmentsStartDate(moment().subtract(1, 'year').startOf('year').format('YYYY-MM-DD'))
@@ -148,9 +148,9 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
             }}>
             Last Year
           </button>
-          <span className='tw:font-light tw:text-[color:var(--bs-secondary-color)] tw:text-sm tw:pb-1 tw:border-t tw:pt-1'>Select Range:</span>
+          <span className='font-light text-[color:var(--bs-secondary-color)] text-sm pb-1 border-t pt-1'>Select Range:</span>
           <Flatpickr
-            className={'tw:border tw:border-[#E1E3E5] tw:text-sm tw:w-full tw:p-2' + (selectedDateFilter == 'picker' ? ' tw:font-bold' : '')}
+            className={'border border-[#E1E3E5] text-sm w-full p-2' + (selectedDateFilter == 'picker' ? ' font-bold' : '')}
             options={{
               mode: 'range',
               dateFormat: 'd M y',

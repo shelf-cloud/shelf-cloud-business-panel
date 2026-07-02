@@ -1,7 +1,7 @@
 @layer theme, base, components, utilities;
 
-@import "tailwindcss/theme.css" layer(theme) prefix(tw);
-@import "tailwindcss/utilities.css" layer(utilities) prefix(tw);
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
 
 @custom-variant dark (&:where([data-layout-mode='dark'], [data-layout-mode='dark'] *));
 
@@ -26,11 +26,11 @@
 :root {
   /* Foundation */
   --background: var(--vz-body-bg, var(--bs-body-bg, #eff3f6));
-  --foreground: var(--vz-body-color, var(--bs-body-color, #495057));
+  --foreground: var(--vz-body-color, var(--bs-body-color, #212529));
   --card: var(--vz-card-bg, var(--bs-card-bg, #ffffff));
-  --card-foreground: var(--vz-heading-color, var(--bs-body-color, #343a40));
+  --card-foreground: var(--vz-heading-color, var(--bs-body-color, #212529));
   --popover: var(--vz-dropdown-bg, var(--vz-card-bg, #ffffff));
-  --popover-foreground: var(--vz-dropdown-link-color, var(--bs-body-color, #343a40));
+  --popover-foreground: var(--vz-dropdown-link-color, var(--bs-body-color, #212529));
   --border: var(--vz-border-color, var(--bs-border-color, #e9ebec));
   --input: var(--vz-input-bg, var(--bs-body-bg, #ffffff));
   --input-border: var(--vz-input-border, var(--vz-border-color, #ced4da));
@@ -46,15 +46,15 @@
   --info: var(--bs-info, #299cdb);
   --info-foreground: var(--bs-white, #ffffff);
   --warning: var(--bs-warning, #f7b84b);
-  --warning-foreground: var(--bs-gray-900, #343a40);
+  --warning-foreground: var(--bs-gray-900, #212529);
   --destructive: var(--bs-danger, #f06548);
   --destructive-foreground: var(--bs-white, #ffffff);
   --light: var(--vz-light, var(--bs-light, #f3f6f9));
   --dark: var(--vz-dark, var(--bs-dark, #212529));
   --muted: var(--vz-light, #f3f6f9);
-  --muted-foreground: var(--bs-secondary-color, #878a99);
+  --muted-foreground: var(--bs-secondary-color, rgba(33, 37, 41, 0.75));
   --accent: color-mix(in srgb, var(--bs-primary, #4481fd) 12%, var(--vz-card-bg, #ffffff));
-  --accent-foreground: var(--vz-heading-color, #343a40);
+  --accent-foreground: var(--vz-heading-color, #495057);
 
   /* Focus/interaction */
   --ring: var(--bs-focus-ring-color, color-mix(in srgb, var(--bs-primary, #4481fd) 45%, transparent));

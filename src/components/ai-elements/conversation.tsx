@@ -12,7 +12,7 @@ export type ConversationProps = ComponentProps<typeof StickToBottom>;
 
 export const Conversation = ({ className, ...props }: ConversationProps) => (
   <StickToBottom
-    className={cn("tw:relative tw:flex-1 tw:overflow-y-hidden", className)}
+    className={cn("relative flex-1 overflow-y-hidden", className)}
     initial="smooth"
     resize="smooth"
     role="log"
@@ -29,7 +29,7 @@ export const ConversationContent = ({
   ...props
 }: ConversationContentProps) => (
   <StickToBottom.Content
-    className={cn("tw:flex tw:flex-col tw:gap-8 tw:p-4", className)}
+    className={cn("flex flex-col gap-8 p-4", className)}
     {...props}
   />
 );
@@ -50,18 +50,18 @@ export const ConversationEmptyState = ({
 }: ConversationEmptyStateProps) => (
   <div
     className={cn(
-      "tw:flex tw:size-full tw:flex-col tw:items-center tw:justify-center tw:gap-3 tw:p-8 tw:text-center",
+      "flex size-full flex-col items-center justify-center gap-3 p-8 text-center",
       className
     )}
     {...props}
   >
     {children ?? (
       <>
-        {icon && <div className="tw:text-muted-foreground">{icon}</div>}
-        <div className="tw:space-y-1">
-          <h3 className="tw:font-medium tw:text-sm">{title}</h3>
+        {icon && <div className="text-muted-foreground">{icon}</div>}
+        <div className="space-y-1">
+          <h3 className="font-medium text-sm">{title}</h3>
           {description && (
-            <p className="tw:text-muted-foreground tw:text-sm">{description}</p>
+            <p className="text-muted-foreground text-sm">{description}</p>
           )}
         </div>
       </>
@@ -85,7 +85,7 @@ export const ConversationScrollButton = ({
     !isAtBottom && (
       <Button
         className={cn(
-          "tw:absolute tw:bottom-4 tw:left-[50%] tw:translate-x-[-50%] tw:rounded-full tw:dark:bg-background tw:dark:hover:bg-muted",
+          "absolute bottom-4 left-[50%] translate-x-[-50%] rounded-full dark:bg-background dark:hover:bg-muted",
           className
         )}
         onClick={handleScrollToBottom}
@@ -94,7 +94,7 @@ export const ConversationScrollButton = ({
         variant="outline"
         {...props}
       >
-        <ArrowDownIcon className="tw:size-4" />
+        <ArrowDownIcon className="size-4" />
       </Button>
     )
   );
@@ -153,7 +153,7 @@ export const ConversationDownload = ({
   return (
     <Button
       className={cn(
-        "tw:absolute tw:top-4 tw:right-4 tw:rounded-full tw:dark:bg-background tw:dark:hover:bg-muted",
+        "absolute top-4 right-4 rounded-full dark:bg-background dark:hover:bg-muted",
         className
       )}
       onClick={handleDownload}
@@ -162,7 +162,7 @@ export const ConversationDownload = ({
       variant="outline"
       {...props}
     >
-      {children ?? <DownloadIcon className="tw:size-4" />}
+      {children ?? <DownloadIcon className="size-4" />}
     </Button>
   );
 };

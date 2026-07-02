@@ -51,7 +51,7 @@ export const Plan = ({
   return (
     <PlanContext.Provider value={contextValue}>
       <Collapsible asChild data-slot="plan" {...props}>
-        <Card className={cn("tw:shadow-none", className)}>{children}</Card>
+        <Card className={cn("shadow-none", className)}>{children}</Card>
       </Collapsible>
     </PlanContext.Provider>
   );
@@ -61,7 +61,7 @@ export type PlanHeaderProps = ComponentProps<typeof CardHeader>;
 
 export const PlanHeader = ({ className, ...props }: PlanHeaderProps) => (
   <CardHeader
-    className={cn("tw:flex tw:items-start tw:justify-between", className)}
+    className={cn("flex items-start justify-between", className)}
     data-slot="plan-header"
     {...props}
   />
@@ -100,7 +100,7 @@ export const PlanDescription = ({
 
   return (
     <CardDescription
-      className={cn("tw:text-balance", className)}
+      className={cn("text-balance", className)}
       data-slot="plan-description"
       {...props}
     >
@@ -134,14 +134,14 @@ export type PlanTriggerProps = ComponentProps<typeof CollapsibleTrigger>;
 export const PlanTrigger = ({ className, ...props }: PlanTriggerProps) => (
   <CollapsibleTrigger asChild>
     <Button
-      className={cn("tw:size-8", className)}
+      className={cn("size-8", className)}
       data-slot="plan-trigger"
       size="icon"
       variant="ghost"
       {...props}
     >
-      <ChevronsUpDownIcon className="tw:size-4" />
-      <span className="tw:sr-only">Toggle plan</span>
+      <ChevronsUpDownIcon className="size-4" />
+      <span className="sr-only">Toggle plan</span>
     </Button>
   </CollapsibleTrigger>
 );

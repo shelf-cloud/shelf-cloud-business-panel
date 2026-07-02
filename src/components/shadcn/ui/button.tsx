@@ -6,24 +6,24 @@ import { type VariantProps, cva } from 'class-variance-authority'
 import { cn } from '@/lib/shadcn/utils'
 
 const buttonVariants = cva(
-  'tw:inline-flex tw:appearance-none tw:items-center tw:justify-center tw:gap-2 tw:whitespace-nowrap tw:rounded-md tw:border tw:border-transparent tw:text-sm tw:font-medium tw:transition-[color,box-shadow,background-color,border-color] tw:duration-200 tw:outline-none tw:ring-0 tw:disabled:pointer-events-none tw:disabled:opacity-50 tw:focus-visible:shadow-[0_0_0_3px_var(--ring)] [&_svg]:tw:pointer-events-none [&_svg:not([class*="tw:size-"])]:tw:size-4 tw:shrink-0',
+  'inline-flex appearance-none items-center justify-center gap-2 whitespace-nowrap rounded-md border border-transparent text-sm font-medium transition-[color,box-shadow,background-color,border-color] duration-200 outline-none ring-0 disabled:pointer-events-none disabled:opacity-50 focus-visible:shadow-[0_0_0_3px_var(--ring)] [&_svg]:pointer-events-none [&_svg:not([class*="size-"])]:size-4 shrink-0',
   {
     variants: {
       variant: {
-        default: 'tw:bg-primary tw:!text-primary-foreground tw:shadow-xs tw:hover:bg-primary/90',
-        secondary: 'tw:bg-secondary tw:!text-secondary-foreground tw:shadow-xs tw:hover:bg-secondary/90',
-        muted: 'tw:border tw:border-light tw:bg-muted tw:!text-foreground tw:shadow-xs tw:hover:border-light/80 tw:hover:bg-muted/80 tw:hover:!text-foreground',
-        outline: 'tw:!border tw:!border-border tw:!bg-background tw:!text-foreground tw:hover:bg-accent tw:hover:!text-accent-foreground',
-        light: 'tw:border tw:border-border tw:bg-white tw:!text-foreground tw:hover:bg-accent tw:hover:!text-accent-foreground',
-        ghost: 'tw:!text-foreground tw:hover:bg-accent tw:hover:!text-accent-foreground',
-        link: 'tw:!text-primary tw:underline-offset-4 tw:hover:underline',
-        destructive: 'tw:bg-destructive tw:!text-destructive-foreground tw:shadow-xs tw:hover:bg-destructive/90',
+        default: 'bg-primary !text-primary-foreground shadow-xs hover:bg-primary/90',
+        secondary: 'bg-secondary !text-secondary-foreground shadow-xs hover:bg-secondary/90',
+        muted: 'border border-light bg-muted !text-foreground shadow-xs hover:border-light/80 hover:bg-muted/80 hover:!text-foreground',
+        outline: '!border !border-border !bg-background !text-foreground hover:bg-accent hover:!text-accent-foreground',
+        light: 'border border-border bg-white !text-foreground hover:bg-accent hover:!text-accent-foreground',
+        ghost: '!text-foreground hover:bg-accent hover:!text-accent-foreground',
+        link: '!text-primary underline-offset-4 hover:underline',
+        destructive: 'bg-destructive !text-destructive-foreground shadow-xs hover:bg-destructive/90',
       },
       size: {
-        default: 'tw:h-9 tw:px-4 tw:py-2 tw:!rounded-md',
-        sm: 'tw:h-8 tw:!rounded-md tw:px-3 tw:text-xs',
-        lg: 'tw:h-10 tw:!rounded-md tw:px-8',
-        icon: 'tw:size-9',
+        default: 'h-9 px-4 py-2 !rounded-md',
+        sm: 'h-8 !rounded-md px-3 text-xs',
+        lg: 'h-10 !rounded-md px-8',
+        icon: 'size-9',
       },
     },
     defaultVariants: {

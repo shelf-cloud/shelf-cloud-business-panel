@@ -80,11 +80,11 @@ const Dashboard = ({ session }: Props) => {
         <div className='page-content'>
           <BreadCrumb title='Dashboard' pageTitle='Commerce HUB' />
           <Container fluid>
-            <div className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:mb-4 tw:lg:flex-row tw:md:justify-between tw:md:items-center tw:px-1'>
-              <div className='tw:w-full tw:flex tw:flex-col tw:justify-center tw:items-start tw:gap-2 tw:tw:mb-0 tw:lg:flex-row tw:lg:justify-start tw:lg:items-center tw:px-0'>
+            <div className='flex flex-col justify-center items-end gap-2 mb-4 lg:flex-row md:justify-between md:items-center px-1'>
+              <div className='w-full flex flex-col justify-center items-start gap-2 mb-0 lg:flex-row lg:justify-start lg:items-center px-0'>
                 <Button
                   color='primary'
-                  className='tw:text-[11.2px] tw:text-nowrap'
+                  className='text-[11.2px] text-nowrap'
                   onClick={() => {
                     setshowUpdateInvoices({ show: true })
                   }}>
@@ -104,7 +104,7 @@ const Dashboard = ({ session }: Props) => {
                 </Col>
               </Row>
             ) : (
-              <p className='tw:text-[19.5px] tw:font-semibold'>Loading...</p>
+              <p className='text-[19.5px] font-semibold'>Loading...</p>
             )}
           </Container>
         </div>

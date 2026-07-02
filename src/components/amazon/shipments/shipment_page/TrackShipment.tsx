@@ -12,11 +12,11 @@ type Props = {
 const TrackShipment = ({ shipmentDetails }: Props) => {
   const { state }: any = useContext(AppContext)
   return (
-    <div className='tw:my-4 tw:px-4'>
+    <div className='my-4 px-4'>
       <Col sm='12' lg='8'>
-        <div className='tw:overflow-x-auto'>
-        <table className='tw:w-full tw:align-middle tw:mb-0 tw:border tw:border-[color:var(--border)] tw:[&_td]:border-t tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
-          <thead className='tw:bg-[color:var(--vz-light)]'>
+        <div className='overflow-x-auto'>
+        <table className='w-full align-middle mb-0 border border-[color:var(--border)] [&_td]:border-t [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+          <thead className='bg-[color:var(--vz-light)]'>
             <tr>
               <th>Box #</th>
               <th>FBA Box Label #</th>
@@ -32,7 +32,7 @@ const TrackShipment = ({ shipmentDetails }: Props) => {
                 <td>{boxIndex + 1}</td>
                 <td>{tracking.boxId}</td>
                 <td>{tracking.trackingId}</td>
-                <td className='tw:text-success tw:font-semibold'>Confirmed</td>
+                <td className='text-success font-semibold'>Confirmed</td>
                 <td>
                   {shipmentDetails.shipmentBoxes.boxes[boxIndex]?.weight.value
                     ? FormatIntPercentage(state.currentRegion, shipmentDetails.shipmentBoxes.boxes[boxIndex]?.weight.value)

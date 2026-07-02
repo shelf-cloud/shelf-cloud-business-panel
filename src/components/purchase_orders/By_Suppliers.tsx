@@ -79,7 +79,7 @@ const By_Suppliers = ({}: Props) => {
     <div>
       <React.Fragment>
         <Col xs={12}>
-          <div className='tw:flex tw:flex-col-reverse tw:justify-center tw:items-end tw:gap-2 tw:mb-2 tw:md:flex-row tw:md:justify-end tw:md:items-center'>
+          <div className='flex flex-col-reverse justify-center items-end gap-2 mb-2 md:flex-row md:justify-end md:items-center'>
             <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='none' />
           </div>
           <Table_By_Suppliers filterDataTable={filterDataTable || []} pending={data ? false : true} />

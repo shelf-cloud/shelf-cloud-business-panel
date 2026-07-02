@@ -90,32 +90,32 @@ const TeamMembers = ({}: Props) => {
           <BreadCrumb title='Team Members' pageTitle='Settings' />
           <Container fluid>
             <Card>
-              <CardBody className='tw:p-6'>
-                <div className='tw:flex tw:sm:flex-col tw:xl:flex-row tw:justify-between tw:items-center tw:p-0 tw:sm:gap-2 tw:xl:gap-0'>
-                  <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center tw:gap-4 tw:w-full'>
+              <CardBody className='p-6'>
+                <div className='flex sm:flex-col xl:flex-row justify-between items-center p-0 sm:gap-2 xl:gap-0'>
+                  <div className='flex flex-wrap justify-start items-center gap-4 w-full'>
                     {Members?.length! < 3 && <Button onClick={() => setShowNewMemberModal(true)}>+ Add Member</Button>}
                   </div>
-                  <div className='app-search tw:w-full tw:xl:w-1/4 tw:p-0'>
-                    <div className='tw:relative tw:flex tw:rounded-lg tw:w-full tw:overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+                  <div className='app-search w-full xl:w-1/4 p-0'>
+                    <div className='relative flex rounded-lg w-full overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                       <DebounceInput
                         type='text'
                         minLength={3}
                         debounceTimeout={500}
-                        className='form-control tw:text-[13px] tw:bg-white'
+                        className='form-control text-[13px] bg-white'
                         placeholder='Search...'
                         id='search-options'
                         value={searchValue}
                         onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
                         onChange={(e) => setSearchValue(e.target.value)}
                       />
-                      <span className='mdi mdi-magnify search-widget-icon tw:text-[16.25px]'></span>
+                      <span className='mdi mdi-magnify search-widget-icon text-[16.25px]'></span>
                       <span
-                        className='tw:flex tw:items-center tw:justify-center tw:bg-white'
+                        className='flex items-center justify-center bg-white'
                         style={{
                           cursor: 'pointer',
                         }}
                         onClick={() => setSearchValue('')}>
-                        <i className='mdi mdi-window-close tw:text-[16.25px] tw:m-0 tw:px-2 tw:py-0 tw:text-[color:var(--bs-secondary-color)]' />
+                        <i className='mdi mdi-window-close text-[16.25px] m-0 px-2 py-0 text-[color:var(--bs-secondary-color)]' />
                       </span>
                     </div>
                   </div>

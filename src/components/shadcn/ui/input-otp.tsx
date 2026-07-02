@@ -20,7 +20,7 @@ function InputOTP({
         "flex items-center gap-2 has-disabled:opacity-50",
         containerClassName
       )}
-      className={cn("tw:disabled:cursor-not-allowed", className)}
+      className={cn("disabled:cursor-not-allowed", className)}
       {...props}
     />
   )
@@ -30,7 +30,7 @@ function InputOTPGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="input-otp-group"
-      className={cn("tw:flex tw:items-center", className)}
+      className={cn("flex items-center", className)}
       {...props}
     />
   )
@@ -51,15 +51,15 @@ function InputOTPSlot({
       data-slot="input-otp-slot"
       data-active={isActive}
       className={cn(
-        "tw:relative tw:flex tw:h-9 tw:w-9 tw:items-center tw:justify-center tw:border-y tw:border-r tw:border-input tw:text-sm tw:shadow-xs tw:transition-all tw:outline-none tw:first:rounded-l-md tw:first:border-l tw:last:rounded-r-md tw:aria-invalid:border-destructive tw:data-[active=true]:z-10 tw:data-[active=true]:border-ring tw:data-[active=true]:ring-[3px] tw:data-[active=true]:ring-ring/50 tw:data-[active=true]:aria-invalid:border-destructive tw:data-[active=true]:aria-invalid:ring-destructive/20 tw:dark:bg-input/30 tw:dark:data-[active=true]:aria-invalid:ring-destructive/40",
+        "relative flex h-9 w-9 items-center justify-center border-y border-r border-input text-sm shadow-xs transition-all outline-none first:rounded-l-md first:border-l last:rounded-r-md aria-invalid:border-destructive data-[active=true]:z-10 data-[active=true]:border-ring data-[active=true]:ring-[3px] data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:border-destructive data-[active=true]:aria-invalid:ring-destructive/20 dark:bg-input/30 dark:data-[active=true]:aria-invalid:ring-destructive/40",
         className
       )}
       {...props}
     >
       {char}
       {hasFakeCaret && (
-        <div className="tw:pointer-events-none tw:absolute tw:inset-0 tw:flex tw:items-center tw:justify-center">
-          <div className="tw:h-4 tw:w-px tw:animate-caret-blink tw:bg-foreground tw:duration-1000" />
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <div className="h-4 w-px animate-caret-blink bg-foreground duration-1000" />
         </div>
       )}
     </div>

@@ -25,9 +25,9 @@ const Collapse = React.forwardRef<HTMLDivElement, CollapseProps>(
         ref={ref}
         data-slot='collapse'
         data-state={isOpen ? 'open' : 'closed'}
-        className={cn('tw:grid tw:transition-[grid-template-rows] tw:duration-200 tw:ease-in-out', isOpen ? 'tw:grid-rows-[1fr]' : 'tw:grid-rows-[0fr]')}
+        className={cn('grid transition-[grid-template-rows] duration-200 ease-in-out', isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]')}
         {...props}>
-        <div className={cn('tw:min-h-0 tw:overflow-hidden', className)}>{children}</div>
+        <div className={cn('min-h-0 overflow-hidden', className)}>{children}</div>
       </Comp>
     )
   }

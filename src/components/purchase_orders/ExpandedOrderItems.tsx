@@ -47,34 +47,34 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
   }, [poItems, orderAsc])
 
   return (
-    <div className='tw:overflow-x-auto'>
-      <table className='tw:w-full tw:text-[11.2px] tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
-        <thead className='tw:bg-[color:var(--vz-light)] tw:text-[11.2px]'>
+    <div className='overflow-x-auto'>
+      <table className='w-full text-[11.2px] align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+        <thead className='bg-[color:var(--vz-light)] text-[11.2px]'>
           <tr key={`poItems-${data.poId}-header`}>
-            <th scope='col' className='tw:text-center'>
+            <th scope='col' className='text-center'>
               Image
             </th>
             <th scope='col'>Title</th>
-            <th className='tw:text-center' scope='col' onClick={() => setOrderAsc(!orderAsc)} style={{ cursor: 'pointer' }}>
-              SKU {orderAsc ? <i className='las la-sort-amount-down-alt tw:ms-1 tw:text-[16.25px]' /> : <i className='las la-sort-amount-up tw:ms-1 tw:text-[16.25px]' />}
+            <th className='text-center' scope='col' onClick={() => setOrderAsc(!orderAsc)} style={{ cursor: 'pointer' }}>
+              SKU {orderAsc ? <i className='las la-sort-amount-down-alt ms-1 text-[16.25px]' /> : <i className='las la-sort-amount-up ms-1 text-[16.25px]' />}
             </th>
-            <th className='tw:text-center' scope='col'>
+            <th className='text-center' scope='col'>
               Cost
             </th>
-            <th className='tw:text-center' scope='col'>
+            <th className='text-center' scope='col'>
               Ordered
             </th>
-            <th className='tw:text-center' scope='col'>
+            <th className='text-center' scope='col'>
               Inbound
             </th>
-            <th className='tw:text-center' scope='col'>
+            <th className='text-center' scope='col'>
               Arrived
             </th>
-            <th className='tw:text-center' scope='col'>
+            <th className='text-center' scope='col'>
               Pending
             </th>
             {(!data.hasSplitting || (data.hasSplitting && activeTab !== 'all')) && (
-              <th className='tw:text-center' scope='col'>
+              <th className='text-center' scope='col'>
                 Receiving
               </th>
             )}
@@ -99,9 +99,9 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
               return ''
             }
             return (
-              <tr key={`${key}-${product.sku}`} className='tw:border-b tw:border-[color:var(--border)] tw:py-2'>
-                <td className='tw:text-center'>
-                  <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' rel='noopener noreferrer' className='tw:!text-black'>
+              <tr key={`${key}-${product.sku}`} className='border-b border-[color:var(--border)] py-2'>
+                <td className='text-center'>
+                  <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' rel='noopener noreferrer' className='!text-black'>
                     <div
                       style={{
                         width: '100%',
@@ -120,20 +120,20 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
                     </div>
                   </Link>
                 </td>
-                <td className='tw:font-semibold'>
-                  <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' rel='noopener noreferrer' className='tw:!text-black'>
+                <td className='font-semibold'>
+                  <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' rel='noopener noreferrer' className='!text-black'>
                     {product.title}
                   </Link>
                   {product.arrivalHistory?.length > 0 && (
                     <>
-                      <i className='ri-information-fill tw:ms-1 tw:text-[11.2px] tw:text-warning' id={`tooltipHistory${product.inventoryId}`} />
+                      <i className='ri-information-fill ms-1 text-[11.2px] text-warning' id={`tooltipHistory${product.inventoryId}`} />
                       <UncontrolledTooltip
                         placement='right'
                         target={`tooltipHistory${product.inventoryId}`}
-                        popperClassName='tw:bg-white tw:shadow tw:px-3 tw:pt-3 tw:rounded'
-                        innerClassName='tw:text-black tw:bg-white tw:p-0'>
-                        <p className='tw:text-[13px] tw:text-primary tw:m-0 tw:p-0 tw:font-bold tw:mb-2'>Arrival History</p>
-                        <table className='tw:w-full tw:text-[11.2px] tw:text-nowrap tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_th]:border tw:[&_th]:border-[color:var(--border)] tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_td]:border tw:[&_td]:border-[color:var(--border)]'>
+                        popperClassName='bg-white shadow px-3 pt-3 rounded'
+                        innerClassName='text-black bg-white p-0'>
+                        <p className='text-[13px] text-primary m-0 p-0 font-bold mb-2'>Arrival History</p>
+                        <table className='w-full text-[11.2px] text-nowrap [&_th]:px-2 [&_th]:py-1 [&_th]:border [&_th]:border-[color:var(--border)] [&_td]:px-2 [&_td]:py-1 [&_td]:border [&_td]:border-[color:var(--border)]'>
                           <thead>
                             <tr>
                               <th>Date</th>
@@ -154,15 +154,15 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
                       </UncontrolledTooltip>
                     </>
                   )}
-                  <span className='tw:m-0 tw:p-0 tw:text-black tw:font-normal tw:text-[11.2px] tw:flex tw:flex-wrap tw:justify-start tw:items-center tw:gap-1'>
+                  <span className='m-0 p-0 text-black font-normal text-[11.2px] flex flex-wrap justify-start items-center gap-1'>
                     {product.asin && (
-                      <div className='tw:flex tw:flex-nowrap tw:justify-start tw:items-center' style={{ gap: '2px' }}>
+                      <div className='flex flex-nowrap justify-start items-center' style={{ gap: '2px' }}>
                         {`ASIN: `}
                         <a
                           href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${product.asin}`}
                           target='blank'
                           rel='noopener noreferrer'
-                          className='tw:font-light'
+                          className='font-light'
                           style={{ textDecoration: 'none' }}>
                           {product.asin}
                         </a>
@@ -172,24 +172,24 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
                     {product.barcode && (
                       <div>
                         {`UPC: `}
-                        <span className='tw:font-light tw:text-[color:var(--bs-secondary-color)]'>{product.barcode}</span>
+                        <span className='font-light text-[color:var(--bs-secondary-color)]'>{product.barcode}</span>
                       </div>
                     )}
                   </span>
                 </td>
-                <td className='tw:text-center tw:text-nowrap'>
-                  <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-1'>
-                    <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' rel='noopener noreferrer' className='tw:!text-black'>
+                <td className='text-center text-nowrap'>
+                  <div className='flex flex-row justify-start items-center gap-1'>
+                    <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' rel='noopener noreferrer' className='!text-black'>
                       {product.sku}
                     </Link>
                     <CopyTextToClipboard text={product.sku} label='SKU' />
                   </div>
                 </td>
-                <td className='tw:text-center tw:text-nowrap'>{FormatCurrency(state.currentRegion, product.orderQty * product.sellerCost)}</td>
-                <td className='tw:text-center tw:text-nowrap'>{FormatIntNumber(state.currentRegion, product.orderQty)}</td>
-                <td className='tw:text-center tw:text-nowrap'>{FormatIntNumber(state.currentRegion, product.inboundQty)}</td>
-                <td className='tw:text-center tw:text-nowrap'>{FormatIntNumber(state.currentRegion, product.receivedQty)}</td>
-                <td className='tw:text-center tw:text-nowrap'>{FormatIntNumber(state.currentRegion, product.orderQty - product.receivedQty - product.inboundQty)}</td>
+                <td className='text-center text-nowrap'>{FormatCurrency(state.currentRegion, product.orderQty * product.sellerCost)}</td>
+                <td className='text-center text-nowrap'>{FormatIntNumber(state.currentRegion, product.orderQty)}</td>
+                <td className='text-center text-nowrap'>{FormatIntNumber(state.currentRegion, product.inboundQty)}</td>
+                <td className='text-center text-nowrap'>{FormatIntNumber(state.currentRegion, product.receivedQty)}</td>
+                <td className='text-center text-nowrap'>{FormatIntNumber(state.currentRegion, product.orderQty - product.receivedQty - product.inboundQty)}</td>
                 {(!data.hasSplitting || (data.hasSplitting && activeTab !== 'all')) && (
                   <td className=''>
                     <DebounceInput
@@ -198,7 +198,7 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
                       debounceTimeout={200}
                       disabled={disableInput}
                       onWheel={(e: React.WheelEvent<HTMLInputElement>) => e.currentTarget.blur()}
-                      className='tw:h-8 tw:w-full tw:rounded-md tw:border tw:border-[color:var(--input-border)] tw:bg-white tw:px-2 tw:text-xs tw:m-0 tw:mx-auto'
+                      className='h-8 w-full rounded-md border border-[color:var(--input-border)] bg-white px-2 text-xs m-0 mx-auto'
                       style={{ maxWidth: '80px' }}
                       placeholder='--'
                       value={inputValue()}
@@ -232,10 +232,10 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
                     Number(product.inboundQty) <= 0 &&
                     Number(product.receivedQty) <= 0 &&
                     (loading ? (
-                      <i className='tw:text-[19.5px] tw:text-[color:var(--bs-secondary-color)] las la-trash-alt tw:mx-1' />
+                      <i className='text-[19.5px] text-[color:var(--bs-secondary-color)] las la-trash-alt mx-1' />
                     ) : (
                       <i
-                        className='tw:text-[19.5px] tw:text-destructive las la-trash-alt tw:mx-1'
+                        className='text-[19.5px] text-destructive las la-trash-alt mx-1'
                         style={{ cursor: 'pointer' }}
                         onClick={() =>
                           setshowDeleteModal((prev) => {
@@ -262,32 +262,32 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
           <tr>
             <td></td>
             <td></td>
-            <td className='tw:text-center tw:text-[13px] tw:font-semibold tw:text-nowrap'>Totals</td>
-            <td className='tw:text-center tw:text-[13px] tw:font-semibold'>
+            <td className='text-center text-[13px] font-semibold text-nowrap'>Totals</td>
+            <td className='text-center text-[13px] font-semibold'>
               {FormatCurrency(
                 state.currentRegion,
                 poItems.reduce((total, product: PurchaseOrderItem) => total + Number(product.orderQty * product.sellerCost), 0)
               )}
             </td>
-            <td className='tw:text-center tw:text-[13px] tw:font-semibold'>
+            <td className='text-center text-[13px] font-semibold'>
               {FormatIntNumber(
                 state.currentRegion,
                 poItems.reduce((total, product: PurchaseOrderItem) => total + Number(product.orderQty), 0)
               )}
             </td>
-            <td className='tw:text-center tw:text-[13px] tw:font-semibold'>
+            <td className='text-center text-[13px] font-semibold'>
               {FormatIntNumber(
                 state.currentRegion,
                 poItems.reduce((total, product: PurchaseOrderItem) => total + Number(product.inboundQty), 0)
               )}
             </td>
-            <td className='tw:text-center tw:text-[13px] tw:font-semibold'>
+            <td className='text-center text-[13px] font-semibold'>
               {FormatIntNumber(
                 state.currentRegion,
                 poItems.reduce((total, product: PurchaseOrderItem) => total + Number(product.receivedQty), 0)
               )}
             </td>
-            <td className='tw:text-center tw:text-[13px] tw:font-semibold'>
+            <td className='text-center text-[13px] font-semibold'>
               {FormatIntNumber(
                 state.currentRegion,
                 poItems.reduce((total, product: PurchaseOrderItem) => total + Number(product.orderQty - product.receivedQty - product.inboundQty), 0)

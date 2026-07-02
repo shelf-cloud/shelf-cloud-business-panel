@@ -1,10 +1,10 @@
 const ResponseLoading = () => {
   return (
-    <div className='tw:flex tw:items-center tw:gap-2 tw:text-xs tw:text-muted-foreground'>
-      <span className='tw:flex tw:gap-1' aria-hidden='true'>
-        <span className='tw:size-2 tw:animate-bounce tw:rounded-full tw:bg-primary [animation-delay:-0.3s]' />
-        <span className='tw:size-2 tw:animate-bounce tw:rounded-full tw:bg-primary [animation-delay:-0.15s]' />
-        <span className='tw:size-2 tw:animate-bounce tw:rounded-full tw:bg-primary' />
+    <div className='flex items-center gap-2 text-xs text-muted-foreground'>
+      <span className='flex gap-1' aria-hidden='true'>
+        <span className='size-2 animate-bounce rounded-full bg-primary [animation-delay:-0.3s]' />
+        <span className='size-2 animate-bounce rounded-full bg-primary [animation-delay:-0.15s]' />
+        <span className='size-2 animate-bounce rounded-full bg-primary' />
       </span>
       Analyzing forecast context...
     </div>

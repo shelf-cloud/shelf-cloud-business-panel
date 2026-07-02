@@ -149,32 +149,32 @@ const PurchaseOrderActionsDropdown = ({ purchaseOrder }: Props) => {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant='ghost' size='icon' className='tw:size-8' aria-label={`Actions for purchase order ${purchaseOrder.orderNumber}`}>
-            <MoreVerticalIcon className='tw:size-4' />
+          <Button variant='ghost' size='icon' className='size-8' aria-label={`Actions for purchase order ${purchaseOrder.orderNumber}`}>
+            <MoreVerticalIcon className='size-4' />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
           <DropdownMenuGroup>
             <DropdownMenuItem
-              className='tw:text-xs'
+              className='text-xs'
               disabled={!canChangeDestination}
               onSelect={(event) => {
                 event.preventDefault()
                 setSelectedWarehouseId(String(purchaseOrder.warehouseId || ''))
                 setDestinationDialogOpen(true)
               }}>
-              <WarehouseIcon className='tw:size-4' />
+              <WarehouseIcon className='size-4' />
               Change destination
             </DropdownMenuItem>
             <DropdownMenuItem
-              className='tw:text-xs'
+              className='text-xs'
               disabled={!canDeletePo}
               variant='destructive'
               onSelect={(event) => {
                 event.preventDefault()
                 setDeleteDialogOpen(true)
               }}>
-              <Trash2Icon className='tw:size-4' />
+              <Trash2Icon className='size-4' />
               Delete PO
             </DropdownMenuItem>
           </DropdownMenuGroup>
@@ -189,10 +189,10 @@ const PurchaseOrderActionsDropdown = ({ purchaseOrder }: Props) => {
           </DialogHeader>
 
           <FieldGroup>
-            <Field className='tw:flex-col'>
+            <Field className='flex-col'>
               <FieldLabel>Warehouse</FieldLabel>
               <Select value={selectedWarehouseId} onValueChange={setSelectedWarehouseId} disabled={isLoadingWarehouses || isUpdatingDestination}>
-                <SelectTrigger className='tw:w-full'>
+                <SelectTrigger className='w-full'>
                   <SelectValue placeholder={isLoadingWarehouses ? 'Loading warehouses...' : 'Select warehouse'} />
                 </SelectTrigger>
                 <SelectContent>
@@ -208,7 +208,7 @@ const PurchaseOrderActionsDropdown = ({ purchaseOrder }: Props) => {
                 </SelectContent>
               </Select>
               <FieldDescription>
-                Current destination: <span className='tw:font-medium tw:text-primary'>{purchaseOrder.warehouseName}</span>
+                Current destination: <span className='font-medium text-primary'>{purchaseOrder.warehouseName}</span>
               </FieldDescription>
             </Field>
           </FieldGroup>
@@ -218,7 +218,7 @@ const PurchaseOrderActionsDropdown = ({ purchaseOrder }: Props) => {
               Cancel
             </Button>
             <Button disabled={isUpdatingDestination || !selectedWarehouse || Number(selectedWarehouseId) === purchaseOrder.warehouseId} onClick={handleUpdateDestination}>
-              {isUpdatingDestination && <Loader2Icon className='tw:size-4 tw:animate-spin' />}
+              {isUpdatingDestination && <Loader2Icon className='size-4 animate-spin' />}
               Update PO
             </Button>
           </DialogFooter>
@@ -234,7 +234,7 @@ const PurchaseOrderActionsDropdown = ({ purchaseOrder }: Props) => {
           <AlertDialogFooter>
             <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
             <Button variant='destructive' disabled={isDeleting} onClick={handleDeletePO}>
-              {isDeleting && <Loader2Icon className='tw:size-4 tw:animate-spin' />}
+              {isDeleting && <Loader2Icon className='size-4 animate-spin' />}
               Delete
             </Button>
           </AlertDialogFooter>

@@ -151,11 +151,11 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
   const renderSortableHeader = (key: ProductsSortKey, label: string, className = '') => (
     <button
       type='button'
-      className={`tw:p-0 tw:border-0 tw:no-underline tw:text-dark tw:font-semibold tw:text-[11.2px] tw:inline-flex tw:items-center tw:gap-1 ${className}`}
+      className={`p-0 border-0 no-underline text-dark font-semibold text-[11.2px] inline-flex items-center gap-1 ${className}`}
       aria-label={`${getProductsSortLabel(key)} by ${label}`}
       onClick={() => handleProductsSort(key)}>
       <span>{label}</span>
-      <i className={`${getProductsSortIcon(key)} tw:text-[13px] tw:leading-none`} aria-hidden='true' />
+      <i className={`${getProductsSortIcon(key)} text-[13px] leading-none`} aria-hidden='true' />
     </button>
   )
 
@@ -165,31 +165,31 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
         <Col sm={3}>
           <Col sm={12}>
             <Card>
-              <CardHeader className='tw:py-2'>
-                <h5 className='tw:font-semibold tw:m-0'>Receiving Details</h5>
+              <CardHeader className='py-2'>
+                <h5 className='font-semibold m-0'>Receiving Details</h5>
               </CardHeader>
               <CardBody>
-                <table className='tw:w-full tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
-                  <tbody className='tw:text-[11.2px]'>
+                <table className='w-full [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+                  <tbody className='text-[11.2px]'>
                     <tr>
-                      <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>Type of Service:</td>
-                      <td className='tw:font-semibold tw:w-full'>{data.carrierService}</td>
+                      <td className='text-[var(--bs-secondary-color)] text-nowrap'>Type of Service:</td>
+                      <td className='font-semibold w-full'>{data.carrierService}</td>
                     </tr>
                     <tr>
-                      <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'># Of Pallets:</td>
-                      <td className='tw:font-semibold tw:w-full'>{data.numberPallets}</td>
+                      <td className='text-[var(--bs-secondary-color)] text-nowrap'># Of Pallets:</td>
+                      <td className='font-semibold w-full'>{data.numberPallets}</td>
                     </tr>
                     <tr>
-                      <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'># Of Boxes:</td>
-                      <td className='tw:font-semibold tw:w-full'>{data.numberBoxes}</td>
+                      <td className='text-[var(--bs-secondary-color)] text-nowrap'># Of Boxes:</td>
+                      <td className='font-semibold w-full'>{data.numberBoxes}</td>
                     </tr>
                     <tr>
-                      <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>Shrink Wrap:</td>
-                      <td className='tw:font-semibold tw:w-full'>{data.shrinkWrap}</td>
+                      <td className='text-[var(--bs-secondary-color)] text-nowrap'>Shrink Wrap:</td>
+                      <td className='font-semibold w-full'>{data.shrinkWrap}</td>
                     </tr>
                     <tr>
-                      <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>Man Hours:</td>
-                      <td className='tw:font-semibold tw:w-full'>{data.manHours}</td>
+                      <td className='text-[var(--bs-secondary-color)] text-nowrap'>Man Hours:</td>
+                      <td className='font-semibold w-full'>{data.manHours}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -198,30 +198,30 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
           </Col>
           <Col sm={12}>
             <Card>
-              <CardHeader className='tw:py-2'>
-                <h5 className='tw:font-semibold tw:m-0'>Charge Details</h5>
+              <CardHeader className='py-2'>
+                <h5 className='font-semibold m-0'>Charge Details</h5>
               </CardHeader>
               <CardBody>
-                <table className='tw:w-full tw:whitespace-nowrap tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
-                  <tbody className='tw:text-[11.2px]'>
-                    <tr className='tw:border-b tw:border-[color:var(--border)] tw:pb-2'>
-                      <td className='tw:text-[var(--bs-secondary-color)] tw:flex tw:flex-row tw:justify-start tw:items-start'>
+                <table className='w-full whitespace-nowrap mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+                  <tbody className='text-[11.2px]'>
+                    <tr className='border-b border-[color:var(--border)] pb-2'>
+                      <td className='text-[var(--bs-secondary-color)] flex flex-row justify-start items-start'>
                         Service
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill tw:ms-1 tw:text-[13px] tw:text-[var(--bs-secondary-color)]' id={`tooltipService${OrderId}`}></i>
+                            <i className='ri-information-fill ms-1 text-[13px] text-[var(--bs-secondary-color)]' id={`tooltipService${OrderId}`}></i>
                             <TooltipComponent target={`tooltipService${OrderId}`} text={serviceFee} />
                           </>
                         )}
                       </td>
-                      <td className='tw:font-semibold tw:text-end'>{FormatCurrency(state.currentRegion, data.receivingService!)}</td>
+                      <td className='font-semibold text-end'>{FormatCurrency(state.currentRegion, data.receivingService!)}</td>
                     </tr>
-                    <tr className='tw:border-b tw:border-[color:var(--border)] tw:pb-2'>
-                      <td className='tw:text-[var(--bs-secondary-color)]'>
+                    <tr className='border-b border-[color:var(--border)] pb-2'>
+                      <td className='text-[var(--bs-secondary-color)]'>
                         Pallets
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill tw:ms-1 tw:text-[13px] tw:text-[var(--bs-secondary-color)]' id={`tooltipPallet${OrderId}`}></i>
+                            <i className='ri-information-fill ms-1 text-[13px] text-[var(--bs-secondary-color)]' id={`tooltipPallet${OrderId}`}></i>
                             <TooltipComponent
                               target={`tooltipPallet${OrderId}`}
                               text={`${FormatCurrency(state.currentRegion, data.chargesFees.receivingPalletCost!)} per pallet`}
@@ -229,39 +229,39 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                           </>
                         )}
                       </td>
-                      <td className='tw:font-semibold tw:text-end'>{FormatCurrency(state.currentRegion, data.receivingPallets!)}</td>
+                      <td className='font-semibold text-end'>{FormatCurrency(state.currentRegion, data.receivingPallets!)}</td>
                     </tr>
-                    <tr className='tw:border-b tw:border-[color:var(--border)] tw:pb-2'>
-                      <td className='tw:text-[var(--bs-secondary-color)] tw:flex tw:flex-row tw:justify-start tw:items-start'>
+                    <tr className='border-b border-[color:var(--border)] pb-2'>
+                      <td className='text-[var(--bs-secondary-color)] flex flex-row justify-start items-start'>
                         Wrap Service
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill tw:ms-1 tw:text-[13px] tw:text-[var(--bs-secondary-color)]' id={`tooltipWrap${OrderId}`}></i>
+                            <i className='ri-information-fill ms-1 text-[13px] text-[var(--bs-secondary-color)]' id={`tooltipWrap${OrderId}`}></i>
                             <TooltipComponent target={`tooltipWrap${OrderId}`} text={`${FormatCurrency(state.currentRegion, data.chargesFees.receivingWrapService!)} per wrap`} />
                           </>
                         )}
                       </td>
-                      <td className='tw:font-semibold tw:text-end'>{FormatCurrency(state.currentRegion, data.receivingWrapService!)}</td>
+                      <td className='font-semibold text-end'>{FormatCurrency(state.currentRegion, data.receivingWrapService!)}</td>
                     </tr>
-                    <tr className='tw:border-b tw:border-[color:var(--border)] tw:pb-2'>
-                      <td className='tw:text-[var(--bs-secondary-color)] tw:flex tw:flex-row tw:justify-start tw:items-start'>
+                    <tr className='border-b border-[color:var(--border)] pb-2'>
+                      <td className='text-[var(--bs-secondary-color)] flex flex-row justify-start items-start'>
                         Man Hour
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill tw:ms-1 tw:text-[13px] tw:text-[var(--bs-secondary-color)]' id={`tooltipHour${OrderId}`}></i>
+                            <i className='ri-information-fill ms-1 text-[13px] text-[var(--bs-secondary-color)]' id={`tooltipHour${OrderId}`}></i>
                             <TooltipComponent target={`tooltipHour${OrderId}`} text={`${FormatCurrency(state.currentRegion, data.chargesFees.receivingManHour!)} per hour`} />
                           </>
                         )}
                       </td>
-                      <td className='tw:font-semibold tw:text-end'>{FormatCurrency(state.currentRegion, data.manHour!)}</td>
+                      <td className='font-semibold text-end'>{FormatCurrency(state.currentRegion, data.manHour!)}</td>
                     </tr>
-                    <tr className='tw:border-b tw:border-[color:var(--border)] tw:pb-2'>
-                      <td className='tw:text-[var(--bs-secondary-color)]'>Extra Charge</td>
-                      <td className='tw:font-semibold tw:text-end'>{FormatCurrency(state.currentRegion, data.extraCharge!)}</td>
+                    <tr className='border-b border-[color:var(--border)] pb-2'>
+                      <td className='text-[var(--bs-secondary-color)]'>Extra Charge</td>
+                      <td className='font-semibold text-end'>{FormatCurrency(state.currentRegion, data.extraCharge!)}</td>
                     </tr>
                     <tr>
-                      <td className='tw:font-bold'>TOTAL</td>
-                      <td className='tw:text-primary tw:font-semibold tw:text-end'>{FormatCurrency(state.currentRegion, data.totalCharge!)}</td>
+                      <td className='font-bold'>TOTAL</td>
+                      <td className='text-primary font-semibold text-end'>{FormatCurrency(state.currentRegion, data.totalCharge!)}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -271,8 +271,8 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
           {data.extraComment != '' && (
             <Col sm={12}>
               <Card>
-                <CardHeader className='tw:py-4'>
-                  <h5 className='tw:font-semibold tw:m-0'>Order Comment</h5>
+                <CardHeader className='py-4'>
+                  <h5 className='font-semibold m-0'>Order Comment</h5>
                 </CardHeader>
                 <CardBody>
                   <p>{data.extraComment}</p>
@@ -282,16 +282,16 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
           )}
         </Col>
         <Col sm={9}>
-          <Card className='tw:mb-4'>
-            <CardHeader className='tw:py-2 tw:flex tw:flex-row tw:justify-between'>
-              <h5 className='tw:font-semibold tw:m-0'>Products</h5>
+          <Card className='mb-4'>
+            <CardHeader className='py-2 flex flex-row justify-between'>
+              <h5 className='font-semibold m-0'>Products</h5>
             </CardHeader>
             <CardBody>
-              <div className='tw:overflow-x-auto'>
-                <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
-                  <thead className='tw:bg-[color:var(--vz-light)] tw:text-[11.2px]'>
+              <div className='overflow-x-auto'>
+                <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+                  <thead className='bg-[color:var(--vz-light)] text-[11.2px]'>
                     <tr>
-                      <th scope='col' className='tw:text-center'>
+                      <th scope='col' className='text-center'>
                         Image
                       </th>
                       <th scope='col'>Title</th>
@@ -299,23 +299,23 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                       <th scope='col' aria-sort={getProductsAriaSort('sku')}>
                         {renderSortableHeader('sku', 'Sku')}
                       </th>
-                      <th className='tw:text-center' scope='col' aria-sort={getProductsAriaSort('available')}>
-                        {renderSortableHeader('available', 'Available', 'tw:justify-center')}
+                      <th className='text-center' scope='col' aria-sort={getProductsAriaSort('available')}>
+                        {renderSortableHeader('available', 'Available', 'justify-center')}
                       </th>
-                      <th className='tw:text-center' scope='col' aria-sort={getProductsAriaSort('quantity')}>
-                        {renderSortableHeader('quantity', 'Qty', 'tw:justify-center')}
+                      <th className='text-center' scope='col' aria-sort={getProductsAriaSort('quantity')}>
+                        {renderSortableHeader('quantity', 'Qty', 'justify-center')}
                       </th>
-                      <th className='tw:text-center' scope='col' aria-sort={getProductsAriaSort('qtyReceived')}>
-                        {renderSortableHeader('qtyReceived', 'Qty Received', 'tw:justify-center')}
+                      <th className='text-center' scope='col' aria-sort={getProductsAriaSort('qtyReceived')}>
+                        {renderSortableHeader('qtyReceived', 'Qty Received', 'justify-center')}
                       </th>
                       {!data.boxes && <th></th>}
                     </tr>
                   </thead>
-                  <tbody className='tw:text-[11.2px]'>
+                  <tbody className='text-[11.2px]'>
                     {sortedOrderItems.map((product: ShipmentOrderItem, key) => (
-                      <tr key={`${product.orderItemId || product.sku}-${product.splitId ?? key}`} className='tw:border-b tw:border-[color:var(--border)] tw:py-2 tw:w-full'>
-                        <td className='tw:text-center'>
-                          <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' rel='noopener noreferrer' className='tw:!text-black'>
+                      <tr key={`${product.orderItemId || product.sku}-${product.splitId ?? key}`} className='border-b border-[color:var(--border)] py-2 w-full'>
+                        <td className='text-center'>
+                          <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' rel='noopener noreferrer' className='!text-black'>
                             <div
                               style={{
                                 width: '100%',
@@ -334,28 +334,28 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                             </div>
                           </Link>
                         </td>
-                        <td className='tw:font-semibold'>
-                          <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' rel='noopener noreferrer' className='tw:!text-black'>
+                        <td className='font-semibold'>
+                          <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' rel='noopener noreferrer' className='!text-black'>
                             {product.name}
                           </Link>
                         </td>
-                        {hasPONumber && <td className='tw:font-normal tw:text-nowrap'>{product.poNumber || ''}</td>}
-                        <td className='tw:text-[var(--bs-secondary-color)]'>
-                          <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-1'>
-                            <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' rel='noopener noreferrer' className='tw:!text-black'>
+                        {hasPONumber && <td className='font-normal text-nowrap'>{product.poNumber || ''}</td>}
+                        <td className='text-[var(--bs-secondary-color)]'>
+                          <div className='flex flex-row justify-start items-center gap-1'>
+                            <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' rel='noopener noreferrer' className='!text-black'>
                               {product.sku}
                             </Link>
                             <CopyTextToClipboard text={product.sku} label='SKU' />
                           </div>
                         </td>
-                        <td className='tw:text-center'>{FormatIntNumber(state.currentRegion, Number(product.available))}</td>
-                        <td className='tw:text-center'>{FormatIntNumber(state.currentRegion, Number(product.quantity))}</td>
-                        <td className='tw:text-center'>{FormatIntNumber(state.currentRegion, Number(product.qtyReceived))}</td>
+                        <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.available))}</td>
+                        <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.quantity))}</td>
+                        <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.qtyReceived))}</td>
                         {!data.boxes && (
                           <td>
                             {(data.orderStatus == 'awaiting' || data.orderStatus == 'awaiting_shipment') && product.qtyReceived! <= 0 && (
                               <i
-                                className='tw:text-[16.25px] tw:text-destructive las la-trash-alt'
+                                className='text-[16.25px] text-destructive las la-trash-alt'
                                 style={{ cursor: 'pointer' }}
                                 onClick={() =>
                                   setDeleteSKUModal({
@@ -380,22 +380,22 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                       <td></td>
                       {hasPONumber && <td></td>}
                       <td></td>
-                      <td className='tw:text-center tw:text-[13px] tw:font-bold tw:text-nowrap'>Total</td>
-                      <td className='tw:text-center tw:font-semibold tw:text-[13px] tw:text-primary'>{FormatIntNumber(state.currentRegion, Number(data.totalItems))}</td>
-                      <td className='tw:text-center tw:font-semibold tw:text-[13px] tw:text-primary'>{FormatIntNumber(state.currentRegion, Number(data.totalReceivedItems))}</td>
+                      <td className='text-center text-[13px] font-bold text-nowrap'>Total</td>
+                      <td className='text-center font-semibold text-[13px] text-primary'>{FormatIntNumber(state.currentRegion, Number(data.totalItems))}</td>
+                      <td className='text-center font-semibold text-[13px] text-primary'>{FormatIntNumber(state.currentRegion, Number(data.totalReceivedItems))}</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
             </CardBody>
           </Card>
-          <Row className='tw:mb-2'>
-            <Col sm={12} className='tw:flex tw:flex-row tw:justify-end tw:items-end'>
-              <div className='tw:m-0 tw:flex tw:flex-row tw:justify-end tw:items-end tw:gap-2'>
+          <Row className='mb-2'>
+            <Col sm={12} className='flex flex-row justify-end items-end'>
+              <div className='m-0 flex flex-row justify-end items-end gap-2'>
                 {!data.isReceivingFromPo && data.orderStatus !== 'received' && (
                   <a href={data.proofOfShipped} target='blank' rel='noopener noreferrer'>
                     <Button color='info'>
-                      <i className='las la-truck label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
+                      <i className='las la-truck label-icon align-middle text-[16.25px] me-2' />
                       Proof Of Received
                     </Button>
                   </a>

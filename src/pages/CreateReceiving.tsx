@@ -70,14 +70,14 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
               <Col lg={12}>
                 <Card>
                   <CardHeader>
-                    <div className='tw:flex tw:justify-between tw:items-start'>
+                    <div className='flex justify-between items-start'>
                       <div>
-                        <h3 className='tw:text-[16.25px] tw:font-semibold tw:text-primary'>Total SKUs in Order: {receivingProducts.length}</h3>
-                        <h5 className='tw:text-[13px] tw:font-normal tw:text-primary'>
+                        <h3 className='text-[16.25px] font-semibold text-primary'>Total SKUs in Order: {receivingProducts.length}</h3>
+                        <h5 className='text-[13px] font-normal text-primary'>
                           Total Qty to Receive in Order: {receivingProducts.reduce((total: number, item) => total + item.quantity, 0)}
                         </h5>
                       </div>
-                      <div className='tw:flex tw:justify-end tw:items-start tw:gap-2'>
+                      <div className='flex justify-end items-start gap-2'>
                         <Button color='info' onClick={() => setreceivingUploadingModal({ show: true })}>
                           Create Uploading File
                         </Button>
@@ -86,14 +86,14 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                         </Button>
                       </div>
                     </div>
-                    <div className='tw:w-full tw:flex tw:flex-col-reverse tw:justify-center tw:items-start tw:gap-2 tw:mb-0 tw:lg:flex-row tw:lg:justify-end tw:lg:items-center tw:px-0'>
-                      <div className='tw:p-0 tw:w-full tw:lg:w-1/3'>
-                        <div className='tw:relative tw:flex tw:rounded-md tw:w-full tw:overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+                    <div className='w-full flex flex-col-reverse justify-center items-start gap-2 mb-0 lg:flex-row lg:justify-end lg:items-center px-0'>
+                      <div className='p-0 w-full lg:w-1/3'>
+                        <div className='relative flex rounded-md w-full overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                           <DebounceInput
                             type='text'
                             minLength={1}
                             debounceTimeout={500}
-                            className='tw:h-9 tw:w-full tw:border-0 tw:bg-white tw:px-3 tw:text-sm tw:outline-none'
+                            className='h-9 w-full border-0 bg-white px-3 text-sm outline-none'
                             placeholder='Search...'
                             id='search-options'
                             value={searchValue}
@@ -101,12 +101,12 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                             onChange={(e) => setSearchValue(e.target.value)}
                           />
                           <span
-                            className='tw:flex tw:items-center tw:justify-center tw:bg-[color:var(--vz-light)]'
+                            className='flex items-center justify-center bg-[color:var(--vz-light)]'
                             style={{
                               cursor: 'pointer',
                             }}
                             onClick={() => setSearchValue('')}>
-                            <i className='mdi mdi-window-close tw:text-[16.25px] tw:m-0 tw:px-2 tw:py-0 tw:text-[color:var(--bs-secondary-color)]' />
+                            <i className='mdi mdi-window-close text-[16.25px] m-0 px-2 py-0 text-[color:var(--bs-secondary-color)]' />
                           </span>
                         </div>
                       </div>

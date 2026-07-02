@@ -43,13 +43,13 @@ export const ModelSelectorContent = ({
   <DialogContent
     aria-describedby={undefined}
     className={cn(
-      "tw:outline! tw:border-none! tw:p-0 tw:outline-border! tw:outline-solid!",
+      "outline! border-none! p-0 outline-border! outline-solid!",
       className
     )}
     {...props}
   >
-    <DialogTitle className="tw:sr-only">{title}</DialogTitle>
-    <Command className="tw:**:data-[slot=command-input-wrapper]:h-auto">
+    <DialogTitle className="sr-only">{title}</DialogTitle>
+    <Command className="**:data-[slot=command-input-wrapper]:h-auto">
       {children}
     </Command>
   </DialogContent>
@@ -67,7 +67,7 @@ export const ModelSelectorInput = ({
   className,
   ...props
 }: ModelSelectorInputProps) => (
-  <CommandInput className={cn("tw:h-auto tw:py-3.5", className)} {...props} />
+  <CommandInput className={cn("h-auto py-3.5", className)} {...props} />
 );
 
 export type ModelSelectorListProps = ComponentProps<typeof CommandList>;
@@ -181,7 +181,7 @@ export const ModelSelectorLogo = ({
   <img
     {...props}
     alt={`${provider} logo`}
-    className={cn("tw:size-3 tw:dark:invert", className)}
+    className={cn("size-3 dark:invert", className)}
     height={12}
     src={`https://models.dev/logos/${provider}.svg`}
     width={12}
@@ -196,7 +196,7 @@ export const ModelSelectorLogoGroup = ({
 }: ModelSelectorLogoGroupProps) => (
   <div
     className={cn(
-      "tw:flex tw:shrink-0 tw:items-center tw:-space-x-1 tw:[&>img]:rounded-full tw:[&>img]:bg-background tw:[&>img]:p-px tw:[&>img]:ring-1 tw:dark:[&>img]:bg-foreground",
+      "flex shrink-0 items-center -space-x-1 [&>img]:rounded-full [&>img]:bg-background [&>img]:p-px [&>img]:ring-1 dark:[&>img]:bg-foreground",
       className
     )}
     {...props}
@@ -209,5 +209,5 @@ export const ModelSelectorName = ({
   className,
   ...props
 }: ModelSelectorNameProps) => (
-  <span className={cn("tw:flex-1 tw:truncate tw:text-left", className)} {...props} />
+  <span className={cn("flex-1 truncate text-left", className)} {...props} />
 );

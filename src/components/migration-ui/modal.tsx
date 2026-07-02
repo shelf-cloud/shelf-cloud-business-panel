@@ -17,10 +17,10 @@ import { cn } from '@/lib/shadcn/utils'
 type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | string
 
 const sizeClass: Record<string, string> = {
-  sm: 'tw:sm:!max-w-sm',
-  md: 'tw:sm:!max-w-lg',
-  lg: 'tw:sm:!max-w-3xl',
-  xl: 'tw:sm:!max-w-5xl',
+  sm: 'sm:!max-w-sm',
+  md: 'sm:!max-w-lg',
+  lg: 'sm:!max-w-3xl',
+  xl: 'sm:!max-w-5xl',
 }
 
 export type ModalProps = {
@@ -47,7 +47,7 @@ function Modal({ isOpen, toggle, size = 'md', scrollable: _scrollable, fade: _fa
       <DialogContent
         id={id}
         aria-describedby={undefined}
-        className={cn('tw:max-h-[90vh] tw:overflow-y-auto', sizeClass[size] ?? sizeClass.md, className)}
+        className={cn('max-h-[90vh] overflow-y-auto', sizeClass[size] ?? sizeClass.md, className)}
         onInteractOutside={backdrop === 'static' ? (e) => e.preventDefault() : undefined}
         onEscapeKeyDown={keyboard === false ? (e) => e.preventDefault() : undefined}>
         {children}
@@ -63,7 +63,7 @@ export type ModalSectionProps = React.ComponentProps<'div'> & {
 
 function ModalHeader({ children, className, toggle: _toggle, tag: _tag, ...props }: ModalSectionProps) {
   return (
-    <DialogHeader className={cn('tw:pr-6', className)} {...props}>
+    <DialogHeader className={cn('pr-6', className)} {...props}>
       <DialogTitle>{children}</DialogTitle>
     </DialogHeader>
   )
@@ -74,7 +74,7 @@ function ModalBody({ className, toggle: _toggle, tag: _tag, ...props }: ModalSec
 }
 
 function ModalFooter({ className, toggle: _toggle, tag: _tag, ...props }: ModalSectionProps) {
-  return <DialogFooter className={cn('tw:items-center', className)} {...props} />
+  return <DialogFooter className={cn('items-center', className)} {...props} />
 }
 
 export { Modal, ModalHeader, ModalBody, ModalFooter }

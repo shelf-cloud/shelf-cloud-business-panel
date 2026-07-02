@@ -112,11 +112,11 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
       </ModalHeader>
       <ModalBody style={{ overflow: 'auto' }}>
         <Col>
-          <div className='tw:overflow-x-auto'>
-          <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)]'>
-            <thead className='tw:bg-[color:var(--vz-light)] tw:text-center tw:font-semibold'>
+          <div className='overflow-x-auto'>
+          <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)]'>
+            <thead className='bg-[color:var(--vz-light)] text-center font-semibold'>
               <tr>
-                <td className='tw:text-left'>SKU Details</td>
+                <td className='text-left'>SKU Details</td>
                 <td>Units Boxed</td>
                 {individualUnitsPlan.plan.cartons.map((box) => (
                   <td key={box.boxId}>BOX {box.boxId}</td>
@@ -127,7 +127,7 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
               {individualUnitsPlan.plan.items.map((item) => (
                 <tr key={item.sku}>
                   <td>
-                    <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2'>
+                    <div className='flex flex-row justify-start items-center gap-2'>
                       <div
                         style={{
                           width: '50px',
@@ -143,26 +143,26 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
                         />
                       </div>
                       <div>
-                        <span className='tw:font-bold'>{item.sku}</span>
+                        <span className='font-bold'>{item.sku}</span>
                         <br />
-                        <span className='tw:font-normal'>{item.name}</span>
+                        <span className='font-normal'>{item.name}</span>
                       </div>
                     </div>
                   </td>
-                  <td className='tw:text-center'>{item.qtyToShip}</td>
+                  <td className='text-center'>{item.qtyToShip}</td>
                   {individualUnitsPlan.plan.cartons.map((box, index) =>
                     box.skus.some((sku) => sku.sku == item.sku) ? (
                       box.skus.map(
                         (sku) =>
                           sku.sku == item.sku &&
                           index + 1 == box.boxId && (
-                            <td key={box.boxId} className='tw:text-center'>
+                            <td key={box.boxId} className='text-center'>
                               {sku.qtyInBox}
                             </td>
                           )
                       )
                     ) : (
-                      <td key={`empty-${box.boxId}`} className='tw:text-center tw:text-[var(--bs-secondary-color)]'>
+                      <td key={`empty-${box.boxId}`} className='text-center text-[var(--bs-secondary-color)]'>
                         -
                       </td>
                     )
@@ -170,10 +170,10 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
                 </tr>
               ))}
               <tr style={{ backgroundColor: '#E5E7E9' }}>
-                <td className='tw:font-bold'>Total SKUs: {individualUnitsPlan.plan.items.length}</td>
-                <td className='tw:font-bold tw:text-center'>{individualUnitsPlan.plan.items.reduce((total: number, item) => total + Number(item.qtyToShip), 0)}</td>
+                <td className='font-bold'>Total SKUs: {individualUnitsPlan.plan.items.length}</td>
+                <td className='font-bold text-center'>{individualUnitsPlan.plan.items.reduce((total: number, item) => total + Number(item.qtyToShip), 0)}</td>
                 {individualUnitsPlan.plan.cartons.map((box) => (
-                  <td key={box.boxId} className='tw:font-bold tw:text-center'>
+                  <td key={box.boxId} className='font-bold text-center'>
                     {box.skus.reduce((total: number, item) => total + Number(item.qtyInBox), 0)}
                   </td>
                 ))}
@@ -183,9 +183,9 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
           </div>
         </Col>
         <Col>
-          <div className='tw:overflow-x-auto'>
-          <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)]'>
-            <thead className='tw:bg-[color:var(--vz-light)] tw:text-center tw:font-semibold'>
+          <div className='overflow-x-auto'>
+          <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)]'>
+            <thead className='bg-[color:var(--vz-light)] text-center font-semibold'>
               <tr>
                 <td>Box #</td>
                 <td>Width {state.currentRegion == 'us' ? '(in)' : '(cm)'}</td>
@@ -196,8 +196,8 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
             </thead>
             <tbody>
               {individualUnitsPlan.plan.cartons.map((box) => (
-                <tr key={box.boxId} className='tw:text-center'>
-                  <td className='tw:font-bold'>{`BOX ${box.boxId}`}</td>
+                <tr key={box.boxId} className='text-center'>
+                  <td className='font-bold'>{`BOX ${box.boxId}`}</td>
                   <td>{box.box.width}</td>
                   <td>{box.box.height}</td>
                   <td>{box.box.length}</td>
@@ -209,7 +209,7 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
                 <td></td>
                 <td></td>
                 <td></td>
-                <td className='tw:text-center tw:font-bold'>
+                <td className='text-center font-bold'>
                   Total: {individualUnitsPlan.plan.cartons.reduce((total: number, box) => total + Number(box.box.weight), 0)} {state.currentRegion == 'us' ? 'lb' : 'kg'}
                 </td>
               </tr>
@@ -218,11 +218,11 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
           </div>
         </Col>
         <Col md={12}>
-          <div className='tw:text-right'>
+          <div className='text-right'>
             <Button
               type='submit'
               color='light'
-              className='btn tw:mr-4'
+              className='btn mr-4'
               onClick={() => {
                 setIndividualUnitsPlan(!state.showIndividualUnitsPlan)
               }}>

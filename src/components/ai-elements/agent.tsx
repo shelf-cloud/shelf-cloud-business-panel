@@ -19,7 +19,7 @@ export type AgentProps = ComponentProps<"div">;
 
 export const Agent = memo(({ className, ...props }: AgentProps) => (
   <div
-    className={cn("tw:not-prose tw:w-full tw:rounded-md tw:border", className)}
+    className={cn("not-prose w-full rounded-md border", className)}
     {...props}
   />
 ));
@@ -33,16 +33,16 @@ export const AgentHeader = memo(
   ({ className, name, model, ...props }: AgentHeaderProps) => (
     <div
       className={cn(
-        "tw:flex tw:w-full tw:items-center tw:justify-between tw:gap-4 tw:p-3",
+        "flex w-full items-center justify-between gap-4 p-3",
         className
       )}
       {...props}
     >
-      <div className="tw:flex tw:items-center tw:gap-2">
-        <BotIcon className="tw:size-4 tw:text-muted-foreground" />
-        <span className="tw:font-medium tw:text-sm">{name}</span>
+      <div className="flex items-center gap-2">
+        <BotIcon className="size-4 text-muted-foreground" />
+        <span className="font-medium text-sm">{name}</span>
         {model && (
-          <Badge className="tw:font-mono tw:text-xs" variant="secondary">
+          <Badge className="font-mono text-xs" variant="secondary">
             {model}
           </Badge>
         )}
@@ -55,7 +55,7 @@ export type AgentContentProps = ComponentProps<"div">;
 
 export const AgentContent = memo(
   ({ className, ...props }: AgentContentProps) => (
-    <div className={cn("tw:space-y-4 tw:p-4 tw:pt-0", className)} {...props} />
+    <div className={cn("space-y-4 p-4 pt-0", className)} {...props} />
   )
 );
 
@@ -65,11 +65,11 @@ export type AgentInstructionsProps = ComponentProps<"div"> & {
 
 export const AgentInstructions = memo(
   ({ className, children, ...props }: AgentInstructionsProps) => (
-    <div className={cn("tw:space-y-2", className)} {...props}>
-      <span className="tw:font-medium tw:text-muted-foreground tw:text-sm">
+    <div className={cn("space-y-2", className)} {...props}>
+      <span className="font-medium text-muted-foreground text-sm">
         Instructions
       </span>
-      <div className="tw:rounded-md tw:bg-muted/50 tw:p-3 tw:text-muted-foreground tw:text-sm">
+      <div className="rounded-md bg-muted/50 p-3 text-muted-foreground text-sm">
         <p>{children}</p>
       </div>
     </div>
@@ -79,9 +79,9 @@ export const AgentInstructions = memo(
 export type AgentToolsProps = ComponentProps<typeof Accordion>;
 
 export const AgentTools = memo(({ className, ...props }: AgentToolsProps) => (
-  <div className={cn("tw:space-y-2", className)}>
-    <span className="tw:font-medium tw:text-muted-foreground tw:text-sm">Tools</span>
-    <Accordion className="tw:rounded-md tw:border" {...props} />
+  <div className={cn("space-y-2", className)}>
+    <span className="font-medium text-muted-foreground text-sm">Tools</span>
+    <Accordion className="rounded-md border" {...props} />
   </div>
 ));
 
@@ -98,15 +98,15 @@ export const AgentTool = memo(
 
     return (
       <AccordionItem
-        className={cn("tw:border-b tw:last:border-b-0", className)}
+        className={cn("border-b last:border-b-0", className)}
         value={value}
         {...props}
       >
-        <AccordionTrigger className="tw:px-3 tw:py-2 tw:text-sm tw:hover:no-underline">
+        <AccordionTrigger className="px-3 py-2 text-sm hover:no-underline">
           {tool.description ?? "No description"}
         </AccordionTrigger>
-        <AccordionContent className="tw:px-3 tw:pb-3">
-          <div className="tw:rounded-md tw:bg-muted/50">
+        <AccordionContent className="px-3 pb-3">
+          <div className="rounded-md bg-muted/50">
             <CodeBlock code={JSON.stringify(schema, null, 2)} language="json" />
           </div>
         </AccordionContent>
@@ -121,11 +121,11 @@ export type AgentOutputProps = ComponentProps<"div"> & {
 
 export const AgentOutput = memo(
   ({ className, schema, ...props }: AgentOutputProps) => (
-    <div className={cn("tw:space-y-2", className)} {...props}>
-      <span className="tw:font-medium tw:text-muted-foreground tw:text-sm">
+    <div className={cn("space-y-2", className)} {...props}>
+      <span className="font-medium text-muted-foreground text-sm">
         Output Schema
       </span>
-      <div className="tw:rounded-md tw:bg-muted/50">
+      <div className="rounded-md bg-muted/50">
         <CodeBlock code={schema} language="typescript" />
       </div>
     </div>

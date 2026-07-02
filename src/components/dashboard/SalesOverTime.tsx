@@ -53,19 +53,19 @@ const SalesOverTime = ({ salesOverTime }: Props) => {
     <React.Fragment>
       <Col>
         <Card>
-          <CardHeader className='tw:flex tw:items-center tw:justify-between'>
-            <h4 className='tw:grow tw:mb-0 tw:text-[16px] tw:font-medium tw:text-[#212529]'>Sales Over Time</h4>
-            <span className='tw:text-[13px] tw:text-[color:var(--bs-secondary-color)] tw:font-normal'>
-              <i className='las la-clock tw:text-[16.25px] tw:me-1'></i>
+          <CardHeader className='flex items-center justify-between'>
+            <h4 className='grow mb-0 text-[16px] font-medium text-[#212529]'>Sales Over Time</h4>
+            <span className='text-[13px] text-[color:var(--bs-secondary-color)] font-normal'>
+              <i className='las la-clock text-[16.25px] me-1'></i>
               {moment().format('h:mm a')}
             </span>
           </CardHeader>
 
-          <CardBody className='tw:pb-0'>
-            <div className='tw:flex tw:flex-row tw:justify-start tw:gap-6'>
+          <CardBody className='pb-0'>
+            <div className='flex flex-row justify-start gap-6'>
               <div id={'SalesOverTimePrevious'}>
-                <p className='tw:m-0 tw:p-0 tw:font-medium'>Yesterday</p>
-                <p className='tw:m-0 tw:p-0 tw:font-semibold tw:text-[16.25px]'>
+                <p className='m-0 p-0 font-medium'>Yesterday</p>
+                <p className='m-0 p-0 font-semibold text-[16.25px]'>
                   <span className='counter-value'>
                     <CountUp
                       start={0}
@@ -83,12 +83,12 @@ const SalesOverTime = ({ salesOverTime }: Props) => {
                 placement='right'
                 target={'SalesOverTimePrevious'}
                 autohide={false}
-                popperClassName='tw:bg-white tw:shadow-[0_1px_2px_rgba(56,65,74,0.15)] tw:px-4 tw:py-4 tw:rounded-[4px]'
-                innerClassName='tw:text-black tw:bg-white tw:p-0'
+                popperClassName='bg-white shadow-[0_1px_2px_rgba(56,65,74,0.15)] px-4 py-4 rounded-[4px]'
+                innerClassName='text-black bg-white p-0'
                 style={{ maxHeight: '300px', overflowY: 'hidden', overflowX: 'hidden', scrollbarWidth: 'none' }}>
-                <p className='tw:text-[16.25px] tw:text-primary tw:m-0 tw:p-0 tw:font-bold tw:mb-2'>Yesterday</p>
+                <p className='text-[16.25px] text-primary m-0 p-0 font-bold mb-2'>Yesterday</p>
                 <table
-                  className='tw:pb-1 tw:w-full tw:text-nowrap tw:border tw:shadow-[0_1px_2px_rgba(56,65,74,0.15)] tw:[&_th]:border tw:[&_th]:p-[0.3rem] tw:[&_td]:border tw:[&_td]:p-[0.3rem] tw:[&_tbody_tr:nth-of-type(odd)]:bg-[rgba(0,0,0,0.05)]'
+                  className='pb-1 w-full text-nowrap border shadow-[0_1px_2px_rgba(56,65,74,0.15)] [&_th]:border [&_th]:p-[0.3rem] [&_td]:border [&_td]:p-[0.3rem] [&_tbody_tr:nth-of-type(odd)]:bg-[rgba(0,0,0,0.05)]'
                   style={{ height: '270px', display: 'block', overflowY: 'scroll', overflowX: 'hidden', scrollbarWidth: 'none' }}>
                   <thead>
                     <tr>
@@ -99,18 +99,18 @@ const SalesOverTime = ({ salesOverTime }: Props) => {
                   <tbody>
                     {previousSortedMarketplaces.map((marketplace: SalesOverTimeMarketplace, index: number) => (
                       <tr key={index}>
-                        <td className='tw:text-start'>{marketplace.name}</td>
-                        <td className='tw:text-end'>{FormatCurrency(state.currentRegion, marketplace.salesOverTime[previousDate])}</td>
+                        <td className='text-start'>{marketplace.name}</td>
+                        <td className='text-end'>{FormatCurrency(state.currentRegion, marketplace.salesOverTime[previousDate])}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </UncontrolledTooltip>
               <div id={'SalesOverTimeCurrent'}>
-                <p className='tw:m-0 tw:p-0 tw:font-medium'>
-                  Today <span className={'tw:font-semibold tw:text-[11.2px] tw:ms-2 ' + (salesDiff > 0 ? 'tw:text-success' : 'tw:text-destructive')}>{salesDiff.toFixed(2)}%</span>
+                <p className='m-0 p-0 font-medium'>
+                  Today <span className={'font-semibold text-[11.2px] ms-2 ' + (salesDiff > 0 ? 'text-success' : 'text-destructive')}>{salesDiff.toFixed(2)}%</span>
                 </p>
-                <p className='tw:m-0 tw:p-0 tw:font-semibold tw:text-[16.25px]'>
+                <p className='m-0 p-0 font-semibold text-[16.25px]'>
                   <span className='counter-value'>
                     <CountUp
                       start={0}
@@ -128,12 +128,12 @@ const SalesOverTime = ({ salesOverTime }: Props) => {
                 placement='right'
                 target={'SalesOverTimeCurrent'}
                 autohide={false}
-                popperClassName='tw:bg-white tw:shadow-[0_1px_2px_rgba(56,65,74,0.15)] tw:px-4 tw:pt-4 tw:rounded-[4px]'
-                innerClassName='tw:text-black tw:bg-white tw:p-0'
+                popperClassName='bg-white shadow-[0_1px_2px_rgba(56,65,74,0.15)] px-4 pt-4 rounded-[4px]'
+                innerClassName='text-black bg-white p-0'
                 style={{ maxHeight: '300px', overflowY: 'hidden', overflowX: 'hidden', scrollbarWidth: 'none' }}>
-                <p className='tw:text-[16.25px] tw:text-primary tw:m-0 tw:p-0 tw:font-bold tw:mb-2'>Today</p>
+                <p className='text-[16.25px] text-primary m-0 p-0 font-bold mb-2'>Today</p>
                 <table
-                  className='tw:pb-1 tw:w-full tw:text-nowrap tw:border tw:shadow-[0_1px_2px_rgba(56,65,74,0.15)] tw:[&_th]:border tw:[&_th]:p-[0.3rem] tw:[&_td]:border tw:[&_td]:p-[0.3rem] tw:[&_tbody_tr:nth-of-type(odd)]:bg-[rgba(0,0,0,0.05)]'
+                  className='pb-1 w-full text-nowrap border shadow-[0_1px_2px_rgba(56,65,74,0.15)] [&_th]:border [&_th]:p-[0.3rem] [&_td]:border [&_td]:p-[0.3rem] [&_tbody_tr:nth-of-type(odd)]:bg-[rgba(0,0,0,0.05)]'
                   style={{ height: '270px', display: 'block', overflowY: 'scroll', overflowX: 'hidden', scrollbarWidth: 'none' }}>
                   <thead>
                     <tr>
@@ -144,8 +144,8 @@ const SalesOverTime = ({ salesOverTime }: Props) => {
                   <tbody>
                     {currentSortedMarketplaces.map((marketplace: SalesOverTimeMarketplace, index: number) => (
                       <tr key={index}>
-                        <td className='tw:text-start'>{marketplace.name}</td>
-                        <td className='tw:text-end'>{FormatCurrency(state.currentRegion, marketplace.salesOverTime[currentDate])}</td>
+                        <td className='text-start'>{marketplace.name}</td>
+                        <td className='text-end'>{FormatCurrency(state.currentRegion, marketplace.salesOverTime[currentDate])}</td>
                       </tr>
                     ))}
                   </tbody>

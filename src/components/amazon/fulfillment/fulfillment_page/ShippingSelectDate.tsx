@@ -17,13 +17,13 @@ const ShippingSelectDate = ({ id, selectedDate, minDate, maxDate, setnewDate, cl
   const datePicker = useRef<any>(null)
   return (
     <>
-      <div key={id} className={'btn btn-sm tw:m-0 tw:rounded tw:border tw:border-2 tw:border-[color:var(--border)] '} style={{ backgroundColor: 'white' }}>
-        <div className='tw:flex tw:justify-start tw:items-center tw:gap-2'>
-          <i className='las la-calendar tw:text-[19.5px] tw:m-0 tw:p-0 tw:text-primary' />
+      <div key={id} className={'btn btn-sm m-0 rounded border border-2 border-[color:var(--border)] '} style={{ backgroundColor: 'white' }}>
+        <div className='flex justify-start items-center gap-2'>
+          <i className='las la-calendar text-[19.5px] m-0 p-0 text-primary' />
           <Flatpickr
             ref={datePicker}
             key={`${id}-picker`}
-            className={'tw:border-0 tw:text-[13px]'}
+            className={'border-0 text-[13px]'}
             options={{
               mode: 'single',
               position: 'auto',
@@ -40,7 +40,7 @@ const ShippingSelectDate = ({ id, selectedDate, minDate, maxDate, setnewDate, cl
       </div>
       {clearDate && (
         <Button size='sm' color='light' className='btn-icon' onClick={() => datePicker.current.flatpickr.clear()}>
-          <i className='ri-close-fill tw:text-[16.25px]' />
+          <i className='ri-close-fill text-[16.25px]' />
         </Button>
       )}
     </>

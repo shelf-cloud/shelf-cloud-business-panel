@@ -56,11 +56,11 @@ const Sidebar = ({}: Props) => {
   return (
     <React.Fragment>
       <div className='app-menu navbar-menu'>
-        <div className='navbar-brand-box tw:p-2'>
+        <div className='navbar-brand-box p-2'>
           <Link href='/' className='logo'>
-            <span className='tw:w-full tw:relative logo-sm'>
+            <span className='w-full relative logo-sm'>
               <Image
-                className='tw:rounded-lg'
+                className='rounded-lg'
                 src={ShelfCloudLogoSolo}
                 alt='ShelfCloud Logo'
                 style={{
@@ -70,9 +70,9 @@ const Sidebar = ({}: Props) => {
                 }}
               />
             </span>
-            <span className='tw:w-full tw:relative logo-lg'>
+            <span className='w-full relative logo-lg'>
               <Image
-                className='tw:rounded-lg'
+                className='rounded-lg'
                 src={ShelfCloudLogo}
                 alt='ShelfCloud Logo'
                 style={{
@@ -94,7 +94,7 @@ const Sidebar = ({}: Props) => {
               </ul>
             </Container>
           </SimpleBar>
-          <button type='button' className='logout_container tw:border-0 tw:bg-transparent' onClick={() => signOut()}>
+          <button type='button' className='logout_container border-0 bg-transparent' onClick={() => signOut()}>
             <i className='mdi mdi-logout'></i>
             <span>Logout</span>
           </button>

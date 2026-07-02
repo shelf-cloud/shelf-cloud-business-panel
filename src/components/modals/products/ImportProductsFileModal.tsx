@@ -500,15 +500,15 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
         }}
         className='modal-title'
         id='myModalLabel'>
-        <p className='tw:text-[19.5px]'>Import File Bulk Add/Update Products Details</p>
+        <p className='text-[19.5px]'>Import File Bulk Add/Update Products Details</p>
       </ModalHeader>
       <ModalBody>
         <Row>
-          <p className='tw:text-[13px] tw:font-normal tw:m-0 tw:mb-1'>
-            You can <span className='tw:font-bold'>Update</span> existing products in bulk by uploading a CSV file using the <span className='tw:font-bold'>Products Template</span> file.
+          <p className='text-[13px] font-normal m-0 mb-1'>
+            You can <span className='font-bold'>Update</span> existing products in bulk by uploading a CSV file using the <span className='font-bold'>Products Template</span> file.
           </p>
-          <p className='tw:text-[13px] tw:font-normal tw:m-0 tw:mb-4'>
-            You can <span className='tw:font-bold'>Add</span> new products in bulk by uploading a CSV file using the <span className='tw:font-bold'>Empty Template</span> file.
+          <p className='text-[13px] font-normal m-0 mb-4'>
+            You can <span className='font-bold'>Add</span> new products in bulk by uploading a CSV file using the <span className='font-bold'>Empty Template</span> file.
           </p>
           <Col md={6}>
             {/* <Dropzone
@@ -521,7 +521,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
                 toast.error(error[0].errors[0].message)
               }}>
               {({ getRootProps, getInputProps }) => (
-                <div className='dropzone dz-clickable tw:cursor-pointer' {...getRootProps()}>
+                <div className='dropzone dz-clickable cursor-pointer' {...getRootProps()}>
                   <input {...getInputProps()} />
                   <div className='px-3 dz-message needsclick'>
                     <div className='mb-3'>
@@ -539,22 +539,22 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
             />
           </Col>
           <Col md={6}>
-            <span className='tw:text-danger tw:font-semibold'>Warning:</span>
+            <span className='text-danger font-semibold'>Warning:</span>
             <ul>
               <li>Review file before uploading!</li>
               <li>Do not change the order of the columns.</li>
               <li>If you want to assign Brand, Supplier or Category to products, add them before exporting any template in the account settings tab.</li>
             </ul>
-            <div className='list-unstyled tw:mb-0' id='file-previews'>
+            <div className='list-unstyled mb-0' id='file-previews'>
               {selectedFiles.map((f: any, i) => {
                 return (
-                  <Card className='tw:mt-1 tw:mb-0 tw:shadow-none tw:border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
-                    <div className='tw:p-2'>
-                      <Row className='tw:items-center'>
-                        <Col className='tw:flex tw:justify-between tw:items-center'>
+                  <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
+                    <div className='p-2'>
+                      <Row className='items-center'>
+                        <Col className='flex justify-between items-center'>
                           <div>
-                            <p className='tw:text-[var(--bs-secondary-color)] tw:font-bold tw:m-0'>{f.name}</p>
-                            <p className='tw:mb-0'>
+                            <p className='text-[var(--bs-secondary-color)] font-bold m-0'>{f.name}</p>
+                            <p className='mb-0'>
                               <strong>{f.formattedSize}</strong>
                             </p>
                           </div>
@@ -572,27 +572,27 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
             </div>
           </Col>
         </Row>
-        {errorFile && <p className='tw:text-danger tw:m-0'>You must Upload a CSV file to upload products.</p>}
+        {errorFile && <p className='text-danger m-0'>You must Upload a CSV file to upload products.</p>}
         {showErrorLines && (
-          <div style={{ overflowY: 'scroll', height: '40vh' }} className='tw:my-4'>
-            <p className='tw:text-danger tw:m-0'>
-              There are <span className='tw:font-bold'>{errorLines.length}</span> errors in this file. Please review the following lines:
+          <div style={{ overflowY: 'scroll', height: '40vh' }} className='my-4'>
+            <p className='text-danger m-0'>
+              There are <span className='font-bold'>{errorLines.length}</span> errors in this file. Please review the following lines:
             </p>
-            <div className='tw:overflow-x-auto'>
-              <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
-                <thead className='tw:bg-[color:var(--vz-light)]'>
-                  <tr className='tw:text-danger'>
-                    <th className='tw:text-center'>In Line</th>
+            <div className='overflow-x-auto'>
+              <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+                <thead className='bg-[color:var(--vz-light)]'>
+                  <tr className='text-danger'>
+                    <th className='text-center'>In Line</th>
                     <th>Value</th>
                     <th>Error</th>
                   </tr>
                 </thead>
                 <tbody>
                   {errorLines.map((error: any, index: number) => (
-                    <tr key={`ErrorLine${index}`} className='tw:m-0'>
-                      <td className='tw:text-center'>{error.errorLine}</td>
-                      <td className='tw:whitespace-normal tw:w-1/4'>{error.value}</td>
-                      <td className='tw:whitespace-normal tw:w-full tw:ps-4'>- {error.errorMessage}</td>
+                    <tr key={`ErrorLine${index}`} className='m-0'>
+                      <td className='text-center'>{error.errorLine}</td>
+                      <td className='whitespace-normal w-1/4'>{error.value}</td>
+                      <td className='whitespace-normal w-full ps-4'>- {error.errorMessage}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -600,9 +600,9 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
             </div>
           </div>
         )}
-        {showerrorResponse && errorResponse?.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='tw:text-danger tw:m-0'>{`Error: ${error}`}</p>)}
+        {showerrorResponse && errorResponse?.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='text-danger m-0'>{`Error: ${error}`}</p>)}
         <Col md={12}>
-          <div className='tw:text-right'>
+          <div className='text-right'>
             <Button type='button' color='success' className='btn' onClick={handleUploadProducts}>
               {loading ? <Spinner /> : 'Upload File'}
             </Button>

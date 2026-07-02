@@ -21,7 +21,7 @@ const Integrations = ({ env }: Props) => {
         <Col sm={6} xl={4}>
           <Card>
             <CardBody>
-              <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-4'>
+              <div className='flex flex-row justify-start items-center gap-4'>
                 <div
                   style={{
                     width: '40px',
@@ -37,16 +37,16 @@ const Integrations = ({ env }: Props) => {
                     style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                   />
                 </div>
-                <span className='tw:text-[22.75px] tw:font-bold'>Amazon Seller FBA</span>
+                <span className='text-[22.75px] font-bold'>Amazon Seller FBA</span>
               </div>
-              <p className='tw:text-[var(--bs-secondary-color)] tw:text-[13px]'>Connect to Amazon FBA through Seller Central. You will be able to manage listings, product performance, orders and more...</p>
-              <div className='tw:text-right'>
+              <p className='text-[var(--bs-secondary-color)] text-[13px]'>Connect to Amazon FBA through Seller Central. You will be able to manage listings, product performance, orders and more...</p>
+              <div className='text-right'>
                 {!state.user[state.currentRegion]?.amazonConnected ? (
                   <AmazonAuthButton />
                 ) : state.user[state.currentRegion]?.amazonNeedsUpdate ? (
                   <AmazonReconnectButton />
                 ) : (
-                  <Button outline color='success' className='tw:font-semibold'>
+                  <Button outline color='success' className='font-semibold'>
                     Active
                   </Button>
                 )}
@@ -59,7 +59,7 @@ const Integrations = ({ env }: Props) => {
         <Col sm={6} xl={4}>
           <Card>
             <CardBody>
-              <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-4'>
+              <div className='flex flex-row justify-start items-center gap-4'>
                 <div
                   style={{
                     width: '40px',
@@ -75,14 +75,14 @@ const Integrations = ({ env }: Props) => {
                     style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                   />
                 </div>
-                <span className='tw:text-[22.75px] tw:font-bold'>Amazon Ads</span>
+                <span className='text-[22.75px] font-bold'>Amazon Ads</span>
               </div>
-              <p className='tw:text-[var(--bs-secondary-color)] tw:text-[13px]'>Connect to Amazon Ads. You will be able to get PPC costs and display cost for accurate product performance more...</p>
-              <div className='tw:text-right'>
+              <p className='text-[var(--bs-secondary-color)] text-[13px]'>Connect to Amazon Ads. You will be able to get PPC costs and display cost for accurate product performance more...</p>
+              <div className='text-right'>
                 {!state.user[state.currentRegion]?.amazonAdsConnected ? (
                   <AmazonAdsAuthButton env={env} />
                 ) : (
-                  <Button outline color='success' className='tw:font-semibold'>
+                  <Button outline color='success' className='font-semibold'>
                     Active
                   </Button>
                 )}

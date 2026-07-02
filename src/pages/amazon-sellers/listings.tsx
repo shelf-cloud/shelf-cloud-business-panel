@@ -168,9 +168,9 @@ const Listings = ({ session }: Props) => {
         <div className='page-content'>
           <BreadCrumb title='Amazon Listings' pageTitle='Amazon' />
           <Container fluid>
-            <Row className='tw:flex tw:flex-col-reverse tw:justify-center tw:items-end tw:gap-2 tw:mb-1 tw:md:tw:flex-row tw:md:justify-end tw:md:items-center tw:px-6'>
-              <div className='app-search tw:flex tw:flex-row tw:justify-between tw:items-center tw:p-0'>
-                <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-6'>
+            <Row className='flex flex-col-reverse justify-center items-end gap-2 mb-1 md:flex-row md:justify-end md:items-center px-6'>
+              <div className='app-search flex flex-row justify-between items-center p-0'>
+                <div className='flex flex-row justify-start items-center gap-6'>
                   <FilterListings showHidden={showHidden} condition={condition} mapped={mapped} />
                   <Button
                     size='sm'
@@ -180,47 +180,47 @@ const Listings = ({ session }: Props) => {
                     }}>
                     {parseInt(showHidden) === 0 ? (
                       <>
-                        <i className='mdi mdi-eye label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
-                        <span className='tw:text-[13px]'>Show All</span>
+                        <i className='mdi mdi-eye label-icon align-middle text-[16.25px] me-2' />
+                        <span className='text-[13px]'>Show All</span>
                       </>
                     ) : (
                       <>
-                        <i className='mdi mdi-eye-off label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
-                        <span className='tw:text-[13px]'>Hide</span>
+                        <i className='mdi mdi-eye-off label-icon align-middle text-[16.25px] me-2' />
+                        <span className='text-[13px]'>Hide</span>
                       </>
                     )}
                   </Button>
                   <CSVLink data={csvData} style={{ width: 'fit-content' }} filename={`${session?.user?.businessName?.toUpperCase()}-Amazon-FBA-Listings.csv`}>
-                    <Button color='primary' className='tw:text-[13px] tw:py-1'>
-                      <i className='mdi mdi-arrow-down-bold label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
+                    <Button color='primary' className='text-[13px] py-1'>
+                      <i className='mdi mdi-arrow-down-bold label-icon align-middle text-[16.25px] me-2' />
                       Export
                     </Button>
                   </CSVLink>
                   {selectedRows.length > 0 && (
                     <UncontrolledButtonDropdown>
                       <DropdownToggle
-                        className='tw:inline-flex tw:h-9 tw:items-center tw:gap-2 tw:rounded-md tw:bg-info tw:px-3 tw:text-[13px] tw:font-medium tw:text-white tw:whitespace-nowrap tw:shadow-xs'
+                        className='inline-flex h-9 items-center gap-2 rounded-md bg-info px-3 text-[13px] font-medium text-white whitespace-nowrap shadow-xs'
                         caret>
                         {`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''} Selected`}
                       </DropdownToggle>
                       <DropdownMenu>
-                        <DropdownItem className='tw:text-nowrap tw:text-primary' onClick={setSelectedRowstoVisible}>
-                          <i className='mdi mdi-eye label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
+                        <DropdownItem className='text-nowrap text-primary' onClick={setSelectedRowstoVisible}>
+                          <i className='mdi mdi-eye label-icon align-middle text-[16.25px] me-2' />
                           Set as Visible
                         </DropdownItem>
-                        <DropdownItem className='tw:text-nowrap tw:text-danger' onClick={setSelectedRowstoHidden}>
-                          <i className='mdi mdi-eye-off label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
+                        <DropdownItem className='text-nowrap text-danger' onClick={setSelectedRowstoHidden}>
+                          <i className='mdi mdi-eye-off label-icon align-middle text-[16.25px] me-2' />
                           Set as Hidden
                         </DropdownItem>
-                        <DropdownItem className='tw:text-nowrap tw:text-[13px] tw:text-right' onClick={clearAllSelectedRows}>
+                        <DropdownItem className='text-nowrap text-[13px] text-right' onClick={clearAllSelectedRows}>
                           Clear Selection
                         </DropdownItem>
                       </DropdownMenu>
                     </UncontrolledButtonDropdown>
                   )}
                 </div>
-                <div className='tw:w-full tw:md:w-1/4'>
-                  <div className='tw:relative tw:flex tw:rounded-lg tw:w-full tw:overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+                <div className='w-full md:w-1/4'>
+                  <div className='relative flex rounded-lg w-full overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                     <DebounceInput
                       type='text'
                       minLength={3}
@@ -232,14 +232,14 @@ const Listings = ({ session }: Props) => {
                       onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
                       onChange={(e) => setSearchValue(e.target.value)}
                     />
-                    <span className='mdi mdi-magnify search-widget-icon tw:text-[19.5px]'></span>
+                    <span className='mdi mdi-magnify search-widget-icon text-[19.5px]'></span>
                     <span
-                      className='tw:flex tw:items-center tw:justify-center input_background_white'
+                      className='flex items-center justify-center input_background_white'
                       style={{
                         cursor: 'pointer',
                       }}
                       onClick={() => setSearchValue('')}>
-                      <i className='mdi mdi-window-close tw:text-[19.5px] tw:m-0 tw:px-2 tw:py-0 tw:text-[color:var(--bs-secondary-color)]' />
+                      <i className='mdi mdi-window-close text-[19.5px] m-0 px-2 py-0 text-[color:var(--bs-secondary-color)]' />
                     </span>
                   </div>
                 </div>
@@ -249,8 +249,8 @@ const Listings = ({ session }: Props) => {
               <CardBody>
                 {data?.error ? (
                   <div>
-                    <p className='tw:font-bold tw:text-[26px]'>Amazon Seller</p>
-                    <p className='tw:text-[16.25px] tw:text-[var(--bs-secondary-color)]'>
+                    <p className='font-bold text-[26px]'>Amazon Seller</p>
+                    <p className='text-[16.25px] text-[var(--bs-secondary-color)]'>
                       {data?.message} <Spinner color='primary' size={'sm'} />
                     </p>
                   </div>

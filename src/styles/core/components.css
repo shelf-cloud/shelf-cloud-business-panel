@@ -19,7 +19,7 @@
  * Verified via grep across src/**\/*.{tsx,ts} (excluding ai-elements/, shadcn/,
  * print-window HTML strings, commented JSX) that every class below is emitted
  * by live rendered markup. migration-ui/* wrappers (src/components/migration-ui)
- * and SCTooltip were read in full: they emit ONLY tw:-prefixed Tailwind classes,
+ * and SCTooltip were read in full: they emit ONLY -prefixed Tailwind classes,
  * no Bootstrap component classes — so classes below come from raw/native
  * markup (native <button>/<input>/<table>/<div> elements, or literal
  * className strings passed as children into migration-ui components).
@@ -850,17 +850,20 @@ fieldset:disabled .btn {
 }
 
 /* ---------------------------------------------------------------------------
- * Collapse: .collapse:not(.show) only — CRITICAL for the vertical sidebar
+ * Collapse: .menu-dropdown:not(.show) only — CRITICAL for the vertical sidebar
  * submenu (src/containers/Layout/VerticalLayout.tsx renders
- * `className={'collapse menu-dropdown' + (open ? ' show' : '')}`; the
+ * `className={'menu-dropdown' + (open ? ' show' : '')}`; the
  * open/closed state depends entirely on this display toggle).
+ * Previously targeted bare ".collapse", but unprefixed Tailwind now generates
+ * its own `.collapse{visibility:collapse}` utility — renamed the app-side
+ * class to avoid the collision; selector re-targeted to match.
  * .collapsing (animated mid-transition state) has zero live usage — the app
  * toggles the "show" class directly with no intermediate class — skipped.
  * migration-ui Collapse (src/components/migration-ui/collapse.tsx) is a
- * separate pure-Tailwind grid-rows implementation and does not use ".collapse".
+ * separate pure-Tailwind grid-rows implementation and does not use ".menu-dropdown".
  * ------------------------------------------------------------------------- */
 
-.collapse:not(.show) {
+.menu-dropdown:not(.show) {
   display: none;
 }
 
@@ -882,4 +885,35 @@ fieldset:disabled .btn {
   padding-left: 0;
   margin-bottom: 0;
   list-style: none;
+}
+
+/* ---------------------------------------------------------------
+ * .nav / .nav-link core base — raw <ul className='nav nav-sm ...'>
+ * submenus in VerticalLayout.tsx rely on Bootstrap's list reset.
+ * Missed in the first port pass; sidebar sub-items grew list markers.
+ * --------------------------------------------------------------- */
+.nav {
+  --bs-nav-link-padding-x: 1rem;
+  --bs-nav-link-padding-y: 0.5rem;
+  --bs-nav-link-font-weight: ;
+  --bs-nav-link-color: #4481fd;
+  --bs-nav-link-hover-color: #4481fd;
+  --bs-nav-link-disabled-color: #878a99;
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+
+.nav-link {
+  display: block;
+  padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
+  font-size: var(--bs-nav-link-font-size);
+  font-weight: var(--bs-nav-link-font-weight);
+  color: var(--bs-nav-link-color);
+  text-decoration: none;
+  background: none;
+  border: 0;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
 }

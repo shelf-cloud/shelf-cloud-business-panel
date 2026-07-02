@@ -84,8 +84,8 @@ const ExportBlankReceivingTemplate = () => {
   }
 
   return (
-    <span className='tw:text-nowrap tw:text-info' style={{ cursor: 'pointer' }} onClick={exportExcelFile}>
-      <i className='mdi mdi-arrow-down-bold label-icon tw:align-middle tw:text-[13px] tw:me-0' />
+    <span className='text-nowrap text-info' style={{ cursor: 'pointer' }} onClick={exportExcelFile}>
+      <i className='mdi mdi-arrow-down-bold label-icon align-middle text-[13px] me-0' />
       Download Empty Template
     </span>
   )

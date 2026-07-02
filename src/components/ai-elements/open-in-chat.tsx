@@ -213,7 +213,7 @@ export type OpenInContentProps = ComponentProps<typeof DropdownMenuContent>;
 export const OpenInContent = ({ className, ...props }: OpenInContentProps) => (
   <DropdownMenuContent
     align="start"
-    className={cn("tw:w-[240px]", className)}
+    className={cn("w-[240px]", className)}
     {...props}
   />
 );
@@ -243,7 +243,7 @@ export const OpenInTrigger = ({ children, ...props }: OpenInTriggerProps) => (
     {children ?? (
       <Button type="button" variant="outline">
         Open in chat
-        <ChevronDownIcon className="tw:size-4" />
+        <ChevronDownIcon className="size-4" />
       </Button>
     )}
   </DropdownMenuTrigger>
@@ -256,14 +256,14 @@ export const OpenInChatGPT = (props: OpenInChatGPTProps) => {
   return (
     <DropdownMenuItem asChild {...props}>
       <a
-        className="tw:flex tw:items-center tw:gap-2"
+        className="flex items-center gap-2"
         href={providers.chatgpt.createUrl(query)}
         rel="noopener"
         target="_blank"
       >
-        <span className="tw:shrink-0">{providers.chatgpt.icon}</span>
-        <span className="tw:flex-1">{providers.chatgpt.title}</span>
-        <ExternalLinkIcon className="tw:size-4 tw:shrink-0" />
+        <span className="shrink-0">{providers.chatgpt.icon}</span>
+        <span className="flex-1">{providers.chatgpt.title}</span>
+        <ExternalLinkIcon className="size-4 shrink-0" />
       </a>
     </DropdownMenuItem>
   );
@@ -276,14 +276,14 @@ export const OpenInClaude = (props: OpenInClaudeProps) => {
   return (
     <DropdownMenuItem asChild {...props}>
       <a
-        className="tw:flex tw:items-center tw:gap-2"
+        className="flex items-center gap-2"
         href={providers.claude.createUrl(query)}
         rel="noopener"
         target="_blank"
       >
-        <span className="tw:shrink-0">{providers.claude.icon}</span>
-        <span className="tw:flex-1">{providers.claude.title}</span>
-        <ExternalLinkIcon className="tw:size-4 tw:shrink-0" />
+        <span className="shrink-0">{providers.claude.icon}</span>
+        <span className="flex-1">{providers.claude.title}</span>
+        <ExternalLinkIcon className="size-4 shrink-0" />
       </a>
     </DropdownMenuItem>
   );
@@ -296,14 +296,14 @@ export const OpenInT3 = (props: OpenInT3Props) => {
   return (
     <DropdownMenuItem asChild {...props}>
       <a
-        className="tw:flex tw:items-center tw:gap-2"
+        className="flex items-center gap-2"
         href={providers.t3.createUrl(query)}
         rel="noopener"
         target="_blank"
       >
-        <span className="tw:shrink-0">{providers.t3.icon}</span>
-        <span className="tw:flex-1">{providers.t3.title}</span>
-        <ExternalLinkIcon className="tw:size-4 tw:shrink-0" />
+        <span className="shrink-0">{providers.t3.icon}</span>
+        <span className="flex-1">{providers.t3.title}</span>
+        <ExternalLinkIcon className="size-4 shrink-0" />
       </a>
     </DropdownMenuItem>
   );
@@ -316,14 +316,14 @@ export const OpenInScira = (props: OpenInSciraProps) => {
   return (
     <DropdownMenuItem asChild {...props}>
       <a
-        className="tw:flex tw:items-center tw:gap-2"
+        className="flex items-center gap-2"
         href={providers.scira.createUrl(query)}
         rel="noopener"
         target="_blank"
       >
-        <span className="tw:shrink-0">{providers.scira.icon}</span>
-        <span className="tw:flex-1">{providers.scira.title}</span>
-        <ExternalLinkIcon className="tw:size-4 tw:shrink-0" />
+        <span className="shrink-0">{providers.scira.icon}</span>
+        <span className="flex-1">{providers.scira.title}</span>
+        <ExternalLinkIcon className="size-4 shrink-0" />
       </a>
     </DropdownMenuItem>
   );
@@ -336,14 +336,14 @@ export const OpenInv0 = (props: OpenInv0Props) => {
   return (
     <DropdownMenuItem asChild {...props}>
       <a
-        className="tw:flex tw:items-center tw:gap-2"
+        className="flex items-center gap-2"
         href={providers.v0.createUrl(query)}
         rel="noopener"
         target="_blank"
       >
-        <span className="tw:shrink-0">{providers.v0.icon}</span>
-        <span className="tw:flex-1">{providers.v0.title}</span>
-        <ExternalLinkIcon className="tw:size-4 tw:shrink-0" />
+        <span className="shrink-0">{providers.v0.icon}</span>
+        <span className="flex-1">{providers.v0.title}</span>
+        <ExternalLinkIcon className="size-4 shrink-0" />
       </a>
     </DropdownMenuItem>
   );
@@ -356,14 +356,14 @@ export const OpenInCursor = (props: OpenInCursorProps) => {
   return (
     <DropdownMenuItem asChild {...props}>
       <a
-        className="tw:flex tw:items-center tw:gap-2"
+        className="flex items-center gap-2"
         href={providers.cursor.createUrl(query)}
         rel="noopener"
         target="_blank"
       >
-        <span className="tw:shrink-0">{providers.cursor.icon}</span>
-        <span className="tw:flex-1">{providers.cursor.title}</span>
-        <ExternalLinkIcon className="tw:size-4 tw:shrink-0" />
+        <span className="shrink-0">{providers.cursor.icon}</span>
+        <span className="flex-1">{providers.cursor.title}</span>
+        <ExternalLinkIcon className="size-4 shrink-0" />
       </a>
     </DropdownMenuItem>
   );

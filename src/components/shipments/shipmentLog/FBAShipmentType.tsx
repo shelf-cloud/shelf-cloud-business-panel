@@ -39,7 +39,7 @@ const FBAShipmentType = ({ data }: Props) => {
   const OrderId = CleanSpecialCharacters(data.orderId)
 
   return (
-    <div className='tw:w-full' style={{ backgroundColor: '#F0F4F7', padding: '0px' }}>
+    <div className='w-full' style={{ backgroundColor: '#F0F4F7', padding: '0px' }}>
       {data.carrierStatus && (
         <Row>
           <Col xs={12}>
@@ -50,42 +50,42 @@ const FBAShipmentType = ({ data }: Props) => {
       <Row>
         <Col xs={12} lg={8}>
           <Card>
-            <CardHeader className='tw:py-4'>
-              <h5 className='tw:font-semibold tw:m-0'>Products</h5>
+            <CardHeader className='py-4'>
+              <h5 className='font-semibold m-0'>Products</h5>
             </CardHeader>
             <CardBody>
-              <div className='tw:overflow-x-auto'>
-                <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
-                  <thead className='tw:bg-[color:var(--vz-light)]'>
+              <div className='overflow-x-auto'>
+                <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+                  <thead className='bg-[color:var(--vz-light)]'>
                     <tr>
                       <th scope='col'>Title</th>
                       <th scope='col'>Sku</th>
-                      <th className='tw:text-center' scope='col'>
+                      <th className='text-center' scope='col'>
                         Qty
                       </th>
                     </tr>
                   </thead>
-                  <tbody className='tw:text-[11.2px]'>
+                  <tbody className='text-[11.2px]'>
                     {data.orderItems.map((product: ShipmentOrderItem, key) => (
-                      <tr key={key} className='tw:border-b tw:py-2'>
-                        <td className='tw:w-3/4 tw:font-semibold'>
+                      <tr key={key} className='border-b py-2'>
+                        <td className='w-3/4 font-semibold'>
                           {product.title || product.name}
                           {product.isKit === true &&
                             product.children.length > 0 &&
                             product.children.map((child: KitChildren) => (
-                              <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)] tw:font-light' key={child.orderChildrenId}>
+                              <p className='m-0 p-0 text-[var(--bs-secondary-color)] font-light' key={child.orderChildrenId}>
                                 {`- ${child.title === undefined ? child.name : child.title} Qty: ${child.quantity}`}
                               </p>
                             ))}
                         </td>
-                        <td className='tw:text-[var(--bs-secondary-color)]'>{product.sku}</td>
-                        <td className='tw:text-center'>{product.quantity}</td>
+                        <td className='text-[var(--bs-secondary-color)]'>{product.sku}</td>
+                        <td className='text-center'>{product.quantity}</td>
                       </tr>
                     ))}
-                    <tr className='tw:bg-light tw:text-[13px]'>
+                    <tr className='bg-light text-[13px]'>
                       <td></td>
-                      <td className='tw:text-left tw:font-bold tw:text-nowrap'>Total</td>
-                      <td className='tw:text-center tw:text-primary tw:font-semibold'>{data.totalItems}</td>
+                      <td className='text-left font-bold text-nowrap'>Total</td>
+                      <td className='text-center text-primary font-semibold'>{data.totalItems}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -95,15 +95,15 @@ const FBAShipmentType = ({ data }: Props) => {
         </Col>
         <Col xs={12} lg={4}>
           <Col xs={12}>
-            <Card className='tw:h-full'>
-              <CardHeader className='tw:py-4'>
-                <h5 className='tw:font-semibold tw:m-0'>Order Summary</h5>
+            <Card className='h-full'>
+              <CardHeader className='py-4'>
+                <h5 className='font-semibold m-0'>Order Summary</h5>
               </CardHeader>
               <CardBody>
-                <Row className='tw:m-0 tw:p-0 tw:flex tw:flex-row tw:justify-between tw:items-start'>
-                  <Col xs={6} className='tw:m-0 tw:p-0'>
-                    <span className='tw:text-[var(--bs-secondary-color)] tw:text-[11.2px]'>Store:</span>
-                    <div className='tw:flex tw:flex-col tw:justify-start tw:items-start tw:gap-2'>
+                <Row className='m-0 p-0 flex flex-row justify-between items-start'>
+                  <Col xs={6} className='m-0 p-0'>
+                    <span className='text-[var(--bs-secondary-color)] text-[11.2px]'>Store:</span>
+                    <div className='flex flex-col justify-start items-start gap-2'>
                       <img
                         loading='lazy'
                         src={data.channelLogo ? data.channelLogo : NoImageAdress}
@@ -115,12 +115,12 @@ const FBAShipmentType = ({ data }: Props) => {
                           objectFit: 'contain',
                         }}
                       />
-                      <span className='tw:text-[11.2px] tw:font-semibold'>{data.storeName}</span>
+                      <span className='text-[11.2px] font-semibold'>{data.storeName}</span>
                     </div>
-                    <span className='tw:text-[var(--bs-secondary-color)] tw:text-[11.2px]'>Order Date:</span>
-                    <p className='tw:text-[11.2px] tw:font-semibold tw:m-0'>{moment.utc(data.orderDate).format('LL')}</p>
-                    <span className='tw:text-[var(--bs-secondary-color)] tw:text-[11.2px]'>Closed Date:</span>
-                    {data.closedDate && <p className='tw:text-[11.2px] tw:font-semibold tw:m-0'>{moment.utc(data.closedDate).format('LL')}</p>}
+                    <span className='text-[var(--bs-secondary-color)] text-[11.2px]'>Order Date:</span>
+                    <p className='text-[11.2px] font-semibold m-0'>{moment.utc(data.orderDate).format('LL')}</p>
+                    <span className='text-[var(--bs-secondary-color)] text-[11.2px]'>Closed Date:</span>
+                    {data.closedDate && <p className='text-[11.2px] font-semibold m-0'>{moment.utc(data.closedDate).format('LL')}</p>}
                   </Col>
                   {/* <Col xs={6} className='m-0 p-0'>
                     <table className='table table-sm table-borderless table-nowrap m-0'>
@@ -157,32 +157,32 @@ const FBAShipmentType = ({ data }: Props) => {
             </Card>
           </Col>
           <Col xs={12}>
-            <Card className='tw:h-full'>
-              <CardHeader className='tw:py-4'>
-                <h5 className='tw:font-semibold tw:m-0'>Shipping</h5>
+            <Card className='h-full'>
+              <CardHeader className='py-4'>
+                <h5 className='font-semibold m-0'>Shipping</h5>
               </CardHeader>
               <CardBody>
-                <table className='tw:w-full tw:whitespace-nowrap tw:m-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
-                  <tbody className='tw:text-[11.2px]'>
+                <table className='w-full whitespace-nowrap m-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+                  <tbody className='text-[11.2px]'>
                     <tr>
-                      <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>Carrier:</td>
-                      <td className='tw:font-semibold tw:w-full tw:capitalize'>{data.carrierUsed}</td>
+                      <td className='text-[var(--bs-secondary-color)] text-nowrap'>Carrier:</td>
+                      <td className='font-semibold w-full capitalize'>{data.carrierUsed}</td>
                     </tr>
                     <tr>
-                      <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>Service Requested:</td>
-                      <td className='tw:font-semibold tw:w-full tw:capitalize'>{data.carrierService}</td>
+                      <td className='text-[var(--bs-secondary-color)] text-nowrap'>Service Requested:</td>
+                      <td className='font-semibold w-full capitalize'>{data.carrierService}</td>
                     </tr>
                     <tr>
-                      <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>Service Used:</td>
-                      <td className='tw:font-semibold tw:w-full tw:capitalize'>{data.carrierType}</td>
+                      <td className='text-[var(--bs-secondary-color)] text-nowrap'>Service Used:</td>
+                      <td className='font-semibold w-full capitalize'>{data.carrierType}</td>
                     </tr>
                     <tr>
-                      <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'># Of Pallets:</td>
-                      <td className='tw:font-semibold tw:w-full'>{data.numberPallets}</td>
+                      <td className='text-[var(--bs-secondary-color)] text-nowrap'># Of Pallets:</td>
+                      <td className='font-semibold w-full'>{data.numberPallets}</td>
                     </tr>
                     <tr>
-                      <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'># Of Boxes:</td>
-                      <td className='tw:font-semibold tw:w-full'>{data.numberBoxes}</td>
+                      <td className='text-[var(--bs-secondary-color)] text-nowrap'># Of Boxes:</td>
+                      <td className='font-semibold w-full'>{data.numberBoxes}</td>
                     </tr>
                     {/* <tr>
                       <td className='text-muted text-nowrap'>Customer Name:</td>
@@ -199,8 +199,8 @@ const FBAShipmentType = ({ data }: Props) => {
                     </tr> */}
                   </tbody>
                 </table>
-                <div className='tw:px-1 tw:text-[11.2px]'>
-                  <span className='tw:m-0 tw:text-[var(--bs-secondary-color)] tw:text-[11.2px]'>Tracking No.</span>
+                <div className='px-1 text-[11.2px]'>
+                  <span className='m-0 text-[var(--bs-secondary-color)] text-[11.2px]'>Tracking No.</span>
                   <ShipmentTrackingNumber
                     orderStatus={data.orderStatus}
                     orderType={data.orderType}
@@ -215,35 +215,35 @@ const FBAShipmentType = ({ data }: Props) => {
           </Col>
           <Col xs={12}>
             <Card>
-              <CardHeader className='tw:py-4'>
-                <h5 className='tw:font-semibold tw:m-0'>Charge Details</h5>
+              <CardHeader className='py-4'>
+                <h5 className='font-semibold m-0'>Charge Details</h5>
               </CardHeader>
               <CardBody>
-                <table className='tw:w-full tw:whitespace-nowrap tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
-                  <tbody className='tw:text-[11.2px]'>
-                    <tr className='tw:border-b tw:pb-2'>
-                      <td className='tw:text-[var(--bs-secondary-color)] tw:flex tw:flex-row tw:justify-start tw:items-start'>
+                <table className='w-full whitespace-nowrap mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+                  <tbody className='text-[11.2px]'>
+                    <tr className='border-b pb-2'>
+                      <td className='text-[var(--bs-secondary-color)] flex flex-row justify-start items-start'>
                         Pick Pack Charge
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill tw:ms-1 tw:text-[13px] tw:text-[color:var(--bs-secondary-color)]' id={`tooltip${OrderId}`}></i>
+                            <i className='ri-information-fill ms-1 text-[13px] text-[color:var(--bs-secondary-color)]' id={`tooltip${OrderId}`}></i>
                             <TooltipComponent target={`tooltip${OrderId}`} text={FBAServiceFees(data, currentRegion)} />
                           </>
                         )}
                       </td>
-                      <td className='tw:font-semibold tw:text-right'>{FormatCurrency(state.currentRegion, data.pickpackCharge)}</td>
+                      <td className='font-semibold text-right'>{FormatCurrency(state.currentRegion, data.pickpackCharge)}</td>
                     </tr>
-                    <tr className='tw:border-b tw:pb-2'>
-                      <td className='tw:text-[var(--bs-secondary-color)]'>Shipping Charge</td>
-                      <td className='tw:font-semibold tw:text-right'>{FormatCurrency(state.currentRegion, data.onixShipping)}</td>
+                    <tr className='border-b pb-2'>
+                      <td className='text-[var(--bs-secondary-color)]'>Shipping Charge</td>
+                      <td className='font-semibold text-right'>{FormatCurrency(state.currentRegion, data.onixShipping)}</td>
                     </tr>
-                    <tr className='tw:border-b tw:pb-2'>
-                      <td className='tw:text-[var(--bs-secondary-color)]'>Extra Charge</td>
-                      <td className='tw:font-semibold tw:text-right'>{FormatCurrency(state.currentRegion, data.extraCharge)}</td>
+                    <tr className='border-b pb-2'>
+                      <td className='text-[var(--bs-secondary-color)]'>Extra Charge</td>
+                      <td className='font-semibold text-right'>{FormatCurrency(state.currentRegion, data.extraCharge)}</td>
                     </tr>
                     <tr>
-                      <td className='tw:font-bold'>TOTAL</td>
-                      <td className='tw:text-primary tw:font-semibold tw:text-right'>{FormatCurrency(state.currentRegion, data.totalCharge)}</td>
+                      <td className='font-bold'>TOTAL</td>
+                      <td className='text-primary font-semibold text-right'>{FormatCurrency(state.currentRegion, data.totalCharge)}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -253,8 +253,8 @@ const FBAShipmentType = ({ data }: Props) => {
           {data.extraComment != '' && (
             <Col xl={12}>
               <Card>
-                <CardHeader className='tw:py-4'>
-                  <h5 className='tw:font-semibold tw:m-0'>Order Comment</h5>
+                <CardHeader className='py-4'>
+                  <h5 className='font-semibold m-0'>Order Comment</h5>
                 </CardHeader>
                 <CardBody>
                   <p>{data.extraComment}</p>

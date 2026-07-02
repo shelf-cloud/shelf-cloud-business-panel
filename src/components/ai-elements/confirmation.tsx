@@ -73,7 +73,7 @@ export const Confirmation = ({
 
   return (
     <ConfirmationContext.Provider value={contextValue}>
-      <Alert className={cn("tw:flex tw:flex-col tw:gap-2", className)} {...props} />
+      <Alert className={cn("flex flex-col gap-2", className)} {...props} />
     </ConfirmationContext.Provider>
   );
 };
@@ -84,7 +84,7 @@ export const ConfirmationTitle = ({
   className,
   ...props
 }: ConfirmationTitleProps) => (
-  <AlertDescription className={cn("tw:inline", className)} {...props} />
+  <AlertDescription className={cn("inline", className)} {...props} />
 );
 
 export interface ConfirmationRequestProps {
@@ -161,7 +161,7 @@ export const ConfirmationActions = ({
 
   return (
     <div
-      className={cn("tw:flex tw:items-center tw:justify-end tw:gap-2 tw:self-end", className)}
+      className={cn("flex items-center justify-end gap-2 self-end", className)}
       {...props}
     />
   );
@@ -170,5 +170,5 @@ export const ConfirmationActions = ({
 export type ConfirmationActionProps = ComponentProps<typeof Button>;
 
 export const ConfirmationAction = (props: ConfirmationActionProps) => (
-  <Button className="tw:h-8 tw:px-3 tw:text-sm" type="button" {...props} />
+  <Button className="h-8 px-3 text-sm" type="button" {...props} />
 );

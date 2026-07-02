@@ -11,23 +11,23 @@ const Widget = ({ summary }) => {
   return (
     <React.Fragment>
       <Col xl={3} md={6}>
-        <Card className='tw:transition-all tw:duration-300 tw:hover:-translate-y-[5px] tw:hover:shadow-[0_5px_10px_rgba(30,32,37,0.12)]'>
+        <Card className='transition-all duration-300 hover:-translate-y-[5px] hover:shadow-[0_5px_10px_rgba(30,32,37,0.12)]'>
           <CardBody>
-            <div className='tw:flex tw:items-center tw:justify-between'>
-              <div className='tw:flex tw:flex-row tw:justify-start tw:items-center'>
+            <div className='flex items-center justify-between'>
+              <div className='flex flex-row justify-start items-center'>
                 <div className=''>
-                  <span className={'tw:inline-flex tw:items-center tw:justify-center tw:p-2 tw:text-[22.75px] tw:bg-[color-mix(in_srgb,var(--primary)_18%,transparent)] tw:rounded-[1rem]'}>
+                  <span className={'inline-flex items-center justify-center p-2 text-[22.75px] bg-[color-mix(in_srgb,var(--primary)_18%,transparent)] rounded-[1rem]'}>
                     <i className='bx bxs-box' style={{ color: '#39B0EC' }}></i>
                   </span>
                 </div>
-                <p className='tw:capitalize tw:font-medium tw:mb-0 tw:ms-2'>Previous Month Charge</p>
+                <p className='capitalize font-medium mb-0 ms-2'>Previous Month Charge</p>
               </div>
-              <div className='tw:shrink-0'>
-                <h5 className={'tw:text-[13px] tw:mb-0 tw:font-bold'}>{summary?.previousMonth?.date}</h5>
+              <div className='shrink-0'>
+                <h5 className={'text-[13px] mb-0 font-bold'}>{summary?.previousMonth?.date}</h5>
               </div>
             </div>
-            <div className='tw:flex tw:items-end tw:justify-between tw:mt-2'>
-              <h4 className='tw:text-[22.75px] tw:font-semibold'>
+            <div className='flex items-end justify-between mt-2'>
+              <h4 className='text-[22.75px] font-semibold'>
                 <span className='counter-value'>
                   <CountUp
                     start={0}
@@ -55,23 +55,23 @@ const Widget = ({ summary }) => {
         </Card>
       </Col>
       <Col xl={3} md={6}>
-        <Card className='tw:transition-all tw:duration-300 tw:hover:-translate-y-[5px] tw:hover:shadow-[0_5px_10px_rgba(30,32,37,0.12)]'>
+        <Card className='transition-all duration-300 hover:-translate-y-[5px] hover:shadow-[0_5px_10px_rgba(30,32,37,0.12)]'>
           <CardBody>
-            <div className='tw:flex tw:items-center tw:justify-between'>
-              <div className='tw:flex tw:flex-row tw:justify-start tw:items-center'>
+            <div className='flex items-center justify-between'>
+              <div className='flex flex-row justify-start items-center'>
                 <div className=''>
-                  <span className={'tw:inline-flex tw:items-center tw:justify-center tw:p-2 tw:text-[22.75px] tw:bg-[color-mix(in_srgb,var(--primary)_18%,transparent)] tw:rounded-[1rem]'}>
+                  <span className={'inline-flex items-center justify-center p-2 text-[22.75px] bg-[color-mix(in_srgb,var(--primary)_18%,transparent)] rounded-[1rem]'}>
                     <i className='las la-clipboard-list' style={{ color: '#4F6EED' }}></i>
                   </span>
                 </div>
-                <p className='tw:capitalize tw:font-medium tw:mb-0 tw:ms-2'>Total Inventory</p>
+                <p className='capitalize font-medium mb-0 ms-2'>Total Inventory</p>
               </div>
-              <div className='tw:shrink-0'>
-                <h5 className={'tw:text-[13px] tw:mb-0 tw:font-bold'}>{summary?.skus} SKUs</h5>
+              <div className='shrink-0'>
+                <h5 className={'text-[13px] mb-0 font-bold'}>{summary?.skus} SKUs</h5>
               </div>
             </div>
-            <div className='tw:flex tw:items-end tw:justify-between tw:mt-2'>
-              <h4 className='tw:text-[22.75px] tw:font-semibold'>
+            <div className='flex items-end justify-between mt-2'>
+              <h4 className='text-[22.75px] font-semibold'>
                 <span className='counter-value'>
                   <CountUp start={0} separator={','} end={summary?.totalInventoryQty} decimals={0} duration={1} />
                 </span>
@@ -86,7 +86,7 @@ const Widget = ({ summary }) => {
                   </p>
                 </div>
                 <div className="flex-shrink-0">
-                  <h5 className={'tw:text-[14px] tw:mb-0 tw:font-bold'}>{summary?.skus} SKUs</h5>
+                  <h5 className={'text-[14px] mb-0 font-bold'}>{summary?.skus} SKUs</h5>
                 </div>
               </div>
               <div className="d-flex align-items-end justify-content-between mt-4">
@@ -120,29 +120,29 @@ const Widget = ({ summary }) => {
         </Card>
       </Col>
       <Col xl={3} md={6}>
-        <Card className='tw:transition-all tw:duration-300 tw:hover:-translate-y-[5px] tw:hover:shadow-[0_5px_10px_rgba(30,32,37,0.12)]'>
+        <Card className='transition-all duration-300 hover:-translate-y-[5px] hover:shadow-[0_5px_10px_rgba(30,32,37,0.12)]'>
           <CardBody>
-            <div className='tw:flex tw:items-center tw:justify-between'>
-              <div className='tw:flex tw:flex-row tw:justify-start tw:items-center'>
+            <div className='flex items-center justify-between'>
+              <div className='flex flex-row justify-start items-center'>
                 <div className=''>
-                  <span className={'tw:inline-flex tw:items-center tw:justify-center tw:px-2 tw:py-1 tw:text-[22.75px] tw:bg-[color-mix(in_srgb,var(--primary)_18%,transparent)] tw:rounded-[1rem]'}>
+                  <span className={'inline-flex items-center justify-center px-2 py-1 text-[22.75px] bg-[color-mix(in_srgb,var(--primary)_18%,transparent)] rounded-[1rem]'}>
                     <i className='ri-truck-fill' style={{ color: '#50BA99' }}></i>
                   </span>
                 </div>
-                <p className='tw:capitalize tw:font-medium tw:mb-0 tw:ms-2'>Total Shipments</p>
+                <p className='capitalize font-medium mb-0 ms-2'>Total Shipments</p>
               </div>
-              <div className='tw:shrink-0'>
-                <h5 className={'tw:text-[13px] tw:mb-0 tw:font-bold'}>
-                  <div className='tw:shrink-0'>
+              <div className='shrink-0'>
+                <h5 className={'text-[13px] mb-0 font-bold'}>
+                  <div className='shrink-0'>
                     {summary?.shipmentsDiff >= 0 ? (
-                      <h5 className={'tw:text-[14px] tw:mb-0 tw:font-bold'}>
-                        <i className={'tw:text-[13px] tw:align-middle ri-arrow-right-up-line'}></i>
+                      <h5 className={'text-[14px] mb-0 font-bold'}>
+                        <i className={'text-[13px] align-middle ri-arrow-right-up-line'}></i>
                         {`+`}
                         {summary?.shipmentsDiff.toFixed(0)} %
                       </h5>
                     ) : (
-                      <h5 className={'tw:text-[14px] tw:mb-0 tw:font-bold'}>
-                        <i className={'tw:text-[13px] tw:align-middle ri-arrow-right-down-line'}></i>
+                      <h5 className={'text-[14px] mb-0 font-bold'}>
+                        <i className={'text-[13px] align-middle ri-arrow-right-down-line'}></i>
                         {``}
                         {summary?.shipmentsDiff.toFixed(0)} %
                       </h5>
@@ -151,8 +151,8 @@ const Widget = ({ summary }) => {
                 </h5>
               </div>
             </div>
-            <div className='tw:flex tw:items-end tw:justify-between tw:mt-2'>
-              <h4 className='tw:text-[22.75px] tw:font-semibold'>
+            <div className='flex items-end justify-between mt-2'>
+              <h4 className='text-[22.75px] font-semibold'>
                 <span className='counter-value'>
                   <CountUp
                     start={0}
@@ -175,13 +175,13 @@ const Widget = ({ summary }) => {
                   </p>
                 </div>
                 <div className="flex-shrink-0">
-                  <h5 className={'tw:text-[14px] tw:mb-0 tw:font-bold'}>
+                  <h5 className={'text-[14px] mb-0 font-bold'}>
                     <div className="flex-shrink-0">
                       {summary?.shipmentsDiff >= 0 ? (
                         <h5 className={'fs-14 mb-0 text-success'}>
                           <i
                             className={
-                              'tw:text-[13px] tw:align-middle ri-arrow-right-up-line'
+                              'text-[13px] align-middle ri-arrow-right-up-line'
                             }
                           ></i>
                           {` +`}
@@ -191,7 +191,7 @@ const Widget = ({ summary }) => {
                         <h5 className={'fs-14 mb-0 text-danger'}>
                           <i
                             className={
-                              'tw:text-[13px] tw:align-middle ri-arrow-right-down-line'
+                              'text-[13px] align-middle ri-arrow-right-down-line'
                             }
                           ></i>
                           {` `}
@@ -233,29 +233,29 @@ const Widget = ({ summary }) => {
         </Card>
       </Col>
       <Col xl={3} md={6}>
-        <Card className='tw:transition-all tw:duration-300 tw:hover:-translate-y-[5px] tw:hover:shadow-[0_5px_10px_rgba(30,32,37,0.12)]'>
+        <Card className='transition-all duration-300 hover:-translate-y-[5px] hover:shadow-[0_5px_10px_rgba(30,32,37,0.12)]'>
           <CardBody>
-            <div className='tw:flex tw:items-center tw:justify-between'>
-              <div className='tw:flex tw:flex-row tw:justify-start tw:items-center'>
+            <div className='flex items-center justify-between'>
+              <div className='flex flex-row justify-start items-center'>
                 <div className=''>
-                  <span className={'tw:inline-flex tw:items-center tw:justify-center tw:px-2 tw:py-1 tw:text-[22.75px] tw:bg-[color-mix(in_srgb,var(--primary)_18%,transparent)] tw:rounded-[1rem]'}>
+                  <span className={'inline-flex items-center justify-center px-2 py-1 text-[22.75px] bg-[color-mix(in_srgb,var(--primary)_18%,transparent)] rounded-[1rem]'}>
                     <i className='ri-luggage-cart-line' style={{ color: '#2D81FE' }}></i>
                   </span>
                 </div>
-                <p className='tw:capitalize tw:font-medium tw:mb-0 tw:ms-2'>Pick and Pack Charges</p>
+                <p className='capitalize font-medium mb-0 ms-2'>Pick and Pack Charges</p>
               </div>
-              <div className='tw:shrink-0'>
-                <h5 className={'tw:text-[13px] tw:mb-0 tw:font-bold'}>
-                  <div className='tw:shrink-0'>
+              <div className='shrink-0'>
+                <h5 className={'text-[13px] mb-0 font-bold'}>
+                  <div className='shrink-0'>
                     {summary?.pickPackDiff >= 0 ? (
-                      <h5 className={'tw:text-[14px] tw:mb-0 tw:font-bold'}>
-                        <i className={'tw:text-[13px] tw:align-middle ri-arrow-right-up-line'}></i>
+                      <h5 className={'text-[14px] mb-0 font-bold'}>
+                        <i className={'text-[13px] align-middle ri-arrow-right-up-line'}></i>
                         {`+`}
                         {summary?.pickPackDiff.toFixed(0)} %
                       </h5>
                     ) : (
-                      <h5 className={'tw:text-[14px] tw:mb-0 tw:font-bold'}>
-                        <i className={'tw:text-[13px] tw:align-middle ri-arrow-right-down-line'}></i>
+                      <h5 className={'text-[14px] mb-0 font-bold'}>
+                        <i className={'text-[13px] align-middle ri-arrow-right-down-line'}></i>
                         {``}
                         {summary?.pickPackDiff.toFixed(0)} %
                       </h5>
@@ -264,8 +264,8 @@ const Widget = ({ summary }) => {
                 </h5>
               </div>
             </div>
-            <div className='tw:flex tw:items-end tw:justify-between tw:mt-2'>
-              <h4 className='tw:text-[22.75px] tw:font-semibold'>
+            <div className='flex items-end justify-between mt-2'>
+              <h4 className='text-[22.75px] font-semibold'>
                 <span className='counter-value'>
                   <CountUp
                     start={0}
@@ -288,13 +288,13 @@ const Widget = ({ summary }) => {
                   </p>
                 </div>
                 <div className="flex-shrink-0">
-                  <h5 className={'tw:text-[14px] tw:mb-0 tw:font-bold'}>
+                  <h5 className={'text-[14px] mb-0 font-bold'}>
                     <div className="flex-shrink-0">
                       {summary?.pickPackDiff >= 0 ? (
                         <h5 className={'fs-14 mb-0 text-success'}>
                           <i
                             className={
-                              'tw:text-[13px] tw:align-middle ri-arrow-right-up-line'
+                              'text-[13px] align-middle ri-arrow-right-up-line'
                             }
                           ></i>
                           {` +`}
@@ -304,7 +304,7 @@ const Widget = ({ summary }) => {
                         <h5 className={'fs-14 mb-0 text-danger'}>
                           <i
                             className={
-                              'tw:text-[13px] tw:align-middle ri-arrow-right-down-line'
+                              'text-[13px] align-middle ri-arrow-right-down-line'
                             }
                           ></i>
                           {` `}

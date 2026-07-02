@@ -41,13 +41,13 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions,
   return (
     <ButtonGroup>
       <Dropdown isOpen={openDatesMenu} toggle={() => setOpenDatesMenu(!openDatesMenu)}>
-        <DropdownToggle caret className='tw:text-[11.2px]' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }} color='light'>
+        <DropdownToggle caret className='text-[11.2px]' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }} color='light'>
           Filters
         </DropdownToggle>
         <DropdownMenu style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
-          <div className={'tw:px-6 tw:py-4'}>
-            <div className='tw:flex tw:flex-col tw:justify-start tw:gap-2'>
-              <span className='tw:text-[11.2px] tw:font-normal'>Filter By Store:</span>
+          <div className={'px-6 py-4'}>
+            <div className='flex flex-col justify-start gap-2'>
+              <span className='text-[11.2px] font-normal'>Filter By Store:</span>
               <SimpleSelect
                 selected={filters.store}
                 handleSelect={(option) => {
@@ -59,7 +59,7 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions,
               />
               {filters.showStaus && (
                 <>
-                  <span className='tw:text-[11.2px] tw:font-normal'>Filter By Status:</span>
+                  <span className='text-[11.2px] font-normal'>Filter By Status:</span>
                   <SimpleSelect
                     selected={filters.status}
                     handleSelect={(option) => {
@@ -72,8 +72,8 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions,
               )}
               {filters.showOverdue && (
                 <>
-                  <div className='form-check form-switch form-switch-right form-switch-sm tw:flex tw:flex-row tw:justify-start tw:items-end'>
-                    <Label className='tw:font-normal tw:text-[11.2px] tw:w-3/4'>Show Only Overdue</Label>
+                  <div className='form-check form-switch form-switch-right form-switch-sm flex flex-row justify-start items-end'>
+                    <Label className='font-normal text-[11.2px] w-3/4'>Show Only Overdue</Label>
                     <Switch
                       id='showOnlyOverdue'
                       name='showOnlyOverdue'
@@ -88,12 +88,12 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions,
                   </div>
                   {filters.onlyOverdue && setdaysOverdue && (
                     <>
-                      <Label className='tw:font-normal tw:text-[11.2px] tw:w-3/4 tw:mb-0'>Days Overdue:</Label>
+                      <Label className='font-normal text-[11.2px] w-3/4 mb-0'>Days Overdue:</Label>
                       <DebounceInput
                         type='number'
                         minLength={1}
                         debounceTimeout={700}
-                        className='form-control form-control-sm tw:text-[13px]'
+                        className='form-control form-control-sm text-[13px]'
                         placeholder='Days Overdue'
                         id='daysOverdue'
                         value={handleDaysOverdueValue}
@@ -117,7 +117,7 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions,
                   }))
                   setOpenDatesMenu(false)
                 }}
-                className='btn btn-link tw:p-0 tw:border-0 tw:no-underline tw:text-[var(--bs-secondary-color)] tw:mt-2 tw:text-[11.2px]'>
+                className='btn btn-link p-0 border-0 no-underline text-[var(--bs-secondary-color)] mt-2 text-[11.2px]'>
                 Clear All
               </button>
             </div>

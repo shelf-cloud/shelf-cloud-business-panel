@@ -131,13 +131,13 @@ const Unsellables = ({ session }: Props) => {
           <Container fluid>
             <Row>
               <Col lg={12}>
-                <Row className='tw:flex tw:flex-col-reverse tw:justify-center tw:items-end tw:gap-2 tw:mb-1 tw:md:flex-row tw:md:justify-between tw:md:items-center'>
-                  <div className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:md:flex-row tw:md:justify-between tw:md:items-center tw:w-auto'>
+                <Row className='flex flex-col-reverse justify-center items-end gap-2 mb-1 md:flex-row md:justify-between md:items-center'>
+                  <div className='flex flex-col justify-center items-end gap-2 md:flex-row md:justify-between md:items-center w-auto'>
                     <div>
                       <Link href={'/Returns'}>
                         <Button color='primary' style={{ cursor: 'pointer' }}>
                           <span className='icon-on'>
-                            <i className='ri-arrow-left-line tw:align-bottom tw:me-1' />
+                            <i className='ri-arrow-left-line align-bottom me-1' />
                             Returns
                           </span>
                         </Button>

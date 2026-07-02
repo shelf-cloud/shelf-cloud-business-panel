@@ -3,7 +3,7 @@
  * Bootstrap grid — used subset only.
  *
  * Verdict: migration-ui Container/Row/Col (src/components/migration-ui/layout.tsx)
- * emit pure tw: classes (tw:flex tw:flex-wrap, tw:w-N/12 fractions, tw:mx-auto
+ * emit pure  classes (flex flex-wrap, w-N/12 fractions, mx-auto
  * max-widths) — no container/row/col classes come from that component.
  * No literal container-fluid/row classNames exist anywhere in src/.
  *

@@ -59,7 +59,7 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
 
   const columnsSkuListToAdd: any = [
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>Image</span>,
+      name: <span className='font-extrabold text-[13px]'>Image</span>,
       selector: (row: SkuToAddPo) => {
         return (
           <div
@@ -85,13 +85,13 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
       grow: 0,
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>Title</span>,
+      name: <span className='font-extrabold text-[13px]'>Title</span>,
       selector: (row: SkuToAddPo) => {
         return (
           <>
-            <span className='tw:text-[11.2px] tw:font-semibold'>{row.title}</span>
+            <span className='text-[11.2px] font-semibold'>{row.title}</span>
             <br />
-            <span className='tw:text-[var(--bs-secondary-color)] tw:text-[11.2px] tw:font-normal'>{`${row.sku} / ${row.barcode} / ${row.asin}`}</span>
+            <span className='text-[var(--bs-secondary-color)] text-[11.2px] font-normal'>{`${row.sku} / ${row.barcode} / ${row.asin}`}</span>
           </>
         )
       },
@@ -101,12 +101,12 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
       grow: 1,
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'></span>,
+      name: <span className='font-extrabold text-[13px]'></span>,
       selector: (row: SkuToAddPo) => {
         if (skuToAddToPo.some((item) => item.sku == row.sku) || addSkuToReceiving.receivingItems.includes(row.sku)) {
-          return <i className='tw:text-[19.5px] tw:text-[var(--bs-secondary-color)] las la-check-circle' />
+          return <i className='text-[19.5px] text-[var(--bs-secondary-color)] las la-check-circle' />
         } else {
-          return <i className='tw:text-[19.5px] tw:text-success las la-plus-circle' style={{ cursor: 'pointer' }} onClick={() => handleAddSkuToList(row)} />
+          return <i className='text-[19.5px] text-success las la-plus-circle' style={{ cursor: 'pointer' }} onClick={() => handleAddSkuToList(row)} />
         }
       },
       sortable: false,
@@ -117,7 +117,7 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
 
   const columnsSkuListAdded: any = [
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>Image</span>,
+      name: <span className='font-extrabold text-[13px]'>Image</span>,
       selector: (row: SkuToAddPo) => {
         return (
           <div
@@ -142,13 +142,13 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
       grow: 0,
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>Title</span>,
+      name: <span className='font-extrabold text-[13px]'>Title</span>,
       selector: (row: SkuToAddPo) => {
         return (
           <>
-            <span className='tw:text-[11.2px] tw:font-semibold'>{row.title}</span>
+            <span className='text-[11.2px] font-semibold'>{row.title}</span>
             <br />
-            <span className='tw:text-[var(--bs-secondary-color)] tw:text-[11.2px] tw:font-normal'>{`${row.sku} / ${row.barcode} / ${row.asin}`}</span>
+            <span className='text-[var(--bs-secondary-color)] text-[11.2px] font-normal'>{`${row.sku} / ${row.barcode} / ${row.asin}`}</span>
           </>
         )
       },
@@ -158,7 +158,7 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
       grow: 1,
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>Qty</span>,
+      name: <span className='font-extrabold text-[13px]'>Qty</span>,
       selector: (row: SkuInListToAddToPo) => {
         return (
           <>
@@ -167,7 +167,7 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
               onWheel={(e: any) => e.currentTarget.blur()}
               minLength={1}
               debounceTimeout={300}
-              className={'form-control tw:text-[11.2px] tw:m-0 ' + (Number(row.addQty) <= 0 || row.addQty == '' ? 'tw:border-destructive' : '')}
+              className={'form-control text-[11.2px] m-0 ' + (Number(row.addQty) <= 0 || row.addQty == '' ? 'border-destructive' : '')}
               style={{ maxWidth: '80px' }}
               placeholder='Qty...'
               id='qtyToAdd'
@@ -175,7 +175,7 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
               value={row.addQty}
               onChange={(e) => handleAddQtyToSku(Number(e.target.value), row.sku)}
             />
-            {(Number(row.addQty) <= 0 || row.addQty == '') && <span className='tw:text-destructive tw:text-[11.2px]'>Qty Error</span>}
+            {(Number(row.addQty) <= 0 || row.addQty == '') && <span className='text-destructive text-[11.2px]'>Qty Error</span>}
           </>
         )
       },
@@ -185,9 +185,9 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
       grow: 0,
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'></span>,
+      name: <span className='font-extrabold text-[13px]'></span>,
       selector: (row: SkuInListToAddToPo) => {
-        return <i className='tw:text-[22.75px] tw:text-destructive las la-trash-alt tw:ps-4' style={{ cursor: 'pointer' }} onClick={() => handleDeleteFromSkuList(row.sku)} />
+        return <i className='text-[22.75px] text-destructive las la-trash-alt ps-4' style={{ cursor: 'pointer' }} onClick={() => handleDeleteFromSkuList(row.sku)} />
       },
       sortable: false,
       compact: true,
@@ -274,27 +274,27 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
             receivingItems: [],
           })
         }}
-        className='modal-title tw:pb-0'
+        className='modal-title pb-0'
         id='myModalLabel'>
         <p>Add Products to Receiving</p>
-        <span className='tw:text-[16.25px] tw:mb-0 tw:font-normal tw:text-primary'>
-          Order Number: <span className='tw:text-[16.25px] tw:font-bold tw:text-black'>{addSkuToReceiving.orderNumber}</span>
+        <span className='text-[16.25px] mb-0 font-normal text-primary'>
+          Order Number: <span className='text-[16.25px] font-bold text-black'>{addSkuToReceiving.orderNumber}</span>
         </span>
         <br />
       </ModalHeader>
       <ModalBody>
         <Row>
-          <Col sm={6} className='tw:overflow-auto tw:h-full'>
-            <Row className='tw:flex tw:flex-col-reverse tw:justify-center tw:items-end tw:gap-2 tw:mb-2 tw:md:flex-row tw:md:justify-between tw:md:items-center'>
-              <span className='tw:text-[19.5px] tw:font-semibold tw:text-[var(--bs-secondary-color)] tw:flex-1'>SKU List</span>
-              <div className='tw:w-full tw:md:w-7/12'>
-                <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:p-0'>
-                  <div className='tw:relative tw:flex tw:rounded-md tw:w-full tw:overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+          <Col sm={6} className='overflow-auto h-full'>
+            <Row className='flex flex-col-reverse justify-center items-end gap-2 mb-2 md:flex-row md:justify-between md:items-center'>
+              <span className='text-[19.5px] font-semibold text-[var(--bs-secondary-color)] flex-1'>SKU List</span>
+              <div className='w-full md:w-7/12'>
+                <div className='flex flex-row justify-end items-center p-0'>
+                  <div className='relative flex rounded-md w-full overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                     <DebounceInput
                       minLength={2}
                       debounceTimeout={500}
                       type='text'
-                      className='tw:h-9 tw:w-full tw:border-0 tw:bg-white tw:px-3 tw:text-sm tw:outline-none'
+                      className='h-9 w-full border-0 bg-white px-3 text-sm outline-none'
                       placeholder='Search...'
                       id='search-options'
                       value={searchValue}
@@ -304,12 +304,12 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
                       }}
                     />
                     <span
-                      className='tw:flex tw:items-center tw:justify-center tw:bg-white'
+                      className='flex items-center justify-center bg-white'
                       style={{
                         cursor: 'pointer',
                       }}
                       onClick={() => setSearchValue('')}>
-                      <i className='mdi mdi-window-close tw:text-[19.5px] tw:m-0 tw:px-2 tw:py-0 tw:text-[var(--bs-secondary-color)]' />
+                      <i className='mdi mdi-window-close text-[19.5px] m-0 px-2 py-0 text-[var(--bs-secondary-color)]' />
                     </span>
                   </div>
                 </div>
@@ -324,20 +324,20 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
                 dense={true}
                 fixedHeader={true}
                 fixedHeaderScrollHeight='60vh'
-                className='tw:pb-6'
+                className='pb-6'
               />
             </Col>
           </Col>
           <Col sm={6}>
-            <Row className='tw:flex tw:flex-col-reverse tw:justify-center tw:items-end tw:gap-2 tw:mb-2 tw:md:flex-row tw:md:justify-end tw:md:items-center'>
-              <span className='tw:text-[19.5px] tw:font-semibold tw:text-[var(--bs-secondary-color)]'>SKU List to Add to PO</span>
+            <Row className='flex flex-col-reverse justify-center items-end gap-2 mb-2 md:flex-row md:justify-end md:items-center'>
+              <span className='text-[19.5px] font-semibold text-[var(--bs-secondary-color)]'>SKU List to Add to PO</span>
             </Row>
             <Col sm={12} style={{ height: '60vh', overflowX: 'hidden', overflowY: 'auto' }}>
               <DataTable columns={columnsSkuListAdded} data={skuToAddToPo || []} striped={true} dense={true} fixedHeader={true} fixedHeaderScrollHeight='60vh' />
             </Col>
           </Col>
           <Row md={12}>
-            <div className='tw:text-end'>
+            <div className='text-end'>
               <Button disabled={hasErrors} type='button' color='success' onClick={handleSubmitProductsToManualReceiving}>
                 {loading ? (
                   <span>

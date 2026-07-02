@@ -63,10 +63,10 @@ const Add_Sku_To_Purchase_Order = ({}) => {
 
   const columnsSkuListToAdd: any = [
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Item</span>,
+      name: <span className='font-bold text-[13px]'>Item</span>,
       selector: (row: SkuToAddPo) => {
         return (
-          <div className='tw:flex tw:justify-center tw:items-center tw:gap-2 tw:my-1'>
+          <div className='flex justify-center items-center gap-2 my-1'>
             <div
               style={{
                 width: '100%',
@@ -84,8 +84,8 @@ const Add_Sku_To_Purchase_Order = ({}) => {
               />
             </div>
             <div>
-              <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:font-semibold'>{row.title}</p>
-              <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)] tw:text-[11.2px] tw:font-normal'>{`${row.sku} / ${row.barcode} / ${row.asin}`}</p>
+              <p className='m-0 p-0 text-[11.2px] font-semibold'>{row.title}</p>
+              <p className='m-0 p-0 text-[var(--bs-secondary-color)] text-[11.2px] font-normal'>{`${row.sku} / ${row.barcode} / ${row.asin}`}</p>
             </div>
           </div>
         )
@@ -97,12 +97,12 @@ const Add_Sku_To_Purchase_Order = ({}) => {
       grow: 1,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Add</span>,
+      name: <span className='font-bold text-[13px]'>Add</span>,
       selector: (row: SkuToAddPo) => {
         if (skuToAddToPo.some((item) => item.sku == row.sku)) {
-          return <i className='tw:text-[22.75px] tw:text-[color:var(--bs-secondary-color)] las la-check-circle' />
+          return <i className='text-[22.75px] text-[color:var(--bs-secondary-color)] las la-check-circle' />
         } else {
-          return <i className='tw:text-[22.75px] tw:text-success las la-plus-circle' style={{ cursor: 'pointer' }} onClick={() => handleAddSkuToList(row)} />
+          return <i className='text-[22.75px] text-success las la-plus-circle' style={{ cursor: 'pointer' }} onClick={() => handleAddSkuToList(row)} />
         }
       },
       sortable: false,
@@ -114,10 +114,10 @@ const Add_Sku_To_Purchase_Order = ({}) => {
 
   const columnsSkuListAdded: any = [
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Image</span>,
+      name: <span className='font-bold text-[13px]'>Image</span>,
       selector: (row: SkuToAddPo) => {
         return (
-          <div className='tw:flex tw:justify-center tw:items-center tw:gap-2 tw:my-1'>
+          <div className='flex justify-center items-center gap-2 my-1'>
             <div
               style={{
                 width: '100%',
@@ -135,8 +135,8 @@ const Add_Sku_To_Purchase_Order = ({}) => {
               />
             </div>
             <div>
-              <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:font-semibold'>{row.title}</p>
-              <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)] tw:text-[11.2px] tw:font-normal'>{`${row.sku} / ${row.barcode} / ${row.asin}`}</p>
+              <p className='m-0 p-0 text-[11.2px] font-semibold'>{row.title}</p>
+              <p className='m-0 p-0 text-[var(--bs-secondary-color)] text-[11.2px] font-normal'>{`${row.sku} / ${row.barcode} / ${row.asin}`}</p>
             </div>
           </div>
         )
@@ -148,7 +148,7 @@ const Add_Sku_To_Purchase_Order = ({}) => {
       grow: 1,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Qty</span>,
+      name: <span className='font-bold text-[13px]'>Qty</span>,
       selector: (row: SkuInListToAddToPo) => {
         return (
           <>
@@ -157,7 +157,7 @@ const Add_Sku_To_Purchase_Order = ({}) => {
               onWheel={(e: any) => e.currentTarget.blur()}
               minLength={1}
               debounceTimeout={300}
-              className={'form-control form-control-sm tw:text-[13px] tw:m-0 ' + (Number(row.addQty) <= 0 || row.addQty == '' ? 'tw:border-danger' : '')}
+              className={'form-control form-control-sm text-[13px] m-0 ' + (Number(row.addQty) <= 0 || row.addQty == '' ? 'border-danger' : '')}
               style={{ maxWidth: '80px' }}
               placeholder='Qty...'
               id='qtyToAdd'
@@ -165,7 +165,7 @@ const Add_Sku_To_Purchase_Order = ({}) => {
               value={row.addQty}
               onChange={(e) => handleAddQtyToSku(Number(e.target.value), row.sku)}
             />
-            {(Number(row.addQty) <= 0 || row.addQty == '') && <span className='tw:text-danger tw:text-[11.2px]'>Qty Error</span>}
+            {(Number(row.addQty) <= 0 || row.addQty == '') && <span className='text-danger text-[11.2px]'>Qty Error</span>}
           </>
         )
       },
@@ -175,9 +175,9 @@ const Add_Sku_To_Purchase_Order = ({}) => {
       grow: 0,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Remove</span>,
+      name: <span className='font-bold text-[13px]'>Remove</span>,
       selector: (row: SkuInListToAddToPo) => {
-        return <i className='tw:text-[19.5px] tw:text-destructive las la-trash-alt tw:ps-4' style={{ cursor: 'pointer' }} onClick={() => handleDeleteFromSkuList(row.sku)} />
+        return <i className='text-[19.5px] text-destructive las la-trash-alt ps-4' style={{ cursor: 'pointer' }} onClick={() => handleDeleteFromSkuList(row.sku)} />
       },
       sortable: false,
       center: true,
@@ -242,25 +242,25 @@ const Add_Sku_To_Purchase_Order = ({}) => {
 
   return (
     <Modal fade={false} scrollable={true} size='xl' id='addSkuToPoModal' isOpen={show} toggle={handleCloseModal}>
-      <ModalHeader toggle={handleCloseModal} className='modal-title tw:pb-0' id='addSkuToPoModalLabel'>
+      <ModalHeader toggle={handleCloseModal} className='modal-title pb-0' id='addSkuToPoModalLabel'>
         Add Products to PO
       </ModalHeader>
       <ModalBody>
-        <p className='tw:m-0 tw:text-[16.25px] tw:font-semibold'>
-          Purchase Order: <span className='tw:text-primary'>{orderNumber}</span>
+        <p className='m-0 text-[16.25px] font-semibold'>
+          Purchase Order: <span className='text-primary'>{orderNumber}</span>
         </p>
-        <p className='tw:m-0 tw:text-[16.25px] tw:font-semibold'>
-          Supplier: <span className='tw:text-primary'>{suppliersName}</span>
+        <p className='m-0 text-[16.25px] font-semibold'>
+          Supplier: <span className='text-primary'>{suppliersName}</span>
         </p>
         {hasSplitting && (
-          <p className='tw:text-[16.25px] tw:font-semibold'>
-            To Split: <span className='tw:text-primary'>{split?.splitName}</span>
+          <p className='text-[16.25px] font-semibold'>
+            To Split: <span className='text-primary'>{split?.splitName}</span>
           </p>
         )}
         <Row>
-          <Col xs={12} md={6} className='tw:overflow-auto tw:h-full'>
-            <Row className='tw:flex tw:flex-col-reverse tw:justify-center tw:items-end tw:gap-2 tw:mb-2 md:tw:flex-row md:tw:justify-between md:tw:items-center'>
-              <span className='tw:text-[19.5px] tw:font-semibold tw:flex-1'>SKU List</span>
+          <Col xs={12} md={6} className='overflow-auto h-full'>
+            <Row className='flex flex-col-reverse justify-center items-end gap-2 mb-2 md:flex-row md:justify-between md:items-center'>
+              <span className='text-[19.5px] font-semibold flex-1'>SKU List</span>
               <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='none' widths='col-12 col-md-7' />
             </Row>
             <Col sm={12} style={{ height: '60vh', overflowX: 'hidden', overflowY: 'auto' }}>
@@ -272,14 +272,14 @@ const Add_Sku_To_Purchase_Order = ({}) => {
                 dense={true}
                 fixedHeader={true}
                 fixedHeaderScrollHeight='60vh'
-                className='tw:pb-4'
+                className='pb-4'
                 customStyles={customStyles}
               />
             </Col>
           </Col>
           <Col xs={12} md={6}>
-            <Row className='tw:flex tw:flex-col-reverse tw:justify-center tw:items-end tw:gap-2 tw:mb-2 md:tw:flex-row md:tw:justify-end md:tw:items-center'>
-              <span className='tw:text-[19.5px] tw:font-semibold'>Selected SKUs to Add to Purchase Order</span>
+            <Row className='flex flex-col-reverse justify-center items-end gap-2 mb-2 md:flex-row md:justify-end md:items-center'>
+              <span className='text-[19.5px] font-semibold'>Selected SKUs to Add to Purchase Order</span>
             </Row>
             <Col sm={12} style={{ height: '60vh', overflowX: 'hidden', overflowY: 'auto' }}>
               <DataTable
@@ -295,11 +295,11 @@ const Add_Sku_To_Purchase_Order = ({}) => {
           </Col>
         </Row>
         <Row md={12}>
-          <div className='tw:mt-4 tw:flex tw:justify-end tw:items-center tw:gap-2'>
-            <Button type='button' color='light' className='tw:text-[11.2px]' onClick={handleCloseModal}>
+          <div className='mt-4 flex justify-end items-center gap-2'>
+            <Button type='button' color='light' className='text-[11.2px]' onClick={handleCloseModal}>
               Cancel
             </Button>
-            <Button disabled={loading || hasErrors} type='button' color='success' className='tw:text-[11.2px]' onClick={handleSubmitProductsToPo}>
+            <Button disabled={loading || hasErrors} type='button' color='success' className='text-[11.2px]' onClick={handleSubmitProductsToPo}>
               {loading ? (
                 <span>
                   <Spinner color='light' size={'sm'} /> Adding...

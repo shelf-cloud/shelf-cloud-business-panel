@@ -250,10 +250,10 @@ const Deductions = ({ session, sessionToken }: Props) => {
         <div className='page-content'>
           <BreadCrumb title='Deductions' pageTitle='Commerce HUB' />
           <Container fluid>
-            <div className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:mb-1 tw:lg:flex-row tw:md:justify-between tw:md:items-center tw:px-1'>
-              <div className='tw:w-full tw:flex tw:flex-col tw:justify-center tw:items-start tw:gap-2 tw:mb-0 tw:lg:flex-row tw:lg:justify-start tw:lg:items-center tw:px-0'>
-                <Button color='primary' className='btn-label tw:text-[11.2px]' onClick={downloadInfoToExcel}>
-                  <i className='las la-cloud-download-alt label-icon tw:align-middle tw:text-[19.5px] tw:me-2' />
+            <div className='flex flex-col justify-center items-end gap-2 mb-1 lg:flex-row md:justify-between md:items-center px-1'>
+              <div className='w-full flex flex-col justify-center items-start gap-2 mb-0 lg:flex-row lg:justify-start lg:items-center px-0'>
+                <Button color='primary' className='btn-label text-[11.2px]' onClick={downloadInfoToExcel}>
+                  <i className='las la-cloud-download-alt label-icon align-middle text-[19.5px] me-2' />
                   Download To Excel
                 </Button>
                 {selectedRows.length > 0 && (
@@ -265,28 +265,28 @@ const Deductions = ({ session, sessionToken }: Props) => {
                   />
                 )}
               </div>
-              <div className='tw:w-full tw:flex tw:flex-col-reverse tw:justify-center tw:items-start tw:gap-2 tw:mb-0 tw:lg:flex-row tw:lg:justify-end tw:lg:items-center tw:px-0'>
-                <div className='app-search tw:p-0 tw:w-full tw:lg:w-5/12'>
-                  <div className='tw:relative tw:flex tw:rounded-lg tw:w-full tw:overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+              <div className='w-full flex flex-col-reverse justify-center items-start gap-2 mb-0 lg:flex-row lg:justify-end lg:items-center px-0'>
+                <div className='app-search p-0 w-full lg:w-5/12'>
+                  <div className='relative flex rounded-lg w-full overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                     <DebounceInput
                       type='text'
                       minLength={1}
                       debounceTimeout={500}
-                      className='form-control input_background_white tw:text-[13px]'
+                      className='form-control input_background_white text-[13px]'
                       placeholder='Search...'
                       id='search-options'
                       value={searchValue}
                       onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
                       onChange={(e) => setSearchValue(e.target.value)}
                     />
-                    <span className='mdi mdi-magnify search-widget-icon tw:text-[19.5px]'></span>
+                    <span className='mdi mdi-magnify search-widget-icon text-[19.5px]'></span>
                     <span
-                      className='tw:flex tw:items-center tw:justify-center input_background_white'
+                      className='flex items-center justify-center input_background_white'
                       style={{
                         cursor: 'pointer',
                       }}
                       onClick={() => setSearchValue('')}>
-                      <i className='mdi mdi-window-close tw:text-[19.5px] tw:m-0 tw:px-2 tw:py-0 tw:text-[color:var(--bs-secondary-color)]' />
+                      <i className='mdi mdi-window-close text-[19.5px] m-0 px-2 py-0 text-[color:var(--bs-secondary-color)]' />
                     </span>
                   </div>
                 </div>
@@ -298,7 +298,7 @@ const Deductions = ({ session, sessionToken }: Props) => {
                   handleChangeDatesFromPicker={handleChangeDatesFromPicker}
                 />
                 <FilterCommerceHubInvoices filters={filters} setfilters={setfilters} stores={stores?.stores ?? []} statusOptions={STATUS_OPTIONS} />
-                <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='tw:text-[11.2px] tw:text-nowrap' onClick={clearFilters}>
+                <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='text-[11.2px] text-nowrap' onClick={clearFilters}>
                   Clear Filters
                 </Button>
               </div>
@@ -316,7 +316,7 @@ const Deductions = ({ session, sessionToken }: Props) => {
                 />
                 <div ref={lastInvoiceElementRef} style={{ height: '20px', marginTop: '10px' }}>
                   {isValidating && size > 1 && (
-                    <p className='tw:text-center'>
+                    <p className='text-center'>
                       <Spinner size='sm' color='primary' /> Loading more invoices...
                     </p>
                   )}

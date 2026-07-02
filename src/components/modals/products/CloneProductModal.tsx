@@ -106,20 +106,20 @@ const CloneProductModal = ({ cloneProductModal, setcloneProductModal }: Props) =
       <ModalBody>
         <Form onSubmit={handleAddProduct}>
           <Row>
-            <p className='tw:m-0 tw:font-bold tw:text-[16.25px] tw:text-primary'>Cloning From:</p>
-            <p className='tw:m-0 tw:font-light'>{cloneProductModal.originalName}</p>
-            <p className='tw:m-0 tw:font-semibold'>{cloneProductModal.originalSku}</p>
+            <p className='m-0 font-bold text-[16.25px] text-primary'>Cloning From:</p>
+            <p className='m-0 font-light'>{cloneProductModal.originalName}</p>
+            <p className='m-0 font-semibold'>{cloneProductModal.originalSku}</p>
           </Row>
           <Row>
-            <h5 className='tw:text-[16.25px] tw:m-0 tw:mt-4 tw:mb-2 tw:font-semibold tw:text-primary'>New Product Details:</h5>
+            <h5 className='text-[16.25px] m-0 mt-4 mb-2 font-semibold text-primary'>New Product Details:</h5>
             <Col xs={12} md={6}>
-              <FormGroup className='tw:mb-4'>
+              <FormGroup className='mb-4'>
                 <Label htmlFor='firstNameinput' className='form-label'>
                   *Title
                 </Label>
                 <Input
                   type='text'
-                  className='tw:text-[11.2px]'
+                  className='text-[11.2px]'
                   placeholder='Title...'
                   id='title'
                   name='title'
@@ -132,13 +132,13 @@ const CloneProductModal = ({ cloneProductModal, setcloneProductModal }: Props) =
               </FormGroup>
             </Col>
             <Col xs={12} md={6}>
-              <FormGroup className='tw:mb-4'>
+              <FormGroup className='mb-4'>
                 <Label htmlFor='lastNameinput' className='form-label'>
                   *SKU
                 </Label>
                 <Input
                   type='text'
-                  className='tw:text-[11.2px] tw:uppercase'
+                  className='text-[11.2px] uppercase'
                   placeholder='Sku...'
                   id='sku'
                   name='sku'
@@ -154,13 +154,13 @@ const CloneProductModal = ({ cloneProductModal, setcloneProductModal }: Props) =
               </FormGroup>
             </Col>
             <Col xs={12} md={6}>
-              <FormGroup className='tw:mb-4'>
+              <FormGroup className='mb-4'>
                 <Label htmlFor='lastNameinput' className='form-label'>
                   *UPC
                 </Label>
                 <Input
                   type='text'
-                  className='tw:text-[11.2px] tw:uppercase'
+                  className='text-[11.2px] uppercase'
                   placeholder='UPC...'
                   id='upc'
                   name='upc'
@@ -176,7 +176,7 @@ const CloneProductModal = ({ cloneProductModal, setcloneProductModal }: Props) =
               </FormGroup>
             </Col>
             <Col md={12}>
-              <div className='tw:mt-6 tw:flex tw:flex-row tw:gap-4 tw:justify-end'>
+              <div className='mt-6 flex flex-row gap-4 justify-end'>
                 <Button
                   disabled={isLoading}
                   type='button'

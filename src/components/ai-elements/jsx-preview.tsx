@@ -159,7 +159,7 @@ export const JSXPreview = memo(({ jsx, isStreaming = false, components, bindings
 
   return (
     <JSXPreviewContext.Provider value={contextValue}>
-      <div className={cn('tw:relative', className)} {...props}>
+      <div className={cn('relative', className)} {...props}>
         {children}
       </div>
     </JSXPreviewContext.Provider>
@@ -214,7 +214,7 @@ export const JSXPreviewContent = memo(({ className, ...props }: JSXPreviewConten
   const displayJsx = isStreaming && hadError ? lastGoodJsxRef.current : processedJsx
 
   return (
-    <div className={cn('tw:jsx-preview-content', className)} {...props}>
+    <div className={cn('jsx-preview-content', className)} {...props}>
       <JsxParser bindings={bindings} components={components} jsx={displayJsx} onError={handleError} renderInWrapper={false} />
     </div>
   )
@@ -242,13 +242,13 @@ export const JSXPreviewError = memo(({ className, children, ...props }: JSXPrevi
 
   return (
     <div
-      className={cn('tw:flex tw:items-center tw:gap-2 tw:rounded-md tw:border tw:border-destructive/50 tw:bg-destructive/10 tw:p-3 tw:text-destructive tw:text-sm', className)}
+      className={cn('flex items-center gap-2 rounded-md border border-destructive/50 bg-destructive/10 p-3 text-destructive text-sm', className)}
       {...props}>
       {children ? (
         renderChildren(children, error)
       ) : (
         <>
-          <AlertCircle className='tw:size-4 tw:shrink-0' />
+          <AlertCircle className='size-4 shrink-0' />
           <span>{error.message}</span>
         </>
       )}

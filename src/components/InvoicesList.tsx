@@ -20,12 +20,12 @@ const InvoicesList = ({ invoices }: Props) => {
     <React.Fragment>
       <Col>
         <Card>
-          <CardHeader className='tw:flex tw:items-center'>
-            <h4 className='tw:grow tw:mb-0 tw:text-[16px] tw:font-medium tw:text-[#212529]'>Invoices</h4>
+          <CardHeader className='flex items-center'>
+            <h4 className='grow mb-0 text-[16px] font-medium text-[#212529]'>Invoices</h4>
           </CardHeader>
 
           <CardBody>
-            <Table className='tw:mb-0'>
+            <Table className='mb-0'>
               <TableHeader>
                 <TableRow>
                   <TableHead style={{ textAlign: 'center' }}>Invoice #</TableHead>
@@ -40,13 +40,13 @@ const InvoicesList = ({ invoices }: Props) => {
                   <TableRow key={invoice.invoiceNumber}>
                     <TableCell>
                       <Link href={`/Invoices/${invoice.idOfInvoice}`}>
-                        <h5 className='tw:text-[14px] tw:my-1 tw:text-center tw:text-[color:var(--bs-secondary-color)]' style={{ cursor: 'pointer' }}>
+                        <h5 className='text-[14px] my-1 text-center text-[color:var(--bs-secondary-color)]' style={{ cursor: 'pointer' }}>
                           {invoice.invoiceNumber}
                         </h5>
                       </Link>
                     </TableCell>
                     <TableCell>
-                      <h5 className='tw:text-[14px] tw:my-1 tw:font-normal tw:text-center'>
+                      <h5 className='text-[14px] my-1 font-normal text-center'>
                         <CountUp
                           start={0}
                           prefix={state.currentRegion == 'us' ? '$ ' : ''}
@@ -58,21 +58,21 @@ const InvoicesList = ({ invoices }: Props) => {
                         />
                       </h5>
                     </TableCell>
-                    <TableCell className='tw:text-center'>
+                    <TableCell className='text-center'>
                       <span
                         className={
                           invoice.paid
-                            ? 'tw:text-[14px] tw:my-1 tw:text-[color:var(--bs-secondary-color)]'
+                            ? 'text-[14px] my-1 text-[color:var(--bs-secondary-color)]'
                             : moment(today).isAfter(invoice.expireDate)
-                              ? 'tw:text-[14px] tw:my-1 tw:text-destructive'
-                              : 'tw:text-[14px] tw:my-1 tw:text-[color:var(--bs-secondary-color)]'
+                              ? 'text-[14px] my-1 text-destructive'
+                              : 'text-[14px] my-1 text-[color:var(--bs-secondary-color)]'
                         }>
                         {moment(invoice.expireDate, 'YYYY-MM-DD').format('LL')}
                       </span>
                     </TableCell>
                     <TableCell>
-                      <div className='tw:text-center tw:px-2 tw:py-1 tw:rounded-[4px]' style={{ background: 'rgba(49, 154, 246, 0.1)' }}>
-                        <span className={invoice.paid ? 'tw:text-[13px] tw:my-1 tw:text-success' : moment(today).isAfter(invoice.expireDate) ? 'tw:text-[13px] tw:my-1 tw:text-destructive' : 'tw:text-[13px] tw:my-1'}>
+                      <div className='text-center px-2 py-1 rounded-[4px]' style={{ background: 'rgba(49, 154, 246, 0.1)' }}>
+                        <span className={invoice.paid ? 'text-[13px] my-1 text-success' : moment(today).isAfter(invoice.expireDate) ? 'text-[13px] my-1 text-destructive' : 'text-[13px] my-1'}>
                           {invoice.paid
                             ? 'Paid'
                             : moment(today).isAfter(invoice.expireDate)
@@ -84,7 +84,7 @@ const InvoicesList = ({ invoices }: Props) => {
                       </div>
                     </TableCell>
                     {state.currentRegion == 'us' && (
-                      <TableCell className='tw:text-center'>
+                      <TableCell className='text-center'>
                         <a href={`${invoice.payLink}`} target='blank' rel='noopener noreferrer'>
                           <Button color={invoice.paid ? 'success' : 'primary'} size='sm'>
                             {invoice.paid ? 'View Receipt' : 'Pay Now'}

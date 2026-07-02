@@ -16,14 +16,14 @@ function Switch({
       data-slot='switch'
       data-size={size}
       className={cn(
-        'tw:peer tw:group/switch tw:inline-flex tw:shrink-0 tw:cursor-pointer tw:items-center tw:!rounded-full tw:border-0 tw:align-middle tw:appearance-none tw:shadow-xs tw:transition-[background-color,box-shadow] tw:leading-none tw:outline-none tw:ring-0 tw:select-none tw:p-0.5 tw:data-[size=default]:h-5 tw:data-[size=default]:w-9 tw:data-[size=default]:[--switch-thumb-size:1rem] tw:data-[size=default]:[--switch-thumb-shift:1rem] tw:data-[size=sm]:h-4 tw:data-[size=sm]:w-7 tw:data-[size=sm]:[--switch-thumb-size:0.75rem] tw:data-[size=sm]:[--switch-thumb-shift:0.75rem] tw:focus-visible:ring-[3px] tw:focus-visible:ring-ring/50 tw:disabled:cursor-not-allowed tw:disabled:opacity-50 tw:data-[state=checked]:bg-primary tw:data-[state=unchecked]:bg-input tw:dark:data-[state=unchecked]:bg-input/80',
+        'peer group/switch inline-flex shrink-0 cursor-pointer items-center !rounded-full border-0 align-middle appearance-none shadow-xs transition-[background-color,box-shadow] leading-none outline-none ring-0 select-none p-0.5 data-[size=default]:h-5 data-[size=default]:w-9 data-[size=default]:[--switch-thumb-size:1rem] data-[size=default]:[--switch-thumb-shift:1rem] data-[size=sm]:h-4 data-[size=sm]:w-7 data-[size=sm]:[--switch-thumb-size:0.75rem] data-[size=sm]:[--switch-thumb-shift:0.75rem] focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80',
         className
       )}
       {...props}>
       <SwitchPrimitive.Thumb
         data-slot='switch-thumb'
         className={cn(
-          'tw:pointer-events-none tw:block tw:size-[var(--switch-thumb-size)] tw:!rounded-full tw:bg-background tw:shadow-sm tw:ring-0 tw:transition-transform tw:data-[state=checked]:translate-x-[var(--switch-thumb-shift)] tw:data-[state=unchecked]:translate-x-0 tw:dark:data-[state=checked]:bg-primary-foreground tw:dark:data-[state=unchecked]:bg-foreground'
+          'pointer-events-none block size-[var(--switch-thumb-size)] !rounded-full bg-background shadow-sm ring-0 transition-transform data-[state=checked]:translate-x-[var(--switch-thumb-shift)] data-[state=unchecked]:translate-x-0 dark:data-[state=checked]:bg-primary-foreground dark:data-[state=unchecked]:bg-foreground'
         )}
       />
     </SwitchPrimitive.Root>

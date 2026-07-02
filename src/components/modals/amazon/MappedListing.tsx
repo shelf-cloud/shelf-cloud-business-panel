@@ -158,19 +158,19 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
       </ModalHeader>
       <ModalBody>
         <Row>
-          <h5 className='tw:text-[19.5px] tw:mb-0 tw:font-semibold tw:text-primary'>Amazon Listing:</h5>
-          <p className='tw:text-[19.5px] tw:font-semibold tw:text-black'>{showMappedListingModal.listingSku}</p>
+          <h5 className='text-[19.5px] mb-0 font-semibold text-primary'>Amazon Listing:</h5>
+          <p className='text-[19.5px] font-semibold text-black'>{showMappedListingModal.listingSku}</p>
           <Col md={12}>
-            <p className='tw:font-semibold tw:text-[13px] tw:m-0 tw:mb-1'>Map to Product or Kit:</p>
+            <p className='font-semibold text-[13px] m-0 mb-1'>Map to Product or Kit:</p>
             <Select_Product_Mapped data={data || []} showMappedListingModal={showMappedListingModal} setshowMappedListingModal={setshowMappedListingModal} />
           </Col>
-          <Row md={12} className='tw:mt-4'>
-            <div className='tw:text-right tw:mt-2 tw:flex tw:flex-row tw:gap-6 tw:justify-between'>
+          <Row md={12} className='mt-4'>
+            <div className='text-right mt-2 flex flex-row gap-6 justify-between'>
               <Button disabled={loading || showMappedListingModal.currentSkuMapped === ''} type='button' color='danger' onClick={handleUnMappedProduct}>
-                <i className='las la-unlink tw:text-[16.25px] tw:text-white tw:m-0 tw:p-0 tw:me-1' />
+                <i className='las la-unlink text-[16.25px] text-white m-0 p-0 me-1' />
                 {loading ? <Spinner color='#fff' size={'sm'} /> : 'UnMap'}
               </Button>
-              <div className='tw:flex tw:flex-row tw:gap-4'>
+              <div className='flex flex-row gap-4'>
                 <Button
                   disabled={loading}
                   type='button'

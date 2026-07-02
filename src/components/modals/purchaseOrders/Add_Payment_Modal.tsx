@@ -81,19 +81,19 @@ const Add_Payment_Modal = ({}: Props) => {
       <ModalBody>
         <Form onSubmit={handleAddProduct}>
           <Row md={12}>
-            <h5 className='tw:text-[16.25px] tw:mb-4 tw:font-semibold'>
-              PO: <span className='tw:font-semibold tw:text-primary'>{state.modalAddPaymentToPoDetails?.orderNumber}</span>
+            <h5 className='text-[16.25px] mb-4 font-semibold'>
+              PO: <span className='font-semibold text-primary'>{state.modalAddPaymentToPoDetails?.orderNumber}</span>
             </h5>
           </Row>
           <Row md={12}>
             <Col md={6}>
-              <FormGroup className='tw:mb-4'>
+              <FormGroup className='mb-4'>
                 <Label htmlFor='firstNameinput' className='form-label'>
                   *Payment Date
                 </Label>
                 <Input
                   type='date'
-                  className='tw:text-[13px]'
+                  className='text-[13px]'
                   bsSize='sm'
                   id='paymentDate'
                   name='paymentDate'
@@ -106,14 +106,14 @@ const Add_Payment_Modal = ({}: Props) => {
               </FormGroup>
             </Col>
             <Col md={6}>
-              <FormGroup className='tw:mb-4'>
+              <FormGroup className='mb-4'>
                 <Label htmlFor='firstNameinput' className='form-label'>
                   *Payment Amount
                 </Label>
                 <Input
                   type='number'
                   onWheel={(e: any) => e.currentTarget.blur()}
-                  className='tw:text-[13px]'
+                  className='text-[13px]'
                   bsSize='sm'
                   id='amount'
                   name='amount'
@@ -122,20 +122,20 @@ const Add_Payment_Modal = ({}: Props) => {
                   onBlur={validation.handleBlur}
                   invalid={validation.touched.amount && validation.errors.amount ? true : false}
                 />
-                <small className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>{FormatCurrency(state.currentRegion, validation.values.amount)}</small>
+                <small className='text-[11.2px] text-[var(--bs-secondary-color)]'>{FormatCurrency(state.currentRegion, validation.values.amount)}</small>
                 {validation.touched.amount && validation.errors.amount ? <FormFeedback type='invalid'>{validation.errors.amount}</FormFeedback> : null}
               </FormGroup>
             </Col>
           </Row>
           <Row md={12}>
             <Col md={12}>
-              <FormGroup className='tw:mb-4'>
+              <FormGroup className='mb-4'>
                 <Label htmlFor='comment' className='form-label'>
                   Comments
                 </Label>
                 <Input
                   type='textarea'
-                  className='tw:text-[13px]'
+                  className='text-[13px]'
                   bsSize='sm'
                   id='comment'
                   name='comment'
@@ -149,8 +149,8 @@ const Add_Payment_Modal = ({}: Props) => {
             </Col>
           </Row>
           <Row md={12}>
-            <div className='tw:text-right'>
-              <Button disabled={loading} type='submit' color='success' className='btn tw:text-[11.2px]'>
+            <div className='text-right'>
+              <Button disabled={loading} type='submit' color='success' className='btn text-[11.2px]'>
                 {loading ? (
                   <span>
                     <Spinner color='light' size={'sm'} /> Adding...

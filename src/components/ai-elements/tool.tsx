@@ -25,7 +25,7 @@ export type ToolProps = ComponentProps<typeof Collapsible>;
 
 export const Tool = ({ className, ...props }: ToolProps) => (
   <Collapsible
-    className={cn("tw:group tw:not-prose tw:mb-4 tw:w-full tw:rounded-md tw:border", className)}
+    className={cn("group not-prose mb-4 w-full rounded-md border", className)}
     {...props}
   />
 );
@@ -55,17 +55,17 @@ const statusLabels: Record<ToolPart["state"], string> = {
 };
 
 const statusIcons: Record<ToolPart["state"], ReactNode> = {
-  "approval-requested": <ClockIcon className="tw:size-4 tw:text-yellow-600" />,
-  "approval-responded": <CheckCircleIcon className="tw:size-4 tw:text-blue-600" />,
-  "input-available": <ClockIcon className="tw:size-4 tw:animate-pulse" />,
-  "input-streaming": <CircleIcon className="tw:size-4" />,
-  "output-available": <CheckCircleIcon className="tw:size-4 tw:text-green-600" />,
-  "output-denied": <XCircleIcon className="tw:size-4 tw:text-orange-600" />,
-  "output-error": <XCircleIcon className="tw:size-4 tw:text-red-600" />,
+  "approval-requested": <ClockIcon className="size-4 text-yellow-600" />,
+  "approval-responded": <CheckCircleIcon className="size-4 text-blue-600" />,
+  "input-available": <ClockIcon className="size-4 animate-pulse" />,
+  "input-streaming": <CircleIcon className="size-4" />,
+  "output-available": <CheckCircleIcon className="size-4 text-green-600" />,
+  "output-denied": <XCircleIcon className="size-4 text-orange-600" />,
+  "output-error": <XCircleIcon className="size-4 text-red-600" />,
 };
 
 export const getStatusBadge = (status: ToolPart["state"]) => (
-  <Badge className="tw:gap-1.5 tw:rounded-full tw:text-xs" variant="secondary">
+  <Badge className="gap-1.5 rounded-full text-xs" variant="secondary">
     {statusIcons[status]}
     {statusLabels[status]}
   </Badge>
@@ -85,17 +85,17 @@ export const ToolHeader = ({
   return (
     <CollapsibleTrigger
       className={cn(
-        "tw:flex tw:w-full tw:items-center tw:justify-between tw:gap-4 tw:p-3",
+        "flex w-full items-center justify-between gap-4 p-3",
         className
       )}
       {...props}
     >
-      <div className="tw:flex tw:items-center tw:gap-2">
-        <WrenchIcon className="tw:size-4 tw:text-muted-foreground" />
-        <span className="tw:font-medium tw:text-sm">{title ?? derivedName}</span>
+      <div className="flex items-center gap-2">
+        <WrenchIcon className="size-4 text-muted-foreground" />
+        <span className="font-medium text-sm">{title ?? derivedName}</span>
         {getStatusBadge(state)}
       </div>
-      <ChevronDownIcon className="tw:size-4 tw:text-muted-foreground tw:transition-transform tw:group-data-[state=open]:rotate-180" />
+      <ChevronDownIcon className="size-4 text-muted-foreground transition-transform group-data-[state=open]:rotate-180" />
     </CollapsibleTrigger>
   );
 };
@@ -105,7 +105,7 @@ export type ToolContentProps = ComponentProps<typeof CollapsibleContent>;
 export const ToolContent = ({ className, ...props }: ToolContentProps) => (
   <CollapsibleContent
     className={cn(
-      "tw:data-[state=closed]:fade-out-0 tw:data-[state=closed]:slide-out-to-top-2 tw:data-[state=open]:slide-in-from-top-2 tw:space-y-4 tw:p-4 tw:text-popover-foreground tw:outline-none tw:data-[state=closed]:animate-out tw:data-[state=open]:animate-in",
+      "data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2 space-y-4 p-4 text-popover-foreground outline-none data-[state=closed]:animate-out data-[state=open]:animate-in",
       className
     )}
     {...props}
@@ -117,11 +117,11 @@ export type ToolInputProps = ComponentProps<"div"> & {
 };
 
 export const ToolInput = ({ className, input, ...props }: ToolInputProps) => (
-  <div className={cn("tw:space-y-2 tw:overflow-hidden", className)} {...props}>
-    <h4 className="tw:font-medium tw:text-muted-foreground tw:text-xs tw:uppercase tw:tracking-wide">
+  <div className={cn("space-y-2 overflow-hidden", className)} {...props}>
+    <h4 className="font-medium text-muted-foreground text-xs uppercase tracking-wide">
       Parameters
     </h4>
-    <div className="tw:rounded-md tw:bg-muted/50">
+    <div className="rounded-md bg-muted/50">
       <CodeBlock code={JSON.stringify(input, null, 2)} language="json" />
     </div>
   </div>
@@ -153,16 +153,16 @@ export const ToolOutput = ({
   }
 
   return (
-    <div className={cn("tw:space-y-2", className)} {...props}>
-      <h4 className="tw:font-medium tw:text-muted-foreground tw:text-xs tw:uppercase tw:tracking-wide">
+    <div className={cn("space-y-2", className)} {...props}>
+      <h4 className="font-medium text-muted-foreground text-xs uppercase tracking-wide">
         {errorText ? "Error" : "Result"}
       </h4>
       <div
         className={cn(
-          "tw:overflow-x-auto tw:rounded-md tw:text-xs tw:[&_table]:w-full",
+          "overflow-x-auto rounded-md text-xs [&_table]:w-full",
           errorText
-            ? "tw:bg-destructive/10 tw:text-destructive"
-            : "tw:bg-muted/50 tw:text-foreground"
+            ? "bg-destructive/10 text-destructive"
+            : "bg-muted/50 text-foreground"
         )}
       >
         {errorText && <div>{errorText}</div>}

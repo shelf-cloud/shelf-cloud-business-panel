@@ -46,40 +46,40 @@ const PoBalanceListModal = ({ poBalanceListModal, poBalanceList, setpoBalanceLis
       </ModalHeader>
       <ModalBody style={{ maxHeight: '80svh', scrollbarWidth: 'thin', overflowY: 'scroll' }}>
         <Row>
-          <Col md={12} className='tw:mt-2'>
-            <div className='tw:overflow-x-auto'>
-              <table className='tw:w-full tw:align-middle tw:mb-0 tw:text-nowrap tw:border tw:[&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
-                <thead className='tw:bg-[color:var(--vz-light)]'>
+          <Col md={12} className='mt-2'>
+            <div className='overflow-x-auto'>
+              <table className='w-full align-middle mb-0 text-nowrap border [&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+                <thead className='bg-[color:var(--vz-light)]'>
                   <tr>
                     <th>PO</th>
                     <th>Supplier</th>
                     <th>Date</th>
-                    <th className='tw:text-right'>Order Cost</th>
-                    <th className='tw:text-right'>Total Paid</th>
-                    <th className='tw:text-right'>Arrived Value</th>
-                    <th className='tw:text-right'>Balance</th>
+                    <th className='text-right'>Order Cost</th>
+                    <th className='text-right'>Total Paid</th>
+                    <th className='text-right'>Arrived Value</th>
+                    <th className='text-right'>Balance</th>
                   </tr>
                 </thead>
-                <tbody className='tw:text-[11.2px]'>
+                <tbody className='text-[11.2px]'>
                   {poBalanceList.map((po, index: number) => (
                     <tr key={index}>
-                      <td className='tw:text-left'>{po.orderNumber}</td>
-                      <td className='tw:text-left'>{po.suppliersName}</td>
+                      <td className='text-left'>{po.orderNumber}</td>
+                      <td className='text-left'>{po.suppliersName}</td>
                       <td>{moment.utc(po.date).local().format('MM/DD/YYYY')}</td>
-                      <td className='tw:text-right'>{FormatCurrency(state.currentRegion, po.totalOrderValue)}</td>
-                      <td className='tw:text-right'>{FormatCurrency(state.currentRegion, po.totalPaid)}</td>
-                      <td className='tw:text-right'>{FormatCurrency(state.currentRegion, po.totalArrivedQtyValue)}</td>
-                      <td className='tw:text-right'>{FormatCurrency(state.currentRegion, po.balance)}</td>
+                      <td className='text-right'>{FormatCurrency(state.currentRegion, po.totalOrderValue)}</td>
+                      <td className='text-right'>{FormatCurrency(state.currentRegion, po.totalPaid)}</td>
+                      <td className='text-right'>{FormatCurrency(state.currentRegion, po.totalArrivedQtyValue)}</td>
+                      <td className='text-right'>{FormatCurrency(state.currentRegion, po.balance)}</td>
                     </tr>
                   ))}
-                  <tr className='tw:bg-light'>
-                    <td colSpan={3} className='tw:font-semibold tw:text-right'>
+                  <tr className='bg-light'>
+                    <td colSpan={3} className='font-semibold text-right'>
                       TOTAL
                     </td>
-                    <td className='tw:font-semibold tw:text-right'>{FormatCurrency(state.currentRegion, totalOrderValue)}</td>
-                    <td className='tw:font-semibold tw:text-right'>{FormatCurrency(state.currentRegion, totalPaid)}</td>
-                    <td className='tw:font-semibold tw:text-right'>{FormatCurrency(state.currentRegion, totalArrivedQtyValue)}</td>
-                    <td className='tw:font-semibold tw:text-right'>{FormatCurrency(state.currentRegion, balance)}</td>
+                    <td className='font-semibold text-right'>{FormatCurrency(state.currentRegion, totalOrderValue)}</td>
+                    <td className='font-semibold text-right'>{FormatCurrency(state.currentRegion, totalPaid)}</td>
+                    <td className='font-semibold text-right'>{FormatCurrency(state.currentRegion, totalArrivedQtyValue)}</td>
+                    <td className='font-semibold text-right'>{FormatCurrency(state.currentRegion, balance)}</td>
                   </tr>
                 </tbody>
               </table>

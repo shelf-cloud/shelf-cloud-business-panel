@@ -72,13 +72,13 @@ const AmazonAdsAuthRedirect = ({}: Props) => {
         <div className='page-content'>
           <Container fluid>
             <BreadCrumb title='Amazon Auth' pageTitle='Amazon' />
-            <Card className='tw:py-12'>
-              <CardBody className='tw:text-center'>
-                <p className='tw:text-primary tw:font-semibold tw:text-[40px]'>ShelfCloud - Amazon Advertising Partner</p>
-                <p className='tw:text-[var(--bs-secondary-color)] tw:font-normal tw:text-[22.75px]'>Integration</p>
-                <div className='tw:flex tw:flex-row tw:justify-center tw:items-center tw:gap-6 tw:mt-6 tw:mb-12'>
+            <Card className='py-12'>
+              <CardBody className='text-center'>
+                <p className='text-primary font-semibold text-[40px]'>ShelfCloud - Amazon Advertising Partner</p>
+                <p className='text-[var(--bs-secondary-color)] font-normal text-[22.75px]'>Integration</p>
+                <div className='flex flex-row justify-center items-center gap-6 mt-6 mb-12'>
                   <div
-                    className='tw:relative'
+                    className='relative'
                     style={{
                       display: 'inline-block',
                       width: '70px',
@@ -86,7 +86,7 @@ const AmazonAdsAuthRedirect = ({}: Props) => {
                       objectFit: 'contain',
                     }}>
                     <Image
-                      className='tw:rounded-lg'
+                      className='rounded-lg'
                       src={ShelfCloudLogoSolo}
                       alt='ShelfCloud Logo'
                       style={{
@@ -96,7 +96,7 @@ const AmazonAdsAuthRedirect = ({}: Props) => {
                       }}
                     />
                   </div>
-                  <i className='las la-sync-alt tw:text-[color:var(--bs-secondary-color)] tw:text-[calc(1.328125rem+0.9375vw)]'></i>
+                  <i className='las la-sync-alt text-[color:var(--bs-secondary-color)] text-[calc(1.328125rem+0.9375vw)]'></i>
                   <div>
                     <img
                       loading='lazy'
@@ -111,15 +111,15 @@ const AmazonAdsAuthRedirect = ({}: Props) => {
                   </div>
                 </div>
 
-                <div className='tw:flex tw:flex-col tw:justify-center tw:items-center tw:gap-12'>
-                  <Button className='tw:mt-2 tw:text-[16.25px]' color='primary' onClick={() => authorizeSeller()}>
+                <div className='flex flex-col justify-center items-center gap-12'>
+                  <Button className='mt-2 text-[16.25px]' color='primary' onClick={() => authorizeSeller()}>
                     {loading ? <Spinner color='#fff' /> : 'Authorize ShelfCloud'}
                   </Button>
-                  <Button className='tw:mt-2 tw:text-[13px]' color='light' onClick={() => router.push('/')}>
+                  <Button className='mt-2 text-[13px]' color='light' onClick={() => router.push('/')}>
                     Cancel
                   </Button>
                 </div>
-                <p className='tw:text-[var(--bs-secondary-color)] tw:font-normal tw:text-[13px] tw:mt-0'>Expire at: {expire}</p>
+                <p className='text-[var(--bs-secondary-color)] font-normal text-[13px] mt-0'>Expire at: {expire}</p>
               </CardBody>
             </Card>
           </Container>

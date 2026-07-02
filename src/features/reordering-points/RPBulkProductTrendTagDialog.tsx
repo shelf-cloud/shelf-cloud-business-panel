@@ -53,9 +53,9 @@ const RPBulkProductTrendTagDialog = ({ isOpen, onClose, onSuccess, products, onS
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className='tw:max-w-xl' showCloseButton={false}>
-        <DialogHeader className='tw:flex tw:flex-col tw:gap-3'>
-          <div className='tw:flex tw:items-center tw:gap-2'>
+      <DialogContent className='max-w-xl' showCloseButton={false}>
+        <DialogHeader className='flex flex-col gap-3'>
+          <div className='flex items-center gap-2'>
             <Badge variant='secondary'>
               <TrendingUpDownIcon />
               Bulk Trend Tag
@@ -66,7 +66,7 @@ const RPBulkProductTrendTagDialog = ({ isOpen, onClose, onSuccess, products, onS
           <DialogDescription>Select the business trend to apply to all selected products.</DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={formik.handleSubmit} className='tw:flex tw:flex-col tw:gap-5'>
+        <form onSubmit={formik.handleSubmit} className='flex flex-col gap-5'>
           <FieldGroup>
             <Field data-invalid={formik.touched.bsnssTrend && formik.errors.bsnssTrend ? true : undefined}>
               <FieldLabel htmlFor='bulk-product-trend-tag'>Business Trend</FieldLabel>
@@ -76,7 +76,7 @@ const RPBulkProductTrendTagDialog = ({ isOpen, onClose, onSuccess, products, onS
                     id='bulk-product-trend-tag'
                     size='sm'
                     aria-invalid={formik.touched.bsnssTrend && formik.errors.bsnssTrend ? true : undefined}
-                    className='tw:w-full'>
+                    className='w-full'>
                     <SelectValue placeholder='Select a trend' />
                   </SelectTrigger>
                   <SelectContent>

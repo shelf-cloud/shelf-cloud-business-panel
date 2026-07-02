@@ -104,17 +104,17 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
             <Form>
               <Row>
                 <Col md={6}>
-                  <FormGroup className='tw:mb-1'>
+                  <FormGroup className='mb-1'>
                     <Label htmlFor='firstNameinput' className='form-label'>
                       *Purchase Order Number
                     </Label>
                     <div className='input-group'>
-                      <span className='input-group-text tw:font-semibold tw:text-[16.25px] tw:m-0 tw:px-2 tw:py-0' id='basic-addon1'>
+                      <span className='input-group-text font-semibold text-[16.25px] m-0 px-2 py-0' id='basic-addon1'>
                         {orderNumberStart}
                       </span>
                       <Input
                         type='text'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         id='orderNumber'
                         name='orderNumber'
                         bsSize='sm'
@@ -138,9 +138,9 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
                     error={errors.supplier}
                   />
                 </Col>
-                <Col md={6} className='tw:py-1'>
-                  <div className='tw:mb-2'>
-                    <Label className='form-label tw:mb-1 tw:text-[11.2px]'>*Destination</Label>
+                <Col md={6} className='py-1'>
+                  <div className='mb-2'>
+                    <Label className='form-label mb-1 text-[11.2px]'>*Destination</Label>
                     <SimpleSelect
                       options={warehouses?.map((w) => ({ value: `${w.warehouseId}`, label: w.name })) || []}
                       selected={values.destinationSC}
@@ -150,16 +150,16 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
                       placeholder={isLoading ? 'Loading...' : 'Select ...'}
                       customStyle='sm'
                     />
-                    {errors.destinationSC && touched.destinationSC ? <div className='tw:m-0 tw:p-0 tw:text-danger tw:text-[11.2px]'>*{errors.destinationSC.value}</div> : null}
+                    {errors.destinationSC && touched.destinationSC ? <div className='m-0 p-0 text-danger text-[11.2px]'>*{errors.destinationSC.value}</div> : null}
                   </div>
 
-                  <FormGroup className='tw:mb-1'>
-                    <Label htmlFor='firstNameinput' className='form-label tw:mb-1 tw:text-[11.2px]'>
+                  <FormGroup className='mb-1'>
+                    <Label htmlFor='firstNameinput' className='form-label mb-1 text-[11.2px]'>
                       *Date
                     </Label>
                     <Input
                       type='date'
-                      className='tw:text-[13px]'
+                      className='text-[13px]'
                       bsSize='sm'
                       id='date'
                       name='date'
@@ -173,9 +173,9 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
                 </Col>
               </Row>
 
-              <Col md={12} className='tw:mt-6'>
-                <div className='tw:text-right'>
-                  <Button disabled={loading} type='submit' color='success' className='tw:text-[11.2px]'>
+              <Col md={12} className='mt-6'>
+                <div className='text-right'>
+                  <Button disabled={loading} type='submit' color='success' className='text-[11.2px]'>
                     {loading ? (
                       <span>
                         <Spinner color='light' size={'sm'} /> Creating...

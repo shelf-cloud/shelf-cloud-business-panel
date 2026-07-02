@@ -111,7 +111,7 @@ const SimpleSelectWithImage = ({
       formatOptionLabel={(option: SelectOptionType, { context }: { context: 'menu' | 'value' }) => {
         if (context === 'menu') {
           return (
-            <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2 tw:text-[11.2px]'>
+            <div className='flex flex-row justify-start items-center gap-2 text-[11.2px]'>
               <div
                 style={{
                   width: '22px',
@@ -127,8 +127,8 @@ const SimpleSelectWithImage = ({
                   style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                 />
               </div>
-              <div className='tw:flex tw:flex-col tw:gap-0'>
-                <span className='tw:text-[11.2px]'>{option.label}</span>
+              <div className='flex flex-col gap-0'>
+                <span className='text-[11.2px]'>{option.label}</span>
                 {option.description && (
                   <small
                     style={{

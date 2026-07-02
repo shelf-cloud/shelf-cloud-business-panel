@@ -19,24 +19,24 @@ const FilterCheckNumber = ({ type, setInvoiceType }: Props) => {
   return (
     <div
       ref={FilterCheckNumberContainer}
-      className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:md:flex-row tw:md:justify-between tw:md:items-center tw:w-auto'>
-      <div className='tw:relative'>
+      className='flex flex-col justify-center items-end gap-2 md:flex-row md:justify-between md:items-center w-auto'>
+      <div className='relative'>
         <button
-          className='tw:inline-flex tw:h-9 tw:items-center tw:gap-2 tw:rounded-md tw:border tw:border-[#E1E3E5] tw:bg-white tw:px-3 tw:text-sm tw:font-semibold tw:text-foreground tw:whitespace-nowrap'
+          className='inline-flex h-9 items-center gap-2 rounded-md border border-[#E1E3E5] bg-white px-3 text-sm font-semibold text-foreground whitespace-nowrap'
           type='button'
           aria-expanded='false'
           onClick={() => setOpenDatesMenu(!openDatesMenu)}>
           Filters
         </button>
-        <div className={'tw:absolute tw:z-10 tw:min-w-[280px] tw:mt-1 tw:bg-white tw:border tw:border-[#E1E3E5] tw:rounded-md tw:shadow tw:px-6 tw:py-4 ' + (openDatesMenu ? 'tw:block' : 'tw:hidden')}>
-          <div className='tw:flex tw:flex-col tw:justify-start tw:gap-2'>
-            <span className='tw:font-semibold'>Type:</span>
+        <div className={'absolute z-10 min-w-[280px] mt-1 bg-white border border-[#E1E3E5] rounded-md shadow px-6 py-4 ' + (openDatesMenu ? 'block' : 'hidden')}>
+          <div className='flex flex-col justify-start gap-2'>
+            <span className='font-semibold'>Type:</span>
             <div
-              className='tw:flex tw:flex-row tw:items-center tw:justify-between tw:gap-2 tw:w-auto tw:px-4 tw:py-0 tw:rounded-lg'
+              className='flex flex-row items-center justify-between gap-2 w-auto px-4 py-0 rounded-lg'
               style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
               <Input
                 type='select'
-                className='tw:border-0 tw:text-[13px] tw:w-full'
+                className='border-0 text-[13px] w-full'
                 id='type'
                 name='type'
                 value={type}
@@ -56,7 +56,7 @@ const FilterCheckNumber = ({ type, setInvoiceType }: Props) => {
                 setInvoiceType('all')
                 setOpenDatesMenu(false)
               }}
-              className='btn btn-link tw:p-0 tw:border-0 tw:no-underline tw:text-[var(--bs-secondary-color)] tw:mt-2 tw:text-[11.2px]'>
+              className='btn btn-link p-0 border-0 no-underline text-[var(--bs-secondary-color)] mt-2 text-[11.2px]'>
               Clear All
             </button>
           </div>

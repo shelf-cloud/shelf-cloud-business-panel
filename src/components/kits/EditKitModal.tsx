@@ -166,7 +166,7 @@ function EditKitModal({ mutateKits }: Props) {
         toggle={() => {
           setShowEditKitModal(!state.showEditKitModal)
         }}>
-        Edit Kit: <span className='tw:text-primary'>{state.modalKitDetails.sku}</span>
+        Edit Kit: <span className='text-primary'>{state.modalKitDetails.sku}</span>
       </ModalHeader>
       <ModalBody>
         {!isLoading && !isValidating ? (
@@ -174,16 +174,16 @@ function EditKitModal({ mutateKits }: Props) {
             {({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => (
               <Form>
                 <Row>
-                  <h4 className='tw:text-[16.25px] tw:mb-4 tw:font-extrabold'>Kit Details</h4>
-                  <Col md={6} className='tw:hidden'>
+                  <h4 className='text-[16.25px] mb-4 font-extrabold'>Kit Details</h4>
+                  <Col md={6} className='hidden'>
                     <FormGroup>
-                      <Label htmlFor='kitId' className='tw:mb-1'>
+                      <Label htmlFor='kitId' className='mb-1'>
                         *kitId
                       </Label>
                       <Input
                         disabled
                         type='number'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         id='kitId'
                         name='kitId'
                         onChange={handleChange}
@@ -196,12 +196,12 @@ function EditKitModal({ mutateKits }: Props) {
                   </Col>
                   <Col md={6}>
                     <FormGroup>
-                      <Label htmlFor='title' className='tw:mb-1'>
+                      <Label htmlFor='title' className='mb-1'>
                         *Title
                       </Label>
                       <Input
                         type='text'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         placeholder='Title...'
                         id='title'
                         name='title'
@@ -215,12 +215,12 @@ function EditKitModal({ mutateKits }: Props) {
                   </Col>
                   <Col md={6}>
                     <FormGroup>
-                      <Label htmlFor='sku' className='tw:mb-1'>
+                      <Label htmlFor='sku' className='mb-1'>
                         *SKU
                       </Label>
                       <Input
                         type='text'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         placeholder='Sku...'
                         id='sku'
                         name='sku'
@@ -234,12 +234,12 @@ function EditKitModal({ mutateKits }: Props) {
                   </Col>
                   <Col md={4}>
                     <FormGroup>
-                      <Label htmlFor='asin' className='tw:mb-1'>
+                      <Label htmlFor='asin' className='mb-1'>
                         ASIN
                       </Label>
                       <Input
                         type='text'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         placeholder='Asin...'
                         id='asin'
                         name='asin'
@@ -253,12 +253,12 @@ function EditKitModal({ mutateKits }: Props) {
                   </Col>
                   <Col md={4}>
                     <FormGroup>
-                      <Label htmlFor='fnsku' className='tw:mb-1'>
+                      <Label htmlFor='fnsku' className='mb-1'>
                         FNSKU
                       </Label>
                       <Input
                         type='text'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         placeholder='Fnsku...'
                         id='fnsku'
                         name='fnsku'
@@ -272,12 +272,12 @@ function EditKitModal({ mutateKits }: Props) {
                   </Col>
                   <Col md={4}>
                     <FormGroup>
-                      <Label htmlFor='barcode' className='tw:mb-1'>
+                      <Label htmlFor='barcode' className='mb-1'>
                         UPC / Barcode
                       </Label>
                       <Input
                         type='text'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         placeholder='Barcode...'
                         id='barcode'
                         name='barcode'
@@ -292,12 +292,12 @@ function EditKitModal({ mutateKits }: Props) {
                   <Row>
                     <Col md={9}>
                       <FormGroup>
-                        <Label htmlFor='image' className='tw:mb-1'>
+                        <Label htmlFor='image' className='mb-1'>
                           Product Image
                         </Label>
                         <Input
                           type='text'
-                          className='tw:text-[13px]'
+                          className='text-[13px]'
                           placeholder='Image URL...'
                           id='image'
                           name='image'
@@ -311,12 +311,12 @@ function EditKitModal({ mutateKits }: Props) {
                     </Col>
                     <Col md={3}>
                       <FormGroup>
-                        <Label htmlFor='boxqty' className='tw:mb-1'>
+                        <Label htmlFor='boxqty' className='mb-1'>
                           *Master Box Quantity
                         </Label>
                         <Input
                           type='number'
-                          className='tw:text-[13px]'
+                          className='text-[13px]'
                           placeholder='Box Qty...'
                           id='boxqty'
                           name='boxqty'
@@ -331,12 +331,12 @@ function EditKitModal({ mutateKits }: Props) {
                   </Row>
                   <Col md={12}>
                     <FormGroup>
-                      <Label htmlFor='note' className='tw:mb-1'>
+                      <Label htmlFor='note' className='mb-1'>
                         Kit Note
                       </Label>
                       <Input
                         type='textarea'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         placeholder=''
                         id='note'
                         name='note'
@@ -349,19 +349,19 @@ function EditKitModal({ mutateKits }: Props) {
                     </FormGroup>
                   </Col>
                   <Row>
-                    <h5 className='tw:text-[16.25px] tw:mb-1 tw:font-extrabold'>Kit Children</h5>
-                    <Col xl={12} className='tw:p-0 tw:mt-1'>
-                      <table className='table table-hover tw:align-middle table-nowrap'>
+                    <h5 className='text-[16.25px] mb-1 font-extrabold'>Kit Children</h5>
+                    <Col xl={12} className='p-0 mt-1'>
+                      <table className='table table-hover align-middle table-nowrap'>
                         <thead>
                           <tr>
-                            <th scope='col' className='tw:py-1 tw:m-0 tw:font-semibold tw:text-center tw:bg-primary tw:text-white'></th>
-                            <th scope='col' className='tw:py-1 tw:m-0 tw:font-semibold tw:text-center tw:bg-primary tw:text-white'>
+                            <th scope='col' className='py-1 m-0 font-semibold text-center bg-primary text-white'></th>
+                            <th scope='col' className='py-1 m-0 font-semibold text-center bg-primary text-white'>
                               SKU
                             </th>
-                            <th scope='col' className='tw:py-1 tw:m-0 tw:font-semibold tw:text-center tw:bg-primary tw:text-white'>
+                            <th scope='col' className='py-1 m-0 font-semibold text-center bg-primary text-white'>
                               Title
                             </th>
-                            <th scope='col' className='tw:py-1 tw:m-0 tw:font-semibold tw:text-center tw:bg-primary tw:text-white'>
+                            <th scope='col' className='py-1 m-0 font-semibold text-center bg-primary text-white'>
                               Qty
                             </th>
                           </tr>
@@ -374,9 +374,9 @@ function EditKitModal({ mutateKits }: Props) {
                                   <tr key={index}>
                                     <td style={{ minWidth: '50px' }}>
                                       {index > 0 ? (
-                                        <Row className='tw:w-full tw:flex tw:flex-row tw:flex-nowrap tw:justify-center tw:gap-1 tw:items-center tw:mb-0'>
+                                        <Row className='w-full flex flex-row flex-nowrap justify-center gap-1 items-center mb-0'>
                                           <i
-                                            className='tw:text-[22.75px] tw:text-success las la-plus-circle tw:m-0 tw:p-0 tw:w-auto'
+                                            className='text-[22.75px] text-success las la-plus-circle m-0 p-0 w-auto'
                                             style={{ cursor: 'pointer' }}
                                             onClick={() =>
                                               push({
@@ -387,12 +387,12 @@ function EditKitModal({ mutateKits }: Props) {
                                               })
                                             }
                                           />
-                                          <i className='tw:text-danger tw:text-[22.75px] las la-minus-circle tw:m-0 tw:p-0 tw:w-auto' style={{ cursor: 'pointer' }} onClick={() => remove(index)} />
+                                          <i className='text-danger text-[22.75px] las la-minus-circle m-0 p-0 w-auto' style={{ cursor: 'pointer' }} onClick={() => remove(index)} />
                                         </Row>
                                       ) : (
-                                        <Row className='tw:w-full tw:flex tw:flex-row tw:flex-nowrap tw:justify-center tw:gap-0 tw:items-center tw:mb-0'>
+                                        <Row className='w-full flex flex-row flex-nowrap justify-center gap-0 items-center mb-0'>
                                           <i
-                                            className='tw:text-[22.75px] tw:text-success las la-plus-circle tw:m-0 tw:p-0 tw:w-auto'
+                                            className='text-[22.75px] text-success las la-plus-circle m-0 p-0 w-auto'
                                             style={{ cursor: 'pointer' }}
                                             onClick={() =>
                                               push({
@@ -429,7 +429,7 @@ function EditKitModal({ mutateKits }: Props) {
                                               hasError={meta.error ? true : false}
                                               isClearable
                                             />
-                                            {meta.error ? <ErrorInputLabel error={meta.error} marginTop='tw:mt-0' /> : null}
+                                            {meta.error ? <ErrorInputLabel error={meta.error} marginTop='mt-0' /> : null}
                                           </FormGroup>
                                         )}
                                       </Field>
@@ -440,7 +440,7 @@ function EditKitModal({ mutateKits }: Props) {
                                           <FormGroup className='createOrder_inputs'>
                                             <Input
                                               type='text'
-                                              className='tw:text-[13px]'
+                                              className='text-[13px]'
                                               name={`children.${index}.title`}
                                               placeholder='Title...'
                                               readOnly
@@ -460,7 +460,7 @@ function EditKitModal({ mutateKits }: Props) {
                                           <FormGroup className='createOrder_inputs'>
                                             <Input
                                               type='text'
-                                              className='tw:text-center tw:text-[13px]'
+                                              className='text-center text-[13px]'
                                               name={`children.${index}.qty`}
                                               placeholder='Qty...'
                                               onChange={handleChange}
@@ -482,15 +482,15 @@ function EditKitModal({ mutateKits }: Props) {
                       </table>
                     </Col>
                   </Row>
-                  <p className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>*You must complete all required fields or you will not be able to create your product.</p>
+                  <p className='text-[11.2px] text-[var(--bs-secondary-color)]'>*You must complete all required fields or you will not be able to create your product.</p>
                   <Col md={12}>
-                    <div className='tw:text-right tw:flex tw:gap-4 tw:justify-end tw:items-center'>
+                    <div className='text-right flex gap-4 justify-end items-center'>
                       <Button color='light' onClick={() => setShowEditKitModal(!state.showEditKitModal)}>
                         Cancel
                       </Button>
-                      <Button type='submit' disabled={updatingKit} color='primary' className='tw:text-[11.2px]'>
+                      <Button type='submit' disabled={updatingKit} color='primary' className='text-[11.2px]'>
                         {updatingKit ? (
-                          <span className='tw:flex tw:items-center tw:gap-2'>
+                          <span className='flex items-center gap-2'>
                             <Spinner color='light' size={'sm'} /> Updating...
                           </span>
                         ) : (
@@ -504,8 +504,8 @@ function EditKitModal({ mutateKits }: Props) {
             )}
           </Formik>
         ) : (
-          <p className='tw:w-full tw:text-center tw:flex tw:items-center tw:justify-center tw:gap-4 tw:text-[13px]'>
-            <Spinner color='primary' /> <span className='tw:text-[16.25px] tw:font-normal'>Loading kit details...</span>
+          <p className='w-full text-center flex items-center justify-center gap-4 text-[13px]'>
+            <Spinner color='primary' /> <span className='text-[16.25px] font-normal'>Loading kit details...</span>
           </p>
         )}
       </ModalBody>

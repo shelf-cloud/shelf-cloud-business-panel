@@ -156,11 +156,11 @@ const List = ({ session }: Props) => {
           <Container fluid>
             <Row>
               <Col lg={12}>
-                <Row className='tw:flex tw:flex-col-reverse tw:justify-center tw:items-end tw:gap-2 tw:mb-1 tw:md:flex-row tw:md:justify-between tw:md:items-center'>
-                  <div className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:md:flex-row tw:md:justify-between tw:md:items-center tw:w-auto'>
+                <Row className='flex flex-col-reverse justify-center items-end gap-2 mb-1 md:flex-row md:justify-between md:items-center'>
+                  <div className='flex flex-col justify-center items-end gap-2 md:flex-row md:justify-between md:items-center w-auto'>
                     <Button
                       color='primary'
-                      className='tw:text-[13px] tw:py-1'
+                      className='text-[13px] py-1'
                       onClick={() =>
                         setshowMappedCreateReport((prev: any) => {
                           return {
@@ -170,13 +170,13 @@ const List = ({ session }: Props) => {
                           }
                         })
                       }>
-                      <i className='mdi mdi-plus-circle label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
+                      <i className='mdi mdi-plus-circle label-icon align-middle text-[16.25px] me-2' />
                       Create Report
                     </Button>
                   </div>
-                  <div className='tw:sm:w-full tw:md:w-3/12'>
-                    <div className='app-search tw:flex tw:flex-row tw:justify-end tw:items-center tw:p-0'>
-                      <div className='tw:relative tw:flex tw:rounded-lg tw:w-full tw:overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+                  <div className='sm:w-full md:w-3/12'>
+                    <div className='app-search flex flex-row justify-end items-center p-0'>
+                      <div className='relative flex rounded-lg w-full overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                         <Input
                           type='text'
                           className='input_background_white'
@@ -185,14 +185,14 @@ const List = ({ session }: Props) => {
                           value={searchValue}
                           onChange={(e) => setSearchValue(e.target.value)}
                         />
-                        <span className='mdi mdi-magnify search-widget-icon tw:text-[19.5px]'></span>
+                        <span className='mdi mdi-magnify search-widget-icon text-[19.5px]'></span>
                         <span
-                          className='tw:flex tw:items-center tw:justify-center input_background_white'
+                          className='flex items-center justify-center input_background_white'
                           style={{
                             cursor: 'pointer',
                           }}
                           onClick={() => setSearchValue('')}>
-                          <i className='mdi mdi-window-close tw:text-[19.5px] tw:m-0 tw:px-2 tw:py-0 tw:text-[color:var(--bs-secondary-color)]' />
+                          <i className='mdi mdi-window-close text-[19.5px] m-0 px-2 py-0 text-[color:var(--bs-secondary-color)]' />
                         </span>
                       </div>
                     </div>

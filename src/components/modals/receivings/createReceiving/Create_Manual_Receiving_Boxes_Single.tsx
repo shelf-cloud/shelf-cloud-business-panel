@@ -20,21 +20,21 @@ const Create_Manual_Receiving_Boxes_Single = ({
   changeQtyOfBoxes,
 }: Props) => {
   return (
-    <div className='tw:overflow-auto'>
-      <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)] tw:text-[11.2px]'>
-        <thead className='tw:bg-[color:var(--vz-light)]'>
+    <div className='overflow-auto'>
+      <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)] text-[11.2px]'>
+        <thead className='bg-[color:var(--vz-light)]'>
           <tr key='manual-receiving-boxes-single-header'>
             <th scope='col'>Title / SKU</th>
-            <th scope='col' className='tw:text-left'>
+            <th scope='col' className='text-left'>
               Quantity
             </th>
-            <th scope='col' className='tw:text-center'>
+            <th scope='col' className='text-center'>
               Units Per Box
             </th>
-            <th scope='col' className='tw:text-center'>
+            <th scope='col' className='text-center'>
               Qty Of Boxes
             </th>
-            <th scope='col' className='tw:text-center'>
+            <th scope='col' className='text-center'>
               Actions
             </th>
           </tr>
@@ -45,9 +45,9 @@ const Create_Manual_Receiving_Boxes_Single = ({
 
             return (
               <>
-                <tr key={`single-sku-perbox-${sku}`} className='tw:bg-light'>
-                  <td className='tw:text-left'>
-                    <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-4'>
+                <tr key={`single-sku-perbox-${sku}`} className='bg-light'>
+                  <td className='text-left'>
+                    <div className='flex flex-row justify-start items-center gap-4'>
                       <div
                         style={{
                           width: '40px',
@@ -62,22 +62,22 @@ const Create_Manual_Receiving_Boxes_Single = ({
                           style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                         />
                       </div>
-                      <div className='tw:text-left'>
-                        <p className='tw:text-nowrap tw:m-0 tw:font-semibold'>{sku}</p>
-                        <p className='tw:text-nowrap tw:m-0'>{item.name}</p>
+                      <div className='text-left'>
+                        <p className='text-nowrap m-0 font-semibold'>{sku}</p>
+                        <p className='text-nowrap m-0'>{item.name}</p>
                       </div>
                     </div>
                   </td>
                   <td>
-                    <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2'>
+                    <div className='flex flex-row justify-start items-center gap-2'>
                       {item.receiving}
-                      <span className={'tw:font-semibold ' + (totalUnitsBoxed > item.receiving || totalUnitsBoxed < item.receiving ? 'tw:text-danger' : 'tw:text-success')}>
+                      <span className={'font-semibold ' + (totalUnitsBoxed > item.receiving || totalUnitsBoxed < item.receiving ? 'text-danger' : 'text-success')}>
                         {totalUnitsBoxed > item.receiving || totalUnitsBoxed < item.receiving ? totalUnitsBoxed : ''}
                         {totalUnitsBoxed > item.receiving ? '↑' : totalUnitsBoxed < item.receiving ? '↓' : ''}
                       </span>
                     </div>
                   </td>
-                  <td className='tw:text-center' style={{ minWidth: '60px' }}>
+                  <td className='text-center' style={{ minWidth: '60px' }}>
                     <InputNumberForm
                       inputName={`box-${sku}-0-unitsPerBox`}
                       value={item.boxes[0].unitsPerBox}
@@ -87,7 +87,7 @@ const Create_Manual_Receiving_Boxes_Single = ({
                       handleBlur={() => {}}
                     />
                   </td>
-                  <td className='tw:text-center' style={{ minWidth: '60px' }}>
+                  <td className='text-center' style={{ minWidth: '60px' }}>
                     <InputNumberForm
                       inputName={`box-${sku}-0-qtyOfBoxes`}
                       value={item.boxes[0].qtyOfBoxes}
@@ -97,11 +97,11 @@ const Create_Manual_Receiving_Boxes_Single = ({
                       handleBlur={() => {}}
                     />
                   </td>
-                  <td className='tw:text-center'>
-                    <div className='tw:text-center tw:flex tw:flex-row tw:justify-center tw:items-center tw:gap-2'>
+                  <td className='text-center'>
+                    <div className='text-center flex flex-row justify-center items-center gap-2'>
                       {item.boxes.length === 1 && (
                         <Button type='button' size='sm' color='ghost' className='btn-icon' onClick={() => addNewSingleSkuBoxConfiguration(sku)}>
-                          <i className='tw:text-[19.5px] tw:text-success las la-plus-circle tw:m-0 tw:p-0 tw:w-auto' />
+                          <i className='text-[19.5px] text-success las la-plus-circle m-0 p-0 w-auto' />
                         </Button>
                       )}
                     </div>
@@ -111,9 +111,9 @@ const Create_Manual_Receiving_Boxes_Single = ({
                   if (index === 0) return null
                   return (
                     <tr key={`box-${sku}-${index}`}>
-                      <td className='tw:text-left'></td>
-                      <td className='tw:text-center'></td>
-                      <td className='tw:text-center tw:py-4' style={{ minWidth: '60px' }}>
+                      <td className='text-left'></td>
+                      <td className='text-center'></td>
+                      <td className='text-center py-4' style={{ minWidth: '60px' }}>
                         <InputNumberForm
                           inputName={`box-${sku}-${index}-unitsPerBox`}
                           value={box.unitsPerBox}
@@ -123,7 +123,7 @@ const Create_Manual_Receiving_Boxes_Single = ({
                           handleBlur={() => {}}
                         />
                       </td>
-                      <td className='tw:text-center' style={{ minWidth: '60px' }}>
+                      <td className='text-center' style={{ minWidth: '60px' }}>
                         <InputNumberForm
                           inputName={`box-${sku}-${index}-qtyOfBoxes`}
                           value={box.qtyOfBoxes}
@@ -133,16 +133,16 @@ const Create_Manual_Receiving_Boxes_Single = ({
                           handleBlur={() => {}}
                         />
                       </td>
-                      <td className='tw:text-center'>
-                        <div className='tw:text-center tw:flex tw:flex-row tw:justify-center tw:items-center tw:gap-0'>
+                      <td className='text-center'>
+                        <div className='text-center flex flex-row justify-center items-center gap-0'>
                           {index + 1 === item.boxes.length && (
                             <Button type='button' size='sm' color='ghost' className='btn-icon' onClick={() => addNewSingleSkuBoxConfiguration(sku)}>
-                              <i className='tw:text-[19.5px] tw:text-success las la-plus-circle tw:m-0 tw:p-0 tw:w-auto' />
+                              <i className='text-[19.5px] text-success las la-plus-circle m-0 p-0 w-auto' />
                             </Button>
                           )}
 
                           <Button type='button' size='sm' color='ghost' className='btn-icon' onClick={() => removeSingleSkuBoxConfiguration(sku, index)}>
-                            <i className='tw:text-danger tw:text-[19.5px] las la-minus-circle tw:m-0 tw:p-0 tw:w-auto' />
+                            <i className='text-danger text-[19.5px] las la-minus-circle m-0 p-0 w-auto' />
                           </Button>
                         </div>
                       </td>

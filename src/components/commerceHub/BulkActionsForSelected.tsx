@@ -26,14 +26,14 @@ const BulkActionsForSelected = ({ selectedRows, clearSelected, statusOptions, ch
   return (
     <ButtonGroup>
       <Dropdown isOpen={openDatesMenu} toggle={() => setOpenDatesMenu(!openDatesMenu)}>
-        <DropdownToggle caret className='tw:text-[11.2px]'>
-          <span className='tw:font-bold'>{`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''}`}</span> Selected
+        <DropdownToggle caret className='text-[11.2px]'>
+          <span className='font-bold'>{`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''}`}</span> Selected
         </DropdownToggle>
         <DropdownMenu style={{ backgroundColor: 'white', minWidth: '260px', border: '1px solid #E1E3E5' }}>
-          <div className={'tw:px-6 tw:py-4'}>
-            <div className='tw:flex tw:flex-col tw:justify-start tw:gap-2'>
-              <span className='tw:text-[11.2px] tw:font-normal'>Set Status:</span>
-              <div className='tw:flex tw:flex-row tw:justify-start tw:gap-1'>
+          <div className={'px-6 py-4'}>
+            <div className='flex flex-col justify-start gap-2'>
+              <span className='text-[11.2px] font-normal'>Set Status:</span>
+              <div className='flex flex-row justify-start gap-1'>
                 <div className='flex-1'>
                   <SimpleSelect
                     selected={selectedStatus}
@@ -55,7 +55,7 @@ const BulkActionsForSelected = ({ selectedRows, clearSelected, statusOptions, ch
                   setselectedStatus({ value: '', label: 'Select Status' })
                   setOpenDatesMenu(false)
                 }}
-                className='btn btn-link tw:p-0 tw:border-0 tw:no-underline tw:text-[var(--bs-secondary-color)] tw:mt-2 tw:text-[11.2px]'>
+                className='btn btn-link p-0 border-0 no-underline text-[var(--bs-secondary-color)] mt-2 text-[11.2px]'>
                 Clear All
               </button>
             </div>

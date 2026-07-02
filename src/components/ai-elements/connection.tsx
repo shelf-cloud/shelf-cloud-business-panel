@@ -10,7 +10,7 @@ export const Connection: ConnectionLineComponent = ({
 }) => (
   <g>
     <path
-      className="tw:animated"
+      className="animated"
       d={`M${fromX},${fromY} C ${fromX + (toX - fromX) * HALF},${fromY} ${fromX + (toX - fromX) * HALF},${toY} ${toX},${toY}`}
       fill="none"
       stroke="var(--color-ring)"

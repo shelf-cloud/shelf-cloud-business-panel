@@ -92,37 +92,37 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
     setShowEditFields(true)
   }
   return (
-    <div className='tw:py-1 tw:w-full'>
+    <div className='py-1 w-full'>
       {!showEditFields ? (
         <div>
-          <table className='tw:w-full tw:text-[11.2px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+          <table className='w-full text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
             <thead>
-              <tr className='tw:text-center'>
+              <tr className='text-center'>
                 <th>SKU</th>
                 <th>UPC</th>
                 <th>HTS Code</th>
                 <th>Default Price</th>
                 <th id='msrpHead'>MSRP</th>
-                <UncontrolledTooltip placement='top' target='msrpHead' innerClassName='tw:bg-white tw:text-primary tw:shadow'>
+                <UncontrolledTooltip placement='top' target='msrpHead' innerClassName='bg-white text-primary shadow'>
                   {`Manufacturer's Suggested Retail Price`}
                 </UncontrolledTooltip>
                 <th id='mapHead'>MAP</th>
-                <UncontrolledTooltip placement='top' target='mapHead' innerClassName='tw:bg-white tw:text-primary tw:shadow'>
+                <UncontrolledTooltip placement='top' target='mapHead' innerClassName='bg-white text-primary shadow'>
                   {`Minimum Advertised Price`}
                 </UncontrolledTooltip>
                 <th id='minSalePriceHead'>Floor</th>
-                <UncontrolledTooltip placement='top' target='minSalePriceHead' innerClassName='tw:bg-white tw:text-primary tw:shadow'>
+                <UncontrolledTooltip placement='top' target='minSalePriceHead' innerClassName='bg-white text-primary shadow'>
                   {`Minimum Sale Price`}
                 </UncontrolledTooltip>
                 <th id='maxSalePriceHead'>Ceilling</th>
-                <UncontrolledTooltip placement='top' target='maxSalePriceHead' innerClassName='tw:bg-white tw:text-primary tw:shadow'>
+                <UncontrolledTooltip placement='top' target='maxSalePriceHead' innerClassName='bg-white text-primary shadow'>
                   {`Maximum Sale Price`}
                 </UncontrolledTooltip>
                 <th scope='col' aria-label='SKU row actions'></th>
               </tr>
             </thead>
             <tbody>
-              <tr className='tw:text-center tw:text-nowrap'>
+              <tr className='text-center text-nowrap'>
                 <td>{sku}</td>
                 <td>{upc}</td>
                 <td>{htsCode}</td>
@@ -132,9 +132,9 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                 <td>{FormatCurrency(state.currentRegion, floor)}</td>
                 <td>{FormatCurrency(state.currentRegion, ceilling)}</td>
                 <td>
-                  <div className='tw:text-right'>
-                    <button type='button' aria-label='Edit SKU details' onClick={handleShowEditFields} className='tw:p-0 tw:border-0 tw:bg-transparent'>
-                      <i className='ri-pencil-fill tw:text-[16.25px] tw:text-primary tw:m-0 tw:p-0'></i>
+                  <div className='text-right'>
+                    <button type='button' aria-label='Edit SKU details' onClick={handleShowEditFields} className='p-0 border-0 bg-transparent'>
+                      <i className='ri-pencil-fill text-[16.25px] text-primary m-0 p-0'></i>
                     </button>
                   </div>
                 </td>
@@ -145,39 +145,39 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
       ) : (
         <Form onSubmit={handleAddProduct}>
           <Row>
-            <table className='tw:w-full tw:text-[11.2px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+            <table className='w-full text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
               <thead>
-                <tr className='tw:text-center'>
+                <tr className='text-center'>
                   <th>SKU</th>
                   <th>UPC</th>
                   <th>HTS Code</th>
                   <th>Default Price</th>
                   <th id='msrpHead'>MSRP</th>
-                  <UncontrolledTooltip placement='top' target='msrpHead' innerClassName='tw:bg-white tw:text-primary tw:shadow'>
+                  <UncontrolledTooltip placement='top' target='msrpHead' innerClassName='bg-white text-primary shadow'>
                     {`Manufacturer's Suggested Retail Price`}
                   </UncontrolledTooltip>
                   <th id='mapHead'>MAP</th>
-                  <UncontrolledTooltip placement='top' target='mapHead' innerClassName='tw:bg-white tw:text-primary tw:shadow'>
+                  <UncontrolledTooltip placement='top' target='mapHead' innerClassName='bg-white text-primary shadow'>
                     {`Minimum Advertised Price`}
                   </UncontrolledTooltip>
                   <th id='minSalePriceHead'>Floor</th>
-                  <UncontrolledTooltip placement='top' target='minSalePriceHead' innerClassName='tw:bg-white tw:text-primary tw:shadow'>
+                  <UncontrolledTooltip placement='top' target='minSalePriceHead' innerClassName='bg-white text-primary shadow'>
                     {`Minimum Sale Price`}
                   </UncontrolledTooltip>
                   <th id='maxSalePriceHead'>Ceilling</th>
-                  <UncontrolledTooltip placement='top' target='maxSalePriceHead' innerClassName='tw:bg-white tw:text-primary tw:shadow'>
+                  <UncontrolledTooltip placement='top' target='maxSalePriceHead' innerClassName='bg-white text-primary shadow'>
                     {`Maximum Sale Price`}
                   </UncontrolledTooltip>
                 </tr>
               </thead>
               <tbody>
-                <tr className='tw:text-center'>
+                <tr className='text-center'>
                   <td>
                     <FormGroup>
                       <Input
                         disabled
                         type='text'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         style={{ minWidth: '80px' }}
                         placeholder='sku...'
                         id='sku'
@@ -196,7 +196,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                       <Input
                         disabled
                         type='text'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         style={{ minWidth: '80px' }}
                         placeholder='upc...'
                         id='upc'
@@ -214,7 +214,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                     <FormGroup>
                       <Input
                         type='text'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         style={{ minWidth: '80px' }}
                         placeholder='HTS Code...'
                         id='htsCode'
@@ -232,7 +232,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                     <FormGroup>
                       <Input
                         type='number'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         placeholder='defaultPrice...'
                         id='defaultPrice'
                         name='defaultPrice'
@@ -250,7 +250,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                     <FormGroup>
                       <Input
                         type='number'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         placeholder='msrp...'
                         id='msrp'
                         name='msrp'
@@ -268,7 +268,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                     <FormGroup>
                       <Input
                         type='number'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         placeholder='map...'
                         id='map'
                         name='map'
@@ -286,7 +286,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                     <FormGroup>
                       <Input
                         type='number'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         placeholder='floor...'
                         id='floor'
                         name='floor'
@@ -304,7 +304,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                     <FormGroup>
                       <Input
                         type='number'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         placeholder='ceilling...'
                         id='ceilling'
                         name='ceilling'
@@ -322,7 +322,7 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
               </tbody>
             </table>
             <Col md={12}>
-              <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-3'>
+              <div className='flex flex-row justify-end items-center gap-3'>
                 <Button disabled={isLoading} type='button' color='light' onClick={() => setShowEditFields(false)}>
                   Cancel
                 </Button>

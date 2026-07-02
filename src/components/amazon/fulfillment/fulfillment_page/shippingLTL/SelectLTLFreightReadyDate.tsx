@@ -60,32 +60,32 @@ const SelectLTLFreightReadyDate = ({ shipmentId, selectedLTLTransportationOption
 
   return (
     <div>
-      <p className='tw:my-2 tw:p-0 tw:font-semibold tw:text-[11.2px]'>Freight Ready Date</p>
+      <p className='my-2 p-0 font-semibold text-[11.2px]'>Freight Ready Date</p>
 
-      <div className='tw:w-full tw:gap-2' style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', alignContent: 'center', justifyItems: 'center' }}>
+      <div className='w-full gap-2' style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', alignContent: 'center', justifyItems: 'center' }}>
         {carrierTransportationOptions.map((option, index) => (
           <div
             key={index}
             className={
-              'tw:text-[11.2px] tw:py-1 tw:px-2 tw:border tw:border-[color:var(--vz-border-color)] tw:border tw:border-[2px] tw:rounded-lg' +
-              (selectedLTLTransportationOption.transportationOptionId === option.transportationOptionId ? ' tw:border-primary tw:shadow-[0_5px_10px_rgba(30,32,37,0.12)]' : '')
+              'text-[11.2px] py-1 px-2 border border-[color:var(--vz-border-color)] border border-[2px] rounded-lg' +
+              (selectedLTLTransportationOption.transportationOptionId === option.transportationOptionId ? ' border-primary shadow-[0_5px_10px_rgba(30,32,37,0.12)]' : '')
             }
             style={{ cursor: 'pointer' }}
             onClick={() => handleChangeFreightReadyDate(option.transportationOptionId)}>
-            <p className='tw:m-0 tw:p-0 tw:font-semibold'>{moment.utc(option.carrierAppointment?.startTime).format('ddd')}</p>
-            <p className='tw:m-0 tw:p-0 tw:font-semibold'>{moment.utc(option.carrierAppointment?.startTime).format('MMM D')}</p>
-            <p className='tw:m-0 tw:p-0'>
-              <span className='tw:text-[var(--bs-secondary-color)]' style={{ fontSize: '0.875em' }}>
+            <p className='m-0 p-0 font-semibold'>{moment.utc(option.carrierAppointment?.startTime).format('ddd')}</p>
+            <p className='m-0 p-0 font-semibold'>{moment.utc(option.carrierAppointment?.startTime).format('MMM D')}</p>
+            <p className='m-0 p-0'>
+              <span className='text-[var(--bs-secondary-color)]' style={{ fontSize: '0.875em' }}>
                 from
               </span>{' '}
               {FormatCurrency(state.currentRegion, option.quote?.cost.amount || 0)}
             </p>
             {option.quote?.expiration && (
               <>
-                <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)]' style={{ fontSize: '0.875em' }}>
+                <p className='m-0 p-0 text-[var(--bs-secondary-color)]' style={{ fontSize: '0.875em' }}>
                   expires
                 </p>
-                <p className='tw:m-0 tw:p-0 tw:text-danger' style={{ fontSize: '0.875em' }}>
+                <p className='m-0 p-0 text-danger' style={{ fontSize: '0.875em' }}>
                   {moment.utc(option.quote?.expiration).local().format('DD/MM h:mm a')}
                 </p>
               </>
@@ -94,13 +94,13 @@ const SelectLTLFreightReadyDate = ({ shipmentId, selectedLTLTransportationOption
         ))}
       </div>
 
-      <div className='tw:mt-4 tw:mb-2 tw:flex tw:flex-row tw:justify-between tw:items-center tw:gap-4'>
-        <p className='tw:my-2 tw:p-0 tw:font-semibold tw:text-[11.2px]'>Carrier</p>
-        <Select className='tw:text-[11.2px]' value={selectedCarrier} onChange={handleChangeCarrier} options={commonCarriers} />
+      <div className='mt-4 mb-2 flex flex-row justify-between items-center gap-4'>
+        <p className='my-2 p-0 font-semibold text-[11.2px]'>Carrier</p>
+        <Select className='text-[11.2px]' value={selectedCarrier} onChange={handleChangeCarrier} options={commonCarriers} />
       </div>
-      <div className='tw:overflow-x-auto'>
-        <table className='tw:w-full tw:align-middle tw:mb-0 tw:text-[11.2px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
-          <thead className='tw:bg-[color:var(--vz-light)]'>
+      <div className='overflow-x-auto'>
+        <table className='w-full align-middle mb-0 text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+          <thead className='bg-[color:var(--vz-light)]'>
             <tr>
               <th>PCP Carrier</th>
               <th>Mode</th>

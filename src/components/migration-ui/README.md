@@ -79,9 +79,10 @@ status chips with `Badge`, and hints with `UncontrolledTooltip`.
 
 ## Conventions
 
-- Keep the `tw:` prefix on every utility (Bootstrap still loaded).
 - Wrappers use **self-contained `cva`** color variants rather than layering over
-  the shadcn variants, because `cn`/tailwind-merge is not configured for the
-  `tw:` prefix and cannot dedupe conflicting prefixed classes.
-- These wrappers are **not wired into any screen yet** (Phase 2 only authors
-  them). Screen-by-screen adoption happens in Phase 3+.
+  the shadcn variants, so every Bootstrap color (incl. success/info/warning,
+  which shadcn's own variants lack) and Velzon's exact visual treatment are
+  preserved. `cn`/tailwind-merge now runs unprefixed, so callers can still rely
+  on `cn(variants, className)` (caller `className` last) to override.
+- Every wrapper forwards the caller's `className` through `cn(...)` last, so
+  caller overrides win.

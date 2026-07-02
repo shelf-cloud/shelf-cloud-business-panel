@@ -38,7 +38,7 @@ function Offcanvas({ isOpen, toggle, direction = 'end', className, id, children 
         id={id}
         side={directionToSide[direction] ?? 'right'}
         aria-describedby={undefined}
-        className={cn('tw:overflow-y-auto tw:sm:max-w-md', className)}>
+        className={cn('overflow-y-auto sm:max-w-md', className)}>
         {children}
       </SheetContent>
     </Sheet>
@@ -52,14 +52,14 @@ export type OffcanvasSectionProps = React.ComponentProps<'div'> & {
 
 function OffcanvasHeader({ children, className, toggle: _toggle, tag: _tag, ...props }: OffcanvasSectionProps) {
   return (
-    <SheetHeader className={cn('tw:pr-10', className)} {...props}>
+    <SheetHeader className={cn('pr-10', className)} {...props}>
       <SheetTitle>{children}</SheetTitle>
     </SheetHeader>
   )
 }
 
 function OffcanvasBody({ className, toggle: _toggle, tag: _tag, ...props }: OffcanvasSectionProps) {
-  return <div data-slot='offcanvas-body' className={cn('tw:px-4 tw:pb-4', className)} {...props} />
+  return <div data-slot='offcanvas-body' className={cn('px-4 pb-4', className)} {...props} />
 }
 
 export { Offcanvas, OffcanvasHeader, OffcanvasBody }

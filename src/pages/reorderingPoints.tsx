@@ -297,12 +297,12 @@ const ReorderingPoints = ({ session }: Props) => {
               splits={splits}
               splitNames={splitNames}
             />
-            <Row className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:mb-2 tw:md:flex-row tw:md:justify-end tw:md:items-center tw:px-4'>
-              <div className='tw:flex tw:flex-col tw:justify-between tw:items-start tw:p-0 tw:md:flex-row tw:md:items-center tw:gap-2'>
-                <div className='tw:flex tw:flex-row tw:flex-wrap tw:justify-start tw:items-center tw:gap-2 tw:w-full'>
+            <Row className='flex flex-col justify-center items-end gap-2 mb-2 md:flex-row md:justify-end md:items-center px-4'>
+              <div className='flex flex-col justify-between items-start p-0 md:flex-row md:items-center gap-2'>
+                <div className='flex flex-row flex-wrap justify-start items-center gap-2 w-full'>
                   <ShadcnButton variant={filters === 'true' ? 'default' : 'light'} onClick={() => setFilterOpen(!filterOpen)}>
                     Filters
-                    <ChevronDownIcon className='tw:size-3' />
+                    <ChevronDownIcon className='size-3' />
                   </ShadcnButton>
                   <FilterByDates
                     shipmentsStartDate={startDate}
@@ -323,8 +323,8 @@ const ReorderingPoints = ({ session }: Props) => {
                         setsplits={setsplits}
                       />
                       {state.user.us.canEditPrompt ? (
-                        <ShadcnButton onClick={() => setPromptModal({ show: true })} className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-1'>
-                          <i className='las la-brain tw:text-[19.5px] tw:m-0 tw:p-0' />
+                        <ShadcnButton onClick={() => setPromptModal({ show: true })} className='flex flex-row justify-start items-center gap-1'>
+                          <i className='las la-brain text-[19.5px] m-0 p-0' />
                           Prompt
                         </ShadcnButton>
                       ) : null}
@@ -335,7 +335,7 @@ const ReorderingPoints = ({ session }: Props) => {
                       <DropdownMenuTrigger asChild>
                         <ShadcnButton>
                           {`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''} Selected`}
-                          <ChevronDownIcon className='tw:size-3' />
+                          <ChevronDownIcon className='size-3' />
                         </ShadcnButton>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align='start'>
@@ -345,11 +345,11 @@ const ReorderingPoints = ({ session }: Props) => {
                             Set Product Trend Tag
                           </DropdownMenuItem> */}
                           <DropdownMenuItem onClick={() => changeSelectedProductsState(false)}>
-                            <i className='mdi mdi-eye tw:text-[16.25px] tw:text-primary' />
+                            <i className='mdi mdi-eye text-[16.25px] text-primary' />
                             Set Visible
                           </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => changeSelectedProductsState(true)}>
-                            <i className='mdi mdi-eye-off tw:text-[16.25px] tw:text-destructive' />
+                            <i className='mdi mdi-eye-off text-[16.25px] text-destructive' />
                             Hide Selected
                           </DropdownMenuItem>
                         </DropdownMenuGroup>
@@ -363,7 +363,7 @@ const ReorderingPoints = ({ session }: Props) => {
                 </div>
                 <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' minLength={3} />
               </div>
-              <Collapse className='tw:px-0' isOpen={filterOpen}>
+              <Collapse className='px-0' isOpen={filterOpen}>
                 <FilterReorderingPoints
                   urgency={urgency !== undefined ? urgency : '[]'}
                   grossmin={grossmin !== undefined ? grossmin : ''}

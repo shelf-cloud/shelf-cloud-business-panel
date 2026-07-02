@@ -62,8 +62,8 @@ const InputModal = ({
       <Form onSubmit={handleAddProduct}>
         <ModalBody>
           <Row>
-            <h5 className='tw:text-[16.25px] tw:mb-0 tw:font-semibold tw:text-primary'>{primaryText}</h5>
-            <Col md={12} className='tw:mt-2'>
+            <h5 className='text-[16.25px] mb-0 font-semibold text-primary'>{primaryText}</h5>
+            <Col md={12} className='mt-2'>
               <DebounceInput
                 type='text'
                 minLength={minLength}
@@ -77,13 +77,13 @@ const InputModal = ({
                 onBlur={validation.handleBlur}
                 invalid={validation.touched.inputText && validation.errors.inputText ? true : false}
               />
-              {validation.touched.inputText && validation.errors.inputText ? <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:text-danger'>{validation.errors.inputText}</p> : null}
+              {validation.touched.inputText && validation.errors.inputText ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.inputText}</p> : null}
             </Col>
           </Row>
         </ModalBody>
         <ModalFooter>
           <Row md={12}>
-            <div className='tw:text-right tw:mt-2 tw:flex tw:flex-row tw:gap-4 tw:justify-end'>
+            <div className='text-right mt-2 flex flex-row gap-4 justify-end'>
               <Button disabled={isLoading} type='button' color='light' className='btn' onClick={onClose}>
                 Cancel
               </Button>

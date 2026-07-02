@@ -103,15 +103,15 @@ const CreateNewTeamMemberModal = ({ showModal, setShowModal }: Props) => {
   return (
     <Modal fade={false} size='lg' id='unitsSoldDetailsModal' isOpen={showModal} toggle={() => setShowModal(false)}>
       <ModalHeader toggle={() => setShowModal(false)}>
-        <p className='tw:m-0 tw:p-0 tw:mb-1 tw:font-bold tw:text-[22.75px]'>Create New Team Member</p>
+        <p className='m-0 p-0 mb-1 font-bold text-[22.75px]'>Create New Team Member</p>
       </ModalHeader>
       <Form onSubmit={handleCreateNewTeamMember}>
-        <ModalBody className='tw:pb-0'>
+        <ModalBody className='pb-0'>
           {!loadingModules ? (
             <>
               <Row>
                 <Col lg={6}>
-                  <FormGroup className='tw:mb-4'>
+                  <FormGroup className='mb-4'>
                     <Label htmlFor='name' className='form-label'>
                       *Name
                     </Label>
@@ -130,7 +130,7 @@ const CreateNewTeamMemberModal = ({ showModal, setShowModal }: Props) => {
                   </FormGroup>
                 </Col>
                 <Col lg={6}>
-                  <FormGroup className='tw:mb-4'>
+                  <FormGroup className='mb-4'>
                     <Label htmlFor='email' className='form-label'>
                       *Email Address
                     </Label>
@@ -150,13 +150,13 @@ const CreateNewTeamMemberModal = ({ showModal, setShowModal }: Props) => {
                 </Col>
               </Row>
               {Object.entries(manageUser.permissions!).map(([module, moduleInfo]) => (
-                <Row className='tw:mb-4' key={module}>
+                <Row className='mb-4' key={module}>
                   <CategoryTeamMembersHeader title={module} icon={moduleInfo.icon!} checked={moduleInfo.view} manageUser={manageUser} setManageUser={setManageUser} />
-                  <Row className='tw:px-6 tw:py-2 tw:gap-4'>
+                  <Row className='px-6 py-2 gap-4'>
                     {Object.entries(moduleInfo.modules).map(([subModule, subModuleInfo]) => (
                       <Col key={subModule}>
-                        <div className='tw:flex tw:flex-row tw:justify-start tw:items-end tw:w-fit tw:gap-2'>
-                          <Label className='form-check-label tw:text-nowrap tw:font-normal'>{subModule}</Label>
+                        <div className='flex flex-row justify-start items-end w-fit gap-2'>
+                          <Label className='form-check-label text-nowrap font-normal'>{subModule}</Label>
                           <div className='form-check-info'>
                             <Input className='form-check-input' type='checkbox' checked={subModuleInfo.view} onChange={() => handleChangePermissions(module, subModule)} />
                           </div>
@@ -166,16 +166,16 @@ const CreateNewTeamMemberModal = ({ showModal, setShowModal }: Props) => {
                   </Row>
                 </Row>
               ))}
-              {formError && <p className='tw:text-danger tw:mb-0 tw:pb-0 tw:text-[11.2px]'>{formError}</p>}
+              {formError && <p className='text-danger mb-0 pb-0 text-[11.2px]'>{formError}</p>}
             </>
           ) : (
             <>
-              <span className='tw:font-normal tw:text-[16.25px] tw:me-4'>Loading Modules...</span>
+              <span className='font-normal text-[16.25px] me-4'>Loading Modules...</span>
               <Spinner color='primary' size='sm' />
             </>
           )}
         </ModalBody>
-        <ModalFooter className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-2'>
+        <ModalFooter className='flex flex-row justify-end items-center gap-2'>
           <Button color='light' onClick={() => setShowModal(false)}>
             Close
           </Button>

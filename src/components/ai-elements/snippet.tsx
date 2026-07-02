@@ -42,7 +42,7 @@ export const Snippet = ({
 
   return (
     <SnippetContext.Provider value={contextValue}>
-      <InputGroup className={cn("tw:font-mono", className)} {...props}>
+      <InputGroup className={cn("font-mono", className)} {...props}>
         {children}
       </InputGroup>
     </SnippetContext.Provider>
@@ -59,7 +59,7 @@ export type SnippetTextProps = ComponentProps<typeof InputGroupText>;
 
 export const SnippetText = ({ className, ...props }: SnippetTextProps) => (
   <InputGroupText
-    className={cn("tw:pl-2 tw:font-normal tw:text-muted-foreground", className)}
+    className={cn("pl-2 font-normal text-muted-foreground", className)}
     {...props}
   />
 );
@@ -74,7 +74,7 @@ export const SnippetInput = ({ className, ...props }: SnippetInputProps) => {
 
   return (
     <InputGroupInput
-      className={cn("tw:text-foreground", className)}
+      className={cn("text-foreground", className)}
       readOnly
       value={code}
       {...props}
@@ -139,7 +139,7 @@ export const SnippetCopyButton = ({
       title="Copy"
       {...props}
     >
-      {children ?? <Icon className="tw:size-3.5" size={14} />}
+      {children ?? <Icon className="size-3.5" size={14} />}
     </InputGroupButton>
   );
 };

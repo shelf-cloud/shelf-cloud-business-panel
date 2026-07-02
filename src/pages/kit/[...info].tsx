@@ -80,10 +80,10 @@ const Kit_Page_Layout = ({}: Props) => {
         <div className='page-content'>
           <Container fluid>
             <BreadCrumb title='Product Details' pageTitle='Inventory' />
-            <Card className='tw:text-[13px]'>
+            <Card className='text-[13px]'>
               {!isLoading ? (
                 <>
-                  <CardHeader className='tw:flex tw:flex-row tw:justify-between tw:items-start'>
+                  <CardHeader className='flex flex-row justify-between items-start'>
                     <div>
                       <Link href={'/Kits'}>
                         <Button
@@ -91,14 +91,14 @@ const Kit_Page_Layout = ({}: Props) => {
                           outline
                           style={{ cursor: 'pointer' }}>
                           <span className='icon-on'>
-                            <i className='ri-arrow-left-line tw:align-bottom tw:me-1' />
+                            <i className='ri-arrow-left-line align-bottom me-1' />
                             Kits
                           </span>
                         </Button>
                       </Link>
-                      <div className='tw:mt-3'>
-                        <div className='tw:font-semibold tw:text-[22.75px]'>
-                          <span className='tw:text-[color:var(--bs-secondary-color)] tw:font-normal'>SKU:</span> {info![1]} <CopyTextToClipboard text={info![1]} label='SKU' fontSize='fs-4' />
+                      <div className='mt-3'>
+                        <div className='font-semibold text-[22.75px]'>
+                          <span className='text-[color:var(--bs-secondary-color)] font-normal'>SKU:</span> {info![1]} <CopyTextToClipboard text={info![1]} label='SKU' fontSize='fs-4' />
                         </div>
                       </div>
                     </div>
@@ -111,7 +111,7 @@ const Kit_Page_Layout = ({}: Props) => {
                   </CardHeader>
                   <CardBody>
                     <Row>
-                      <Col xs='12' md='12' lg='9' className='tw:gap-2 tw:flex tw:flex-col tw:overflow-auto'>
+                      <Col xs='12' md='12' lg='9' className='gap-2 flex flex-col overflow-auto'>
                         <General_Kit_Details
                           inventoryId={productDetails?.inventoryId}
                           sku={productDetails?.sku}
@@ -127,11 +127,11 @@ const Kit_Page_Layout = ({}: Props) => {
                           categories={productDetails?.categories ?? []}
                           suppliers={productDetails?.suppliers ?? []}
                         />
-                        <Nav className='tw:pt-2 nav-tabs-custom tw:rounded-[0.25rem] card-header-tabs tw:border-b-0' role='tablist'>
+                        <Nav className='pt-2 nav-tabs-custom rounded-[0.25rem] card-header-tabs border-b-0' role='tablist'>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={'tw:text-[16.25px] tw:font-semibold ' + (activeTab == '1' ? 'tw:!text-primary' : 'tw:!text-[color:var(--bs-secondary-color)]')}
+                              className={'text-[16.25px] font-semibold ' + (activeTab == '1' ? '!text-primary' : '!text-[color:var(--bs-secondary-color)]')}
                               onClick={() => {
                                 tabChange('1')
                               }}
@@ -144,7 +144,7 @@ const Kit_Page_Layout = ({}: Props) => {
                           </NavItem>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
-                              className={'tw:text-[16.25px] tw:font-semibold ' + (activeTab == '2' ? 'tw:!text-primary' : 'tw:!text-[color:var(--bs-secondary-color)]')}
+                              className={'text-[16.25px] font-semibold ' + (activeTab == '2' ? '!text-primary' : '!text-[color:var(--bs-secondary-color)]')}
                               onClick={() => {
                                 tabChange('2')
                               }}>
@@ -157,7 +157,7 @@ const Kit_Page_Layout = ({}: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={'tw:text-[16.25px] tw:font-semibold ' + (activeTab == '3' ? 'tw:!text-primary' : 'tw:!text-[color:var(--bs-secondary-color)]')}
+                              className={'text-[16.25px] font-semibold ' + (activeTab == '3' ? '!text-primary' : '!text-[color:var(--bs-secondary-color)]')}
                               onClick={() => {
                                 tabChange('3')
                               }}
@@ -171,7 +171,7 @@ const Kit_Page_Layout = ({}: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={'tw:text-[16.25px] tw:font-semibold ' + (activeTab == '4' ? 'tw:!text-primary' : 'tw:!text-[color:var(--bs-secondary-color)]')}
+                              className={'text-[16.25px] font-semibold ' + (activeTab == '4' ? '!text-primary' : '!text-[color:var(--bs-secondary-color)]')}
                               onClick={() => {
                                 tabChange('4')
                               }}
@@ -185,7 +185,7 @@ const Kit_Page_Layout = ({}: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={'tw:text-[16.25px] tw:font-semibold ' + (activeTab == '5' ? 'tw:!text-primary' : 'tw:!text-[color:var(--bs-secondary-color)]')}
+                              className={'text-[16.25px] font-semibold ' + (activeTab == '5' ? '!text-primary' : '!text-[color:var(--bs-secondary-color)]')}
                               onClick={() => {
                                 tabChange('5')
                               }}
@@ -197,7 +197,7 @@ const Kit_Page_Layout = ({}: Props) => {
                             </NavLink>
                           </NavItem>
                         </Nav>
-                        <TabContent activeTab={activeTab} className='tw:pt-2 tw:pb-4 tw:border-b tw:border-[color:var(--border)]'>
+                        <TabContent activeTab={activeTab} className='pt-2 pb-4 border-b border-[color:var(--border)]'>
                           <TabPane tabId='1'>
                             <Children_Kit_Details kitChildren={productDetails?.children ?? []} />
                           </TabPane>
@@ -253,7 +253,7 @@ const Kit_Page_Layout = ({}: Props) => {
                           amazonFBA={productDetails?.amazonFBA ?? []}
                         />
                       </Col>
-                      <Col xs='12' md='12' lg='3' className='tw:gap-4 tw:flex tw:flex-col'>
+                      <Col xs='12' md='12' lg='3' className='gap-4 flex flex-col'>
                         <Status_Kit_Details
                           active={productDetails?.activeState ?? true}
                           isKit={productDetails?.isKit ? true : false}
@@ -265,8 +265,8 @@ const Kit_Page_Layout = ({}: Props) => {
                   </CardBody>
                 </>
               ) : (
-                <div className='tw:w-full tw:h-full tw:px-4 tw:py-4 tw:flex tw:justify-center tw:items-center'>
-                  <div className='tw:text-[19.5px] tw:font-normal tw:my-4 tw:flex tw:justify-center tw:items-center tw:gap-3'>
+                <div className='w-full h-full px-4 py-4 flex justify-center items-center'>
+                  <div className='text-[19.5px] font-normal my-4 flex justify-center items-center gap-3'>
                     <Spinner color='primary' size={'md'} /> Loading kit details...
                   </div>
                 </div>

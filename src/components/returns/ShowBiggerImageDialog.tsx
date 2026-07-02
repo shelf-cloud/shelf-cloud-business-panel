@@ -35,35 +35,35 @@ const ShowBiggerImageDialog = ({ selectedImage, setSelectedImage }: Props) => {
 
   return (
     <Dialog open={Boolean(selectedImage)} onOpenChange={(isOpen) => !isOpen && setSelectedImage(null)}>
-      <DialogContent className='tw:max-w-5xl'>
+      <DialogContent className='max-w-5xl'>
         <DialogHeader>
           <DialogTitle>Unsellable Image</DialogTitle>
           <DialogDescription>{selectedImageAlt}</DialogDescription>
         </DialogHeader>
-        <div className='tw:bg-muted tw:relative tw:flex tw:max-h-[70vh] tw:items-center tw:justify-center tw:overflow-hidden tw:rounded-md tw:border'>
+        <div className='bg-muted relative flex max-h-[70vh] items-center justify-center overflow-hidden rounded-md border'>
           {selectedImageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={selectedImageUrl} alt={selectedImageAlt} className='tw:max-h-[70vh] tw:w-full tw:object-contain' />
+            <img src={selectedImageUrl} alt={selectedImageAlt} className='max-h-[70vh] w-full object-contain' />
           ) : null}
           {canNavigateSelectedImage ? (
-            <div className='tw:pointer-events-none tw:absolute tw:inset-0 tw:z-10 tw:flex tw:items-center tw:justify-between tw:px-3'>
+            <div className='pointer-events-none absolute inset-0 z-10 flex items-center justify-between px-3'>
               <Button
                 type='button'
                 variant='outline'
                 size='icon'
-                className='tw:pointer-events-auto tw:size-7 tw:rounded-full! tw:shadow-md'
+                className='pointer-events-auto size-7 rounded-full! shadow-md'
                 onClick={() => handleSelectedImageNavigate(-1)}
                 aria-label='Previous image'>
-                <ChevronLeftIcon className='tw:size-5' />
+                <ChevronLeftIcon className='size-5' />
               </Button>
               <Button
                 type='button'
                 variant='outline'
                 size='icon'
-                className='tw:pointer-events-auto tw:size-7 tw:rounded-full! tw:shadow-md'
+                className='pointer-events-auto size-7 rounded-full! shadow-md'
                 onClick={() => handleSelectedImageNavigate(1)}
                 aria-label='Next image'>
-                <ChevronRightIcon className='tw:size-5' />
+                <ChevronRightIcon className='size-5' />
               </Button>
             </div>
           ) : null}
@@ -72,7 +72,7 @@ const ShowBiggerImageDialog = ({ selectedImage, setSelectedImage }: Props) => {
           {selectedImageUrl ? (
             <Button asChild type='button'>
               <a href={selectedImageUrl} download target='_blank' rel='noopener noreferrer'>
-                <DownloadIcon className='tw:size-4' />
+                <DownloadIcon className='size-4' />
                 Download
               </a>
             </Button>

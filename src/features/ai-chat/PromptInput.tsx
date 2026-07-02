@@ -28,30 +28,30 @@ const PromptInput = ({ value, disabled, isStreaming, onChange, onSubmit, onStop 
   }
 
   return (
-    <form onSubmit={handleSubmit} className='tw:space-y-2'>
-      <div className='tw:flex tw:items-end tw:gap-2'>
+    <form onSubmit={handleSubmit} className='space-y-2'>
+      <div className='flex items-end gap-2'>
         <Textarea
           value={value}
           onChange={(event) => onChange(event.target.value)}
           onKeyDown={handleKeyDown}
           disabled={disabled}
           rows={1}
-          className='tw:min-h-14 tw:h-auto tw:flex-1 tw:resize-none tw:rounded-2xl tw:border-border/80'
+          className='min-h-14 h-auto flex-1 resize-none rounded-2xl border-border/80'
           placeholder='Ask why this forecast was produced, what assumptions mattered most, or test a hypothetical scenario.'
           aria-label='Forecast chat prompt'
         />
-        <div className='tw:flex tw:shrink-0 tw:items-center tw:gap-2'>
+        <div className='flex shrink-0 items-center gap-2'>
           {isStreaming && (
-            <Button size={'icon'} className='tw:rounded-full!' type='button' variant='outline' onClick={onStop}>
-              <StopCircleIcon className='tw:size-5' />
+            <Button size={'icon'} className='rounded-full!' type='button' variant='outline' onClick={onStop}>
+              <StopCircleIcon className='size-5' />
             </Button>
           )}
-          <Button size={'icon'} className='tw:rounded-full!' type='submit' disabled={disabled || value.trim().length === 0}>
-            <SendHorizonal className='tw:size-5' />
+          <Button size={'icon'} className='rounded-full!' type='submit' disabled={disabled || value.trim().length === 0}>
+            <SendHorizonal className='size-5' />
           </Button>
         </div>
       </div>
-      <p className='tw:m-0! tw:text-xs tw:text-muted-foreground'>Press Enter to send. Use Shift+Enter for a new line.</p>
+      <p className='m-0! text-xs text-muted-foreground'>Press Enter to send. Use Shift+Enter for a new line.</p>
     </form>
   )
 }

@@ -16,11 +16,11 @@ export const Suggestions = ({
   children,
   ...props
 }: SuggestionsProps) => (
-  <ScrollArea className="tw:w-full tw:overflow-x-auto tw:whitespace-nowrap" {...props}>
-    <div className={cn("tw:flex tw:w-max tw:flex-nowrap tw:items-center tw:gap-2", className)}>
+  <ScrollArea className="w-full overflow-x-auto whitespace-nowrap" {...props}>
+    <div className={cn("flex w-max flex-nowrap items-center gap-2", className)}>
       {children}
     </div>
-    <ScrollBar className="tw:hidden" orientation="horizontal" />
+    <ScrollBar className="hidden" orientation="horizontal" />
   </ScrollArea>
 );
 
@@ -44,7 +44,7 @@ export const Suggestion = ({
 
   return (
     <Button
-      className={cn("tw:cursor-pointer tw:rounded-full tw:px-4", className)}
+      className={cn("cursor-pointer rounded-full px-4", className)}
       onClick={handleClick}
       size={size}
       type="button"

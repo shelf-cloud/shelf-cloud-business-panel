@@ -21,7 +21,7 @@ export const Checkpoint = ({
 }: CheckpointProps) => (
   <div
     className={cn(
-      "tw:flex tw:items-center tw:gap-0.5 tw:overflow-hidden tw:text-muted-foreground",
+      "flex items-center gap-0.5 overflow-hidden text-muted-foreground",
       className
     )}
     {...props}
@@ -39,7 +39,7 @@ export const CheckpointIcon = ({
   ...props
 }: CheckpointIconProps) =>
   children ?? (
-    <BookmarkIcon className={cn("tw:size-4 tw:shrink-0", className)} {...props} />
+    <BookmarkIcon className={cn("size-4 shrink-0", className)} {...props} />
   );
 
 export type CheckpointTriggerProps = ComponentProps<typeof Button> & {

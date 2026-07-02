@@ -67,7 +67,7 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
 
   const columns: any = [
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Image</span>,
+      name: <span className='font-bold text-[13px]'>Image</span>,
       selector: (row: Listing) => {
         return (
           <div
@@ -95,7 +95,7 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
     },
     {
       name: (
-        <span className='tw:font-bold tw:text-[13px]'>
+        <span className='font-bold text-[13px]'>
           SKU
           <br />
           Brand
@@ -104,8 +104,8 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
       selector: (row: Listing) => {
         return (
           <div>
-            <p className='tw:text-[11.2px] tw:m-0 tw:p-0 tw:font-semibold'>{row.sku}</p>
-            <p style={{ margin: '0px' }} className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>
+            <p className='text-[11.2px] m-0 p-0 font-semibold'>{row.sku}</p>
+            <p style={{ margin: '0px' }} className='text-[11.2px] text-[var(--bs-secondary-color)]'>
               {row.brand}
             </p>
           </div>
@@ -118,7 +118,7 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
     },
     {
       name: (
-        <span className='tw:font-bold tw:text-[13px]'>
+        <span className='font-bold text-[13px]'>
           ASIN
           <br />
           FNSKU
@@ -127,13 +127,13 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
       selector: (row: Listing) => {
         return (
           <div>
-            <p className='tw:m-0 tw:text-[11.2px]'>
+            <p className='m-0 text-[11.2px]'>
               {/* <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/exec/obidos/ASIN${row.asin}`} target='blank'> */}
               <a href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank' rel='noopener noreferrer'>
                 {row.asin}
               </a>
             </p>
-            {row.fnsku && row.asin !== row.fnsku && <p className='tw:m-0 tw:text-[11.2px]'>{row.fnsku}</p>}
+            {row.fnsku && row.asin !== row.fnsku && <p className='m-0 text-[11.2px]'>{row.fnsku}</p>}
           </div>
         )
       },
@@ -143,12 +143,12 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
       grow: 0,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Condition</span>,
+      name: <span className='font-bold text-[13px]'>Condition</span>,
       selector: (row: Listing) => {
         return (
           <>
-            <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:text-center'>{row.condition}</p>
-            {row.show === 0 && <span className='tw:text-info tw:text-[11.2px] tw:text-center tw:opacity-75'>Hidden</span>}
+            <p className='m-0 p-0 text-[11.2px] text-center'>{row.condition}</p>
+            {row.show === 0 && <span className='text-info text-[11.2px] text-center opacity-75'>Hidden</span>}
           </>
         )
       },
@@ -158,12 +158,12 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
       grow: 0,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px] tw:text-center'>Fulfillment Channel</span>,
+      name: <span className='font-bold text-[13px] text-center'>Fulfillment Channel</span>,
       selector: (row: Listing) => {
         return (
           <div>
-            {row.mfn_listing_exists ? <p className='tw:m-0 tw:p-0 tw:text-[11.2px]'>Merchant</p> : <></>}
-            {row.afn_listing_exists ? <p className='tw:m-0 tw:p-0 tw:text-[11.2px]'>Amazon FBA</p> : <></>}
+            {row.mfn_listing_exists ? <p className='m-0 p-0 text-[11.2px]'>Merchant</p> : <></>}
+            {row.afn_listing_exists ? <p className='m-0 p-0 text-[11.2px]'>Amazon FBA</p> : <></>}
           </div>
         )
       },
@@ -173,7 +173,7 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
       grow: 0,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Fulfillable</span>,
+      name: <span className='font-bold text-[13px]'>Fulfillable</span>,
       selector: (row: Listing) => row.afn_fulfillable_quantity,
       center: true,
       sortable: true,
@@ -181,7 +181,7 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
       grow: 0,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Reserved</span>,
+      name: <span className='font-bold text-[13px]'>Reserved</span>,
       selector: (row: Listing) => row.afn_reserved_quantity,
       center: true,
       sortable: true,
@@ -189,7 +189,7 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
       grow: 0,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Unsellable</span>,
+      name: <span className='font-bold text-[13px]'>Unsellable</span>,
       selector: (row: Listing) => row.afn_unsellable_quantity,
       center: true,
       sortable: true,
@@ -197,7 +197,7 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
       grow: 0,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Inbound</span>,
+      name: <span className='font-bold text-[13px]'>Inbound</span>,
       selector: (row: Listing) => row.afn_inbound_receiving_quantity + row.afn_inbound_shipped_quantity + row.afn_inbound_working_quantity,
       center: true,
       sortable: true,
@@ -205,14 +205,14 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
       grow: 0,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px] tw:text-center'>Mapped to ShelfCloud</span>,
+      name: <span className='font-bold text-[13px] text-center'>Mapped to ShelfCloud</span>,
       selector: (row: Listing) => {
         return (
           <div>
             {row.shelfcloud_sku ? (
-              <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-2'>
+              <div className='flex flex-row justify-end items-center gap-2'>
                 <i
-                  className='las la-link tw:text-[19.5px] tw:text-success tw:m-0 tw:p-0'
+                  className='las la-link text-[19.5px] text-success m-0 p-0'
                   style={{ cursor: 'pointer' }}
                   onClick={() =>
                     setshowMappedListingModal((prev) => {
@@ -233,12 +233,12 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
                   href={row.shelfcloud_isKit ? `/kit/${row.shelfcloud_sku_id}/${row.shelfcloud_sku}` : `/product/${row.shelfcloud_sku_id}/${row.shelfcloud_sku}`}
                   target='blank'
                   rel='noopener noreferrer'>
-                  <span className='tw:text-[11.2px]'>{row.shelfcloud_sku}</span>
+                  <span className='text-[11.2px]'>{row.shelfcloud_sku}</span>
                 </Link>
               </div>
             ) : (
               <div
-                className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-2'
+                className='flex flex-row justify-end items-center gap-2'
                 style={{ cursor: 'pointer' }}
                 onClick={() =>
                   setshowMappedListingModal((prev) => {
@@ -251,8 +251,8 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
                     }
                   })
                 }>
-                <i className='las la-link tw:text-[19.5px] tw:text-destructive tw:m-0 tw:p-0' />
-                <span className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>Not Mapped</span>
+                <i className='las la-link text-[19.5px] text-destructive m-0 p-0' />
+                <span className='text-[11.2px] text-[var(--bs-secondary-color)]'>Not Mapped</span>
               </div>
             )}
           </div>

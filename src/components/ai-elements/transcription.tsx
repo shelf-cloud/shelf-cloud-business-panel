@@ -59,7 +59,7 @@ export const Transcription = ({
     <TranscriptionContext.Provider value={contextValue}>
       <div
         className={cn(
-          "tw:flex tw:flex-wrap tw:gap-1 tw:text-sm tw:leading-relaxed",
+          "flex flex-wrap gap-1 text-sm leading-relaxed",
           className
         )}
         data-slot="transcription"
@@ -104,12 +104,12 @@ export const TranscriptionSegment = ({
   return (
     <button
       className={cn(
-        "tw:inline tw:text-left",
-        isActive && "tw:text-primary",
-        isPast && "tw:text-muted-foreground",
-        !(isActive || isPast) && "tw:text-muted-foreground/60",
-        onSeek && "tw:cursor-pointer tw:hover:text-foreground",
-        !onSeek && "tw:cursor-default",
+        "inline text-left",
+        isActive && "text-primary",
+        isPast && "text-muted-foreground",
+        !(isActive || isPast) && "text-muted-foreground/60",
+        onSeek && "cursor-pointer hover:text-foreground",
+        !onSeek && "cursor-default",
         className
       )}
       data-active={isActive}

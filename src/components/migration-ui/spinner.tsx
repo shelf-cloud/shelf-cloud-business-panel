@@ -13,16 +13,16 @@ import { cn } from '@/lib/shadcn/utils'
  * single visual.
  */
 const colorClass: Record<string, string> = {
-  primary: 'tw:text-primary',
-  secondary: 'tw:text-secondary',
-  success: 'tw:text-success',
-  info: 'tw:text-info',
-  warning: 'tw:text-warning',
-  danger: 'tw:text-destructive',
-  light: 'tw:text-white',
-  white: 'tw:text-white',
-  dark: 'tw:text-dark',
-  muted: 'tw:text-muted-foreground',
+  primary: 'text-primary',
+  secondary: 'text-secondary',
+  success: 'text-success',
+  info: 'text-info',
+  warning: 'text-warning',
+  danger: 'text-destructive',
+  light: 'text-white',
+  white: 'text-white',
+  dark: 'text-dark',
+  muted: 'text-muted-foreground',
 }
 
 export type SpinnerProps = Omit<React.ComponentProps<'svg'>, 'color'> & {
@@ -38,7 +38,7 @@ export type SpinnerProps = Omit<React.ComponentProps<'svg'>, 'color'> & {
 function Spinner({ className, color, size, type: _type, animation: _animation, ...props }: SpinnerProps) {
   return (
     <ShadcnSpinner
-      className={cn(size === 'sm' ? 'tw:size-4' : 'tw:size-6', color ? colorClass[color] : undefined, className)}
+      className={cn(size === 'sm' ? 'size-4' : 'size-6', color ? colorClass[color] : undefined, className)}
       {...props}
     />
   )

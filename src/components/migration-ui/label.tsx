@@ -22,7 +22,7 @@ function Label({ className, htmlFor, for: forProp, check, tag: _tag, ...props }:
   return (
     <ShadcnLabel
       htmlFor={htmlFor ?? forProp}
-      className={cn(check && 'tw:font-normal', className)}
+      className={cn(check && 'font-normal', className)}
       {...props}
     />
   )

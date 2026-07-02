@@ -30,10 +30,10 @@ const CategoryTeamMembersHeader = ({ title, icon, checked, manageUser, setManage
   }
 
   return (
-    <div className='tw:bg-light tw:flex tw:flex-row tw:justify-start tw:items-center tw:py-2'>
+    <div className='bg-light flex flex-row justify-start items-center py-2'>
       <>
-        <i className={`${icon} tw:text-[16.25px] tw:m-0 tw:p-0 tw:me-2`} />
-        <span className='tw:font-semibold tw:text-[16.25px] tw:capitalize'>{title}</span>
+        <i className={`${icon} text-[16.25px] m-0 p-0 me-2`} />
+        <span className='font-semibold text-[16.25px] capitalize'>{title}</span>
       </>
       <div className='form-check form-switch form-check-right form-check-success'>
         <Switch checked={checked} onChange={handleChangePermissions} />

@@ -30,7 +30,7 @@ function Nav({ className, tabs: _tabs, pills: _pills, vertical, justified, fill,
   return (
     <Comp
       role='tablist'
-      className={cn('tw:flex tw:list-none tw:flex-wrap tw:gap-1 tw:p-0', vertical && 'tw:flex-col', (justified || fill) && 'tw:w-full', className)}
+      className={cn('flex list-none flex-wrap gap-1 p-0', vertical && 'flex-col', (justified || fill) && 'w-full', className)}
       {...props}
     />
   )
@@ -60,7 +60,7 @@ const NavLink = React.forwardRef<HTMLAnchorElement, NavLinkProps>(({ className, 
       aria-selected={active || undefined}
       data-active={active || undefined}
       aria-disabled={disabled || undefined}
-      className={cn('tw:cursor-pointer tw:px-3 tw:py-2 tw:text-sm tw:font-medium', disabled && 'tw:pointer-events-none tw:opacity-50', className)}
+      className={cn('cursor-pointer px-3 py-2 text-sm font-medium', disabled && 'pointer-events-none opacity-50', className)}
       {...props}
     />
   )
@@ -93,7 +93,7 @@ function TabPane({ tabId, className, children, tag, ...props }: TabPaneProps) {
   const isActive = active === tabId
   const Comp: React.ElementType = tag ?? 'div'
   return (
-    <Comp role='tabpanel' hidden={!isActive} className={cn(!isActive && 'tw:hidden', className)} {...props}>
+    <Comp role='tabpanel' hidden={!isActive} className={cn(!isActive && 'hidden', className)} {...props}>
       {children}
     </Comp>
   )

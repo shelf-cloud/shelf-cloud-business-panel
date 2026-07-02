@@ -66,25 +66,25 @@ const ShipmentDetailsModal = ({ mutateShipments }: Props) => {
 
   return (
     <Modal fade={false} size='xl' id='shipmentDetailsModal' isOpen={show} toggle={handleCloseOffModal}>
-      <ModalHeader toggle={handleCloseOffModal} className='modal-title tw:items-start' id='myModalLabel'>
+      <ModalHeader toggle={handleCloseOffModal} className='modal-title items-start' id='myModalLabel'>
         {/* <h4 className='fw-semibold mb-3'>Shipment Details</h4> */}
-        <div className='tw:w-full tw:mt-2 tw:flex tw:flex-row tw:justify-start tw:items-start tw:gap-4'>
-          <p className='tw:font-bold tw:text-primary tw:text-[22.75px] tw:m-0'>{orderNumber}</p>
+        <div className='w-full mt-2 flex flex-row justify-start items-start gap-4'>
+          <p className='font-bold text-primary text-[22.75px] m-0'>{orderNumber}</p>
           <ShipmentStatusBadge status={status} />
         </div>
-        <p className='tw:font-normal tw:text-[var(--bs-secondary-color)] tw:text-[13px] tw:m-0'>
-          Type: <span className='tw:text-black tw:font-semibold'>{orderType}</span>
+        <p className='font-normal text-[var(--bs-secondary-color)] text-[13px] m-0'>
+          Type: <span className='text-black font-semibold'>{orderType}</span>
         </p>
-        <p className='tw:font-normal tw:mb-2 tw:text-[var(--bs-secondary-color)] tw:text-[13px] tw:m-0'>
-          Order Date: <span className='tw:text-black tw:font-semibold'>{moment.utc(orderDate).format('LL')}</span>
+        <p className='font-normal mb-2 text-[var(--bs-secondary-color)] text-[13px] m-0'>
+          Order Date: <span className='text-black font-semibold'>{moment.utc(orderDate).format('LL')}</span>
         </p>
       </ModalHeader>
-      <ModalBody className='tw:pt-2' style={{ backgroundColor: '#F0F4F7' }}>
+      <ModalBody className='pt-2' style={{ backgroundColor: '#F0F4F7' }}>
         {!isValidating && data?.shipment ? (
           SelectShipmentType(orderType, data.shipment, showActions, mutateShipment, mutateShipments)
         ) : (
-          <div className='tw:w-full tw:flex tw:justify-center tw:items-center' style={{ height: '60dvh' }}>
-            <p className='tw:text-[16.25px] tw:text-primary tw:flex tw:justify-center tw:items-center tw:gap-4'>
+          <div className='w-full flex justify-center items-center' style={{ height: '60dvh' }}>
+            <p className='text-[16.25px] text-primary flex justify-center items-center gap-4'>
               <Spinner color='primary' size={'md'} />
               Loading Shipment....
             </p>

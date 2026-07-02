@@ -115,8 +115,8 @@ const SimpleSelectWithCreation = ({
   const formatOptionLabel = useCallback((option: SelectOptionType, { context }: { context: 'menu' | 'value' }) => {
     if (context === 'menu') {
       return (
-        <div className='tw:flex tw:flex-col tw:gap-0'>
-          <span className='tw:text-sm'>{option.label}</span>
+        <div className='flex flex-col gap-0'>
+          <span className='text-sm'>{option.label}</span>
           {option.description && (
             <small
               style={{

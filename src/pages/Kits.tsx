@@ -115,16 +115,16 @@ const Kits = ({ session }: Props) => {
         <div className='page-content'>
           <BreadCrumb title='Kits' pageTitle='Warehouse' />
           <Container fluid>
-            <div className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:mb-2 tw:lg:flex-row tw:md:justify-between tw:md:items-center tw:px-1'>
-              <div className='tw:w-full tw:flex tw:flex-col tw:justify-center tw:items-start tw:gap-2 tw:mb-0 tw:lg:flex-row tw:lg:justify-start tw:lg:items-center tw:px-0'>
+            <div className='flex flex-col justify-center items-end gap-2 mb-2 lg:flex-row md:justify-between md:items-center px-1'>
+              <div className='w-full flex flex-col justify-center items-start gap-2 mb-0 lg:flex-row lg:justify-start lg:items-center px-0'>
                 <Link href={'/AddKit'}>
-                  <Button color='primary' className='tw:text-[13px] tw:py-1'>
-                    <i className='mdi mdi-plus-circle label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
+                  <Button color='primary' className='text-[13px] py-1'>
+                    <i className='mdi mdi-plus-circle label-icon align-middle text-[16.25px] me-2' />
                     Add Kit
                   </Button>
                 </Link>
               </div>
-              <div className='tw:w-full tw:flex tw:flex-col-reverse tw:justify-center tw:items-start tw:gap-2 tw:mb-0 tw:lg:flex-row tw:lg:justify-end tw:lg:items-center tw:px-0'>
+              <div className='w-full flex flex-col-reverse justify-center items-start gap-2 mb-0 lg:flex-row lg:justify-end lg:items-center px-0'>
                 <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' minLength={3} widths='col-12 col-md-8' />
               </div>
             </div>
@@ -135,8 +135,8 @@ const Kits = ({ session }: Props) => {
                   pending={isValidating}
                   changeProductState={changeProductState}
                   setMsg={'Set Inactive'}
-                  icon={'las la-eye-slash tw:align-middle tw:text-[16.25px] tw:me-2'}
-                  activeText={'tw:text-destructive'}
+                  icon={'las la-eye-slash align-middle text-[16.25px] me-2'}
+                  activeText={'text-destructive'}
                 />
               </CardBody>
             </Card>

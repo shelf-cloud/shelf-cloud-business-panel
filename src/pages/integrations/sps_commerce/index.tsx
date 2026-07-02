@@ -61,14 +61,14 @@ const ProductsListings = ({ session }: Props) => {
           <Container fluid>
             <Row>
               <Col xs={12}>
-                <Row className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:mb-2 tw:md:flex-row tw:md:justify-end tw:md:items-center tw:px-4'>
-                  <div className='tw:flex tw:flex-col tw:justify-between tw:items-start tw:p-0 tw:md:flex-row tw:md:items-center tw:gap-2'>
-                    <div className='tw:flex tw:flex-row tw:flex-wrap tw:justify-start tw:items-center tw:gap-2 tw:w-full'>
+                <Row className='flex flex-col justify-center items-end gap-2 mb-2 md:flex-row md:justify-end md:items-center px-4'>
+                  <div className='flex flex-col justify-between items-start p-0 md:flex-row md:items-center gap-2'>
+                    <div className='flex flex-row flex-wrap justify-start items-center gap-2 w-full'>
                       <SimpleSelect
                         selected={warehouse}
                         options={warehouses ? Object.entries(warehouses).map(([key, warehouse]) => ({ value: key, label: warehouse.name })) : []}
                         handleSelect={(selected) => setwarehouse(selected)}
-                        className='w-30 tw:text-[13px]'
+                        className='w-30 text-[13px]'
                         customStyle='base'
                         placeholder={'Select Warehouse...'}
                         hasError={false}
@@ -85,11 +85,11 @@ const ProductsListings = ({ session }: Props) => {
 
                       {selectedRows.length > 0 && (
                         <UncontrolledButtonDropdown>
-                          <DropdownToggle className='btn btn-primary tw:text-[13px] tw:py-2' caret>
-                            <span className='tw:font-semibold'>{`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''}`}</span> Selected
+                          <DropdownToggle className='btn btn-primary text-[13px] py-2' caret>
+                            <span className='font-semibold'>{`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''}`}</span> Selected
                           </DropdownToggle>
                           <DropdownMenu>
-                            <DropdownItem className='tw:text-nowrap' onClick={(e) => e.stopPropagation()}>
+                            <DropdownItem className='text-nowrap' onClick={(e) => e.stopPropagation()}>
                               {integrationInfo && (
                                 <GenerateSPSCommerceFileButton
                                   integrationInfo={integrationInfo}
@@ -100,7 +100,7 @@ const ProductsListings = ({ session }: Props) => {
                                 />
                               )}
                             </DropdownItem>
-                            <DropdownItem className='tw:text-nowrap tw:text-right tw:text-[13px] tw:text-[var(--bs-secondary-color)]' onClick={clearAllSelectedRows}>
+                            <DropdownItem className='text-nowrap text-right text-[13px] text-[var(--bs-secondary-color)]' onClick={clearAllSelectedRows}>
                               Clear All
                             </DropdownItem>
                           </DropdownMenu>
@@ -112,18 +112,18 @@ const ProductsListings = ({ session }: Props) => {
                 </Row>
                 <Card>
                   <CardHeader>
-                    <p className='tw:m-0 tw:p-0'>
-                      <span className='tw:text-[var(--bs-secondary-color)]'> Vendor Number:</span> <span className='tw:font-semibold'>{integrationInfo?.['VENDOR NUMBER']}</span>
+                    <p className='m-0 p-0'>
+                      <span className='text-[var(--bs-secondary-color)]'> Vendor Number:</span> <span className='font-semibold'>{integrationInfo?.['VENDOR NUMBER']}</span>
                     </p>
-                    <p className='tw:text-[11.2px] tw:mt-1 tw:mb-0 tw:p-0'>Location Details:</p>
-                    <div className='tw:flex tw:gap-4'>
-                      <p className='tw:m-0 tw:p-0'>
-                        <span className='tw:text-[var(--bs-secondary-color)]'>Reporting Location Name:</span>{' '}
-                        <span className='tw:font-semibold'>{integrationInfo?.locations[warehouse?.value.toString() || '']?.['REPORTING LOCATION NAME']}</span>
+                    <p className='text-[11.2px] mt-1 mb-0 p-0'>Location Details:</p>
+                    <div className='flex gap-4'>
+                      <p className='m-0 p-0'>
+                        <span className='text-[var(--bs-secondary-color)]'>Reporting Location Name:</span>{' '}
+                        <span className='font-semibold'>{integrationInfo?.locations[warehouse?.value.toString() || '']?.['REPORTING LOCATION NAME']}</span>
                       </p>
-                      <p className='tw:m-0 tw:p-0'>
-                        <span className='tw:text-[var(--bs-secondary-color)]'>Reporting Location Number: </span>
-                        <span className='tw:font-semibold'>{integrationInfo?.locations[warehouse?.value.toString() || '']?.['REPORTING LOCATION NUMBER']}</span>
+                      <p className='m-0 p-0'>
+                        <span className='text-[var(--bs-secondary-color)]'>Reporting Location Number: </span>
+                        <span className='font-semibold'>{integrationInfo?.locations[warehouse?.value.toString() || '']?.['REPORTING LOCATION NUMBER']}</span>
                       </p>
                     </div>
                   </CardHeader>

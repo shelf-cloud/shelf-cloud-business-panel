@@ -10,26 +10,26 @@ import { cn } from '@/lib/shadcn/utils'
  *
  * Keeps the reactstrap surface: `color`, `pill`, `className`. Self-contained cva
  * so every Bootstrap color (incl. success/info, which shadcn's badge lacks) is
- * covered without relying on prefix-unaware tailwind-merge.
+ * covered.
  */
 const badgeVariants = cva(
-  'tw:inline-flex tw:w-fit tw:shrink-0 tw:items-center tw:justify-center tw:gap-1 tw:overflow-hidden tw:border tw:border-transparent tw:px-2 tw:py-0.5 tw:text-xs tw:font-medium tw:whitespace-nowrap tw:[&>svg]:size-3 tw:[&>svg]:pointer-events-none',
+  'inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap [&>svg]:size-3 [&>svg]:pointer-events-none',
   {
     variants: {
       color: {
-        primary: 'tw:bg-primary tw:text-primary-foreground',
-        secondary: 'tw:bg-secondary tw:text-secondary-foreground',
-        success: 'tw:bg-success tw:text-success-foreground',
-        info: 'tw:bg-info tw:text-info-foreground',
-        warning: 'tw:bg-warning tw:text-warning-foreground',
-        danger: 'tw:bg-destructive tw:text-destructive-foreground',
-        dark: 'tw:bg-dark tw:text-white',
-        light: 'tw:bg-light tw:text-foreground',
-        muted: 'tw:bg-muted tw:text-muted-foreground',
+        primary: 'bg-primary text-primary-foreground',
+        secondary: 'bg-secondary text-secondary-foreground',
+        success: 'bg-success text-success-foreground',
+        info: 'bg-info text-info-foreground',
+        warning: 'bg-warning text-warning-foreground',
+        danger: 'bg-destructive text-destructive-foreground',
+        dark: 'bg-dark text-white',
+        light: 'bg-light text-foreground',
+        muted: 'bg-muted text-muted-foreground',
       },
       pill: {
-        true: 'tw:rounded-full',
-        false: 'tw:rounded-sm',
+        true: 'rounded-full',
+        false: 'rounded-sm',
       },
     },
     defaultVariants: {

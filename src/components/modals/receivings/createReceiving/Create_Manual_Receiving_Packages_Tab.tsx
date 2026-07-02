@@ -49,39 +49,39 @@ const Create_Manual_Receiving_Packages_Tab = ({
 }: Props) => {
   return (
     <div>
-      <Row className='tw:mb-4'>
-        <Label htmlFor='firstNameinput' className='form-label tw:text-[11.2px]'>
+      <Row className='mb-4'>
+        <Label htmlFor='firstNameinput' className='form-label text-[11.2px]'>
           *Select Box Distribution
         </Label>
-        <Col xs={12} className='tw:flex tw:flex-row tw:flex-wrap tw:justify-start tw:items-center tw:gap-2'>
+        <Col xs={12} className='flex flex-row flex-wrap justify-start items-center gap-2'>
           <Button
-            className='tw:text-[11.2px]'
+            className='text-[11.2px]'
             size='sm'
             type='button'
             color='primary'
             outline={packingConfiguration !== 'single'}
             onClick={() => setPackingConfiguration('packingConfiguration', 'single')}>
-            <Image src={SingleSkuPerBox} alt='Single SKU Per Box' width={30} height={30} className='tw:me-2' />
+            <Image src={SingleSkuPerBox} alt='Single SKU Per Box' width={30} height={30} className='me-2' />
             Single SKU Per Box
           </Button>
           <Button
-            className='tw:text-[11.2px]'
+            className='text-[11.2px]'
             size='sm'
             type='button'
             color='primary'
             outline={packingConfiguration !== 'multi'}
             onClick={() => setPackingConfiguration('packingConfiguration', 'multi')}>
-            <Image src={MultiSkusPerBox} alt='Multi SKUs Per Box' width={30} height={30} className='tw:me-2' />
+            <Image src={MultiSkusPerBox} alt='Multi SKUs Per Box' width={30} height={30} className='me-2' />
             Mixed SKUs
           </Button>
           <Button
-            className='tw:text-[11.2px]'
+            className='text-[11.2px]'
             size='sm'
             type='button'
             color='primary'
             outline={packingConfiguration !== 'box'}
             onClick={() => setPackingConfiguration('packingConfiguration', 'box')}>
-            <Image src={OneBoxAllSkus} alt='One Box All SKUs' width={30} height={30} className='tw:me-2' />
+            <Image src={OneBoxAllSkus} alt='One Box All SKUs' width={30} height={30} className='me-2' />
             Everything in One Box
           </Button>
         </Col>

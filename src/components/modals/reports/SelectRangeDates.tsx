@@ -27,19 +27,19 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
   return (
     <div ref={selectDates} className='dropdown'>
       <button
-        className='btn btn-light dropdown-toggle tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2'
+        className='btn btn-light dropdown-toggle flex flex-row justify-start items-center gap-2'
         style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }}
         type='button'
         aria-expanded='false'
         onClick={() => setOpenDatesMenu(!openDatesMenu)}>
-        <i className='las la-calendar tw:text-[22.75px] tw:m-0 tw:p-0 tw:text-primary' />
-        <span className='tw:font-semibold tw:m-0 tw:p-0 tw:text-xs'>{`${showMappedCreateReport.startDate} -> ${showMappedCreateReport.endDate}`}</span>
+        <i className='las la-calendar text-[22.75px] m-0 p-0 text-primary' />
+        <span className='font-semibold m-0 p-0 text-xs'>{`${showMappedCreateReport.startDate} -> ${showMappedCreateReport.endDate}`}</span>
       </button>
-      <div className={'dropdown-menu dropdown-menu-md tw:px-4 tw:py-3' + (openDatesMenu ? ' show' : '')}>
-        <div className='tw:flex tw:flex-col tw:justify-start tw:gap-1'>
+      <div className={'dropdown-menu dropdown-menu-md px-4 py-3' + (openDatesMenu ? ' show' : '')}>
+        <div className='flex flex-col justify-start gap-1'>
           <button
             type='button'
-            className={'btn btn-link tw:p-0 tw:border-0 tw:text-left tw:no-underline tw:text-inherit ' + (selectedDateFilter == 'today' ? 'tw:font-bold' : '')}
+            className={'btn btn-link p-0 border-0 text-left no-underline text-inherit ' + (selectedDateFilter == 'today' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('today')
               setshowMappedCreateReport((prev: any) => {
@@ -55,7 +55,7 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
           </button>
           <button
             type='button'
-            className={'btn btn-link tw:p-0 tw:border-0 tw:text-left tw:no-underline tw:text-inherit ' + (selectedDateFilter == 'yesterday' ? 'tw:font-bold' : '')}
+            className={'btn btn-link p-0 border-0 text-left no-underline text-inherit ' + (selectedDateFilter == 'yesterday' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('yesterday')
               setshowMappedCreateReport((prev: any) => {
@@ -71,7 +71,7 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
           </button>
           <button
             type='button'
-            className={'btn btn-link tw:p-0 tw:border-0 tw:text-left tw:no-underline tw:text-inherit ' + (selectedDateFilter == 'thisweek' ? 'tw:font-bold' : '')}
+            className={'btn btn-link p-0 border-0 text-left no-underline text-inherit ' + (selectedDateFilter == 'thisweek' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('thisweek')
               setshowMappedCreateReport((prev: any) => {
@@ -87,7 +87,7 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
           </button>
           <button
             type='button'
-            className={'btn btn-link tw:p-0 tw:border-0 tw:text-left tw:no-underline tw:text-inherit ' + (selectedDateFilter == 'lastweek' ? 'tw:font-bold' : '')}
+            className={'btn btn-link p-0 border-0 text-left no-underline text-inherit ' + (selectedDateFilter == 'lastweek' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('lastweek')
               setshowMappedCreateReport((prev: any) => {
@@ -103,7 +103,7 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
           </button>
           <button
             type='button'
-            className={'btn btn-link tw:p-0 tw:border-0 tw:text-left tw:no-underline tw:text-inherit ' + (selectedDateFilter == 'past7days' ? 'tw:font-bold' : '')}
+            className={'btn btn-link p-0 border-0 text-left no-underline text-inherit ' + (selectedDateFilter == 'past7days' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('past7days')
               setshowMappedCreateReport((prev: any) => {
@@ -119,7 +119,7 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
           </button>
           <button
             type='button'
-            className={'btn btn-link tw:p-0 tw:border-0 tw:text-left tw:no-underline tw:text-inherit ' + (selectedDateFilter == 'thismonth' ? 'tw:font-bold' : '')}
+            className={'btn btn-link p-0 border-0 text-left no-underline text-inherit ' + (selectedDateFilter == 'thismonth' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('thismonth')
               setshowMappedCreateReport((prev: any) => {
@@ -135,7 +135,7 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
           </button>
           <button
             type='button'
-            className={'btn btn-link tw:p-0 tw:border-0 tw:text-left tw:no-underline tw:text-inherit ' + (selectedDateFilter == 'past3days' ? 'tw:font-bold' : '')}
+            className={'btn btn-link p-0 border-0 text-left no-underline text-inherit ' + (selectedDateFilter == 'past3days' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('past3days')
               setshowMappedCreateReport((prev: any) => {
@@ -151,7 +151,7 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
           </button>
           <button
             type='button'
-            className={'btn btn-link tw:p-0 tw:border-0 tw:text-left tw:no-underline tw:text-inherit ' + (selectedDateFilter == 'lastmonth' ? 'tw:font-bold' : '')}
+            className={'btn btn-link p-0 border-0 text-left no-underline text-inherit ' + (selectedDateFilter == 'lastmonth' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('lastmonth')
               setshowMappedCreateReport((prev: any) => {
@@ -167,7 +167,7 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
           </button>
           <button
             type='button'
-            className={'btn btn-link tw:p-0 tw:border-0 tw:text-left tw:no-underline tw:text-inherit ' + (selectedDateFilter == 'yeartodate' ? 'tw:font-bold' : '')}
+            className={'btn btn-link p-0 border-0 text-left no-underline text-inherit ' + (selectedDateFilter == 'yeartodate' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('yeartodate')
               setshowMappedCreateReport((prev: any) => {
@@ -183,7 +183,7 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
           </button>
           <button
             type='button'
-            className={'btn btn-link tw:p-0 tw:border-0 tw:text-left tw:no-underline tw:text-inherit ' + (selectedDateFilter == 'lastyear' ? 'tw:font-bold' : '')}
+            className={'btn btn-link p-0 border-0 text-left no-underline text-inherit ' + (selectedDateFilter == 'lastyear' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('lastyear')
               setshowMappedCreateReport((prev: any) => {
@@ -197,9 +197,9 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
             }}>
             Last Year
           </button>
-          <span className='tw:font-light tw:text-[var(--bs-secondary-color)] tw:text-[11.2px] tw:pb-0 tw:border-t tw:pt-1'>Select Range:</span>
+          <span className='font-light text-[var(--bs-secondary-color)] text-[11.2px] pb-0 border-t pt-1'>Select Range:</span>
           <Flatpickr
-            className={'tw:border-0 tw:text-[13px] tw:w-full tw:py-2 tw:px-2' + (selectedDateFilter == 'picker' ? ' tw:font-bold' : '')}
+            className={'border-0 text-[13px] w-full py-2 px-2' + (selectedDateFilter == 'picker' ? ' font-bold' : '')}
             options={{
               mode: 'range',
               dateFormat: 'd M y',

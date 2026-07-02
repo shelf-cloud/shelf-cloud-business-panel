@@ -100,91 +100,91 @@ const ForecastChatPanel = ({ businessId, region, chatSessionKey, modelNumber, pr
   return (
     <div
       className={cn(
-        'tw:grid tw:h-full tw:flex-1 tw:gap-2 tw:overflow-auto tw:py-3 tw:transition-all tw:duration-200 tw:ease-out',
-        isLeftColumnOpen ? 'tw:lg:grid-cols-[minmax(280px,30%)_minmax(0,100%)]' : 'tw:grid-cols-1'
+        'grid h-full flex-1 gap-2 overflow-auto py-3 transition-all duration-200 ease-out',
+        isLeftColumnOpen ? 'lg:grid-cols-[minmax(280px,30%)_minmax(0,100%)]' : 'grid-cols-1'
       )}>
       {isLeftColumnOpen ? (
-        <div className='tw:flex tw:min-h-0 tw:flex-col tw:gap-2 tw:pr-1'>
+        <div className='flex min-h-0 flex-col gap-2 pr-1'>
           <Card
-            className='tw:overflow-y-auto tw:border-border/70 tw:bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,252,0.94))] tw:shadow-md!'
+            className='overflow-y-auto border-border/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,252,0.94))] shadow-md!'
             style={{ scrollbarWidth: 'thin' }}>
-            <CardHeader className='tw:px-4'>
-              <div className='tw:flex tw:flex-wrap tw:items-start tw:justify-between tw:gap-1'>
-                <div className='tw:flex tw:flex-col tw:gap-1'>
-                  <CardTitle className='tw:text-base tw:font-semibold!'>Forecast Analysis</CardTitle>
-                  <CardDescription className='tw:text-xs'>
+            <CardHeader className='px-4'>
+              <div className='flex flex-wrap items-start justify-between gap-1'>
+                <div className='flex flex-col gap-1'>
+                  <CardTitle className='text-base font-semibold!'>Forecast Analysis</CardTitle>
+                  <CardDescription className='text-xs'>
                     Continuation of the saved forecast result for this model. Follow-up answers explain the existing decision and label hypotheticals clearly.
                   </CardDescription>
                 </div>
               </div>
             </CardHeader>
-            <CardContent className='tw:px-4'>
-              <div className='tw:flex tw:flex-col tw:gap-3 tw:text-xs'>
-                <div className='tw:rounded-md tw:border tw:border-border tw:bg-muted/30 tw:p-3'>
-                  <p className='tw:mb-1! tw:flex tw:items-center tw:gap-2 tw:text-xs tw:font-semibold tw:uppercase tw:tracking-[0.08em] tw:text-muted-foreground'>
-                    <Clock3 className='tw:size-3.5' />6 Month Forecast
+            <CardContent className='px-4'>
+              <div className='flex flex-col gap-3 text-xs'>
+                <div className='rounded-md border border-border bg-muted/30 p-3'>
+                  <p className='mb-1! flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground'>
+                    <Clock3 className='size-3.5' />6 Month Forecast
                   </p>
-                  <p className='tw:m-0! tw:text-base tw:font-semibold tw:text-foreground'>{FormatIntNumber(region, forecastValue)} units</p>
+                  <p className='m-0! text-base font-semibold text-foreground'>{FormatIntNumber(region, forecastValue)} units</p>
                 </div>
-                <div className='tw:grid tw:grid-cols-3 tw:gap-2'>
+                <div className='grid grid-cols-3 gap-2'>
                   {monthlyForecast.map((month) => (
-                    <div key={month.label} className='tw:rounded-md tw:border tw:border-border tw:bg-background tw:p-2'>
-                      <p className='tw:m-0! tw:text-[11px] tw:font-medium tw:text-muted-foreground'>{month.label}</p>
-                      <p className='tw:m-0! tw:text-sm tw:font-semibold tw:text-foreground'>{FormatIntNumber(region, month.value)}</p>
+                    <div key={month.label} className='rounded-md border border-border bg-background p-2'>
+                      <p className='m-0! text-[11px] font-medium text-muted-foreground'>{month.label}</p>
+                      <p className='m-0! text-sm font-semibold text-foreground'>{FormatIntNumber(region, month.value)}</p>
                     </div>
                   ))}
                 </div>
               </div>
-              <Separator className='tw:my-4' />
-              <div className='tw:flex tw:flex-col tw:gap-2'>
-                <p className='tw:m-0 tw:text-xs tw:font-semibold tw:uppercase tw:text-muted-foreground'>Original forecast summary</p>
-                <p className='tw:m-0 tw:text-xs tw:text-foreground'>{selectedForecast.analysis}</p>
+              <Separator className='my-4' />
+              <div className='flex flex-col gap-2'>
+                <p className='m-0 text-xs font-semibold uppercase text-muted-foreground'>Original forecast summary</p>
+                <p className='m-0 text-xs text-foreground'>{selectedForecast.analysis}</p>
               </div>
             </CardContent>
           </Card>
 
           <Card
-            className='tw:overflow-y-auto tw:border-border/70 tw:bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,252,0.94))] tw:shadow-md!'
+            className='overflow-y-auto border-border/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,252,0.94))] shadow-md!'
             style={{ scrollbarWidth: 'thin' }}>
-            <CardHeader className='tw:px-4'>
-              <CardTitle className='tw:text-base! tw:font-semibold!'>Starter Prompts</CardTitle>
-              <CardDescription className='tw:text-xs'>Use one of these to inspect the saved forecast faster.</CardDescription>
+            <CardHeader className='px-4'>
+              <CardTitle className='text-base! font-semibold!'>Starter Prompts</CardTitle>
+              <CardDescription className='text-xs'>Use one of these to inspect the saved forecast faster.</CardDescription>
             </CardHeader>
-            <CardContent className='tw:min-w-0 tw:px-4'>
+            <CardContent className='min-w-0 px-4'>
               <StarterPrompts prompts={FORECAST_CHAT_STARTER_PROMPTS} disabled={isStreaming} onSelect={(prompt) => void handleSubmit(prompt)} />
             </CardContent>
           </Card>
         </div>
       ) : null}
 
-      <div className='tw:flex tw:min-h-0 tw:min-w-0 tw:flex-col'>
+      <div className='flex min-h-0 min-w-0 flex-col'>
         <Card
-          className='tw:flex tw:min-h-0 tw:flex-1 tw:flex-col tw:border-border/70 tw:bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,252,0.94))] tw:shadow-md! tw:gap-1'
+          className='flex min-h-0 flex-1 flex-col border-border/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,252,0.94))] shadow-md! gap-1'
           style={{ scrollbarWidth: 'thin' }}>
-          <CardHeader className='tw:px-4'>
-            <div className='tw:flex tw:items-center tw:justify-between tw:gap-3'>
+          <CardHeader className='px-4'>
+            <div className='flex items-center justify-between gap-3'>
               <div>
-                <CardTitle className='tw:text-base! tw:font-semibold!'>Chat</CardTitle>
-                <CardDescription className='tw:text-xs'>Ask follow-up questions about the saved forecast or test hypothetical scenarios.</CardDescription>
+                <CardTitle className='text-base! font-semibold!'>Chat</CardTitle>
+                <CardDescription className='text-xs'>Ask follow-up questions about the saved forecast or test hypothetical scenarios.</CardDescription>
               </div>
-              <div className='tw:flex tw:items-center tw:gap-2'>
+              <div className='flex items-center gap-2'>
                 <Button
                   type='button'
                   variant='outline'
                   size='icon'
-                  className='tw:rounded-full!'
+                  className='rounded-full!'
                   aria-label={isLeftColumnOpen ? 'Hide forecast details' : 'Show forecast details'}
                   onClick={onToggleLeftColumn}>
-                  {isLeftColumnOpen ? <ChevronLeftIcon className='tw:size-4' /> : <ChevronRightIcon className='tw:size-4' />}
+                  {isLeftColumnOpen ? <ChevronLeftIcon className='size-4' /> : <ChevronRightIcon className='size-4' />}
                 </Button>
                 <Badge variant={isStreaming ? 'default' : 'secondary'}>{isStreaming ? 'Analyzing' : 'Ready'}</Badge>
               </div>
             </div>
           </CardHeader>
-          <CardContent className='tw:flex tw:min-h-0 tw:flex-1 tw:flex-col tw:gap-2 tw:px-4'>
+          <CardContent className='flex min-h-0 flex-1 flex-col gap-2 px-4'>
             {error && (
-              <div className='tw:rounded-2xl tw:border tw:border-destructive/30 tw:bg-destructive/5 tw:p-3 tw:text-xs tw:text-destructive tw:space-y-2'>
-                <p className='tw:m-0!'>The forecast chat could not respond right now. Please try again.</p>
+              <div className='rounded-2xl border border-destructive/30 bg-destructive/5 p-3 text-xs text-destructive space-y-2'>
+                <p className='m-0!'>The forecast chat could not respond right now. Please try again.</p>
                 <Button variant='ghost' size='sm' onClick={() => clearError()}>
                   Dismiss
                 </Button>

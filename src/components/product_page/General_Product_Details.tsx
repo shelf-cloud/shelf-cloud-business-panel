@@ -218,11 +218,11 @@ const General_Product_Details = ({
   }
 
   return (
-    <div className='tw:px-4 tw:pt-2 tw:pb-4 tw:border-b tw:border-[color:var(--border)]'>
-      <p className='tw:text-[19.5px] tw:text-primary tw:font-semibold'>General</p>
+    <div className='px-4 pt-2 pb-4 border-b border-[color:var(--border)]'>
+      <p className='text-[19.5px] text-primary font-semibold'>General</p>
       {!showEditFields ? (
-        <div className='tw:w-full tw:flex tw:flex-col tw:justify-start tw:items-start tw:gap-4 tw:lg:flex-row'>
-          <div className='tw:flex tw:flex-col tw:justify-start tw:items-start tw:gap-2'>
+        <div className='w-full flex flex-col justify-start items-start gap-4 lg:flex-row'>
+          <div className='flex flex-col justify-start items-start gap-2'>
             <div
               style={{
                 width: '30%',
@@ -239,61 +239,61 @@ const General_Product_Details = ({
                 style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
               />
             </div>
-            <Button className='tw:flex tw:items-center tw:gap-2' color='primary' size='sm' onClick={() => setuploadLogoImage((prev) => ({ ...prev, isOpen: true }))}>
-              <i className='mdi mdi-cloud-upload tw:text-[16.25px] tw:m-0 tw:p-0' />
+            <Button className='flex items-center gap-2' color='primary' size='sm' onClick={() => setuploadLogoImage((prev) => ({ ...prev, isOpen: true }))}>
+              <i className='mdi mdi-cloud-upload text-[16.25px] m-0 p-0' />
               Image
             </Button>
           </div>
-          <div className='tw:w-full'>
-            <table className='tw:w-full tw:text-[13px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
-              <tbody className='tw:bg-transparent'>
+          <div className='w-full'>
+            <table className='w-full text-[13px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+              <tbody className='bg-transparent'>
                 <tr>
-                  <td className='tw:font-extrabold'>Name</td>
+                  <td className='font-extrabold'>Name</td>
                   <td>{title}</td>
                 </tr>
                 <tr>
-                  <td className='tw:font-extrabold'>Description</td>
-                  <td className={description ?? 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>{description ?? 'No Description'}</td>
+                  <td className='font-extrabold'>Description</td>
+                  <td className={description ?? 'text-[color:var(--bs-secondary-color)] font-light italic'}>{description ?? 'No Description'}</td>
                 </tr>
                 <tr>
-                  <td className='tw:font-extrabold'>Brand</td>
-                  <td className={brand ?? 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>{brand ?? 'No Brand'}</td>
+                  <td className='font-extrabold'>Brand</td>
+                  <td className={brand ?? 'text-[color:var(--bs-secondary-color)] font-light italic'}>{brand ?? 'No Brand'}</td>
                 </tr>
                 <tr>
-                  <td className='tw:font-extrabold'>Category</td>
-                  <td className={category ?? 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>{category ?? 'No Category'}</td>
+                  <td className='font-extrabold'>Category</td>
+                  <td className={category ?? 'text-[color:var(--bs-secondary-color)] font-light italic'}>{category ?? 'No Category'}</td>
                 </tr>
                 <tr>
-                  <td className='tw:font-extrabold'>Supplier</td>
-                  <td className={supplier ?? 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>{supplier ?? 'No supplier'}</td>
+                  <td className='font-extrabold'>Supplier</td>
+                  <td className={supplier ?? 'text-[color:var(--bs-secondary-color)] font-light italic'}>{supplier ?? 'No supplier'}</td>
                 </tr>
                 <tr>
-                  <td className='tw:font-extrabold'>Condition</td>
-                  <td className={itemCondition ?? 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>{itemCondition ?? 'No supplier'}</td>
+                  <td className='font-extrabold'>Condition</td>
+                  <td className={itemCondition ?? 'text-[color:var(--bs-secondary-color)] font-light italic'}>{itemCondition ?? 'No supplier'}</td>
                 </tr>
                 <tr>
-                  <td className='tw:font-extrabold'>Tracking</td>
-                  <td className={itemCondition ?? 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>
-                    <p className='tw:m-0 tw:p-0'>
-                      <span className='tw:font-semibold'>FIFO:</span> {useEntryDate ? 'Yes' : 'No'}
+                  <td className='font-extrabold'>Tracking</td>
+                  <td className={itemCondition ?? 'text-[color:var(--bs-secondary-color)] font-light italic'}>
+                    <p className='m-0 p-0'>
+                      <span className='font-semibold'>FIFO:</span> {useEntryDate ? 'Yes' : 'No'}
                     </p>
-                    <p className='tw:m-0 tw:p-0'>
-                      <span className='tw:font-semibold'>Expires:</span> {useExpireDate ? `${expirationTime} Days` : 'No'}
+                    <p className='m-0 p-0'>
+                      <span className='font-semibold'>Expires:</span> {useExpireDate ? `${expirationTime} Days` : 'No'}
                     </p>
                   </td>
                 </tr>
                 {note && (
                   <tr>
-                    <td className='tw:font-extrabold'>Note</td>
-                    <td className='tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'>{note}</td>
+                    <td className='font-extrabold'>Note</td>
+                    <td className='text-[color:var(--bs-secondary-color)] font-light italic'>{note}</td>
                   </tr>
                 )}
               </tbody>
             </table>
           </div>
           <div>
-            <button type='button' aria-label='Edit product details' onClick={handleShowEditFields} className='tw:p-0 tw:border-0 tw:bg-transparent'>
-              <i className='ri-pencil-fill tw:text-[16.25px] tw:m-0 tw:p-0 tw:text-primary' />
+            <button type='button' aria-label='Edit product details' onClick={handleShowEditFields} className='p-0 border-0 bg-transparent'>
+              <i className='ri-pencil-fill text-[16.25px] m-0 p-0 text-primary' />
             </button>
           </div>
         </div>
@@ -307,7 +307,7 @@ const General_Product_Details = ({
                 </Label>
                 <Input
                   type='text'
-                  className='tw:text-[13px]'
+                  className='text-[13px]'
                   placeholder='Title...'
                   id='title'
                   name='title'
@@ -327,7 +327,7 @@ const General_Product_Details = ({
                 </Label>
                 <Input
                   type='text'
-                  className='tw:text-[13px]'
+                  className='text-[13px]'
                   placeholder='Description...'
                   id='description'
                   name='description'
@@ -392,8 +392,8 @@ const General_Product_Details = ({
                 errorMessage={validation.errors.itemCondition}
               />
             </Col>
-            <Col md={12} className='tw:px-3'>
-              <FormGroup className='tw:!mb-1' check inline>
+            <Col md={12} className='px-3'>
+              <FormGroup className='!mb-1' check inline>
                 <Label htmlFor='useEntryDate' check>
                   Track Entry: FIFO
                 </Label>
@@ -409,7 +409,7 @@ const General_Product_Details = ({
                 {validation.touched.useEntryDate && validation.errors.useEntryDate ? <FormFeedback type='invalid'>{validation.errors.useEntryDate}</FormFeedback> : null}
               </FormGroup>
             </Col>
-            <div className='tw:w-full tw:px-3 tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-3'>
+            <div className='w-full px-3 flex flex-row justify-start items-center gap-3'>
               <FormGroup check inline>
                 <Label htmlFor='useExpireDate' check>
                   Track Expiration
@@ -426,13 +426,13 @@ const General_Product_Details = ({
                 {validation.touched.useExpireDate && validation.errors.useExpireDate ? <FormFeedback type='invalid'>{validation.errors.useExpireDate}</FormFeedback> : null}
               </FormGroup>
               {validation.values.useExpireDate && (
-                <FormGroup className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-3'>
-                  <Label htmlFor='expirationTime' className='tw:text-nowrap' check>
+                <FormGroup className='flex flex-row justify-start items-center gap-3'>
+                  <Label htmlFor='expirationTime' className='text-nowrap' check>
                     *Expiration Time (Days)
                   </Label>
                   <Input
                     type='number'
-                    className='tw:text-[13px]'
+                    className='text-[13px]'
                     placeholder='Expires in Days'
                     id='expirationTime'
                     name='expirationTime'
@@ -454,7 +454,7 @@ const General_Product_Details = ({
                 </Label>
                 <Input
                   type='textarea'
-                  className='tw:text-[13px]'
+                  className='text-[13px]'
                   placeholder=''
                   id='note'
                   name='note'
@@ -468,7 +468,7 @@ const General_Product_Details = ({
               </FormGroup>
             </Col>
             <Col md={12}>
-              <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-3'>
+              <div className='flex flex-row justify-end items-center gap-3'>
                 <Button disabled={isLoading} type='button' color='light' onClick={() => setShowEditFields(false)}>
                   Cancel
                 </Button>

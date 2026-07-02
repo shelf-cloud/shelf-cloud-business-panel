@@ -12,14 +12,14 @@ import { cn } from '@/lib/shadcn/utils'
  * match the theme without Bootstrap.
  */
 const colorClass: Record<string, string> = {
-  primary: 'tw:border-primary/30 tw:bg-primary/10 tw:text-primary',
-  secondary: 'tw:border-border tw:bg-muted tw:text-foreground',
-  success: 'tw:border-success/30 tw:bg-success/10 tw:text-success',
-  info: 'tw:border-info/30 tw:bg-info/10 tw:text-info',
-  warning: 'tw:border-warning/30 tw:bg-warning/10 tw:text-warning',
-  danger: 'tw:border-destructive/30 tw:bg-destructive/10 tw:text-destructive',
-  light: 'tw:border-border tw:bg-light tw:text-foreground',
-  dark: 'tw:border-dark/30 tw:bg-dark/10 tw:text-dark',
+  primary: 'border-primary/30 bg-primary/10 text-primary',
+  secondary: 'border-border bg-muted text-foreground',
+  success: 'border-success/30 bg-success/10 text-success',
+  info: 'border-info/30 bg-info/10 text-info',
+  warning: 'border-warning/30 bg-warning/10 text-warning',
+  danger: 'border-destructive/30 bg-destructive/10 text-destructive',
+  light: 'border-border bg-light text-foreground',
+  dark: 'border-dark/30 bg-dark/10 text-dark',
 }
 
 export type AlertProps = Omit<React.ComponentProps<'div'>, 'color'> & {
@@ -34,11 +34,11 @@ function Alert({ color = 'primary', isOpen = true, toggle, fade: _fade, classNam
   if (!isOpen) return null
   const Comp: React.ElementType = tag ?? 'div'
   return (
-    <Comp role='alert' className={cn('tw:relative tw:w-full tw:rounded-lg tw:border tw:px-4 tw:py-3 tw:text-sm', colorClass[color] ?? colorClass.primary, toggle && 'tw:pr-10', className)} {...props}>
+    <Comp role='alert' className={cn('relative w-full rounded-lg border px-4 py-3 text-sm', colorClass[color] ?? colorClass.primary, toggle && 'pr-10', className)} {...props}>
       {children}
       {toggle && (
-        <button type='button' aria-label='Close' onClick={toggle} className='tw:absolute tw:top-2.5 tw:right-2.5 tw:opacity-70 tw:transition-opacity tw:hover:opacity-100'>
-          <XIcon className='tw:size-4' />
+        <button type='button' aria-label='Close' onClick={toggle} className='absolute top-2.5 right-2.5 opacity-70 transition-opacity hover:opacity-100'>
+          <XIcon className='size-4' />
         </button>
       )}
     </Comp>

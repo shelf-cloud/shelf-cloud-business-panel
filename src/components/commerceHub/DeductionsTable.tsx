@@ -60,9 +60,9 @@ const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClear
   const columns: any = [
     {
       name: (
-        <span className='tw:font-extrabold tw:text-[13px]' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'storeId', asc: !sortBy.asc })}>
+        <span className='font-extrabold text-[13px]' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'storeId', asc: !sortBy.asc })}>
           Marketplace
-          {sortBy.key === 'storeId' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
+          {sortBy.key === 'storeId' ? sortBy.asc ? <i className='ri-arrow-up-fill text-[11.2px] text-primary' /> : <i className='ri-arrow-down-fill text-[11.2px] text-primary' /> : null}
         </span>
       ),
       selector: (row: DeductionType) => {
@@ -92,16 +92,16 @@ const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClear
     },
     {
       name: (
-        <span className='tw:font-bold tw:text-[13px]' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'invoiceNumber', asc: !sortBy.asc })}>
+        <span className='font-bold text-[13px]' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'invoiceNumber', asc: !sortBy.asc })}>
           Invoice No.
-          {sortBy.key === 'invoiceNumber' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
+          {sortBy.key === 'invoiceNumber' ? sortBy.asc ? <i className='ri-arrow-up-fill text-[11.2px] text-primary' /> : <i className='ri-arrow-down-fill text-[11.2px] text-primary' /> : null}
         </span>
       ),
       selector: (row: DeductionType) => (
-        <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center'>
-          <p className='tw:m-0 tw:p-0 tw:font-semibold tw:text-[11.2px]'>{row.invoiceNumber}</p>{' '}
+        <div className='flex flex-wrap justify-start items-center'>
+          <p className='m-0 p-0 font-semibold text-[11.2px]'>{row.invoiceNumber}</p>{' '}
           <i
-            className='ri-file-copy-line tw:text-[13px] tw:my-0 tw:mx-1 tw:p-0 tw:text-[color:var(--bs-secondary-color)]'
+            className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-[color:var(--bs-secondary-color)]'
             style={{ cursor: 'pointer' }}
             onClick={() => {
               navigator.clipboard.writeText(row.invoiceNumber)
@@ -118,17 +118,17 @@ const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClear
       compact: true,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px] tw:text-nowrap'>Keyrec No.</span>,
-      selector: (row: DeductionType) => <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)] tw:text-[11.2px]'>{row.keyrecNumber ? row.keyrecNumber : ''}</p>,
+      name: <span className='font-bold text-[13px] text-nowrap'>Keyrec No.</span>,
+      selector: (row: DeductionType) => <p className='m-0 p-0 text-[var(--bs-secondary-color)] text-[11.2px]'>{row.keyrecNumber ? row.keyrecNumber : ''}</p>,
       sortable: false,
       left: true,
       compact: true,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>PO No.</span>,
+      name: <span className='font-bold text-[13px]'>PO No.</span>,
       selector: (row: DeductionType) => (
-        <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center'>
-          <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)] tw:text-[11.2px]'>{row.poNumber}</p>
+        <div className='flex flex-wrap justify-start items-center'>
+          <p className='m-0 p-0 text-[var(--bs-secondary-color)] text-[11.2px]'>{row.poNumber}</p>
         </div>
       ),
       sortable: false,
@@ -136,11 +136,11 @@ const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClear
       compact: true,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Comments</span>,
+      name: <span className='font-bold text-[13px]'>Comments</span>,
       selector: (row: DeductionType) => (
-        <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2'>
-          <span className='tw:text-[11.2px]'>{row.comments}</span>
-          <i className='ri-pencil-fill tw:text-primary' style={{ cursor: 'pointer' }} onClick={() => setEditCommentModal({ show: true, id: row.id, comment: row.comments ?? '' })} />
+        <div className='flex flex-row justify-start items-center gap-2'>
+          <span className='text-[11.2px]'>{row.comments}</span>
+          <i className='ri-pencil-fill text-primary' style={{ cursor: 'pointer' }} onClick={() => setEditCommentModal({ show: true, id: row.id, comment: row.comments ?? '' })} />
         </div>
       ),
       sortable: false,
@@ -151,58 +151,58 @@ const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClear
     },
     {
       name: (
-        <span className='tw:font-bold tw:text-[13px]' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkDate', asc: !sortBy.asc })}>
+        <span className='font-bold text-[13px]' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkDate', asc: !sortBy.asc })}>
           Check Date
-          {sortBy.key === 'checkDate' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
+          {sortBy.key === 'checkDate' ? sortBy.asc ? <i className='ri-arrow-up-fill text-[11.2px] text-primary' /> : <i className='ri-arrow-down-fill text-[11.2px] text-primary' /> : null}
         </span>
       ),
-      selector: (row: DeductionType) => <span className='tw:text-[11.2px]'>{row.checkDate ? moment.utc(row.checkDate).local().format('D MMM YYYY') : ''}</span>,
+      selector: (row: DeductionType) => <span className='text-[11.2px]'>{row.checkDate ? moment.utc(row.checkDate).local().format('D MMM YYYY') : ''}</span>,
       sortable: false,
       center: true,
       compact: true,
     },
     {
       name: (
-        <span className='tw:font-bold tw:text-[13px]' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkNumber', asc: !sortBy.asc })}>
+        <span className='font-bold text-[13px]' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkNumber', asc: !sortBy.asc })}>
           Check Number
-          {sortBy.key === 'checkNumber' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
+          {sortBy.key === 'checkNumber' ? sortBy.asc ? <i className='ri-arrow-up-fill text-[11.2px] text-primary' /> : <i className='ri-arrow-down-fill text-[11.2px] text-primary' /> : null}
         </span>
       ),
-      selector: (row: DeductionType) => <span className='tw:text-[11.2px]'>{row.checkNumber}</span>,
+      selector: (row: DeductionType) => <span className='text-[11.2px]'>{row.checkNumber}</span>,
       sortable: false,
       center: true,
       compact: true,
     },
     {
       name: (
-        <span className='tw:font-bold tw:text-[13px]' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkTotal', asc: !sortBy.asc })}>
+        <span className='font-bold text-[13px]' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkTotal', asc: !sortBy.asc })}>
           Deduction
-          {sortBy.key === 'checkTotal' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
+          {sortBy.key === 'checkTotal' ? sortBy.asc ? <i className='ri-arrow-up-fill text-[11.2px] text-primary' /> : <i className='ri-arrow-down-fill text-[11.2px] text-primary' /> : null}
         </span>
       ),
-      selector: (row: DeductionType) => <span className='tw:text-[11.2px] tw:text-danger'>{row.checkTotal ? FormatCurrency(state.currentRegion, row.checkTotal) : ''}</span>,
+      selector: (row: DeductionType) => <span className='text-[11.2px] text-danger'>{row.checkTotal ? FormatCurrency(state.currentRegion, row.checkTotal) : ''}</span>,
       sortable: false,
       center: true,
       compact: true,
     },
     {
       name: (
-        <span className='tw:font-extrabold tw:text-[13px]' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'status', asc: !sortBy.asc })}>
+        <span className='font-extrabold text-[13px]' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'status', asc: !sortBy.asc })}>
           Status
-          {sortBy.key === 'status' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
+          {sortBy.key === 'status' ? sortBy.asc ? <i className='ri-arrow-up-fill text-[11.2px] text-primary' /> : <i className='ri-arrow-down-fill text-[11.2px] text-primary' /> : null}
         </span>
       ),
       selector: (row: DeductionType) => {
         switch (row.status) {
           case 'closed':
           case 'resolved':
-            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-dark)_10%,transparent)] tw:text-dark tw:p-2'>{` ${row.status} `}</span>
+            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-dark)_10%,transparent)] text-dark p-2'>{` ${row.status} `}</span>
           case 'reviewing':
-            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] tw:text-warning tw:p-2'>{` ${row.status} `}</span>
+            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] text-warning p-2'>{` ${row.status} `}</span>
           case 'pending':
-            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-info)_10%,transparent)] tw:text-info tw:p-2'>{` ${row.status} `}</span>
+            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-info)_10%,transparent)] text-info p-2'>{` ${row.status} `}</span>
           default:
-            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-info)_10%,transparent)] tw:text-info tw:p-2'>{` pending `}</span>
+            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-info)_10%,transparent)] text-info p-2'>{` pending `}</span>
         }
       },
       sortable: false,

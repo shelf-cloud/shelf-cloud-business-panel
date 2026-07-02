@@ -126,8 +126,8 @@ const ExportProductsPerformance = ({ products, startDate, endDate, selectedMarke
   }
 
   return (
-    <Button color='primary' size='sm' className='tw:text-nowrap tw:text-[11.2px]' onClick={exportExcelFile}>
-      <i className='mdi mdi-arrow-down-bold label-icon tw:align-middle tw:text-[16.25px] tw:me-1' />
+    <Button color='primary' size='sm' className='text-nowrap text-[11.2px]' onClick={exportExcelFile}>
+      <i className='mdi mdi-arrow-down-bold label-icon align-middle text-[16.25px] me-1' />
       Export Products
     </Button>
   )

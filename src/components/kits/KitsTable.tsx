@@ -31,7 +31,7 @@ const KitsTable = ({ tableData, pending }: Props) => {
 
   const columns: any = [
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Image</span>,
+      name: <span className='font-bold text-[13px]'>Image</span>,
       selector: (cell: { image: any }) => {
         return (
           <div
@@ -57,7 +57,7 @@ const KitsTable = ({ tableData, pending }: Props) => {
     },
     {
       name: (
-        <span className='tw:font-bold tw:text-[13px]'>
+        <span className='font-bold text-[13px]'>
           Title
           <br />
           SKU
@@ -65,18 +65,18 @@ const KitsTable = ({ tableData, pending }: Props) => {
       ),
       selector: (row: KitRow) => {
         return (
-          <div className='tw:text-[11.2px] tw:flex tw:flex-col tw:justify-start tw:items-start tw:gap-0 tw:pe-2'>
-            <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:text-[11.2px]'>
+          <div className='text-[11.2px] flex flex-col justify-start items-start gap-0 pe-2'>
+            <div className='flex flex-row justify-start items-center text-[11.2px]'>
               <Link href={`/kit/${row.kitId}/${row.sku}`}>
-                <p className='tw:m-0 tw:p-0 tw:text-primary tw:font-semibold tw:text-[13px]'>{row.sku}</p>
+                <p className='m-0 p-0 text-primary font-semibold text-[13px]'>{row.sku}</p>
               </Link>
               <CopyTextToClipboard text={row.sku} label='SKU' />{' '}
             </div>
-            <span className='tw:m-0 tw:p-0 tw:text-black tw:font-semibold tw:text-[11.2px] tw:text-wrap'>{row.title}</span>
-            {row.note != '' && <i className='ri-information-fill tw:text-[16.25px] tw:text-warning' id={`tooltip${row.sku}`} />}
+            <span className='m-0 p-0 text-black font-semibold text-[11.2px] text-wrap'>{row.title}</span>
+            {row.note != '' && <i className='ri-information-fill text-[16.25px] text-warning' id={`tooltip${row.sku}`} />}
             {row.note != '' && (
               <SCTooltip target={`tooltip${row.sku}`} placement='right' key={`tooltip${row.sku}`}>
-                <p className='tw:text-[11.2px] tw:text-primary tw:m-0 tw:p-0'>{row.note}</p>
+                <p className='text-[11.2px] text-primary m-0 p-0'>{row.note}</p>
               </SCTooltip>
             )}
           </div>
@@ -90,7 +90,7 @@ const KitsTable = ({ tableData, pending }: Props) => {
     },
     {
       name: (
-        <span className='tw:font-bold tw:text-[13px]'>
+        <span className='font-bold text-[13px]'>
           ASIN
           <br />
           FNSKU
@@ -100,23 +100,23 @@ const KitsTable = ({ tableData, pending }: Props) => {
       ),
       selector: (row: KitRow) => {
         return (
-          <div className='tw:text-[11.2px] tw:flex tw:flex-col tw:justify-items-start tw:gap-0'>
+          <div className='text-[11.2px] flex flex-col justify-items-start gap-0'>
             {row.asin !== '' && (
-              <div className='tw:flex tw:flex-row tw:justify-start tw:items-center'>
-                <a className='tw:m-0' href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank' rel='noopener noreferrer'>
+              <div className='flex flex-row justify-start items-center'>
+                <a className='m-0' href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank' rel='noopener noreferrer'>
                   {row.asin}
                 </a>
                 <CopyTextToClipboard text={row.asin} label='ASIN' />
               </div>
             )}
             {row.fnSku !== '' && (
-              <p className='tw:m-0'>
+              <p className='m-0'>
                 {row.fnSku} <CopyTextToClipboard text={row.fnSku} label='FNSKU' />
               </p>
             )}
             {row.barcode !== '' && (
-              <div className='tw:flex tw:flex-row tw:justify-start tw:items-center'>
-                <a className='tw:m-0 tw:!text-info' href='#' onClick={() => loadBarcode(row)}>
+              <div className='flex flex-row justify-start items-center'>
+                <a className='m-0 !text-info' href='#' onClick={() => loadBarcode(row)}>
                   {row.barcode}
                 </a>
                 <CopyTextToClipboard text={row.barcode} label='Barcode' />
@@ -129,7 +129,7 @@ const KitsTable = ({ tableData, pending }: Props) => {
       compact: true,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Quantity</span>,
+      name: <span className='font-bold text-[13px]'>Quantity</span>,
       selector: (row: KitRow) => FormatIntNumber(state.currentRegion, row.quantity),
       sortable: true,
       compact: true,
@@ -137,13 +137,13 @@ const KitsTable = ({ tableData, pending }: Props) => {
       sortFunction: (rowA: KitRow, rowB: KitRow) => sortNumbers(rowA.quantity, rowB.quantity),
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Unit Dimensions</span>,
+      name: <span className='font-bold text-[13px]'>Unit Dimensions</span>,
       sortable: false,
       compact: true,
       grow: 1.3,
       selector: (row: KitRow) => {
         return (
-          <div className='tw:text-[11.2px]' style={{ padding: '7px 0px' }}>
+          <div className='text-[11.2px]' style={{ padding: '7px 0px' }}>
             <Row>
               <span>
                 Weight: {row.weight} {state.currentRegion == 'us' ? 'lb' : 'kg'}
@@ -169,13 +169,13 @@ const KitsTable = ({ tableData, pending }: Props) => {
       },
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Box Dimensions</span>,
+      name: <span className='font-bold text-[13px]'>Box Dimensions</span>,
       sortable: false,
       compact: true,
       grow: 1.3,
       selector: (row: KitRow) => {
         return (
-          <div className='tw:text-[11.2px]' style={{ padding: '7px 5px 7px 0px' }}>
+          <div className='text-[11.2px]' style={{ padding: '7px 5px 7px 0px' }}>
             <Row>
               <span>
                 Weight: {row.boxweight} {state.currentRegion == 'us' ? 'lb' : 'kg'}
@@ -201,7 +201,7 @@ const KitsTable = ({ tableData, pending }: Props) => {
       },
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Qty/Box</span>,
+      name: <span className='font-bold text-[13px]'>Qty/Box</span>,
       selector: (row: KitRow) => row.boxQty,
       sortable: true,
       center: true,
@@ -211,24 +211,24 @@ const KitsTable = ({ tableData, pending }: Props) => {
       },
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Action</span>,
+      name: <span className='font-bold text-[13px]'>Action</span>,
       sortable: false,
       compact: true,
       cell: (row: KitRow) => {
         return (
-          <UncontrolledDropdown className='dropdown tw:inline-block'>
-            <DropdownToggle className='btn btn-light btn-sm tw:m-0 tw:p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
-              <i className='mdi mdi-dots-vertical tw:align-middle tw:text-[19.5px] tw:m-0 tw:px-1 tw:py-0' style={{ color: '#919FAF' }}></i>
+          <UncontrolledDropdown className='dropdown inline-block'>
+            <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
+              <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-1 py-0' style={{ color: '#919FAF' }}></i>
             </DropdownToggle>
             <DropdownMenu className='dropdown-menu-end' container={'body'}>
               <DropdownItem className='edit-item-btn' onClick={() => setModalKitDetails(row.kitId, row.sku)}>
-                <i className='ri-pencil-fill tw:align-middle tw:me-2 tw:text-[16.25px] tw:text-[var(--bs-secondary-color)]'></i>
-                <span className='tw:text-[11.2px] tw:font-normal'>Edit</span>
+                <i className='ri-pencil-fill align-middle me-2 text-[16.25px] text-[var(--bs-secondary-color)]'></i>
+                <span className='text-[11.2px] font-normal'>Edit</span>
               </DropdownItem>
               <DropdownItem className='edit-item-btn'>
                 <Link href={`/kit/${row.kitId}/${row.sku}`}>
-                  <i className='ri-file-list-line tw:align-middle tw:me-2 tw:text-[16.25px] tw:text-[var(--bs-secondary-color)]'></i>
-                  <span className='tw:text-[11.2px] tw:font-normal tw:text-dark'>View Details</span>
+                  <i className='ri-file-list-line align-middle me-2 text-[16.25px] text-[var(--bs-secondary-color)]'></i>
+                  <span className='text-[11.2px] font-normal text-dark'>View Details</span>
                 </Link>
               </DropdownItem>
             </DropdownMenu>

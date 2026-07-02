@@ -112,7 +112,7 @@ const ProductsBulkEdit = ({}: Props) => {
   }, [productsDetailsData.length, state.currentRegion, state.user.businessId])
 
   return (
-    <div className='tw:w-full'>
+    <div className='w-full'>
       <Head>
         <title>Bulk Edit Products Details</title>
       </Head>

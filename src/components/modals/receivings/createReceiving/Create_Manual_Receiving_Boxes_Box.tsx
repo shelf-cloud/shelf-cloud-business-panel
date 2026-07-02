@@ -16,26 +16,26 @@ const Create_Manual_Receiving_Boxes_Box = ({ orderProducts }: Props) => {
   const { state } = useContext(AppContext)
   return (
     <div>
-      <div className='tw:flex tw:flex-row tw:justify-between tw:items-center tw:gap-4 tw:mb-2'>
-        <p className='tw:m-0 tw:font-bold tw:text-[16.25px]'>All Products in 1 Box</p>
+      <div className='flex flex-row justify-between items-center gap-4 mb-2'>
+        <p className='m-0 font-bold text-[16.25px]'>All Products in 1 Box</p>
       </div>
-      <Col md={12} className='tw:overflow-auto'>
-        <table className='tw:w-full tw:align-middle tw:mb-0 tw:whitespace-nowrap tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)]'>
-          <thead className='tw:bg-[color:var(--vz-light)]'>
+      <Col md={12} className='overflow-auto'>
+        <table className='w-full align-middle mb-0 whitespace-nowrap [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)]'>
+          <thead className='bg-[color:var(--vz-light)]'>
             <tr>
               <th scope='col'>Title / SKU</th>
-              <th scope='col' className='tw:text-center'>
+              <th scope='col' className='text-center'>
                 Total to Received
               </th>
             </tr>
           </thead>
-          <tbody className='tw:text-[11.2px]'>
+          <tbody className='text-[11.2px]'>
             {orderProducts
               .sort((itemA, itemB) => sortStringsLocaleCompare(itemA.sku, itemB.sku))
               .map((item) => (
                 <tr key={`${item.inventoryId}`}>
-                  <td className='tw:text-center'>
-                    <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2'>
+                  <td className='text-center'>
+                    <div className='flex flex-row justify-start items-center gap-2'>
                       <div
                         style={{
                           width: '40px',
@@ -50,18 +50,18 @@ const Create_Manual_Receiving_Boxes_Box = ({ orderProducts }: Props) => {
                           style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                         />
                       </div>
-                      <div className='tw:text-left'>
-                        <p className='tw:text-nowrap tw:m-0 tw:font-semibold'>{item.title}</p>
-                        <p className='tw:text-nowrap tw:m-0'>{item.sku}</p>
+                      <div className='text-left'>
+                        <p className='text-nowrap m-0 font-semibold'>{item.title}</p>
+                        <p className='text-nowrap m-0'>{item.sku}</p>
                       </div>
                     </div>
                   </td>
-                  <td className='tw:text-center'>{item.quantity}</td>
+                  <td className='text-center'>{item.quantity}</td>
                 </tr>
               ))}
             <tr>
-              <td className='tw:font-bold tw:text-[13px] tw:text-right'>Total</td>
-              <td className='tw:font-bold tw:text-[13px] tw:text-center'>
+              <td className='font-bold text-[13px] text-right'>Total</td>
+              <td className='font-bold text-[13px] text-center'>
                 {FormatIntNumber(
                   state.currentRegion,
                   orderProducts.reduce((subtotal: number, item) => {

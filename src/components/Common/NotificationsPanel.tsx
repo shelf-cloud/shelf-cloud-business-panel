@@ -65,39 +65,39 @@ const NotificationsPanel = () => {
   return (
     <div className='notification-panel'>
       <ButtonGroup>
-        <UncontrolledDropdown className='dropdown tw:inline-block' direction='down'>
+        <UncontrolledDropdown className='dropdown inline-block' direction='down'>
           <DropdownToggle tag='button' className='btn btn-primary btn-icon'>
-            <i className='mdi mdi-bell tw:text-[19.5px]' />
+            <i className='mdi mdi-bell text-[19.5px]' />
             {notifications?.some((info) => !info.read) && (
-              <span className='badge tw:bg-destructive tw:absolute tw:top-0 tw:left-full tw:-translate-x-1/2 tw:-translate-y-1/2'>{notifications?.filter((info) => !info.read).length}</span>
+              <span className='badge bg-destructive absolute top-0 left-full -translate-x-1/2 -translate-y-1/2'>{notifications?.filter((info) => !info.read).length}</span>
             )}
           </DropdownToggle>
-          <DropdownMenu className='dropdown-menu-lg tw:pt-0 tw:mt-2' end style={{ minWidth: '200px' }}>
-            <div className='tw:bg-primary bg-pattern tw:rounded-t tw:flex tw:flex-col tw:justify-between tw:items-baseline tw:md:flex-row'>
-              <h6 className='tw:font-semibold tw:text-white tw:text-left tw:p-4 tw:text-[16.25px]'>Notifications</h6>
+          <DropdownMenu className='dropdown-menu-lg pt-0 mt-2' end style={{ minWidth: '200px' }}>
+            <div className='bg-primary bg-pattern rounded-t flex flex-col justify-between items-baseline md:flex-row'>
+              <h6 className='font-semibold text-white text-left p-4 text-[16.25px]'>Notifications</h6>
               {notifications && notifications?.length > 0 && (
-                <Button color='ghost' className='tw:text-white tw:text-[11.2px]' size='sm' onClick={markNotificationsAsRead}>
+                <Button color='ghost' className='text-white text-[11.2px]' size='sm' onClick={markNotificationsAsRead}>
                   Mark as Read
                 </Button>
               )}
             </div>
             {notifications && notifications?.length > 0 ? (
-              <div className='tw:flex tw:flex-col tw:gap-2 tw:items-start tw:w-full tw:overflow-auto tw:px-4 tw:py-2'>
+              <div className='flex flex-col gap-2 items-start w-full overflow-auto px-4 py-2'>
                 {notifications.map((info, index) => (
-                  <div key={info.id} className={`tw:w-full tw:pb-1 ${index !== notifications.length - 1 ? 'tw:border-b tw:border-[color:var(--border)]' : ''}`}>
-                    <p className='tw:m-0 tw:mb-1 tw:text-[11.2px] tw:font-semibold tw:flex tw:flex-row tw:justify-between tw:items-center'>
+                  <div key={info.id} className={`w-full pb-1 ${index !== notifications.length - 1 ? 'border-b border-[color:var(--border)]' : ''}`}>
+                    <p className='m-0 mb-1 text-[11.2px] font-semibold flex flex-row justify-between items-center'>
                       {info.title}
-                      {!info.read && <i className='tw:text-destructive mdi mdi-alert-circle tw:text-[13px] tw:me-1' />}
+                      {!info.read && <i className='text-destructive mdi mdi-alert-circle text-[13px] me-1' />}
                     </p>
-                    <p className='tw:m-0 tw:text-[var(--bs-secondary-color)] tw:font-normal tw:truncate' style={{ fontSize: '0.65rem' }}>
+                    <p className='m-0 text-[var(--bs-secondary-color)] font-normal truncate' style={{ fontSize: '0.65rem' }}>
                       {info.description}
                     </p>
-                    <span className='tw:m-0 tw:font-normal tw:justify-start tw:items-end tw:gap-1 tw:lg:flex tw:lg:flex-row' style={{ fontSize: '0.65rem' }}>
+                    <span className='m-0 font-normal justify-start items-end gap-1 lg:flex lg:flex-row' style={{ fontSize: '0.65rem' }}>
                       {moment(info.created).fromNow()}
                       {info.tag && notificationsTagLinks[info.tag as keyof typeof notificationsTagLinks]?.link && (
-                        <Link href={notificationsTagLinks[info.tag as keyof typeof notificationsTagLinks].link} className='tw:capitalize tw:!text-primary tw:flex tw:items-end tw:gap-1'>
+                        <Link href={notificationsTagLinks[info.tag as keyof typeof notificationsTagLinks].link} className='capitalize !text-primary flex items-end gap-1'>
                           {' • '}
-                          {notificationsTagLinks[info.tag as keyof typeof notificationsTagLinks].title} <i className='ri-external-link-fill tw:m-0 tw:text-[11.2px] tw:text-primary' />
+                          {notificationsTagLinks[info.tag as keyof typeof notificationsTagLinks].title} <i className='ri-external-link-fill m-0 text-[11.2px] text-primary' />
                         </Link>
                       )}
                     </span>
@@ -105,9 +105,9 @@ const NotificationsPanel = () => {
                 ))}
               </div>
             ) : (
-              <div className='tw:flex tw:flex-col tw:gap-2 tw:items-start tw:w-full tw:overflow-auto tw:px-4 tw:py-2'>
-                <div className='tw:w-full tw:py-2'>
-                  <p className='tw:m-0 tw:text-[11.2px] tw:font-normal tw:text-[var(--bs-secondary-color)]'>Notifications will appear here</p>
+              <div className='flex flex-col gap-2 items-start w-full overflow-auto px-4 py-2'>
+                <div className='w-full py-2'>
+                  <p className='m-0 text-[11.2px] font-normal text-[var(--bs-secondary-color)]'>Notifications will appear here</p>
                 </div>
               </div>
             )}

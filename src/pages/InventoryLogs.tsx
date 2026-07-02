@@ -67,19 +67,19 @@ const InventoryLogs = ({ session }: Props) => {
 
   const columns: any = [
     {
-      name: <span className='tw:font-extrabold tw:text-[16.25px]'>SKU</span>,
+      name: <span className='font-extrabold text-[16.25px]'>SKU</span>,
       selector: (row: { sku: string }) => row.sku,
       sortable: true,
       center: true,
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[16.25px]'>Date</span>,
+      name: <span className='font-extrabold text-[16.25px]'>Date</span>,
       selector: (row: { date: string }) => row.date,
       sortable: true,
       center: true,
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[16.25px]'>Details</span>,
+      name: <span className='font-extrabold text-[16.25px]'>Details</span>,
       selector: (row: { details: string }) => row.details,
       sortable: true,
       left: true,
@@ -120,11 +120,11 @@ const InventoryLogs = ({ session }: Props) => {
               <Col lg={12}>
                 <Card>
                   <CardHeader>
-                    <div className='app-search tw:flex tw:flex-row tw:justify-end tw:items-center tw:p-0'>
-                      <div className='tw:relative'>
+                    <div className='app-search flex flex-row justify-end items-center p-0'>
+                      <div className='relative'>
                         <Input type='text' placeholder='Search...' id='search-options' value={serachValue} onChange={filterByText} />
                         <span className='mdi mdi-magnify search-widget-icon'></span>
-                        <span className='mdi mdi-close-circle search-widget-icon search-widget-icon-close tw:hidden' id='search-close-options'></span>
+                        <span className='mdi mdi-close-circle search-widget-icon search-widget-icon-close hidden' id='search-close-options'></span>
                       </div>
                       <Button className='btn-soft-dark' onClick={clearSearch}>
                         Clear

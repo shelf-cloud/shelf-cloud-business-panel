@@ -93,27 +93,27 @@ const UploadFileModal = ({
       </ModalHeader>
       <ModalBody>
         <Row>
-          <p className='tw:mb-2 tw:text-[13px] tw:font-semibold'>
-            {primaryText} {primaryTextSub && <span className='tw:text-primary'>{primaryTextSub}</span>}
+          <p className='mb-2 text-[13px] font-semibold'>
+            {primaryText} {primaryTextSub && <span className='text-primary'>{primaryTextSub}</span>}
           </p>
-          {descriptionText && <p className='tw:mb-1 tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>{descriptionText}</p>}
+          {descriptionText && <p className='mb-1 text-[11.2px] text-[var(--bs-secondary-color)]'>{descriptionText}</p>}
           <div>
             <UploadFileDropzone accptedFiles={acceptedFiles} handleAcceptedFiles={handleAcceptedFiles} description={uploadZoneText} />
           </div>
           {showSelect && handleSelect && options ? (
-            <div className='tw:mb-2 tw:mt-3'>
-              <p className='tw:text-[11.2px] tw:font-normal tw:mb-2'>Select Marketplace:</p>
+            <div className='mb-2 mt-3'>
+              <p className='text-[11.2px] font-normal mb-2'>Select Marketplace:</p>
               <SimpleSelect selected={select} handleSelect={(option) => handleSelect(option)} options={options} customStyle='sm' />
             </div>
           ) : null}
-          <div className='list-unstyled tw:mb-0' id='file-previews'>
-            <p className='tw:text-[11.2px] tw:font-normal tw:mb-2'>Files:</p>
+          <div className='list-unstyled mb-0' id='file-previews'>
+            <p className='text-[11.2px] font-normal mb-2'>Files:</p>
             {selectedFiles.map((f: any, i) => {
               return (
-                <Card className='tw:mt-1 tw:mb-0 tw:py-2 tw:shadow-none tw:border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
-                  <div className='tw:p-2'>
-                    <Row className='tw:items-center'>
-                      <Col className='tw:flex tw:justify-evenly tw:items-center tw:gap-4'>
+                <Card className='mt-1 mb-0 py-2 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
+                  <div className='p-2'>
+                    <Row className='items-center'>
+                      <Col className='flex justify-evenly items-center gap-4'>
                         <div
                           style={{
                             width: '60px',
@@ -132,9 +132,9 @@ const UploadFileModal = ({
                             }}
                           />
                         </div>
-                        <div className='tw:flex-grow'>
-                          <p className='tw:text-[var(--bs-secondary-color)] tw:font-bold tw:m-0'>{f.name}</p>
-                          <p className='tw:mb-0'>
+                        <div className='flex-grow'>
+                          <p className='text-[var(--bs-secondary-color)] font-bold m-0'>{f.name}</p>
+                          <p className='mb-0'>
                             <strong>{f.formattedSize}</strong>
                           </p>
                         </div>
@@ -153,17 +153,17 @@ const UploadFileModal = ({
         </Row>
       </ModalBody>
       <ModalFooter>
-        <div className='tw:w-full tw:flex tw:flex-row tw:gap-2 tw:justify-between tw:items-center'>
+        <div className='w-full flex flex-row gap-2 justify-between items-center'>
           <div></div>
-          <div className='tw:flex tw:flex-row tw:gap-2 tw:justify-end'>
-            <Button disabled={isLoading} type='button' color='light' className='tw:text-[11.2px]' onClick={handleClose}>
+          <div className='flex flex-row gap-2 justify-end'>
+            <Button disabled={isLoading} type='button' color='light' className='text-[11.2px]' onClick={handleClose}>
               Cancel
             </Button>
             <Button
               disabled={isLoading || selectedFiles.length === 0 || (showSelect && select ? !select.value : false)}
               type='button'
               color={isDeleteAction ? 'danger' : 'success'}
-              className='tw:text-[11.2px]'
+              className='text-[11.2px]'
               onClick={handleConfirmAction}>
               {isLoading ? (
                 <span>

@@ -177,12 +177,12 @@ const CheckNumberDetails = ({ session }: Props) => {
 
   const columns: any = [
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Invoice No.</span>,
+      name: <span className='font-bold text-[13px]'>Invoice No.</span>,
       selector: (row: Invoice) => (
-        <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center'>
-          <p className='tw:m-0 tw:p-0 tw:font-semibold tw:text-[11.2px]'>{row.invoiceNumber}</p>{' '}
+        <div className='flex flex-wrap justify-start items-center'>
+          <p className='m-0 p-0 font-semibold text-[11.2px]'>{row.invoiceNumber}</p>{' '}
           <i
-            className='ri-file-copy-line tw:text-[13px] tw:my-0 tw:mx-1 tw:p-0 tw:text-[color:var(--bs-secondary-color)]'
+            className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-[color:var(--bs-secondary-color)]'
             style={{ cursor: 'pointer' }}
             onClick={() => {
               navigator.clipboard.writeText(row.invoiceNumber)
@@ -199,20 +199,20 @@ const CheckNumberDetails = ({ session }: Props) => {
       sortFunction: (rowA: Invoice, rowB: Invoice) => sortStrings(rowA.invoiceNumber, rowB.invoiceNumber),
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px] tw:text-nowrap'>Keyrec No.</span>,
-      selector: (row: Invoice) => <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)] tw:text-[11.2px]'>{row.keyrecNumber ? row.keyrecNumber : ''}</p>,
+      name: <span className='font-bold text-[13px] text-nowrap'>Keyrec No.</span>,
+      selector: (row: Invoice) => <p className='m-0 p-0 text-[var(--bs-secondary-color)] text-[11.2px]'>{row.keyrecNumber ? row.keyrecNumber : ''}</p>,
       sortable: false,
       left: true,
       compact: true,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>PO No.</span>,
+      name: <span className='font-bold text-[13px]'>PO No.</span>,
       selector: (row: Invoice) =>
         row.checkTotal > 0 && (
-          <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center'>
-            <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)] tw:text-[11.2px]'>{row.poNumber}</p>
+          <div className='flex flex-wrap justify-start items-center'>
+            <p className='m-0 p-0 text-[var(--bs-secondary-color)] text-[11.2px]'>{row.poNumber}</p>
             <i
-              className='ri-file-copy-line tw:text-[13px] tw:my-0 tw:mx-1 tw:p-0 tw:text-[color:var(--bs-secondary-color)]'
+              className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-[color:var(--bs-secondary-color)]'
               style={{ cursor: 'pointer' }}
               onClick={() => {
                 navigator.clipboard.writeText(row.poNumber)
@@ -228,8 +228,8 @@ const CheckNumberDetails = ({ session }: Props) => {
       compact: true,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Comments</span>,
-      selector: (row: Invoice) => <span className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>{row.comments}</span>,
+      name: <span className='font-bold text-[13px]'>Comments</span>,
+      selector: (row: Invoice) => <span className='text-[11.2px] text-[var(--bs-secondary-color)]'>{row.comments}</span>,
       sortable: false,
       left: true,
       compact: true,
@@ -237,24 +237,24 @@ const CheckNumberDetails = ({ session }: Props) => {
       grow: 1.3,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Invoice Date</span>,
-      selector: (row: Invoice) => row.invoiceDate && <span className='tw:text-[11.2px]'>{moment.utc(row.invoiceDate).local().format('D MMM YYYY')}</span>,
+      name: <span className='font-bold text-[13px]'>Invoice Date</span>,
+      selector: (row: Invoice) => row.invoiceDate && <span className='text-[11.2px]'>{moment.utc(row.invoiceDate).local().format('D MMM YYYY')}</span>,
       sortable: false,
       center: true,
       compact: true,
       sortFunction: (rowA: Invoice, rowB: Invoice) => sortDates(rowA.invoiceDate!, rowB.invoiceDate!),
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Order Total</span>,
-      selector: (row: Invoice) => (row.checkTotal >= 0 ? <span className='tw:text-[11.2px]'>{FormatCurrency(state.currentRegion, row.orderTotal)}</span> : <></>),
+      name: <span className='font-bold text-[13px]'>Order Total</span>,
+      selector: (row: Invoice) => (row.checkTotal >= 0 ? <span className='text-[11.2px]'>{FormatCurrency(state.currentRegion, row.orderTotal)}</span> : <></>),
       sortable: true,
       center: true,
       compact: true,
       sortFunction: (rowA: Invoice, rowB: Invoice) => sortNumbers(rowA.checkTotal, rowB.checkTotal),
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Due Date</span>,
-      selector: (row: Invoice) => row.dueDate && <span className='tw:text-[11.2px]'>{moment.utc(row.dueDate).local().format('D MMM YYYY')}</span>,
+      name: <span className='font-bold text-[13px]'>Due Date</span>,
+      selector: (row: Invoice) => row.dueDate && <span className='text-[11.2px]'>{moment.utc(row.dueDate).local().format('D MMM YYYY')}</span>,
       sortable: false,
       center: true,
       compact: true,
@@ -263,10 +263,10 @@ const CheckNumberDetails = ({ session }: Props) => {
       },
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>Deductions</span>,
+      name: <span className='font-extrabold text-[13px]'>Deductions</span>,
       selector: (row: Invoice) => {
         if (row.checkTotal >= 0) {
-          return <span className={'tw:text-center tw:text-[11.2px] ' + (row.deductions < 0 ? 'tw:text-danger' : 'tw:text-[var(--bs-secondary-color)]')}>{FormatCurrency(state.currentRegion, row.deductions)}</span>
+          return <span className={'text-center text-[11.2px] ' + (row.deductions < 0 ? 'text-danger' : 'text-[var(--bs-secondary-color)]')}>{FormatCurrency(state.currentRegion, row.deductions)}</span>
         } else {
           return <></>
         }
@@ -277,10 +277,10 @@ const CheckNumberDetails = ({ session }: Props) => {
       sortFunction: (rowA: Invoice, rowB: Invoice) => sortNumbers(rowA.checkTotal, rowB.checkTotal),
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>Charges</span>,
+      name: <span className='font-extrabold text-[13px]'>Charges</span>,
       selector: (row: Invoice) => {
         if (row.checkTotal >= 0) {
-          return <span className={'tw:text-center tw:text-[11.2px] ' + (row.charges < 0 ? 'tw:text-danger' : 'tw:text-[var(--bs-secondary-color)]')}>{FormatCurrency(state.currentRegion, row.charges)}</span>
+          return <span className={'text-center text-[11.2px] ' + (row.charges < 0 ? 'text-danger' : 'text-[var(--bs-secondary-color)]')}>{FormatCurrency(state.currentRegion, row.charges)}</span>
         } else {
           return <></>
         }
@@ -292,18 +292,18 @@ const CheckNumberDetails = ({ session }: Props) => {
     },
     {
       name: (
-        <div className='tw:flex tw:flex-col tw:justify-center tw:items-center'>
-          <p className='tw:m-0 tw:font-bold tw:text-[13px]'>Total Paid</p>
-          <p className='tw:m-0 tw:text-[var(--bs-secondary-color)]'>
-            <span className='tw:font-semibold'>{FormatCurrency(state.currentRegion, getCheckAmountTotal(filterInvoices))}</span>
+        <div className='flex flex-col justify-center items-center'>
+          <p className='m-0 font-bold text-[13px]'>Total Paid</p>
+          <p className='m-0 text-[var(--bs-secondary-color)]'>
+            <span className='font-semibold'>{FormatCurrency(state.currentRegion, getCheckAmountTotal(filterInvoices))}</span>
           </p>
         </div>
       ),
       selector: (row: Invoice) => {
         if (row.checkTotal >= 0) {
-          return <span className='tw:text-center tw:text-[11.2px]'>{FormatCurrency(state.currentRegion, row.checkTotal)}</span>
+          return <span className='text-center text-[11.2px]'>{FormatCurrency(state.currentRegion, row.checkTotal)}</span>
         } else {
-          return <span className='tw:text-danger tw:text-center tw:text-[11.2px]'>{FormatCurrency(state.currentRegion, row.checkTotal)}</span>
+          return <span className='text-danger text-center text-[11.2px]'>{FormatCurrency(state.currentRegion, row.checkTotal)}</span>
         }
       },
       sortable: true,
@@ -312,25 +312,25 @@ const CheckNumberDetails = ({ session }: Props) => {
       sortFunction: (rowA: Invoice, rowB: Invoice) => sortNumbers(rowA.checkTotal, rowB.checkTotal),
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>Status</span>,
+      name: <span className='font-extrabold text-[13px]'>Status</span>,
       selector: (row: Invoice) => {
         switch (row.status) {
           case 'paid':
-            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-success)_10%,transparent)] tw:text-success tw:p-2'>{` ${row.status} `}</span>
+            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-success)_10%,transparent)] text-success p-2'>{` ${row.status} `}</span>
           case 'unpaid':
-            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] tw:text-warning tw:p-2'>{` ${row.status} `}</span>
+            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] text-warning p-2'>{` ${row.status} `}</span>
           case 'closed':
           case 'resolved':
-            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-dark)_10%,transparent)] tw:text-dark tw:p-2'>{` ${row.status} `}</span>
+            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-dark)_10%,transparent)] text-dark p-2'>{` ${row.status} `}</span>
           case 'reviewing':
-            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] tw:text-warning tw:p-2'>{` ${row.status} `}</span>
+            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] text-warning p-2'>{` ${row.status} `}</span>
           case 'pending':
-            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-info)_10%,transparent)] tw:text-info tw:p-2'>{` ${row.status} `}</span>
+            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-info)_10%,transparent)] text-info p-2'>{` ${row.status} `}</span>
           default:
             if (row.checkTotal > 0) {
-              return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-success)_10%,transparent)] tw:text-success tw:p-2'>{` Paid `}</span>
+              return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-success)_10%,transparent)] text-success p-2'>{` Paid `}</span>
             } else {
-              return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-info)_10%,transparent)] tw:text-info tw:p-2'>{` pending `}</span>
+              return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-info)_10%,transparent)] text-info p-2'>{` pending `}</span>
             }
         }
       },
@@ -352,8 +352,8 @@ const CheckNumberDetails = ({ session }: Props) => {
         <div className='page-content'>
           <BreadCrumb title='Check Number' pageTitle='Commerce HUB' />
           <Container fluid>
-            <div className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:mb-1 tw:lg:flex-row tw:md:justify-between tw:md:items-center tw:px-1'>
-              <div className='tw:w-full tw:flex tw:flex-col tw:justify-center tw:items-start tw:gap-2 tw:mb-0 tw:lg:flex-row tw:lg:justify-start tw:lg:items-center tw:px-0'>
+            <div className='flex flex-col justify-center items-end gap-2 mb-1 lg:flex-row md:justify-between md:items-center px-1'>
+              <div className='w-full flex flex-col justify-center items-start gap-2 mb-0 lg:flex-row lg:justify-start lg:items-center px-0'>
                 <FilterCheckNumber type={invoiceType} setInvoiceType={setInvoiceType} />
                 {selectedRows.length > 0 && (
                   <BulkActionsForSelected
@@ -364,9 +364,9 @@ const CheckNumberDetails = ({ session }: Props) => {
                   />
                 )}
               </div>
-              <div className='tw:w-full tw:flex tw:flex-col-reverse tw:justify-center tw:items-start tw:gap-2 tw:mb-0 tw:lg:flex-row tw:lg:justify-end tw:lg:items-center tw:px-0'>
-                <div className='app-search tw:p-0 tw:w-full tw:lg:w-5/12'>
-                  <div className='tw:relative tw:flex tw:rounded-lg tw:w-full tw:overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+              <div className='w-full flex flex-col-reverse justify-center items-start gap-2 mb-0 lg:flex-row lg:justify-end lg:items-center px-0'>
+                <div className='app-search p-0 w-full lg:w-5/12'>
+                  <div className='relative flex rounded-lg w-full overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                     <DebounceInput
                       type='text'
                       minLength={1}
@@ -378,14 +378,14 @@ const CheckNumberDetails = ({ session }: Props) => {
                       onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
                       onChange={(e) => setSearchValue(e.target.value)}
                     />
-                    <span className='mdi mdi-magnify search-widget-icon tw:text-[19.5px]'></span>
+                    <span className='mdi mdi-magnify search-widget-icon text-[19.5px]'></span>
                     <span
-                      className='tw:flex tw:items-center tw:justify-center input_background_white'
+                      className='flex items-center justify-center input_background_white'
                       style={{
                         cursor: 'pointer',
                       }}
                       onClick={() => setSearchValue('')}>
-                      <i className='mdi mdi-window-close tw:text-[19.5px] tw:m-0 tw:px-2 tw:py-0 tw:text-[color:var(--bs-secondary-color)]' />
+                      <i className='mdi mdi-window-close text-[19.5px] m-0 px-2 py-0 text-[color:var(--bs-secondary-color)]' />
                     </span>
                   </div>
                 </div>
@@ -393,21 +393,21 @@ const CheckNumberDetails = ({ session }: Props) => {
             </div>
             <Card>
               <CardHeader>
-                <div className='tw:flex tw:flex-wrap tw:justify-between tw:items-start'>
-                  <div className='tw:flex tw:flex-col tw:justify-start tw:items-start'>
-                    <p className='tw:m-0 tw:p-0 tw:text-[13px]'>
-                      Check Number: <span className='tw:font-semibold'>{id![1]}</span>
+                <div className='flex flex-wrap justify-between items-start'>
+                  <div className='flex flex-col justify-start items-start'>
+                    <p className='m-0 p-0 text-[13px]'>
+                      Check Number: <span className='font-semibold'>{id![1]}</span>
                     </p>
-                    <p className='tw:m-0 tw:p-0 tw:text-[13px]'>
-                      Marketplace <span className='tw:font-semibold'>{id![0]}</span>
+                    <p className='m-0 p-0 text-[13px]'>
+                      Marketplace <span className='font-semibold'>{id![0]}</span>
                     </p>
-                    <p className='tw:m-0 tw:p-0 tw:text-[13px]'>
-                      Check Date <span className='tw:font-semibold'>{data ? moment.utc(data?.invoices[0].checkDate).local().format('LL') : 'loading...'}</span>
+                    <p className='m-0 p-0 text-[13px]'>
+                      Check Date <span className='font-semibold'>{data ? moment.utc(data?.invoices[0].checkDate).local().format('LL') : 'loading...'}</span>
                     </p>
                   </div>
-                  <div className='tw:flex tw:flex-col tw:justify-start tw:items-end'>
-                    {pendingInfo.totalInvoices > 0 && <p className='tw:m-0 tw:p-0 tw:text-[13px]'>Total Invoices: {pendingInfo.totalInvoices}</p>}
-                    <p className='tw:m-0 tw:p-0 tw:text-[13px]'>Total Paid: {FormatCurrency(state.currentRegion, pendingInfo.totalPaid <= 0 ? 0 : pendingInfo.totalPaid)}</p>
+                  <div className='flex flex-col justify-start items-end'>
+                    {pendingInfo.totalInvoices > 0 && <p className='m-0 p-0 text-[13px]'>Total Invoices: {pendingInfo.totalInvoices}</p>}
+                    <p className='m-0 p-0 text-[13px]'>Total Paid: {FormatCurrency(state.currentRegion, pendingInfo.totalPaid <= 0 ? 0 : pendingInfo.totalPaid)}</p>
                   </div>
                 </div>
               </CardHeader>

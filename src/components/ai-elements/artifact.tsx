@@ -17,7 +17,7 @@ export type ArtifactProps = HTMLAttributes<HTMLDivElement>;
 export const Artifact = ({ className, ...props }: ArtifactProps) => (
   <div
     className={cn(
-      "tw:flex tw:flex-col tw:overflow-hidden tw:rounded-lg tw:border tw:bg-background tw:shadow-sm",
+      "flex flex-col overflow-hidden rounded-lg border bg-background shadow-sm",
       className
     )}
     {...props}
@@ -32,7 +32,7 @@ export const ArtifactHeader = ({
 }: ArtifactHeaderProps) => (
   <div
     className={cn(
-      "tw:flex tw:items-center tw:justify-between tw:border-b tw:bg-muted/50 tw:px-4 tw:py-3",
+      "flex items-center justify-between border-b bg-muted/50 px-4 py-3",
       className
     )}
     {...props}
@@ -50,7 +50,7 @@ export const ArtifactClose = ({
 }: ArtifactCloseProps) => (
   <Button
     className={cn(
-      "tw:size-8 tw:p-0 tw:text-muted-foreground tw:hover:text-foreground",
+      "size-8 p-0 text-muted-foreground hover:text-foreground",
       className
     )}
     size={size}
@@ -58,8 +58,8 @@ export const ArtifactClose = ({
     variant={variant}
     {...props}
   >
-    {children ?? <XIcon className="tw:size-4" />}
-    <span className="tw:sr-only">Close</span>
+    {children ?? <XIcon className="size-4" />}
+    <span className="sr-only">Close</span>
   </Button>
 );
 
@@ -67,7 +67,7 @@ export type ArtifactTitleProps = HTMLAttributes<HTMLParagraphElement>;
 
 export const ArtifactTitle = ({ className, ...props }: ArtifactTitleProps) => (
   <p
-    className={cn("tw:font-medium tw:text-foreground tw:text-sm", className)}
+    className={cn("font-medium text-foreground text-sm", className)}
     {...props}
   />
 );
@@ -78,7 +78,7 @@ export const ArtifactDescription = ({
   className,
   ...props
 }: ArtifactDescriptionProps) => (
-  <p className={cn("tw:text-muted-foreground tw:text-sm", className)} {...props} />
+  <p className={cn("text-muted-foreground text-sm", className)} {...props} />
 );
 
 export type ArtifactActionsProps = HTMLAttributes<HTMLDivElement>;
@@ -87,7 +87,7 @@ export const ArtifactActions = ({
   className,
   ...props
 }: ArtifactActionsProps) => (
-  <div className={cn("tw:flex tw:items-center tw:gap-1", className)} {...props} />
+  <div className={cn("flex items-center gap-1", className)} {...props} />
 );
 
 export type ArtifactActionProps = ComponentProps<typeof Button> & {
@@ -109,7 +109,7 @@ export const ArtifactAction = ({
   const button = (
     <Button
       className={cn(
-        "tw:size-8 tw:p-0 tw:text-muted-foreground tw:hover:text-foreground",
+        "size-8 p-0 text-muted-foreground hover:text-foreground",
         className
       )}
       size={size}
@@ -117,8 +117,8 @@ export const ArtifactAction = ({
       variant={variant}
       {...props}
     >
-      {Icon ? <Icon className="tw:size-4" /> : children}
-      <span className="tw:sr-only">{label || tooltip}</span>
+      {Icon ? <Icon className="size-4" /> : children}
+      <span className="sr-only">{label || tooltip}</span>
     </Button>
   );
 
@@ -144,5 +144,5 @@ export const ArtifactContent = ({
   className,
   ...props
 }: ArtifactContentProps) => (
-  <div className={cn("tw:flex-1 tw:overflow-auto tw:p-4", className)} {...props} />
+  <div className={cn("flex-1 overflow-auto p-4", className)} {...props} />
 );

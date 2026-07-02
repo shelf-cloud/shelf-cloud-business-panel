@@ -174,8 +174,8 @@ const Products = ({ session }: Props) => {
             <ProductsWidgets />
             <Row>
               <Col lg={12}>
-                <div className='tw:flex tw:flex-col-reverse tw:justify-center tw:items-start tw:gap-2 tw:mb-2 tw:md:flex-row tw:md:justify-between tw:md:items-center'>
-                  <div className='tw:w-auto tw:flex tw:flex-row tw:items-center tw:justify-between tw:gap-2'>
+                <div className='flex flex-col-reverse justify-center items-start gap-2 mb-2 md:flex-row md:justify-between md:items-center'>
+                  <div className='w-auto flex flex-row items-center justify-between gap-2'>
                     <FilterProducts
                       brands={brands}
                       suppliers={suppliers}
@@ -188,8 +188,8 @@ const Products = ({ session }: Props) => {
                       setProductFilters={setProductFilters}
                     />
                     <Link href={'/AddProduct'}>
-                      <Button color='primary' className='tw:text-nowrap'>
-                        <i className='mdi mdi-plus-circle label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
+                      <Button color='primary' className='text-nowrap'>
+                        <i className='mdi mdi-plus-circle label-icon align-middle text-[16.25px] me-2' />
                         Basic Product
                       </Button>
                     </Link>
@@ -197,7 +197,7 @@ const Products = ({ session }: Props) => {
                       <DropdownToggle
                         caret
                         color='light'
-                        className='tw:inline-flex tw:h-9 tw:items-center tw:gap-2 tw:rounded-md tw:border tw:border-[#E1E3E5] tw:bg-white tw:px-3 tw:text-sm tw:font-semibold tw:text-foreground tw:whitespace-nowrap'>
+                        className='inline-flex h-9 items-center gap-2 rounded-md border border-[#E1E3E5] bg-white px-3 text-sm font-semibold text-foreground whitespace-nowrap'>
                         Bulk Actions
                       </DropdownToggle>
                       <DropdownMenu>
@@ -212,13 +212,13 @@ const Products = ({ session }: Props) => {
                         )}
                         <ExportBlankTemplate brands={brands || []} suppliers={suppliers || []} categories={categories || []} />
                         <DropdownItem
-                          className='tw:text-nowrap tw:text-primary'
+                          className='text-nowrap text-primary'
                           onClick={() =>
                             setimportModalDetails((prev) => {
                               return { ...prev, show: true }
                             })
                           }>
-                          <i className='mdi mdi-arrow-up-bold label-icon tw:align-middle tw:text-[13px] tw:me-2' />
+                          <i className='mdi mdi-arrow-up-bold label-icon align-middle text-[13px] me-2' />
                           Import Add/Update
                         </DropdownItem>
                       </DropdownMenu>
@@ -227,24 +227,24 @@ const Products = ({ session }: Props) => {
                       <UncontrolledButtonDropdown>
                         <DropdownToggle
                           caret
-                          className='tw:inline-flex tw:h-9 tw:items-center tw:gap-2 tw:rounded-md tw:bg-primary tw:px-3 tw:text-sm tw:font-medium tw:text-primary-foreground tw:whitespace-nowrap tw:shadow-xs tw:hover:bg-primary/90'>
-                          <span className='tw:font-bold'>{`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''}`}</span> Selected
+                          className='inline-flex h-9 items-center gap-2 rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground whitespace-nowrap shadow-xs hover:bg-primary/90'>
+                          <span className='font-bold'>{`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''}`}</span> Selected
                         </DropdownToggle>
                         <DropdownMenu>
                           <ExportProductsFile products={selectedRows} />
                           {selectedRowsToSetActive.length > 0 && (
-                            <DropdownItem className='tw:text-nowrap tw:text-success' onClick={() => changeSelectedProductsState(1)}>
-                              <i className='mdi mdi-eye label-icon tw:align-middle tw:text-[13px] tw:me-2' />
+                            <DropdownItem className='text-nowrap text-success' onClick={() => changeSelectedProductsState(1)}>
+                              <i className='mdi mdi-eye label-icon align-middle text-[13px] me-2' />
                               Set Active
                             </DropdownItem>
                           )}
                           {selectedRowsToSetInactive.length > 0 && (
-                            <DropdownItem className='tw:text-nowrap tw:text-destructive' onClick={() => changeSelectedProductsState(0)}>
-                              <i className='mdi mdi-eye-off label-icon tw:align-middle tw:text-[13px] tw:me-2' />
+                            <DropdownItem className='text-nowrap text-destructive' onClick={() => changeSelectedProductsState(0)}>
+                              <i className='mdi mdi-eye-off label-icon align-middle text-[13px] me-2' />
                               Set Inactive
                             </DropdownItem>
                           )}
-                          <DropdownItem className='tw:text-nowrap tw:text-right tw:text-[13px] tw:text-[color:var(--bs-secondary-color)]' onClick={clearAllSelectedRows}>
+                          <DropdownItem className='text-nowrap text-right text-[13px] text-[color:var(--bs-secondary-color)]' onClick={clearAllSelectedRows}>
                             Clear All
                           </DropdownItem>
                         </DropdownMenu>

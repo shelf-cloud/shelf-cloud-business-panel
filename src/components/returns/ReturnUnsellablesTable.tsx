@@ -15,17 +15,17 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending, openImagesDialog }: 
   const conditionalRowStyles = [
     {
       when: (row: UnsellablesType) => row.converted && !row.dispose,
-      classNames: ['tw:text-[var(--bs-secondary-color)]'],
+      classNames: ['text-[var(--bs-secondary-color)]'],
     },
     {
       when: (row: UnsellablesType) => !row.converted && row.dispose,
-      classNames: ['tw:text-danger'],
+      classNames: ['text-danger'],
     },
   ]
 
   const columns: any = [
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>SKU</span>,
+      name: <span className='font-extrabold text-[13px]'>SKU</span>,
       selector: (row: UnsellablesType) => row.sku,
       sortable: true,
       wrap: true,
@@ -35,7 +35,7 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending, openImagesDialog }: 
       },
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>Title</span>,
+      name: <span className='font-extrabold text-[13px]'>Title</span>,
       selector: (row: UnsellablesType) => row.title,
       sortable: true,
       wrap: true,
@@ -47,7 +47,7 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending, openImagesDialog }: 
       },
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>RMA</span>,
+      name: <span className='font-extrabold text-[13px]'>RMA</span>,
       selector: (row: UnsellablesType) => row.returnRMA,
       sortable: true,
       wrap: true,
@@ -58,7 +58,7 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending, openImagesDialog }: 
       },
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>Date</span>,
+      name: <span className='font-extrabold text-[13px]'>Date</span>,
       selector: (row: UnsellablesType) => row.date,
       sortable: true,
       wrap: true,
@@ -69,7 +69,7 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending, openImagesDialog }: 
       },
     },
     {
-      name: <span className='tw:font-extrabold tw:text-left tw:text-[13px]'>Return</span>,
+      name: <span className='font-extrabold text-left text-[13px]'>Return</span>,
       selector: (row: UnsellablesType) => row.orderNumber,
       sortable: true,
       wrap: true,
@@ -80,7 +80,7 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending, openImagesDialog }: 
       },
     },
     {
-      name: <span className='tw:font-extrabold tw:text-left tw:text-[13px]'>Reason</span>,
+      name: <span className='font-extrabold text-left text-[13px]'>Reason</span>,
       selector: (row: UnsellablesType) => row.returnReason,
       sortable: true,
       wrap: true,
@@ -91,7 +91,7 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending, openImagesDialog }: 
       },
     },
     {
-      name: <span className='tw:font-extrabold tw:text-left tw:text-[13px]'>Status</span>,
+      name: <span className='font-extrabold text-left text-[13px]'>Status</span>,
       selector: (row: UnsellablesType) => (row.dispose ? 'Disposed' : row.converted ? 'Converted Sellable' : 'Unsellable'),
       sortable: true,
       wrap: true,
@@ -102,7 +102,7 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending, openImagesDialog }: 
       },
     },
     {
-      name: <span className='tw:font-extrabold tw:text-center tw:text-[13px]'>Unsellable Barcode</span>,
+      name: <span className='font-extrabold text-center text-[13px]'>Unsellable Barcode</span>,
       selector: (row: UnsellablesType) => row.barcode,
       sortable: true,
       wrap: false,
@@ -113,7 +113,7 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending, openImagesDialog }: 
       },
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'></span>,
+      name: <span className='font-bold text-[13px]'></span>,
       sortable: false,
       compact: true,
       center: true,
@@ -121,14 +121,14 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending, openImagesDialog }: 
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant='ghost' className='tw:data-[state=open]:bg-muted tw:text-muted-foreground tw:flex tw:size-8' size='icon'>
+              <Button variant='ghost' className='data-[state=open]:bg-muted text-muted-foreground flex size-8' size='icon'>
                 <EllipsisVerticalIcon />
                 <span className='sr-only'>Open actions menu</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align='end' className='tw:w-38 tw:rounded-md'>
-              <DropdownMenuItem className='tw:text-xs' onSelect={() => openImagesDialog(row)}>
-                <ImagesIcon className='tw:mr-2 tw:size-4' />
+            <DropdownMenuContent align='end' className='w-38 rounded-md'>
+              <DropdownMenuItem className='text-xs' onSelect={() => openImagesDialog(row)}>
+                <ImagesIcon className='mr-2 size-4' />
                 Images
               </DropdownMenuItem>
             </DropdownMenuContent>

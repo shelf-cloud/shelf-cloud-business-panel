@@ -10,7 +10,7 @@ const Footer = () => {
           <Row>
             <Col sm={6}>{new Date().getFullYear()} © Shelf Cloud.</Col>
             <Col sm={6}>
-              <div className='tw:sm:text-right tw:hidden tw:sm:block'>Design & Develop by Shelf Cloud</div>
+              <div className='sm:text-right hidden sm:block'>Design & Develop by Shelf Cloud</div>
             </Col>
           </Row>
         </Container>

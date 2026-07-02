@@ -28,19 +28,19 @@ function UnitsSoldDetailsModal({ showUnitsSoldDetailsModal, setshowUnitsSoldDeta
 
   const columns: any = [
     {
-      name: <span className='tw:font-semibold tw:text-[16.25px]'>Marketplace</span>,
+      name: <span className='font-semibold text-[16.25px]'>Marketplace</span>,
       selector: (row: Marketplace) => row.name,
       sortable: true,
       center: true,
     },
     {
-      name: <span className='tw:font-semibold tw:text-[16.25px]'>Units Sold</span>,
+      name: <span className='font-semibold text-[16.25px]'>Units Sold</span>,
       selector: (row: Marketplace) => row.totalUnitsSold,
       sortable: true,
       center: true,
     },
     {
-      name: <span className='tw:font-semibold tw:text-[16.25px]'></span>,
+      name: <span className='font-semibold text-[16.25px]'></span>,
       selector: (row: Marketplace) => `${((row.totalUnitsSold / showUnitsSoldDetailsModal.totalUnitsSold) * 100).toFixed(2)} %`,
       sortable: true,
       center: true,
@@ -71,9 +71,9 @@ function UnitsSoldDetailsModal({ showUnitsSoldDetailsModal, setshowUnitsSoldDeta
             marketplacesData: [],
           })
         }}>
-        <p className='tw:m-0 tw:p-0 tw:font-bold tw:text-[16.25px]'>Units Sold by Marketplace</p>
-        <p className='tw:m-0 tw:p-0 tw:font-normal tw:text-[16.25px]'>{showUnitsSoldDetailsModal.title}</p>
-        <p className='tw:m-0 tw:p-0 tw:font-light tw:text-[16.25px]'>{showUnitsSoldDetailsModal.sku}</p>
+        <p className='m-0 p-0 font-bold text-[16.25px]'>Units Sold by Marketplace</p>
+        <p className='m-0 p-0 font-normal text-[16.25px]'>{showUnitsSoldDetailsModal.title}</p>
+        <p className='m-0 p-0 font-light text-[16.25px]'>{showUnitsSoldDetailsModal.sku}</p>
       </ModalHeader>
       <ModalBody>
         <DataTable columns={columns} data={sortedTableData} striped={true} highlightOnHover={true} dense />

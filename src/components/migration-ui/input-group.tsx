@@ -23,8 +23,8 @@ function InputGroup({ className, size: _size, tag, ...props }: InputGroupProps) 
       data-slot='input-group'
       role='group'
       className={cn(
-        'tw:flex tw:w-full tw:items-stretch',
-        'tw:[&>*:not(:first-child)]:rounded-l-none tw:[&>*:not(:last-child)]:rounded-r-none tw:[&>*:not(:first-child)]:-ml-px',
+        'flex w-full items-stretch',
+        '[&>*:not(:first-child)]:rounded-l-none [&>*:not(:last-child)]:rounded-r-none [&>*:not(:first-child)]:-ml-px',
         className
       )}
       {...props}
@@ -41,7 +41,7 @@ function InputGroupText({ className, tag, ...props }: InputGroupTextProps) {
   return (
     <Comp
       data-slot='input-group-text'
-      className={cn('tw:inline-flex tw:items-center tw:rounded-md tw:border tw:border-input-border tw:bg-muted tw:px-3 tw:text-sm tw:text-muted-foreground', className)}
+      className={cn('inline-flex items-center rounded-md border border-input-border bg-muted px-3 text-sm text-muted-foreground', className)}
       {...props}
     />
   )

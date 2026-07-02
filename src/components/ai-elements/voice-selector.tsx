@@ -68,9 +68,9 @@ export type VoiceSelectorContentProps = ComponentProps<typeof DialogContent> & {
 }
 
 export const VoiceSelectorContent = ({ className, children, title = 'Voice Selector', ...props }: VoiceSelectorContentProps) => (
-  <DialogContent aria-describedby={undefined} className={cn('tw:p-0', className)} {...props}>
-    <DialogTitle className='tw:sr-only'>{title}</DialogTitle>
-    <Command className='tw:**:data-[slot=command-input-wrapper]:h-auto'>{children}</Command>
+  <DialogContent aria-describedby={undefined} className={cn('p-0', className)} {...props}>
+    <DialogTitle className='sr-only'>{title}</DialogTitle>
+    <Command className='**:data-[slot=command-input-wrapper]:h-auto'>{children}</Command>
   </DialogContent>
 )
 
@@ -80,7 +80,7 @@ export const VoiceSelectorDialog = (props: VoiceSelectorDialogProps) => <Command
 
 export type VoiceSelectorInputProps = ComponentProps<typeof CommandInput>
 
-export const VoiceSelectorInput = ({ className, ...props }: VoiceSelectorInputProps) => <CommandInput className={cn('tw:h-auto tw:py-3.5', className)} {...props} />
+export const VoiceSelectorInput = ({ className, ...props }: VoiceSelectorInputProps) => <CommandInput className={cn('h-auto py-3.5', className)} {...props} />
 
 export type VoiceSelectorListProps = ComponentProps<typeof CommandList>
 
@@ -96,7 +96,7 @@ export const VoiceSelectorGroup = (props: VoiceSelectorGroupProps) => <CommandGr
 
 export type VoiceSelectorItemProps = ComponentProps<typeof CommandItem>
 
-export const VoiceSelectorItem = ({ className, ...props }: VoiceSelectorItemProps) => <CommandItem className={cn('tw:px-4 tw:py-2', className)} {...props} />
+export const VoiceSelectorItem = ({ className, ...props }: VoiceSelectorItemProps) => <CommandItem className={cn('px-4 py-2', className)} {...props} />
 
 export type VoiceSelectorShortcutProps = ComponentProps<typeof CommandShortcut>
 
@@ -115,36 +115,36 @@ export const VoiceSelectorGender = ({ className, value, children, ...props }: Vo
 
   switch (value) {
     case 'male': {
-      icon = <MarsIcon className='tw:size-4' />
+      icon = <MarsIcon className='size-4' />
       break
     }
     case 'female': {
-      icon = <VenusIcon className='tw:size-4' />
+      icon = <VenusIcon className='size-4' />
       break
     }
     case 'transgender': {
-      icon = <TransgenderIcon className='tw:size-4' />
+      icon = <TransgenderIcon className='size-4' />
       break
     }
     case 'androgyne': {
-      icon = <MarsStrokeIcon className='tw:size-4' />
+      icon = <MarsStrokeIcon className='size-4' />
       break
     }
     case 'non-binary': {
-      icon = <NonBinaryIcon className='tw:size-4' />
+      icon = <NonBinaryIcon className='size-4' />
       break
     }
     case 'intersex': {
-      icon = <VenusAndMarsIcon className='tw:size-4' />
+      icon = <VenusAndMarsIcon className='size-4' />
       break
     }
     default: {
-      icon = <CircleSmallIcon className='tw:size-4' />
+      icon = <CircleSmallIcon className='size-4' />
     }
   }
 
   return (
-    <span className={cn('tw:text-muted-foreground tw:text-xs', className)} {...props}>
+    <span className={cn('text-muted-foreground text-xs', className)} {...props}>
       {children ?? icon}
     </span>
   )
@@ -315,7 +315,7 @@ export const VoiceSelectorAccent = ({ className, value, children, ...props }: Vo
   }
 
   return (
-    <span className={cn('tw:text-muted-foreground tw:text-xs', className)} {...props}>
+    <span className={cn('text-muted-foreground text-xs', className)} {...props}>
       {children ?? emoji}
     </span>
   )
@@ -324,25 +324,25 @@ export const VoiceSelectorAccent = ({ className, value, children, ...props }: Vo
 export type VoiceSelectorAgeProps = ComponentProps<'span'>
 
 export const VoiceSelectorAge = ({ className, ...props }: VoiceSelectorAgeProps) => (
-  <span className={cn('tw:text-muted-foreground tw:text-xs tw:tabular-nums', className)} {...props} />
+  <span className={cn('text-muted-foreground text-xs tabular-nums', className)} {...props} />
 )
 
 export type VoiceSelectorNameProps = ComponentProps<'span'>
 
 export const VoiceSelectorName = ({ className, ...props }: VoiceSelectorNameProps) => (
-  <span className={cn('tw:flex-1 tw:truncate tw:text-left tw:font-medium', className)} {...props} />
+  <span className={cn('flex-1 truncate text-left font-medium', className)} {...props} />
 )
 
 export type VoiceSelectorDescriptionProps = ComponentProps<'span'>
 
 export const VoiceSelectorDescription = ({ className, ...props }: VoiceSelectorDescriptionProps) => (
-  <span className={cn('tw:text-muted-foreground tw:text-xs', className)} {...props} />
+  <span className={cn('text-muted-foreground text-xs', className)} {...props} />
 )
 
 export type VoiceSelectorAttributesProps = ComponentProps<'div'>
 
 export const VoiceSelectorAttributes = ({ className, children, ...props }: VoiceSelectorAttributesProps) => (
-  <div className={cn('tw:flex tw:items-center tw:text-xs', className)} {...props}>
+  <div className={cn('flex items-center text-xs', className)} {...props}>
     {children}
   </div>
 )
@@ -350,7 +350,7 @@ export const VoiceSelectorAttributes = ({ className, children, ...props }: Voice
 export type VoiceSelectorBulletProps = ComponentProps<'span'>
 
 export const VoiceSelectorBullet = ({ className, ...props }: VoiceSelectorBulletProps) => (
-  <span aria-hidden='true' className={cn('tw:select-none tw:text-border', className)} {...props}>
+  <span aria-hidden='true' className={cn('select-none text-border', className)} {...props}>
     &bull;
   </span>
 )
@@ -371,18 +371,18 @@ export const VoiceSelectorPreview = ({ className, playing, loading, onPlay, onCl
     [onClick, onPlay]
   )
 
-  let icon = <PlayIcon className='tw:size-3' />
+  let icon = <PlayIcon className='size-3' />
 
   if (loading) {
-    icon = <Spinner className='tw:size-3' />
+    icon = <Spinner className='size-3' />
   } else if (playing) {
-    icon = <PauseIcon className='tw:size-3' />
+    icon = <PauseIcon className='size-3' />
   }
 
   return (
     <Button
       aria-label={playing ? 'Pause preview' : 'Play preview'}
-      className={cn('tw:size-6', className)}
+      className={cn('size-6', className)}
       disabled={loading}
       onClick={handleClick}
       size='sm'

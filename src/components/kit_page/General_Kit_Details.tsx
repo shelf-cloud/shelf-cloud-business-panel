@@ -101,10 +101,10 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
   }
 
   return (
-    <div className='tw:px-4 tw:pt-2 tw:pb-4 tw:border-b tw:border-[color:var(--border)]'>
-      <p className='tw:text-[19.5px] tw:text-primary tw:font-semibold'>General</p>
+    <div className='px-4 pt-2 pb-4 border-b border-[color:var(--border)]'>
+      <p className='text-[19.5px] text-primary font-semibold'>General</p>
       {!showEditFields ? (
-        <div className='tw:w-full tw:flex tw:justify-start tw:items-start tw:gap-4'>
+        <div className='w-full flex justify-start items-start gap-4'>
           <div
             style={{
               width: '30%',
@@ -116,37 +116,37 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
             }}>
             <img loading='lazy' src={image ? image : NoImageAdress} alt='Kit' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
           </div>
-          <div className='tw:w-full'>
-            <table className='tw:w-full tw:text-[13px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
-              <tbody className='tw:bg-transparent'>
+          <div className='w-full'>
+            <table className='w-full text-[13px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+              <tbody className='bg-transparent'>
                 <tr>
-                  <td className='tw:font-extrabold'>Name</td>
+                  <td className='font-extrabold'>Name</td>
                   <td>{title}</td>
                 </tr>
                 <tr>
-                  <td className='tw:font-extrabold'>Description</td>
-                  <td className={description ?? 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>{description ?? 'No Description'}</td>
+                  <td className='font-extrabold'>Description</td>
+                  <td className={description ?? 'text-[color:var(--bs-secondary-color)] font-light italic'}>{description ?? 'No Description'}</td>
                 </tr>
                 <tr>
-                  <td className='tw:font-extrabold'>Brand</td>
-                  <td className={brand ?? 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>{brand ?? 'No Brand'}</td>
+                  <td className='font-extrabold'>Brand</td>
+                  <td className={brand ?? 'text-[color:var(--bs-secondary-color)] font-light italic'}>{brand ?? 'No Brand'}</td>
                 </tr>
                 <tr>
-                  <td className='tw:font-extrabold'>Category</td>
-                  <td className={category ?? 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>{category ?? 'No Category'}</td>
+                  <td className='font-extrabold'>Category</td>
+                  <td className={category ?? 'text-[color:var(--bs-secondary-color)] font-light italic'}>{category ?? 'No Category'}</td>
                 </tr>
                 <tr>
-                  <td className='tw:font-extrabold'>Supplier</td>
-                  <td className={supplier ?? 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>{supplier ?? 'No supplier'}</td>
+                  <td className='font-extrabold'>Supplier</td>
+                  <td className={supplier ?? 'text-[color:var(--bs-secondary-color)] font-light italic'}>{supplier ?? 'No supplier'}</td>
                 </tr>
                 <tr>
-                  <td className='tw:font-extrabold'>Condition</td>
-                  <td className={itemCondition ?? 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>{itemCondition ?? 'No supplier'}</td>
+                  <td className='font-extrabold'>Condition</td>
+                  <td className={itemCondition ?? 'text-[color:var(--bs-secondary-color)] font-light italic'}>{itemCondition ?? 'No supplier'}</td>
                 </tr>
                 {note && (
                   <tr>
-                    <td className='tw:font-extrabold'>Note</td>
-                    <td className='tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'>{note}</td>
+                    <td className='font-extrabold'>Note</td>
+                    <td className='text-[color:var(--bs-secondary-color)] font-light italic'>{note}</td>
                   </tr>
                 )}
               </tbody>
@@ -164,7 +164,7 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
                 </Label>
                 <Input
                   type='text'
-                  className='tw:text-[13px]'
+                  className='text-[13px]'
                   placeholder='Title...'
                   id='title'
                   name='title'
@@ -184,7 +184,7 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
                 </Label>
                 <Input
                   type='text'
-                  className='tw:text-[13px]'
+                  className='text-[13px]'
                   placeholder='Description...'
                   id='description'
                   name='description'
@@ -256,7 +256,7 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
                 </Label>
                 <Input
                   type='text'
-                  className='tw:text-[13px]'
+                  className='text-[13px]'
                   placeholder='Image URL...'
                   id='image'
                   name='image'
@@ -276,7 +276,7 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
                 </Label>
                 <Input
                   type='textarea'
-                  className='tw:text-[13px]'
+                  className='text-[13px]'
                   placeholder=''
                   id='note'
                   name='note'
@@ -290,7 +290,7 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
               </FormGroup>
             </Col>
             <Col md={12}>
-              <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-3'>
+              <div className='flex flex-row justify-end items-center gap-3'>
                 <Button type='button' color='light' onClick={() => setShowEditFields(false)}>
                   Cancel
                 </Button>

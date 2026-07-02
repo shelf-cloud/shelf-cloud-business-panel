@@ -117,7 +117,7 @@ function UncontrolledTooltip({ target, placement = 'top', children, className, i
       ref={tipRef}
       role='tooltip'
       style={{ position: 'fixed', top: coords.top, left: coords.left, transform, zIndex: 1080, ...style }}
-      className={cn('tw:pointer-events-none tw:max-w-xs tw:rounded-md tw:bg-foreground tw:px-2 tw:py-1 tw:text-xs tw:text-background tw:shadow-md', popperClassName, innerClassName, className)}>
+      className={cn('pointer-events-none max-w-xs rounded-md bg-foreground px-2 py-1 text-xs text-background shadow-md', popperClassName, innerClassName, className)}>
       {children}
     </div>,
     document.body

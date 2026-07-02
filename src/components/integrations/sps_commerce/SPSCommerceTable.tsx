@@ -34,7 +34,7 @@ const SPSCommerceTable = ({ tableData, pending, setSelectedRows, toggledClearRow
 
   const columns: any = [
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Image</span>,
+      name: <span className='font-bold text-[13px]'>Image</span>,
       selector: (row: SPSCommerceItem) => {
         return (
           <Link href={`/product/${row.inventoryId}/${row.sku}`}>
@@ -63,7 +63,7 @@ const SPSCommerceTable = ({ tableData, pending, setSelectedRows, toggledClearRow
     },
     {
       name: (
-        <span className='tw:font-bold tw:text-[13px]'>
+        <span className='font-bold text-[13px]'>
           Title
           <br />
           SKU
@@ -71,18 +71,18 @@ const SPSCommerceTable = ({ tableData, pending, setSelectedRows, toggledClearRow
       ),
       selector: (row: SPSCommerceItem) => {
         return (
-          <div className='tw:text-[11.2px] tw:flex tw:flex-col tw:justify-start tw:items-start tw:gap-0 tw:pe-2'>
-            <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:text-[11.2px]'>
+          <div className='text-[11.2px] flex flex-col justify-start items-start gap-0 pe-2'>
+            <div className='flex flex-row justify-start items-center text-[11.2px]'>
               <Link href={`/product/${row.inventoryId}/${row.sku}`}>
-                <p className='tw:m-0 tw:p-0 tw:text-primary tw:font-semibold tw:text-[13px]'>{row.sku}</p>
+                <p className='m-0 p-0 text-primary font-semibold text-[13px]'>{row.sku}</p>
               </Link>
               <CopyTextToClipboard text={row.sku} label='SKU' />{' '}
             </div>
-            <span className='tw:m-0 tw:p-0 text-black tw:text-[11.2px] tw:text-wrap'>{row.title}</span>
-            {row.note && <i className='ri-information-fill tw:text-[16.25px] tw:text-warning' id={`tooltip${row.inventoryId}`} />}
+            <span className='m-0 p-0 text-black text-[11.2px] text-wrap'>{row.title}</span>
+            {row.note && <i className='ri-information-fill text-[16.25px] text-warning' id={`tooltip${row.inventoryId}`} />}
             {row.note && (
               <SCTooltip target={`tooltip${row.inventoryId}`} placement='right' key={`tooltip${row.inventoryId}`}>
-                <p className='tw:text-[11.2px] tw:text-primary tw:m-0 tw:p-0'>{row.note}</p>
+                <p className='text-[11.2px] text-primary m-0 p-0'>{row.note}</p>
               </SCTooltip>
             )}
           </div>
@@ -96,7 +96,7 @@ const SPSCommerceTable = ({ tableData, pending, setSelectedRows, toggledClearRow
       sortFunction: (rowA: SPSCommerceItem, rowB: SPSCommerceItem) => sortStringsCaseInsensitive(rowA.title.toLowerCase(), rowB.title.toLowerCase()),
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Integration SKU</span>,
+      name: <span className='font-bold text-[13px]'>Integration SKU</span>,
       selector: (row: SPSCommerceItem) => row.integrationSku,
       sortable: true,
       left: true,
@@ -107,7 +107,7 @@ const SPSCommerceTable = ({ tableData, pending, setSelectedRows, toggledClearRow
       },
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>UPC</span>,
+      name: <span className='font-bold text-[13px]'>UPC</span>,
       selector: (row: SPSCommerceItem) => row.barcode,
       sortable: true,
       left: true,
@@ -118,7 +118,7 @@ const SPSCommerceTable = ({ tableData, pending, setSelectedRows, toggledClearRow
       },
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Total Available</span>,
+      name: <span className='font-bold text-[13px]'>Total Available</span>,
       selector: (row: SPSCommerceItem) => FormatIntNumber(state.currentRegion, row.quantity ? Object.values(row.quantity).reduce((acc, qty) => acc + qty, 0) : 0),
       sortable: true,
       compact: true,
@@ -130,8 +130,8 @@ const SPSCommerceTable = ({ tableData, pending, setSelectedRows, toggledClearRow
         ),
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Should Update</span>,
-      selector: (row: SPSCommerceItem) => (row.shouldUpdate ? <span className='tw:text-success'>Yes</span> : <span className='tw:text-danger'>No</span>),
+      name: <span className='font-bold text-[13px]'>Should Update</span>,
+      selector: (row: SPSCommerceItem) => (row.shouldUpdate ? <span className='text-success'>Yes</span> : <span className='text-danger'>No</span>),
       sortable: true,
       compact: true,
       center: true,

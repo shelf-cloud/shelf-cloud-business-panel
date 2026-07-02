@@ -156,21 +156,21 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
         Listing Box Dimensions
       </ModalHeader>
       <ModalBody>
-        <h5 className='tw:text-[19.5px] tw:mb-0 tw:font-semibold tw:text-primary'>Amazon Listing:</h5>
-        <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)]'>
-          MSKU: <span className='text-black tw:font-semibold'>{dimensionsModal.msku}</span>
+        <h5 className='text-[19.5px] mb-0 font-semibold text-primary'>Amazon Listing:</h5>
+        <p className='m-0 p-0 text-[var(--bs-secondary-color)]'>
+          MSKU: <span className='text-black font-semibold'>{dimensionsModal.msku}</span>
         </p>
-        <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)]'>
-          ASIN: <span className='text-black tw:font-semibold'>{dimensionsModal.asin}</span>
+        <p className='m-0 p-0 text-[var(--bs-secondary-color)]'>
+          ASIN: <span className='text-black font-semibold'>{dimensionsModal.asin}</span>
         </p>
-        <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)]'>
-          ShelfCloud SKU: <span className='text-black tw:font-semibold'>{dimensionsModal.scSKU}</span>
+        <p className='m-0 p-0 text-[var(--bs-secondary-color)]'>
+          ShelfCloud SKU: <span className='text-black font-semibold'>{dimensionsModal.scSKU}</span>
         </p>
 
         <Form onSubmit={handleAddProduct}>
-          <Row className='tw:my-4'>
+          <Row className='my-4'>
             <Col md={3}>
-              <FormGroup className='tw:mb-4'>
+              <FormGroup className='mb-4'>
                 <Label htmlFor='boxLength' className='form-label'>
                   *Box Length (inch)
                 </Label>
@@ -190,7 +190,7 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
               </FormGroup>
             </Col>
             <Col md={3}>
-              <FormGroup className='tw:mb-4'>
+              <FormGroup className='mb-4'>
                 <Label htmlFor='boxWidth' className='form-label'>
                   *Box Width (inch)
                 </Label>
@@ -210,7 +210,7 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
               </FormGroup>
             </Col>
             <Col md={3}>
-              <FormGroup className='tw:mb-4'>
+              <FormGroup className='mb-4'>
                 <Label htmlFor='boxHeight' className='form-label'>
                   *Box Height (inch)
                 </Label>
@@ -230,7 +230,7 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
               </FormGroup>
             </Col>
             <Col md={3}>
-              <FormGroup className='tw:mb-4'>
+              <FormGroup className='mb-4'>
                 <Label htmlFor='boxWeight' className='form-label'>
                   *Box Weight (lb)
                 </Label>
@@ -250,26 +250,26 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
               </FormGroup>
             </Col>
           </Row>
-          <Row className='tw:mb-2 tw:mt-0'>
-            <p className='tw:m-0 tw:text-[16.25px] tw:font-semibold'>Expected Dimensions</p>
-            <p className='tw:m-0 tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>
-              Amazon Minimum Expected Box Volume: <span className='text-black tw:font-semibold'>{FormatIntPercentage(state.currentRegion, amzBoxVolume - amzBoxTenPercent)} inch3</span>
+          <Row className='mb-2 mt-0'>
+            <p className='m-0 text-[16.25px] font-semibold'>Expected Dimensions</p>
+            <p className='m-0 text-[var(--bs-secondary-color)] text-nowrap'>
+              Amazon Minimum Expected Box Volume: <span className='text-black font-semibold'>{FormatIntPercentage(state.currentRegion, amzBoxVolume - amzBoxTenPercent)} inch3</span>
             </p>
-            <p className='tw:m-0 tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>
+            <p className='m-0 text-[var(--bs-secondary-color)] text-nowrap'>
               ShelfCloud Box Volume:{' '}
-              <span className='text-black tw:font-semibold'>
+              <span className='text-black font-semibold'>
                 {FormatIntPercentage(state.currentRegion, validation.values.boxLength * validation.values.boxWidth * validation.values.boxHeight)} inch3
               </span>
             </p>
             {amzBoxVolume - amzBoxTenPercent > validation.values.boxLength * validation.values.boxWidth * validation.values.boxHeight && (
-              <span className='tw:m-0 tw:mt-1 tw:text-danger'>
+              <span className='m-0 mt-1 text-danger'>
                 ShelfCloud Box dimensions do not meet the expected minimum volume for Amazon. Please adjust the Box Dimensions to meet the minimum volume requirements.
               </span>
             )}
           </Row>
-          <Row md={12} className='tw:mt-4'>
-            <div className='tw:text-right tw:mt-2 tw:flex tw:flex-row tw:gap-6 tw:justify-end'>
-              <div className='tw:flex tw:flex-row tw:gap-4'>
+          <Row md={12} className='mt-4'>
+            <div className='text-right mt-2 flex flex-row gap-6 justify-end'>
+              <div className='flex flex-row gap-4'>
                 <Button
                   type='button'
                   color='light'

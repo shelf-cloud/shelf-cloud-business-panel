@@ -295,8 +295,8 @@ const Shipments = ({ session }: Props) => {
         <div className='page-content'>
           <BreadCrumb title='Shipments' pageTitle='Orders' />
           <Container fluid>
-            <div className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:mb-2 tw:lg:flex-row tw:md:justify-between tw:md:items-center tw:px-1'>
-              <div className='tw:w-full tw:flex tw:flex-col tw:justify-center tw:items-start tw:gap-2 tw:mb-0 tw:lg:flex-row tw:lg:justify-start tw:lg:items-center tw:px-0'>
+            <div className='flex flex-col justify-center items-end gap-2 mb-2 lg:flex-row md:justify-between md:items-center px-1'>
+              <div className='w-full flex flex-col justify-center items-start gap-2 mb-0 lg:flex-row lg:justify-start lg:items-center px-0'>
                 <FilterByDates
                   shipmentsStartDate={startDate}
                   setShipmentsStartDate={setStartDate}
@@ -317,10 +317,10 @@ const Shipments = ({ session }: Props) => {
                   setcarrierStatus={setcarrierStatus}
                 />
               </div>
-              <div className='tw:w-full tw:flex tw:flex-col-reverse tw:justify-center tw:items-start tw:gap-2 tw:mb-0 tw:lg:flex-row tw:lg:justify-end tw:lg:items-center tw:px-0'>
-                <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' minLength={3} widths='tw:w-full tw:md:w-1/2' />
+              <div className='w-full flex flex-col-reverse justify-center items-start gap-2 mb-0 lg:flex-row lg:justify-end lg:items-center px-0'>
+                <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' minLength={3} widths='w-full md:w-1/2' />
 
-                <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='tw:text-nowrap' onClick={clearFilters}>
+                <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='text-nowrap' onClick={clearFilters}>
                   Clear Filters
                 </Button>
               </div>
@@ -337,7 +337,7 @@ const Shipments = ({ session }: Props) => {
                 />
                 <div ref={lastInvoiceElementRef} style={{ height: '20px', marginTop: '10px' }}>
                   {isValidating && size > 1 && (
-                    <p className='tw:text-center'>
+                    <p className='text-center'>
                       <Spinner size='sm' color='primary' /> Loading more shipments...
                     </p>
                   )}

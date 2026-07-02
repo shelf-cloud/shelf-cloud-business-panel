@@ -268,23 +268,23 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
     <Modal fade={false} size='xl' id='unitsSoldDetailsModal' isOpen={showPOModal} toggle={() => setshowPOModal(false)}>
       <Form onSubmit={handleSubmit}>
         <ModalHeader toggle={() => setshowPOModal(false)}>
-          <p className='tw:m-0 tw:p-0 tw:mb-1 tw:font-bold tw:text-[16.25px]'>Purchase Order</p>
-          <p className='tw:m-0 tw:p-0 tw:font-normal tw:text-[13px]'>Supplier: {selectedSupplier}</p>
+          <p className='m-0 p-0 mb-1 font-bold text-[16.25px]'>Purchase Order</p>
+          <p className='m-0 p-0 font-normal text-[13px]'>Supplier: {selectedSupplier}</p>
         </ModalHeader>
-        <ModalBody className='tw:overflow-auto' style={{ minHeight: '60dvh' }}>
-          <Row className='tw:mb-2'>
+        <ModalBody className='overflow-auto' style={{ minHeight: '60dvh' }}>
+          <Row className='mb-2'>
             <Col xs={12} md={4}>
               <FormGroup className='createOrder_inputs'>
-                <Label htmlFor='lastNameinput' className='form-label tw:mb-1 tw:text-[11.2px]'>
+                <Label htmlFor='lastNameinput' className='form-label mb-1 text-[11.2px]'>
                   *Purchase Order Number
                 </Label>
                 <div className='input-group'>
-                  <span className='input-group-text tw:font-semibold tw:text-[13px]' style={{ padding: '0.2rem 0.9rem' }} id='basic-addon1'>
+                  <span className='input-group-text font-semibold text-[13px]' style={{ padding: '0.2rem 0.9rem' }} id='basic-addon1'>
                     {orderNumberStart}
                   </span>
                   <Input
                     type='text'
-                    className='tw:text-[13px]'
+                    className='text-[13px]'
                     bsSize='sm'
                     style={{ padding: '0.2rem 0.9rem' }}
                     placeholder='Order Number...'
@@ -303,7 +303,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
             {!splits.isSplitting && (
               <>
                 <Col xs={12} md={4}>
-                  <Label htmlFor='shipmentType' className='form-label tw:text-[11.2px]'>
+                  <Label htmlFor='shipmentType' className='form-label text-[11.2px]'>
                     *Shipment Type
                   </Label>
                   <SimpleSelect
@@ -317,11 +317,11 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                     customStyle='sm'
                   />
                   {validation.errors.shipmentType && validation.touched.shipmentType ? (
-                    <div className='tw:m-0 tw:p-0 tw:text-danger tw:text-[11.2px]'>*{validation.errors.shipmentType.value}</div>
+                    <div className='m-0 p-0 text-danger text-[11.2px]'>*{validation.errors.shipmentType.value}</div>
                   ) : null}
                 </Col>
                 <Col xs={12} md={4}>
-                  <Label htmlFor='destinationSC' className='form-label tw:text-[11.2px]'>
+                  <Label htmlFor='destinationSC' className='form-label text-[11.2px]'>
                     *Select Destination
                   </Label>
                   <SimpleSelect
@@ -334,20 +334,20 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                     customStyle='sm'
                   />
                   {validation.errors.destinationSC && validation.touched.destinationSC ? (
-                    <div className='tw:m-0 tw:p-0 tw:text-danger tw:text-[11.2px]'>*{validation.errors.destinationSC.value}</div>
+                    <div className='m-0 p-0 text-danger text-[11.2px]'>*{validation.errors.destinationSC.value}</div>
                   ) : null}
                 </Col>
               </>
             )}
           </Row>
           {splits.isSplitting && (
-            <Row className='tw:mb-4'>
-              <Label className='tw:mb-1 tw:text-[13px] tw:font-semibold'>*Select Split Destination</Label>
+            <Row className='mb-4'>
+              <Label className='mb-1 text-[13px] font-semibold'>*Select Split Destination</Label>
               {Object.entries(validation.values.splitShipmentTypes).map(([key, split]) => (
-                <Col xs={12} md={12 / Object.entries(validation.values.splitShipmentTypes).length} key={`splitShipmentType-${key}`} className='tw:mb-2'>
-                  <Label htmlFor={`splitShipmentType-${key}`} className='form-label tw:mb-1 tw:text-[11.2px]'>
-                    <span className='tw:font-normal'>Shipment Type To: </span>
-                    <span className='tw:font-semibold'>{splitNames[`${key}`]}</span>
+                <Col xs={12} md={12 / Object.entries(validation.values.splitShipmentTypes).length} key={`splitShipmentType-${key}`} className='mb-2'>
+                  <Label htmlFor={`splitShipmentType-${key}`} className='form-label mb-1 text-[11.2px]'>
+                    <span className='font-normal'>Shipment Type To: </span>
+                    <span className='font-semibold'>{splitNames[`${key}`]}</span>
                   </Label>
                   <SimpleSelect
                     options={RECEIVING_SHIPMENT_TYPES}
@@ -363,15 +363,15 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                   typeof validation.errors.splitShipmentTypes !== 'string' &&
                   validation.errors.splitShipmentTypes[key]?.value &&
                   validation.touched.splitShipmentTypes ? (
-                    <div className='tw:m-0 tw:p-0 tw:text-danger tw:text-[11.2px]'>{`*${validation.errors.splitShipmentTypes[key]?.value}`}</div>
+                    <div className='m-0 p-0 text-danger text-[11.2px]'>{`*${validation.errors.splitShipmentTypes[key]?.value}`}</div>
                   ) : null}
                 </Col>
               ))}
               {Object.entries(validation.values.splitDestinations).map(([key, split]) => (
                 <Col xs={12} md={12 / Object.entries(validation.values.splitDestinations).length} key={`splitDestination-${key}`}>
-                  <Label htmlFor={`splitDestination-${key}`} className='form-label tw:mb-1 tw:text-[11.2px]'>
-                    <span className='tw:font-normal'>Split:: </span>
-                    <span className='tw:font-semibold'>{splitNames[`${key}`]}</span>
+                  <Label htmlFor={`splitDestination-${key}`} className='form-label mb-1 text-[11.2px]'>
+                    <span className='font-normal'>Split:: </span>
+                    <span className='font-semibold'>{splitNames[`${key}`]}</span>
                   </Label>
                   <SimpleSelect
                     options={splitFilteredWarehouses(validation.values.splitShipmentTypes[`${key}`]?.value)}
@@ -386,18 +386,18 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                   typeof validation.errors.splitDestinations !== 'string' &&
                   validation.errors.splitDestinations[key]?.value &&
                   validation.touched.splitDestinations ? (
-                    <div className='tw:m-0 tw:p-0 tw:text-danger tw:text-[11.2px]'>{`*${validation.errors.splitDestinations[key]?.value}`}</div>
+                    <div className='m-0 p-0 text-danger text-[11.2px]'>{`*${validation.errors.splitDestinations[key]?.value}`}</div>
                   ) : null}
                 </Col>
               ))}
               {validation.errors.splitDestinations && typeof validation.errors.splitDestinations === 'string' && validation.touched.splitDestinations ? (
-                <p className='tw:mb-0 tw:mt-1 tw:text-danger tw:text-[11.2px]'>{`*${validation.errors.splitDestinations}`}</p>
+                <p className='mb-0 mt-1 text-danger text-[11.2px]'>{`*${validation.errors.splitDestinations}`}</p>
               ) : null}
             </Row>
           )}
-          <span className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>*Select the columns you wish to print.</span>
-          <div className='tw:flex tw:flex-row tw:justify-evenly tw:items-start'>
-            <table className='tw:w-full tw:align-middle tw:mb-0 tw:border tw:border-[color:var(--border)] tw:text-[11.2px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_th]:border tw:[&_th]:border-[color:var(--border)] tw:[&_td]:border tw:[&_td]:border-[color:var(--border)] tw:[&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)] tw:[&_tbody_tr:hover]:bg-[color-mix(in_srgb,var(--bs-light)_60%,transparent)]'>
+          <span className='text-[11.2px] text-[var(--bs-secondary-color)]'>*Select the columns you wish to print.</span>
+          <div className='flex flex-row justify-evenly items-start'>
+            <table className='w-full align-middle mb-0 border border-[color:var(--border)] text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_th]:border [&_th]:border-[color:var(--border)] [&_td]:border [&_td]:border-[color:var(--border)] [&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)] [&_tbody_tr:hover]:bg-[color-mix(in_srgb,var(--bs-light)_60%,transparent)]'>
               <thead>
                 <tr>
                   <th>SKU</th>
@@ -407,7 +407,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                     Product Comment{' '}
                     <Input
                       type='checkbox'
-                      className='tw:text-[11.2px]'
+                      className='text-[11.2px]'
                       checked={printColumns.comments}
                       onChange={() =>
                         setprintColumns((prev) => {
@@ -416,11 +416,11 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                       }
                     />
                   </th>
-                  <th className='tw:text-center'>
+                  <th className='text-center'>
                     Qty Per Box{' '}
                     <Input
                       type='checkbox'
-                      className='tw:text-[11.2px]'
+                      className='text-[11.2px]'
                       checked={printColumns.qtyPerBox}
                       onChange={() =>
                         setprintColumns((prev) => {
@@ -433,16 +433,16 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                     Array(splits.splitsQty)
                       .fill('')
                       .map((_, splitIndex) => (
-                        <th key={`splitHeader-${splitIndex}`} className='tw:text-center'>
+                        <th key={`splitHeader-${splitIndex}`} className='text-center'>
                           {splitNames[`${splitIndex}`]}
                         </th>
                       ))}
-                  <th className='tw:text-center'>Order Qty</th>
-                  <th className='tw:text-center'>
+                  <th className='text-center'>Order Qty</th>
+                  <th className='text-center'>
                     Volume{' '}
                     <Input
                       type='checkbox'
-                      className='tw:text-[11.2px]'
+                      className='text-[11.2px]'
                       checked={printColumns.volume}
                       onChange={() =>
                         setprintColumns((prev) => {
@@ -451,11 +451,11 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                       }
                     />
                   </th>
-                  <th className='tw:text-center'>
+                  <th className='text-center'>
                     Cost{' '}
                     <Input
                       type='checkbox'
-                      className='tw:text-[11.2px]'
+                      className='text-[11.2px]'
                       checked={printColumns.cost}
                       onChange={() =>
                         setprintColumns((prev) => {
@@ -472,7 +472,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
 
                   return (
                     <tr key={product.sku}>
-                      <td className='tw:text-nowrap'>{product.sku}</td>
+                      <td className='text-nowrap'>{product.sku}</td>
                       <td>
                         <div
                           style={{
@@ -491,17 +491,17 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                           />
                         </div>
                       </td>
-                      <td className='tw:w-1/4 tw:text-[11.2px]'>
+                      <td className='w-1/4 text-[11.2px]'>
                         {product.title}
                         <br />
-                        <span className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>{`UPC: ${product.barcode}`}</span>
+                        <span className='text-[11.2px] text-[var(--bs-secondary-color)]'>{`UPC: ${product.barcode}`}</span>
                       </td>
-                      <td className='tw:flex tw:flex-row tw:justify-center tw:items-end tw:gap-1'>
+                      <td className='flex flex-row justify-center items-end gap-1'>
                         <DebounceInput
                           element='textarea'
                           minLength={6}
                           debounceTimeout={1000}
-                          className='form-control tw:text-[11.2px]'
+                          className='form-control text-[11.2px]'
                           style={{ scrollbarWidth: 'none' }}
                           rows={product.note === '' ? 1 : 2}
                           placeholder='Add comment...'
@@ -510,24 +510,24 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                           onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
                           onChange={(e) => handleAddComment(e.target.value, product.sku, product.inventoryId)}
                         />
-                        {savingComment ? <Spinner color='success' size={'sm'} /> : <i className={`mdi mdi-check-all tw:text-[16.25px] tw:m-0 tw:p-0 tw:text-success`} />}
+                        {savingComment ? <Spinner color='success' size={'sm'} /> : <i className={`mdi mdi-check-all text-[16.25px] m-0 p-0 text-success`} />}
                       </td>
-                      <td className='tw:text-center tw:align-middle'>{product.boxQty}</td>
+                      <td className='text-center align-middle'>{product.boxQty}</td>
                       {splits.isSplitting &&
                         Array(splits.splitsQty)
                           .fill('')
                           .map((_, splitIndex) => (
-                            <td key={`splitProduct-${product.sku}-${splitIndex}`} className='tw:text-center tw:align-middle'>
+                            <td key={`splitProduct-${product.sku}-${splitIndex}`} className='text-center align-middle'>
                               {FormatIntNumber(
                                 state.currentRegion,
                                 product.useOrderAdjusted ? product.orderSplits[`${splitIndex}`].orderAdjusted : product.orderSplits[`${splitIndex}`].order
                               )}
                             </td>
                           ))}
-                      <td className='tw:text-center tw:align-middle'>{FormatIntNumber(state.currentRegion, product.useOrderAdjusted ? product.orderAdjusted : product.order)}</td>
-                      <td className='tw:text-center tw:align-middle'>{`${FormatIntPercentage(state.currentRegion, state.currentRegion === 'us' ? productVolume / 61020 : productVolume / 1000000)} m³`}</td>
+                      <td className='text-center align-middle'>{FormatIntNumber(state.currentRegion, product.useOrderAdjusted ? product.orderAdjusted : product.order)}</td>
+                      <td className='text-center align-middle'>{`${FormatIntPercentage(state.currentRegion, state.currentRegion === 'us' ? productVolume / 61020 : productVolume / 1000000)} m³`}</td>
 
-                      <td className='tw:text-center tw:align-middle'>
+                      <td className='text-center align-middle'>
                         {FormatCurrency(state.currentRegion, product.useOrderAdjusted ? product.orderAdjusted * product.sellerCost : product.order * product.sellerCost)}
                       </td>
                     </tr>
@@ -535,17 +535,17 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                 })}
               </tbody>
               <tfoot>
-                <tr className='tw:font-semibold'>
+                <tr className='font-semibold'>
                   <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td className='tw:text-center'>TOTAL</td>
+                  <td className='text-center'>TOTAL</td>
                   {splits.isSplitting &&
                     Array(splits.splitsQty)
                       .fill('')
                       .map((_, splitIndex) => (
-                        <td key={`splitFooter-${splitIndex}`} className='tw:text-center tw:align-middle'>
+                        <td key={`splitFooter-${splitIndex}`} className='text-center align-middle'>
                           {FormatIntNumber(
                             state.currentRegion,
                             Object.values(reorderingPointsOrder.products).reduce(
@@ -556,21 +556,21 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                           )}
                         </td>
                       ))}
-                  <td className='tw:text-center'>{FormatIntNumber(state.currentRegion, reorderingPointsOrder.totalQty)}</td>
-                  <td className='tw:text-center'>{`${FormatIntPercentage(state.currentRegion, state.currentRegion === 'us' ? reorderingPointsOrder.totalVolume / 61020 : reorderingPointsOrder.totalVolume / 1000000)} m³`}</td>
-                  <td className='tw:text-center'>{FormatCurrency(state.currentRegion, reorderingPointsOrder.totalCost)}</td>
+                  <td className='text-center'>{FormatIntNumber(state.currentRegion, reorderingPointsOrder.totalQty)}</td>
+                  <td className='text-center'>{`${FormatIntPercentage(state.currentRegion, state.currentRegion === 'us' ? reorderingPointsOrder.totalVolume / 61020 : reorderingPointsOrder.totalVolume / 1000000)} m³`}</td>
+                  <td className='text-center'>{FormatCurrency(state.currentRegion, reorderingPointsOrder.totalCost)}</td>
                 </tr>
               </tfoot>
             </table>
           </div>
-          <Row className='tw:my-1'>
+          <Row className='my-1'>
             <Col xs={12} md={6}>
-              <Label className='form-label tw:mb-0 tw:text-[11.2px]'>Order Comment</Label>
+              <Label className='form-label mb-0 text-[11.2px]'>Order Comment</Label>
               <DebounceInput
                 element='textarea'
                 minLength={5}
                 debounceTimeout={800}
-                className='form-control tw:text-[11.2px]'
+                className='form-control text-[11.2px]'
                 rows={1}
                 placeholder='Add comment...'
                 id='order-comment'
@@ -581,12 +581,12 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
             </Col>
           </Row>
         </ModalBody>
-        <ModalFooter className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-2'>
+        <ModalFooter className='flex flex-row justify-end items-center gap-2'>
           <Button type='button' color='light' onClick={() => setshowPOModal(false)}>
             Close
           </Button>
           <UncontrolledButtonDropdown>
-            <DropdownToggle className='tw:inline-flex tw:items-center tw:bg-primary tw:text-white tw:rounded tw:px-3 tw:py-2 tw:text-[13px]' caret>
+            <DropdownToggle className='inline-flex items-center bg-primary text-white rounded px-3 py-2 text-[13px]' caret>
               Actions
             </DropdownToggle>
             <DropdownMenu>

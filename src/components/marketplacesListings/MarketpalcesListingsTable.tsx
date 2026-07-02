@@ -38,7 +38,7 @@ const MarketplacesListingsTable = ({ tableData, pending, setSelectedRows, toggle
 
   const columns: any = [
     {
-      name: <span className='tw:font-semibold tw:text-[13px]'>Image</span>,
+      name: <span className='font-semibold text-[13px]'>Image</span>,
       selector: (row: MarketplaceListingsProduct) => {
         return (
           <Link href={`/product/${row.inventoryId}/${row.sku}`}>
@@ -67,7 +67,7 @@ const MarketplacesListingsTable = ({ tableData, pending, setSelectedRows, toggle
     },
     {
       name: (
-        <span className='tw:font-semibold tw:text-[13px]'>
+        <span className='font-semibold text-[13px]'>
           Title
           <br />
           SKU
@@ -75,14 +75,14 @@ const MarketplacesListingsTable = ({ tableData, pending, setSelectedRows, toggle
       ),
       selector: (row: MarketplaceListingsProduct) => {
         return (
-          <div className='tw:text-[11.2px] tw:flex tw:flex-col tw:justify-start tw:items-start tw:gap-0 tw:pe-2'>
-            <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:text-[11.2px]'>
+          <div className='text-[11.2px] flex flex-col justify-start items-start gap-0 pe-2'>
+            <div className='flex flex-row justify-start items-center text-[11.2px]'>
               <Link href={`/product/${row.inventoryId}/${row.sku}`}>
-                <p className='tw:m-0 tw:p-0 tw:!text-primary tw:font-semibold tw:text-[13px]'>{row.sku}</p>
+                <p className='m-0 p-0 !text-primary font-semibold text-[13px]'>{row.sku}</p>
               </Link>
               <CopyTextToClipboard text={row.sku} label='SKU' />{' '}
             </div>
-            <span className='tw:m-0 tw:p-0 tw:text-black tw:font-semibold tw:text-[11.2px] tw:text-wrap'>{row.title}</span>
+            <span className='m-0 p-0 text-black font-semibold text-[11.2px] text-wrap'>{row.title}</span>
           </div>
         )
       },
@@ -94,7 +94,7 @@ const MarketplacesListingsTable = ({ tableData, pending, setSelectedRows, toggle
     },
     {
       name: (
-        <span className='tw:font-semibold tw:text-[13px]'>
+        <span className='font-semibold text-[13px]'>
           ASIN
           <br />
           FNSKU
@@ -104,23 +104,23 @@ const MarketplacesListingsTable = ({ tableData, pending, setSelectedRows, toggle
       ),
       selector: (row: MarketplaceListingsProduct) => {
         return (
-          <div className='tw:text-[11.2px] tw:flex tw:flex-col tw:justify-start tw:gap-1'>
+          <div className='text-[11.2px] flex flex-col justify-start gap-1'>
             {row.asin !== '' && (
-              <div className='tw:flex tw:flex-row tw:justify-start tw:items-center'>
-                <a className='tw:m-0' href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank' rel='noopener noreferrer'>
+              <div className='flex flex-row justify-start items-center'>
+                <a className='m-0' href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank' rel='noopener noreferrer'>
                   {row.asin}
                 </a>
                 <CopyTextToClipboard text={row.asin} label='ASIN' />
               </div>
             )}
             {row.fnSku !== '' && (
-              <p className='tw:m-0'>
+              <p className='m-0'>
                 {row.fnSku} <CopyTextToClipboard text={row.fnSku} label='FNSKU' />
               </p>
             )}
             {row.barcode !== '' && (
-              <div className='tw:flex tw:flex-row tw:justify-start tw:items-center'>
-                <p className='tw:m-0'>{row.barcode}</p>
+              <div className='flex flex-row justify-start items-center'>
+                <p className='m-0'>{row.barcode}</p>
                 <CopyTextToClipboard text={row.barcode} label='Barcode' />
               </div>
             )}
@@ -132,7 +132,7 @@ const MarketplacesListingsTable = ({ tableData, pending, setSelectedRows, toggle
       // grow: 1,
     },
     {
-      name: <span className='tw:font-semibold tw:text-[13px]'>Brand</span>,
+      name: <span className='font-semibold text-[13px]'>Brand</span>,
       selector: (row: MarketplaceListingsProduct) => row.brand,
       sortable: true,
       left: true,
@@ -143,7 +143,7 @@ const MarketplacesListingsTable = ({ tableData, pending, setSelectedRows, toggle
       },
     },
     {
-      name: <span className='tw:font-semibold tw:text-[13px]'>Supplier</span>,
+      name: <span className='font-semibold text-[13px]'>Supplier</span>,
       selector: (row: MarketplaceListingsProduct) => row.supplier,
       sortable: true,
       left: true,
@@ -155,39 +155,39 @@ const MarketplacesListingsTable = ({ tableData, pending, setSelectedRows, toggle
       width: '100px',
     },
     {
-      name: <span className='tw:font-semibold tw:text-[13px] tw:text-center'>Mapped</span>,
+      name: <span className='font-semibold text-[13px] text-center'>Mapped</span>,
       id: MAPPED_COL_ID,
       selector: (row: MarketplaceListingsProduct) => {
         if (marketplaceId === '') {
-          return <span className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>Select Marketplace</span>
+          return <span className='text-[11.2px] text-[var(--bs-secondary-color)]'>Select Marketplace</span>
         }
 
         const listing = row.listings.find((listing) => listing.storeId_true?.toString() === marketplaceId)
 
         if (listing) {
           return (
-            <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-2'>
-              <i className='las la-link tw:text-[19.5px] tw:text-success tw:m-0 tw:p-0' />
+            <div className='flex flex-row justify-end items-center gap-2'>
+              <i className='las la-link text-[19.5px] text-success m-0 p-0' />
               <Link href={row.isKit ? `/kit/${row.inventoryId}/${row.sku}` : `/product/${row.inventoryId}/${row.sku}`} target='blank' rel='noopener noreferrer'>
-                <span className='tw:text-[11.2px]'>{listing.storeSku}</span>
+                <span className='text-[11.2px]'>{listing.storeSku}</span>
               </Link>
               {listing.isHidden ? (
-                <p className='tw:text-[11.2px] tw:m-0 tw:p-0'>
-                  <i className='mdi mdi-eye-off label-icon tw:align-middle tw:text-[13px] tw:me-0 tw:text-destructive' /> <span className='tw:text-[var(--bs-secondary-color)]'>Hidden</span>
+                <p className='text-[11.2px] m-0 p-0'>
+                  <i className='mdi mdi-eye-off label-icon align-middle text-[13px] me-0 text-destructive' /> <span className='text-[var(--bs-secondary-color)]'>Hidden</span>
                 </p>
               ) : null}
               {listing.isManual ? (
-                <p className='tw:text-[11.2px] tw:m-0 tw:p-0'>
-                  <i className='mdi mdi-hand-back-left label-icon tw:align-middle tw:text-[13px] tw:me-0 tw:text-primary' /> <span className='tw:text-[var(--bs-secondary-color)]'>Manual</span>
+                <p className='text-[11.2px] m-0 p-0'>
+                  <i className='mdi mdi-hand-back-left label-icon align-middle text-[13px] me-0 text-primary' /> <span className='text-[var(--bs-secondary-color)]'>Manual</span>
                 </p>
               ) : null}
             </div>
           )
         } else {
           return (
-            <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-2'>
-              <i className='las la-link tw:text-[19.5px] tw:text-destructive tw:m-0 tw:p-0' />
-              <span className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>Not Mapped</span>
+            <div className='flex flex-row justify-end items-center gap-2'>
+              <i className='las la-link text-[19.5px] text-destructive m-0 p-0' />
+              <span className='text-[11.2px] text-[var(--bs-secondary-color)]'>Not Mapped</span>
             </div>
           )
         }

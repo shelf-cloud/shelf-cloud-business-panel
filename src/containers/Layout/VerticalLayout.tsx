@@ -30,7 +30,7 @@ const VerticalLayout = () => {
                 <Link
                   href={item.link ? item.link : '/#'}
                   className={
-                    'nav-link menu-link tw:rounded-t ' +
+                    'nav-link menu-link rounded-t ' +
                     (item?.subItems?.some(
                       (subItem: any) => pathname == subItem?.link.split('?')[0] || subItem?.childItems?.some((subitemChild: any) => pathname == subitemChild.link.split('?')[0])
                     ) && 'linkActive')
@@ -53,18 +53,18 @@ const VerticalLayout = () => {
                     </span>
                   ) : null}
                 </Link>
-                <div className={'collapse menu-dropdown' + (item.stateVariables ? ' show' : '')} id='sidebarApps'>
-                  <ul className='nav nav-sm tw:flex-col test' style={{ borderLeft: '2px solid rgba(255, 255, 255, 0.1)' }}>
+                <div className={'menu-dropdown' + (item.stateVariables ? ' show' : '')} id='sidebarApps'>
+                  <ul className='nav nav-sm flex-col test' style={{ borderLeft: '2px solid rgba(255, 255, 255, 0.1)' }}>
                     {/* subItms  */}
                     {item?.subItems &&
                       (item?.subItems || []).map((subItem: any, key: any) => (
                         <React.Fragment key={key}>
                           {!subItem.isChildItem ? (
-                            <li className='nav-item tw:w-full'>
+                            <li className='nav-item w-full'>
                               <Link
                                 href={subItem.link ? subItem.link : '/#'}
                                 className={
-                                  'nav-link menu-link tw:w-full ' +
+                                  'nav-link menu-link w-full ' +
                                   ((pathname == `${subItem.link.split('?')[0]}` || subItem?.childItems?.some((subitemChild: any) => pathname == subitemChild.link.split('?')[0])) &&
                                     'subLinkActive')
                                 }>
@@ -89,7 +89,7 @@ const VerticalLayout = () => {
                                   }
                                 }}
                                 className={
-                                  'nav-link tw:w-full ' +
+                                  'nav-link w-full ' +
                                   ((pathname == `${subItem.link.split('?')[0]}` || subItem?.childItems?.some((subitemChild: any) => pathname == subitemChild.link.split('?')[0])) &&
                                     'linkActive')
                                 }
@@ -97,33 +97,33 @@ const VerticalLayout = () => {
                                 aria-expanded={actualSubItemCollapsed == subItem.label ? true : false}>
                                 {subItem.label}
                               </Link>
-                              <div className={'collapse menu-dropdown' + (subItem.stateVariables ? ' show' : '')}>
-                                <ul className='nav nav-sm tw:flex-col' style={{ borderLeft: '2px solid rgba(255, 255, 255, 0.1)', paddingLeft: '0px' }} id='childrenChildslist'>
+                              <div className={'menu-dropdown' + (subItem.stateVariables ? ' show' : '')}>
+                                <ul className='nav nav-sm flex-col' style={{ borderLeft: '2px solid rgba(255, 255, 255, 0.1)', paddingLeft: '0px' }} id='childrenChildslist'>
                                   {/* child subItms  */}
                                   {subItem.childItems &&
                                     (subItem.childItems || []).map((childItem: any, key: any) => (
                                       <React.Fragment key={key}>
                                         {!childItem.childItems ? (
-                                          <li className='nav-item tw:rounded-[0.25rem]'>
+                                          <li className='nav-item rounded-[0.25rem]'>
                                             <Link
                                               href={childItem.link ? childItem.link : '/#'}
-                                              className={'nav-link menu-link tw:w-full ' + (pathname == `${childItem.link.split('?')[0]}` && 'subLinkActiveChildren')}>
+                                              className={'nav-link menu-link w-full ' + (pathname == `${childItem.link.split('?')[0]}` && 'subLinkActiveChildren')}>
                                               {childItem.label}
                                             </Link>
                                           </li>
                                         ) : (
-                                          <li className='nav-item tw:rounded-[0.25rem]'>
-                                            <Link href={'/#'} className='nav-link tw:w-full' onClick={childItem.click} data-collapse-toggle=''>
+                                          <li className='nav-item rounded-[0.25rem]'>
+                                            <Link href={'/#'} className='nav-link w-full' onClick={childItem.click} data-collapse-toggle=''>
                                               {childItem.label}{' '}
                                               <span className='badge badge-pill bg-danger' data-key='t-new'>
                                                 New
                                               </span>
                                             </Link>
-                                            <div className={'collapse menu-dropdown' + (childItem.stateVariables ? ' show' : '')}>
-                                              <ul className='nav nav-sm tw:flex-col'>
+                                            <div className={'menu-dropdown' + (childItem.stateVariables ? ' show' : '')}>
+                                              <ul className='nav nav-sm flex-col'>
                                                 {childItem.childItems.map((subChildItem: any, key: any) => (
-                                                  <li className='nav-item tw:rounded-[0.25rem]' key={key}>
-                                                    <Link href={subChildItem.link} className='nav-link tw:w-full' data-key='t-basic-action'>
+                                                  <li className='nav-item rounded-[0.25rem]' key={key}>
+                                                    <Link href={subChildItem.link} className='nav-link w-full' data-key='t-basic-action'>
                                                       {subChildItem.label}{' '}
                                                     </Link>
                                                   </li>
@@ -145,7 +145,7 @@ const VerticalLayout = () => {
               </li>
             ) : (
               <li className='nav-item'>
-                <Link href={item.link ? item.link : '/#'} className={'nav-link menu-link tw:rounded-[0.25rem] ' + (pathname == '/' && 'linkActive')}>
+                <Link href={item.link ? item.link : '/#'} className={'nav-link menu-link rounded-[0.25rem] ' + (pathname == '/' && 'linkActive')}>
                   <i className={item.icon}></i>
                   <span data-key='t-apps'>{item.label}</span>
                   {item.badgeName ? (

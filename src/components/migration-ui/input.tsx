@@ -36,7 +36,7 @@ export type InputProps = Omit<React.ComponentProps<'input'>, 'size'> &
   }
 
 const sizeClass = (bsSize?: Size) =>
-  bsSize === 'sm' ? 'tw:h-8 tw:text-xs' : bsSize === 'lg' ? 'tw:h-10' : undefined
+  bsSize === 'sm' ? 'h-8 text-xs' : bsSize === 'lg' ? 'h-10' : undefined
 
 function Input({ type = 'text', className, invalid, valid: _valid, bsSize, innerRef, ...props }: InputProps) {
   const ariaInvalid = invalid || undefined
@@ -57,7 +57,7 @@ function Input({ type = 'text', className, invalid, valid: _valid, bsSize, inner
         ref={innerRef as React.Ref<HTMLSelectElement>}
         aria-invalid={ariaInvalid}
         className={cn(
-          'tw:h-9 tw:w-full tw:min-w-0 tw:rounded-md tw:px-3 tw:py-1 tw:text-base tw:md:text-sm',
+          'h-9 w-full min-w-0 rounded-md px-3 py-1 text-base md:text-sm',
           shadcnControlSurface,
           shadcnControlStates,
           sizeClass(bsSize),
@@ -75,8 +75,8 @@ function Input({ type = 'text', className, invalid, valid: _valid, bsSize, inner
         type={type}
         aria-invalid={ariaInvalid}
         className={cn(
-          'tw:size-4 tw:shrink-0 tw:border tw:border-input-border tw:accent-primary',
-          type === 'checkbox' ? 'tw:rounded-sm' : 'tw:rounded-full',
+          'size-4 shrink-0 border border-input-border accent-primary',
+          type === 'checkbox' ? 'rounded-sm' : 'rounded-full',
           className
         )}
         {...props}

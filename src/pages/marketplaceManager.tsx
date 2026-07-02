@@ -54,10 +54,10 @@ const MarketplaceManager = ({ session, env }: Props) => {
               <Col lg={12}>
                 <Card>
                   <CardHeader>
-                    <Nav className='nav-tabs-custom tw:rounded-[0.25rem] card-header-tabs tw:border-b-0' role='tablist'>
+                    <Nav className='nav-tabs-custom rounded-[0.25rem] card-header-tabs border-b-0' role='tablist'>
                       <NavItem style={{ cursor: 'pointer' }}>
                         <NavLink
-                          className={activeTab == '1' ? 'tw:text-primary tw:text-[16.25px]' : 'tw:text-[var(--bs-secondary-color)] tw:text-[16.25px]'}
+                          className={activeTab == '1' ? 'text-primary text-[16.25px]' : 'text-[var(--bs-secondary-color)] text-[16.25px]'}
                           onClick={() => {
                             tabChange('1')
                           }}>
@@ -70,7 +70,7 @@ const MarketplaceManager = ({ session, env }: Props) => {
                       <NavItem style={{ cursor: 'pointer' }}>
                         <NavLink
                           to='#'
-                          className={activeTab == '2' ? 'tw:text-primary tw:text-[16.25px]' : 'tw:text-[var(--bs-secondary-color)] tw:text-[16.25px]'}
+                          className={activeTab == '2' ? 'text-primary text-[16.25px]' : 'text-[var(--bs-secondary-color)] text-[16.25px]'}
                           onClick={() => {
                             tabChange('2')
                           }}
@@ -83,7 +83,7 @@ const MarketplaceManager = ({ session, env }: Props) => {
                       </NavItem>
                     </Nav>
                   </CardHeader>
-                  <CardBody className='tw:p-6'>
+                  <CardBody className='p-6'>
                     <TabContent activeTab={activeTab}>
                       <TabPane tabId='1'>
                         <MarketplacesFees />

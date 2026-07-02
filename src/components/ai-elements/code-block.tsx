@@ -60,7 +60,7 @@ const addKeysToTokens = (lines: ThemedToken[][]): KeyedLine[] =>
 // Token rendering component
 const TokenSpan = ({ token }: { token: ThemedToken }) => (
   <span
-    className="tw:dark:!bg-[var(--shiki-dark-bg)] tw:dark:!text-[var(--shiki-dark)]"
+    className="dark:!bg-[var(--shiki-dark-bg)] dark:!text-[var(--shiki-dark)]"
     style={
       {
         backgroundColor: token.bgColor,
@@ -271,15 +271,15 @@ const CodeBlockBody = memo(
     return (
       <pre
         className={cn(
-          "tw:dark:!bg-[var(--shiki-dark-bg)] tw:dark:!text-[var(--shiki-dark)] tw:m-0 tw:p-4 tw:text-sm",
+          "dark:!bg-[var(--shiki-dark-bg)] dark:!text-[var(--shiki-dark)] m-0 p-4 text-sm",
           className
         )}
         style={preStyle}
       >
         <code
           className={cn(
-            "tw:font-mono tw:text-sm",
-            showLineNumbers && "tw:[counter-increment:line_0] tw:[counter-reset:line]"
+            "font-mono text-sm",
+            showLineNumbers && "[counter-increment:line_0] [counter-reset:line]"
           )}
         >
           {keyedLines.map((keyedLine) => (
@@ -309,7 +309,7 @@ export const CodeBlockContainer = ({
 }: HTMLAttributes<HTMLDivElement> & { language: string }) => (
   <div
     className={cn(
-      "tw:group tw:relative tw:w-full tw:overflow-hidden tw:rounded-md tw:border tw:bg-background tw:text-foreground",
+      "group relative w-full overflow-hidden rounded-md border bg-background text-foreground",
       className
     )}
     data-language={language}
@@ -329,7 +329,7 @@ export const CodeBlockHeader = ({
 }: HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "tw:flex tw:items-center tw:justify-between tw:border-b tw:bg-muted/80 tw:px-3 tw:py-2 tw:text-muted-foreground tw:text-xs",
+      "flex items-center justify-between border-b bg-muted/80 px-3 py-2 text-muted-foreground text-xs",
       className
     )}
     {...props}
@@ -343,7 +343,7 @@ export const CodeBlockTitle = ({
   className,
   ...props
 }: HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("tw:flex tw:items-center tw:gap-2", className)} {...props}>
+  <div className={cn("flex items-center gap-2", className)} {...props}>
     {children}
   </div>
 );
@@ -353,7 +353,7 @@ export const CodeBlockFilename = ({
   className,
   ...props
 }: HTMLAttributes<HTMLSpanElement>) => (
-  <span className={cn("tw:font-mono", className)} {...props}>
+  <span className={cn("font-mono", className)} {...props}>
     {children}
   </span>
 );
@@ -364,7 +364,7 @@ export const CodeBlockActions = ({
   ...props
 }: HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn("tw:-my-1 tw:-mr-1 tw:flex tw:items-center tw:gap-2", className)}
+    className={cn("-my-1 -mr-1 flex items-center gap-2", className)}
     {...props}
   >
     {children}
@@ -419,7 +419,7 @@ export const CodeBlockContent = ({
   const tokenized = asyncTokens ?? syncTokens;
 
   return (
-    <div className="tw:relative tw:overflow-auto">
+    <div className="relative overflow-auto">
       <CodeBlockBody showLineNumbers={showLineNumbers} tokenized={tokenized} />
     </div>
   );
@@ -499,7 +499,7 @@ export const CodeBlockCopyButton = ({
 
   return (
     <Button
-      className={cn("tw:shrink-0", className)}
+      className={cn("shrink-0", className)}
       onClick={copyToClipboard}
       size="icon"
       variant="ghost"
@@ -526,7 +526,7 @@ export const CodeBlockLanguageSelectorTrigger = ({
 }: CodeBlockLanguageSelectorTriggerProps) => (
   <SelectTrigger
     className={cn(
-      "tw:h-7 tw:border-none tw:bg-transparent tw:px-2 tw:text-xs tw:shadow-none",
+      "h-7 border-none bg-transparent px-2 text-xs shadow-none",
       className
     )}
     size="sm"

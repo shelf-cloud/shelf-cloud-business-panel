@@ -34,18 +34,18 @@ const FilterProducts = ({ brands, suppliers, categories, brand, supplier, catego
   }
 
   return (
-    <div className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:md:flex-row tw:md:justify-between tw:md:items-center tw:w-auto'>
+    <div className='flex flex-col justify-center items-end gap-2 md:flex-row md:justify-between md:items-center w-auto'>
       <ButtonGroup>
         <Dropdown isOpen={openDatesMenu} toggle={() => setOpenDatesMenu(!openDatesMenu)}>
           <DropdownToggle
-            className='tw:inline-flex tw:h-9 tw:items-center tw:gap-2 tw:rounded-md tw:border tw:border-[#E1E3E5] tw:bg-white tw:px-3 tw:text-sm tw:font-semibold tw:text-foreground tw:whitespace-nowrap'
+            className='inline-flex h-9 items-center gap-2 rounded-md border border-[#E1E3E5] bg-white px-3 text-sm font-semibold text-foreground whitespace-nowrap'
             color='light'>
             Filters
           </DropdownToggle>
           <DropdownMenu style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
-            <div className='tw:px-4 tw:py-3'>
-              <div className='tw:flex tw:flex-col tw:justify-start tw:gap-2'>
-                <span className='tw:font-semibold tw:text-[11.2px]'>Brand:</span>
+            <div className='px-4 py-3'>
+              <div className='flex flex-col justify-start gap-2'>
+                <span className='font-semibold text-[11.2px]'>Brand:</span>
                 <SimpleSelect
                   selected={{ label: brand, value: brand }}
                   options={[{ label: 'All', value: 'All' }, ...brands?.map((brand) => ({ label: brand, value: brand }))]}
@@ -57,7 +57,7 @@ const FilterProducts = ({ brands, suppliers, categories, brand, supplier, catego
                   placeholder={'Select Brand'}
                 />
 
-                <span className='tw:font-semibold tw:text-[11.2px]'>Suppliers:</span>
+                <span className='font-semibold text-[11.2px]'>Suppliers:</span>
                 <SimpleSelect
                   selected={{ label: supplier, value: supplier }}
                   options={[{ label: 'All', value: 'All' }, ...suppliers?.map((supplier) => ({ label: supplier, value: supplier }))]}
@@ -68,7 +68,7 @@ const FilterProducts = ({ brands, suppliers, categories, brand, supplier, catego
                   customStyle='sm'
                   placeholder={'Select Supplier'}
                 />
-                <span className='tw:font-semibold tw:text-[11.2px]'>Categories:</span>
+                <span className='font-semibold text-[11.2px]'>Categories:</span>
                 <SimpleSelect
                   selected={{ label: category, value: category }}
                   options={[{ label: 'All', value: 'All' }, ...categories?.map((category) => ({ label: category, value: category }))]}
@@ -79,7 +79,7 @@ const FilterProducts = ({ brands, suppliers, categories, brand, supplier, catego
                   customStyle='sm'
                   placeholder={'Select Category'}
                 />
-                <span className='tw:font-semibold tw:text-[11.2px]'>Condition:</span>
+                <span className='font-semibold text-[11.2px]'>Condition:</span>
                 <SimpleSelect
                   selected={{ label: condition, value: condition }}
                   options={[
@@ -94,7 +94,7 @@ const FilterProducts = ({ brands, suppliers, categories, brand, supplier, catego
                   customStyle='sm'
                   placeholder={'Select Condition'}
                 />
-                <span className='tw:font-semibold tw:text-[11.2px]'>Status:</span>
+                <span className='font-semibold text-[11.2px]'>Status:</span>
                 <SimpleSelect
                   selected={{ label: status, value: status }}
                   options={[
@@ -116,7 +116,7 @@ const FilterProducts = ({ brands, suppliers, categories, brand, supplier, catego
                     setProductFilters({ brand: null, supplier: null, category: null, condition: null, status: null })
                     setOpenDatesMenu(false)
                   }}
-                  className='tw:p-0 tw:border-0 tw:bg-transparent tw:no-underline tw:text-[color:var(--bs-secondary-color)] tw:mt-2 tw:text-sm'>
+                  className='p-0 border-0 bg-transparent no-underline text-[color:var(--bs-secondary-color)] mt-2 text-sm'>
                   Clear All
                 </button>
               </div>

@@ -116,7 +116,7 @@ export const ContextTrigger = ({ children, ...props }: ContextTriggerProps) => {
     <HoverCardTrigger asChild>
       {children ?? (
         <Button type="button" variant="ghost" {...props}>
-          <span className="tw:font-medium tw:text-muted-foreground">
+          <span className="font-medium text-muted-foreground">
             {renderedPercent}
           </span>
           <ContextIcon />
@@ -133,7 +133,7 @@ export const ContextContent = ({
   ...props
 }: ContextContentProps) => (
   <HoverCardContent
-    className={cn("tw:min-w-60 tw:divide-y tw:overflow-hidden tw:p-0", className)}
+    className={cn("min-w-60 divide-y overflow-hidden p-0", className)}
     {...props}
   />
 );
@@ -159,17 +159,17 @@ export const ContextContentHeader = ({
   }).format(maxTokens);
 
   return (
-    <div className={cn("tw:w-full tw:space-y-2 tw:p-3", className)} {...props}>
+    <div className={cn("w-full space-y-2 p-3", className)} {...props}>
       {children ?? (
         <>
-          <div className="tw:flex tw:items-center tw:justify-between tw:gap-3 tw:text-xs">
+          <div className="flex items-center justify-between gap-3 text-xs">
             <p>{displayPct}</p>
-            <p className="tw:font-mono tw:text-muted-foreground">
+            <p className="font-mono text-muted-foreground">
               {used} / {total}
             </p>
           </div>
-          <div className="tw:space-y-2">
-            <Progress className="tw:bg-muted" value={usedPercent * PERCENT_MAX} />
+          <div className="space-y-2">
+            <Progress className="bg-muted" value={usedPercent * PERCENT_MAX} />
           </div>
         </>
       )}
@@ -184,7 +184,7 @@ export const ContextContentBody = ({
   className,
   ...props
 }: ContextContentBodyProps) => (
-  <div className={cn("tw:w-full tw:p-3", className)} {...props}>
+  <div className={cn("w-full p-3", className)} {...props}>
     {children}
   </div>
 );
@@ -214,14 +214,14 @@ export const ContextContentFooter = ({
   return (
     <div
       className={cn(
-        "tw:flex tw:w-full tw:items-center tw:justify-between tw:gap-3 tw:bg-secondary tw:p-3 tw:text-xs",
+        "flex w-full items-center justify-between gap-3 bg-secondary p-3 text-xs",
         className
       )}
       {...props}
     >
       {children ?? (
         <>
-          <span className="tw:text-muted-foreground">Total cost</span>
+          <span className="text-muted-foreground">Total cost</span>
           <span>{totalCost}</span>
         </>
       )}
@@ -243,7 +243,7 @@ const TokensWithCost = ({
           notation: "compact",
         }).format(tokens)}
     {costText ? (
-      <span className="tw:ml-2 tw:text-muted-foreground">• {costText}</span>
+      <span className="ml-2 text-muted-foreground">• {costText}</span>
     ) : null}
   </span>
 );
@@ -279,10 +279,10 @@ export const ContextInputUsage = ({
 
   return (
     <div
-      className={cn("tw:flex tw:items-center tw:justify-between tw:text-xs", className)}
+      className={cn("flex items-center justify-between text-xs", className)}
       {...props}
     >
-      <span className="tw:text-muted-foreground">Input</span>
+      <span className="text-muted-foreground">Input</span>
       <TokensWithCost costText={inputCostText} tokens={inputTokens} />
     </div>
   );
@@ -319,10 +319,10 @@ export const ContextOutputUsage = ({
 
   return (
     <div
-      className={cn("tw:flex tw:items-center tw:justify-between tw:text-xs", className)}
+      className={cn("flex items-center justify-between text-xs", className)}
       {...props}
     >
-      <span className="tw:text-muted-foreground">Output</span>
+      <span className="text-muted-foreground">Output</span>
       <TokensWithCost costText={outputCostText} tokens={outputTokens} />
     </div>
   );
@@ -359,10 +359,10 @@ export const ContextReasoningUsage = ({
 
   return (
     <div
-      className={cn("tw:flex tw:items-center tw:justify-between tw:text-xs", className)}
+      className={cn("flex items-center justify-between text-xs", className)}
       {...props}
     >
-      <span className="tw:text-muted-foreground">Reasoning</span>
+      <span className="text-muted-foreground">Reasoning</span>
       <TokensWithCost costText={reasoningCostText} tokens={reasoningTokens} />
     </div>
   );
@@ -399,10 +399,10 @@ export const ContextCacheUsage = ({
 
   return (
     <div
-      className={cn("tw:flex tw:items-center tw:justify-between tw:text-xs", className)}
+      className={cn("flex items-center justify-between text-xs", className)}
       {...props}
     >
-      <span className="tw:text-muted-foreground">Cache</span>
+      <span className="text-muted-foreground">Cache</span>
       <TokensWithCost costText={cacheCostText} tokens={cacheTokens} />
     </div>
   );

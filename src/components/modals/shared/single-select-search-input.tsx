@@ -41,13 +41,13 @@ type SingleSelectProps = {
 
 const selectSizes = {
   xs: {
-    selectText: 'tw:text-xs',
+    selectText: 'text-xs',
   },
   sm: {
-    selectText: 'tw:text-sm',
+    selectText: 'text-sm',
   },
   base: {
-    selectText: 'tw:text-base',
+    selectText: 'text-base',
   },
 }
 
@@ -120,32 +120,32 @@ export function SingleSelectSearchInput({
             aria-expanded={open}
             tabIndex={0}
             className={cn(
-              'tw:flex tw:w-full tw:min-w-[200px] tw:cursor-pointer tw:items-center tw:justify-between tw:rounded-md tw:border tw:border-border tw:bg-transparent tw:px-3 tw:py-2',
+              'flex w-full min-w-[200px] cursor-pointer items-center justify-between rounded-md border border-border bg-transparent px-3 py-2',
               triggerClassName
             )}>
-            <span className={cn(selectSizes[triggerSize].selectText, selected ? 'tw:font-normal' : 'tw:text-muted-foreground')}>{selected ? selectedLabel : placeholder}</span>
-            <div className='tw:flex tw:items-center tw:gap-2'>
-              {selected && <XCircle className='tw:size-4 tw:opacity-50' onClick={handleClearAll} aria-label='Clear selection' />}
-              <ChevronsUpDown className='tw:size-4 tw:opacity-50' />
+            <span className={cn(selectSizes[triggerSize].selectText, selected ? 'font-normal' : 'text-muted-foreground')}>{selected ? selectedLabel : placeholder}</span>
+            <div className='flex items-center gap-2'>
+              {selected && <XCircle className='size-4 opacity-50' onClick={handleClearAll} aria-label='Clear selection' />}
+              <ChevronsUpDown className='size-4 opacity-50' />
             </div>
           </div>
         </PopoverTrigger>
-        <PopoverContent align='start' className='tw:z-[1060] tw:w-[var(--radix-popover-trigger-width)] tw:p-0'>
+        <PopoverContent align='start' className='z-[1060] w-[var(--radix-popover-trigger-width)] p-0'>
           <Command filter={filterFunction}>
-            <CommandInput ref={inputRef} autoFocus placeholder='Search...' value={inputValue} onValueChange={setInputValue} className='tw:text-base' />
+            <CommandInput ref={inputRef} autoFocus placeholder='Search...' value={inputValue} onValueChange={setInputValue} className='text-base' />
             <CommandList>
               <CommandEmpty>{emptyMessage}</CommandEmpty>
               <CommandGroup>
                 {items.map((item) => (
                   <CommandItem key={item.value} value={item.label} onSelect={() => handleSelect(item.value)}>
-                    <div className='tw:flex tw:w-full tw:flex-row tw:items-center tw:justify-between tw:gap-1'>
-                      <div className='tw:flex tw:flex-1 tw:flex-col tw:items-start tw:justify-start tw:gap-0'>
-                        <p className='tw:m-0'>{item.label}</p>
+                    <div className='flex w-full flex-row items-center justify-between gap-1'>
+                      <div className='flex flex-1 flex-col items-start justify-start gap-0'>
+                        <p className='m-0'>{item.label}</p>
                         {item.description && (
-                          <p className='tw:m-0 tw:line-clamp-1 tw:w-11/12 tw:break-words tw:text-xs tw:text-muted-foreground tw:whitespace-normal'>{item.description}</p>
+                          <p className='m-0 line-clamp-1 w-11/12 break-words text-xs text-muted-foreground whitespace-normal'>{item.description}</p>
                         )}
                       </div>
-                      <Check className={cn('tw:ml-auto', selected === item.value ? 'tw:opacity-100' : 'tw:opacity-0')} />
+                      <Check className={cn('ml-auto', selected === item.value ? 'opacity-100' : 'opacity-0')} />
                     </div>
                   </CommandItem>
                 ))}
@@ -164,7 +164,7 @@ export function SingleSelectSearchInput({
                             action.onSelect()
                             setOpen(false)
                           }}>
-                          {ActionIcon && <ActionIcon className='tw:mr-2 tw:h-4 tw:w-4' />}
+                          {ActionIcon && <ActionIcon className='mr-2 h-4 w-4' />}
                           {action.label}
                         </CommandItem>
                       )

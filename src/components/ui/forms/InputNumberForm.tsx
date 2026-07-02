@@ -21,7 +21,7 @@ const InputNumberForm = ({ inputName, value, isInvalid, placeholder, handleChang
   return (
     <Input
       type='number'
-      className='tw:text-[13px] tw:m-0'
+      className='text-[13px] m-0'
       bsSize='sm'
       style={{ padding: '0.2rem 0.9rem' }}
       placeholder={placeholder}

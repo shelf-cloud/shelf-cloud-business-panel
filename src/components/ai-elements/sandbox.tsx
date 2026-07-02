@@ -23,7 +23,7 @@ export type SandboxRootProps = ComponentProps<typeof Collapsible>;
 export const Sandbox = ({ className, ...props }: SandboxRootProps) => (
   <Collapsible
     className={cn(
-      "tw:not-prose tw:group tw:mb-4 tw:w-full tw:overflow-hidden tw:rounded-md tw:border",
+      "not-prose group mb-4 w-full overflow-hidden rounded-md border",
       className
     )}
     defaultOpen
@@ -45,17 +45,17 @@ export const SandboxHeader = ({
 }: SandboxHeaderProps) => (
   <CollapsibleTrigger
     className={cn(
-      "tw:flex tw:w-full tw:items-center tw:justify-between tw:gap-4 tw:p-3",
+      "flex w-full items-center justify-between gap-4 p-3",
       className
     )}
     {...props}
   >
-    <div className="tw:flex tw:items-center tw:gap-2">
-      <Code className="tw:size-4 tw:text-muted-foreground" />
-      <span className="tw:font-medium tw:text-sm">{title}</span>
+    <div className="flex items-center gap-2">
+      <Code className="size-4 text-muted-foreground" />
+      <span className="font-medium text-sm">{title}</span>
       {getStatusBadge(state)}
     </div>
-    <ChevronDownIcon className="tw:size-4 tw:text-muted-foreground tw:transition-transform tw:group-data-[state=open]:rotate-180" />
+    <ChevronDownIcon className="size-4 text-muted-foreground transition-transform group-data-[state=open]:rotate-180" />
   </CollapsibleTrigger>
 );
 
@@ -67,7 +67,7 @@ export const SandboxContent = ({
 }: SandboxContentProps) => (
   <CollapsibleContent
     className={cn(
-      "tw:data-[state=closed]:fade-out-0 tw:data-[state=closed]:slide-out-to-top-2 tw:data-[state=open]:slide-in-from-top-2 tw:outline-none tw:data-[state=closed]:animate-out tw:data-[state=open]:animate-in",
+      "data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2 outline-none data-[state=closed]:animate-out data-[state=open]:animate-in",
       className
     )}
     {...props}
@@ -77,7 +77,7 @@ export const SandboxContent = ({
 export type SandboxTabsProps = ComponentProps<typeof Tabs>;
 
 export const SandboxTabs = ({ className, ...props }: SandboxTabsProps) => (
-  <Tabs className={cn("tw:w-full tw:gap-0", className)} {...props} />
+  <Tabs className={cn("w-full gap-0", className)} {...props} />
 );
 
 export type SandboxTabsBarProps = ComponentProps<"div">;
@@ -88,7 +88,7 @@ export const SandboxTabsBar = ({
 }: SandboxTabsBarProps) => (
   <div
     className={cn(
-      "tw:flex tw:w-full tw:items-center tw:border-border tw:border-t tw:border-b",
+      "flex w-full items-center border-border border-t border-b",
       className
     )}
     {...props}
@@ -102,7 +102,7 @@ export const SandboxTabsList = ({
   ...props
 }: SandboxTabsListProps) => (
   <TabsList
-    className={cn("tw:h-auto tw:rounded-none tw:border-0 tw:bg-transparent tw:p-0", className)}
+    className={cn("h-auto rounded-none border-0 bg-transparent p-0", className)}
     {...props}
   />
 );
@@ -115,7 +115,7 @@ export const SandboxTabsTrigger = ({
 }: SandboxTabsTriggerProps) => (
   <TabsTrigger
     className={cn(
-      "tw:rounded-none tw:border-0 tw:border-transparent tw:border-b-2 tw:px-4 tw:py-2 tw:font-medium tw:text-muted-foreground tw:text-sm tw:transition-colors tw:data-[state=active]:border-primary tw:data-[state=active]:bg-transparent tw:data-[state=active]:text-foreground tw:data-[state=active]:shadow-none",
+      "rounded-none border-0 border-transparent border-b-2 px-4 py-2 font-medium text-muted-foreground text-sm transition-colors data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none",
       className
     )}
     {...props}
@@ -128,5 +128,5 @@ export const SandboxTabContent = ({
   className,
   ...props
 }: SandboxTabContentProps) => (
-  <TabsContent className={cn("tw:mt-0 tw:text-sm", className)} {...props} />
+  <TabsContent className={cn("mt-0 text-sm", className)} {...props} />
 );

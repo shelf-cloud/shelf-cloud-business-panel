@@ -121,12 +121,12 @@ const FilterProfits = ({
                   <Label htmlFor='lastNameinput'>
                     Gross Revenue
                   </Label>
-                  <div className='tw:flex tw:flex-row tw:justify-between tw:items-center tw:gap-2'>
+                  <div className='flex flex-row justify-between items-center gap-2'>
                     <InputGroup size='sm'>
-                      <InputGroupText className='tw:text-[16.25px] tw:py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
+                      <InputGroupText className='text-[16.25px] py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
                       <Input
                         type='number'
-                        className='tw:text-[13px] tw:m-0'
+                        className='text-[13px] m-0'
                         bsSize='sm'
                         style={{ padding: '0.2rem 0.9rem' }}
                         placeholder='Min'
@@ -140,10 +140,10 @@ const FilterProfits = ({
                       />
                     </InputGroup>
                     <InputGroup size='sm'>
-                      <InputGroupText className='tw:text-[16.25px] tw:py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
+                      <InputGroupText className='text-[16.25px] py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
                       <Input
                         type='number'
-                        className='tw:text-[13px] tw:m-0'
+                        className='text-[13px] m-0'
                         bsSize='sm'
                         style={{ padding: '0.2rem 0.9rem' }}
                         placeholder='Max'
@@ -164,12 +164,12 @@ const FilterProfits = ({
                   <Label htmlFor='lastNameinput'>
                     Net Profit
                   </Label>
-                  <div className='tw:flex tw:flex-row tw:justify-between tw:items-center tw:gap-2'>
+                  <div className='flex flex-row justify-between items-center gap-2'>
                     <InputGroup size='sm'>
-                      <InputGroupText className='tw:text-[16.25px] tw:py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
+                      <InputGroupText className='text-[16.25px] py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
                       <Input
                         type='number'
-                        className='tw:text-[13px] tw:m-0'
+                        className='text-[13px] m-0'
                         bsSize='sm'
                         style={{ padding: '0.2rem 0.9rem' }}
                         placeholder='Min'
@@ -183,10 +183,10 @@ const FilterProfits = ({
                       />
                     </InputGroup>
                     <InputGroup size='sm'>
-                      <InputGroupText className='tw:text-[16.25px] tw:py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
+                      <InputGroupText className='text-[16.25px] py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
                       <Input
                         type='number'
-                        className='tw:text-[13px] tw:m-0'
+                        className='text-[13px] m-0'
                         bsSize='sm'
                         style={{ padding: '0.2rem 0.9rem' }}
                         placeholder='Max'
@@ -207,10 +207,10 @@ const FilterProfits = ({
                   <Label htmlFor='lastNameinput'>
                     Units Sold
                   </Label>
-                  <div className='tw:flex tw:flex-row tw:justify-between tw:items-center tw:gap-2'>
+                  <div className='flex flex-row justify-between items-center gap-2'>
                     <Input
                       type='number'
-                      className='tw:text-[13px] tw:m-0'
+                      className='text-[13px] m-0'
                       bsSize='sm'
                       style={{ padding: '0.2rem 0.9rem' }}
                       placeholder='Min'
@@ -224,7 +224,7 @@ const FilterProfits = ({
                     />
                     <Input
                       type='number'
-                      className='tw:text-[13px] tw:m-0'
+                      className='text-[13px] m-0'
                       bsSize='sm'
                       style={{ padding: '0.2rem 0.9rem' }}
                       placeholder='Max'
@@ -240,7 +240,7 @@ const FilterProfits = ({
                 </FormGroup>
               </Col>
             </Row>
-            <Row className='tw:mt-2'>
+            <Row className='mt-2'>
               <Col md={3}>
                 <FormGroup className='createOrder_inputs'>
                   <Label htmlFor='lastNameinput'>
@@ -266,9 +266,9 @@ const FilterProfits = ({
                 </FormGroup>
               </Col>
             </Row>
-            <Col md={12} className='tw:flex tw:flex-row tw:justify-between tw:items-center'>
+            <Col md={12} className='flex flex-row justify-between items-center'>
               <Col md={3}>
-                <div className='tw:flex tw:flex-row tw:justify-start tw:items-center'>
+                <div className='flex flex-row justify-start items-center'>
                   <Label>Show products with NO Sales</Label>
                   <Switch
                     id='showWithSales'
@@ -281,11 +281,11 @@ const FilterProfits = ({
                   />
                 </div>
               </Col>
-              <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-3'>
-                <Button type='button' color='light' className='tw:text-[13px]' onClick={() => handleClearFilters(setValues)}>
+              <div className='flex flex-row justify-end items-center gap-3'>
+                <Button type='button' color='light' className='text-[13px]' onClick={() => handleClearFilters(setValues)}>
                   Clear
                 </Button>
-                <Button type='submit' className='tw:text-[13px]'>
+                <Button type='submit' className='text-[13px]'>
                   Apply Filters
                 </Button>
               </div>

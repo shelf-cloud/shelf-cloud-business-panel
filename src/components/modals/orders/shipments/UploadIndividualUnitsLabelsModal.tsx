@@ -132,7 +132,7 @@ const UploadIndividualUnitsLabelsModal = ({ data, mutateShipment }: Props) => {
                   handleAcceptedFiles(acceptedFiles)
                 }}>
                 {({ getRootProps }) => (
-                  <div className='dropzone dz-clickable tw:cursor-pointer'>
+                  <div className='dropzone dz-clickable cursor-pointer'>
                     <div className='dz-message needsclick' {...getRootProps()}>
                       <div className='mb-3'>
                         <i className='display-4 text-muted ri-upload-cloud-2-fill' />
@@ -147,16 +147,16 @@ const UploadIndividualUnitsLabelsModal = ({ data, mutateShipment }: Props) => {
                 handleAcceptedFiles={handleAcceptedFiles}
                 description={`Upload Shipping Labels. Drop Only PDF files here or click to upload.`}
               />
-              <div className='list-unstyled tw:mb-0' id='file-previews'>
+              <div className='list-unstyled mb-0' id='file-previews'>
                 {selectedFiles.map((f: any, i) => {
                   return (
-                    <Card className='tw:mt-1 tw:mb-0 tw:shadow-none tw:border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
-                      <div className='tw:p-2'>
-                        <Row className='tw:items-center'>
-                          <Col className='tw:flex tw:justify-between tw:items-center'>
+                    <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
+                      <div className='p-2'>
+                        <Row className='items-center'>
+                          <Col className='flex justify-between items-center'>
                             <div>
-                              <p className='tw:text-[var(--bs-secondary-color)] tw:font-bold tw:m-0'>{f.name}</p>
-                              <p className='tw:mb-0'>
+                              <p className='text-[var(--bs-secondary-color)] font-bold m-0'>{f.name}</p>
+                              <p className='mb-0'>
                                 <strong>{f.formattedSize}</strong>
                               </p>
                             </div>
@@ -172,7 +172,7 @@ const UploadIndividualUnitsLabelsModal = ({ data, mutateShipment }: Props) => {
                   )
                 })}
               </div>
-              {errorFile && <p className='tw:text-danger tw:m-0'>You must Upload Labels to ship order.</p>}
+              {errorFile && <p className='text-danger m-0'>You must Upload Labels to ship order.</p>}
             </Col>
             <Col>
               {data.numberPallets > 0 && (
@@ -184,8 +184,8 @@ const UploadIndividualUnitsLabelsModal = ({ data, mutateShipment }: Props) => {
                 //   {({ getRootProps }) => (
                 //     <div className='dropzone dz-clickable cursor-pointer'>
                 //       <div className='dz-message needsclick' {...getRootProps()}>
-                //         <div className='tw:mb-4'>
-                //           <i className='display-4 tw:text-[color:var(--bs-secondary-color)] ri-upload-cloud-2-fill' />
+                //         <div className='mb-4'>
+                //           <i className='display-4 text-[color:var(--bs-secondary-color)] ri-upload-cloud-2-fill' />
                 //         </div>
                 //         <h4>Upload Pallet Labels. Drop Only PDF files here or click to upload.</h4>
                 //       </div>
@@ -198,16 +198,16 @@ const UploadIndividualUnitsLabelsModal = ({ data, mutateShipment }: Props) => {
                   description={`Upload Pallet Labels. Drop Only PDF files here or click to upload.`}
                 />
               )}
-              <div className='list-unstyled tw:mb-0' id='file-previews'>
+              <div className='list-unstyled mb-0' id='file-previews'>
                 {palletSelectedFiles.map((f: any, i) => {
                   return (
-                    <Card className='tw:mt-1 tw:mb-0 tw:shadow-none tw:border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
-                      <div className='tw:p-2'>
-                        <Row className='tw:items-center'>
-                          <Col className='tw:flex tw:justify-between tw:items-center'>
+                    <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
+                      <div className='p-2'>
+                        <Row className='items-center'>
+                          <Col className='flex justify-between items-center'>
                             <div>
-                              <p className='tw:text-[var(--bs-secondary-color)] tw:font-bold tw:m-0'>{f.name}</p>
-                              <p className='tw:mb-0'>
+                              <p className='text-[var(--bs-secondary-color)] font-bold m-0'>{f.name}</p>
+                              <p className='mb-0'>
                                 <strong>{f.formattedSize}</strong>
                               </p>
                             </div>
@@ -223,16 +223,16 @@ const UploadIndividualUnitsLabelsModal = ({ data, mutateShipment }: Props) => {
                   )
                 })}
               </div>
-              {errorPalletFile && <p className='tw:text-danger tw:m-0'>You must Upload the Pallet Labels to create order.</p>}
+              {errorPalletFile && <p className='text-danger m-0'>You must Upload the Pallet Labels to create order.</p>}
             </Col>
           </Row>
         </Col>
         <Col md={12}>
-          <div className='tw:text-right'>
+          <div className='text-right'>
             <Button
               type='submit'
               color='light'
-              className='btn tw:mr-4'
+              className='btn mr-4'
               onClick={() => {
                 setUploadIndividualUnitsLabelsModal(!state.showUploadIndividualUnitsLabelsModal)
               }}>

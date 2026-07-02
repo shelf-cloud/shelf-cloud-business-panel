@@ -77,10 +77,10 @@ function ContactUs() {
             <BreadCrumb title='Contact Us' pageTitle='Profile' />
             <Row>
               <Col lg={12}>
-                <Card className='tw:border-t-[5px] tw:border-primary'>
-                  <CardBody className='tw:pb-2 tw:md:pb-12'>
-                    <div className='tw:flex tw:flex-row tw:justify-between tw:w-full tw:items-start tw:pt-4 tw:pb-2'>
-                      <div className='tw:relative tw:flex' style={{ width: '30%', minWidth: '130px' }}>
+                <Card className='border-t-[5px] border-primary'>
+                  <CardBody className='pb-2 md:pb-12'>
+                    <div className='flex flex-row justify-between w-full items-start pt-4 pb-2'>
+                      <div className='relative flex' style={{ width: '30%', minWidth: '130px' }}>
                         <Image
                           src={PlaneImage}
                           alt='ShelfCloud Logo'
@@ -91,7 +91,7 @@ function ContactUs() {
                           }}
                         />
                       </div>
-                      <div className='tw:relative tw:flex' style={{ width: '8%', minWidth: '40px' }}>
+                      <div className='relative flex' style={{ width: '8%', minWidth: '40px' }}>
                         <Image
                           src={SquareImage}
                           alt='ShelfCloud Logo'
@@ -103,12 +103,12 @@ function ContactUs() {
                         />
                       </div>
                     </div>
-                    <Col md={9} className='tw:mx-auto tw:my-0'>
-                      <h2 className='tw:mb-6 tw:font-semibold'>Get in touch</h2>
+                    <Col md={9} className='mx-auto my-0'>
+                      <h2 className='mb-6 font-semibold'>Get in touch</h2>
                       <Form onSubmit={handleContactForm}>
                         <Row>
                           <Col lg={6}>
-                            <FormGroup className='tw:mb-6'>
+                            <FormGroup className='mb-6'>
                               <Label htmlFor='firstNameinput' className='form-label'>
                                 *Company Name
                               </Label>
@@ -124,7 +124,7 @@ function ContactUs() {
                               />
                               {validation.touched.companyName && validation.errors.companyName ? <FormFeedback type='invalid'>{validation.errors.companyName}</FormFeedback> : null}
                             </FormGroup>
-                            <FormGroup className='tw:mb-6'>
+                            <FormGroup className='mb-6'>
                               <Label htmlFor='firstNameinput' className='form-label'>
                                 *Email Address
                               </Label>
@@ -140,7 +140,7 @@ function ContactUs() {
                               />
                               {validation.touched.email && validation.errors.email ? <FormFeedback type='invalid'>{validation.errors.email}</FormFeedback> : null}
                             </FormGroup>
-                            <FormGroup className='tw:mb-6'>
+                            <FormGroup className='mb-6'>
                               <Label htmlFor='firstNameinput' className='form-label'>
                                 *Message Subject
                               </Label>
@@ -157,14 +157,14 @@ function ContactUs() {
                               {validation.touched.subject && validation.errors.subject ? <FormFeedback type='invalid'>{validation.errors.subject}</FormFeedback> : null}
                             </FormGroup>
                           </Col>
-                          <Col lg={6} className='tw:h-auto tw:flex tw:flex-col tw:justify-between tw:pb-6'>
-                            <FormGroup className='tw:mb-6 tw:flex tw:flex-col tw:h-full tw:md:mb-12'>
+                          <Col lg={6} className='h-auto flex flex-col justify-between pb-6'>
+                            <FormGroup className='mb-6 flex flex-col h-full md:mb-12'>
                               <Label htmlFor='firstNameinput' className='form-label'>
                                 *Message
                               </Label>
                               <Input
                                 type='textarea'
-                                className='tw:grow tw:text-[16.25px]'
+                                className='grow text-[16.25px]'
                                 placeholder='Enter your message here'
                                 id='message'
                                 name='message'
@@ -175,7 +175,7 @@ function ContactUs() {
                               />
                               {validation.touched.message && validation.errors.message ? <FormFeedback type='invalid'>{validation.errors.message}</FormFeedback> : null}
                             </FormGroup>
-                            <Button color='primary' type='submit' className='form-control tw:text-[16.25px] tw:w-full'>
+                            <Button color='primary' type='submit' className='form-control text-[16.25px] w-full'>
                               Submit
                             </Button>
                           </Col>

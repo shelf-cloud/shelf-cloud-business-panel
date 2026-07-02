@@ -33,58 +33,58 @@ const SellerFbaOrdersTable = ({ tableData, pending }: Props) => {
 
   const columns: any = [
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>Order Id</span>,
+      name: <span className='font-extrabold text-[13px]'>Order Id</span>,
       selector: (row: FBAOrder) => row.amazonOrderId,
       sortable: true,
       center: true,
       compact: true,
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px] tw:text-center'>Date</span>,
+      name: <span className='font-extrabold text-[13px] text-center'>Date</span>,
       selector: (row: FBAOrder) => moment(row.purchaseDate).format('YYYY-MM-DD'),
       center: true,
       sortable: true,
       compact: true,
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>Fulfillment</span>,
+      name: <span className='font-extrabold text-[13px]'>Fulfillment</span>,
       selector: (row: FBAOrder) => row.fulfillmentChannel,
       center: true,
       sortable: true,
       compact: true,
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>Channel</span>,
+      name: <span className='font-extrabold text-[13px]'>Channel</span>,
       selector: (row: FBAOrder) => row.salesChannel,
       center: true,
       sortable: true,
       compact: true,
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>Status</span>,
+      name: <span className='font-extrabold text-[13px]'>Status</span>,
       selector: (row: FBAOrder) => {
         switch (row.orderStatus) {
           case 'Shipped':
-            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-success)_10%,transparent)] tw:text-success tw:p-2 tw:my-2'>{` ${row.orderStatus} `}</span>
+            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-success)_10%,transparent)] text-success p-2 my-2'>{` ${row.orderStatus} `}</span>
             break
           case 'Processed':
-            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-secondary)_10%,transparent)] tw:text-secondary tw:p-2 tw:my-2'>{` ${row.orderStatus} `}</span>
+            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-secondary)_10%,transparent)] text-secondary p-2 my-2'>{` ${row.orderStatus} `}</span>
             break
           case 'Pending':
           case 'Unshipped':
           case 'PartiallyShipped':
           case 'InvoiceUnconfirmed':
-            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] tw:text-warning tw:p-2 tw:my-2'>{` ${row.orderStatus} `}</span>
+            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] text-warning p-2 my-2'>{` ${row.orderStatus} `}</span>
             break
           case 'PendingAvailability':
-            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-danger)_10%,transparent)] tw:text-danger tw:p-2 tw:my-2'>{` ${row.orderStatus} `}</span>
+            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-danger)_10%,transparent)] text-danger p-2 my-2'>{` ${row.orderStatus} `}</span>
             break
           case 'Unfulfillable':
           case 'Cancelled':
-            return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-dark)_10%,transparent)] tw:text-dark tw:p-2 tw:my-2'>{` ${row.orderStatus} `}</span>
+            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-dark)_10%,transparent)] text-dark p-2 my-2'>{` ${row.orderStatus} `}</span>
             break
           default:
-            return <span className='badge tw:uppercase tw:text-info tw:bg-[color:var(--vz-light)] tw:p-2 tw:my-2'>{` ${row.orderStatus} `}</span>
+            return <span className='badge uppercase text-info bg-[color:var(--vz-light)] p-2 my-2'>{` ${row.orderStatus} `}</span>
         }
       },
       center: true,
@@ -93,14 +93,14 @@ const SellerFbaOrdersTable = ({ tableData, pending }: Props) => {
       sortFunction: orderStatus,
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>Item Qty</span>,
+      name: <span className='font-extrabold text-[13px]'>Item Qty</span>,
       selector: (row: FBAOrder) => row?.orderItems.reduce((total, item: FBAOrderItem) => total + item.quantity, 0),
       center: true,
       sortable: true,
       compact: true,
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>Order Total</span>,
+      name: <span className='font-extrabold text-[13px]'>Order Total</span>,
       selector: (row: FBAOrder) => {
         return (
           <>
@@ -122,12 +122,12 @@ const SellerFbaOrdersTable = ({ tableData, pending }: Props) => {
                 0
               )
             )}
-            <span className='tw:text-[var(--bs-secondary-color)] tw:text-[11.2px]'>{` USD`}</span>
+            <span className='text-[var(--bs-secondary-color)] text-[11.2px]'>{` USD`}</span>
             {row?.orderItems.reduce(
               (total, item: FBAOrderItem) =>
                 total + (item.refund_item + item.refund_itemTax + item.refund_commission + item.refund_adminCommission + item.refund_facilitatorTax_item),
               0
-            ) !== 0 && <span className='tw:text-danger tw:font-normal'> - Refund</span>}
+            ) !== 0 && <span className='text-danger font-normal'> - Refund</span>}
           </>
         )
       },

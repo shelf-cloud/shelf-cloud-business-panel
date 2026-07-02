@@ -163,42 +163,42 @@ const Suppliers = ({}: Props) => {
 
   const columns: any = [
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Name</span>,
+      name: <span className='font-bold text-[13px]'>Name</span>,
       selector: (row: Supplier) => row.name,
       sortable: true,
       center: true,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Email</span>,
+      name: <span className='font-bold text-[13px]'>Email</span>,
       selector: (row: Supplier) => row.email,
       sortable: true,
       center: true,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Phone</span>,
+      name: <span className='font-bold text-[13px]'>Phone</span>,
       selector: (row: Supplier) => row.phone,
       sortable: true,
       center: true,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Address</span>,
+      name: <span className='font-bold text-[13px]'>Address</span>,
       selector: (row: Supplier) => row.address,
       sortable: true,
       center: true,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Country</span>,
+      name: <span className='font-bold text-[13px]'>Country</span>,
       selector: (row: Supplier) => row.country,
       sortable: true,
       center: true,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'></span>,
+      name: <span className='font-bold text-[13px]'></span>,
       selector: (row: Supplier) => {
         return (
-          <div className='tw:flex tw:flex-row tw:flex-nowrap tw:justify-center tw:items-center tw:gap-6'>
-            <i className='ri-pencil-fill tw:text-[22.75px] tw:text-secondary' style={{ cursor: 'pointer' }} onClick={() => handleShowEditFields(row)} />
-            <i className='tw:align-middle tw:text-destructive tw:text-[22.75px] las la-trash-alt' style={{ cursor: 'pointer' }} onClick={() => handleDeleteSupplier(row.suppliersId)} />
+          <div className='flex flex-row flex-nowrap justify-center items-center gap-6'>
+            <i className='ri-pencil-fill text-[22.75px] text-secondary' style={{ cursor: 'pointer' }} onClick={() => handleShowEditFields(row)} />
+            <i className='align-middle text-destructive text-[22.75px] las la-trash-alt' style={{ cursor: 'pointer' }} onClick={() => handleDeleteSupplier(row.suppliersId)} />
           </div>
         )
       },
@@ -210,21 +210,21 @@ const Suppliers = ({}: Props) => {
   return (
     <>
       {!showAddNewFields ? (
-        <div className='tw:flex tw:flex-row tw:justify-end tw:items-end'>
-          <Button type='submit' color='primary' size='sm' className='tw:m-0' onClick={handleShowAddSupplier}>
+        <div className='flex flex-row justify-end items-end'>
+          <Button type='submit' color='primary' size='sm' className='m-0' onClick={handleShowAddSupplier}>
             Add New
           </Button>
         </div>
       ) : (
         <div>
-          <Form onSubmit={handleAddSupplier} className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-4 tw:w-full'>
+          <Form onSubmit={handleAddSupplier} className='flex flex-row justify-start items-center gap-4 w-full'>
             <FormGroup>
               <Label htmlFor='title' className='form-label'>
                 *Supplier Name
               </Label>
               <Input
                 type='text'
-                className='tw:text-[13px]'
+                className='text-[13px]'
                 placeholder='Name...'
                 id='name'
                 name='name'
@@ -242,7 +242,7 @@ const Suppliers = ({}: Props) => {
               </Label>
               <Input
                 type='text'
-                className='tw:text-[13px]'
+                className='text-[13px]'
                 placeholder='Email...'
                 id='email'
                 name='email'
@@ -260,7 +260,7 @@ const Suppliers = ({}: Props) => {
               </Label>
               <Input
                 type='text'
-                className='tw:text-[13px]'
+                className='text-[13px]'
                 placeholder='Phone...'
                 id='phone'
                 name='phone'
@@ -278,7 +278,7 @@ const Suppliers = ({}: Props) => {
               </Label>
               <Input
                 type='text'
-                className='tw:text-[13px]'
+                className='text-[13px]'
                 placeholder='Address...'
                 id='address'
                 name='address'
@@ -296,7 +296,7 @@ const Suppliers = ({}: Props) => {
               </Label>
               <Input
                 type='text'
-                className='tw:text-[13px]'
+                className='text-[13px]'
                 placeholder='Address...'
                 id='country'
                 name='country'
@@ -324,11 +324,11 @@ const Suppliers = ({}: Props) => {
                 )}
               </datalist>
             </FormGroup>
-            <div className='tw:flex tw:flex-row tw:justify-end tw:items-end tw:gap-4'>
-              <Button type='button' color='light' size='sm' className='tw:m-0' onClick={handleCancelShowAddSupplier}>
+            <div className='flex flex-row justify-end items-end gap-4'>
+              <Button type='button' color='light' size='sm' className='m-0' onClick={handleCancelShowAddSupplier}>
                 Cancel
               </Button>
-              <Button type='submit' color='primary' size='sm' className='tw:m-0'>
+              <Button type='submit' color='primary' size='sm' className='m-0'>
                 Add New
               </Button>
             </div>
@@ -337,14 +337,14 @@ const Suppliers = ({}: Props) => {
       )}
 
       {showEditFields && (
-        <Form onSubmit={handleEditSupplier} className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-4 tw:w-full'>
+        <Form onSubmit={handleEditSupplier} className='flex flex-row justify-start items-center gap-4 w-full'>
           <FormGroup>
             <Label htmlFor='title' className='form-label'>
               *Supplier Name
             </Label>
             <Input
               type='text'
-              className='tw:text-[13px]'
+              className='text-[13px]'
               placeholder='Name...'
               id='name'
               name='name'
@@ -362,7 +362,7 @@ const Suppliers = ({}: Props) => {
             </Label>
             <Input
               type='text'
-              className='tw:text-[13px]'
+              className='text-[13px]'
               placeholder='Email...'
               id='email'
               name='email'
@@ -380,7 +380,7 @@ const Suppliers = ({}: Props) => {
             </Label>
             <Input
               type='text'
-              className='tw:text-[13px]'
+              className='text-[13px]'
               placeholder='Phone...'
               id='phone'
               name='phone'
@@ -398,7 +398,7 @@ const Suppliers = ({}: Props) => {
             </Label>
             <Input
               type='text'
-              className='tw:text-[13px]'
+              className='text-[13px]'
               placeholder='Address...'
               id='address'
               name='address'
@@ -416,7 +416,7 @@ const Suppliers = ({}: Props) => {
             </Label>
             <Input
               type='text'
-              className='tw:text-[13px]'
+              className='text-[13px]'
               placeholder='Address...'
               id='country'
               name='country'
@@ -444,11 +444,11 @@ const Suppliers = ({}: Props) => {
               )}
             </datalist>
           </FormGroup>
-          <div className='tw:flex tw:flex-row tw:justify-end tw:items-end tw:gap-4'>
-            <Button type='button' color='light' size='sm' className='tw:m-0' onClick={handleCancelEdit}>
+          <div className='flex flex-row justify-end items-end gap-4'>
+            <Button type='button' color='light' size='sm' className='m-0' onClick={handleCancelEdit}>
               Cancel
             </Button>
-            <Button type='submit' color='primary' size='sm' className='tw:m-0'>
+            <Button type='submit' color='primary' size='sm' className='m-0'>
               Update
             </Button>
           </div>

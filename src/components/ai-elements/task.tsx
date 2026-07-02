@@ -18,7 +18,7 @@ export const TaskItemFile = ({
 }: TaskItemFileProps) => (
   <div
     className={cn(
-      "tw:inline-flex tw:items-center tw:gap-1 tw:rounded-md tw:border tw:bg-secondary tw:px-1.5 tw:py-0.5 tw:text-foreground tw:text-xs",
+      "inline-flex items-center gap-1 rounded-md border bg-secondary px-1.5 py-0.5 text-foreground text-xs",
       className
     )}
     {...props}
@@ -30,7 +30,7 @@ export const TaskItemFile = ({
 export type TaskItemProps = ComponentProps<"div">;
 
 export const TaskItem = ({ children, className, ...props }: TaskItemProps) => (
-  <div className={cn("tw:text-muted-foreground tw:text-sm", className)} {...props}>
+  <div className={cn("text-muted-foreground text-sm", className)} {...props}>
     {children}
   </div>
 );
@@ -55,12 +55,12 @@ export const TaskTrigger = ({
   title,
   ...props
 }: TaskTriggerProps) => (
-  <CollapsibleTrigger asChild className={cn("tw:group", className)} {...props}>
+  <CollapsibleTrigger asChild className={cn("group", className)} {...props}>
     {children ?? (
-      <div className="tw:flex tw:w-full tw:cursor-pointer tw:items-center tw:gap-2 tw:text-muted-foreground tw:text-sm tw:transition-colors tw:hover:text-foreground">
-        <SearchIcon className="tw:size-4" />
-        <p className="tw:text-sm">{title}</p>
-        <ChevronDownIcon className="tw:size-4 tw:transition-transform tw:group-data-[state=open]:rotate-180" />
+      <div className="flex w-full cursor-pointer items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground">
+        <SearchIcon className="size-4" />
+        <p className="text-sm">{title}</p>
+        <ChevronDownIcon className="size-4 transition-transform group-data-[state=open]:rotate-180" />
       </div>
     )}
   </CollapsibleTrigger>
@@ -75,12 +75,12 @@ export const TaskContent = ({
 }: TaskContentProps) => (
   <CollapsibleContent
     className={cn(
-      "tw:data-[state=closed]:fade-out-0 tw:data-[state=closed]:slide-out-to-top-2 tw:data-[state=open]:slide-in-from-top-2 tw:text-popover-foreground tw:outline-none tw:data-[state=closed]:animate-out tw:data-[state=open]:animate-in",
+      "data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2 text-popover-foreground outline-none data-[state=closed]:animate-out data-[state=open]:animate-in",
       className
     )}
     {...props}
   >
-    <div className="tw:mt-4 tw:space-y-2 tw:border-muted tw:border-l-2 tw:pl-4">
+    <div className="mt-4 space-y-2 border-muted border-l-2 pl-4">
       {children}
     </div>
   </CollapsibleContent>

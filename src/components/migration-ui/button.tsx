@@ -12,51 +12,51 @@ import { cn } from '@/lib/shadcn/utils'
  * surface the app actually uses: `color`, `size`, `outline`, `disabled`,
  * `type`, `className`, `block`, plus `tag`/`href` for link-style buttons.
  *
- * Self-contained cva (does not layer over the shadcn buttonVariants) because
- * `cn`/tailwind-merge is not configured for the `tw:` prefix and cannot reliably
- * dedupe conflicting prefixed color classes.
+ * Self-contained cva (does not layer over the shadcn buttonVariants) to keep
+ * every Bootstrap color (incl. success/info/warning, which shadcn's button
+ * lacks) and Velzon's exact visual treatment per color/outline combo.
  */
 const buttonVariants = cva(
-  'tw:inline-flex tw:appearance-none tw:items-center tw:justify-center tw:gap-2 tw:whitespace-nowrap tw:rounded-md tw:border tw:border-transparent tw:text-sm tw:font-medium tw:transition-[color,box-shadow,background-color,border-color] tw:duration-200 tw:outline-none tw:disabled:pointer-events-none tw:disabled:opacity-50 tw:focus-visible:shadow-[0_0_0_3px_var(--ring)] [&_svg]:tw:pointer-events-none [&_svg:not([class*="tw:size-"])]:tw:size-4 tw:shrink-0',
+  'inline-flex appearance-none items-center justify-center gap-2 whitespace-nowrap rounded-md border border-transparent text-sm font-medium transition-[color,box-shadow,background-color,border-color] duration-200 outline-none disabled:pointer-events-none disabled:opacity-50 focus-visible:shadow-[0_0_0_3px_var(--ring)] [&_svg]:pointer-events-none [&_svg:not([class*="size-"])]:size-4 shrink-0',
   {
     variants: {
       color: {
-        primary: 'tw:bg-primary tw:!text-primary-foreground tw:shadow-xs tw:hover:bg-primary/90',
-        secondary: 'tw:bg-secondary tw:!text-secondary-foreground tw:shadow-xs tw:hover:bg-secondary/90',
-        success: 'tw:bg-success tw:!text-success-foreground tw:shadow-xs tw:hover:bg-success/90',
-        info: 'tw:bg-info tw:!text-info-foreground tw:shadow-xs tw:hover:bg-info/90',
-        warning: 'tw:bg-warning tw:!text-warning-foreground tw:shadow-xs tw:hover:bg-warning/90',
-        danger: 'tw:bg-destructive tw:!text-destructive-foreground tw:shadow-xs tw:hover:bg-destructive/90',
-        dark: 'tw:bg-dark tw:!text-white tw:shadow-xs tw:hover:bg-dark/90',
-        light: 'tw:border tw:border-border tw:bg-white tw:!text-foreground tw:shadow-xs tw:hover:bg-accent tw:hover:!text-accent-foreground',
-        muted: 'tw:border tw:border-light tw:bg-muted tw:!text-foreground tw:shadow-xs tw:hover:border-light/80 tw:hover:bg-muted/80',
-        ghost: 'tw:!text-foreground tw:hover:bg-accent tw:hover:!text-accent-foreground',
-        link: 'tw:!text-primary tw:underline-offset-4 tw:hover:underline',
+        primary: 'bg-primary !text-primary-foreground shadow-xs hover:bg-primary/90',
+        secondary: 'bg-secondary !text-secondary-foreground shadow-xs hover:bg-secondary/90',
+        success: 'bg-success !text-success-foreground shadow-xs hover:bg-success/90',
+        info: 'bg-info !text-info-foreground shadow-xs hover:bg-info/90',
+        warning: 'bg-warning !text-warning-foreground shadow-xs hover:bg-warning/90',
+        danger: 'bg-destructive !text-destructive-foreground shadow-xs hover:bg-destructive/90',
+        dark: 'bg-dark !text-white shadow-xs hover:bg-dark/90',
+        light: 'border border-border bg-white !text-foreground shadow-xs hover:bg-accent hover:!text-accent-foreground',
+        muted: 'border border-light bg-muted !text-foreground shadow-xs hover:border-light/80 hover:bg-muted/80',
+        ghost: '!text-foreground hover:bg-accent hover:!text-accent-foreground',
+        link: '!text-primary underline-offset-4 hover:underline',
       },
       size: {
-        default: 'tw:h-9 tw:px-4 tw:py-2',
-        sm: 'tw:h-8 tw:px-3 tw:text-xs',
-        lg: 'tw:h-10 tw:px-8',
-        icon: 'tw:size-9',
+        default: 'h-9 px-4 py-2',
+        sm: 'h-8 px-3 text-xs',
+        lg: 'h-10 px-8',
+        icon: 'size-9',
       },
       outline: {
-        true: 'tw:!bg-transparent',
+        true: '!bg-transparent',
         false: '',
       },
       block: {
-        true: 'tw:flex tw:w-full',
+        true: 'flex w-full',
         false: '',
       },
     },
     compoundVariants: [
-      { outline: true, color: 'primary', class: 'tw:!border-primary tw:!text-primary tw:hover:!bg-primary tw:hover:!text-primary-foreground' },
-      { outline: true, color: 'secondary', class: 'tw:!border-secondary tw:!text-secondary tw:hover:!bg-secondary tw:hover:!text-secondary-foreground' },
-      { outline: true, color: 'success', class: 'tw:!border-success tw:!text-success tw:hover:!bg-success tw:hover:!text-success-foreground' },
-      { outline: true, color: 'info', class: 'tw:!border-info tw:!text-info tw:hover:!bg-info tw:hover:!text-info-foreground' },
-      { outline: true, color: 'warning', class: 'tw:!border-warning tw:!text-warning tw:hover:!bg-warning tw:hover:!text-warning-foreground' },
-      { outline: true, color: 'danger', class: 'tw:!border-destructive tw:!text-destructive tw:hover:!bg-destructive tw:hover:!text-destructive-foreground' },
-      { outline: true, color: 'dark', class: 'tw:!border-dark tw:!text-dark tw:hover:!bg-dark tw:hover:!text-white' },
-      { outline: true, color: 'light', class: 'tw:!border-border tw:!text-foreground tw:hover:!bg-accent' },
+      { outline: true, color: 'primary', class: '!border-primary !text-primary hover:!bg-primary hover:!text-primary-foreground' },
+      { outline: true, color: 'secondary', class: '!border-secondary !text-secondary hover:!bg-secondary hover:!text-secondary-foreground' },
+      { outline: true, color: 'success', class: '!border-success !text-success hover:!bg-success hover:!text-success-foreground' },
+      { outline: true, color: 'info', class: '!border-info !text-info hover:!bg-info hover:!text-info-foreground' },
+      { outline: true, color: 'warning', class: '!border-warning !text-warning hover:!bg-warning hover:!text-warning-foreground' },
+      { outline: true, color: 'danger', class: '!border-destructive !text-destructive hover:!bg-destructive hover:!text-destructive-foreground' },
+      { outline: true, color: 'dark', class: '!border-dark !text-dark hover:!bg-dark hover:!text-white' },
+      { outline: true, color: 'light', class: '!border-border !text-foreground hover:!bg-accent' },
     ],
     defaultVariants: {
       color: 'primary',

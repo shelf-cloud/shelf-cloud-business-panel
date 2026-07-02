@@ -83,12 +83,12 @@ const ConfirmCancelInboundPlan = ({ cancelInboundPlanModal, setcancelInboundPlan
       </ModalHeader>
       <ModalBody>
         <Row>
-          <h5 className='tw:text-[19.5px] tw:mb-0 tw:font-semibold tw:text-primary'>InboundPlan:</h5>
-          <Col md={12} className='tw:mt-2'>
-            <p className='tw:text-[16.25px]'>{cancelInboundPlanModal.inboundPlanName}</p>
+          <h5 className='text-[19.5px] mb-0 font-semibold text-primary'>InboundPlan:</h5>
+          <Col md={12} className='mt-2'>
+            <p className='text-[16.25px]'>{cancelInboundPlanModal.inboundPlanName}</p>
           </Col>
-          <Row md={12} className='tw:mt-4'>
-            <div className='tw:text-right tw:mt-2 tw:flex tw:flex-row tw:gap-6 tw:justify-end'>
+          <Row md={12} className='mt-4'>
+            <div className='text-right mt-2 flex flex-row gap-6 justify-end'>
               <Button
                 disabled={isLoading}
                 type='button'

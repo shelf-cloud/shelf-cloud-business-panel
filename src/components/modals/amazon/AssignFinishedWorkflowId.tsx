@@ -189,35 +189,35 @@ const AssignFinishedWorkflowId = ({ assignFinishedWorkflowIdModal, setassignFini
       </ModalHeader>
       <ModalBody>
         <Row>
-          <div className='tw:mb-4'>
-            <p className='tw:text-[16.25px] tw:m-0 tw:font-semibold tw:text-primary'>ShelfCloud Fulfillment</p>
-            <p className='tw:text-[13px] tw:m-0 tw:text-[var(--bs-secondary-color)]'>
-              Fulfillment Name: <span className='tw:font-semibold tw:text-black'>{assignFinishedWorkflowIdModal.inboundPlanName}</span>
+          <div className='mb-4'>
+            <p className='text-[16.25px] m-0 font-semibold text-primary'>ShelfCloud Fulfillment</p>
+            <p className='text-[13px] m-0 text-[var(--bs-secondary-color)]'>
+              Fulfillment Name: <span className='font-semibold text-black'>{assignFinishedWorkflowIdModal.inboundPlanName}</span>
             </p>
-            <p className='tw:text-[13px] tw:m-0 tw:text-[var(--bs-secondary-color)]'>
-              Marketpalce: <span className='tw:font-semibold tw:text-black'>{AMAZON_MARKETPLACES[assignFinishedWorkflowIdModal.marketplace].domain}</span>
+            <p className='text-[13px] m-0 text-[var(--bs-secondary-color)]'>
+              Marketpalce: <span className='font-semibold text-black'>{AMAZON_MARKETPLACES[assignFinishedWorkflowIdModal.marketplace].domain}</span>
             </p>
-            <p className='tw:text-[13px] tw:m-0 tw:text-[var(--bs-secondary-color)]'>
-              Date Created: <span className='tw:font-semibold tw:text-black'>{moment(assignFinishedWorkflowIdModal.dateCreated).local().format('LL hh:mm A')}</span>
+            <p className='text-[13px] m-0 text-[var(--bs-secondary-color)]'>
+              Date Created: <span className='font-semibold text-black'>{moment(assignFinishedWorkflowIdModal.dateCreated).local().format('LL hh:mm A')}</span>
             </p>
-            <p className='tw:text-[13px] tw:m-0 tw:text-[var(--bs-secondary-color)]'>
-              SKUs: <span className='tw:font-semibold tw:text-black'>{assignFinishedWorkflowIdModal.skus}</span> Units:{' '}
-              <span className='tw:font-semibold tw:text-black'>{assignFinishedWorkflowIdModal.units}</span>
+            <p className='text-[13px] m-0 text-[var(--bs-secondary-color)]'>
+              SKUs: <span className='font-semibold text-black'>{assignFinishedWorkflowIdModal.skus}</span> Units:{' '}
+              <span className='font-semibold text-black'>{assignFinishedWorkflowIdModal.units}</span>
             </p>
           </div>
-          <p className='tw:m-0 tw:text-[11.2px] tw:text-danger'>ONLY ASSIGN FINISHED WORKFLOWS</p>
-          <p className='tw:text-[11.2px]'>
+          <p className='m-0 text-[11.2px] text-danger'>ONLY ASSIGN FINISHED WORKFLOWS</p>
+          <p className='text-[11.2px]'>
             *This assignment are only for already Finished Workflows in Send to Amazon, Seller Central, workflow must be in the last Step: Veiw Tracking Details. After Assigning
             the workflow to ShelfCloud Fulfillment, you will be redirected to the workflow details page. ShelfCloud will receive the shipments and begin preparing them for
             Shipping.
           </p>
           {!loadingWorflows ? (
             <Col xs={12}>
-              <p className='tw:text-[16.25px] tw:font-semibold'>Amazon Active Workflows List</p>
-              <div className='tw:overflow-x-auto'>
-              <table className='tw:w-full tw:align-middle tw:mb-0 tw:border tw:border-[color:var(--border)] tw:[&_td]:border-t tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
-                <thead className='tw:bg-[color:var(--vz-light)]'>
-                  <tr className='tw:text-center'>
+              <p className='text-[16.25px] font-semibold'>Amazon Active Workflows List</p>
+              <div className='overflow-x-auto'>
+              <table className='w-full align-middle mb-0 border border-[color:var(--border)] [&_td]:border-t [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+                <thead className='bg-[color:var(--vz-light)]'>
+                  <tr className='text-center'>
                     <th>Date Created</th>
                     <th>Marketplace</th>
                     <th>SKUs</th>
@@ -230,10 +230,10 @@ const AssignFinishedWorkflowId = ({ assignFinishedWorkflowIdModal, setassignFini
                     Object.values(activeWorkFlows).map(
                       (workflow) =>
                         allData.find((fulfillment) => fulfillment.inboundPlanId === workflow.inboundPlanId) === undefined && (
-                          <tr key={workflow.inboundPlanId} className='tw:text-center'>
+                          <tr key={workflow.inboundPlanId} className='text-center'>
                             <td>
-                              <p className='tw:m-0'>{moment.utc(workflow.createdAt).local().format('LL hh:mm A')}</p>
-                              <p className='tw:m-0 tw:text-[var(--bs-secondary-color)] tw:text-[11.2px]'>{workflow.inboundPlanId}</p>
+                              <p className='m-0'>{moment.utc(workflow.createdAt).local().format('LL hh:mm A')}</p>
+                              <p className='m-0 text-[var(--bs-secondary-color)] text-[11.2px]'>{workflow.inboundPlanId}</p>
                             </td>
                             <td>{AMAZON_MARKETPLACES[workflow.marketplaceIds[0]].domain}</td>
                             <td>{FormatIntNumber(state.currentRegion, new Set(workflow.items.map((item) => item.msku)).size)}</td>
@@ -260,8 +260,8 @@ const AssignFinishedWorkflowId = ({ assignFinishedWorkflowIdModal, setassignFini
               </table>
               </div>
               <Row md={12} className=''>
-                <div className='tw:text-right tw:mt-2 tw:flex tw:flex-row tw:gap-6 tw:justify-end'>
-                  <div className='tw:flex tw:flex-row tw:gap-4'>
+                <div className='text-right mt-2 flex flex-row gap-6 justify-end'>
+                  <div className='flex flex-row gap-4'>
                     <Button
                       disabled={loadingWorflows || loadingAssignment}
                       type='button'

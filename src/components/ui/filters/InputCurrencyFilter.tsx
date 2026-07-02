@@ -23,10 +23,10 @@ const InputCurrencyFilter = ({ inputName, value, isInvalid, handleChange, handle
   const { state }: any = useContext(AppContext)
   return (
     <InputGroup size='sm'>
-      <InputGroupText className='tw:text-[16.25px] tw:py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
+      <InputGroupText className='text-[16.25px] py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
       <Input
         type='number'
-        className='tw:text-[13px] tw:m-0'
+        className='text-[13px] m-0'
         bsSize='sm'
         style={{ padding: '0.2rem 0.9rem' }}
         placeholder='Min'

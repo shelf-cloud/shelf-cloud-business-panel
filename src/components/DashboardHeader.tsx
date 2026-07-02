@@ -15,23 +15,23 @@ type Props = {
 const DashboardHeader = ({ user, startDate, endDate, handleChangeDates }: Props) => {
   return (
     <React.Fragment>
-      <Row className='tw:mb-4 tw:pb-1'>
+      <Row className='mb-4 pb-1'>
         <Col xs={12}>
-          <div className='tw:flex tw:flex-col tw:justify-between tw:lg:flex-row tw:lg:items-center'>
+          <div className='flex flex-col justify-between lg:flex-row lg:items-center'>
             <div>
-              <h4 className='tw:text-[13px] tw:mb-1'>
-                Good Morning, <span className='tw:capitalize'>{user}</span>
+              <h4 className='text-[13px] mb-1'>
+                Good Morning, <span className='capitalize'>{user}</span>
               </h4>
-              <p className='tw:text-[13px] tw:text-[color:var(--bs-secondary-color)] tw:mb-0'>Here's what's happening with your Inventory today.</p>
+              <p className='text-[13px] text-[color:var(--bs-secondary-color)] mb-0'>Here's what's happening with your Inventory today.</p>
             </div>
-            <div className='tw:mt-4 tw:lg:mt-0'>
+            <div className='mt-4 lg:mt-0'>
               <form action='#'>
                 <div
-                  className='tw:flex tw:flex-row tw:items-center tw:justify-between tw:gap-2 tw:w-auto tw:px-4 tw:py-1 tw:rounded-[4.8px] tw:shadow-[0_1px_2px_rgba(56,65,74,0.15)]'
+                  className='flex flex-row items-center justify-between gap-2 w-auto px-4 py-1 rounded-[4.8px] shadow-[0_1px_2px_rgba(56,65,74,0.15)]'
                   style={{ backgroundColor: 'white', minWidth: '230px' }}>
-                  <i className='ri-calendar-2-line tw:text-[16.25px]' />
+                  <i className='ri-calendar-2-line text-[16.25px]' />
                   <Flatpickr
-                    className='tw:border-0 tw:text-[13px] tw:w-full'
+                    className='border-0 text-[13px] w-full'
                     options={{
                       mode: 'range',
                       dateFormat: 'd M y',

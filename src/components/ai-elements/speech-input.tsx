@@ -287,12 +287,12 @@ export const SpeechInput = ({
     isProcessing;
 
   return (
-    <div className="tw:relative tw:inline-flex tw:items-center tw:justify-center">
+    <div className="relative inline-flex items-center justify-center">
       {/* Animated pulse rings */}
       {isListening &&
         [0, 1, 2].map((index) => (
           <div
-            className="tw:absolute tw:inset-0 tw:animate-ping tw:rounded-full tw:border-2 tw:border-red-400/30"
+            className="absolute inset-0 animate-ping rounded-full border-2 border-red-400/30"
             key={index}
             style={{
               animationDelay: `${index * 0.3}s`,
@@ -304,10 +304,10 @@ export const SpeechInput = ({
       {/* Main record button */}
       <Button
         className={cn(
-          "tw:relative tw:z-10 tw:rounded-full tw:transition-all tw:duration-300",
+          "relative z-10 rounded-full transition-all duration-300",
           isListening
-            ? "tw:bg-destructive tw:text-white tw:hover:bg-destructive/80 tw:hover:text-white"
-            : "tw:bg-primary tw:text-primary-foreground tw:hover:bg-primary/80 tw:hover:text-primary-foreground",
+            ? "bg-destructive text-white hover:bg-destructive/80 hover:text-white"
+            : "bg-primary text-primary-foreground hover:bg-primary/80 hover:text-primary-foreground",
           className
         )}
         disabled={isDisabled}
@@ -315,8 +315,8 @@ export const SpeechInput = ({
         {...props}
       >
         {isProcessing && <Spinner />}
-        {!isProcessing && isListening && <SquareIcon className="tw:size-4" />}
-        {!(isProcessing || isListening) && <MicIcon className="tw:size-4" />}
+        {!isProcessing && isListening && <SquareIcon className="size-4" />}
+        {!(isProcessing || isListening) && <MicIcon className="size-4" />}
       </Button>
     </div>
   );

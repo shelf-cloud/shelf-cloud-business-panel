@@ -86,43 +86,43 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
         Edit PO Quantities
       </ModalHeader>
       <ModalBody>
-        <p className='tw:m-0 tw:text-[16.25px] tw:font-semibold'>
-          Purchase Order: <span className='tw:text-primary'>{orderNumber}</span>
+        <p className='m-0 text-[16.25px] font-semibold'>
+          Purchase Order: <span className='text-primary'>{orderNumber}</span>
         </p>
         {hasSplitting && (
-          <p className='tw:text-[16.25px] tw:font-semibold'>
-            In Split: <span className='tw:text-primary'>{split?.splitName}</span>
+          <p className='text-[16.25px] font-semibold'>
+            In Split: <span className='text-primary'>{split?.splitName}</span>
           </p>
         )}
-        <div className='tw:mt-2 tw:overflow-x-auto'>
-          <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
-            <thead className='tw:bg-[color:var(--vz-light)]'>
+        <div className='mt-2 overflow-x-auto'>
+          <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+            <thead className='bg-[color:var(--vz-light)]'>
               <tr>
-                <th scope='col' className='tw:text-center'>
+                <th scope='col' className='text-center'>
                   Image
                 </th>
                 <th scope='col'>Title</th>
-                <th className='tw:text-center' scope='col'>
+                <th className='text-center' scope='col'>
                   SKU
                 </th>
-                <th className='tw:text-center' scope='col'>
+                <th className='text-center' scope='col'>
                   Cost
                 </th>
-                <th className='tw:text-center' scope='col'>
+                <th className='text-center' scope='col'>
                   Ordered
                 </th>
-                <th className='tw:text-center' scope='col'>
+                <th className='text-center' scope='col'>
                   Inbound
                 </th>
-                <th className='tw:text-center' scope='col'>
+                <th className='text-center' scope='col'>
                   Arrived
                 </th>
               </tr>
             </thead>
-            <tbody className='tw:text-[11.2px]'>
+            <tbody className='text-[11.2px]'>
               {newOrderedQtyItems?.map((product: PurchaseOrderItem, key: number) => (
-                <tr key={`${key}-${product.sku}`} className='tw:border-b tw:py-2'>
-                  <td className='tw:text-center'>
+                <tr key={`${key}-${product.sku}`} className='border-b py-2'>
+                  <td className='text-center'>
                     <div
                       style={{
                         width: '100%',
@@ -140,29 +140,29 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
                       />
                     </div>
                   </td>
-                  <td className='tw:text-[11.2px] tw:font-semibold'>
+                  <td className='text-[11.2px] font-semibold'>
                     {product.title}
 
                     {product.asin && (
                       <>
                         <br />
-                        <span className='tw:text-[var(--bs-secondary-color)] tw:text-[11.2px] tw:font-normal'>ASIN: {product.asin}</span>
+                        <span className='text-[var(--bs-secondary-color)] text-[11.2px] font-normal'>ASIN: {product.asin}</span>
                       </>
                     )}
                     {product.barcode && (
                       <>
                         <br />
-                        <span className='tw:text-[var(--bs-secondary-color)] tw:text-[11.2px] tw:font-normal'>UPC: {product.barcode}</span>
+                        <span className='text-[var(--bs-secondary-color)] text-[11.2px] font-normal'>UPC: {product.barcode}</span>
                       </>
                     )}
                   </td>
-                  <td className='tw:text-center tw:text-nowrap'>{product.sku}</td>
-                  <td className='tw:text-center tw:text-nowrap'>{FormatCurrency(state.currentRegion, product.orderQty * product.sellerCost || 0)}</td>
-                  <td className='tw:text-center tw:text-nowrap'>
+                  <td className='text-center text-nowrap'>{product.sku}</td>
+                  <td className='text-center text-nowrap'>{FormatCurrency(state.currentRegion, product.orderQty * product.sellerCost || 0)}</td>
+                  <td className='text-center text-nowrap'>
                     <Input
                       type='number'
                       onWheel={(e) => e.currentTarget.blur()}
-                      className='tw:text-[13px] tw:m-0 tw:mx-auto'
+                      className='text-[13px] m-0 mx-auto'
                       style={{ maxWidth: '60px' }}
                       placeholder='Qty'
                       id='newOrderQty'
@@ -175,7 +175,7 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
                         if (trEl) trEl.style.backgroundColor = 'color-mix(in srgb, var(--warning) 25%, transparent)'
                         if (parseInt(e.target.value) <= 0 || parseInt(e.target.value) < product.receivedQty + product.inboundQty) {
                           setError(true)
-                          e.target.classList.remove('tw:border-warning')
+                          e.target.classList.remove('border-warning')
                         } else {
                           setError(false)
                         }
@@ -186,19 +186,19 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
                       invalid={product.orderQty <= 0 || product.orderQty < product.receivedQty + product.inboundQty ? true : false}
                     />
                   </td>
-                  <td className='tw:text-[13px] tw:text-center tw:text-nowrap'>{FormatIntNumber(state.currentRegion, product.inboundQty)}</td>
-                  <td className='tw:text-[13px] tw:text-center tw:text-nowrap'>{FormatIntNumber(state.currentRegion, product.receivedQty)}</td>
+                  <td className='text-[13px] text-center text-nowrap'>{FormatIntNumber(state.currentRegion, product.inboundQty)}</td>
+                  <td className='text-[13px] text-center text-nowrap'>{FormatIntNumber(state.currentRegion, product.receivedQty)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
 
-        <div className='tw:mt-4 tw:flex tw:justify-end tw:items-center tw:gap-2'>
-          <Button type='button' color='light' className='tw:text-[11.2px]' onClick={handleClose}>
+        <div className='mt-4 flex justify-end items-center gap-2'>
+          <Button type='button' color='light' className='text-[11.2px]' onClick={handleClose}>
             Cancel
           </Button>
-          <Button disabled={loading || error ? true : false} type='button' color='success' className='tw:text-[11.2px]' onClick={handleEditOrderedQtyFromPO}>
+          <Button disabled={loading || error ? true : false} type='button' color='success' className='text-[11.2px]' onClick={handleEditOrderedQtyFromPO}>
             {loading ? (
               <span>
                 <Spinner color='light' size={'sm'} /> Saving...

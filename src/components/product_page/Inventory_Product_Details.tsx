@@ -74,11 +74,11 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
   const hasAWDInventory = amazonFBA.reduce((total: number, listing: AmazonFBA) => total + listing.awd_onHand_qty + listing.awd_inbound_qty, 0) > 0
 
   return (
-    <div className='tw:px-3 tw:py-1 tw:border-b tw:border-[color:var(--border)] tw:w-full'>
-      <p className='tw:text-[19.5px] tw:text-primary tw:font-semibold tw:mb-1'>Inventory</p>
-      <table className='tw:w-full tw:text-[11.2px] tw:align-middle tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
-        <thead className='tw:bg-[color:var(--vz-light)]'>
-          <tr className='tw:text-center'>
+    <div className='px-3 py-1 border-b border-[color:var(--border)] w-full'>
+      <p className='text-[19.5px] text-primary font-semibold mb-1'>Inventory</p>
+      <table className='w-full text-[11.2px] align-middle [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+        <thead className='bg-[color:var(--vz-light)]'>
+          <tr className='text-center'>
             <th scope='col' aria-label='Inventory source'></th>
             <th>On Hand</th>
             <th>Buffer</th>
@@ -89,26 +89,26 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
           </tr>
         </thead>
         <tbody>
-          <tr className='tw:text-center'>
-            <td className='tw:font-semibold'>ShelfCloud</td>
+          <tr className='text-center'>
+            <td className='font-semibold'>ShelfCloud</td>
             <td>{onhand}</td>
             <td onMouseEnter={() => setShowEditButton({ display: 'block' })} onMouseLeave={() => setShowEditButton({ display: 'none' })}>
               {!showEditFields ? (
-                <div className='tw:flex tw:flex-row tw:justify-center tw:items-center tw:gap-1'>
+                <div className='flex flex-row justify-center items-center gap-1'>
                   {buffer}
-                  <div className='tw:text-right' style={showEditButton}>
-                    <button type='button' aria-label='Edit buffer inventory' className='tw:m-0 tw:p-0 tw:border-0 tw:bg-transparent tw:text-primary' onClick={handleShowEditFields}>
-                      <i className='ri-pencil-fill tw:text-[16.25px] tw:m-0 tw:p-0' />
+                  <div className='text-right' style={showEditButton}>
+                    <button type='button' aria-label='Edit buffer inventory' className='m-0 p-0 border-0 bg-transparent text-primary' onClick={handleShowEditFields}>
+                      <i className='ri-pencil-fill text-[16.25px] m-0 p-0' />
                     </button>
                   </div>
                 </div>
               ) : (
                 <Form onSubmit={handleAddProduct}>
-                  <div className='tw:flex tw:flex-row tw:justify-center tw:items-center tw:gap-1 tw:align-middle'>
+                  <div className='flex flex-row justify-center items-center gap-1 align-middle'>
                     <div>
                       <Input
                         type='number'
-                        className='tw:text-[13px] tw:m-0'
+                        className='text-[13px] m-0'
                         style={{ maxWidth: '60px' }}
                         placeholder='Buffer...'
                         id='buffer'
@@ -121,22 +121,22 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
                       />
                       {validation.touched.buffer && validation.errors.buffer ? <FormFeedback type='invalid'>{validation.errors.buffer}</FormFeedback> : null}
                     </div>
-                    <button type='button' aria-label='Cancel editing buffer inventory' className='tw:m-0 tw:p-0 tw:border-0 tw:bg-transparent tw:text-[color:var(--bs-secondary-color)]' onClick={() => setShowEditFields(false)}>
-                      <i className='tw:text-[22.75px] mdi mdi-close-circle' />
+                    <button type='button' aria-label='Cancel editing buffer inventory' className='m-0 p-0 border-0 bg-transparent text-[color:var(--bs-secondary-color)]' onClick={() => setShowEditFields(false)}>
+                      <i className='text-[22.75px] mdi mdi-close-circle' />
                     </button>
-                    <Button type='submit' color='muted' size='sm' className='tw:m-0 tw:p-0'>
-                      <i className='tw:text-[22.75px] tw:text-success ri-checkbox-circle-fill' />
+                    <Button type='submit' color='muted' size='sm' className='m-0 p-0'>
+                      <i className='text-[22.75px] text-success ri-checkbox-circle-fill' />
                     </Button>
                   </div>
                 </Form>
               )}
             </td>
-            <td className='tw:text-success'>{FormatIntNumber(state.currentRegion, available)}</td>
-            <td className='tw:text-destructive'>{FormatIntNumber(state.currentRegion, reserved)}</td>
+            <td className='text-success'>{FormatIntNumber(state.currentRegion, available)}</td>
+            <td className='text-destructive'>{FormatIntNumber(state.currentRegion, reserved)}</td>
             <td>
               <button
                 type='button'
-                className='tw:p-0 tw:border-0 tw:bg-transparent tw:text-primary tw:no-underline'
+                className='p-0 border-0 bg-transparent text-primary no-underline'
                 onClick={() => setshowOrderedModal({ show: true, sku: sku! })}
               >
                 {FormatIntNumber(state.currentRegion, ordered)}
@@ -147,9 +147,9 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
         </tbody>
       </table>
       {amazonFBA.length > 0 && (
-        <table className='tw:w-full tw:text-[11.2px] tw:align-middle tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
-          <thead className='tw:bg-[color:var(--vz-light)]'>
-            <tr className='tw:text-center'>
+        <table className='w-full text-[11.2px] align-middle [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+          <thead className='bg-[color:var(--vz-light)]'>
+            <tr className='text-center'>
               <th scope='col' aria-label='Fulfillment channel'></th>
               <th>Total</th>
               <th>Fulfillable</th>
@@ -159,8 +159,8 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
             </tr>
           </thead>
           <tbody>
-            <tr className='tw:text-center'>
-              <td className='tw:font-semibold'>Amazon FBA</td>
+            <tr className='text-center'>
+              <td className='font-semibold'>Amazon FBA</td>
               <td>
                 {FormatIntNumber(
                   state.currentRegion,
@@ -206,8 +206,8 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
               </td>
             </tr>
             {hasAWDInventory && (
-              <tr className='tw:text-center'>
-                <td className='tw:font-semibold'>Amazon AWD</td>
+              <tr className='text-center'>
+                <td className='font-semibold'>Amazon AWD</td>
                 <td>
                   {FormatIntNumber(
                     state.currentRegion,

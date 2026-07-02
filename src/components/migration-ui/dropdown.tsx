@@ -46,7 +46,7 @@ function DropdownRoot({ children, className, style, isOpen, toggle, group }: Dro
             },
           }
         : {})}>
-      <div className={cn('tw:relative tw:inline-block', group && 'tw:inline-flex', className)} style={style}>
+      <div className={cn('relative inline-block', group && 'inline-flex', className)} style={style}>
         {children}
       </div>
     </RadixDropdownMenu>
@@ -83,7 +83,7 @@ const DropdownToggle = React.forwardRef<HTMLButtonElement, DropdownToggleProps>(
       <DropdownMenuTrigger asChild>
         <Comp ref={ref} type={isButton ? (type ?? 'button') : type} className={cn(className)} {...props}>
           {children}
-          {caret && <ChevronDownIcon className='tw:ml-1 tw:size-4' />}
+          {caret && <ChevronDownIcon className='ml-1 size-4' />}
         </Comp>
       </DropdownMenuTrigger>
     )
@@ -132,7 +132,7 @@ export type ButtonGroupProps = React.ComponentProps<'div'> & { tag?: React.Eleme
 
 function ButtonGroup({ className, tag, size: _size, vertical, ...props }: ButtonGroupProps) {
   const Comp: React.ElementType = tag ?? 'div'
-  return <Comp role='group' className={cn('tw:inline-flex', vertical && 'tw:flex-col', className)} {...props} />
+  return <Comp role='group' className={cn('inline-flex', vertical && 'flex-col', className)} {...props} />
 }
 
 export { UncontrolledDropdown, Dropdown, UncontrolledButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem, ButtonGroup }

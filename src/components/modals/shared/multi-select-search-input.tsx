@@ -80,10 +80,10 @@ const MultiSelectSearchInput = ({
           aria-expanded={open}
           tabIndex={0}
           className={cn(
-            'tw:flex tw:min-h-8 tw:w-full tw:cursor-pointer tw:items-center tw:justify-between tw:rounded-md tw:border tw:border-border tw:bg-white tw:px-3 tw:py-1.5 tw:text-sm tw:shadow-xs tw:outline-none tw:transition-colors tw:focus-visible:shadow-[0_0_0_3px_var(--ring)]',
+            'flex min-h-8 w-full cursor-pointer items-center justify-between rounded-md border border-border bg-white px-3 py-1.5 text-sm shadow-xs outline-none transition-colors focus-visible:shadow-[0_0_0_3px_var(--ring)]',
             triggerClassName
           )}>
-          <div className='tw:flex tw:flex-grow tw:flex-wrap tw:gap-1'>
+          <div className='flex flex-grow flex-wrap gap-1'>
             {selectedItems.length > 0 ? (
               <>
                 {displayItems.map((item) => (
@@ -92,42 +92,42 @@ const MultiSelectSearchInput = ({
                 {overflowCount > 0 && <MultiSelectTag label={`+${overflowCount} more`} onRemove={() => undefined} />}
               </>
             ) : (
-              <span className='tw:text-sm tw:font-normal tw:text-muted-foreground'>{placeholder}</span>
+              <span className='text-sm font-normal text-muted-foreground'>{placeholder}</span>
             )}
           </div>
-          <div className='tw:flex tw:items-center tw:gap-1'>
+          <div className='flex items-center gap-1'>
             {selected.length > 0 && (
               <button
                 type='button'
-                className='tw:inline-flex tw:size-6 tw:shrink-0 tw:appearance-none tw:items-center tw:justify-center tw:rounded-full tw:border-0 tw:bg-transparent tw:p-0 tw:text-muted-foreground tw:outline-none tw:ring-0 tw:hover:bg-muted tw:hover:text-foreground tw:focus-visible:shadow-[0_0_0_2px_var(--ring)]'
+                className='inline-flex size-6 shrink-0 appearance-none items-center justify-center rounded-full border-0 bg-transparent p-0 text-muted-foreground outline-none ring-0 hover:bg-muted hover:text-foreground focus-visible:shadow-[0_0_0_2px_var(--ring)]'
                 onClick={handleClearAll}
                 aria-label='Clear all selections'>
-                <XCircle className='tw:size-4' />
+                <XCircle className='size-4' />
               </button>
             )}
-            <ChevronsUpDown className='tw:size-4 tw:shrink-0 tw:text-muted-foreground tw:opacity-70' />
+            <ChevronsUpDown className='size-4 shrink-0 text-muted-foreground opacity-70' />
           </div>
         </div>
       </PopoverTrigger>
       <PopoverContent
         align='start'
         className={cn(
-          'tw:z-[1060] tw:w-[var(--radix-popover-trigger-width)] tw:overflow-hidden tw:rounded-md tw:border tw:border-border tw:bg-white tw:p-0 tw:shadow-lg',
+          'z-[1060] w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-md border border-border bg-white p-0 shadow-lg',
           popoverClassName
         )}>
-        <Command className='tw:bg-white tw:text-foreground tw:[&_[data-slot=command-input-wrapper]]:h-9 tw:[&_[data-slot=command-input-wrapper]]:border-b tw:[&_[data-slot=command-input-wrapper]]:border-border tw:[&_[data-slot=command-input-wrapper]]:px-3 tw:[&_[data-slot=command-input-wrapper]_svg]:size-4 tw:[&_[data-slot=command-input-wrapper]_svg]:text-muted-foreground tw:[&_[data-slot=command-input]]:!h-9 tw:[&_[data-slot=command-input]]:!border-0 tw:[&_[data-slot=command-input]]:!bg-transparent tw:[&_[data-slot=command-input]]:!p-0 tw:[&_[data-slot=command-input]]:!text-sm tw:[&_[data-slot=command-input]]:!shadow-none tw:[&_[data-slot=command-input]]:!outline-none tw:[&_[data-slot=command-input]]:placeholder:text-muted-foreground tw:[&_[data-slot=command-input]]:focus:!border-0 tw:[&_[data-slot=command-input]]:focus:!shadow-none tw:[&_[data-slot=command-input]]:focus:!outline-none'>
+        <Command className='bg-white text-foreground [&_[data-slot=command-input-wrapper]]:h-9 [&_[data-slot=command-input-wrapper]]:border-b [&_[data-slot=command-input-wrapper]]:border-border [&_[data-slot=command-input-wrapper]]:px-3 [&_[data-slot=command-input-wrapper]_svg]:size-4 [&_[data-slot=command-input-wrapper]_svg]:text-muted-foreground [&_[data-slot=command-input]]:!h-9 [&_[data-slot=command-input]]:!border-0 [&_[data-slot=command-input]]:!bg-transparent [&_[data-slot=command-input]]:!p-0 [&_[data-slot=command-input]]:!text-sm [&_[data-slot=command-input]]:!shadow-none [&_[data-slot=command-input]]:!outline-none [&_[data-slot=command-input]]:placeholder:text-muted-foreground [&_[data-slot=command-input]]:focus:!border-0 [&_[data-slot=command-input]]:focus:!shadow-none [&_[data-slot=command-input]]:focus:!outline-none'>
           <CommandInput placeholder={searchPlaceholder} value={inputValue} onValueChange={setInputValue} />
-          <CommandList className='tw:max-h-64'>
+          <CommandList className='max-h-64'>
             <CommandEmpty>{emptyMessage}</CommandEmpty>
-            <CommandGroup className='tw:p-1'>
+            <CommandGroup className='p-1'>
               {items.map((item) => (
                 <CommandItem
                   key={`item-${item.value}-${item.label}`}
                   value={item.label}
-                  className='tw:h-8 tw:cursor-pointer tw:px-2 tw:py-1 tw:text-sm'
+                  className='h-8 cursor-pointer px-2 py-1 text-sm'
                   onSelect={() => handleSelect(item.value)}>
-                  <Check className={cn('tw:mr-2 tw:h-4 tw:w-4', selected.includes(item.value) ? 'tw:opacity-100' : 'tw:opacity-0')} />
-                  <span className='tw:truncate'>{item.label}</span>
+                  <Check className={cn('mr-2 h-4 w-4', selected.includes(item.value) ? 'opacity-100' : 'opacity-0')} />
+                  <span className='truncate'>{item.label}</span>
                 </CommandItem>
               ))}
             </CommandGroup>
@@ -145,7 +145,7 @@ const MultiSelectSearchInput = ({
                           action.onSelect()
                           setOpen(false)
                         }}>
-                        {ActionIcon && <ActionIcon className='tw:mr-2 tw:h-4 tw:w-4' />}
+                        {ActionIcon && <ActionIcon className='mr-2 h-4 w-4' />}
                         {action.label}
                       </CommandItem>
                     )

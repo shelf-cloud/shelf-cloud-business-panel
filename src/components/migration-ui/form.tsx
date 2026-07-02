@@ -36,10 +36,10 @@ function FormGroup({ className, check, inline, row, tag, ...props }: FormGroupPr
     <Comp
       data-slot='form-group'
       className={cn(
-        'tw:mb-3',
-        check && 'tw:flex tw:items-center tw:gap-2',
-        inline && 'tw:inline-flex tw:items-center tw:gap-2',
-        row && 'tw:flex tw:flex-wrap',
+        'mb-3',
+        check && 'flex items-center gap-2',
+        inline && 'inline-flex items-center gap-2',
+        row && 'flex flex-wrap',
         className
       )}
       {...props}
@@ -61,7 +61,7 @@ function FormFeedback({ className, type: _type, valid, children, tag: _tag, ...p
   // error string as children, which is empty/undefined when valid).
   if (children == null || children === '' || children === false) return null
   return (
-    <div data-slot='form-feedback' className={cn('tw:text-sm', valid ? 'tw:text-success' : 'tw:text-destructive', className)} {...props}>
+    <div data-slot='form-feedback' className={cn('text-sm', valid ? 'text-success' : 'text-destructive', className)} {...props}>
       {children}
     </div>
   )

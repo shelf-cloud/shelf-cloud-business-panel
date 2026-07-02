@@ -65,7 +65,7 @@ export const EnvironmentVariables = ({
   return (
     <EnvironmentVariablesContext.Provider value={contextValue}>
       <div
-        className={cn("tw:rounded-lg tw:border tw:bg-background", className)}
+        className={cn("rounded-lg border bg-background", className)}
         {...props}
       >
         {children}
@@ -83,7 +83,7 @@ export const EnvironmentVariablesHeader = ({
 }: EnvironmentVariablesHeaderProps) => (
   <div
     className={cn(
-      "tw:flex tw:items-center tw:justify-between tw:border-b tw:px-4 tw:py-3",
+      "flex items-center justify-between border-b px-4 py-3",
       className
     )}
     {...props}
@@ -99,7 +99,7 @@ export const EnvironmentVariablesTitle = ({
   children,
   ...props
 }: EnvironmentVariablesTitleProps) => (
-  <h3 className={cn("tw:font-medium tw:text-sm", className)} {...props}>
+  <h3 className={cn("font-medium text-sm", className)} {...props}>
     {children ?? "Environment Variables"}
   </h3>
 );
@@ -113,8 +113,8 @@ export const EnvironmentVariablesToggle = ({
   const { showValues, setShowValues } = useContext(EnvironmentVariablesContext);
 
   return (
-    <div className={cn("tw:flex tw:items-center tw:gap-2", className)}>
-      <span className="tw:text-muted-foreground tw:text-xs">
+    <div className={cn("flex items-center gap-2", className)}>
+      <span className="text-muted-foreground text-xs">
         {showValues ? <EyeIcon size={14} /> : <EyeOffIcon size={14} />}
       </span>
       <Switch
@@ -134,7 +134,7 @@ export const EnvironmentVariablesContent = ({
   children,
   ...props
 }: EnvironmentVariablesContentProps) => (
-  <div className={cn("tw:divide-y", className)} {...props}>
+  <div className={cn("divide-y", className)} {...props}>
     {children}
   </div>
 );
@@ -157,7 +157,7 @@ export const EnvironmentVariableGroup = ({
   children,
   ...props
 }: EnvironmentVariableGroupProps) => (
-  <div className={cn("tw:flex tw:items-center tw:gap-2", className)} {...props}>
+  <div className={cn("flex items-center gap-2", className)} {...props}>
     {children}
   </div>
 );
@@ -172,7 +172,7 @@ export const EnvironmentVariableName = ({
   const { name } = useContext(EnvironmentVariableContext);
 
   return (
-    <span className={cn("tw:font-mono tw:text-sm", className)} {...props}>
+    <span className={cn("font-mono text-sm", className)} {...props}>
       {children ?? name}
     </span>
   );
@@ -195,8 +195,8 @@ export const EnvironmentVariableValue = ({
   return (
     <span
       className={cn(
-        "tw:font-mono tw:text-muted-foreground tw:text-sm",
-        !showValues && "tw:select-none",
+        "font-mono text-muted-foreground text-sm",
+        !showValues && "select-none",
         className
       )}
       {...props}
@@ -224,14 +224,14 @@ export const EnvironmentVariable = ({
     <EnvironmentVariableContext.Provider value={envVarContextValue}>
       <div
         className={cn(
-          "tw:flex tw:items-center tw:justify-between tw:gap-4 tw:px-4 tw:py-3",
+          "flex items-center justify-between gap-4 px-4 py-3",
           className
         )}
         {...props}
       >
         {children ?? (
           <>
-            <div className="tw:flex tw:items-center tw:gap-2">
+            <div className="flex items-center gap-2">
               <EnvironmentVariableName />
             </div>
             <EnvironmentVariableValue />
@@ -300,7 +300,7 @@ export const EnvironmentVariableCopyButton = ({
 
   return (
     <Button
-      className={cn("tw:size-6 tw:shrink-0", className)}
+      className={cn("size-6 shrink-0", className)}
       onClick={copyToClipboard}
       size="icon"
       variant="ghost"
@@ -318,7 +318,7 @@ export const EnvironmentVariableRequired = ({
   children,
   ...props
 }: EnvironmentVariableRequiredProps) => (
-  <Badge className={cn("tw:text-xs", className)} variant="secondary" {...props}>
+  <Badge className={cn("text-xs", className)} variant="secondary" {...props}>
     {children ?? "Required"}
   </Badge>
 );

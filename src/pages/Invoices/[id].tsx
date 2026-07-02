@@ -74,7 +74,7 @@ const InvoiceDetails = () => {
                 <Card>
                   {!loading ? (
                     <>
-                      <CardHeader className='tw:flex tw:flex-row tw:justify-between tw:items-start'>
+                      <CardHeader className='flex flex-row justify-between items-start'>
                         <div>
                           <Link href={'/Invoices'}>
                             <Button
@@ -83,14 +83,14 @@ const InvoiceDetails = () => {
                               // className="d-flex flex-row gap-1 text-decoration-none text-primary"
                               style={{ cursor: 'pointer' }}>
                               <span className='icon-on'>
-                                <i className='ri-arrow-left-line tw:align-bottom tw:me-1' />
+                                <i className='ri-arrow-left-line align-bottom me-1' />
                                 Go Back
                               </span>
                             </Button>
                           </Link>
                         </div>
-                        <div className='tw:text-right tw:pe-12'>
-                          <div className='tw:flex tw:gap-4 tw:flex-row tw:items-center tw:mb-4'>
+                        <div className='text-right pe-12'>
+                          <div className='flex gap-4 flex-row items-center mb-4'>
                             <PrintInvoice invoiceDetails={invoiceDetails!} />
                             {currentRegion == 'us' && (
                               <a href={`${invoiceDetails?.invoice.payLink}`} target='blank' rel='noopener noreferrer'>
@@ -101,20 +101,20 @@ const InvoiceDetails = () => {
                             )}
                           </div>
                           <h1>INVOICE</h1>
-                          <h2 className='tw:text-[2.5rem] tw:font-bold' style={{ color: '#458BC9' }}>
+                          <h2 className='text-[2.5rem] font-bold' style={{ color: '#458BC9' }}>
                             {invoiceDetails?.invoice.invoiceNumber}
                           </h2>
-                          <p className='tw:m-0 tw:font-semibold'>Invoice Date: {moment(invoiceDetails?.invoice.createdDate).format('LL')}</p>
-                          <p className='tw:m-0 tw:font-normal'>Expire Date: {moment(invoiceDetails?.invoice.expireDate).format('LL')}</p>
-                          <h4 className={invoiceDetails?.invoice?.paid ? 'tw:m-0 tw:font-bold tw:text-success' : 'tw:m-0 tw:font-bold tw:text-danger'}>
+                          <p className='m-0 font-semibold'>Invoice Date: {moment(invoiceDetails?.invoice.createdDate).format('LL')}</p>
+                          <p className='m-0 font-normal'>Expire Date: {moment(invoiceDetails?.invoice.expireDate).format('LL')}</p>
+                          <h4 className={invoiceDetails?.invoice?.paid ? 'm-0 font-bold text-success' : 'm-0 font-bold text-danger'}>
                             {invoiceDetails?.invoice?.paid ? 'Paid' : 'Due'}
                           </h4>
                         </div>
                       </CardHeader>
                       <CardBody>
-                        <div className='tw:overflow-x-auto'>
-                          <table className='tw:w-full tw:align-middle tw:text-center tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)]'>
-                            <thead className='tw:text-[16.25px]'>
+                        <div className='overflow-x-auto'>
+                          <table className='w-full align-middle text-center [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)]'>
+                            <thead className='text-[16.25px]'>
                               <tr>
                                 <th>ORDER #</th>
                                 <th>TYPE</th>
@@ -126,7 +126,7 @@ const InvoiceDetails = () => {
                               {invoiceDetails?.orders.map((order) => (
                                 <tr key={order.orderNumber}>
                                   <td
-                                    className='tw:text-primary'
+                                    className='text-primary'
                                     style={{ cursor: 'pointer' }}
                                     onClick={
                                       order.orderType != 'Storage'
@@ -149,10 +149,10 @@ const InvoiceDetails = () => {
                                 </tr>
                               ))}
                             </tbody>
-                            <tfoot className='tw:font-bold tw:text-[16.25px]'>
+                            <tfoot className='font-bold text-[16.25px]'>
                               {currentRegion == 'us' ? (
                                 <tr>
-                                  <td className='tw:text-right' colSpan={3}>
+                                  <td className='text-right' colSpan={3}>
                                     Total
                                   </td>
                                   <td>{FormatCurrency(currentRegion, Number(invoiceDetails?.invoice?.totalCharge))}</td>
@@ -160,19 +160,19 @@ const InvoiceDetails = () => {
                               ) : (
                                 <>
                                   <tr>
-                                    <td className='tw:text-right' colSpan={3}>
+                                    <td className='text-right' colSpan={3}>
                                       SubTotal
                                     </td>
                                     <td>{FormatCurrency(currentRegion, Number(invoiceDetails?.invoice?.totalCharge! / 1.21))}</td>
                                   </tr>
                                   <tr>
-                                    <td className='tw:text-right' colSpan={3}>
+                                    <td className='text-right' colSpan={3}>
                                       IVA 21%
                                     </td>
                                     <td>{FormatCurrency(currentRegion, Number((invoiceDetails?.invoice?.totalCharge! / 1.21) * 0.21))}</td>
                                   </tr>
                                   <tr>
-                                    <td className='tw:text-right' colSpan={3}>
+                                    <td className='text-right' colSpan={3}>
                                       Total
                                     </td>
                                     <td>{FormatCurrency(currentRegion, Number(invoiceDetails?.invoice?.totalCharge!))}</td>
@@ -185,7 +185,7 @@ const InvoiceDetails = () => {
                       </CardBody>
                     </>
                   ) : (
-                    <CardHeader className='tw:font-bold tw:text-[16.25px] tw:text-center'>Loading...</CardHeader>
+                    <CardHeader className='font-bold text-[16.25px] text-center'>Loading...</CardHeader>
                   )}
                 </Card>
               </Col>

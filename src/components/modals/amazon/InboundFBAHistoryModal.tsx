@@ -95,39 +95,39 @@ const InboundFBAHistoryModal = ({ inboundFBAHistoryModal, setinboundFBAHistoryMo
         className='modal-title'
         id='myModalLabel'>
         FBA Shipment History
-        <p className='tw:text-[16.25px] tw:mb-0 tw:font-semibold tw:text-[var(--bs-secondary-color)]'>
-          SKU: <span className='tw:text-black'>{inboundFBAHistoryModal.sku}</span>
+        <p className='text-[16.25px] mb-0 font-semibold text-[var(--bs-secondary-color)]'>
+          SKU: <span className='text-black'>{inboundFBAHistoryModal.sku}</span>
         </p>
-        <p className='tw:text-[13px] tw:m-0 tw:font-semibold tw:text-[var(--bs-secondary-color)]'>
-          FBA SKU: <span className='tw:text-black'>{inboundFBAHistoryModal.msku}</span>
+        <p className='text-[13px] m-0 font-semibold text-[var(--bs-secondary-color)]'>
+          FBA SKU: <span className='text-black'>{inboundFBAHistoryModal.msku}</span>
         </p>
       </ModalHeader>
       <ModalBody style={{ maxHeight: '70svh', scrollbarWidth: 'thin', overflowY: 'scroll' }}>
         <Row>
-          <Col md={12} className='tw:mt-2'>
-            <div className='tw:overflow-x-auto'>
-              <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:border tw:border-[color:var(--border)] tw:[&_td]:border-t tw:[&_td]:border-[color:var(--border)] tw:[&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)] tw:text-nowrap'>
-                <thead className='tw:bg-[color:var(--vz-light)]'>
+          <Col md={12} className='mt-2'>
+            <div className='overflow-x-auto'>
+              <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 border border-[color:var(--border)] [&_td]:border-t [&_td]:border-[color:var(--border)] [&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)] text-nowrap'>
+                <thead className='bg-[color:var(--vz-light)]'>
                   <tr>
                     <th>FBA</th>
                     <th>Date</th>
                     <th>Status</th>
-                    <th className='tw:text-center'>Shipment</th>
-                    <th className='tw:text-center'>Received</th>
+                    <th className='text-center'>Shipment</th>
+                    <th className='text-center'>Received</th>
                   </tr>
                 </thead>
-                <tbody className='tw:text-[11.2px]'>
+                <tbody className='text-[11.2px]'>
                   {newShipments.map((shipment, index: number) => (
                     <tr key={index}>
-                      <td className='tw:text-left'>
+                      <td className='text-left'>
                         <Link href={`/amazon-sellers/shipments/${shipment.id}`} target='blank' rel='noopener noreferrer'>
                           {shipment.shipmentId}
                         </Link>
                       </td>
                       <td>{moment.utc(shipment.createdAt).local().format('MM/DD/YYYY')}</td>
                       <td>{CleanStatus(shipment.status)}</td>
-                      <td className='tw:text-center'>{shipment.shipmentQty}</td>
-                      <td className='tw:text-center'>{shipment.receivedQty}</td>
+                      <td className='text-center'>{shipment.shipmentQty}</td>
+                      <td className='text-center'>{shipment.receivedQty}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -136,7 +136,7 @@ const InboundFBAHistoryModal = ({ inboundFBAHistoryModal, setinboundFBAHistoryMo
                     <tr ref={lastInvoiceElementRef}>
                       <td colSpan={5}>
                         {isValidating && (
-                          <p className='tw:text-center tw:text-[11.2px] tw:m-0'>
+                          <p className='text-center text-[11.2px] m-0'>
                             <Spinner size='sm' color='primary' /> Loading more shipments...
                           </p>
                         )}
@@ -146,7 +146,7 @@ const InboundFBAHistoryModal = ({ inboundFBAHistoryModal, setinboundFBAHistoryMo
                 )}
               </table>
             </div>
-            <div className='tw:flex tw:justify-end tw:items-center'>
+            <div className='flex justify-end items-center'>
               {!showMore && (
                 <Button color='info' outline size='sm' className='btn-ghost-info' onClick={() => setshowMore(true)}>
                   Show More

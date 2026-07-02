@@ -51,7 +51,7 @@ const ExportUnsellables = ({ unsellables }: Props) => {
 
   return (
     <Button color='primary' onClick={exportExcelFile}>
-      <i className='mdi mdi-arrow-down-bold label-icon tw:align-middle tw:me-2' />
+      <i className='mdi mdi-arrow-down-bold label-icon align-middle me-2' />
       Export List
     </Button>
   )

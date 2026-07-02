@@ -16,8 +16,8 @@ type Props = {
 
 const SelectSingleFilter = ({ inputLabel, inputName, placeholder, options, selected, handleSelect, error }: Props) => {
   return (
-    <div id={`select-container-${inputName}`} className='tw:mb-2'>
-      <Label htmlFor={inputLabel} className='tw:mb-2 tw:inline-block tw:text-sm'>
+    <div id={`select-container-${inputName}`} className='mb-2'>
+      <Label htmlFor={inputLabel} className='mb-2 inline-block text-sm'>
         {inputLabel}
       </Label>
       <SimpleSelect selected={selected} options={options} handleSelect={handleSelect} customStyle='sm' placeholder={placeholder} hasError={Boolean(error)} />

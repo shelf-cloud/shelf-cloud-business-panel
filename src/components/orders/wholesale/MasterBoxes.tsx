@@ -47,10 +47,10 @@ const MasterBoxes = ({ completeData, pending, orderNumberStart }: Props) => {
 
   return (
     <>
-      <div className='tw:flex tw:flex-wrap tw:justify-between tw:items-center tw:mb-2'>
+      <div className='flex flex-wrap justify-between items-center mb-2'>
         <div>
-          <p className='tw:text-[16.25px] tw:font-semibold tw:text-primary tw:m-0'>Total SKUs in Order: {FormatIntNumber(state.currentRegion, orderProducts.length)}</p>
-          <p className='tw:text-[13px] tw:font-normal tw:text-primary tw:m-0'>
+          <p className='text-[16.25px] font-semibold text-primary m-0'>Total SKUs in Order: {FormatIntNumber(state.currentRegion, orderProducts.length)}</p>
+          <p className='text-[13px] font-normal text-primary m-0'>
             Total Quantity to Ship in Order:{' '}
             {FormatIntNumber(
               state.currentRegion,
@@ -59,12 +59,12 @@ const MasterBoxes = ({ completeData, pending, orderNumberStart }: Props) => {
           </p>
         </div>
         <div>
-          <Button disabled={error.length > 0 || hasQtyError} className='tw:text-[13px]' color='primary' onClick={() => setWholeSaleOrderModal(!state.showWholeSaleOrderModal)}>
+          <Button disabled={error.length > 0 || hasQtyError} className='text-[13px]' color='primary' onClick={() => setWholeSaleOrderModal(!state.showWholeSaleOrderModal)}>
             Create Order
           </Button>
         </div>
       </div>
-      <Col xs='12' className='tw:flex tw:justify-end tw:items-center tw:mb-2'>
+      <Col xs='12' className='flex justify-end items-center mb-2'>
         <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='none' minLength={3} debounceTimeout={300} widths='col-12 col-md-4' />
       </Col>
       <WholeSaleTable2 allData={allData} filteredItems={filteredItems} setAllData={setAllData} pending={pending} setError={setError} setHasQtyError={setHasQtyError} />

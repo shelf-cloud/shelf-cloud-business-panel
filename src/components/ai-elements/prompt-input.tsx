@@ -430,7 +430,7 @@ export const PromptInputActionAddAttachments = ({
 
   return (
     <DropdownMenuItem {...props} onSelect={handleSelect}>
-      <ImageIcon className="tw:mr-2 tw:size-4" /> {label}
+      <ImageIcon className="mr-2 size-4" /> {label}
     </DropdownMenuItem>
   );
 };
@@ -475,7 +475,7 @@ export const PromptInputActionAddScreenshot = ({
 
   return (
     <DropdownMenuItem {...props} onSelect={handleSelect}>
-      <Monitor className="tw:mr-2 tw:size-4" />
+      <Monitor className="mr-2 size-4" />
       {label}
     </DropdownMenuItem>
   );
@@ -908,7 +908,7 @@ export const PromptInput = ({
       <input
         accept={accept}
         aria-label="Upload files"
-        className="tw:hidden"
+        className="hidden"
         multiple={multiple}
         onChange={handleChange}
         ref={inputRef}
@@ -916,12 +916,12 @@ export const PromptInput = ({
         type="file"
       />
       <form
-        className={cn("tw:w-full", className)}
+        className={cn("w-full", className)}
         onSubmit={handleSubmit}
         ref={formRef}
         {...props}
       >
-        <InputGroup className="tw:overflow-hidden">{children}</InputGroup>
+        <InputGroup className="overflow-hidden">{children}</InputGroup>
       </form>
     </>
   );
@@ -946,7 +946,7 @@ export const PromptInputBody = ({
   className,
   ...props
 }: PromptInputBodyProps) => (
-  <div className={cn("tw:contents", className)} {...props} />
+  <div className={cn("contents", className)} {...props} />
 );
 
 export type PromptInputTextareaProps = ComponentProps<
@@ -1055,7 +1055,7 @@ export const PromptInputTextarea = ({
 
   return (
     <InputGroupTextarea
-      className={cn("tw:field-sizing-content tw:max-h-48 tw:min-h-16", className)}
+      className={cn("field-sizing-content max-h-48 min-h-16", className)}
       name="message"
       onCompositionEnd={handleCompositionEnd}
       onCompositionStart={handleCompositionStart}
@@ -1079,7 +1079,7 @@ export const PromptInputHeader = ({
 }: PromptInputHeaderProps) => (
   <InputGroupAddon
     align="block-end"
-    className={cn("tw:order-first tw:flex-wrap tw:gap-1", className)}
+    className={cn("order-first flex-wrap gap-1", className)}
     {...props}
   />
 );
@@ -1095,7 +1095,7 @@ export const PromptInputFooter = ({
 }: PromptInputFooterProps) => (
   <InputGroupAddon
     align="block-end"
-    className={cn("tw:justify-between tw:gap-1", className)}
+    className={cn("justify-between gap-1", className)}
     {...props}
   />
 );
@@ -1107,7 +1107,7 @@ export const PromptInputTools = ({
   ...props
 }: PromptInputToolsProps) => (
   <div
-    className={cn("tw:flex tw:min-w-0 tw:items-center tw:gap-1", className)}
+    className={cn("flex min-w-0 items-center gap-1", className)}
     {...props}
   />
 );
@@ -1159,7 +1159,7 @@ export const PromptInputButton = ({
       <TooltipContent side={side}>
         {tooltipContent}
         {shortcut && (
-          <span className="tw:ml-2 tw:text-muted-foreground">{shortcut}</span>
+          <span className="ml-2 text-muted-foreground">{shortcut}</span>
         )}
       </TooltipContent>
     </Tooltip>
@@ -1180,7 +1180,7 @@ export const PromptInputActionMenuTrigger = ({
 }: PromptInputActionMenuTriggerProps) => (
   <DropdownMenuTrigger asChild>
     <PromptInputButton className={className} {...props}>
-      {children ?? <PlusIcon className="tw:size-4" />}
+      {children ?? <PlusIcon className="size-4" />}
     </PromptInputButton>
   </DropdownMenuTrigger>
 );
@@ -1225,14 +1225,14 @@ export const PromptInputSubmit = ({
 }: PromptInputSubmitProps) => {
   const isGenerating = status === "submitted" || status === "streaming";
 
-  let Icon = <CornerDownLeftIcon className="tw:size-4" />;
+  let Icon = <CornerDownLeftIcon className="size-4" />;
 
   if (status === "submitted") {
     Icon = <Spinner />;
   } else if (status === "streaming") {
-    Icon = <SquareIcon className="tw:size-4" />;
+    Icon = <SquareIcon className="size-4" />;
   } else if (status === "error") {
-    Icon = <XIcon className="tw:size-4" />;
+    Icon = <XIcon className="size-4" />;
   }
 
   const handleClick = useCallback(
@@ -1278,8 +1278,8 @@ export const PromptInputSelectTrigger = ({
 }: PromptInputSelectTriggerProps) => (
   <SelectTrigger
     className={cn(
-      "tw:border-none tw:bg-transparent tw:font-medium tw:text-muted-foreground tw:shadow-none tw:transition-colors",
-      "tw:hover:bg-accent tw:hover:text-foreground tw:aria-expanded:bg-accent tw:aria-expanded:text-foreground",
+      "border-none bg-transparent font-medium text-muted-foreground shadow-none transition-colors",
+      "hover:bg-accent hover:text-foreground aria-expanded:bg-accent aria-expanded:text-foreground",
       className
     )}
     {...props}
@@ -1368,7 +1368,7 @@ export const PromptInputTabLabel = ({
   // oxlint-disable-next-line eslint-plugin-jsx-a11y(heading-has-content)
   <h3
     className={cn(
-      "tw:mb-2 tw:px-3 tw:font-medium tw:text-muted-foreground tw:text-xs",
+      "mb-2 px-3 font-medium text-muted-foreground text-xs",
       className
     )}
     {...props}
@@ -1381,7 +1381,7 @@ export const PromptInputTabBody = ({
   className,
   ...props
 }: PromptInputTabBodyProps) => (
-  <div className={cn("tw:space-y-1", className)} {...props} />
+  <div className={cn("space-y-1", className)} {...props} />
 );
 
 export type PromptInputTabItemProps = HTMLAttributes<HTMLDivElement>;
@@ -1392,7 +1392,7 @@ export const PromptInputTabItem = ({
 }: PromptInputTabItemProps) => (
   <div
     className={cn(
-      "tw:flex tw:items-center tw:gap-2 tw:px-3 tw:py-2 tw:text-xs tw:hover:bg-accent",
+      "flex items-center gap-2 px-3 py-2 text-xs hover:bg-accent",
       className
     )}
     {...props}

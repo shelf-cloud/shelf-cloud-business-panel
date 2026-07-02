@@ -32,37 +32,37 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
 
   const columns: any = [
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Order Number</span>,
+      name: <span className='font-bold text-[13px]'>Order Number</span>,
       selector: (row: Shipment) => {
         return (
           <>
-            <div className='tw:flex tw:flex-row tw:justify-start tw:gap-1'>
+            <div className='flex flex-row justify-start gap-1'>
               <div
-                className='tw:text-[11.2px] tw:m-0 tw:font-semibold'
+                className='text-[11.2px] m-0 font-semibold'
                 style={{ cursor: 'pointer' }}
                 onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
-                <span className='tw:m-0'>{row.orderNumber}</span>
+                <span className='m-0'>{row.orderNumber}</span>
               </div>
-              {row.note != '' && <i className='ri-information-fill tw:text-[16.25px] tw:text-warning' id={`tooltip-shipment-note${row.orderId}`} />}
+              {row.note != '' && <i className='ri-information-fill text-[16.25px] text-warning' id={`tooltip-shipment-note${row.orderId}`} />}
               {row.note != '' && (
                 <SCTooltip target={`tooltip-shipment-note${row.orderId}`} placement='right' key={`tooltip-shipment-note${row.orderId}`}>
-                  <p className='tw:text-[11.2px] tw:text-primary tw:m-0 tw:p-0'>{row.note}</p>
+                  <p className='text-[11.2px] text-primary m-0 p-0'>{row.note}</p>
                 </SCTooltip>
               )}
             </div>
             {row.poNumber && row.poNumber !== row.orderNumber && (
-              <span className='tw:m-0 tw:text-[11.2px] tw:text-[color:var(--bs-secondary-color)]' style={{ opacity: '80%' }}>
+              <span className='m-0 text-[11.2px] text-[color:var(--bs-secondary-color)]' style={{ opacity: '80%' }}>
                 PO: {row.poNumber}
               </span>
             )}
             {row.hasReturn && (
-              <span className='tw:text-destructive' style={{ opacity: '80%' }}>
+              <span className='text-destructive' style={{ opacity: '80%' }}>
                 Return: {row.returns[0]}
-                {row.returns.length > 1 && <span className='tw:text-[11.2px] tw:text-destructive'>{` +${row.returns.length - 1}`}</span>}
+                {row.returns.length > 1 && <span className='text-[11.2px] text-destructive'>{` +${row.returns.length - 1}`}</span>}
               </span>
             )}
             {row.isIndividualUnits && (
-              <span className='tw:text-secondary' style={{ opacity: '80%' }}>
+              <span className='text-secondary' style={{ opacity: '80%' }}>
                 Individual Units
               </span>
             )}
@@ -76,26 +76,26 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
     },
     {
       name: (
-        <span className='tw:font-bold tw:text-[13px] tw:text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'orderStatus', asc: !sortBy.asc })}>
-          Status {sortBy.key === 'orderStatus' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
+        <span className='font-bold text-[13px] text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'orderStatus', asc: !sortBy.asc })}>
+          Status {sortBy.key === 'orderStatus' ? sortBy.asc ? <i className='ri-arrow-up-fill text-[11.2px] text-primary' /> : <i className='ri-arrow-down-fill text-[11.2px] text-primary' /> : null}
         </span>
       ),
       selector: (row: Shipment) => {
         switch (row.orderStatus) {
           case 'shipped':
           case 'received':
-            return <span className='tw:inline-block tw:text-[9.75px] tw:font-semibold tw:rounded-[4px] tw:uppercase tw:p-2 tw:bg-[color-mix(in_srgb,var(--success)_10%,transparent)] tw:text-success'>{` ${row.orderStatus} `}</span>
+            return <span className='inline-block text-[9.75px] font-semibold rounded-[4px] uppercase p-2 bg-[color-mix(in_srgb,var(--success)_10%,transparent)] text-success'>{` ${row.orderStatus} `}</span>
           case 'Processed':
-            return <span className='tw:inline-block tw:text-[9.75px] tw:font-semibold tw:rounded-[4px] tw:uppercase tw:p-2 tw:bg-[color-mix(in_srgb,var(--secondary)_10%,transparent)] tw:text-secondary'>{` ${row.orderStatus} `}</span>
+            return <span className='inline-block text-[9.75px] font-semibold rounded-[4px] uppercase p-2 bg-[color-mix(in_srgb,var(--secondary)_10%,transparent)] text-secondary'>{` ${row.orderStatus} `}</span>
           case 'awaiting_shipment':
           case 'awaiting':
-            return <span className='tw:inline-block tw:text-[9.75px] tw:font-semibold tw:rounded-[4px] tw:uppercase tw:p-2 tw:bg-[color-mix(in_srgb,var(--warning)_10%,transparent)] tw:text-warning'>{' awaiting '}</span>
+            return <span className='inline-block text-[9.75px] font-semibold rounded-[4px] uppercase p-2 bg-[color-mix(in_srgb,var(--warning)_10%,transparent)] text-warning'>{' awaiting '}</span>
           case 'awaiting pickup':
-            return <span className='tw:inline-block tw:text-[9.75px] tw:font-semibold tw:rounded-[4px] tw:uppercase tw:p-2 tw:bg-[color-mix(in_srgb,var(--secondary)_10%,transparent)] tw:text-secondary'>{' awaiting pickup '}</span>
+            return <span className='inline-block text-[9.75px] font-semibold rounded-[4px] uppercase p-2 bg-[color-mix(in_srgb,var(--secondary)_10%,transparent)] text-secondary'>{' awaiting pickup '}</span>
           case 'on_hold':
-            return <span className='tw:inline-block tw:text-[9.75px] tw:font-semibold tw:rounded-[4px] tw:uppercase tw:p-2 tw:bg-[color-mix(in_srgb,var(--destructive)_10%,transparent)] tw:text-destructive'>{' on hold '}</span>
+            return <span className='inline-block text-[9.75px] font-semibold rounded-[4px] uppercase p-2 bg-[color-mix(in_srgb,var(--destructive)_10%,transparent)] text-destructive'>{' on hold '}</span>
           case 'cancelled':
-            return <span className='tw:inline-block tw:text-[9.75px] tw:font-semibold tw:rounded-[4px] tw:uppercase tw:p-2 tw:bg-[color-mix(in_srgb,var(--dark)_10%,transparent)] tw:text-dark'> {row.orderStatus} </span>
+            return <span className='inline-block text-[9.75px] font-semibold rounded-[4px] uppercase p-2 bg-[color-mix(in_srgb,var(--dark)_10%,transparent)] text-dark'> {row.orderStatus} </span>
           default:
             break
         }
@@ -110,19 +110,19 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
     },
     {
       name: (
-        <span className='tw:font-bold tw:text-[13px] tw:text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'orderType', asc: !sortBy.asc })}>
-          Type {sortBy.key === 'orderType' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
+        <span className='font-bold text-[13px] text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'orderType', asc: !sortBy.asc })}>
+          Type {sortBy.key === 'orderType' ? sortBy.asc ? <i className='ri-arrow-up-fill text-[11.2px] text-primary' /> : <i className='ri-arrow-down-fill text-[11.2px] text-primary' /> : null}
         </span>
       ),
-      selector: (row: Shipment) => <span className='tw:text-[11.2px] tw:text-[color:var(--bs-secondary-color)]'>{row.orderType}</span>,
+      selector: (row: Shipment) => <span className='text-[11.2px] text-[color:var(--bs-secondary-color)]'>{row.orderType}</span>,
       sortable: false,
       wrap: false,
       center: true,
     },
     {
       name: (
-        <span className='tw:font-bold tw:text-[13px] tw:text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'storeId', asc: !sortBy.asc })}>
-          Store {sortBy.key === 'storeId' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
+        <span className='font-bold text-[13px] text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'storeId', asc: !sortBy.asc })}>
+          Store {sortBy.key === 'storeId' ? sortBy.asc ? <i className='ri-arrow-up-fill text-[11.2px] text-primary' /> : <i className='ri-arrow-down-fill text-[11.2px] text-primary' /> : null}
         </span>
       ),
       selector: (row: Shipment) => {
@@ -152,12 +152,12 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
     },
     {
       name: (
-        <span className='tw:font-bold tw:text-[13px] tw:text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'orderDate', asc: !sortBy.asc })}>
+        <span className='font-bold text-[13px] text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'orderDate', asc: !sortBy.asc })}>
           Order Date{' '}
-          {sortBy.key === 'orderDate' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
+          {sortBy.key === 'orderDate' ? sortBy.asc ? <i className='ri-arrow-up-fill text-[11.2px] text-primary' /> : <i className='ri-arrow-down-fill text-[11.2px] text-primary' /> : null}
         </span>
       ),
-      selector: (row: Shipment) => <span className='tw:text-[11.2px]'>{row.orderDate}</span>,
+      selector: (row: Shipment) => <span className='text-[11.2px]'>{row.orderDate}</span>,
       sortable: false,
       wrap: false,
       center: true,
@@ -165,18 +165,18 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
     },
     {
       name: (
-        <span className='tw:font-bold tw:text-[13px] tw:text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'closedDate', asc: !sortBy.asc })}>
+        <span className='font-bold text-[13px] text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'closedDate', asc: !sortBy.asc })}>
           Order Closed{' '}
           {sortBy.key === 'closedDate' || sortBy.key === '' ? (
             sortBy.asc ? (
-              <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' />
+              <i className='ri-arrow-up-fill text-[11.2px] text-primary' />
             ) : (
-              <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' />
+              <i className='ri-arrow-down-fill text-[11.2px] text-primary' />
             )
           ) : null}
         </span>
       ),
-      selector: (row: Shipment) => row.closedDate && <span className='tw:text-[11.2px]'>{row.closedDate}</span>,
+      selector: (row: Shipment) => row.closedDate && <span className='text-[11.2px]'>{row.closedDate}</span>,
       sortable: false,
       wrap: true,
       grow: 1.2,
@@ -184,7 +184,7 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
       compact: true,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Tracking No.</span>,
+      name: <span className='font-bold text-[13px]'>Tracking No.</span>,
       selector: (row: Shipment) => {
         let tracking
         {
@@ -194,7 +194,7 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
               break
             case (row.orderType == 'Shipment' || row.orderType == 'Return') && row.trackingNumber != '' && !!row.trackingLink:
               tracking = (
-                <div className='tw:flex tw:flex-row tw:flex-nowrap tw:items-center tw:gap-1'>
+                <div className='flex flex-row flex-nowrap items-center gap-1'>
                   <img
                     loading='lazy'
                     src={row.carrierIcon}
@@ -206,7 +206,7 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                     }}
                   />
                   <a
-                    className='tw:text-[11.2px]'
+                    className='text-[11.2px]'
                     href={`${row.trackingLink}${row.trackingNumber}`}
                     target='blank'
                     rel='noopener noreferrer'
@@ -218,7 +218,7 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
               break
             case (row.orderType == 'Shipment' || row.orderType == 'Return') && row.trackingNumber != '':
               tracking = (
-                <div className='tw:flex tw:flex-row tw:flex-nowrap tw:items-center tw:gap-1'>
+                <div className='flex flex-row flex-nowrap items-center gap-1'>
                   <img
                     loading='lazy'
                     src={row.carrierIcon}
@@ -229,7 +229,7 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                       objectFit: 'contain',
                     }}
                   />
-                  <p className='tw:text-[11.2px]' style={{ margin: '0px' }}>
+                  <p className='text-[11.2px]' style={{ margin: '0px' }}>
                     {row.trackingNumber}
                   </p>
                 </div>
@@ -237,7 +237,7 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
               break
             case (row.orderType == 'Wholesale' || row.orderType == 'FBA Shipment') && row.trackingNumber != '' && !!row.trackingLink && row.carrierService == 'Parcel Boxes':
               tracking = (
-                <div className='tw:flex tw:flex-row tw:flex-nowrap tw:items-center tw:gap-1'>
+                <div className='flex flex-row flex-nowrap items-center gap-1'>
                   <img
                     loading='lazy'
                     src={row.carrierIcon}
@@ -249,7 +249,7 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                     }}
                   />
                   <a
-                    className='tw:text-[11.2px]'
+                    className='text-[11.2px]'
                     href={`${row.trackingLink}${row.trackingNumber}`}
                     target='blank'
                     rel='noopener noreferrer'
@@ -261,7 +261,7 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
               break
             case row.orderType == 'Wholesale' && row.trackingNumber != '':
               tracking = (
-                <div className='tw:flex tw:flex-row tw:flex-nowrap tw:items-center tw:gap-1'>
+                <div className='flex flex-row flex-nowrap items-center gap-1'>
                   <img
                     loading='lazy'
                     src={row.carrierIcon}
@@ -272,17 +272,17 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                       objectFit: 'contain',
                     }}
                   />
-                  <p className='tw:text-[11.2px]' style={{ margin: '0px' }}>
+                  <p className='text-[11.2px]' style={{ margin: '0px' }}>
                     {row.trackingNumber}
                   </p>
                 </div>
               )
               break
             case row.trackingNumber == '':
-              tracking = <span className='tw:text-[11.2px]'>{row.trackingNumber}</span>
+              tracking = <span className='text-[11.2px]'>{row.trackingNumber}</span>
               break
             default:
-              tracking = <span className='tw:text-[11.2px]'>{row.trackingNumber}</span>
+              tracking = <span className='text-[11.2px]'>{row.trackingNumber}</span>
           }
         }
         return tracking
@@ -294,8 +294,8 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
       compact: true,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'># of Items</span>,
-      selector: (row: Shipment) => row.totalItems && <span className='tw:text-[11.2px]'>{row.totalItems}</span>,
+      name: <span className='font-bold text-[13px]'># of Items</span>,
+      selector: (row: Shipment) => row.totalItems && <span className='text-[11.2px]'>{row.totalItems}</span>,
       sortable: false,
       wrap: true,
       // grow: 1.5,
@@ -303,7 +303,7 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
       compact: true,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Total Charge</span>,
+      name: <span className='font-bold text-[13px]'>Total Charge</span>,
       selector: (row: Shipment) => {
         let totalCharge
         {
@@ -315,14 +315,14 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
               totalCharge = FormatCurrency(state.currentRegion, row.totalCharge)
           }
         }
-        return <span className='tw:text-[11.2px] tw:text-primary'>{totalCharge}</span>
+        return <span className='text-[11.2px] text-primary'>{totalCharge}</span>
       },
       sortable: false,
       wrap: true,
       center: true,
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>Action</span>,
+      name: <span className='font-extrabold text-[13px]'>Action</span>,
       sortable: false,
       compact: true,
       center: true,
@@ -330,26 +330,26 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
         switch (row.orderType) {
           case 'Shipment':
             return row.orderStatus === 'shipped' ? (
-              <UncontrolledDropdown className='tw:inline-block' direction='start'>
-                <DropdownToggle className='tw:m-0 tw:p-0 tw:bg-transparent tw:border-0' tag='button'>
-                  <i className='mdi mdi-dots-vertical tw:align-middle tw:text-[19.5px] tw:m-0 tw:px-2 tw:py-0' style={{ color: '#919FAF' }} />
+              <UncontrolledDropdown className='inline-block' direction='start'>
+                <DropdownToggle className='m-0 p-0 bg-transparent border-0' tag='button'>
+                  <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-2 py-0' style={{ color: '#919FAF' }} />
                 </DropdownToggle>
                 <DropdownMenu end container={'body'}>
                   <DropdownItem onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
-                    <i className='ri-article-line tw:align-middle tw:me-2 tw:text-[16.25px] tw:text-[color:var(--bs-secondary-color)]' />
-                    <span className='tw:text-[13px] tw:font-normal tw:text-dark'>View Details</span>
+                    <i className='ri-article-line align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
+                    <span className='text-[13px] font-normal text-dark'>View Details</span>
                   </DropdownItem>
                   {state.currentRegion == 'us' && row.orderStatus == 'shipped' && row.hasReturn == false && row.shipCountry == 'US' && (
                     <>
                       <DropdownItem header>Actions</DropdownItem>
                       <DropdownItem onClick={() => setaddNoteToShipmentModal({ show: true, orderId: row.id, orderNumber: row.orderNumber, note: row.note ?? '' })}>
                         <div>
-                          <i className='las la-clipboard label-icon tw:align-middle tw:me-2 tw:text-[16.25px]' />
-                          <span className='tw:font-normal tw:text-dark'>Shipment Note</span>
+                          <i className='las la-clipboard label-icon align-middle me-2 text-[16.25px]' />
+                          <span className='font-normal text-dark'>Shipment Note</span>
                         </div>
                       </DropdownItem>
                       <DropdownItem className='edit-item-btn' onClick={() => setModalCreateReturnInfo(row.businessId, row.id)}>
-                        <i className='las la-reply label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
+                        <i className='las la-reply label-icon align-middle text-[16.25px] me-2' />
                         Create Return
                       </DropdownItem>
                     </>
@@ -358,12 +358,12 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                     <>
                       <DropdownItem header>Documents</DropdownItem>
                       <DropdownItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'bill_of_lading')}>
-                        <i className='ri-file-text-fill tw:align-middle tw:me-2 tw:text-[16.25px] tw:text-[color:var(--bs-secondary-color)]' />
-                        <span className='tw:text-[13px] tw:font-normal tw:text-dark'>Download BOL</span>
+                        <i className='ri-file-text-fill align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
+                        <span className='text-[13px] font-normal text-dark'>Download BOL</span>
                       </DropdownItem>
                       <DropdownItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'carton_labels')}>
-                        <i className='ri-file-text-fill tw:align-middle tw:me-2 tw:text-[16.25px] tw:text-[color:var(--bs-secondary-color)]' />
-                        <span className='tw:text-[13px] tw:font-normal tw:text-dark'>Carton Label</span>
+                        <i className='ri-file-text-fill align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
+                        <span className='text-[13px] font-normal text-dark'>Carton Label</span>
                       </DropdownItem>
                       <DownloadPackingSlip order={row} />
                     </>
@@ -371,32 +371,32 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                 </DropdownMenu>
               </UncontrolledDropdown>
             ) : (
-              <UncontrolledDropdown className='tw:inline-block' direction='start'>
-                <DropdownToggle className='tw:m-0 tw:p-0 tw:bg-transparent tw:border-0' tag='button'>
-                  <i className='mdi mdi-dots-vertical tw:align-middle tw:text-[19.5px] tw:m-0 tw:px-2 tw:py-0' style={{ color: '#919FAF' }} />
+              <UncontrolledDropdown className='inline-block' direction='start'>
+                <DropdownToggle className='m-0 p-0 bg-transparent border-0' tag='button'>
+                  <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-2 py-0' style={{ color: '#919FAF' }} />
                 </DropdownToggle>
                 <DropdownMenu end container={'body'}>
                   <DropdownItem onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
-                    <i className='ri-article-line tw:align-middle tw:me-2 tw:text-[16.25px] tw:text-[color:var(--bs-secondary-color)]' />
-                    <span className='tw:text-[13px] tw:font-normal tw:text-dark'>View Details</span>
+                    <i className='ri-article-line align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
+                    <span className='text-[13px] font-normal text-dark'>View Details</span>
                   </DropdownItem>
                   <DropdownItem header>Actions</DropdownItem>
                   <DropdownItem onClick={() => setaddNoteToShipmentModal({ show: true, orderId: row.id, orderNumber: row.orderNumber, note: row.note ?? '' })}>
                     <div>
-                      <i className='las la-clipboard label-icon tw:align-middle tw:me-2 tw:text-[16.25px]' />
-                      <span className='tw:font-normal tw:text-dark'>Shipment Note</span>
+                      <i className='las la-clipboard label-icon align-middle me-2 text-[16.25px]' />
+                      <span className='font-normal text-dark'>Shipment Note</span>
                     </div>
                   </DropdownItem>
                   <DropdownItem header>Documents</DropdownItem>
                   {row.carrierService.toLowerCase() === 'ltl' && (
                     <DropdownItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'bill_of_lading')}>
-                      <i className='ri-file-text-fill tw:align-middle tw:me-2 tw:text-[16.25px] tw:text-[color:var(--bs-secondary-color)]' />
-                      <span className='tw:text-[13px] tw:font-normal tw:text-dark'>Download BOL</span>
+                      <i className='ri-file-text-fill align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
+                      <span className='text-[13px] font-normal text-dark'>Download BOL</span>
                     </DropdownItem>
                   )}
                   <DropdownItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'carton_labels')}>
-                    <i className='ri-file-text-fill tw:align-middle tw:me-2 tw:text-[16.25px] tw:text-[color:var(--bs-secondary-color)]' />
-                    <span className='tw:text-[13px] tw:font-normal tw:text-dark'>Carton Label</span>
+                    <i className='ri-file-text-fill align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
+                    <span className='text-[13px] font-normal text-dark'>Carton Label</span>
                   </DropdownItem>
                   <DownloadPackingSlip order={row} />
                 </DropdownMenu>
@@ -404,43 +404,43 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
             )
           case 'Wholesale':
             return (
-              <UncontrolledDropdown className='tw:inline-block' direction='start'>
-                <DropdownToggle className='tw:m-0 tw:p-0 tw:bg-transparent tw:border-0' tag='button'>
-                  <i className='mdi mdi-dots-vertical tw:align-middle tw:text-[19.5px] tw:m-0 tw:px-2 tw:py-0' style={{ color: '#919FAF' }} />
+              <UncontrolledDropdown className='inline-block' direction='start'>
+                <DropdownToggle className='m-0 p-0 bg-transparent border-0' tag='button'>
+                  <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-2 py-0' style={{ color: '#919FAF' }} />
                 </DropdownToggle>
                 <DropdownMenu end container={'body'}>
                   <DropdownItem onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
-                    <i className='ri-article-line tw:align-middle tw:me-2 tw:text-[16.25px] tw:text-[color:var(--bs-secondary-color)]' />
-                    <span className='tw:text-[13px] tw:font-normal tw:text-dark'>View Details</span>
+                    <i className='ri-article-line align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
+                    <span className='text-[13px] font-normal text-dark'>View Details</span>
                   </DropdownItem>
                   <DropdownItem header>Actions</DropdownItem>
                   <DropdownItem onClick={() => setaddNoteToShipmentModal({ show: true, orderId: row.id, orderNumber: row.orderNumber, note: row.note ?? '' })}>
                     <div>
-                      <i className='las la-clipboard label-icon tw:align-middle tw:me-2 tw:text-[16.25px]' />
-                      <span className='tw:font-normal tw:text-dark'>Shipment Note</span>
+                      <i className='las la-clipboard label-icon align-middle me-2 text-[16.25px]' />
+                      <span className='font-normal text-dark'>Shipment Note</span>
                     </div>
                   </DropdownItem>
                   <DropdownItem header>Documents</DropdownItem>
                   {row.proofOfShipped != '' && row.proofOfShipped != null && (
                     <DropdownItem className='edit-item-btn'>
-                      <a className='tw:text-black' href={row.proofOfShipped} target='blank' rel='noopener noreferrer'>
-                        <i className='las la-truck label-icon tw:align-middle tw:text-[22.75px] tw:me-2' />
+                      <a className='text-black' href={row.proofOfShipped} target='blank' rel='noopener noreferrer'>
+                        <i className='las la-truck label-icon align-middle text-[22.75px] me-2' />
                         Proof Of Shipped
                       </a>
                     </DropdownItem>
                   )}
                   {row.labelsName != '' && (
                     <DropdownItem className='edit-item-btn'>
-                      <a className='tw:text-black' href={row.labelsName} target='blank' rel='noopener noreferrer'>
-                        <i className='las la-toilet-paper label-icon tw:align-middle tw:text-[22.75px] tw:me-2' />
+                      <a className='text-black' href={row.labelsName} target='blank' rel='noopener noreferrer'>
+                        <i className='las la-toilet-paper label-icon align-middle text-[22.75px] me-2' />
                         Shipping Labels
                       </a>
                     </DropdownItem>
                   )}
                   {row.palletLabelsName != '' && (
                     <DropdownItem className='edit-item-btn'>
-                      <a className='tw:text-black' href={row.palletLabelsName} target='blank' rel='noopener noreferrer'>
-                        <i className='las la-toilet-paper label-icon tw:align-middle tw:text-[22.75px] tw:me-2' />
+                      <a className='text-black' href={row.palletLabelsName} target='blank' rel='noopener noreferrer'>
+                        <i className='las la-toilet-paper label-icon align-middle text-[22.75px] me-2' />
                         Pallet Labels
                       </a>
                     </DropdownItem>
@@ -451,20 +451,20 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
             )
           default:
             return (
-              <UncontrolledDropdown className='tw:inline-block' direction='start'>
-                <DropdownToggle className='tw:m-0 tw:p-0 tw:bg-transparent tw:border-0' tag='button'>
-                  <i className='mdi mdi-dots-vertical tw:align-middle tw:text-[19.5px] tw:m-0 tw:px-2 tw:py-0' style={{ color: '#919FAF' }} />
+              <UncontrolledDropdown className='inline-block' direction='start'>
+                <DropdownToggle className='m-0 p-0 bg-transparent border-0' tag='button'>
+                  <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-2 py-0' style={{ color: '#919FAF' }} />
                 </DropdownToggle>
                 <DropdownMenu end container={'body'}>
                   <DropdownItem onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
-                    <i className='ri-article-line tw:align-middle tw:me-2 tw:text-[16.25px] tw:text-[color:var(--bs-secondary-color)]' />
-                    <span className='tw:text-[13px] tw:font-normal tw:text-dark'>View Details</span>
+                    <i className='ri-article-line align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
+                    <span className='text-[13px] font-normal text-dark'>View Details</span>
                   </DropdownItem>
                   <DropdownItem header>Actions</DropdownItem>
                   <DropdownItem onClick={() => setaddNoteToShipmentModal({ show: true, orderId: row.id, orderNumber: row.orderNumber, note: row.note ?? '' })}>
                     <div>
-                      <i className='las la-clipboard label-icon tw:align-middle tw:me-2 tw:text-[16.25px]' />
-                      <span className='tw:font-normal tw:text-dark'>Shipment Note</span>
+                      <i className='las la-clipboard label-icon align-middle me-2 text-[16.25px]' />
+                      <span className='font-normal text-dark'>Shipment Note</span>
                     </div>
                   </DropdownItem>
                 </DropdownMenu>

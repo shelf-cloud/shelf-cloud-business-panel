@@ -64,8 +64,8 @@ const ExportProductsFile = ({ products }: Props) => {
   }, [products])
 
   return (
-    <DropdownItem className='tw:text-primary' onClick={exportExcelFile}>
-      <i className='mdi mdi-arrow-down-bold label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
+    <DropdownItem className='text-primary' onClick={exportExcelFile}>
+      <i className='mdi mdi-arrow-down-bold label-icon align-middle text-[16.25px] me-2' />
       Export Products
     </DropdownItem>
   )

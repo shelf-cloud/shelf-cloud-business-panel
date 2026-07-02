@@ -3,9 +3,9 @@ type Props = {
   marginTop?: string
 }
 
-const ErrorInputLabel = ({ error, marginTop = 'tw:mt-1' }: Props) => {
+const ErrorInputLabel = ({ error, marginTop = 'mt-1' }: Props) => {
   if (!error || error === undefined) return null
-  return <p className={`tw:m-0 ${marginTop} tw:p-0 tw:text-sm tw:text-destructive`}>{error}</p>
+  return <p className={`m-0 ${marginTop} p-0 text-sm text-destructive`}>{error}</p>
 }
 
 export default ErrorInputLabel

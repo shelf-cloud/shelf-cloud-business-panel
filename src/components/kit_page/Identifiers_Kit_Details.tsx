@@ -71,10 +71,10 @@ const Identifiers_Kit_Details = ({ inventoryId, sku, upc, asin, fnsku, identifie
   //   setShowEditFields(true)
   // }
   return (
-    <div className='tw:py-1 tw:w-3/4'>
+    <div className='py-1 w-3/4'>
       {!showEditFields ? (
-        <div className='tw:flex tw:flex-row tw:justify-start tw:items-start tw:gap-4'>
-          <table className='tw:w-full tw:text-[11.2px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+        <div className='flex flex-row justify-start items-start gap-4'>
+          <table className='w-full text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
             <thead>
               <tr>
                 <th>Type</th>
@@ -109,28 +109,28 @@ const Identifiers_Kit_Details = ({ inventoryId, sku, upc, asin, fnsku, identifie
                 ))}
             </tbody>
           </table>
-          <div className='tw:text-right'>{/* <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i> */}</div>
+          <div className='text-right'>{/* <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i> */}</div>
         </div>
       ) : (
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => handleSubmit(values)}>
           {({ values, errors, touched, handleChange, handleBlur }) => (
             <Form>
-              <table className='tw:w-full tw:text-[11.2px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+              <table className='w-full text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                 <thead>
-                  <tr className='tw:text-center'>
+                  <tr className='text-center'>
                     <th>Type</th>
                     <th>Value</th>
                   </tr>
                 </thead>
-                <tbody className='tw:text-center'>
+                <tbody className='text-center'>
                   <tr>
-                    <td className='tw:align-middle'>UPC</td>
+                    <td className='align-middle'>UPC</td>
                     <td>
                       <FormGroup className='createOrder_inputs'>
                         <Input
                           disabled
                           type='text'
-                          className='tw:text-[13px]'
+                          className='text-[13px]'
                           style={{ padding: '0.2rem 0.9rem' }}
                           placeholder='Upc...'
                           id='upc'
@@ -145,21 +145,21 @@ const Identifiers_Kit_Details = ({ inventoryId, sku, upc, asin, fnsku, identifie
                     {({ remove, push }) => (
                       <>
                         <tr>
-                          <td className='tw:text-[color:var(--bs-secondary-color)] tw:align-middle tw:text-nowrap'>Additional Identifiers</td>
+                          <td className='text-[color:var(--bs-secondary-color)] align-middle text-nowrap'>Additional Identifiers</td>
                           <td></td>
-                          <td className='tw:align-middle'>
-                            <div className='tw:flex tw:flex-row tw:flex-nowrap tw:justify-center tw:items-center tw:mb-0 tw:h-full'>
-                              <i className='tw:text-[26px] tw:text-success las la-plus-circle' style={{ cursor: 'pointer' }} onClick={() => push({ type: '', value: '' })} />
+                          <td className='align-middle'>
+                            <div className='flex flex-row flex-nowrap justify-center items-center mb-0 h-full'>
+                              <i className='text-[26px] text-success las la-plus-circle' style={{ cursor: 'pointer' }} onClick={() => push({ type: '', value: '' })} />
                             </div>
                           </td>
                         </tr>
                         <tr>
-                          <td className='tw:align-middle'>ASIN</td>
+                          <td className='align-middle'>ASIN</td>
                           <td>
                             <FormGroup className='createOrder_inputs'>
                               <Input
                                 type='text'
-                                className='tw:text-[13px]'
+                                className='text-[13px]'
                                 style={{ padding: '0.2rem 0.9rem' }}
                                 placeholder='Asin...'
                                 id='asin'
@@ -175,12 +175,12 @@ const Identifiers_Kit_Details = ({ inventoryId, sku, upc, asin, fnsku, identifie
                           </td>
                         </tr>
                         <tr>
-                          <td className='tw:align-middle'>FNSKU</td>
+                          <td className='align-middle'>FNSKU</td>
                           <td>
                             <FormGroup className='createOrder_inputs'>
                               <Input
                                 type='text'
-                                className='tw:text-[13px]'
+                                className='text-[13px]'
                                 style={{ padding: '0.2rem 0.9rem' }}
                                 placeholder='FNSKU...'
                                 id='fnsku'
@@ -204,7 +204,7 @@ const Identifiers_Kit_Details = ({ inventoryId, sku, upc, asin, fnsku, identifie
                                     <Input
                                       type='select'
                                       disabled={!IDENTIFIERS_TYPES[values.identifiers[index].type as keyof typeof IDENTIFIERS_TYPES].options.modified}
-                                      className='tw:text-center tw:align-middle tw:text-[13px]'
+                                      className='text-center align-middle text-[13px]'
                                       style={{
                                         padding: '0.2rem 0.9rem',
                                       }}
@@ -232,7 +232,7 @@ const Identifiers_Kit_Details = ({ inventoryId, sku, upc, asin, fnsku, identifie
                                   <FormGroup className='createOrder_inputs'>
                                     <Input
                                       type='text'
-                                      className='tw:align-middle tw:text-[13px]'
+                                      className='align-middle text-[13px]'
                                       disabled={!IDENTIFIERS_TYPES[values.identifiers[index].type as keyof typeof IDENTIFIERS_TYPES].options.modified}
                                       style={{
                                         padding: '0.2rem 0.9rem',
@@ -250,10 +250,10 @@ const Identifiers_Kit_Details = ({ inventoryId, sku, upc, asin, fnsku, identifie
                                 )}
                               </Field>
                             </td>
-                            <td className='tw:align-middle'>
-                              <div className='tw:flex tw:flex-row tw:flex-nowrap tw:justify-center tw:gap-2 tw:items-center tw:mb-0 tw:h-full'>
+                            <td className='align-middle'>
+                              <div className='flex flex-row flex-nowrap justify-center gap-2 items-center mb-0 h-full'>
                                 {IDENTIFIERS_TYPES[values.identifiers[index].type as keyof typeof IDENTIFIERS_TYPES].options.delete && (
-                                  <i className='tw:align-middle tw:text-danger tw:text-[26px] las la-trash-alt' style={{ cursor: 'pointer' }} onClick={() => remove(index)} />
+                                  <i className='align-middle text-danger text-[26px] las la-trash-alt' style={{ cursor: 'pointer' }} onClick={() => remove(index)} />
                                 )}
                               </div>
                             </td>
@@ -265,7 +265,7 @@ const Identifiers_Kit_Details = ({ inventoryId, sku, upc, asin, fnsku, identifie
                 </tbody>
               </table>
               <Col md={12}>
-                <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-3'>
+                <div className='flex flex-row justify-end items-center gap-3'>
                   <Button type='button' color='light' onClick={() => setShowEditFields(false)}>
                     Cancel
                   </Button>

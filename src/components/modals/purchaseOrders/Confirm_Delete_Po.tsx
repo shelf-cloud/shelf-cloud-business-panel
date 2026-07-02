@@ -72,14 +72,14 @@ const Confirm_Delete_Po = ({ showDeleteModal, setshowDeleteModal, loading, setLo
       </ModalHeader>
       <ModalBody>
         <Row>
-          <p className='tw:m-0 tw:text-[16.25px] tw:font-semibold'>
-            Purchase Order: <span className='tw:text-primary'>{orderNumber}</span>
+          <p className='m-0 text-[16.25px] font-semibold'>
+            Purchase Order: <span className='text-primary'>{orderNumber}</span>
           </p>
-          <div className='tw:mt-4 tw:flex tw:justify-end tw:items-center tw:gap-2'>
-            <Button type='button' color='light' className='tw:text-[11.2px]' onClick={handleClose}>
+          <div className='mt-4 flex justify-end items-center gap-2'>
+            <Button type='button' color='light' className='text-[11.2px]' onClick={handleClose}>
               Cancel
             </Button>
-            <Button disabled={loading} type='button' color='danger' className='tw:text-[11.2px]' onClick={handleDeletePO}>
+            <Button disabled={loading} type='button' color='danger' className='text-[11.2px]' onClick={handleDeletePO}>
               {loading ? (
                 <span>
                   <Spinner color='light' size={'sm'} /> Deleting...

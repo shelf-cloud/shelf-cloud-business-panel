@@ -96,13 +96,13 @@ const PurchaseOrders = ({ session }: Props) => {
               <Col lg={12}>
                 <Card>
                   <CardHeader>
-                    <div className='tw:flex tw:flex-col tw:justify-between tw:items-end tw:mt-0 tw:mb-0 tw:gap-3 tw:lg:flex-row'>
-                      <div className='tw:flex-1'>
-                        <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:text-[color:var(--bs-secondary-color)] tw:font-normal'>Organize Purchase Orders by:</p>
-                        <Nav className='tw:pt-1' role='tablist'>
+                    <div className='flex flex-col justify-between items-end mt-0 mb-0 gap-3 lg:flex-row'>
+                      <div className='flex-1'>
+                        <p className='m-0 p-0 text-[11.2px] text-[color:var(--bs-secondary-color)] font-normal'>Organize Purchase Orders by:</p>
+                        <Nav className='pt-1' role='tablist'>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
-                              className={organizeBy == 'suppliers' ? 'tw:!text-primary tw:font-semibold tw:text-[16.25px]' : 'tw:!text-[color:var(--bs-secondary-color)] tw:text-[16.25px]'}
+                              className={organizeBy == 'suppliers' ? '!text-primary font-semibold text-[16.25px]' : '!text-[color:var(--bs-secondary-color)] text-[16.25px]'}
                               onClick={() => {
                                 router.replace(`/purchaseOrders?status=${status}&organizeBy=suppliers`, undefined, { shallow: true })
                               }}>
@@ -111,7 +111,7 @@ const PurchaseOrders = ({ session }: Props) => {
                           </NavItem>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
-                              className={organizeBy == 'orders' ? 'tw:!text-primary tw:font-semibold tw:text-[16.25px]' : 'tw:!text-[color:var(--bs-secondary-color)] tw:text-[16.25px]'}
+                              className={organizeBy == 'orders' ? '!text-primary font-semibold text-[16.25px]' : '!text-[color:var(--bs-secondary-color)] text-[16.25px]'}
                               onClick={() => {
                                 router.replace(`/purchaseOrders?status=${status}&organizeBy=orders`, undefined, { shallow: true })
                               }}
@@ -121,7 +121,7 @@ const PurchaseOrders = ({ session }: Props) => {
                           </NavItem>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
-                              className={organizeBy == 'sku' ? 'tw:!text-primary tw:font-semibold tw:text-[16.25px]' : 'tw:!text-[color:var(--bs-secondary-color)] tw:text-[16.25px]'}
+                              className={organizeBy == 'sku' ? '!text-primary font-semibold text-[16.25px]' : '!text-[color:var(--bs-secondary-color)] text-[16.25px]'}
                               onClick={() => {
                                 router.replace(`/purchaseOrders?status=${status}&organizeBy=sku`, undefined, { shallow: true })
                               }}
@@ -131,33 +131,33 @@ const PurchaseOrders = ({ session }: Props) => {
                           </NavItem>
                         </Nav>
                       </div>
-                      <div className='tw:flex-1 tw:w-auto tw:flex tw:flex-row tw:flex-wrap tw:items-end tw:justify-start tw:gap-2 tw:lg:justify-end'>
+                      <div className='flex-1 w-auto flex flex-row flex-wrap items-end justify-start gap-2 lg:justify-end'>
                         {status == 'pending' ? (
                           <Button
-                            className='tw:text-[11.2px] tw:py-1 tw:px-3 tw:text-nowrap'
+                            className='text-[11.2px] py-1 px-3 text-nowrap'
                             color='info'
                             onClick={() => {
                               router.replace(`/purchaseOrders?status=all&organizeBy=${organizeBy}`)
                             }}>
-                            <i className='mdi mdi-eye label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
+                            <i className='mdi mdi-eye label-icon align-middle text-[16.25px] me-2' />
                             Show Completed
                           </Button>
                         ) : (
                           <Button
-                            className='tw:text-[11.2px] tw:py-1 tw:px-3 tw:text-nowrap'
+                            className='text-[11.2px] py-1 px-3 text-nowrap'
                             color='info'
                             onClick={() => {
                               router.replace(`/purchaseOrders?status=pending&organizeBy=${organizeBy}`)
                             }}>
-                            <i className='mdi mdi-eye-off label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
+                            <i className='mdi mdi-eye-off label-icon align-middle text-[16.25px] me-2' />
                             Hide Completed
                           </Button>
                         )}
                         <UncontrolledButtonDropdown>
                           <DropdownToggle
                             caret
-                            className='tw:inline-flex tw:items-center tw:gap-1 tw:rounded-md tw:bg-primary tw:py-1 tw:px-3 tw:text-[11.2px] tw:font-medium tw:text-primary-foreground tw:whitespace-nowrap tw:shadow-xs tw:hover:bg-primary/90'>
-                            <i className='mdi mdi-plus-circle label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
+                            className='inline-flex items-center gap-1 rounded-md bg-primary py-1 px-3 text-[11.2px] font-medium text-primary-foreground whitespace-nowrap shadow-xs hover:bg-primary/90'>
+                            <i className='mdi mdi-plus-circle label-icon align-middle text-[16.25px] me-2' />
                             Add Purchase Order
                           </DropdownToggle>
                           <DropdownMenu>
@@ -167,11 +167,11 @@ const PurchaseOrders = ({ session }: Props) => {
                         </UncontrolledButtonDropdown>
                         <Button
                           color='primary'
-                          className='tw:text-[11.2px] tw:py-1 tw:px-3 tw:text-nowrap'
+                          className='text-[11.2px] py-1 px-3 text-nowrap'
                           onClick={() => {
                             setShowCreateReceivingFromPo(true)
                           }}>
-                          <i className='mdi mdi-airplane-landing label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
+                          <i className='mdi mdi-airplane-landing label-icon align-middle text-[16.25px] me-2' />
                           Create Receiving
                         </Button>
                       </div>

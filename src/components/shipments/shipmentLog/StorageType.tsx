@@ -16,35 +16,35 @@ const StorageType = ({ data, totalCharge }: Props) => {
   const { state }: any = useContext(AppContext)
   const products = Object.values(data)
   return (
-    <div className='tw:w-full' style={{ backgroundColor: '#F0F4F7', padding: '0px' }}>
+    <div className='w-full' style={{ backgroundColor: '#F0F4F7', padding: '0px' }}>
       <Row>
         <Col xs={12}>
           <Row>
             <Col xs={12}>
               <Card>
-                <CardHeader className='tw:py-4'>
-                  <h5 className='tw:font-semibold tw:m-0'>Products</h5>
+                <CardHeader className='py-4'>
+                  <h5 className='font-semibold m-0'>Products</h5>
                 </CardHeader>
                 <CardBody>
-                  <div className='tw:overflow-x-auto'>
-                    <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
-                      <thead className='tw:bg-[color:var(--vz-light)]'>
+                  <div className='overflow-x-auto'>
+                    <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+                      <thead className='bg-[color:var(--vz-light)]'>
                         <tr>
-                          <th className='tw:text-center' scope='col'>
+                          <th className='text-center' scope='col'>
                             Image
                           </th>
                           <th scope='col'>Sku</th>
                           <th scope='col'>Title</th>
-                          <th className='tw:text-center' scope='col'>
+                          <th className='text-center' scope='col'>
                             Storage Fee
                           </th>
                         </tr>
                       </thead>
                       <tbody>
                         {products.map((product: StorageProduct, key) => (
-                          <tr key={key} className='tw:border-b tw:py-2'>
+                          <tr key={key} className='border-b py-2'>
                             <td>
-                              <div className='tw:flex tw:flex-col tw:justify-center tw:items-center tw:gap-2'>
+                              <div className='flex flex-col justify-center items-center gap-2'>
                                 <img
                                   loading='lazy'
                                   src={product.image ? product.image : NoImageAdress}
@@ -58,16 +58,16 @@ const StorageType = ({ data, totalCharge }: Props) => {
                                 />
                               </div>
                             </td>
-                            <td className='tw:w-1/2 tw:text-[11.2px] tw:font-semibold'>{product.title}</td>
-                            <td className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>{product.sku}</td>
-                            <td className='tw:text-center'>{FormatCurrency(state.currentRegion, product.storageFee ?? 0)}</td>
+                            <td className='w-1/2 text-[11.2px] font-semibold'>{product.title}</td>
+                            <td className='text-[11.2px] text-[var(--bs-secondary-color)]'>{product.sku}</td>
+                            <td className='text-center'>{FormatCurrency(state.currentRegion, product.storageFee ?? 0)}</td>
                           </tr>
                         ))}
-                        <tr className='tw:bg-light'>
+                        <tr className='bg-light'>
                           <td></td>
                           <td></td>
-                          <td className='tw:text-right tw:font-bold tw:text-nowrap'>Total</td>
-                          <td className='tw:text-center tw:text-primary tw:font-semibold'>{FormatCurrency(state.currentRegion, totalCharge)}</td>
+                          <td className='text-right font-bold text-nowrap'>Total</td>
+                          <td className='text-center text-primary font-semibold'>{FormatCurrency(state.currentRegion, totalCharge)}</td>
                         </tr>
                       </tbody>
                     </table>

@@ -120,29 +120,29 @@ const MasterBoxesTable = ({
   const conditionalRowStyles = [
     {
       when: (row: AmazonFulfillmentSku) => Number(row.maxOrderQty) == 0,
-      classNames: ['tw:bg-warning/25'],
+      classNames: ['bg-warning/25'],
     },
     {
       when: (row: AmazonFulfillmentSku) => Number(row.orderQty) > 0,
-      classNames: ['tw:bg-success/25'],
+      classNames: ['bg-success/25'],
     },
     {
       when: (row: AmazonFulfillmentSku) => {
         const rowValidation = rowValidationByMsku[row.msku]
         return Boolean(rowValidation?.hasInputError || rowValidation?.hasExceededQtyError || rowValidation?.hasMissingAvailabilityError)
       },
-      classNames: ['tw:bg-danger/25'],
+      classNames: ['bg-danger/25'],
     },
   ]
 
   const columns: any = [
     {
-      name: <span className='tw:font-bold tw:text-[11.2px]'>Image</span>,
+      name: <span className='font-bold text-[11.2px]'>Image</span>,
       selector: (row: AmazonFulfillmentSku) => {
         return (
           <Link href={row.isKit ? `/kit/${row.inventoryId}/${row.sku}` : `/product/${row.inventoryId}/${row.sku}`} target='blank' rel='noopener noreferrer' tabIndex={-1}>
             <div
-              className='tw:my-2'
+              className='my-2'
               style={{
                 width: '50px',
                 height: '50px',
@@ -165,18 +165,18 @@ const MasterBoxesTable = ({
       width: '80px',
     },
     {
-      name: <span className='tw:font-bold tw:text-[11.2px]'>Amazon SKU Details</span>,
+      name: <span className='font-bold text-[11.2px]'>Amazon SKU Details</span>,
       selector: (row: AmazonFulfillmentSku) => {
         if (row.isKit) {
           return (
-            <div className='tw:flex tw:flex-col tw:justify-start tw:items-start tw:my-2'>
+            <div className='flex flex-col justify-start items-start my-2'>
               <Link href={`/kit/${row.inventoryId}/${row.sku}`} style={{ cursor: 'pointer' }} target='blank' rel='noopener noreferrer' tabIndex={-1}>
-                <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:font-semibold tw:text-black'>{row.title || `${row.product_name.substring(0, 80)}...`}</p>
+                <p className='m-0 p-0 text-[11.2px] font-semibold text-black'>{row.title || `${row.product_name.substring(0, 80)}...`}</p>
               </Link>
-              <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center'>
-                <p className='tw:m-0 tw:p-0 tw:text-[11.2px]'>{`${row.msku}`}</p>
+              <div className='flex flex-wrap justify-start items-center'>
+                <p className='m-0 p-0 text-[11.2px]'>{`${row.msku}`}</p>
                 <i
-                  className='ri-file-copy-line tw:text-[13px] tw:my-0 tw:mx-1 tw:p-0 tw:text-[color:var(--bs-secondary-color)]'
+                  className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-[color:var(--bs-secondary-color)]'
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
                     navigator.clipboard.writeText(row.msku)
@@ -184,17 +184,17 @@ const MasterBoxesTable = ({
                   }}
                 />
               </div>
-              <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center'>
+              <div className='flex flex-wrap justify-start items-center'>
                 <a
                   tabIndex={-1}
                   href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`}
                   target='blank'
                   rel='noopener noreferrer'
-                  className='tw:font-light tw:text-[11.2px]'>
+                  className='font-light text-[11.2px]'>
                   {`ASIN: ${row.asin}`}
                 </a>
                 <i
-                  className='ri-file-copy-line tw:text-[13px] tw:my-0 tw:mx-1 tw:p-0 tw:text-[color:var(--bs-secondary-color)]'
+                  className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-[color:var(--bs-secondary-color)]'
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
                     navigator.clipboard.writeText(row.asin)
@@ -202,8 +202,8 @@ const MasterBoxesTable = ({
                   }}
                 />
               </div>
-              <p className='tw:text-[11.2px] tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)]'>
-                Label Owner: <span className='tw:text-black'>{row.labelOwner}</span> Prep Owner: <span className='tw:text-black'>{row.prepOwner}</span>
+              <p className='text-[11.2px] m-0 p-0 text-[var(--bs-secondary-color)]'>
+                Label Owner: <span className='text-black'>{row.labelOwner}</span> Prep Owner: <span className='text-black'>{row.prepOwner}</span>
               </p>
               <div>
                 {row.children?.map((child) => (
@@ -216,14 +216,14 @@ const MasterBoxesTable = ({
           )
         } else {
           return (
-            <div className='tw:flex tw:flex-col tw:justify-start tw:items-start'>
+            <div className='flex flex-col justify-start items-start'>
               <Link href={`/product/${row.inventoryId}/${row.sku}`} style={{ cursor: 'pointer' }} target='blank' rel='noopener noreferrer' tabIndex={-1}>
-                <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:font-semibold tw:text-black'>{row.title || `${row.product_name.substring(0, 80)}...`}</p>
+                <p className='m-0 p-0 text-[11.2px] font-semibold text-black'>{row.title || `${row.product_name.substring(0, 80)}...`}</p>
               </Link>
-              <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center'>
-                <p className='tw:m-0 tw:p-0 tw:text-[11.2px]'>{`${row.msku}`}</p>
+              <div className='flex flex-wrap justify-start items-center'>
+                <p className='m-0 p-0 text-[11.2px]'>{`${row.msku}`}</p>
                 <i
-                  className='ri-file-copy-line tw:text-[13px] tw:my-0 tw:mx-1 tw:p-0 tw:text-[color:var(--bs-secondary-color)]'
+                  className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-[color:var(--bs-secondary-color)]'
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
                     navigator.clipboard.writeText(row.msku)
@@ -231,17 +231,17 @@ const MasterBoxesTable = ({
                   }}
                 />
               </div>
-              <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center'>
+              <div className='flex flex-wrap justify-start items-center'>
                 <a
                   tabIndex={-1}
                   href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`}
                   target='blank'
                   rel='noopener noreferrer'
-                  className='tw:font-light tw:text-[11.2px]'>
+                  className='font-light text-[11.2px]'>
                   {`ASIN: ${row.asin}`}
                 </a>
                 <i
-                  className='ri-file-copy-line tw:text-[13px] tw:my-0 tw:mx-1 tw:p-0 tw:text-[color:var(--bs-secondary-color)]'
+                  className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-[color:var(--bs-secondary-color)]'
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
                     navigator.clipboard.writeText(row.asin)
@@ -249,8 +249,8 @@ const MasterBoxesTable = ({
                   }}
                 />
               </div>
-              <p className='tw:text-[11.2px] tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)]'>
-                Label Owner: <span className='tw:text-black'>{row.labelOwner}</span> Prep Owner: <span className='tw:text-black'>{row.prepOwner}</span>
+              <p className='text-[11.2px] m-0 p-0 text-[var(--bs-secondary-color)]'>
+                Label Owner: <span className='text-black'>{row.labelOwner}</span> Prep Owner: <span className='text-black'>{row.prepOwner}</span>
               </p>
             </div>
           )
@@ -265,11 +265,11 @@ const MasterBoxesTable = ({
       sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => sortStringsLocaleCompare(rowA.product_name, rowB.product_name),
     },
     {
-      name: <span className='tw:font-bold tw:text-[11.2px]'>SC SKU</span>,
+      name: <span className='font-bold text-[11.2px]'>SC SKU</span>,
       selector: (row: AmazonFulfillmentSku) => {
         return (
-          <div className='tw:text-center'>
-            <p className='tw:m-0 tw:p-0 tw:text-[11.2px]'>{row.shelfcloud_sku}</p>
+          <div className='text-center'>
+            <p className='m-0 p-0 text-[11.2px]'>{row.shelfcloud_sku}</p>
             {/* <p className='m-0 p-0 d-inline-flex flex-row justify-content-center align-items-center gap-1'>
               <span
                 className='text-primary fs-7'
@@ -295,7 +295,7 @@ const MasterBoxesTable = ({
                   <UncontrolledTooltip
                     placement='right'
                     target={`tooltipFBABoxesErrors${row.inventoryId}`}
-                    popperClassName='bg-white shadow p-3 tw:rounded'
+                    popperClassName='bg-white shadow p-3 rounded'
                     style={{ display: 'inline-table' }}
                     innerClassName='text-black bg-white p-0 position-relative'>
                     <p className='fs-6 text-primary m-0 p-0 fw-bold text-start mb-2'>SKU Errors</p>
@@ -351,12 +351,12 @@ const MasterBoxesTable = ({
                                         state.currentRegion,
                                         amzBoxVolume
                                       )} - 10%:`}</p>
-                                      <p className='m-0 p-0 tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>
+                                      <p className='m-0 p-0 text-[var(--bs-secondary-color)] text-nowrap'>
                                         Amazon Box Volume:{' '}
-                                        <span className='text-black tw:font-semibold'>{FormatIntPercentage(state.currentRegion, amzBoxVolume - amzBoxTenPercent)} inch3</span>
+                                        <span className='text-black font-semibold'>{FormatIntPercentage(state.currentRegion, amzBoxVolume - amzBoxTenPercent)} inch3</span>
                                       </p>
-                                      <p className='m-0 p-0 tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>
-                                        ShelfCloud Box Volume: <span className='text-black tw:font-semibold'>{FormatIntPercentage(state.currentRegion, scboxVolume)} inch3</span>
+                                      <p className='m-0 p-0 text-[var(--bs-secondary-color)] text-nowrap'>
+                                        ShelfCloud Box Volume: <span className='text-black font-semibold'>{FormatIntPercentage(state.currentRegion, scboxVolume)} inch3</span>
                                       </p>
                                     </>
                                   )
@@ -383,12 +383,12 @@ const MasterBoxesTable = ({
       compact: true,
     },
     {
-      name: <span className='tw:font-bold tw:text-[11.2px]'>Type</span>,
+      name: <span className='font-bold text-[11.2px]'>Type</span>,
       selector: (cell: any) => {
         if (cell.isKit) {
-          return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-info)_10%,transparent)] tw:text-info tw:p-2'>kit</span>
+          return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-info)_10%,transparent)] text-info p-2'>kit</span>
         } else {
-          return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--bs-primary)_10%,transparent)] tw:text-primary tw:p-2'>product</span>
+          return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-primary)_10%,transparent)] text-primary p-2'>product</span>
         }
       },
       sortable: true,
@@ -397,32 +397,32 @@ const MasterBoxesTable = ({
       sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => sortBooleans(rowA.isKit, rowB.isKit),
     },
     {
-      name: <span className='tw:font-bold tw:text-[11.2px]'>Amazon FBA</span>,
+      name: <span className='font-bold text-[11.2px]'>Amazon FBA</span>,
       selector: (row: AmazonFulfillmentSku) => {
         return (
-          <div className='tw:flex tw:flex-col tw:justify-start tw:items-start tw:my-1 tw:text-[11.2px]'>
-            <span className='tw:m-0 tw:p-0 tw:font-semibold'>
-              <span className='tw:text-[var(--bs-secondary-color)] tw:font-light'>Fulfillable: </span>
+          <div className='flex flex-col justify-start items-start my-1 text-[11.2px]'>
+            <span className='m-0 p-0 font-semibold'>
+              <span className='text-[var(--bs-secondary-color)] font-light'>Fulfillable: </span>
               {FormatIntNumber(state.currentRegion, row.afn_fulfillable_quantity)}
             </span>
-            <span className='tw:m-0 tw:p-0 tw:font-semibold'>
-              <span className='tw:text-[var(--bs-secondary-color)] tw:font-light'>Reserved: </span>
+            <span className='m-0 p-0 font-semibold'>
+              <span className='text-[var(--bs-secondary-color)] font-light'>Reserved: </span>
               {FormatIntNumber(state.currentRegion, row.afn_reserved_quantity)}
             </span>
-            <span className='tw:m-0 tw:p-0 tw:font-semibold'>
-              <span className='tw:text-[var(--bs-secondary-color)] tw:font-light'>Unsellable: </span>
+            <span className='m-0 p-0 font-semibold'>
+              <span className='text-[var(--bs-secondary-color)] font-light'>Unsellable: </span>
               {FormatIntNumber(state.currentRegion, row.afn_unsellable_quantity)}
             </span>
-            <div className='tw:m-0 tw:p-0 tw:font-semibold tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-1'>
-              <span className='tw:text-[var(--bs-secondary-color)] tw:font-light'>Inbound: </span>
+            <div className='m-0 p-0 font-semibold flex flex-row justify-end items-center gap-1'>
+              <span className='text-[var(--bs-secondary-color)] font-light'>Inbound: </span>
               {FormatIntNumber(state.currentRegion, row.afn_inbound_receiving_quantity + row.afn_inbound_shipped_quantity + row.afn_inbound_working_quantity)}
               {row.fbaShipments.length > 0 && (
                 <Button
                   color='light'
                   outline
-                  className='tw:p-0 tw:m-0 btn btn-sm btn-icon btn-ghost-info'
+                  className='p-0 m-0 btn btn-sm btn-icon btn-ghost-info'
                   onClick={() => setinboundFBAHistoryModal({ show: true, sku: row.shelfcloud_sku, msku: row.msku, shipments: row.fbaShipments })}>
-                  <i className='ri-information-fill tw:p-0 tw:m-0 tw:text-[13px] tw:text-info' />
+                  <i className='ri-information-fill p-0 m-0 text-[13px] text-info' />
                 </Button>
               )}
             </div>
@@ -437,16 +437,16 @@ const MasterBoxesTable = ({
       sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => sortNumbers(rowA.afn_fulfillable_quantity, rowB.afn_fulfillable_quantity),
     },
     {
-      name: <span className='tw:font-bold tw:text-[11.2px]'>Amazon AWD</span>,
+      name: <span className='font-bold text-[11.2px]'>Amazon AWD</span>,
       selector: (row: AmazonFulfillmentSku) => {
         return (
-          <div className='tw:flex tw:flex-col tw:justify-start tw:items-start tw:my-1 tw:text-[11.2px]'>
-            <span className='tw:m-0 tw:p-0 tw:font-semibold'>
-              <span className='tw:text-[var(--bs-secondary-color)] tw:font-light'>On Hand: </span>
+          <div className='flex flex-col justify-start items-start my-1 text-[11.2px]'>
+            <span className='m-0 p-0 font-semibold'>
+              <span className='text-[var(--bs-secondary-color)] font-light'>On Hand: </span>
               {FormatIntNumber(state.currentRegion, row.awd_onHand_qty)}
             </span>
-            <span className='tw:m-0 tw:p-0 tw:font-semibold'>
-              <span className='tw:text-[var(--bs-secondary-color)] tw:font-light'>Inbound: </span>
+            <span className='m-0 p-0 font-semibold'>
+              <span className='text-[var(--bs-secondary-color)] font-light'>Inbound: </span>
               {FormatIntNumber(state.currentRegion, row.awd_inbound_qty)}
             </span>
           </div>
@@ -462,37 +462,37 @@ const MasterBoxesTable = ({
     {
       name: (
         <div>
-          <p className='tw:m-0 tw:mb-1 tw:font-bold tw:text-[11.2px] tw:text-center'>FBA Sales</p>
+          <p className='m-0 mb-1 font-bold text-[11.2px] text-center'>FBA Sales</p>
         </div>
       ),
       selector: (row: AmazonFulfillmentSku) => {
         return (
-          <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2 tw:my-2 tw:text-[11.2px]'>
-            <div className='tw:flex tw:flex-col tw:justify-start tw:items-center tw:gap-2' style={{ overflow: 'unset', textOverflow: 'unset' }}>
+          <div className='flex flex-row justify-start items-center gap-2 my-2 text-[11.2px]'>
+            <div className='flex flex-col justify-start items-center gap-2' style={{ overflow: 'unset', textOverflow: 'unset' }}>
               <div>
-                <span className='tw:font-semibold'>1D: </span>
+                <span className='font-semibold'>1D: </span>
                 <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['1D'])}</span>
               </div>
               <div>
-                <span className='tw:font-semibold'>3D: </span>
+                <span className='font-semibold'>3D: </span>
                 <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['3D'])}</span>
               </div>
               <div>
-                <span className='tw:font-semibold'>7D: </span>
+                <span className='font-semibold'>7D: </span>
                 <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['7D'])}</span>
               </div>
             </div>
-            <div className='tw:flex tw:flex-col tw:justify-center tw:items-center tw:gap-2' style={{ overflow: 'unset', textOverflow: 'unset' }}>
+            <div className='flex flex-col justify-center items-center gap-2' style={{ overflow: 'unset', textOverflow: 'unset' }}>
               <div>
-                <span className='tw:font-semibold'>15D: </span>
+                <span className='font-semibold'>15D: </span>
                 <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['15D'])}</span>
               </div>
               <div>
-                <span className='tw:font-semibold'>30D: </span>
+                <span className='font-semibold'>30D: </span>
                 <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['30D'])}</span>
               </div>
               <div>
-                <span className='tw:font-semibold'>60D: </span>
+                <span className='font-semibold'>60D: </span>
                 <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['60D'])}</span>
               </div>
             </div>
@@ -507,10 +507,10 @@ const MasterBoxesTable = ({
       width: '140px',
     },
     {
-      name: <span className='tw:font-bold tw:text-[11.2px] tw:text-center'>Warehouse Qty</span>,
+      name: <span className='font-bold text-[11.2px] text-center'>Warehouse Qty</span>,
       selector: (cell: AmazonFulfillmentSku) => {
         if (cell.isKit) {
-          return <span className='tw:text-info tw:text-[11.2px]'>{FormatIntNumber(state.currentRegion, cell.quantity)}</span>
+          return <span className='text-info text-[11.2px]'>{FormatIntNumber(state.currentRegion, cell.quantity)}</span>
         }
         return (
           <>
@@ -518,7 +518,7 @@ const MasterBoxesTable = ({
               tabIndex={-1}
               color='info'
               outline
-              className='btn btn-ghost-info tw:text-[11.2px]'
+              className='btn btn-ghost-info text-[11.2px]'
               id={`reservedMasterQty${CleanSpecialCharacters(cell.sku)}`}
               onClick={() => {
                 setModalProductInfo(cell.inventoryId, cell.sku)
@@ -540,7 +540,7 @@ const MasterBoxesTable = ({
       sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => sortNumbers(rowA.quantity, rowB.quantity),
     },
     {
-      name: <span className='tw:font-bold tw:text-[11.2px]'>Qty/Box</span>,
+      name: <span className='font-bold text-[11.2px]'>Qty/Box</span>,
       selector: (row: AmazonFulfillmentSku) => row.boxQty,
       sortable: true,
       center: true,
@@ -552,7 +552,7 @@ const MasterBoxesTable = ({
       },
     },
     {
-      name: <span className='tw:font-bold tw:text-[11.2px] tw:text-center'>Recommended Ship Date</span>,
+      name: <span className='font-bold text-[11.2px] text-center'>Recommended Ship Date</span>,
       selector: (row: AmazonFulfillmentSku) => (row.recommendedShipDate ? moment.utc(row.recommendedShipDate).local().format('MMM DD') : 'N/A'),
       sortable: true,
       center: true,
@@ -587,7 +587,7 @@ const MasterBoxesTable = ({
       sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => sortDates(rowA.recommendedShipDate, rowB.recommendedShipDate),
     },
     {
-      name: <span className='tw:font-bold tw:text-[11.2px] tw:text-center'>Recommended Replenishment</span>,
+      name: <span className='font-bold text-[11.2px] text-center'>Recommended Replenishment</span>,
       selector: (row: AmazonFulfillmentSku) => row.recommendedReplenishmentQty,
       sortable: true,
       center: true,
@@ -600,8 +600,8 @@ const MasterBoxesTable = ({
     },
     {
       name: (
-        <span className='tw:font-bold tw:text-[11.2px] tw:text-center'>
-          Order Qty <br /> <span className='tw:text-nowrap'>(Master Boxes)</span>
+        <span className='font-bold text-[11.2px] text-center'>
+          Order Qty <br /> <span className='text-nowrap'>(Master Boxes)</span>
         </span>
       ),
       selector: (row: AmazonFulfillmentSku) => {
@@ -613,7 +613,7 @@ const MasterBoxesTable = ({
               minLength={1}
               debounceTimeout={300}
               disabled={row.hasError || row.maxOrderQty <= 0}
-              className='form-control tw:text-[13px]'
+              className='form-control text-[13px]'
               placeholder={row?.maxOrderQty! <= 0 ? 'Not Enough Qty' : 'Order Qty...'}
               value={row.orderQty}
               onClick={(e: any) => e.target.select()}
@@ -624,12 +624,12 @@ const MasterBoxesTable = ({
               invalid={Boolean(rowValidation?.hasInputError)}
             />
             {rowValidation?.hasInputError ? (
-              <FormFeedback className='tw:text-left tw:text-[11.2px]' type='invalid'>
+              <FormFeedback className='text-left text-[11.2px]' type='invalid'>
                 Quantity Error
               </FormFeedback>
             ) : null}
-            {rowValidation?.hasExceededQtyError ? <span className='tw:text-[11.2px] tw:font-normal tw:text-danger tw:text-wrap'>Quantity Exceeded</span> : null}
-            {rowValidation?.hasMissingAvailabilityError ? <span className='tw:text-[11.2px] tw:font-normal tw:text-danger tw:text-wrap'>Unable to verify available warehouse quantity</span> : null}
+            {rowValidation?.hasExceededQtyError ? <span className='text-[11.2px] font-normal text-danger text-wrap'>Quantity Exceeded</span> : null}
+            {rowValidation?.hasMissingAvailabilityError ? <span className='text-[11.2px] font-normal text-danger text-wrap'>Unable to verify available warehouse quantity</span> : null}
           </>
         )
       },
@@ -641,15 +641,15 @@ const MasterBoxesTable = ({
       sortFunction: (rowA: AmazonFulfillmentSku, rowB: AmazonFulfillmentSku) => sortNumbers(Number(rowA.orderQty), Number(rowB.orderQty)),
     },
     {
-      name: <span className='tw:font-bold tw:text-[11.2px] tw:text-center'>Total To Amazon</span>,
+      name: <span className='font-bold text-[11.2px] text-center'>Total To Amazon</span>,
       selector: (row: AmazonFulfillmentSku) =>
         row.totalSendToAmazon > 0 ? (
           <div>
-            <p className='tw:m-0 tw:text-center tw:font-semibold'>
-              {FormatIntNumber(state.currentRegion, parseInt(row.orderQty))} <span className='tw:text-[11.2px] tw:font-normal'>{parseInt(row.orderQty) > 1 ? 'Boxes' : 'Box'}</span>
+            <p className='m-0 text-center font-semibold'>
+              {FormatIntNumber(state.currentRegion, parseInt(row.orderQty))} <span className='text-[11.2px] font-normal'>{parseInt(row.orderQty) > 1 ? 'Boxes' : 'Box'}</span>
             </p>
-            <p className='tw:m-0 tw:text-center tw:font-semibold'>
-              {FormatIntNumber(state.currentRegion, row.totalSendToAmazon)} <span className='tw:text-[11.2px] tw:font-normal'>{row.totalSendToAmazon > 1 ? 'Units' : 'Unit'}</span>
+            <p className='m-0 text-center font-semibold'>
+              {FormatIntNumber(state.currentRegion, row.totalSendToAmazon)} <span className='text-[11.2px] font-normal'>{row.totalSendToAmazon > 1 ? 'Units' : 'Unit'}</span>
             </p>
           </div>
         ) : (

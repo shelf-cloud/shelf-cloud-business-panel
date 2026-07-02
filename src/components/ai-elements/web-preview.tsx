@@ -78,7 +78,7 @@ export const WebPreview = ({
     <WebPreviewContext.Provider value={contextValue}>
       <div
         className={cn(
-          "tw:flex tw:size-full tw:flex-col tw:rounded-lg tw:border tw:bg-card",
+          "flex size-full flex-col rounded-lg border bg-card",
           className
         )}
         {...props}
@@ -97,7 +97,7 @@ export const WebPreviewNavigation = ({
   ...props
 }: WebPreviewNavigationProps) => (
   <div
-    className={cn("tw:flex tw:items-center tw:gap-1 tw:border-b tw:p-2", className)}
+    className={cn("flex items-center gap-1 border-b p-2", className)}
     {...props}
   >
     {children}
@@ -119,7 +119,7 @@ export const WebPreviewNavigationButton = ({
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          className="tw:h-8 tw:w-8 tw:p-0 tw:hover:text-foreground"
+          className="h-8 w-8 p-0 hover:text-foreground"
           disabled={disabled}
           onClick={onClick}
           size="sm"
@@ -172,7 +172,7 @@ export const WebPreviewUrl = ({
 
   return (
     <Input
-      className="tw:h-8 tw:flex-1 tw:text-sm"
+      className="h-8 flex-1 text-sm"
       onChange={onChange ?? handleChange}
       onKeyDown={handleKeyDown}
       placeholder="Enter URL..."
@@ -195,9 +195,9 @@ export const WebPreviewBody = ({
   const { url } = useWebPreview();
 
   return (
-    <div className="tw:flex-1">
+    <div className="flex-1">
       <iframe
-        className={cn("tw:size-full", className)}
+        className={cn("size-full", className)}
         // oxlint-disable-next-line eslint-plugin-react(iframe-missing-sandbox)
         sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-presentation"
         src={(src ?? url) || undefined}
@@ -227,46 +227,46 @@ export const WebPreviewConsole = ({
 
   return (
     <Collapsible
-      className={cn("tw:border-t tw:bg-muted/50 tw:font-mono tw:text-sm", className)}
+      className={cn("border-t bg-muted/50 font-mono text-sm", className)}
       onOpenChange={setConsoleOpen}
       open={consoleOpen}
       {...props}
     >
       <CollapsibleTrigger asChild>
         <Button
-          className="tw:flex tw:w-full tw:items-center tw:justify-between tw:p-4 tw:text-left tw:font-medium tw:hover:bg-muted/50"
+          className="flex w-full items-center justify-between p-4 text-left font-medium hover:bg-muted/50"
           variant="ghost"
         >
           Console
           <ChevronDownIcon
             className={cn(
-              "tw:h-4 tw:w-4 tw:transition-transform tw:duration-200",
-              consoleOpen && "tw:rotate-180"
+              "h-4 w-4 transition-transform duration-200",
+              consoleOpen && "rotate-180"
             )}
           />
         </Button>
       </CollapsibleTrigger>
       <CollapsibleContent
         className={cn(
-          "tw:px-4 tw:pb-4",
-          "tw:data-[state=closed]:fade-out-0 tw:data-[state=open]:fade-in-0 tw:data-[state=closed]:zoom-out-95 tw:data-[state=open]:zoom-in-95 tw:data-[side=bottom]:slide-in-from-top-2 tw:data-[side=left]:slide-in-from-right-2 tw:data-[side=right]:slide-in-from-left-2 tw:data-[side=top]:slide-in-from-bottom-2 tw:outline-none tw:data-[state=closed]:animate-out tw:data-[state=open]:animate-in"
+          "px-4 pb-4",
+          "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 outline-none data-[state=closed]:animate-out data-[state=open]:animate-in"
         )}
       >
-        <div className="tw:max-h-48 tw:space-y-1 tw:overflow-y-auto">
+        <div className="max-h-48 space-y-1 overflow-y-auto">
           {logs.length === 0 ? (
-            <p className="tw:text-muted-foreground">No console output</p>
+            <p className="text-muted-foreground">No console output</p>
           ) : (
             logs.map((log) => (
               <div
                 className={cn(
-                  "tw:text-xs",
-                  log.level === "error" && "tw:text-destructive",
-                  log.level === "warn" && "tw:text-yellow-600",
-                  log.level === "log" && "tw:text-foreground"
+                  "text-xs",
+                  log.level === "error" && "text-destructive",
+                  log.level === "warn" && "text-yellow-600",
+                  log.level === "log" && "text-foreground"
                 )}
                 key={`${log.timestamp.getTime()}-${log.level}-${log.message}`}
               >
-                <span className="tw:text-muted-foreground">
+                <span className="text-muted-foreground">
                   {log.timestamp.toLocaleTimeString()}
                 </span>{" "}
                 {log.message}

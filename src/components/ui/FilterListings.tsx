@@ -16,24 +16,24 @@ const FilterListings = ({ showHidden, condition, mapped }: Props) => {
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
 
   return (
-    <div className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:md:flex-row tw:md:justify-between tw:md:items-center tw:w-auto'>
+    <div className='flex flex-col justify-center items-end gap-2 md:flex-row md:justify-between md:items-center w-auto'>
       <ButtonGroup>
         <Dropdown isOpen={openDatesMenu} toggle={() => setOpenDatesMenu(!openDatesMenu)}>
           <DropdownToggle
-            className='tw:inline-flex tw:h-9 tw:items-center tw:gap-2 tw:rounded-md tw:border tw:border-[#E1E3E5] tw:bg-white tw:px-3 tw:text-sm tw:font-semibold tw:text-foreground tw:whitespace-nowrap'
+            className='inline-flex h-9 items-center gap-2 rounded-md border border-[#E1E3E5] bg-white px-3 text-sm font-semibold text-foreground whitespace-nowrap'
             color='light'>
             Filters
           </DropdownToggle>
           <DropdownMenu style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
-            <div className='tw:px-4 tw:py-3'>
-              <div className='tw:flex tw:flex-col tw:justify-start tw:gap-2'>
-                <span className='tw:font-semibold'>Condition:</span>
+            <div className='px-4 py-3'>
+              <div className='flex flex-col justify-start gap-2'>
+                <span className='font-semibold'>Condition:</span>
                 <div
-                  className='tw:flex tw:flex-row tw:items-center tw:justify-between tw:gap-2 tw:w-auto tw:px-3 tw:py-0 tw:rounded-md'
+                  className='flex flex-row items-center justify-between gap-2 w-auto px-3 py-0 rounded-md'
                   style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
                   <Input
                     type='select'
-                    className='tw:border-0 tw:text-[13px] tw:w-full'
+                    className='border-0 text-[13px] w-full'
                     id='type'
                     name='type'
                     value={condition}
@@ -46,13 +46,13 @@ const FilterListings = ({ showHidden, condition, mapped }: Props) => {
                     <option value='Used'>Used</option>
                   </Input>
                 </div>
-                <span className='tw:font-semibold'>Mapped:</span>
+                <span className='font-semibold'>Mapped:</span>
                 <div
-                  className='tw:flex tw:flex-row tw:items-center tw:justify-between tw:gap-2 tw:w-auto tw:px-3 tw:py-0 tw:rounded-md'
+                  className='flex flex-row items-center justify-between gap-2 w-auto px-3 py-0 rounded-md'
                   style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
                   <Input
                     type='select'
-                    className='tw:border-0 tw:text-[13px] tw:w-full'
+                    className='border-0 text-[13px] w-full'
                     id='type'
                     name='type'
                     value={mapped}
@@ -72,7 +72,7 @@ const FilterListings = ({ showHidden, condition, mapped }: Props) => {
                     router.replace(`/amazon-sellers/listings?showHidden=${parseInt(showHidden)}&condition=All&mapped=All`)
                     setOpenDatesMenu(false)
                   }}
-                  className='tw:p-0 tw:border-0 tw:bg-transparent tw:no-underline tw:text-[color:var(--bs-secondary-color)] tw:mt-2 tw:text-sm'>
+                  className='p-0 border-0 bg-transparent no-underline text-[color:var(--bs-secondary-color)] mt-2 text-sm'>
                   Clear All
                 </button>
               </div>

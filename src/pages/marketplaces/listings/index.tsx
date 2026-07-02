@@ -70,12 +70,12 @@ const ProductsListings = ({ session }: Props) => {
           <Container fluid>
             <Row>
               <Col xs={12}>
-                <Row className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:mb-2 tw:md:flex-row tw:md:justify-end tw:md:items-center tw:px-4'>
-                  <div className='tw:flex tw:flex-col tw:justify-between tw:items-start tw:p-0 tw:md:flex-row tw:md:items-center tw:gap-2'>
-                    <div className='tw:flex tw:flex-row tw:flex-wrap tw:justify-start tw:items-center tw:gap-2 tw:w-full'>
+                <Row className='flex flex-col justify-center items-end gap-2 mb-2 md:flex-row md:justify-end md:items-center px-4'>
+                  <div className='flex flex-col justify-between items-start p-0 md:flex-row md:items-center gap-2'>
+                    <div className='flex flex-row flex-wrap justify-start items-center gap-2 w-full'>
                       <Button
                         color={filters === 'true' ? 'info' : 'light'}
-                        className='tw:text-[11.2px]'
+                        className='text-[11.2px]'
                         style={filters === 'true' ? {} : { backgroundColor: 'white', border: '1px solid #E1E3E5' }}
                         type='button'
                         aria-expanded='false'
@@ -86,14 +86,14 @@ const ProductsListings = ({ session }: Props) => {
                       {selectedRows.length > 0 && (
                         <UncontrolledButtonDropdown>
                           <DropdownToggle
-                            className='tw:inline-flex tw:h-9 tw:items-center tw:gap-2 tw:rounded-md tw:bg-primary tw:px-3 tw:text-[11.2px] tw:font-medium tw:text-primary-foreground tw:whitespace-nowrap tw:shadow-xs tw:hover:bg-primary/90'
+                            className='inline-flex h-9 items-center gap-2 rounded-md bg-primary px-3 text-[11.2px] font-medium text-primary-foreground whitespace-nowrap shadow-xs hover:bg-primary/90'
                             caret>
                             {`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''} Selected`}
                           </DropdownToggle>
                           <DropdownMenu>
                             <ExportProductListingsButton products={selectedRows} />
                             <DropdownItem
-                              className='tw:text-nowrap tw:text-[11.2px]'
+                              className='text-nowrap text-[11.2px]'
                               onClick={() =>
                                 setSelectedVisibility({
                                   products: selectedRows.map((row) => ({
@@ -107,11 +107,11 @@ const ProductsListings = ({ session }: Props) => {
                                   clearAllSelectedRows()
                                 })
                               }>
-                              <i className='mdi mdi-eye label-icon tw:align-middle tw:text-[16.25px] tw:me-2 tw:text-primary' />
+                              <i className='mdi mdi-eye label-icon align-middle text-[16.25px] me-2 text-primary' />
                               Set Visible
                             </DropdownItem>
                             <DropdownItem
-                              className='tw:text-nowrap tw:text-[11.2px]'
+                              className='text-nowrap text-[11.2px]'
                               onClick={() =>
                                 setSelectedVisibility({
                                   products: selectedRows.map((row) => ({
@@ -125,12 +125,12 @@ const ProductsListings = ({ session }: Props) => {
                                   clearAllSelectedRows()
                                 })
                               }>
-                              <i className='mdi mdi-eye-off label-icon tw:align-middle tw:text-[16.25px] tw:me-2 tw:text-destructive' />
+                              <i className='mdi mdi-eye-off label-icon align-middle text-[16.25px] me-2 text-destructive' />
                               Set Hidden
                             </DropdownItem>
                             <DropdownItem divider />
                             <DropdownItem
-                              className='tw:text-nowrap tw:text-[11.2px]'
+                              className='text-nowrap text-[11.2px]'
                               onClick={() =>
                                 setSelectedasMapped({
                                   products: selectedRows.map((row) => ({
@@ -143,10 +143,10 @@ const ProductsListings = ({ session }: Props) => {
                                   clearAllSelectedRows()
                                 })
                               }>
-                              <i className='las la-link label-icon tw:align-middle tw:text-[16.25px] tw:me-2 tw:text-primary' />
+                              <i className='las la-link label-icon align-middle text-[16.25px] me-2 text-primary' />
                               Set Mapped
                             </DropdownItem>
-                            <DropdownItem className='tw:text-nowrap tw:text-[var(--bs-secondary-color)] tw:text-[11.2px] tw:text-end' onClick={clearAllSelectedRows}>
+                            <DropdownItem className='text-nowrap text-[var(--bs-secondary-color)] text-[11.2px] text-end' onClick={clearAllSelectedRows}>
                               Clear
                             </DropdownItem>
                           </DropdownMenu>
@@ -155,13 +155,13 @@ const ProductsListings = ({ session }: Props) => {
                     </div>
                     <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' minLength={2} />
                   </div>
-                  <Collapse className='tw:px-0' isOpen={filterOpen}>
+                  <Collapse className='px-0' isOpen={filterOpen}>
                     <MKL_Filters supplierOptions={suppliers} brandOptions={brands} categoryOptions={categories} setFilterOpen={setFilterOpen} />
                   </Collapse>
                 </Row>
                 <Card>
-                  <CardHeader className='tw:flex tw:flex-row tw:flex-wrap tw:justify-start tw:items-center tw:gap-2 tw:w-full'>
-                    <Label className='tw:font-semibold tw:text-[13px] tw:m-0'>Marketplace:</Label>
+                  <CardHeader className='flex flex-row flex-wrap justify-start items-center gap-2 w-full'>
+                    <Label className='font-semibold text-[13px] m-0'>Marketplace:</Label>
                     <SelectMarketplaceDropDown
                       selectionInfo={marketplaces.filter((marketplace) => !marketplace.name.startsWith('FBA Amazon.')) || []}
                       selected={selectedMarketplace}

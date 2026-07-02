@@ -57,59 +57,59 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
   }, [data, searchValue])
 
   return (
-    <div ref={selectProductMappedDiv} className='dropdown tw:mb-4'>
+    <div ref={selectProductMappedDiv} className='dropdown mb-4'>
       {showMappedListingModal.currentSkuMapped !== '' ? (
-        <div className='tw:w-full'>
-          <p className='tw:px-4 tw:m-0 tw:py-0 tw:text-[16.25px] tw:font-semibold'>{showMappedListingModal.currentSkuMapped}</p>
+        <div className='w-full'>
+          <p className='px-4 m-0 py-0 text-[16.25px] font-semibold'>{showMappedListingModal.currentSkuMapped}</p>
         </div>
       ) : (
-        <button type='button' className='btn-group tw:w-full tw:p-0 tw:border-0 tw:bg-transparent' onClick={() => setOpenSelectionList(!openSelectionList)}>
-          <span className='btn btn-light btn-sm form-control tw:text-[13px] tw:w-full tw:text-left' style={{ backgroundColor: 'white', opacity: '100%' }}>
+        <button type='button' className='btn-group w-full p-0 border-0 bg-transparent' onClick={() => setOpenSelectionList(!openSelectionList)}>
+          <span className='btn btn-light btn-sm form-control text-[13px] w-full text-left' style={{ backgroundColor: 'white', opacity: '100%' }}>
             {showMappedListingModal.shelfCloudSku == '' ? `Select...` : showMappedListingModal.shelfCloudSku}
           </span>
           <span
-            className='btn btn-light btn-sm dropdown-toggle form-control tw:text-[13px] dropdown-toggle dropdown-toggle-split'
+            className='btn btn-light btn-sm dropdown-toggle form-control text-[13px] dropdown-toggle dropdown-toggle-split'
             style={{ backgroundColor: 'white', maxWidth: '35px' }}
             aria-expanded='false'>
-            <span className='tw:sr-only'>Toggle Dropdown</span>
+            <span className='sr-only'>Toggle Dropdown</span>
           </span>
         </button>
       )}
-      <div className={'dropdown-menu tw:w-full tw:py-4 tw:px-4' + (openSelectionList ? ' show' : '')}>
-        <div className='tw:w-full tw:mb-4'>
-          <div className='app-search tw:flex tw:flex-row tw:justify-end tw:items-center tw:p-0'>
-            <div className='tw:relative tw:flex tw:rounded-lg tw:w-full tw:overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+      <div className={'dropdown-menu w-full py-4 px-4' + (openSelectionList ? ' show' : '')}>
+        <div className='w-full mb-4'>
+          <div className='app-search flex flex-row justify-end items-center p-0'>
+            <div className='relative flex rounded-lg w-full overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
               <DebounceInput
                 type='text'
                 minLength={3}
                 debounceTimeout={300}
-                className='form-control input_background_white tw:text-[13px] tw:py-0'
+                className='form-control input_background_white text-[13px] py-0'
                 placeholder='Search...'
                 id='search-options-mapped'
                 value={searchValue}
                 onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
                 onChange={(e) => setSearchValue(e.target.value)}
               />
-              <span className='mdi mdi-magnify search-widget-icon tw:text-[16.25px]'></span>
+              <span className='mdi mdi-magnify search-widget-icon text-[16.25px]'></span>
               <button
                 type='button'
                 aria-label='Clear search'
-                className='tw:flex tw:items-center tw:justify-center input_background_white'
+                className='flex items-center justify-center input_background_white'
                 style={{ border: 0 }}
                 onClick={() => setSearchValue('')}>
-                <i className='mdi mdi-window-close tw:text-[16.25px] tw:m-0 tw:px-2 tw:py-0 tw:text-[color:var(--bs-secondary-color)]' />
+                <i className='mdi mdi-window-close text-[16.25px] m-0 px-2 py-0 text-[color:var(--bs-secondary-color)]' />
               </button>
             </div>
           </div>
         </div>
 
-        <div className='tw:flex tw:flex-col tw:justify-start'>
+        <div className='flex flex-col justify-start'>
           <div style={{ maxHeight: '30vh', overflowY: 'scroll' }}>
             {filterSelectionList?.map((option) => (
               <button
                 type='button'
                 key={`${option.sku}-${option.inventoryId}`}
-                className={'btn btn-link tw:w-full tw:border-0 tw:text-left tw:no-underline tw:text-inherit tw:m-0 tw:py-2 tw:px-1 tw:flex tw:flex-row tw:gap-2 ' + (showMappedListingModal.shelfCloudSku == `${option.sku}` ? 'tw:bg-light' : '')}
+                className={'btn btn-link w-full border-0 text-left no-underline text-inherit m-0 py-2 px-1 flex flex-row gap-2 ' + (showMappedListingModal.shelfCloudSku == `${option.sku}` ? 'bg-light' : '')}
                 onClick={() => {
                   setshowMappedListingModal((prev: any) => {
                     return {
@@ -122,7 +122,7 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
                   setOpenSelectionList(false)
                 }}>
                 <span
-                  className='tw:inline-block tw:shrink-0'
+                  className='inline-block shrink-0'
                   style={{
                     width: '50px',
                     height: '40px',
@@ -137,10 +137,10 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
                     style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                   />
                 </span>
-                <span className='tw:inline-flex tw:flex-col'>
-                  <span className='tw:text-[11.2px] tw:m-0 tw:p-0 tw:font-bold'>{option.sku}</span>
-                  <span className='tw:text-[11.2px] tw:font-semibold tw:text-primary tw:m-0 tw:p-0'>{option.isKit ? 'Kit' : 'Product'}</span>
-                  <span className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)] tw:m-0 tw:p-0'>{option.title}</span>
+                <span className='inline-flex flex-col'>
+                  <span className='text-[11.2px] m-0 p-0 font-bold'>{option.sku}</span>
+                  <span className='text-[11.2px] font-semibold text-primary m-0 p-0'>{option.isKit ? 'Kit' : 'Product'}</span>
+                  <span className='text-[11.2px] text-[var(--bs-secondary-color)] m-0 p-0'>{option.title}</span>
                 </span>
               </button>
             ))}

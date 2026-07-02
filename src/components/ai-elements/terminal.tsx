@@ -37,7 +37,7 @@ export const TerminalHeader = ({
 }: TerminalHeaderProps) => (
   <div
     className={cn(
-      "tw:flex tw:items-center tw:justify-between tw:border-zinc-800 tw:border-b tw:px-4 tw:py-2",
+      "flex items-center justify-between border-zinc-800 border-b px-4 py-2",
       className
     )}
     {...props}
@@ -54,10 +54,10 @@ export const TerminalTitle = ({
   ...props
 }: TerminalTitleProps) => (
   <div
-    className={cn("tw:flex tw:items-center tw:gap-2 tw:text-sm tw:text-zinc-400", className)}
+    className={cn("flex items-center gap-2 text-sm text-zinc-400", className)}
     {...props}
   >
-    <TerminalIcon className="tw:size-4" />
+    <TerminalIcon className="size-4" />
     {children ?? "Terminal"}
   </div>
 );
@@ -77,7 +77,7 @@ export const TerminalStatus = ({
 
   return (
     <div
-      className={cn("tw:flex tw:items-center tw:gap-2 tw:text-xs tw:text-zinc-400", className)}
+      className={cn("flex items-center gap-2 text-xs text-zinc-400", className)}
       {...props}
     >
       {children}
@@ -92,7 +92,7 @@ export const TerminalActions = ({
   children,
   ...props
 }: TerminalActionsProps) => (
-  <div className={cn("tw:flex tw:items-center tw:gap-1", className)} {...props}>
+  <div className={cn("flex items-center gap-1", className)} {...props}>
     {children}
   </div>
 );
@@ -143,7 +143,7 @@ export const TerminalCopyButton = ({
   return (
     <Button
       className={cn(
-        "tw:size-7 tw:shrink-0 tw:text-zinc-400 tw:hover:bg-zinc-800 tw:hover:text-zinc-100",
+        "size-7 shrink-0 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100",
         className
       )}
       onClick={copyToClipboard}
@@ -172,7 +172,7 @@ export const TerminalClearButton = ({
   return (
     <Button
       className={cn(
-        "tw:size-7 tw:shrink-0 tw:text-zinc-400 tw:hover:bg-zinc-800 tw:hover:text-zinc-100",
+        "size-7 shrink-0 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100",
         className
       )}
       onClick={onClear}
@@ -204,17 +204,17 @@ export const TerminalContent = ({
   return (
     <div
       className={cn(
-        "tw:max-h-96 tw:overflow-auto tw:p-4 tw:font-mono tw:text-sm tw:leading-relaxed",
+        "max-h-96 overflow-auto p-4 font-mono text-sm leading-relaxed",
         className
       )}
       ref={containerRef}
       {...props}
     >
       {children ?? (
-        <pre className="tw:whitespace-pre-wrap tw:break-words">
+        <pre className="whitespace-pre-wrap break-words">
           <Ansi>{output}</Ansi>
           {isStreaming && (
-            <span className="tw:ml-0.5 tw:inline-block tw:h-4 tw:w-2 tw:animate-pulse tw:bg-zinc-100" />
+            <span className="ml-0.5 inline-block h-4 w-2 animate-pulse bg-zinc-100" />
           )}
         </pre>
       )}
@@ -247,7 +247,7 @@ export const Terminal = ({
     <TerminalContext.Provider value={contextValue}>
       <div
         className={cn(
-          "tw:flex tw:flex-col tw:overflow-hidden tw:rounded-lg tw:border tw:bg-zinc-950 tw:text-zinc-100",
+          "flex flex-col overflow-hidden rounded-lg border bg-zinc-950 text-zinc-100",
           className
         )}
         {...props}
@@ -256,7 +256,7 @@ export const Terminal = ({
           <>
             <TerminalHeader>
               <TerminalTitle />
-              <div className="tw:flex tw:items-center tw:gap-1">
+              <div className="flex items-center gap-1">
                 <TerminalStatus />
                 <TerminalActions>
                   <TerminalCopyButton />

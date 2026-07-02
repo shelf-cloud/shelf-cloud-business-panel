@@ -78,17 +78,17 @@ const InputTextAreaModal = ({
       <Form onSubmit={handleSubmitForm}>
         <ModalBody>
           <Row>
-            <p className='tw:text-[16.25px] tw:font-semibold'>
-              {primaryText} {primaryTextSub && <span className='tw:text-primary'>{primaryTextSub}</span>}
+            <p className='text-[16.25px] font-semibold'>
+              {primaryText} {primaryTextSub && <span className='text-primary'>{primaryTextSub}</span>}
             </p>
-            {descriptionText && <p className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>{descriptionText}</p>}
-            <Col sm={12} className='tw:flex tw:flex-col tw:justify-end tw:items-end'>
-              <Col xs={12} className='tw:text-right'>
+            {descriptionText && <p className='text-[11.2px] text-[var(--bs-secondary-color)]'>{descriptionText}</p>}
+            <Col sm={12} className='flex flex-col justify-end items-end'>
+              <Col xs={12} className='text-right'>
                 <DebounceInput
                   element='textarea'
                   minLength={minLength}
                   debounceTimeout={600}
-                  className={`form-control form-control-sm tw:text-[13px] ${validation.errors.inputValue ? 'is-invalid' : ''}`}
+                  className={`form-control form-control-sm text-[13px] ${validation.errors.inputValue ? 'is-invalid' : ''}`}
                   placeholder={placeholder}
                   id='inputValue'
                   name='inputValue'
@@ -103,23 +103,23 @@ const InputTextAreaModal = ({
                     }
                   }}
                 />
-                {validation.touched.inputValue && validation.errors.inputValue ? <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:text-danger'>{validation.errors.inputValue}</p> : null}
+                {validation.touched.inputValue && validation.errors.inputValue ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.inputValue}</p> : null}
               </Col>
             </Col>
           </Row>
         </ModalBody>
         <ModalFooter>
-          <div className='tw:w-full tw:mt-2 tw:flex tw:flex-row tw:gap-2 tw:justify-between tw:items-center'>
+          <div className='w-full mt-2 flex flex-row gap-2 justify-between items-center'>
             <div>
-              <Button disabled={isLoading} type='button' color='danger' className='tw:text-[11.2px]' onClick={handleClearValue}>
+              <Button disabled={isLoading} type='button' color='danger' className='text-[11.2px]' onClick={handleClearValue}>
                 Clear Value
               </Button>
             </div>
-            <div className='tw:flex tw:flex-row tw:gap-2 tw:justify-end'>
-              <Button disabled={isLoading} type='button' color='light' className='tw:text-[11.2px]' onClick={handleClose}>
+            <div className='flex flex-row gap-2 justify-end'>
+              <Button disabled={isLoading} type='button' color='light' className='text-[11.2px]' onClick={handleClose}>
                 Cancel
               </Button>
-              <Button disabled={isLoading} type='submit' color='success' className='tw:text-[11.2px]'>
+              <Button disabled={isLoading} type='submit' color='success' className='text-[11.2px]'>
                 {isLoading ? (
                   <span>
                     <Spinner color='light' size={'sm'} /> {loadingText}

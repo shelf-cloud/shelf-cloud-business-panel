@@ -166,21 +166,21 @@ const AddKit = ({ session }: Props) => {
           <Container fluid>
             <BreadCrumb title='Create New Kit' pageTitle='Inventory' />
             <Card>
-              <CardBody className='tw:px-4'>
+              <CardBody className='px-4'>
                 {!isLoading ? (
                   <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values, { resetForm }) => handleSubmit(values, { resetForm })}>
                     {({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => (
                       <Form>
                         <Row>
-                          <h5 className='tw:text-[16.25px] tw:mb-4 tw:font-extrabold'>New Kit Details</h5>
+                          <h5 className='text-[16.25px] mb-4 font-extrabold'>New Kit Details</h5>
                           <Col md={6}>
                             <FormGroup>
-                              <Label htmlFor='title' className='tw:mb-1'>
+                              <Label htmlFor='title' className='mb-1'>
                                 *Title
                               </Label>
                               <Input
                                 type='text'
-                                className='tw:text-[13px]'
+                                className='text-[13px]'
                                 placeholder='Title...'
                                 id='title'
                                 name='title'
@@ -194,12 +194,12 @@ const AddKit = ({ session }: Props) => {
                           </Col>
                           <Col md={6}>
                             <FormGroup>
-                              <Label htmlFor='sku' className='tw:mb-1'>
+                              <Label htmlFor='sku' className='mb-1'>
                                 *SKU
                               </Label>
                               <Input
                                 type='text'
-                                className='tw:text-[13px]'
+                                className='text-[13px]'
                                 placeholder='Sku...'
                                 id='sku'
                                 name='sku'
@@ -213,12 +213,12 @@ const AddKit = ({ session }: Props) => {
                           </Col>
                           <Col md={4}>
                             <FormGroup>
-                              <Label htmlFor='asin' className='tw:mb-1'>
+                              <Label htmlFor='asin' className='mb-1'>
                                 ASIN
                               </Label>
                               <Input
                                 type='text'
-                                className='tw:text-[13px]'
+                                className='text-[13px]'
                                 placeholder='Asin...'
                                 id='asin'
                                 name='asin'
@@ -232,12 +232,12 @@ const AddKit = ({ session }: Props) => {
                           </Col>
                           <Col md={4}>
                             <FormGroup>
-                              <Label htmlFor='fnsku' className='tw:mb-1'>
+                              <Label htmlFor='fnsku' className='mb-1'>
                                 FNSKU
                               </Label>
                               <Input
                                 type='text'
-                                className='tw:text-[13px]'
+                                className='text-[13px]'
                                 placeholder='Fnsku...'
                                 id='fnsku'
                                 name='fnsku'
@@ -251,12 +251,12 @@ const AddKit = ({ session }: Props) => {
                           </Col>
                           <Col md={4}>
                             <FormGroup>
-                              <Label htmlFor='barcode' className='tw:mb-1'>
+                              <Label htmlFor='barcode' className='mb-1'>
                                 UPC / Barcode
                               </Label>
                               <Input
                                 type='text'
-                                className='tw:text-[13px]'
+                                className='text-[13px]'
                                 placeholder='Barcode...'
                                 id='barcode'
                                 name='barcode'
@@ -270,12 +270,12 @@ const AddKit = ({ session }: Props) => {
                           </Col>
                           <Col md={12}>
                             <FormGroup>
-                              <Label htmlFor='image' className='tw:mb-1'>
+                              <Label htmlFor='image' className='mb-1'>
                                 Product Image
                               </Label>
                               <Input
                                 type='text'
-                                className='tw:text-[13px]'
+                                className='text-[13px]'
                                 placeholder='Image URL...'
                                 id='image'
                                 name='image'
@@ -287,15 +287,15 @@ const AddKit = ({ session }: Props) => {
                               {touched.image && errors.image ? <FormFeedback type='invalid'>{errors.image}</FormFeedback> : null}
                             </FormGroup>
                           </Col>
-                          <h5 className='tw:text-[16.25px] tw:my-4 tw:font-extrabold'>Unit Dimensions</h5>
+                          <h5 className='text-[16.25px] my-4 font-extrabold'>Unit Dimensions</h5>
                           <Col md={3}>
                             <FormGroup>
-                              <Label htmlFor='weight' className='tw:mb-1'>
+                              <Label htmlFor='weight' className='mb-1'>
                                 *Weight {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(lb)' : '(kg)')}
                               </Label>
                               <Input
                                 type='number'
-                                className='tw:text-[13px]'
+                                className='text-[13px]'
                                 placeholder='Weight...'
                                 id='weight'
                                 name='weight'
@@ -309,12 +309,12 @@ const AddKit = ({ session }: Props) => {
                           </Col>
                           <Col md={3}>
                             <FormGroup>
-                              <Label htmlFor='width' className='tw:mb-1'>
+                              <Label htmlFor='width' className='mb-1'>
                                 *Width {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(in)' : '(cm)')}
                               </Label>
                               <Input
                                 type='number'
-                                className='tw:text-[13px]'
+                                className='text-[13px]'
                                 placeholder='Width...'
                                 id='width'
                                 name='width'
@@ -328,12 +328,12 @@ const AddKit = ({ session }: Props) => {
                           </Col>
                           <Col md={3}>
                             <FormGroup>
-                              <Label htmlFor='length' className='tw:mb-1'>
+                              <Label htmlFor='length' className='mb-1'>
                                 *Length {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(in)' : '(cm)')}
                               </Label>
                               <Input
                                 type='number'
-                                className='tw:text-[13px]'
+                                className='text-[13px]'
                                 placeholder='Length...'
                                 id='length'
                                 name='length'
@@ -347,12 +347,12 @@ const AddKit = ({ session }: Props) => {
                           </Col>
                           <Col md={3}>
                             <FormGroup>
-                              <Label htmlFor='height' className='tw:mb-1'>
+                              <Label htmlFor='height' className='mb-1'>
                                 *Height {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(in)' : '(cm)')}
                               </Label>
                               <Input
                                 type='number'
-                                className='tw:text-[13px]'
+                                className='text-[13px]'
                                 placeholder='Height...'
                                 id='height'
                                 name='height'
@@ -364,15 +364,15 @@ const AddKit = ({ session }: Props) => {
                               {touched.height && errors.height ? <FormFeedback type='invalid'>{errors.height}</FormFeedback> : null}
                             </FormGroup>
                           </Col>
-                          <h5 className='tw:text-[16.25px] tw:my-4 tw:font-extrabold'>Master Box Dimensions</h5>
+                          <h5 className='text-[16.25px] my-4 font-extrabold'>Master Box Dimensions</h5>
                           <Col md={3}>
                             <FormGroup>
-                              <Label htmlFor='boxweight' className='tw:mb-1'>
+                              <Label htmlFor='boxweight' className='mb-1'>
                                 *Box Weight {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(lb)' : '(kg)')}
                               </Label>
                               <Input
                                 type='number'
-                                className='tw:text-[13px]'
+                                className='text-[13px]'
                                 placeholder='Box Weight...'
                                 id='boxweight'
                                 name='boxweight'
@@ -386,12 +386,12 @@ const AddKit = ({ session }: Props) => {
                           </Col>
                           <Col md={3}>
                             <FormGroup>
-                              <Label htmlFor='boxwidth' className='tw:mb-1'>
+                              <Label htmlFor='boxwidth' className='mb-1'>
                                 *Box Width {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(in)' : '(cm)')}
                               </Label>
                               <Input
                                 type='number'
-                                className='tw:text-[13px]'
+                                className='text-[13px]'
                                 placeholder='Box Width...'
                                 id='boxwidth'
                                 name='boxwidth'
@@ -405,12 +405,12 @@ const AddKit = ({ session }: Props) => {
                           </Col>
                           <Col md={3}>
                             <FormGroup>
-                              <Label htmlFor='boxlength' className='tw:mb-1'>
+                              <Label htmlFor='boxlength' className='mb-1'>
                                 *Box Length {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(in)' : '(cm)')}
                               </Label>
                               <Input
                                 type='number'
-                                className='tw:text-[13px]'
+                                className='text-[13px]'
                                 placeholder='Box Length...'
                                 id='boxlength'
                                 name='boxlength'
@@ -424,12 +424,12 @@ const AddKit = ({ session }: Props) => {
                           </Col>
                           <Col md={3}>
                             <FormGroup>
-                              <Label htmlFor='boxheight' className='tw:mb-1'>
+                              <Label htmlFor='boxheight' className='mb-1'>
                                 *Box Height {state.currentRegion !== '' && (state.currentRegion == 'us' ? '(in)' : '(cm)')}
                               </Label>
                               <Input
                                 type='number'
-                                className='tw:text-[13px]'
+                                className='text-[13px]'
                                 placeholder='Box Height...'
                                 id='boxheight'
                                 name='boxheight'
@@ -443,12 +443,12 @@ const AddKit = ({ session }: Props) => {
                           </Col>
                           <Col md={3}>
                             <FormGroup>
-                              <Label htmlFor='boxqty' className='tw:mb-1'>
+                              <Label htmlFor='boxqty' className='mb-1'>
                                 *Master Box Quantity
                               </Label>
                               <Input
                                 type='number'
-                                className='tw:text-[13px]'
+                                className='text-[13px]'
                                 placeholder='Box Qty...'
                                 id='boxqty'
                                 name='boxqty'
@@ -461,19 +461,19 @@ const AddKit = ({ session }: Props) => {
                             </FormGroup>
                           </Col>
                           <Row>
-                            <h5 className='tw:text-[16.25px] tw:mb-4 tw:font-extrabold'>Kit Children</h5>
-                            <Col xl={12} className='tw:p-0 tw:mt-1'>
-                              <table className='tw:w-full tw:align-middle tw:text-nowrap tw:[&_th]:px-2 tw:[&_td]:px-2'>
+                            <h5 className='text-[16.25px] mb-4 font-extrabold'>Kit Children</h5>
+                            <Col xl={12} className='p-0 mt-1'>
+                              <table className='w-full align-middle text-nowrap [&_th]:px-2 [&_td]:px-2'>
                                 <thead>
                                   <tr>
-                                    <th scope='col' className='tw:py-1 tw:text-[16.25px] tw:m-0 tw:font-semibold tw:text-center tw:bg-primary tw:text-white'></th>
-                                    <th scope='col' className='tw:py-1 tw:text-[16.25px] tw:m-0 tw:font-semibold tw:text-center tw:bg-primary tw:text-white'>
+                                    <th scope='col' className='py-1 text-[16.25px] m-0 font-semibold text-center bg-primary text-white'></th>
+                                    <th scope='col' className='py-1 text-[16.25px] m-0 font-semibold text-center bg-primary text-white'>
                                       SKU
                                     </th>
-                                    <th scope='col' className='tw:py-1 tw:text-[16.25px] tw:m-0 tw:font-semibold tw:text-center tw:bg-primary tw:text-white'>
+                                    <th scope='col' className='py-1 text-[16.25px] m-0 font-semibold text-center bg-primary text-white'>
                                       Title
                                     </th>
-                                    <th scope='col' className='tw:py-1 tw:text-[16.25px] tw:m-0 tw:font-semibold tw:text-center tw:bg-primary tw:text-white'>
+                                    <th scope='col' className='py-1 text-[16.25px] m-0 font-semibold text-center bg-primary text-white'>
                                       Qty
                                     </th>
                                   </tr>
@@ -486,9 +486,9 @@ const AddKit = ({ session }: Props) => {
                                           <tr key={index}>
                                             <td style={{ minWidth: '50px' }}>
                                               {index > 0 ? (
-                                                <Row className='tw:w-full tw:flex tw:flex-row tw:flex-nowrap tw:justify-center tw:gap-1 tw:items-center tw:mb-0'>
+                                                <Row className='w-full flex flex-row flex-nowrap justify-center gap-1 items-center mb-0'>
                                                   <i
-                                                    className='tw:text-[22.75px] tw:text-success las la-plus-circle tw:m-0 tw:p-0 tw:w-auto'
+                                                    className='text-[22.75px] text-success las la-plus-circle m-0 p-0 w-auto'
                                                     style={{ cursor: 'pointer' }}
                                                     onClick={() =>
                                                       push({
@@ -499,12 +499,12 @@ const AddKit = ({ session }: Props) => {
                                                       })
                                                     }
                                                   />
-                                                  <i className='tw:text-danger tw:text-[22.75px] las la-minus-circle tw:m-0 tw:p-0 tw:w-auto' style={{ cursor: 'pointer' }} onClick={() => remove(index)} />
+                                                  <i className='text-danger text-[22.75px] las la-minus-circle m-0 p-0 w-auto' style={{ cursor: 'pointer' }} onClick={() => remove(index)} />
                                                 </Row>
                                               ) : (
-                                                <Row className='tw:w-full tw:flex tw:flex-row tw:flex-nowrap tw:justify-center tw:gap-0 tw:items-center tw:mb-0'>
+                                                <Row className='w-full flex flex-row flex-nowrap justify-center gap-0 items-center mb-0'>
                                                   <i
-                                                    className='tw:text-[22.75px] tw:text-success las la-plus-circle tw:m-0 tw:p-0 tw:w-auto'
+                                                    className='text-[22.75px] text-success las la-plus-circle m-0 p-0 w-auto'
                                                     style={{ cursor: 'pointer' }}
                                                     onClick={() =>
                                                       push({
@@ -542,7 +542,7 @@ const AddKit = ({ session }: Props) => {
                                                       isClearable
                                                       menuPortalTarget={document?.body}
                                                     />
-                                                    {meta.error ? <ErrorInputLabel error={meta.error} marginTop='tw:mt-0' /> : null}
+                                                    {meta.error ? <ErrorInputLabel error={meta.error} marginTop='mt-0' /> : null}
                                                   </FormGroup>
                                                 )}
                                               </Field>
@@ -553,7 +553,7 @@ const AddKit = ({ session }: Props) => {
                                                   <FormGroup className='createOrder_inputs'>
                                                     <Input
                                                       type='text'
-                                                      className='tw:text-[13px]'
+                                                      className='text-[13px]'
                                                       name={`children.${index}.title`}
                                                       placeholder='Title...'
                                                       readOnly
@@ -573,7 +573,7 @@ const AddKit = ({ session }: Props) => {
                                                   <FormGroup className='createOrder_inputs'>
                                                     <Input
                                                       type='text'
-                                                      className='tw:text-center tw:text-[13px]'
+                                                      className='text-center text-[13px]'
                                                       name={`children.${index}.qty`}
                                                       placeholder='Qty...'
                                                       onChange={handleChange}
@@ -595,12 +595,12 @@ const AddKit = ({ session }: Props) => {
                               </table>
                             </Col>
                           </Row>
-                          <h5 className='tw:text-[13px] tw:my-0 tw:text-[color:var(--bs-secondary-color)] tw:font-normal'>*You must complete all required fields or you will not be able to create your product.</h5>
+                          <h5 className='text-[13px] my-0 text-[color:var(--bs-secondary-color)] font-normal'>*You must complete all required fields or you will not be able to create your product.</h5>
                           <Col md={12}>
-                            <div className='tw:text-right'>
+                            <div className='text-right'>
                               <Button type='submit' color='primary' disabled={creatingKit}>
                                 {creatingKit ? (
-                                  <span className='tw:flex tw:items-center tw:gap-2'>
+                                  <span className='flex items-center gap-2'>
                                     <Spinner color='light' size={'sm'} /> Creating...
                                   </span>
                                 ) : (

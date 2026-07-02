@@ -20,51 +20,51 @@ const BoxLabelsCard = ({ inboundPlan, handleNextStep, shipment, shipmentIndex }:
   return (
     <Card
       key={shipment.shipmentId}
-      className='tw:m-0 tw:shadow-sm'
+      className='m-0 shadow-sm'
       style={{ width: 'fit-content', maxWidth: '400px', zIndex: Object.values(inboundPlan.confirmedShipments).length - shipmentIndex }}>
       <CardHeader>
-        <p className='tw:m-0 tw:p-0 tw:font-bold tw:text-[13px]'>Shipment #{shipmentIndex + 1}</p>
+        <p className='m-0 p-0 font-bold text-[13px]'>Shipment #{shipmentIndex + 1}</p>
       </CardHeader>
       <CardBody>
-        <p className='tw:m-0 tw:text-[11.2px]'>
-          <span className='tw:text-primary'>Shipment Name: </span>
+        <p className='m-0 text-[11.2px]'>
+          <span className='text-primary'>Shipment Name: </span>
           {shipment.shipment.name}
         </p>
-        <p className='tw:m-0 tw:text-[11.2px]'>
-          <span className='tw:text-primary'>Shipment ID: </span>
+        <p className='m-0 text-[11.2px]'>
+          <span className='text-primary'>Shipment ID: </span>
           {shipment.shipment.shipmentConfirmationId}
         </p>
-        <p className='tw:m-0 tw:text-[11.2px]'>
-          <span className='tw:text-primary'>Ship From: </span>
+        <p className='m-0 text-[11.2px]'>
+          <span className='text-primary'>Ship From: </span>
           {shipment.shipment.source.address.name}, {shipment.shipment.source.address.addressLine1}, {shipment.shipment.source.address.city},{' '}
           {shipment.shipment.source.address.stateOrProvinceCode}, {shipment.shipment.source.address.postalCode}, {shipment.shipment.source.address.countryCode}
         </p>
-        <p className='tw:m-0 tw:text-[11.2px]'>
-          <span className='tw:text-primary'>Ship to: </span>
+        <p className='m-0 text-[11.2px]'>
+          <span className='text-primary'>Ship to: </span>
           {shipment.shipment.destination.warehouseId} - {shipment.shipment.destination.address.addressLine1}, {shipment.shipment.destination.address.city},{' '}
           {shipment.shipment.destination.address.stateOrProvinceCode}, {shipment.shipment.destination.address.countryCode}
         </p>
-        <p className='tw:my-2 tw:p-0 tw:font-semibold tw:text-[11.2px]'>Shipment Contents</p>
-        <div className='tw:flex tw:flex-row tw:flex-nowrap tw:justify-between tw:items-start'>
+        <p className='my-2 p-0 font-semibold text-[11.2px]'>Shipment Contents</p>
+        <div className='flex flex-row flex-nowrap justify-between items-start'>
           <div>
-            <p className='tw:m-0 tw:p-0 tw:text-[11.2px]'>
-              Boxes: <span className='tw:font-bold'>{shipment.shipmentBoxes.boxes.reduce((total, item) => total + item.quantity, 0)}</span>
+            <p className='m-0 p-0 text-[11.2px]'>
+              Boxes: <span className='font-bold'>{shipment.shipmentBoxes.boxes.reduce((total, item) => total + item.quantity, 0)}</span>
             </p>
-            <p className='tw:m-0 tw:p-0 tw:text-[11.2px]'>
-              SKUs: <span className='tw:font-bold'>{shipment.shipmentItems.items.length}</span>
+            <p className='m-0 p-0 text-[11.2px]'>
+              SKUs: <span className='font-bold'>{shipment.shipmentItems.items.length}</span>
             </p>
-            <p className='tw:m-0 tw:p-0 tw:text-[11.2px]'>
+            <p className='m-0 p-0 text-[11.2px]'>
               Units:{' '}
-              <span className='tw:font-bold'>
+              <span className='font-bold'>
                 {shipment.shipmentBoxes.boxes.reduce((total, item) => {
                   const totalitems = item.items.reduce((total, item) => total + item.quantity, 0) * item.quantity
                   return total + totalitems
                 }, 0)}
               </span>
             </p>
-            <p className='tw:m-0 tw:p-0 tw:text-[11.2px]'>
+            <p className='m-0 p-0 text-[11.2px]'>
               Weight:{' '}
-              <span className='tw:font-bold'>
+              <span className='font-bold'>
                 {FormatIntPercentage(
                   state.currentRegion,
                   shipment.shipmentBoxes.boxes.reduce((total, item) => {
@@ -76,13 +76,13 @@ const BoxLabelsCard = ({ inboundPlan, handleNextStep, shipment, shipmentIndex }:
               </span>
             </p>
           </div>
-          <div className='tw:flex tw:flex-row tw:flex-nowrap tw:justify-end tw:items-center tw:gap-2'>
+          <div className='flex flex-row flex-nowrap justify-end items-center gap-2'>
             {shipment.shipmentItems.items.map(
               (item, itemIndex) =>
                 itemIndex <= 2 && (
                   <div
                     key={`${shipment.shipmentId}-${itemIndex}`}
-                    className='tw:my-2'
+                    className='my-2'
                     style={{
                       width: '50px',
                       height: '50px',
@@ -103,8 +103,8 @@ const BoxLabelsCard = ({ inboundPlan, handleNextStep, shipment, shipmentIndex }:
         </div>
       </CardBody>
       <CardFooter>
-        <div className='tw:flex tw:justify-between tw:items-center'>
-          <p className='tw:m-0 tw:p-0 tw:font-semibold'>Print Box and Shipping Lables</p>
+        <div className='flex justify-between items-center'>
+          <p className='m-0 p-0 font-semibold'>Print Box and Shipping Lables</p>
           <Button
             disabled={isLoading}
             size='sm'
@@ -118,8 +118,8 @@ const BoxLabelsCard = ({ inboundPlan, handleNextStep, shipment, shipmentIndex }:
               ).then(() => setisLoading(false))
             }}>
             {isLoading ? (
-              <span className='tw:text-nowrap'>
-                <Spinner color='light' size={'sm'} className='tw:me-1' /> Downloading...
+              <span className='text-nowrap'>
+                <Spinner color='light' size={'sm'} className='me-1' /> Downloading...
               </span>
             ) : (
               'Print Box Labels'

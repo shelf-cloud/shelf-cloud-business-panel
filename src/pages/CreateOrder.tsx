@@ -299,15 +299,15 @@ const CreateOrder = ({ session }: Props) => {
         <div className='page-content'>
           <BreadCrumb title='Create Order' pageTitle='Shipments' />
           <Container fluid>
-            <Card className='tw:text-[13px]'>
+            <Card className='text-[13px]'>
               <CardBody>
                 {ready ? (
                   <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values, { resetForm }) => handleSubmit(values, { resetForm })}>
                     {({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => (
                       <Form>
                         <Row>
-                          <div className='tw:flex tw:justify-end tw:items-center'>
-                            <div className='form-check form-check-inline form-switch form-switch-md form-switch-warning tw:mb-2 tw:md:mb-0'>
+                          <div className='flex justify-end items-center'>
+                            <div className='form-check form-check-inline form-switch form-switch-md form-switch-warning mb-2 md:mb-0'>
                               <Label className='form-check-label' for='SwitchCheck4'>
                                 Select for Local PickUp
                               </Label>
@@ -325,16 +325,16 @@ const CreateOrder = ({ session }: Props) => {
                         <Row>
                           {/* NAME */}
 
-                          <Col xs={12} md={8} className='tw:flex tw:flex-col tw:gap-1'>
+                          <Col xs={12} md={8} className='flex flex-col gap-1'>
                             <Row>
                               <Col xs={12} md={6}>
                                 <FormGroup className='createOrder_inputs'>
-                                  <Label htmlFor='firstNameinput' className='form-label tw:mb-1'>
+                                  <Label htmlFor='firstNameinput' className='form-label mb-1'>
                                     *First Name
                                   </Label>
                                   <Input
                                     type='text'
-                                    className='form-control form-control-sm tw:text-[13px]'
+                                    className='form-control form-control-sm text-[13px]'
                                     placeholder='First Name...'
                                     id='firstName'
                                     name='firstName'
@@ -344,7 +344,7 @@ const CreateOrder = ({ session }: Props) => {
                                     invalid={touched.firstName && errors.firstName ? true : false}
                                   />
                                   {touched.firstName && errors.firstName ? (
-                                    <FormFeedback className='tw:m-0 tw:text-[11.2px]' type='invalid'>
+                                    <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
                                       {errors.firstName}
                                     </FormFeedback>
                                   ) : null}
@@ -352,12 +352,12 @@ const CreateOrder = ({ session }: Props) => {
                               </Col>
                               <Col xs={12} md={6}>
                                 <FormGroup className='createOrder_inputs'>
-                                  <Label htmlFor='lastNameinput' className='form-label tw:mb-1'>
+                                  <Label htmlFor='lastNameinput' className='form-label mb-1'>
                                     *Last Name
                                   </Label>
                                   <Input
                                     type='text'
-                                    className='form-control form-control-sm tw:text-[13px]'
+                                    className='form-control form-control-sm text-[13px]'
                                     placeholder='Last Name...'
                                     id='lastName'
                                     name='lastName'
@@ -367,7 +367,7 @@ const CreateOrder = ({ session }: Props) => {
                                     invalid={touched.lastName && errors.lastName ? true : false}
                                   />
                                   {touched.lastName && errors.lastName ? (
-                                    <FormFeedback className='tw:m-0 tw:text-[11.2px]' type='invalid'>
+                                    <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
                                       {errors.lastName}
                                     </FormFeedback>
                                   ) : null}
@@ -379,12 +379,12 @@ const CreateOrder = ({ session }: Props) => {
 
                             <Col md={12}>
                               <FormGroup className='createOrder_inputs'>
-                                <Label htmlFor='company' className='form-label tw:mb-1'>
+                                <Label htmlFor='company' className='form-label mb-1'>
                                   Company
                                 </Label>
                                 <Input
                                   type='text'
-                                  className='form-control form-control-sm tw:text-[13px]'
+                                  className='form-control form-control-sm text-[13px]'
                                   placeholder='Company...'
                                   id='company'
                                   name='company'
@@ -394,7 +394,7 @@ const CreateOrder = ({ session }: Props) => {
                                   invalid={touched.company && errors.company ? true : false}
                                 />
                                 {touched.company && errors.company ? (
-                                  <FormFeedback className='tw:m-0 tw:text-[11.2px]' type='invalid'>
+                                  <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
                                     {errors.company}
                                   </FormFeedback>
                                 ) : null}
@@ -404,15 +404,15 @@ const CreateOrder = ({ session }: Props) => {
                             {/* ADDRESS */}
 
                             <Col md={12}>
-                              <FormGroup className='createOrder_inputs tw:relative'>
-                                <Label htmlFor='adress1' className='form-label tw:mb-1'>
+                              <FormGroup className='createOrder_inputs relative'>
+                                <Label htmlFor='adress1' className='form-label mb-1'>
                                   *Address
                                 </Label>
                                 <DebounceInput
                                   minLength={3}
                                   debounceTimeout={500}
                                   type='text'
-                                  className={'form-control form-control-sm tw:text-[13px] ' + (errors.adress1 && touched.adress1 ? 'is-invalid' : '')}
+                                  className={'form-control form-control-sm text-[13px] ' + (errors.adress1 && touched.adress1 ? 'is-invalid' : '')}
                                   placeholder='Address...'
                                   id='adress1'
                                   name='adress1'
@@ -424,21 +424,21 @@ const CreateOrder = ({ session }: Props) => {
                                   onBlur={handleBlur}
                                   value={values.adress1 || ''}
                                 />
-                                {touched.adress1 && errors.adress1 ? <ErrorInputLabel error={errors.adress1} marginTop='tw:mt-0' /> : null}
+                                {touched.adress1 && errors.adress1 ? <ErrorInputLabel error={errors.adress1} marginTop='mt-0' /> : null}
                                 {!isPickUpOrder && autoCompleteAddress?.length > 0 && (
-                                  <div className='tw:absolute'>
+                                  <div className='absolute'>
                                     <Card>
-                                      <CardBody className='tw:flex tw:flex-col tw:gap-2'>
+                                      <CardBody className='flex flex-col gap-2'>
                                         {autoCompleteAddress?.map((address: any) => (
-                                          <div key={address.id} className='tw:rounded-lg'>
-                                            <div className='tw:flex tw:justify-between tw:items-center tw:border-b'>
-                                              <div className='tw:flex tw:flex-col'>
-                                                <span className='tw:text-[13px] tw:font-semibold'>{address.properties.formatted}</span>
-                                                <span className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>{`${address.properties.street ? address.properties.street + ', ' : ''}${address.properties.city ? address.properties.city + ', ' : ''}${
+                                          <div key={address.id} className='rounded-lg'>
+                                            <div className='flex justify-between items-center border-b'>
+                                              <div className='flex flex-col'>
+                                                <span className='text-[13px] font-semibold'>{address.properties.formatted}</span>
+                                                <span className='text-[11.2px] text-[var(--bs-secondary-color)]'>{`${address.properties.street ? address.properties.street + ', ' : ''}${address.properties.city ? address.properties.city + ', ' : ''}${
                                                   address.properties.postcode ? address.properties.postcode + ', ' : ''
                                                 }${address.properties.state ? address.properties.state + ', ' : ''}${address.properties.country ? address.properties.country : ''}`}</span>
                                               </div>
-                                              <div className='tw:flex tw:justify-end tw:items-center'>
+                                              <div className='flex justify-end items-center'>
                                                 <Button
                                                   color='info'
                                                   size='sm'
@@ -463,10 +463,10 @@ const CreateOrder = ({ session }: Props) => {
                                             </div>
                                           </div>
                                         ))}
-                                        <div className='tw:rounded-lg'>
-                                          <div className='tw:flex tw:justify-between tw:items-center'>
-                                            <span className='tw:text-[13px] tw:text-[var(--bs-secondary-color)]'></span>
-                                            <div className='tw:flex tw:justify-end tw:items-center tw:mt-1'>
+                                        <div className='rounded-lg'>
+                                          <div className='flex justify-between items-center'>
+                                            <span className='text-[13px] text-[var(--bs-secondary-color)]'></span>
+                                            <div className='flex justify-end items-center mt-1'>
                                               <Button
                                                 color='light'
                                                 size='sm'
@@ -483,10 +483,10 @@ const CreateOrder = ({ session }: Props) => {
                                   </div>
                                 )}
                               </FormGroup>
-                              <FormGroup className='createOrder_inputs tw:mt-2'>
+                              <FormGroup className='createOrder_inputs mt-2'>
                                 <Input
                                   type='text'
-                                  className='form-control form-control-sm tw:text-[13px]'
+                                  className='form-control form-control-sm text-[13px]'
                                   placeholder='Apartment, suite, etc...'
                                   id='adress2'
                                   name='adress2'
@@ -496,7 +496,7 @@ const CreateOrder = ({ session }: Props) => {
                                   value={values.adress2 || ''}
                                 />
                                 {touched.adress2 && errors.adress2 ? (
-                                  <FormFeedback className='tw:m-0 tw:text-[11.2px]' type='invalid'>
+                                  <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
                                     {errors.adress2}
                                   </FormFeedback>
                                 ) : null}
@@ -509,12 +509,12 @@ const CreateOrder = ({ session }: Props) => {
                               <Row>
                                 <Col xs={12} md={3}>
                                   <FormGroup className='createOrder_inputs'>
-                                    <Label htmlFor='compnayNameinput' className='form-label tw:mb-1'>
+                                    <Label htmlFor='compnayNameinput' className='form-label mb-1'>
                                       *City
                                     </Label>
                                     <Input
                                       type='text'
-                                      className='form-control form-control-sm tw:text-[13px]'
+                                      className='form-control form-control-sm text-[13px]'
                                       placeholder='City...'
                                       id='city'
                                       name='city'
@@ -525,7 +525,7 @@ const CreateOrder = ({ session }: Props) => {
                                       invalid={touched.city && errors.city ? true : false}
                                     />
                                     {touched.city && errors.city ? (
-                                      <FormFeedback className='tw:m-0 tw:text-[11.2px]' type='invalid'>
+                                      <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
                                         {errors.city}
                                       </FormFeedback>
                                     ) : null}
@@ -533,12 +533,12 @@ const CreateOrder = ({ session }: Props) => {
                                 </Col>
                                 <Col xs={12} md={3}>
                                   <FormGroup className='createOrder_inputs'>
-                                    <Label htmlFor='compnayNameinput' className='form-label tw:mb-1'>
+                                    <Label htmlFor='compnayNameinput' className='form-label mb-1'>
                                       *Zip Code
                                     </Label>
                                     <Input
                                       type='text'
-                                      className='form-control form-control-sm tw:text-[13px]'
+                                      className='form-control form-control-sm text-[13px]'
                                       placeholder='Zip Code...'
                                       id='zipCode'
                                       name='zipCode'
@@ -549,7 +549,7 @@ const CreateOrder = ({ session }: Props) => {
                                       invalid={touched.zipCode && errors.zipCode ? true : false}
                                     />
                                     {touched.zipCode && errors.zipCode ? (
-                                      <FormFeedback className='tw:m-0 tw:text-[11.2px]' type='invalid'>
+                                      <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
                                         {errors.zipCode}
                                       </FormFeedback>
                                     ) : null}
@@ -557,7 +557,7 @@ const CreateOrder = ({ session }: Props) => {
                                 </Col>
                                 <Col xs={12} md={3}>
                                   <FormGroup className='createOrder_inputs'>
-                                    <Label htmlFor='compnayNameinput' className='form-label tw:mb-1'>
+                                    <Label htmlFor='compnayNameinput' className='form-label mb-1'>
                                       *Country
                                     </Label>
                                     <SimpleSelect
@@ -578,12 +578,12 @@ const CreateOrder = ({ session }: Props) => {
                                       isClearable
                                       menuPortalTarget={document.body}
                                     />
-                                    {errors.country ? <ErrorInputLabel error={errors.country} marginTop='tw:mt-0' /> : null}
+                                    {errors.country ? <ErrorInputLabel error={errors.country} marginTop='mt-0' /> : null}
                                   </FormGroup>
                                 </Col>
                                 <Col xs={12} md={3}>
                                   <FormGroup className='createOrder_inputs'>
-                                    <Label htmlFor='compnayNameinput' className='form-label tw:mb-1'>
+                                    <Label htmlFor='compnayNameinput' className='form-label mb-1'>
                                       *State
                                     </Label>
                                     {stateList[values.country] ? (
@@ -606,13 +606,13 @@ const CreateOrder = ({ session }: Props) => {
                                           isClearable
                                           menuPortalTarget={document.body}
                                         />
-                                        {errors.state ? <ErrorInputLabel error={errors.state} marginTop='tw:mt-0' /> : null}
+                                        {errors.state ? <ErrorInputLabel error={errors.state} marginTop='mt-0' /> : null}
                                       </>
                                     ) : (
                                       <>
                                         <Input
                                           type='text'
-                                          className='form-control form-control-sm tw:text-[13px]'
+                                          className='form-control form-control-sm text-[13px]'
                                           placeholder='State...'
                                           id='state'
                                           name='state'
@@ -623,7 +623,7 @@ const CreateOrder = ({ session }: Props) => {
                                           invalid={touched.state && errors.state ? true : false}
                                         />
                                         {touched.state && errors.state ? (
-                                          <FormFeedback className='tw:m-0 tw:text-[11.2px]' type='invalid'>
+                                          <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
                                             {errors.state}
                                           </FormFeedback>
                                         ) : null}
@@ -640,12 +640,12 @@ const CreateOrder = ({ session }: Props) => {
                               <Row>
                                 <Col xs={12} md={6}>
                                   <FormGroup className='createOrder_inputs'>
-                                    <Label htmlFor='lastNameinput' className='form-label tw:mb-1'>
+                                    <Label htmlFor='lastNameinput' className='form-label mb-1'>
                                       Phone #
                                     </Label>
                                     <Input
                                       type='text'
-                                      className='form-control form-control-sm tw:text-[13px]'
+                                      className='form-control form-control-sm text-[13px]'
                                       placeholder='Phone Number...'
                                       id='phoneNumber'
                                       name='phoneNumber'
@@ -656,7 +656,7 @@ const CreateOrder = ({ session }: Props) => {
                                       invalid={touched.phoneNumber && errors.phoneNumber ? true : false}
                                     />
                                     {touched.phoneNumber && errors.phoneNumber ? (
-                                      <FormFeedback className='tw:m-0 tw:text-[11.2px]' type='invalid'>
+                                      <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
                                         {errors.phoneNumber}
                                       </FormFeedback>
                                     ) : null}
@@ -664,12 +664,12 @@ const CreateOrder = ({ session }: Props) => {
                                 </Col>
                                 <Col xs={12} md={6}>
                                   <FormGroup className='createOrder_inputs'>
-                                    <Label htmlFor='lastNameinput' className='form-label tw:mb-1'>
+                                    <Label htmlFor='lastNameinput' className='form-label mb-1'>
                                       *Email
                                     </Label>
                                     <Input
                                       type='text'
-                                      className='form-control form-control-sm tw:text-[13px]'
+                                      className='form-control form-control-sm text-[13px]'
                                       placeholder='Email Address...'
                                       id='email'
                                       name='email'
@@ -680,7 +680,7 @@ const CreateOrder = ({ session }: Props) => {
                                       invalid={touched.email && errors.email ? true : false}
                                     />
                                     {touched.email && errors.email ? (
-                                      <FormFeedback className='tw:m-0 tw:text-[11.2px]' type='invalid'>
+                                      <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
                                         {errors.email}
                                       </FormFeedback>
                                     ) : null}
@@ -695,16 +695,16 @@ const CreateOrder = ({ session }: Props) => {
                           <Col xs={12} md={4}>
                             <Col xs={12} md={12}>
                               <FormGroup className='createOrder_inputs'>
-                                <Label htmlFor='lastNameinput' className='form-label tw:mb-1'>
+                                <Label htmlFor='lastNameinput' className='form-label mb-1'>
                                   *Order Number
                                 </Label>
                                 <div className='input-group'>
-                                  <span className='input-group-text tw:font-semibold tw:text-[13px] tw:py-1' id='orderNumberid'>
+                                  <span className='input-group-text font-semibold text-[13px] py-1' id='orderNumberid'>
                                     {orderNumberStart}
                                   </span>
                                   <Input
                                     type='text'
-                                    className='form-control form-control-sm tw:text-[13px]'
+                                    className='form-control form-control-sm text-[13px]'
                                     placeholder='Order Number...'
                                     aria-describedby='orderNumberid'
                                     id='orderNumber'
@@ -715,21 +715,21 @@ const CreateOrder = ({ session }: Props) => {
                                     invalid={touched.orderNumber && errors.orderNumber ? true : false}
                                   />
                                   {touched.orderNumber && errors.orderNumber ? (
-                                    <FormFeedback className='tw:m-0 tw:text-[11.2px]' type='invalid'>
+                                    <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
                                       {errors.orderNumber}
                                     </FormFeedback>
                                   ) : null}
                                 </div>
                               </FormGroup>
                             </Col>
-                            <Col xs={12} md={6} className='tw:mt-4'>
+                            <Col xs={12} md={6} className='mt-4'>
                               <FormGroup className='createOrder_inputs'>
                                 <Label htmlFor='lastNameinput' className='form-label'>
                                   *Amount Paid
                                 </Label>
                                 <Input
                                   type='text'
-                                  className='form-control form-control-sm tw:text-[13px]'
+                                  className='form-control form-control-sm text-[13px]'
                                   placeholder='Amount...'
                                   id='amount'
                                   name='amount'
@@ -746,7 +746,7 @@ const CreateOrder = ({ session }: Props) => {
                                 </Label>
                                 <Input
                                   type='text'
-                                  className='form-control form-control-sm tw:text-[13px]'
+                                  className='form-control form-control-sm text-[13px]'
                                   placeholder='Shipping...'
                                   id='shipping'
                                   name='shipping'
@@ -763,7 +763,7 @@ const CreateOrder = ({ session }: Props) => {
                                 </Label>
                                 <Input
                                   type='text'
-                                  className='form-control form-control-sm tw:text-[13px]'
+                                  className='form-control form-control-sm text-[13px]'
                                   placeholder='Tax...'
                                   id='tax'
                                   name='tax'
@@ -780,25 +780,25 @@ const CreateOrder = ({ session }: Props) => {
 
                         {/* TABLE OF PRODUCTS */}
                         <Row>
-                          <Col xs={12} className='tw:mt-2'>
-                            <div className='tw:overflow-x-auto'>
-                              <table className='tw:w-full tw:align-middle tw:whitespace-nowrap tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)]'>
+                          <Col xs={12} className='mt-2'>
+                            <div className='overflow-x-auto'>
+                              <table className='w-full align-middle whitespace-nowrap [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)]'>
                                 <thead>
                                   <tr>
-                                    <th scope='col' aria-label='Product row actions' className='tw:py-1 tw:text-[16.25px] tw:m-0 tw:font-semibold tw:text-center tw:bg-primary tw:text-white'></th>
-                                    <th scope='col' className='tw:py-1 tw:text-[16.25px] tw:m-0 tw:font-semibold tw:text-center tw:bg-primary tw:text-white'>
+                                    <th scope='col' aria-label='Product row actions' className='py-1 text-[16.25px] m-0 font-semibold text-center bg-primary text-white'></th>
+                                    <th scope='col' className='py-1 text-[16.25px] m-0 font-semibold text-center bg-primary text-white'>
                                       SKU
                                     </th>
-                                    <th scope='col' className='tw:py-1 tw:text-[16.25px] tw:m-0 tw:font-semibold tw:text-center tw:bg-primary tw:text-white'>
+                                    <th scope='col' className='py-1 text-[16.25px] m-0 font-semibold text-center bg-primary text-white'>
                                       Title
                                     </th>
-                                    <th scope='col' className='tw:py-1 tw:text-[16.25px] tw:m-0 tw:font-semibold tw:text-center tw:bg-primary tw:text-white'>
+                                    <th scope='col' className='py-1 text-[16.25px] m-0 font-semibold text-center bg-primary text-white'>
                                       Unit Price
                                     </th>
-                                    <th scope='col' className='tw:py-1 tw:text-[16.25px] tw:m-0 tw:font-semibold tw:text-center tw:bg-primary tw:text-white'>
+                                    <th scope='col' className='py-1 text-[16.25px] m-0 font-semibold text-center bg-primary text-white'>
                                       Qty
                                     </th>
-                                    <th scope='col' className='tw:py-1 tw:text-[16.25px] tw:m-0 tw:font-semibold tw:text-center tw:bg-primary tw:text-white'>
+                                    <th scope='col' className='py-1 text-[16.25px] m-0 font-semibold text-center bg-primary text-white'>
                                       Total
                                     </th>
                                   </tr>
@@ -811,11 +811,11 @@ const CreateOrder = ({ session }: Props) => {
                                           <tr key={index}>
                                             <td style={{ minWidth: '50px' }}>
                                               {index > 0 ? (
-                                                <Row className='tw:w-full tw:flex tw:flex-row tw:flex-nowrap tw:justify-center tw:gap-1 tw:items-center tw:mb-0'>
+                                                <Row className='w-full flex flex-row flex-nowrap justify-center gap-1 items-center mb-0'>
                                                   <button
                                                     type='button'
                                                     aria-label='Add product row'
-                                                    className='btn btn-link tw:border-0 tw:bg-transparent tw:text-success tw:m-0 tw:p-0 tw:w-auto'
+                                                    className='btn btn-link border-0 bg-transparent text-success m-0 p-0 w-auto'
                                                     onClick={() =>
                                                       push({
                                                         sku: '',
@@ -824,22 +824,22 @@ const CreateOrder = ({ session }: Props) => {
                                                         price: '0',
                                                       })
                                                     }>
-                                                    <i className='tw:text-[22.75px] las la-plus-circle tw:m-0 tw:p-0' />
+                                                    <i className='text-[22.75px] las la-plus-circle m-0 p-0' />
                                                   </button>
                                                   <button
                                                     type='button'
                                                     aria-label='Remove product row'
-                                                    className='btn btn-link tw:border-0 tw:bg-transparent tw:text-danger tw:m-0 tw:p-0 tw:w-auto'
+                                                    className='btn btn-link border-0 bg-transparent text-danger m-0 p-0 w-auto'
                                                     onClick={() => remove(index)}>
-                                                    <i className='tw:text-[22.75px] las la-minus-circle tw:m-0 tw:p-0' />
+                                                    <i className='text-[22.75px] las la-minus-circle m-0 p-0' />
                                                   </button>
                                                 </Row>
                                               ) : (
-                                                <Row className='tw:w-full tw:flex tw:flex-row tw:flex-nowrap tw:justify-center tw:gap-0 tw:items-center tw:mb-0'>
+                                                <Row className='w-full flex flex-row flex-nowrap justify-center gap-0 items-center mb-0'>
                                                   <button
                                                     type='button'
                                                     aria-label='Add product row'
-                                                    className='btn btn-link tw:border-0 tw:bg-transparent tw:text-success tw:m-0 tw:p-0 tw:w-auto'
+                                                    className='btn btn-link border-0 bg-transparent text-success m-0 p-0 w-auto'
                                                     onClick={() =>
                                                       push({
                                                         sku: '',
@@ -848,7 +848,7 @@ const CreateOrder = ({ session }: Props) => {
                                                         price: '0',
                                                       })
                                                     }>
-                                                    <i className='tw:text-[22.75px] las la-plus-circle tw:m-0 tw:p-0' />
+                                                    <i className='text-[22.75px] las la-plus-circle m-0 p-0' />
                                                   </button>
                                                 </Row>
                                               )}
@@ -875,7 +875,7 @@ const CreateOrder = ({ session }: Props) => {
                                                       isClearable
                                                       menuPortalTarget={document.body}
                                                     />
-                                                    {meta.error ? <ErrorInputLabel error={meta.error} marginTop='tw:mt-0' /> : null}
+                                                    {meta.error ? <ErrorInputLabel error={meta.error} marginTop='mt-0' /> : null}
                                                   </FormGroup>
                                                 )}
                                               </Field>
@@ -886,7 +886,7 @@ const CreateOrder = ({ session }: Props) => {
                                                   <FormGroup className='createOrder_inputs'>
                                                     <Input
                                                       type='text'
-                                                      className='form-control form-control-sm tw:text-[13px]'
+                                                      className='form-control form-control-sm text-[13px]'
                                                       name={`products.${index}.title`}
                                                       placeholder='Title...'
                                                       list='skuNames'
@@ -896,7 +896,7 @@ const CreateOrder = ({ session }: Props) => {
                                                       invalid={meta.touched && meta.error ? true : false}
                                                     />
                                                     {meta.touched && meta.error ? (
-                                                      <FormFeedback className='tw:m-0 tw:text-[11.2px]' type='invalid'>
+                                                      <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
                                                         {meta.error}
                                                       </FormFeedback>
                                                     ) : null}
@@ -910,7 +910,7 @@ const CreateOrder = ({ session }: Props) => {
                                                   <FormGroup className='createOrder_inputs'>
                                                     <Input
                                                       type='text'
-                                                      className='form-control form-control-sm tw:text-[13px]'
+                                                      className='form-control form-control-sm text-[13px]'
                                                       name={`products.${index}.price`}
                                                       placeholder='Price...'
                                                       onChange={handleChange}
@@ -919,7 +919,7 @@ const CreateOrder = ({ session }: Props) => {
                                                       invalid={meta.touched && meta.error ? true : false}
                                                     />
                                                     {meta.touched && meta.error ? (
-                                                      <FormFeedback className='tw:m-0 tw:text-[11.2px]' type='invalid'>
+                                                      <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
                                                         {meta.error}
                                                       </FormFeedback>
                                                     ) : null}
@@ -933,7 +933,7 @@ const CreateOrder = ({ session }: Props) => {
                                                   <FormGroup className='createOrder_inputs'>
                                                     <Input
                                                       type='text'
-                                                      className='form-control form-control-sm tw:text-[13px] tw:text-center'
+                                                      className='form-control form-control-sm text-[13px] text-center'
                                                       name={`products.${index}.qty`}
                                                       max={skuQuantities[values.products[index].sku]}
                                                       placeholder='Qty...'
@@ -943,7 +943,7 @@ const CreateOrder = ({ session }: Props) => {
                                                       invalid={meta.touched && meta.error ? true : false}
                                                     />
                                                     {meta.touched && meta.error ? (
-                                                      <FormFeedback className='tw:m-0 tw:text-[11.2px] tw:text-wrap' type='invalid'>
+                                                      <FormFeedback className='m-0 text-[11.2px] text-wrap' type='invalid'>
                                                         {meta.error}
                                                       </FormFeedback>
                                                     ) : null}
@@ -951,7 +951,7 @@ const CreateOrder = ({ session }: Props) => {
                                                 )}
                                               </Field>
                                             </td>
-                                            <td className='tw:text-right' style={{ minWidth: '80px' }}>
+                                            <td className='text-right' style={{ minWidth: '80px' }}>
                                               {FormatCurrency(state.currentRegion, values.products[index].qty * Number(values.products[index].price))}
                                             </td>
                                           </tr>
@@ -960,18 +960,18 @@ const CreateOrder = ({ session }: Props) => {
                                     )}
                                   </FieldArray>
                                 </tbody>
-                                <tfoot className='tw:bg-light'>
+                                <tfoot className='bg-light'>
                                   <tr>
-                                    <td className='tw:text-right tw:font-bold' colSpan={4}>
+                                    <td className='text-right font-bold' colSpan={4}>
                                       TOTAL
                                     </td>
-                                    <td className='tw:text-center tw:font-semibold'>
+                                    <td className='text-center font-semibold'>
                                       {FormatIntNumber(
                                         state.currentRegion,
                                         values.products.reduce((acc: number, product: any) => acc + Number(product.qty), 0)
                                       )}
                                     </td>
-                                    <td className='tw:text-right tw:font-semibold'>
+                                    <td className='text-right font-semibold'>
                                       {FormatCurrency(
                                         state.currentRegion,
                                         values.products.reduce((acc: number, product: any) => acc + product.qty * Number(product.price), 0)
@@ -988,14 +988,14 @@ const CreateOrder = ({ session }: Props) => {
 
                         <Row>
                           {skuExceededAvailability.sku !== '' && (
-                            <span className='tw:text-danger tw:text-[13px] tw:font-normal'>{`*SKU: ${skuExceededAvailability.sku} Available: ${skuExceededAvailability.availableQty} Ordered: ${skuExceededAvailability.orderedQty}`}</span>
+                            <span className='text-danger text-[13px] font-normal'>{`*SKU: ${skuExceededAvailability.sku} Available: ${skuExceededAvailability.availableQty} Ordered: ${skuExceededAvailability.orderedQty}`}</span>
                           )}
-                          <p className='tw:text-[13px] tw:mb-0 tw:text-[var(--bs-secondary-color)]'>*You must complete all required fields or you will not be able to create your product.</p>
+                          <p className='text-[13px] mb-0 text-[var(--bs-secondary-color)]'>*You must complete all required fields or you will not be able to create your product.</p>
                           <Col md={12}>
-                            <div className='tw:text-right'>
-                              <Button type='submit' disabled={creatingOrder} className='tw:text-[13px] tw:bg-primary'>
+                            <div className='text-right'>
+                              <Button type='submit' disabled={creatingOrder} className='text-[13px] bg-primary'>
                                 {creatingOrder ? (
-                                  <span className='tw:flex tw:items-center tw:gap-2'>
+                                  <span className='flex items-center gap-2'>
                                     <Spinner color='light' size={'sm'} /> Creating...
                                   </span>
                                 ) : (

@@ -81,23 +81,23 @@ function ReorderingPointsPromptModal({ promptModal, setPromptModal }: Props) {
         }}>
         Business Prompt
       </ModalHeader>
-      <ModalBody className='tw:px-6 tw:py-4' style={{ overflowX: 'hidden', overflowY: 'auto', minWidth: 0 }}>
-        <p className='tw:text-[13px]'>To forecast using different AI models, you can add custom instructions/rules additionally.</p>
+      <ModalBody className='px-6 py-4' style={{ overflowX: 'hidden', overflowY: 'auto', minWidth: 0 }}>
+        <p className='text-[13px]'>To forecast using different AI models, you can add custom instructions/rules additionally.</p>
         {isValidating ? (
-          <div className='tw:flex tw:items-center tw:gap-2 tw:text-[var(--bs-secondary-color)] tw:py-4'>
+          <div className='flex items-center gap-2 text-[var(--bs-secondary-color)] py-4'>
             <div className='spinner-border spinner-border-sm' role='status' aria-hidden='true' />
             <span>Loading prompt...</span>
           </div>
         ) : error ? (
-          <div className='alert alert-danger tw:mb-0' role='alert'>
+          <div className='alert alert-danger mb-0' role='alert'>
             Failed to fetch prompt. Please try again.
           </div>
         ) : data?.error ? (
-          <div className='alert alert-warning tw:mb-0' role='alert'>
+          <div className='alert alert-warning mb-0' role='alert'>
             {data.message || 'Prompt service returned an error.'}
           </div>
         ) : data?.prompt ? (
-          <div className='tw:flex tw:flex-col tw:gap-4' style={{ minWidth: 0, width: '100%' }}>
+          <div className='flex flex-col gap-4' style={{ minWidth: 0, width: '100%' }}>
             {[
               // { label: 'General', content: snarkdown(data.prompt.general) },
               { label: 'Objective', content: snarkdown(data.prompt.objective) },
@@ -105,8 +105,8 @@ function ReorderingPointsPromptModal({ promptModal, setPromptModal }: Props) {
               // { label: 'Restrictions', content: snarkdown(data.prompt.restrictions) },
               // { label: 'Output', content: snarkdown(data.prompt.output) },
             ].map(({ label, content }) => (
-              <div key={label} className='tw:border tw:rounded tw:p-4 tw:shadow-sm' style={{ minWidth: 0, overflow: 'hidden' }}>
-                <p className='tw:font-semibold tw:text-[var(--bs-secondary-color)] tw:uppercase tw:mb-2' style={{ fontSize: '0.7rem', letterSpacing: '0.06em' }}>
+              <div key={label} className='border rounded p-4 shadow-sm' style={{ minWidth: 0, overflow: 'hidden' }}>
+                <p className='font-semibold text-[var(--bs-secondary-color)] uppercase mb-2' style={{ fontSize: '0.7rem', letterSpacing: '0.06em' }}>
                   {label}
                 </p>
                 <div
@@ -116,8 +116,8 @@ function ReorderingPointsPromptModal({ promptModal, setPromptModal }: Props) {
                 />
               </div>
             ))}
-            <div className='tw:border tw:rounded tw:p-4 tw:shadow-sm'>
-              <p className='tw:font-semibold tw:text-[var(--bs-secondary-color)] tw:uppercase tw:mb-4' style={{ fontSize: '0.7rem', letterSpacing: '0.06em' }}>
+            <div className='border rounded p-4 shadow-sm'>
+              <p className='font-semibold text-[var(--bs-secondary-color)] uppercase mb-4' style={{ fontSize: '0.7rem', letterSpacing: '0.06em' }}>
                 Business Rules
               </p>
               <Input
@@ -131,7 +131,7 @@ function ReorderingPointsPromptModal({ promptModal, setPromptModal }: Props) {
             </div>
           </div>
         ) : (
-          <p className='tw:text-[var(--bs-secondary-color)] tw:mb-0'>No prompt available.</p>
+          <p className='text-[var(--bs-secondary-color)] mb-0'>No prompt available.</p>
         )}
       </ModalBody>
       <ModalFooter>

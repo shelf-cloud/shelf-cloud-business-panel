@@ -267,23 +267,23 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
         <Col sm={3}>
           <Col sm={12}>
             <Card>
-              <CardHeader className='tw:py-2'>
-                <h5 className='tw:font-semibold tw:m-0'>Details</h5>
+              <CardHeader className='py-2'>
+                <h5 className='font-semibold m-0'>Details</h5>
               </CardHeader>
               <CardBody>
-                <table className='tw:w-full tw:text-[11.2px] tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+                <table className='w-full text-[11.2px] mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <tbody>
                     {!editPONumber && (
                       <tr>
-                        <td className='tw:text-[color:var(--bs-secondary-color)] tw:text-nowrap'>PO Number:</td>
-                        <td className='tw:font-semibold tw:w-full'>
+                        <td className='text-[color:var(--bs-secondary-color)] text-nowrap'>PO Number:</td>
+                        <td className='font-semibold w-full'>
                           {data.orderNumber}{' '}
                           <button
                             type='button'
                             aria-label='Edit PO number'
-                            className={'btn btn-link tw:border-0 tw:bg-transparent tw:text-primary tw:m-0 tw:p-0 ' + (editPONumber && 'tw:hidden')}
+                            className={'btn btn-link border-0 bg-transparent text-primary m-0 p-0 ' + (editPONumber && 'hidden')}
                             onClick={() => seteditPONumber(true)}>
-                            <i className='las la-edit tw:text-[16.25px] tw:m-0 tw:p-0' />
+                            <i className='las la-edit text-[16.25px] m-0 p-0' />
                           </button>
                         </td>
                       </tr>
@@ -297,14 +297,14 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                                 <Label htmlFor='orderNumber'>
                                   New PO Number:
                                 </Label>
-                                <div className='tw:flex tw:mb-2'>
-                                  <span className='tw:inline-flex tw:items-center tw:font-semibold tw:text-[11.2px] tw:m-0 tw:px-2 tw:py-0 tw:bg-[color:var(--vz-light)] tw:border tw:border-[color:var(--input-border)] tw:rounded-l-md' id='basic-addon1'>
+                                <div className='flex mb-2'>
+                                  <span className='inline-flex items-center font-semibold text-[11.2px] m-0 px-2 py-0 bg-[color:var(--vz-light)] border border-[color:var(--input-border)] rounded-l-md' id='basic-addon1'>
                                     {orderNumberStart}
                                   </span>
                                   <Input
                                     type='text'
                                     aria-label='New PO number'
-                                    className='tw:text-[11.2px]'
+                                    className='text-[11.2px]'
                                     id='orderNumber'
                                     name='orderNumber'
                                     bsSize='sm'
@@ -317,7 +317,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                                     <FormFeedback type='invalid'>{validationPONumber.errors.orderNumber}</FormFeedback>
                                   ) : null}
                                 </div>
-                                <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-2'>
+                                <div className='flex flex-row justify-end items-center gap-2'>
                                   <Button type='button' disabled={loading} color='light' size='sm' onClick={() => seteditPONumber(false)}>
                                     Cancel
                                   </Button>
@@ -333,39 +333,39 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                     )}
 
                     <tr>
-                      <td className='tw:text-[color:var(--bs-secondary-color)] tw:text-nowrap'>Supplier:</td>
-                      <td className='tw:font-semibold tw:w-full'>{data.suppliersName}</td>
+                      <td className='text-[color:var(--bs-secondary-color)] text-nowrap'>Supplier:</td>
+                      <td className='font-semibold w-full'>{data.suppliersName}</td>
                     </tr>
                     <tr>
-                      <td className='tw:text-[color:var(--bs-secondary-color)] tw:text-nowrap'>Created:</td>
-                      <td className='tw:font-semibold tw:w-full'>{data.date}</td>
+                      <td className='text-[color:var(--bs-secondary-color)] text-nowrap'>Created:</td>
+                      <td className='font-semibold w-full'>{data.date}</td>
                     </tr>
                     <tr>
-                      <td className='tw:text-[color:var(--bs-secondary-color)] tw:text-nowrap'>Note:</td>
+                      <td className='text-[color:var(--bs-secondary-color)] text-nowrap'>Note:</td>
                       <td aria-label='Note value'></td>
                     </tr>
                   </tbody>
                 </table>
-                <p className='tw:m-0 tw:px-1 tw:text-[11.2px]'>{data.note}</p>
-                <p className='tw:text-right tw:m-0 tw:px-1'>
+                <p className='m-0 px-1 text-[11.2px]'>{data.note}</p>
+                <p className='text-right m-0 px-1'>
                   <button
                     type='button'
                     aria-label='Edit PO note'
-                    className={'btn btn-link tw:border-0 tw:bg-transparent tw:text-primary tw:m-0 tw:p-0 ' + (showEditNote && 'tw:hidden')}
+                    className={'btn btn-link border-0 bg-transparent text-primary m-0 p-0 ' + (showEditNote && 'hidden')}
                     onClick={() => setShowEditNote(true)}>
-                    <i className='las la-edit tw:text-[19.5px] tw:m-0 tw:p-0' />
+                    <i className='las la-edit text-[19.5px] m-0 p-0' />
                   </button>
                 </p>
                 {showEditNote && (
                   <Form onSubmit={handleAddComment}>
                     <Col md={12}>
-                      <FormGroup className='tw:!m-0'>
+                      <FormGroup className='!m-0'>
                         <Label htmlFor='note'>
                           Edit Note
                         </Label>
                         <Input
                           type='textarea'
-                          className='tw:text-[13px]'
+                          className='text-[13px]'
                           placeholder=''
                           id='note'
                           name='note'
@@ -377,7 +377,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                         />
                         {validationNote.touched.note && validationNote.errors.note ? <FormFeedback type='invalid'>{validationNote.errors.note}</FormFeedback> : null}
                       </FormGroup>
-                      <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-3'>
+                      <div className='flex flex-row justify-end items-center gap-3'>
                         <Button type='button' disabled={loading} color='light' size='sm' onClick={() => setShowEditNote(false)}>
                           Cancel
                         </Button>
@@ -393,26 +393,26 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
           </Col>
           <Col sm={12}>
             <Card>
-              <CardHeader className='tw:py-2 tw:flex tw:flex-row tw:justify-between'>
-                <h5 className='tw:font-semibold tw:m-0'>Payment History</h5>{' '}
+              <CardHeader className='py-2 flex flex-row justify-between'>
+                <h5 className='font-semibold m-0'>Payment History</h5>{' '}
                 {data.isOpen && (
                   <button
                     type='button'
                     aria-label='Add payment'
-                    className='tw:border-0 tw:bg-transparent tw:text-success tw:m-0 tw:p-0'
+                    className='border-0 bg-transparent text-success m-0 p-0'
                     onClick={() => setModalAddPaymentToPoDetails(data.poId, data.orderNumber)}>
-                    <i className='tw:text-[19.5px] las la-plus-circle' />
+                    <i className='text-[19.5px] las la-plus-circle' />
                   </button>
                 )}
               </CardHeader>
-              <CardBody className='tw:pt-0 tw:px-0'>
-                <table className='tw:w-full tw:text-[11.2px] tw:text-nowrap tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
-                  <thead className='tw:bg-[color:var(--vz-light)] tw:text-[11.2px]'>
+              <CardBody className='pt-0 px-0'>
+                <table className='w-full text-[11.2px] text-nowrap mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+                  <thead className='bg-[color:var(--vz-light)] text-[11.2px]'>
                     <tr>
-                      <th scope='col' className='tw:text-center'>
+                      <th scope='col' className='text-center'>
                         Date
                       </th>
-                      <th scope='col' className='tw:text-left'>
+                      <th scope='col' className='text-left'>
                         Amount
                       </th>
                     </tr>
@@ -420,13 +420,13 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                   <tbody>
                     {data.poPayments?.map((payment: PoPaymentHistory, key) => (
                       <tr key={`${data.orderNumber}-${key}-${payment.date}`}>
-                        <td className='tw:text-center'>{payment.date}</td>
-                        <td className='tw:flex tw:justify-start tw:items-center tw:gap-2'>
+                        <td className='text-center'>{payment.date}</td>
+                        <td className='flex justify-start items-center gap-2'>
                           <span>{FormatCurrency(state.currentRegion, payment.amount)}</span>
                           <button
                             type='button'
                             aria-label='Edit payment'
-                            className='tw:border-0 tw:bg-transparent tw:text-primary tw:m-0 tw:p-0'
+                            className='border-0 bg-transparent text-primary m-0 p-0'
                             onClick={() =>
                               setEditPaymentModal({
                                 show: true,
@@ -438,16 +438,16 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                                 paymentIndex: key,
                               })
                             }>
-                            <i className='las la-edit tw:text-[16.25px] tw:m-0 tw:p-0' />
+                            <i className='las la-edit text-[16.25px] m-0 p-0' />
                           </button>
                           {payment.comment && (
                             <>
-                              <i className='ri-information-fill tw:m-0 tw:p-0 tw:text-[16.25px] tw:text-info' id={`paymentComment${data.orderNumber}-${key}-${payment.date}`} />
+                              <i className='ri-information-fill m-0 p-0 text-[16.25px] text-info' id={`paymentComment${data.orderNumber}-${key}-${payment.date}`} />
                               <UncontrolledTooltip
                                 placement='right'
                                 target={`paymentComment${data.orderNumber}-${key}-${payment.date}`}
-                                popperClassName='tw:bg-[color:var(--vz-light)] tw:shadow tw:px-3 tw:py-3 tw:rounded'
-                                innerClassName='tw:text-black tw:bg-[color:var(--vz-light)] tw:p-0'>
+                                popperClassName='bg-[color:var(--vz-light)] shadow px-3 py-3 rounded'
+                                innerClassName='text-black bg-[color:var(--vz-light)] p-0'>
                                 {payment.comment}
                               </UncontrolledTooltip>
                             </>
@@ -456,9 +456,9 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                       </tr>
                     ))}
                     {data.poPayments?.length > 0 && (
-                      <tr className='tw:border-t tw:border-[color:var(--border)]'>
-                        <td className='tw:text-center tw:font-semibold'>Total</td>
-                        <td className='tw:text-left tw:font-semibold'>
+                      <tr className='border-t border-[color:var(--border)]'>
+                        <td className='text-center font-semibold'>Total</td>
+                        <td className='text-left font-semibold'>
                           {FormatCurrency(
                             state.currentRegion,
                             data.poPayments.reduce((total, payment: PoPaymentHistory) => total + Number(payment.amount), 0)
@@ -473,16 +473,16 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
           </Col>
         </Col>
         <Col sm={9}>
-          <Card className='tw:mb-3'>
-            <CardHeader className='tw:py-2 tw:flex tw:flex-row tw:justify-between tw:items-start'>
+          <Card className='mb-3'>
+            <CardHeader className='py-2 flex flex-row justify-between items-start'>
               <div>
-                <h5 className='tw:font-semibold tw:m-0'>Products</h5>
+                <h5 className='font-semibold m-0'>Products</h5>
                 {data.hasSplitting && (
                   <>
-                    <p className='tw:m-0 tw:my-1 tw:p-0 tw:text-[11.2px] tw:text-[color:var(--bs-secondary-color)] tw:font-normal'>Split Destinations:</p>
-                    <Nav className='tw:m-0 tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2 tw:text-[11.2px]' role='tablist'>
+                    <p className='m-0 my-1 p-0 text-[11.2px] text-[color:var(--bs-secondary-color)] font-normal'>Split Destinations:</p>
+                    <Nav className='m-0 flex flex-row justify-start items-center gap-2 text-[11.2px]' role='tablist'>
                       <NavItem>
-                        <Button type='button' color={activeTab === 'all' ? 'primary' : 'light'} size='sm' className='tw:text-[11.2px]' onClick={() => setactiveTab('all')}>
+                        <Button type='button' color={activeTab === 'all' ? 'primary' : 'light'} size='sm' className='text-[11.2px]' onClick={() => setactiveTab('all')}>
                           All Splits
                         </Button>
                       </NavItem>
@@ -492,7 +492,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                             type='button'
                             color={activeTab === `${split.splitId}` ? 'primary' : 'light'}
                             size='sm'
-                            className='tw:text-[11.2px]'
+                            className='text-[11.2px]'
                             onClick={() => setactiveTab(`${split.splitId}`)}>
                             {split.splitName}
                           </Button>
@@ -503,13 +503,13 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                 )}
               </div>
               {(!data.hasSplitting || (data.hasSplitting && activeTab !== 'all')) && data.isOpen && (
-                <div className='tw:flex tw:flex-row tw:justify-end tw:gap-2 tw:items-center'>
+                <div className='flex flex-row justify-end gap-2 items-center'>
                   {data.poItems.length > 0 && (
                     <button
                       type='button'
                       aria-label='Edit PO items'
                       id={`editPoItems-${data.poId}-${activeTab}`}
-                      className='tw:border-0 tw:bg-transparent tw:text-primary tw:m-0 tw:p-0'
+                      className='border-0 bg-transparent text-primary m-0 p-0'
                       onClick={() =>
                         setshowEditOrderQty((prev) => {
                           return {
@@ -523,15 +523,15 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                           }
                         })
                       }>
-                      <i className='mdi mdi-file-edit-outline tw:text-[19.5px] tw:m-0 tw:p-0' />
+                      <i className='mdi mdi-file-edit-outline text-[19.5px] m-0 p-0' />
                     </button>
                   )}
                   {data.poItems.length > 0 && (
                     <UncontrolledTooltip
                       placement='top'
                       target={`editPoItems-${data.poId}-${activeTab}`}
-                      popperClassName='tw:bg-[color:var(--vz-light)] tw:shadow tw:px-2 tw:py-2 tw:rounded'
-                      innerClassName='tw:text-black tw:bg-[color:var(--vz-light)] tw:p-0'>
+                      popperClassName='bg-[color:var(--vz-light)] shadow px-2 py-2 rounded'
+                      innerClassName='text-black bg-[color:var(--vz-light)] p-0'>
                       Edit PO items
                     </UncontrolledTooltip>
                   )}
@@ -539,15 +539,15 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                     type='button'
                     aria-label='Add SKU to PO'
                     id={`addSkuToPo-${data.poId}-${activeTab}`}
-                    className='tw:border-0 tw:bg-transparent tw:text-success tw:m-0 tw:p-0'
+                    className='border-0 bg-transparent text-success m-0 p-0'
                     onClick={() => setModalAddSkuToPurchaseOrder(true, data.poId, data.orderNumber, data.suppliersName, data.hasSplitting, data.splits[activeTab] || undefined)}>
-                    <i className='tw:text-[19.5px] mdi mdi-plus-circle-outline' />
+                    <i className='text-[19.5px] mdi mdi-plus-circle-outline' />
                   </button>
                   <UncontrolledTooltip
                     placement='top'
                     target={`addSkuToPo-${data.poId}-${activeTab}`}
-                    popperClassName='tw:bg-[color:var(--vz-light)] tw:shadow tw:px-2 tw:py-2 tw:rounded'
-                    innerClassName='tw:text-black tw:bg-[color:var(--vz-light)] tw:p-0'>
+                    popperClassName='bg-[color:var(--vz-light)] shadow px-2 py-2 rounded'
+                    innerClassName='text-black bg-[color:var(--vz-light)] p-0'>
                     Add SKU to PO
                   </UncontrolledTooltip>
                   {hasPendingProducts && (
@@ -556,15 +556,15 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                         type='button'
                         aria-label='Receive all pending items'
                         id={`receiveAllPendingItems-${data.poId}-${activeTab}`}
-                        className='tw:border-0 tw:bg-transparent tw:text-success tw:m-0 tw:p-0'
+                        className='border-0 bg-transparent text-success m-0 p-0'
                         onClick={() => handleReceiveAllPendingItems()}>
-                        <i className='tw:text-[19.5px] mdi mdi-checkbox-multiple-marked-outline' />
+                        <i className='text-[19.5px] mdi mdi-checkbox-multiple-marked-outline' />
                       </button>
                       <UncontrolledTooltip
                         placement='top'
                         target={`receiveAllPendingItems-${data.poId}-${activeTab}`}
-                        popperClassName='tw:bg-[color:var(--vz-light)] tw:shadow tw:px-2 tw:py-2 tw:rounded'
-                        innerClassName='tw:text-black tw:bg-[color:var(--vz-light)] tw:p-0'>
+                        popperClassName='bg-[color:var(--vz-light)] shadow px-2 py-2 rounded'
+                        innerClassName='text-black bg-[color:var(--vz-light)] p-0'>
                         Receive all pending items
                       </UncontrolledTooltip>
                     </>
@@ -572,7 +572,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                 </div>
               )}
             </CardHeader>
-            <CardBody className='tw:pt-0 tw:px-0'>
+            <CardBody className='pt-0 px-0'>
               <ExpandedOrderItems
                 activeTab={activeTab}
                 poItems={activeTab === 'all' ? data.poItems : data.splits[activeTab].items}
@@ -583,19 +583,19 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
               />
             </CardBody>
           </Card>
-          <Row className='tw:mb-2'>
-            <Col sm={12} className='tw:flex tw:flex-row tw:justify-end tw:items-end'>
-              <div className='tw:m-0 tw:flex tw:flex-row tw:justify-end tw:items-end tw:gap-2'>
+          <Row className='mb-2'>
+            <Col sm={12} className='flex flex-row justify-end items-end'>
+              <div className='m-0 flex flex-row justify-end items-end gap-2'>
                 {/* <DownloadExcelPurchaseOrder purchaseOrder={data}/> */}
                 <DownloadExcelPurchaseOrder purchaseOrder={data} />
                 {data.isOpen ? (
-                  <Button color='success' disabled={loading} className='tw:text-[11.2px]' onClick={() => handlePoOpenState(data.poId, !data.isOpen)}>
-                    <i className='las la-check-circle label-icon tw:align-middle tw:text-[19.5px] tw:me-2' />
+                  <Button color='success' disabled={loading} className='text-[11.2px]' onClick={() => handlePoOpenState(data.poId, !data.isOpen)}>
+                    <i className='las la-check-circle label-icon align-middle text-[19.5px] me-2' />
                     Mark as Complete
                   </Button>
                 ) : (
-                  <Button color='info' disabled={loading} className='tw:text-[11.2px]' onClick={() => handlePoOpenState(data.poId, !data.isOpen)}>
-                    <i className='las la-lock-open label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
+                  <Button color='info' disabled={loading} className='text-[11.2px]' onClick={() => handlePoOpenState(data.poId, !data.isOpen)}>
+                    <i className='las la-lock-open label-icon align-middle text-[16.25px] me-2' />
                     ReOpen PO
                   </Button>
                 )}

@@ -33,7 +33,7 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
 
   const columns: any = [
     {
-      name: <span className='tw:font-semibold tw:text-[13px]'>Image</span>,
+      name: <span className='font-semibold text-[13px]'>Image</span>,
       selector: (row: ReceivingInventory) => {
         return (
           <div
@@ -58,8 +58,8 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
       width: '80px',
     },
     {
-      name: <span className='tw:font-semibold tw:text-[13px]'>Title</span>,
-      selector: (row: ReceivingInventory) => <p className='tw:text-[11.2px] tw:m-0 tw:p-0'>{row.title}</p>,
+      name: <span className='font-semibold text-[13px]'>Title</span>,
+      selector: (row: ReceivingInventory) => <p className='text-[11.2px] m-0 p-0'>{row.title}</p>,
 
       sortable: true,
       wrap: true,
@@ -67,16 +67,16 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
       sortFunction: (rowA: ReceivingInventory, rowB: ReceivingInventory) => sortStringsCaseInsensitive(rowA.title, rowB.title),
     },
     {
-      name: <span className='tw:font-semibold tw:text-[13px]'>SKU</span>,
-      selector: (row: ReceivingInventory) => <span className='tw:text-[11.2px]'>{row.sku}</span>,
+      name: <span className='font-semibold text-[13px]'>SKU</span>,
+      selector: (row: ReceivingInventory) => <span className='text-[11.2px]'>{row.sku}</span>,
       sortable: true,
       wrap: false,
       compact: true,
       sortFunction: (rowA: ReceivingInventory, rowB: ReceivingInventory) => sortStringsCaseInsensitive(rowA.sku, rowB.sku),
     },
     {
-      name: <span className='tw:font-semibold tw:text-[13px]'>Supplier</span>,
-      selector: (row: ReceivingInventory) => <span className='tw:text-[11.2px]'>{row.suppliersName}</span>,
+      name: <span className='font-semibold text-[13px]'>Supplier</span>,
+      selector: (row: ReceivingInventory) => <span className='text-[11.2px]'>{row.suppliersName}</span>,
       sortable: true,
       wrap: false,
       compact: true,
@@ -84,12 +84,12 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
     },
     {
       name: (
-        <span className='tw:font-semibold tw:text-[13px] tw:text-center'>
+        <span className='font-semibold text-[13px] text-center'>
           Master Box <br />
-          <span className='tw:text-[11.2px]'>(Units/Box)</span>
+          <span className='text-[11.2px]'>(Units/Box)</span>
         </span>
       ),
-      selector: (row: ReceivingInventory) => <span className='tw:text-[11.2px]'>{FormatIntNumber(state.currentRegion, row.boxQty)}</span>,
+      selector: (row: ReceivingInventory) => <span className='text-[11.2px]'>{FormatIntNumber(state.currentRegion, row.boxQty)}</span>,
       sortable: true,
       center: true,
       wrap: false,
@@ -97,13 +97,13 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
       sortFunction: (rowA: ReceivingInventory, rowB: ReceivingInventory) => sortNumbers(rowA.boxQty, rowB.boxQty),
     },
     {
-      name: <span className='tw:font-semibold tw:text-[13px] tw:text-center'>Inventory</span>,
+      name: <span className='font-semibold text-[13px] text-center'>Inventory</span>,
       selector: (row: ReceivingInventory) => {
         return (
           <Button
             color='ghost'
             size='sm'
-            className='tw:!text-info tw:hover:bg-[color-mix(in_srgb,var(--info)_10%,transparent)]'
+            className='!text-info hover:bg-[color-mix(in_srgb,var(--info)_10%,transparent)]'
             onClick={() => {
               setModalProductInfo(row.inventoryId, row.sku)
             }}>
@@ -118,7 +118,7 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
     },
     {
       name: (
-        <span className='tw:font-semibold tw:text-[13px] tw:text-center'>
+        <span className='font-semibold text-[13px] text-center'>
           Receiving <br /> Quantity
         </span>
       ),
@@ -129,7 +129,7 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
               type='number'
               minLength={0}
               debounceTimeout={200}
-              className='form-control form-control-sm tw:text-[13px] tw:mt-1'
+              className='form-control form-control-sm text-[13px] mt-1'
               placeholder={'Receiving Qty...'}
               value={row.quantity}
               onFocus={(e: React.FocusEvent<HTMLInputElement>) => e.target.select()}
@@ -145,7 +145,7 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
               }}
               min={0}
             />
-            <span className='tw:text-[11.2px] tw:font-normal tw:text-destructive' id={`Error-${row.sku}`} style={{ display: 'none' }}>
+            <span className='text-[11.2px] font-normal text-destructive' id={`Error-${row.sku}`} style={{ display: 'none' }}>
               Quantity Error
             </span>
           </>

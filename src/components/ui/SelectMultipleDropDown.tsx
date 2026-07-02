@@ -56,14 +56,14 @@ const SelectMultipleDropDown = ({ formValue, selectionInfo, selected, handleSele
   }, [])
 
   return (
-    <div ref={selectMultiple} className='tw:relative tw:mb-4'>
+    <div ref={selectMultiple} className='relative mb-4'>
       <div
-        className='tw:flex tw:w-full tw:items-center tw:p-0 tw:bg-transparent tw:rounded-md tw:border tw:border-[#E1E3E5]'
+        className='flex w-full items-center p-0 bg-transparent rounded-md border border-[#E1E3E5]'
         style={{ cursor: 'pointer' }}
         onClick={() => setOpenDatesMenu(!openDatesMenu)}>
-        <span className='tw:flex-1 tw:px-3 tw:py-[0.3rem] tw:text-[13px] tw:text-left' style={{ backgroundColor: 'white', opacity: '100%' }}>
+        <span className='flex-1 px-3 py-[0.3rem] text-[13px] text-left' style={{ backgroundColor: 'white', opacity: '100%' }}>
           {selectedParsed.length === 0 ? (
-            <span className='tw:text-[color:var(--bs-secondary-color)]'>Select</span>
+            <span className='text-[color:var(--bs-secondary-color)]'>Select</span>
           ) : (
             selectedParsed
               .map((value) => selectionInfo[value]?.label)
@@ -71,18 +71,18 @@ const SelectMultipleDropDown = ({ formValue, selectionInfo, selected, handleSele
               .join(', ')
           )}
         </span>
-        <span className='tw:flex tw:items-center tw:justify-center tw:px-2' style={{ backgroundColor: 'white', maxWidth: '35px' }} aria-expanded='false'>
-          <i className='mdi mdi-chevron-down tw:text-[16.25px]' />
-          <span className='tw:sr-only'>Toggle Dropdown</span>
+        <span className='flex items-center justify-center px-2' style={{ backgroundColor: 'white', maxWidth: '35px' }} aria-expanded='false'>
+          <i className='mdi mdi-chevron-down text-[16.25px]' />
+          <span className='sr-only'>Toggle Dropdown</span>
         </span>
       </div>
-      <div className={'tw:absolute tw:z-10 tw:mt-1 tw:w-full tw:py-3 tw:px-4 tw:bg-white tw:border tw:border-[#E1E3E5] tw:rounded-md tw:shadow ' + (openDatesMenu ? 'tw:block' : 'tw:hidden')}>
-        <div className='tw:flex tw:flex-col tw:justify-start'>
+      <div className={'absolute z-10 mt-1 w-full py-3 px-4 bg-white border border-[#E1E3E5] rounded-md shadow ' + (openDatesMenu ? 'block' : 'hidden')}>
+        <div className='flex flex-col justify-start'>
           <div style={{ maxHeight: '25vh', overflowY: 'scroll', scrollbarWidth: 'thin' }}>
             {Object.entries(selectionInfo)?.map(([value, option]) => (
               <p
                 key={value}
-                className={'tw:m-0 tw:mb-2 ' + (selectedParsed.includes(value) ? 'tw:font-bold' : '')}
+                className={'m-0 mb-2 ' + (selectedParsed.includes(value) ? 'font-bold' : '')}
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                   const newSelected = selectedParsed.includes(value) ? selectedParsed.filter((item) => item !== value) : [...selectedParsed, value]
@@ -94,7 +94,7 @@ const SelectMultipleDropDown = ({ formValue, selectionInfo, selected, handleSele
             ))}
           </div>
           <p
-            className='tw:mt-2 tw:mb-0 tw:text-[color:var(--bs-secondary-color)] tw:text-right'
+            className='mt-2 mb-0 text-[color:var(--bs-secondary-color)] text-right'
             style={{ cursor: 'pointer' }}
             onClick={() => {
               handleSelection(formValue, '[]')

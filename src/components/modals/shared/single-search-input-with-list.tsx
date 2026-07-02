@@ -42,13 +42,13 @@ type Props = {
 
 const selectSizes = {
   xs: {
-    selectText: 'tw:text-xs',
+    selectText: 'text-xs',
   },
   sm: {
-    selectText: 'tw:text-sm',
+    selectText: 'text-sm',
   },
   base: {
-    selectText: 'tw:text-base',
+    selectText: 'text-base',
   },
 }
 
@@ -141,10 +141,10 @@ const SingleSearchInputWithList = ({
         </Label>
       ) : null}
       <Popover open={open} onOpenChange={setOpen}>
-        <div className='tw:w-full tw:space-y-1'>
+        <div className='w-full space-y-1'>
           <PopoverTrigger id={id} asChild>
-            <div className='tw:flex tw:w-full tw:items-center tw:justify-between tw:gap-2 tw:rounded-md tw:border tw:border-border tw:bg-popover tw:p-0 tw:px-2'>
-              <SearchIcon className='tw:size-4 tw:text-muted-foreground' />
+            <div className='flex w-full items-center justify-between gap-2 rounded-md border border-border bg-popover p-0 px-2'>
+              <SearchIcon className='size-4 text-muted-foreground' />
               <Input
                 style={{ backgroundColor: 'transparent' }}
                 ref={inputRef}
@@ -158,17 +158,17 @@ const SingleSearchInputWithList = ({
                 }}
                 onKeyDown={(event) => event.stopPropagation()}
                 onKeyUp={() => null}
-                className='tw:m-0 tw:border-0 tw:p-0 tw:text-base tw:shadow-none tw:focus-visible:border-none tw:focus-visible:ring-0'
+                className='m-0 border-0 p-0 text-base shadow-none focus-visible:border-none focus-visible:ring-0'
               />
-              <div className='tw:flex tw:items-center tw:gap-2'>
-                {inputValue && <XCircle className='tw:size-4 tw:opacity-50' onClick={handleClearAll} aria-label='Clear selection' />}
-                <ChevronsUpDown className='tw:size-4 tw:opacity-50' />
+              <div className='flex items-center gap-2'>
+                {inputValue && <XCircle className='size-4 opacity-50' onClick={handleClearAll} aria-label='Clear selection' />}
+                <ChevronsUpDown className='size-4 opacity-50' />
               </div>
             </div>
           </PopoverTrigger>
           <PopoverContent
             align='start'
-            className='tw:z-[1060] tw:max-h-60 tw:w-[var(--radix-popover-trigger-width)] tw:overflow-y-auto tw:p-2'
+            className='z-[1060] max-h-60 w-[var(--radix-popover-trigger-width)] overflow-y-auto p-2'
             onWheel={(event) => event.stopPropagation()}
             onTouchMove={(event) => event.stopPropagation()}
             onOpenAutoFocus={(event) => {
@@ -176,18 +176,18 @@ const SingleSearchInputWithList = ({
               inputRef.current?.focus()
             }}>
             {filteredItems.length === 0 ? (
-              <div className='tw:p-2 tw:text-sm tw:text-muted-foreground'>{emptyMessage}</div>
+              <div className='p-2 text-sm text-muted-foreground'>{emptyMessage}</div>
             ) : (
               filteredItems.map((item) => {
                 const isSelected = inputValue === item.value
                 return (
                   <div
                     key={item.value}
-                    className={cn('tw:flex tw:cursor-pointer tw:items-center tw:justify-between tw:px-2 tw:py-1', isSelected ? 'tw:bg-muted' : '')}
+                    className={cn('flex cursor-pointer items-center justify-between px-2 py-1', isSelected ? 'bg-muted' : '')}
                     onClick={() => handleSelect(item.value)}>
-                    <div className='tw:flex tw:flex-1 tw:flex-row tw:items-center tw:justify-start tw:gap-2'>
+                    <div className='flex flex-1 flex-row items-center justify-start gap-2'>
                       {item.imageUrl && (
-                        <div className='tw:relative tw:my-0.5 tw:h-[30px] tw:w-[30px] tw:min-w-[30px]'>
+                        <div className='relative my-0.5 h-[30px] w-[30px] min-w-[30px]'>
                           <img
                             loading='lazy'
                             id={`productImage-${item.value}`}
@@ -196,18 +196,18 @@ const SingleSearchInputWithList = ({
                               'https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/image%2Fno-image.png?alt=media&token=c2232af5-43f6-4739-84eb-1d4803c44770'
                             }
                             alt='Product'
-                            className='tw:h-full tw:w-full tw:object-contain tw:object-center'
+                            className='h-full w-full object-contain object-center'
                           />
                         </div>
                       )}
-                      <div className='tw:flex-1'>
-                        <p className='tw:m-0 tw:text-sm tw:font-semibold'>{item.label}</p>
+                      <div className='flex-1'>
+                        <p className='m-0 text-sm font-semibold'>{item.label}</p>
                         {item.description && (
-                          <p className='tw:m-0 tw:line-clamp-1 tw:max-w-11/12 tw:break-words tw:text-xs tw:text-muted-foreground tw:whitespace-normal'>{item.description}</p>
+                          <p className='m-0 line-clamp-1 max-w-11/12 break-words text-xs text-muted-foreground whitespace-normal'>{item.description}</p>
                         )}
                       </div>
                     </div>
-                    <Check className={cn('tw:ml-auto tw:size-4', isSelected ? 'tw:opacity-100' : 'tw:opacity-0')} />
+                    <Check className={cn('ml-auto size-4', isSelected ? 'opacity-100' : 'opacity-0')} />
                   </div>
                 )
               })

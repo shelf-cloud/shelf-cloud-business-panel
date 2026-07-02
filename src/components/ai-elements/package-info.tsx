@@ -27,7 +27,7 @@ export const PackageInfoHeader = ({
   ...props
 }: PackageInfoHeaderProps) => (
   <div
-    className={cn("tw:flex tw:items-center tw:justify-between tw:gap-2", className)}
+    className={cn("flex items-center justify-between gap-2", className)}
     {...props}
   >
     {children}
@@ -44,9 +44,9 @@ export const PackageInfoName = ({
   const { name } = useContext(PackageInfoContext);
 
   return (
-    <div className={cn("tw:flex tw:items-center tw:gap-2", className)} {...props}>
-      <PackageIcon className="tw:size-4 tw:text-muted-foreground" />
-      <span className="tw:font-medium tw:font-mono tw:text-sm">{children ?? name}</span>
+    <div className={cn("flex items-center gap-2", className)} {...props}>
+      <PackageIcon className="size-4 text-muted-foreground" />
+      <span className="font-medium font-mono text-sm">{children ?? name}</span>
     </div>
   );
 };
@@ -61,11 +61,11 @@ const changeTypeStyles: Record<ChangeType, string> = {
 };
 
 const changeTypeIcons: Record<ChangeType, React.ReactNode> = {
-  added: <PlusIcon className="tw:size-3" />,
-  major: <ArrowRightIcon className="tw:size-3" />,
-  minor: <ArrowRightIcon className="tw:size-3" />,
-  patch: <ArrowRightIcon className="tw:size-3" />,
-  removed: <MinusIcon className="tw:size-3" />,
+  added: <PlusIcon className="size-3" />,
+  major: <ArrowRightIcon className="size-3" />,
+  minor: <ArrowRightIcon className="size-3" />,
+  patch: <ArrowRightIcon className="size-3" />,
+  removed: <MinusIcon className="size-3" />,
 };
 
 export type PackageInfoChangeTypeProps = HTMLAttributes<HTMLDivElement>;
@@ -84,7 +84,7 @@ export const PackageInfoChangeType = ({
   return (
     <Badge
       className={cn(
-        "tw:gap-1 tw:text-xs tw:capitalize",
+        "gap-1 text-xs capitalize",
         changeTypeStyles[changeType],
         className
       )}
@@ -113,7 +113,7 @@ export const PackageInfoVersion = ({
   return (
     <div
       className={cn(
-        "tw:mt-2 tw:flex tw:items-center tw:gap-2 tw:font-mono tw:text-muted-foreground tw:text-sm",
+        "mt-2 flex items-center gap-2 font-mono text-muted-foreground text-sm",
         className
       )}
       {...props}
@@ -122,10 +122,10 @@ export const PackageInfoVersion = ({
         <>
           {currentVersion && <span>{currentVersion}</span>}
           {currentVersion && newVersion && (
-            <ArrowRightIcon className="tw:size-3" />
+            <ArrowRightIcon className="size-3" />
           )}
           {newVersion && (
-            <span className="tw:font-medium tw:text-foreground">{newVersion}</span>
+            <span className="font-medium text-foreground">{newVersion}</span>
           )}
         </>
       )}
@@ -157,7 +157,7 @@ export const PackageInfo = ({
   return (
     <PackageInfoContext.Provider value={contextValue}>
       <div
-        className={cn("tw:rounded-lg tw:border tw:bg-background tw:p-4", className)}
+        className={cn("rounded-lg border bg-background p-4", className)}
         {...props}
       >
         {children ?? (
@@ -181,7 +181,7 @@ export const PackageInfoDescription = ({
   children,
   ...props
 }: PackageInfoDescriptionProps) => (
-  <p className={cn("tw:mt-2 tw:text-muted-foreground tw:text-sm", className)} {...props}>
+  <p className={cn("mt-2 text-muted-foreground text-sm", className)} {...props}>
     {children}
   </p>
 );
@@ -193,7 +193,7 @@ export const PackageInfoContent = ({
   children,
   ...props
 }: PackageInfoContentProps) => (
-  <div className={cn("tw:mt-3 tw:border-t tw:pt-3", className)} {...props}>
+  <div className={cn("mt-3 border-t pt-3", className)} {...props}>
     {children}
   </div>
 );
@@ -205,11 +205,11 @@ export const PackageInfoDependencies = ({
   children,
   ...props
 }: PackageInfoDependenciesProps) => (
-  <div className={cn("tw:space-y-2", className)} {...props}>
-    <span className="tw:font-medium tw:text-muted-foreground tw:text-xs tw:uppercase tw:tracking-wide">
+  <div className={cn("space-y-2", className)} {...props}>
+    <span className="font-medium text-muted-foreground text-xs uppercase tracking-wide">
       Dependencies
     </span>
-    <div className="tw:space-y-1">{children}</div>
+    <div className="space-y-1">{children}</div>
   </div>
 );
 
@@ -226,13 +226,13 @@ export const PackageInfoDependency = ({
   ...props
 }: PackageInfoDependencyProps) => (
   <div
-    className={cn("tw:flex tw:items-center tw:justify-between tw:text-sm", className)}
+    className={cn("flex items-center justify-between text-sm", className)}
     {...props}
   >
     {children ?? (
       <>
-        <span className="tw:font-mono tw:text-muted-foreground">{name}</span>
-        {version && <span className="tw:font-mono tw:text-xs">{version}</span>}
+        <span className="font-mono text-muted-foreground">{name}</span>
+        {version && <span className="font-mono text-xs">{version}</span>}
       </>
     )}
   </div>

@@ -196,7 +196,7 @@ export const StackTrace = memo(
       <StackTraceContext.Provider value={contextValue}>
         <div
           className={cn(
-            "tw:not-prose tw:w-full tw:overflow-hidden tw:rounded-lg tw:border tw:bg-background tw:font-mono tw:text-sm",
+            "not-prose w-full overflow-hidden rounded-lg border bg-background font-mono text-sm",
             className
           )}
           {...props}
@@ -219,7 +219,7 @@ export const StackTraceHeader = memo(
         <CollapsibleTrigger asChild {...props}>
           <div
             className={cn(
-              "tw:flex tw:w-full tw:cursor-pointer tw:items-center tw:gap-3 tw:p-3 tw:text-left tw:transition-colors tw:hover:bg-muted/50",
+              "flex w-full cursor-pointer items-center gap-3 p-3 text-left transition-colors hover:bg-muted/50",
               className
             )}
           >
@@ -237,12 +237,12 @@ export const StackTraceError = memo(
   ({ className, children, ...props }: StackTraceErrorProps) => (
     <div
       className={cn(
-        "tw:flex tw:flex-1 tw:items-center tw:gap-2 tw:overflow-hidden",
+        "flex flex-1 items-center gap-2 overflow-hidden",
         className
       )}
       {...props}
     >
-      <AlertTriangleIcon className="tw:size-4 tw:shrink-0 tw:text-destructive" />
+      <AlertTriangleIcon className="size-4 shrink-0 text-destructive" />
       {children}
     </div>
   )
@@ -256,7 +256,7 @@ export const StackTraceErrorType = memo(
 
     return (
       <span
-        className={cn("tw:shrink-0 tw:font-semibold tw:text-destructive", className)}
+        className={cn("shrink-0 font-semibold text-destructive", className)}
         {...props}
       >
         {children ?? trace.errorType}
@@ -272,7 +272,7 @@ export const StackTraceErrorMessage = memo(
     const { trace } = useStackTrace();
 
     return (
-      <span className={cn("tw:truncate tw:text-foreground", className)} {...props}>
+      <span className={cn("truncate text-foreground", className)} {...props}>
         {children ?? trace.errorMessage}
       </span>
     );
@@ -291,7 +291,7 @@ const handleActionsKeyDown = (e: React.KeyboardEvent) => {
 export const StackTraceActions = memo(
   ({ className, children, ...props }: StackTraceActionsProps) => (
     <div
-      className={cn("tw:flex tw:shrink-0 tw:items-center tw:gap-1", className)}
+      className={cn("flex shrink-0 items-center gap-1", className)}
       onClick={handleActionsClick}
       onKeyDown={handleActionsKeyDown}
       role="group"
@@ -351,7 +351,7 @@ export const StackTraceCopyButton = memo(
 
     return (
       <Button
-        className={cn("tw:size-7", className)}
+        className={cn("size-7", className)}
         onClick={copyToClipboard}
         size="icon"
         variant="ghost"
@@ -371,13 +371,13 @@ export const StackTraceExpandButton = memo(
 
     return (
       <div
-        className={cn("tw:flex tw:size-7 tw:items-center tw:justify-center", className)}
+        className={cn("flex size-7 items-center justify-center", className)}
         {...props}
       >
         <ChevronDownIcon
           className={cn(
-            "tw:size-4 tw:text-muted-foreground tw:transition-transform",
-            isOpen ? "tw:rotate-180" : "tw:rotate-0"
+            "size-4 text-muted-foreground transition-transform",
+            isOpen ? "rotate-180" : "rotate-0"
           )}
         />
       </div>
@@ -404,8 +404,8 @@ export const StackTraceContent = memo(
       <Collapsible open={isOpen}>
         <CollapsibleContent
           className={cn(
-            "tw:overflow-auto tw:border-t tw:bg-muted/30",
-            "tw:data-[state=closed]:fade-out-0 tw:data-[state=open]:fade-in-0 tw:data-[state=closed]:animate-out tw:data-[state=open]:animate-in",
+            "overflow-auto border-t bg-muted/30",
+            "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=open]:animate-in",
             className
           )}
           style={{ maxHeight }}
@@ -446,8 +446,8 @@ const FilePathButton = memo(
     return (
       <button
         className={cn(
-          "tw:underline tw:decoration-dotted tw:hover:text-primary",
-          onFilePathClick && "tw:cursor-pointer"
+          "underline decoration-dotted hover:text-primary",
+          onFilePathClick && "cursor-pointer"
         )}
         disabled={!onFilePathClick}
         onClick={handleClick}
@@ -476,18 +476,18 @@ export const StackTraceFrames = memo(
       : trace.frames.filter((f) => !f.isInternal);
 
     return (
-      <div className={cn("tw:space-y-1 tw:p-3", className)} {...props}>
+      <div className={cn("space-y-1 p-3", className)} {...props}>
         {framesToShow.map((frame) => (
           <div
             className={cn(
-              "tw:text-xs",
+              "text-xs",
               frame.isInternal
-                ? "tw:text-muted-foreground/50"
-                : "tw:text-foreground/90"
+                ? "text-muted-foreground/50"
+                : "text-foreground/90"
             )}
             key={frame.raw}
           >
-            <span className="tw:text-muted-foreground">at </span>
+            <span className="text-muted-foreground">at </span>
             {frame.functionName && (
               <span className={frame.isInternal ? "" : "text-foreground"}>
                 {frame.functionName}{" "}
@@ -495,12 +495,12 @@ export const StackTraceFrames = memo(
             )}
             {frame.filePath && (
               <>
-                <span className="tw:text-muted-foreground">(</span>
+                <span className="text-muted-foreground">(</span>
                 <FilePathButton
                   frame={frame}
                   onFilePathClick={onFilePathClick}
                 />
-                <span className="tw:text-muted-foreground">)</span>
+                <span className="text-muted-foreground">)</span>
               </>
             )}
             {!(frame.filePath || frame.functionName) && (
@@ -509,7 +509,7 @@ export const StackTraceFrames = memo(
           </div>
         ))}
         {framesToShow.length === 0 && (
-          <div className="tw:text-muted-foreground tw:text-xs">No stack frames</div>
+          <div className="text-muted-foreground text-xs">No stack frames</div>
         )}
       </div>
     );

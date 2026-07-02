@@ -19,7 +19,7 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
   const { state }: any = useContext(AppContext)
   const columns: any = [
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>Order Number</span>,
+      name: <span className='font-extrabold text-[13px]'>Order Number</span>,
       selector: (row: PurchaseOrder) => row.orderNumber,
       sortable: true,
       wrap: false,
@@ -29,7 +29,7 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
       },
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>Supplier</span>,
+      name: <span className='font-extrabold text-[13px]'>Supplier</span>,
       selector: (row: PurchaseOrder) => row.suppliersName,
       sortable: true,
       compact: true,
@@ -38,7 +38,7 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
       },
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>Date Created</span>,
+      name: <span className='font-extrabold text-[13px]'>Date Created</span>,
       selector: (row: PurchaseOrder) => row.date,
       sortable: true,
       center: true,
@@ -48,7 +48,7 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
       },
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>Order Cost</span>,
+      name: <span className='font-extrabold text-[13px]'>Order Cost</span>,
       selector: (row: PurchaseOrder) =>
         FormatCurrency(
           state.currentRegion,
@@ -67,7 +67,7 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
         ),
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>Status</span>,
+      name: <span className='font-extrabold text-[13px]'>Status</span>,
       selector: (row: PurchaseOrder) => {
         switch (true) {
           case row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) === 0:
@@ -101,13 +101,13 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
       conditionalCellStyles: [
         {
           when: (row: PurchaseOrder) => row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) === 0,
-          classNames: ['tw:text-primary'],
+          classNames: ['text-primary'],
         },
         {
           when: (row: PurchaseOrder) =>
             row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) > 0 &&
             row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) < row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0),
-          classNames: ['tw:text-info'],
+          classNames: ['text-info'],
         },
         {
           when: (row: PurchaseOrder) =>
@@ -115,7 +115,7 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
             row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) ===
               row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0),
 
-          classNames: ['tw:text-destructive'],
+          classNames: ['text-destructive'],
         },
         {
           when: (row: PurchaseOrder) =>
@@ -123,12 +123,12 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
             row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.receivedQty, 0) ===
               row.poItems.reduce((total, item: PurchaseOrderItem) => total + item.orderQty, 0),
 
-          classNames: ['tw:text-success'],
+          classNames: ['text-success'],
         },
       ],
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'>Destination</span>,
+      name: <span className='font-extrabold text-[13px]'>Destination</span>,
       selector: (row: PurchaseOrder) => row.warehouseName,
       sortable: true,
       left: true,
@@ -140,11 +140,11 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
       },
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'></span>,
+      name: <span className='font-extrabold text-[13px]'></span>,
       selector: (row: PurchaseOrder) =>
         state.receivingFromPo.items[row.poId] ? (
           <>
-            <Badge pill color='success' className='tw:text-[11.2px]'>
+            <Badge pill color='success' className='text-[11.2px]'>
               {FormatIntNumber(
                 state.currentRegion,
                 Object.entries(state.receivingFromPo.items[row.poId]).reduce((total: number, obj: [string, any]) => total + obj[1].receivingQty, 0)
@@ -160,7 +160,7 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
       grow: 0,
     },
     {
-      name: <span className='tw:font-extrabold tw:text-[13px]'></span>,
+      name: <span className='font-extrabold text-[13px]'></span>,
       selector: (row: PurchaseOrder) => <PurchaseOrderActionsDropdown purchaseOrder={row} />,
       sortable: false,
       center: true,
@@ -169,7 +169,7 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
     },
   ]
   return (
-    <div className='tw:p-2'>
+    <div className='p-2'>
       <Card>
         <DataTable columns={columns} data={data.orders} striped={true} expandableRows expandableRowsComponent={Expanded_By_Orders} defaultSortFieldId={3} defaultSortAsc={false} />
       </Card>

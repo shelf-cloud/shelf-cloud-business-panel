@@ -36,7 +36,7 @@ function ToggleGroup({
       data-spacing={spacing}
       style={{ "--gap": spacing } as React.CSSProperties}
       className={cn(
-        "tw:group/toggle-group tw:flex tw:w-fit tw:items-center tw:gap-[--spacing(var(--gap))] tw:rounded-md tw:data-[spacing=default]:data-[variant=outline]:shadow-xs",
+        "group/toggle-group flex w-fit items-center gap-[--spacing(var(--gap))] rounded-md data-[spacing=default]:data-[variant=outline]:shadow-xs",
         className
       )}
       {...props}
@@ -69,8 +69,8 @@ function ToggleGroupItem({
           variant: context.variant || variant,
           size: context.size || size,
         }),
-        "tw:w-auto tw:min-w-0 tw:shrink-0 tw:px-3 tw:focus:z-10 tw:focus-visible:z-10",
-        "tw:data-[spacing=0]:rounded-none tw:data-[spacing=0]:shadow-none tw:data-[spacing=0]:first:rounded-l-md tw:data-[spacing=0]:last:rounded-r-md tw:data-[spacing=0]:data-[variant=outline]:border-l-0 tw:data-[spacing=0]:data-[variant=outline]:first:border-l",
+        "w-auto min-w-0 shrink-0 px-3 focus:z-10 focus-visible:z-10",
+        "data-[spacing=0]:rounded-none data-[spacing=0]:shadow-none data-[spacing=0]:first:rounded-l-md data-[spacing=0]:last:rounded-r-md data-[spacing=0]:data-[variant=outline]:border-l-0 data-[spacing=0]:data-[variant=outline]:first:border-l",
         className
       )}
       {...props}

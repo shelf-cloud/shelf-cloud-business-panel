@@ -15,10 +15,10 @@ export type SwitchProps = Omit<React.ComponentProps<'input'>, 'type'>
 
 const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(({ className, disabled, ...props }, ref) => {
   return (
-    <label className={cn('tw:relative tw:inline-flex tw:h-5 tw:w-9 tw:shrink-0 tw:items-center', disabled ? 'tw:cursor-not-allowed tw:opacity-50' : 'tw:cursor-pointer', className)}>
-      <input ref={ref} type='checkbox' disabled={disabled} className='tw:peer tw:sr-only' {...props} />
-      <span className='tw:absolute tw:inset-0 tw:rounded-full tw:bg-input tw:transition-colors tw:peer-checked:bg-primary tw:peer-focus-visible:ring-2 tw:peer-focus-visible:ring-ring/50' />
-      <span className='tw:absolute tw:left-0.5 tw:size-4 tw:rounded-full tw:bg-white tw:shadow-sm tw:transition-transform tw:peer-checked:translate-x-4' />
+    <label className={cn('relative inline-flex h-5 w-9 shrink-0 items-center', disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer', className)}>
+      <input ref={ref} type='checkbox' disabled={disabled} className='peer sr-only' {...props} />
+      <span className='absolute inset-0 rounded-full bg-input transition-colors peer-checked:bg-primary peer-focus-visible:ring-2 peer-focus-visible:ring-ring/50' />
+      <span className='absolute left-0.5 size-4 rounded-full bg-white shadow-sm transition-transform peer-checked:translate-x-4' />
     </label>
   )
 })

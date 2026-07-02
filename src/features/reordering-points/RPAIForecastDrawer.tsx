@@ -66,23 +66,23 @@ const RPAIForecastDrawer = ({ product, isOpen, onClose, region, businessId, urge
   return (
     <Drawer open={isOpen} onOpenChange={(open) => !open && handleClose()} direction='right'>
       <DrawerPortal>
-        <DrawerOverlay className='tw:z-1040' />
+        <DrawerOverlay className='z-1040' />
         <DrawerPrimitive.Content
           data-slot='drawer-content'
           className={cn(
-            'tw:fixed tw:z-1045 tw:flex tw:h-full tw:flex-col tw:border-border tw:bg-background tw:text-foreground tw:shadow-xl tw:transition-[max-width] tw:duration-200 tw:ease-out',
-            'tw:inset-y-0 tw:right-0 tw:w-full tw:border-l',
+            'fixed z-1045 flex h-full flex-col border-border bg-background text-foreground shadow-xl transition-[max-width] duration-200 ease-out',
+            'inset-y-0 right-0 w-full border-l',
             activeSelectedForecastChat
               ? isChatLeftColumnOpen
-                ? 'tw:lg:max-w-[min(92vw)] tw:xl:max-w-[min(80vw)]'
-                : 'tw:lg:max-w-[min(75vw)] tw:xl:max-w-[min(35vw)]'
-              : 'tw:sm:max-w-[min(40vw)]'
+                ? 'lg:max-w-[min(92vw)] xl:max-w-[min(80vw)]'
+                : 'lg:max-w-[min(75vw)] xl:max-w-[min(35vw)]'
+              : 'sm:max-w-[min(40vw)]'
           )}>
           {/* HEADER */}
-          <DrawerHeader className='tw:border-b tw:border-border tw:pb-1'>
-            <div className='tw:flex tw:flex-row tw:items-start tw:justify-between tw:gap-1'>
-              <div className='tw:flex tw:flex-row tw:items-start tw:gap-3'>
-                <div style={{ width: 40, height: 52, flexShrink: 0 }} className='tw:relative tw:overflow-hidden tw:rounded-md tw:border tw:border-border tw:bg-muted'>
+          <DrawerHeader className='border-b border-border pb-1'>
+            <div className='flex flex-row items-start justify-between gap-1'>
+              <div className='flex flex-row items-start gap-3'>
+                <div style={{ width: 40, height: 52, flexShrink: 0 }} className='relative overflow-hidden rounded-md border border-border bg-muted'>
                   <img
                     loading='lazy'
                     src={product?.image || NoImageAdress}
@@ -91,24 +91,24 @@ const RPAIForecastDrawer = ({ product, isOpen, onClose, region, businessId, urge
                     style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                   />
                 </div>
-                <div className='tw:flex tw:flex-col tw:gap-0 tw:min-w-0'>
-                  <DrawerTitle className='tw:text-base tw:text-primary tw:font-semibold tw:leading-tight'>{product?.sku}</DrawerTitle>
-                  <DrawerDescription className='tw:text-sm tw:font-medium tw:text-foreground tw:line-clamp-2 tw:leading-snug tw:m-0!'>{product?.title}</DrawerDescription>
+                <div className='flex flex-col gap-0 min-w-0'>
+                  <DrawerTitle className='text-base text-primary font-semibold leading-tight'>{product?.sku}</DrawerTitle>
+                  <DrawerDescription className='text-sm font-medium text-foreground line-clamp-2 leading-snug m-0!'>{product?.title}</DrawerDescription>
                   {activeSelectedForecastChat && (
-                    <p className='tw:m-0! tw:text-xs tw:font-medium tw:text-muted-foreground'>AI follow-up chat for Model {activeSelectedForecastChat.modelNumber}</p>
+                    <p className='m-0! text-xs font-medium text-muted-foreground'>AI follow-up chat for Model {activeSelectedForecastChat.modelNumber}</p>
                   )}
                 </div>
               </div>
               <DrawerClose asChild>
                 <Button variant={'outline'} size={'icon'} aria-label='Close'>
-                  <XIcon className='tw:size-5' />
+                  <XIcon className='size-5' />
                 </Button>
               </DrawerClose>
             </div>
           </DrawerHeader>
 
           {/* BODY */}
-          <div className='tw:flex tw:min-h-0 tw:flex-1 tw:flex-col tw:px-4 tw:py-0'>
+          <div className='flex min-h-0 flex-1 flex-col px-4 py-0'>
             {activeSelectedForecastChat && sanitizedProduct ? (
               <ForecastChatPanel
                 key={`${sanitizedProduct.sku}-${activeSelectedForecastChat.modelNumber}-${activeSelectedForecastChat.sessionKey}`}
@@ -125,23 +125,23 @@ const RPAIForecastDrawer = ({ product, isOpen, onClose, region, businessId, urge
             ) : (
               <>
                 {/* PRODUCT TREND TAG */}
-                <div className='tw:overflow-y-auto tw:px-2' style={{ scrollbarWidth: 'thin' }}>
+                <div className='overflow-y-auto px-2' style={{ scrollbarWidth: 'thin' }}>
                   {/* {product?.productTrendTag && <RPProductTrendTagSection product={product} onSave={onSave} />} */}
-                  <div className='tw:mb-4'>
-                    <h4 className='tw:text-sm tw:font-semibold tw:text-foreground tw:mb-0.5 tw:flex tw:items-center tw:gap-1.5'>
-                      <i className='las la-brain tw:text-base tw:text-info' />
+                  <div className='mb-4'>
+                    <h4 className='text-sm font-semibold text-foreground mb-0.5 flex items-center gap-1.5'>
+                      <i className='las la-brain text-base text-info' />
                       AI Forecast Models
                     </h4>
-                    <p className='tw:text-xs tw:text-muted-foreground tw:m-0'>Comparison of all AI forecast models used for this product.</p>
+                    <p className='text-xs text-muted-foreground m-0'>Comparison of all AI forecast models used for this product.</p>
                   </div>
 
                   {visibleModels.length === 0 || !product ? (
-                    <div className='tw:flex tw:flex-col tw:items-center tw:justify-center tw:gap-2 tw:py-12 tw:text-center'>
-                      <i className='las la-robot tw:text-4xl tw:text-muted-foreground' />
-                      <p className='tw:text-sm tw:text-muted-foreground tw:m-0'>No AI forecast data available for this product.</p>
+                    <div className='flex flex-col items-center justify-center gap-2 py-12 text-center'>
+                      <i className='las la-robot text-4xl text-muted-foreground' />
+                      <p className='text-sm text-muted-foreground m-0'>No AI forecast data available for this product.</p>
                     </div>
                   ) : (
-                    <div className='tw:flex tw:flex-col tw:gap-0 tw:pb-4'>
+                    <div className='flex flex-col gap-0 pb-4'>
                       {visibleModels.map((m, idx) => (
                         <div key={m.modelNumber}>
                           <RPAIForecastModelCard
@@ -155,7 +155,7 @@ const RPAIForecastDrawer = ({ product, isOpen, onClose, region, businessId, urge
                             urgencyThresholds={urgencyThresholds}
                             onAnalyze={handleOpenForecastChat}
                           />
-                          {idx < visibleModels.length - 1 && <Separator className='tw:my-2' />}
+                          {idx < visibleModels.length - 1 && <Separator className='my-2' />}
                         </div>
                       ))}
                     </div>
@@ -166,12 +166,12 @@ const RPAIForecastDrawer = ({ product, isOpen, onClose, region, businessId, urge
           </div>
 
           {/* FOOTER */}
-          <DrawerFooter className='tw:border-t tw:border-border tw:pt-3 tw:pb-4'>
-            <div className='tw:flex tw:justify-between tw:gap-3'>
+          <DrawerFooter className='border-t border-border pt-3 pb-4'>
+            <div className='flex justify-between gap-3'>
               <div>
                 {activeSelectedForecastChat ? (
                   <Button variant='outline' aria-label='Back to forecasts' onClick={handleBackToForecasts}>
-                    <ArrowLeftIcon className='tw:size-4' />
+                    <ArrowLeftIcon className='size-4' />
                     Back to forecasts
                   </Button>
                 ) : null}

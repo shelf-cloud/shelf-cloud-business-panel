@@ -245,10 +245,10 @@ const AddProducts = ({ session }: Props) => {
               <CardBody>
                 <Form onSubmit={handleAddProduct}>
                   <Row>
-                    <h5 className='tw:text-[16.25px] tw:font-bold tw:text-primary'>Product Details</h5>
+                    <h5 className='text-[16.25px] font-bold text-primary'>Product Details</h5>
                     <Col md={6}>
                       <FormGroup>
-                        <Label htmlFor='firstNameinput' className='tw:text-[11.2px]'>
+                        <Label htmlFor='firstNameinput' className='text-[11.2px]'>
                           *Title
                         </Label>
                         <Input
@@ -267,7 +267,7 @@ const AddProducts = ({ session }: Props) => {
                     </Col>
                     <Col md={6}>
                       <FormGroup>
-                        <Label htmlFor='lastNameinput' className='tw:text-[11.2px]'>
+                        <Label htmlFor='lastNameinput' className='text-[11.2px]'>
                           *SKU
                         </Label>
                         <Input
@@ -286,7 +286,7 @@ const AddProducts = ({ session }: Props) => {
                     </Col>
                     <Col md={3}>
                       <FormGroup>
-                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
+                        <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           ASIN
                         </Label>
                         <Input
@@ -305,7 +305,7 @@ const AddProducts = ({ session }: Props) => {
                     </Col>
                     <Col md={3}>
                       <FormGroup>
-                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
+                        <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           FNSKU
                         </Label>
                         <Input
@@ -324,7 +324,7 @@ const AddProducts = ({ session }: Props) => {
                     </Col>
                     <Col md={3}>
                       <FormGroup>
-                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
+                        <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           UPC / Barcode
                         </Label>
                         <Input
@@ -343,7 +343,7 @@ const AddProducts = ({ session }: Props) => {
                     </Col>
                     <Col md={3}>
                       <FormGroup>
-                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
+                        <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           Selling Price {state?.currentRegion == 'us' ? '($)' : '(€)'}
                         </Label>
                         <Input
@@ -460,7 +460,7 @@ const AddProducts = ({ session }: Props) => {
                     </Col>
 
                     {/* ADD PRODUCT IMAGE */}
-                    <Row className='tw:items-center'>
+                    <Row className='items-center'>
                       {validation.values.image && (
                         <Col xs={2} md={1} style={{ minWidth: 'fit-content' }}>
                           <div
@@ -484,8 +484,8 @@ const AddProducts = ({ session }: Props) => {
                         </Col>
                       )}
                       <Col xs={10} md={9}>
-                        <FormGroup className='tw:!mb-0'>
-                          <Label htmlFor='lastNameinput' className='tw:text-[11.2px]'>
+                        <FormGroup className='!mb-0'>
+                          <Label htmlFor='lastNameinput' className='text-[11.2px]'>
                             Product Image
                           </Label>
                           <Input
@@ -504,21 +504,21 @@ const AddProducts = ({ session }: Props) => {
                         </FormGroup>
                       </Col>
                       <Col xs={4} md={2}>
-                        <Button className='tw:flex tw:items-center tw:gap-2 tw:m-0' color='primary' size='sm' onClick={() => setuploadLogoImage((prev) => ({ ...prev, isOpen: true }))}>
-                          <i className='mdi mdi-cloud-upload tw:text-[16.25px] tw:m-0 tw:p-0' />
+                        <Button className='flex items-center gap-2 m-0' color='primary' size='sm' onClick={() => setuploadLogoImage((prev) => ({ ...prev, isOpen: true }))}>
+                          <i className='mdi mdi-cloud-upload text-[16.25px] m-0 p-0' />
                           Image
                         </Button>
                       </Col>
                     </Row>
 
-                    <div className='tw:mt-3 tw:border tw:border-dashed tw:border-[color:var(--border)]'></div>
+                    <div className='mt-3 border border-dashed border-[color:var(--border)]'></div>
 
                     {/* DIMENSIONS & WEIGHTS */}
 
-                    <h5 className='tw:text-[16.25px] tw:mt-3 tw:font-bold tw:text-primary'>Unit Dimensions</h5>
+                    <h5 className='text-[16.25px] mt-3 font-bold text-primary'>Unit Dimensions</h5>
                     <Col md={3}>
                       <FormGroup>
-                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
+                        <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           Weight {state?.currentRegion == 'us' ? '(lb)' : '(kg)'}
                         </Label>
                         <Input
@@ -537,7 +537,7 @@ const AddProducts = ({ session }: Props) => {
                     </Col>
                     <Col md={3}>
                       <FormGroup>
-                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
+                        <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           Width {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
@@ -556,7 +556,7 @@ const AddProducts = ({ session }: Props) => {
                     </Col>
                     <Col md={3}>
                       <FormGroup>
-                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
+                        <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           Length {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
@@ -575,7 +575,7 @@ const AddProducts = ({ session }: Props) => {
                     </Col>
                     <Col md={3}>
                       <FormGroup>
-                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
+                        <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           Height {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
@@ -593,22 +593,22 @@ const AddProducts = ({ session }: Props) => {
                       </FormGroup>
                     </Col>
 
-                    <div className='tw:mt-3 tw:border tw:border-dashed tw:border-[color:var(--border)]'></div>
+                    <div className='mt-3 border border-dashed border-[color:var(--border)]'></div>
 
                     {/* BOX DIMENSIONS & WEIGHTS */}
 
-                    <div className='tw:items-baseline tw:flex tw:gap-3 tw:justify-start tw:mb-2'>
-                      <h5 className='tw:text-[16.25px] tw:mt-3 tw:font-bold tw:text-primary'>Box Dimensions</h5>
-                      <div className='tw:shrink-0'>
-                        <div className='tw:flex tw:items-center tw:gap-2'>
-                          <Label className='tw:text-[color:var(--bs-secondary-color)]'>Same as unit dimensions</Label>
+                    <div className='items-baseline flex gap-3 justify-start mb-2'>
+                      <h5 className='text-[16.25px] mt-3 font-bold text-primary'>Box Dimensions</h5>
+                      <div className='shrink-0'>
+                        <div className='flex items-center gap-2'>
+                          <Label className='text-[color:var(--bs-secondary-color)]'>Same as unit dimensions</Label>
                           <Switch checked={useSameUnitDimensions} onChange={handleBoxDimensionsCheckbox} />
                         </div>
                       </div>
                     </div>
                     <Col md={3}>
                       <FormGroup>
-                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
+                        <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           Box Weight {state?.currentRegion == 'us' ? '(lb)' : '(kg)'}
                         </Label>
                         <Input
@@ -627,7 +627,7 @@ const AddProducts = ({ session }: Props) => {
                     </Col>
                     <Col md={3}>
                       <FormGroup>
-                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
+                        <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           Box Width {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
@@ -646,7 +646,7 @@ const AddProducts = ({ session }: Props) => {
                     </Col>
                     <Col md={3}>
                       <FormGroup>
-                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
+                        <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           Box Length {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
@@ -665,7 +665,7 @@ const AddProducts = ({ session }: Props) => {
                     </Col>
                     <Col md={3}>
                       <FormGroup>
-                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
+                        <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           Box Height {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
@@ -684,7 +684,7 @@ const AddProducts = ({ session }: Props) => {
                     </Col>
                     <Col md={3}>
                       <FormGroup>
-                        <Label htmlFor='compnayNameinput' className='tw:text-[11.2px]'>
+                        <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           Box Quantity
                         </Label>
                         <Input
@@ -702,9 +702,9 @@ const AddProducts = ({ session }: Props) => {
                       </FormGroup>
                     </Col>
 
-                    <h5 className='tw:text-[11.2px] tw:mb-3 tw:text-[color:var(--bs-secondary-color)] tw:font-light'>*You must complete all required fields.</h5>
+                    <h5 className='text-[11.2px] mb-3 text-[color:var(--bs-secondary-color)] font-light'>*You must complete all required fields.</h5>
                     <Col md={12}>
-                      <div className='tw:text-right'>
+                      <div className='text-right'>
                         <Button type='submit' color='primary'>
                           Add New Product
                         </Button>

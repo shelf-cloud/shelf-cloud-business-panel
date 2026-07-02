@@ -58,7 +58,7 @@
   font-size: 48px !important;
 }
 
-/* border-color helpers — used (e.g. migration-ui/button.tsx via tw:border-dark override base, alert.tsx dark variant). */
+/* border-color helpers — used (e.g. migration-ui/button.tsx via border-dark override base, alert.tsx dark variant). */
 .border-dark {
   border-color: var(--vz-dark) !important;
 }
@@ -72,7 +72,7 @@
    text-truncate-two-lines, favourite-btn, card-logo-light/dark,
    [data-layout-mode='dark'] .btn-close: all DROPPED, zero usage found via
    grep across src/**\/*.{tsx,ts,js,jsx} (checked class stems individually;
-   candidate matches were false positives from Tailwind's `tw:`-prefixed
+   candidate matches were false positives from Tailwind's ``-prefixed
    utilities or shadcn's own unrelated classes of the same name). */
 
 .ff-base {

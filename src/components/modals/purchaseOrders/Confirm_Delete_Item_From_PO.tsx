@@ -90,15 +90,15 @@ const Confirm_Delete_Item_From_PO = ({ showDeleteModal, setshowDeleteModal, load
         Confirm Delete Item From PO
       </ModalHeader>
       <ModalBody>
-        <p className='tw:m-0 tw:text-[16.25px] tw:font-semibold'>
-          Purchase Order: <span className='tw:text-primary'>{orderNumber}</span>
+        <p className='m-0 text-[16.25px] font-semibold'>
+          Purchase Order: <span className='text-primary'>{orderNumber}</span>
         </p>
         {hasSplitting && (
-          <p className='tw:text-[16.25px] tw:font-semibold'>
-            From Split: <span className='tw:text-primary'>{split?.splitName}</span>
+          <p className='text-[16.25px] font-semibold'>
+            From Split: <span className='text-primary'>{split?.splitName}</span>
           </p>
         )}
-        <div className='tw:my-2 tw:flex tw:flex-row'>
+        <div className='my-2 flex flex-row'>
           <div
             style={{
               width: '100%',
@@ -110,15 +110,15 @@ const Confirm_Delete_Item_From_PO = ({ showDeleteModal, setshowDeleteModal, load
             <img loading='lazy' src={image ? image : NoImageAdress} alt='product Image' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
           </div>
           <div>
-            <p className='tw:font-semibold tw:mb-0'>{title}</p>
-            <p className='tw:font-normal tw:mb-0'>{sku}</p>
+            <p className='font-semibold mb-0'>{title}</p>
+            <p className='font-normal mb-0'>{sku}</p>
           </div>
         </div>
-        <div className='tw:mt-4 tw:flex tw:justify-end tw:items-center tw:gap-2'>
-          <Button type='button' color='light' className='tw:text-[11.2px]' onClick={handleClose}>
+        <div className='mt-4 flex justify-end items-center gap-2'>
+          <Button type='button' color='light' className='text-[11.2px]' onClick={handleClose}>
             Cancel
           </Button>
-          <Button disabled={loading} type='button' color='danger' className='tw:text-[11.2px]' onClick={handleDeleteFromSkuList}>
+          <Button disabled={loading} type='button' color='danger' className='text-[11.2px]' onClick={handleDeleteFromSkuList}>
             {loading ? (
               <span>
                 <Spinner color='light' size={'sm'} /> Deleting...

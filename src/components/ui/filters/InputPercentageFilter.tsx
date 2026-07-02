@@ -20,7 +20,7 @@ const InputPercentageFilter = ({ inputName, value, isInvalid, error, handleChang
     <InputGroup size='sm'>
       <Input
         type='number'
-        className='tw:text-[13px] tw:m-0'
+        className='text-[13px] m-0'
         bsSize='sm'
         style={{ padding: '0.2rem 0.9rem' }}
         placeholder='Min'
@@ -32,7 +32,7 @@ const InputPercentageFilter = ({ inputName, value, isInvalid, error, handleChang
         value={value}
         invalid={isInvalid}
       />
-      <InputGroupText className='tw:text-[16.25px] tw:py-0'>%</InputGroupText>
+      <InputGroupText className='text-[16.25px] py-0'>%</InputGroupText>
       {isInvalid ? <FormFeedback type='invalid'>{error}</FormFeedback> : null}
     </InputGroup>
   )

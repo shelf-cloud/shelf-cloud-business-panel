@@ -226,20 +226,20 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
       </ModalHeader>
       <ModalBody>
         <Form onSubmit={handleAddProduct}>
-          <h5 className='tw:text-[16.25px] tw:font-extrabold'>Receiving Details</h5>
+          <h5 className='text-[16.25px] font-extrabold'>Receiving Details</h5>
           <Row>
             <Col xs={12} md={4}>
               <FormGroup>
-                <Label htmlFor='orderNumber' className='tw:mb-2 tw:inline-block tw:text-[11.2px]'>
+                <Label htmlFor='orderNumber' className='mb-2 inline-block text-[11.2px]'>
                   *Transaction Number
                 </Label>
                 <div className='input-group'>
-                  <span className='input-group-text tw:font-semibold tw:text-[16.25px] tw:m-0 tw:px-2 tw:py-0' id='basic-addon1'>
+                  <span className='input-group-text font-semibold text-[16.25px] m-0 px-2 py-0' id='basic-addon1'>
                     {orderNumberStart}
                   </span>
                   <Input
                     type='text'
-                    className='tw:text-[13px]'
+                    className='text-[13px]'
                     id='orderNumber'
                     name='orderNumber'
                     bsSize='sm'
@@ -253,7 +253,7 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
               </FormGroup>
             </Col>
             <Col xs={12} md={4}>
-              <Label className='tw:mb-2 tw:inline-block tw:text-[11.2px]'>*Shipment Type</Label>
+              <Label className='mb-2 inline-block text-[11.2px]'>*Shipment Type</Label>
               <SimpleSelect
                 options={RECEIVING_SHIPMENT_TYPES}
                 selected={validation.values.shipmentType}
@@ -264,10 +264,10 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
                 placeholder={'Select ...'}
                 customStyle='sm'
               />
-              {validation.errors.shipmentType && validation.touched.shipmentType ? <div className='tw:m-0 tw:p-0 tw:text-destructive tw:text-[11.2px]'>*{validation.errors.shipmentType.value}</div> : null}
+              {validation.errors.shipmentType && validation.touched.shipmentType ? <div className='m-0 p-0 text-destructive text-[11.2px]'>*{validation.errors.shipmentType.value}</div> : null}
             </Col>
             <Col xs={12} md={4}>
-              <Label className='tw:mb-2 tw:inline-block tw:text-[11.2px]'>*Select Destination</Label>
+              <Label className='mb-2 inline-block text-[11.2px]'>*Select Destination</Label>
               <SimpleSelect
                 options={filteredWarehouses}
                 selected={validation.values.destinationSC}
@@ -278,15 +278,15 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
                 customStyle='sm'
               />
               {validation.errors.destinationSC && validation.touched.destinationSC ? (
-                <div className='tw:m-0 tw:p-0 tw:text-destructive tw:text-[11.2px]'>*{validation.errors.destinationSC.value}</div>
+                <div className='m-0 p-0 text-destructive text-[11.2px]'>*{validation.errors.destinationSC.value}</div>
               ) : null}
             </Col>
           </Row>
 
-          <Nav className='nav-tabs tw:border-b' role='tablist'>
+          <Nav className='nav-tabs border-b' role='tablist'>
             <NavItem style={{ cursor: 'pointer' }}>
               <NavLink
-                className={activeTab == 'summary' ? 'tw:!text-primary tw:font-semibold tw:text-[13px] tw:border tw:border-primary' : 'tw:!text-[color:var(--bs-secondary-color)] tw:text-[13px]'}
+                className={activeTab == 'summary' ? '!text-primary font-semibold text-[13px] border border-primary' : '!text-[color:var(--bs-secondary-color)] text-[13px]'}
                 onClick={() => {
                   setactiveTab('summary')
                 }}
@@ -296,7 +296,7 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
             </NavItem>
             <NavItem style={{ cursor: 'pointer' }}>
               <NavLink
-                className={activeTab == 'packages' ? 'tw:!text-primary tw:font-semibold tw:text-[13px] tw:border tw:border-primary' : 'tw:!text-[color:var(--bs-secondary-color)] tw:text-[13px]'}
+                className={activeTab == 'packages' ? '!text-primary font-semibold text-[13px] border border-primary' : '!text-[color:var(--bs-secondary-color)] text-[13px]'}
                 onClick={() => {
                   setactiveTab('packages')
                 }}
@@ -306,7 +306,7 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
             </NavItem>
           </Nav>
 
-          <TabContent activeTab={activeTab} className='tw:pt-2 tw:mb-4'>
+          <TabContent activeTab={activeTab} className='pt-2 mb-4'>
             <TabPane tabId='summary'>{activeTab == 'summary' && <Create_Manual_Receiving_Summary_Tab orderProducts={receivingProducts} />}</TabPane>
             <TabPane tabId='packages'>
               {activeTab == 'packages' && (
@@ -331,18 +331,18 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
             </TabPane>
           </TabContent>
 
-          <Row className='tw:mb-2'>
+          <Row className='mb-2'>
             {hasBoxedErrors.error && (
-              <Col xs={12} className='tw:m-0'>
-                <Alert color='danger' className='tw:text-[11.2px] tw:py-1 tw:mb-2'>
-                  <i className='ri-error-warning-line tw:me-4 tw:align-middle tw:text-[16.25px]' />
+              <Col xs={12} className='m-0'>
+                <Alert color='danger' className='text-[11.2px] py-1 mb-2'>
+                  <i className='ri-error-warning-line me-4 align-middle text-[16.25px]' />
                   {hasBoxedErrors.message}
                 </Alert>
               </Col>
             )}
           </Row>
           <Row md={12}>
-            <div className='tw:flex tw:justify-end tw:items-center tw:gap-2'>
+            <div className='flex justify-end items-center gap-2'>
               {activeTab == 'summary' && (
                 <Button disabled={loading || receivingProducts.length <= 0} type='button' color='primary' onClick={() => setactiveTab('packages')}>
                   Next Step

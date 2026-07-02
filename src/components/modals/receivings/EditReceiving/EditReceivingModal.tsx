@@ -162,20 +162,20 @@ const EditReceivingModal = ({ editReceiving, seteditReceiving, mutateReceivings 
       </ModalHeader>
       <ModalBody>
         <Row>
-          <p className='tw:m-0 tw:text-[16.25px] tw:font-semibold'>
-            Receiving: <span className='tw:text-primary'>{orderNumber}</span>
+          <p className='m-0 text-[16.25px] font-semibold'>
+            Receiving: <span className='text-primary'>{orderNumber}</span>
           </p>
         </Row>
-        <Row className='tw:mb-4'>
-          <p className='tw:m-0 tw:text-[13px] tw:font-semibold'>
-            Destination: <span className='tw:text-primary'>{warehouseName}</span>
+        <Row className='mb-4'>
+          <p className='m-0 text-[13px] font-semibold'>
+            Destination: <span className='text-primary'>{warehouseName}</span>
           </p>
         </Row>
 
-        <Nav className='nav-tabs tw:border-b' role='tablist'>
+        <Nav className='nav-tabs border-b' role='tablist'>
           <NavItem style={{ cursor: 'pointer' }}>
             <NavLink
-              className={activeTab == 'summary' ? 'tw:text-primary tw:font-semibold tw:text-[13px] tw:border tw:border-primary' : 'tw:text-[var(--bs-secondary-color)] tw:text-[13px]'}
+              className={activeTab == 'summary' ? 'text-primary font-semibold text-[13px] border border-primary' : 'text-[var(--bs-secondary-color)] text-[13px]'}
               onClick={() => {
                 setactiveTab('summary')
               }}
@@ -185,7 +185,7 @@ const EditReceivingModal = ({ editReceiving, seteditReceiving, mutateReceivings 
           </NavItem>
           <NavItem style={{ cursor: 'pointer' }}>
             <NavLink
-              className={activeTab == 'packages' ? 'tw:text-primary tw:font-semibold tw:text-[13px] tw:border tw:border-primary' : 'tw:text-[var(--bs-secondary-color)] tw:text-[13px]'}
+              className={activeTab == 'packages' ? 'text-primary font-semibold text-[13px] border border-primary' : 'text-[var(--bs-secondary-color)] text-[13px]'}
               onClick={() => {
                 setactiveTab('packages')
               }}
@@ -195,7 +195,7 @@ const EditReceivingModal = ({ editReceiving, seteditReceiving, mutateReceivings 
           </NavItem>
         </Nav>
 
-        <TabContent activeTab={activeTab} className='tw:pt-2 tw:mb-4'>
+        <TabContent activeTab={activeTab} className='pt-2 mb-4'>
           <TabPane tabId='summary'>
             {activeTab == 'summary' && <Edit_Receiving_Summary_Tab orderItems={orderItems} handleDeleteItem={handleDeleteItem} isReceivingFromPo={isReceivingFromPo!} />}
           </TabPane>
@@ -224,38 +224,38 @@ const EditReceivingModal = ({ editReceiving, seteditReceiving, mutateReceivings 
             )}
           </TabPane>
         </TabContent>
-        <Row className='tw:mb-2'>
+        <Row className='mb-2'>
           {needsNewBoxConfiguration && (
-            <Col xs={12} className='tw:m-0'>
-              <Alert color='warning' className='tw:text-[11.2px] tw:py-1 tw:mb-2' fade={false}>
-                <i className='ri-error-warning-line tw:me-4 tw:align-middle tw:text-[16.25px]' />
+            <Col xs={12} className='m-0'>
+              <Alert color='warning' className='text-[11.2px] py-1 mb-2' fade={false}>
+                <i className='ri-error-warning-line me-4 align-middle text-[16.25px]' />
                 You need to create a new box configuration for this receiving.
               </Alert>
             </Col>
           )}
           {!needsNewBoxConfiguration && packingConfiguration !== 'current' && (
-            <Col xs={12} className='tw:m-0'>
-              <Alert color='warning' className='tw:text-[11.2px] tw:py-1 tw:mb-2' fade={false}>
-                <i className='ri-error-warning-line tw:me-4 tw:align-middle tw:text-[16.25px]' />
+            <Col xs={12} className='m-0'>
+              <Alert color='warning' className='text-[11.2px] py-1 mb-2' fade={false}>
+                <i className='ri-error-warning-line me-4 align-middle text-[16.25px]' />
                 You are editing the current box configuration. Please make sure to update the current box configuration if needed.
               </Alert>
             </Col>
           )}
           {hasBoxedErrors.error && (
-            <Col xs={12} className='tw:m-0'>
-              <Alert color='danger' className='tw:text-[11.2px] tw:py-1 tw:mb-2' fade={false}>
-                <i className='ri-error-warning-line tw:me-4 tw:align-middle tw:text-[16.25px]' />
+            <Col xs={12} className='m-0'>
+              <Alert color='danger' className='text-[11.2px] py-1 mb-2' fade={false}>
+                <i className='ri-error-warning-line me-4 align-middle text-[16.25px]' />
                 {hasBoxedErrors.message}
               </Alert>
             </Col>
           )}
         </Row>
         <Row md={12}>
-          <div className='tw:flex tw:justify-end tw:items-center tw:gap-4'>
+          <div className='flex justify-end items-center gap-4'>
             <Button
               type='button'
               color='light'
-              className='tw:text-[11.2px]'
+              className='text-[11.2px]'
               onClick={() =>
                 seteditReceiving({
                   show: false,
@@ -265,12 +265,12 @@ const EditReceivingModal = ({ editReceiving, seteditReceiving, mutateReceivings 
               Cancel
             </Button>
             {activeTab == 'summary' && (
-              <Button disabled={false} type='button' className='tw:text-[11.2px] btn-soft-primary' onClick={() => setactiveTab('packages')}>
+              <Button disabled={false} type='button' className='text-[11.2px] btn-soft-primary' onClick={() => setactiveTab('packages')}>
                 Next Step
               </Button>
             )}
             {activeTab == 'packages' && (
-              <Button disabled={loading || hasBoxedErrors.error} type='button' color='success' className='tw:text-[11.2px]' onClick={() => handleUpdateReceiving()}>
+              <Button disabled={loading || hasBoxedErrors.error} type='button' color='success' className='text-[11.2px]' onClick={() => handleUpdateReceiving()}>
                 {loading ? (
                   <span>
                     <Spinner color='light' size={'sm'} /> Updating...

@@ -12,12 +12,12 @@ type Props = {
 const TeamMembersTable = ({ teamMembers, handleManageUser, pending }: Props) => {
   const columns: any = [
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Name</span>,
+      name: <span className='font-bold text-[13px]'>Name</span>,
       selector: (row: TeamMember) => {
         return (
           <>
-            <p className='tw:m-0 tw:p-0'>{row.name}</p>
-            <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)] tw:text-[11.2px]'>{row.email}</p>
+            <p className='m-0 p-0'>{row.name}</p>
+            <p className='m-0 p-0 text-[var(--bs-secondary-color)] text-[11.2px]'>{row.email}</p>
           </>
         )
       },
@@ -25,7 +25,7 @@ const TeamMembersTable = ({ teamMembers, handleManageUser, pending }: Props) => 
       center: false,
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Role</span>,
+      name: <span className='font-bold text-[13px]'>Role</span>,
       selector: (row: TeamMember) => row.role,
       sortable: true,
       center: true,
@@ -35,7 +35,7 @@ const TeamMembersTable = ({ teamMembers, handleManageUser, pending }: Props) => 
       },
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Date Added</span>,
+      name: <span className='font-bold text-[13px]'>Date Added</span>,
       selector: (row: TeamMember) => row.dateAdded,
       sortable: true,
       center: true,
@@ -44,7 +44,7 @@ const TeamMembersTable = ({ teamMembers, handleManageUser, pending }: Props) => 
       },
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'>Last Activity</span>,
+      name: <span className='font-bold text-[13px]'>Last Activity</span>,
       selector: (row: TeamMember) => (row.lastActive ? moment(row.lastActive).format('YYYY-MM-DD, h:mm:ss a') : 'No Activity'),
       sortable: true,
       center: true,
@@ -53,10 +53,10 @@ const TeamMembersTable = ({ teamMembers, handleManageUser, pending }: Props) => 
       },
     },
     {
-      name: <span className='tw:font-bold tw:text-[13px]'></span>,
+      name: <span className='font-bold text-[13px]'></span>,
       selector: (row: TeamMember) => {
         return (
-          <Button color='light' className='tw:text-[11.2px]' onClick={() => handleManageUser(JSON.parse(JSON.stringify(row)))}>
+          <Button color='light' className='text-[11.2px]' onClick={() => handleManageUser(JSON.parse(JSON.stringify(row)))}>
             Manage
           </Button>
         )

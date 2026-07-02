@@ -23,23 +23,23 @@ const NewFilterByDates = ({ filterDates, setfilterDates, handleChangeDatesFromPi
   useClickOutside(filterByDates, () => setOpenDatesMenu(false))
 
   return (
-    <div ref={filterByDates} className='tw:relative'>
+    <div ref={filterByDates} className='relative'>
       <button
-        className='tw:inline-flex tw:h-9 tw:flex-row tw:justify-start tw:items-center tw:gap-2 tw:rounded-md tw:px-3'
+        className='inline-flex h-9 flex-row justify-start items-center gap-2 rounded-md px-3'
         style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }}
         type='button'
         aria-expanded='false'
         onClick={() => setOpenDatesMenu(!openDatesMenu)}>
-        <i className='las la-calendar tw:text-[19.5px] tw:m-0 tw:p-0 tw:text-primary' />
-        <span className='tw:font-semibold tw:m-0 tw:p-0 tw:text-[11.2px]'>
+        <i className='las la-calendar text-[19.5px] m-0 p-0 text-primary' />
+        <span className='font-semibold m-0 p-0 text-[11.2px]'>
           {filterDates.startDate !== '' || filterDates.endDate !== '' ? `${filterDates.startDate} -> ${filterDates.endDate}` : 'Select Dates'}
         </span>
       </button>
-      <div className={'tw:absolute tw:z-10 tw:mt-1 tw:px-4 tw:py-3 tw:bg-white tw:border tw:border-[#E1E3E5] tw:rounded-md tw:shadow tw:min-w-[200px]' + (openDatesMenu ? ' show' : '')}>
-        <div className='tw:flex tw:flex-col tw:justify-start'>
+      <div className={'absolute z-10 mt-1 px-4 py-3 bg-white border border-[#E1E3E5] rounded-md shadow min-w-[200px]' + (openDatesMenu ? ' show' : '')}>
+        <div className='flex flex-col justify-start'>
           <button
             type='button'
-            className={'tw:block tw:p-0 tw:border-0 tw:bg-transparent tw:text-left tw:no-underline tw:text-inherit tw:text-[11.2px] ' + (selectedDateFilter == 'today' ? 'tw:font-bold' : '')}
+            className={'block p-0 border-0 bg-transparent text-left no-underline text-inherit text-[11.2px] ' + (selectedDateFilter == 'today' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('today')
               setfilterDates({
@@ -52,7 +52,7 @@ const NewFilterByDates = ({ filterDates, setfilterDates, handleChangeDatesFromPi
           </button>
           <button
             type='button'
-            className={'tw:block tw:p-0 tw:border-0 tw:bg-transparent tw:text-left tw:no-underline tw:text-inherit tw:text-[11.2px] ' + (selectedDateFilter == 'yesterday' ? 'tw:font-bold' : '')}
+            className={'block p-0 border-0 bg-transparent text-left no-underline text-inherit text-[11.2px] ' + (selectedDateFilter == 'yesterday' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('yesterday')
               setfilterDates({
@@ -65,7 +65,7 @@ const NewFilterByDates = ({ filterDates, setfilterDates, handleChangeDatesFromPi
           </button>
           <button
             type='button'
-            className={'tw:block tw:p-0 tw:border-0 tw:bg-transparent tw:text-left tw:no-underline tw:text-inherit tw:text-[11.2px] ' + (selectedDateFilter == 'thisweek' ? 'tw:font-bold' : '')}
+            className={'block p-0 border-0 bg-transparent text-left no-underline text-inherit text-[11.2px] ' + (selectedDateFilter == 'thisweek' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('thisweek')
               setfilterDates({
@@ -78,7 +78,7 @@ const NewFilterByDates = ({ filterDates, setfilterDates, handleChangeDatesFromPi
           </button>
           <button
             type='button'
-            className={'tw:block tw:p-0 tw:border-0 tw:bg-transparent tw:text-left tw:no-underline tw:text-inherit tw:text-[11.2px] ' + (selectedDateFilter == 'lastweek' ? 'tw:font-bold' : '')}
+            className={'block p-0 border-0 bg-transparent text-left no-underline text-inherit text-[11.2px] ' + (selectedDateFilter == 'lastweek' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('lastweek')
               setfilterDates({
@@ -91,7 +91,7 @@ const NewFilterByDates = ({ filterDates, setfilterDates, handleChangeDatesFromPi
           </button>
           <button
             type='button'
-            className={'tw:block tw:p-0 tw:border-0 tw:bg-transparent tw:text-left tw:no-underline tw:text-inherit tw:text-[11.2px] ' + (selectedDateFilter == 'past7days' ? 'tw:font-bold' : '')}
+            className={'block p-0 border-0 bg-transparent text-left no-underline text-inherit text-[11.2px] ' + (selectedDateFilter == 'past7days' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('past7days')
               setfilterDates({
@@ -104,7 +104,7 @@ const NewFilterByDates = ({ filterDates, setfilterDates, handleChangeDatesFromPi
           </button>
           <button
             type='button'
-            className={'tw:block tw:p-0 tw:border-0 tw:bg-transparent tw:text-left tw:no-underline tw:text-inherit tw:text-[11.2px] ' + (selectedDateFilter == 'thismonth' ? 'tw:font-bold' : '')}
+            className={'block p-0 border-0 bg-transparent text-left no-underline text-inherit text-[11.2px] ' + (selectedDateFilter == 'thismonth' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('thismonth')
               setfilterDates({
@@ -117,7 +117,7 @@ const NewFilterByDates = ({ filterDates, setfilterDates, handleChangeDatesFromPi
           </button>
           <button
             type='button'
-            className={'tw:block tw:p-0 tw:border-0 tw:bg-transparent tw:text-left tw:no-underline tw:text-inherit tw:text-[11.2px] ' + (selectedDateFilter == 'past3days' ? 'tw:font-bold' : '')}
+            className={'block p-0 border-0 bg-transparent text-left no-underline text-inherit text-[11.2px] ' + (selectedDateFilter == 'past3days' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('past3days')
               setfilterDates({
@@ -130,7 +130,7 @@ const NewFilterByDates = ({ filterDates, setfilterDates, handleChangeDatesFromPi
           </button>
           <button
             type='button'
-            className={'tw:block tw:p-0 tw:border-0 tw:bg-transparent tw:text-left tw:no-underline tw:text-inherit tw:text-[11.2px] ' + (selectedDateFilter == 'lastmonth' ? 'tw:font-bold' : '')}
+            className={'block p-0 border-0 bg-transparent text-left no-underline text-inherit text-[11.2px] ' + (selectedDateFilter == 'lastmonth' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('lastmonth')
               setfilterDates({
@@ -143,7 +143,7 @@ const NewFilterByDates = ({ filterDates, setfilterDates, handleChangeDatesFromPi
           </button>
           <button
             type='button'
-            className={'tw:block tw:p-0 tw:border-0 tw:bg-transparent tw:text-left tw:no-underline tw:text-inherit tw:text-[11.2px] ' + (selectedDateFilter == 'yeartodate' ? 'tw:font-bold' : '')}
+            className={'block p-0 border-0 bg-transparent text-left no-underline text-inherit text-[11.2px] ' + (selectedDateFilter == 'yeartodate' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('yeartodate')
               setfilterDates({
@@ -156,7 +156,7 @@ const NewFilterByDates = ({ filterDates, setfilterDates, handleChangeDatesFromPi
           </button>
           <button
             type='button'
-            className={'tw:block tw:p-0 tw:border-0 tw:bg-transparent tw:text-left tw:no-underline tw:text-inherit tw:text-[11.2px] ' + (selectedDateFilter == 'lastyear' ? 'tw:font-bold' : '')}
+            className={'block p-0 border-0 bg-transparent text-left no-underline text-inherit text-[11.2px] ' + (selectedDateFilter == 'lastyear' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('lastyear')
               setfilterDates({
@@ -167,9 +167,9 @@ const NewFilterByDates = ({ filterDates, setfilterDates, handleChangeDatesFromPi
             }}>
             Last Year
           </button>
-          <span className='tw:font-light tw:text-[color:var(--bs-secondary-color)] tw:text-[11.2px] tw:pb-1 tw:border-t tw:border-[color:var(--border)] tw:pt-1'>Select Range:</span>
+          <span className='font-light text-[color:var(--bs-secondary-color)] text-[11.2px] pb-1 border-t border-[color:var(--border)] pt-1'>Select Range:</span>
           <Flatpickr
-            className={'tw:border tw:border-[color:var(--border)] tw:text-[13px] tw:w-full tw:p-2 tw:rounded-md' + (selectedDateFilter == 'picker' ? ' tw:font-bold' : '')}
+            className={'border border-[color:var(--border)] text-[13px] w-full p-2 rounded-md' + (selectedDateFilter == 'picker' ? ' font-bold' : '')}
             options={{
               mode: 'range',
               dateFormat: 'd M y',

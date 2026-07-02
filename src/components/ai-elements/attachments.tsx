@@ -93,7 +93,7 @@ const renderAttachmentImage = (
   isGrid ? (
     <img
       alt={filename || "Image"}
-      className="tw:size-full tw:object-cover"
+      className="size-full object-cover"
       height={96}
       src={url}
       width={96}
@@ -101,7 +101,7 @@ const renderAttachmentImage = (
   ) : (
     <img
       alt={filename || "Image"}
-      className="tw:size-full tw:rounded tw:object-cover"
+      className="size-full rounded object-cover"
       height={20}
       src={url}
       width={20}
@@ -162,9 +162,9 @@ export const Attachments = ({
     <AttachmentsContext.Provider value={contextValue}>
       <div
         className={cn(
-          "tw:flex tw:items-start",
-          variant === "list" ? "tw:flex-col tw:gap-2" : "tw:flex-wrap tw:gap-2",
-          variant === "grid" && "tw:ml-auto tw:w-fit",
+          "flex items-start",
+          variant === "list" ? "flex-col gap-2" : "flex-wrap gap-2",
+          variant === "grid" && "ml-auto w-fit",
           className
         )}
         {...props}
@@ -203,8 +203,8 @@ export const Attachment = ({
     <AttachmentContext.Provider value={contextValue}>
       <div
         className={cn(
-          "tw:group tw:relative",
-          variant === "grid" && "tw:size-24 tw:overflow-hidden tw:rounded-lg",
+          "group relative",
+          variant === "grid" && "size-24 overflow-hidden rounded-lg",
           variant === "inline" && [
             "flex h-8 cursor-pointer select-none items-center gap-1.5",
             "rounded-md border border-border px-1.5",
@@ -243,7 +243,7 @@ export const AttachmentPreview = ({
   const iconSize = variant === "inline" ? "size-3" : "size-4";
 
   const renderIcon = (Icon: typeof ImageIcon) => (
-    <Icon className={cn(iconSize, "tw:text-muted-foreground")} />
+    <Icon className={cn(iconSize, "text-muted-foreground")} />
   );
 
   const renderContent = () => {
@@ -252,7 +252,7 @@ export const AttachmentPreview = ({
     }
 
     if (mediaCategory === "video" && data.type === "file" && data.url) {
-      return <video className="tw:size-full tw:object-cover" muted src={data.url} />;
+      return <video className="size-full object-cover" muted src={data.url} />;
     }
 
     const Icon = mediaCategoryIcons[mediaCategory];
@@ -262,10 +262,10 @@ export const AttachmentPreview = ({
   return (
     <div
       className={cn(
-        "tw:flex tw:shrink-0 tw:items-center tw:justify-center tw:overflow-hidden",
-        variant === "grid" && "tw:size-full tw:bg-muted",
-        variant === "inline" && "tw:size-5 tw:rounded tw:bg-background",
-        variant === "list" && "tw:size-12 tw:rounded tw:bg-muted",
+        "flex shrink-0 items-center justify-center overflow-hidden",
+        variant === "grid" && "size-full bg-muted",
+        variant === "inline" && "size-5 rounded bg-background",
+        variant === "list" && "size-12 rounded bg-muted",
         className
       )}
       {...props}
@@ -296,10 +296,10 @@ export const AttachmentInfo = ({
   }
 
   return (
-    <div className={cn("tw:min-w-0 tw:flex-1", className)} {...props}>
-      <span className="tw:block tw:truncate">{label}</span>
+    <div className={cn("min-w-0 flex-1", className)} {...props}>
+      <span className="block truncate">{label}</span>
       {showMediaType && data.mediaType && (
-        <span className="tw:block tw:truncate tw:text-muted-foreground tw:text-xs">
+        <span className="block truncate text-muted-foreground text-xs">
           {data.mediaType}
         </span>
       )}
@@ -360,7 +360,7 @@ export const AttachmentRemove = ({
       {...props}
     >
       {children ?? <XIcon />}
-      <span className="tw:sr-only">{label}</span>
+      <span className="sr-only">{label}</span>
     </Button>
   );
 };
@@ -398,7 +398,7 @@ export const AttachmentHoverCardContent = ({
 }: AttachmentHoverCardContentProps) => (
   <HoverCardContent
     align={align}
-    className={cn("tw:w-auto tw:p-2", className)}
+    className={cn("w-auto p-2", className)}
     {...props}
   />
 );
@@ -416,7 +416,7 @@ export const AttachmentEmpty = ({
 }: AttachmentEmptyProps) => (
   <div
     className={cn(
-      "tw:flex tw:items-center tw:justify-center tw:p-4 tw:text-muted-foreground tw:text-sm",
+      "flex items-center justify-center p-4 text-muted-foreground text-sm",
       className
     )}
     {...props}

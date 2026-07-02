@@ -21,24 +21,24 @@ const FilterUnsellables = ({ searchStatus, setSearchStatus, searchReason, setSea
   return (
     <div
       ref={filterByOthersContainer}
-      className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:md:flex-row tw:md:justify-between tw:md:items-center tw:w-auto'>
-      <div className='tw:relative'>
+      className='flex flex-col justify-center items-end gap-2 md:flex-row md:justify-between md:items-center w-auto'>
+      <div className='relative'>
         <button
-          className='tw:inline-flex tw:h-9 tw:items-center tw:gap-2 tw:rounded-md tw:border tw:border-[#E1E3E5] tw:bg-white tw:px-3 tw:text-sm tw:font-semibold tw:text-foreground tw:whitespace-nowrap'
+          className='inline-flex h-9 items-center gap-2 rounded-md border border-[#E1E3E5] bg-white px-3 text-sm font-semibold text-foreground whitespace-nowrap'
           type='button'
           aria-expanded='false'
           onClick={() => setOpenDatesMenu(!openDatesMenu)}>
           Filters
         </button>
-        <div className={'tw:absolute tw:z-10 tw:mt-1 tw:min-w-[16rem] tw:end-0 tw:bg-white tw:border tw:border-[#E1E3E5] tw:rounded-md tw:shadow tw:px-6 tw:py-4 ' + (openDatesMenu ? 'tw:block' : 'tw:hidden')}>
-          <div className='tw:flex tw:flex-col tw:justify-start tw:gap-2'>
-            <span className='tw:font-semibold tw:text-[11.2px]'>Status:</span>
+        <div className={'absolute z-10 mt-1 min-w-[16rem] end-0 bg-white border border-[#E1E3E5] rounded-md shadow px-6 py-4 ' + (openDatesMenu ? 'block' : 'hidden')}>
+          <div className='flex flex-col justify-start gap-2'>
+            <span className='font-semibold text-[11.2px]'>Status:</span>
             <div
-              className='tw:flex tw:flex-row tw:items-center tw:justify-between tw:gap-2 tw:w-auto tw:ps-1 tw:pe-0 tw:py-0 tw:rounded'
+              className='flex flex-row items-center justify-between gap-2 w-auto ps-1 pe-0 py-0 rounded'
               style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
               <Input
                 type='select'
-                className='tw:border-0 tw:text-[11.2px] tw:w-full'
+                className='border-0 text-[11.2px] w-full'
                 id='type'
                 name='type'
                 value={searchStatus}
@@ -52,13 +52,13 @@ const FilterUnsellables = ({ searchStatus, setSearchStatus, searchReason, setSea
                 <option value='dispose'>Dispose</option>
               </Input>
             </div>
-            <span className='tw:font-semibold tw:text-[11.2px]'>Reason:</span>
+            <span className='font-semibold text-[11.2px]'>Reason:</span>
             <div
-              className='tw:flex tw:flex-row tw:items-center tw:justify-between tw:gap-2 tw:w-auto tw:ps-1 tw:pe-0 tw:py-0 tw:rounded'
+              className='flex flex-row items-center justify-between gap-2 w-auto ps-1 pe-0 py-0 rounded'
               style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
               <Input
                 type='select'
-                className='tw:border-0 tw:text-[11.2px] tw:w-full'
+                className='border-0 text-[11.2px] w-full'
                 id='type'
                 name='type'
                 value={searchReason}
@@ -84,7 +84,7 @@ const FilterUnsellables = ({ searchStatus, setSearchStatus, searchReason, setSea
                 setSearchReason('')
                 setOpenDatesMenu(false)
               }}
-              className='tw:p-0 tw:border-0 tw:no-underline tw:text-inherit tw:font-normal tw:text-[11.2px] tw:mt-2 tw:bg-transparent'>
+              className='p-0 border-0 no-underline text-inherit font-normal text-[11.2px] mt-2 bg-transparent'>
               Clear All
             </button>
           </div>

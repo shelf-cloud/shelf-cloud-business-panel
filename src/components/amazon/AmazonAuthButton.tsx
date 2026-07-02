@@ -10,7 +10,7 @@ type Props = {}
 const AmazonAuthButton = ({}: Props) => {
   const { state }: any = useContext(AppContext)
   return (
-    <div className='tw:px-2'>
+    <div className='px-2'>
       {state.currentRegion == 'us' ? (
         <Link
           href={`https://sellercentral.amazon.com/apps/authorize/consent?application_id=amzn1.sp.solution.9ab6cdba-3a1d-4aaf-8e00-0d3c012bd7de&version=beta&state=ShelcloudNewAmazonSeller`}

@@ -49,7 +49,7 @@ const StorageTable = ({ tableData, pending }: Props) => {
 
   const columns: any = [
     {
-      name: <span className='tw:font-bold tw:text-[16.25px]'>Image</span>,
+      name: <span className='font-bold text-[16.25px]'>Image</span>,
       selector: (row: StorageRowProduct) => {
         return (
           <div
@@ -70,7 +70,7 @@ const StorageTable = ({ tableData, pending }: Props) => {
     },
     {
       name: (
-        <span className='tw:font-bold tw:text-[16.25px]'>
+        <span className='font-bold text-[16.25px]'>
           Title
           <br />
           SKU
@@ -91,21 +91,21 @@ const StorageTable = ({ tableData, pending }: Props) => {
       //   compact: true,
     },
     {
-      name: <span className='tw:font-bold tw:text-[16.25px]'>Total Bins Used</span>,
+      name: <span className='font-bold text-[16.25px]'>Total Bins Used</span>,
       selector: (row: StorageRowProduct) => row.totalBins,
       sortable: true,
       compact: true,
       center: true,
     },
     {
-      name: <span className='tw:font-bold tw:text-[16.25px]'>Total Quantity In Bin</span>,
+      name: <span className='font-bold text-[16.25px]'>Total Quantity In Bin</span>,
       selector: (row: StorageRowProduct) => row.totalQuantity,
       sortable: true,
       compact: true,
       center: true,
     },
     {
-      name: <span className='tw:font-bold tw:text-[16.25px]'>Estimated Monthly Cost</span>,
+      name: <span className='font-bold text-[16.25px]'>Estimated Monthly Cost</span>,
       selector: (row: StorageRowProduct) => FormatCurrency(state.currentRegion, row.currentBalance!),
       sortable: true,
       compact: true,

@@ -49,7 +49,7 @@ export const TestResultsHeader = ({
 }: TestResultsHeaderProps) => (
   <div
     className={cn(
-      "tw:flex tw:items-center tw:justify-between tw:border-b tw:px-4 tw:py-3",
+      "flex items-center justify-between border-b px-4 py-3",
       className
     )}
     {...props}
@@ -72,7 +72,7 @@ export const TestResultsDuration = ({
   }
 
   return (
-    <span className={cn("tw:text-muted-foreground tw:text-sm", className)} {...props}>
+    <span className={cn("text-muted-foreground text-sm", className)} {...props}>
       {children ?? formatDuration(summary.duration)}
     </span>
   );
@@ -92,31 +92,31 @@ export const TestResultsSummary = ({
   }
 
   return (
-    <div className={cn("tw:flex tw:items-center tw:gap-3", className)} {...props}>
+    <div className={cn("flex items-center gap-3", className)} {...props}>
       {children ?? (
         <>
           <Badge
-            className="tw:gap-1 tw:bg-green-100 tw:text-green-700 tw:dark:bg-green-900/30 tw:dark:text-green-400"
+            className="gap-1 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
             variant="secondary"
           >
-            <CheckCircle2Icon className="tw:size-3" />
+            <CheckCircle2Icon className="size-3" />
             {summary.passed} passed
           </Badge>
           {summary.failed > 0 && (
             <Badge
-              className="tw:gap-1 tw:bg-red-100 tw:text-red-700 tw:dark:bg-red-900/30 tw:dark:text-red-400"
+              className="gap-1 bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
               variant="secondary"
             >
-              <XCircleIcon className="tw:size-3" />
+              <XCircleIcon className="size-3" />
               {summary.failed} failed
             </Badge>
           )}
           {summary.skipped > 0 && (
             <Badge
-              className="tw:gap-1 tw:bg-yellow-100 tw:text-yellow-700 tw:dark:bg-yellow-900/30 tw:dark:text-yellow-400"
+              className="gap-1 bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
               variant="secondary"
             >
-              <CircleIcon className="tw:size-3" />
+              <CircleIcon className="size-3" />
               {summary.skipped} skipped
             </Badge>
           )}
@@ -141,7 +141,7 @@ export const TestResults = ({
   return (
     <TestResultsContext.Provider value={contextValue}>
       <div
-        className={cn("tw:rounded-lg tw:border tw:bg-background", className)}
+        className={cn("rounded-lg border bg-background", className)}
         {...props}
       >
         {children ??
@@ -173,20 +173,20 @@ export const TestResultsProgress = ({
   const failedPercent = (summary.failed / summary.total) * 100;
 
   return (
-    <div className={cn("tw:space-y-2", className)} {...props}>
+    <div className={cn("space-y-2", className)} {...props}>
       {children ?? (
         <>
-          <div className="tw:flex tw:h-2 tw:overflow-hidden tw:rounded-full tw:bg-muted">
+          <div className="flex h-2 overflow-hidden rounded-full bg-muted">
             <div
-              className="tw:bg-green-500 tw:transition-all"
+              className="bg-green-500 transition-all"
               style={{ width: `${passedPercent}%` }}
             />
             <div
-              className="tw:bg-red-500 tw:transition-all"
+              className="bg-red-500 transition-all"
               style={{ width: `${failedPercent}%` }}
             />
           </div>
-          <div className="tw:flex tw:justify-between tw:text-muted-foreground tw:text-xs">
+          <div className="flex justify-between text-muted-foreground text-xs">
             <span>
               {summary.passed}/{summary.total} tests passed
             </span>
@@ -205,7 +205,7 @@ export const TestResultsContent = ({
   children,
   ...props
 }: TestResultsContentProps) => (
-  <div className={cn("tw:space-y-2 tw:p-4", className)} {...props}>
+  <div className={cn("space-y-2 p-4", className)} {...props}>
     {children}
   </div>
 );
@@ -228,14 +228,14 @@ const statusStyles: Record<TestStatus, string> = {
 };
 
 const statusIcons: Record<TestStatus, React.ReactNode> = {
-  failed: <XCircleIcon className="tw:size-4" />,
-  passed: <CheckCircle2Icon className="tw:size-4" />,
-  running: <CircleDotIcon className="tw:size-4 tw:animate-pulse" />,
-  skipped: <CircleIcon className="tw:size-4" />,
+  failed: <XCircleIcon className="size-4" />,
+  passed: <CheckCircle2Icon className="size-4" />,
+  running: <CircleDotIcon className="size-4 animate-pulse" />,
+  skipped: <CircleIcon className="size-4" />,
 };
 
 const TestStatusIcon = ({ status }: { status: TestStatus }) => (
-  <span className={cn("tw:shrink-0", statusStyles[status])}>
+  <span className={cn("shrink-0", statusStyles[status])}>
     {statusIcons[status]}
   </span>
 );
@@ -256,7 +256,7 @@ export const TestSuite = ({
 
   return (
     <TestSuiteContext.Provider value={contextValue}>
-      <Collapsible className={cn("tw:rounded-lg tw:border", className)} {...props}>
+      <Collapsible className={cn("rounded-lg border", className)} {...props}>
         {children}
       </Collapsible>
     </TestSuiteContext.Provider>
@@ -275,14 +275,14 @@ export const TestSuiteName = ({
   return (
     <CollapsibleTrigger
       className={cn(
-        "tw:group tw:flex tw:w-full tw:items-center tw:gap-2 tw:px-4 tw:py-3 tw:text-left tw:transition-colors tw:hover:bg-muted/50",
+        "group flex w-full items-center gap-2 px-4 py-3 text-left transition-colors hover:bg-muted/50",
         className
       )}
       {...props}
     >
-      <ChevronRightIcon className="tw:size-4 tw:shrink-0 tw:text-muted-foreground tw:transition-transform tw:group-data-[state=open]:rotate-90" />
+      <ChevronRightIcon className="size-4 shrink-0 text-muted-foreground transition-transform group-data-[state=open]:rotate-90" />
       <TestStatusIcon status={status} />
-      <span className="tw:font-medium tw:text-sm">{children ?? name}</span>
+      <span className="font-medium text-sm">{children ?? name}</span>
     </CollapsibleTrigger>
   );
 };
@@ -302,23 +302,23 @@ export const TestSuiteStats = ({
   ...props
 }: TestSuiteStatsProps) => (
   <div
-    className={cn("tw:ml-auto tw:flex tw:items-center tw:gap-2 tw:text-xs", className)}
+    className={cn("ml-auto flex items-center gap-2 text-xs", className)}
     {...props}
   >
     {children ?? (
       <>
         {passed > 0 && (
-          <span className="tw:text-green-600 tw:dark:text-green-400">
+          <span className="text-green-600 dark:text-green-400">
             {passed} passed
           </span>
         )}
         {failed > 0 && (
-          <span className="tw:text-red-600 tw:dark:text-red-400">
+          <span className="text-red-600 dark:text-red-400">
             {failed} failed
           </span>
         )}
         {skipped > 0 && (
-          <span className="tw:text-yellow-600 tw:dark:text-yellow-400">
+          <span className="text-yellow-600 dark:text-yellow-400">
             {skipped} skipped
           </span>
         )}
@@ -334,8 +334,8 @@ export const TestSuiteContent = ({
   children,
   ...props
 }: TestSuiteContentProps) => (
-  <CollapsibleContent className={cn("tw:border-t", className)} {...props}>
-    <div className="tw:divide-y">{children}</div>
+  <CollapsibleContent className={cn("border-t", className)} {...props}>
+    <div className="divide-y">{children}</div>
   </CollapsibleContent>
 );
 
@@ -356,7 +356,7 @@ export const TestName = ({ className, children, ...props }: TestNameProps) => {
   const { name } = useContext(TestContext);
 
   return (
-    <span className={cn("tw:flex-1", className)} {...props}>
+    <span className={cn("flex-1", className)} {...props}>
       {children ?? name}
     </span>
   );
@@ -377,7 +377,7 @@ export const TestDuration = ({
 
   return (
     <span
-      className={cn("tw:ml-auto tw:text-muted-foreground tw:text-xs", className)}
+      className={cn("ml-auto text-muted-foreground text-xs", className)}
       {...props}
     >
       {children ?? `${duration}ms`}
@@ -396,7 +396,7 @@ export const TestStatus = ({
 
   return (
     <span
-      className={cn("tw:shrink-0", statusStyles[status], className)}
+      className={cn("shrink-0", statusStyles[status], className)}
       {...props}
     >
       {children ?? statusIcons[status]}
@@ -426,7 +426,7 @@ export const Test = ({
   return (
     <TestContext.Provider value={contextValue}>
       <div
-        className={cn("tw:flex tw:items-center tw:gap-2 tw:px-4 tw:py-2 tw:text-sm", className)}
+        className={cn("flex items-center gap-2 px-4 py-2 text-sm", className)}
         {...props}
       >
         {children ?? (
@@ -450,7 +450,7 @@ export const TestError = ({
 }: TestErrorProps) => (
   <div
     className={cn(
-      "tw:mt-2 tw:rounded-md tw:bg-red-50 tw:p-3 tw:dark:bg-red-900/20",
+      "mt-2 rounded-md bg-red-50 p-3 dark:bg-red-900/20",
       className
     )}
     {...props}
@@ -468,7 +468,7 @@ export const TestErrorMessage = ({
 }: TestErrorMessageProps) => (
   <p
     className={cn(
-      "tw:font-medium tw:text-red-700 tw:text-sm tw:dark:text-red-400",
+      "font-medium text-red-700 text-sm dark:text-red-400",
       className
     )}
     {...props}
@@ -486,7 +486,7 @@ export const TestErrorStack = ({
 }: TestErrorStackProps) => (
   <pre
     className={cn(
-      "tw:mt-2 tw:overflow-auto tw:font-mono tw:text-red-600 tw:text-xs tw:dark:text-red-400",
+      "mt-2 overflow-auto font-mono text-red-600 text-xs dark:text-red-400",
       className
     )}
     {...props}

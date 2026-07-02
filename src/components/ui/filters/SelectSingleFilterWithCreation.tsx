@@ -41,8 +41,8 @@ const SelectSingleFilterWithCreation = ({ inputLabel, inputName, placeholder, op
   })
 
   return (
-    <div id={`select-container-${inputName}`} className='tw:mb-2'>
-      <Label htmlFor={inputLabel} className='tw:mb-2 tw:inline-block tw:text-sm'>
+    <div id={`select-container-${inputName}`} className='mb-2'>
+      <Label htmlFor={inputLabel} className='mb-2 inline-block text-sm'>
         {inputLabel}
       </Label>
       <SimpleSelectWithCreation
@@ -59,7 +59,7 @@ const SelectSingleFilterWithCreation = ({ inputLabel, inputName, placeholder, op
         hasError={Boolean(error)}
       />
       <ErrorInputLabel error={error} />
-      {validation.touched.name && validation.errors.name ? <span className='tw:text-destructive tw:m-0 tw:p-0 tw:text-sm'>{validation.errors.name}</span> : null}
+      {validation.touched.name && validation.errors.name ? <span className='text-destructive m-0 p-0 text-sm'>{validation.errors.name}</span> : null}
     </div>
   )
 }

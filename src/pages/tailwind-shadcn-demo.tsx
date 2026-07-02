@@ -56,12 +56,12 @@ const frameworkOptions: FrameworkOption[] = [
 
 function ShowcaseCard({ title, description, children }: { title: string; description: string; children: React.ReactNode }) {
   return (
-    <Card className='tw:h-full'>
-      <CardHeader className='tw:space-y-2'>
+    <Card className='h-full'>
+      <CardHeader className='space-y-2'>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent className='tw:flex tw:flex-col tw:gap-5'>{children}</CardContent>
+      <CardContent className='flex flex-col gap-5'>{children}</CardContent>
     </Card>
   )
 }
@@ -85,32 +85,32 @@ export default function TailwindShadcnDemo() {
         <title>Tailwind + shadcn Component Lab</title>
       </Head>
       <TooltipProvider>
-        <section className='tw:min-h-screen tw:bg-background tw:px-4 tw:py-10 tw:text-foreground sm:tw:px-6 lg:tw:px-8'>
-          <div className='tw:mx-auto tw:flex tw:w-full tw:max-w-7xl tw:flex-col tw:gap-8'>
-            <Card className='tw:overflow-hidden'>
-              <CardContent className='tw:relative tw:flex tw:flex-col tw:gap-8 tw:px-6 tw:py-8 sm:tw:px-8 lg:tw:px-10'>
+        <section className='min-h-screen bg-background px-4 py-10 text-foreground sm:px-6 lg:px-8'>
+          <div className='mx-auto flex w-full max-w-7xl flex-col gap-8'>
+            <Card className='overflow-hidden'>
+              <CardContent className='relative flex flex-col gap-8 px-6 py-8 sm:px-8 lg:px-10'>
                 <div
                   aria-hidden='true'
-                  className='tw:pointer-events-none tw:absolute tw:inset-x-0 tw:top-0 tw:h-44 tw:bg-[radial-gradient(circle_at_top,rgba(68,129,253,0.18),transparent_65%)]'
+                  className='pointer-events-none absolute inset-x-0 top-0 h-44 bg-[radial-gradient(circle_at_top,rgba(68,129,253,0.18),transparent_65%)]'
                 />
-                <div className='tw:relative tw:flex tw:flex-col tw:gap-6 lg:tw:flex-row lg:tw:items-end lg:tw:justify-between'>
-                  <div className='tw:max-w-4xl tw:space-y-4'>
-                    <div className='tw:flex tw:flex-wrap tw:items-center tw:gap-2'>
+                <div className='relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between'>
+                  <div className='max-w-4xl space-y-4'>
+                    <div className='flex flex-wrap items-center gap-2'>
                       <Badge>Component lab</Badge>
                       <Badge variant='outline'>Bootstrap-safe coexistence</Badge>
                       <Badge variant='secondary'>Prefixed utilities only</Badge>
                     </div>
-                    <div className='tw:space-y-3'>
-                      <h1 className='tw:max-w-3xl tw:text-3xl tw:font-semibold tw:tracking-tight sm:tw:text-4xl'>
+                    <div className='space-y-3'>
+                      <h1 className='max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl'>
                         Newly installed shadcn primitives now render with explicit resets, semantic borders, and plugin-free motion states.
                       </h1>
-                      <p className='tw:max-w-3xl tw:text-base tw:leading-7 tw:text-muted-foreground sm:tw:text-lg'>
+                      <p className='max-w-3xl text-base leading-7 text-muted-foreground sm:text-lg'>
                         This page is the validation surface for the new stack. Every example below is built with the prefixed Tailwind and shadcn layer only, without disturbing the
                         existing Reactstrap and Bootstrap screens.
                       </p>
                     </div>
                   </div>
-                  <div className='tw:flex tw:flex-wrap tw:items-center tw:gap-3'>
+                  <div className='flex flex-wrap items-center gap-3'>
                     <Button asChild>
                       <Link href='/'>
                         Return Home
@@ -135,9 +135,9 @@ export default function TailwindShadcnDemo() {
               </CardContent>
             </Card>
 
-            <div className='tw:grid tw:gap-6 xl:tw:grid-cols-2'>
+            <div className='grid gap-6 xl:grid-cols-2'>
               <ShowcaseCard title='Actions' description='Button, button group, toggle, toggle group, tooltip, dropdown menu, dialog, and drawer.'>
-                <div className='tw:flex tw:flex-wrap tw:gap-3'>
+                <div className='flex flex-wrap gap-3'>
                   <Button>Primary action</Button>
                   <Button variant='outline'>Secondary action</Button>
                   <Button variant='ghost'>Ghost action</Button>
@@ -151,14 +151,14 @@ export default function TailwindShadcnDemo() {
 
                 <ButtonGroup>
                   <ButtonGroupText>
-                    <Command className='tw:size-4' />
+                    <Command className='size-4' />
                     Filters
                   </ButtonGroupText>
                   <Button variant='outline'>In stock</Button>
                   <Button variant='outline'>Backordered</Button>
                 </ButtonGroup>
 
-                <div className='tw:flex tw:flex-wrap tw:items-center tw:gap-3'>
+                <div className='flex flex-wrap items-center gap-3'>
                   <Toggle aria-label='Pin view' pressed={pinBoard} onPressedChange={setPinBoard} variant='outline'>
                     <LayoutGrid />
                     Pin board
@@ -180,7 +180,7 @@ export default function TailwindShadcnDemo() {
                   </Tooltip>
                 </div>
 
-                <div className='tw:flex tw:flex-wrap tw:gap-3'>
+                <div className='flex flex-wrap gap-3'>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant='outline'>
@@ -219,7 +219,7 @@ export default function TailwindShadcnDemo() {
                         <DialogDescription>The modal, its close button, and the overlay all use the normalized shadcn-only layer.</DialogDescription>
                       </DialogHeader>
                       <Separator />
-                      <div className='tw:space-y-2 tw:text-sm tw:text-muted-foreground'>
+                      <div className='space-y-2 text-sm text-muted-foreground'>
                         <p>Tailwind stays prefixed.</p>
                         <p>Bootstrap keeps global control.</p>
                         <p>New primitives normalize themselves at the shared component layer.</p>
@@ -239,8 +239,8 @@ export default function TailwindShadcnDemo() {
                         <DrawerTitle>Drawer surface validation</DrawerTitle>
                         <DrawerDescription>The drawer keeps its own border and shadow tokens instead of inheriting browser defaults.</DrawerDescription>
                       </DrawerHeader>
-                      <div className='tw:px-4 tw:pb-2 tw:text-sm tw:text-muted-foreground'>
-                        <div className='tw:rounded-xl tw:border tw:border-border tw:bg-muted/50 tw:p-4'>This is the kind of leaf screen where the new stack can ship first.</div>
+                      <div className='px-4 pb-2 text-sm text-muted-foreground'>
+                        <div className='rounded-xl border border-border bg-muted/50 p-4'>This is the kind of leaf screen where the new stack can ship first.</div>
                       </div>
                       <DrawerFooter>
                         <Button>Continue</Button>
@@ -285,7 +285,7 @@ export default function TailwindShadcnDemo() {
                         <FieldDescription>Select uses the same semantic field tokens as inputs.</FieldDescription>
                       </FieldContent>
                       <Select value={priority} onValueChange={setPriority}>
-                        <SelectTrigger className='tw:w-full sm:tw:w-56'>
+                        <SelectTrigger className='w-full sm:w-56'>
                           <SelectValue placeholder='Pick a priority' />
                         </SelectTrigger>
                         <SelectContent>
@@ -345,7 +345,7 @@ export default function TailwindShadcnDemo() {
 
                   <FieldSeparator>Preferences</FieldSeparator>
 
-                  <div className='tw:grid tw:gap-4 md:tw:grid-cols-2'>
+                  <div className='grid gap-4 md:grid-cols-2'>
                     <Field orientation='horizontal'>
                       <Checkbox id='notify-owners' checked={notifyOwners} onCheckedChange={(checked) => setNotifyOwners(checked === true)} />
                       <FieldContent>
@@ -374,17 +374,17 @@ export default function TailwindShadcnDemo() {
               </ShowcaseCard>
             </div>
 
-            <div className='tw:grid tw:gap-6 xl:tw:grid-cols-[1.1fr_0.9fr]'>
+            <div className='grid gap-6 xl:grid-cols-[1.1fr_0.9fr]'>
               <ShowcaseCard title='Items and Display' description='Alert, badge, item, separator, skeleton, spinner, and status surfaces.'>
-                <div className='tw:flex tw:flex-wrap tw:items-center tw:gap-2'>
+                <div className='flex flex-wrap items-center gap-2'>
                   <Badge>Live</Badge>
                   <Badge variant='secondary'>Legacy safe</Badge>
                   <Badge variant='outline'>No Preflight</Badge>
                   <Badge variant='ghost'>Pilot</Badge>
                 </div>
 
-                <ItemGroup className='tw:rounded-xl tw:border tw:border-border tw:bg-card'>
-                  <Item variant='outline' className='tw:rounded-none tw:border-0 tw:border-b tw:border-border'>
+                <ItemGroup className='rounded-xl border border-border bg-card'>
+                  <Item variant='outline' className='rounded-none border-0 border-b border-border'>
                     <ItemHeader>
                       <ItemTitle>Warehouse board</ItemTitle>
                       <Badge variant='secondary'>Stable</Badge>
@@ -402,7 +402,7 @@ export default function TailwindShadcnDemo() {
                     </ItemActions>
                   </Item>
                   <ItemSeparator />
-                  <Item variant='muted' className='tw:rounded-none tw:border-0'>
+                  <Item variant='muted' className='rounded-none border-0'>
                     <ItemMedia variant='icon'>
                       <Box />
                     </ItemMedia>
@@ -411,17 +411,17 @@ export default function TailwindShadcnDemo() {
                       <ItemDescription>Newly installed primitives now carry their own resets, borders, and overlay styling.</ItemDescription>
                     </ItemContent>
                     <ItemActions>
-                      <Spinner className='tw:size-4' />
+                      <Spinner className='size-4' />
                     </ItemActions>
                   </Item>
                 </ItemGroup>
 
                 <Separator />
 
-                <div className='tw:grid tw:gap-3 sm:tw:grid-cols-3'>
-                  <Skeleton className='tw:h-16 tw:w-full' />
-                  <Skeleton className='tw:h-16 tw:w-full' />
-                  <Skeleton className='tw:h-16 tw:w-full' />
+                <div className='grid gap-3 sm:grid-cols-3'>
+                  <Skeleton className='h-16 w-full' />
+                  <Skeleton className='h-16 w-full' />
+                  <Skeleton className='h-16 w-full' />
                 </div>
               </ShowcaseCard>
 
@@ -432,28 +432,28 @@ export default function TailwindShadcnDemo() {
                   <AlertDescription>Keep legacy pages on Reactstrap and Bootstrap. Use the new stack for new routes, leaf components, and isolated rewrites.</AlertDescription>
                 </Alert>
 
-                <div className='tw:grid tw:gap-3'>
-                  <div className='tw:rounded-xl tw:border tw:border-border tw:bg-muted/50 tw:p-4'>
-                    <p className='tw:text-sm tw:font-semibold'>Do share</p>
-                    <p className='tw:mt-2 tw:text-sm tw:text-muted-foreground'>Hooks, data fetching, business logic, and page-level state.</p>
+                <div className='grid gap-3'>
+                  <div className='rounded-xl border border-border bg-muted/50 p-4'>
+                    <p className='text-sm font-semibold'>Do share</p>
+                    <p className='mt-2 text-sm text-muted-foreground'>Hooks, data fetching, business logic, and page-level state.</p>
                   </div>
-                  <div className='tw:rounded-xl tw:border tw:border-border tw:bg-muted/50 tw:p-4'>
-                    <p className='tw:text-sm tw:font-semibold'>Do isolate</p>
-                    <p className='tw:mt-2 tw:text-sm tw:text-muted-foreground'>Buttons, fields, menus, overlays, and layout shells built from `@shadcn/ui`.</p>
+                  <div className='rounded-xl border border-border bg-muted/50 p-4'>
+                    <p className='text-sm font-semibold'>Do isolate</p>
+                    <p className='mt-2 text-sm text-muted-foreground'>Buttons, fields, menus, overlays, and layout shells built from `@shadcn/ui`.</p>
                   </div>
                 </div>
 
-                <div className='tw:flex tw:flex-wrap tw:items-center tw:gap-3'>
+                <div className='flex flex-wrap items-center gap-3'>
                   <Badge variant='outline'>
-                    <Bell className='tw:mr-1 tw:size-3' />
+                    <Bell className='mr-1 size-3' />
                     Explicit resets
                   </Badge>
                   <Badge variant='outline'>
-                    <ChevronsUpDown className='tw:mr-1 tw:size-3' />
+                    <ChevronsUpDown className='mr-1 size-3' />
                     Prefix aligned
                   </Badge>
                   <Badge variant='outline'>
-                    <Wand2 className='tw:mr-1 tw:size-3' />
+                    <Wand2 className='mr-1 size-3' />
                     Future installs ready
                   </Badge>
                 </div>

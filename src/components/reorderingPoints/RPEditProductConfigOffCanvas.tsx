@@ -91,27 +91,27 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
 
   return (
     <Offcanvas isOpen={isOpen} direction='end' toggle={handleCloseCanvas}>
-      <OffcanvasHeader className='tw:pb-2' toggle={handleCloseCanvas}>
+      <OffcanvasHeader className='pb-2' toggle={handleCloseCanvas}>
         Product Config
       </OffcanvasHeader>
-      <OffcanvasBody className='tw:pt-0'>
-        <div className='tw:flex tw:flex-col'>
-          <p className='tw:text-[16.25px] tw:font-bold tw:m-0 tw:p-0'>
-            SKU: <span className='tw:text-primary'>{rpProductConfig.product.sku}</span>
+      <OffcanvasBody className='pt-0'>
+        <div className='flex flex-col'>
+          <p className='text-[16.25px] font-bold m-0 p-0'>
+            SKU: <span className='text-primary'>{rpProductConfig.product.sku}</span>
           </p>
-          <p className='tw:text-[13px] tw:m-0 tw:p-0 tw:font-semibold'>{rpProductConfig.product.title}</p>
-          <p className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>Here you can edit some configurations related to the product to adjust the forecast.</p>
+          <p className='text-[13px] m-0 p-0 font-semibold'>{rpProductConfig.product.title}</p>
+          <p className='text-[11.2px] text-[var(--bs-secondary-color)]'>Here you can edit some configurations related to the product to adjust the forecast.</p>
           <Form onSubmit={handleAddProduct}>
-            <h5 className='tw:text-[16.25px] tw:font-bold'>Warehouse</h5>
+            <h5 className='text-[16.25px] font-bold'>Warehouse</h5>
             <Row>
               <Col xs={12} md={10}>
-                <Label htmlFor='orderFrequency' className='tw:text-[11.2px] form-label'>
+                <Label htmlFor='orderFrequency' className='text-[11.2px] form-label'>
                   Order Frequency (Weeks)
                 </Label>
-                <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2'>
+                <div className='flex flex-row justify-start items-center gap-2'>
                   <Input
                     type='number'
-                    className='form-control tw:text-[13px]'
+                    className='form-control text-[13px]'
                     bsSize='sm'
                     id='orderFrequency'
                     name='orderFrequency'
@@ -122,18 +122,18 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
                   />
                   <span>Weeks</span>
                 </div>
-                {validation.touched.orderFrequency && validation.errors.orderFrequency ? <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:text-danger'>{validation.errors.orderFrequency}</p> : null}
+                {validation.touched.orderFrequency && validation.errors.orderFrequency ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.orderFrequency}</p> : null}
               </Col>
             </Row>
             <Row>
               <Col xs={12} md={10}>
-                <Label htmlFor='leadTimeSC' className='tw:text-[11.2px] form-label'>
+                <Label htmlFor='leadTimeSC' className='text-[11.2px] form-label'>
                   Lead Time
                 </Label>
-                <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2'>
+                <div className='flex flex-row justify-start items-center gap-2'>
                   <Input
                     type='number'
-                    className='form-control tw:text-[13px]'
+                    className='form-control text-[13px]'
                     bsSize='sm'
                     id='leadTimeSC'
                     name='leadTimeSC'
@@ -144,18 +144,18 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
                   />
                   <span>Days</span>
                 </div>
-                {validation.touched.leadTimeSC && validation.errors.leadTimeSC ? <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:text-danger'>{validation.errors.leadTimeSC}</p> : null}
+                {validation.touched.leadTimeSC && validation.errors.leadTimeSC ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.leadTimeSC}</p> : null}
               </Col>
             </Row>
             <Row>
-              <Col xs={12} md={10} className='tw:mb-4'>
-                <Label htmlFor='daysOfStockSC' className='tw:text-[11.2px] form-label'>
+              <Col xs={12} md={10} className='mb-4'>
+                <Label htmlFor='daysOfStockSC' className='text-[11.2px] form-label'>
                   *Days of Stock after Lead Time
                 </Label>
-                <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2'>
+                <div className='flex flex-row justify-start items-center gap-2'>
                   <Input
                     type='number'
-                    className='form-control tw:text-[13px]'
+                    className='form-control text-[13px]'
                     bsSize='sm'
                     id='daysOfStockSC'
                     name='daysOfStockSC'
@@ -166,21 +166,21 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
                   />
                   <span>Days</span>
                 </div>
-                {validation.touched.daysOfStockSC && validation.errors.daysOfStockSC ? <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:text-danger'>{validation.errors.daysOfStockSC}</p> : null}
+                {validation.touched.daysOfStockSC && validation.errors.daysOfStockSC ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.daysOfStockSC}</p> : null}
               </Col>
             </Row>
             {state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected && (
               <>
-                <h5 className='tw:text-[16.25px] tw:font-bold'>Amazon FBA</h5>
+                <h5 className='text-[16.25px] font-bold'>Amazon FBA</h5>
                 <Row>
                   <Col xs={12} md={10}>
-                    <Label htmlFor='leadTimeFBA' className='tw:text-[11.2px] form-label'>
+                    <Label htmlFor='leadTimeFBA' className='text-[11.2px] form-label'>
                       Lead Time
                     </Label>
-                    <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2'>
+                    <div className='flex flex-row justify-start items-center gap-2'>
                       <Input
                         type='number'
-                        className='form-control tw:text-[13px]'
+                        className='form-control text-[13px]'
                         bsSize='sm'
                         id='leadTimeFBA'
                         name='leadTimeFBA'
@@ -191,18 +191,18 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
                       />
                       <span>Days</span>
                     </div>
-                    {validation.touched.leadTimeFBA && validation.errors.leadTimeFBA ? <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:text-danger'>{validation.errors.leadTimeFBA}</p> : null}
+                    {validation.touched.leadTimeFBA && validation.errors.leadTimeFBA ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.leadTimeFBA}</p> : null}
                   </Col>
                 </Row>
                 <Row>
-                  <Col xs={12} md={10} className='tw:mb-4'>
-                    <Label htmlFor='daysOfStockFBA' className='tw:text-[11.2px] form-label'>
+                  <Col xs={12} md={10} className='mb-4'>
+                    <Label htmlFor='daysOfStockFBA' className='text-[11.2px] form-label'>
                       *Days of Stock after Lead Time
                     </Label>
-                    <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2'>
+                    <div className='flex flex-row justify-start items-center gap-2'>
                       <Input
                         type='number'
-                        className='form-control tw:text-[13px]'
+                        className='form-control text-[13px]'
                         bsSize='sm'
                         id='daysOfStockFBA'
                         name='daysOfStockFBA'
@@ -213,23 +213,23 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
                       />
                       <span>Days</span>
                     </div>
-                    {validation.touched.daysOfStockFBA && validation.errors.daysOfStockFBA ? <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:text-danger'>{validation.errors.daysOfStockFBA}</p> : null}
+                    {validation.touched.daysOfStockFBA && validation.errors.daysOfStockFBA ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.daysOfStockFBA}</p> : null}
                   </Col>
                 </Row>
               </>
             )}
             {state.user[state.currentRegion]?.rpShowAWD && (
               <>
-                <h5 className='tw:text-[16.25px] tw:font-bold'>Amazon AWD</h5>
+                <h5 className='text-[16.25px] font-bold'>Amazon AWD</h5>
                 <Row>
                   <Col xs={12} md={10}>
-                    <Label htmlFor='leadTimeAWD' className='tw:text-[11.2px] form-label'>
+                    <Label htmlFor='leadTimeAWD' className='text-[11.2px] form-label'>
                       Lead Time
                     </Label>
-                    <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2'>
+                    <div className='flex flex-row justify-start items-center gap-2'>
                       <Input
                         type='number'
-                        className='form-control tw:text-[13px]'
+                        className='form-control text-[13px]'
                         bsSize='sm'
                         id='leadTimeAWD'
                         name='leadTimeAWD'
@@ -240,18 +240,18 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
                       />
                       <span>Days</span>
                     </div>
-                    {validation.touched.leadTimeAWD && validation.errors.leadTimeAWD ? <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:text-danger'>{validation.errors.leadTimeAWD}</p> : null}
+                    {validation.touched.leadTimeAWD && validation.errors.leadTimeAWD ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.leadTimeAWD}</p> : null}
                   </Col>
                 </Row>
                 <Row>
-                  <Col xs={12} md={10} className='tw:mb-4'>
-                    <Label htmlFor='daysOfStockAWD' className='tw:text-[11.2px] form-label'>
+                  <Col xs={12} md={10} className='mb-4'>
+                    <Label htmlFor='daysOfStockAWD' className='text-[11.2px] form-label'>
                       *Days of Stock after Lead Time
                     </Label>
-                    <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2'>
+                    <div className='flex flex-row justify-start items-center gap-2'>
                       <Input
                         type='number'
-                        className='form-control tw:text-[13px]'
+                        className='form-control text-[13px]'
                         bsSize='sm'
                         id='daysOfStockAWD'
                         name='daysOfStockAWD'
@@ -262,20 +262,20 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
                       />
                       <span>Days</span>
                     </div>
-                    {validation.touched.daysOfStockAWD && validation.errors.daysOfStockAWD ? <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:text-danger'>{validation.errors.daysOfStockAWD}</p> : null}
+                    {validation.touched.daysOfStockAWD && validation.errors.daysOfStockAWD ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.daysOfStockAWD}</p> : null}
                   </Col>
                 </Row>
               </>
             )}
-            <h5 className='tw:text-[16.25px] tw:font-bold'>Extra Config</h5>
+            <h5 className='text-[16.25px] font-bold'>Extra Config</h5>
             <Row>
               <Col xs={12} md={10}>
-                <Label htmlFor='buffer' className='tw:text-[11.2px] form-label'>
+                <Label htmlFor='buffer' className='text-[11.2px] form-label'>
                   Buffer
                 </Label>
                 <Input
                   type='number'
-                  className='form-control tw:text-[13px]'
+                  className='form-control text-[13px]'
                   bsSize='sm'
                   id='buffer'
                   name='buffer'
@@ -284,19 +284,19 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
                   value={validation.values.buffer || ''}
                   invalid={validation.touched.buffer && validation.errors.buffer ? true : false}
                 />
-                {validation.touched.buffer && validation.errors.buffer ? <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:text-danger'>{validation.errors.buffer}</p> : null}
+                {validation.touched.buffer && validation.errors.buffer ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.buffer}</p> : null}
               </Col>
             </Row>
             <Row>
-              <Col xs={12} md={10} className='tw:mb-4'>
-                <Label htmlFor='sellerCost' className='tw:text-[11.2px] form-label'>
+              <Col xs={12} md={10} className='mb-4'>
+                <Label htmlFor='sellerCost' className='text-[11.2px] form-label'>
                   Seller Cost
                 </Label>
-                <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2'>
+                <div className='flex flex-row justify-start items-center gap-2'>
                   <span>$</span>
                   <Input
                     type='number'
-                    className='form-control tw:text-[13px]'
+                    className='form-control text-[13px]'
                     bsSize='sm'
                     id='sellerCost'
                     name='sellerCost'
@@ -306,14 +306,14 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
                     invalid={validation.touched.sellerCost && validation.errors.sellerCost ? true : false}
                   />
                 </div>
-                {validation.touched.sellerCost && validation.errors.sellerCost ? <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:text-danger'>{validation.errors.sellerCost}</p> : null}
+                {validation.touched.sellerCost && validation.errors.sellerCost ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.sellerCost}</p> : null}
               </Col>
             </Row>
-            <p className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>*The number of days you want to have of stock in addition to the lead time.</p>
-            <Row className='tw:mt-4'>
+            <p className='text-[11.2px] text-[var(--bs-secondary-color)]'>*The number of days you want to have of stock in addition to the lead time.</p>
+            <Row className='mt-4'>
               <Col md={12}>
-                <div className='tw:text-right'>
-                  <Button disabled={loading} type='submit' color='success' className='tw:text-[11.2px]'>
+                <div className='text-right'>
+                  <Button disabled={loading} type='submit' color='success' className='text-[11.2px]'>
                     {loading ? (
                       <span>
                         <Spinner color='#fff' size={'sm'} /> Saving...

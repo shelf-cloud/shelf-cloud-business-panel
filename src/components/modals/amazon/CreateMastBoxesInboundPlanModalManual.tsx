@@ -306,19 +306,19 @@ const CreateMastBoxesInboundPlanModalManual = ({ orderProducts, showCreateInboun
         }}
         className='modal-title'
         id='myModalLabel'>
-        <p className='tw:text-[19.5px] tw:m-0'>Create Manual Fulfillment - Send To Amazon</p>
+        <p className='text-[19.5px] m-0'>Create Manual Fulfillment - Send To Amazon</p>
       </ModalHeader>
       <ModalBody>
         <Form onSubmit={handleCreateInboundPlan}>
           <Row>
-            <p className='tw:text-[16.25px] tw:font-extrabold tw:text-primary'>Fulfillment Details</p>
-            <p className='tw:font-normal'>
+            <p className='text-[16.25px] font-extrabold text-primary'>Fulfillment Details</p>
+            <p className='font-normal'>
               *Create Manual Fulfillment will generate a file that has to be uploaded to your Seller Central. After finishing the fulfillment workflow in Seller Central, assign the
               corresponding finished workflow to the Shelf-Cloud fulfillment in the fulfillment table.
             </p>
-            <Row xs={12} className='tw:my-0'>
+            <Row xs={12} className='my-0'>
               <Col md={6}>
-                <FormGroup className='tw:mb-4'>
+                <FormGroup className='mb-4'>
                   <Label htmlFor='orderNumber' className='form-label'>
                     *Fulfillment Name
                   </Label>
@@ -340,7 +340,7 @@ const CreateMastBoxesInboundPlanModalManual = ({ orderProducts, showCreateInboun
                 </FormGroup>
               </Col>
               <Col md={6}>
-                <FormGroup className='tw:mb-4'>
+                <FormGroup className='mb-4'>
                   <Label htmlFor='marketplace' className='form-label'>
                     *Marketplace destination
                   </Label>
@@ -366,9 +366,9 @@ const CreateMastBoxesInboundPlanModalManual = ({ orderProducts, showCreateInboun
                 </FormGroup>
               </Col>
             </Row>
-            <Row xs={12} className='tw:my-0'>
+            <Row xs={12} className='my-0'>
               <Col md={6}>
-                <FormGroup className='tw:mb-4'>
+                <FormGroup className='mb-4'>
                   <Label htmlFor='shipFrom' className='form-label'>
                     *Ship From
                   </Label>
@@ -388,43 +388,43 @@ const CreateMastBoxesInboundPlanModalManual = ({ orderProducts, showCreateInboun
               </Col>
             </Row>
             <Col md={12}>
-              <p className='tw:text-[16.25px] tw:mb-0 tw:p-0'>SKUs ready to send: {validation.values.hasProducts}</p>
-              {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='tw:text-danger'>{validation.errors.hasProducts}</p> : null}
-              <div className='tw:overflow-x-auto'>
-              <table className='tw:w-full tw:align-middle tw:mb-0 tw:whitespace-nowrap tw:text-[13px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_tr>*:nth-child(odd)]:bg-[color:var(--vz-light)]'>
+              <p className='text-[16.25px] mb-0 p-0'>SKUs ready to send: {validation.values.hasProducts}</p>
+              {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='text-danger'>{validation.errors.hasProducts}</p> : null}
+              <div className='overflow-x-auto'>
+              <table className='w-full align-middle mb-0 whitespace-nowrap text-[13px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_tr>*:nth-child(odd)]:bg-[color:var(--vz-light)]'>
                 <thead>
                   <tr>
                     <th>SKU</th>
-                    <th className='tw:text-center'>Type</th>
-                    <th className='tw:text-center'>Master Boxes</th>
-                    <th className='tw:text-center'>Quantity To Send</th>
+                    <th className='text-center'>Type</th>
+                    <th className='text-center'>Master Boxes</th>
+                    <th className='text-center'>Quantity To Send</th>
                   </tr>
                 </thead>
                 <tbody>
                   {orderProducts?.map((product, index: number) => (
                     <tr key={index}>
                       <td>
-                        <span className='tw:text-[13px] tw:m-0 tw:p-0'>{product.sku}</span>
+                        <span className='text-[13px] m-0 p-0'>{product.sku}</span>
                         <br />
-                        <span className='tw:text-primary tw:text-[11.2px] tw:m-0 tw:p-0'>{product.asin}</span>
+                        <span className='text-primary text-[11.2px] m-0 p-0'>{product.asin}</span>
                       </td>
-                      <td className='tw:text-center'>{product.isKit ? 'Kit' : 'Product'}</td>
-                      <td className='tw:text-center'>{FormatIntNumber(state.currentRegion, parseInt(product.orderQty))}</td>
-                      <td className='tw:text-center'>{FormatIntNumber(state.currentRegion, product.totalSendToAmazon)}</td>
+                      <td className='text-center'>{product.isKit ? 'Kit' : 'Product'}</td>
+                      <td className='text-center'>{FormatIntNumber(state.currentRegion, parseInt(product.orderQty))}</td>
+                      <td className='text-center'>{FormatIntNumber(state.currentRegion, product.totalSendToAmazon)}</td>
                     </tr>
                   ))}
                   <tr key={'totalMasterBoxes'} style={{ backgroundColor: '#e5e5e5' }}>
-                    <td className='tw:font-bold tw:text-right'></td>
-                    <td className='tw:font-bold tw:text-right'>TOTAL</td>
-                    <td className='tw:font-bold tw:text-center'>{FormatIntNumber(state.currentRegion, TotalMasterBoxes)}</td>
-                    <td className='tw:font-bold tw:text-center'>{FormatIntNumber(state.currentRegion, totalQuantityToShip)}</td>
+                    <td className='font-bold text-right'></td>
+                    <td className='font-bold text-right'>TOTAL</td>
+                    <td className='font-bold text-center'>{FormatIntNumber(state.currentRegion, TotalMasterBoxes)}</td>
+                    <td className='font-bold text-center'>{FormatIntNumber(state.currentRegion, totalQuantityToShip)}</td>
                   </tr>
                 </tbody>
               </table>
               </div>
             </Col>
             <Col md={12}>
-              <div className='tw:text-right'>
+              <div className='text-right'>
                 <Button disabled={loading} type='submit' color='success'>
                   {loading ? <Spinner color='light' /> : 'Confirm Plan'}
                 </Button>

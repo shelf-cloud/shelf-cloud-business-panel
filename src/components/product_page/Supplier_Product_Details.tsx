@@ -93,23 +93,23 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
   }
 
   return (
-    <div className='tw:py-1 tw:w-full'>
+    <div className='py-1 w-full'>
       {!showEditFields ? (
         <div>
-          <table className='tw:w-full tw:text-[11.2px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+          <table className='w-full text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
             <thead>
-              <tr className='tw:text-center'>
+              <tr className='text-center'>
                 <th>Seller Cost</th>
                 <th>Inbound Shipping Cost</th>
                 <th>Other Costs</th>
                 <th id='landedCostHead'>Landed Cost</th>
-                <UncontrolledTooltip placement='top' target='landedCostHead' innerClassName='tw:bg-white tw:text-primary tw:shadow'>
+                <UncontrolledTooltip placement='top' target='landedCostHead' innerClassName='bg-white text-primary shadow'>
                   {`Total of Seller, Inbound and Other Costs`}
                 </UncontrolledTooltip>
                 <th>{`Production Time (Days)`}</th>
                 <th>{`Transit Time (Days)`}</th>
                 <th id='leadTimeHead'>{`Total Lead Time (Days)`}</th>
-                <UncontrolledTooltip placement='top' target='leadTimeHead' innerClassName='tw:bg-white tw:text-primary tw:shadow'>
+                <UncontrolledTooltip placement='top' target='leadTimeHead' innerClassName='bg-white text-primary shadow'>
                   {`Total Days from Production and Transit`}
                 </UncontrolledTooltip>
                 <th>Shipping To FBA Cost</th>
@@ -117,21 +117,21 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
               </tr>
             </thead>
             <tbody>
-              <tr className='tw:text-center'>
-                <td className={sellerCost ? '' : 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>{sellerCost ? FormatCurrency(state.currentRegion, sellerCost) : 'No Cost'}</td>
-                <td className={inboundShippingCost ? '' : 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>
+              <tr className='text-center'>
+                <td className={sellerCost ? '' : 'text-[color:var(--bs-secondary-color)] font-light italic'}>{sellerCost ? FormatCurrency(state.currentRegion, sellerCost) : 'No Cost'}</td>
+                <td className={inboundShippingCost ? '' : 'text-[color:var(--bs-secondary-color)] font-light italic'}>
                   {inboundShippingCost ? FormatCurrency(state.currentRegion, inboundShippingCost) : 'No Cost'}
                 </td>
-                <td className={otherCosts ? '' : 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>{otherCosts ? FormatCurrency(state.currentRegion, otherCosts) : 'No Cost'}</td>
-                <td className={landedCost ? '' : 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>{landedCost ? FormatCurrency(state.currentRegion, landedCost) : 'No Cost'}</td>
-                <td className={productionTime ? '' : 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>{`${productionTime ?? 'No'} Days`}</td>
-                <td className={transitTime ? '' : 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>{`${transitTime ?? 'No'} Days`}</td>
-                <td className={totalLeadTime ? '' : 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>{`${totalLeadTime ?? 'No'} Days`}</td>
-                <td className={shippingToFBA ? '' : 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>{shippingToFBA ? FormatCurrency(state.currentRegion, shippingToFBA) : 'No Cost'}</td>
+                <td className={otherCosts ? '' : 'text-[color:var(--bs-secondary-color)] font-light italic'}>{otherCosts ? FormatCurrency(state.currentRegion, otherCosts) : 'No Cost'}</td>
+                <td className={landedCost ? '' : 'text-[color:var(--bs-secondary-color)] font-light italic'}>{landedCost ? FormatCurrency(state.currentRegion, landedCost) : 'No Cost'}</td>
+                <td className={productionTime ? '' : 'text-[color:var(--bs-secondary-color)] font-light italic'}>{`${productionTime ?? 'No'} Days`}</td>
+                <td className={transitTime ? '' : 'text-[color:var(--bs-secondary-color)] font-light italic'}>{`${transitTime ?? 'No'} Days`}</td>
+                <td className={totalLeadTime ? '' : 'text-[color:var(--bs-secondary-color)] font-light italic'}>{`${totalLeadTime ?? 'No'} Days`}</td>
+                <td className={shippingToFBA ? '' : 'text-[color:var(--bs-secondary-color)] font-light italic'}>{shippingToFBA ? FormatCurrency(state.currentRegion, shippingToFBA) : 'No Cost'}</td>
                 <td>
-                  <div className='tw:text-right'>
-                    <button type='button' aria-label='Edit supplier details' onClick={handleShowEditFields} className='tw:p-0 tw:border-0 tw:bg-transparent'>
-                      <i className='ri-pencil-fill tw:text-[16.25px] tw:m-0 tw:p-0 tw:text-primary'></i>
+                  <div className='text-right'>
+                    <button type='button' aria-label='Edit supplier details' onClick={handleShowEditFields} className='p-0 border-0 bg-transparent'>
+                      <i className='ri-pencil-fill text-[16.25px] m-0 p-0 text-primary'></i>
                     </button>
                   </div>
                 </td>
@@ -142,32 +142,32 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
       ) : (
         <Form onSubmit={handleAddProduct}>
           <Row>
-            <table className='tw:w-full tw:text-[11.2px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+            <table className='w-full text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
               <thead>
-                <tr className='tw:text-center'>
+                <tr className='text-center'>
                   <th>Seller Cost</th>
                   <th>Inbound Shipping Cost</th>
                   <th>Other Costs</th>
                   <th id='landedCostHead'>Landed Cost</th>
-                  <UncontrolledTooltip placement='top' target='landedCostHead' innerClassName='tw:bg-white tw:text-primary tw:shadow'>
+                  <UncontrolledTooltip placement='top' target='landedCostHead' innerClassName='bg-white text-primary shadow'>
                     {`Total of Seller, Inbound and Other Costs`}
                   </UncontrolledTooltip>
                   <th>{`Production Time (Days)`}</th>
                   <th>{`Transit Time (Days)`}</th>
                   <th id='leadTimeHead'>{`Total Lead Time (Days)`}</th>
-                  <UncontrolledTooltip placement='top' target='leadTimeHead' innerClassName='tw:bg-white tw:text-primary tw:shadow'>
+                  <UncontrolledTooltip placement='top' target='leadTimeHead' innerClassName='bg-white text-primary shadow'>
                     {`Total Days from Production and Transit`}
                   </UncontrolledTooltip>
                   <th>Shipping To FBA Cost</th>
                 </tr>
               </thead>
               <tbody>
-                <tr className='tw:text-center'>
+                <tr className='text-center'>
                   <td>
                     <FormGroup>
                       <Input
                         type='number'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         style={{ minWidth: '60px' }}
                         placeholder='Seller Cost...'
                         id='sellerCost'
@@ -186,7 +186,7 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
                     <FormGroup>
                       <Input
                         type='number'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         placeholder='Shipping Cost...'
                         id='inboundShippingCost'
                         name='inboundShippingCost'
@@ -206,7 +206,7 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
                     <FormGroup>
                       <Input
                         type='number'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         placeholder='Other Cost...'
                         id='otherCosts'
                         name='otherCosts'
@@ -225,7 +225,7 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
                       <Input
                         disabled
                         type='number'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         style={{ minWidth: '60px' }}
                         placeholder='Seller Cost...'
                         id='landedCost'
@@ -242,7 +242,7 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
                     <FormGroup>
                       <Input
                         type='number'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         placeholder='Production...'
                         id='productionTime'
                         name='productionTime'
@@ -261,7 +261,7 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
                     <FormGroup>
                       <Input
                         type='number'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         placeholder='Transit...'
                         id='transitTime'
                         name='transitTime'
@@ -279,7 +279,7 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
                       <Input
                         disabled
                         type='number'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         placeholder='Transit...'
                         id='totalTime'
                         name='totalTime'
@@ -294,7 +294,7 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
                     <FormGroup>
                       <Input
                         type='number'
-                        className='tw:text-[13px]'
+                        className='text-[13px]'
                         placeholder='FBA Cost...'
                         id='shippingToFBA'
                         name='shippingToFBA'
@@ -312,7 +312,7 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
               </tbody>
             </table>
             <Col md={12}>
-              <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-3'>
+              <div className='flex flex-row justify-end items-center gap-3'>
                 <Button disabled={isLoading} type='button' color='light' onClick={() => setShowEditFields(false)}>
                   Cancel
                 </Button>

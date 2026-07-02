@@ -14,28 +14,28 @@ type Props = {
 const ReportsTable = ({ reportList, pending, handleDownloadReport }: Props) => {
   const columns: any = [
     {
-      name: <span className='tw:font-bold tw:text-[16.25px]'>Report Name</span>,
+      name: <span className='font-bold text-[16.25px]'>Report Name</span>,
       selector: (row: ShelfCloudReportList) => row.reportName,
       sortable: true,
       wrap: true,
       grow: 1.5,
     },
     {
-      name: <span className='tw:font-bold tw:text-[16.25px]'>Report Type</span>,
+      name: <span className='font-bold text-[16.25px]'>Report Type</span>,
       selector: (row: ShelfCloudReportList) => row.reportType,
       sortable: true,
       center: true,
       compact: true,
     },
     {
-      name: <span className='tw:font-bold tw:text-[16.25px]'>Date Created</span>,
+      name: <span className='font-bold text-[16.25px]'>Date Created</span>,
       selector: (row: ShelfCloudReportList) => {
         return (
           <div>
-            <p className='tw:m-0 tw:p-0'>
+            <p className='m-0 p-0'>
               {moment.utc(row.dateCreated).local().format('LL')} {moment.utc(row.timeCreated, 'HH:mm:ss').local().format('HH:mm A')}
             </p>
-            <p className='tw:text-[var(--bs-secondary-color)] tw:text-[11.2px] tw:m-0 tw:p-0'>Expires: {moment(row.dateCreated).add(10, 'days').format('LL')}</p>
+            <p className='text-[var(--bs-secondary-color)] text-[11.2px] m-0 p-0'>Expires: {moment(row.dateCreated).add(10, 'days').format('LL')}</p>
           </div>
         )
       },
@@ -44,20 +44,20 @@ const ReportsTable = ({ reportList, pending, handleDownloadReport }: Props) => {
       compact: true,
     },
     {
-      name: <span className='tw:font-bold tw:text-[16.25px]'>Status</span>,
+      name: <span className='font-bold text-[16.25px]'>Status</span>,
       selector: (row: ShelfCloudReportList) => {
         if (row.reportStatus === 'ready') {
           return (
             <div>
-              <i className={'ri-checkbox-circle-fill tw:align-middle tw:me-2 tw:text-[22.75px] tw:text-success'}></i>
-              <span className='tw:capitalize'>{row.reportStatus}</span>
+              <i className={'ri-checkbox-circle-fill align-middle me-2 text-[22.75px] text-success'}></i>
+              <span className='capitalize'>{row.reportStatus}</span>
             </div>
           )
         } else {
           return (
             <div>
-              <i className={'ri-time-line tw:align-middle tw:me-2 tw:text-[22.75px] tw:text-[color:var(--bs-secondary-color)]'}></i>
-              <span className='tw:capitalize'>{row.reportStatus}</span>
+              <i className={'ri-time-line align-middle me-2 text-[22.75px] text-[color:var(--bs-secondary-color)]'}></i>
+              <span className='capitalize'>{row.reportStatus}</span>
             </div>
           )
         }
@@ -67,11 +67,11 @@ const ReportsTable = ({ reportList, pending, handleDownloadReport }: Props) => {
       compact: true,
     },
     {
-      name: <span className='tw:font-bold tw:text-[16.25px]'></span>,
+      name: <span className='font-bold text-[16.25px]'></span>,
       selector: (row: ShelfCloudReportList) => {
         if (row.reportStatus === 'ready') {
           return (
-            <Button color='primary' className='tw:text-[13px] tw:py-1' onClick={() => handleDownloadReport(row.reportFileName)}>
+            <Button color='primary' className='text-[13px] py-1' onClick={() => handleDownloadReport(row.reportFileName)}>
               Download
             </Button>
           )

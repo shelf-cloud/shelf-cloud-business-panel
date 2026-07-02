@@ -92,13 +92,13 @@ const CancelManualOrderConfirmationModal = ({ showDeleteModal, setshowDeleteModa
       </ModalHeader>
       <ModalBody>
         <Row>
-          <h5 className='tw:text-[19.5px] tw:mb-0 tw:font-semibold tw:text-primary'>
-            Order Number: <span className='tw:text-[19.5px] tw:font-bold tw:text-black'>{showDeleteModal.orderNumber}</span>
+          <h5 className='text-[19.5px] mb-0 font-semibold text-primary'>
+            Order Number: <span className='text-[19.5px] font-bold text-black'>{showDeleteModal.orderNumber}</span>
           </h5>
-          <Row md={12} className='tw:mt-6'>
+          <Row md={12} className='mt-6'>
             <Form onSubmit={handleCancelOrder}>
               <Col md={12}>
-                <div className='tw:mb-4 tw:flex tw:gap-2'>
+                <div className='mb-4 flex gap-2'>
                   <Label className='form-check-label' for='notify'>
                     Notify Marketplace
                   </Label>
@@ -114,13 +114,13 @@ const CancelManualOrderConfirmationModal = ({ showDeleteModal, setshowDeleteModa
                   {validation.touched.notify && validation.errors.notify ? <FormFeedback type='invalid'>{validation.errors.notify}</FormFeedback> : null}
                 </div>
                 <div>
-                  <FormGroup className='tw:mb-4'>
+                  <FormGroup className='mb-4'>
                     <Label htmlFor='reason' className='form-label'>
                       Reason
                     </Label>
                     <Input
                       type='select'
-                      className='tw:text-[13px]'
+                      className='text-[13px]'
                       placeholder='reason...'
                       id='reason'
                       name='reason'
@@ -140,7 +140,7 @@ const CancelManualOrderConfirmationModal = ({ showDeleteModal, setshowDeleteModa
                   </FormGroup>
                 </div>
               </Col>
-              <div className='tw:text-right tw:mt-2'>
+              <div className='text-right mt-2'>
                 <Button disabled={loading} type='submit' color='danger' className='btn'>
                   {loading ? <Spinner color='#fff' /> : 'Cancel'}
                 </Button>

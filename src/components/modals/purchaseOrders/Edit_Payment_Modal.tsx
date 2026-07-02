@@ -152,19 +152,19 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
       <ModalBody>
         <Form onSubmit={handleAddProduct}>
           <Row md={12}>
-            <h5 className='tw:text-[16.25px] tw:mb-4 tw:font-semibold tw:text-primary'>
-              PO: <span className='tw:font-semibold tw:text-black'>{editPaymentModal.orderNumber}</span>
+            <h5 className='text-[16.25px] mb-4 font-semibold text-primary'>
+              PO: <span className='font-semibold text-black'>{editPaymentModal.orderNumber}</span>
             </h5>
           </Row>
           <Row md={12}>
             <Col md={6}>
-              <FormGroup className='tw:mb-4'>
+              <FormGroup className='mb-4'>
                 <Label htmlFor='firstNameinput' className='form-label'>
                   *Payment Date
                 </Label>
                 <Input
                   type='date'
-                  className='tw:text-[13px]'
+                  className='text-[13px]'
                   id='paymentDate'
                   name='paymentDate'
                   onChange={validation.handleChange}
@@ -176,14 +176,14 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
               </FormGroup>
             </Col>
             <Col md={6}>
-              <FormGroup className='tw:mb-4'>
+              <FormGroup className='mb-4'>
                 <Label htmlFor='firstNameinput' className='form-label'>
                   *Payment Amount
                 </Label>
                 <Input
                   type='number'
                   onWheel={(e: any) => e.currentTarget.blur()}
-                  className='tw:text-[13px]'
+                  className='text-[13px]'
                   id='amount'
                   name='amount'
                   step='.01'
@@ -192,20 +192,20 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
                   onBlur={validation.handleBlur}
                   invalid={validation.touched.amount && validation.errors.amount ? true : false}
                 />
-                <small className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>{FormatCurrency(state.currentRegion, validation.values.amount)}</small>
+                <small className='text-[11.2px] text-[var(--bs-secondary-color)]'>{FormatCurrency(state.currentRegion, validation.values.amount)}</small>
                 {validation.touched.amount && validation.errors.amount ? <FormFeedback type='invalid'>{validation.errors.amount}</FormFeedback> : null}
               </FormGroup>
             </Col>
           </Row>
           <Row md={12}>
             <Col md={12}>
-              <FormGroup className='tw:mb-4'>
+              <FormGroup className='mb-4'>
                 <Label htmlFor='comment' className='form-label'>
                   Comments
                 </Label>
                 <Input
                   type='textarea'
-                  className='tw:text-[13px]'
+                  className='text-[13px]'
                   id='comment'
                   name='comment'
                   onChange={validation.handleChange}
@@ -218,11 +218,11 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
             </Col>
           </Row>
           <Row md={12}>
-            <div className='tw:flex tw:justify-between tw:items-center'>
-              <Button disabled={loading} type='button' color='danger' className='btn tw:text-[11.2px]' onClick={handleDeletePayment}>
+            <div className='flex justify-between items-center'>
+              <Button disabled={loading} type='button' color='danger' className='btn text-[11.2px]' onClick={handleDeletePayment}>
                 {loading ? <Spinner color='light' /> : 'Delete'}
               </Button>
-              <Button disabled={loading} type='submit' color='success' className='btn tw:text-[11.2px]'>
+              <Button disabled={loading} type='submit' color='success' className='btn text-[11.2px]'>
                 {loading ? <Spinner color='light' /> : 'Edit Payment'}
               </Button>
             </div>

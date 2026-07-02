@@ -22,7 +22,7 @@ export type MessageProps = HTMLAttributes<HTMLDivElement> & {
 
 export const Message = ({ className, from, ...props }: MessageProps) => (
   <div
-    className={cn('tw:group tw:flex tw:w-full tw:max-w-[95%] tw:flex-col tw:gap-2', from === 'user' ? 'tw:is-user tw:ml-auto tw:justify-end' : 'tw:is-assistant', className)}
+    className={cn('group flex w-full max-w-[95%] flex-col gap-2', from === 'user' ? 'is-user ml-auto justify-end' : 'is-assistant', className)}
     {...props}
   />
 )
@@ -32,9 +32,9 @@ export type MessageContentProps = HTMLAttributes<HTMLDivElement>
 export const MessageContent = ({ children, className, ...props }: MessageContentProps) => (
   <div
     className={cn(
-      'tw:is-user:dark tw:flex tw:w-fit tw:min-w-0 tw:max-w-full tw:flex-col tw:gap-2 tw:overflow-hidden tw:text-sm',
-      'tw:group-[.is-user]:ml-auto tw:group-[.is-user]:rounded-lg tw:group-[.is-user]:bg-secondary tw:group-[.is-user]:px-4 tw:group-[.is-user]:py-3 tw:group-[.is-user]:text-foreground',
-      'tw:group-[.is-assistant]:text-foreground',
+      'is-user:dark flex w-fit min-w-0 max-w-full flex-col gap-2 overflow-hidden text-sm',
+      'group-[.is-user]:ml-auto group-[.is-user]:rounded-lg group-[.is-user]:bg-secondary group-[.is-user]:px-4 group-[.is-user]:py-3 group-[.is-user]:text-foreground',
+      'group-[.is-assistant]:text-foreground',
       className
     )}
     {...props}>
@@ -45,7 +45,7 @@ export const MessageContent = ({ children, className, ...props }: MessageContent
 export type MessageActionsProps = ComponentProps<'div'>
 
 export const MessageActions = ({ className, children, ...props }: MessageActionsProps) => (
-  <div className={cn('tw:flex tw:items-center tw:gap-1', className)} {...props}>
+  <div className={cn('flex items-center gap-1', className)} {...props}>
     {children}
   </div>
 )
@@ -59,7 +59,7 @@ export const MessageAction = ({ tooltip, children, label, variant = 'ghost', siz
   const button = (
     <Button size={size} type='button' variant={variant} {...props}>
       {children}
-      <span className='tw:sr-only'>{label || tooltip}</span>
+      <span className='sr-only'>{label || tooltip}</span>
     </Button>
   )
 
@@ -141,7 +141,7 @@ export const MessageBranch = ({ defaultBranch = 0, onBranchChange, className, ..
 
   return (
     <MessageBranchContext.Provider value={contextValue}>
-      <div className={cn('tw:grid tw:w-full tw:gap-2 tw:[&>div]:pb-0', className)} {...props} />
+      <div className={cn('grid w-full gap-2 [&>div]:pb-0', className)} {...props} />
     </MessageBranchContext.Provider>
   )
 }
@@ -160,7 +160,7 @@ export const MessageBranchContent = ({ children, ...props }: MessageBranchConten
   }, [childrenArray, branches, setBranches])
 
   return childrenArray.map((branch, index) => (
-    <div className={cn('tw:grid tw:gap-2 tw:overflow-hidden tw:[&>div]:pb-0', index === currentBranch ? 'tw:block' : 'tw:hidden')} key={branch.key} {...props}>
+    <div className={cn('grid gap-2 overflow-hidden [&>div]:pb-0', index === currentBranch ? 'block' : 'hidden')} key={branch.key} {...props}>
       {branch}
     </div>
   ))
@@ -176,7 +176,7 @@ export const MessageBranchSelector = ({ className, ...props }: MessageBranchSele
     return null
   }
 
-  return <ButtonGroup className={cn('tw:[&>*:not(:first-child)]:rounded-l-md tw:[&>*:not(:last-child)]:rounded-r-md', className)} orientation='horizontal' {...props} />
+  return <ButtonGroup className={cn('[&>*:not(:first-child)]:rounded-l-md [&>*:not(:last-child)]:rounded-r-md', className)} orientation='horizontal' {...props} />
 }
 
 export type MessageBranchPreviousProps = ComponentProps<typeof Button>
@@ -209,7 +209,7 @@ export const MessageBranchPage = ({ className, ...props }: MessageBranchPageProp
   const { currentBranch, totalBranches } = useMessageBranch()
 
   return (
-    <ButtonGroupText className={cn('tw:border-none tw:bg-transparent tw:text-muted-foreground tw:shadow-none', className)} {...props}>
+    <ButtonGroupText className={cn('border-none bg-transparent text-muted-foreground shadow-none', className)} {...props}>
       {currentBranch + 1} of {totalBranches}
     </ButtonGroupText>
   )
@@ -221,7 +221,7 @@ const streamdownPlugins = { cjk, code, math, mermaid }
 
 export const MessageResponse = memo(
   ({ className, ...props }: MessageResponseProps) => (
-    <Streamdown className={cn('tw:size-full tw:[&>*:first-child]:mt-0 tw:[&>*:last-child]:mb-0', className)} plugins={streamdownPlugins} {...props} />
+    <Streamdown className={cn('size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0', className)} plugins={streamdownPlugins} {...props} />
   ),
   (prevProps, nextProps) => prevProps.children === nextProps.children && nextProps.isAnimating === prevProps.isAnimating
 )
@@ -231,7 +231,7 @@ MessageResponse.displayName = 'MessageResponse'
 export type MessageToolbarProps = ComponentProps<'div'>
 
 export const MessageToolbar = ({ className, children, ...props }: MessageToolbarProps) => (
-  <div className={cn('tw:mt-4 tw:flex tw:w-full tw:items-center tw:justify-between tw:gap-4', className)} {...props}>
+  <div className={cn('mt-4 flex w-full items-center justify-between gap-4', className)} {...props}>
     {children}
   </div>
 )

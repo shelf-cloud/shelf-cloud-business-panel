@@ -332,7 +332,7 @@ const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, po
   }
   return (
     <>
-      <div className='tw:px-6 tw:m-0 tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2'>
+      <div className='px-6 m-0 flex flex-row justify-start items-center gap-2'>
         <Button size='sm' color={grouping === 'daily' ? 'primary' : 'light'} onClick={() => setGrouping('daily')}>
           Daily
         </Button>

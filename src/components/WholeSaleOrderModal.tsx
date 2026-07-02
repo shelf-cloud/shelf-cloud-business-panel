@@ -373,21 +373,21 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
       <ModalBody>
         <Form onSubmit={handleAddProduct}>
           <Row>
-            <p className='tw:text-[19.5px] tw:font-bold tw:text-primary'>Order Details</p>
+            <p className='text-[19.5px] font-bold text-primary'>Order Details</p>
             <Col md={6}>
               <Col md={12}>
-                <FormGroup className='tw:mb-4'>
-                  <Label htmlFor='orderNumber' className='form-label tw:text-[11.2px]'>
+                <FormGroup className='mb-4'>
+                  <Label htmlFor='orderNumber' className='form-label text-[11.2px]'>
                     *Order Number
                   </Label>
                   <div className='input-group'>
-                    <span className='input-group-text tw:font-semibold tw:text-[16.25px]' style={{ padding: '0.2rem 0.9rem' }} id='bsnss-prefix'>
+                    <span className='input-group-text font-semibold text-[16.25px]' style={{ padding: '0.2rem 0.9rem' }} id='bsnss-prefix'>
                       {orderNumberStart}
                     </span>
                     <Input
                       type='text'
                       bsSize='sm'
-                      className='tw:text-[13px]'
+                      className='text-[13px]'
                       style={{ padding: '0.2rem 0.9rem' }}
                       id='orderNumber'
                       name='orderNumber'
@@ -401,20 +401,20 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                 </FormGroup>
               </Col>
               <Col md={12}>
-                <Label htmlFor='type' className='form-label tw:text-[11.2px]'>
+                <Label htmlFor='type' className='form-label text-[11.2px]'>
                   *Type of Shipment
                 </Label>
-                <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:pb-4 tw:gap-4'>
+                <div className='flex flex-row justify-start items-center pb-4 gap-4'>
                   <Button
                     type='button'
-                    className={validation.values.type == 'Parcel Boxes' ? '' : 'tw:text-[var(--bs-secondary-color)]'}
+                    className={validation.values.type == 'Parcel Boxes' ? '' : 'text-[var(--bs-secondary-color)]'}
                     color={validation.values.type == 'Parcel Boxes' ? 'primary' : 'light'}
                     onClick={() => validation.setFieldValue('type', 'Parcel Boxes')}>
                     Parcel Boxes
                   </Button>
                   <Button
                     type='button'
-                    className={validation.values.type == 'LTL' ? '' : 'tw:text-[var(--bs-secondary-color)]'}
+                    className={validation.values.type == 'LTL' ? '' : 'text-[var(--bs-secondary-color)]'}
                     color={validation.values.type == 'LTL' ? 'primary' : 'light'}
                     onClick={() => validation.setFieldValue('type', 'LTL')}>
                     Pallets
@@ -423,13 +423,13 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
               </Col>
               {validation.values.type == 'LTL' && (
                 <Col md={6}>
-                  <FormGroup className='tw:mb-4'>
-                    <Label htmlFor='numberOfPallets' className='form-label tw:text-[11.2px]'>
+                  <FormGroup className='mb-4'>
+                    <Label htmlFor='numberOfPallets' className='form-label text-[11.2px]'>
                       *How many Pallets will be used?
                     </Label>
                     <Input
                       type='number'
-                      className='tw:text-[13px]'
+                      className='text-[13px]'
                       id='numberOfPallets'
                       name='numberOfPallets'
                       onChange={validation.handleChange}
@@ -465,15 +465,15 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     handleAcceptedFiles={orderLabel.handleAcceptedFiles}
                     description={`Upload Shipping Labels. Drop Only PDF files here or click to upload.`}
                   />
-                  <div className='list-unstyled tw:mb-0' id='file-previews'>
+                  <div className='list-unstyled mb-0' id='file-previews'>
                     {orderLabel.files.map((file, i) => {
                       return (
-                        <Card className='tw:mt-1 tw:mb-0 tw:shadow-none tw:border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
-                          <div className='tw:p-2'>
-                            <Row className='tw:items-center'>
-                              <Col className='tw:flex tw:justify-between tw:items-center tw:gap-2'>
+                        <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
+                          <div className='p-2'>
+                            <Row className='items-center'>
+                              <Col className='flex justify-between items-center gap-2'>
                                 {file.type === 'application/pdf' ? (
-                                  <div className='tw:relative tw:overflow-hidden tw:rounded tw:border' style={{ width: '60px', height: '60px' }}>
+                                  <div className='relative overflow-hidden rounded border' style={{ width: '60px', height: '60px' }}>
                                     <iframe
                                       title={`Shipping label preview for ${file.name}`}
                                       sandbox=''
@@ -509,8 +509,8 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                                   </div>
                                 )}
                                 <div>
-                                  <p className='tw:text-[var(--bs-secondary-color)] tw:m-0 tw:text-[11.2px]'>{file.name}</p>
-                                  <p className='tw:mb-0 tw:text-[11.2px]'>
+                                  <p className='text-[var(--bs-secondary-color)] m-0 text-[11.2px]'>{file.name}</p>
+                                  <p className='mb-0 text-[11.2px]'>
                                     <strong>{file.formattedSize}</strong>
                                   </p>
                                 </div>
@@ -526,7 +526,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                       )
                     })}
                   </div>
-                  {errorFile && <p className='tw:text-danger tw:m-0'>You must Upload the FBA Labels to create order.</p>}
+                  {errorFile && <p className='text-danger m-0'>You must Upload the FBA Labels to create order.</p>}
                 </Col>
                 <Col>
                   {validation.values.type == 'LTL' && (
@@ -536,15 +536,15 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                       description={`Upload Pallet Labels. Drop Only PDF files here or click to upload.`}
                     />
                   )}
-                  <div className='list-unstyled tw:mb-0' id='file-previews'>
+                  <div className='list-unstyled mb-0' id='file-previews'>
                     {orderPalletLabel.files.map((file: any, i) => {
                       return (
-                        <Card className='tw:mt-1 tw:mb-0 tw:shadow-none tw:border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
-                          <div className='tw:p-2'>
-                            <Row className='tw:items-center'>
-                              <Col className='tw:flex tw:justify-between tw:items-center tw:gap-2'>
+                        <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
+                          <div className='p-2'>
+                            <Row className='items-center'>
+                              <Col className='flex justify-between items-center gap-2'>
                                 {file.type === 'application/pdf' ? (
-                                  <div className='tw:relative tw:overflow-hidden tw:rounded tw:border' style={{ width: '60px', height: '60px' }}>
+                                  <div className='relative overflow-hidden rounded border' style={{ width: '60px', height: '60px' }}>
                                     <iframe
                                       title={`Pallet label preview for ${file.name}`}
                                       sandbox=''
@@ -580,8 +580,8 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                                   </div>
                                 )}
                                 <div>
-                                  <p className='tw:text-[var(--bs-secondary-color)] tw:font-bold tw:m-0 tw:text-[11.2px]'>{file.name}</p>
-                                  <p className='tw:mb-0 tw:text-[11.2px]'>
+                                  <p className='text-[var(--bs-secondary-color)] font-bold m-0 text-[11.2px]'>{file.name}</p>
+                                  <p className='mb-0 text-[11.2px]'>
                                     <strong>{file.formattedSize}</strong>
                                   </p>
                                 </div>
@@ -597,7 +597,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                       )
                     })}
                   </div>
-                  {errorPalletFile && <p className='tw:text-danger tw:m-0'>You must Upload the Pallet Labels to create order.</p>}
+                  {errorPalletFile && <p className='text-danger m-0'>You must Upload the Pallet Labels to create order.</p>}
                 </Col>
               </Row>
             </Col>
@@ -615,46 +615,46 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     invalid={validation.touched.thirdInfo && validation.errors.thirdInfo ? true : false}
                   />
                   {validation.touched.thirdInfo && validation.errors.thirdInfo ? <FormFeedback type='invalid'>{validation.errors.thirdInfo}</FormFeedback> : null}
-                  <h5 className='tw:text-[11.2px] tw:mb-4 tw:text-[var(--bs-secondary-color)]'>*Additional shipping costs apply to this type of shipping.</h5>
+                  <h5 className='text-[11.2px] mb-4 text-[var(--bs-secondary-color)]'>*Additional shipping costs apply to this type of shipping.</h5>
                 </>
               )}
             </Col>
             <Col md={12}>
-              <p className='tw:text-[13px] tw:m-0'>Total SKUs in Order: {validation.values.hasProducts}</p>
-              {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='tw:text-danger'>{validation.errors.hasProducts}</p> : null}
-              <div className='tw:overflow-x-auto'>
-              <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+              <p className='text-[13px] m-0'>Total SKUs in Order: {validation.values.hasProducts}</p>
+              {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='text-danger'>{validation.errors.hasProducts}</p> : null}
+              <div className='overflow-x-auto'>
+              <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                 <thead>
                   <tr>
                     <th>SKU</th>
-                    <th className='tw:text-center'>Type</th>
-                    <th className='tw:text-center'>Master Boxes</th>
-                    <th className='tw:text-center'>Quantity</th>
+                    <th className='text-center'>Type</th>
+                    <th className='text-center'>Master Boxes</th>
+                    <th className='text-center'>Quantity</th>
                   </tr>
                 </thead>
                 <tbody>
                   {orderProducts?.map((product, index: number) => (
                     <tr key={index}>
                       <td>{product.sku}</td>
-                      <td className='tw:text-center'>{product.isKit ? 'Kit' : 'Product'}</td>
-                      <td className='tw:text-center'>{product.orderQty}</td>
-                      <td className='tw:text-center'>{product.totalToShip}</td>
+                      <td className='text-center'>{product.isKit ? 'Kit' : 'Product'}</td>
+                      <td className='text-center'>{product.orderQty}</td>
+                      <td className='text-center'>{product.totalToShip}</td>
                     </tr>
                   ))}
                 </tbody>
                 <tfoot>
                   <tr key={'totalMasterBoxes'} style={{ backgroundColor: '#e5e5e5' }}>
                     <td aria-label='Total label spacer'></td>
-                    <td className='tw:font-bold tw:text-center'>TOTAL</td>
-                    <td className='tw:font-bold tw:text-center'>{TotalMasterBoxes}</td>
-                    <td className='tw:font-bold tw:text-center'>{totalQuantityToShip}</td>
+                    <td className='font-bold text-center'>TOTAL</td>
+                    <td className='font-bold text-center'>{TotalMasterBoxes}</td>
+                    <td className='font-bold text-center'>{totalQuantityToShip}</td>
                   </tr>
                 </tfoot>
               </table>
               </div>
             </Col>
             <Col md={12}>
-              <div className='tw:text-right'>
+              <div className='text-right'>
                 <Button disabled={loading} type='submit' color='success'>
                   {loading ? <Spinner color='#fff' /> : 'Confirm Order'}
                 </Button>

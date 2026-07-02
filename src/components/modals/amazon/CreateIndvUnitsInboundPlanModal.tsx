@@ -381,15 +381,15 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
         }}
         className='modal-title'
         id='myModalLabel'>
-        <p className='tw:text-[19.5px] tw:m-0'>Create Individual Units Fulfillment - Send To Amazon</p>
+        <p className='text-[19.5px] m-0'>Create Individual Units Fulfillment - Send To Amazon</p>
       </ModalHeader>
       <ModalBody>
         <Form onSubmit={handleCreateInboundPlan}>
           <Row>
-            <h5 className='tw:text-[16.25px] tw:font-extrabold tw:text-primary'>Fulfillment Details</h5>
-            <Row xs={12} className='tw:my-0'>
+            <h5 className='text-[16.25px] font-extrabold text-primary'>Fulfillment Details</h5>
+            <Row xs={12} className='my-0'>
               <Col md={6}>
-                <FormGroup className='tw:mb-4'>
+                <FormGroup className='mb-4'>
                   <Label htmlFor='orderNumber' className='form-label'>
                     *Fulfillment Name
                   </Label>
@@ -411,7 +411,7 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                 </FormGroup>
               </Col>
               <Col md={6}>
-                <FormGroup className='tw:mb-4'>
+                <FormGroup className='mb-4'>
                   <Label htmlFor='marketplace' className='form-label'>
                     *Marketplace destination
                   </Label>
@@ -437,9 +437,9 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                 </FormGroup>
               </Col>
             </Row>
-            <Row xs={12} className='tw:my-0'>
+            <Row xs={12} className='my-0'>
               <Col md={6}>
-                <FormGroup className='tw:mb-4'>
+                <FormGroup className='mb-4'>
                   <Label htmlFor='shipFrom' className='form-label'>
                     *Ship From
                   </Label>
@@ -459,29 +459,29 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
               </Col>
             </Row>
             <Col md={12} style={{ overflowX: 'auto', overflowY: 'hidden', position: 'relative' }}>
-              <p className='tw:font-semibold tw:mb-0'>SKUs ready to send: {validation.values.hasProducts}</p>
-              {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='tw:text-danger'>{validation.errors.hasProducts}</p> : null}
-              <table className='tw:w-full tw:align-middle tw:mb-0 tw:whitespace-nowrap tw:text-[13px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_tr>*:nth-child(odd)]:bg-[color:var(--vz-light)]'>
+              <p className='font-semibold mb-0'>SKUs ready to send: {validation.values.hasProducts}</p>
+              {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='text-danger'>{validation.errors.hasProducts}</p> : null}
+              <table className='w-full align-middle mb-0 whitespace-nowrap text-[13px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_tr>*:nth-child(odd)]:bg-[color:var(--vz-light)]'>
                 <thead>
                   <tr>
                     <th>SKU</th>
-                    <th className='tw:text-center'>Expiration Date</th>
-                    <th className='tw:text-center'>Label Owner</th>
-                    <th className='tw:text-center'>Prep Owner</th>
-                    <th className='tw:text-center'>Type</th>
-                    <th className='tw:text-center'>Individual Units</th>
-                    <th className='tw:text-center'>Quantity To Send</th>
+                    <th className='text-center'>Expiration Date</th>
+                    <th className='text-center'>Label Owner</th>
+                    <th className='text-center'>Prep Owner</th>
+                    <th className='text-center'>Type</th>
+                    <th className='text-center'>Individual Units</th>
+                    <th className='text-center'>Quantity To Send</th>
                   </tr>
                 </thead>
                 <tbody>
                   {orderProducts?.map((product, index: number) => (
                     <tr key={index}>
                       <td>
-                        <span className='tw:text-[13px] tw:m-0 tw:p-0'>{product.sku}</span>
+                        <span className='text-[13px] m-0 p-0'>{product.sku}</span>
                         <br />
-                        <span className='tw:text-primary tw:text-[11.2px] tw:m-0 tw:p-0'>{product.asin}</span>
+                        <span className='text-primary text-[11.2px] m-0 p-0'>{product.asin}</span>
                       </td>
-                      <td className='tw:w-fit tw:px-0 tw:flex tw:flex-row tw:justify-center tw:items-center'>
+                      <td className='w-fit px-0 flex flex-row justify-center items-center'>
                         <ShippingSelectDate
                           id={product.msku}
                           selectedDate={product.expiration}
@@ -492,7 +492,7 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                           clearDate={true}
                         />
                       </td>
-                      <td className='tw:px-4' style={{ minWidth: '150px', position: 'relative' }}>
+                      <td className='px-4' style={{ minWidth: '150px', position: 'relative' }}>
                         <SimpleSelect
                           selected={{ value: product.labelOwner, label: product.labelOwner }}
                           handleSelect={(selected) => {
@@ -501,7 +501,7 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                           options={Label_Prep_Owner_Options}
                         />
                       </td>
-                      <td className='tw:px-4' style={{ minWidth: '150px', position: 'relative' }}>
+                      <td className='px-4' style={{ minWidth: '150px', position: 'relative' }}>
                         <SimpleSelect
                           selected={{ value: product.prepOwner, label: product.prepOwner }}
                           handleSelect={(selected) => {
@@ -510,19 +510,19 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                           options={Label_Prep_Owner_Options}
                         />
                       </td>
-                      <td className='tw:text-center'>{product.isKit ? 'Kit' : 'Product'}</td>
-                      <td className='tw:text-center'>{FormatIntNumber(state.currentRegion, parseInt(product.orderQty))}</td>
-                      <td className='tw:text-center'>{FormatIntNumber(state.currentRegion, product.totalSendToAmazon)}</td>
+                      <td className='text-center'>{product.isKit ? 'Kit' : 'Product'}</td>
+                      <td className='text-center'>{FormatIntNumber(state.currentRegion, parseInt(product.orderQty))}</td>
+                      <td className='text-center'>{FormatIntNumber(state.currentRegion, product.totalSendToAmazon)}</td>
                     </tr>
                   ))}
                   <tr key={'totalMasterBoxes'} style={{ backgroundColor: '#e5e5e5' }}>
-                    <td className='tw:font-bold tw:text-right'></td>
-                    <td className='tw:font-bold tw:text-right'></td>
-                    <td className='tw:font-bold tw:text-right'></td>
-                    <td className='tw:font-bold tw:text-right'></td>
-                    <td className='tw:font-bold tw:text-right'>TOTAL</td>
-                    <td className='tw:font-bold tw:text-center'>{FormatIntNumber(state.currentRegion, TotalMasterBoxes)}</td>
-                    <td className='tw:font-bold tw:text-center'>{FormatIntNumber(state.currentRegion, totalQuantityToShip)}</td>
+                    <td className='font-bold text-right'></td>
+                    <td className='font-bold text-right'></td>
+                    <td className='font-bold text-right'></td>
+                    <td className='font-bold text-right'></td>
+                    <td className='font-bold text-right'>TOTAL</td>
+                    <td className='font-bold text-center'>{FormatIntNumber(state.currentRegion, TotalMasterBoxes)}</td>
+                    <td className='font-bold text-center'>{FormatIntNumber(state.currentRegion, totalQuantityToShip)}</td>
                   </tr>
                 </tbody>
               </table>
@@ -531,7 +531,7 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
               <Col>
                 <ul>
                   {creatingErros.map((error, index: number) => (
-                    <li key={index} className='tw:text-danger'>
+                    <li key={index} className='text-danger'>
                       {`${error.message} -//- ${error.details}`}
                     </li>
                   ))}
@@ -539,7 +539,7 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
               </Col>
             </Row>
             <Col md={12}>
-              <div className='tw:text-right'>
+              <div className='text-right'>
                 <Button disabled={loading} type='submit' color='success'>
                   {loading ? (
                     <span>

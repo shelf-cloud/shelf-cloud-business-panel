@@ -12,42 +12,42 @@ type Props = {
 const ReceivingType = ({ data }: Props) => {
   const { state }: any = useContext(AppContext)
   return (
-    <div className='tw:w-full' style={{ backgroundColor: '#F0F4F7', padding: '0px' }}>
+    <div className='w-full' style={{ backgroundColor: '#F0F4F7', padding: '0px' }}>
       <Row>
         <Col xs={12} lg={8}>
           <Card>
-            <CardHeader className='tw:py-4'>
-              <h5 className='tw:font-semibold tw:m-0'>Products</h5>
+            <CardHeader className='py-4'>
+              <h5 className='font-semibold m-0'>Products</h5>
             </CardHeader>
             <CardBody>
-              <div className='tw:overflow-x-auto'>
-                <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
-                  <thead className='tw:bg-[color:var(--vz-light)]'>
+              <div className='overflow-x-auto'>
+                <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+                  <thead className='bg-[color:var(--vz-light)]'>
                     <tr>
                       <th scope='col'>Title</th>
                       <th scope='col'>Sku</th>
-                      <th className='tw:text-center' scope='col'>
+                      <th className='text-center' scope='col'>
                         Qty
                       </th>
-                      <th className='tw:text-center' scope='col'>
+                      <th className='text-center' scope='col'>
                         Qty Received
                       </th>
                     </tr>
                   </thead>
-                  <tbody className='tw:text-[11.2px]'>
+                  <tbody className='text-[11.2px]'>
                     {data.orderItems?.map((product: ShipmentOrderItem, key: any) => (
-                      <tr key={key} className='tw:border-b tw:border-[color:var(--border)] tw:py-2'>
-                        <td className='tw:w-1/2 tw:font-semibold'>{product.title || product.name}</td>
-                        <td className='tw:text-[var(--bs-secondary-color)]'>{product.sku}</td>
-                        <td className='tw:text-center'>{FormatIntNumber(state.currentRegion, Number(product.quantity))}</td>
-                        <td className='tw:text-center'>{FormatIntNumber(state.currentRegion, Number(product.qtyReceived))}</td>
+                      <tr key={key} className='border-b border-[color:var(--border)] py-2'>
+                        <td className='w-1/2 font-semibold'>{product.title || product.name}</td>
+                        <td className='text-[var(--bs-secondary-color)]'>{product.sku}</td>
+                        <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.quantity))}</td>
+                        <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.qtyReceived))}</td>
                       </tr>
                     ))}
-                    <tr className='tw:bg-[color:var(--vz-light)]'>
+                    <tr className='bg-[color:var(--vz-light)]'>
                       <td></td>
-                      <td className='tw:text-start tw:text-[13px] tw:font-bold tw:text-nowrap'>Total</td>
-                      <td className='tw:text-center tw:font-semibold tw:text-[13px] tw:text-primary'>{FormatIntNumber(state.currentRegion, Number(data.totalItems))}</td>
-                      <td className='tw:text-center tw:font-semibold tw:text-[13px] tw:text-primary'>{FormatIntNumber(state.currentRegion, Number(data.totalReceivedItems))}</td>
+                      <td className='text-start text-[13px] font-bold text-nowrap'>Total</td>
+                      <td className='text-center font-semibold text-[13px] text-primary'>{FormatIntNumber(state.currentRegion, Number(data.totalItems))}</td>
+                      <td className='text-center font-semibold text-[13px] text-primary'>{FormatIntNumber(state.currentRegion, Number(data.totalReceivedItems))}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -58,31 +58,31 @@ const ReceivingType = ({ data }: Props) => {
         <Col xs={12} lg={4}>
           <Col xl={12}>
             <Card>
-              <CardHeader className='tw:py-4'>
-                <h5 className='tw:font-semibold tw:m-0'>Receiving Details</h5>
+              <CardHeader className='py-4'>
+                <h5 className='font-semibold m-0'>Receiving Details</h5>
               </CardHeader>
               <CardBody>
-                <table className='tw:w-full tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
-                  <tbody className='tw:text-[11.2px]'>
+                <table className='w-full [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+                  <tbody className='text-[11.2px]'>
                     <tr>
-                      <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>Type of Service:</td>
-                      <td className='tw:font-semibold tw:w-full'>{data.carrierService}</td>
+                      <td className='text-[var(--bs-secondary-color)] text-nowrap'>Type of Service:</td>
+                      <td className='font-semibold w-full'>{data.carrierService}</td>
                     </tr>
                     <tr>
-                      <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'># Of Pallets:</td>
-                      <td className='tw:font-semibold tw:w-full'>{data.numberPallets}</td>
+                      <td className='text-[var(--bs-secondary-color)] text-nowrap'># Of Pallets:</td>
+                      <td className='font-semibold w-full'>{data.numberPallets}</td>
                     </tr>
                     <tr>
-                      <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'># Of Boxes:</td>
-                      <td className='tw:font-semibold tw:w-full'>{data.numberBoxes}</td>
+                      <td className='text-[var(--bs-secondary-color)] text-nowrap'># Of Boxes:</td>
+                      <td className='font-semibold w-full'>{data.numberBoxes}</td>
                     </tr>
                     <tr>
-                      <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>Shrink Wrap:</td>
-                      <td className='tw:font-semibold tw:w-full'>{data.shrinkWrap}</td>
+                      <td className='text-[var(--bs-secondary-color)] text-nowrap'>Shrink Wrap:</td>
+                      <td className='font-semibold w-full'>{data.shrinkWrap}</td>
                     </tr>
                     <tr>
-                      <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>Man Hours:</td>
-                      <td className='tw:font-semibold tw:w-full'>{data.manHours}</td>
+                      <td className='text-[var(--bs-secondary-color)] text-nowrap'>Man Hours:</td>
+                      <td className='font-semibold w-full'>{data.manHours}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -91,35 +91,35 @@ const ReceivingType = ({ data }: Props) => {
           </Col>
           <Col xl={12}>
             <Card>
-              <CardHeader className='tw:py-4'>
-                <h5 className='tw:font-semibold tw:m-0'>Charge Details</h5>
+              <CardHeader className='py-4'>
+                <h5 className='font-semibold m-0'>Charge Details</h5>
               </CardHeader>
               <CardBody>
-                <table className='tw:w-full tw:whitespace-nowrap tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
-                  <tbody className='tw:text-[11.2px]'>
-                    <tr className='tw:border-b tw:border-[color:var(--border)] tw:pb-2'>
-                      <td className='tw:text-[var(--bs-secondary-color)]'>Service</td>
-                      <td className='tw:font-semibold tw:text-end'>{FormatCurrency(state.currentRegion, data.receivingService)}</td>
+                <table className='w-full whitespace-nowrap mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+                  <tbody className='text-[11.2px]'>
+                    <tr className='border-b border-[color:var(--border)] pb-2'>
+                      <td className='text-[var(--bs-secondary-color)]'>Service</td>
+                      <td className='font-semibold text-end'>{FormatCurrency(state.currentRegion, data.receivingService)}</td>
                     </tr>
-                    <tr className='tw:border-b tw:border-[color:var(--border)] tw:pb-2'>
-                      <td className='tw:text-[var(--bs-secondary-color)]'>Pallets</td>
-                      <td className='tw:font-semibold tw:text-end'>{FormatCurrency(state.currentRegion, data.receivingPallets)}</td>
+                    <tr className='border-b border-[color:var(--border)] pb-2'>
+                      <td className='text-[var(--bs-secondary-color)]'>Pallets</td>
+                      <td className='font-semibold text-end'>{FormatCurrency(state.currentRegion, data.receivingPallets)}</td>
                     </tr>
-                    <tr className='tw:border-b tw:border-[color:var(--border)] tw:pb-2'>
-                      <td className='tw:text-[var(--bs-secondary-color)]'>Wrap Service</td>
-                      <td className='tw:font-semibold tw:text-end'>{FormatCurrency(state.currentRegion, data.receivingWrapService)}</td>
+                    <tr className='border-b border-[color:var(--border)] pb-2'>
+                      <td className='text-[var(--bs-secondary-color)]'>Wrap Service</td>
+                      <td className='font-semibold text-end'>{FormatCurrency(state.currentRegion, data.receivingWrapService)}</td>
                     </tr>
-                    <tr className='tw:border-b tw:border-[color:var(--border)] tw:pb-2'>
-                      <td className='tw:text-[var(--bs-secondary-color)]'>Man Hour</td>
-                      <td className='tw:font-semibold tw:text-end'>{FormatCurrency(state.currentRegion, data.manHour)}</td>
+                    <tr className='border-b border-[color:var(--border)] pb-2'>
+                      <td className='text-[var(--bs-secondary-color)]'>Man Hour</td>
+                      <td className='font-semibold text-end'>{FormatCurrency(state.currentRegion, data.manHour)}</td>
                     </tr>
-                    <tr className='tw:border-b tw:border-[color:var(--border)] tw:pb-2'>
-                      <td className='tw:text-[var(--bs-secondary-color)]'>Extra Charge</td>
-                      <td className='tw:font-semibold tw:text-end'>{FormatCurrency(state.currentRegion, data.extraCharge)}</td>
+                    <tr className='border-b border-[color:var(--border)] pb-2'>
+                      <td className='text-[var(--bs-secondary-color)]'>Extra Charge</td>
+                      <td className='font-semibold text-end'>{FormatCurrency(state.currentRegion, data.extraCharge)}</td>
                     </tr>
                     <tr>
-                      <td className='tw:font-bold'>TOTAL</td>
-                      <td className='tw:text-primary tw:font-semibold tw:text-end'>{FormatCurrency(state.currentRegion, data.totalCharge)}</td>
+                      <td className='font-bold'>TOTAL</td>
+                      <td className='text-primary font-semibold text-end'>{FormatCurrency(state.currentRegion, data.totalCharge)}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -129,8 +129,8 @@ const ReceivingType = ({ data }: Props) => {
           {data.extraComment != '' && (
             <Col xl={12}>
               <Card>
-                <CardHeader className='tw:py-4'>
-                  <h5 className='tw:font-semibold tw:m-0'>Order Comment</h5>
+                <CardHeader className='py-4'>
+                  <h5 className='font-semibold m-0'>Order Comment</h5>
                 </CardHeader>
                 <CardBody>
                   <p>{data.extraComment}</p>

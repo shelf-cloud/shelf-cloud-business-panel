@@ -82,13 +82,13 @@ export const FileTree = ({
     <FileTreeContext.Provider value={contextValue}>
       <div
         className={cn(
-          "tw:rounded-lg tw:border tw:bg-background tw:font-mono tw:text-sm",
+          "rounded-lg border bg-background font-mono text-sm",
           className
         )}
         role="tree"
         {...props}
       >
-        <div className="tw:p-2">{children}</div>
+        <div className="p-2">{children}</div>
       </div>
     </FileTreeContext.Provider>
   );
@@ -101,7 +101,7 @@ export const FileTreeIcon = ({
   children,
   ...props
 }: FileTreeIconProps) => (
-  <span className={cn("tw:shrink-0", className)} {...props}>
+  <span className={cn("shrink-0", className)} {...props}>
     {children}
   </span>
 );
@@ -113,7 +113,7 @@ export const FileTreeName = ({
   children,
   ...props
 }: FileTreeNameProps) => (
-  <span className={cn("tw:truncate", className)} {...props}>
+  <span className={cn("truncate", className)} {...props}>
     {children}
   </span>
 );
@@ -164,47 +164,47 @@ export const FileTreeFolder = ({
     <FileTreeFolderContext.Provider value={folderContextValue}>
       <Collapsible onOpenChange={handleOpenChange} open={isExpanded}>
         <div
-          className={cn("tw:", className)}
+          className={cn("", className)}
           role="treeitem"
           tabIndex={0}
           {...props}
         >
           <div
             className={cn(
-              "tw:flex tw:w-full tw:items-center tw:gap-1 tw:rounded tw:px-2 tw:py-1 tw:text-left tw:transition-colors tw:hover:bg-muted/50",
-              isSelected && "tw:bg-muted"
+              "flex w-full items-center gap-1 rounded px-2 py-1 text-left transition-colors hover:bg-muted/50",
+              isSelected && "bg-muted"
             )}
           >
             <CollapsibleTrigger asChild>
               <button
-                className="tw:flex tw:shrink-0 tw:cursor-pointer tw:items-center tw:border-none tw:bg-transparent tw:p-0"
+                className="flex shrink-0 cursor-pointer items-center border-none bg-transparent p-0"
                 type="button"
               >
                 <ChevronRightIcon
                   className={cn(
-                    "tw:size-4 tw:shrink-0 tw:text-muted-foreground tw:transition-transform",
-                    isExpanded && "tw:rotate-90"
+                    "size-4 shrink-0 text-muted-foreground transition-transform",
+                    isExpanded && "rotate-90"
                   )}
                 />
               </button>
             </CollapsibleTrigger>
             <button
-              className="tw:flex tw:min-w-0 tw:flex-1 tw:cursor-pointer tw:items-center tw:gap-1 tw:border-none tw:bg-transparent tw:p-0 tw:text-left"
+              className="flex min-w-0 flex-1 cursor-pointer items-center gap-1 border-none bg-transparent p-0 text-left"
               onClick={handleSelect}
               type="button"
             >
               <FileTreeIcon>
                 {isExpanded ? (
-                  <FolderOpenIcon className="tw:size-4 tw:text-blue-500" />
+                  <FolderOpenIcon className="size-4 text-blue-500" />
                 ) : (
-                  <FolderIcon className="tw:size-4 tw:text-blue-500" />
+                  <FolderIcon className="size-4 text-blue-500" />
                 )}
               </FileTreeIcon>
               <FileTreeName>{name}</FileTreeName>
             </button>
           </div>
           <CollapsibleContent>
-            <div className="tw:ml-4 tw:border-l tw:pl-2">{children}</div>
+            <div className="ml-4 border-l pl-2">{children}</div>
           </CollapsibleContent>
         </div>
       </Collapsible>
@@ -258,8 +258,8 @@ export const FileTreeFile = ({
     <FileTreeFileContext.Provider value={fileContextValue}>
       <div
         className={cn(
-          "tw:flex tw:cursor-pointer tw:items-center tw:gap-1 tw:rounded tw:px-2 tw:py-1 tw:transition-colors tw:hover:bg-muted/50",
-          isSelected && "tw:bg-muted",
+          "flex cursor-pointer items-center gap-1 rounded px-2 py-1 transition-colors hover:bg-muted/50",
+          isSelected && "bg-muted",
           className
         )}
         onClick={handleClick}
@@ -271,9 +271,9 @@ export const FileTreeFile = ({
         {children ?? (
           <>
             {/* Spacer for alignment */}
-            <span className="tw:size-4 tw:shrink-0" />
+            <span className="size-4 shrink-0" />
             <FileTreeIcon>
-              {icon ?? <FileIcon className="tw:size-4 tw:text-muted-foreground" />}
+              {icon ?? <FileIcon className="size-4 text-muted-foreground" />}
             </FileTreeIcon>
             <FileTreeName>{name}</FileTreeName>
           </>
@@ -293,7 +293,7 @@ export const FileTreeActions = ({
   ...props
 }: FileTreeActionsProps) => (
   <div
-    className={cn("tw:ml-auto tw:flex tw:items-center tw:gap-1", className)}
+    className={cn("ml-auto flex items-center gap-1", className)}
     onClick={stopPropagation}
     onKeyDown={stopPropagation}
     role="group"
