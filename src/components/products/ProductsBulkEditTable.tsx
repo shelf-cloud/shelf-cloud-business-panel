@@ -89,7 +89,7 @@ const ProductsBulkEditTable = ({ tableData, pending }: Props) => {
         ) : (
           <div
             onClick={() => toggleCellSelection(index, id)}
-            className={selectedCells.has(`${index}-${id}`) ? 'border border-primary' : ''}
+            className={selectedCells.has(`${index}-${id}`) ? 'tw:border tw:border-primary' : ''}
             style={{ cursor: 'pointer' }}
             onDoubleClick={() => handleCellClick(index, id)}>
             {row.title}

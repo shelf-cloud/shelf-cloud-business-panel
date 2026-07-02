@@ -238,7 +238,7 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                     </Row>
                     <Row>
                       <Col xs='12' className='tw:gap-2 tw:flex tw:flex-col'>
-                        <Nav className='tw:pt-0 rounded card-header-tabs tw:border-b-0' role='tablist'>
+                        <Nav className='tw:pt-0 tw:rounded card-header-tabs tw:border-b-0' role='tablist'>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink to='#' className={'tw:text-[16.25px] tw:font-semibold ' + (activeTab == '1' ? 'tw:text-primary' : 'tw:text-[var(--bs-secondary-color)]')} onClick={() => tabChange('1')} type='button'>
                               <>

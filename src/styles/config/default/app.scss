@@ -23,89 +23,33 @@ File: Main Css File
 // horizontal/two-column/layouts were unreachable (data-layout is always 'vertical',
 // data-layout-width always 'fluid') and were dropped in the port.
 
-// Components
-@import '../../components/waves';
+// Components — ported to plain CSS (extensionless imports resolve the .css siblings);
+// dead Velzon files (waves/accordion/preloader/forms/widgets/demos/ribbons/toast/scrollspy,
+// badge/breadcrumb/pagination/progress/popover/type/form-control/list-group) deleted.
 @import '../../components/avatar';
-@import '../../components/accordion';
 @import '../../components/helper';
-@import '../../components/preloader';
-@import '../../components/forms';
-@import '../../components/widgets';
-@import '../../components/demos';
 @import '../../components/print';
-@import '../../components/ribbons';
-@import '../../components/toast';
-@import '../../components/scrollspy';
 
-// Bootstrap components
+// Bootstrap components (Velzon overrides, ported to plain CSS)
 @import '../../components/reboot';
 @import '../../components/alerts';
 @import '../../components/backgrounds';
-@import '../../components/badge';
 @import '../../components/buttons';
-@import '../../components/breadcrumb';
 @import '../../components/card';
 @import '../../components/dropdown';
 @import '../../components/nav';
 @import '../../components/table';
 @import '../../components/modal';
-@import '../../components/pagination';
-@import '../../components/progress';
-@import '../../components/popover';
-@import '../../components/type';
 @import '../../components/form-check';
-@import '../../components/form-control';
-@import '../../components/list-group';
 
-// Plugins
-@import '../../plugins/custom-scrollbar';
-@import '../../plugins/prismjs';
-@import '../../plugins/sweetalert2';
-@import '../../plugins/dropzone';
-@import '../../plugins/range-slider';
-@import '../../plugins/sortablejs';
-@import '../../plugins/tour';
-@import '../../plugins/swiper';
-@import '../../plugins/multijs';
-@import '../../plugins/colorpicker';
-@import '../../plugins/filepond';
-@import '../../plugins/form-input-spin';
-@import '../../plugins/ckeditor';
-@import '../../plugins/quilljs';
-@import '../../plugins/gridjs';
-@import '../../plugins/listjs';
+// Plugins — only libs actually installed/used survive (ported to plain CSS);
+// 27 dead plugin skins deleted (libs absent from package.json, selectors unused).
+// custom-scrollbar was a duplicate of simplebar's own CSS (imported in Sidebar.tsx);
+// toastify styled the old Toastify.js lib, not react-toastify.
 @import '../../plugins/apexcharts';
-@import '../../plugins/chartjs';
-@import '../../plugins/echarts';
-@import '../../plugins/google-map';
-@import '../../plugins/autocomplete';
-@import '../../plugins/vector-maps';
-@import '../../plugins/leaflet-maps';
-@import '../../plugins/fullcalendar';
-@import '../../plugins/emoji-picker';
-@import '../../plugins/datatables';
-@import '../../plugins/select2';
-
-// Plugins
-@import '../../plugins/toastify';
-@import '../../plugins/choices';
+@import '../../plugins/dropzone';
 @import '../../plugins/flatpicker';
 
-// Pages
+// Pages — 16 Velzon demo-page files deleted (zero consumers);
+// authentication ported (only the password-eye rule was live).
 @import '../../pages/authentication';
-@import '../../pages/dashboard';
-@import '../../pages/timeline';
-@import '../../pages/gallery';
-@import '../../pages/errors';
-@import '../../pages/profile';
-@import '../../pages/sitemap';
-@import '../../pages/team';
-@import '../../pages/coming-soon';
-@import '../../pages/search-results';
-@import '../../pages/ecommerce';
-@import '../../pages/invoice';
-@import '../../pages/chat';
-@import '../../pages/email';
-@import '../../pages/kanban';
-@import '../../pages/landing';
-@import '../../pages/nft-landing';

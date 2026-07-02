@@ -159,7 +159,7 @@ function SignIn({}: Props) {
                   }}
                 />
               </div>
-              <div className='tw:absolute translate-middle' style={{ width: '45%', zIndex: '1', top: '85%', left: '95%' }}>
+              <div className='tw:absolute tw:-translate-x-1/2 tw:-translate-y-1/2' style={{ width: '45%', zIndex: '1', top: '85%', left: '95%' }}>
                 <Image
                   src={PuntosImage}
                   alt='ShelfCloud Background dots Image'

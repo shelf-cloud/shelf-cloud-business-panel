@@ -1,0 +1,16 @@
+/*
+ * dropzone.css
+ * Plain-CSS port of _dropzone.scss (values from compiled Velzon output).
+ */
+
+.dropzone {
+  min-height: 230px;
+  border: 2px dashed var(--vz-border-color);
+  background: var(--vz-card-bg);
+  border-radius: 6px;
+}
+.dropzone .dz-message {
+  font-size: 24px;
+  width: 100%;
+  margin: 1em 0;
+}

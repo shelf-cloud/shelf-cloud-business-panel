@@ -1,0 +1,108 @@
+/*
+ * helper.css
+ * Ported from Velzon _helper.scss, audited rule-group by rule-group against
+ * src/**\/*.{tsx,ts,js,jsx}. Dropped groups (zero usage found, evidence in
+ * comments); kept groups are load-bearing app-wide.
+ */
+
+/* fs-* font-size helpers — used app-wide on icons/headings (fs-5, fs-14, ...). */
+.fs-10 {
+  font-size: 10px !important;
+}
+.fs-11 {
+  font-size: 11px !important;
+}
+.fs-12 {
+  font-size: 12px !important;
+}
+.fs-13 {
+  font-size: 13px !important;
+}
+.fs-14 {
+  font-size: 14px !important;
+}
+.fs-15 {
+  font-size: 15px !important;
+}
+.fs-16 {
+  font-size: 16px !important;
+}
+.fs-17 {
+  font-size: 17px !important;
+}
+.fs-18 {
+  font-size: 18px !important;
+}
+.fs-19 {
+  font-size: 19px !important;
+}
+.fs-20 {
+  font-size: 20px !important;
+}
+.fs-21 {
+  font-size: 21px !important;
+}
+.fs-22 {
+  font-size: 22px !important;
+}
+.fs-23 {
+  font-size: 23px !important;
+}
+.fs-24 {
+  font-size: 24px !important;
+}
+.fs-36 {
+  font-size: 36px !important;
+}
+.fs-48 {
+  font-size: 48px !important;
+}
+
+/* border-color helpers — used (e.g. migration-ui/button.tsx via tw:border-dark override base, alert.tsx dark variant). */
+.border-dark {
+  border-color: var(--vz-dark) !important;
+}
+.border-light {
+  border-color: var(--vz-light) !important;
+}
+
+/* Border style, link-dark/light dark-mode, #back-to-top, social-list-item,
+   w-xs..w-xl, icon-xs..icon-xxl, icon-dual*, search-box, bg-overlay,
+   customizer-setting, layout-rightside(-col), object-cover,
+   text-truncate-two-lines, favourite-btn, card-logo-light/dark,
+   [data-layout-mode='dark'] .btn-close: all DROPPED, zero usage found via
+   grep across src/**\/*.{tsx,ts,js,jsx} (checked class stems individually;
+   candidate matches were false positives from Tailwind's `tw:`-prefixed
+   utilities or shadcn's own unrelated classes of the same name). */
+
+.ff-base {
+  font-family: var(--vz-font-sans-serif, "Poppins", sans-serif);
+}
+
+.ff-secondary {
+  font-family: "hkgrotesk", sans-serif;
+}
+
+.fw-medium {
+  font-weight: 500;
+}
+
+.fw-semibold {
+  font-weight: 600 !important;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.bg-pattern {
+  background: url("../../assets/images/modal-bg.png") var(--vz-modal-bg);
+}
+
+code {
+  user-select: all;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

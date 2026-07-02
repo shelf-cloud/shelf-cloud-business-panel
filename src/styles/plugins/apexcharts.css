@@ -1,0 +1,141 @@
+/*
+ * apexcharts.css
+ * Plain-CSS port of _apexcharts.scss (values from compiled Velzon output).
+ */
+
+.apex-charts {
+  min-height: 10px !important;
+}
+.apex-charts text {
+  font-family: var(--vz-font-sans-serif) !important;
+}
+.apex-charts .apexcharts-canvas {
+  margin: 0 auto;
+}
+
+.apexcharts-tooltip-title,
+.apexcharts-tooltip-text {
+  font-family: var(--vz-font-sans-serif) !important;
+}
+
+.apexcharts-tooltip {
+  border: 1px solid var(--vz-border-color) !important;
+  background-color: var(--vz-card-bg) !important;
+  box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15) !important;
+}
+.apexcharts-tooltip * {
+  font-family: var(--vz-font-sans-serif) !important;
+  color: #878a99 !important;
+}
+.apexcharts-tooltip .apexcharts-tooltip-title {
+  background-color: rgba(var(--vz-light-rgb), 0.75) !important;
+  border-bottom: 1px solid var(--vz-border-color) !important;
+}
+
+.apexcharts-tooltip.apexcharts-theme-dark * {
+  color: #fff !important;
+}
+
+.apexcharts-legend-series {
+  font-weight: 500;
+}
+
+.apexcharts-gridline {
+  pointer-events: none;
+  stroke: rgba(225, 227, 229, 0.8) !important;
+}
+
+.apexcharts-legend-text {
+  color: #878a99 !important;
+  font-family: var(--vz-font-sans-serif) !important;
+  font-size: 13px !important;
+}
+
+.apexcharts-pie-label {
+  fill: #fff !important;
+}
+
+.apexcharts-title-text,
+.apexcharts-subtitle-text {
+  fill: #adb5bd;
+}
+
+.apexcharts-yaxis text,
+.apexcharts-xaxis text {
+  font-family: var(--vz-font-sans-serif) !important;
+  fill: #adb5bd;
+}
+
+.apexcharts-yaxis-title {
+  font-weight: 500;
+}
+
+/* column dynamic loaded chart */
+
+#dynamicloadedchart-wrap {
+  margin: 0px auto;
+  max-width: 800px;
+  position: relative;
+}
+
+.chart-box {
+  padding-left: 0;
+}
+
+#chart-year,
+#chart-quarter {
+  width: 96%;
+  max-width: 48%;
+  box-shadow: none;
+  padding-left: 0;
+  padding-top: 20px;
+  background: var(--vz-card-bg);
+  border: 1px solid var(--vz-border-color);
+}
+
+#chart-year {
+  float: left;
+  position: relative;
+  transition: 1s ease transform;
+  z-index: 3;
+}
+#chart-year.chart-quarter-activated {
+  transform: translateX(0);
+  transition: 1s ease transform;
+}
+
+#chart-quarter {
+  float: left;
+  position: relative;
+  z-index: -2;
+  transition: 1s ease transform;
+}
+#chart-quarter.active {
+  transition: 1.1s ease-in-out transform;
+  transform: translateX(0);
+  z-index: 1;
+}
+
+@media screen and (min-width: 480px) {
+  #chart-year {
+    transform: translateX(50%);
+  }
+  #chart-quarter {
+    transform: translateX(-50%);
+  }
+}
+
+/* radar chart */
+
+.apexcharts-radar-series polygon,
+.apexcharts-radar-series line {
+  stroke: var(--vz-border-color);
+}
+
+.apexcharts-pie circle,
+.apexcharts-pie line {
+  stroke: var(--vz-border-color);
+}
+.apexcharts-pie text {
+  fill: var(--vz-body-color);
+}

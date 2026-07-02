@@ -1,0 +1,18 @@
+/*
+ * avatar.css
+ * Ported from Velzon _avatar.scss. Only .avatar-title is used in src
+ * (src/components/commerceHub/CommerceHubWidget.tsx). Size classes
+ * (avatar-xxs/xs/sm/md/lg/xl) and .avatar-group/.avatar-group-item
+ * have zero usage in src/**\/*.{tsx,ts,js,jsx} and were dropped.
+ */
+
+.avatar-title {
+  align-items: center;
+  background-color: #4481fd;
+  color: #fff;
+  display: flex;
+  font-weight: 500;
+  height: 100%;
+  justify-content: center;
+  width: 100%;
+}

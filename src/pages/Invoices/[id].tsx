@@ -101,7 +101,7 @@ const InvoiceDetails = () => {
                             )}
                           </div>
                           <h1>INVOICE</h1>
-                          <h2 className='fs-1 tw:font-bold' style={{ color: '#458BC9' }}>
+                          <h2 className='tw:text-[2.5rem] tw:font-bold' style={{ color: '#458BC9' }}>
                             {invoiceDetails?.invoice.invoiceNumber}
                           </h2>
                           <p className='tw:m-0 tw:font-semibold'>Invoice Date: {moment(invoiceDetails?.invoice.createdDate).format('LL')}</p>

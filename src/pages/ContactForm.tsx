@@ -117,7 +117,7 @@ function ContactForm({}: Props) {
       </div>
       <div className='tw:hidden tw:w-full tw:h-full tw:bg-primary tw:lg:flex tw:justify-center tw:items-center'>
         <div className='tw:flex tw:flex-col tw:justify-center tw:items-start' style={{ width: '65%' }}>
-          <h2 className='fs-1 tw:font-bold tw:text-white tw:text-left tw:m-0 tw:p-0 tw:w-full tw:mb-4'>{`We'd love to hear from you`}</h2>
+          <h2 className='tw:text-[2.5rem] tw:font-bold tw:text-white tw:text-left tw:m-0 tw:p-0 tw:w-full tw:mb-4'>{`We'd love to hear from you`}</h2>
           <p className='tw:text-[16.25px] tw:font-light tw:text-white tw:text-left tw:m-0 tw:p-0 tw:w-full tw:mb-4'>4 in 1 Cloud-Based Software Solutions for Small Business.</p>
           <div className='tw:relative tw:text-left tw:mb-4' style={{ width: '70px' }}>
             <Image
@@ -131,7 +131,7 @@ function ContactForm({}: Props) {
             />
           </div>
           <div className='tw:w-full tw:relative'>
-            <div className='tw:absolute translate-middle' style={{ width: '35%', zIndex: '1', top: '30%', left: '0%' }}>
+            <div className='tw:absolute tw:-translate-x-1/2 tw:-translate-y-1/2' style={{ width: '35%', zIndex: '1', top: '30%', left: '0%' }}>
               <Image
                 src={PuntosImageLeft}
                 alt='ShelfCloud Logo'
@@ -153,7 +153,7 @@ function ContactForm({}: Props) {
                 }}
               />
             </div>
-            <div className='tw:absolute translate-middle' style={{ width: '45%', zIndex: '1', top: '85%', left: '95%' }}>
+            <div className='tw:absolute tw:-translate-x-1/2 tw:-translate-y-1/2' style={{ width: '45%', zIndex: '1', top: '85%', left: '95%' }}>
               <Image
                 src={PuntosImage}
                 alt='ShelfCloud Logo'

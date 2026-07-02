@@ -77,7 +77,7 @@ function ContactUs() {
             <BreadCrumb title='Contact Us' pageTitle='Profile' />
             <Row>
               <Col lg={12}>
-                <Card className='tw:border-t tw:border-primary border-5 '>
+                <Card className='tw:border-t-[5px] tw:border-primary'>
                   <CardBody className='tw:pb-2 tw:md:pb-12'>
                     <div className='tw:flex tw:flex-row tw:justify-between tw:w-full tw:items-start tw:pt-4 tw:pb-2'>
                       <div className='tw:relative tw:flex' style={{ width: '30%', minWidth: '130px' }}>

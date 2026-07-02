@@ -1,0 +1,125 @@
+/*
+ * buttons.css
+ * Ported from _buttons.scss (Bootstrap-component overrides).
+ * Dropped (zero usage in src): .btn-rounded, .btn-animation (+ per-color combos),
+ * .btn-group-vertical, .btn-group.radio, .btn-[color].btn-border, [data-layout-mode='dark'] block (dark mode never enabled).
+ */
+
+button,
+a {
+  outline: none !important;
+  position: relative;
+}
+
+.btn {
+  box-shadow: none;
+}
+
+.btn-icon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(1rem + 1.5em + 2px);
+  width: calc(1rem + 1.5em + 2px);
+  padding: 0;
+}
+
+.btn-icon i,
+.btn-icon svg,
+.btn-icon img {
+  vertical-align: middle;
+}
+
+.btn-icon.btn-sm {
+  height: calc(0.5rem + 1.5em + 2px);
+  width: calc(0.5rem + 1.5em + 2px);
+}
+
+.btn-icon.btn-lg {
+  height: calc(1.4rem + 1.5em + 2px);
+  width: calc(1.4rem + 1.5em + 2px);
+}
+
+/* Soft buttons (colors used in src: primary, success, dark) */
+
+.btn-soft-primary {
+  color: #4481fd;
+  background-color: rgba(68, 129, 253, 0.1);
+  border-color: transparent;
+}
+.btn-soft-primary:hover,
+.btn-soft-primary:focus,
+.btn-soft-primary:active {
+  color: #fff;
+  background-color: #4481fd;
+}
+
+.btn-soft-success {
+  color: #0ab39c;
+  background-color: rgba(10, 179, 156, 0.1);
+  border-color: transparent;
+}
+.btn-soft-success:hover,
+.btn-soft-success:focus,
+.btn-soft-success:active {
+  color: #fff;
+  background-color: #0ab39c;
+}
+
+.btn-soft-dark {
+  color: #212529;
+  background-color: rgba(33, 37, 41, 0.1);
+  border-color: transparent;
+}
+.btn-soft-dark:hover,
+.btn-soft-dark:focus,
+.btn-soft-dark:active {
+  color: #fff;
+  background-color: #212529;
+}
+
+/* Ghost buttons (colors used in src: info) */
+
+.btn-ghost-info {
+  color: #299cdb;
+  border-color: transparent;
+}
+.btn-ghost-info:hover,
+.btn-ghost-info:focus,
+.btn-ghost-info:active {
+  color: #299cdb;
+  background-color: rgba(41, 156, 219, 0.1);
+}
+
+.btn-ghost-secondary {
+  color: var(--vz-gray-700);
+}
+
+/* Button with icon label */
+.btn-label {
+  position: relative;
+  padding-left: 44px;
+}
+.btn-label .label-icon {
+  position: absolute;
+  width: 35.5px;
+  left: -1px;
+  top: -1px;
+  bottom: -1px;
+  background-color: rgba(255, 255, 255, 0.1);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-label.btn-light .label-icon {
+  background-color: rgba(33, 37, 41, 0.05);
+}
+.btn-label.right {
+  padding-left: 0.9rem;
+  padding-right: 44px;
+}
+.btn-label.right .label-icon {
+  right: -1px;
+  left: auto;
+}

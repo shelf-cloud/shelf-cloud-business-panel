@@ -1,0 +1,87 @@
+/*
+ * table.css
+ * Ported from _table.scss.
+ * Dropped (zero usage in src): .border-[color].table / .table-[color].table (@each family,
+ * no literal table-primary etc. classNames found), .table .sort (::before/::after MDI arrows -
+ * no literal `.sort` classNames, only aria-sort/sortBy identifiers), [data-layout-mode='dark']
+ * .table-light block (dark mode never enabled).
+ * .rdt_Table / .rdt_Pagination rules target react-data-table-component's internal
+ * styled-components classnames (not literal in src, but DataTable is used across many table
+ * components — kept, values are var() refs only, no color resolution needed).
+ */
+
+.table th {
+  font-weight: 600;
+}
+.table .table-light {
+  color: #212529;
+  border-color: var(--vz-border-color);
+  background-color: var(--vz-light);
+}
+.table > thead {
+  border-color: var(--vz-border-color);
+}
+.table > :not(:first-child) {
+  border-top-width: 1px;
+}
+
+.table-nowrap th,
+.table-nowrap td {
+  white-space: nowrap;
+}
+
+.table-card {
+  margin: -1rem -1rem;
+}
+.table-card th:first-child,
+.table-card td:first-child {
+  padding-left: 16px;
+}
+.table-card th:last-child,
+.table-card td:last-child {
+  padding-right: 16px;
+}
+.table-card .table > :not(:first-child) {
+  border-top-width: 1px;
+}
+
+.table .form-check {
+  padding-left: 0px;
+  margin-bottom: 0px;
+}
+.table .form-check .form-check-input {
+  margin-left: 0px;
+  margin-top: 0px;
+  float: none;
+  vertical-align: middle;
+}
+
+.rdt_Table.eSTlnH {
+  background-color: var(--vz-card-bg) !important;
+  color: var(--vz-body-color);
+}
+
+.rdt_Table .gZWIKX,
+.rdt_Table .jVeafb {
+  color: var(--vz-body-color);
+  background-color: var(--vz-card-bg);
+}
+
+.rdt_Table .jVeafb:not(:last-of-type),
+.rdt_Table .gZWIKX {
+  border-bottom-color: var(--vz-border-color);
+}
+
+.rdt_Pagination.jxflYm {
+  background-color: var(--vz-card-bg);
+  color: var(--vz-body-color);
+  border-top-color: var(--vz-border-color);
+}
+
+.rdt_Pagination .bvxQGL {
+  fill: var(--vz-dark);
+}
+
+.rdt_Pagination .bvxQGL:disabled {
+  fill: rgba(var(--vz-dark-rgb), 0.25);
+}

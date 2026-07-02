@@ -171,10 +171,11 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
                       min={0}
                       value={product.orderQty || 0}
                       onChange={(e) => {
-                        e.target.closest('tr')?.classList.add('bg-warning', 'bg-opacity-25')
+                        const trEl = e.target.closest('tr')
+                        if (trEl) trEl.style.backgroundColor = 'color-mix(in srgb, var(--warning) 25%, transparent)'
                         if (parseInt(e.target.value) <= 0 || parseInt(e.target.value) < product.receivedQty + product.inboundQty) {
                           setError(true)
-                          e.target.classList.remove('border-warning')
+                          e.target.classList.remove('tw:border-warning')
                         } else {
                           setError(false)
                         }

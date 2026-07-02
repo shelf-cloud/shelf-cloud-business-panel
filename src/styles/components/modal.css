@@ -1,0 +1,25 @@
+/*
+ * modal.css
+ * Ported from _modal.scss.
+ * Dropped (zero usage in src): .modal.fadeInRight/.fadeInLeft/.fadeInUp/.flip/.zoomIn
+ * (+ their @keyframes fadeInLeft/fadeInUp/zoomIn), .modal-dialog-right, .modal-dialog-bottom,
+ * .modal-dialog-bottom-right, .login-modal.
+ * Note: the .btn-close margin-top rule below is invalid CSS in the original source too
+ * ($modal-header-padding resolves to a 2-value shorthand negated as a single value,
+ * producing `-1.25rem 1.25rem` for a single-value property) — ported byte-for-byte from
+ * ground truth since the declaration is a no-op in both old and new builds.
+ */
+
+.modal-title {
+  font-weight: 600;
+}
+
+.modal-dialog:not(.modal-dialog-scrollable) .modal-header {
+  padding-bottom: 0;
+}
+.modal-dialog:not(.modal-dialog-scrollable) .modal-header .btn-close {
+  margin-top: -1.25rem 1.25rem;
+}
+.modal-dialog:not(.modal-dialog-scrollable) .modal-footer {
+  padding-top: 0;
+}

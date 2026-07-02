@@ -1,0 +1,12 @@
+/*
+ * authentication.css
+ * Ported from _authentication.scss. Only .auth-pass-inputgroup is used by
+ * SignIn.tsx, ContactForm.tsx, Forgotpassword/[resetcode].tsx (password
+ * visibility toggle icon). All other rules in the old SCSS file
+ * (.auth-page-wrapper, .auth-one-bg*, .auth-bg-cover, .signin-other-title,
+ * .particles-js-canvas-el, #password-contain) have no consumers in src/**
+ * and were dropped.
+ */
+.auth-pass-inputgroup input[type='text'] + .btn .ri-eye-fill:before {
+  content: '\ecb6';
+}

@@ -1,0 +1,27 @@
+/*
+ * backgrounds.css
+ * Ported from _backgrounds.scss.
+ * Colors confirmed used in src: primary, success, info (+ light/dark are unconditional
+ * hardcoded overrides in the source, kept as-is).
+ * Dropped (zero usage): bg-soft-secondary, bg-soft-warning, bg-soft-danger.
+ */
+
+.bg-soft-primary {
+  background-color: rgba(68, 129, 253, 0.18) !important;
+}
+
+.bg-soft-success {
+  background-color: rgba(10, 179, 156, 0.18) !important;
+}
+
+.bg-soft-info {
+  background-color: rgba(41, 156, 219, 0.18) !important;
+}
+
+.bg-soft-dark {
+  background-color: rgba(var(--vz-dark-rgb), 0.18) !important;
+}
+
+.bg-soft-light {
+  background-color: rgba(var(--vz-light-rgb), 0.18) !important;
+}

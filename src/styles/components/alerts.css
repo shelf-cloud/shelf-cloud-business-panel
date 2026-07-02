@@ -1,0 +1,17 @@
+/*
+ * alerts.css
+ * Ported from _alerts.scss.
+ * Only .alert-border-left is used in src (Shipping.tsx, color='secondary').
+ * Dropped (zero usage): .alert-solid, .alert-outline, .alert-borderless, .alert-label-icon
+ * (+ .label-arrow), .alert-top-border, .alert-additional, .rounded-label, .alert-dismissible
+ * .btn-close override, .alert-outline.alert-dark, and all their per-color @each combos except
+ * .alert-border-left.alert-secondary (the only color combo actually reachable).
+ */
+
+.alert-border-left {
+  border-left: 3px solid;
+}
+
+.alert-border-left.alert-secondary {
+  border-left-color: #3577f1;
+}

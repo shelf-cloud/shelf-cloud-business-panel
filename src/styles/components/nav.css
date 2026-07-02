@@ -1,0 +1,50 @@
+/*
+ * nav.css
+ * Ported from _nav.scss.
+ * Only .nav-tabs / .nav-tabs-custom (+ .card-header-tabs combo) are used in src.
+ * Dropped (zero usage): .nav-pills base rules kept only where combined with .nav-tabs
+ * selector (cheap, unsure->port); .vertical-nav, .navtab-bg, .arrow-navtabs,
+ * .custom-hover-nav-tabs, .custom-verti-nav-pills, .animation-nav, .nav-border-top(-[color]),
+ * .nav-custom(-light/-[color]), .nav-[color] (@each family), .progress-nav, .step-arrow-nav,
+ * .vertical-navs-step, .nav-custom-outline (+ .nav-[color].nav-custom-outline), .nav-customs.
+ */
+
+.nav-tabs > li > a,
+.nav-pills > li > a {
+  color: var(--vz-gray-700);
+  font-weight: 500;
+}
+
+.nav-tabs-custom {
+  border-bottom: 1px solid var(--vz-gray-300);
+}
+.nav-tabs-custom .nav-item {
+  position: relative;
+}
+.nav-tabs-custom .nav-item .nav-link {
+  border: none;
+  font-weight: 500;
+}
+.nav-tabs-custom .nav-item .nav-link::after {
+  content: '';
+  background: #4481fd;
+  height: 1px;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  transition: all 250ms ease 0s;
+  transform: scale(0);
+}
+.nav-tabs-custom .nav-item .nav-link.active {
+  color: #4481fd;
+}
+.nav-tabs-custom .nav-item .nav-link.active:after {
+  transform: scale(1);
+}
+.nav-tabs-custom.card-header-tabs {
+  margin-top: -1rem;
+}
+.nav-tabs-custom.card-header-tabs .nav-link {
+  padding: 1rem 1rem;
+}

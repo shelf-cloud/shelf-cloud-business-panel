@@ -150,7 +150,7 @@ const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCos
                 </tr>
               </thead>
               <tbody>
-                <tr className='text-center'>
+                <tr className='tw:text-center'>
                   <td>
                     <FormGroup>
                       <Input

@@ -20,7 +20,7 @@ const InputNumberFilter = ({ inputName, value, isInvalid, placeholder, handleCha
   return (
     <Input
       type='number'
-      className='fs-6 m-0'
+      className='tw:text-[13px] tw:m-0'
       bsSize='sm'
       style={{ padding: '0.2rem 0.9rem' }}
       placeholder={placeholder}

@@ -27,7 +27,7 @@ const ProfileDropdown = () => {
         <Dropdown
           isOpen={isProfileDropdown}
           toggle={toggleProfileDropdown}
-          className='tw:flex tw:items-center rounded-4 shadow'
+          className='tw:flex tw:items-center tw:rounded-[1rem] tw:shadow-sm'
           style={{ backgroundColor: 'rgba(239, 243, 246, 1)' }}>
           <DropdownToggle tag='button' type='button' className='btn'>
             <span className='tw:flex tw:items-center tw:justify-between tw:gap-2'>

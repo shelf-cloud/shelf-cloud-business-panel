@@ -1,0 +1,92 @@
+/*
+ * form-check.css
+ * Ported from _form-check.scss.
+ * Colors confirmed used in src: form-check-success, form-check-info, form-switch-warning.
+ * Dropped (zero usage): form-radio-[color] (@each family, no .form-radio-* classNames found),
+ * .form-check-outline (+ per-color combos), .form-radio-outline (+ per-color combos),
+ * .form-switch-lg, .form-switch-custom (+ per-color combos), .card-radio (+ .dark nested),
+ * [data-layout-mode='dark'] .form-switch block (dark mode never enabled).
+ */
+
+.form-check {
+  position: relative;
+  text-align: left;
+}
+.form-check .form-check-input {
+  cursor: pointer;
+}
+.form-check label {
+  cursor: pointer;
+}
+
+.form-check-success .form-check-input:checked {
+  background-color: #0ab39c;
+  border-color: #0ab39c;
+}
+
+.form-check-info .form-check-input:checked {
+  background-color: #299cdb;
+  border-color: #299cdb;
+}
+
+.form-check-label {
+  cursor: pointer;
+  margin-bottom: 0;
+}
+
+.form-check-right {
+  padding-left: 0;
+  display: inline-block;
+}
+.form-check-right .form-check-input {
+  float: right;
+  margin-left: 0;
+  margin-right: -1.6em;
+}
+.form-check-right .form-check-label {
+  display: block;
+}
+.form-check-right.form-switch .form-check-input {
+  margin-right: -2.56em;
+}
+
+.form-switch-md {
+  padding-left: 2.5rem;
+  min-height: 22px;
+  line-height: 22px;
+}
+.form-switch-md .form-check-input {
+  width: 40px;
+  height: 20px;
+  left: -0.5rem;
+  position: relative;
+}
+.form-switch-md .form-check-label {
+  vertical-align: middle;
+}
+
+.input-group-text {
+  margin-bottom: 0px;
+}
+
+.form-switch-warning .form-check-input:checked {
+  background-color: #f7b84b;
+  border-color: #f7b84b;
+}
+
+.form-switch-right {
+  display: inline-block;
+  padding-right: 0.8em;
+  margin-bottom: 0;
+  padding-left: 0 !important;
+}
+.form-switch-right .form-check-input {
+  float: right;
+  margin-left: 0;
+  margin-right: -1.6em;
+  margin-top: 0.1em !important;
+}
+.form-switch-right label {
+  margin-bottom: 0;
+  margin-right: 1rem;
+}

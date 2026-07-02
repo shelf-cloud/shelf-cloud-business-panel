@@ -23,7 +23,7 @@ const ShippingSelectDate = ({ id, selectedDate, minDate, maxDate, setnewDate, cl
           <Flatpickr
             ref={datePicker}
             key={`${id}-picker`}
-            className={'border-0 tw:text-[13px]'}
+            className={'tw:border-0 tw:text-[13px]'}
             options={{
               mode: 'single',
               position: 'auto',

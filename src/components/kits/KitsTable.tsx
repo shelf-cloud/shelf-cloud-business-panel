@@ -216,8 +216,8 @@ const KitsTable = ({ tableData, pending }: Props) => {
       compact: true,
       cell: (row: KitRow) => {
         return (
-          <UncontrolledDropdown className='dropdown d-inline-block'>
-            <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
+          <UncontrolledDropdown className='dropdown tw:inline-block'>
+            <DropdownToggle className='btn btn-light btn-sm tw:m-0 tw:p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
               <i className='mdi mdi-dots-vertical tw:align-middle tw:text-[19.5px] tw:m-0 tw:px-1 tw:py-0' style={{ color: '#919FAF' }}></i>
             </DropdownToggle>
             <DropdownMenu className='dropdown-menu-end' container={'body'}>

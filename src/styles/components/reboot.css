@@ -1,0 +1,46 @@
+/*
+ * reboot.css
+ * Ported from _reboot.scss.
+ * Dropped (zero usage in src): .blockquote / .blockquote-reverse,
+ * .container/.container-lg/-md/-sm/-xl/-xxl media block (no literal `.container*` classNames in src),
+ * set-color-from-background() Sass function (only consumed by deleted _badge.scss / pruned _alerts.scss rules).
+ */
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--vz-heading-color);
+  font-family: 'Poppins', sans-serif;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+b,
+strong {
+  font-weight: 600;
+}
+
+.row > * {
+  position: relative;
+}

@@ -150,7 +150,7 @@ const SKU_Kit_details = ({ inventoryId, sku, upc, defaultPrice, msrp, map, floor
                 </tr>
               </thead>
               <tbody>
-                <tr className='text-center'>
+                <tr className='tw:text-center'>
                   <td>
                     <FormGroup>
                       <Input

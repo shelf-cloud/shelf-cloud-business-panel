@@ -1,0 +1,47 @@
+/*
+ * dropdown.css
+ * Ported from _dropdown.scss.
+ * Dropped (zero usage in src): .dropdown-menu-xl/-lg/-md media block, .dropdown-mega,
+ * .dropdown-mega-menu-xl/-lg, [dir='ltr'] block (app never sets a dir attribute — dead state),
+ * .dropdown-head, .dropdownmenu-[color] (@each family).
+ */
+
+.dropdown-toggle::after {
+  display: inline-block;
+  margin-left: 0.255em;
+  font-size: 15px;
+  line-height: 15px;
+  content: '\F0140';
+  font-family: 'Material Design Icons';
+}
+
+.dropdown-menu {
+  box-shadow: 0 5px 10px rgba(30, 32, 37, 0.12);
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+  position: absolute;
+  z-index: 1000;
+}
+
+.dropdown-menu.dropdown-megamenu {
+  padding: 20px;
+  left: 0 !important;
+  right: 0 !important;
+}
+
+.dropdown-toggle-split {
+  border-left: none;
+}
+.dropdown-toggle-split::after {
+  margin-left: 0px;
+}
+.dropdown-toggle-split:before {
+  content: '';
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.12);
+  top: -1px;
+  bottom: -1px;
+  right: -1px;
+  left: 0;
+  border-radius: 0 0.25rem 0.25rem 0;
+}

@@ -292,7 +292,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                   <CardBody>
                     <Row>
                       <Col xs='12' className='tw:gap-2 tw:flex tw:flex-col'>
-                        <Nav className='tw:pt-0 nav-tabs-custom rounded card-header-tabs tw:border-b-0' role='tablist'>
+                        <Nav className='tw:pt-0 nav-tabs-custom tw:rounded card-header-tabs tw:border-b-0' role='tablist'>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'

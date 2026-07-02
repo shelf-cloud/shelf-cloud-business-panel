@@ -18,7 +18,7 @@ const NotFound = () => {
       <React.Fragment>
         <div className='page-content'>
           <Container fluid className='tw:h-full tw:w-full tw:flex tw:flex-col tw:items-center tw:justify-center tw:text-center'>
-            <h1 className='tw:font-bold fs-1 tw:mt-2 tw:mb-2'>PAGE NOT FOUND</h1>
+            <h1 className='tw:font-bold tw:text-[2.5rem] tw:mt-2 tw:mb-2'>PAGE NOT FOUND</h1>
             <h3 className='tw:font-normal tw:text-[22.75px] tw:mt-2 tw:mb-2'>
               Return to <Link href={'/'}>Home</Link>
             </h3>

@@ -74,7 +74,7 @@ const ResetPasswordPage = ({}: Props) => {
       </div>
       <div className='tw:w-full tw:h-full tw:flex tw:flex-col tw:justify-center tw:items-center'>
         <div className='tw:w-10/12 tw:md:w-1/2 tw:lg:w-4/12 tw:mx-auto'>
-          <h1 className='fs-1 tw:mb-6 tw:font-bold tw:text-center'>Reset Password</h1>
+          <h1 className='tw:text-[2.5rem] tw:mb-6 tw:font-bold tw:text-center'>Reset Password</h1>
           <form onSubmit={handleResetPasswordSubmit} className='tw:w-full'>
             <div className='tw:mb-1 tw:w-full'>
               <Label className='form-label' htmlFor='password-input'>
