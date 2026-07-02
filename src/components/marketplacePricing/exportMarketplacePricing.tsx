@@ -68,8 +68,8 @@ const ExportMarketplacePricing = ({ products, activeTab }: Props) => {
   }, [products, activeTab])
 
   return (
-    <Button color='primary' size='sm' className='text-nowrap fs-7' onClick={exportExcelFile}>
-      <i className='mdi mdi-arrow-down-bold align-middle fs-5 me-2' />
+    <Button color='primary' size='sm' className='tw:text-nowrap tw:text-[11.2px]' onClick={exportExcelFile}>
+      <i className='mdi mdi-arrow-down-bold tw:align-middle tw:text-[16.25px] tw:me-2' />
       Export Products
     </Button>
   )

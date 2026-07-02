@@ -10,39 +10,39 @@ const KitType = ({ data }: Props) => {
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
       <Row>
         <Col xl={12}>
-          <Card className='m-0'>
-            <CardHeader className='py-2'>
-              <h5 className='fw-semibold m-0'>Kit Children</h5>
+          <Card className='tw:m-0'>
+            <CardHeader className='tw:py-2'>
+              <h5 className='tw:font-semibold tw:m-0'>Kit Children</h5>
             </CardHeader>
             <CardBody>
-              <div className='table-responsive'>
-                <table className='table table-sm align-middle table-borderless mb-0'>
-                  <thead className='table-light'>
+              <div className='tw:overflow-x-auto'>
+                <table className='tw:w-full tw:align-middle tw:mb-0 tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+                  <thead className='tw:bg-[color:var(--vz-light)]'>
                     <tr>
                       <th scope='col'>Title</th>
                       <th scope='col'>Sku</th>
-                      <th className='text-center' scope='col'>
+                      <th className='tw:text-center' scope='col'>
                         Warehouse Qty
                       </th>
-                      <th className='text-center' scope='col'>
+                      <th className='tw:text-center' scope='col'>
                         Kit Qty
                       </th>
                     </tr>
                   </thead>
                   <tbody>
                     {data.children.map((product: Children, key) => (
-                      <tr key={key} className='border-bottom py-2'>
-                        <td className='w-50 fs-7 fw-semibold'>{product.title || ''}</td>
-                        <td className='fs-7 text-muted'>{product.sku}</td>
-                        <td className='text-center'>{product.available}</td>
-                        <td className='text-center'>{product.qty}</td>
+                      <tr key={key} className='tw:border-b tw:border-[color:var(--border)]'>
+                        <td className='tw:w-1/2 tw:text-[11.2px] tw:font-semibold'>{product.title || ''}</td>
+                        <td className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>{product.sku}</td>
+                        <td className='tw:text-center'>{product.available}</td>
+                        <td className='tw:text-center'>{product.qty}</td>
                       </tr>
                     ))}
                     <tr>
                       <td></td>
                       <td></td>
-                      <td className='text-end fs-6 fw-bold text-nowrap'>Total</td>
-                      <td className='text-center fs-5 text-primary'>{data.children.reduce((total, product: Children) => total + Number(product.qty), 0)}</td>
+                      <td className='tw:text-right tw:text-[13px] tw:font-bold tw:text-nowrap'>Total</td>
+                      <td className='tw:text-center tw:text-[16.25px] tw:text-primary'>{data.children.reduce((total, product: Children) => total + Number(product.qty), 0)}</td>
                     </tr>
                   </tbody>
                 </table>

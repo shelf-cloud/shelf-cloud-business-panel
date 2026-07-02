@@ -8,7 +8,7 @@ import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/Forma
 import { NoImageAdress } from '@lib/assetsConstants'
 import { sortNumbers, sortStringsCaseInsensitive } from '@lib/helperFunctions'
 import { MKP_Product, MKP_Product_Table } from '@typesTs/marketplacePricing/marketplacePricing'
-import DataTable from 'react-data-table-component'
+import DataTable from '@components/Common/DataTableSC'
 import { DebounceInput } from 'react-debounce-input'
 
 type Props = {
@@ -42,10 +42,10 @@ const MKP_table_ByMarketplace = ({
 
   const columns: any = [
     {
-      name: <span className='fw-semibold text-center fs-7'></span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'></span>,
       selector: (row: MKP_Product_Table) => {
         return (
-          <div className='d-flex flex-column justify-content-center gap-0 align-items-center'>
+          <div className='tw:flex tw:flex-col tw:justify-center tw:gap-0 tw:items-center'>
             <div
               style={{
                 width: '22px',
@@ -70,10 +70,10 @@ const MKP_table_ByMarketplace = ({
       minWidth: '30px',
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Product</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Product</span>,
       selector: (row: MKP_Product_Table) => {
         return (
-          <div className='my-1 d-flex flex-row justify-content-start align-items-center gap-2'>
+          <div className='tw:my-1 tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2'>
             <div
               style={{
                 width: '35px',
@@ -89,27 +89,27 @@ const MKP_table_ByMarketplace = ({
                 style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
               />
             </div>
-            <div className='w-100'>
-              <div className='d-flex flex-row justify-content-start align-items-center'>
+            <div className='tw:w-full'>
+              <div className='tw:flex tw:flex-row tw:justify-start tw:items-center'>
                 <Link href={`/product/${row.inventoryId}/${row.sku}`}>
-                  <p className='m-0 p-0 text-primary fw-semibold fs-7'>{row.sku}</p>
+                  <p className='tw:m-0 tw:p-0 tw:text-primary tw:font-semibold tw:text-[11.2px]'>{row.sku}</p>
                 </Link>
                 <CopyTextToClipboard text={row.sku} label='SKU' />
               </div>
-              <p className='m-0 p-0 text-black fw-semibold fs-7 text-wrap'>{row.title}</p>
-              <span className='m-0 p-0 text-black fw-normal fs-7 d-flex flex-wrap justify-content-start align-items-center'>
+              <p className='tw:m-0 tw:p-0 tw:text-black tw:font-semibold tw:text-[11.2px] tw:text-wrap'>{row.title}</p>
+              <span className='tw:m-0 tw:p-0 tw:text-black tw:font-normal tw:text-[11.2px] tw:flex tw:flex-wrap tw:justify-start tw:items-center'>
                 {row.asin && (
-                  <div className='d-flex flex-nowrap justify-content-start align-items-center' style={{ gap: '2px' }}>
+                  <div className='tw:flex tw:flex-nowrap tw:justify-start tw:items-center' style={{ gap: '2px' }}>
                     {`ASIN: `}
                     <a
                       href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`}
                       target='blank'
                       rel='noopener noreferrer'
-                      className='fw-light'
+                      className='tw:font-light'
                       style={{ textDecoration: 'none' }}>
                       {row.asin}
                     </a>
-                    <i className='ri-file-copy-line fs-6 m-0 p-0 text-muted' style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(row.asin)} />
+                    <i className='ri-file-copy-line tw:text-[13px] tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)]' style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(row.asin)} />
                   </div>
                 )}
               </span>
@@ -125,9 +125,9 @@ const MKP_table_ByMarketplace = ({
       sortFunction: (rowA: MKP_Product, rowB: MKP_Product) => sortStringsCaseInsensitive(rowA.sku, rowB.sku),
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>On Watch</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>On Watch</span>,
       selector: (row: MKP_Product_Table) =>
-        row.proposedPrice > 0 && row.proposedPrice !== row.actualPrice ? <i className='mdi mdi-eye label-icon align-middle fs-5 me-2 text-primary' /> : null,
+        row.proposedPrice > 0 && row.proposedPrice !== row.actualPrice ? <i className='mdi mdi-eye label-icon tw:align-middle tw:text-[16.25px] tw:me-2 tw:text-primary' /> : null,
       sortable: true,
       center: true,
       compact: true,
@@ -137,7 +137,7 @@ const MKP_table_ByMarketplace = ({
         sortNumbers(rowA.proposedPrice > 0 && rowA.proposedPrice !== rowA.actualPrice ? 1 : 0, rowB.proposedPrice > 0 && rowB.proposedPrice !== rowB.actualPrice ? 1 : 0),
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>1 Month Sales</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>1 Month Sales</span>,
       selector: (row: MKP_Product_Table) => FormatIntNumber(state.currentRegion, row.unitsSold['1M'] ?? 0),
       sortable: true,
       center: true,
@@ -146,7 +146,7 @@ const MKP_table_ByMarketplace = ({
       sortFunction: (rowA: MKP_Product_Table, rowB: MKP_Product_Table) => sortNumbers(rowA.unitsSold['1M'] ?? 0, rowB.unitsSold['1M'] ?? 0),
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>1 Year Sales</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>1 Year Sales</span>,
       selector: (row: MKP_Product_Table) => FormatIntNumber(state.currentRegion, row.unitsSold['1Y'] ?? 0),
       sortable: true,
       center: true,
@@ -155,7 +155,7 @@ const MKP_table_ByMarketplace = ({
       sortFunction: (rowA: MKP_Product_Table, rowB: MKP_Product_Table) => sortNumbers(rowA.unitsSold['1Y'] ?? 0, rowB.unitsSold['1Y'] ?? 0),
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Landed Cost</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Landed Cost</span>,
       selector: (row: MKP_Product) => FormatCurrency(state.currentRegion, row.sellerCost + row.inboundShippingCost),
       sortable: true,
       center: true,
@@ -166,7 +166,7 @@ const MKP_table_ByMarketplace = ({
       },
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Shipping Cost</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Shipping Cost</span>,
       selector: (row: MKP_Product_Table) => FormatCurrency(state.currentRegion, row.shippingToMarketpalce),
       sortable: true,
       center: true,
@@ -178,14 +178,14 @@ const MKP_table_ByMarketplace = ({
       sortFunction: (rowA: MKP_Product_Table, rowB: MKP_Product_Table) => sortNumbers(rowA.shippingToMarketpalce, rowB.shippingToMarketpalce),
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Other Costs</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Other Costs</span>,
       selector: (row: MKP_Product_Table) => {
         return (
-          <div className='d-flex flex-column justify-content-start align-items-center gap-2 w-100 px-1'>
+          <div className='tw:flex tw:flex-col tw:justify-start tw:items-center tw:gap-2 tw:w-full tw:px-1'>
             <DebounceInput
               type='number'
               debounceTimeout={400}
-              className='form-control form-control-sm fs-7 m-0 py-0 w-75 text-center'
+              className='form-control form-control-sm tw:text-[11.2px] tw:m-0 tw:py-0 tw:w-3/4 tw:text-center'
               min={0}
               id={`orderQty-${row.sku}-${row.storeId}`}
               value={row.storeOtherCosts}
@@ -210,7 +210,7 @@ const MKP_table_ByMarketplace = ({
       sortFunction: (rowA: MKP_Product_Table, rowB: MKP_Product_Table) => sortNumbers(rowA.storeOtherCosts, rowB.storeOtherCosts),
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Current Price</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Current Price</span>,
       selector: (row: MKP_Product_Table) => FormatCurrency(state.currentRegion, row.actualPrice),
       sortable: true,
       center: true,
@@ -222,7 +222,7 @@ const MKP_table_ByMarketplace = ({
       sortFunction: (rowA: MKP_Product_Table, rowB: MKP_Product_Table) => sortNumbers(rowA.actualPrice, rowB.actualPrice),
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Fee</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Fee</span>,
       selector: (row: MKP_Product_Table) => FormatCurrency(state.currentRegion, row.totalFees),
       sortable: true,
       center: true,
@@ -234,7 +234,7 @@ const MKP_table_ByMarketplace = ({
       sortFunction: (rowA: MKP_Product_Table, rowB: MKP_Product_Table) => sortNumbers(rowA.totalFees, rowB.totalFees),
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Profit</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Profit</span>,
       selector: (row: MKP_Product_Table) =>
         FormatCurrency(
           state.currentRegion,
@@ -254,14 +254,14 @@ const MKP_table_ByMarketplace = ({
         ),
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Margin</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Margin</span>,
       selector: (row: MKP_Product_Table) => {
         const actualMargin =
           row.actualPrice <= 0
             ? 0
             : ((row.actualPrice - row.totalFees - row.sellerCost - row.inboundShippingCost - row.otherCosts - row.shippingToMarketpalce - row.storeOtherCosts) / row.actualPrice) *
               100
-        return <span className={actualMargin < 0 ? 'text-danger' : 'text-success'}>{`${FormatIntPercentage(state.currentRegion, actualMargin)} %`}</span>
+        return <span className={actualMargin < 0 ? 'tw:text-danger' : 'tw:text-success'}>{`${FormatIntPercentage(state.currentRegion, actualMargin)} %`}</span>
       },
       sortable: true,
       center: true,
@@ -281,14 +281,14 @@ const MKP_table_ByMarketplace = ({
         ),
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Proposed Price</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Proposed Price</span>,
       selector: (row: MKP_Product_Table) => {
         return (
-          <div className='d-flex flex-column justify-content-start align-items-center gap-2 w-100 px-1'>
+          <div className='tw:flex tw:flex-col tw:justify-start tw:items-center tw:gap-2 tw:w-full tw:px-1'>
             <DebounceInput
               type='number'
               debounceTimeout={400}
-              className='form-control form-control-sm fs-7 m-0 py-0 w-75 text-center'
+              className='form-control form-control-sm tw:text-[11.2px] tw:m-0 tw:py-0 tw:w-3/4 tw:text-center'
               min={0}
               id={`orderQty-${row.sku}-${row.storeId}`}
               value={row.proposedPrice}
@@ -313,7 +313,7 @@ const MKP_table_ByMarketplace = ({
       sortFunction: (rowA: MKP_Product_Table, rowB: MKP_Product_Table) => sortNumbers(rowA.proposedPrice, rowB.proposedPrice),
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Fee</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Fee</span>,
       selector: (row: MKP_Product_Table) => FormatCurrency(state.currentRegion, row.proposedPrice * (row.comissionFee / 100) + row.fixedFee + row.fbaHandlingFee),
       sortable: true,
       center: true,
@@ -329,7 +329,7 @@ const MKP_table_ByMarketplace = ({
         ),
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Profit</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Profit</span>,
       selector: (row: MKP_Product_Table) =>
         FormatCurrency(
           state.currentRegion,
@@ -367,7 +367,7 @@ const MKP_table_ByMarketplace = ({
         ),
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Margin</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Margin</span>,
       selector: (row: MKP_Product_Table) => {
         const proposedMargin =
           ((row.proposedPrice -
@@ -379,7 +379,7 @@ const MKP_table_ByMarketplace = ({
             row.storeOtherCosts) /
             row.proposedPrice) *
           100
-        return <span className={proposedMargin < 0 ? 'text-danger' : 'text-success'}>{`${FormatIntPercentage(state.currentRegion, proposedMargin)} %`}</span>
+        return <span className={proposedMargin < 0 ? 'tw:text-danger' : 'tw:text-success'}>{`${FormatIntPercentage(state.currentRegion, proposedMargin)} %`}</span>
       },
       sortable: true,
       center: true,
@@ -412,13 +412,13 @@ const MKP_table_ByMarketplace = ({
     },
     {
       name: (
-        <div className='d-flex flex-column justify-content-start align-items-center gap-1 w-100'>
-          <span className='fw-semibold text-center fs-7'>Set Margin</span>
-          <div className='d-flex flex-row justify-content-center align-items-center gap-2 w-100 px-1'>
+        <div className='tw:flex tw:flex-col tw:justify-start tw:items-center tw:gap-1 tw:w-full'>
+          <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Set Margin</span>
+          <div className='tw:flex tw:flex-row tw:justify-center tw:items-center tw:gap-2 tw:w-full tw:px-1'>
             <DebounceInput
               type='number'
               debounceTimeout={400}
-              className='form-control form-control-sm fs-7 m-0 py-0 w-50 text-center'
+              className='form-control form-control-sm tw:text-[11.2px] tw:m-0 tw:py-0 tw:w-1/2 tw:text-center'
               min={0}
               id={`marketplaceMargin-${storeId}`}
               onClick={(e: any) => e.target.select()}
@@ -438,18 +438,18 @@ const MKP_table_ByMarketplace = ({
                 }
               }}
             />
-            <span className='text-muted'>%</span>
+            <span className='tw:text-[var(--bs-secondary-color)]'>%</span>
           </div>
         </div>
       ),
 
       selector: (row: MKP_Product_Table) => {
         return (
-          <div className='d-flex flex-row justify-content-center align-items-center gap-2 w-100 px-1'>
+          <div className='tw:flex tw:flex-row tw:justify-center tw:items-center tw:gap-2 tw:w-full tw:px-1'>
             <DebounceInput
               type='number'
               debounceTimeout={400}
-              className='form-control form-control-sm fs-7 m-0 py-0 w-50 text-center'
+              className='form-control form-control-sm tw:text-[11.2px] tw:m-0 tw:py-0 tw:w-1/2 tw:text-center'
               min={0}
               id={`orderQty-${row.sku}-${row.storeId}`}
               value={row.proposedMargin}
@@ -462,7 +462,7 @@ const MKP_table_ByMarketplace = ({
                 }
               }}
             />
-            <span className='text-muted'>%</span>
+            <span className='tw:text-[var(--bs-secondary-color)]'>%</span>
           </div>
         )
       },
@@ -474,13 +474,13 @@ const MKP_table_ByMarketplace = ({
       },
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Notes</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Notes</span>,
       selector: (row: MKP_Product_Table) => (
         <DebounceInput
           element='textarea'
           minLength={3}
           debounceTimeout={600}
-          className='form-control form-control-sm fs-7 m-0'
+          className='form-control form-control-sm tw:text-[11.2px] tw:m-0'
           rows={2}
           id={`notes-${row.sku}-${row.storeId}`}
           value={row.notes}

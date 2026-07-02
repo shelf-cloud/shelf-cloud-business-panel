@@ -16,7 +16,7 @@ type Props = {
 const Edit_Receiving_Summary_Tab = ({ orderItems, handleDeleteItem, isReceivingFromPo }: Props) => {
   const { state } = useContext(AppContext)
   return (
-    <div className='overflow-auto'>
+    <div className='tw:overflow-auto'>
       <Col md={12}>
         <table className='table table-sm align-middle table-responsive table-nowrap table-striped'>
           <thead className='table-light'>
@@ -24,21 +24,21 @@ const Edit_Receiving_Summary_Tab = ({ orderItems, handleDeleteItem, isReceivingF
               {isReceivingFromPo && <th scope='col'>PO Number</th>}
               <th scope='col'>Supplier</th>
               <th scope='col'>Title / SKU</th>
-              <th scope='col' className='text-center'>
+              <th scope='col' className='tw:text-center'>
                 Total to Received
               </th>
               <th></th>
             </tr>
           </thead>
-          <tbody className='fs-7'>
+          <tbody className='tw:text-[11.2px]'>
             {orderItems
               .sort((itemA, itemB) => (itemA.poNumber ? itemA.poNumber!.localeCompare(itemB.poNumber!) : itemA.sku.localeCompare(itemB.sku)))
               .map((item) => (
                 <tr key={`${item.poId}-${item.inventoryId}`}>
                   {isReceivingFromPo && <td>{item.poNumber}</td>}
-                  <td className='fw-bold fs-6'>{item.suppliersName}</td>
-                  <td className='text-center'>
-                    <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
+                  <td className='tw:font-bold tw:text-[13px]'>{item.suppliersName}</td>
+                  <td className='tw:text-center'>
+                    <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2'>
                       <div
                         style={{
                           width: '40px',
@@ -53,27 +53,27 @@ const Edit_Receiving_Summary_Tab = ({ orderItems, handleDeleteItem, isReceivingF
                           style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                         />
                       </div>
-                      <div className='text-start'>
-                        <p className='text-nowrap m-0 fw-semibold'>{item.title}</p>
-                        <p className='text-nowrap m-0'>{item.sku}</p>
+                      <div className='tw:text-left'>
+                        <p className='tw:text-nowrap tw:m-0 tw:font-semibold'>{item.title}</p>
+                        <p className='tw:text-nowrap tw:m-0'>{item.sku}</p>
                       </div>
                     </div>
                   </td>
-                  <td className='text-center'>{item.quantity}</td>
+                  <td className='tw:text-center'>{item.quantity}</td>
                   <td>
                     <i
-                      className='fs-4 text-danger las la-trash-alt'
+                      className='tw:text-[19.5px] tw:text-danger las la-trash-alt'
                       style={{ cursor: 'pointer' }}
                       onClick={() => handleDeleteItem(item.poId!, item.sku, item.quantity, item.inventoryId!, item.splitId)}
                     />
                   </td>
                 </tr>
               ))}
-            <tr key='edit-receiving-summary-total-footer' className='bg-light'>
+            <tr key='edit-receiving-summary-total-footer' className='tw:bg-light'>
               {isReceivingFromPo && <td></td>}
               <td></td>
-              <td className='fw-bold fs-6 text-end'>Total</td>
-              <td className='fw-bold fs-6 text-center'>
+              <td className='tw:font-bold tw:text-[13px] tw:text-right'>Total</td>
+              <td className='tw:font-bold tw:text-[13px] tw:text-center'>
                 {FormatIntNumber(
                   state.currentRegion,
                   orderItems.reduce((total: number, item) => {

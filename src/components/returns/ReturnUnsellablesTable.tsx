@@ -1,6 +1,6 @@
 import { UnsellablesType } from '@typesTs/returns/unsellables'
 import { EllipsisVerticalIcon, ImagesIcon } from 'lucide-react'
-import DataTable from 'react-data-table-component'
+import DataTable from '@components/Common/DataTableSC'
 
 import { Button } from '../shadcn/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../shadcn/ui/dropdown-menu'
@@ -15,17 +15,17 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending, openImagesDialog }: 
   const conditionalRowStyles = [
     {
       when: (row: UnsellablesType) => row.converted && !row.dispose,
-      classNames: ['text-muted'],
+      classNames: ['tw:text-[var(--bs-secondary-color)]'],
     },
     {
       when: (row: UnsellablesType) => !row.converted && row.dispose,
-      classNames: ['text-danger'],
+      classNames: ['tw:text-danger'],
     },
   ]
 
   const columns: any = [
     {
-      name: <span className='fw-bolder fs-6'>SKU</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>SKU</span>,
       selector: (row: UnsellablesType) => row.sku,
       sortable: true,
       wrap: true,
@@ -35,7 +35,7 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending, openImagesDialog }: 
       },
     },
     {
-      name: <span className='fw-bolder fs-6'>Title</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Title</span>,
       selector: (row: UnsellablesType) => row.title,
       sortable: true,
       wrap: true,
@@ -47,7 +47,7 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending, openImagesDialog }: 
       },
     },
     {
-      name: <span className='fw-bolder fs-6'>RMA</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>RMA</span>,
       selector: (row: UnsellablesType) => row.returnRMA,
       sortable: true,
       wrap: true,
@@ -58,7 +58,7 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending, openImagesDialog }: 
       },
     },
     {
-      name: <span className='fw-bolder fs-6'>Date</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Date</span>,
       selector: (row: UnsellablesType) => row.date,
       sortable: true,
       wrap: true,
@@ -69,7 +69,7 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending, openImagesDialog }: 
       },
     },
     {
-      name: <span className='fw-bolder text-start fs-6'>Return</span>,
+      name: <span className='tw:font-extrabold tw:text-left tw:text-[13px]'>Return</span>,
       selector: (row: UnsellablesType) => row.orderNumber,
       sortable: true,
       wrap: true,
@@ -80,7 +80,7 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending, openImagesDialog }: 
       },
     },
     {
-      name: <span className='fw-bolder text-start fs-6'>Reason</span>,
+      name: <span className='tw:font-extrabold tw:text-left tw:text-[13px]'>Reason</span>,
       selector: (row: UnsellablesType) => row.returnReason,
       sortable: true,
       wrap: true,
@@ -91,7 +91,7 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending, openImagesDialog }: 
       },
     },
     {
-      name: <span className='fw-bolder text-start fs-6'>Status</span>,
+      name: <span className='tw:font-extrabold tw:text-left tw:text-[13px]'>Status</span>,
       selector: (row: UnsellablesType) => (row.dispose ? 'Disposed' : row.converted ? 'Converted Sellable' : 'Unsellable'),
       sortable: true,
       wrap: true,
@@ -102,7 +102,7 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending, openImagesDialog }: 
       },
     },
     {
-      name: <span className='fw-bolder text-center fs-6'>Unsellable Barcode</span>,
+      name: <span className='tw:font-extrabold tw:text-center tw:text-[13px]'>Unsellable Barcode</span>,
       selector: (row: UnsellablesType) => row.barcode,
       sortable: true,
       wrap: false,
@@ -113,7 +113,7 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending, openImagesDialog }: 
       },
     },
     {
-      name: <span className='fw-bold fs-6'></span>,
+      name: <span className='tw:font-bold tw:text-[13px]'></span>,
       sortable: false,
       compact: true,
       center: true,

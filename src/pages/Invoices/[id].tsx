@@ -73,7 +73,7 @@ const InvoiceDetails = () => {
                 <Card>
                   {!loading ? (
                     <>
-                      <CardHeader className='d-flex flex-row justify-content-between align-items-start'>
+                      <CardHeader className='tw:flex tw:flex-row tw:justify-between tw:items-start'>
                         <div>
                           <Link href={'/Invoices'}>
                             <Button
@@ -88,8 +88,8 @@ const InvoiceDetails = () => {
                             </Button>
                           </Link>
                         </div>
-                        <div className='text-end pe-5'>
-                          <div className='d-flex gap-3 flex-row align-items-center mb-3'>
+                        <div className='tw:text-right tw:pe-12'>
+                          <div className='tw:flex tw:gap-4 tw:flex-row tw:items-center tw:mb-4'>
                             <PrintInvoice invoiceDetails={invoiceDetails!} />
                             {currentRegion == 'us' && (
                               <a href={`${invoiceDetails?.invoice.payLink}`} target='blank' rel='noopener noreferrer'>
@@ -100,19 +100,19 @@ const InvoiceDetails = () => {
                             )}
                           </div>
                           <h1>INVOICE</h1>
-                          <h2 className='fs-1 fw-bold' style={{ color: '#458BC9' }}>
+                          <h2 className='fs-1 tw:font-bold' style={{ color: '#458BC9' }}>
                             {invoiceDetails?.invoice.invoiceNumber}
                           </h2>
-                          <p className='m-0 fw-semibold'>Invoice Date: {moment(invoiceDetails?.invoice.createdDate).format('LL')}</p>
-                          <p className='m-0 fw-normal'>Expire Date: {moment(invoiceDetails?.invoice.expireDate).format('LL')}</p>
-                          <h4 className={invoiceDetails?.invoice?.paid ? 'm-0 fw-bold text-success' : 'm-0 fw-bold text-danger'}>
+                          <p className='tw:m-0 tw:font-semibold'>Invoice Date: {moment(invoiceDetails?.invoice.createdDate).format('LL')}</p>
+                          <p className='tw:m-0 tw:font-normal'>Expire Date: {moment(invoiceDetails?.invoice.expireDate).format('LL')}</p>
+                          <h4 className={invoiceDetails?.invoice?.paid ? 'tw:m-0 tw:font-bold tw:text-success' : 'tw:m-0 tw:font-bold tw:text-danger'}>
                             {invoiceDetails?.invoice?.paid ? 'Paid' : 'Due'}
                           </h4>
                         </div>
                       </CardHeader>
                       <CardBody>
-                        <table className='table text-center table-striped-columns'>
-                          <thead className='fs-5'>
+                        <table className='table tw:text-center table-striped-columns'>
+                          <thead className='tw:text-[16.25px]'>
                             <tr>
                               <th>ORDER #</th>
                               <th>TYPE</th>
@@ -124,7 +124,7 @@ const InvoiceDetails = () => {
                             {invoiceDetails?.orders.map((order) => (
                               <tr key={order.orderNumber}>
                                 <td
-                                  className='text-primary'
+                                  className='tw:text-primary'
                                   style={{ cursor: 'pointer' }}
                                   onClick={
                                     order.orderType != 'Storage'
@@ -147,10 +147,10 @@ const InvoiceDetails = () => {
                               </tr>
                             ))}
                           </tbody>
-                          <tfoot className='fw-bold fs-5'>
+                          <tfoot className='tw:font-bold tw:text-[16.25px]'>
                             {currentRegion == 'us' ? (
                               <tr>
-                                <td className='text-end' colSpan={3}>
+                                <td className='tw:text-right' colSpan={3}>
                                   Total
                                 </td>
                                 <td>{FormatCurrency(currentRegion, Number(invoiceDetails?.invoice?.totalCharge))}</td>
@@ -158,19 +158,19 @@ const InvoiceDetails = () => {
                             ) : (
                               <>
                                 <tr>
-                                  <td className='text-end' colSpan={3}>
+                                  <td className='tw:text-right' colSpan={3}>
                                     SubTotal
                                   </td>
                                   <td>{FormatCurrency(currentRegion, Number(invoiceDetails?.invoice?.totalCharge! / 1.21))}</td>
                                 </tr>
                                 <tr>
-                                  <td className='text-end' colSpan={3}>
+                                  <td className='tw:text-right' colSpan={3}>
                                     IVA 21%
                                   </td>
                                   <td>{FormatCurrency(currentRegion, Number((invoiceDetails?.invoice?.totalCharge! / 1.21) * 0.21))}</td>
                                 </tr>
                                 <tr>
-                                  <td className='text-end' colSpan={3}>
+                                  <td className='tw:text-right' colSpan={3}>
                                     Total
                                   </td>
                                   <td>{FormatCurrency(currentRegion, Number(invoiceDetails?.invoice?.totalCharge!))}</td>
@@ -182,7 +182,7 @@ const InvoiceDetails = () => {
                       </CardBody>
                     </>
                   ) : (
-                    <CardHeader className='fw-bold fs-5 text-center'>Loading...</CardHeader>
+                    <CardHeader className='tw:font-bold tw:text-[16.25px] tw:text-center'>Loading...</CardHeader>
                   )}
                 </Card>
               </Col>

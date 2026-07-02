@@ -49,14 +49,14 @@ const Confirm_Delete_Receiving = ({ showDeleteModal, setshowDeleteModal, mutateR
       </ModalHeader>
       <ModalBody>
         <Row>
-          <p className='m-0 fs-5 fw-semibold'>
-            Receiving: <span className='text-primary'>{orderNumber}</span>
+          <p className='tw:m-0 tw:text-[16.25px] tw:font-semibold'>
+            Receiving: <span className='tw:text-primary'>{orderNumber}</span>
           </p>
-          <div className='mt-3 d-flex justify-content-end align-items-center gap-2'>
-            <Button type='button' color='light' className='fs-7' onClick={handleClose}>
+          <div className='tw:mt-4 tw:flex tw:justify-end tw:items-center tw:gap-2'>
+            <Button type='button' color='light' onClick={handleClose}>
               Cancel
             </Button>
-            <Button disabled={isLoading} type='button' color='danger' className='fs-7' onClick={handleDeleteReceiving}>
+            <Button disabled={isLoading} type='button' color='danger' onClick={handleDeleteReceiving}>
               {isLoading ? (
                 <span>
                   <Spinner color='light' size={'sm'} /> Deleting...

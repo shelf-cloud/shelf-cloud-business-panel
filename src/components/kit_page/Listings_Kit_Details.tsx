@@ -8,21 +8,21 @@ type Props = {
 
 const Listings_Kit_Details = ({ listings }: Props) => {
   return (
-    <div className='py-1 w-100'>
-      <table className='table table-sm'>
+    <div className='tw:py-1 tw:px-3 tw:w-full'>
+      <table className='tw:w-full tw:text-[11.2px]'>
         <thead>
-          <tr key={'listing-header'} className='text-center'>
-            <th>Store SKU</th>
-            <th>Channel</th>
-            <th>Store</th>
+          <tr key={'listing-header'} className='tw:text-left'>
+            <th className='tw:px-2 tw:py-1'>Store SKU</th>
+            <th className='tw:px-2 tw:py-1'>Channel</th>
+            <th className='tw:px-2 tw:py-1'>Store</th>
           </tr>
         </thead>
         <tbody>
           {listings.length > 0 ? (
             listings.map((store, index) => (
-              <tr key={`lisiting-${store.store}-${index}`} className='text-center'>
-                <td>{store.storeSku}</td>
-                <td>
+              <tr key={`lisiting-${store.store}-${index}`} className='tw:text-left tw:border-t tw:border-[color:var(--border)]'>
+                <td className='tw:px-2 tw:py-1'>{store.storeSku}</td>
+                <td className='tw:px-2 tw:py-1'>
                   <img
                     loading='lazy'
                     src={store.channel ? store.channel : NoImageAdress}
@@ -34,12 +34,12 @@ const Listings_Kit_Details = ({ listings }: Props) => {
                     }}
                   />
                 </td>
-                <td>{store.store}</td>
+                <td className='tw:px-2 tw:py-1'>{store.store}</td>
               </tr>
             ))
           ) : (
             <tr key={'no-listings'}>
-              <td>No Listings Mapped</td>
+              <td className='tw:px-2 tw:py-1'>No Listings Mapped</td>
             </tr>
           )}
         </tbody>

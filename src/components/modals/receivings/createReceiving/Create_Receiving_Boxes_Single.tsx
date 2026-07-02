@@ -27,21 +27,21 @@ const Create_Receiving_Boxes_Single = ({ singleSkuPackages, addNewSingleSkuBoxCo
   }, 0)
 
   return (
-    <div className='overflow-auto'>
-      <table className='table table-sm align-middle table-responsive table-striped fs-7'>
+    <div className='tw:overflow-auto'>
+      <table className='table table-sm align-middle table-responsive table-striped tw:text-[11.2px]'>
         <thead className='table-light'>
           <tr>
             <th scope='col'>Title / SKU</th>
-            <th scope='col' className='text-start'>
+            <th scope='col' className='tw:text-left'>
               Quantity
             </th>
-            <th scope='col' className='text-center'>
+            <th scope='col' className='tw:text-center'>
               Units Per Box
             </th>
-            <th scope='col' className='text-center'>
+            <th scope='col' className='tw:text-center'>
               Qty Of Boxes
             </th>
-            <th scope='col' className='text-center'>
+            <th scope='col' className='tw:text-center'>
               Actions
             </th>
           </tr>
@@ -53,9 +53,9 @@ const Create_Receiving_Boxes_Single = ({ singleSkuPackages, addNewSingleSkuBoxCo
 
               return (
                 <>
-                  <tr key={`sku-${poId}-${sku}`} className='bg-light'>
-                    <td className='text-start'>
-                      <div className='d-flex flex-row justify-content-start align-items-center gap-3'>
+                  <tr key={`sku-${poId}-${sku}`} className='tw:bg-light'>
+                    <td className='tw:text-left'>
+                      <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-4'>
                         <div
                           style={{
                             width: '40px',
@@ -70,23 +70,23 @@ const Create_Receiving_Boxes_Single = ({ singleSkuPackages, addNewSingleSkuBoxCo
                             style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                           />
                         </div>
-                        <div className='text-start'>
-                          <p className='text-nowrap m-0 fw-semibold'>{sku}</p>
-                          <p className='text-nowrap m-0'>{item.name}</p>
-                          <p className='text-nowrap m-0 text-muted'>PO: {item.poNumber}</p>
+                        <div className='tw:text-left'>
+                          <p className='tw:text-nowrap tw:m-0 tw:font-semibold'>{sku}</p>
+                          <p className='tw:text-nowrap tw:m-0'>{item.name}</p>
+                          <p className='tw:text-nowrap tw:m-0 tw:text-[var(--bs-secondary-color)]'>PO: {item.poNumber}</p>
                         </div>
                       </div>
                     </td>
                     <td>
-                      <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
+                      <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2'>
                         {item.receiving}
-                        <span className={'fw-semibold ' + (totalUnitsBoxed > item.receiving || totalUnitsBoxed < item.receiving ? 'text-danger' : 'text-success')}>
+                        <span className={'tw:font-semibold ' + (totalUnitsBoxed > item.receiving || totalUnitsBoxed < item.receiving ? 'tw:text-danger' : 'tw:text-success')}>
                           {totalUnitsBoxed > item.receiving || totalUnitsBoxed < item.receiving ? totalUnitsBoxed : ''}
                           {totalUnitsBoxed > item.receiving ? '↑' : totalUnitsBoxed < item.receiving ? '↓' : ''}
                         </span>
                       </div>
                     </td>
-                    <td className='text-center col-1' style={{ minWidth: '60px' }}>
+                    <td className='tw:text-center' style={{ minWidth: '60px' }}>
                       <InputNumberForm
                         inputName={`box-${poId}-${sku}-0-unitsPerBox`}
                         value={item.boxes[0].unitsPerBox}
@@ -96,7 +96,7 @@ const Create_Receiving_Boxes_Single = ({ singleSkuPackages, addNewSingleSkuBoxCo
                         handleBlur={() => {}}
                       />
                     </td>
-                    <td className='text-center col-1' style={{ minWidth: '60px' }}>
+                    <td className='tw:text-center' style={{ minWidth: '60px' }}>
                       <InputNumberForm
                         inputName={`box-${poId}-${sku}-0-qtyOfBoxes`}
                         value={item.boxes[0].qtyOfBoxes}
@@ -106,11 +106,11 @@ const Create_Receiving_Boxes_Single = ({ singleSkuPackages, addNewSingleSkuBoxCo
                         handleBlur={() => {}}
                       />
                     </td>
-                    <td className='text-center col-1'>
-                      <div className='text-center d-flex flex-row justify-content-center align-items-center gap-2'>
+                    <td className='tw:text-center'>
+                      <div className='tw:text-center tw:flex tw:flex-row tw:justify-center tw:items-center tw:gap-2'>
                         {item.boxes.length === 1 && (
                           <Button type='button' size='sm' color='ghost' className='btn-icon' onClick={() => addNewSingleSkuBoxConfiguration(poId, sku)}>
-                            <i className='fs-4 text-success las la-plus-circle m-0 p-0 w-auto' />
+                            <i className='tw:text-[19.5px] tw:text-success las la-plus-circle tw:m-0 tw:p-0 tw:w-auto' />
                           </Button>
                         )}
                       </div>
@@ -120,9 +120,9 @@ const Create_Receiving_Boxes_Single = ({ singleSkuPackages, addNewSingleSkuBoxCo
                     if (index === 0) return null
                     return (
                       <tr key={`box-${poId}-${sku}-${index}`}>
-                        <td className='text-start'></td>
-                        <td className='text-center'></td>
-                        <td className='text-center py-3' style={{ minWidth: '60px' }}>
+                        <td className='tw:text-left'></td>
+                        <td className='tw:text-center'></td>
+                        <td className='tw:text-center tw:py-4' style={{ minWidth: '60px' }}>
                           <InputNumberForm
                             inputName={`box-${poId}-${sku}-${index}-unitsPerBox`}
                             value={box.unitsPerBox}
@@ -132,7 +132,7 @@ const Create_Receiving_Boxes_Single = ({ singleSkuPackages, addNewSingleSkuBoxCo
                             handleBlur={() => {}}
                           />
                         </td>
-                        <td className='text-center' style={{ minWidth: '60px' }}>
+                        <td className='tw:text-center' style={{ minWidth: '60px' }}>
                           <InputNumberForm
                             inputName={`box-${poId}-${sku}-${index}-qtyOfBoxes`}
                             value={box.qtyOfBoxes}
@@ -142,16 +142,16 @@ const Create_Receiving_Boxes_Single = ({ singleSkuPackages, addNewSingleSkuBoxCo
                             handleBlur={() => {}}
                           />
                         </td>
-                        <td className='text-center col-1'>
-                          <div className='text-center d-flex flex-row justify-content-center align-items-center gap-0'>
+                        <td className='tw:text-center'>
+                          <div className='tw:text-center tw:flex tw:flex-row tw:justify-center tw:items-center tw:gap-0'>
                             {index + 1 === item.boxes.length && (
                               <Button type='button' size='sm' color='ghost' className='btn-icon' onClick={() => addNewSingleSkuBoxConfiguration(poId, sku)}>
-                                <i className='fs-4 text-success las la-plus-circle m-0 p-0 w-auto' />
+                                <i className='tw:text-[19.5px] tw:text-success las la-plus-circle tw:m-0 tw:p-0 tw:w-auto' />
                               </Button>
                             )}
 
                             <Button type='button' size='sm' color='ghost' className='btn-icon' onClick={() => removeSingleSkuBoxConfiguration(poId, sku, index)}>
-                              <i className='text-danger fs-4 las la-minus-circle m-0 p-0 w-auto' />
+                              <i className='tw:text-danger tw:text-[19.5px] las la-minus-circle tw:m-0 tw:p-0 tw:w-auto' />
                             </Button>
                           </div>
                         </td>
@@ -165,10 +165,10 @@ const Create_Receiving_Boxes_Single = ({ singleSkuPackages, addNewSingleSkuBoxCo
         </tbody>
         <tfoot>
           <tr>
-            <td colSpan={3} className='text-end'>
-              <span className='text-muted fst-italic'>Total Boxes</span>
+            <td colSpan={3} className='tw:text-right'>
+              <span className='tw:text-[var(--bs-secondary-color)] tw:italic'>Total Boxes</span>
             </td>
-            <td className='text-center'>
+            <td className='tw:text-center'>
               <span>{FormatIntNumber(state.currentRegion, totalBoxes)}</span>
             </td>
             <td></td>

@@ -14,11 +14,12 @@ import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { Badge as ShadcnBadge } from '@shadcn/ui/badge'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
-import DataTable from 'react-data-table-component'
+import DataTable from '@components/Common/DataTableSC'
 import { DebounceInput } from 'react-debounce-input'
 import { Button, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from '@/components/migration-ui'
 
 import { getAIForecastTotal, getProductAIForecastCoverageQty, getProductAIForecastUrgency } from '@/lib/getAIForecastUrgency'
+import { tableRowTint } from '@/lib/shadcn/dataTableStyles'
 
 const ReorderingPointsExpandedDetails = dynamic(() => import('./ReorderingPointsExpandedDetails'), {
   ssr: false,
@@ -95,11 +96,11 @@ const ReorderingPointsTable = ({
   const conditionalRowStyles = [
     {
       when: (row: ReorderingPointsProduct) => Number(row.order) > 0,
-      classNames: ['bg-success bg-opacity-25'],
+      style: tableRowTint.success,
     },
     {
       when: (row: ReorderingPointsProduct) => Number(row.order) < 0 || !Number.isInteger(Number(row.order)),
-      classNames: ['bg-danger bg-opacity-25'],
+      style: tableRowTint.danger,
     },
   ]
 
@@ -109,8 +110,8 @@ const ReorderingPointsTable = ({
         return [
           {
             name: (
-              <div className='text-center d-flex flex-column justify-content-center align-items-center'>
-                <span className={'fs-7 ' + (setField === 'order' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('order')}>
+              <div className='tw:text-center tw:flex tw:flex-col tw:justify-center tw:items-center'>
+                <span className={'tw:text-[11.2px] ' + (setField === 'order' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('order')}>
                   Order Qty{' '}
                   {setField === 'order' ? (
                     sortingDirectionAsc ? (
@@ -121,7 +122,7 @@ const ReorderingPointsTable = ({
                   ) : null}
                 </span>
                 <span
-                  className={'fs-7 ' + (setField === 'orderAdjusted' ? 'fw-bold' : 'text-muted')}
+                  className={'tw:text-[11.2px] ' + (setField === 'orderAdjusted' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')}
                   style={{ cursor: 'pointer' }}
                   onClick={() => handleSetSorting('orderAdjusted')}>
                   Adjusted to Box Qty{' '}
@@ -137,12 +138,12 @@ const ReorderingPointsTable = ({
             ),
             selector: (row: ReorderingPointsProduct) => {
               return (
-                <div className='d-flex flex-column justify-content-start align-items-center gap-2 w-100 px-1'>
+                <div className='tw:flex tw:flex-col tw:justify-start tw:items-center tw:gap-2 tw:w-full tw:px-1'>
                   <DebounceInput
                     type='number'
                     disabled={row.supplier === '' ? false : selectedSupplier !== '' && selectedSupplier.toLowerCase() !== row.supplier.toLowerCase()}
                     debounceTimeout={400}
-                    className='form-control form-control-sm fs-7 m-0 py-0 w-75 text-center'
+                    className='form-control form-control-sm tw:text-[11.2px] tw:m-0 tw:py-0 tw:w-3/4 tw:text-center'
                     placeholder='Order Qty'
                     min={0}
                     id={`orderQty-${row.sku}`}
@@ -158,10 +159,10 @@ const ReorderingPointsTable = ({
                       }
                     }}
                   />
-                  <span className='w-75 m-0 p-0 text-center fs-7'>{FormatIntNumber(state.currentRegion, row.orderAdjusted)}</span>
+                  <span className='tw:w-3/4 tw:m-0 tw:p-0 tw:text-center tw:text-[11.2px]'>{FormatIntNumber(state.currentRegion, row.orderAdjusted)}</span>
                   {selectedSupplier !== '' && selectedSupplier !== row.supplier && (
-                    <UncontrolledTooltip placement='top' target={`orderQty-${row.sku}`} innerClassName='bg-white border border-info border-opacity-50 p-2'>
-                      <p className='fs-7 text-primary m-0 p-0 mb-0'>All products of the order must be from the same supplier.</p>
+                    <UncontrolledTooltip placement='top' target={`orderQty-${row.sku}`} innerClassName='tw:bg-white tw:border tw:border-[color-mix(in_srgb,var(--info)_50%,transparent)] tw:p-2'>
+                      <p className='tw:text-[11.2px] tw:text-primary tw:m-0 tw:p-0 tw:mb-0'>All products of the order must be from the same supplier.</p>
                     </UncontrolledTooltip>
                   )}
                 </div>
@@ -179,25 +180,25 @@ const ReorderingPointsTable = ({
         .fill(0)
         .map((_, splitIndex) => ({
           name: (
-            <div className='text-center d-flex flex-column justify-content-center align-items-center'>
-              <span className={'fs-7 fw-bold'}>
+            <div className='tw:text-center tw:flex tw:flex-col tw:justify-center tw:items-center'>
+              <span className={'tw:text-[11.2px] tw:font-bold'}>
                 {splitNames[`${splitIndex}`].length > 10 ? `${splitNames[`${splitIndex}`].substring(0, 11)}..` : splitNames[`${splitIndex}`]}
-                <Button className='m-0 p-0' color='ghost' size='sm' onClick={() => setValuesAndOpen({ id: `${splitIndex}`, text: splitNames[`${splitIndex}`] })}>
+                <Button className='tw:m-0 tw:p-0' color='ghost' size='sm' onClick={() => setValuesAndOpen({ id: `${splitIndex}`, text: splitNames[`${splitIndex}`] })}>
                   <i className='las la-edit fs-5 text-primary m-0 p-0 ' />
                 </Button>
               </span>
-              <span className={'fs-7 text-muted'}>Order Qty</span>
-              <span className='fs-7 text-muted'>Adjusted to Box Qty</span>
+              <span className={'tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'}>Order Qty</span>
+              <span className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>Adjusted to Box Qty</span>
             </div>
           ),
           selector: (row: ReorderingPointsProduct) => {
             return (
-              <div className='d-flex flex-column justify-content-start align-items-center gap-2 w-100 px-1'>
+              <div className='tw:flex tw:flex-col tw:justify-start tw:items-center tw:gap-2 tw:w-full tw:px-1'>
                 <DebounceInput
                   type='number'
                   disabled={row.supplier === '' ? false : selectedSupplier !== '' && selectedSupplier.toLowerCase() !== row.supplier.toLowerCase()}
                   debounceTimeout={400}
-                  className='form-control form-control-sm fs-7 m-0 py-0 w-75 text-center'
+                  className='form-control form-control-sm tw:text-[11.2px] tw:m-0 tw:py-0 tw:w-3/4 tw:text-center'
                   placeholder='Order Qty'
                   min={0}
                   id={`orderQty-${row.sku}`}
@@ -213,10 +214,10 @@ const ReorderingPointsTable = ({
                     }
                   }}
                 />
-                <span className='w-75 m-0 p-0 text-center fs-7'>{FormatIntNumber(state.currentRegion, row.orderSplits[`${splitIndex}`]?.orderAdjusted || 0)}</span>
+                <span className='tw:w-3/4 tw:m-0 tw:p-0 tw:text-center tw:text-[11.2px]'>{FormatIntNumber(state.currentRegion, row.orderSplits[`${splitIndex}`]?.orderAdjusted || 0)}</span>
                 {selectedSupplier !== '' && selectedSupplier !== row.supplier && (
-                  <UncontrolledTooltip placement='top' target={`orderQty-${row.sku}`} innerClassName='bg-white border border-info border-opacity-50 p-2'>
-                    <p className='fs-7 text-primary m-0 p-0 mb-0'>All products of the order must be from the same supplier.</p>
+                  <UncontrolledTooltip placement='top' target={`orderQty-${row.sku}`} innerClassName='tw:bg-white tw:border tw:border-[color-mix(in_srgb,var(--info)_50%,transparent)] tw:p-2'>
+                    <p className='tw:text-[11.2px] tw:text-primary tw:m-0 tw:p-0 tw:mb-0'>All products of the order must be from the same supplier.</p>
                   </UncontrolledTooltip>
                 )}
               </div>
@@ -245,8 +246,8 @@ const ReorderingPointsTable = ({
   const columns: any = [
     {
       name: (
-        <div className='text-center d-flex flex-column justify-content-center align-items-center gap-1'>
-          <span className={'fs-7 ' + (setField === 'ai_urgency' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('ai_urgency')}>
+        <div className='tw:text-center tw:flex tw:flex-col tw:justify-center tw:items-center tw:gap-1'>
+          <span className={'tw:text-[11.2px] ' + (setField === 'ai_urgency' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('ai_urgency')}>
             Urgency
             <br />
             Days To Order{' '}
@@ -258,17 +259,17 @@ const ReorderingPointsTable = ({
         const aiUrgency = getProductAIForecastUrgency(row, aiUrgencyThresholds)
 
         return (
-          <div className='d-flex flex-column justify-content-center align-items-center gap-1'>
+          <div className='tw:flex tw:flex-col tw:justify-center tw:items-center tw:gap-1'>
             <i className={`mdi mdi-alert-octagon fs-3 m-0 p-0 ${aiUrgency.color}`} />
 
-            <div className='d-flex flex-row justify-content-center align-items-center gap-1'>
-              <span className={`m-0 p-0 text-center fs-7 ${aiUrgency.color}${aiUrgency.urgency === 3 ? ' fw-semibold' : ''}`}>{`${FormatIntNumber(
+            <div className='tw:flex tw:flex-row tw:justify-center tw:items-center tw:gap-1'>
+              <span className={`tw:m-0 tw:p-0 tw:text-center tw:text-[11.2px] ${aiUrgency.color}${aiUrgency.urgency === 3 ? ' tw:font-semibold' : ''}`}>{`${FormatIntNumber(
                 state.currentRegion,
                 aiUrgency.daysToOrder
               )} ${aiUrgency.daysToOrder == 1 ? 'day' : 'days'}`}</span>
               <i className='fs-5 text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={`AI_DaysToOrderIcon-${row.sku}`} />
-              <UncontrolledTooltip placement='top' target={`AI_DaysToOrderIcon-${row.sku}`} innerClassName='bg-white border border-info border-opacity-50 p-2'>
-                <p className='fs-7 text-primary m-0 p-0 mb-0'>{`Projected days left to place an order after lead time (${FormatIntNumber(
+              <UncontrolledTooltip placement='top' target={`AI_DaysToOrderIcon-${row.sku}`} innerClassName='tw:bg-white tw:border tw:border-[color-mix(in_srgb,var(--info)_50%,transparent)] tw:p-2'>
+                <p className='tw:text-[11.2px] tw:text-primary tw:m-0 tw:p-0 tw:mb-0'>{`Projected days left to place an order after lead time (${FormatIntNumber(
                   state.currentRegion,
                   row.leadTimeSC + row.daysOfStockSC
                 )} days). AI projected stock remaining: ${FormatIntNumber(state.currentRegion, aiUrgency.remainingDays)} days.`}</p>
@@ -283,12 +284,12 @@ const ReorderingPointsTable = ({
     },
     // {
     //   name: (
-    //     <div className='text-center d-flex flex-column justify-content-center align-items-center gap-1'>
-    //       <span className={'fs-7 ' + (setField === 'urgency' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('urgency')}>
+    //     <div className='tw:text-center tw:flex tw:flex-col tw:justify-center tw:items-center tw:gap-1'>
+    //       <span className={'tw:text-[11.2px] ' + (setField === 'urgency' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('urgency')}>
     //         Urgency{' '}
     //         {setField === 'urgency' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
     //       </span>
-    //       <span className={'fs-7 ' + (setField === 'daysRemaining' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('daysRemaining')}>
+    //       <span className={'tw:text-[11.2px] ' + (setField === 'daysRemaining' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('daysRemaining')}>
     //         Remaining Days{' '}
     //         {setField === 'daysRemaining' ? (
     //           sortingDirectionAsc ? (
@@ -326,7 +327,7 @@ const ReorderingPointsTable = ({
     //               'm-0 p-0 text-center fs-7' + (row.daysToOrder <= 0 ? ' text-danger fw-semibold' : '')
     //             }>{`${FormatIntNumber(state.currentRegion, row.daysToOrder)} ${row.daysToOrder == 1 ? 'day' : 'days'}`}</span>
     //           <i className='fs-5 text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={'DaysToOrderIcon'} />
-    //           <UncontrolledTooltip placement='top' target={'DaysToOrderIcon'} innerClassName='bg-white border border-info border-opacity-50 p-2'>
+    //           <UncontrolledTooltip placement='top' target={'DaysToOrderIcon'} innerClassName='tw:bg-white tw:border tw:border-[color-mix(in_srgb,var(--info)_50%,transparent)] tw:p-2'>
     //             <p className='fs-7 text-primary m-0 p-0 mb-0'>Remaining days to place order.</p>
     //           </UncontrolledTooltip>
     //         </div>
@@ -337,7 +338,7 @@ const ReorderingPointsTable = ({
     //               'm-0 p-0 text-center fs-7' + (row.daysRemaining <= 0 ? ' text-danger fw-semibold' : '')
     //             }>{`${FormatIntNumber(state.currentRegion, row.daysRemaining)} ${row.daysRemaining == 1 ? 'day' : 'days'}`}</span>
     //           <i className='fs-5 text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={'DaysRemaining'} />
-    //           <UncontrolledTooltip placement='top' target={'DaysRemaining'} innerClassName='bg-white border border-info border-opacity-50 p-2'>
+    //           <UncontrolledTooltip placement='top' target={'DaysRemaining'} innerClassName='tw:bg-white tw:border tw:border-[color-mix(in_srgb,var(--info)_50%,transparent)] tw:p-2'>
     //             <p className='fs-7 text-primary m-0 p-0 mb-0'>Remaining days of stock.</p>
     //           </UncontrolledTooltip>
     //         </div>
@@ -352,13 +353,13 @@ const ReorderingPointsTable = ({
     // },
     {
       name: (
-        <span className={'w-100 fs-7 text-center ' + (setField === 'sku' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('sku')}>
+        <span className={'tw:w-full tw:text-[11.2px] tw:text-center ' + (setField === 'sku' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('sku')}>
           Product {setField === 'sku' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
         </span>
       ),
       selector: (row: ReorderingPointsProduct) => {
         return (
-          <div className='my-2 mx-0 d-flex flex-row justify-content-start align-items-center gap-3'>
+          <div className='tw:my-2 tw:mx-0 tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-4'>
             <div
               style={{
                 width: '35px',
@@ -374,23 +375,23 @@ const ReorderingPointsTable = ({
                 style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
               />
             </div>
-            <div className='w-100'>
-              <div className='d-flex flex-row justify-content-start align-items-center gap-1'>
+            <div className='tw:w-full'>
+              <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-1'>
                 <Link href={`/product/${row.inventoryId}/${row.sku}`} target='_blank'>
-                  <p className='m-0 p-0 text-primary fw-semibold fs-6'>{row.sku}</p>
+                  <p className='tw:m-0 tw:p-0 tw:text-primary tw:font-semibold tw:text-[13px]'>{row.sku}</p>
                 </Link>
                 <CopyTextToClipboard text={row.sku} label='SKU' />
               </div>
-              <p className='m-0 p-0 text-black fw-semibold fs-7 text-wrap'>{row.title}</p>
-              <span className='m-0 p-0 text-black fw-normal fs-7 d-flex flex-wrap justify-content-start align-items-center'>
+              <p className='tw:m-0 tw:p-0 tw:text-black tw:font-semibold tw:text-[11.2px] tw:text-wrap'>{row.title}</p>
+              <span className='tw:m-0 tw:p-0 tw:text-black tw:font-normal tw:text-[11.2px] tw:flex tw:flex-wrap tw:justify-start tw:items-center'>
                 {row.asin && (
-                  <div className='d-flex flex-nowrap justify-content-start align-items-center' style={{ gap: '2px' }}>
+                  <div className='tw:flex tw:flex-nowrap tw:justify-start tw:items-center' style={{ gap: '2px' }}>
                     {`ASIN: `}
                     <a
                       href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`}
                       target='_blank'
                       rel='noopener noreferrer'
-                      className='fw-light'
+                      className='tw:font-light'
                       style={{ textDecoration: 'none' }}>
                       {row.asin}
                     </a>
@@ -400,11 +401,11 @@ const ReorderingPointsTable = ({
                 {row.barcode && (
                   <div>
                     {`UPC: `}
-                    <span className='fw-light text-muted'>{row.barcode}</span>
+                    <span className='tw:font-light tw:text-[var(--bs-secondary-color)]'>{row.barcode}</span>
                   </div>
                 )}
               </span>
-              <div className='tw:flex tw:flex-row tw:justify-start tw:items-center gap-1 tw:mt-1'>
+              <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-1 tw:mt-1'>
                 {/* {(row.productTrendTag?.aiTrend || row.productTrendTag?.bsnssTrend) && (
                   <ShadcnBadge variant={'default'} className='tw:text-xs'>
                     <TrendingUpDownIcon className='tw:size-3 tw:mr-2' />
@@ -429,8 +430,8 @@ const ReorderingPointsTable = ({
     },
     {
       name: (
-        <div className='text-center d-flex flex-column justify-content-center align-items-center py-1'>
-          <span className={'fs-7 ' + (setField === 'warehouseQty' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('warehouseQty')}>
+        <div className='tw:text-center tw:flex tw:flex-col tw:justify-center tw:items-center tw:py-1'>
+          <span className={'tw:text-[11.2px] ' + (setField === 'warehouseQty' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('warehouseQty')}>
             Warehouse{' '}
             {setField === 'warehouseQty' ? (
               sortingDirectionAsc ? (
@@ -440,7 +441,7 @@ const ReorderingPointsTable = ({
               )
             ) : null}
           </span>
-          <span className={'fs-7 ' + (setField === 'productionQty' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('productionQty')}>
+          <span className={'tw:text-[11.2px] ' + (setField === 'productionQty' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('productionQty')}>
             Production{' '}
             {setField === 'productionQty' ? (
               sortingDirectionAsc ? (
@@ -450,7 +451,7 @@ const ReorderingPointsTable = ({
               )
             ) : null}
           </span>
-          <span className={'fs-7 ' + (setField === 'receiving' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('receiving')}>
+          <span className={'tw:text-[11.2px] ' + (setField === 'receiving' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('receiving')}>
             Receiving{' '}
             {setField === 'receiving' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
           </span>
@@ -459,17 +460,17 @@ const ReorderingPointsTable = ({
       selector: (row: ReorderingPointsProduct) => {
         return (
           <div>
-            <p className='m-0 p-0 text-end fs-7'>
-              <span className='text-muted fw-light'>On Hand: </span>
-              <span className='fw-semibold'>{row.warehouseQty}</span>
+            <p className='tw:m-0 tw:p-0 tw:text-right tw:text-[11.2px]'>
+              <span className='tw:text-[var(--bs-secondary-color)] tw:font-light'>On Hand: </span>
+              <span className='tw:font-semibold'>{row.warehouseQty}</span>
             </p>
-            <p className='m-0 p-0 text-end fs-7'>
-              <span className='text-muted fw-light'>Prod: </span>
-              <span className='fw-semibold'>{row.productionQty}</span>
+            <p className='tw:m-0 tw:p-0 tw:text-right tw:text-[11.2px]'>
+              <span className='tw:text-[var(--bs-secondary-color)] tw:font-light'>Prod: </span>
+              <span className='tw:font-semibold'>{row.productionQty}</span>
             </p>
-            <p className='m-0 p-0 text-end fs-7'>
-              <span className='text-muted fw-light'>Inbound: </span>
-              <span className='fw-semibold'>{row.receiving}</span>
+            <p className='tw:m-0 tw:p-0 tw:text-right tw:text-[11.2px]'>
+              <span className='tw:text-[var(--bs-secondary-color)] tw:font-light'>Inbound: </span>
+              <span className='tw:font-semibold'>{row.receiving}</span>
             </p>
           </div>
         )
@@ -483,10 +484,10 @@ const ReorderingPointsTable = ({
       ? [
           {
             name: (
-              <div className='text-center d-flex flex-column justify-content-center align-items-center py-1'>
+              <div className='tw:text-center tw:flex tw:flex-col tw:justify-center tw:items-center tw:py-1'>
                 {state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected && (
                   <>
-                    <span className={'fs-7 ' + (setField === 'fbaQty' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('fbaQty')}>
+                    <span className={'tw:text-[11.2px] ' + (setField === 'fbaQty' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('fbaQty')}>
                       FBA{' '}
                       {setField === 'fbaQty' ? (
                         sortingDirectionAsc ? (
@@ -497,7 +498,7 @@ const ReorderingPointsTable = ({
                       ) : null}
                     </span>
                     {state.user[state.currentRegion]?.rpShowAWD && (
-                      <span className={'fs-7 ' + (setField === 'awdQty' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('awdQty')}>
+                      <span className={'tw:text-[11.2px] ' + (setField === 'awdQty' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('awdQty')}>
                         AWD{' '}
                         {setField === 'awdQty' ? (
                           sortingDirectionAsc ? (
@@ -516,33 +517,33 @@ const ReorderingPointsTable = ({
               return (
                 <div>
                   {state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected && (
-                    <div className='my-1'>
-                      <p className='m-0 p-0 text-end fs-7'>
-                        <span className='text-muted fw-bold'>FBA: </span>
-                        <span className='fw-semibold'>{row.fbaQty}</span>
+                    <div className='tw:my-1'>
+                      <p className='tw:m-0 tw:p-0 tw:text-right tw:text-[11.2px]'>
+                        <span className='tw:text-[var(--bs-secondary-color)] tw:font-bold'>FBA: </span>
+                        <span className='tw:font-semibold'>{row.fbaQty}</span>
                       </p>
-                      <p className='m-0 p-0 text-end fs-7'>
-                        <span className='text-muted fw-light'>Prod: </span>
-                        <span className='fw-semibold'>{row.fbaProduction}</span>
+                      <p className='tw:m-0 tw:p-0 tw:text-right tw:text-[11.2px]'>
+                        <span className='tw:text-[var(--bs-secondary-color)] tw:font-light'>Prod: </span>
+                        <span className='tw:font-semibold'>{row.fbaProduction}</span>
                       </p>
-                      <p className='m-0 p-0 text-end fs-7'>
-                        <span className='text-muted fw-light'>Inbound: </span>
-                        <span className='fw-semibold'>{row.fbaInboundQty}</span>
+                      <p className='tw:m-0 tw:p-0 tw:text-right tw:text-[11.2px]'>
+                        <span className='tw:text-[var(--bs-secondary-color)] tw:font-light'>Inbound: </span>
+                        <span className='tw:font-semibold'>{row.fbaInboundQty}</span>
                       </p>
-                      {state.user[state.currentRegion]?.rpShowAWD && <hr className='my-1 mx-0 opacity-50' style={{ borderColor: '#6c757d' }} />}
+                      {state.user[state.currentRegion]?.rpShowAWD && <hr className='tw:my-1 tw:mx-0 tw:opacity-50' style={{ borderColor: '#6c757d' }} />}
                       {state.user[state.currentRegion]?.rpShowAWD && (
                         <>
-                          <p className='m-0 p-0 text-end fs-7'>
-                            <span className='text-muted fw-bold'>AWD: </span>
-                            <span className='fw-semibold'>{row.awdQty}</span>
+                          <p className='tw:m-0 tw:p-0 tw:text-right tw:text-[11.2px]'>
+                            <span className='tw:text-[var(--bs-secondary-color)] tw:font-bold'>AWD: </span>
+                            <span className='tw:font-semibold'>{row.awdQty}</span>
                           </p>
-                          <p className='m-0 p-0 text-end fs-7'>
-                            <span className='text-muted fw-light'>Inbound: </span>
-                            <span className='fw-semibold'>{row.awdInboundQty}</span>
+                          <p className='tw:m-0 tw:p-0 tw:text-right tw:text-[11.2px]'>
+                            <span className='tw:text-[var(--bs-secondary-color)] tw:font-light'>Inbound: </span>
+                            <span className='tw:font-semibold'>{row.awdInboundQty}</span>
                           </p>
-                          <p className='m-0 p-0 text-end fs-7'>
-                            <span className='text-muted fw-light'>Prod: </span>
-                            <span className='fw-semibold'>{row.awdProduction}</span>
+                          <p className='tw:m-0 tw:p-0 tw:text-right tw:text-[11.2px]'>
+                            <span className='tw:text-[var(--bs-secondary-color)] tw:font-light'>Prod: </span>
+                            <span className='tw:font-semibold'>{row.awdProduction}</span>
                           </p>
                         </>
                       )}
@@ -561,7 +562,7 @@ const ReorderingPointsTable = ({
     {
       name: (
         <span
-          className={'fs-7 text-wrap text-center ' + (setField === 'totalInventory' ? 'fw-bold' : 'text-muted')}
+          className={'tw:text-[11.2px] tw:text-wrap tw:text-center ' + (setField === 'totalInventory' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')}
           style={{ cursor: 'pointer' }}
           onClick={() => handleSetSorting('totalInventory')}>
           Total <br /> Inventory{' '}
@@ -587,26 +588,26 @@ const ReorderingPointsTable = ({
     {
       name: (
         <div>
-          <p className='m-0 mb-1 fw-bold fs-7 text-center'>Total Orders</p>
-          <div className='d-grid gap-1' style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
-            <span className={'fs-7 ' + (setField === '30D' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('30D')}>
+          <p className='tw:m-0 tw:mb-1 tw:font-bold tw:text-[11.2px] tw:text-center'>Total Orders</p>
+          <div className='tw:grid tw:gap-1' style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+            <span className={'tw:text-[11.2px] ' + (setField === '30D' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('30D')}>
               30D {setField === '30D' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
             </span>
-            <span className={'fs-7 ' + (setField === '60D' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('60D')}>
+            <span className={'tw:text-[11.2px] ' + (setField === '60D' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('60D')}>
               60D {setField === '60D' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
             </span>
-            <span className={'fs-7 ' + (setField === '90D' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('90D')}>
+            <span className={'tw:text-[11.2px] ' + (setField === '90D' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('90D')}>
               90D {setField === '90D' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
             </span>
-            <span className={'fs-7 ' + (setField === '120D' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('120D')}>
+            <span className={'tw:text-[11.2px] ' + (setField === '120D' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('120D')}>
               120D{' '}
               {setField === '120D' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
             </span>
-            <span className={'fs-7 ' + (setField === '180D' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('180D')}>
+            <span className={'tw:text-[11.2px] ' + (setField === '180D' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('180D')}>
               180D{' '}
               {setField === '180D' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
             </span>
-            <span className={'fs-7 ' + (setField === '365D' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('365D')}>
+            <span className={'tw:text-[11.2px] ' + (setField === '365D' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('365D')}>
               365D{' '}
               {setField === '365D' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
             </span>
@@ -615,30 +616,30 @@ const ReorderingPointsTable = ({
       ),
       selector: (row: ReorderingPointsProduct) => {
         return (
-          <div className='d-grid gap-2 my-3 fs-7' style={{ gridTemplateColumns: 'repeat(2, 1fr)', overflow: 'unset', textOverflow: 'unset' }}>
+          <div className='tw:grid tw:gap-2 tw:my-4 tw:text-[11.2px]' style={{ gridTemplateColumns: 'repeat(2, 1fr)', overflow: 'unset', textOverflow: 'unset' }}>
             <div>
-              <span className='fw-semibold'>30D: </span>
+              <span className='tw:font-semibold'>30D: </span>
               <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['30D'])}</span>
             </div>
             <div>
-              <span className='fw-semibold'>120D: </span>
+              <span className='tw:font-semibold'>120D: </span>
               <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['120D'])}</span>
             </div>
             <div>
-              <span className='fw-semibold'>60D: </span>
+              <span className='tw:font-semibold'>60D: </span>
               <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['60D'])}</span>
             </div>
             <div>
-              <span className='fw-semibold'>180D: </span>
+              <span className='tw:font-semibold'>180D: </span>
               <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['180D'])}</span>
             </div>
             <div>
-              <span className='fw-semibold'>90D: </span>
+              <span className='tw:font-semibold'>90D: </span>
               <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['90D'])}</span>
             </div>
 
             <div>
-              <span className='fw-semibold'>365D: </span>
+              <span className='tw:font-semibold'>365D: </span>
               <span>{FormatIntNumber(state.currentRegion, row.totalUnitsSold['365D'])}</span>
             </div>
           </div>
@@ -653,12 +654,12 @@ const ReorderingPointsTable = ({
     },
     {
       name: (
-        <div className='w-100 text-center d-flex flex-column justify-content-center align-items-center'>
-          <span className={'fs-7 ' + (setField === 'sellerCost' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('sellerCost')}>
+        <div className='tw:w-full tw:text-center tw:flex tw:flex-col tw:justify-center tw:items-center'>
+          <span className={'tw:text-[11.2px] ' + (setField === 'sellerCost' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('sellerCost')}>
             Supplier Cost{' '}
             {setField === 'sellerCost' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
           </span>
-          <span className={'fs-7 ' + (setField === 'boxQty' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('boxQty')}>
+          <span className={'tw:text-[11.2px] ' + (setField === 'boxQty' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('boxQty')}>
             Box Qty{' '}
             {setField === 'boxQty' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
           </span>
@@ -666,9 +667,9 @@ const ReorderingPointsTable = ({
       ),
       selector: (row: ReorderingPointsProduct) => {
         return (
-          <div className='fs-7 my-3'>
-            <p className='m-0 p-0 text-center'>{FormatCurrency(state.currentRegion, row.sellerCost)}</p>
-            <p className='m-0 p-0 text-center'>{row.boxQty}</p>
+          <div className='tw:text-[11.2px] tw:my-4'>
+            <p className='tw:m-0 tw:p-0 tw:text-center'>{FormatCurrency(state.currentRegion, row.sellerCost)}</p>
+            <p className='tw:m-0 tw:p-0 tw:text-center'>{row.boxQty}</p>
           </div>
         )
       },
@@ -678,18 +679,18 @@ const ReorderingPointsTable = ({
     },
     {
       name: (
-        <div className='w-100 text-center d-flex flex-column justify-content-center align-items-center'>
-          <span className={'fs-7 text-muted'}>Lead Time </span>
-          <span className={'fs-7 text-muted'}>Safety Stock Days </span>
+        <div className='tw:w-full tw:text-center tw:flex tw:flex-col tw:justify-center tw:items-center'>
+          <span className={'tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'}>Lead Time </span>
+          <span className={'tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'}>Safety Stock Days </span>
         </div>
       ),
       selector: (row: ReorderingPointsProduct) => {
         return (
-          <div className='fs-7 my-3'>
-            <p className='m-0 p-0 text-center font-semibold'>
+          <div className='tw:text-[11.2px] tw:my-4'>
+            <p className='tw:m-0 tw:p-0 tw:text-center tw:font-semibold'>
               {FormatIntNumber(state.currentRegion, row.leadTimeSC)} <span className='tw:text-muted-foreground tw:text-xs'>Days</span>
             </p>
-            <p className='m-0 p-0 text-center font-semibold'>
+            <p className='tw:m-0 tw:p-0 tw:text-center tw:font-semibold'>
               {FormatIntNumber(state.currentRegion, row.daysOfStockSC)} <span className='tw:text-muted-foreground tw:text-xs'>Days</span>
             </p>
           </div>
@@ -701,9 +702,9 @@ const ReorderingPointsTable = ({
     },
     // {
     //   name: (
-    //     <div className='text-center d-flex flex-column justify-content-center align-items-center py-1'>
+    //     <div className='tw:text-center tw:flex tw:flex-col tw:justify-center tw:items-center tw:py-1'>
     //       {/* <span className={'fs-7 fw-bold'}>Forecast</span> */}
-    //       <span className={'fs-7 ' + (setField === 'totalSCForecast' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('totalSCForecast')}>
+    //       <span className={'tw:text-[11.2px] ' + (setField === 'totalSCForecast' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('totalSCForecast')}>
     //         Forecast{' '}
     //         {setField === 'totalSCForecast' ? (
     //           sortingDirectionAsc ? (
@@ -730,9 +731,9 @@ const ReorderingPointsTable = ({
     // },
     {
       name: (
-        <div className='text-center d-flex flex-column justify-content-center align-items-center py-1'>
+        <div className='tw:text-center tw:flex tw:flex-col tw:justify-center tw:items-center tw:py-1'>
           <span
-            className={'fs-7 ' + (setField === 'totalAIForecast_1' ? 'fw-bold' : 'text-muted')}
+            className={'tw:text-[11.2px] ' + (setField === 'totalAIForecast_1' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')}
             style={{ cursor: 'pointer' }}
             onClick={() => handleSetSorting('totalAIForecast_1')}>
             AI 9 Month Forecast{' '}
@@ -747,25 +748,25 @@ const ReorderingPointsTable = ({
         </div>
       ),
       selector: (row: ReorderingPointsProduct) => {
-        if (!state.user[state.currentRegion]?.useAiForecast) return <p className='text-center fs-7 text-muted'>Disabled</p>
+        if (!state.user[state.currentRegion]?.useAiForecast) return <p className='tw:text-center tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>Disabled</p>
         const forecastValue = getAIForecastTotal(row.totalAIForecast_1)
 
         return (
-          <div className='fs-7'>
+          <div className='tw:text-[11.2px]'>
             {row.totalAIForecast_1.model ? (
-              <div className='d-flex flex-row justify-content-center align-items-center gap-2'>
-                <p className='m-0 p-0 text-center'>{FormatIntNumber(state.currentRegion, forecastValue)}</p>
+              <div className='tw:flex tw:flex-row tw:justify-center tw:items-center tw:gap-2'>
+                <p className='tw:m-0 tw:p-0 tw:text-center'>{FormatIntNumber(state.currentRegion, forecastValue)}</p>
                 {row.totalAIForecast_1.analysis && (
                   <>
                     <i className='ri-information-fill m-0 fs-5 text-info' id={`ai_forecast_model_1_${row.sku}`}></i>
                     <SCTooltip target={`ai_forecast_model_1_${row.sku}`} placement='right' key={`ai_forecast_model_1_${row.sku}`}>
-                      <p className='fs-7 text-primary m-0 p-0'>{row.totalAIForecast_1.analysis}</p>
+                      <p className='tw:text-[11.2px] tw:text-primary tw:m-0 tw:p-0'>{row.totalAIForecast_1.analysis}</p>
                     </SCTooltip>
                   </>
                 )}
               </div>
             ) : (
-              <p className='m-0 p-0 text-center text-danger' id={'ai_recommended_Qty'}>
+              <p className='tw:m-0 tw:p-0 tw:text-center tw:text-danger' id={'ai_recommended_Qty'}>
                 No Forecast
               </p>
             )}
@@ -778,9 +779,9 @@ const ReorderingPointsTable = ({
     },
     {
       name: (
-        <div className='text-center d-flex flex-column justify-content-center align-items-center py-1'>
+        <div className='tw:text-center tw:flex tw:flex-col tw:justify-center tw:items-center tw:py-1'>
           {/* <span className={'fs-7 fw-bold'}>Forecast</span> */}
-          <span className={'fs-7 ' + (setField === 'ai_forecast_qty' ? 'fw-bold' : 'text-muted')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('ai_forecast_qty')}>
+          <span className={'tw:text-[11.2px] ' + (setField === 'ai_forecast_qty' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('ai_forecast_qty')}>
             Forecast{' '}
             {setField === 'ai_forecast_qty' ? (
               sortingDirectionAsc ? (
@@ -795,8 +796,8 @@ const ReorderingPointsTable = ({
       selector: (row: ReorderingPointsProduct) => {
         const forecastValue = getProductAIForecastCoverageQty(row)
         return (
-          <div className='fs-7'>
-            <p className='m-0 p-0 text-center' id={'Recommended_Qty'}>
+          <div className='tw:text-[11.2px]'>
+            <p className='tw:m-0 tw:p-0 tw:text-center' id={'Recommended_Qty'}>
               {FormatIntNumber(state.currentRegion, forecastValue)}
             </p>
           </div>
@@ -809,36 +810,36 @@ const ReorderingPointsTable = ({
     ...orderSplitsColumns(splits.isSplitting, splits.splitsQty),
     {
       name: (
-        <div className='text-center text-muted d-flex flex-column justify-content-center align-items-center'>
-          <span className='fs-7'>
+        <div className='tw:text-center tw:text-[var(--bs-secondary-color)] tw:flex tw:flex-col tw:justify-center tw:items-center'>
+          <span className='tw:text-[11.2px]'>
             Quantity <br /> Used
           </span>
         </div>
       ),
       selector: (row: ReorderingPointsProduct) => {
         return (
-          <div className='d-flex flex-column justify-content-start align-items-end gap-2 w-100 px-1'>
-            <div className='w-100 d-flex flex-row justify-content-start align-items-center gap-1'>
+          <div className='tw:flex tw:flex-col tw:justify-start tw:items-end tw:gap-2 tw:w-full tw:px-1'>
+            <div className='tw:w-full tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-1'>
               <input
-                className='form-check-input m-0 p-0'
+                className='form-check-input tw:m-0 tw:p-0'
                 type='checkbox'
                 checked={!row.useOrderAdjusted}
                 id={`orderCheckbox-${row.sku}`}
                 onClick={() => handleUseAdjustedQty(row.sku, false)}
                 readOnly
               />
-              <span className='fs-7'>Order</span>
+              <span className='tw:text-[11.2px]'>Order</span>
             </div>
-            <div className='w-100 d-flex flex-row justify-content-start align-items-center gap-1'>
+            <div className='tw:w-full tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-1'>
               <input
-                className='form-check-input m-0 p-0'
+                className='form-check-input tw:m-0 tw:p-0'
                 type='checkbox'
                 checked={row.useOrderAdjusted}
                 id={`adjustedOrderCheckbox-${row.sku}`}
                 onClick={() => handleUseAdjustedQty(row.sku, true)}
                 readOnly
               />
-              <span className='fs-7'>Boxes</span>
+              <span className='tw:text-[11.2px]'>Boxes</span>
             </div>
           </div>
         )
@@ -849,41 +850,41 @@ const ReorderingPointsTable = ({
     },
     {
       name: (
-        <span className='fs-7 text-center text-muted'>
+        <span className='tw:text-[11.2px] tw:text-center tw:text-[var(--bs-secondary-color)]'>
           Total <br /> Ordered
         </span>
       ),
       selector: (row: ReorderingPointsProduct) => {
         const totalOrdered = row.useOrderAdjusted ? row.orderAdjusted : row.order
-        return <p className='fs-6 fw-semibold text-center'>{FormatIntNumber(state.currentRegion, totalOrdered)}</p>
+        return <p className='tw:text-[13px] tw:font-semibold tw:text-center'>{FormatIntNumber(state.currentRegion, totalOrdered)}</p>
       },
       sortable: false,
       center: true,
       compact: true,
     },
     {
-      name: <span className='fs-7 text-center text-muted'>Actions</span>,
+      name: <span className='tw:text-[11.2px] tw:text-center tw:text-[var(--bs-secondary-color)]'>Actions</span>,
       cell: (row: ReorderingPointsProduct) => {
         return (
-          <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
-            <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
+          <UncontrolledDropdown className='tw:inline-block' direction='start'>
+            <DropdownToggle className='tw:m-0 tw:p-0 tw:rounded tw:bg-[var(--vz-light)]' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
               <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-2 py-0' style={{ color: '#919FAF' }} />
             </DropdownToggle>
             <DropdownMenu className='dropdown-menu-end' container={'body'}>
               <DropdownItem className='edit-item-btn' onClick={() => setRPProductConfig({ isOpen: true, product: row })}>
                 <i className='ri-settings-3-line align-middle me-2 fs-5 text-black'></i>
-                <span className='fs-7 fw-normal text-dark'>Edit Config</span>
+                <span className='tw:text-[11.2px] tw:font-normal tw:text-black'>Edit Config</span>
               </DropdownItem>
               {state.user.us.useAiForecast ? (
                 <DropdownItem className='edit-item-btn' onClick={() => handleRegenerateForecast({ inventoryId: row.inventoryId, sku: row.sku })}>
                   <i className='mdi mdi-reload align-middle me-2 fs-5 text-primary'></i>
-                  <span className='fs-7 fw-normal text-dark'>Regenerate Forecast</span>
+                  <span className='tw:text-[11.2px] tw:font-normal tw:text-black'>Regenerate Forecast</span>
                 </DropdownItem>
               ) : null}
               {state.user.us.useAiForecast ? (
                 <DropdownItem className='edit-item-btn' onClick={() => setAIForecastProduct(row)}>
                   <i className='las la-brain align-middle me-2 fs-5 text-info'></i>
-                  <span className='fs-7 fw-normal text-dark'>AI Forecast Details</span>
+                  <span className='tw:text-[11.2px] tw:font-normal tw:text-black'>AI Forecast Details</span>
                 </DropdownItem>
               ) : null}
               {/* <DownloadProductMD product={row} /> */}
@@ -893,7 +894,7 @@ const ReorderingPointsTable = ({
                   setSalesModal({ showSalesModal: true, sku: row.sku, title: row.title, totalUnitsSold: row.totalUnitsSold, marketplaces: row.marketplaces })
                 }}>
                 <i className='ri-search-eye-line align-middle me-2 fs-5 text-primary'></i>
-                <span className='fs-7 fw-normal text-dark'>Sales By Marketpalce</span>
+                <span className='tw:text-[11.2px] tw:font-normal tw:text-black'>Sales By Marketpalce</span>
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>

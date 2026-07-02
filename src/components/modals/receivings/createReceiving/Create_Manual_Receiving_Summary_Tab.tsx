@@ -14,23 +14,23 @@ type Props = {
 const Create_Manual_Receiving_Summary_Tab = ({ orderProducts }: Props) => {
   const { state } = useContext(AppContext)
   return (
-    <div className='overflow-auto'>
+    <div className='tw:overflow-auto'>
       <Col md={12}>
         <table className='table table-sm align-middle table-responsive table-nowrap table-striped'>
           <thead className='table-light'>
             <tr key='manualReceivingSummaryTab-header'>
               <th scope='col'>Title / SKU</th>
               <th scope='col'>Supplier</th>
-              <th scope='col' className='text-center'>
+              <th scope='col' className='tw:text-center'>
                 Total to Received
               </th>
             </tr>
           </thead>
-          <tbody className='fs-7'>
+          <tbody className='tw:text-[11.2px]'>
             {orderProducts.map((item) => (
               <tr key={`summary-item-${item.businessId}-${item.sku}`}>
-                <td className='text-center'>
-                  <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
+                <td className='tw:text-center'>
+                  <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2'>
                     <div
                       style={{
                         width: '40px',
@@ -45,20 +45,20 @@ const Create_Manual_Receiving_Summary_Tab = ({ orderProducts }: Props) => {
                         style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                       />
                     </div>
-                    <div className='text-start'>
-                      <p className='text-nowrap m-0 fw-semibold'>{item.title}</p>
-                      <p className='text-nowrap m-0'>{item.sku}</p>
+                    <div className='tw:text-left'>
+                      <p className='tw:text-nowrap tw:m-0 tw:font-semibold'>{item.title}</p>
+                      <p className='tw:text-nowrap tw:m-0'>{item.sku}</p>
                     </div>
                   </div>
                 </td>
                 <td className=''>{item.suppliersName}</td>
-                <td className='text-center'>{item.quantity}</td>
+                <td className='tw:text-center'>{item.quantity}</td>
               </tr>
             ))}
             <tr key='manualReceivingSummaryTab-footer'>
               <td></td>
-              <td className='fw-bold fs-6 text-end'>Total</td>
-              <td className='fw-bold fs-6 text-center'>
+              <td className='tw:font-bold tw:text-[13px] tw:text-right'>Total</td>
+              <td className='tw:font-bold tw:text-[13px] tw:text-center'>
                 {FormatIntNumber(
                   state.currentRegion,
                   orderProducts.reduce((total: number, item) => {

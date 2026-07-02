@@ -263,25 +263,25 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
       </ModalHeader>
       <ModalBody>
         <Row>
-          <p className='m-0 fs-5 fw-semibold'>
-            Destination: <span className='text-primary'>{state.receivingFromPo.warehouse.name}</span>
+          <p className='tw:m-0 tw:text-[16.25px] tw:font-semibold'>
+            Destination: <span className='tw:text-primary'>{state.receivingFromPo.warehouse.name}</span>
           </p>
         </Row>
         <Form onSubmit={handleCreateReceiving}>
           <Row>
             <Col xs={12} md={5}>
               <FormGroup>
-                <Label htmlFor='firstNameinput' className='form-label fs-7'>
+                <Label htmlFor='firstNameinput' className='tw:mb-2 tw:inline-block tw:text-[11.2px]'>
                   *Transaction Number
                 </Label>
                 <div className='input-group'>
-                  <span className='input-group-text fw-semibold fs-5 m-0 px-2 py-0' id='basic-addon1'>
+                  <span className='input-group-text tw:font-semibold tw:text-[16.25px] tw:m-0 tw:px-2 tw:py-0' id='basic-addon1'>
                     {orderNumberStart}
                   </span>
                   <Input
                     disabled={validation.values.isNewReceiving === 'false'}
                     type='text'
-                    className='fs-6'
+                    className='tw:text-[13px]'
                     id='orderNumber'
                     name='orderNumber'
                     bsSize='sm'
@@ -308,7 +308,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                 }}
                 error={validation.errors.isNewReceiving}
               />
-              {openReceivings && openReceivings.length <= 0 && <p className='text-muted fs-7'>{`No open receiving to ${state.receivingFromPo.warehouse.name}`}</p>}
+              {openReceivings && openReceivings.length <= 0 && <p className='tw:text-[var(--bs-secondary-color)] tw:text-[11.2px]'>{`No open receiving to ${state.receivingFromPo.warehouse.name}`}</p>}
               {validation.values.isNewReceiving === 'false' && (
                 <SelectSingleFilter
                   inputLabel='*Select Existing Receiving'
@@ -328,10 +328,10 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
             </Col>
           </Row>
 
-          <Nav className='nav-tabs border-bottom' role='tablist'>
+          <Nav className='nav-tabs tw:border-b' role='tablist'>
             <NavItem style={{ cursor: 'pointer' }}>
               <NavLink
-                className={activeTab == 'summary' ? 'text-primary fw-semibold fs-6 border border-primary' : 'text-muted fs-6'}
+                className={activeTab == 'summary' ? 'tw:text-primary tw:font-semibold tw:text-[13px] tw:border tw:border-primary' : 'tw:text-[var(--bs-secondary-color)] tw:text-[13px]'}
                 onClick={() => {
                   setactiveTab('summary')
                 }}
@@ -341,7 +341,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
             </NavItem>
             <NavItem style={{ cursor: 'pointer' }}>
               <NavLink
-                className={activeTab == 'packages' ? 'text-primary fw-semibold fs-6 border border-primary' : 'text-muted fs-6'}
+                className={activeTab == 'packages' ? 'tw:text-primary tw:font-semibold tw:text-[13px] tw:border tw:border-primary' : 'tw:text-[var(--bs-secondary-color)] tw:text-[13px]'}
                 onClick={() => {
                   setactiveTab('packages')
                 }}
@@ -351,7 +351,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
             </NavItem>
           </Nav>
 
-          <TabContent activeTab={activeTab} className='pt-2 mb-3'>
+          <TabContent activeTab={activeTab} className='tw:pt-2 tw:mb-4'>
             <TabPane tabId='summary'>{activeTab == 'summary' && <Create_Receiving_Summary_Tab />}</TabPane>
             <TabPane tabId='packages'>
               {activeTab == 'packages' && (
@@ -374,10 +374,10 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
               )}
             </TabPane>
           </TabContent>
-          <Row className='mb-2'>
+          <Row className='tw:mb-2'>
             {hasBoxedErrors.error && (
-              <Col xs={12} className='m-0'>
-                <Alert color='danger' className='fs-7 py-1 mb-2'>
+              <Col xs={12} className='tw:m-0'>
+                <Alert color='danger' className='tw:text-[11.2px] tw:py-1 tw:mb-2'>
                   <i className='ri-error-warning-line me-3 align-middle fs-5' />
                   {hasBoxedErrors.message}
                 </Alert>
@@ -385,18 +385,18 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
             )}
           </Row>
           <Row md={12}>
-            <div className='d-flex justify-content-end align-items-center gap-2'>
+            <div className='tw:flex tw:justify-end tw:items-center tw:gap-2'>
               {activeTab == 'summary' && (
                 <Button
                   disabled={loading || Object.keys(state.receivingFromPo.items).length <= 0}
                   type='button'
-                  className='fs-7 btn-soft-primary'
+                  className='tw:text-[11.2px] btn-soft-primary'
                   onClick={() => setactiveTab('packages')}>
                   Next Step
                 </Button>
               )}
               {activeTab == 'packages' && (
-                <Button disabled={loading || Object.keys(state.receivingFromPo.items).length <= 0 || hasBoxedErrors.error} type='submit' color='success' className='fs-7'>
+                <Button disabled={loading || Object.keys(state.receivingFromPo.items).length <= 0 || hasBoxedErrors.error} type='submit' color='success' className='tw:text-[11.2px]'>
                   {loading ? (
                     <span>
                       <Spinner color='light' size={'sm'} /> Creating...

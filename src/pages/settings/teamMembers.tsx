@@ -89,19 +89,19 @@ const TeamMembers = ({}: Props) => {
         <div className='page-content'>
           <BreadCrumb title='Team Members' pageTitle='Settings' />
           <Container fluid>
-            <Card className=''>
-              <CardBody className='p-4'>
-                <div className='d-flex flex-sm-column justify-content-between align-items-center p-0 flex-xl-row gap-sm-2 gap-xl-0'>
-                  <div className='d-flex flex-wrap justify-content-start align-items-center gap-3 w-100'>
+            <Card>
+              <CardBody className='tw:p-6'>
+                <div className='tw:flex tw:sm:flex-col tw:xl:flex-row tw:justify-between tw:items-center tw:p-0 tw:sm:gap-2 tw:xl:gap-0'>
+                  <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center tw:gap-4 tw:w-full'>
                     {Members?.length! < 3 && <Button onClick={() => setShowNewMemberModal(true)}>+ Add Member</Button>}
                   </div>
-                  <div className='app-search col-sm-12 col-xl-3 p-0'>
-                    <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+                  <div className='app-search tw:w-full tw:xl:w-1/4 tw:p-0'>
+                    <div className='tw:relative tw:flex tw:rounded-lg tw:w-full tw:overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                       <DebounceInput
                         type='text'
                         minLength={3}
                         debounceTimeout={500}
-                        className='form-control fs-6 bg-white'
+                        className='form-control tw:text-[13px] tw:bg-white'
                         placeholder='Search...'
                         id='search-options'
                         value={searchValue}
@@ -110,7 +110,7 @@ const TeamMembers = ({}: Props) => {
                       />
                       <span className='mdi mdi-magnify search-widget-icon fs-5'></span>
                       <span
-                        className='d-flex align-items-center justify-content-center bg-white'
+                        className='tw:flex tw:items-center tw:justify-center tw:bg-white'
                         style={{
                           cursor: 'pointer',
                         }}

@@ -26,12 +26,12 @@ const Settings = ({}: Props) => {
           <Container fluid>
             <Row>
               <Col lg={12}>
-                <Card className=''>
+                <Card>
                   <CardHeader>
-                    <Nav className='nav-tabs-custom rounded card-header-tabs border-bottom-0' role='tablist'>
+                    <Nav className='nav-tabs-custom tw:rounded card-header-tabs tw:border-b-0' role='tablist'>
                       <NavItem style={{ cursor: 'pointer' }}>
                         <NavLink
-                          className={activeTab == '1' ? 'text-primary fs-5' : 'text-muted fs-5'}
+                          className={activeTab == '1' ? 'tw:!text-primary tw:text-[16.25px]' : 'tw:!text-[var(--bs-secondary-color)] tw:text-[16.25px]'}
                           onClick={() => {
                             tabChange('1')
                           }}>
@@ -44,7 +44,7 @@ const Settings = ({}: Props) => {
                       <NavItem style={{ cursor: 'pointer' }}>
                         <NavLink
                           to='#'
-                          className={activeTab == '2' ? 'text-primary fs-5' : 'text-muted fs-5'}
+                          className={activeTab == '2' ? 'tw:!text-primary tw:text-[16.25px]' : 'tw:!text-[var(--bs-secondary-color)] tw:text-[16.25px]'}
                           onClick={() => {
                             tabChange('2')
                           }}
@@ -58,7 +58,7 @@ const Settings = ({}: Props) => {
                       <NavItem style={{ cursor: 'pointer' }}>
                         <NavLink
                           to='#'
-                          className={activeTab == '3' ? 'text-primary fs-5' : 'text-muted fs-5'}
+                          className={activeTab == '3' ? 'tw:!text-primary tw:text-[16.25px]' : 'tw:!text-[var(--bs-secondary-color)] tw:text-[16.25px]'}
                           onClick={() => {
                             tabChange('3')
                           }}
@@ -71,7 +71,7 @@ const Settings = ({}: Props) => {
                       </NavItem>
                     </Nav>
                   </CardHeader>
-                  <CardBody className='p-4'>
+                  <CardBody className='tw:p-6'>
                     <TabContent activeTab={activeTab}>
                       <TabPane tabId='1'>
                         <Suppliers />

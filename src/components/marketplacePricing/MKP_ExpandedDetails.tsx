@@ -7,7 +7,8 @@ import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/Forma
 import { NoImageAdress } from '@lib/assetsConstants'
 import { sortNumbers } from '@lib/helperFunctions'
 import { MKP_Marketplaces, MKP_Product } from '@typesTs/marketplacePricing/marketplacePricing'
-import DataTable, { ExpanderComponentProps } from 'react-data-table-component'
+import { ExpanderComponentProps } from 'react-data-table-component'
+import DataTable from '@components/Common/DataTableSC'
 import { DebounceInput } from 'react-debounce-input'
 import { Card } from '@/components/migration-ui'
 
@@ -21,10 +22,10 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
   const { handleOtherCosts, handleProposedPrice, handleSetSingleMargin, handleSetProductMargin, handleNotes } = expandedRowProps!
   const columns: any = [
     {
-      name: <span className='fw-semibold text-center fs-7'>Marketplace</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Marketplace</span>,
       selector: (row: MKP_Marketplaces) => {
         return (
-          <div className='d-flex flex-row justify-content-start gap-1 align-items-center'>
+          <div className='tw:flex tw:flex-row tw:justify-start tw:gap-1 tw:items-center'>
             <div
               style={{
                 width: '20px',
@@ -40,7 +41,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
                 style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
               />
             </div>
-            <span className='m-0 p-0 fs-7 text-muted text-wrap'>{row.name}</span>
+            <span className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:text-[var(--bs-secondary-color)] tw:text-wrap'>{row.name}</span>
           </div>
         )
       },
@@ -50,9 +51,9 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       grow: 2,
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>On Watch</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>On Watch</span>,
       selector: (row: MKP_Marketplaces) =>
-        row.proposedPrice > 0 && row.proposedPrice !== row.actualPrice ? <i className='mdi mdi-eye label-icon align-middle fs-5 me-2 text-primary' /> : null,
+        row.proposedPrice > 0 && row.proposedPrice !== row.actualPrice ? <i className='mdi mdi-eye label-icon tw:align-middle tw:text-[16.25px] tw:me-2 tw:text-primary' /> : null,
       sortable: true,
       center: true,
       compact: true,
@@ -62,21 +63,21 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
         sortNumbers(rowA.proposedPrice > 0 && rowA.proposedPrice !== rowA.actualPrice ? 1 : 0, rowB.proposedPrice > 0 && rowB.proposedPrice !== rowB.actualPrice ? 1 : 0),
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>1 Month Sales</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>1 Month Sales</span>,
       selector: (row: MKP_Marketplaces) => FormatIntNumber(state.currentRegion, row.unitsSold['1M'] ?? 0),
       sortable: true,
       center: true,
       compact: true,
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>1 Year Sales</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>1 Year Sales</span>,
       selector: (row: MKP_Marketplaces) => FormatIntNumber(state.currentRegion, row.unitsSold['1Y'] ?? 0),
       sortable: true,
       center: true,
       compact: true,
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Shipping Cost</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Shipping Cost</span>,
       selector: (row: MKP_Marketplaces) => FormatCurrency(state.currentRegion, row.shippingToMarketpalce),
       sortable: true,
       center: true,
@@ -86,14 +87,14 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       },
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Other Costs</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Other Costs</span>,
       selector: (row: MKP_Marketplaces) => {
         return (
-          <div className='d-flex flex-column justify-content-start align-items-center gap-2 w-100 px-1'>
+          <div className='tw:flex tw:flex-col tw:justify-start tw:items-center tw:gap-2 tw:w-full tw:px-1'>
             <DebounceInput
               type='number'
               debounceTimeout={400}
-              className='form-control form-control-sm fs-7 m-0 py-0 w-75 text-center'
+              className='form-control form-control-sm tw:text-[11.2px] tw:m-0 tw:py-0 tw:w-3/4 tw:text-center'
               min={0}
               id={`orderQty-${data.sku}-${row.storeId}`}
               value={row.storeOtherCosts}
@@ -117,7 +118,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       },
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Current Price</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Current Price</span>,
       selector: (row: MKP_Marketplaces) => FormatCurrency(state.currentRegion, row.actualPrice),
       sortable: true,
       center: true,
@@ -128,7 +129,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       },
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Fee</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Fee</span>,
       selector: (row: MKP_Marketplaces) => FormatCurrency(state.currentRegion, row.totalFees),
       sortable: true,
       center: true,
@@ -139,7 +140,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       },
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Profit</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Profit</span>,
       selector: (row: MKP_Marketplaces) =>
         FormatCurrency(state.currentRegion, row.actualPrice - row.totalFees - data.sellerCost - data.inboundShippingCost - row.storeOtherCosts - row.shippingToMarketpalce),
       sortable: true,
@@ -151,13 +152,13 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       },
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Margin</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Margin</span>,
       selector: (row: MKP_Marketplaces) => {
         const actualMargin =
           row.actualPrice <= 0
             ? 0
             : ((row.actualPrice - row.totalFees - data.sellerCost - data.inboundShippingCost - row.storeOtherCosts - row.shippingToMarketpalce) / row.actualPrice) * 100
-        return <span className={actualMargin < 0 ? 'text-danger' : 'text-success'}>{`${FormatIntPercentage(state.currentRegion, actualMargin)} %`}</span>
+        return <span className={actualMargin < 0 ? 'tw:text-danger' : 'tw:text-success'}>{`${FormatIntPercentage(state.currentRegion, actualMargin)} %`}</span>
       },
       sortable: true,
       center: true,
@@ -168,14 +169,14 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       },
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Proposed Price</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Proposed Price</span>,
       selector: (row: MKP_Marketplaces) => {
         return (
-          <div className='d-flex flex-column justify-content-start align-items-center gap-2 w-100 px-1'>
+          <div className='tw:flex tw:flex-col tw:justify-start tw:items-center tw:gap-2 tw:w-full tw:px-1'>
             <DebounceInput
               type='number'
               debounceTimeout={400}
-              className='form-control form-control-sm fs-7 m-0 py-0 w-75 text-center'
+              className='form-control form-control-sm tw:text-[11.2px] tw:m-0 tw:py-0 tw:w-3/4 tw:text-center'
               min={0}
               id={`orderQty-${data.sku}-${row.storeId}`}
               value={row.proposedPrice}
@@ -199,7 +200,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       },
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Fee</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Fee</span>,
       selector: (row: MKP_Marketplaces) => FormatCurrency(state.currentRegion, row.proposedPrice * (row.comissionFee / 100) + row.fixedFee + row.fbaHandlingFee),
       sortable: true,
       center: true,
@@ -210,7 +211,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       },
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Profit</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Profit</span>,
       selector: (row: MKP_Marketplaces) =>
         FormatCurrency(
           state.currentRegion,
@@ -230,7 +231,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       },
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Margin</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Margin</span>,
       selector: (row: MKP_Marketplaces) => {
         const proposedMargin =
           ((row.proposedPrice -
@@ -241,7 +242,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
             row.shippingToMarketpalce) /
             row.proposedPrice) *
           100
-        return <span className={proposedMargin < 0 ? 'text-danger' : 'text-success'}>{`${FormatIntPercentage(state.currentRegion, proposedMargin)} %`}</span>
+        return <span className={proposedMargin < 0 ? 'tw:text-danger' : 'tw:text-success'}>{`${FormatIntPercentage(state.currentRegion, proposedMargin)} %`}</span>
       },
       sortable: true,
       center: true,
@@ -253,13 +254,13 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
     },
     {
       name: (
-        <div className='d-flex flex-column justify-content-start align-items-center gap-1 w-100'>
-          <span className='fw-semibold text-center fs-7'>Set Margin</span>
-          <div className='d-flex flex-row justify-content-center align-items-center gap-2 w-100 px-1'>
+        <div className='tw:flex tw:flex-col tw:justify-start tw:items-center tw:gap-1 tw:w-full'>
+          <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Set Margin</span>
+          <div className='tw:flex tw:flex-row tw:justify-center tw:items-center tw:gap-2 tw:w-full tw:px-1'>
             <DebounceInput
               type='number'
               debounceTimeout={400}
-              className='form-control form-control-sm fs-7 m-0 py-0 w-50 text-center'
+              className='form-control form-control-sm tw:text-[11.2px] tw:m-0 tw:py-0 tw:w-1/2 tw:text-center'
               min={0}
               id={`productMargin-${data.sku}`}
               onClick={(e: any) => e.target.select()}
@@ -271,17 +272,17 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
                 }
               }}
             />
-            <span className='text-muted'>%</span>
+            <span className='tw:text-[var(--bs-secondary-color)]'>%</span>
           </div>
         </div>
       ),
       selector: (row: MKP_Marketplaces) => {
         return (
-          <div className='d-flex flex-row justify-content-center align-items-center gap-2 w-100 px-1'>
+          <div className='tw:flex tw:flex-row tw:justify-center tw:items-center tw:gap-2 tw:w-full tw:px-1'>
             <DebounceInput
               type='number'
               debounceTimeout={400}
-              className='form-control form-control-sm fs-7 m-0 py-0 w-50 text-center'
+              className='form-control form-control-sm tw:text-[11.2px] tw:m-0 tw:py-0 tw:w-1/2 tw:text-center'
               min={0}
               id={`orderQty-${data.sku}-${row.storeId}`}
               value={row.proposedMargin}
@@ -294,7 +295,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
                 }
               }}
             />
-            <span className='text-muted'>%</span>
+            <span className='tw:text-[var(--bs-secondary-color)]'>%</span>
           </div>
         )
       },
@@ -306,12 +307,12 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
       },
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Notes</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Notes</span>,
       selector: (row: MKP_Marketplaces) => (
         <DebounceInput
           element='textarea'
           debounceTimeout={600}
-          className='form-control form-control-sm fs-7 m-0'
+          className='form-control form-control-sm tw:text-[11.2px] tw:m-0'
           min={3}
           id={`notes-${data.sku}-${row.storeId}`}
           value={row.notes}
@@ -327,7 +328,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
     },
   ]
   return (
-    <div className='p-2'>
+    <div className='tw:p-2'>
       <Card>
         <DataTable
           columns={columns}

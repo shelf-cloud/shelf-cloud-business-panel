@@ -12,22 +12,22 @@ const Create_Receiving_Boxes_Box = ({}: Props) => {
   const { state } = useContext(AppContext)
   return (
     <div>
-      <div className='d-flex flex-row justify-content-between align-items-center gap-3 mb-2'>
-        <p className='m-0 fw-bold fs-5'>All Products in 1 Box</p>
+      <div className='tw:flex tw:flex-row tw:justify-between tw:items-center tw:gap-4 tw:mb-2'>
+        <p className='tw:m-0 tw:font-bold tw:text-[16.25px]'>All Products in 1 Box</p>
       </div>
-      <Col md={12} className='overflow-auto'>
+      <Col md={12} className='tw:overflow-auto'>
         <table className='table table-sm align-middle table-responsive table-nowrap table-striped'>
           <thead className='table-light'>
             <tr>
               <th scope='col'>PO Number</th>
               <th scope='col'>Supplier</th>
               <th scope='col'>Title / SKU</th>
-              <th scope='col' className='text-center'>
+              <th scope='col' className='tw:text-center'>
                 Total to Received
               </th>
             </tr>
           </thead>
-          <tbody className='fs-7'>
+          <tbody className='tw:text-[11.2px]'>
             {Object.entries(state.receivingFromPo.items)
               .sort(([_poIdA, inventoryIdA]: any, [_poIdB, inventoryIdB]: any) => {
                 const supplerA = Object.values<any>(inventoryIdA)[0].suppliersName
@@ -44,9 +44,9 @@ const Create_Receiving_Boxes_Box = ({}: Props) => {
                 Object.entries(inventoryId).map(([inventoryId, item]: any) => (
                   <tr key={`${poId}-${inventoryId}`}>
                     <td>{item.orderNumber}</td>
-                    <td className='fw-bold fs-6'>{item.suppliersName}</td>
-                    <td className='text-center'>
-                      <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
+                    <td className='tw:font-bold tw:text-[13px]'>{item.suppliersName}</td>
+                    <td className='tw:text-center'>
+                      <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2'>
                         <div
                           style={{
                             width: '40px',
@@ -61,21 +61,21 @@ const Create_Receiving_Boxes_Box = ({}: Props) => {
                             style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                           />
                         </div>
-                        <div className='text-start'>
-                          <p className='text-nowrap m-0 fw-semibold'>{item.title}</p>
-                          <p className='text-nowrap m-0'>{item.sku}</p>
+                        <div className='tw:text-left'>
+                          <p className='tw:text-nowrap tw:m-0 tw:font-semibold'>{item.title}</p>
+                          <p className='tw:text-nowrap tw:m-0'>{item.sku}</p>
                         </div>
                       </div>
                     </td>
-                    <td className='text-center'>{item.receivingQty}</td>
+                    <td className='tw:text-center'>{item.receivingQty}</td>
                   </tr>
                 ))
               )}
             <tr>
               <td></td>
               <td></td>
-              <td className='fw-bold fs-6 text-end'>Total</td>
-              <td className='fw-bold fs-6 text-center'>
+              <td className='tw:font-bold tw:text-[13px] tw:text-right'>Total</td>
+              <td className='tw:font-bold tw:text-[13px] tw:text-center'>
                 {FormatIntNumber(
                   state.currentRegion,
                   Object.entries(state.receivingFromPo.items).reduce((total: number, po: [string, any]) => {

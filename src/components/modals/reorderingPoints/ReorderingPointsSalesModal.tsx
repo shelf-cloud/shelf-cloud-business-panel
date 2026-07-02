@@ -40,16 +40,16 @@ function ReorderingPointsSalesModal({ salesModal, setSalesModal }: Props) {
         }}>
         Orders by Marketplaces
       </ModalHeader>
-      <ModalBody className='overflow-auto'>
-        <p className='fs-5 fw-bold m-0 p-0'>
-          SKU: <span className='text-primary'>{salesModal.sku}</span>
+      <ModalBody className='tw:overflow-auto'>
+        <p className='tw:text-[16.25px] tw:font-bold tw:m-0 tw:p-0'>
+          SKU: <span className='tw:text-primary'>{salesModal.sku}</span>
         </p>
-        <p className='fs-6 p-0 fw-semibold'>{salesModal.title}</p>
-        <div className='d-flex flex-row justify-content-evenly align-items-start gap-2 mb-5'>
+        <p className='tw:text-[13px] tw:p-0 tw:font-semibold'>{salesModal.title}</p>
+        <div className='tw:flex tw:flex-row tw:justify-evenly tw:items-start tw:gap-2 tw:mb-12'>
           {/* 30 DAYS */}
           <div>
-            <p className='fs-5 fw-bold text-center'>30 Days</p>
-            <table className='table table-sm table-border table-nowrap mb-0 fs-7'>
+            <p className='tw:text-[16.25px] tw:font-bold tw:text-center'>30 Days</p>
+            <table className='table table-sm table-border table-nowrap tw:mb-0 tw:text-[11.2px]'>
               <thead>
                 <tr>
                   <th>Marketpalce</th>
@@ -64,23 +64,23 @@ function ReorderingPointsSalesModal({ salesModal, setSalesModal }: Props) {
                       marketplace.unitsSold['30D'] > 0 && (
                         <tr key={index}>
                           <td>{marketplace.name}</td>
-                          <td className='text-center'>{marketplace.unitsSold['30D']}</td>
+                          <td className='tw:text-center'>{marketplace.unitsSold['30D']}</td>
                         </tr>
                       )
                   )}
               </tbody>
               <tfoot>
                 <tr>
-                  <td className='fw-bold text-end'>Total</td>
-                  <td className='text-center'>{salesModal.totalUnitsSold['30D']}</td>
+                  <td className='tw:font-bold tw:text-right'>Total</td>
+                  <td className='tw:text-center'>{salesModal.totalUnitsSold['30D']}</td>
                 </tr>
               </tfoot>
             </table>
           </div>
           {/* 60 DAYS */}
           <div>
-            <p className='fs-5 fw-bold text-center'>60 Days</p>
-            <table className='table table-sm table-border table-nowrap mb-0 fs-7'>
+            <p className='tw:text-[16.25px] tw:font-bold tw:text-center'>60 Days</p>
+            <table className='table table-sm table-border table-nowrap tw:mb-0 tw:text-[11.2px]'>
               <thead>
                 <tr>
                   <th>Marketpalce</th>
@@ -95,23 +95,23 @@ function ReorderingPointsSalesModal({ salesModal, setSalesModal }: Props) {
                       marketplace.unitsSold['60D'] > 0 && (
                         <tr key={index}>
                           <td>{marketplace.name}</td>
-                          <td className='text-center'>{marketplace.unitsSold['60D']}</td>
+                          <td className='tw:text-center'>{marketplace.unitsSold['60D']}</td>
                         </tr>
                       )
                   )}
               </tbody>
               <tfoot>
                 <tr>
-                  <td className='fw-bold text-end'>Total</td>
-                  <td className='text-center'>{salesModal.totalUnitsSold['60D']}</td>
+                  <td className='tw:font-bold tw:text-right'>Total</td>
+                  <td className='tw:text-center'>{salesModal.totalUnitsSold['60D']}</td>
                 </tr>
               </tfoot>
             </table>
           </div>
           {/* 90 DAYS */}
           <div>
-            <p className='fs-5 fw-bold text-center'>90 Days</p>
-            <table className='table table-sm table-border table-nowrap mb-0 fs-7'>
+            <p className='tw:text-[16.25px] tw:font-bold tw:text-center'>90 Days</p>
+            <table className='table table-sm table-border table-nowrap tw:mb-0 tw:text-[11.2px]'>
               <thead>
                 <tr>
                   <th>Marketpalce</th>
@@ -126,25 +126,25 @@ function ReorderingPointsSalesModal({ salesModal, setSalesModal }: Props) {
                       marketplace.unitsSold['90D'] > 0 && (
                         <tr key={index}>
                           <td>{marketplace.name}</td>
-                          <td className='text-center'>{marketplace.unitsSold['90D']}</td>
+                          <td className='tw:text-center'>{marketplace.unitsSold['90D']}</td>
                         </tr>
                       )
                   )}
               </tbody>
               <tfoot>
                 <tr>
-                  <td className='fw-bold text-end'>Total</td>
-                  <td className='text-center'>{salesModal.totalUnitsSold['90D']}</td>
+                  <td className='tw:font-bold tw:text-right'>Total</td>
+                  <td className='tw:text-center'>{salesModal.totalUnitsSold['90D']}</td>
                 </tr>
               </tfoot>
             </table>
           </div>
         </div>
-        <div className='d-flex flex-row justify-content-evenly align-items-start gap-2'>
+        <div className='tw:flex tw:flex-row tw:justify-evenly tw:items-start tw:gap-2'>
           {/* 120 DAYS */}
           <div>
-            <p className='fs-5 fw-bold text-center'>120 Days</p>
-            <table className='table table-sm table-border table-nowrap mb-0 fs-7'>
+            <p className='tw:text-[16.25px] tw:font-bold tw:text-center'>120 Days</p>
+            <table className='table table-sm table-border table-nowrap tw:mb-0 tw:text-[11.2px]'>
               <thead>
                 <tr>
                   <th>Marketpalce</th>
@@ -159,23 +159,23 @@ function ReorderingPointsSalesModal({ salesModal, setSalesModal }: Props) {
                       marketplace.unitsSold['120D'] > 0 && (
                         <tr key={index}>
                           <td>{marketplace.name}</td>
-                          <td className='text-center'>{marketplace.unitsSold['120D']}</td>
+                          <td className='tw:text-center'>{marketplace.unitsSold['120D']}</td>
                         </tr>
                       )
                   )}
               </tbody>
               <tfoot>
                 <tr>
-                  <td className='fw-bold text-end'>Total</td>
-                  <td className='text-center'>{salesModal.totalUnitsSold['120D']}</td>
+                  <td className='tw:font-bold tw:text-right'>Total</td>
+                  <td className='tw:text-center'>{salesModal.totalUnitsSold['120D']}</td>
                 </tr>
               </tfoot>
             </table>
           </div>
           {/* 180 DAYS */}
           <div>
-            <p className='fs-5 fw-bold text-center'>180 Days</p>
-            <table className='table table-sm table-border table-nowrap mb-0 fs-7'>
+            <p className='tw:text-[16.25px] tw:font-bold tw:text-center'>180 Days</p>
+            <table className='table table-sm table-border table-nowrap tw:mb-0 tw:text-[11.2px]'>
               <thead>
                 <tr>
                   <th>Marketpalce</th>
@@ -190,23 +190,23 @@ function ReorderingPointsSalesModal({ salesModal, setSalesModal }: Props) {
                       marketplace.unitsSold['180D'] > 0 && (
                         <tr key={index}>
                           <td>{marketplace.name}</td>
-                          <td className='text-center'>{marketplace.unitsSold['180D']}</td>
+                          <td className='tw:text-center'>{marketplace.unitsSold['180D']}</td>
                         </tr>
                       )
                   )}
               </tbody>
               <tfoot>
                 <tr>
-                  <td className='fw-bold text-end'>Total</td>
-                  <td className='text-center'>{salesModal.totalUnitsSold['180D']}</td>
+                  <td className='tw:font-bold tw:text-right'>Total</td>
+                  <td className='tw:text-center'>{salesModal.totalUnitsSold['180D']}</td>
                 </tr>
               </tfoot>
             </table>
           </div>
           {/* 365 DAYS */}
           <div>
-            <p className='fs-5 fw-bold text-center'>365 Days</p>
-            <table className='table table-sm table-border table-nowrap mb-0 fs-7'>
+            <p className='tw:text-[16.25px] tw:font-bold tw:text-center'>365 Days</p>
+            <table className='table table-sm table-border table-nowrap tw:mb-0 tw:text-[11.2px]'>
               <thead>
                 <tr>
                   <th>Marketpalce</th>
@@ -221,15 +221,15 @@ function ReorderingPointsSalesModal({ salesModal, setSalesModal }: Props) {
                       marketplace.unitsSold['365D'] > 0 && (
                         <tr key={index}>
                           <td>{marketplace.name}</td>
-                          <td className='text-center'>{marketplace.unitsSold['365D']}</td>
+                          <td className='tw:text-center'>{marketplace.unitsSold['365D']}</td>
                         </tr>
                       )
                   )}
               </tbody>
               <tfoot>
                 <tr>
-                  <td className='fw-bold text-end'>Total</td>
-                  <td className='text-center'>{salesModal.totalUnitsSold['365D']}</td>
+                  <td className='tw:font-bold tw:text-right'>Total</td>
+                  <td className='tw:text-center'>{salesModal.totalUnitsSold['365D']}</td>
                 </tr>
               </tfoot>
             </table>

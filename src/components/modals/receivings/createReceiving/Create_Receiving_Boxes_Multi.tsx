@@ -85,13 +85,13 @@ const Create_Receiving_Boxes_Multi = ({
   return (
     <Row key='mixed-skus'>
       <Col md={4}>
-        <div className='d-flex flex-row justify-content-between align-items-center gap-3 mb-2'>
-          <p className='m-0 fw-bold fs-5'>Receiving SKUs</p>
-          <Button size='sm' color='primary' onClick={() => setMixedSkuBoxesUsingMasterBoxes()} className='fs-6'>
+        <div className='tw:flex tw:flex-row tw:justify-between tw:items-center tw:gap-4 tw:mb-2'>
+          <p className='tw:m-0 tw:font-bold tw:text-[16.25px]'>Receiving SKUs</p>
+          <Button size='sm' color='primary' onClick={() => setMixedSkuBoxesUsingMasterBoxes()} className='tw:text-[13px]'>
             Prefill Boxes
           </Button>
         </div>
-        <div className='fs-7 d-flex flex-column gap-2 py-2'>
+        <div className='tw:text-[11.2px] tw:flex tw:flex-col tw:gap-2 tw:py-2'>
           {Object.entries(state.receivingFromPo.items)
             .sort(([_poIdA, inventoryIdA], [_poIdB, inventoryIdB]) => {
               const supplerA = Object.values<any>(inventoryIdA)[0].suppliersName
@@ -113,9 +113,9 @@ const Create_Receiving_Boxes_Multi = ({
 
                 const pendingToBoxed = item.receivingQty - alreadyBoxed
                 return (
-                  <div key={`${poId}-${inventoryId}`} className='d-flex flex-row justify-content-between align-items-center gap-3 border rounded py-2 px-2'>
-                    <div className='text-center'>
-                      <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
+                  <div key={`${poId}-${inventoryId}`} className='tw:flex tw:flex-row tw:justify-between tw:items-center tw:gap-4 tw:border tw:rounded tw:py-2 tw:px-2'>
+                    <div className='tw:text-center'>
+                      <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2'>
                         <div
                           style={{
                             width: '100%',
@@ -131,16 +131,16 @@ const Create_Receiving_Boxes_Multi = ({
                             style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                           />
                         </div>
-                        <div className='text-start'>
-                          <p className='text-nowrap m-0 fw-semibold'>{item.sku}</p>
-                          <p className='text-nowrap m-0 text-muted'>PO: {item.orderNumber}</p>
-                          <p className='text-nowrap m-0'>Receiving: {item.receivingQty}</p>
+                        <div className='tw:text-left'>
+                          <p className='tw:text-nowrap tw:m-0 tw:font-semibold'>{item.sku}</p>
+                          <p className='tw:text-nowrap tw:m-0 tw:text-[var(--bs-secondary-color)]'>PO: {item.orderNumber}</p>
+                          <p className='tw:text-nowrap tw:m-0'>Receiving: {item.receivingQty}</p>
                         </div>
                       </div>
                     </div>
                     <Badge
                       color={pendingToBoxed > 0 ? 'light' : pendingToBoxed < 0 ? 'danger' : 'success'}
-                      className={'text-center fs-7 ' + (pendingToBoxed > 0 ? 'text-muted' : pendingToBoxed < 0 ? 'text-white' : 'text-white')}>
+                      className={'tw:text-center tw:text-[11.2px] ' + (pendingToBoxed > 0 ? 'tw:text-[var(--bs-secondary-color)]' : pendingToBoxed < 0 ? 'tw:text-white' : 'tw:text-white')}>
                       {pendingToBoxed}
                     </Badge>
                   </div>
@@ -150,12 +150,12 @@ const Create_Receiving_Boxes_Multi = ({
         </div>
       </Col>
       <Col md={8}>
-        <div className='mb-2 border-bottom pb-1'>
+        <div className='tw:mb-2 tw:border-b tw:pb-1'>
           <Row>
-            <p className='m-0 fw-bold fs-5'>Add SKU to Box</p>
+            <p className='tw:m-0 tw:font-bold tw:text-[16.25px]'>Add SKU to Box</p>
           </Row>
           {/* ADD SKU TO BOX */}
-          <Row className='d-flex flex-row justify-content-around align-items-end gap-0'>
+          <Row className='tw:flex tw:flex-row tw:justify-around tw:items-end tw:gap-0'>
             <Col md={4}>
               <SelectSingleFilter
                 inputLabel='*Select SKU'
@@ -240,8 +240,8 @@ const Create_Receiving_Boxes_Multi = ({
                 }}
               />
             </Col>
-            <Col md={2} className='mb-2'>
-              <Label htmlFor={`add-sku-to-box-quantity`} className='form-label fs-7'>
+            <Col md={2} className='tw:mb-2'>
+              <Label htmlFor={`add-sku-to-box-quantity`} className='form-label tw:text-[11.2px]'>
                 *Quantity
               </Label>
               <InputNumberForm
@@ -253,63 +253,63 @@ const Create_Receiving_Boxes_Multi = ({
                 handleBlur={() => {}}
               />
             </Col>
-            <Col md={2} className='mb-2 d-flex flex-row justify-content-end align-items-end'>
-              <Button size='sm' color='primary' onClick={() => handleAddSkuToBox()} className='fs-6'>
+            <Col md={2} className='tw:mb-2 tw:flex tw:flex-row tw:justify-end tw:items-end'>
+              <Button size='sm' color='primary' onClick={() => handleAddSkuToBox()} className='tw:text-[13px]'>
                 Add To Box
               </Button>
             </Col>
           </Row>
-          {errorAddingSKU && <p className='m-0 text-danger fs-7'>{errorAddingSKU}</p>}
+          {errorAddingSKU && <p className='tw:m-0 tw:text-danger tw:text-[11.2px]'>{errorAddingSKU}</p>}
         </div>
 
         {/* ADD BOX */}
-        <div className='d-flex flex-row flex-wrap justify-content-between align-items-center gap-3 mb-3'>
-          <p className='m-0 fw-bold fs-5'>Boxes</p>
+        <div className='tw:flex tw:flex-row tw:flex-wrap tw:justify-between tw:items-center tw:gap-4 tw:mb-4'>
+          <p className='tw:m-0 tw:font-bold tw:text-[16.25px]'>Boxes</p>
 
-          <div className='d-flex flex-row justify-content-end align-items-center gap-2'>
-            <Button size='sm' color='light' onClick={() => toggleCollapse()} className='fs-6'>
+          <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-2'>
+            <Button size='sm' color='light' onClick={() => toggleCollapse()} className='tw:text-[13px]'>
               {allCollapse ? '- Collapse All' : '+ Expand All'}
             </Button>
-            <Button size='sm' color='success' onClick={() => addNewMultiSkuBoxConfiguration()} className='fs-6'>
+            <Button size='sm' color='success' onClick={() => addNewMultiSkuBoxConfiguration()} className='tw:text-[13px]'>
               + Add New Box
             </Button>
-            <Button size='sm' color='light' onClick={() => clearMultiSkuBoxes()} className='fs-6 d-flex flex-row justify-content-center align-items-center gap-1'>
-              <i className='mdi mdi-trash-can-outline text-danger' /> All Boxes
+            <Button size='sm' color='light' onClick={() => clearMultiSkuBoxes()} className='tw:text-[13px] tw:flex tw:flex-row tw:justify-center tw:items-center tw:gap-1'>
+              <i className='mdi mdi-trash-can-outline tw:text-danger' /> All Boxes
             </Button>
           </div>
         </div>
 
         {/* BOXES LIST */}
 
-        <div className='gap-2 d-flex flex-row flex-wrap justify-content-start align-items-start pb-2'>
+        <div className='tw:gap-2 tw:flex tw:flex-row tw:flex-wrap tw:justify-start tw:items-start tw:pb-2'>
           {multiSkuPackages.map((box, boxIndex) => (
-            <Col xs={12} md={5} key={`boxed-${boxIndex}`} className='border rounded p-2 fs-7 shadow-sm bg-white'>
-              <div className='d-flex flex-row justify-content-between align-items-center mb-1'>
+            <Col xs={12} md={5} key={`boxed-${boxIndex}`} className='tw:border tw:rounded tw:p-2 tw:text-[11.2px] tw:shadow-sm tw:bg-white'>
+              <div className='tw:flex tw:flex-row tw:justify-between tw:items-center tw:mb-1'>
                 <div style={{ cursor: 'pointer' }} onClick={() => document.getElementById(`box-${boxIndex}-content`)?.classList.toggle('show')}>
-                  <p className='m-0 fw-semibold fs-6'>Box {boxIndex + 1}</p>
-                  <p className={'m-0 fs-7 ' + (Object.entries(box).length === 0 ? 'text-danger' : 'text-muted')}>
+                  <p className='tw:m-0 tw:font-semibold tw:text-[13px]'>Box {boxIndex + 1}</p>
+                  <p className={'tw:m-0 tw:text-[11.2px] ' + (Object.entries(box).length === 0 ? 'tw:text-danger' : 'tw:text-[var(--bs-secondary-color)]')}>
                     {Object.entries(box).length} SKUs, {Object.values(box).reduce((acc, item) => acc + item.quantity, 0)} total units
                   </p>
                 </div>
-                <div className='d-flex flex-row justify-content-end align-items-center gap-2'>
-                  <Button size='sm' color='ghost' onClick={() => removeMultiSkuBoxConfiguration(boxIndex)} className='fs-7 btn-icon'>
-                    <i className='mdi mdi-trash-can-outline fs-5' />
+                <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-2'>
+                  <Button size='sm' color='ghost' onClick={() => removeMultiSkuBoxConfiguration(boxIndex)} className='tw:text-[11.2px] btn-icon'>
+                    <i className='mdi mdi-trash-can-outline tw:text-[16.25px]' />
                   </Button>
-                  <Button size='sm' color='ghost' className='fs-7 btn-icon' onClick={() => document.getElementById(`box-${boxIndex}-content`)?.classList.toggle('show')}>
-                    <i className='mdi mdi-chevron-down fs-5' />
+                  <Button size='sm' color='ghost' className='tw:text-[11.2px] btn-icon' onClick={() => document.getElementById(`box-${boxIndex}-content`)?.classList.toggle('show')}>
+                    <i className='mdi mdi-chevron-down tw:text-[16.25px]' />
                   </Button>
                 </div>
               </div>
               <Collapse isOpen={allCollapse} id={`box-${boxIndex}-content`} className='collapse-content'>
-                <div className='d-flex flex-column justify-content-start align-items-start gap-1'>
+                <div className='tw:flex tw:flex-col tw:justify-start tw:items-start tw:gap-1'>
                   {Object.entries(box).map(([sku, item]) => (
-                    <div key={`boxed-${boxIndex}-${sku}`} className='w-100 d-flex flex-row justify-content-between align-items-center gap-3 bg-light px-3 py-1 rounded'>
-                      <div className='text-start'>
-                        <p className='text-nowrap m-0 fw-semibold'>{sku}</p>
-                        <p className='text-nowrap m-0 text-muted'>Qty: {item.quantity}</p>
+                    <div key={`boxed-${boxIndex}-${sku}`} className='tw:w-full tw:flex tw:flex-row tw:justify-between tw:items-center tw:gap-4 tw:bg-light tw:px-4 tw:py-1 tw:rounded'>
+                      <div className='tw:text-left'>
+                        <p className='tw:text-nowrap tw:m-0 tw:font-semibold'>{sku}</p>
+                        <p className='tw:text-nowrap tw:m-0 tw:text-[var(--bs-secondary-color)]'>Qty: {item.quantity}</p>
                       </div>
-                      <Button size='sm' color='ghost' onClick={() => removeSkuFromMultiSkuBox(boxIndex, sku)} className='fs-7 btn-icon'>
-                        <i className='mdi mdi-trash-can-outline fs-5' />
+                      <Button size='sm' color='ghost' onClick={() => removeSkuFromMultiSkuBox(boxIndex, sku)} className='tw:text-[11.2px] btn-icon'>
+                        <i className='mdi mdi-trash-can-outline tw:text-[16.25px]' />
                       </Button>
                     </div>
                   ))}

@@ -6,7 +6,7 @@ import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { InvoiceList } from '@typings'
 import moment from 'moment'
-import DataTable from 'react-data-table-component'
+import DataTable from '@components/Common/DataTableSC'
 import { Button } from '@/components/migration-ui'
 
 type Props = {
@@ -94,7 +94,7 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
   }
   const columns: any = [
     {
-      name: <span className='fw-bold fs-5'>Invoice Number</span>,
+      name: <span className='tw:font-bold tw:text-[16.25px]'>Invoice Number</span>,
       selector: (row: InvoiceList) => {
         return (
           <div>
@@ -108,10 +108,10 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
       sortFunction: sortInvoiceNumber,
     },
     {
-      name: <span className='fw-bold fs-5'>Status</span>,
+      name: <span className='tw:font-bold tw:text-[16.25px]'>Status</span>,
       selector: (row: InvoiceList) => {
         return (
-          <p className={row.paid ? 'fs-14 my-1 text-success' : moment(today).isAfter(row.expireDate) ? 'fs-14 my-1 text-danger' : 'fs-14 my-1'}>
+          <p className={row.paid ? 'tw:text-[14px] tw:my-1 tw:text-success' : moment(today).isAfter(row.expireDate) ? 'tw:text-[14px] tw:my-1 tw:text-danger' : 'tw:text-[14px] tw:my-1'}>
             {row.paid
               ? 'Paid'
               : moment(today).isAfter(row.expireDate)
@@ -128,7 +128,7 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
       sortFunction: sortStatus,
     },
     {
-      name: <span className='fw-bold fs-5'>Invoice Date</span>,
+      name: <span className='tw:font-bold tw:text-[16.25px]'>Invoice Date</span>,
       selector: (row: InvoiceList) => {
         return moment(row.createdDate, 'YYYY-MM-DD').format('LL')
       },
@@ -138,10 +138,10 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
       sortFunction: sortCreatedDates,
     },
     {
-      name: <span className='fw-bold fs-5'>Expire Date</span>,
+      name: <span className='tw:font-bold tw:text-[16.25px]'>Expire Date</span>,
       selector: (row: InvoiceList) => {
         return (
-          <p className={row.paid ? 'fs-14 my-1' : moment(today).isSameOrAfter(row.expireDate) ? 'fs-14 my-1 text-danger' : 'fs-14 my-1'}>
+          <p className={row.paid ? 'tw:text-[14px] tw:my-1' : moment(today).isSameOrAfter(row.expireDate) ? 'tw:text-[14px] tw:my-1 tw:text-danger' : 'tw:text-[14px] tw:my-1'}>
             {moment(row.expireDate, 'YYYY-MM-DD').format('LL')}
           </p>
         )
@@ -152,7 +152,7 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
       sortFunction: sortExpireDates,
     },
     {
-      name: <span className='fw-bold fs-5'>Total Invoice</span>,
+      name: <span className='tw:font-bold tw:text-[16.25px]'>Total Invoice</span>,
       selector: (row: InvoiceList) => FormatCurrency(state.currentRegion, row.totalCharge),
       sortable: true,
       center: true,
@@ -160,7 +160,7 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
       sortFunction: sortTotal,
     },
     {
-      name: <span className='fw-bold fs-5'></span>,
+      name: <span className='tw:font-bold tw:text-[16.25px]'></span>,
       selector: (row: InvoiceList) => {
         if (state.currentRegion == 'us') {
           return (
@@ -177,7 +177,7 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
       compact: true,
     },
     {
-      name: <span className='fw-bold fs-5'></span>,
+      name: <span className='tw:font-bold tw:text-[16.25px]'></span>,
       selector: (row: InvoiceList) => {
         return <Link href={`/Invoices/${row.idOfInvoice}`}>View Details</Link>
       },

@@ -70,44 +70,43 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
               <Col lg={12}>
                 <Card>
                   <CardHeader>
-                    <div className='d-flex justify-content-between align-items-start'>
+                    <div className='tw:flex tw:justify-between tw:items-start'>
                       <div>
-                        <h3 className='fs-5 fw-semibold text-primary'>Total SKUs in Order: {receivingProducts.length}</h3>
-                        <h5 className='fs-6 fw-normal text-primary'>
+                        <h3 className='tw:text-[16.25px] tw:font-semibold tw:text-primary'>Total SKUs in Order: {receivingProducts.length}</h3>
+                        <h5 className='tw:text-[13px] tw:font-normal tw:text-primary'>
                           Total Qty to Receive in Order: {receivingProducts.reduce((total: number, item) => total + item.quantity, 0)}
                         </h5>
                       </div>
-                      <div className='d-flex justify-content-end align-items-start gap-2'>
-                        <Button className='fs-7 btn' color='info' onClick={() => setreceivingUploadingModal({ show: true })}>
+                      <div className='tw:flex tw:justify-end tw:items-start tw:gap-2'>
+                        <Button color='info' onClick={() => setreceivingUploadingModal({ show: true })}>
                           Create Uploading File
                         </Button>
-                        <Button className='fs-7 btn' color='primary' onClick={() => setWholeSaleOrderModal(!state.showWholeSaleOrderModal)}>
+                        <Button color='primary' onClick={() => setWholeSaleOrderModal(!state.showWholeSaleOrderModal)}>
                           Create Receiving
                         </Button>
                       </div>
                     </div>
-                    <div className='w-100 d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-end align-items-lg-center px-0'>
-                      <div className='app-search p-0 col-sm-12 col-lg-4'>
-                        <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+                    <div className='tw:w-full tw:flex tw:flex-col-reverse tw:justify-center tw:items-start tw:gap-2 tw:mb-0 tw:lg:flex-row tw:lg:justify-end tw:lg:items-center tw:px-0'>
+                      <div className='tw:p-0 tw:w-full tw:lg:w-1/3'>
+                        <div className='tw:relative tw:flex tw:rounded-md tw:w-full tw:overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                           <DebounceInput
                             type='text'
                             minLength={1}
                             debounceTimeout={500}
-                            className='form-control fs-6'
+                            className='tw:h-9 tw:w-full tw:border-0 tw:bg-white tw:px-3 tw:text-sm tw:outline-none'
                             placeholder='Search...'
                             id='search-options'
                             value={searchValue}
                             onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
                             onChange={(e) => setSearchValue(e.target.value)}
                           />
-                          <span className='mdi mdi-magnify search-widget-icon fs-5'></span>
                           <span
-                            className='d-flex align-items-center justify-content-center bg-light'
+                            className='tw:flex tw:items-center tw:justify-center tw:bg-[color:var(--vz-light)]'
                             style={{
                               cursor: 'pointer',
                             }}
                             onClick={() => setSearchValue('')}>
-                            <i className='mdi mdi-window-close fs-5 m-0 px-2 py-0 text-muted' />
+                            <i className='mdi mdi-window-close tw:text-[16.25px] tw:m-0 tw:px-2 tw:py-0 tw:text-[color:var(--bs-secondary-color)]' />
                           </span>
                         </div>
                       </div>

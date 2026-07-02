@@ -83,52 +83,52 @@ function CreateReturnModal({ data, mutateShipments }: Props) {
         </h3>
       </ModalHeader>
       <ModalBody>
-        <h4 className='fw-normal fs-5 text-muted'>
-          Order: <span className='fw-bold text-black'>{data?.orderNumber}</span>
+        <h4 className='tw:font-normal tw:text-[16.25px] tw:text-[var(--bs-secondary-color)]'>
+          Order: <span className='tw:font-bold tw:text-black'>{data?.orderNumber}</span>
         </h4>
-        <h4 className='fw-normal fs-5 text-muted'>
-          Status: <span className='fw-bold text-black capitalize'>{data?.orderStatus}</span>
+        <h4 className='tw:font-normal tw:text-[16.25px] tw:text-[var(--bs-secondary-color)]'>
+          Status: <span className='tw:font-bold tw:text-black tw:capitalize'>{data?.orderStatus}</span>
         </h4>
         {data?.totalItems == 1 ? (
-          <table className='table table-striped table-responsive align-middle'>
-            <thead className='table-light'>
-              <tr className='fw-bold'>
+          <table className='tw:w-full tw:align-middle tw:text-[13px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_tbody_tr:nth-child(odd)]:bg-[var(--vz-light)]'>
+            <thead className='tw:bg-[color:var(--vz-light)]'>
+              <tr className='tw:font-bold'>
                 <th>Item</th>
-                <th className='text-center'>Qty</th>
+                <th className='tw:text-center'>Qty</th>
               </tr>
             </thead>
-            <tbody className='fs-6'>
+            <tbody>
               {data?.orderItems.map((item: any) => (
                 <tr key={item.sku}>
                   <td>
-                    <span className='fw-bold'>{item.name || item.title}</span>
+                    <span className='tw:font-bold'>{item.name || item.title}</span>
                     <br />
                     SKU: {item.sku}
                   </td>
-                  <td className='fw-bold text-center'>{item.quantity}</td>
+                  <td className='tw:font-bold tw:text-center'>{item.quantity}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         ) : (
-          <table className='table table-striped table-responsive align-middle'>
-            <thead className='table-light'>
-              <tr className='fw-bold'>
+          <table className='tw:w-full tw:align-middle tw:text-[13px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1 tw:[&_tbody_tr:nth-child(odd)]:bg-[var(--vz-light)]'>
+            <thead className='tw:bg-[color:var(--vz-light)]'>
+              <tr className='tw:font-bold'>
                 <th>Item</th>
-                <th className='text-center'>Qty</th>
+                <th className='tw:text-center'>Qty</th>
               </tr>
             </thead>
-            <tbody className='fs-6'>
+            <tbody>
               {data?.orderItems.map((item: any, index: number) => (
                 <tr key={item.sku}>
                   <td>
-                    <span className='fw-bold'>{item.name || item.title}</span>
+                    <span className='tw:font-bold'>{item.name || item.title}</span>
                     <br />
                     SKU: {item.sku}
                   </td>
-                  <td className='fw-bold text-center'>
-                    <div className='d-flex justify-content-center align-items-center flex-nowrap gap-3 fs-6'>
-                      <select className='form-select fs-6' value={returnItemsList[index].quantity} style={{ width: '80px' }} onChange={(e) => handleOnChangeQty(e, item.sku)}>
+                  <td className='tw:font-bold tw:text-center'>
+                    <div className='tw:flex tw:justify-center tw:items-center tw:flex-nowrap tw:gap-4 tw:text-[13px]'>
+                      <select className='form-select tw:text-[13px]' value={returnItemsList[index].quantity} style={{ width: '80px' }} onChange={(e) => handleOnChangeQty(e, item.sku)}>
                         <option key={0} value={0}>
                           {0}
                         </option>
@@ -140,7 +140,7 @@ function CreateReturnModal({ data, mutateShipments }: Props) {
                             </option>
                           ))}
                       </select>
-                      <p className='m-0'>of</p>
+                      <p className='tw:m-0'>of</p>
                       {item.quantity}
                     </div>
                   </td>
@@ -150,11 +150,11 @@ function CreateReturnModal({ data, mutateShipments }: Props) {
           </table>
         )}
         {errorMsg && (
-          <div className='d-flex justify-content-start align-items-center'>
-            <p className='text-danger fs-6'>You must select at least 1 Quantity to return!</p>
+          <div className='tw:flex tw:justify-start tw:items-center'>
+            <p className='tw:text-danger tw:text-[13px]'>You must select at least 1 Quantity to return!</p>
           </div>
         )}
-        <div className='d-flex justify-content-end align-items-center'>
+        <div className='tw:flex tw:justify-end tw:items-center'>
           <Button disabled={loadingConfirmation} color='success' onClick={() => handleConfirmReturn()}>
             {loadingConfirmation ? <Spinner color='light' /> : 'Confirm Return'}
           </Button>

@@ -121,10 +121,10 @@ const Profile = () => {
               <Col lg={12}>
                 <Card className=''>
                   <CardHeader>
-                    <Nav className='nav-tabs-custom rounded card-header-tabs border-bottom-0' role='tablist'>
+                    <Nav className='nav-tabs-custom tw:rounded card-header-tabs tw:border-b-0' role='tablist'>
                       <NavItem style={{ cursor: 'pointer' }}>
                         <NavLink
-                          className={activeTab == '1' ? 'text-primary fs-5' : 'text-muted fs-5'}
+                          className={activeTab == '1' ? 'tw:!text-primary tw:text-[16.25px]' : 'tw:!text-[var(--bs-secondary-color)] tw:text-[16.25px]'}
                           onClick={() => {
                             tabChange('1')
                             validation.setFieldValue('isPasswordTab', false)
@@ -138,7 +138,7 @@ const Profile = () => {
                       <NavItem style={{ cursor: 'pointer' }}>
                         <NavLink
                           to='#'
-                          className={activeTab == '2' ? 'text-primary fs-5' : 'text-muted fs-5'}
+                          className={activeTab == '2' ? 'tw:!text-primary tw:text-[16.25px]' : 'tw:!text-[var(--bs-secondary-color)] tw:text-[16.25px]'}
                           onClick={() => {
                             tabChange('2')
                             validation.setFieldValue('isPasswordTab', true)
@@ -152,13 +152,13 @@ const Profile = () => {
                       </NavItem>
                     </Nav>
                   </CardHeader>
-                  <CardBody className='p-4'>
+                  <CardBody className='tw:p-6'>
                     <TabContent activeTab={activeTab}>
                       <TabPane tabId='1'>
                         <Form onSubmit={handleUpdateProfile}>
                           <Row>
                             <Col lg={6}>
-                              <FormGroup className='mb-3'>
+                              <FormGroup className='tw:mb-4'>
                                 <Label htmlFor='firstNameinput' className='form-label'>
                                   *Company Name
                                 </Label>
@@ -178,7 +178,7 @@ const Profile = () => {
                               </FormGroup>
                             </Col>
                             <Col lg={6}>
-                              <FormGroup className='mb-3'>
+                              <FormGroup className='tw:mb-4'>
                                 <Label htmlFor='firstNameinput' className='form-label'>
                                   *Email Address
                                 </Label>
@@ -196,11 +196,11 @@ const Profile = () => {
                               </FormGroup>
                             </Col>
                             <Col lg={12}>
-                              <div className='hstack gap-2 justify-content-end'>
-                                <button type='submit' className='btn btn-primary fs-5'>
+                              <div className='tw:flex tw:flex-row tw:items-center tw:gap-2 tw:justify-end'>
+                                <button type='submit' className='btn btn-primary tw:text-[16.25px]'>
                                   Updates
                                 </button>
-                                <button type='button' className='btn btn-soft-success fs-5' onClick={() => router.push('/')}>
+                                <button type='button' className='btn btn-soft-success tw:text-[16.25px]' onClick={() => router.push('/')}>
                                   Cancel
                                 </button>
                               </div>
@@ -211,9 +211,9 @@ const Profile = () => {
 
                       <TabPane tabId='2'>
                         <Form onSubmit={handleChangePassword}>
-                          <Row className='g-2'>
+                          <Row className='tw:gap-y-2'>
                             <Col lg={4}>
-                              <FormGroup className='mb-3'>
+                              <FormGroup className='tw:mb-4'>
                                 <Label htmlFor='firstNameinput' className='form-label'>
                                   *Curent Password
                                 </Label>
@@ -234,7 +234,7 @@ const Profile = () => {
                             </Col>
 
                             <Col lg={4}>
-                              <FormGroup className='mb-3'>
+                              <FormGroup className='tw:mb-4'>
                                 <Label htmlFor='firstNameinput' className='form-label'>
                                   *New Password
                                 </Label>
@@ -255,7 +255,7 @@ const Profile = () => {
                             </Col>
 
                             <Col lg={4}>
-                              <FormGroup className='mb-3'>
+                              <FormGroup className='tw:mb-4'>
                                 <Label htmlFor='firstNameinput' className='form-label'>
                                   *Confirm Password
                                 </Label>
@@ -287,7 +287,7 @@ const Profile = () => {
                             </Col> */}
 
                             <Col lg={12}>
-                              <div className='text-end'>
+                              <div className='tw:text-right'>
                                 <button type='submit' className='btn btn-success'>
                                   Change Password
                                 </button>

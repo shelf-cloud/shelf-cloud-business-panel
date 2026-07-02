@@ -70,11 +70,12 @@ const ProductsListings = ({ session }: Props) => {
           <Container fluid>
             <Row>
               <Col xs={12}>
-                <Row className='d-flex flex-column justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-end align-items-md-center px-3'>
-                  <div className='d-flex flex-column justify-content-between align-items-start p-0 flex-md-row align-items-md-center gap-2'>
-                    <div className='d-flex flex-row flex-wrap justify-content-start align-items-center gap-2 w-100'>
+                <Row className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:mb-2 tw:md:flex-row tw:md:justify-end tw:md:items-center tw:px-4'>
+                  <div className='tw:flex tw:flex-col tw:justify-between tw:items-start tw:p-0 tw:md:flex-row tw:md:items-center tw:gap-2'>
+                    <div className='tw:flex tw:flex-row tw:flex-wrap tw:justify-start tw:items-center tw:gap-2 tw:w-full'>
                       <Button
-                        className={'dropdown-toggle fs-7 ' + (filters === 'true' ? 'btn-info' : 'btn-light')}
+                        color={filters === 'true' ? 'info' : 'light'}
+                        className='tw:text-[11.2px]'
                         style={filters === 'true' ? {} : { backgroundColor: 'white', border: '1px solid #E1E3E5' }}
                         type='button'
                         aria-expanded='false'
@@ -84,13 +85,13 @@ const ProductsListings = ({ session }: Props) => {
 
                       {selectedRows.length > 0 && (
                         <UncontrolledButtonDropdown>
-                          <DropdownToggle className='btn btn-primary fs-7 py-2' caret>
+                          <DropdownToggle className='btn btn-primary tw:text-[11.2px] tw:py-2' caret>
                             {`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''} Selected`}
                           </DropdownToggle>
                           <DropdownMenu>
                             <ExportProductListingsButton products={selectedRows} />
                             <DropdownItem
-                              className='text-nowrap fs-7'
+                              className='tw:text-nowrap tw:text-[11.2px]'
                               onClick={() =>
                                 setSelectedVisibility({
                                   products: selectedRows.map((row) => ({
@@ -108,7 +109,7 @@ const ProductsListings = ({ session }: Props) => {
                               Set Visible
                             </DropdownItem>
                             <DropdownItem
-                              className='text-nowrap fs-7'
+                              className='tw:text-nowrap tw:text-[11.2px]'
                               onClick={() =>
                                 setSelectedVisibility({
                                   products: selectedRows.map((row) => ({
@@ -127,7 +128,7 @@ const ProductsListings = ({ session }: Props) => {
                             </DropdownItem>
                             <DropdownItem divider />
                             <DropdownItem
-                              className='text-nowrap fs-7'
+                              className='tw:text-nowrap tw:text-[11.2px]'
                               onClick={() =>
                                 setSelectedasMapped({
                                   products: selectedRows.map((row) => ({
@@ -143,7 +144,7 @@ const ProductsListings = ({ session }: Props) => {
                               <i className='las la-link label-icon align-middle fs-5 me-2 text-primary' />
                               Set Mapped
                             </DropdownItem>
-                            <DropdownItem className='text-nowrap text-muted fs-7 text-end' onClick={clearAllSelectedRows}>
+                            <DropdownItem className='tw:text-nowrap tw:text-[var(--bs-secondary-color)] tw:text-[11.2px] tw:text-end' onClick={clearAllSelectedRows}>
                               Clear
                             </DropdownItem>
                           </DropdownMenu>
@@ -152,13 +153,13 @@ const ProductsListings = ({ session }: Props) => {
                     </div>
                     <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' minLength={2} />
                   </div>
-                  <Collapse className='px-0' isOpen={filterOpen}>
+                  <Collapse className='tw:px-0' isOpen={filterOpen}>
                     <MKL_Filters supplierOptions={suppliers} brandOptions={brands} categoryOptions={categories} setFilterOpen={setFilterOpen} />
                   </Collapse>
                 </Row>
                 <Card>
-                  <CardHeader className='d-flex flex-row flex-wrap justify-content-start align-items-center gap-2 w-100'>
-                    <Label className='fw-semibold fs-6 m-0'>Marketplace:</Label>
+                  <CardHeader className='tw:flex tw:flex-row tw:flex-wrap tw:justify-start tw:items-center tw:gap-2 tw:w-full'>
+                    <Label className='tw:font-semibold tw:text-[13px] tw:m-0'>Marketplace:</Label>
                     <SelectMarketplaceDropDown
                       selectionInfo={marketplaces.filter((marketplace) => !marketplace.name.startsWith('FBA Amazon.')) || []}
                       selected={selectedMarketplace}

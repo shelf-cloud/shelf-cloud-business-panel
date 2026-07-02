@@ -3,7 +3,7 @@ import { useContext, useEffect, useMemo, useState } from 'react'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { useFormik } from 'formik'
-import DataTable from 'react-data-table-component'
+import DataTable from '@components/Common/DataTableSC'
 import { toast } from 'react-toastify'
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from '@/components/migration-ui'
 import useSWR from 'swr'
@@ -138,22 +138,22 @@ const Brands = ({}: Props) => {
 
   const columns: any = [
     {
-      name: <span className='font-weight-bold fs-13'>Name</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Name</span>,
       selector: (row: Brand) => row.name,
       sortable: true,
       center: true,
     },
     {
-      name: <span className='font-weight-bold fs-13'>Logo Link</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Logo Link</span>,
       selector: (row: Brand) => row.logo,
       sortable: true,
       center: true,
     },
     {
-      name: <span className='font-weight-bold fs-13'></span>,
+      name: <span className='tw:font-bold tw:text-[13px]'></span>,
       selector: (row: Brand) => {
         return (
-          <div className='d-flex flex-row flex-nowrap justify-content-center align-items-center gap-4'>
+          <div className='tw:flex tw:flex-row tw:flex-nowrap tw:justify-center tw:items-center tw:gap-6'>
             <i className='ri-pencil-fill fs-3 text-secondary' style={{ cursor: 'pointer' }} onClick={() => handleShowEditFields(row)} />
             <i className='align-middle text-danger fs-3 las la-trash-alt' style={{ cursor: 'pointer' }} onClick={() => handleDeleteBrand(row.brandId)} />
           </div>
@@ -167,21 +167,21 @@ const Brands = ({}: Props) => {
   return (
     <>
       {!showAddNewFields ? (
-        <div className='d-flex flex-row justify-content-end align-items-end'>
-          <Button type='submit' color='primary' className='btn btn-sm m-0' onClick={handleShowAddSupplier}>
+        <div className='tw:flex tw:flex-row tw:justify-end tw:items-end'>
+          <Button type='submit' color='primary' size='sm' className='tw:m-0' onClick={handleShowAddSupplier}>
             Add New
           </Button>
         </div>
       ) : (
         <div>
-          <Form onSubmit={handleAddSupplier} className='d-flex flex-row justify-content-start align-items-center gap-3 w-100'>
+          <Form onSubmit={handleAddSupplier} className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-4 tw:w-full'>
             <FormGroup>
               <Label htmlFor='title' className='form-label'>
                 *Brand Name
               </Label>
               <Input
                 type='text'
-                className='fs-6'
+                className='tw:text-[13px]'
                 placeholder='Name...'
                 id='name'
                 name='name'
@@ -199,7 +199,7 @@ const Brands = ({}: Props) => {
               </Label>
               <Input
                 type='text'
-                className='fs-6'
+                className='tw:text-[13px]'
                 placeholder='Logo...'
                 id='logo'
                 name='logo'
@@ -211,11 +211,11 @@ const Brands = ({}: Props) => {
               />
               {validation.touched.logo && validation.errors.logo ? <FormFeedback type='invalid'>{validation.errors.logo}</FormFeedback> : null}
             </FormGroup>
-            <div className='d-flex flex-row justify-content-end align-items-end gap-3'>
-              <Button type='button' color='light' className='btn btn-sm m-0' onClick={handleCancelShowAddSupplier}>
+            <div className='tw:flex tw:flex-row tw:justify-end tw:items-end tw:gap-4'>
+              <Button type='button' color='light' size='sm' className='tw:m-0' onClick={handleCancelShowAddSupplier}>
                 Cancel
               </Button>
-              <Button type='submit' color='primary' className='btn btn-sm m-0'>
+              <Button type='submit' color='primary' size='sm' className='tw:m-0'>
                 Add New
               </Button>
             </div>
@@ -224,14 +224,14 @@ const Brands = ({}: Props) => {
       )}
 
       {showEditFields && (
-        <Form onSubmit={handleEditSupplier} className='d-flex flex-row justify-content-start align-items-center gap-3 w-100'>
+        <Form onSubmit={handleEditSupplier} className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-4 tw:w-full'>
           <FormGroup>
             <Label htmlFor='title' className='form-label'>
               *Supplier Name
             </Label>
             <Input
               type='text'
-              className='fs-6'
+              className='tw:text-[13px]'
               placeholder='Name...'
               id='name'
               name='name'
@@ -249,7 +249,7 @@ const Brands = ({}: Props) => {
             </Label>
             <Input
               type='text'
-              className='fs-6'
+              className='tw:text-[13px]'
               placeholder='Logo...'
               id='logo'
               name='logo'
@@ -261,11 +261,11 @@ const Brands = ({}: Props) => {
             />
             {validationEdit.touched.logo && validationEdit.errors.logo ? <FormFeedback type='invalid'>{validationEdit.errors.logo}</FormFeedback> : null}
           </FormGroup>
-          <div className='d-flex flex-row justify-content-end align-items-end gap-3'>
-            <Button type='button' color='light' className='btn btn-sm m-0' onClick={handleCancelEdit}>
+          <div className='tw:flex tw:flex-row tw:justify-end tw:items-end tw:gap-4'>
+            <Button type='button' color='light' size='sm' className='tw:m-0' onClick={handleCancelEdit}>
               Cancel
             </Button>
-            <Button type='submit' color='primary' className='btn btn-sm m-0'>
+            <Button type='submit' color='primary' size='sm' className='tw:m-0'>
               Update
             </Button>
           </div>

@@ -57,23 +57,23 @@ const Confirm_Delete_Item_From_Receiving = ({ deleteSKUModal, setDeleteSKUModal,
       </ModalHeader>
       <ModalBody>
         <Row>
-          <p className='mb-2 fs-5 fw-semibold'>
-            Receiving: <span className='text-primary'>{orderNumber}</span>
+          <p className='tw:mb-2 tw:text-[16.25px] tw:font-semibold'>
+            Receiving: <span className='tw:text-primary'>{orderNumber}</span>
           </p>
-          <div className='my-2 d-flex flex-row'>
+          <div className='tw:my-2 tw:flex tw:flex-row'>
             <div>
-              <p className='fw-bold mb-1'>
-                PO: <span className='text-primary'>{poNumber}</span>
+              <p className='tw:font-bold tw:mb-1'>
+                PO: <span className='tw:text-primary'>{poNumber}</span>
               </p>
-              <p className='fw-semibold mb-0'>{title}</p>
-              <p className='fw-normal mb-0'>SKU: {sku}</p>
+              <p className='tw:font-semibold tw:mb-0'>{title}</p>
+              <p className='tw:font-normal tw:mb-0'>SKU: {sku}</p>
             </div>
           </div>
-          <div className='mt-3 d-flex justify-content-end align-items-center gap-2'>
-            <Button type='button' color='light' className='fs-7' onClick={handleClose}>
+          <div className='tw:mt-4 tw:flex tw:justify-end tw:items-center tw:gap-2'>
+            <Button type='button' color='light' onClick={handleClose}>
               Cancel
             </Button>
-            <Button disabled={loading} type='button' color='danger' className='fs-7' onClick={handleDeleteFromSkuList}>
+            <Button disabled={loading} type='button' color='danger' onClick={handleDeleteFromSkuList}>
               {loading ? (
                 <span>
                   <Spinner color='light' size={'sm'} /> Deleting...

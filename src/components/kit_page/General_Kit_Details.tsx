@@ -101,10 +101,10 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
   }
 
   return (
-    <div className='px-4 pt-2 pb-4 border-bottom'>
-      <p className='fs-4 text-primary fw-semibold'>General</p>
+    <div className='tw:px-4 tw:pt-2 tw:pb-4 tw:border-b tw:border-[color:var(--border)]'>
+      <p className='tw:text-[19.5px] tw:text-primary tw:font-semibold'>General</p>
       {!showEditFields ? (
-        <div className='w-full d-flex justify-content-start align-items-start gap-4'>
+        <div className='tw:w-full tw:flex tw:justify-start tw:items-start tw:gap-4'>
           <div
             style={{
               width: '30%',
@@ -116,37 +116,37 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
             }}>
             <img loading='lazy' src={image ? image : NoImageAdress} alt='Kit' style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }} />
           </div>
-          <div className='w-100'>
-            <table className='table table-sm table-borderless'>
-              <tbody className='fs-6 bg-transparent'>
+          <div className='tw:w-full'>
+            <table className='tw:w-full tw:text-[13px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+              <tbody className='tw:bg-transparent'>
                 <tr>
-                  <td className='fw-bolder'>Name</td>
+                  <td className='tw:font-extrabold'>Name</td>
                   <td>{title}</td>
                 </tr>
                 <tr>
-                  <td className='fw-bolder'>Description</td>
-                  <td className={description ?? 'text-muted fw-light fst-italic'}>{description ?? 'No Description'}</td>
+                  <td className='tw:font-extrabold'>Description</td>
+                  <td className={description ?? 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>{description ?? 'No Description'}</td>
                 </tr>
                 <tr>
-                  <td className='fw-bolder'>Brand</td>
-                  <td className={brand ?? 'text-muted fw-light fst-italic'}>{brand ?? 'No Brand'}</td>
+                  <td className='tw:font-extrabold'>Brand</td>
+                  <td className={brand ?? 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>{brand ?? 'No Brand'}</td>
                 </tr>
                 <tr>
-                  <td className='fw-bolder'>Category</td>
-                  <td className={category ?? 'text-muted fw-light fst-italic'}>{category ?? 'No Category'}</td>
+                  <td className='tw:font-extrabold'>Category</td>
+                  <td className={category ?? 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>{category ?? 'No Category'}</td>
                 </tr>
                 <tr>
-                  <td className='fw-bolder'>Supplier</td>
-                  <td className={supplier ?? 'text-muted fw-light fst-italic'}>{supplier ?? 'No supplier'}</td>
+                  <td className='tw:font-extrabold'>Supplier</td>
+                  <td className={supplier ?? 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>{supplier ?? 'No supplier'}</td>
                 </tr>
                 <tr>
-                  <td className='fw-bolder'>Condition</td>
-                  <td className={itemCondition ?? 'text-muted fw-light fst-italic'}>{itemCondition ?? 'No supplier'}</td>
+                  <td className='tw:font-extrabold'>Condition</td>
+                  <td className={itemCondition ?? 'tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'}>{itemCondition ?? 'No supplier'}</td>
                 </tr>
                 {note && (
                   <tr>
-                    <td className='fw-bolder'>Note</td>
-                    <td className='text-muted fw-light fst-italic'>{note}</td>
+                    <td className='tw:font-extrabold'>Note</td>
+                    <td className='tw:text-[color:var(--bs-secondary-color)] tw:font-light tw:italic'>{note}</td>
                   </tr>
                 )}
               </tbody>
@@ -158,13 +158,13 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
         <Form onSubmit={handleAddProduct}>
           <Row>
             <Col md={6}>
-              <FormGroup className='mb-3'>
-                <Label htmlFor='title' className='form-label'>
+              <FormGroup>
+                <Label htmlFor='title'>
                   *Title
                 </Label>
                 <Input
                   type='text'
-                  className='fs-6'
+                  className='tw:text-[13px]'
                   placeholder='Title...'
                   id='title'
                   name='title'
@@ -178,13 +178,13 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
               </FormGroup>
             </Col>
             <Col md={12}>
-              <FormGroup className='mb-3'>
-                <Label htmlFor='description' className='form-label'>
+              <FormGroup>
+                <Label htmlFor='description'>
                   Product Description
                 </Label>
                 <Input
                   type='text'
-                  className='fs-6'
+                  className='tw:text-[13px]'
                   placeholder='Description...'
                   id='description'
                   name='description'
@@ -198,7 +198,7 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
               </FormGroup>
             </Col>
             <Col md={6}>
-              <Label htmlFor='brand' className='form-label'>
+              <Label htmlFor='brand'>
                 *Brand
               </Label>
               <Select_Kit_Details
@@ -212,7 +212,7 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
               />
             </Col>
             <Col md={6}>
-              <Label htmlFor='supplier' className='form-label'>
+              <Label htmlFor='supplier'>
                 *Supplier
               </Label>
               <Select_Kit_Details
@@ -226,7 +226,7 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
               />
             </Col>
             <Col md={6}>
-              <Label htmlFor='category' className='form-label'>
+              <Label htmlFor='category'>
                 Category
               </Label>
               <Select_Kit_Details
@@ -240,7 +240,7 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
               />
             </Col>
             <Col md={6}>
-              <Label htmlFor='itemCondition' className='form-label'>
+              <Label htmlFor='itemCondition'>
                 *Condition
               </Label>
               <Select_Condition_Kit_Details
@@ -250,13 +250,13 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
               />
             </Col>
             <Col md={12}>
-              <FormGroup className='mb-3'>
-                <Label htmlFor='lastNameinput' className='form-label'>
+              <FormGroup>
+                <Label htmlFor='lastNameinput'>
                   Product Image
                 </Label>
                 <Input
                   type='text'
-                  className='fs-6'
+                  className='tw:text-[13px]'
                   placeholder='Image URL...'
                   id='image'
                   name='image'
@@ -270,13 +270,13 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
               </FormGroup>
             </Col>
             <Col md={12}>
-              <FormGroup className='mb-3'>
-                <Label htmlFor='note' className='form-label'>
+              <FormGroup>
+                <Label htmlFor='note'>
                   Product Note
                 </Label>
                 <Input
                   type='textarea'
-                  className='fs-6'
+                  className='tw:text-[13px]'
                   placeholder=''
                   id='note'
                   name='note'
@@ -290,11 +290,11 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
               </FormGroup>
             </Col>
             <Col md={12}>
-              <div className='d-flex flex-row justify-content-end align-items-center gap-3'>
-                <Button type='button' color='light' className='btn' onClick={() => setShowEditFields(false)}>
+              <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-3'>
+                <Button type='button' color='light' onClick={() => setShowEditFields(false)}>
                   Cancel
                 </Button>
-                <Button type='submit' color='primary' className='btn'>
+                <Button type='submit' color='primary'>
                   Save Changes
                 </Button>
               </div>

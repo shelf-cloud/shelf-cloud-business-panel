@@ -75,12 +75,12 @@ const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilter
   }
 
   return (
-    <Card className='mb-0' style={{ zIndex: '999' }}>
-      <CardBody className='w-100'>
+    <Card className='tw:mb-0' style={{ zIndex: '999' }}>
+      <CardBody className='tw:w-full'>
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => handleSubmit(values)}>
           {({ values, errors, touched, handleBlur, setFieldValue, setValues }) => (
             <Form>
-              <Row className='mt-2'>
+              <Row className='tw:mt-2'>
                 <Col md={3}>
                   <FormGroup className='createOrder_inputs'>
                     <Label htmlFor='lastNameinput' className='form-label'>
@@ -127,8 +127,8 @@ const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilter
                   </FormGroup>
                 </Col>
               </Row>
-              <Col md={12} className='d-flex flex-row flex-wrap justify-content-between align-items-center gap-3'>
-                <Col xs={12} md={7} className='d-flex flex-row flex-wrap justify-content-start align-items-center gap-4'>
+              <Col md={12} className='tw:flex tw:flex-row tw:flex-wrap tw:justify-between tw:items-center tw:gap-4'>
+                <Col xs={12} md={7} className='tw:flex tw:flex-row tw:flex-wrap tw:justify-start tw:items-center tw:gap-6'>
                   <InputCheckFilter
                     inputLabel='Show Mapped'
                     inputName='showMapped'
@@ -162,11 +162,11 @@ const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilter
                 </Col>
 
                 <Col xs={12} md={4}>
-                  <div className='d-flex flewx-row justify-content-end align-items-center gap-3'>
-                    <Button type='button' color='light' className='fs-7' onClick={() => handleClearFilters(setValues)}>
+                  <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-4'>
+                    <Button type='button' color='light' className='tw:text-[11.2px]' onClick={() => handleClearFilters(setValues)}>
                       Clear
                     </Button>
-                    <Button type='submit' className='fs-7' color='primary'>
+                    <Button type='submit' className='tw:text-[11.2px]' color='primary'>
                       Apply Filters
                     </Button>
                   </div>

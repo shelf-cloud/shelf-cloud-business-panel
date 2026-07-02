@@ -80,9 +80,9 @@ const Storage = ({ session }: Props) => {
               <Col lg={12}>
                 <Card>
                   <CardHeader>
-                    <div className='d-flex flex-column flex-md-row justify-content-start gap-0 gap-md-4 mb-2'>
-                      <div className='col-xs-12 col-sm-6 col-lg-5 col-xl-4 col-xxl-3'>
-                        <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>Monthly Storage Fees</p>
+                    <div className='tw:flex tw:flex-col tw:md:flex-row tw:justify-start tw:gap-0 tw:md:gap-6 tw:mb-2'>
+                      <div className='tw:w-full tw:sm:w-1/2 tw:lg:w-5/12 tw:xl:w-1/3 tw:2xl:w-1/4'>
+                        <p className='tw:uppercase tw:font-semibold tw:text-primary tw:truncate tw:mb-0'>Monthly Storage Fees</p>
                         <StorageChart storageInvoices={storageInvoices} storageDates={storageDates} />
                       </div>
                       <StorageWidgets
@@ -92,10 +92,10 @@ const Storage = ({ session }: Props) => {
                         binsUSed={data?.totalBinsUSed}
                       />
                     </div>
-                    <div className='d-flex flex-row justify-content-between'>
+                    <div className='tw:flex tw:flex-row tw:justify-between'>
                       <div>
-                        <p className='text-uppercase fw-semibold text-muted text-truncate mb-0'>*Estimated Total Monthly Cost</p>
-                        <h4 className='fs-18 fw-normal text-muted'>
+                        <p className='tw:uppercase tw:font-semibold tw:text-[var(--bs-secondary-color)] tw:truncate tw:mb-0'>*Estimated Total Monthly Cost</p>
+                        <h4 className='tw:text-[18px] tw:font-normal tw:text-[var(--bs-secondary-color)]'>
                           <span className='counter-value'>
                             <CountUp
                               start={0}
@@ -109,8 +109,8 @@ const Storage = ({ session }: Props) => {
                           </span>
                         </h4>
                       </div>
-                      <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
-                        <div className='position-relative'>
+                      <div className='app-search tw:flex tw:flex-row tw:justify-end tw:items-center tw:p-0'>
+                        <div className='tw:relative'>
                           <Input
                             type='text'
                             placeholder='Search...'
@@ -119,7 +119,7 @@ const Storage = ({ session }: Props) => {
                             onChange={(e) => setSearchValue(e.target.value)}
                           />
                           <span className='mdi mdi-magnify search-widget-icon'></span>
-                          <span className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none' id='search-close-options'></span>
+                          <span className='mdi mdi-close-circle search-widget-icon search-widget-icon-close tw:hidden' id='search-close-options'></span>
                         </div>
                         <Button className='btn-soft-dark' onClick={() => setSearchValue('')}>
                           Clear

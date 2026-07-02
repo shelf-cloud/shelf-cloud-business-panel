@@ -8,7 +8,7 @@ import AppContext from '@context/AppContext'
 import { MarketplaceListingsProduct } from '@hooks/products/useMarketplaceListings'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { sortStringsCaseInsensitive } from '@lib/helperFunctions'
-import DataTable from 'react-data-table-component'
+import DataTable from '@components/Common/DataTableSC'
 
 type Props = {
   tableData: MarketplaceListingsProduct[]
@@ -38,7 +38,7 @@ const MarketplacesListingsTable = ({ tableData, pending, setSelectedRows, toggle
 
   const columns: any = [
     {
-      name: <span className='fw-semibold fs-6'>Image</span>,
+      name: <span className='tw:font-semibold tw:text-[13px]'>Image</span>,
       selector: (row: MarketplaceListingsProduct) => {
         return (
           <Link href={`/product/${row.inventoryId}/${row.sku}`}>
@@ -67,7 +67,7 @@ const MarketplacesListingsTable = ({ tableData, pending, setSelectedRows, toggle
     },
     {
       name: (
-        <span className='fw-semibold fs-6'>
+        <span className='tw:font-semibold tw:text-[13px]'>
           Title
           <br />
           SKU
@@ -75,14 +75,14 @@ const MarketplacesListingsTable = ({ tableData, pending, setSelectedRows, toggle
       ),
       selector: (row: MarketplaceListingsProduct) => {
         return (
-          <div className='fs-7 d-flex flex-column justify-content-start align-items-start gap-0 pe-2'>
-            <div className='d-flex flex-row justify-content-start align-items-center fs-7'>
+          <div className='tw:text-[11.2px] tw:flex tw:flex-col tw:justify-start tw:items-start tw:gap-0 tw:pe-2'>
+            <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:text-[11.2px]'>
               <Link href={`/product/${row.inventoryId}/${row.sku}`}>
-                <p className='m-0 p-0 text-primary fw-semibold fs-6'>{row.sku}</p>
+                <p className='tw:m-0 tw:p-0 tw:!text-primary tw:font-semibold tw:text-[13px]'>{row.sku}</p>
               </Link>
               <CopyTextToClipboard text={row.sku} label='SKU' />{' '}
             </div>
-            <span className='m-0 p-0 text-black fw-semibold fs-7 text-wrap'>{row.title}</span>
+            <span className='tw:m-0 tw:p-0 tw:text-black tw:font-semibold tw:text-[11.2px] tw:text-wrap'>{row.title}</span>
           </div>
         )
       },
@@ -94,7 +94,7 @@ const MarketplacesListingsTable = ({ tableData, pending, setSelectedRows, toggle
     },
     {
       name: (
-        <span className='fw-semibold fs-6'>
+        <span className='tw:font-semibold tw:text-[13px]'>
           ASIN
           <br />
           FNSKU
@@ -104,23 +104,23 @@ const MarketplacesListingsTable = ({ tableData, pending, setSelectedRows, toggle
       ),
       selector: (row: MarketplaceListingsProduct) => {
         return (
-          <div className='fs-7 d-flex flex-column justify-item-start gap-1'>
+          <div className='tw:text-[11.2px] tw:flex tw:flex-col tw:justify-start tw:gap-1'>
             {row.asin !== '' && (
-              <div className='d-flex flex-row justify-content-start align-items-center'>
-                <a className='m-0' href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank' rel='noopener noreferrer'>
+              <div className='tw:flex tw:flex-row tw:justify-start tw:items-center'>
+                <a className='tw:m-0' href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank' rel='noopener noreferrer'>
                   {row.asin}
                 </a>
                 <CopyTextToClipboard text={row.asin} label='ASIN' />
               </div>
             )}
             {row.fnSku !== '' && (
-              <p className='m-0'>
+              <p className='tw:m-0'>
                 {row.fnSku} <CopyTextToClipboard text={row.fnSku} label='FNSKU' />
               </p>
             )}
             {row.barcode !== '' && (
-              <div className='d-flex flex-row justify-content-start align-items-center'>
-                <p className='m-0'>{row.barcode}</p>
+              <div className='tw:flex tw:flex-row tw:justify-start tw:items-center'>
+                <p className='tw:m-0'>{row.barcode}</p>
                 <CopyTextToClipboard text={row.barcode} label='Barcode' />
               </div>
             )}
@@ -132,7 +132,7 @@ const MarketplacesListingsTable = ({ tableData, pending, setSelectedRows, toggle
       // grow: 1,
     },
     {
-      name: <span className='fw-semibold fs-6'>Brand</span>,
+      name: <span className='tw:font-semibold tw:text-[13px]'>Brand</span>,
       selector: (row: MarketplaceListingsProduct) => row.brand,
       sortable: true,
       left: true,
@@ -143,7 +143,7 @@ const MarketplacesListingsTable = ({ tableData, pending, setSelectedRows, toggle
       },
     },
     {
-      name: <span className='fw-semibold fs-6'>Supplier</span>,
+      name: <span className='tw:font-semibold tw:text-[13px]'>Supplier</span>,
       selector: (row: MarketplaceListingsProduct) => row.supplier,
       sortable: true,
       left: true,
@@ -155,39 +155,39 @@ const MarketplacesListingsTable = ({ tableData, pending, setSelectedRows, toggle
       width: '100px',
     },
     {
-      name: <span className='fw-semibold fs-6 text-center'>Mapped</span>,
+      name: <span className='tw:font-semibold tw:text-[13px] tw:text-center'>Mapped</span>,
       id: MAPPED_COL_ID,
       selector: (row: MarketplaceListingsProduct) => {
         if (marketplaceId === '') {
-          return <span className='fs-7 text-muted'>Select Marketplace</span>
+          return <span className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>Select Marketplace</span>
         }
 
         const listing = row.listings.find((listing) => listing.storeId_true?.toString() === marketplaceId)
 
         if (listing) {
           return (
-            <div className='d-flex flex-row justify-content-end align-items-center gap-2'>
-              <i className='las la-link fs-4 text-success m-0 p-0' />
+            <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-2'>
+              <i className='las la-link fs-4 text-success tw:m-0 tw:p-0' />
               <Link href={row.isKit ? `/kit/${row.inventoryId}/${row.sku}` : `/product/${row.inventoryId}/${row.sku}`} target='blank' rel='noopener noreferrer'>
-                <span className='fs-7'>{listing.storeSku}</span>
+                <span className='tw:text-[11.2px]'>{listing.storeSku}</span>
               </Link>
               {listing.isHidden ? (
-                <p className='fs-7 m-0 p-0'>
-                  <i className='mdi mdi-eye-off label-icon align-middle fs-6 me-0 text-danger' /> <span className='text-muted'>Hidden</span>
+                <p className='tw:text-[11.2px] tw:m-0 tw:p-0'>
+                  <i className='mdi mdi-eye-off label-icon align-middle fs-6 me-0 text-danger' /> <span className='tw:text-[var(--bs-secondary-color)]'>Hidden</span>
                 </p>
               ) : null}
               {listing.isManual ? (
-                <p className='fs-7 m-0 p-0'>
-                  <i className='mdi mdi-hand-back-left label-icon align-middle fs-6 me-0 text-primary' /> <span className='text-muted'>Manual</span>
+                <p className='tw:text-[11.2px] tw:m-0 tw:p-0'>
+                  <i className='mdi mdi-hand-back-left label-icon align-middle fs-6 me-0 text-primary' /> <span className='tw:text-[var(--bs-secondary-color)]'>Manual</span>
                 </p>
               ) : null}
             </div>
           )
         } else {
           return (
-            <div className='d-flex flex-row justify-content-end align-items-center gap-2'>
-              <i className='las la-link fs-4 text-danger m-0 p-0' />
-              <span className='fs-7 text-muted'>Not Mapped</span>
+            <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-2'>
+              <i className='las la-link fs-4 text-danger tw:m-0 tw:p-0' />
+              <span className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>Not Mapped</span>
             </div>
           )
         }

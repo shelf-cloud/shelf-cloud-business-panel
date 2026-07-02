@@ -320,23 +320,23 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
       <ModalBody>
         <Form onSubmit={handleAddProduct}>
           <Row>
-            <h5 className='fs-5 fw-bolder'>Order Details</h5>
-            <p className='m-0 mb-2 fs-7'>
+            <h5 className='tw:text-[16.25px] tw:font-extrabold'>Order Details</h5>
+            <p className='tw:m-0 tw:mb-2 tw:text-[11.2px]'>
               You can download a template to help you create your receiving file. <ExportBlankReceivingTemplate />
             </p>
             <Col md={6}>
               <Col xs={12}>
                 <FormGroup>
-                  <Label htmlFor='orderNumber' className='form-label fs-7'>
+                  <Label htmlFor='orderNumber' className='tw:mb-2 tw:inline-block tw:text-[11.2px]'>
                     *Transaction Number
                   </Label>
                   <div className='input-group'>
-                    <span className='input-group-text fw-semibold fs-5 m-0 px-2 py-0' id='basic-addon1'>
+                    <span className='input-group-text tw:font-semibold tw:text-[16.25px] tw:m-0 tw:px-2 tw:py-0' id='basic-addon1'>
                       {orderNumberStart}
                     </span>
                     <Input
                       type='text'
-                      className='fs-6'
+                      className='tw:text-[13px]'
                       id='orderNumber'
                       name='orderNumber'
                       bsSize='sm'
@@ -350,7 +350,7 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
                 </FormGroup>
               </Col>
               <Col xs={12}>
-                <Label className='form-label fs-7'>*Select Destination</Label>
+                <Label className='tw:mb-2 tw:inline-block tw:text-[11.2px]'>*Select Destination</Label>
                 <SimpleSelect
                   options={warehouses?.map((w) => ({ value: `${w.warehouseId}`, label: w.name })) || []}
                   selected={validation.values.destinationSC}
@@ -361,31 +361,30 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
                   customStyle='sm'
                 />
                 {validation.errors.destinationSC && validation.touched.destinationSC ? (
-                  <div className='m-0 p-0 text-danger fs-7'>*{validation.errors.destinationSC.value}</div>
+                  <div className='tw:m-0 tw:p-0 tw:text-destructive tw:text-[11.2px]'>*{validation.errors.destinationSC.value}</div>
                 ) : null}
               </Col>
               <Col xs={12}>
-                <Label htmlFor='orderNumber' className='form-label fs-7 mt-3 mb-1'>
+                <Label htmlFor='orderNumber' className='tw:mb-1 tw:inline-block tw:text-[11.2px] tw:mt-4'>
                   *Uploaded File
                 </Label>
-                <div className='list-unstyled mb-0' id='file-previews'>
-                  {selectedFiles.length === 0 && <div className='text-danger fs-7'>No file selected. Please upload a CSV file with the SKUs and quantities.</div>}
+                <div className='tw:list-none tw:mb-0' id='file-previews'>
+                  {selectedFiles.length === 0 && <div className='tw:text-destructive tw:text-[11.2px]'>No file selected. Please upload a CSV file with the SKUs and quantities.</div>}
                   {selectedFiles.map((f: any, i) => {
                     return (
-                      <Card className='mt-1 mb-0 shadow border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
-                        <div className='px-3 py-1'>
-                          <Row className='align-items-center'>
-                            <Col className='d-flex justify-content-between align-items-center'>
+                      <Card className='tw:mt-1 tw:mb-0 tw:shadow tw:border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
+                        <div className='tw:px-4 tw:py-1'>
+                          <Row className='tw:items-center'>
+                            <Col className='tw:flex tw:justify-between tw:items-center'>
                               <div>
-                                <p className='text-muted font-weight-bold m-0 fs-7'>{f.name}</p>
-                                <p className='mb-0 fs-7'>
+                                <p className='tw:text-[var(--bs-secondary-color)] tw:font-bold tw:m-0 tw:text-[11.2px]'>{f.name}</p>
+                                <p className='tw:mb-0 tw:text-[11.2px]'>
                                   <strong>{f.formattedSize}</strong>
                                 </p>
                               </div>
                               <div>
                                 <Button
                                   color='light'
-                                  className='btn-icon'
                                   onClick={() => {
                                     setuploadedSkuList([])
                                     setselectedFiles([])
@@ -414,26 +413,26 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
                 description={`Upload Invoices File. Drop Only CSV files here or click to upload.`}
               />
             </Col>
-            {errorFile && <p className='text-danger m-0 fs-7'>You must Upload a CSV file to upload products.</p>}
+            {errorFile && <p className='tw:text-destructive tw:m-0 tw:text-[11.2px]'>You must Upload a CSV file to upload products.</p>}
             {showErrorLines && (
-              <div style={{ overflowY: 'scroll', height: '40vh' }} className='my-3'>
-                <p className='text-danger m-0 fs-7'>
-                  <span className='fw-bold'>{errorLines.length}</span> errors found. Please review the following lines:
+              <div style={{ overflowY: 'scroll', height: '40vh' }} className='tw:my-4'>
+                <p className='tw:text-destructive tw:m-0 tw:text-[11.2px]'>
+                  <span className='tw:font-bold'>{errorLines.length}</span> errors found. Please review the following lines:
                 </p>
-                <table className='table table-sm'>
+                <table className='tw:w-full tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
                   <thead>
-                    <tr className='text-danger fs-7'>
-                      <th className='text-center text-nowrap'>In Line</th>
+                    <tr className='tw:text-destructive tw:text-[11.2px]'>
+                      <th className='tw:text-center tw:text-nowrap'>In Line</th>
                       <th>Value</th>
                       <th>Error</th>
                     </tr>
                   </thead>
-                  <tbody className='fs-7'>
+                  <tbody className='tw:text-[11.2px]'>
                     {errorLines.map((error: any, index: number) => (
-                      <tr key={`ErrorLine${index}`} className='m-0'>
-                        <td className='text-center'>{error.errorLine}</td>
-                        <td className='text-wrap w-25'>{error.value}</td>
-                        <td className='text-wrap w-100'>{error.errorMessage}</td>
+                      <tr key={`ErrorLine${index}`} className='tw:m-0'>
+                        <td className='tw:text-center'>{error.errorLine}</td>
+                        <td className='tw:text-wrap tw:w-1/4'>{error.value}</td>
+                        <td className='tw:text-wrap tw:w-full'>{error.errorMessage}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -441,10 +440,10 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
               </div>
             )}
 
-            <Nav className='nav-tabs border-bottom' role='tablist'>
+            <Nav className='nav-tabs tw:border-b' role='tablist'>
               <NavItem style={{ cursor: 'pointer' }}>
                 <NavLink
-                  className={activeTab == 'summary' ? 'text-primary fw-semibold fs-6 border border-primary' : 'text-muted fs-6'}
+                  className={activeTab == 'summary' ? 'tw:!text-primary tw:font-semibold tw:text-[13px] tw:border tw:border-primary' : 'tw:!text-[color:var(--bs-secondary-color)] tw:text-[13px]'}
                   onClick={() => {
                     setactiveTab('summary')
                   }}
@@ -454,7 +453,7 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
               </NavItem>
               <NavItem style={{ cursor: 'pointer' }}>
                 <NavLink
-                  className={activeTab == 'packages' ? 'text-primary fw-semibold fs-6 border border-primary' : 'text-muted fs-6'}
+                  className={activeTab == 'packages' ? 'tw:!text-primary tw:font-semibold tw:text-[13px] tw:border tw:border-primary' : 'tw:!text-[color:var(--bs-secondary-color)] tw:text-[13px]'}
                   onClick={() => {
                     setactiveTab('packages')
                   }}
@@ -464,7 +463,7 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
               </NavItem>
             </Nav>
 
-            <TabContent activeTab={activeTab} className='pt-2 mb-3'>
+            <TabContent activeTab={activeTab} className='tw:pt-2 tw:mb-4'>
               <TabPane tabId='summary'>{activeTab == 'summary' && <Create_Manual_Receiving_Summary_Tab orderProducts={receivingProducts} />}</TabPane>
               <TabPane tabId='packages'>
                 {activeTab == 'packages' && (
@@ -489,11 +488,11 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
               </TabPane>
             </TabContent>
 
-            <Row className='mb-2'>
+            <Row className='tw:mb-2'>
               {hasBoxedErrors.error && (
-                <Col xs={12} className='m-0'>
-                  <Alert color='danger' className='fs-7 py-1 mb-2'>
-                    <i className='ri-error-warning-line me-3 align-middle fs-5' />
+                <Col xs={12} className='tw:m-0'>
+                  <Alert color='danger' className='tw:text-[11.2px] tw:py-1 tw:mb-2'>
+                    <i className='ri-error-warning-line tw:me-4 align-middle fs-5' />
                     {hasBoxedErrors.message}
                   </Alert>
                 </Col>
@@ -501,14 +500,14 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
             </Row>
 
             <Row md={12}>
-              <div className='d-flex justify-content-end align-items-center gap-2'>
+              <div className='tw:flex tw:justify-end tw:items-center tw:gap-2'>
                 {activeTab == 'summary' && (
-                  <Button disabled={loading || receivingProducts.length <= 0} type='button' className='fs-7 btn-soft-primary' onClick={() => setactiveTab('packages')}>
+                  <Button disabled={loading || receivingProducts.length <= 0} type='button' color='primary' onClick={() => setactiveTab('packages')}>
                     Next Step
                   </Button>
                 )}
                 {activeTab == 'packages' && (
-                  <Button disabled={loading || receivingProducts.length <= 0 || hasBoxedErrors.error} type='submit' color='success' className='fs-7'>
+                  <Button disabled={loading || receivingProducts.length <= 0 || hasBoxedErrors.error} type='submit' color='success'>
                     {loading ? (
                       <span>
                         <Spinner color='light' size={'sm'} /> Creating...

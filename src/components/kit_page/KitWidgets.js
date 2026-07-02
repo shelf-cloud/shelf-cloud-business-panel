@@ -11,18 +11,18 @@ const KitWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValue })
   const currentMonthDays = moment().format('D') - 1
   return (
     <React.Fragment>
-      <Row className='gap-2'>
+      <Row className='tw:gap-2'>
         <Col>
-          <div className='shadow-none mb-0 ps-2'>
-            <div className='p-0'>
-              <div className='d-flex align-items-center'>
-                <div className='flex-grow-1 overflow-hidden'>
-                  <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>Inventory</p>
+          <div className='tw:shadow-none tw:mb-0 tw:ps-2'>
+            <div className='tw:p-0'>
+              <div className='tw:flex tw:items-center'>
+                <div className='tw:grow tw:overflow-hidden'>
+                  <p className='tw:uppercase tw:font-semibold tw:text-primary tw:truncate tw:mb-0'>Inventory</p>
                 </div>
               </div>
-              <div className='d-flex align-items-end justify-content-between mt-1'>
+              <div className='tw:flex tw:items-end tw:justify-between tw:mt-1'>
                 <div>
-                  <h4 className='fs-22 fw-semibold ff-secondary'>
+                  <h4 className='tw:text-[19.5px] tw:font-semibold'>
                     <span className='counter-value'>
                       <CountUp start={0} end={onhand} decimals={0} duration={1} />
                     </span>
@@ -33,16 +33,16 @@ const KitWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValue })
           </div>
         </Col>
         <Col>
-          <div className='shadow-none mb-0 border-start ps-2'>
-            <div className='p-0'>
-              <div className='d-flex align-items-center'>
-                <div className='flex-grow-1 overflow-hidden'>
-                  <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>Children</p>
+          <div className='tw:shadow-none tw:mb-0 tw:border-l tw:border-[color:var(--border)] tw:ps-2'>
+            <div className='tw:p-0'>
+              <div className='tw:flex tw:items-center'>
+                <div className='tw:grow tw:overflow-hidden'>
+                  <p className='tw:uppercase tw:font-semibold tw:text-primary tw:truncate tw:mb-0'>Children</p>
                 </div>
               </div>
-              <div className='d-flex align-items-end justify-content-between mt-1'>
+              <div className='tw:flex tw:items-end tw:justify-between tw:mt-1'>
                 <div>
-                  <h4 className='fs-22 fw-semibold ff-secondary'>
+                  <h4 className='tw:text-[19.5px] tw:font-semibold'>
                     <span className='counter-value'>
                       <CountUp
                         start={0}

@@ -21,24 +21,22 @@ const Select_Condition_Kit_Details = ({ selected, handleSelection, errorMessage 
   useClickOutside(selectCondition, () => setOpenDatesMenu(false))
 
   return (
-    <div ref={selectCondition} className='dropdown mb-3'>
-      <button type='button' className='btn-group w-100 p-0 bg-transparent' style={errorMessage ? styles.error : styles.noError} onClick={() => setOpenDatesMenu(!openDatesMenu)}>
-        <span className='btn btn-light btn-sm form-control fs-6 w-100 text-start' style={{ backgroundColor: 'white', opacity: '100%' }}>
+    <div ref={selectCondition} className='tw:relative tw:mb-3'>
+      <button type='button' className='tw:flex tw:w-full tw:items-center tw:p-0 tw:bg-transparent tw:rounded-md' style={errorMessage ? styles.error : styles.noError} onClick={() => setOpenDatesMenu(!openDatesMenu)}>
+        <span className='tw:flex-1 tw:px-3 tw:py-[0.3rem] tw:text-[13px] tw:text-left' style={{ backgroundColor: 'white', opacity: '100%' }}>
           {selected == '' ? `Select...` : selected}
         </span>
-        <span
-          className='btn btn-light btn-sm dropdown-toggle form-control fs-6dropdown-toggle dropdown-toggle-split'
-          style={{ backgroundColor: 'white', maxWidth: '35px' }}
-          aria-expanded='false'>
-          <span className='visually-hidden'>Toggle Dropdown</span>
+        <span className='tw:flex tw:items-center tw:justify-center tw:px-2' style={{ backgroundColor: 'white', maxWidth: '35px' }} aria-expanded='false'>
+          <i className='mdi mdi-chevron-down tw:text-[16.25px]' />
+          <span className='tw:sr-only'>Toggle Dropdown</span>
         </span>
       </button>
-      <div className={'dropdown-menu w-100 pt-3 px-4' + (openDatesMenu ? ' show' : '')}>
-        <div className='d-flex flex-column justify-content-start'>
+      <div className={'tw:absolute tw:z-10 tw:mt-1 tw:w-full tw:pt-3 tw:px-4 tw:bg-white tw:border tw:border-[#E1E3E5] tw:rounded-md tw:shadow ' + (openDatesMenu ? 'tw:block' : 'tw:hidden')}>
+        <div className='tw:flex tw:flex-col tw:justify-start'>
           <button
             type='button'
             key={'New'}
-            className={'btn btn-link p-0 border-0 text-start text-decoration-none text-reset mb-3 ' + (selectedOption == 'New' ? 'fw-bold' : '')}
+            className={'tw:block tw:p-0 tw:border-0 tw:bg-transparent tw:text-left tw:no-underline tw:text-inherit tw:mb-3 ' + (selectedOption == 'New' ? 'tw:font-bold' : '')}
             onClick={() => {
               setSelectedOption('New')
               handleSelection('New')
@@ -48,7 +46,7 @@ const Select_Condition_Kit_Details = ({ selected, handleSelection, errorMessage 
           <button
             type='button'
             key={'Like New'}
-            className={'btn btn-link p-0 border-0 text-start text-decoration-none text-reset mb-3 ' + (selectedOption == 'Like New' ? 'fw-bold' : '')}
+            className={'tw:block tw:p-0 tw:border-0 tw:bg-transparent tw:text-left tw:no-underline tw:text-inherit tw:mb-3 ' + (selectedOption == 'Like New' ? 'tw:font-bold' : '')}
             onClick={() => {
               setSelectedOption('Like New')
               handleSelection('Like New')
@@ -58,7 +56,7 @@ const Select_Condition_Kit_Details = ({ selected, handleSelection, errorMessage 
           <button
             type='button'
             key={'Used'}
-            className={'btn btn-link p-0 border-0 text-start text-decoration-none text-reset mb-3 ' + (selectedOption == 'Used' ? 'fw-bold' : '')}
+            className={'tw:block tw:p-0 tw:border-0 tw:bg-transparent tw:text-left tw:no-underline tw:text-inherit tw:mb-3 ' + (selectedOption == 'Used' ? 'tw:font-bold' : '')}
             onClick={() => {
               setSelectedOption('Used')
               handleSelection('Used')

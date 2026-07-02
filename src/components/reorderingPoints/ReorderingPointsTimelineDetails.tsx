@@ -20,8 +20,8 @@ const ReorderingPointsTimelineDetails = ({ data, expandedRowProps }: Props) => {
   return (
     <Col xs={8}>
       <Card>
-        <CardHeader className='py-3'>
-          <h5 className='fw-semibold m-0'>Performance Timeline</h5>
+        <CardHeader className='tw:py-3'>
+          <h5 className='tw:font-semibold tw:m-0'>Performance Timeline</h5>
         </CardHeader>
         {!isLoadingProductsTimeline && productTimeline ? (
           <CardBody>

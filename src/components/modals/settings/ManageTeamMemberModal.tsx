@@ -170,13 +170,13 @@ function ManageTeamMemberModal({ manageUser, setManageUser, showModal, setShowMo
             permissions: {},
           })
         }}>
-        <p className='m-0 p-0 mb-1 fw-bold fs-5'>{manageUser.name}</p>
-        <p className='m-0 p-0 fw-normal fs-6'>{manageUser.email}</p>
+        <p className='tw:m-0 tw:p-0 tw:mb-1 tw:font-bold tw:text-[16.25px]'>{manageUser.name}</p>
+        <p className='tw:m-0 tw:p-0 tw:font-normal tw:text-[13px]'>{manageUser.email}</p>
       </ModalHeader>
-      <ModalBody className='pb-0'>
+      <ModalBody className='tw:pb-0'>
         {!loadingModules ? (
           Object.entries(modules!).map(([module, moduleInfo]) => (
-            <Row className='mb-3' key={module}>
+            <Row className='tw:mb-4' key={module}>
               <CategoryTeamMembersHeader
                 title={module}
                 icon={moduleInfo.icon}
@@ -184,11 +184,11 @@ function ManageTeamMemberModal({ manageUser, setManageUser, showModal, setShowMo
                 manageUser={manageUser}
                 setManageUser={setManageUser}
               />
-              <Row className='px-4 py-3 gap-3'>
+              <Row className='tw:px-6 tw:py-4 tw:gap-4'>
                 {moduleInfo.modules?.map((subModule) => (
                   <Col key={subModule}>
-                    <div className='d-flex flex-row justify-content-start align-items-end w-fit gap-2'>
-                      <Label className='form-check-label text-nowrap fw-normal'>{subModule}</Label>
+                    <div className='tw:flex tw:flex-row tw:justify-start tw:items-end tw:w-fit tw:gap-2'>
+                      <Label className='form-check-label tw:text-nowrap tw:font-normal'>{subModule}</Label>
                       <div className='form-check-info'>
                         <Input
                           className='form-check-input'
@@ -205,14 +205,14 @@ function ManageTeamMemberModal({ manageUser, setManageUser, showModal, setShowMo
           ))
         ) : (
           <>
-            <span className='fw-normal fs-5 me-3'>Loading Modules...</span>
+            <span className='tw:font-normal tw:text-[16.25px] tw:me-4'>Loading Modules...</span>
             <Spinner color='primary' size='sm' />
           </>
         )}
       </ModalBody>
       {!loadingModules && (
-        <ModalFooter className='d-flex flex-row justify-content-between align-items-center gap-2'>
-          <div className='d-flex flex-row gap-3'>
+        <ModalFooter className='tw:flex tw:flex-row tw:justify-between tw:items-center tw:gap-2'>
+          <div className='tw:flex tw:flex-row tw:gap-4'>
             <Button color='danger' disabled={loading} onClick={handleDeleteTeamMember}>
               Delete User
             </Button>
@@ -220,7 +220,7 @@ function ManageTeamMemberModal({ manageUser, setManageUser, showModal, setShowMo
               Reset Password
             </Button>
           </div>
-          <div className='d-flex flex-row gap-3'>
+          <div className='tw:flex tw:flex-row tw:gap-4'>
             <Button
               color='light'
               onClick={() => {

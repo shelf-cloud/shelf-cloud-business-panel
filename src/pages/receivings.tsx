@@ -200,8 +200,8 @@ const Receiving = ({ session }: Props) => {
         <div className='page-content'>
           <BreadCrumb title='Receivings' pageTitle='Inbound' />
           <Container fluid>
-            <div className='d-flex flex-column justify-content-center align-items-end gap-2 mb-1 flex-lg-row justify-content-md-between align-items-md-center px-1'>
-              <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'>
+            <div className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:mb-1 tw:lg:flex-row tw:md:justify-between tw:md:items-center tw:px-1'>
+              <div className='tw:w-full tw:flex tw:flex-col tw:justify-center tw:items-start tw:gap-2 tw:mb-0 tw:lg:flex-row tw:lg:justify-start tw:lg:items-center tw:px-0'>
                 <FilterByDates
                   shipmentsStartDate={shipmentsStartDate}
                   setShipmentsStartDate={setShipmentsStartDate}
@@ -212,12 +212,12 @@ const Receiving = ({ session }: Props) => {
                 <FilterReceivings searchStatus={searchStatus} setSearchStatus={setSearchStatus} searchWarehouse={searchWarehouse} setSearchWarehouse={setSearchWarehouse} />
               </div>
               <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' />
-              <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='fs-7 text-nowrap' onClick={clearFilters}>
+              <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='tw:text-nowrap' onClick={clearFilters}>
                 Clear Filters
               </Button>
             </div>
             <Card>
-              <CardBody className='fs-7'>
+              <CardBody className='tw:text-[11.2px]'>
                 <ReceivingTable
                   tableData={receivings}
                   pending={isLoading}

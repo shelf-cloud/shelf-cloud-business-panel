@@ -11,18 +11,18 @@ const StorageWidgets = ({ previousCharge, previousChargeDate, currentBalance, bi
   const currentMonthDays = moment().format('D') - 1
   return (
     <React.Fragment>
-      <Row className='col-xs-12 col-md-6 col-xl-8 gap-2'>
+      <Row className='tw:w-full tw:md:w-1/2 tw:xl:w-2/3 tw:gap-2'>
         <Col>
-          <div className='shadow-none mb-0 border-start ps-2'>
-            <div className='p-0'>
-              <div className='d-flex align-items-center'>
-                <div className='flex-grow-1 overflow-hidden'>
-                  <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>Previous Month Charge</p>
+          <div className='tw:shadow-none tw:mb-0 tw:border-l tw:ps-2'>
+            <div className='tw:p-0'>
+              <div className='tw:flex tw:items-center'>
+                <div className='tw:grow tw:overflow-hidden'>
+                  <p className='tw:uppercase tw:font-semibold tw:text-primary tw:truncate tw:mb-0'>Previous Month Charge</p>
                 </div>
               </div>
-              <div className='d-flex align-items-end justify-content-between mt-1'>
+              <div className='tw:flex tw:items-end tw:justify-between tw:mt-1'>
                 <div>
-                  <h4 className='fs-22 fw-semibold ff-secondary'>
+                  <h4 className='tw:text-[22px] tw:font-semibold ff-secondary'>
                     <span className='counter-value'>
                       <CountUp
                         start={0}
@@ -35,23 +35,23 @@ const StorageWidgets = ({ previousCharge, previousChargeDate, currentBalance, bi
                       />
                     </span>
                   </h4>
-                  <span className='text-muted'>{previousChargeDate}</span>
+                  <span className='tw:text-[var(--bs-secondary-color)]'>{previousChargeDate}</span>
                 </div>
               </div>
             </div>
           </div>
         </Col>
         <Col>
-          <div className='shadow-none mb-0 border-start ps-2'>
-            <div className='p-0'>
-              <div className='d-flex align-items-center'>
-                <div className='flex-grow-1 overflow-hidden'>
-                  <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>Current Storage Balance</p>
+          <div className='tw:shadow-none tw:mb-0 tw:border-l tw:ps-2'>
+            <div className='tw:p-0'>
+              <div className='tw:flex tw:items-center'>
+                <div className='tw:grow tw:overflow-hidden'>
+                  <p className='tw:uppercase tw:font-semibold tw:text-primary tw:truncate tw:mb-0'>Current Storage Balance</p>
                 </div>
               </div>
-              <div className='d-flex align-items-end justify-content-between mt-1'>
+              <div className='tw:flex tw:items-end tw:justify-between tw:mt-1'>
                 <div>
-                  <h4 className='fs-22 fw-semibold ff-secondary'>
+                  <h4 className='tw:text-[22px] tw:font-semibold ff-secondary'>
                     <span className='counter-value'>
                       <CountUp
                         start={0}
@@ -64,23 +64,23 @@ const StorageWidgets = ({ previousCharge, previousChargeDate, currentBalance, bi
                       />
                     </span>
                   </h4>
-                  <span className='text-muted'>{currentMonthDays} accumulated days</span>
+                  <span className='tw:text-[var(--bs-secondary-color)]'>{currentMonthDays} accumulated days</span>
                 </div>
               </div>
             </div>
           </div>
         </Col>
         <Col>
-          <div className='shadow-none mb-0 border-start ps-2'>
-            <div className='p-0'>
-              <div className='d-flex align-items-center'>
-                <div className='flex-grow-1 overflow-hidden'>
-                  <p className='text-uppercase fw-semibold text-primary text-truncate mb-0'>Current Bins Used</p>
+          <div className='tw:shadow-none tw:mb-0 tw:border-l tw:ps-2'>
+            <div className='tw:p-0'>
+              <div className='tw:flex tw:items-center'>
+                <div className='tw:grow tw:overflow-hidden'>
+                  <p className='tw:uppercase tw:font-semibold tw:text-primary tw:truncate tw:mb-0'>Current Bins Used</p>
                 </div>
               </div>
-              <div className='d-flex align-items-end justify-content-between mt-1'>
+              <div className='tw:flex tw:items-end tw:justify-between tw:mt-1'>
                 <div>
-                  <h4 className='fs-22 fw-semibold ff-secondary'>
+                  <h4 className='tw:text-[22px] tw:font-semibold ff-secondary'>
                     <span className='counter-value'>
                       <CountUp
                         start={0}

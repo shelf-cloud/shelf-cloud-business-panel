@@ -66,7 +66,7 @@ const ExportProductListingsButton = ({ products }: Props) => {
   }, [products])
 
   return (
-    <DropdownItem className='text-nowrap fs-7' onClick={exportExcelFile}>
+    <DropdownItem className='tw:text-nowrap tw:text-[11.2px]' onClick={exportExcelFile}>
       <i className='mdi mdi-arrow-down-bold align-middle fs-5 me-2 text-primary' />
       Export Listings
     </DropdownItem>

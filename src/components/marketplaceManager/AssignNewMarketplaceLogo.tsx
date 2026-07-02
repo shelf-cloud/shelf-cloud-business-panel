@@ -42,13 +42,13 @@ const AssignNewMarketplaceLogo = ({ selected, defaultLogo, setLogo }: Props) => 
 
   return (
     <Dropdown isOpen={openDatesMenu} toggle={() => setOpenDatesMenu(!openDatesMenu)} direction='end'>
-      <DropdownToggle size='sm' caret className='fs-7' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }} color='light'>
+      <DropdownToggle size='sm' caret className='tw:text-[11.2px]' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }} color='light'>
         Logo
       </DropdownToggle>
       <DropdownMenu container={'body'} style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
-        <div className={'px-3 py-1'}>
-          <div className='d-flex flex-column justify-content-start gap-2'>
-            <span className='fs-7 fw-normal'>Set custom Logo:</span>
+        <div className='tw:px-4 tw:py-1'>
+          <div className='tw:flex tw:flex-col tw:justify-start tw:gap-2'>
+            <span className='tw:text-[11.2px] tw:font-normal'>Set custom Logo:</span>
             {channels ? (
               <SimpleSelectWithImage
                 selected={channels.find((option) => option.value === selected) ?? { value: '', label: 'Default Logo' }}

@@ -20,12 +20,12 @@ const AssignCommerceHubFileType = ({ selected, setSelected, options }: Props) =>
 
   return (
     <Dropdown isOpen={isDialogOpen} toggle={() => setIsDialogOpen(!isDialogOpen)} direction='end'>
-      <DropdownToggle caret className='fs-7' size='sm' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }} color='light'>
+      <DropdownToggle caret className='tw:text-[11.2px]' size='sm' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }} color='light'>
         File
       </DropdownToggle>
       <DropdownMenu container={'body'} style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
-        <div className={'px-3 py-1'}>
-          <div className='d-flex flex-column justify-content-start gap-2'>
+        <div className='tw:px-4 tw:py-1'>
+          <div className='tw:flex tw:flex-col tw:justify-start tw:gap-2'>
             <SimpleSelect
               selected={selected}
               handleSelect={(option) => {

@@ -297,9 +297,9 @@ const ReorderingPoints = ({ session }: Props) => {
               splits={splits}
               splitNames={splitNames}
             />
-            <Row className='d-flex flex-column justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-end align-items-md-center px-3'>
-              <div className='d-flex flex-column justify-content-between align-items-start p-0 flex-md-row align-items-md-center gap-2'>
-                <div className='d-flex flex-row flex-wrap justify-content-start align-items-center gap-2 w-100'>
+            <Row className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:mb-2 tw:md:flex-row tw:md:justify-end tw:md:items-center tw:px-4'>
+              <div className='tw:flex tw:flex-col tw:justify-between tw:items-start tw:p-0 tw:md:flex-row tw:md:items-center tw:gap-2'>
+                <div className='tw:flex tw:flex-row tw:flex-wrap tw:justify-start tw:items-center tw:gap-2 tw:w-full'>
                   <ShadcnButton variant={filters === 'true' ? 'default' : 'light'} onClick={() => setFilterOpen(!filterOpen)}>
                     Filters
                     <ChevronDownIcon className='tw:size-3' />
@@ -323,7 +323,7 @@ const ReorderingPoints = ({ session }: Props) => {
                         setsplits={setsplits}
                       />
                       {state.user.us.canEditPrompt ? (
-                        <ShadcnButton onClick={() => setPromptModal({ show: true })} className='d-flex flex-row justify-content-start align-items-center gap-1'>
+                        <ShadcnButton onClick={() => setPromptModal({ show: true })} className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-1'>
                           <i className='las la-brain fs-4 m-0 p-0' />
                           Prompt
                         </ShadcnButton>
@@ -363,7 +363,7 @@ const ReorderingPoints = ({ session }: Props) => {
                 </div>
                 <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' minLength={3} />
               </div>
-              <Collapse className='px-0' isOpen={filterOpen}>
+              <Collapse className='tw:px-0' isOpen={filterOpen}>
                 <FilterReorderingPoints
                   urgency={urgency !== undefined ? urgency : '[]'}
                   grossmin={grossmin !== undefined ? grossmin : ''}

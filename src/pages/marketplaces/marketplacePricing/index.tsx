@@ -186,11 +186,12 @@ const MarketplacePricing = ({ session }: Props) => {
         <div className='page-content'>
           <BreadCrumb title='Marketplace Pricing' pageTitle='Marketplaces' />
           <Container fluid>
-            <Row className='d-flex flex-column justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-end align-items-md-center px-3'>
-              <div className='d-flex flex-column justify-content-between align-items-start p-0 flex-md-row align-items-md-center gap-2'>
-                <div className='d-flex flex-row flex-wrap justify-content-start align-items-center gap-2 w-100'>
+            <Row className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:mb-2 tw:md:flex-row tw:md:justify-end tw:md:items-center tw:px-4'>
+              <div className='tw:flex tw:flex-col tw:justify-between tw:items-start tw:p-0 tw:md:flex-row tw:md:items-center tw:gap-2'>
+                <div className='tw:flex tw:flex-row tw:flex-wrap tw:justify-start tw:items-center tw:gap-2 tw:w-full'>
                   <Button
-                    className={'dropdown-toggle fs-7 ' + (filters === 'true' ? 'btn-info' : 'btn-light')}
+                    className='tw:text-[11.2px]'
+                    color={filters === 'true' ? 'info' : 'light'}
                     style={filters === 'true' ? {} : { backgroundColor: 'white', border: '1px solid #E1E3E5' }}
                     type='button'
                     aria-expanded='false'
@@ -199,13 +200,13 @@ const MarketplacePricing = ({ session }: Props) => {
                   </Button>
 
                   <ExportMarketplacePricing products={activeTab === 'byProducts' ? products : filteredByMarketplaceProducts} activeTab={activeTab} />
-                  <Button className='fs-7' color={changesMade ? 'warning' : 'light'} onClick={() => handleSaveProductsInfo()}>
+                  <Button className='tw:text-[11.2px]' color={changesMade ? 'warning' : 'light'} onClick={() => handleSaveProductsInfo()}>
                     Save Changes
                   </Button>
                 </div>
                 <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' minLength={3} />
               </div>
-              <Collapse className='px-0' isOpen={filterOpen}>
+              <Collapse className='tw:px-0' isOpen={filterOpen}>
                 <MKP_Filters
                   filters={{
                     units1monthmin: units1monthmin || '',
@@ -229,12 +230,12 @@ const MarketplacePricing = ({ session }: Props) => {
               </Collapse>
             </Row>
             <Card>
-              <CardHeader className='d-flex flex-row flex-wrap justify-content-start align-items-center gap-2 w-100'>
-                <Nav className='d-flex flex-row gap-2' role='tablist'>
+              <CardHeader className='tw:flex tw:flex-row tw:flex-wrap tw:justify-start tw:items-center tw:gap-2 tw:w-full'>
+                <Nav className='tw:flex tw:flex-row tw:gap-2' role='tablist'>
                   <NavItem>
                     <Button
                       color={activeTab === 'byProducts' ? 'primary' : 'light'}
-                      className='fs-7'
+                      className='tw:text-[11.2px]'
                       onClick={() => {
                         setSelectedMarketplace({ storeId: '9999', name: 'All Marketplaces', logo: '' })
                         setActiveTab('byProducts')
@@ -245,7 +246,7 @@ const MarketplacePricing = ({ session }: Props) => {
                   <NavItem>
                     <Button
                       color={activeTab === 'byMarketplace' ? 'primary' : 'light'}
-                      className='fs-7'
+                      className='tw:text-[11.2px]'
                       onClick={() => {
                         setSelectedMarketplace(marketplaces[0])
                         setActiveTab('byMarketplace')

@@ -151,27 +151,27 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
         <Col xl={4}>
           <Col xl={12}>
             <Card>
-              <CardHeader className='py-3'>
-                <h5 className='fw-semibold m-0'>Return</h5>
+              <CardHeader className='tw:py-4'>
+                <h5 className='tw:font-semibold tw:m-0'>Return</h5>
               </CardHeader>
               <CardBody>
-                <table className='table table-sm table-borderless'>
-                  <tbody className='fs-7'>
+                <table className='tw:w-full tw:text-[11.2px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+                  <tbody>
                     <tr>
-                      <td className='text-muted text-nowrap'>Service Requested:</td>
-                      <td className='fw-semibold w-100'>{data.carrierService}</td>
+                      <td className='tw:text-[var(--bs-secondary-color)] tw:whitespace-nowrap'>Service Requested:</td>
+                      <td className='tw:font-semibold tw:w-full'>{data.carrierService}</td>
                     </tr>
                     <tr>
-                      <td className='text-muted text-nowrap'>Service Used:</td>
-                      <td className='fw-semibold w-100'>{data.carrierType}</td>
+                      <td className='tw:text-[var(--bs-secondary-color)] tw:whitespace-nowrap'>Service Used:</td>
+                      <td className='tw:font-semibold tw:w-full'>{data.carrierType}</td>
                     </tr>
                     <tr>
-                      <td className='text-muted text-nowrap'>Customer Name:</td>
-                      <td className='fw-semibold w-100'>{data.shipName}</td>
+                      <td className='tw:text-[var(--bs-secondary-color)] tw:whitespace-nowrap'>Customer Name:</td>
+                      <td className='tw:font-semibold tw:w-full'>{data.shipName}</td>
                     </tr>
                     <tr>
-                      <td className='text-muted text-nowrap'># Of Pallets:</td>
-                      <td className='fw-semibold w-100'>{data.numberPallets}</td>
+                      <td className='tw:text-[var(--bs-secondary-color)] tw:whitespace-nowrap'># Of Pallets:</td>
+                      <td className='tw:font-semibold tw:w-full'>{data.numberPallets}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -180,35 +180,35 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
           </Col>
           <Col xl={12}>
             <Card>
-              <CardHeader className='py-3'>
-                <h5 className='fw-semibold m-0'>Charge Details</h5>
+              <CardHeader className='tw:py-4'>
+                <h5 className='tw:font-semibold tw:m-0'>Charge Details</h5>
               </CardHeader>
               <CardBody>
-                <table className='table table-sm table-borderless table-nowrap mb-0'>
-                  <tbody className='fs-7'>
-                    <tr className='border-bottom pb-2'>
-                      <td className='text-muted d-flex flex-row justify-content-start align-items-start'>
+                <table className='tw:w-full tw:whitespace-nowrap tw:mb-0 tw:text-[11.2px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+                  <tbody>
+                    <tr className='tw:border-b tw:border-[color:var(--border)]'>
+                      <td className='tw:text-[var(--bs-secondary-color)] tw:flex tw:flex-row tw:justify-start tw:items-start'>
                         Pick Pack Charge
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltip${OrderId}`}></i>
+                            <i className='ri-information-fill tw:ms-1 tw:text-[13px] tw:text-[var(--bs-secondary-color)]' id={`tooltip${OrderId}`}></i>
                             <TooltipComponent target={`tooltip${OrderId}`} text={serviceFee} />
                           </>
                         )}
                       </td>
-                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.pickpackCharge!)}</td>
+                      <td className='tw:font-semibold tw:text-right'>{FormatCurrency(state.currentRegion, data.pickpackCharge!)}</td>
                     </tr>
-                    <tr className='border-bottom pb-2'>
-                      <td className='text-muted'>Shipping Charge</td>
-                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.onixShipping!)}</td>
+                    <tr className='tw:border-b tw:border-[color:var(--border)]'>
+                      <td className='tw:text-[var(--bs-secondary-color)]'>Shipping Charge</td>
+                      <td className='tw:font-semibold tw:text-right'>{FormatCurrency(state.currentRegion, data.onixShipping!)}</td>
                     </tr>
-                    <tr className='border-bottom pb-2'>
-                      <td className='text-muted'>Extra Charge</td>
-                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.extraCharge!)}</td>
+                    <tr className='tw:border-b tw:border-[color:var(--border)]'>
+                      <td className='tw:text-[var(--bs-secondary-color)]'>Extra Charge</td>
+                      <td className='tw:font-semibold tw:text-right'>{FormatCurrency(state.currentRegion, data.extraCharge!)}</td>
                     </tr>
                     <tr>
-                      <td className='fw-bold'>TOTAL</td>
-                      <td className='text-primary fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.totalCharge!)}</td>
+                      <td className='tw:font-bold'>TOTAL</td>
+                      <td className='tw:text-primary tw:font-semibold tw:text-right'>{FormatCurrency(state.currentRegion, data.totalCharge!)}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -217,27 +217,27 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
           </Col>
           <Col xl={12}>
             <Card>
-              <CardHeader className='py-3 d-flex justify-content-between align-items-center'>
-                <h5 className='fw-semibold m-0'>Order Comment</h5>
+              <CardHeader className='tw:py-4 tw:flex tw:justify-between tw:items-center'>
+                <h5 className='tw:font-semibold tw:m-0'>Order Comment</h5>
                 <button
                   type='button'
                   aria-label='Edit order comment'
-                  className={'btn btn-link border-0 bg-transparent text-primary m-0 p-0 ' + (showEditNote && 'd-none')}
+                  className={'tw:border-0 tw:bg-transparent tw:text-primary tw:m-0 tw:p-0 ' + (showEditNote && 'tw:hidden')}
                   onClick={() => setShowEditNote(true)}>
-                  <i className='las la-edit fs-3 m-0 p-0' />
+                  <i className='las la-edit tw:text-[22.75px] tw:m-0 tw:p-0' />
                 </button>
               </CardHeader>
               <CardBody>
                 {showEditNote ? (
                   <Form onSubmit={handleAddComment}>
                     <Col md={12}>
-                      <FormGroup className='m-0'>
+                      <FormGroup className='tw:m-0'>
                         <Label htmlFor='comment' className='form-label'>
                           Edit Comment
                         </Label>
                         <Input
                           type='textarea'
-                          className='fs-6'
+                          className='tw:text-[13px]'
                           placeholder=''
                           id='comment'
                           name='comment'
@@ -249,11 +249,11 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                         />
                         {validationNote.touched.comment && validationNote.errors.comment ? <FormFeedback type='invalid'>{validationNote.errors.comment}</FormFeedback> : null}
                       </FormGroup>
-                      <div className='d-flex flex-row justify-content-end align-items-center gap-3'>
-                        <Button type='button' disabled={loading} color='light' className='btn btn-sm' onClick={() => setShowEditNote(false)}>
+                      <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-4'>
+                        <Button type='button' disabled={loading} color='light' size='sm' onClick={() => setShowEditNote(false)}>
                           Cancel
                         </Button>
-                        <Button type='submit' disabled={loading} color='primary' className='btn btn-sm'>
+                        <Button type='submit' disabled={loading} color='primary' size='sm'>
                           {loading ? <Spinner size={'sm'} color='light' /> : 'Save Changes'}
                         </Button>
                       </div>
@@ -268,28 +268,28 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
         </Col>
         <Col xl={8}>
           <Card>
-            <CardHeader className='py-3'>
-              <h5 className='fw-semibold m-0'>Products</h5>
+            <CardHeader className='tw:py-4'>
+              <h5 className='tw:font-semibold tw:m-0'>Products</h5>
             </CardHeader>
             <CardBody>
-              <div className='table-responsive'>
-                <table className='table table-sm align-middle table-borderless mb-0'>
-                  <thead className='table-light'>
+              <div className='tw:overflow-x-auto'>
+                <table className='tw:w-full tw:align-middle tw:mb-0 tw:text-[11.2px] tw:[&_th]:px-2 tw:[&_th]:py-1 tw:[&_td]:px-2 tw:[&_td]:py-1'>
+                  <thead className='tw:bg-[color:var(--vz-light)]'>
                     <tr>
                       <th scope='col'>Title</th>
                       <th scope='col'>Sku</th>
                       <th scope='col' aria-label='Item images'></th>
                       <th scope='col'>Condition</th>
-                      <th className='text-center' scope='col'>
+                      <th className='tw:text-center' scope='col'>
                         Qty Received
                       </th>
                     </tr>
                   </thead>
-                  <tbody className='fs-7'>
+                  <tbody>
                     {data.orderItems.map((product: OrderItem, key) => (
-                      <tr key={key} className='border-bottom py-2'>
-                        <td className='w-50 fw-semibold'>{product.title ? product.title : product.name}</td>
-                        <td className='text-muted'>{product.sku}</td>
+                      <tr key={key} className='tw:border-b tw:border-[color:var(--border)]'>
+                        <td className='tw:w-1/2 tw:font-semibold'>{product.title ? product.title : product.name}</td>
+                        <td className='tw:text-[var(--bs-secondary-color)]'>{product.sku}</td>
                         <td>
                           {product.images && product.images.length > 0 ? (
                             <ShadcnButton
@@ -303,14 +303,14 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                             </ShadcnButton>
                           ) : null}
                         </td>
-                        <td className='text-muted text-capitalize'>{product.state}</td>
-                        <td className='text-center'>{product.qtyReceived ? product.qtyReceived : product.quantity}</td>
+                        <td className='tw:text-[var(--bs-secondary-color)] tw:capitalize'>{product.state}</td>
+                        <td className='tw:text-center'>{product.qtyReceived ? product.qtyReceived : product.quantity}</td>
                       </tr>
                     ))}
                     <tr>
                       <td colSpan={3} aria-label='Total label spacer'></td>
-                      <td className='text-start fs-6 fw-bold text-nowrap'>Total</td>
-                      <td className='text-center fs-6 text-primary'>
+                      <td className='tw:text-left tw:text-[13px] tw:font-bold tw:whitespace-nowrap'>Total</td>
+                      <td className='tw:text-center tw:text-[13px] tw:text-primary'>
                         {data.orderItems.reduce((total, item: OrderItem) => total + (item.qtyReceived ? item.qtyReceived : item.quantity), 0)}
                       </td>
                     </tr>
@@ -322,17 +322,17 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
         </Col>
       </Row>
       <Row>
-        <Col xl={12} className='d-flex justify-content-end align-items-end'>
+        <Col xl={12} className='tw:flex tw:justify-end tw:items-end'>
           {data.returnOrigin === 'shipment' && (
-            <Card className='m-0'>
+            <Card className='tw:m-0'>
               {loadingLabel ? (
                 <Button color='secondary' className='btn-label'>
-                  <i className='las la-toilet-paper label-icon align-middle fs-3 me-2' />
+                  <i className='las la-toilet-paper label-icon tw:align-middle tw:text-[22.75px] tw:me-2' />
                   <Spinner color='light' size={'sm'} />
                 </Button>
               ) : (
                 <Button color='secondary' className='btn-label' onClick={() => handlePrintingLabel()}>
-                  <i className='las la-toilet-paper label-icon align-middle fs-3 me-2' />
+                  <i className='las la-toilet-paper label-icon tw:align-middle tw:text-[22.75px] tw:me-2' />
                   Print Label
                 </Button>
               )}

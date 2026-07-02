@@ -226,20 +226,20 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
       </ModalHeader>
       <ModalBody>
         <Form onSubmit={handleAddProduct}>
-          <h5 className='fs-5 fw-bolder'>Receiving Details</h5>
+          <h5 className='tw:text-[16.25px] tw:font-extrabold'>Receiving Details</h5>
           <Row>
             <Col xs={12} md={4}>
               <FormGroup>
-                <Label htmlFor='orderNumber' className='form-label fs-7'>
+                <Label htmlFor='orderNumber' className='tw:mb-2 tw:inline-block tw:text-[11.2px]'>
                   *Transaction Number
                 </Label>
                 <div className='input-group'>
-                  <span className='input-group-text fw-semibold fs-5 m-0 px-2 py-0' id='basic-addon1'>
+                  <span className='input-group-text tw:font-semibold tw:text-[16.25px] tw:m-0 tw:px-2 tw:py-0' id='basic-addon1'>
                     {orderNumberStart}
                   </span>
                   <Input
                     type='text'
-                    className='fs-6'
+                    className='tw:text-[13px]'
                     id='orderNumber'
                     name='orderNumber'
                     bsSize='sm'
@@ -253,7 +253,7 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
               </FormGroup>
             </Col>
             <Col xs={12} md={4}>
-              <Label className='form-label fs-7'>*Shipment Type</Label>
+              <Label className='tw:mb-2 tw:inline-block tw:text-[11.2px]'>*Shipment Type</Label>
               <SimpleSelect
                 options={RECEIVING_SHIPMENT_TYPES}
                 selected={validation.values.shipmentType}
@@ -264,10 +264,10 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
                 placeholder={'Select ...'}
                 customStyle='sm'
               />
-              {validation.errors.shipmentType && validation.touched.shipmentType ? <div className='m-0 p-0 text-danger fs-7'>*{validation.errors.shipmentType.value}</div> : null}
+              {validation.errors.shipmentType && validation.touched.shipmentType ? <div className='tw:m-0 tw:p-0 tw:text-destructive tw:text-[11.2px]'>*{validation.errors.shipmentType.value}</div> : null}
             </Col>
             <Col xs={12} md={4}>
-              <Label className='form-label fs-7'>*Select Destination</Label>
+              <Label className='tw:mb-2 tw:inline-block tw:text-[11.2px]'>*Select Destination</Label>
               <SimpleSelect
                 options={filteredWarehouses}
                 selected={validation.values.destinationSC}
@@ -278,15 +278,15 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
                 customStyle='sm'
               />
               {validation.errors.destinationSC && validation.touched.destinationSC ? (
-                <div className='m-0 p-0 text-danger fs-7'>*{validation.errors.destinationSC.value}</div>
+                <div className='tw:m-0 tw:p-0 tw:text-destructive tw:text-[11.2px]'>*{validation.errors.destinationSC.value}</div>
               ) : null}
             </Col>
           </Row>
 
-          <Nav className='nav-tabs border-bottom' role='tablist'>
+          <Nav className='nav-tabs tw:border-b' role='tablist'>
             <NavItem style={{ cursor: 'pointer' }}>
               <NavLink
-                className={activeTab == 'summary' ? 'text-primary fw-semibold fs-6 border border-primary' : 'text-muted fs-6'}
+                className={activeTab == 'summary' ? 'tw:!text-primary tw:font-semibold tw:text-[13px] tw:border tw:border-primary' : 'tw:!text-[color:var(--bs-secondary-color)] tw:text-[13px]'}
                 onClick={() => {
                   setactiveTab('summary')
                 }}
@@ -296,7 +296,7 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
             </NavItem>
             <NavItem style={{ cursor: 'pointer' }}>
               <NavLink
-                className={activeTab == 'packages' ? 'text-primary fw-semibold fs-6 border border-primary' : 'text-muted fs-6'}
+                className={activeTab == 'packages' ? 'tw:!text-primary tw:font-semibold tw:text-[13px] tw:border tw:border-primary' : 'tw:!text-[color:var(--bs-secondary-color)] tw:text-[13px]'}
                 onClick={() => {
                   setactiveTab('packages')
                 }}
@@ -306,7 +306,7 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
             </NavItem>
           </Nav>
 
-          <TabContent activeTab={activeTab} className='pt-2 mb-3'>
+          <TabContent activeTab={activeTab} className='tw:pt-2 tw:mb-4'>
             <TabPane tabId='summary'>{activeTab == 'summary' && <Create_Manual_Receiving_Summary_Tab orderProducts={receivingProducts} />}</TabPane>
             <TabPane tabId='packages'>
               {activeTab == 'packages' && (
@@ -331,25 +331,25 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
             </TabPane>
           </TabContent>
 
-          <Row className='mb-2'>
+          <Row className='tw:mb-2'>
             {hasBoxedErrors.error && (
-              <Col xs={12} className='m-0'>
-                <Alert color='danger' className='fs-7 py-1 mb-2'>
-                  <i className='ri-error-warning-line me-3 align-middle fs-5' />
+              <Col xs={12} className='tw:m-0'>
+                <Alert color='danger' className='tw:text-[11.2px] tw:py-1 tw:mb-2'>
+                  <i className='ri-error-warning-line tw:me-4 align-middle fs-5' />
                   {hasBoxedErrors.message}
                 </Alert>
               </Col>
             )}
           </Row>
           <Row md={12}>
-            <div className='d-flex justify-content-end align-items-center gap-2'>
+            <div className='tw:flex tw:justify-end tw:items-center tw:gap-2'>
               {activeTab == 'summary' && (
-                <Button disabled={loading || receivingProducts.length <= 0} type='button' className='fs-7 btn-soft-primary' onClick={() => setactiveTab('packages')}>
+                <Button disabled={loading || receivingProducts.length <= 0} type='button' color='primary' onClick={() => setactiveTab('packages')}>
                   Next Step
                 </Button>
               )}
               {activeTab == 'packages' && (
-                <Button disabled={loading || receivingProducts.length <= 0 || hasBoxedErrors.error} type='submit' color='success' className='fs-7'>
+                <Button disabled={loading || receivingProducts.length <= 0 || hasBoxedErrors.error} type='submit' color='success'>
                   {loading ? (
                     <span>
                       <Spinner color='light' size={'sm'} /> Creating...

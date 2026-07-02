@@ -188,8 +188,8 @@ const Returns = ({ session }: Props) => {
           <BreadCrumb title='Returns' pageTitle='Orders' />
           <Container fluid>
             <Col xs={12}>
-              <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-between align-items-md-center'>
-                <div className='d-flex flex-column justify-content-center align-items-end gap-2 flex-md-row justify-content-md-between align-items-md-center w-auto'>
+              <Row className='tw:flex tw:flex-col-reverse tw:justify-center tw:items-end tw:gap-2 tw:mb-2 tw:md:flex-row tw:md:justify-between tw:md:items-center'>
+                <div className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:md:flex-row tw:md:justify-between tw:md:items-center tw:w-auto'>
                   <FilterByDates
                     shipmentsStartDate={shipmentsStartDate}
                     setShipmentsStartDate={setShipmentsStartDate}
@@ -206,25 +206,25 @@ const Returns = ({ session }: Props) => {
                     setSearchMarketplace={setSearchMarketplace}
                   />
                   <Link href='/returns/Unsellables'>
-                    <Button color='primary' className='fs-7'>
+                    <Button color='primary' className='tw:text-[11.2px]'>
                       Unsellables
                     </Button>
                   </Link>
                   <ExportReturns returns={filterDataTable || []} />
                   {selectedRows.length > 0 && (
                     <UncontrolledButtonDropdown>
-                      <DropdownToggle className='btn btn-primary fs-7 py-2' caret>
-                        <span className='fw-bold'>{`${selectedRows.length} Order${selectedRows.length > 1 ? 's' : ''}`}</span> Selected
+                      <DropdownToggle className='tw:inline-flex tw:h-9 tw:items-center tw:gap-2 tw:rounded-md tw:bg-primary tw:px-3 tw:text-[11.2px] tw:font-medium tw:text-primary-foreground tw:whitespace-nowrap tw:shadow-xs tw:hover:bg-primary/90' caret>
+                        <span className='tw:font-bold'>{`${selectedRows.length} Order${selectedRows.length > 1 ? 's' : ''}`}</span> Selected
                       </DropdownToggle>
                       <DropdownMenu>
                         <DropdownItem header>Actions</DropdownItem>
-                        <DropdownItem className='text-nowrap text-capitalize fs-7' onClick={() => changeSelectedProductsState('complete')}>
-                          <i className='mdi mdi-check-circle-outline fs-5 text-success align-middle m-0 p-0' /> set complete
+                        <DropdownItem className='tw:whitespace-nowrap tw:capitalize tw:text-[11.2px]' onClick={() => changeSelectedProductsState('complete')}>
+                          <i className='mdi mdi-check-circle-outline tw:text-[16.25px] tw:text-success tw:align-middle tw:m-0 tw:p-0' /> set complete
                         </DropdownItem>
-                        <DropdownItem className='text-nowrap text-capitalize fs-7' onClick={() => changeSelectedProductsState('pending')}>
-                          <i className='mdi mdi-backup-restore fs-5 text-warning align-middle m-0 p-0' /> set pending
+                        <DropdownItem className='tw:whitespace-nowrap tw:capitalize tw:text-[11.2px]' onClick={() => changeSelectedProductsState('pending')}>
+                          <i className='mdi mdi-backup-restore tw:text-[16.25px] tw:text-warning tw:align-middle tw:m-0 tw:p-0' /> set pending
                         </DropdownItem>
-                        <DropdownItem className='text-nowrap text-end fs-7 text-muted' onClick={clearAllSelectedRows}>
+                        <DropdownItem className='tw:whitespace-nowrap tw:text-right tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]' onClick={clearAllSelectedRows}>
                           Clear All
                         </DropdownItem>
                       </DropdownMenu>

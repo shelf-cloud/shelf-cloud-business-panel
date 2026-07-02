@@ -8,7 +8,7 @@ import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { sortNumbers, sortStringsCaseInsensitive } from '@lib/helperFunctions'
 import { MKP_Product } from '@typesTs/marketplacePricing/marketplacePricing'
-import DataTable from 'react-data-table-component'
+import DataTable from '@components/Common/DataTableSC'
 
 import MKP_ExpandedDetails from './MKP_ExpandedDetails'
 
@@ -33,7 +33,7 @@ const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice,
 
   const columns: any = [
     {
-      name: <span className='fw-semibold text-center fs-7'>Image</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Image</span>,
       selector: (row: MKP_Product) => {
         return (
           <Link href={`/product/${row.inventoryId}/${row.sku}`}>
@@ -61,7 +61,7 @@ const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice,
     },
     {
       name: (
-        <span className='fw-semibold text-center fs-7'>
+        <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>
           SKU
           <br />
           Title
@@ -70,13 +70,13 @@ const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice,
       selector: (row: MKP_Product) => {
         return (
           <>
-            <div className='d-flex flex-row justify-content-start align-items-center'>
+            <div className='tw:flex tw:flex-row tw:justify-start tw:items-center'>
               <Link href={`/product/${row.inventoryId}/${row.sku}`} target='_blank'>
-                <p className='m-0 fs-7 fw-semibold'>{row.sku}</p>
+                <p className='tw:m-0 tw:text-[11.2px] tw:font-semibold'>{row.sku}</p>
               </Link>
               <CopyTextToClipboard text={row.sku} label='SKU' />
             </div>
-            <p className='fs-7 m-0 fw-semibold text-black'>{row.title}</p>
+            <p className='tw:text-[11.2px] tw:m-0 tw:font-semibold tw:text-black'>{row.title}</p>
           </>
         )
       },
@@ -87,10 +87,10 @@ const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice,
       sortFunction: (rowA: MKP_Product, rowB: MKP_Product) => sortStringsCaseInsensitive(rowA.sku, rowB.sku),
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>On Watch</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>On Watch</span>,
       selector: (row: MKP_Product) =>
         Object.values(row.marketplaces).find((marketplace) => marketplace.proposedPrice > 0 && marketplace.proposedPrice !== marketplace.actualPrice) ? (
-          <i className='mdi mdi-eye label-icon align-middle fs-5 me-2 text-primary' />
+          <i className='mdi mdi-eye label-icon tw:align-middle tw:text-[16.25px] tw:me-2 tw:text-primary' />
         ) : null,
       sortable: true,
       center: true,
@@ -103,10 +103,10 @@ const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice,
         ),
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>ASIN</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>ASIN</span>,
       selector: (row: MKP_Product) => {
         return row.asin !== '' ? (
-          <a className='m-0' href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank' rel='noopener noreferrer'>
+          <a className='tw:m-0' href={`https://www.amazon.${state.currentRegion == 'us' ? 'com' : 'es'}/dp/${row.asin}`} target='blank' rel='noopener noreferrer'>
             {row.asin}
           </a>
         ) : (
@@ -118,7 +118,7 @@ const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice,
       // grow: 1,
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>1 Month Sales</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>1 Month Sales</span>,
       selector: (row: MKP_Product) =>
         FormatIntNumber(
           state.currentRegion,
@@ -134,7 +134,7 @@ const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice,
         ),
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>1 Year Sales</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>1 Year Sales</span>,
       selector: (row: MKP_Product) =>
         FormatIntNumber(
           state.currentRegion,
@@ -150,7 +150,7 @@ const MKP_table = ({ products, isLoading, handleOtherCosts, handleProposedPrice,
         ),
     },
     {
-      name: <span className='fw-semibold text-center fs-7'>Landed Cost</span>,
+      name: <span className='tw:font-semibold tw:text-center tw:text-[11.2px]'>Landed Cost</span>,
       selector: (row: MKP_Product) => FormatCurrency(state.currentRegion, row.sellerCost + row.inboundShippingCost),
       sortable: true,
       center: true,

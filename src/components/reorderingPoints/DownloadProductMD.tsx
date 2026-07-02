@@ -58,7 +58,7 @@ const DownloadProductMD = ({ product }: Props) => {
   return (
     <DropdownItem className='edit-item-btn' onClick={handleDownloadFile}>
       <i className='ri-download-2-line align-middle me-2 fs-5 text-black'></i>
-      <span className='fs-7 fw-normal text-dark'>Download Markdown</span>
+      <span className='tw:text-[11.2px] tw:font-normal tw:text-black'>Download Markdown</span>
     </DropdownItem>
   )
 }

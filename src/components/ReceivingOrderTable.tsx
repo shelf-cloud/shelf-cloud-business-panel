@@ -6,7 +6,8 @@ import { ReceivingInventory } from '@hooks/receivings/useReceivingInventory'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { sortNumbers, sortStringsCaseInsensitive } from '@lib/helperFunctions'
-import DataTable from 'react-data-table-component'
+import DataTable from '@components/Common/DataTableSC'
+import { tableRowTint } from '@/lib/shadcn/dataTableStyles'
 import { DebounceInput } from 'react-debounce-input'
 import { Button } from '@/components/migration-ui'
 
@@ -22,17 +23,17 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
   const conditionalRowStyles = [
     {
       when: (row: ReceivingInventory) => row.quantity > 0,
-      classNames: ['bg-success bg-opacity-25'],
+      style: tableRowTint.success,
     },
     {
       when: (row: ReceivingInventory) => row.quantity < 0,
-      classNames: ['bg-danger bg-opacity-25'],
+      style: tableRowTint.danger,
     },
   ]
 
   const columns: any = [
     {
-      name: <span className='fw-semibold fs-6'>Image</span>,
+      name: <span className='tw:font-semibold tw:text-[13px]'>Image</span>,
       selector: (row: ReceivingInventory) => {
         return (
           <div
@@ -57,8 +58,8 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
       width: '80px',
     },
     {
-      name: <span className='fw-semibold fs-6'>Title</span>,
-      selector: (row: ReceivingInventory) => <p className='fs-7 m-0 p-0'>{row.title}</p>,
+      name: <span className='tw:font-semibold tw:text-[13px]'>Title</span>,
+      selector: (row: ReceivingInventory) => <p className='tw:text-[11.2px] tw:m-0 tw:p-0'>{row.title}</p>,
 
       sortable: true,
       wrap: true,
@@ -66,16 +67,16 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
       sortFunction: (rowA: ReceivingInventory, rowB: ReceivingInventory) => sortStringsCaseInsensitive(rowA.title, rowB.title),
     },
     {
-      name: <span className='fw-semibold fs-6'>SKU</span>,
-      selector: (row: ReceivingInventory) => <span className='fs-7'>{row.sku}</span>,
+      name: <span className='tw:font-semibold tw:text-[13px]'>SKU</span>,
+      selector: (row: ReceivingInventory) => <span className='tw:text-[11.2px]'>{row.sku}</span>,
       sortable: true,
       wrap: false,
       compact: true,
       sortFunction: (rowA: ReceivingInventory, rowB: ReceivingInventory) => sortStringsCaseInsensitive(rowA.sku, rowB.sku),
     },
     {
-      name: <span className='fw-semibold fs-6'>Supplier</span>,
-      selector: (row: ReceivingInventory) => <span className='fs-7'>{row.suppliersName}</span>,
+      name: <span className='tw:font-semibold tw:text-[13px]'>Supplier</span>,
+      selector: (row: ReceivingInventory) => <span className='tw:text-[11.2px]'>{row.suppliersName}</span>,
       sortable: true,
       wrap: false,
       compact: true,
@@ -83,12 +84,12 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
     },
     {
       name: (
-        <span className='fw-semibold fs-6 text-center'>
+        <span className='tw:font-semibold tw:text-[13px] tw:text-center'>
           Master Box <br />
-          <span className='fs-7'>(Units/Box)</span>
+          <span className='tw:text-[11.2px]'>(Units/Box)</span>
         </span>
       ),
-      selector: (row: ReceivingInventory) => <span className='fs-7'>{FormatIntNumber(state.currentRegion, row.boxQty)}</span>,
+      selector: (row: ReceivingInventory) => <span className='tw:text-[11.2px]'>{FormatIntNumber(state.currentRegion, row.boxQty)}</span>,
       sortable: true,
       center: true,
       wrap: false,
@@ -96,14 +97,13 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
       sortFunction: (rowA: ReceivingInventory, rowB: ReceivingInventory) => sortNumbers(rowA.boxQty, rowB.boxQty),
     },
     {
-      name: <span className='fw-semibold fs-6 text-center'>Inventory</span>,
+      name: <span className='tw:font-semibold tw:text-[13px] tw:text-center'>Inventory</span>,
       selector: (row: ReceivingInventory) => {
         return (
           <Button
-            color='info'
-            outline
+            color='ghost'
             size='sm'
-            className='btn btn-ghost-info'
+            className='tw:!text-info tw:hover:bg-[color-mix(in_srgb,var(--info)_10%,transparent)]'
             onClick={() => {
               setModalProductInfo(row.inventoryId, row.sku)
             }}>
@@ -118,7 +118,7 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
     },
     {
       name: (
-        <span className='fw-semibold fs-6 text-center'>
+        <span className='tw:font-semibold tw:text-[13px] tw:text-center'>
           Receiving <br /> Quantity
         </span>
       ),
@@ -129,7 +129,7 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
               type='number'
               minLength={0}
               debounceTimeout={200}
-              className='form-control form-control-sm fs-6 mt-1'
+              className='form-control form-control-sm tw:text-[13px] tw:mt-1'
               placeholder={'Receiving Qty...'}
               value={row.quantity}
               onFocus={(e: React.FocusEvent<HTMLInputElement>) => e.target.select()}
@@ -145,7 +145,7 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
               }}
               min={0}
             />
-            <span className='fs-7 fw-normal text-danger' id={`Error-${row.sku}`} style={{ display: 'none' }}>
+            <span className='tw:text-[11.2px] tw:font-normal tw:text-destructive' id={`Error-${row.sku}`} style={{ display: 'none' }}>
               Quantity Error
             </span>
           </>

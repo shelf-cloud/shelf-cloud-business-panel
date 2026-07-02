@@ -6,7 +6,7 @@ import { FormatCurrency } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { OrderItem, ReturnOrder, ReturnType } from '@typesTs/returns/returns'
 import { CameraIcon } from 'lucide-react'
-import DataTable from 'react-data-table-component'
+import DataTable from '@components/Common/DataTableSC'
 import { UncontrolledTooltip } from '@/components/migration-ui'
 
 import ReturnsTable from './ReturnsTable'
@@ -86,7 +86,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
 
   const columns: any = [
     {
-      name: <span className='fw-bolder fs-6'>Orders Returned</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Orders Returned</span>,
       selector: (row: ReturnType) => {
         const hasImage =
           Object.values(row.returns).some((ret) => ret.proofImageUrl) ||
@@ -94,12 +94,12 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
         return (
           <>
             <div className='tw:flex tw:items-center tw:justify-start tw:gap-1'>
-              <p className='fw-semibold fs-7 m-0 p-0'>{row.shipmentOrderNumber}</p>
+              <p className='tw:font-semibold tw:text-[11.2px] tw:m-0 tw:p-0'>{row.shipmentOrderNumber}</p>
               {hasImage ? <CameraIcon className='tw:text-destructive tw:size-4' /> : null}
             </div>
-            <p className='text-muted fs-7 m-0 p-0'>
+            <p className='tw:text-[var(--bs-secondary-color)] tw:text-[11.2px] tw:m-0 tw:p-0'>
               {Object.values(row.returns)[0].orderNumber}
-              {Object.values(row.returns).length > 1 && <span className='fs-7 text-danger'>{` +${Object.values(row.returns).length - 1}`}</span>}
+              {Object.values(row.returns).length > 1 && <span className='tw:text-[11.2px] tw:text-danger'>{` +${Object.values(row.returns).length - 1}`}</span>}
             </p>
           </>
         )
@@ -112,24 +112,24 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
       sortFunction: orderNumber,
     },
     {
-      name: <span className='fw-bolder text-center fs-6'>Status</span>,
+      name: <span className='tw:font-extrabold tw:text-center tw:text-[13px]'>Status</span>,
       selector: (row: ReturnType) => {
         const status = Object.values(row.returns)[0].orderStatus
         switch (status) {
           case 'shipped':
           case 'received':
-            return <span className='badge text-uppercase text-center badge-soft-success p-2'>{` ${status} `}</span>
+            return <span className='tw:inline-block tw:rounded tw:uppercase tw:text-center tw:text-[9.75px] tw:font-bold tw:p-2 tw:bg-[color-mix(in_srgb,var(--success)_10%,transparent)] tw:text-success'>{` ${status} `}</span>
           case 'Processed':
-            return <span className='badge text-uppercase text-center badge-soft-secondary p-2'>{` ${status} `}</span>
+            return <span className='tw:inline-block tw:rounded tw:uppercase tw:text-center tw:text-[9.75px] tw:font-bold tw:p-2 tw:bg-[color-mix(in_srgb,var(--secondary)_10%,transparent)] tw:text-secondary'>{` ${status} `}</span>
           case 'awaiting_shipment':
           case 'awaiting':
-            return <span className='badge text-uppercase text-center badge-soft-warning p-2'>{' awaiting '}</span>
+            return <span className='tw:inline-block tw:rounded tw:uppercase tw:text-center tw:text-[9.75px] tw:font-bold tw:p-2 tw:bg-[color-mix(in_srgb,var(--warning)_10%,transparent)] tw:text-warning'>{' awaiting '}</span>
           case 'awaiting pickup':
-            return <span className='badge text-uppercase text-center badge-soft-secondary p-2'>{' awaiting pickup '}</span>
+            return <span className='tw:inline-block tw:rounded tw:uppercase tw:text-center tw:text-[9.75px] tw:font-bold tw:p-2 tw:bg-[color-mix(in_srgb,var(--secondary)_10%,transparent)] tw:text-secondary'>{' awaiting pickup '}</span>
           case 'on_hold':
-            return <span className='badge text-uppercase text-center badge-soft-danger p-2'>{' on hold '}</span>
+            return <span className='tw:inline-block tw:rounded tw:uppercase tw:text-center tw:text-[9.75px] tw:font-bold tw:p-2 tw:bg-[color-mix(in_srgb,var(--danger)_10%,transparent)] tw:text-danger'>{' on hold '}</span>
           case 'cancelled':
-            return <span className='badge text-uppercase text-center badge-soft-dark p-2'> {status} </span>
+            return <span className='tw:inline-block tw:rounded tw:uppercase tw:text-center tw:text-[9.75px] tw:font-bold tw:p-2 tw:bg-[color-mix(in_srgb,var(--dark)_10%,transparent)] tw:text-dark'> {status} </span>
           default:
             break
         }
@@ -142,7 +142,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
       sortFunction: orderStatus,
     },
     {
-      name: <span className='fw-bolder fs-6'>Reason</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Reason</span>,
       selector: (row: ReturnType) => Object.values(row.returns)[0].returnReason,
       sortable: true,
       wrap: true,
@@ -153,7 +153,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
       },
     },
     {
-      name: <span className='fw-bolder text-center fs-6'>Marketplace</span>,
+      name: <span className='tw:font-extrabold tw:text-center tw:text-[13px]'>Marketplace</span>,
       selector: (row: ReturnType) => {
         return (
           <>
@@ -181,7 +181,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
       sortFunction: orderMarketplace,
     },
     {
-      name: <span className='fw-bolder text-center fs-6'>Return Date</span>,
+      name: <span className='tw:font-extrabold tw:text-center tw:text-[13px]'>Return Date</span>,
       selector: (row: ReturnType) => Object.values(row.returns)[0].orderDate,
       sortable: true,
       wrap: true,
@@ -193,7 +193,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
       },
     },
     {
-      name: <span className='fw-bolder fs-6'>Tracking Number</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Tracking Number</span>,
       selector: (row: ReturnType) => {
         let tracking
         {
@@ -220,10 +220,10 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
                     href={`${Object.values(row.returns)[0].trackingLink}${Object.values(row.returns)[0].trackingNumber}`}
                     target='_blank'
                     rel='noopener noreferrer'
-                    className='fs-7'
+                    className='tw:text-[11.2px]'
                     style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
                     {Object.values(row.returns)[0].trackingNumber}
-                    {Object.values(row.returns).length > 1 && <span className='fs-7 text-danger'>{` +${Object.values(row.returns).length}`}</span>}
+                    {Object.values(row.returns).length > 1 && <span className='tw:text-[11.2px] tw:text-danger'>{` +${Object.values(row.returns).length}`}</span>}
                   </a>
                 </div>
               )
@@ -242,9 +242,9 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
                       objectFit: 'contain',
                     }}
                   />
-                  <p style={{ margin: '0px' }} className='fs-7'>
+                  <p style={{ margin: '0px' }} className='tw:text-[11.2px]'>
                     {Object.values(row.returns)[0].trackingNumber}
-                    {Object.values(row.returns).length > 1 && <span className='fs-7 text-danger'>{` +${Object.values(row.returns).length}`}</span>}
+                    {Object.values(row.returns).length > 1 && <span className='tw:text-[11.2px] tw:text-danger'>{` +${Object.values(row.returns).length}`}</span>}
                   </p>
                 </div>
               )
@@ -269,10 +269,10 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
                     href={`${Object.values(row.returns)[0].trackingLink}${Object.values(row.returns)[0].trackingNumber}`}
                     target='_blank'
                     rel='noopener noreferrer'
-                    className='fs-7'
+                    className='tw:text-[11.2px]'
                     style={{ textDecoration: 'none', color: 'black', cursor: 'pointer' }}>
                     {Object.values(row.returns)[0].trackingNumber}
-                    {Object.values(row.returns).length > 1 && <span className='fs-7 text-danger'>{` +${Object.values(row.returns).length}`}</span>}
+                    {Object.values(row.returns).length > 1 && <span className='tw:text-[11.2px] tw:text-danger'>{` +${Object.values(row.returns).length}`}</span>}
                   </a>
                 </div>
               )
@@ -290,9 +290,9 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
                       objectFit: 'contain',
                     }}
                   />
-                  <p style={{ margin: '0px' }} className='fs-7'>
+                  <p style={{ margin: '0px' }} className='tw:text-[11.2px]'>
                     {Object.values(row.returns)[0].trackingNumber}
-                    {Object.values(row.returns).length > 1 && <span className='fs-7 text-danger'>{` +${Object.values(row.returns).length}`}</span>}
+                    {Object.values(row.returns).length > 1 && <span className='tw:text-[11.2px] tw:text-danger'>{` +${Object.values(row.returns).length}`}</span>}
                   </p>
                 </div>
               )
@@ -313,7 +313,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
       compact: true,
     },
     {
-      name: <span className='fw-bolder text-center fs-6'>Items Received</span>,
+      name: <span className='tw:font-extrabold tw:text-center tw:text-[13px]'>Items Received</span>,
       selector: (row: ReturnType) => {
         const totalOrderItems = Object.values(row.returns).reduce((total: number, returnOrder: ReturnOrder) => total + returnOrder.totalItems, 0)
         const totalReceivedItems = Object.values(row.returns).reduce((total: number, returnOrder: ReturnOrder) => {
@@ -323,13 +323,13 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
 
         return row.totalOrderItems === 0 ? (
           <>
-            <span className='fs-7'>{totalOrderItems}</span>
+            <span className='tw:text-[11.2px]'>{totalOrderItems}</span>
           </>
         ) : (
           <>
-            <span className={'fw-bold fs-6' + (totalReceivedItems !== row.totalOrderItems ? ' text-danger' : '')}>{totalReceivedItems}</span>
+            <span className={'tw:font-bold tw:text-[13px]' + (totalReceivedItems !== row.totalOrderItems ? ' tw:text-danger' : '')}>{totalReceivedItems}</span>
             {` / `}
-            <span className='fs-7'>{row.totalOrderItems}</span>
+            <span className='tw:text-[11.2px]'>{row.totalOrderItems}</span>
           </>
         )
       },
@@ -340,7 +340,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
       compact: true,
     },
     {
-      name: <span className='fw-bolder text-center fs-6'>Total Charge</span>,
+      name: <span className='tw:font-extrabold tw:text-center tw:text-[13px]'>Total Charge</span>,
       selector: (row: ReturnType) =>
         FormatCurrency(
           state.currentRegion,
@@ -356,23 +356,23 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
       },
     },
     {
-      name: <span className='fw-bolder text-center fs-6'>Status</span>,
+      name: <span className='tw:font-extrabold tw:text-center tw:text-[13px]'>Status</span>,
       cell: (row: ReturnType) => {
         var returnStateBtn
         switch (Object.values(row.returns)[0].returnState) {
           case 'complete':
             returnStateBtn = (
-              <span className='fs-7 text-capitalize text-nowrap text-success p-2'>
+              <span className='tw:text-[11.2px] tw:capitalize tw:whitespace-nowrap tw:text-success tw:p-2'>
                 {` ${Object.values(row.returns)[0].returnState} `}
-                {Object.values(row.returns).length > 1 && <span className='fs-7 text-danger'>{` +${Object.values(row.returns).length}`}</span>}
+                {Object.values(row.returns).length > 1 && <span className='tw:text-[11.2px] tw:text-danger'>{` +${Object.values(row.returns).length}`}</span>}
               </span>
             )
             break
           case 'pending':
             returnStateBtn = (
-              <span className='fs-7 text-capitalize text-nowrap text-warning p-2'>
+              <span className='tw:text-[11.2px] tw:capitalize tw:whitespace-nowrap tw:text-warning tw:p-2'>
                 {` ${Object.values(row.returns)[0].returnState} `}
-                {Object.values(row.returns).length > 1 && <span className='fs-7 text-danger'>{` +${Object.values(row.returns).length}`}</span>}
+                {Object.values(row.returns).length > 1 && <span className='tw:text-[11.2px] tw:text-danger'>{` +${Object.values(row.returns).length}`}</span>}
               </span>
             )
             break

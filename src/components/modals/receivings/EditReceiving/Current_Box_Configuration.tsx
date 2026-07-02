@@ -9,29 +9,29 @@ type Props = {
 
 const Current_Box_Configuration = ({ boxes, isReceivingFromPo }: Props) => {
   return (
-    <div className='overflow-auto'>
-      <table className='table table-sm align-middle table-responsive table-striped fs-7'>
+    <div className='tw:overflow-auto'>
+      <table className='table table-sm align-middle table-responsive table-striped tw:text-[11.2px]'>
         <tbody>
           {boxes.map((box, index) => (
             <>
               <tr key={`box-${index}`}>
-                <td colSpan={5} className='text-start ps-3 fs-5 fw-semibold bg-soft-primary'>
+                <td colSpan={5} className='tw:text-left tw:ps-4 tw:text-[16.25px] tw:font-semibold bg-soft-primary'>
                   Box {index + 1}
                 </td>
               </tr>
               <tr key={`box-${index}-items`}>
-                <table className='table table-sm align-middle table-responsive table-striped fs-7'>
+                <table className='table table-sm align-middle table-responsive table-striped tw:text-[11.2px]'>
                   <thead className='table-light'>
                     <tr key={`box-${index}-header`}>
-                      <th scope='col' className='text-start px-3'>
+                      <th scope='col' className='tw:text-left tw:px-4'>
                         Title / SKU
                       </th>
                       {isReceivingFromPo && (
-                        <th scope='col' className='text-start'>
+                        <th scope='col' className='tw:text-left'>
                           PO Numbers
                         </th>
                       )}
-                      <th scope='col' className='text-center px-3'>
+                      <th scope='col' className='tw:text-center tw:px-4'>
                         Quantity
                       </th>
                     </tr>
@@ -39,8 +39,8 @@ const Current_Box_Configuration = ({ boxes, isReceivingFromPo }: Props) => {
                   <tbody>
                     {box.items.map((item, itemIndex) => (
                       <tr key={`box-${index}-item-${itemIndex}`}>
-                        <td className='text-start px-3'>
-                          <div className='d-flex flex-row justify-content-start align-items-center gap-3'>
+                        <td className='tw:text-left tw:px-4'>
+                          <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-4'>
                             <div
                               style={{
                                 width: '40px',
@@ -55,14 +55,14 @@ const Current_Box_Configuration = ({ boxes, isReceivingFromPo }: Props) => {
                                 style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                               />
                             </div>
-                            <div className='text-start'>
-                              <p className='text-nowrap m-0 fw-semibold'>{item.sku}</p>
-                              <p className='text-nowrap m-0'>{item.name}</p>
+                            <div className='tw:text-left'>
+                              <p className='tw:text-nowrap tw:m-0 tw:font-semibold'>{item.sku}</p>
+                              <p className='tw:text-nowrap tw:m-0'>{item.name}</p>
                             </div>
                           </div>
                         </td>
-                        {isReceivingFromPo && <td className='text-start'>{item.poNumber}</td>}
-                        <td className='text-center px-3'>{item.quantity}</td>
+                        {isReceivingFromPo && <td className='tw:text-left'>{item.poNumber}</td>}
+                        <td className='tw:text-center tw:px-4'>{item.quantity}</td>
                       </tr>
                     ))}
                   </tbody>

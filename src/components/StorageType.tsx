@@ -18,9 +18,9 @@ const StorageTable = ({ data }: Props) => {
           <Card>
             <CardBody>
               <div className='table-responsive table-card'>
-                <table className='table table-sm align-middle text-center table-bordered mb-0'>
-                  <thead className='table-light text-muted'>
-                    <tr className='fs-5 fw-bold'>
+                <table className='table table-sm align-middle tw:text-center table-bordered tw:mb-0'>
+                  <thead className='table-light tw:text-[var(--bs-secondary-color)]'>
+                    <tr className='tw:text-[16.25px] tw:font-bold'>
                       <th scope='col'>Bin Name</th>
                       <th scope='col'>Bin Quantity</th>
                       <th scope='col'>Bin Est. Monthly Balance</th>
@@ -29,9 +29,9 @@ const StorageTable = ({ data }: Props) => {
                   <tbody>
                     {data.bins.map((bin: StorageBin, key) => (
                       <tr key={key}>
-                        <td className='fs-16 fw-semibold text-primary'>{bin.binName || ''}</td>
-                        <td className='fs-15'>{bin.quantity}</td>
-                        <td className='text-center'>
+                        <td className='tw:text-[16px] tw:font-semibold tw:text-primary'>{bin.binName || ''}</td>
+                        <td className='tw:text-[15px]'>{bin.quantity}</td>
+                        <td className='tw:text-center'>
                           {bin.idBin != 156 ? FormatCurrency(state.currentRegion, bin.binBalance!) : bin.countEntry ? FormatCurrency(state.currentRegion, bin.binBalance!) : '--'}
                         </td>
                       </tr>

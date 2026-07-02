@@ -150,10 +150,10 @@ const MarketplacesFees = ({}: Props) => {
 
   const columns: any = [
     {
-      name: <span className='fw-bold fs-6'>Logo</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Logo</span>,
       selector: (row: MarketplaceFees) => {
         return (
-          <div className='d-flex flex-row justify-content-start align-items-center gap-2 fs-7'>
+          <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2 tw:text-[11.2px]'>
             <div
               style={{
                 width: '22px',
@@ -188,7 +188,7 @@ const MarketplacesFees = ({}: Props) => {
       sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortStringsCaseInsensitive(rowA.storeName, rowB.storeName),
     },
     {
-      name: <span className='fw-bold fs-6'>Marketplace</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Marketplace</span>,
       selector: (row: MarketplaceFees) => row.name,
       sortable: true,
       left: true,
@@ -201,7 +201,7 @@ const MarketplacesFees = ({}: Props) => {
       sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortStringsCaseInsensitive(rowA.name, rowB.name),
     },
     {
-      name: <span className='fw-bold fs-6'>Sales Channel</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Sales Channel</span>,
       selector: (row: MarketplaceFees) => row.storeName,
       sortable: true,
       center: true,
@@ -212,16 +212,16 @@ const MarketplacesFees = ({}: Props) => {
       sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortStringsCaseInsensitive(rowA.storeName, rowB.storeName),
     },
     {
-      name: <span className='fw-bold fs-6'>Alias</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Alias</span>,
       selector: (row: MarketplaceFees) => {
-        if (!showEditFields) return <span className=''>{row.alias}</span>
+        if (!showEditFields) return <span>{row.alias}</span>
         return (
-          <div className='d-flex flex-row justify-content-center align-items-center gap-2'>
+          <div className='tw:flex tw:flex-row tw:justify-center tw:items-center tw:gap-2'>
             <DebounceInput
               type='text'
               minLength={1}
               debounceTimeout={400}
-              className='form-control fs-7'
+              className='form-control tw:text-[11.2px]'
               style={{ padding: '0.2rem 0.5rem', minWidth: '80px' }}
               onChange={(e) => setmarketplaceFees((prev) => ({ ...prev, [row.storeId]: { ...row, alias: e.target.value !== '' ? e.target.value : null } }))}
               value={row.alias || ''}
@@ -234,22 +234,22 @@ const MarketplacesFees = ({}: Props) => {
       sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortStringsCaseInsensitive(rowA.storeName, rowB.storeName),
     },
     {
-      name: <span className='fw-bold fs-6'>Comission Fee</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Comission Fee</span>,
       selector: (row: MarketplaceFees) => {
         if (!showEditFields)
           return (
             <span
               className={
-                row.comissionFee === 0 ? 'text-muted fw-light' : row.comissionFee < 0 || row.comissionFee > 100 ? 'text-danger fw-bold' : 'text-dark'
+                row.comissionFee === 0 ? 'tw:text-[var(--bs-secondary-color)] tw:font-light' : row.comissionFee < 0 || row.comissionFee > 100 ? 'tw:text-danger tw:font-bold' : 'tw:text-black'
               }>{`${row.comissionFee} %`}</span>
           )
         return (
-          <div className='d-flex flex-row justify-content-center align-items-center gap-1'>
+          <div className='tw:flex tw:flex-row tw:justify-center tw:items-center tw:gap-1'>
             <DebounceInput
               minLength={1}
               debounceTimeout={200}
               type='number'
-              className={'form-control fs-7 ' + ((row.comissionFee < 0 || row.comissionFee > 100) && 'is-invalid')}
+              className={'form-control tw:text-[11.2px] ' + ((row.comissionFee < 0 || row.comissionFee > 100) && 'is-invalid')}
               style={{ padding: '0.2rem 0.9rem', minWidth: '80px' }}
               max={100}
               min={0}
@@ -259,7 +259,7 @@ const MarketplacesFees = ({}: Props) => {
               }}
               value={row.comissionFee || 0}
             />
-            <span className='fw-sembold fs-6'>%</span>
+            <span className='tw:font-semibold tw:text-[13px]'>%</span>
           </div>
         )
       },
@@ -269,15 +269,15 @@ const MarketplacesFees = ({}: Props) => {
       sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortNumbers(rowA.comissionFee, rowB.comissionFee),
     },
     {
-      name: <span className='fw-bold fs-6'>Fixed Fee</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Fixed Fee</span>,
       selector: (row: MarketplaceFees) => {
-        if (!showEditFields) return <span className={row.fixedFee === 0 ? 'text-muted fw-light' : 'text-dark'}>{FormatCurrency(state.currentRegion, row.fixedFee)}</span>
+        if (!showEditFields) return <span className={row.fixedFee === 0 ? 'tw:text-[var(--bs-secondary-color)] tw:font-light' : 'tw:text-black'}>{FormatCurrency(state.currentRegion, row.fixedFee)}</span>
         return (
           <DebounceInput
             minLength={1}
             debounceTimeout={200}
             type='number'
-            className={'form-control fs-7 ' + (row.fixedFee < 0 && 'is-invalid')}
+            className={'form-control tw:text-[11.2px] ' + (row.fixedFee < 0 && 'is-invalid')}
             style={{ padding: '0.2rem 0.9rem', minWidth: '80px' }}
             min={0}
             onChange={(e) => {
@@ -294,20 +294,20 @@ const MarketplacesFees = ({}: Props) => {
       sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortNumbers(rowA.fixedFee, rowB.fixedFee),
     },
     {
-      name: <span className='fw-bold fs-6 text-center'>Commerce Hub</span>,
+      name: <span className='tw:font-bold tw:text-[13px] tw:text-center'>Commerce Hub</span>,
       selector: (row: MarketplaceFees) => {
         if (!showEditFields)
           return (
             row.isCommerceHub && (
-              <div className='my-2 d-flex flex-column justify-content-center align-items-center gap-0'>
-                <p className='fs-7 text-center m-0 text-primary'>Active</p>
-                <p className='fs-7 text-center m-0'>File: {row.commerceHubFileType}</p>
+              <div className='tw:my-2 tw:flex tw:flex-col tw:justify-center tw:items-center tw:gap-0'>
+                <p className='tw:text-[11.2px] tw:text-center tw:m-0 tw:text-primary'>Active</p>
+                <p className='tw:text-[11.2px] tw:text-center tw:m-0'>File: {row.commerceHubFileType}</p>
               </div>
             )
           )
         return (
-          <div className='py-2 d-flex flex-column justify-content-center align-items-center gap-2'>
-            <div className='fs-7 d-flex flex-row justify-content-center align-items-center gap-2'>
+          <div className='tw:py-2 tw:flex tw:flex-col tw:justify-center tw:items-center tw:gap-2'>
+            <div className='tw:text-[11.2px] tw:flex tw:flex-row tw:justify-center tw:items-center tw:gap-2'>
               <input
                 type='checkbox'
                 className='form-check-input'
@@ -329,7 +329,7 @@ const MarketplacesFees = ({}: Props) => {
               )}
             </div>
             {row.isCommerceHub && (
-              <span className={'fs-7 text-info fw-light ' + (row.isCommerceHub && row.commerceHubFileType === '' ? 'text-danger' : '')}>
+              <span className={'tw:text-[11.2px] tw:text-info tw:font-light ' + (row.isCommerceHub && row.commerceHubFileType === '' ? 'tw:text-danger' : '')}>
                 File: {row.commerceHubFileType || 'Required'}
               </span>
             )}
@@ -345,15 +345,15 @@ const MarketplacesFees = ({}: Props) => {
       sortFunction: (rowA: MarketplaceFees) => (rowA.isCommerceHub ? 1 : -1),
     },
     {
-      name: <span className='fw-bold fs-6'>Pay Terms</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Pay Terms</span>,
       selector: (row: MarketplaceFees) => {
-        if (!showEditFields) return <span className={row.payTerms === 0 ? 'text-muted fw-light' : 'text-dark'}>{row.payTerms}</span>
+        if (!showEditFields) return <span className={row.payTerms === 0 ? 'tw:text-[var(--bs-secondary-color)] tw:font-light' : 'tw:text-black'}>{row.payTerms}</span>
         return (
           <DebounceInput
             minLength={1}
             debounceTimeout={200}
             type='number'
-            className={'form-control fs-7 ' + (row.payTerms < 0 && 'is-invalid')}
+            className={'form-control tw:text-[11.2px] ' + (row.payTerms < 0 && 'is-invalid')}
             style={{ padding: '0.2rem 0.9rem', minWidth: '80px' }}
             min={0}
             onChange={(e) => {
@@ -370,16 +370,16 @@ const MarketplacesFees = ({}: Props) => {
       sortFunction: (rowA: MarketplaceFees, rowB: MarketplaceFees) => sortNumbers(rowA.payTerms, rowB.payTerms),
     },
     {
-      name: <span className='fw-bold fs-6'>Notes</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Notes</span>,
       selector: (row: MarketplaceFees) => {
-        if (!showEditFields) return <p className='fs-7 my-1'>{row.notes}</p>
+        if (!showEditFields) return <p className='tw:text-[11.2px] tw:my-1'>{row.notes}</p>
         return (
-          <div className='d-flex flex-row justify-content-center align-items-center gap-2 my-1'>
+          <div className='tw:flex tw:flex-row tw:justify-center tw:items-center tw:gap-2 tw:my-1'>
             <DebounceInput
               element='textarea'
               minLength={3}
               debounceTimeout={500}
-              className='form-control fs-7'
+              className='form-control tw:text-[11.2px]'
               style={{ padding: '0.2rem 0.5rem', minWidth: '80px' }}
               onChange={(e) => setmarketplaceFees((prev) => ({ ...prev, [row.storeId]: { ...row, notes: e.target.value !== '' ? e.target.value : null } }))}
               value={row.notes || ''}
@@ -396,7 +396,7 @@ const MarketplacesFees = ({}: Props) => {
 
   return (
     <>
-      <div className='d-flex flex-row justify-content-end align-items-center gap-3 mb-2'>
+      <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-4 tw:mb-2'>
         <Button color='primary' size='sm' onClick={() => setuploadLogoImage((prev) => ({ ...prev, isOpen: true }))}>
           Add New Logo
         </Button>
@@ -405,7 +405,7 @@ const MarketplacesFees = ({}: Props) => {
             Edit
           </Button>
         ) : (
-          <div className='d-flex flex-row justify-content-end align-items-center gap-3'>
+          <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-4'>
             <Button color='success' size='sm' disabled={hasError} onClick={handleUpdateMarketplaceFees}>
               {updatingFees ? <Spinner size={'sm'} color='white' /> : 'Save'}
             </Button>
