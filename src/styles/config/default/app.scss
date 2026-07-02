@@ -19,14 +19,9 @@ File: Main Css File
 @import './theme-light';
 @import './theme-dark';
 
-// Structure
-@import '../../structure/topbar';
-@import '../../structure/page-head';
-@import '../../structure/footer';
-@import '../../structure/vertical';
-@import '../../structure/horizontal';
-@import '../../structure/two-column';
-@import '../../structure/layouts';
+// Structure — replaced by plain CSS in src/styles/shell/*.css (imported in _app.tsx).
+// horizontal/two-column/layouts were unreachable (data-layout is always 'vertical',
+// data-layout-width always 'fluid') and were dropped in the port.
 
 // Components
 @import '../../components/waves';

@@ -1,0 +1,20 @@
+/*
+ * layouts.css
+ *
+ * Ported from src/styles/structure/_layouts.scss.
+ *
+ * This file is intentionally empty of rules: every selector in the
+ * source SCSS is gated behind attributes the app never sets:
+ *   - [data-layout-width='boxed']   (app always sets 'fluid')
+ *   - [data-layout='horizontal']    (app always sets 'vertical')
+ *   - [data-layout-style='detached'] (app always sets 'default')
+ *   - [data-layout-position='scrollable'] (app always sets 'fixed')
+ * See src/hooks/useInitialState.ts for the attributes the app actually
+ * applies to <html> (data-layout-width='fluid', data-layout='vertical',
+ * data-layout-position='fixed', data-layout-style='default'), and
+ * src/containers/Layout/Layout.tsx / src/hooks for confirmation nothing
+ * else mutates these attributes at runtime.
+ *
+ * No rules ported. File kept as a placeholder / import target in case
+ * future layout variants are reintroduced.
+ */

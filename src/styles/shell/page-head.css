@@ -1,0 +1,81 @@
+/*
+ * page-head.css
+ *
+ * Ported from src/styles/structure/_page-head.scss.
+ *
+ * Dropped: [data-layout='horizontal'] .page-title-box and
+ * [data-layout='vertical'][data-layout-style='detached'] .page-title-box
+ * variants — app always sets data-layout='vertical' and
+ * data-layout-style='default' (see src/hooks/useInitialState.ts), so
+ * those branches are unreachable.
+ *
+ * Bootstrap-base rules absorbed here (die with Bootstrap otherwise):
+ * .breadcrumb, .breadcrumb-item + .breadcrumb-item (separator),
+ * .breadcrumb-item.active, .breadcrumb-item > a — required because
+ * src/components/Common/BreadCrumb.tsx renders <ol class="breadcrumb">
+ * / <li class="breadcrumb-item"> and relies on Bootstrap's own base
+ * styling for the separator glyph, spacing, and active-item color.
+ */
+
+.page-title-box {
+  padding: 10px var(--vz-grid-gutter-width, 1.5rem);
+  background-color: var(--vz-card-bg);
+  box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15);
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  margin: -23px 0 1rem 0;
+}
+
+.page-title-box .breadcrumb {
+  background-color: transparent;
+  padding: 0;
+}
+
+.page-title-box h4 {
+  font-weight: 700;
+  font-size: 15px !important;
+  text-transform: uppercase;
+}
+
+/* Bootstrap .breadcrumb base (absorbed) */
+.breadcrumb {
+  --bs-breadcrumb-padding-x: 0;
+  --bs-breadcrumb-padding-y: 0;
+  --bs-breadcrumb-margin-bottom: 1rem;
+  --bs-breadcrumb-bg: ;
+  --bs-breadcrumb-border-radius: ;
+  --bs-breadcrumb-divider-color: #878a99;
+  --bs-breadcrumb-item-padding-x: 0.5rem;
+  --bs-breadcrumb-item-active-color: #878a99;
+  display: flex;
+  flex-wrap: wrap;
+  padding: var(--bs-breadcrumb-padding-y) var(--bs-breadcrumb-padding-x);
+  margin-bottom: var(--bs-breadcrumb-margin-bottom);
+  font-size: var(--bs-breadcrumb-font-size);
+  list-style: none;
+  background-color: var(--bs-breadcrumb-bg);
+  border-radius: var(--bs-breadcrumb-border-radius);
+}
+
+.breadcrumb-item + .breadcrumb-item {
+  padding-left: var(--bs-breadcrumb-item-padding-x);
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  float: left;
+  padding-right: var(--bs-breadcrumb-item-padding-x);
+  color: var(--bs-breadcrumb-divider-color);
+  content: var(--bs-breadcrumb-divider, "\f0142");
+  font-family: 'Material Design Icons';
+  font-size: 15px;
+  line-height: 20px;
+}
+
+.breadcrumb-item.active {
+  color: var(--bs-breadcrumb-item-active-color);
+}
+
+.breadcrumb-item > a {
+  color: var(--vz-gray-700);
+  text-decoration: none;
+}

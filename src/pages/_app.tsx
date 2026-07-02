@@ -12,6 +12,11 @@ import 'react-toastify/dist/ReactToastify.min.css'
 import { TooltipProvider } from '@/components/shadcn/ui/tooltip'
 
 import '../styles/themes.scss'
+import '../styles/shell/tokens.css'
+import '../styles/shell/topbar.css'
+import '../styles/shell/page-head.css'
+import '../styles/shell/footer.css'
+import '../styles/shell/vertical.css'
 import '../styles/tailwind.css'
 
 function MyApp({

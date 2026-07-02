@@ -1,0 +1,60 @@
+/*
+ * footer.css
+ * Ported from src/styles/structure/_footer.scss (compiled values).
+ */
+
+.footer {
+  bottom: 0;
+  padding: 20px calc(1.5rem / 2);
+  position: absolute;
+  right: 0;
+  color: var(--vz-footer-color);
+  left: 250px;
+  height: 60px;
+  background-color: transparent;
+}
+
+@media (max-width: 991.98px) {
+  .footer {
+    left: 0;
+  }
+}
+
+[data-layout='vertical'][data-sidebar-size='sm'] .footer,
+[data-layout='vertical'][data-sidebar-size='sm-hover'] .footer {
+  left: 70px;
+}
+
+@media (max-width: 767.98px) {
+  [data-layout='vertical'][data-sidebar-size='sm'] .footer,
+  [data-layout='vertical'][data-sidebar-size='sm-hover'] .footer {
+    left: 0;
+  }
+}
+
+[data-layout='vertical'][data-sidebar-size='md'] .footer {
+  left: 180px;
+}
+
+@media (max-width: 991.98px) {
+  [data-layout='vertical'][data-sidebar-size='md'] .footer {
+    left: 0;
+  }
+}
+
+[data-layout='horizontal'] .footer {
+  left: 0 !important;
+}
+
+@media (min-width: 1024.1px) {
+  [data-layout='vertical'][data-layout-style='detached'] .footer {
+    left: 0 !important;
+    background-color: transparent;
+  }
+}
+
+@media (min-width: 768.1px) {
+  [data-layout='twocolumn'] .footer {
+    left: calc(70px + 220px);
+  }
+}
