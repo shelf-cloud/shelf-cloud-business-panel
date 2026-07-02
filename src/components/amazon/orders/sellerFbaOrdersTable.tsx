@@ -4,7 +4,7 @@ import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { FBAOrder, FBAOrderItem } from '@typesTs/amazon/orders'
 import moment from 'moment'
-import DataTable from 'react-data-table-component'
+import DataTable from '@components/Common/DataTableSC'
 
 import FbaOrdersExpandedDetail from './FbaOrdersExpandedDetail'
 
@@ -33,35 +33,35 @@ const SellerFbaOrdersTable = ({ tableData, pending }: Props) => {
 
   const columns: any = [
     {
-      name: <span className='fw-bolder fs-6'>Order Id</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Order Id</span>,
       selector: (row: FBAOrder) => row.amazonOrderId,
       sortable: true,
       center: true,
       compact: true,
     },
     {
-      name: <span className='fw-bolder fs-6 text-center'>Date</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px] tw:text-center'>Date</span>,
       selector: (row: FBAOrder) => moment(row.purchaseDate).format('YYYY-MM-DD'),
       center: true,
       sortable: true,
       compact: true,
     },
     {
-      name: <span className='fw-bolder fs-6'>Fulfillment</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Fulfillment</span>,
       selector: (row: FBAOrder) => row.fulfillmentChannel,
       center: true,
       sortable: true,
       compact: true,
     },
     {
-      name: <span className='fw-bolder fs-6'>Channel</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Channel</span>,
       selector: (row: FBAOrder) => row.salesChannel,
       center: true,
       sortable: true,
       compact: true,
     },
     {
-      name: <span className='fw-bolder fs-6'>Status</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Status</span>,
       selector: (row: FBAOrder) => {
         switch (row.orderStatus) {
           case 'Shipped':
@@ -93,14 +93,14 @@ const SellerFbaOrdersTable = ({ tableData, pending }: Props) => {
       sortFunction: orderStatus,
     },
     {
-      name: <span className='fw-bolder fs-6'>Item Qty</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Item Qty</span>,
       selector: (row: FBAOrder) => row?.orderItems.reduce((total, item: FBAOrderItem) => total + item.quantity, 0),
       center: true,
       sortable: true,
       compact: true,
     },
     {
-      name: <span className='fw-bolder fs-6'>Order Total</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Order Total</span>,
       selector: (row: FBAOrder) => {
         return (
           <>
@@ -122,12 +122,12 @@ const SellerFbaOrdersTable = ({ tableData, pending }: Props) => {
                 0
               )
             )}
-            <span className='text-muted fs-7'>{` USD`}</span>
+            <span className='tw:text-[var(--bs-secondary-color)] tw:text-[11.2px]'>{` USD`}</span>
             {row?.orderItems.reduce(
               (total, item: FBAOrderItem) =>
                 total + (item.refund_item + item.refund_itemTax + item.refund_commission + item.refund_adminCommission + item.refund_facilitatorTax_item),
               0
-            ) !== 0 && <span className='text-danger fw-normal'> - Refund</span>}
+            ) !== 0 && <span className='tw:text-danger tw:font-normal'> - Refund</span>}
           </>
         )
       },

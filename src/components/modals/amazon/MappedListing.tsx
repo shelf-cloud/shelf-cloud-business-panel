@@ -158,24 +158,23 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
       </ModalHeader>
       <ModalBody>
         <Row>
-          <h5 className='fs-4 mb-0 fw-semibold text-primary'>Amazon Listing:</h5>
-          <p className='fs-4 fw-semibold text-black'>{showMappedListingModal.listingSku}</p>
+          <h5 className='tw:text-[19.5px] tw:mb-0 tw:font-semibold tw:text-primary'>Amazon Listing:</h5>
+          <p className='tw:text-[19.5px] tw:font-semibold tw:text-black'>{showMappedListingModal.listingSku}</p>
           <Col md={12}>
-            <p className='fw-semibold fs-6 m-0 mb-1'>Map to Product or Kit:</p>
+            <p className='tw:font-semibold tw:text-[13px] tw:m-0 tw:mb-1'>Map to Product or Kit:</p>
             <Select_Product_Mapped data={data || []} showMappedListingModal={showMappedListingModal} setshowMappedListingModal={setshowMappedListingModal} />
           </Col>
-          <Row md={12} className='mt-3'>
-            <div className='text-end mt-2 d-flex flex-row gap-4 justify-content-between'>
-              <Button disabled={loading || showMappedListingModal.currentSkuMapped === ''} type='button' color='danger' className='btn' onClick={handleUnMappedProduct}>
+          <Row md={12} className='tw:mt-4'>
+            <div className='tw:text-right tw:mt-2 tw:flex tw:flex-row tw:gap-6 tw:justify-between'>
+              <Button disabled={loading || showMappedListingModal.currentSkuMapped === ''} type='button' color='danger' onClick={handleUnMappedProduct}>
                 <i className='las la-unlink fs-5 text-white m-0 p-0 me-1' />
                 {loading ? <Spinner color='#fff' size={'sm'} /> : 'UnMap'}
               </Button>
-              <div className='d-flex flex-row gap-3'>
+              <div className='tw:flex tw:flex-row tw:gap-4'>
                 <Button
                   disabled={loading}
                   type='button'
                   color='light'
-                  className='btn'
                   onClick={() => {
                     setshowMappedListingModal({
                       show: false,
@@ -192,7 +191,7 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
                   }}>
                   Cancel
                 </Button>
-                <Button disabled={loading || showMappedListingModal.currentSkuMapped !== ''} type='button' color='success' className='btn' onClick={handleSaveMappedProduct}>
+                <Button disabled={loading || showMappedListingModal.currentSkuMapped !== ''} type='button' color='success' onClick={handleSaveMappedProduct}>
                   {loading ? <Spinner color='#fff' size={'sm'} /> : 'Save'}
                 </Button>
               </div>

@@ -160,21 +160,21 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
         <div className='page-content'>
           <BreadCrumb title='Fulfillments' pageTitle='Amazon' />
           <Container fluid>
-            {/* <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-1 flex-md-row justify-content-md-end align-items-md-center px-3'> */}
-            <Row className='justify-content-between gap-2 mb-2 px-1'>
-              <Col xs='12' lg='6' className='d-flex justify-content-start align-items-center gap-2'>
+            {/* <Row className='tw:flex tw:flex-col-reverse tw:justify-center tw:items-end tw:gap-2 tw:mb-1 flex-md-row justify-content-md-end align-items-md-center tw:px-4'> */}
+            <Row className='tw:justify-between tw:tw:gap-2 tw:tw:mb-2 tw:tw:px-1'>
+              <Col xs='12' lg='6' className='tw:flex tw:justify-start tw:items-center tw:tw:gap-2'>
                 <Link href={'/amazon-sellers/fulfillment/sendToAmazon'}>
                   <Button>Start New</Button>
                 </Link>
-                <Button color='info' className='d-flex align-items-center' onClick={() => setHelpOffCanvasIsOpen(true)}>
+                <Button color='info' className='tw:flex tw:items-center' onClick={() => setHelpOffCanvasIsOpen(true)}>
                   <i className='ri-question-line fs-14 p-0 m-0 me-lg-1' />
-                  <span className='d-none d-lg-block'>Need help</span>
+                  <span className='tw:hidden tw:lg:block'>Need help</span>
                 </Button>
               </Col>
-              <Col xs='12' lg='4' className='d-flex justify-content-end align-items-center'>
+              <Col xs='12' lg='4' className='tw:flex tw:justify-end tw:items-center'>
                 <div className='flex-1'>
-                  <div className='app-search d-flex flex-row justify-content-between align-items-center p-0'>
-                    <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+                  <div className='app-search tw:flex tw:tw:flex-row tw:justify-between tw:items-center tw:tw:p-0'>
+                    <div className='tw:relative tw:flex tw:rounded-lg tw:w-full tw:overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                       <DebounceInput
                         type='text'
                         minLength={3}
@@ -188,7 +188,7 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
                       />
                       <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
                       <span
-                        className='d-flex align-items-center justify-content-center input_background_white'
+                        className='tw:flex tw:items-center tw:justify-center input_background_white'
                         style={{
                           cursor: 'pointer',
                         }}

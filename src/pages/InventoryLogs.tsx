@@ -7,7 +7,7 @@ import BreadCrumb from '@components/Common/BreadCrumb'
 import AppContext from '@context/AppContext'
 import { LogRowType } from '@typings'
 import axios from 'axios'
-import DataTable from 'react-data-table-component'
+import DataTable from '@components/Common/DataTableSC'
 import { toast } from 'react-toastify'
 import { Button, Card, CardBody, CardHeader, Col, Container, Input, Row } from '@/components/migration-ui'
 import useSWR from 'swr'
@@ -67,19 +67,19 @@ const InventoryLogs = ({ session }: Props) => {
 
   const columns: any = [
     {
-      name: <span className='fw-bolder fs-5'>SKU</span>,
+      name: <span className='tw:font-extrabold tw:text-[16.25px]'>SKU</span>,
       selector: (row: { sku: string }) => row.sku,
       sortable: true,
       center: true,
     },
     {
-      name: <span className='fw-bolder fs-5'>Date</span>,
+      name: <span className='tw:font-extrabold tw:text-[16.25px]'>Date</span>,
       selector: (row: { date: string }) => row.date,
       sortable: true,
       center: true,
     },
     {
-      name: <span className='fw-bolder fs-5'>Details</span>,
+      name: <span className='tw:font-extrabold tw:text-[16.25px]'>Details</span>,
       selector: (row: { details: string }) => row.details,
       sortable: true,
       left: true,
@@ -120,8 +120,8 @@ const InventoryLogs = ({ session }: Props) => {
               <Col lg={12}>
                 <Card>
                   <CardHeader>
-                    <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
-                      <div className='position-relative'>
+                    <div className='app-search tw:flex tw:flex-row tw:justify-end tw:items-center tw:p-0'>
+                      <div className='tw:relative'>
                         <Input type='text' placeholder='Search...' id='search-options' value={serachValue} onChange={filterByText} />
                         <span className='mdi mdi-magnify search-widget-icon'></span>
                         <span className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none' id='search-close-options'></span>

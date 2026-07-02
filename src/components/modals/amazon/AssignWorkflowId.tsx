@@ -187,32 +187,32 @@ const AssignWorkflowId = ({ assignWorkflowIdModal, setassignWorkflowIdModal, ses
       </ModalHeader>
       <ModalBody>
         <Row>
-          <div className='mb-3'>
-            <p className='fs-5 m-0 fw-semibold text-primary'>ShelfCloud Fulfillment</p>
-            <p className='fs-6 m-0 text-muted'>
-              Fulfillment Name: <span className='fw-semibold text-black'>{assignWorkflowIdModal.inboundPlanName}</span>
+          <div className='tw:mb-4'>
+            <p className='tw:text-[16.25px] tw:m-0 tw:font-semibold tw:text-primary'>ShelfCloud Fulfillment</p>
+            <p className='tw:text-[13px] tw:m-0 tw:text-[var(--bs-secondary-color)]'>
+              Fulfillment Name: <span className='tw:font-semibold tw:text-black'>{assignWorkflowIdModal.inboundPlanName}</span>
             </p>
-            <p className='fs-6 m-0 text-muted'>
-              Marketpalce: <span className='fw-semibold text-black'>{AMAZON_MARKETPLACES[assignWorkflowIdModal.marketplace].domain}</span>
+            <p className='tw:text-[13px] tw:m-0 tw:text-[var(--bs-secondary-color)]'>
+              Marketpalce: <span className='tw:font-semibold tw:text-black'>{AMAZON_MARKETPLACES[assignWorkflowIdModal.marketplace].domain}</span>
             </p>
-            <p className='fs-6 m-0 text-muted'>
-              Date Created: <span className='fw-semibold text-black'>{moment(assignWorkflowIdModal.dateCreated).local().format('LL hh:mm A')}</span>
+            <p className='tw:text-[13px] tw:m-0 tw:text-[var(--bs-secondary-color)]'>
+              Date Created: <span className='tw:font-semibold tw:text-black'>{moment(assignWorkflowIdModal.dateCreated).local().format('LL hh:mm A')}</span>
             </p>
-            <p className='fs-6 m-0 text-muted'>
-              SKUs: <span className='fw-semibold text-black'>{assignWorkflowIdModal.skus}</span> Units:{' '}
-              <span className='fw-semibold text-black'>{assignWorkflowIdModal.units}</span>
+            <p className='tw:text-[13px] tw:m-0 tw:text-[var(--bs-secondary-color)]'>
+              SKUs: <span className='tw:font-semibold tw:text-black'>{assignWorkflowIdModal.skus}</span> Units:{' '}
+              <span className='tw:font-semibold tw:text-black'>{assignWorkflowIdModal.units}</span>
             </p>
           </div>
-          <p className='fs-7 text-muted'>
+          <p className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>
             * After Uploading the template file to a new workflow in Amazon Seller Central, Assign it to a ShelfCloud Fulfillment. ShelfCloud would then handle the whole
             fulfillment process.
           </p>
           {!loadingWorflows ? (
             <Col xs={12}>
-              <p className='fs-5 fw-semibold'>Amazon Active Workflows List</p>
+              <p className='tw:text-[16.25px] tw:font-semibold'>Amazon Active Workflows List</p>
               <table className='table table-bordered table-responsive'>
                 <thead className='table-light'>
-                  <tr className='text-center'>
+                  <tr className='tw:text-center'>
                     <th>Date Created</th>
                     <th>Marketplace</th>
                     <th>SKUs</th>
@@ -225,7 +225,7 @@ const AssignWorkflowId = ({ assignWorkflowIdModal, setassignWorkflowIdModal, ses
                     Object.values(activeWorkFlows).map(
                       (workflow) =>
                         allData.find((fulfillment) => fulfillment.inboundPlanId === workflow.inboundPlanId) === undefined && (
-                          <tr key={workflow.inboundPlanId} className='text-center'>
+                          <tr key={workflow.inboundPlanId} className='tw:text-center'>
                             <td>{moment.utc(workflow.createdAt).local().format('LL hh:mm A')}</td>
                             <td>{AMAZON_MARKETPLACES[workflow.marketplaceIds[0]].domain}</td>
                             <td>{FormatIntNumber(state.currentRegion, workflow.items.length)}</td>
@@ -251,13 +251,12 @@ const AssignWorkflowId = ({ assignWorkflowIdModal, setassignWorkflowIdModal, ses
                 </tbody>
               </table>
               <Row md={12} className=''>
-                <div className='text-end mt-2 d-flex flex-row gap-4 justify-content-end'>
-                  <div className='d-flex flex-row gap-3'>
+                <div className='tw:text-right tw:mt-2 tw:flex tw:flex-row tw:gap-6 tw:justify-end'>
+                  <div className='tw:flex tw:flex-row tw:gap-4'>
                     <Button
                       disabled={loadingWorflows || loadingAssignment}
                       type='button'
                       color='light'
-                      className='btn'
                       onClick={() => {
                         setassignWorkflowIdModal({
                           show: false,

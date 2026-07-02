@@ -57,23 +57,23 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, ma
   return (
     <div
       ref={filterByOthersContainer}
-      className='d-flex flex-column justify-content-center align-items-end gap-2 flex-md-row justify-content-md-between align-items-md-center w-auto'>
-      <div className='dropdown'>
+      className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:md:flex-row tw:md:justify-between tw:md:items-center tw:w-auto'>
+      <div className='tw:relative'>
         <Button
           color={filters === 'true' ? 'info' : 'light'}
-          className='dropdown-toggle fs-7'
+          className='tw:text-[11.2px]'
           type='button'
           aria-expanded='false'
           onClick={() => setOpenFilters(!OpenFilters)}>
           Filters
         </Button>
-        <div className={'dropdown-menu dropdown-menu-md px-4 py-3' + (OpenFilters ? ' show' : '')}>
+        <div className={'tw:absolute tw:z-10 tw:mt-1 tw:px-6 tw:py-4 tw:bg-white tw:border tw:rounded-md tw:shadow ' + (OpenFilters ? 'tw:block' : 'tw:hidden')}>
           <Formik initialValues={initialValues} onSubmit={(values) => handleSubmit(values)}>
             {({ values, handleBlur, setFieldValue, setValues }) => (
               <Form>
-                <div className='d-flex flex-column justify-content-start gap-3'>
-                  <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-end'>
-                    <Label className='fw-normal fs-7 w-75'>Show hidden products</Label>
+                <div className='tw:flex tw:flex-col tw:justify-start tw:gap-4'>
+                  <div className='form-check form-switch form-switch-right form-switch-sm tw:flex tw:flex-row tw:justify-start tw:items-end'>
+                    <Label className='tw:font-normal tw:text-[11.2px] tw:w-3/4'>Show hidden products</Label>
                     <Switch
                       id='showHidden'
                       name='showHidden'
@@ -85,8 +85,8 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, ma
                     />
                   </div>
                   {masterBoxVisibility && (
-                    <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-end'>
-                      <Label className='fw-normal fs-7 w-75'>Show hidden visibility in Master Boxes</Label>
+                    <div className='form-check form-switch form-switch-right form-switch-sm tw:flex tw:flex-row tw:justify-start tw:items-end'>
+                      <Label className='tw:font-normal tw:text-[11.2px] tw:w-3/4'>Show hidden visibility in Master Boxes</Label>
                       <Switch
                         id='masterBoxVisibility'
                         name='masterBoxVisibility'
@@ -98,8 +98,8 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, ma
                       />
                     </div>
                   )}
-                  <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-end'>
-                    <Label className='fw-normal fs-7 w-75'>Show With Not Enough Qty</Label>
+                  <div className='form-check form-switch form-switch-right form-switch-sm tw:flex tw:flex-row tw:justify-start tw:items-end'>
+                    <Label className='tw:font-normal tw:text-[11.2px] tw:w-3/4'>Show With Not Enough Qty</Label>
                     <Switch
                       id='showNotEnough'
                       name='showNotEnough'
@@ -110,8 +110,8 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, ma
                       onBlur={handleBlur}
                     />
                   </div>
-                  <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-end'>
-                    <Label className='fw-normal fs-7 w-75'>Show With No Recommended Ship Date</Label>
+                  <div className='form-check form-switch form-switch-right form-switch-sm tw:flex tw:flex-row tw:justify-start tw:items-end'>
+                    <Label className='tw:font-normal tw:text-[11.2px] tw:w-3/4'>Show With No Recommended Ship Date</Label>
                     <Switch
                       id='ShowNoShipDate'
                       name='ShowNoShipDate'
@@ -123,8 +123,8 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, ma
                     />
                   </div>
                 </div>
-                <div className='w-full d-flex justify-content-between align-items-center mt-4'>
-                  <button type='button' onClick={() => handleClearFilters(setValues)} className='btn btn-link p-0 border-0 text-decoration-none text-reset fw-normal m-0 fs-7'>
+                <div className='tw:w-full tw:flex tw:justify-between tw:items-center tw:mt-6'>
+                  <button type='button' onClick={() => handleClearFilters(setValues)} className='btn btn-link tw:p-0 tw:border-0 tw:no-underline tw:font-normal tw:m-0 tw:text-[11.2px]'>
                     Clear All
                   </button>
                   <Button color='primary' type='submit' size='sm'>

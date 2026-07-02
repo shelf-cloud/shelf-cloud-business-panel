@@ -103,11 +103,11 @@ const IndividualUnitsFulfillment = ({ lisiting, pending }: Props) => {
 
   return (
     <>
-      <Row className='justify-content-between gap-0'>
-        <Col xs='12' lg='8' className='d-flex flex-wrap justify-content-start align-items-center gap-2'>
+      <Row className='tw:justify-between tw:gap-0'>
+        <Col xs='12' lg='8' className='tw:flex tw:flex-wrap tw:justify-start tw:items-center tw:gap-2'>
           <Button
             disabled={orderProducts.length === 0 || hasInputError || hasQtyError}
-            className='fs-7 text-nowrap'
+            className='tw:text-[11.2px] tw:text-nowrap'
             color='success'
             onClick={() => setShowCreateInboundPlanModal(true)}>
             Create Inbound Plan
@@ -119,16 +119,16 @@ const IndividualUnitsFulfillment = ({ lisiting, pending }: Props) => {
             ShowNoShipDate={ShowNoShipDate !== undefined || ShowNoShipDate === '' ? ShowNoShipDate : 'false'}
           />
         </Col>
-        <Col xs='12' lg='4' className='d-flex justify-content-end align-items-center'>
+        <Col xs='12' lg='4' className='tw:flex tw:justify-end tw:items-center'>
           <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='none' minLength={3} debounceTimeout={300} widths='col-12' />
         </Col>
       </Row>
-      <div className='d-flex justify-content-start align-items-center gap-3 mt-3'>
-        <p className='m-0 p-0 text-primary text-uppercase'>
-          Total SKUs: <span className='fw-bold'>{orderProducts.length}</span>
+      <div className='tw:flex tw:justify-start tw:items-center tw:gap-4 tw:mt-4'>
+        <p className='tw:m-0 tw:p-0 tw:text-primary tw:uppercase'>
+          Total SKUs: <span className='tw:font-bold'>{orderProducts.length}</span>
         </p>
-        <p className='m-0 p-0 text-primary text-uppercase'>
-          Total Item Quantities: <span className='fw-bold'>{orderProducts.reduce((total: number, item: AmazonFulfillmentSku) => total + Number(item.totalSendToAmazon), 0)}</span>
+        <p className='tw:m-0 tw:p-0 tw:text-primary tw:uppercase'>
+          Total Item Quantities: <span className='tw:font-bold'>{orderProducts.reduce((total: number, item: AmazonFulfillmentSku) => total + Number(item.totalSendToAmazon), 0)}</span>
         </p>
       </div>
       <IndividualUnitsTable

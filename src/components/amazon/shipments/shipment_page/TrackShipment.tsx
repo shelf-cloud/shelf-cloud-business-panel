@@ -12,7 +12,7 @@ type Props = {
 const TrackShipment = ({ shipmentDetails }: Props) => {
   const { state }: any = useContext(AppContext)
   return (
-    <div className='my-3 px-3'>
+    <div className='tw:my-4 tw:px-4'>
       <Col sm='12' lg='8'>
         <table className='table table-bordered'>
           <thead className='table-light'>
@@ -31,7 +31,7 @@ const TrackShipment = ({ shipmentDetails }: Props) => {
                 <td>{boxIndex + 1}</td>
                 <td>{tracking.boxId}</td>
                 <td>{tracking.trackingId}</td>
-                <td className='text-success fw-semibold'>Confirmed</td>
+                <td className='tw:text-success tw:font-semibold'>Confirmed</td>
                 <td>
                   {shipmentDetails.shipmentBoxes.boxes[boxIndex]?.weight.value
                     ? FormatIntPercentage(state.currentRegion, shipmentDetails.shipmentBoxes.boxes[boxIndex]?.weight.value)

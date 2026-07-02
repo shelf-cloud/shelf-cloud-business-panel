@@ -91,13 +91,13 @@ const AmazonAuthRedirect = ({}: Props) => {
         <div className='page-content'>
           <Container fluid>
             <BreadCrumb title='Amazon Auth' pageTitle='Amazon' />
-            <Card className='py-5'>
-              <CardBody className='text-center'>
-                <p className='text-primary fw-semibold fs-1'>ShelfCloud - Amazon</p>
-                <p className='text-muted fw-normal fs-3'>Integration</p>
-                <div className='d-flex flex-row justify-content-center align-items-center gap-4 mt-3 mb-5'>
+            <Card className='tw:py-12'>
+              <CardBody className='tw:tw:text-center'>
+                <p className='tw:tw:text-primary tw:font-semibold fs-1'>ShelfCloud - Amazon</p>
+                <p className='tw:text-[var(--bs-secondary-color)] tw:font-normal tw:text-[22.75px]'>Integration</p>
+                <div className='tw:flex tw:tw:flex-row tw:justify-center tw:items-center tw:gap-6 tw:tw:mt-6 tw:mb-12'>
                   <div
-                    className='position-relative'
+                    className='tw:relative'
                     style={{
                       display: 'inline-block',
                       width: '70px',
@@ -105,7 +105,7 @@ const AmazonAuthRedirect = ({}: Props) => {
                       objectFit: 'contain',
                     }}>
                     <Image
-                      className='rounded-3'
+                      className='tw:rounded-lg'
                       src={ShelfCloudLogoSolo}
                       alt='ShelfCloud Logo'
                       style={{
@@ -130,21 +130,21 @@ const AmazonAuthRedirect = ({}: Props) => {
                   </div>
                 </div>
 
-                <div className='d-flex flex-column justify-content-center align-items-center gap-5'>
+                <div className='tw:flex tw:flex-col tw:justify-center tw:items-center tw:gap-12'>
                   {amzState === 'ShelcloudNewAmazonSeller' ? (
-                    <Button className='mt-2 fs-5 btn btn-primary' onClick={() => authorizeSeller()}>
+                    <Button className='tw:tw:mt-2 tw:text-[16.25px]' color='primary' onClick={() => authorizeSeller()}>
                       {loading ? <Spinner color='#fff' /> : 'Authorize ShelfCloud'}
                     </Button>
                   ) : (
-                    <Button className='mt-2 fs-5 btn btn-primary' onClick={() => reauthorizeSeller()}>
+                    <Button className='tw:tw:mt-2 tw:text-[16.25px]' color='primary' onClick={() => reauthorizeSeller()}>
                       {loading ? <Spinner color='#fff' /> : 'Reauthorize ShelfCloud'}
                     </Button>
                   )}
-                  <Button className='mt-2 fs-6 btn btn-light' onClick={() => router.push('/')}>
+                  <Button className='tw:tw:mt-2 tw:text-[13px]' color='light' onClick={() => router.push('/')}>
                     Cancel
                   </Button>
                 </div>
-                <p className='text-muted fw-normal fs-6 mt-0'>Expire at: {expire}</p>
+                <p className='tw:text-[var(--bs-secondary-color)] tw:font-normal tw:text-[13px] tw:tw:mt-0'>Expire at: {expire}</p>
               </CardBody>
             </Card>
           </Container>

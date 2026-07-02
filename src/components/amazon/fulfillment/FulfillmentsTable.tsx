@@ -6,7 +6,7 @@ import { AMAZON_MARKETPLACES } from '@lib/AmzConstants'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { ListInboundPlan } from '@typesTs/amazon/fulfillments/listInboundPlans'
 import moment from 'moment'
-import DataTable from 'react-data-table-component'
+import DataTable from '@components/Common/DataTableSC'
 import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from '@/components/migration-ui'
 
 type Props = {
@@ -47,7 +47,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
 
   const columns: any = [
     {
-      name: <span className='fw-bold fs-6'>Fulfillment Name</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Fulfillment Name</span>,
       selector: (row: ListInboundPlan) => row.name,
       sortable: true,
       center: false,
@@ -58,7 +58,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
       },
     },
     {
-      name: <span className='fw-bold fs-6'>Marketplace</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Marketplace</span>,
       selector: (row: ListInboundPlan) => AMAZON_MARKETPLACES[row.destinationMarketplaces]?.domain ?? 'Error Marketplace',
       sortable: true,
       center: true,
@@ -68,7 +68,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
       },
     },
     {
-      name: <span className='fw-bold fs-6'>Date Created</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Date Created</span>,
       selector: (row: ListInboundPlan) => moment.utc(row.createdAt).local().format('LL hh:mm A'),
       sortable: true,
       center: true,
@@ -80,30 +80,30 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
       sortFunction: (rowA: ListInboundPlan, rowB: ListInboundPlan) => sortDates(rowA.createdAt, rowB.createdAt),
     },
     {
-      name: <span className='fw-bolder fs-13'>Status</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Status</span>,
       selector: (row: ListInboundPlan) => {
         switch (row.status.toLowerCase()) {
           case 'complete':
           case 'completed':
-            return <span className='badge text-uppercase badge-soft-success p-2'>{` ${row.status} `}</span>
+            return <span className='badge badge-soft-success tw:uppercase tw:p-2'>{` ${row.status} `}</span>
           case 'delivered':
           case 'creating':
-            return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${row.status} `}</span>
+            return <span className='badge badge-soft-secondary tw:uppercase tw:p-2'>{` ${row.status} `}</span>
           case 'assign':
           case 'working':
           case 'awaiting':
           case 'active':
-            return <span className='badge text-uppercase badge-soft-warning p-2'>{` ${row.status} `}</span>
+            return <span className='badge badge-soft-warning tw:uppercase tw:p-2'>{` ${row.status} `}</span>
           case 'ready to ship':
-            return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${row.status} `}</span>
+            return <span className='badge badge-soft-secondary tw:uppercase tw:p-2'>{` ${row.status} `}</span>
           case 'error':
-            return <span className='badge text-uppercase badge-soft-danger p-2'>{` ${row.status} `}</span>
+            return <span className='badge badge-soft-danger tw:uppercase tw:p-2'>{` ${row.status} `}</span>
           case 'cancelled':
           case 'closed':
           case 'deleted':
-            return <span className='badge text-uppercase badge-soft-dark p-2'> {row.status} </span>
+            return <span className='badge badge-soft-dark tw:uppercase tw:p-2'> {row.status} </span>
           default:
-            return <span className='badge text-uppercase badge-soft-secondary p-2'>{` ${row.status} `}</span>
+            return <span className='badge badge-soft-secondary tw:uppercase tw:p-2'>{` ${row.status} `}</span>
         }
       },
       sortable: true,
@@ -116,7 +116,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
       sortFunction: orderStatus,
     },
     {
-      name: <span className='fw-bold fs-6'>SKU</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>SKU</span>,
       selector: (row: ListInboundPlan) => FormatIntNumber(state.currentRegion, row.items.length),
       sortable: true,
       center: true,
@@ -126,7 +126,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
       },
     },
     {
-      name: <span className='fw-bold fs-6'>Units</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Units</span>,
       selector: (row: ListInboundPlan) =>
         FormatIntNumber(
           state.currentRegion,
@@ -140,7 +140,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
       },
     },
     {
-      name: <span className='fw-bold fs-6'>Action</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Action</span>,
       sortable: false,
       compact: true,
       center: true,
@@ -168,11 +168,11 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
                       }>
                       <div>
                         <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
-                        <span className='fs-6 fw-normal text-dark'>Manage</span>
+                        <span className='tw:text-[13px] tw:font-normal tw:text-black'>Manage</span>
                       </div>
                     </DropdownItem>
                     {!row.confirmedDate && (
-                      <DropdownItem className='text-danger' onClick={() => setcancelInboundPlanModal({ show: true, inboundPlanId: row.inboundPlanId, inboundPlanName: row.name })}>
+                      <DropdownItem className='tw:text-danger' onClick={() => setcancelInboundPlanModal({ show: true, inboundPlanId: row.inboundPlanId, inboundPlanName: row.name })}>
                         <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
                       </DropdownItem>
                     )}
@@ -218,10 +218,10 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
                       }>
                       <div>
                         <i className='ri-file-list-line align-middle me-2 fs-5 text-info'></i>
-                        <span className='fs-6 fw-normal text-dark'>Assign Finished Workflow</span>
+                        <span className='tw:text-[13px] tw:font-normal tw:text-black'>Assign Finished Workflow</span>
                       </div>
                     </DropdownItem>
-                    <DropdownItem className='text-danger' onClick={() => setcancelInboundPlanModal({ show: true, inboundPlanId: 'manual', inboundPlanName: row.name })}>
+                    <DropdownItem className='tw:text-danger' onClick={() => setcancelInboundPlanModal({ show: true, inboundPlanId: 'manual', inboundPlanName: row.name })}>
                       <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
                     </DropdownItem>
                   </DropdownMenu>
@@ -246,7 +246,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
                     }>
                     <div>
                       <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
-                      <span className='fs-6 fw-normal text-dark'>View Details</span>
+                      <span className='tw:text-[13px] tw:font-normal tw:text-black'>View Details</span>
                     </div>
                   </DropdownItem>
                   {/* {Object.values(row.confirmedShipments).some((shipment) => shipment.shipment.trackingDetails.ltlTrackingDetail.billOfLadingNumber)
@@ -285,10 +285,10 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
                   <DropdownItem onClick={() => handleRepairFBAWorkflow(row.inboundPlanId)}>
                     <div>
                       <i className='las la-undo-alt align-middle me-2 fs-5 text-info'></i>
-                      <span className='fs-6 fw-normal'>Repair Inbound Plan</span>
+                      <span className='tw:text-[13px] tw:font-normal'>Repair Inbound Plan</span>
                     </div>
                   </DropdownItem>
-                  <DropdownItem className='text-danger' onClick={() => setcancelInboundPlanModal({ show: true, inboundPlanId: row.inboundPlanId, inboundPlanName: row.name })}>
+                  <DropdownItem className='tw:text-danger' onClick={() => setcancelInboundPlanModal({ show: true, inboundPlanId: row.inboundPlanId, inboundPlanName: row.name })}>
                     <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
                   </DropdownItem>
                 </DropdownMenu>

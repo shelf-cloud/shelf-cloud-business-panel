@@ -13,7 +13,7 @@ import { Invoice, InvoicesResponse } from '@typesTs/commercehub/invoices'
 import axios from 'axios'
 import moment from 'moment'
 import { getSession } from 'next-auth/react'
-import DataTable from 'react-data-table-component'
+import DataTable from '@components/Common/DataTableSC'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
 import { Card, CardBody, CardHeader, Container } from '@/components/migration-ui'
@@ -177,10 +177,10 @@ const CheckNumberDetails = ({ session }: Props) => {
 
   const columns: any = [
     {
-      name: <span className='fw-bold fs-6'>Invoice No.</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Invoice No.</span>,
       selector: (row: Invoice) => (
-        <div className='d-flex flex-wrap justify-content-start align-items-center'>
-          <p className='m-0 p-0 fw-semibold fs-7'>{row.invoiceNumber}</p>{' '}
+        <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center'>
+          <p className='tw:m-0 tw:p-0 tw:font-semibold tw:text-[11.2px]'>{row.invoiceNumber}</p>{' '}
           <i
             className='ri-file-copy-line fs-6 my-0 mx-1 p-0 text-muted'
             style={{ cursor: 'pointer' }}
@@ -199,18 +199,18 @@ const CheckNumberDetails = ({ session }: Props) => {
       sortFunction: (rowA: Invoice, rowB: Invoice) => sortStrings(rowA.invoiceNumber, rowB.invoiceNumber),
     },
     {
-      name: <span className='fw-bold fs-6 text-nowrap'>Keyrec No.</span>,
-      selector: (row: Invoice) => <p className='m-0 p-0 text-muted fs-7'>{row.keyrecNumber ? row.keyrecNumber : ''}</p>,
+      name: <span className='tw:font-bold tw:text-[13px] tw:text-nowrap'>Keyrec No.</span>,
+      selector: (row: Invoice) => <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)] tw:text-[11.2px]'>{row.keyrecNumber ? row.keyrecNumber : ''}</p>,
       sortable: false,
       left: true,
       compact: true,
     },
     {
-      name: <span className='fw-bold fs-6'>PO No.</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>PO No.</span>,
       selector: (row: Invoice) =>
         row.checkTotal > 0 && (
-          <div className='d-flex flex-wrap justify-content-start align-items-center'>
-            <p className='m-0 p-0 text-muted fs-7'>{row.poNumber}</p>
+          <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center'>
+            <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)] tw:text-[11.2px]'>{row.poNumber}</p>
             <i
               className='ri-file-copy-line fs-6 my-0 mx-1 p-0 text-muted'
               style={{ cursor: 'pointer' }}
@@ -228,8 +228,8 @@ const CheckNumberDetails = ({ session }: Props) => {
       compact: true,
     },
     {
-      name: <span className='fw-bold fs-6'>Comments</span>,
-      selector: (row: Invoice) => <span className='fs-7 text-muted'>{row.comments}</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Comments</span>,
+      selector: (row: Invoice) => <span className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>{row.comments}</span>,
       sortable: false,
       left: true,
       compact: true,
@@ -237,24 +237,24 @@ const CheckNumberDetails = ({ session }: Props) => {
       grow: 1.3,
     },
     {
-      name: <span className='fw-bold fs-6'>Invoice Date</span>,
-      selector: (row: Invoice) => row.invoiceDate && <span className='fs-7'>{moment.utc(row.invoiceDate).local().format('D MMM YYYY')}</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Invoice Date</span>,
+      selector: (row: Invoice) => row.invoiceDate && <span className='tw:text-[11.2px]'>{moment.utc(row.invoiceDate).local().format('D MMM YYYY')}</span>,
       sortable: false,
       center: true,
       compact: true,
       sortFunction: (rowA: Invoice, rowB: Invoice) => sortDates(rowA.invoiceDate!, rowB.invoiceDate!),
     },
     {
-      name: <span className='fw-bold fs-6'>Order Total</span>,
-      selector: (row: Invoice) => (row.checkTotal >= 0 ? <span className='fs-7'>{FormatCurrency(state.currentRegion, row.orderTotal)}</span> : <></>),
+      name: <span className='tw:font-bold tw:text-[13px]'>Order Total</span>,
+      selector: (row: Invoice) => (row.checkTotal >= 0 ? <span className='tw:text-[11.2px]'>{FormatCurrency(state.currentRegion, row.orderTotal)}</span> : <></>),
       sortable: true,
       center: true,
       compact: true,
       sortFunction: (rowA: Invoice, rowB: Invoice) => sortNumbers(rowA.checkTotal, rowB.checkTotal),
     },
     {
-      name: <span className='fw-bold fs-6'>Due Date</span>,
-      selector: (row: Invoice) => row.dueDate && <span className='fs-7'>{moment.utc(row.dueDate).local().format('D MMM YYYY')}</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Due Date</span>,
+      selector: (row: Invoice) => row.dueDate && <span className='tw:text-[11.2px]'>{moment.utc(row.dueDate).local().format('D MMM YYYY')}</span>,
       sortable: false,
       center: true,
       compact: true,
@@ -263,10 +263,10 @@ const CheckNumberDetails = ({ session }: Props) => {
       },
     },
     {
-      name: <span className='fw-bolder fs-6'>Deductions</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Deductions</span>,
       selector: (row: Invoice) => {
         if (row.checkTotal >= 0) {
-          return <span className={'text-center fs-7 ' + (row.deductions < 0 ? 'text-danger' : 'text-muted')}>{FormatCurrency(state.currentRegion, row.deductions)}</span>
+          return <span className={'tw:text-center tw:text-[11.2px] ' + (row.deductions < 0 ? 'tw:text-danger' : 'tw:text-[var(--bs-secondary-color)]')}>{FormatCurrency(state.currentRegion, row.deductions)}</span>
         } else {
           return <></>
         }
@@ -277,10 +277,10 @@ const CheckNumberDetails = ({ session }: Props) => {
       sortFunction: (rowA: Invoice, rowB: Invoice) => sortNumbers(rowA.checkTotal, rowB.checkTotal),
     },
     {
-      name: <span className='fw-bolder fs-6'>Charges</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Charges</span>,
       selector: (row: Invoice) => {
         if (row.checkTotal >= 0) {
-          return <span className={'text-center fs-7 ' + (row.charges < 0 ? 'text-danger' : 'text-muted')}>{FormatCurrency(state.currentRegion, row.charges)}</span>
+          return <span className={'tw:text-center tw:text-[11.2px] ' + (row.charges < 0 ? 'tw:text-danger' : 'tw:text-[var(--bs-secondary-color)]')}>{FormatCurrency(state.currentRegion, row.charges)}</span>
         } else {
           return <></>
         }
@@ -292,18 +292,18 @@ const CheckNumberDetails = ({ session }: Props) => {
     },
     {
       name: (
-        <div className='d-flex flex-column justify-content-center align-items-center'>
-          <p className='m-0 fw-bold fs-6'>Total Paid</p>
-          <p className='m-0 text-muted'>
-            <span className='fw-semibold'>{FormatCurrency(state.currentRegion, getCheckAmountTotal(filterInvoices))}</span>
+        <div className='tw:flex tw:flex-col tw:justify-center tw:items-center'>
+          <p className='tw:m-0 tw:font-bold tw:text-[13px]'>Total Paid</p>
+          <p className='tw:m-0 tw:text-[var(--bs-secondary-color)]'>
+            <span className='tw:font-semibold'>{FormatCurrency(state.currentRegion, getCheckAmountTotal(filterInvoices))}</span>
           </p>
         </div>
       ),
       selector: (row: Invoice) => {
         if (row.checkTotal >= 0) {
-          return <span className='text-center fs-7'>{FormatCurrency(state.currentRegion, row.checkTotal)}</span>
+          return <span className='tw:text-center tw:text-[11.2px]'>{FormatCurrency(state.currentRegion, row.checkTotal)}</span>
         } else {
-          return <span className='text-danger text-center fs-7'>{FormatCurrency(state.currentRegion, row.checkTotal)}</span>
+          return <span className='tw:text-danger tw:text-center tw:text-[11.2px]'>{FormatCurrency(state.currentRegion, row.checkTotal)}</span>
         }
       },
       sortable: true,
@@ -312,7 +312,7 @@ const CheckNumberDetails = ({ session }: Props) => {
       sortFunction: (rowA: Invoice, rowB: Invoice) => sortNumbers(rowA.checkTotal, rowB.checkTotal),
     },
     {
-      name: <span className='fw-bolder fs-6'>Status</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Status</span>,
       selector: (row: Invoice) => {
         switch (row.status) {
           case 'paid':
@@ -352,8 +352,8 @@ const CheckNumberDetails = ({ session }: Props) => {
         <div className='page-content'>
           <BreadCrumb title='Check Number' pageTitle='Commerce HUB' />
           <Container fluid>
-            <div className='d-flex flex-column justify-content-center align-items-end gap-2 mb-1 flex-lg-row justify-content-md-between align-items-md-center px-1'>
-              <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'>
+            <div className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:mb-1 tw:lg:flex-row tw:md:justify-between tw:md:items-center tw:px-1'>
+              <div className='tw:w-full tw:flex tw:flex-col tw:justify-center tw:items-start tw:gap-2 tw:mb-0 tw:lg:flex-row tw:lg:justify-start tw:lg:items-center tw:px-0'>
                 <FilterCheckNumber type={invoiceType} setInvoiceType={setInvoiceType} />
                 {selectedRows.length > 0 && (
                   <BulkActionsForSelected
@@ -364,9 +364,9 @@ const CheckNumberDetails = ({ session }: Props) => {
                   />
                 )}
               </div>
-              <div className='w-100 d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-end align-items-lg-center px-0'>
-                <div className='app-search p-0 col-sm-12 col-lg-5'>
-                  <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+              <div className='tw:w-full tw:flex tw:flex-col-reverse tw:justify-center tw:items-start tw:gap-2 tw:mb-0 tw:lg:flex-row tw:lg:justify-end tw:lg:items-center tw:px-0'>
+                <div className='app-search tw:p-0 tw:w-full tw:lg:w-5/12'>
+                  <div className='tw:relative tw:flex tw:rounded-lg tw:w-full tw:overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                     <DebounceInput
                       type='text'
                       minLength={1}
@@ -380,7 +380,7 @@ const CheckNumberDetails = ({ session }: Props) => {
                     />
                     <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
                     <span
-                      className='d-flex align-items-center justify-content-center input_background_white'
+                      className='tw:flex tw:items-center tw:justify-center input_background_white'
                       style={{
                         cursor: 'pointer',
                       }}
@@ -393,21 +393,21 @@ const CheckNumberDetails = ({ session }: Props) => {
             </div>
             <Card>
               <CardHeader>
-                <div className='d-flex flex-wrap justify-content-between align-items-start'>
-                  <div className='d-flex flex-column justify-content-start align-items-start'>
-                    <p className='m-0 p-0 fs-6'>
-                      Check Number: <span className='fw-semibold'>{id![1]}</span>
+                <div className='tw:flex tw:flex-wrap tw:justify-between tw:items-start'>
+                  <div className='tw:flex tw:flex-col tw:justify-start tw:items-start'>
+                    <p className='tw:m-0 tw:p-0 tw:text-[13px]'>
+                      Check Number: <span className='tw:font-semibold'>{id![1]}</span>
                     </p>
-                    <p className='m-0 p-0 fs-6'>
-                      Marketplace <span className='fw-semibold'>{id![0]}</span>
+                    <p className='tw:m-0 tw:p-0 tw:text-[13px]'>
+                      Marketplace <span className='tw:font-semibold'>{id![0]}</span>
                     </p>
-                    <p className='m-0 p-0 fs-6'>
-                      Check Date <span className='fw-semibold'>{data ? moment.utc(data?.invoices[0].checkDate).local().format('LL') : 'loading...'}</span>
+                    <p className='tw:m-0 tw:p-0 tw:text-[13px]'>
+                      Check Date <span className='tw:font-semibold'>{data ? moment.utc(data?.invoices[0].checkDate).local().format('LL') : 'loading...'}</span>
                     </p>
                   </div>
-                  <div className='d-flex flex-column justify-content-start align-items-end'>
-                    {pendingInfo.totalInvoices > 0 && <p className='m-0 p-0 fs-6'>Total Invoices: {pendingInfo.totalInvoices}</p>}
-                    <p className='m-0 p-0 fs-6'>Total Paid: {FormatCurrency(state.currentRegion, pendingInfo.totalPaid <= 0 ? 0 : pendingInfo.totalPaid)}</p>
+                  <div className='tw:flex tw:flex-col tw:justify-start tw:items-end'>
+                    {pendingInfo.totalInvoices > 0 && <p className='tw:m-0 tw:p-0 tw:text-[13px]'>Total Invoices: {pendingInfo.totalInvoices}</p>}
+                    <p className='tw:m-0 tw:p-0 tw:text-[13px]'>Total Paid: {FormatCurrency(state.currentRegion, pendingInfo.totalPaid <= 0 ? 0 : pendingInfo.totalPaid)}</p>
                   </div>
                 </div>
               </CardHeader>

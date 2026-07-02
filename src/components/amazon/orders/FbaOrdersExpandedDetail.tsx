@@ -96,27 +96,27 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
         <Col xl={3}>
           <Col xl={12}>
             <Card>
-              <CardHeader className='py-3'>
-                <h5 className='fw-semibold m-0'>Shipping</h5>
+              <CardHeader className='tw:py-4'>
+                <h5 className='tw:font-semibold tw:m-0'>Shipping</h5>
               </CardHeader>
               <CardBody>
                 <table className='table table-sm table-borderless'>
                   <tbody>
                     <tr>
-                      <td className='text-muted text-nowrap'>Country:</td>
-                      <td className='fw-semibold w-100'>{data.countryCode}</td>
+                      <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>Country:</td>
+                      <td className='tw:font-semibold tw:w-full'>{data.countryCode}</td>
                     </tr>
                     <tr>
-                      <td className='text-muted text-nowrap'>State:</td>
-                      <td className='fw-semibold w-100'>{data.state}</td>
+                      <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>State:</td>
+                      <td className='tw:font-semibold tw:w-full'>{data.state}</td>
                     </tr>
                     <tr>
-                      <td className='text-muted text-nowrap'>City:</td>
-                      <td className='fw-semibold w-100'>{data.city}</td>
+                      <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>City:</td>
+                      <td className='tw:font-semibold tw:w-full'>{data.city}</td>
                     </tr>
                     <tr>
-                      <td className='text-muted text-nowrap'>PostalCode:</td>
-                      <td className='fw-semibold w-100'>{data.postalCode}</td>
+                      <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>PostalCode:</td>
+                      <td className='tw:font-semibold tw:w-full'>{data.postalCode}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -125,21 +125,21 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
           </Col>
           <Col xl={12}>
             <Card>
-              <CardHeader className='py-3'>
-                <h5 className='fw-semibold m-0'>Charge Details</h5>
+              <CardHeader className='tw:py-4'>
+                <h5 className='tw:font-semibold tw:m-0'>Charge Details</h5>
               </CardHeader>
               <CardBody>
-                <table className='table table-sm table-borderless table-nowrap mb-0'>
+                <table className='table table-sm table-borderless table-nowrap tw:mb-0'>
                   <tbody>
-                    <tr className='border-bottom pb-2'>
-                      <td className='text-black d-flex flex-row justify-content-start align-items-start fw-semibold'>Order Total</td>
-                      <td className={'fw-semibold text-end text-primary'}>{FormatCurrency(state.currentRegion, OrderTotalBeforeFees)}</td>
+                    <tr className='tw:border-b tw:pb-2'>
+                      <td className='tw:text-black tw:flex tw:flex-row tw:justify-start tw:items-start tw:font-semibold'>Order Total</td>
+                      <td className={'tw:font-semibold tw:text-right tw:text-primary'}>{FormatCurrency(state.currentRegion, OrderTotalBeforeFees)}</td>
                     </tr>
 
                     {data.orderItems.reduce((total, item: FBAOrderItem) => total + item.Commission, 0) < 0 && (
-                      <tr className='border-bottom pb-2'>
-                        <td className='text-muted d-flex flex-row justify-content-start align-items-start'>Commission</td>
-                        <td className='fw-normal text-end text-danger'>
+                      <tr className='tw:border-b tw:pb-2'>
+                        <td className='tw:text-[var(--bs-secondary-color)] tw:flex tw:flex-row tw:justify-start tw:items-start'>Commission</td>
+                        <td className='tw:font-normal tw:text-right tw:tw:text-danger'>
                           {FormatCurrency(
                             state.currentRegion,
                             data.orderItems.reduce((total, item: FBAOrderItem) => total + item.Commission, 0)
@@ -148,9 +148,9 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       </tr>
                     )}
                     {data.orderItems.reduce((total, item: FBAOrderItem) => total + item.FBAPerOrderFulfillmentFee, 0) < 0 && (
-                      <tr className='border-bottom pb-2'>
-                        <td className='text-muted'>FBAPerOrderFulfillmentFee</td>
-                        <td className='fw-normal text-end text-danger'>
+                      <tr className='tw:border-b tw:pb-2'>
+                        <td className='tw:text-[var(--bs-secondary-color)]'>FBAPerOrderFulfillmentFee</td>
+                        <td className='tw:font-normal tw:text-right tw:tw:text-danger'>
                           {FormatCurrency(
                             state.currentRegion,
                             data.orderItems.reduce((total, item: FBAOrderItem) => total + item.FBAPerOrderFulfillmentFee, 0)
@@ -159,9 +159,9 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       </tr>
                     )}
                     {data.orderItems.reduce((total, item: FBAOrderItem) => total + item.FBAPerUnitFulfillmentFee, 0) < 0 && (
-                      <tr className='border-bottom pb-2'>
-                        <td className='text-muted'>FBAPerUnitFulfillmentFee</td>
-                        <td className='fw-normal text-end text-danger'>
+                      <tr className='tw:border-b tw:pb-2'>
+                        <td className='tw:text-[var(--bs-secondary-color)]'>FBAPerUnitFulfillmentFee</td>
+                        <td className='tw:font-normal tw:text-right tw:tw:text-danger'>
                           {FormatCurrency(
                             state.currentRegion,
                             data.orderItems.reduce((total, item: FBAOrderItem) => total + item.FBAPerUnitFulfillmentFee, 0)
@@ -170,9 +170,9 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       </tr>
                     )}
                     {data.orderItems.reduce((total, item: FBAOrderItem) => total + item.FBAWeightBasedFee, 0) < 0 && (
-                      <tr className='border-bottom pb-2'>
-                        <td className='text-muted'>FBAWeightBasedFee</td>
-                        <td className='fw-normal text-end text-danger'>
+                      <tr className='tw:border-b tw:pb-2'>
+                        <td className='tw:text-[var(--bs-secondary-color)]'>FBAWeightBasedFee</td>
+                        <td className='tw:font-normal tw:text-right tw:tw:text-danger'>
                           {FormatCurrency(
                             state.currentRegion,
                             data.orderItems.reduce((total, item: FBAOrderItem) => total + item.FBAWeightBasedFee, 0)
@@ -181,9 +181,9 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       </tr>
                     )}
                     {data.orderItems.reduce((total, item: FBAOrderItem) => total + item.FixedClosingFee, 0) < 0 && (
-                      <tr className='border-bottom pb-2'>
-                        <td className='text-muted'>FixedClosingFee</td>
-                        <td className='fw-normal text-end text-danger'>
+                      <tr className='tw:border-b tw:pb-2'>
+                        <td className='tw:text-[var(--bs-secondary-color)]'>FixedClosingFee</td>
+                        <td className='tw:font-normal tw:text-right tw:tw:text-danger'>
                           {FormatCurrency(
                             state.currentRegion,
                             data.orderItems.reduce((total, item: FBAOrderItem) => total + item.FixedClosingFee, 0)
@@ -192,9 +192,9 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       </tr>
                     )}
                     {data.orderItems.reduce((total, item: FBAOrderItem) => total + item.GiftwrapChargeback, 0) < 0 && (
-                      <tr className='border-bottom pb-2'>
-                        <td className='text-muted'>GiftwrapChargeback</td>
-                        <td className='fw-normal text-end text-danger'>
+                      <tr className='tw:border-b tw:pb-2'>
+                        <td className='tw:text-[var(--bs-secondary-color)]'>GiftwrapChargeback</td>
+                        <td className='tw:font-normal tw:text-right tw:tw:text-danger'>
                           {FormatCurrency(
                             state.currentRegion,
                             data.orderItems.reduce((total, item: FBAOrderItem) => total + item.GiftwrapChargeback, 0)
@@ -203,9 +203,9 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       </tr>
                     )}
                     {data.orderItems.reduce((total, item: FBAOrderItem) => total + item.SalesTaxCollectionFee, 0) < 0 && (
-                      <tr className='border-bottom pb-2'>
-                        <td className='text-muted'>SalesTaxCollectionFee</td>
-                        <td className='fw-normal text-end text-danger'>
+                      <tr className='tw:border-b tw:pb-2'>
+                        <td className='tw:text-[var(--bs-secondary-color)]'>SalesTaxCollectionFee</td>
+                        <td className='tw:font-normal tw:text-right tw:tw:text-danger'>
                           {FormatCurrency(
                             state.currentRegion,
                             data.orderItems.reduce((total, item: FBAOrderItem) => total + item.SalesTaxCollectionFee, 0)
@@ -214,9 +214,9 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       </tr>
                     )}
                     {data.orderItems.reduce((total, item: FBAOrderItem) => total + item.VariableClosingFee, 0) < 0 && (
-                      <tr className='border-bottom pb-2'>
-                        <td className='text-muted'>VariableClosingFee</td>
-                        <td className='fw-normal text-end text-danger'>
+                      <tr className='tw:border-b tw:pb-2'>
+                        <td className='tw:text-[var(--bs-secondary-color)]'>VariableClosingFee</td>
+                        <td className='tw:font-normal tw:text-right tw:tw:text-danger'>
                           {FormatCurrency(
                             state.currentRegion,
                             data.orderItems.reduce((total, item: FBAOrderItem) => total + item.VariableClosingFee, 0)
@@ -225,19 +225,19 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       </tr>
                     )}
                     <tr>
-                      <td className='fw-bold fs-5 border-top border-dark'>Total Seller Balance</td>
-                      <td className='fw-semibold fs-5 text-end border-top border-dark text-primary'>{FormatCurrency(state.currentRegion, OrderTotalAfterFees)}</td>
+                      <td className='tw:font-bold tw:text-[16.25px] tw:border-t tw:border-black'>Total Seller Balance</td>
+                      <td className='tw:font-semibold tw:text-[16.25px] tw:text-right tw:border-t tw:border-black tw:text-primary'>{FormatCurrency(state.currentRegion, OrderTotalAfterFees)}</td>
                     </tr>
                     {OrderTotalBeforeFeesWithRefund !== 0 && (
-                      <tr className='border-bottom pb-2'>
-                        <td className='text-black d-flex flex-row justify-content-start align-items-start fw-normal'>Refund</td>
-                        <td className='fw-semibold text-end text-danger'>{FormatCurrency(state.currentRegion, OrderTotalBeforeFeesWithRefund)}</td>
+                      <tr className='tw:border-b tw:pb-2'>
+                        <td className='tw:text-black tw:flex tw:flex-row tw:justify-start tw:items-start tw:font-normal'>Refund</td>
+                        <td className='tw:font-semibold tw:text-right tw:tw:text-danger'>{FormatCurrency(state.currentRegion, OrderTotalBeforeFeesWithRefund)}</td>
                       </tr>
                     )}
                     {OrderTotalBeforeFeesWithRefund !== 0 && (
-                      <tr className='pb-2 fs-5'>
-                        <td className='fw-bold fs-5'>Total</td>
-                        <td className={'fw-semibold text-end ' + (OrderTotalAfterFees + OrderTotalBeforeFeesWithRefund > 0 ? 'text-primary' : 'text-danger')}>
+                      <tr className='tw:pb-2 tw:text-[16.25px]'>
+                        <td className='tw:font-bold tw:text-[16.25px]'>Total</td>
+                        <td className={'tw:font-semibold tw:text-right ' + (OrderTotalAfterFees + OrderTotalBeforeFeesWithRefund > 0 ? 'tw:text-primary' : 'tw:tw:text-danger')}>
                           {FormatCurrency(state.currentRegion, OrderTotalAfterFees + OrderTotalBeforeFeesWithRefund)}
                         </td>
                       </tr>
@@ -250,39 +250,39 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
         </Col>
         <Col xl={9}>
           <Card>
-            <CardHeader className='py-3'>
-              <h5 className='fw-semibold m-0'>Products</h5>
+            <CardHeader className='tw:py-4'>
+              <h5 className='tw:font-semibold tw:m-0'>Products</h5>
             </CardHeader>
             <CardBody>
               <div className='table-responsive'>
-                <table className='table table-sm align-middle table-borderless mb-0'>
+                <table className='table table-sm align-middle table-borderless tw:mb-0'>
                   <thead className='table-light'>
                     <tr>
                       <th scope='col'>SKU</th>
                       <th scope='col'>ASIN</th>
                       <th scope='col'>ShelfCloud SKU</th>
-                      <th className='text-center' scope='col'>
+                      <th className='tw:tw:text-center' scope='col'>
                         Qty
                       </th>
-                      <th className='text-center' scope='col'>
+                      <th className='tw:tw:text-center' scope='col'>
                         Item Price
                       </th>
-                      <th className='text-center' scope='col'>
+                      <th className='tw:tw:text-center' scope='col'>
                         Total
                       </th>
                     </tr>
                   </thead>
                   <tbody>
                     {data.orderItems.map((product: FBAOrderItem, key) => (
-                      <tr key={key} className='border-bottom py-2'>
-                        <td className='w-25 fs-6 fw-semibold'>{product.sku}</td>
-                        <td className='fs-6 text-muted'>{product.asin}</td>
-                        <td className='fs-6 text-muted'>{product.shelfcloud_sku ? product.shelfcloud_sku : <span className='text-muted'>Not Mapped</span>}</td>
-                        <td className='text-center'>{product.quantity}</td>
-                        <td className='text-center'>
+                      <tr key={key} className='tw:border-b tw:py-2'>
+                        <td className='tw:w-1/4 tw:text-[13px] tw:font-semibold'>{product.sku}</td>
+                        <td className='tw:text-[13px] tw:text-[var(--bs-secondary-color)]'>{product.asin}</td>
+                        <td className='tw:text-[13px] tw:text-[var(--bs-secondary-color)]'>{product.shelfcloud_sku ? product.shelfcloud_sku : <span className='tw:text-[var(--bs-secondary-color)]'>Not Mapped</span>}</td>
+                        <td className='tw:tw:text-center'>{product.quantity}</td>
+                        <td className='tw:tw:text-center'>
                           {product.quantity === 0 ? FormatCurrency(state.currentRegion, 0) : FormatCurrency(state.currentRegion, product.itemPrice / product.quantity)}
                         </td>
-                        <td className='text-center'>{FormatCurrency(state.currentRegion, product.itemPrice)}</td>
+                        <td className='tw:tw:text-center'>{FormatCurrency(state.currentRegion, product.itemPrice)}</td>
                       </tr>
                     ))}
                     <tr>
@@ -290,8 +290,8 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td className='text-end fs-6 fw-semibold text-nowrap'>Items</td>
-                      <td className='text-center fw-normal fs-6 text-black'>
+                      <td className='tw:text-right tw:text-[13px] tw:font-semibold tw:text-nowrap'>Items</td>
+                      <td className='tw:tw:text-center tw:font-normal tw:text-[13px] tw:text-black'>
                         {FormatCurrency(
                           state.currentRegion,
                           data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.itemPrice, 0)
@@ -303,8 +303,8 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td className='text-end fs-6 fw-semibold text-nowrap'>Items Tax</td>
-                      <td className='text-center fw-normal fs-6 text-black'>
+                      <td className='tw:text-right tw:text-[13px] tw:font-semibold tw:text-nowrap'>Items Tax</td>
+                      <td className='tw:tw:text-center tw:font-normal tw:text-[13px] tw:text-black'>
                         {FormatCurrency(
                           state.currentRegion,
                           data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.itemTax, 0)
@@ -316,8 +316,8 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td className='text-end fs-6 fw-semibold text-nowrap'>Shipping</td>
-                      <td className='text-center fw-normal fs-6 text-black'>
+                      <td className='tw:text-right tw:text-[13px] tw:font-semibold tw:text-nowrap'>Shipping</td>
+                      <td className='tw:tw:text-center tw:font-normal tw:text-[13px] tw:text-black'>
                         {FormatCurrency(
                           state.currentRegion,
                           data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.shippingPrice, 0)
@@ -329,8 +329,8 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td className='text-end fs-6 fw-semibold text-nowrap border-bottom'>Shipping Tax</td>
-                      <td className='text-center fw-normal fs-6 text-black border-bottom'>
+                      <td className='tw:text-right tw:text-[13px] tw:font-semibold tw:text-nowrap tw:border-b'>Shipping Tax</td>
+                      <td className='tw:tw:text-center tw:font-normal tw:text-[13px] tw:text-black tw:border-b'>
                         {FormatCurrency(
                           state.currentRegion,
                           data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.shippingTax, 0)
@@ -342,8 +342,8 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td className='text-end fs-7 fw-normal text-nowrap'>Item Promotion</td>
-                      <td className='text-center fw-normal fs-7 text-muted'>
+                      <td className='tw:text-right tw:text-[11.2px] tw:font-normal tw:text-nowrap'>Item Promotion</td>
+                      <td className='tw:tw:text-center tw:font-normal tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>
                         {FormatCurrency(
                           state.currentRegion,
                           data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.itemPromotionDiscount * -1, 0)
@@ -355,8 +355,8 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td className='text-end fs-7 fw-normal text-nowrap border-bottom'>Shipping Promotion</td>
-                      <td className='text-center fw-normal fs-7 text-muted border-bottom'>
+                      <td className='tw:text-right tw:text-[11.2px] tw:font-normal tw:text-nowrap tw:border-b'>Shipping Promotion</td>
+                      <td className='tw:tw:text-center tw:font-normal tw:text-[11.2px] tw:text-[var(--bs-secondary-color)] tw:border-b'>
                         {FormatCurrency(
                           state.currentRegion,
                           data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.shippingPromotionDiscount * -1, 0)
@@ -368,8 +368,8 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td className='text-end fs-7 fw-normal text-nowrap'>Shipping Rebate</td>
-                      <td className='text-center fw-normal fs-7 text-muted'>
+                      <td className='tw:text-right tw:text-[11.2px] tw:font-normal tw:text-nowrap'>Shipping Rebate</td>
+                      <td className='tw:tw:text-center tw:font-normal tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>
                         {FormatCurrency(
                           state.currentRegion,
                           data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.ShippingChargeback, 0)
@@ -381,8 +381,8 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td className='text-end fs-7 fw-normal text-nowrap'>Item Tax WithHeld</td>
-                      <td className='text-center fw-normal fs-7 text-muted'>
+                      <td className='tw:text-right tw:text-[11.2px] tw:font-normal tw:text-nowrap'>Item Tax WithHeld</td>
+                      <td className='tw:tw:text-center tw:font-normal tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>
                         {FormatCurrency(
                           state.currentRegion,
                           data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.facilitatorTax_item, 0)
@@ -394,8 +394,8 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td className='text-end fs-7 fw-normal text-nowrap border-bottom border-dark'>Shipping Tax WithHeld</td>
-                      <td className='text-center fw-normal fs-7 text-muted border-bottom border-dark'>
+                      <td className='tw:text-right tw:text-[11.2px] tw:font-normal tw:text-nowrap tw:border-b tw:border-black'>Shipping Tax WithHeld</td>
+                      <td className='tw:tw:text-center tw:font-normal tw:text-[11.2px] tw:text-[var(--bs-secondary-color)] tw:border-b tw:border-black'>
                         {FormatCurrency(
                           state.currentRegion,
                           data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.facilitatorTax_shipping, 0)
@@ -407,8 +407,8 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td className='text-end fs-5 fw-bold text-nowrap'>Total</td>
-                      <td className='text-center fw-semibold fs-5 text-primary'>{FormatCurrency(state.currentRegion, OrderTotalBeforeFees)}</td>
+                      <td className='tw:text-right tw:text-[16.25px] tw:font-bold tw:text-nowrap'>Total</td>
+                      <td className='tw:tw:text-center tw:font-semibold tw:text-[16.25px] tw:text-primary'>{FormatCurrency(state.currentRegion, OrderTotalBeforeFees)}</td>
                     </tr>
                     {data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.refund_item, 0) < 0 && (
                       <tr>
@@ -416,8 +416,8 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td className='text-end fs-7 fw-normal text-nowrap border-top border-dark'>Refund Item</td>
-                        <td className='text-center fw-normal fs-7 text-danger border-top border-dark'>
+                        <td className='tw:text-right tw:text-[11.2px] tw:font-normal tw:text-nowrap tw:border-t tw:border-black'>Refund Item</td>
+                        <td className='tw:tw:text-center tw:font-normal tw:text-[11.2px] tw:tw:text-danger tw:border-t tw:border-black'>
                           {FormatCurrency(
                             state.currentRegion,
                             data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.refund_item, 0)
@@ -431,8 +431,8 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td className='text-end fs-7 fw-normal text-nowrap'>Refund Item Tax</td>
-                        <td className='text-center fw-normal fs-7 text-danger'>
+                        <td className='tw:text-right tw:text-[11.2px] tw:font-normal tw:text-nowrap'>Refund Item Tax</td>
+                        <td className='tw:tw:text-center tw:font-normal tw:text-[11.2px] tw:tw:text-danger'>
                           {FormatCurrency(
                             state.currentRegion,
                             data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.refund_itemTax, 0)
@@ -446,8 +446,8 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td className='text-end fs-7 fw-normal text-nowrap'>Refund Commision</td>
-                        <td className='text-center fw-normal fs-7'>
+                        <td className='tw:text-right tw:text-[11.2px] tw:font-normal tw:text-nowrap'>Refund Commision</td>
+                        <td className='tw:tw:text-center tw:font-normal tw:text-[11.2px]'>
                           {FormatCurrency(
                             state.currentRegion,
                             data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.refund_commission, 0)
@@ -461,8 +461,8 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td className='text-end fs-7 fw-normal text-nowrap'>Refund Admin Fee</td>
-                        <td className='text-center fw-normal fs-7 text-danger'>
+                        <td className='tw:text-right tw:text-[11.2px] tw:font-normal tw:text-nowrap'>Refund Admin Fee</td>
+                        <td className='tw:tw:text-center tw:font-normal tw:text-[11.2px] tw:tw:text-danger'>
                           {FormatCurrency(
                             state.currentRegion,
                             data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.refund_adminCommission, 0)
@@ -476,8 +476,8 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td className='text-end fs-7 fw-normal text-nowrap'>Refund WithHeld Tax</td>
-                        <td className='text-center fw-normal fs-7 text-danger'>
+                        <td className='tw:text-right tw:text-[11.2px] tw:font-normal tw:text-nowrap'>Refund WithHeld Tax</td>
+                        <td className='tw:tw:text-center tw:font-normal tw:text-[11.2px] tw:tw:text-danger'>
                           {FormatCurrency(
                             state.currentRegion,
                             data?.orderItems.reduce((total, item: FBAOrderItem) => total + item.refund_facilitatorTax_item, 0)
@@ -491,8 +491,8 @@ const FbaOrdersExpandedDetail: React.FC<ExpanderComponentProps<FBAOrder>> = ({ d
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td className='text-end fs-5 fw-bold text-nowrap'>Total After Refund</td>
-                        <td className='text-center fw-semibold fs-5 text-danger'>{FormatCurrency(state.currentRegion, OrderTotalBeforeFeesWithRefund)}</td>
+                        <td className='tw:text-right tw:text-[16.25px] tw:font-bold tw:text-nowrap'>Total After Refund</td>
+                        <td className='tw:tw:text-center tw:font-semibold tw:text-[16.25px] tw:tw:text-danger'>{FormatCurrency(state.currentRegion, OrderTotalBeforeFeesWithRefund)}</td>
                       </tr>
                     )}
                   </tbody>

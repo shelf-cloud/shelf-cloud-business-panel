@@ -44,21 +44,21 @@ const CommerceHubWidget = ({ summary }: Props) => {
       <Col xs={6}>
         <Card className='card-animate'>
           <CardBody>
-            <div className='d-flex align-items-center justify-content-between'>
-              <div className='d-flex flex-row justify-content-start align-items-center'>
+            <div className='tw:flex tw:items-center tw:justify-between'>
+              <div className='tw:flex tw:flex-row tw:justify-start tw:items-center'>
                 <div className=''>
-                  <span className={'avatar-title p-2 fs-3 bg-soft-primary rounded-4'}>
+                  <span className={'avatar-title tw:p-2 tw:text-[22.75px] bg-soft-primary rounded-4'}>
                     <i className='bx bx-money-withdraw' style={{ color: '#39B0EC' }}></i>
                   </span>
                 </div>
-                <p className='text-capitalize fw-medium mb-0 ms-2'>Pending</p>
+                <p className='tw:capitalize tw:font-medium tw:mb-0 tw:ms-2'>Pending</p>
               </div>
-              {/* <div className='flex-shrink-0'>
-                <h5 className={'fs-6 mb-0 fw-bold'}>{pendingInfo.totalPending}</h5>
+              {/* <div className='tw:shrink-0'>
+                <h5 className={'tw:text-[13px] tw:mb-0 tw:font-bold'}>{pendingInfo.totalPending}</h5>
               </div> */}
             </div>
-            <div className='d-flex align-items-end justify-content-between mt-2'>
-              <h4 className='fs-3 fw-semibold'>
+            <div className='tw:flex tw:items-end tw:justify-between tw:mt-2'>
+              <h4 className='tw:text-[22.75px] tw:font-semibold'>
                 <span className='counter-value'>
                   <CountUp
                     start={0}
@@ -79,21 +79,21 @@ const CommerceHubWidget = ({ summary }: Props) => {
       <Col xs={6}>
         <Card className='card-animate'>
           <CardBody>
-            <div className='d-flex align-items-center justify-content-between'>
-              <div className='d-flex flex-row justify-content-start align-items-center'>
+            <div className='tw:flex tw:items-center tw:justify-between'>
+              <div className='tw:flex tw:flex-row tw:justify-start tw:items-center'>
                 <div className=''>
-                  <span className={'avatar-title p-2 fs-3 bg-soft-primary rounded-4'}>
+                  <span className={'avatar-title tw:p-2 tw:text-[22.75px] bg-soft-primary rounded-4'}>
                     <i className='las la-file-invoice-dollar' style={{ color: '#4F6EED' }}></i>
                   </span>
                 </div>
-                <p className='text-capitalize fw-medium mb-0 ms-2'>Pending Invoices</p>
+                <p className='tw:capitalize tw:font-medium tw:mb-0 tw:ms-2'>Pending Invoices</p>
               </div>
-              {/* <div className='flex-shrink-0'>
-                <h5 className={'fs-6 mb-0 fw-bold'}>{pendingInfo.totalInvoices}</h5>
+              {/* <div className='tw:shrink-0'>
+                <h5 className={'tw:text-[13px] tw:mb-0 tw:font-bold'}>{pendingInfo.totalInvoices}</h5>
               </div> */}
             </div>
-            <div className='d-flex align-items-end justify-content-between mt-2'>
-              <h4 className='fs-3 fw-semibold'>
+            <div className='tw:flex tw:items-end tw:justify-between tw:mt-2'>
+              <h4 className='tw:text-[22.75px] tw:font-semibold'>
                 <span className='counter-value'>
                   <CountUp start={0} separator={','} end={pendingInfo.totalInvoices} decimals={0} duration={1} />
                 </span>
@@ -106,15 +106,15 @@ const CommerceHubWidget = ({ summary }: Props) => {
         <Card>
           <CardBody>
             <div className='table-responsive table-card'>
-              <table className='table table-hover table-centered align-middle mb-0'>
+              <table className='table table-hover table-centered align-middle tw:mb-0'>
                 <thead>
-                  <tr className='fw-semibold'>
+                  <tr className='tw:font-semibold'>
                     <td>Store</td>
                     <td>No. Invoices</td>
                     <td>Pending</td>
                   </tr>
                 </thead>
-                <tbody className='fs-7'>
+                <tbody className='tw:text-[11.2px]'>
                   {summary.summary.map((item, key) => {
                     return (
                       <tr key={key}>
@@ -123,7 +123,7 @@ const CommerceHubWidget = ({ summary }: Props) => {
                             loading='lazy'
                             src={item.channelLogo ? item.channelLogo : NoImageAdress}
                             alt='Channel Logo'
-                            className='m-0 p-0 me-1 '
+                            className='tw:m-0 tw:p-0 tw:me-1 '
                             style={{
                               width: '20px',
                               height: '20px',

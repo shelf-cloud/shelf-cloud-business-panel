@@ -45,7 +45,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
   const OrderId = CleanSpecialCharacters(data.orderId!)
 
   return (
-    <div className='w-100' style={{ backgroundColor: '#F0F4F7', padding: '0px 10px' }}>
+    <div className='tw:w-full' style={{ backgroundColor: '#F0F4F7', padding: '0px 10px' }}>
       {data.carrierStatus && (
         <Row className=''>
           <Col xs={12}>
@@ -57,39 +57,39 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
       <Row>
         <Col xl={8}>
           <Card>
-            <CardHeader className='py-3'>
-              <h5 className='fw-semibold m-0'>Products</h5>
+            <CardHeader className='tw:py-4'>
+              <h5 className='tw:font-semibold tw:m-0'>Products</h5>
             </CardHeader>
             <CardBody>
               <div className='table-responsive'>
-                <table className='table table-sm align-middle table-borderless mb-0'>
+                <table className='table table-sm align-middle table-borderless tw:mb-0'>
                   <thead className='table-light'>
                     <tr>
                       <th scope='col'>Title</th>
                       <th scope='col'>Sku</th>
-                      <th className='text-center' scope='col'>
+                      <th className='tw:text-center' scope='col'>
                         Qty
                       </th>
                     </tr>
                   </thead>
-                  <tbody className='fs-7'>
+                  <tbody className='tw:text-[11.2px]'>
                     {data.orderItems.map((product: ShipmentOrderItem, key) => (
-                      <tr key={key} className='border-bottom py-2'>
-                        <td className='w-75 fw-semibold'>{product.name || ''}</td>
-                        <td className='text-muted'>{product.sku}</td>
-                        <td className='text-center'>{product.quantity}</td>
+                      <tr key={key} className='tw:border-b tw:py-2'>
+                        <td className='tw:w-3/4 tw:font-semibold'>{product.name || ''}</td>
+                        <td className='tw:text-[var(--bs-secondary-color)]'>{product.sku}</td>
+                        <td className='tw:text-center'>{product.quantity}</td>
                       </tr>
                     ))}
-                    <tr className='bg-light fs-6'>
+                    <tr className='tw:bg-light tw:text-[13px]'>
                       <td></td>
-                      <td className='text-end fw-bold text-nowrap'>Total</td>
-                      <td className='text-center fw-bold text-primary'>{data.totalItems}</td>
+                      <td className='tw:text-right tw:font-bold tw:text-nowrap'>Total</td>
+                      <td className='tw:text-center tw:font-bold tw:text-primary'>{data.totalItems}</td>
                     </tr>
                     {data.totalIndividualUnits! > 0 && (
-                      <tr className='bg-light fs-6'>
+                      <tr className='tw:bg-light tw:text-[13px]'>
                         <td></td>
-                        <td className='text-end fw-normal text-nowrap'>{data.isIndividualUnits ? 'Total Individual Units' : 'Total Individual Units in Kits'}</td>
-                        <td className='text-center fw-bold text-primary'>{data.totalIndividualUnits}</td>
+                        <td className='tw:text-right tw:font-normal tw:text-nowrap'>{data.isIndividualUnits ? 'Total Individual Units' : 'Total Individual Units in Kits'}</td>
+                        <td className='tw:text-center tw:font-bold tw:text-primary'>{data.totalIndividualUnits}</td>
                       </tr>
                     )}
                   </tbody>
@@ -101,38 +101,38 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
         <Col xl={4}>
           <Col xl={12}>
             <Card>
-              <CardHeader className='py-3'>
-                <h5 className='fw-semibold m-0'>Shipping</h5>
+              <CardHeader className='tw:py-4'>
+                <h5 className='tw:font-semibold tw:m-0'>Shipping</h5>
               </CardHeader>
               <CardBody>
                 <table className='table table-sm table-borderless'>
-                  <tbody className='fs-7'>
+                  <tbody className='tw:text-[11.2px]'>
                     <tr>
-                      <td className='text-muted text-nowrap'>Service Requested:</td>
-                      <td className='fw-semibold w-100'>{data.carrierService}</td>
+                      <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>Service Requested:</td>
+                      <td className='tw:font-semibold tw:w-full'>{data.carrierService}</td>
                     </tr>
                     <tr>
-                      <td className='text-muted text-nowrap'>Service Used:</td>
-                      <td className='fw-semibold w-100'>{data.carrierType}</td>
+                      <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>Service Used:</td>
+                      <td className='tw:font-semibold tw:w-full'>{data.carrierType}</td>
                     </tr>
                     <tr>
-                      <td className='text-muted text-nowrap'># Of Pallets:</td>
-                      <td className='fw-semibold w-100'>{data.numberPallets}</td>
+                      <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'># Of Pallets:</td>
+                      <td className='tw:font-semibold tw:w-full'>{data.numberPallets}</td>
                     </tr>
                     <tr>
-                      <td className='text-muted text-nowrap'># Of Boxes:</td>
-                      <td className='fw-semibold w-100'>{data.numberBoxes}</td>
+                      <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'># Of Boxes:</td>
+                      <td className='tw:font-semibold tw:w-full'>{data.numberBoxes}</td>
                     </tr>
                     {data.isThird && (
                       <tr>
-                        <td className='text-muted text-nowrap'>Third Party Shipping Info:</td>
-                        <td className='fw-semibold w-100'>{data.thirdInfo}</td>
+                        <td className='tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>Third Party Shipping Info:</td>
+                        <td className='tw:font-semibold tw:w-full'>{data.thirdInfo}</td>
                       </tr>
                     )}
                   </tbody>
                 </table>
-                <div className='px-1 fs-7'>
-                  <span className='m-0 text-muted fs-7'>Tracking No.</span>
+                <div className='tw:px-1 tw:text-[11.2px]'>
+                  <span className='tw:m-0 tw:text-[var(--bs-secondary-color)] tw:text-[11.2px]'>Tracking No.</span>
                   <ShipmentTrackingNumber
                     orderStatus={data.orderStatus}
                     orderType={data.orderType}
@@ -147,14 +147,14 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
           </Col>
           <Col xl={12}>
             <Card>
-              <CardHeader className='py-3'>
-                <h5 className='fw-semibold m-0'>Charge Details</h5>
+              <CardHeader className='tw:py-4'>
+                <h5 className='tw:font-semibold tw:m-0'>Charge Details</h5>
               </CardHeader>
               <CardBody>
-                <table className='table table-sm table-borderless table-nowrap mb-0'>
-                  <tbody className='fs-7'>
-                    <tr className='border-bottom pb-2'>
-                      <td className='text-muted d-flex flex-row justify-content-start align-items-start'>
+                <table className='table table-sm table-borderless table-nowrap tw:mb-0'>
+                  <tbody className='tw:text-[11.2px]'>
+                    <tr className='tw:border-b tw:pb-2'>
+                      <td className='tw:text-[var(--bs-secondary-color)] tw:flex tw:flex-row tw:justify-start tw:items-start'>
                         Pick Pack Charge
                         {data.chargesFees && (
                           <>
@@ -163,14 +163,14 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                           </>
                         )}
                       </td>
-                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.pickpackCharge!)}</td>
+                      <td className='tw:font-semibold tw:text-right'>{FormatCurrency(state.currentRegion, data.pickpackCharge!)}</td>
                     </tr>
-                    <tr className='border-bottom pb-2'>
-                      <td className='text-muted'>Shipping Charge</td>
-                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.onixShipping!)}</td>
+                    <tr className='tw:border-b tw:pb-2'>
+                      <td className='tw:text-[var(--bs-secondary-color)]'>Shipping Charge</td>
+                      <td className='tw:font-semibold tw:text-right'>{FormatCurrency(state.currentRegion, data.onixShipping!)}</td>
                     </tr>
-                    <tr className='border-bottom pb-2'>
-                      <td className='text-muted d-flex flex-row justify-content-start align-items-start'>
+                    <tr className='tw:border-b tw:pb-2'>
+                      <td className='tw:text-[var(--bs-secondary-color)] tw:flex tw:flex-row tw:justify-start tw:items-start'>
                         Labeling
                         {data.chargesFees && (
                           <>
@@ -179,10 +179,10 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                           </>
                         )}
                       </td>
-                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.labeling!)}</td>
+                      <td className='tw:font-semibold tw:text-right'>{FormatCurrency(state.currentRegion, data.labeling!)}</td>
                     </tr>
-                    <tr className='border-bottom pb-2'>
-                      <td className='text-muted d-flex flex-row justify-content-start align-items-start'>
+                    <tr className='tw:border-b tw:pb-2'>
+                      <td className='tw:text-[var(--bs-secondary-color)] tw:flex tw:flex-row tw:justify-start tw:items-start'>
                         Man Hour
                         {data.chargesFees && (
                           <>
@@ -191,15 +191,15 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                           </>
                         )}
                       </td>
-                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.manHour!)}</td>
+                      <td className='tw:font-semibold tw:text-right'>{FormatCurrency(state.currentRegion, data.manHour!)}</td>
                     </tr>
-                    <tr className='border-bottom pb-2'>
-                      <td className='text-muted'>Extra Charge</td>
-                      <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.extraCharge!)}</td>
+                    <tr className='tw:border-b tw:pb-2'>
+                      <td className='tw:text-[var(--bs-secondary-color)]'>Extra Charge</td>
+                      <td className='tw:font-semibold tw:text-right'>{FormatCurrency(state.currentRegion, data.extraCharge!)}</td>
                     </tr>
                     <tr>
-                      <td className='fw-bold'>TOTAL</td>
-                      <td className='text-primary fw-semibold text-end'>
+                      <td className='tw:font-bold'>TOTAL</td>
+                      <td className='tw:text-primary tw:font-semibold tw:text-right'>
                         {data.isIndividualUnits && data.individualUnitsPlan?.state == 'Pending' ? 'Pending' : `${FormatCurrency(state.currentRegion, data.totalCharge!)}`}
                       </td>
                     </tr>
@@ -211,8 +211,8 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
           {data.extraComment != '' && (
             <Col xl={12}>
               <Card>
-                <CardHeader className='py-3'>
-                  <h5 className='fw-semibold m-0'>Order Comment</h5>
+                <CardHeader className='tw:py-4'>
+                  <h5 className='tw:font-semibold tw:m-0'>Order Comment</h5>
                 </CardHeader>
                 <CardBody>
                   <p>{data.extraComment}</p>
@@ -222,10 +222,10 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
           )}
           {showActions && (
             <Row>
-              <Col xl={12} className='d-flex flex-row flex-wrap justify-content-start align-items-end gap-2'>
+              <Col xl={12} className='tw:flex tw:flex-row tw:flex-wrap tw:justify-start tw:items-end tw:gap-2'>
                 {data.proofOfShipped != '' && data.proofOfShipped != null && (
                   <a href={data.proofOfShipped} target='blank' rel='noopener noreferrer'>
-                    <Button color='info' className='btn-label btn-sm fs-7 text-nowrap'>
+                    <Button color='info' className='btn-label btn-sm tw:text-[11.2px] tw:text-nowrap'>
                       <i className='las la-truck label-icon align-middle fs-4 me-2' />
                       Proof Of Shipped
                     </Button>
@@ -236,7 +236,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                   <Button
                     disabled={data.individualUnitsPlan?.state == 'Pending' ? true : false}
                     color='info'
-                    className='btn-label btn-sm fs-7 text-nowrap'
+                    className='btn-label btn-sm tw:text-[11.2px] tw:text-nowrap'
                     onClick={() => setIndividualUnitsPlan(!state.showIndividualUnitsPlan)}>
                     <i className='las la-boxes label-icon align-middle fs-3 me-2' />
                     {data.individualUnitsPlan?.state == 'Pending' ? 'Waiting for plan...' : 'Individual Units Plan'}
@@ -247,7 +247,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                     href={`https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/shelf-cloud%2F${data.labelsName}?alt=media&token=837cdbcf-11ab-4555-9697-50f1c6a3d0e3`}
                     target='blank'
                     rel='noopener noreferrer'>
-                    <Button color='secondary' className='btn-label btn-sm fs-7 text-nowrap'>
+                    <Button color='secondary' className='btn-label btn-sm tw:text-[11.2px] tw:text-nowrap'>
                       <i className='las la-toilet-paper label-icon align-middle fs-4 me-2' />
                       FBA Labels
                     </Button>
@@ -258,7 +258,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                     href={`https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/shelf-cloud%2F${data.palletLabelsName}?alt=media&token=837cdbcf-11ab-4555-9697-50f1c6a3d0e3`}
                     target='blank'
                     rel='noopener noreferrer'>
-                    <Button color='secondary' className='btn-label btn-sm fs-7 text-nowrap'>
+                    <Button color='secondary' className='btn-label btn-sm tw:text-[11.2px] tw:text-nowrap'>
                       <i className='las la-toilet-paper label-icon align-middle fs-4 me-2' />
                       Pallet Labels
                     </Button>
@@ -268,7 +268,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                   <Button
                     disabled={data.individualUnitsPlan?.state == 'Pending' ? true : false}
                     color='secondary'
-                    className='btn-label btn-sm fs-7 text-nowrap'
+                    className='btn-label btn-sm tw:text-[11.2px] tw:text-nowrap'
                     onClick={() => setUploadIndividualUnitsLabelsModal(!state.showUploadIndividualUnitsLabelsModal)}>
                     <i className='las la-toilet-paper label-icon align-middle fs-4 me-2' />
                     Upload Labels

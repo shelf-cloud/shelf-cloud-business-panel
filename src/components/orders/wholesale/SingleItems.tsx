@@ -58,13 +58,13 @@ const SingleItems = ({ completeData, pending, orderNumberStart }: Props) => {
 
   return (
     <>
-      <div className='d-flex justify-content-between align-items-center'>
+      <div className='tw:flex tw:justify-between tw:items-center'>
         <div>
-          <p className='fs-5 fw-semibold text-primary m-0'>Total SKUs in Order: {orderProducts.length}</p>
-          <p className='fs-6 fw-normal text-primary m-0'>
+          <p className='tw:text-[16.25px] tw:font-semibold tw:text-primary tw:m-0'>Total SKUs in Order: {orderProducts.length}</p>
+          <p className='tw:text-[13px] tw:font-normal tw:text-primary tw:m-0'>
             Total Quantity to Ship in Order: {orderProducts.reduce((total: number, item: wholesaleProductRow) => total + Number(item.totalToShip), 0)}
           </p>
-          <p className='fs-7 fw-normal text-danger m-0'>
+          <p className='tw:text-[11.2px] tw:font-normal tw:text-danger tw:m-0'>
             *Minimum units in order: {(state?.user?.[state.currentRegion as keyof UserType] as RegionInfoTypeUS)?.minQtyForIndividualUnitsOrder}
           </p>
         </div>
@@ -78,14 +78,14 @@ const SingleItems = ({ completeData, pending, orderNumberStart }: Props) => {
                 ? true
                 : false || hasQtyError
             }
-            className='fs-6 btn'
+            className='tw:text-[13px]'
             color='primary'
             onClick={() => setSingleBoxesOrderModal(!state.showSingleBoxesOrderModal)}>
             Create Order
           </Button>
         </div>
       </div>
-      <Col xs='12' className='d-flex justify-content-end align-items-center mb-2'>
+      <Col xs='12' className='tw:flex tw:justify-end tw:items-center tw:mb-2'>
         <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='none' minLength={3} debounceTimeout={300} widths='col-12 col-md-4' />
       </Col>
       <WholeSaleTableSingleItem

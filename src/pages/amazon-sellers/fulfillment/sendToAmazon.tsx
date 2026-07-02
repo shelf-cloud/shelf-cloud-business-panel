@@ -90,11 +90,11 @@ const SendToAmazon = ({ session }: Props) => {
             <Row>
               <Col lg={12}>
                 <Card>
-                  <CardHeader className='d-flex justify-content-between align-items-center'>
-                    <Nav className='nav-tabs-custom rounded card-header-tabs border-bottom-0' role='tablist'>
+                  <CardHeader className='tw:flex tw:justify-between tw:items-center'>
+                    <Nav className='nav-tabs-custom rounded card-header-tabs tw:border-b-0' role='tablist'>
                       <NavItem style={{ cursor: 'pointer' }}>
                         <NavLink
-                          className={activeTab == '1' ? 'text-primary fw-semibold fs-5' : 'text-muted fs-5'}
+                          className={activeTab == '1' ? 'tw:text-primary tw:font-semibold tw:text-[16.25px]' : 'tw:text-[var(--bs-secondary-color)] tw:text-[16.25px]'}
                           onClick={() => {
                             router.push(`/amazon-sellers/fulfillment/sendToAmazon`, undefined, { shallow: true })
                             tabChange('1')
@@ -108,7 +108,7 @@ const SendToAmazon = ({ session }: Props) => {
                       <NavItem style={{ cursor: 'pointer' }}>
                         <NavLink
                           to='#'
-                          className={activeTab == '2' ? 'text-primary fw-semibold fs-5' : 'text-muted fs-5'}
+                          className={activeTab == '2' ? 'tw:text-primary tw:font-semibold tw:text-[16.25px]' : 'tw:text-[var(--bs-secondary-color)] tw:text-[16.25px]'}
                           onClick={() => {
                             router.push(`/amazon-sellers/fulfillment/sendToAmazon`, undefined, { shallow: true })
                             tabChange('2')
@@ -121,18 +121,18 @@ const SendToAmazon = ({ session }: Props) => {
                         </NavLink>
                       </NavItem>
                     </Nav>
-                    <div className='d-flex justify-content-end align-items-center gap-3'>
+                    <div className='tw:flex tw:justify-end tw:items-center tw:gap-4'>
                       <Link href={'/amazon-sellers/fulfillments'}>
-                        <Button color='info' className='fs-7'>
+                        <Button color='info' className='tw:text-[11.2px]'>
                           <span className='icon-on'>
                             <i className='ri-external-link-fill align-bottom me-1' />
                             Fulfillments
                           </span>
                         </Button>
                       </Link>
-                      {/* <Button color='info' className='d-flex align-items-center' onClick={() => setHelpOffCanvasIsOpen(true)}>
+                      {/* <Button color='info' className='tw:flex tw:items-center' onClick={() => setHelpOffCanvasIsOpen(true)}>
                         <i className='ri-question-line fs-14 p-0 m-0 me-lg-1' />
-                        <span className='d-none d-lg-block'>Need help</span>
+                        <span className='tw:hidden d-lg-block'>Need help</span>
                       </Button> */}
                     </div>
                   </CardHeader>

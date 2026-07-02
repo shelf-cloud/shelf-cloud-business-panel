@@ -10,10 +10,10 @@ const MasterBoxHelp = ({ isOpen, setHelpOffCanvasIsOpen }: Props) => {
     <Offcanvas isOpen={isOpen} direction='end' toggle={() => setHelpOffCanvasIsOpen(false)}>
       <OffcanvasHeader toggle={() => setHelpOffCanvasIsOpen(false)}>Send To Amazon Guide</OffcanvasHeader>
       <OffcanvasBody>
-        <div className='d-flex flex-column'>
-          <p className='fs-5 fw-bold'>Master Boxes</p>
-          <div className='fs-7'>
-            <p className='fs-6 fw-semibold'>Step 1 - Choose Inventory to Send</p>
+        <div className='tw:flex tw:flex-col'>
+          <p className='tw:text-[16.25px] tw:font-bold'>Master Boxes</p>
+          <div className='tw:text-[11.2px]'>
+            <p className='tw:text-[13px] tw:font-semibold'>Step 1 - Choose Inventory to Send</p>
             <ul>
               <li>{`Add how many Master Boxes per SKU you want to send in the "Order Qty" column.`}</li>
               <li>Click the Create Inbound Plan Button to review order, add missing details and confirm fulfillment quantities.</li>
@@ -21,7 +21,7 @@ const MasterBoxHelp = ({ isOpen, setHelpOffCanvasIsOpen }: Props) => {
             </ul>
             <p className=''>A fulfillment is created in shelfcloud and a file template is generated to be uploaded in your Amazon Seller.</p>
 
-            <p className='fs-6 fw-semibold'>Step 2 - Upload Template File and Assign Fulfillment</p>
+            <p className='tw:text-[13px] tw:font-semibold'>Step 2 - Upload Template File and Assign Fulfillment</p>
             <ul>
               <li>Upload the download template file corresponding to the created fulfillment into a new workflow in your Amazon Seller - Sent To Amazon page.</li>
               <li>
@@ -33,7 +33,7 @@ const MasterBoxHelp = ({ isOpen, setHelpOffCanvasIsOpen }: Props) => {
 
             <p>{`After assigning the workflow to ShelfCloud's Fulfillment, the fulfillment details page will open and you can continue the Amazon workflow in shelfCloud.`}</p>
 
-            <p className='fs-6 fw-semibold'>Step 3 - Fulfillment Workflow</p>
+            <p className='tw:text-[13px] tw:font-semibold'>Step 3 - Fulfillment Workflow</p>
             <ul>
               <li>Check and Confirm the Inventory to Send to continue to the Shipping Step.</li>
               <li>This step may take a few minutes, please be patient while Amazon returns the placements (splits) and Transportation Options.</li>

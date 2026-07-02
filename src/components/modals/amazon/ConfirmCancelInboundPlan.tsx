@@ -83,17 +83,16 @@ const ConfirmCancelInboundPlan = ({ cancelInboundPlanModal, setcancelInboundPlan
       </ModalHeader>
       <ModalBody>
         <Row>
-          <h5 className='fs-4 mb-0 fw-semibold text-primary'>InboundPlan:</h5>
-          <Col md={12} className='mt-2'>
-            <p className='fs-5'>{cancelInboundPlanModal.inboundPlanName}</p>
+          <h5 className='tw:text-[19.5px] tw:mb-0 tw:font-semibold tw:text-primary'>InboundPlan:</h5>
+          <Col md={12} className='tw:mt-2'>
+            <p className='tw:text-[16.25px]'>{cancelInboundPlanModal.inboundPlanName}</p>
           </Col>
-          <Row md={12} className='mt-3'>
-            <div className='text-end mt-2 d-flex flex-row gap-4 justify-content-end'>
+          <Row md={12} className='tw:mt-4'>
+            <div className='tw:text-right tw:mt-2 tw:flex tw:flex-row tw:gap-6 tw:justify-end'>
               <Button
                 disabled={isLoading}
                 type='button'
                 color='light'
-                className='btn'
                 onClick={() => {
                   setcancelInboundPlanModal({
                     show: false,
@@ -107,7 +106,6 @@ const ConfirmCancelInboundPlan = ({ cancelInboundPlanModal, setcancelInboundPlan
                 disabled={isLoading}
                 type='button'
                 color='danger'
-                className='btn'
                 onClick={() => handleCancelInboundPlan(cancelInboundPlanModal.inboundPlanId, cancelInboundPlanModal.inboundPlanName)}>
                 {isLoading ? <Spinner color='#fff' size={'sm'} /> : 'Cancel Inbound Plan'}
               </Button>

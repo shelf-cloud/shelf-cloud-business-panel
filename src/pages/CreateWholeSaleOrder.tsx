@@ -114,7 +114,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                     <Nav className='nav-tabs-custom rounded card-header-tabs border-bottom-0' role='tablist'>
                       <NavItem style={{ cursor: 'pointer' }}>
                         <NavLink
-                          className={activeTab == '1' ? 'text-primary fw-semibold fs-5' : 'text-muted fs-5'}
+                          className={activeTab == '1' ? 'tw:!text-primary tw:font-semibold tw:text-[16.25px]' : 'tw:!text-[color:var(--bs-secondary-color)] tw:text-[16.25px]'}
                           onClick={() => {
                             tabChange('1')
                           }}>
@@ -127,7 +127,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                       <NavItem style={{ cursor: 'pointer' }}>
                         <NavLink
                           to='#'
-                          className={activeTab == '2' ? 'text-primary fw-semibold fs-5' : 'text-muted fs-5'}
+                          className={activeTab == '2' ? 'tw:!text-primary tw:font-semibold tw:text-[16.25px]' : 'tw:!text-[color:var(--bs-secondary-color)] tw:text-[16.25px]'}
                           onClick={() => {
                             tabChange('2')
                           }}

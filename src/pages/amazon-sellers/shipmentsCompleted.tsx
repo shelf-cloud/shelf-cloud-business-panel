@@ -221,12 +221,12 @@ const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
         <div className='page-content'>
           <BreadCrumb title='Amazon Complete FBA Shipments' pageTitle='Amazon' />
           <Container fluid>
-            <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-2 flex-md-row justify-content-md-end align-items-md-center px-3'>
-              <div className='app-search d-flex flex-row justify-content-between align-items-center p-0'>
-                <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'>
+            <Row className='tw:flex tw:flex-col-reverse tw:justify-center tw:items-end tw:gap-2 tw:mb-2 tw:md:flex-row tw:md:justify-end tw:md:items-center tw:px-4'>
+              <div className='app-search tw:flex tw:flex-row tw:justify-between tw:items-center tw:p-0'>
+                <div className='tw:w-full tw:flex tw:flex-col tw:justify-center tw:items-start tw:gap-2 tw:tw:mb-0 tw:lg:flex-row tw:lg:justify-start tw:lg:items-center tw:px-0'>
                   <FilterFBAShipments filters={filters} setfilters={setFilters} />
                   <Link href={'/amazon-sellers/fulfillments'}>
-                    <Button className='fs-7 text-nowrap'>
+                    <Button className='tw:text-[11.2px] tw:text-nowrap'>
                       <span className='icon-on'>
                         <i className='ri-external-link-fill align-bottom me-1' />
                         Fulfillments
@@ -234,7 +234,7 @@ const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
                     </Button>
                   </Link>
                   <Link href={'/amazon-sellers/shipments'}>
-                    <Button color='info' className='fs-7 text-nowrap'>
+                    <Button color='info' className='tw:text-[11.2px] tw:text-nowrap'>
                       <span className='icon-on'>
                         <i className='ri-external-link-fill align-bottom me-1' />
                         Shipments
@@ -242,14 +242,14 @@ const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
                     </Button>
                   </Link>
                 </div>
-                <div className='w-100 d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-end align-items-lg-center px-0'>
-                  <div className='app-search p-0 col-sm-12 col-lg-5'>
-                    <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+                <div className='tw:w-full tw:flex tw:flex-col-reverse tw:justify-center tw:items-start tw:gap-2 tw:tw:mb-0 tw:lg:flex-row tw:lg:justify-end tw:lg:items-center tw:px-0'>
+                  <div className='app-search tw:p-0 col-sm-12 col-lg-5'>
+                    <div className='tw:relative tw:flex tw:rounded-lg tw:w-full overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                       <DebounceInput
                         type='text'
                         minLength={3}
                         debounceTimeout={300}
-                        className='form-control input_background_white fs-6'
+                        className='form-control input_background_white tw:text-[13px]'
                         placeholder='Search...'
                         id='search-options'
                         value={searchValue}
@@ -258,7 +258,7 @@ const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
                       />
                       <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
                       <span
-                        className='d-flex align-items-center justify-content-center input_background_white'
+                        className='tw:flex tw:items-center tw:justify-center input_background_white'
                         style={{
                           cursor: 'pointer',
                         }}

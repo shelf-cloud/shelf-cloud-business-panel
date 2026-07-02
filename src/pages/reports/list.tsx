@@ -156,11 +156,11 @@ const List = ({ session }: Props) => {
           <Container fluid>
             <Row>
               <Col lg={12}>
-                <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-1 flex-md-row justify-content-md-between align-items-md-center'>
-                  <div className='d-flex flex-column justify-content-center align-items-end gap-2 flex-md-row justify-content-md-between align-items-md-center w-auto'>
+                <Row className='tw:flex tw:flex-col-reverse tw:justify-center tw:items-end tw:gap-2 tw:mb-1 tw:md:flex-row tw:md:justify-between tw:md:items-center'>
+                  <div className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:md:flex-row tw:md:justify-between tw:md:items-center tw:w-auto'>
                     <Button
                       color='primary'
-                      className='fs-6 py-1'
+                      className='tw:text-[13px] tw:py-1'
                       onClick={() =>
                         setshowMappedCreateReport((prev: any) => {
                           return {
@@ -174,9 +174,9 @@ const List = ({ session }: Props) => {
                       Create Report
                     </Button>
                   </div>
-                  <div className='col-sm-12 col-md-3'>
-                    <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
-                      <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+                  <div className='tw:sm:w-full tw:md:w-3/12'>
+                    <div className='app-search tw:flex tw:flex-row tw:justify-end tw:items-center tw:p-0'>
+                      <div className='tw:relative tw:flex tw:rounded-lg tw:w-full tw:overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                         <Input
                           type='text'
                           className='input_background_white'
@@ -187,7 +187,7 @@ const List = ({ session }: Props) => {
                         />
                         <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
                         <span
-                          className='d-flex align-items-center justify-content-center input_background_white'
+                          className='tw:flex tw:items-center tw:justify-center input_background_white'
                           style={{
                             cursor: 'pointer',
                           }}

@@ -496,11 +496,11 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
         <div className='page-content'>
           <Container fluid>
             <BreadCrumb title='Fulfillment Workdflow' pageTitle='Send to Amazon' />
-            <Card className='fs-6'>
+            <Card className='tw:text-[13px]'>
               {!loading && inboundPlanDetails ? (
                 <>
                   <CardHeader>
-                    <div className='d-flex flex-row justify-content-between align-items-start'>
+                    <div className='tw:flex tw:flex-row tw:justify-between tw:items-start'>
                       <Link href={'/amazon-sellers/fulfillments'}>
                         <Button outline>
                           <span className='icon-on'>
@@ -509,21 +509,21 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           </span>
                         </Button>
                       </Link>
-                      <Button color='info' className='d-flex align-items-center' onClick={() => setHelpOffCanvasIsOpen(true)}>
+                      <Button color='info' className='tw:flex tw:items-center' onClick={() => setHelpOffCanvasIsOpen(true)}>
                         <i className='ri-question-line fs-14 p-0 m-0 me-lg-1' />
-                        <span className='d-none d-lg-block'>Need help</span>
+                        <span className='tw:hidden d-lg-block'>Need help</span>
                       </Button>
                     </div>
-                    <div className='mt-3'>
-                      <p className='fw-semibold fs-4 m-0 p-0'>
-                        <span className='text-muted fw-normal'>Name: </span>
+                    <div className='tw:mt-4'>
+                      <p className='tw:font-semibold tw:text-[19.5px] tw:m-0 tw:p-0'>
+                        <span className='tw:text-[var(--bs-secondary-color)] tw:font-normal'>Name: </span>
                         {inboundPlanDetails.name}
-                        <Badge color='info' className='ms-2 fs-6'>
+                        <Badge color='info' className='tw:ms-2 tw:text-[13px]'>
                           {inboundPlanDetails.fulfillmentType}
                         </Badge>
                       </p>
-                      <p className='fw-normal fs-6 m-0 p-0'>
-                        <span className='text-muted'>Inbound ID: </span>
+                      <p className='tw:font-normal tw:text-[13px] tw:m-0 tw:p-0'>
+                        <span className='tw:text-[var(--bs-secondary-color)]'>Inbound ID: </span>
                         {inboundPlanId}
                         <i
                           className='ri-file-copy-line fs-6 my-0 mx-1 p-0 text-muted'
@@ -538,13 +538,13 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                   </CardHeader>
                   <CardBody>
                     <Row>
-                      <Col xs='12' className='gap-2 d-flex flex-column'>
-                        <Nav className='pt-0 nav-tabs-custom rounded card-header-tabs border-bottom-0' role='tablist'>
+                      <Col xs='12' className='tw:gap-2 tw:flex tw:flex-col'>
+                        <Nav className='tw:pt-0 nav-tabs-custom rounded card-header-tabs tw:border-b-0' role='tablist'>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
                               className={
-                                'fs-5 fw-semibold ' + (activeTab == '1' ? 'text-primary' : inboundPlanDetails.steps[1].complete ? 'text-success opacity-50' : 'text-muted')
+                                'tw:text-[16.25px] tw:font-semibold ' + (activeTab == '1' ? 'tw:text-primary' : inboundPlanDetails.steps[1].complete ? 'tw:text-success opacity-50' : 'tw:text-[var(--bs-secondary-color)]')
                               }
                               onClick={() => {
                                 tabChange('1')
@@ -559,7 +559,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               className={
-                                'fs-5 fw-semibold ' + (activeTab == '2' ? 'text-primary' : inboundPlanDetails.steps[2].complete ? 'text-success opacity-50' : 'text-muted')
+                                'tw:text-[16.25px] tw:font-semibold ' + (activeTab == '2' ? 'tw:text-primary' : inboundPlanDetails.steps[2].complete ? 'tw:text-success opacity-50' : 'tw:text-[var(--bs-secondary-color)]')
                               }
                               onClick={() => {
                                 inboundPlanDetails?.steps[1]?.complete ? tabChange('2') : document.getElementById('btn_handleNextStepPacking')?.focus()
@@ -573,7 +573,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               className={
-                                'fs-5 fw-semibold ' + (activeTab == '3' ? 'text-primary' : inboundPlanDetails.steps[3].complete ? 'text-success opacity-50' : 'text-muted')
+                                'tw:text-[16.25px] tw:font-semibold ' + (activeTab == '3' ? 'tw:text-primary' : inboundPlanDetails.steps[3].complete ? 'tw:text-success opacity-50' : 'tw:text-[var(--bs-secondary-color)]')
                               }
                               onClick={() => {
                                 inboundPlanDetails?.steps[2]?.complete ? tabChange('3') : document.getElementById('btn_handleNextStepPacking')?.focus()
@@ -588,7 +588,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                             <NavLink
                               to='#'
                               className={
-                                'fs-5 fw-semibold ' + (activeTab == '4' ? 'text-primary' : inboundPlanDetails.steps[4].complete ? 'text-success opacity-50' : 'text-muted')
+                                'tw:text-[16.25px] tw:font-semibold ' + (activeTab == '4' ? 'tw:text-primary' : inboundPlanDetails.steps[4].complete ? 'tw:text-success opacity-50' : 'tw:text-[var(--bs-secondary-color)]')
                               }
                               onClick={() => {
                                 inboundPlanDetails?.steps[3]?.complete ? tabChange('4') : document.getElementById('btn_handleNextShipping')?.focus()
@@ -604,7 +604,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                             <NavLink
                               to='#'
                               className={
-                                'fs-5 fw-semibold ' + (activeTab == '5' ? 'text-primary' : inboundPlanDetails.steps[5].complete ? 'text-success opacity-50' : 'text-muted')
+                                'tw:text-[16.25px] tw:font-semibold ' + (activeTab == '5' ? 'tw:text-primary' : inboundPlanDetails.steps[5].complete ? 'tw:text-success opacity-50' : 'tw:text-[var(--bs-secondary-color)]')
                               }
                               onClick={() => {
                                 inboundPlanDetails?.steps[4]?.complete ? tabChange('5') : document.getElementById('btn_handleNextShipping')?.focus()
@@ -620,7 +620,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                             <NavLink
                               to='#'
                               className={
-                                'fs-5 fw-semibold ' + (activeTab == '6' ? 'text-primary' : inboundPlanDetails.steps[6].complete ? 'text-success opacity-50' : 'text-muted')
+                                'tw:text-[16.25px] tw:font-semibold ' + (activeTab == '6' ? 'tw:text-primary' : inboundPlanDetails.steps[6].complete ? 'tw:text-success opacity-50' : 'tw:text-[var(--bs-secondary-color)]')
                               }
                               onClick={() => {
                                 inboundPlanDetails?.steps[5]?.complete ? tabChange('6') : document.getElementById('btn_handleNextShipping')?.focus()
@@ -633,7 +633,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                             </NavLink>
                           </NavItem>
                         </Nav>
-                        <TabContent activeTab={activeTab} className='pt-2 pb-4 border-bottom'>
+                        <TabContent activeTab={activeTab} className='tw:pt-2 tw:pb-6 tw:border-b'>
                           <TabPane tabId='1'>
                             <InventoryToSend inboundPlan={inboundPlanDetails} handleNextStep={handleNextPackingStep} watingRepsonse={watingRepsonse} />
                           </TabPane>
@@ -675,9 +675,9 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                   </CardBody>
                 </>
               ) : (
-                <div className='w-100 px-4 py-4 d-flex gap-4'>
-                  <Spinner color='primary' className='fs-3' />
-                  <p className='fs-3 fw-semibold'>Loading...</p>
+                <div className='tw:w-full tw:px-6 tw:py-6 tw:flex tw:gap-6'>
+                  <Spinner color='primary' className='tw:text-[22.75px]' />
+                  <p className='tw:text-[22.75px] tw:font-semibold'>Loading...</p>
                 </div>
               )}
             </Card>

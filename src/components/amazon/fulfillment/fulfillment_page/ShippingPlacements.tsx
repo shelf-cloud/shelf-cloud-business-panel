@@ -6,7 +6,7 @@ type Props = {
 
 const ShippingPlacements = ({ fulfillment }: Props) => {
   return (
-    <div className='w-100'>
+    <div className='tw:w-full'>
       {fulfillment.packingOptions?.map((packingOption) => (
         <div key={packingOption.packingOptionId}>
           <p>{packingOption.status}</p>

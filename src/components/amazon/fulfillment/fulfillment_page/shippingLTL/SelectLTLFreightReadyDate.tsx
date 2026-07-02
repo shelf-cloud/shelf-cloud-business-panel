@@ -60,32 +60,32 @@ const SelectLTLFreightReadyDate = ({ shipmentId, selectedLTLTransportationOption
 
   return (
     <div>
-      <p className='my-2 p-0 fw-semibold fs-7'>Freight Ready Date</p>
+      <p className='tw:my-2 tw:p-0 tw:font-semibold tw:text-[11.2px]'>Freight Ready Date</p>
 
-      <div className='w-100 gap-2' style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', alignContent: 'center', justifyItems: 'center' }}>
+      <div className='tw:w-full tw:gap-2' style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', alignContent: 'center', justifyItems: 'center' }}>
         {carrierTransportationOptions.map((option, index) => (
           <div
             key={index}
             className={
-              'fs-7 py-1 px-2 border border-2 rounded-3' +
+              'tw:text-[11.2px] tw:py-1 tw:px-2 border border-2 tw:rounded-lg' +
               (selectedLTLTransportationOption.transportationOptionId === option.transportationOptionId ? ' border-primary shadow-lg' : '')
             }
             style={{ cursor: 'pointer' }}
             onClick={() => handleChangeFreightReadyDate(option.transportationOptionId)}>
-            <p className='m-0 p-0 fw-semibold'>{moment.utc(option.carrierAppointment?.startTime).format('ddd')}</p>
-            <p className='m-0 p-0 fw-semibold'>{moment.utc(option.carrierAppointment?.startTime).format('MMM D')}</p>
-            <p className='m-0 p-0'>
-              <span className='text-muted' style={{ fontSize: '0.875em' }}>
+            <p className='tw:m-0 tw:p-0 tw:font-semibold'>{moment.utc(option.carrierAppointment?.startTime).format('ddd')}</p>
+            <p className='tw:m-0 tw:p-0 tw:font-semibold'>{moment.utc(option.carrierAppointment?.startTime).format('MMM D')}</p>
+            <p className='tw:m-0 tw:p-0'>
+              <span className='tw:text-[var(--bs-secondary-color)]' style={{ fontSize: '0.875em' }}>
                 from
               </span>{' '}
               {FormatCurrency(state.currentRegion, option.quote?.cost.amount || 0)}
             </p>
             {option.quote?.expiration && (
               <>
-                <p className='m-0 p-0 text-muted' style={{ fontSize: '0.875em' }}>
+                <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)]' style={{ fontSize: '0.875em' }}>
                   expires
                 </p>
-                <p className='m-0 p-0 text-danger' style={{ fontSize: '0.875em' }}>
+                <p className='tw:m-0 tw:p-0 tw:text-danger' style={{ fontSize: '0.875em' }}>
                   {moment.utc(option.quote?.expiration).local().format('DD/MM h:mm a')}
                 </p>
               </>
@@ -94,11 +94,11 @@ const SelectLTLFreightReadyDate = ({ shipmentId, selectedLTLTransportationOption
         ))}
       </div>
 
-      <div className='mt-3 mb-2 d-flex flex-row justify-content-between align-items-center gap-3'>
-        <p className='my-2 p-0 fw-semibold fs-7'>Carrier</p>
-        <Select className='fs-7' value={selectedCarrier} onChange={handleChangeCarrier} options={commonCarriers} />
+      <div className='tw:mt-4 tw:mb-2 tw:flex tw:flex-row tw:justify-between tw:items-center tw:gap-4'>
+        <p className='tw:my-2 tw:p-0 tw:font-semibold tw:text-[11.2px]'>Carrier</p>
+        <Select className='tw:text-[11.2px]' value={selectedCarrier} onChange={handleChangeCarrier} options={commonCarriers} />
       </div>
-      <table className='table table-sm table-borderless table-responsive fs-7'>
+      <table className='table table-sm table-borderless table-responsive tw:text-[11.2px]'>
         <thead>
           <tr>
             <th>PCP Carrier</th>

@@ -7,7 +7,7 @@ import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { sortBooleans, sortNumbers, sortStringsLocaleCompare } from '@lib/helperFunctions'
 import { wholesaleProductRow } from '@typings'
-import DataTable from 'react-data-table-component'
+import DataTable from '@components/Common/DataTableSC'
 import { DebounceInput } from 'react-debounce-input'
 import { Button, FormFeedback, UncontrolledTooltip } from '@/components/migration-ui'
 
@@ -131,7 +131,7 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
 
   const columns: any = [
     {
-      name: <span className='fw-semibold fs-6'>Image</span>,
+      name: <span className='tw:font-semibold tw:text-[13px]'>Image</span>,
       selector: (row: wholesaleProductRow) => {
         return (
           <div
@@ -157,7 +157,7 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
     },
     {
       name: (
-        <span className='fw-semibold fs-6'>
+        <span className='tw:font-semibold tw:text-[13px]'>
           Title
           <br />
           SKU
@@ -166,21 +166,21 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
       selector: (row: wholesaleProductRow) => {
         if (row.isKit) {
           return (
-            <div className='py-2'>
-              <p className='m-0 fw-semibold'>{row.title}</p>
-              <p className='m-0'>{row.sku}</p>
-              <ul className='m-0 ps-3'>
+            <div className='tw:py-2'>
+              <p className='tw:m-0 tw:font-semibold'>{row.title}</p>
+              <p className='tw:m-0'>{row.sku}</p>
+              <ul className='tw:m-0 tw:ps-4'>
                 {row.children?.map((child) => (
-                  <li className='m-0 fs-7 text-muted' key={child.idInventory}>{`${child.title} | ${child.sku} | Available: ${child.available} | Used: ${child.qty}`}</li>
+                  <li className='tw:m-0 tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]' key={child.idInventory}>{`${child.title} | ${child.sku} | Available: ${child.available} | Used: ${child.qty}`}</li>
                 ))}
               </ul>
             </div>
           )
         } else {
           return (
-            <div className='py-2'>
-              <p className='m-0 fw-semibold'>{row.title}</p>
-              <p className='m-0'>{row.sku}</p>
+            <div className='tw:py-2'>
+              <p className='tw:m-0 tw:font-semibold'>{row.title}</p>
+              <p className='tw:m-0'>{row.sku}</p>
             </div>
           )
         }
@@ -194,7 +194,7 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
     },
     {
       name: (
-        <span className='fw-semibold fs-6'>
+        <span className='tw:font-semibold tw:text-[13px]'>
           ASIN
           <br />
           UPC
@@ -205,9 +205,9 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
       selector: (row: wholesaleProductRow) => {
         return (
           <div>
-            <p className='m-0 fs-7'>{row.asin}</p>
-            <p className='m-0 fs-7'>{row.barcode}</p>
-            <p className='m-0 fs-7'>{row.fnSku}</p>
+            <p className='tw:m-0 tw:text-[11.2px]'>{row.asin}</p>
+            <p className='tw:m-0 tw:text-[11.2px]'>{row.barcode}</p>
+            <p className='tw:m-0 tw:text-[11.2px]'>{row.fnSku}</p>
           </div>
         )
       },
@@ -217,12 +217,12 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
       compact: true,
     },
     {
-      name: <span className='fw-semibold fs-6'>Type</span>,
+      name: <span className='tw:font-semibold tw:text-[13px]'>Type</span>,
       selector: (cell: any) => {
         if (cell.isKit) {
-          return <span className='badge text-uppercase badge-soft-info p-2'>kit</span>
+          return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--info)_10%,transparent)] tw:text-info tw:p-2'>kit</span>
         } else {
-          return <span className='badge text-uppercase badge-soft-primary p-2'>product</span>
+          return <span className='badge tw:uppercase tw:bg-[color-mix(in_srgb,var(--primary)_10%,transparent)] tw:text-primary tw:p-2'>product</span>
         }
       },
       sortable: true,
@@ -231,7 +231,7 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
       sortFunction: (a: wholesaleProductRow, b: wholesaleProductRow) => sortBooleans(a.isKit!, b.isKit!),
     },
     {
-      name: <span className='fw-semibold fs-6'>Quantity</span>,
+      name: <span className='tw:font-semibold tw:text-[13px]'>Quantity</span>,
       selector: (cell: any) => {
         if (cell.isKit) {
           return cell.quantity.quantity
@@ -262,7 +262,7 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
     },
     {
       name: (
-        <span className='fw-semibold fs-6 text-center'>
+        <span className='tw:font-semibold tw:text-[13px] tw:text-center'>
           Order Qty <br /> (Individual Units)
         </span>
       ),
@@ -274,7 +274,7 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
               minLength={1}
               debounceTimeout={300}
               disabled={(row?.quantity.quantity || 0) <= 0 ? true : false}
-              className='form-control form-control-sm fs-6'
+              className='form-control form-control-sm tw:text-[13px]'
               placeholder={(row?.quantity.quantity || 0) <= 0 ? 'Not Enough Qty' : 'Order Qty...'}
               value={row.orderQty}
               onChange={async (e) => {
@@ -294,15 +294,15 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
               invalid={Number(row.orderQty) > (row?.quantity.quantity || 0) ? true : false}
             />
             {Number(row.orderQty) > (row?.quantity.quantity || 0) ? (
-              <FormFeedback className='text-start' type='invalid'>
+              <FormFeedback className='tw:text-left' type='invalid'>
                 Not enough quantity!
               </FormFeedback>
             ) : null}
-            <span className='fs-6 fw-normal text-danger' id={`ErrorSingle-${row.sku}`} style={{ display: 'none' }}>
+            <span className='tw:text-[13px] tw:font-normal tw:text-danger' id={`ErrorSingle-${row.sku}`} style={{ display: 'none' }}>
               Quantity Error
             </span>
             <span
-              className='fs-6 fw-normal text-danger'
+              className='tw:text-[13px] tw:font-normal tw:text-danger'
               id={`ErrorQty-${row.sku}`}
               style={skusWithError[row.sku] === true || row.children?.some((child) => skusWithError[child.sku] === true) === true ? {} : { display: 'none' }}>
               Available Quantity Exceeded
@@ -315,7 +315,7 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
       compact: true,
     },
     {
-      name: <span className='fw-semibold fs-6'>Total To Ship</span>,
+      name: <span className='tw:font-semibold tw:text-[13px]'>Total To Ship</span>,
       selector: (row: wholesaleProductRow) => Number(row.totalToShip).toFixed(0),
       sortable: true,
       center: true,

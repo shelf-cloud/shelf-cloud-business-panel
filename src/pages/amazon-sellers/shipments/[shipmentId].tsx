@@ -154,10 +154,10 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
         <div className='page-content'>
           <Container fluid>
             <BreadCrumb title='Product Details' pageTitle='Inventory' />
-            <Card className='fs-6'>
+            <Card className='tw:text-[13px]'>
               {!loading && shipmentDetails ? (
                 <>
-                  <CardHeader className='d-flex flex-row justify-content-between align-items-start'>
+                  <CardHeader className='tw:flex tw:flex-row tw:justify-between tw:items-start'>
                     <div>
                       <Link href={'/amazon-sellers/shipments'}>
                         <Button outline>
@@ -167,14 +167,14 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                           </span>
                         </Button>
                       </Link>
-                      <div className='mt-3'>
-                        <p className='fw-semibold fs-4 m-0 p-0'>
-                          <span className='text-muted fw-normal'>Name: </span>
+                      <div className='tw:mt-4'>
+                        <p className='tw:font-semibold tw:text-[19.5px] tw:m-0 tw:p-0'>
+                          <span className='tw:text-[var(--bs-secondary-color)] tw:font-normal'>Name: </span>
                           {shipmentDetails.shipment.name}
                         </p>
-                        <div className='my-1 d-flex flex-row justify-content-start align-items-center gap-4'>
-                          <p className='fw-normal fs-6 m-0 p-0'>
-                            <span className='text-muted'>Shipment ID: </span>
+                        <div className='tw:my-1 tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-6'>
+                          <p className='tw:font-normal tw:text-[13px] tw:m-0 tw:p-0'>
+                            <span className='tw:text-[var(--bs-secondary-color)]'>Shipment ID: </span>
                             {shipmentDetails.shipment.shipmentConfirmationId}
                             <i
                               className='ri-file-copy-line fs-6 my-0 mx-1 p-0 text-muted'
@@ -185,62 +185,62 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                               }}
                             />
                           </p>
-                          <p className='m-0 p-0 text-muted'>
+                          <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)]'>
                             Status:{' '}
-                            <Badge color='success' className='fs-6'>
+                            <Badge color='success' className='tw:text-[13px]'>
                               {CleanStatus(shipmentDetails.shipment.status)}
                             </Badge>
                           </p>
-                          <p className='m-0 p-0 text-muted'>
-                            Last Updated: <span className='text-black fw-semibold'>{moment(shipmentDetails.lastUpdated).format('LL')}</span>
+                          <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)]'>
+                            Last Updated: <span className='text-black tw:font-semibold'>{moment(shipmentDetails.lastUpdated).format('LL')}</span>
                           </p>
                         </div>
                       </div>
                     </div>
                   </CardHeader>
                   <CardBody style={{ minHeight: '60dvh' }}>
-                    <Row xs='5' className='mb-3'>
+                    <Row xs='5' className='tw:mb-4'>
                       <Col xs='12' lg='2'>
-                        <p className='m-0 mb-1 fw-bold'>Shipment</p>
-                        <p className='m-0 p-0 fs-7 fw-semibold'>
-                          Created: <span className='fw-normal'>{moment(shipmentDetails.createdAt).format('LL')}</span>
+                        <p className='tw:m-0 tw:mb-1 tw:font-bold'>Shipment</p>
+                        <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:font-semibold'>
+                          Created: <span className='tw:font-normal'>{moment(shipmentDetails.createdAt).format('LL')}</span>
                         </p>
-                        <p className='m-0 p-0 fs-7 fw-semibold'>
-                          ID: <span className='fw-normal'>{shipmentDetails.shipment.shipmentConfirmationId}</span>
+                        <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:font-semibold'>
+                          ID: <span className='tw:font-normal'>{shipmentDetails.shipment.shipmentConfirmationId}</span>
                         </p>
                       </Col>
                       <Col xs='12' lg='2'>
-                        <p className='m-0 mb-1 fw-bold'>Ship From</p>
-                        <p className='m-0 p-0 fs-7'>{`${shipmentDetails.shipment.source.address.name} ${shipmentDetails.shipment.source.address.addressLine1} ${shipmentDetails.shipment.source.address.city} ${shipmentDetails.shipment.source.address.stateOrProvinceCode} ${shipmentDetails.shipment.source.address.postalCode} ${shipmentDetails.shipment.source.address.countryCode} ${shipmentDetails.shipment.source.address.phoneNumber}`}</p>
+                        <p className='tw:m-0 tw:mb-1 tw:font-bold'>Ship From</p>
+                        <p className='tw:m-0 tw:p-0 tw:text-[11.2px]'>{`${shipmentDetails.shipment.source.address.name} ${shipmentDetails.shipment.source.address.addressLine1} ${shipmentDetails.shipment.source.address.city} ${shipmentDetails.shipment.source.address.stateOrProvinceCode} ${shipmentDetails.shipment.source.address.postalCode} ${shipmentDetails.shipment.source.address.countryCode} ${shipmentDetails.shipment.source.address.phoneNumber}`}</p>
                       </Col>
                       <Col xs='12' lg='2'>
-                        <p className='m-0 mb-1 fw-bold'>Ship To</p>
-                        <p className='m-0 p-0 fs-7'>{`${shipmentDetails.shipment.destination.warehouseId} - ${shipmentDetails.shipment.destination.address.name} ${shipmentDetails.shipment.destination.address.addressLine1} ${shipmentDetails.shipment.destination.address.city} ${shipmentDetails.shipment.destination.address.stateOrProvinceCode} ${shipmentDetails.shipment.destination.address.postalCode} ${shipmentDetails.shipment.destination.address.countryCode}`}</p>
+                        <p className='tw:m-0 tw:mb-1 tw:font-bold'>Ship To</p>
+                        <p className='tw:m-0 tw:p-0 tw:text-[11.2px]'>{`${shipmentDetails.shipment.destination.warehouseId} - ${shipmentDetails.shipment.destination.address.name} ${shipmentDetails.shipment.destination.address.addressLine1} ${shipmentDetails.shipment.destination.address.city} ${shipmentDetails.shipment.destination.address.stateOrProvinceCode} ${shipmentDetails.shipment.destination.address.postalCode} ${shipmentDetails.shipment.destination.address.countryCode}`}</p>
                       </Col>
                       <Col xs='12' lg='1'>
-                        <p className='m-0 mb-1 fw-bold'>Contents</p>
-                        <p className='m-0 p-0'>{shipmentDetails.shipmentItems.items.length} MSKUs</p>
-                        <p className='m-0 p-0'>{shipmentDetails.shipmentItems.items.reduce((total, item) => total + item.quantity, 0)} Units</p>
+                        <p className='tw:m-0 tw:mb-1 tw:font-bold'>Contents</p>
+                        <p className='tw:m-0 tw:p-0'>{shipmentDetails.shipmentItems.items.length} MSKUs</p>
+                        <p className='tw:m-0 tw:p-0'>{shipmentDetails.shipmentItems.items.reduce((total, item) => total + item.quantity, 0)} Units</p>
                       </Col>
                       <Col xs='12' lg='3'>
-                        <p className='m-0 mb-1 fw-bold'>Fees (estimated)</p>
-                        <p className='m-0 p-0 fs-7 fw-semibold'>
-                          FBA manual processing fee: <span className='fw-normal'>{FormatCurrency(state.currentRegion, shipmentDetails.totalPrepFees)}</span>
+                        <p className='tw:m-0 tw:mb-1 tw:font-bold'>Fees (estimated)</p>
+                        <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:font-semibold'>
+                          FBA manual processing fee: <span className='tw:font-normal'>{FormatCurrency(state.currentRegion, shipmentDetails.totalPrepFees)}</span>
                         </p>
-                        <p className='m-0 p-0 fs-7 fw-semibold'>
-                          Total inbound placement service fees: <span className='fw-normal'>{FormatCurrency(state.currentRegion, shipmentDetails.totalPlacementFees)}</span>
+                        <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:font-semibold'>
+                          Total inbound placement service fees: <span className='tw:font-normal'>{FormatCurrency(state.currentRegion, shipmentDetails.totalPlacementFees)}</span>
                         </p>
-                        <p className='m-0 p-0 fs-7 fw-semibold'>
+                        <p className='tw:m-0 tw:p-0 tw:text-[11.2px] tw:font-semibold'>
                           Amazon partnered carrier cost:{' '}
-                          <span className='fw-normal'>{FormatCurrency(state.currentRegion, shipmentDetails.totalSpdFees + shipmentDetails.totalLtlFees)}</span>
+                          <span className='tw:font-normal'>{FormatCurrency(state.currentRegion, shipmentDetails.totalSpdFees + shipmentDetails.totalLtlFees)}</span>
                         </p>
                       </Col>
                     </Row>
                     <Row>
-                      <Col xs='12' className='gap-2 d-flex flex-column'>
-                        <Nav className='pt-0 rounded card-header-tabs border-bottom-0' role='tablist'>
+                      <Col xs='12' className='tw:gap-2 tw:flex tw:flex-col'>
+                        <Nav className='tw:pt-0 rounded card-header-tabs tw:border-b-0' role='tablist'>
                           <NavItem style={{ cursor: 'pointer' }}>
-                            <NavLink to='#' className={'fs-5 fw-semibold ' + (activeTab == '1' ? 'text-primary' : 'text-muted')} onClick={() => tabChange('1')} type='button'>
+                            <NavLink to='#' className={'tw:text-[16.25px] tw:font-semibold ' + (activeTab == '1' ? 'tw:text-primary' : 'tw:text-[var(--bs-secondary-color)]')} onClick={() => tabChange('1')} type='button'>
                               <>
                                 <i className='far fa-user'></i>
                                 Track Shipment
@@ -249,7 +249,7 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                           </NavItem>
                           {shipmentDetails.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber && (
                             <NavItem style={{ cursor: 'pointer' }}>
-                              <NavLink className={'fs-5 fw-semibold ' + (activeTab == '2' ? 'text-primary' : 'text-muted')} onClick={() => tabChange('2')}>
+                              <NavLink className={'tw:text-[16.25px] tw:font-semibold ' + (activeTab == '2' ? 'tw:text-primary' : 'tw:text-[var(--bs-secondary-color)]')} onClick={() => tabChange('2')}>
                                 <>
                                   <i className='fas fa-home'></i>
                                   Pallets
@@ -258,7 +258,7 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                             </NavItem>
                           )}
                           <NavItem style={{ cursor: 'pointer' }}>
-                            <NavLink className={'fs-5 fw-semibold ' + (activeTab == '3' ? 'text-primary' : 'text-muted')} onClick={() => tabChange('3')}>
+                            <NavLink className={'tw:text-[16.25px] tw:font-semibold ' + (activeTab == '3' ? 'tw:text-primary' : 'tw:text-[var(--bs-secondary-color)]')} onClick={() => tabChange('3')}>
                               <>
                                 <i className='fas fa-home'></i>
                                 Contents
@@ -266,7 +266,7 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                             </NavLink>
                           </NavItem>
                           <NavItem style={{ cursor: 'pointer' }}>
-                            <NavLink to='#' className={'fs-5 fw-semibold ' + (activeTab == '4' ? 'text-primary' : 'text-muted')} onClick={() => tabChange('4')} type='button'>
+                            <NavLink to='#' className={'tw:text-[16.25px] tw:font-semibold ' + (activeTab == '4' ? 'tw:text-primary' : 'tw:text-[var(--bs-secondary-color)]')} onClick={() => tabChange('4')} type='button'>
                               <>
                                 <i className='far fa-user'></i>
                                 Problems
@@ -274,7 +274,7 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                             </NavLink>
                           </NavItem>
                         </Nav>
-                        <TabContent activeTab={activeTab} className='pt-2 pb-4'>
+                        <TabContent activeTab={activeTab} className='tw:pt-2 tw:pb-6'>
                           <TabPane tabId='1'>
                             {shipmentDetails.shippingMode === 'LTL' ? (
                               <TrackingEvents shipmentDetails={shipmentDetails} handlePrintShipmentBillOfLading={handlePrintShipmentBillOfLading} watingRepsonse={watingRepsonse} />
@@ -297,9 +297,9 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                   </CardBody>
                 </>
               ) : (
-                <div className='w-100 px-4 py-4 d-flex gap-4'>
-                  <Spinner color='primary' className='fs-4' />
-                  <p className='fs-3 fw-semibold'>Loading...</p>
+                <div className='tw:w-full tw:px-6 tw:py-6 tw:flex tw:gap-6'>
+                  <Spinner color='primary' className='tw:text-[19.5px]' />
+                  <p className='tw:text-[22.75px] tw:font-semibold'>Loading...</p>
                 </div>
               )}
             </Card>

@@ -12,7 +12,7 @@ type Props = {
 const AmazonAdsAuthButton = ({ env }: Props) => {
   const { state }: any = useContext(AppContext)
   return (
-    <div className='px-2'>
+    <div className='tw:px-2'>
       {state.currentRegion == 'us' ? (
         <Link
           href={

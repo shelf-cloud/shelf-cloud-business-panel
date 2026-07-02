@@ -19,7 +19,7 @@ const FilterCheckNumber = ({ type, setInvoiceType }: Props) => {
   return (
     <div
       ref={FilterCheckNumberContainer}
-      className='d-flex flex-column justify-content-center align-items-end gap-2 flex-md-row justify-content-md-between align-items-md-center w-auto'>
+      className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:md:flex-row tw:md:justify-between tw:md:items-center tw:w-auto'>
       <div className='dropdown'>
         <button
           className='btn btn-light dropdown-toggle'
@@ -29,15 +29,15 @@ const FilterCheckNumber = ({ type, setInvoiceType }: Props) => {
           onClick={() => setOpenDatesMenu(!openDatesMenu)}>
           Filters
         </button>
-        <div className={'dropdown-menu dropdown-menu-md px-4 py-3' + (openDatesMenu ? ' show' : '')}>
-          <div className='d-flex flex-column justify-content-start gap-2'>
-            <span className='fw-semibold'>Type:</span>
+        <div className={'dropdown-menu dropdown-menu-md tw:px-6 tw:py-4' + (openDatesMenu ? ' show' : '')}>
+          <div className='tw:flex tw:flex-col tw:justify-start tw:gap-2'>
+            <span className='tw:font-semibold'>Type:</span>
             <div
-              className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto px-3 py-0 rounded-3'
+              className='tw:flex tw:flex-row tw:items-center tw:justify-between tw:gap-2 tw:w-auto tw:px-4 tw:py-0 tw:rounded-lg'
               style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
               <Input
                 type='select'
-                className='border-0 fs-6 w-100'
+                className='border-0 tw:text-[13px] tw:w-full'
                 id='type'
                 name='type'
                 value={type}
@@ -57,7 +57,7 @@ const FilterCheckNumber = ({ type, setInvoiceType }: Props) => {
                 setInvoiceType('all')
                 setOpenDatesMenu(false)
               }}
-              className='btn btn-link p-0 border-0 text-decoration-none text-muted mt-2 fs-7'>
+              className='btn btn-link tw:p-0 border-0 tw:no-underline tw:text-[var(--bs-secondary-color)] tw:mt-2 tw:text-[11.2px]'>
               Clear All
             </button>
           </div>

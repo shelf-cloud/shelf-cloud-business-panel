@@ -93,8 +93,8 @@ const ChangeFBAShipmentName = ({ editShipmentName, seteditShipmentName }: Props)
       </ModalHeader>
       <ModalBody>
         <Row>
-          <h5 className='fs-4 mb-0 fw-semibold text-primary'>Shipment:</h5>
-          <Col md={12} className='mt-2'>
+          <h5 className='tw:text-[19.5px] tw:mb-0 tw:font-semibold tw:text-primary'>Shipment:</h5>
+          <Col md={12} className='tw:mt-2'>
             <DebounceInput
               type='text'
               minLength={3}
@@ -107,12 +107,11 @@ const ChangeFBAShipmentName = ({ editShipmentName, seteditShipmentName }: Props)
               onChange={(e) => setshipmentName(e.target.value)}
             />
           </Col>
-          <div className='mt-4 d-flex flex-row gap-3 justify-content-end'>
+          <div className='tw:mt-6 tw:flex tw:flex-row tw:gap-4 tw:justify-end'>
             <Button
               disabled={isLoading}
               type='button'
               color='light'
-              className='btn'
               onClick={() => {
                 seteditShipmentName({
                   show: false,
@@ -122,7 +121,7 @@ const ChangeFBAShipmentName = ({ editShipmentName, seteditShipmentName }: Props)
               }}>
               Cancel
             </Button>
-            <Button disabled={isLoading} type='button' color='success' className='btn' onClick={hanldeEditFBAShipmentName}>
+            <Button disabled={isLoading} type='button' color='success' onClick={hanldeEditFBAShipmentName}>
               {isLoading ? <Spinner color='light' size={'sm'} /> : 'Confirm'}
             </Button>
           </div>

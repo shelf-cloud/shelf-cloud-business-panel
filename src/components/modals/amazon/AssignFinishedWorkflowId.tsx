@@ -189,34 +189,34 @@ const AssignFinishedWorkflowId = ({ assignFinishedWorkflowIdModal, setassignFini
       </ModalHeader>
       <ModalBody>
         <Row>
-          <div className='mb-3'>
-            <p className='fs-5 m-0 fw-semibold text-primary'>ShelfCloud Fulfillment</p>
-            <p className='fs-6 m-0 text-muted'>
-              Fulfillment Name: <span className='fw-semibold text-black'>{assignFinishedWorkflowIdModal.inboundPlanName}</span>
+          <div className='tw:mb-4'>
+            <p className='tw:text-[16.25px] tw:m-0 tw:font-semibold tw:text-primary'>ShelfCloud Fulfillment</p>
+            <p className='tw:text-[13px] tw:m-0 tw:text-[var(--bs-secondary-color)]'>
+              Fulfillment Name: <span className='tw:font-semibold tw:text-black'>{assignFinishedWorkflowIdModal.inboundPlanName}</span>
             </p>
-            <p className='fs-6 m-0 text-muted'>
-              Marketpalce: <span className='fw-semibold text-black'>{AMAZON_MARKETPLACES[assignFinishedWorkflowIdModal.marketplace].domain}</span>
+            <p className='tw:text-[13px] tw:m-0 tw:text-[var(--bs-secondary-color)]'>
+              Marketpalce: <span className='tw:font-semibold tw:text-black'>{AMAZON_MARKETPLACES[assignFinishedWorkflowIdModal.marketplace].domain}</span>
             </p>
-            <p className='fs-6 m-0 text-muted'>
-              Date Created: <span className='fw-semibold text-black'>{moment(assignFinishedWorkflowIdModal.dateCreated).local().format('LL hh:mm A')}</span>
+            <p className='tw:text-[13px] tw:m-0 tw:text-[var(--bs-secondary-color)]'>
+              Date Created: <span className='tw:font-semibold tw:text-black'>{moment(assignFinishedWorkflowIdModal.dateCreated).local().format('LL hh:mm A')}</span>
             </p>
-            <p className='fs-6 m-0 text-muted'>
-              SKUs: <span className='fw-semibold text-black'>{assignFinishedWorkflowIdModal.skus}</span> Units:{' '}
-              <span className='fw-semibold text-black'>{assignFinishedWorkflowIdModal.units}</span>
+            <p className='tw:text-[13px] tw:m-0 tw:text-[var(--bs-secondary-color)]'>
+              SKUs: <span className='tw:font-semibold tw:text-black'>{assignFinishedWorkflowIdModal.skus}</span> Units:{' '}
+              <span className='tw:font-semibold tw:text-black'>{assignFinishedWorkflowIdModal.units}</span>
             </p>
           </div>
-          <p className='m-0 fs-7 text-danger'>ONLY ASSIGN FINISHED WORKFLOWS</p>
-          <p className='fs-7'>
+          <p className='tw:m-0 tw:text-[11.2px] tw:text-danger'>ONLY ASSIGN FINISHED WORKFLOWS</p>
+          <p className='tw:text-[11.2px]'>
             *This assignment are only for already Finished Workflows in Send to Amazon, Seller Central, workflow must be in the last Step: Veiw Tracking Details. After Assigning
             the workflow to ShelfCloud Fulfillment, you will be redirected to the workflow details page. ShelfCloud will receive the shipments and begin preparing them for
             Shipping.
           </p>
           {!loadingWorflows ? (
             <Col xs={12}>
-              <p className='fs-5 fw-semibold'>Amazon Active Workflows List</p>
+              <p className='tw:text-[16.25px] tw:font-semibold'>Amazon Active Workflows List</p>
               <table className='table table-bordered table-responsive'>
                 <thead className='table-light'>
-                  <tr className='text-center'>
+                  <tr className='tw:text-center'>
                     <th>Date Created</th>
                     <th>Marketplace</th>
                     <th>SKUs</th>
@@ -229,10 +229,10 @@ const AssignFinishedWorkflowId = ({ assignFinishedWorkflowIdModal, setassignFini
                     Object.values(activeWorkFlows).map(
                       (workflow) =>
                         allData.find((fulfillment) => fulfillment.inboundPlanId === workflow.inboundPlanId) === undefined && (
-                          <tr key={workflow.inboundPlanId} className='text-center'>
+                          <tr key={workflow.inboundPlanId} className='tw:text-center'>
                             <td>
-                              <p className='m-0 '>{moment.utc(workflow.createdAt).local().format('LL hh:mm A')}</p>
-                              <p className=' m-0 text-muted fs-7'>{workflow.inboundPlanId}</p>
+                              <p className='tw:m-0'>{moment.utc(workflow.createdAt).local().format('LL hh:mm A')}</p>
+                              <p className='tw:m-0 tw:text-[var(--bs-secondary-color)] tw:text-[11.2px]'>{workflow.inboundPlanId}</p>
                             </td>
                             <td>{AMAZON_MARKETPLACES[workflow.marketplaceIds[0]].domain}</td>
                             <td>{FormatIntNumber(state.currentRegion, new Set(workflow.items.map((item) => item.msku)).size)}</td>
@@ -258,13 +258,12 @@ const AssignFinishedWorkflowId = ({ assignFinishedWorkflowIdModal, setassignFini
                 </tbody>
               </table>
               <Row md={12} className=''>
-                <div className='text-end mt-2 d-flex flex-row gap-4 justify-content-end'>
-                  <div className='d-flex flex-row gap-3'>
+                <div className='tw:text-right tw:mt-2 tw:flex tw:flex-row tw:gap-6 tw:justify-end'>
+                  <div className='tw:flex tw:flex-row tw:gap-4'>
                     <Button
                       disabled={loadingWorflows || loadingAssignment}
                       type='button'
                       color='light'
-                      className='btn'
                       onClick={() => {
                         setassignFinishedWorkflowIdModal({
                           show: false,

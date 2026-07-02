@@ -8,7 +8,7 @@ type Props = {
 
 const Contents = ({ shipmentDetails }: Props) => {
   return (
-    <div className='my-3 px-3'>
+    <div className='tw:my-4 tw:px-4'>
       <Col sm='12' lg='9'>
         <table className='table table-bordered'>
           <thead className='table-light'>
@@ -16,28 +16,28 @@ const Contents = ({ shipmentDetails }: Props) => {
               <th>SKU</th>
               <th>MSKU</th>
               <th>Title</th>
-              <th className='text-nowrap'>Additional Information</th>
-              <th className='text-center text-nowrap'>
-                Units Expected <p className='m-0 fs-7 text-muted'>Units Located</p>
+              <th className='tw:text-nowrap'>Additional Information</th>
+              <th className='tw:text-center tw:text-nowrap'>
+                Units Expected <p className='tw:m-0 tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>Units Located</p>
               </th>
-              <th className='text-center'>Status</th>
+              <th className='tw:text-center'>Status</th>
             </tr>
           </thead>
           <tbody>
             {shipmentDetails.shipmentItems.items.map((item) => (
               <tr key={item.msku}>
-                <td className='text-nowrap fw-bold'>{shipmentDetails.skus_details[item.msku].shelfcloud_sku}</td>
-                <td className='text-nowrap'>{item.msku}</td>
+                <td className='tw:text-nowrap tw:font-bold'>{shipmentDetails.skus_details[item.msku].shelfcloud_sku}</td>
+                <td className='tw:text-nowrap'>{item.msku}</td>
                 <td>{shipmentDetails.skus_details[item.msku].title}</td>
-                <td className='text-nowrap'>
-                  <p className='m-0 p-0'>ASIN: {item.asin}</p>
-                  {item.asin !== item.fnsku && <p className='m-0 p-0'>FNSKU: {item.fnsku}</p>}
+                <td className='tw:text-nowrap'>
+                  <p className='tw:m-0 tw:p-0'>ASIN: {item.asin}</p>
+                  {item.asin !== item.fnsku && <p className='tw:m-0 tw:p-0'>FNSKU: {item.fnsku}</p>}
                 </td>
-                <td className='text-center'>
-                  <p className='m-0 fw-semibold'>{item.quantity}</p>
-                  <p className='m-0 text-primary'>{shipmentDetails.receipts && shipmentDetails.receipts[item.asin] ? shipmentDetails.receipts[item.asin].quantity : 0}</p>
+                <td className='tw:text-center'>
+                  <p className='tw:m-0 tw:font-semibold'>{item.quantity}</p>
+                  <p className='tw:m-0 tw:text-primary'>{shipmentDetails.receipts && shipmentDetails.receipts[item.asin] ? shipmentDetails.receipts[item.asin].quantity : 0}</p>
                 </td>
-                <td className='text-nowrap'>{CleanStatus(shipmentDetails.shipment.status)}</td>
+                <td className='tw:text-nowrap'>{CleanStatus(shipmentDetails.shipment.status)}</td>
               </tr>
             ))}
           </tbody>

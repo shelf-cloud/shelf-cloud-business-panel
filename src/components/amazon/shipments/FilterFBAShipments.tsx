@@ -40,13 +40,13 @@ const FilterFBAShipments = ({ filters, setfilters }: Props) => {
   return (
     <ButtonGroup>
       <Dropdown isOpen={openDatesMenu} toggle={() => setOpenDatesMenu(!openDatesMenu)}>
-        <DropdownToggle caret className='fs-7' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }} color='light'>
+        <DropdownToggle caret className='tw:text-[11.2px]' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }} color='light'>
           Filters
         </DropdownToggle>
         <DropdownMenu style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
-          <div className={'px-4 py-3'}>
-            <div className='d-flex flex-column justify-content-start gap-2'>
-              <span className='fs-7 fw-normal'>Filter By Status:</span>
+          <div className={'tw:px-6 tw:py-4'}>
+            <div className='tw:flex tw:flex-col tw:justify-start tw:gap-2'>
+              <span className='tw:text-[11.2px] tw:font-normal'>Filter By Status:</span>
               <SimpleSelect
                 selected={filters.status}
                 handleSelect={(option) => {
@@ -55,8 +55,8 @@ const FilterFBAShipments = ({ filters, setfilters }: Props) => {
                 }}
                 options={[{ value: 'all', label: 'All' }, ...STATUSOPTIONS]}
               />
-              <div className='form-check form-switch form-switch-right form-switch-sm d-flex flex-row justify-content-start align-items-end'>
-                <Label className='fw-normal fs-7 w-75'>Show Only Missing Qty</Label>
+              <div className='form-check form-switch form-switch-right form-switch-sm tw:flex tw:flex-row tw:justify-start tw:items-end'>
+                <Label className='tw:font-normal tw:text-[11.2px] tw:w-3/4'>Show Only Missing Qty</Label>
                 <Switch
                   id='showOnlyOverdue'
                   name='showOnlyOverdue'
@@ -74,7 +74,7 @@ const FilterFBAShipments = ({ filters, setfilters }: Props) => {
                   }))
                   setOpenDatesMenu(false)
                 }}
-                className='btn btn-link p-0 border-0 text-decoration-none text-muted mt-2 fs-7'>
+                className='tw:p-0 tw:border-0 tw:no-underline tw:text-[var(--bs-secondary-color)] tw:mt-2 tw:text-[11.2px]'>
                 Clear All
               </button>
             </div>

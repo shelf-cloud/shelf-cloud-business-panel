@@ -58,9 +58,9 @@ const ResetPasswordPage = ({}: Props) => {
   }
 
   return (
-    <div className='vw-100 vh-100 d-flex flex-column relative'>
-      <div className='w-100 px-4 py-2 border-bottom' style={{ height: '80px', backgroundColor: '#FAFBFD' }}>
-        <div className='position-relative d-flex align-self-center h-100' style={{ width: '20%', minWidth: '220px' }}>
+    <div className='tw:w-screen tw:h-screen tw:flex tw:flex-col tw:relative'>
+      <div className='tw:w-full tw:px-6 tw:py-2 tw:border-b' style={{ height: '80px', backgroundColor: '#FAFBFD' }}>
+        <div className='tw:relative tw:flex tw:self-center tw:h-full' style={{ width: '20%', minWidth: '220px' }}>
           <Image
             src={ShelfCloudLogo}
             alt='ShelfCloud Logo'
@@ -72,18 +72,18 @@ const ResetPasswordPage = ({}: Props) => {
           />
         </div>
       </div>
-      <div className='w-100 h-100 d-flex flex-column justify-content-center align-items-center'>
-        <div className='col-10 col-md-6 col-lg-4 mx-auto'>
-          <h1 className='fs-1 mb-4 fw-bold text-center'>Reset Password</h1>
-          <form onSubmit={handleResetPasswordSubmit} className='w-100'>
-            <div className='mb-1 w-100'>
+      <div className='tw:w-full tw:h-full tw:flex tw:flex-col tw:justify-center tw:items-center'>
+        <div className='tw:w-10/12 tw:md:w-1/2 tw:lg:w-4/12 tw:mx-auto'>
+          <h1 className='fs-1 tw:mb-6 tw:font-bold tw:text-center'>Reset Password</h1>
+          <form onSubmit={handleResetPasswordSubmit} className='tw:w-full'>
+            <div className='tw:mb-1 tw:w-full'>
               <Label className='form-label' htmlFor='password-input'>
                 New Password
               </Label>
-              <div className='position-relative auth-pass-inputgroup mb-3'>
+              <div className='tw:relative auth-pass-inputgroup tw:mb-4'>
                 <input
                   type={show ? 'text' : 'password'}
-                  className='form-control pe-5'
+                  className='form-control tw:pe-12'
                   placeholder='Enter new password'
                   id='newPassword'
                   name='newPassword'
@@ -91,22 +91,22 @@ const ResetPasswordPage = ({}: Props) => {
                   onBlur={validationChangePassword.handleBlur}
                   value={validationChangePassword.values.newPassword || ''}
                 />
-                <button className='btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted' type='button' onClick={() => setShow(!show)}>
+                <button className='btn btn-link tw:absolute tw:right-0 tw:top-0 tw:no-underline tw:text-[var(--bs-secondary-color)]' type='button' onClick={() => setShow(!show)}>
                   <i className='ri-eye-fill align-middle fs-5'></i>
                 </button>
               </div>
               {validationChangePassword.touched.newPassword && validationChangePassword.errors.newPassword ? (
-                <p className='text-danger'>{validationChangePassword.errors.newPassword}</p>
+                <p className='tw:text-danger'>{validationChangePassword.errors.newPassword}</p>
               ) : null}
             </div>
-            <div className='mb-1 w-100'>
+            <div className='tw:mb-1 tw:w-full'>
               <Label className='form-label' htmlFor='password-input'>
                 Confirm Password
               </Label>
-              <div className='position-relative auth-pass-inputgroup mb-3'>
+              <div className='tw:relative auth-pass-inputgroup tw:mb-4'>
                 <input
                   type={showConfirm ? 'text' : 'password'}
-                  className='form-control pe-5'
+                  className='form-control tw:pe-12'
                   placeholder='Confirm your password'
                   id='confirmPassword'
                   name='confirmPassword'
@@ -114,16 +114,16 @@ const ResetPasswordPage = ({}: Props) => {
                   onBlur={validationChangePassword.handleBlur}
                   value={validationChangePassword.values.confirmPassword || ''}
                 />
-                <button className='btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted' type='button' onClick={() => setShowConfirm(!showConfirm)}>
+                <button className='btn btn-link tw:absolute tw:right-0 tw:top-0 tw:no-underline tw:text-[var(--bs-secondary-color)]' type='button' onClick={() => setShowConfirm(!showConfirm)}>
                   <i className='ri-eye-fill align-middle fs-5'></i>
                 </button>
               </div>
               {validationChangePassword.touched.confirmPassword && validationChangePassword.errors.confirmPassword ? (
-                <p className='text-danger'>{validationChangePassword.errors.confirmPassword}</p>
+                <p className='tw:text-danger'>{validationChangePassword.errors.confirmPassword}</p>
               ) : null}
             </div>
-            <div className='mt-4 w-100'>
-              <Button color='primary' className='btn btn-primary w-100 fw-semibold fs-5' type='submit'>
+            <div className='tw:mt-6 tw:w-full'>
+              <Button color='primary' className='tw:w-full tw:font-semibold tw:text-[16.25px]' type='submit'>
                 {loading ? <Spinner size='sm' color='light' role='status' aria-hidden='true' animation='border' /> : 'Set New Password'}
               </Button>
             </div>

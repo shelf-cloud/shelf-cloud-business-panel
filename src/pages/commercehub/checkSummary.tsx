@@ -204,21 +204,21 @@ const CheckSummary = ({ session, sessionToken }: Props) => {
         <div className='page-content'>
           <BreadCrumb title='Check Summary' pageTitle='Commerce HUB' />
           <Container fluid>
-            <div className='d-flex flex-column justify-content-center align-items-end gap-2 mb-1 flex-lg-row justify-content-md-between align-items-md-center px-1'>
-              <div className='w-100 d-flex flex-column justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-start align-items-lg-center px-0'>
-                <Button color='primary' className='btn-label fs-7' onClick={downloadInfoToExcel}>
+            <div className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:mb-1 tw:lg:flex-row tw:md:justify-between tw:md:items-center tw:px-1'>
+              <div className='tw:w-full tw:flex tw:flex-col tw:justify-center tw:items-start tw:gap-2 tw:tw:mb-0 tw:lg:flex-row tw:lg:justify-start tw:lg:items-center tw:px-0'>
+                <Button color='primary' className='btn-label tw:text-[11.2px]' onClick={downloadInfoToExcel}>
                   <i className='las la-cloud-download-alt label-icon align-middle fs-4 me-2' />
                   Download To Excel
                 </Button>
               </div>
-              <div className='w-100 d-flex flex-column-reverse justify-content-center align-items-start gap-2 mb-0 flex-lg-row justify-content-lg-end align-items-lg-center px-0'>
-                <div className='app-search p-0 col-sm-12 col-lg-5'>
-                  <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+              <div className='tw:w-full tw:flex tw:flex-col-reverse tw:justify-center tw:items-start tw:gap-2 tw:tw:mb-0 tw:lg:flex-row tw:lg:justify-end tw:lg:items-center tw:px-0'>
+                <div className='app-search tw:p-0 tw:w-full tw:lg:w-5/12'>
+                  <div className='tw:relative tw:flex tw:rounded-lg tw:w-full tw:overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                     <DebounceInput
                       type='text'
                       minLength={1}
                       debounceTimeout={500}
-                      className='form-control input_background_white fs-6'
+                      className='form-control input_background_white tw:text-[13px]'
                       placeholder='Search...'
                       id='search-options'
                       value={searchValue}
@@ -227,7 +227,7 @@ const CheckSummary = ({ session, sessionToken }: Props) => {
                     />
                     <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
                     <span
-                      className='d-flex align-items-center justify-content-center input_background_white'
+                      className='tw:flex tw:items-center tw:justify-center input_background_white'
                       style={{
                         cursor: 'pointer',
                       }}
@@ -244,7 +244,7 @@ const CheckSummary = ({ session, sessionToken }: Props) => {
                   handleChangeDatesFromPicker={handleChangeDatesFromPicker}
                 />
                 <FilterCommerceHubInvoices filters={filters} setfilters={setfilters} stores={stores?.stores ?? []} />
-                <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='fs-7 text-nowrap' onClick={clearFilters}>
+                <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='tw:text-[11.2px] tw:text-nowrap' onClick={clearFilters}>
                   Clear Filters
                 </Button>
               </div>
@@ -254,7 +254,7 @@ const CheckSummary = ({ session, sessionToken }: Props) => {
                 <CheckSummaryTable filteredItems={invoices} pending={isValidating && size === 1} sortBy={sortBy} setSortBy={setSortBy} />
                 <div ref={lastInvoiceElementRef} style={{ height: '20px', marginTop: '10px' }}>
                   {isValidating && size > 1 && (
-                    <p className='text-center'>
+                    <p className='tw:tw:text-center'>
                       <Spinner size='sm' color='primary' /> Loading more invoices...
                     </p>
                   )}

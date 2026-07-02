@@ -168,21 +168,21 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
       <ModalBody>
         <Form onSubmit={handleAddProduct}>
           <Row>
-            <p className='fs-4 fw-bold text-primary'>Order Details</p>
+            <p className='tw:text-[19.5px] tw:font-bold tw:text-primary'>Order Details</p>
             <Col md={6}>
               <Col md={12}>
-                <FormGroup className='mb-3'>
-                  <Label htmlFor='firstNameinput' className='form-label fs-7'>
+                <FormGroup className='tw:mb-4'>
+                  <Label htmlFor='firstNameinput' className='form-label tw:text-[11.2px]'>
                     *Order Number
                   </Label>
                   <div className='input-group'>
-                    <span className='input-group-text fw-semibold fs-5' style={{ padding: '0.2rem 0.9rem' }} id='bsnss-prefix'>
+                    <span className='input-group-text tw:font-semibold tw:text-[16.25px]' style={{ padding: '0.2rem 0.9rem' }} id='bsnss-prefix'>
                       {orderNumberStart}
                     </span>
                     <Input
                       type='text'
                       bsSize='sm'
-                      className='fs-6'
+                      className='tw:text-[13px]'
                       style={{ padding: '0.2rem 0.9rem' }}
                       id='orderNumber'
                       name='orderNumber'
@@ -196,20 +196,20 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                 </FormGroup>
               </Col>
               <Col md={12}>
-                <Label htmlFor='firstNameinput' className='form-label fs-7'>
+                <Label htmlFor='firstNameinput' className='form-label tw:text-[11.2px]'>
                   *Type of Shipment
                 </Label>
-                <div className='d-flex flex-row justify-content-start align-items-center pb-3 gap-3'>
+                <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:pb-4 tw:gap-4'>
                   <Button
                     type='button'
-                    className={validation.values.type == 'Parcel Boxes' ? '' : 'text-muted'}
+                    className={validation.values.type == 'Parcel Boxes' ? '' : 'tw:text-[var(--bs-secondary-color)]'}
                     color={validation.values.type == 'Parcel Boxes' ? 'primary' : 'light'}
                     onClick={() => validation.setFieldValue('type', 'Parcel Boxes')}>
                     Parcel Boxes
                   </Button>
                   <Button
                     type='button'
-                    className={validation.values.type == 'LTL' ? '' : 'text-muted'}
+                    className={validation.values.type == 'LTL' ? '' : 'tw:text-[var(--bs-secondary-color)]'}
                     color={validation.values.type == 'LTL' ? 'primary' : 'light'}
                     onClick={() => validation.setFieldValue('type', 'LTL')}>
                     Pallets
@@ -218,13 +218,13 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
               </Col>
               {validation.values.type == 'LTL' && (
                 <Col md={6}>
-                  <FormGroup className='mb-3'>
-                    <Label htmlFor='firstNameinput' className='form-label fs-7'>
+                  <FormGroup className='tw:mb-4'>
+                    <Label htmlFor='firstNameinput' className='form-label tw:text-[11.2px]'>
                       *How many Pallets will be used?
                     </Label>
                     <Input
                       type='number'
-                      className='fs-6'
+                      className='tw:text-[13px]'
                       id='numberOfPallets'
                       name='numberOfPallets'
                       onChange={validation.handleChange}
@@ -266,14 +266,14 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     invalid={validation.touched.thirdInfo && validation.errors.thirdInfo ? true : false}
                   />
                   {validation.touched.thirdInfo && validation.errors.thirdInfo ? <FormFeedback type='invalid'>{validation.errors.thirdInfo}</FormFeedback> : null}
-                  <h5 className='fs-12 mb-3 text-muted'>*Additional shipping costs apply to this type of shipping.</h5>
+                  <h5 className='tw:text-[13px] tw:mb-4 tw:text-[var(--bs-secondary-color)]'>*Additional shipping costs apply to this type of shipping.</h5>
                 </>
               )}
             </Col>
             <Col md={12}>
-              <span className='text-info fs-6 fw-light'>*The distribution plan for boxes and items will be available after picking.</span>
-              <p className='fs-6 m-0'>Total SKUs in Order: {validation.values.hasProducts}</p>
-              {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='text-light'>{validation.errors.hasProducts}</p> : null}
+              <span className='tw:text-info tw:text-[13px] tw:font-light'>*The distribution plan for boxes and items will be available after picking.</span>
+              <p className='tw:text-[13px] tw:m-0'>Total SKUs in Order: {validation.values.hasProducts}</p>
+              {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='tw:text-white'>{validation.errors.hasProducts}</p> : null}
               <table className='table align-middle table-responsive table-nowrap table-striped-columns table-sm'>
                 <thead>
                   <tr>
@@ -293,16 +293,16 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                 </tbody>
                 <tfoot>
                   <tr key={'totalMasterBoxes'} style={{ backgroundColor: '#e5e5e5' }}>
-                    <td className='fw-bold'>TOTAL</td>
-                    <td className='fw-bold text-center'>{TotalMasterBoxes}</td>
-                    <td className='fw-bold text-center'>{totalQuantityToShip}</td>
+                    <td className='tw:font-bold'>TOTAL</td>
+                    <td className='tw:font-bold tw:text-center'>{TotalMasterBoxes}</td>
+                    <td className='tw:font-bold tw:text-center'>{totalQuantityToShip}</td>
                   </tr>
                 </tfoot>
               </table>
             </Col>
             <Col md={12}>
-              <div className='text-end'>
-                <Button disabled={loading} type='submit' color='success' className='btn'>
+              <div className='tw:text-right'>
+                <Button disabled={loading} type='submit' color='success'>
                   {loading ? <Spinner color='#fff' /> : 'Confirm Order'}
                 </Button>
               </div>

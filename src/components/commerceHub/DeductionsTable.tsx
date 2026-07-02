@@ -7,7 +7,7 @@ import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { DeductionType } from '@typesTs/commercehub/deductions'
 import moment from 'moment'
-import DataTable from 'react-data-table-component'
+import DataTable from '@components/Common/DataTableSC'
 import { toast } from 'react-toastify'
 import { UncontrolledTooltip } from '@/components/migration-ui'
 
@@ -60,7 +60,7 @@ const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClear
   const columns: any = [
     {
       name: (
-        <span className='fw-bolder fs-6' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'storeId', asc: !sortBy.asc })}>
+        <span className='tw:font-extrabold tw:text-[13px]' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'storeId', asc: !sortBy.asc })}>
           Marketplace
           {sortBy.key === 'storeId' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
         </span>
@@ -92,14 +92,14 @@ const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClear
     },
     {
       name: (
-        <span className='fw-bold fs-6' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'invoiceNumber', asc: !sortBy.asc })}>
+        <span className='tw:font-bold tw:text-[13px]' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'invoiceNumber', asc: !sortBy.asc })}>
           Invoice No.
           {sortBy.key === 'invoiceNumber' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
         </span>
       ),
       selector: (row: DeductionType) => (
-        <div className='d-flex flex-wrap justify-content-start align-items-center'>
-          <p className='m-0 p-0 fw-semibold fs-7'>{row.invoiceNumber}</p>{' '}
+        <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center'>
+          <p className='tw:m-0 tw:p-0 tw:font-semibold tw:text-[11.2px]'>{row.invoiceNumber}</p>{' '}
           <i
             className='ri-file-copy-line fs-6 my-0 mx-1 p-0 text-muted'
             style={{ cursor: 'pointer' }}
@@ -118,17 +118,17 @@ const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClear
       compact: true,
     },
     {
-      name: <span className='fw-bold fs-6 text-nowrap'>Keyrec No.</span>,
-      selector: (row: DeductionType) => <p className='m-0 p-0 text-muted fs-7'>{row.keyrecNumber ? row.keyrecNumber : ''}</p>,
+      name: <span className='tw:font-bold tw:text-[13px] tw:text-nowrap'>Keyrec No.</span>,
+      selector: (row: DeductionType) => <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)] tw:text-[11.2px]'>{row.keyrecNumber ? row.keyrecNumber : ''}</p>,
       sortable: false,
       left: true,
       compact: true,
     },
     {
-      name: <span className='fw-bold fs-6'>PO No.</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>PO No.</span>,
       selector: (row: DeductionType) => (
-        <div className='d-flex flex-wrap justify-content-start align-items-center'>
-          <p className='m-0 p-0 text-muted fs-7'>{row.poNumber}</p>
+        <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center'>
+          <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)] tw:text-[11.2px]'>{row.poNumber}</p>
         </div>
       ),
       sortable: false,
@@ -136,10 +136,10 @@ const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClear
       compact: true,
     },
     {
-      name: <span className='fw-bold fs-6'>Comments</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Comments</span>,
       selector: (row: DeductionType) => (
-        <div className='d-flex flex-row justify-content-start align-items-center gap-2'>
-          <span className='fs-7'>{row.comments}</span>
+        <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-2'>
+          <span className='tw:text-[11.2px]'>{row.comments}</span>
           <i className='ri-pencil-fill text-primary' style={{ cursor: 'pointer' }} onClick={() => setEditCommentModal({ show: true, id: row.id, comment: row.comments ?? '' })} />
         </div>
       ),
@@ -151,43 +151,43 @@ const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClear
     },
     {
       name: (
-        <span className='fw-bold fs-6' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkDate', asc: !sortBy.asc })}>
+        <span className='tw:font-bold tw:text-[13px]' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkDate', asc: !sortBy.asc })}>
           Check Date
           {sortBy.key === 'checkDate' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
         </span>
       ),
-      selector: (row: DeductionType) => <span className='fs-7'>{row.checkDate ? moment.utc(row.checkDate).local().format('D MMM YYYY') : ''}</span>,
+      selector: (row: DeductionType) => <span className='tw:text-[11.2px]'>{row.checkDate ? moment.utc(row.checkDate).local().format('D MMM YYYY') : ''}</span>,
       sortable: false,
       center: true,
       compact: true,
     },
     {
       name: (
-        <span className='fw-bold fs-6' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkNumber', asc: !sortBy.asc })}>
+        <span className='tw:font-bold tw:text-[13px]' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkNumber', asc: !sortBy.asc })}>
           Check Number
           {sortBy.key === 'checkNumber' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
         </span>
       ),
-      selector: (row: DeductionType) => <span className='fs-7'>{row.checkNumber}</span>,
+      selector: (row: DeductionType) => <span className='tw:text-[11.2px]'>{row.checkNumber}</span>,
       sortable: false,
       center: true,
       compact: true,
     },
     {
       name: (
-        <span className='fw-bold fs-6' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkTotal', asc: !sortBy.asc })}>
+        <span className='tw:font-bold tw:text-[13px]' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkTotal', asc: !sortBy.asc })}>
           Deduction
           {sortBy.key === 'checkTotal' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
         </span>
       ),
-      selector: (row: DeductionType) => <span className='fs-7 text-danger'>{row.checkTotal ? FormatCurrency(state.currentRegion, row.checkTotal) : ''}</span>,
+      selector: (row: DeductionType) => <span className='tw:text-[11.2px] tw:text-danger'>{row.checkTotal ? FormatCurrency(state.currentRegion, row.checkTotal) : ''}</span>,
       sortable: false,
       center: true,
       compact: true,
     },
     {
       name: (
-        <span className='fw-bolder fs-6' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'status', asc: !sortBy.asc })}>
+        <span className='tw:font-extrabold tw:text-[13px]' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'status', asc: !sortBy.asc })}>
           Status
           {sortBy.key === 'status' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
         </span>

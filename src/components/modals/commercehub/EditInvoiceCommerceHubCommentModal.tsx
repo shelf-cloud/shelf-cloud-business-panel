@@ -94,12 +94,12 @@ const EditInvoiceCommerceHubCommentModal = ({ editCommentModal, setEditCommentMo
       </ModalHeader>
       <ModalBody>
         <Row>
-          <Col md={12} className='mt-2'>
+          <Col md={12} className='tw:mt-2'>
             <DebounceInput
               element='textarea'
               minLength={3}
               debounceTimeout={700}
-              className='form-control fs-7'
+              className='form-control tw:text-[11.2px]'
               placeholder='Comment ...'
               id='search-options'
               value={editCommentModal.comment}
@@ -107,7 +107,7 @@ const EditInvoiceCommerceHubCommentModal = ({ editCommentModal, setEditCommentMo
               onChange={(e) => setnewComment(e.target.value)}
             />
           </Col>
-          <div className='mt-4 d-flex flex-row gap-3 justify-content-end'>
+          <div className='tw:mt-6 tw:flex tw:flex-row tw:gap-4 tw:justify-end'>
             <Button
               disabled={isLoading}
               type='button'

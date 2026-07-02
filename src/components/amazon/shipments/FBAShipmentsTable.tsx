@@ -6,7 +6,7 @@ import { FormatIntNumber } from '@lib/FormatNumbers'
 import { CleanStatus } from '@lib/SkuFormatting'
 import { FBAShipment } from '@typesTs/amazon/fbaShipments.interface'
 import moment from 'moment'
-import DataTable from 'react-data-table-component'
+import DataTable from '@components/Common/DataTableSC'
 import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from '@/components/migration-ui'
 
 import FBAShipmentPackingSlip from './FBAShipmentPackingSlip'
@@ -75,12 +75,12 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
 
   const columns: any = [
     {
-      name: <span className='fw-bold fs-6'>Shipment Name</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Shipment Name</span>,
       selector: (row: FBAShipment) => {
         return (
-          <div className='my-2'>
-            <p className='m-0 p-0 fw-semibold'>{row.shipment.shipmentConfirmationId}</p>
-            <p className='fs-7 m-0 p-0 text-muted'>
+          <div className='tw:my-2'>
+            <p className='tw:m-0 tw:p-0 tw:font-semibold'>{row.shipment.shipmentConfirmationId}</p>
+            <p className='tw:text-[11.2px] tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)]'>
               {row.shipment.name}{' '}
               {UpdateShipmentNameStatus.includes(row.shipment.status.toLowerCase()) && row.totalPlacementFees > 0 && (
                 <i
@@ -105,12 +105,12 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
       compact: false,
     },
     {
-      name: <span className='fw-bold fs-6'>Created</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Created</span>,
       selector: (row: FBAShipment) => {
         return (
           <>
-            <p className='fs-7 m-0 p-0'>{moment(row.createdAt).local().format('LL')}</p>
-            <p className='fs-7 m-0 p-0 text-muted'>{moment(row.createdAt).local().format('hh:mm A')}</p>
+            <p className='tw:text-[11.2px] tw:m-0 tw:p-0'>{moment(row.createdAt).local().format('LL')}</p>
+            <p className='tw:text-[11.2px] tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)]'>{moment(row.createdAt).local().format('hh:mm A')}</p>
           </>
         )
       },
@@ -120,12 +120,12 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
       sortFunction: (rowA: FBAShipment, rowB: FBAShipment) => sortDates(rowA.createdAt, rowB.createdAt),
     },
     {
-      name: <span className='fw-bold fs-6'>Last Updated</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Last Updated</span>,
       selector: (row: FBAShipment) => {
         return (
           <>
-            <p className='fs-7 m-0 p-0'>{moment.utc(row.lastUpdated).local().format('LL')}</p>
-            <p className='fs-7 m-0 p-0 text-muted'>{moment.utc(row.lastUpdated).local().format('hh:mm A')}</p>
+            <p className='tw:text-[11.2px] tw:m-0 tw:p-0'>{moment.utc(row.lastUpdated).local().format('LL')}</p>
+            <p className='tw:text-[11.2px] tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)]'>{moment.utc(row.lastUpdated).local().format('hh:mm A')}</p>
           </>
         )
       },
@@ -135,7 +135,7 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
       sortFunction: (rowA: FBAShipment, rowB: FBAShipment) => sortDates(rowA.lastUpdated, rowB.lastUpdated),
     },
     {
-      name: <span className='fw-bold fs-6'>Ship To</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Ship To</span>,
       selector: (row: FBAShipment) => row.shipment.destination.warehouseId,
       sortable: true,
       center: true,
@@ -145,14 +145,14 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
       },
     },
     {
-      name: <span className='fw-bold fs-6'>Type</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Type</span>,
       selector: (row: FBAShipment) => {
         switch (row.fulfillmentType) {
           case 'Master Boxes':
-            return <span className='fs-7 text-primary fw-semibold'>{CleanStatus(row.fulfillmentType)}</span>
+            return <span className='tw:text-[11.2px] tw:text-primary tw:font-semibold'>{CleanStatus(row.fulfillmentType)}</span>
             break
           case 'Individual Units':
-            return <span className='fs-7 text-info fw-semibold'>{CleanStatus(row.fulfillmentType)}</span>
+            return <span className='tw:text-[11.2px] tw:text-info tw:font-semibold'>{CleanStatus(row.fulfillmentType)}</span>
             break
           default:
             return <></>
@@ -165,7 +165,7 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
       sortFunction: (rowA: FBAShipment, rowB: FBAShipment) => sortStrings(rowA.fulfillmentType, rowB.fulfillmentType),
     },
     {
-      name: <span className='fw-bold fs-6'>Shipping Mode</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>Shipping Mode</span>,
       selector: (row: FBAShipment) => row.shippingMode,
       sortable: true,
       center: true,
@@ -175,7 +175,7 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
       },
     },
     {
-      name: <span className='fw-bold fs-6'>SKU</span>,
+      name: <span className='tw:font-bold tw:text-[13px]'>SKU</span>,
       selector: (row: FBAShipment) => row.shipmentItems.items.length,
       sortable: true,
       center: true,
@@ -183,21 +183,21 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
     },
     {
       name: (
-        <div className='text-center'>
-          <p className='m-0 fw-bold fs-6 '>Units Expected</p>
-          <p className='m-0 fs-7 text-muted'>Units Located</p>
+        <div className='tw:text-center'>
+          <p className='tw:m-0 tw:font-bold tw:text-[13px]'>Units Expected</p>
+          <p className='tw:m-0 tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>Units Located</p>
         </div>
       ),
       selector: (row: FBAShipment) => {
         return (
           <>
-            <p className='m-0 fw-semibold text-center'>
+            <p className='tw:m-0 tw:font-semibold tw:text-center'>
               {FormatIntNumber(
                 state.currentRegion,
                 row.shipmentItems.items.reduce((total, item) => total + item.quantity, 0)
               )}
             </p>
-            <p className='m-0 text-primary text-center'>
+            <p className='tw:m-0 tw:text-primary tw:text-center'>
               {row.receipts
                 ? FormatIntNumber(
                     state.currentRegion,
@@ -214,7 +214,7 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
       sortFunction: sortUnits,
     },
     {
-      name: <span className='fw-bolder fs-13'>Status</span>,
+      name: <span className='tw:font-extrabold tw:text-[13px]'>Status</span>,
       selector: (row: FBAShipment) => {
         const status = row.status ? row.status.toLowerCase() : row.shipment.status.toLowerCase()
         switch (status) {
@@ -261,22 +261,22 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
       sortFunction: orderStatus,
     },
     {
-      name: <span className='fw-bold fs-6'></span>,
+      name: <span className='tw:font-bold tw:text-[13px]'></span>,
       sortable: false,
       compact: true,
       center: true,
       cell: (row: FBAShipment) => {
         if (row.shipment.status.toLowerCase() !== 'cancelled') {
           return (
-            <UncontrolledDropdown className='dropdown d-inline-block' direction='start'>
-              <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
+            <UncontrolledDropdown className='dropdown tw:inline-block' direction='start'>
+              <DropdownToggle className='btn btn-light btn-sm tw:m-0 tw:p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
                 <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-1 py-0' style={{ color: '#919FAF' }} />
               </DropdownToggle>
               <DropdownMenu className='dropdown-menu-end' container={'body'}>
                 <DropdownItem onClick={() => router.push(`/amazon-sellers/shipments/${row.shipmentId}`)}>
                   <div>
                     <i className='ri-file-list-line label-icon align-middle me-2 fs-5 text-muted' />
-                    <span className='fs-6 fw-normal text-dark'>View Shipment</span>
+                    <span className='tw:text-[13px] tw:font-normal tw:text-black'>View Shipment</span>
                   </div>
                 </DropdownItem>
                 <DropdownItem header>Documents</DropdownItem>
@@ -285,7 +285,7 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
                   <DropdownItem onClick={() => getFBAShipmentProofOfShipped(row.shipment.shipmentConfirmationId)}>
                     <div>
                       <i className='las la-truck label-icon align-middle fs-5 me-2' />
-                      <span className='fs-7 fw-normal text-dark'>Proof Of Shipped</span>
+                      <span className='tw:text-[11.2px] tw:font-normal tw:text-black'>Proof Of Shipped</span>
                     </div>
                   </DropdownItem>
                 )}
@@ -293,13 +293,13 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
                 {row.status !== 'REVIEWING' && (
                   <DropdownItem onClick={() => setFBAShipmentReviewingStatus(row.shipmentId, !row.isComplete ? 1 : 0, 'IN_DISPUTE')}>
                     <i className='las la-clipboard-check label-icon align-middle fs-5 me-2' />
-                    <span className='fs-6 fw-normal text-dark'>Mark In Dispute</span>
+                    <span className='tw:text-[13px] tw:font-normal tw:text-black'>Mark In Dispute</span>
                   </DropdownItem>
                 )}
                 <DropdownItem
                   onClick={() => setFBAShipmentCompleteStatus(row.shipmentId, !row.isComplete ? 1 : 0, !row.isComplete ? 1 : 0, !row.isComplete ? 'MANUALLY_CLOSED' : 'PENDING')}>
                   <i className='las la-clipboard-check label-icon align-middle fs-5 me-2' />
-                  <span className='fs-6 fw-normal text-dark'>{!row.isComplete ? 'Mark Closed' : 'Mark Open'}</span>
+                  <span className='tw:text-[13px] tw:font-normal tw:text-black'>{!row.isComplete ? 'Mark Closed' : 'Mark Open'}</span>
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>

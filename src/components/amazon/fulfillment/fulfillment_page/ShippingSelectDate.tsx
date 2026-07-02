@@ -17,13 +17,13 @@ const ShippingSelectDate = ({ id, selectedDate, minDate, maxDate, setnewDate, cl
   const datePicker = useRef<any>(null)
   return (
     <>
-      <div key={id} className={'btn btn-sm m-0 rounded border border-2 '} style={{ backgroundColor: 'white' }}>
-        <div className='d-flex justify-content-start align-items-center gap-2'>
+      <div key={id} className={'btn btn-sm tw:m-0 rounded border border-2 '} style={{ backgroundColor: 'white' }}>
+        <div className='tw:flex tw:justify-start tw:items-center tw:gap-2'>
           <i className='las la-calendar fs-4 m-0 p-0 text-primary' />
           <Flatpickr
             ref={datePicker}
             key={`${id}-picker`}
-            className={'border-0 fs-6'}
+            className={'border-0 tw:text-[13px]'}
             options={{
               mode: 'single',
               position: 'auto',

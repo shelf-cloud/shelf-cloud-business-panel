@@ -168,9 +168,9 @@ const Listings = ({ session }: Props) => {
         <div className='page-content'>
           <BreadCrumb title='Amazon Listings' pageTitle='Amazon' />
           <Container fluid>
-            <Row className='d-flex flex-column-reverse justify-content-center align-items-end gap-2 mb-1 flex-md-row justify-content-md-end align-items-md-center px-3'>
-              <div className='app-search d-flex flex-row justify-content-between align-items-center p-0'>
-                <div className='d-flex flex-row justify-content-start align-items-center gap-3'>
+            <Row className='tw:flex tw:flex-col-reverse tw:justify-center tw:items-end tw:tw:gap-2 tw:tw:mb-1 tw:md:tw:flex-row tw:md:justify-end tw:md:items-center tw:tw:px-6'>
+              <div className='app-search tw:flex tw:tw:flex-row tw:justify-between tw:items-center tw:tw:p-0'>
+                <div className='tw:flex tw:tw:flex-row tw:justify-start tw:items-center tw:tw:gap-6'>
                   <FilterListings showHidden={showHidden} condition={condition} mapped={mapped} />
                   <Button
                     size='sm'
@@ -181,44 +181,44 @@ const Listings = ({ session }: Props) => {
                     {parseInt(showHidden) === 0 ? (
                       <>
                         <i className='mdi mdi-eye label-icon align-middle fs-5 me-2' />
-                        <span className='fs-6'>Show All</span>
+                        <span className='tw:text-[13px]'>Show All</span>
                       </>
                     ) : (
                       <>
                         <i className='mdi mdi-eye-off label-icon align-middle fs-5 me-2' />
-                        <span className='fs-6'>Hide</span>
+                        <span className='tw:text-[13px]'>Hide</span>
                       </>
                     )}
                   </Button>
                   <CSVLink data={csvData} style={{ width: 'fit-content' }} filename={`${session?.user?.businessName?.toUpperCase()}-Amazon-FBA-Listings.csv`}>
-                    <Button color='primary' className='fs-6 py-1'>
+                    <Button color='primary' className='tw:text-[13px] tw:tw:py-1'>
                       <i className='mdi mdi-arrow-down-bold label-icon align-middle fs-5 me-2' />
                       Export
                     </Button>
                   </CSVLink>
                   {selectedRows.length > 0 && (
                     <UncontrolledButtonDropdown>
-                      <DropdownToggle className='btn btn-info fs-6 py-2' caret>
+                      <DropdownToggle className='btn btn-info tw:text-[13px] tw:tw:py-2' caret>
                         {`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''} Selected`}
                       </DropdownToggle>
                       <DropdownMenu>
-                        <DropdownItem className='text-nowrap text-primary' onClick={setSelectedRowstoVisible}>
+                        <DropdownItem className='tw:tw:text-nowrap tw:tw:text-primary' onClick={setSelectedRowstoVisible}>
                           <i className='mdi mdi-eye label-icon align-middle fs-5 me-2' />
                           Set as Visible
                         </DropdownItem>
-                        <DropdownItem className='text-nowrap text-danger' onClick={setSelectedRowstoHidden}>
+                        <DropdownItem className='tw:tw:text-nowrap tw:tw:text-danger' onClick={setSelectedRowstoHidden}>
                           <i className='mdi mdi-eye-off label-icon align-middle fs-5 me-2' />
                           Set as Hidden
                         </DropdownItem>
-                        <DropdownItem className='text-nowrap fs-6 text-end' onClick={clearAllSelectedRows}>
+                        <DropdownItem className='tw:tw:text-nowrap tw:text-[13px] tw:text-right' onClick={clearAllSelectedRows}>
                           Clear Selection
                         </DropdownItem>
                       </DropdownMenu>
                     </UncontrolledButtonDropdown>
                   )}
                 </div>
-                <div className='col-sm-12 col-md-3'>
-                  <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+                <div className='tw:w-full tw:md:w-1/4'>
+                  <div className='tw:relative tw:flex tw:rounded-lg tw:w-full tw:overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
                     <DebounceInput
                       type='text'
                       minLength={3}
@@ -232,7 +232,7 @@ const Listings = ({ session }: Props) => {
                     />
                     <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
                     <span
-                      className='d-flex align-items-center justify-content-center input_background_white'
+                      className='tw:flex tw:items-center tw:justify-center input_background_white'
                       style={{
                         cursor: 'pointer',
                       }}
@@ -247,8 +247,8 @@ const Listings = ({ session }: Props) => {
               <CardBody>
                 {data?.error ? (
                   <div>
-                    <p className='fw-bold fs-2'>Amazon Seller</p>
-                    <p className='fs-5 text-muted'>
+                    <p className='tw:font-bold tw:text-[26px]'>Amazon Seller</p>
+                    <p className='tw:text-[16.25px] tw:text-[var(--bs-secondary-color)]'>
                       {data?.message} <Spinner color='primary' size={'sm'} />
                     </p>
                   </div>

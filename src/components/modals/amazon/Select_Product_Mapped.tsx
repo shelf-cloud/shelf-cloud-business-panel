@@ -57,14 +57,14 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
   }, [data, searchValue])
 
   return (
-    <div ref={selectProductMappedDiv} className='dropdown mb-3'>
+    <div ref={selectProductMappedDiv} className='dropdown tw:mb-4'>
       {showMappedListingModal.currentSkuMapped !== '' ? (
-        <div className='w-100'>
-          <p className='px-3 m-0 py-0 fs-5 fw-semibold'>{showMappedListingModal.currentSkuMapped}</p>
+        <div className='tw:w-full'>
+          <p className='tw:px-4 tw:m-0 tw:py-0 tw:text-[16.25px] tw:font-semibold'>{showMappedListingModal.currentSkuMapped}</p>
         </div>
       ) : (
-        <button type='button' className='btn-group w-100 p-0 border-0 bg-transparent' onClick={() => setOpenSelectionList(!openSelectionList)}>
-          <span className='btn btn-light btn-sm form-control fs-6 w-100 text-start' style={{ backgroundColor: 'white', opacity: '100%' }}>
+        <button type='button' className='btn-group tw:w-full tw:p-0 tw:border-0 tw:bg-transparent' onClick={() => setOpenSelectionList(!openSelectionList)}>
+          <span className='btn btn-light btn-sm form-control tw:text-[13px] tw:w-full tw:text-left' style={{ backgroundColor: 'white', opacity: '100%' }}>
             {showMappedListingModal.shelfCloudSku == '' ? `Select...` : showMappedListingModal.shelfCloudSku}
           </span>
           <span
@@ -75,15 +75,15 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
           </span>
         </button>
       )}
-      <div className={'dropdown-menu w-100 py-3 px-3' + (openSelectionList ? ' show' : '')}>
-        <div className='w-100 mb-3'>
-          <div className='app-search d-flex flex-row justify-content-end align-items-center p-0'>
-            <div className='position-relative d-flex rounded-3 w-100 overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
+      <div className={'dropdown-menu tw:w-full tw:py-4 tw:px-4' + (openSelectionList ? ' show' : '')}>
+        <div className='tw:w-full tw:mb-4'>
+          <div className='app-search tw:flex tw:flex-row tw:justify-end tw:items-center tw:p-0'>
+            <div className='tw:relative tw:flex tw:rounded-lg tw:w-full tw:overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
               <DebounceInput
                 type='text'
                 minLength={3}
                 debounceTimeout={300}
-                className='form-control input_background_white fs-6 py-0'
+                className='form-control input_background_white tw:text-[13px] tw:py-0'
                 placeholder='Search...'
                 id='search-options-mapped'
                 value={searchValue}
@@ -94,7 +94,7 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
               <button
                 type='button'
                 aria-label='Clear search'
-                className='d-flex align-items-center justify-content-center input_background_white'
+                className='tw:flex tw:items-center tw:justify-center input_background_white'
                 style={{ border: 0 }}
                 onClick={() => setSearchValue('')}>
                 <i className='mdi mdi-window-close fs-5 m-0 px-2 py-0 text-muted' />
@@ -103,13 +103,13 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
           </div>
         </div>
 
-        <div className='d-flex flex-column justify-content-start'>
+        <div className='tw:flex tw:flex-col tw:justify-start'>
           <div style={{ maxHeight: '30vh', overflowY: 'scroll' }}>
             {filterSelectionList?.map((option) => (
               <button
                 type='button'
                 key={`${option.sku}-${option.inventoryId}`}
-                className={'btn btn-link w-100 border-0 text-start text-decoration-none text-reset m-0 py-2 px-1 d-flex flex-row gap-2 ' + (showMappedListingModal.shelfCloudSku == `${option.sku}` ? 'bg-light' : '')}
+                className={'btn btn-link tw:w-full tw:border-0 tw:text-left tw:no-underline text-reset tw:m-0 tw:py-2 tw:px-1 tw:flex tw:flex-row tw:gap-2 ' + (showMappedListingModal.shelfCloudSku == `${option.sku}` ? 'tw:bg-light' : '')}
                 onClick={() => {
                   setshowMappedListingModal((prev: any) => {
                     return {
@@ -122,7 +122,7 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
                   setOpenSelectionList(false)
                 }}>
                 <span
-                  className='d-inline-block flex-shrink-0'
+                  className='tw:inline-block tw:shrink-0'
                   style={{
                     width: '50px',
                     height: '40px',
@@ -137,10 +137,10 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
                     style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                   />
                 </span>
-                <span className='d-inline-flex flex-column'>
-                  <span className='fs-7 m-0 p-0 fw-bold'>{option.sku}</span>
-                  <span className='fs-7 fw-semibold text-primary m-0 p-0'>{option.isKit ? 'Kit' : 'Product'}</span>
-                  <span className='fs-7 text-muted m-0 p-0'>{option.title}</span>
+                <span className='tw:inline-flex tw:flex-col'>
+                  <span className='tw:text-[11.2px] tw:m-0 tw:p-0 tw:font-bold'>{option.sku}</span>
+                  <span className='tw:text-[11.2px] tw:font-semibold tw:text-primary tw:m-0 tw:p-0'>{option.isKit ? 'Kit' : 'Product'}</span>
+                  <span className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)] tw:m-0 tw:p-0'>{option.title}</span>
                 </span>
               </button>
             ))}

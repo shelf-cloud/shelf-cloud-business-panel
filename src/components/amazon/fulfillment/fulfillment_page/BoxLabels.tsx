@@ -13,28 +13,28 @@ const BoxLabels = ({ inboundPlan, handleNextStep, watingRepsonse }: Props) => {
   return (
     <>
       {!watingRepsonse.boxLabels && inboundPlan.confirmedShipments && Object.values(inboundPlan.confirmedShipments)?.length > 0 ? (
-        <div className='w-100 px-3'>
-          <p className='my-1 p-0 fs-6'>
+        <div className='tw:w-full tw:px-4'>
+          <p className='tw:my-1 tw:p-0 tw:text-[13px]'>
             From:{' '}
-            <span className='fw-semibold'>
+            <span className='tw:font-semibold'>
               {inboundPlan.sourceAddress.companyName}, {inboundPlan.sourceAddress.addressLine1}, {inboundPlan.sourceAddress.addressLine2}, {inboundPlan.sourceAddress.city},{' '}
               {inboundPlan.sourceAddress.stateOrProvinceCode}, {inboundPlan.sourceAddress.postalCode}, {inboundPlan.sourceAddress.countryCode}
             </span>
           </p>
-          <p className='p-0 fs-6'>
-            Ship Date: <span className='fw-semibold'>09/15/2024</span>
+          <p className='tw:p-0 tw:text-[13px]'>
+            Ship Date: <span className='tw:font-semibold'>09/15/2024</span>
           </p>
-          <div className='d-flex flex-row flex-wrap justify-content-start align-items-start gap-3'>
+          <div className='tw:flex tw:flex-row tw:flex-wrap tw:justify-start tw:items-start tw:gap-4'>
             {Object.values(inboundPlan.confirmedShipments).map((shipment, shipmentIndex) => (
               <BoxLabelsCard key={shipment.shipmentId} inboundPlan={inboundPlan} handleNextStep={handleNextStep} shipment={shipment} shipmentIndex={shipmentIndex} />
             ))}
           </div>
         </div>
       ) : (
-        <div className='w-100 px-3'>
-          <div className='my-3 d-flex justify-content-start align-items-center gap-3'>
+        <div className='tw:w-full tw:px-4'>
+          <div className='tw:my-4 tw:flex tw:justify-start tw:items-center tw:gap-4'>
             <Spinner color='primary' />
-            <p className='m-0 p-0 fw-normal fs-5'>Confirm charges and fees first for Box labels to be available.</p>
+            <p className='tw:m-0 tw:p-0 tw:font-normal tw:text-[16.25px]'>Confirm charges and fees first for Box labels to be available.</p>
           </div>
         </div>
       )}

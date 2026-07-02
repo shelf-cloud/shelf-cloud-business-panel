@@ -198,29 +198,29 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
         }}
         className='modal-title'
         id='myModalLabel'>
-        <p className='text-primary fs-4'>Import File to Update Commerce Hub Invoices</p>
+        <p className='tw:text-primary tw:text-[19.5px]'>Import File to Update Commerce Hub Invoices</p>
       </ModalHeader>
       <ModalBody>
-        <div className='mb-3'>
-          <p className='m-0 fs-5 fw-bold'>Download Guide:</p>
-          <p className='m-0 mb-1 fs-6 fw-semibold'>
-            Lowes: <span className='m-0 fs-7 fw-light'>{`Download  de Vendor Gateway -> Finance & Accounting -> INVOICES`}</span>
+        <div className='tw:mb-4'>
+          <p className='tw:m-0 tw:text-[16.25px] tw:font-bold'>Download Guide:</p>
+          <p className='tw:m-0 tw:mb-1 tw:text-[13px] tw:font-semibold'>
+            Lowes: <span className='tw:m-0 tw:text-[11.2px] tw:font-light'>{`Download  de Vendor Gateway -> Finance & Accounting -> INVOICES`}</span>
           </p>
-          <p className='m-0 mb-1 fs-6 fw-semibold'>
+          <p className='tw:m-0 tw:mb-1 tw:text-[13px] tw:font-semibold'>
             Home Depot:{' '}
-            <span className='m-0 fs-7 fw-light'>{`Download de Supplier Hub -> FINANCE AND ACCOUNTING -> Merch Payables Self-Service Portal -> Payments -> Remittance Advice`}</span>
+            <span className='tw:m-0 tw:text-[11.2px] tw:font-light'>{`Download de Supplier Hub -> FINANCE AND ACCOUNTING -> Merch Payables Self-Service Portal -> Payments -> Remittance Advice`}</span>
           </p>
         </div>
         <Form onSubmit={handleUploadFile}>
-          <Row className='mb-3'>
+          <Row className='tw:mb-4'>
             <Col md={6}>
-              <FormGroup className='mb-0'>
+              <FormGroup className='tw:mb-0'>
                 <Label htmlFor='storeId' className='form-label'>
                   *Store
                 </Label>
                 <Input
                   type='select'
-                  className='fs-7'
+                  className='tw:text-[11.2px]'
                   id='storeId'
                   name='storeId'
                   onChange={(e) => {
@@ -238,22 +238,22 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
                 </Input>
                 {validation.touched.storeId && validation.errors.storeId ? <FormFeedback type='invalid'>{validation.errors.storeId}</FormFeedback> : null}
               </FormGroup>
-              <p className='fs-7 text-muted fw-light m-0'>
+              <p className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)] tw:font-light tw:m-0'>
                 {`You might need to configure in marketplace manager if you don't see a store.`}{' '}
-                <span onClick={() => router.push('/marketplaceManager')} className='text-primary' style={{ cursor: 'pointer' }}>
+                <span onClick={() => router.push('/marketplaceManager')} className='tw:text-primary' style={{ cursor: 'pointer' }}>
                   <i className='ri-external-link-fill ms-1 fs-6 text-primary' />
                 </span>
               </p>
-              <div className='list-unstyled mb-0' id='file-previews'>
+              <div className='list-unstyled tw:mb-0' id='file-previews'>
                 {selectedFiles.map((f: any, i) => {
                   return (
-                    <Card className='mt-1 mb-0 shadow-sm border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
-                      <div className='p-2'>
-                        <Row className='align-items-center'>
-                          <Col className='d-flex justify-content-between align-items-center'>
+                    <Card className='tw:mt-1 tw:mb-0 shadow-sm border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
+                      <div className='tw:p-2'>
+                        <Row className='tw:items-center'>
+                          <Col className='tw:flex tw:justify-between tw:items-center'>
                             <div>
-                              <p className='text-muted font-weight-bold m-0'>{f.name}</p>
-                              <p className='mb-0'>
+                              <p className='tw:text-[var(--bs-secondary-color)] tw:font-bold tw:m-0'>{f.name}</p>
+                              <p className='tw:mb-0'>
                                 <strong>{f.formattedSize}</strong>
                               </p>
                             </div>
@@ -288,11 +288,11 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
                 }}>
                 {({ getRootProps }) => (
                   <div className='dropzone dz-clickable cursor-pointer'>
-                    <div className='px-3 dz-message needsclick' {...getRootProps()}>
-                      <div className='mb-3'>
+                    <div className='tw:px-4 dz-message needsclick' {...getRootProps()}>
+                      <div className='tw:mb-4'>
                         <i className='display-4 text-muted ri-upload-cloud-2-fill' />
                       </div>
-                      <p className='fs-6'>Upload Invoices File. Drop Only CSV files here or click to upload.</p>
+                      <p className='tw:text-[13px]'>Upload Invoices File. Drop Only CSV files here or click to upload.</p>
                     </div>
                   </div>
                 )}
@@ -304,35 +304,35 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
               />
             </Col>
           </Row>
-          {errorFile && <p className='text-danger m-0'>You must Upload a CSV file to upload products.</p>}
+          {errorFile && <p className='tw:text-danger tw:m-0'>You must Upload a CSV file to upload products.</p>}
           {showErrorLines && (
-            <div style={{ overflowY: 'scroll', height: '30vh', scrollbarWidth: 'none' }} className='my-3'>
-              <p className='text-danger m-0'>
-                There are <span className='fw-bold'>{errorLines.length}</span> errors in this file. Please review the following lines:
+            <div style={{ overflowY: 'scroll', height: '30vh', scrollbarWidth: 'none' }} className='tw:my-4'>
+              <p className='tw:text-danger tw:m-0'>
+                There are <span className='tw:font-bold'>{errorLines.length}</span> errors in this file. Please review the following lines:
               </p>
               <table className='table table-sm'>
                 <thead>
-                  <tr className='text-danger'>
-                    <th className='text-center'>In Line</th>
+                  <tr className='tw:text-danger'>
+                    <th className='tw:text-center'>In Line</th>
                     <th>Value</th>
                     <th>Error</th>
                   </tr>
                 </thead>
                 <tbody>
                   {errorLines.map((error: any, index: number) => (
-                    <tr key={`ErrorLine${index}`} className='m-0'>
-                      <td className='text-center'>{error.errorLine}</td>
-                      <td className='text-wrap w-25'>{error.value}</td>
-                      <td className='text-wrap w-100 ps-3'>- {error.errorMessage}</td>
+                    <tr key={`ErrorLine${index}`} className='tw:m-0'>
+                      <td className='tw:text-center'>{error.errorLine}</td>
+                      <td className='tw:text-wrap tw:w-1/4'>{error.value}</td>
+                      <td className='tw:text-wrap tw:w-full tw:ps-4'>- {error.errorMessage}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           )}
-          {showerrorResponse && errorResponse?.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='text-danger m-0'>{`Error: ${error}`}</p>)}
+          {showerrorResponse && errorResponse?.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='tw:text-danger tw:m-0'>{`Error: ${error}`}</p>)}
           <Col md={12}>
-            <div className='text-end'>
+            <div className='tw:text-right'>
               <Button type='submit' color='success'>
                 {loading ? (
                   <span>

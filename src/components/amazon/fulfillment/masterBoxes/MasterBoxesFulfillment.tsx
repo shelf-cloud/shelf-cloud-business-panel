@@ -166,18 +166,18 @@ const MasterBoxesFulfillment = ({ lisiting, pending, mutateFBASkus }: Props) => 
 
   return (
     <>
-      <Row className='justify-content-between gap-0'>
-        <Col xs='12' lg='8' className='d-flex flex-wrap justify-content-start align-items-center gap-2'>
+      <Row className='tw:justify-between tw:gap-0'>
+        <Col xs='12' lg='8' className='tw:flex tw:flex-wrap tw:justify-start tw:items-center tw:gap-2'>
           <Button
             disabled={orderProducts.length === 0 || hasInputError || hasQtyError}
-            className='fs-7 text-nowrap'
+            className='tw:text-[11.2px] tw:text-nowrap'
             color='success'
             onClick={() => setShowCreateInboundPlanModal(true)}>
             Create Inbound Plan
           </Button>
           <Button
             disabled={orderProducts.length === 0 || hasInputError || hasQtyError}
-            className='fs-7 text-nowrap'
+            className='tw:text-[11.2px] tw:text-nowrap'
             color='secondary'
             onClick={() => setShowCreateManualInboundPlanModal(true)}>
             Create Manual Inbound Plan
@@ -190,36 +190,36 @@ const MasterBoxesFulfillment = ({ lisiting, pending, mutateFBASkus }: Props) => 
             masterBoxVisibility={masterBoxVisibility !== undefined || masterBoxVisibility === '' ? masterBoxVisibility : 'false'}
           />
           <UncontrolledButtonDropdown>
-            <DropdownToggle className='btn btn-info fs-7 py-2' caret>
+            <DropdownToggle className='btn btn-info tw:text-[11.2px] tw:py-2' caret>
               Bulk Actions
             </DropdownToggle>
             <DropdownMenu>
               <DropdownItem header>Master Box Visibility</DropdownItem>
-              <DropdownItem className='text-nowrap fs-7' onClick={() => changeSelectedMasterBoxVisibility(false)}>
+              <DropdownItem className='tw:text-nowrap tw:text-[11.2px]' onClick={() => changeSelectedMasterBoxVisibility(false)}>
                 <i className='mdi mdi-eye-off label-icon align-middle fs-5 me-2' />
                 Hide Selected
               </DropdownItem>
-              <DropdownItem className='text-nowrap fs-7' onClick={() => changeSelectedMasterBoxVisibility(true)}>
+              <DropdownItem className='tw:text-nowrap tw:text-[11.2px]' onClick={() => changeSelectedMasterBoxVisibility(true)}>
                 <i className='mdi mdi-eye label-icon align-middle fs-5 me-2' />
                 Show Selected
               </DropdownItem>
-              <DropdownItem className='text-nowrap text-end fs-7 text-muted' onClick={clearAllSelectedRows}>
+              <DropdownItem className='tw:text-nowrap tw:text-right tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]' onClick={clearAllSelectedRows}>
                 Clear All
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledButtonDropdown>
         </Col>
-        <Col xs='12' lg='4' className='d-flex justify-content-end align-items-center'>
+        <Col xs='12' lg='4' className='tw:flex tw:justify-end tw:items-center'>
           <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='none' minLength={3} debounceTimeout={300} widths='col-12' />
         </Col>
       </Row>
-      <div className='d-flex justify-content-start align-items-center gap-3 mt-3'>
-        <p className='m-0 p-0'>
-          Total SKUs: <span className='fw-semibold text-primary'>{orderProducts.length}</span>
+      <div className='tw:flex tw:justify-start tw:items-center tw:gap-4 tw:mt-4'>
+        <p className='tw:m-0 tw:p-0'>
+          Total SKUs: <span className='tw:font-semibold tw:text-primary'>{orderProducts.length}</span>
         </p>
-        <p className='m-0 p-0'>
+        <p className='tw:m-0 tw:p-0'>
           Total Item Quantities:{' '}
-          <span className='fw-semibold text-primary'>{orderProducts.reduce((total: number, item: AmazonFulfillmentSku) => total + Number(item.totalSendToAmazon), 0)}</span>
+          <span className='tw:font-semibold tw:text-primary'>{orderProducts.reduce((total: number, item: AmazonFulfillmentSku) => total + Number(item.totalSendToAmazon), 0)}</span>
         </p>
       </div>
       <MasterBoxesTable

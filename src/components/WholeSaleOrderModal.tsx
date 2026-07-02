@@ -373,21 +373,21 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
       <ModalBody>
         <Form onSubmit={handleAddProduct}>
           <Row>
-            <p className='fs-4 fw-bold text-primary'>Order Details</p>
+            <p className='tw:text-[19.5px] tw:font-bold tw:text-primary'>Order Details</p>
             <Col md={6}>
               <Col md={12}>
-                <FormGroup className='mb-3'>
-                  <Label htmlFor='orderNumber' className='form-label fs-7'>
+                <FormGroup className='tw:mb-4'>
+                  <Label htmlFor='orderNumber' className='form-label tw:text-[11.2px]'>
                     *Order Number
                   </Label>
                   <div className='input-group'>
-                    <span className='input-group-text fw-semibold fs-5' style={{ padding: '0.2rem 0.9rem' }} id='bsnss-prefix'>
+                    <span className='input-group-text tw:font-semibold tw:text-[16.25px]' style={{ padding: '0.2rem 0.9rem' }} id='bsnss-prefix'>
                       {orderNumberStart}
                     </span>
                     <Input
                       type='text'
                       bsSize='sm'
-                      className='fs-6'
+                      className='tw:text-[13px]'
                       style={{ padding: '0.2rem 0.9rem' }}
                       id='orderNumber'
                       name='orderNumber'
@@ -401,20 +401,20 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                 </FormGroup>
               </Col>
               <Col md={12}>
-                <Label htmlFor='type' className='form-label fs-7'>
+                <Label htmlFor='type' className='form-label tw:text-[11.2px]'>
                   *Type of Shipment
                 </Label>
-                <div className='d-flex flex-row justify-content-start align-items-center pb-3 gap-3'>
+                <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:pb-4 tw:gap-4'>
                   <Button
                     type='button'
-                    className={validation.values.type == 'Parcel Boxes' ? '' : 'text-muted'}
+                    className={validation.values.type == 'Parcel Boxes' ? '' : 'tw:text-[var(--bs-secondary-color)]'}
                     color={validation.values.type == 'Parcel Boxes' ? 'primary' : 'light'}
                     onClick={() => validation.setFieldValue('type', 'Parcel Boxes')}>
                     Parcel Boxes
                   </Button>
                   <Button
                     type='button'
-                    className={validation.values.type == 'LTL' ? '' : 'text-muted'}
+                    className={validation.values.type == 'LTL' ? '' : 'tw:text-[var(--bs-secondary-color)]'}
                     color={validation.values.type == 'LTL' ? 'primary' : 'light'}
                     onClick={() => validation.setFieldValue('type', 'LTL')}>
                     Pallets
@@ -423,13 +423,13 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
               </Col>
               {validation.values.type == 'LTL' && (
                 <Col md={6}>
-                  <FormGroup className='mb-3'>
-                    <Label htmlFor='numberOfPallets' className='form-label fs-7'>
+                  <FormGroup className='tw:mb-4'>
+                    <Label htmlFor='numberOfPallets' className='form-label tw:text-[11.2px]'>
                       *How many Pallets will be used?
                     </Label>
                     <Input
                       type='number'
-                      className='fs-6'
+                      className='tw:text-[13px]'
                       id='numberOfPallets'
                       name='numberOfPallets'
                       onChange={validation.handleChange}
@@ -465,13 +465,13 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     handleAcceptedFiles={orderLabel.handleAcceptedFiles}
                     description={`Upload Shipping Labels. Drop Only PDF files here or click to upload.`}
                   />
-                  <div className='list-unstyled mb-0' id='file-previews'>
+                  <div className='list-unstyled tw:mb-0' id='file-previews'>
                     {orderLabel.files.map((file, i) => {
                       return (
-                        <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
+                        <Card className='tw:mt-1 tw:mb-0 tw:shadow-none tw:border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
                           <div className='p-2'>
-                            <Row className='align-items-center'>
-                              <Col className='d-flex justify-content-between align-items-center gap-2'>
+                            <Row className='tw:items-center'>
+                              <Col className='tw:flex tw:justify-between tw:items-center tw:gap-2'>
                                 {file.type === 'application/pdf' ? (
                                   <div className='relative overflow-hidden rounded border' style={{ width: '60px', height: '60px' }}>
                                     <iframe
@@ -509,8 +509,8 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                                   </div>
                                 )}
                                 <div>
-                                  <p className='text-muted m-0 fs-7'>{file.name}</p>
-                                  <p className='mb-0 fs-7'>
+                                  <p className='tw:text-[var(--bs-secondary-color)] tw:m-0 tw:text-[11.2px]'>{file.name}</p>
+                                  <p className='tw:mb-0 tw:text-[11.2px]'>
                                     <strong>{file.formattedSize}</strong>
                                   </p>
                                 </div>
@@ -526,7 +526,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                       )
                     })}
                   </div>
-                  {errorFile && <p className='text-danger m-0'>You must Upload the FBA Labels to create order.</p>}
+                  {errorFile && <p className='tw:text-danger tw:m-0'>You must Upload the FBA Labels to create order.</p>}
                 </Col>
                 <Col>
                   {validation.values.type == 'LTL' && (
@@ -536,13 +536,13 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                       description={`Upload Pallet Labels. Drop Only PDF files here or click to upload.`}
                     />
                   )}
-                  <div className='list-unstyled mb-0' id='file-previews'>
+                  <div className='list-unstyled tw:mb-0' id='file-previews'>
                     {orderPalletLabel.files.map((file: any, i) => {
                       return (
-                        <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
+                        <Card className='tw:mt-1 tw:mb-0 tw:shadow-none tw:border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
                           <div className='p-2'>
-                            <Row className='align-items-center'>
-                              <Col className='d-flex justify-content-between align-items-center gap-2'>
+                            <Row className='tw:items-center'>
+                              <Col className='tw:flex tw:justify-between tw:items-center tw:gap-2'>
                                 {file.type === 'application/pdf' ? (
                                   <div className='relative overflow-hidden rounded border' style={{ width: '60px', height: '60px' }}>
                                     <iframe
@@ -580,8 +580,8 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                                   </div>
                                 )}
                                 <div>
-                                  <p className='text-muted font-weight-bold m-0 fs-7'>{file.name}</p>
-                                  <p className='mb-0 fs-7'>
+                                  <p className='tw:text-[var(--bs-secondary-color)] tw:font-bold tw:m-0 tw:text-[11.2px]'>{file.name}</p>
+                                  <p className='tw:mb-0 tw:text-[11.2px]'>
                                     <strong>{file.formattedSize}</strong>
                                   </p>
                                 </div>
@@ -597,7 +597,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                       )
                     })}
                   </div>
-                  {errorPalletFile && <p className='text-danger m-0'>You must Upload the Pallet Labels to create order.</p>}
+                  {errorPalletFile && <p className='tw:text-danger tw:m-0'>You must Upload the Pallet Labels to create order.</p>}
                 </Col>
               </Row>
             </Col>
@@ -615,13 +615,13 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     invalid={validation.touched.thirdInfo && validation.errors.thirdInfo ? true : false}
                   />
                   {validation.touched.thirdInfo && validation.errors.thirdInfo ? <FormFeedback type='invalid'>{validation.errors.thirdInfo}</FormFeedback> : null}
-                  <h5 className='fs-7 mb-3 text-muted'>*Additional shipping costs apply to this type of shipping.</h5>
+                  <h5 className='tw:text-[11.2px] tw:mb-4 tw:text-[var(--bs-secondary-color)]'>*Additional shipping costs apply to this type of shipping.</h5>
                 </>
               )}
             </Col>
             <Col md={12}>
-              <p className='fs-6 m-0'>Total SKUs in Order: {validation.values.hasProducts}</p>
-              {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='text-danger'>{validation.errors.hasProducts}</p> : null}
+              <p className='tw:text-[13px] tw:m-0'>Total SKUs in Order: {validation.values.hasProducts}</p>
+              {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='tw:text-danger'>{validation.errors.hasProducts}</p> : null}
               <table className='table align-middle table-responsive table-nowrap table-striped-columns table-sm'>
                 <thead>
                   <tr>
@@ -644,16 +644,16 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                 <tfoot>
                   <tr key={'totalMasterBoxes'} style={{ backgroundColor: '#e5e5e5' }}>
                     <td aria-label='Total label spacer'></td>
-                    <td className='fw-bold text-center'>TOTAL</td>
-                    <td className='fw-bold text-center'>{TotalMasterBoxes}</td>
-                    <td className='fw-bold text-center'>{totalQuantityToShip}</td>
+                    <td className='tw:font-bold tw:text-center'>TOTAL</td>
+                    <td className='tw:font-bold tw:text-center'>{TotalMasterBoxes}</td>
+                    <td className='tw:font-bold tw:text-center'>{totalQuantityToShip}</td>
                   </tr>
                 </tfoot>
               </table>
             </Col>
             <Col md={12}>
-              <div className='text-end'>
-                <Button disabled={loading} type='submit' color='success' className='btn'>
+              <div className='tw:text-right'>
+                <Button disabled={loading} type='submit' color='success'>
                   {loading ? <Spinner color='#fff' /> : 'Confirm Order'}
                 </Button>
               </div>
