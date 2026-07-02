@@ -167,18 +167,18 @@ const MarketplacesListingsTable = ({ tableData, pending, setSelectedRows, toggle
         if (listing) {
           return (
             <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-2'>
-              <i className='las la-link fs-4 text-success tw:m-0 tw:p-0' />
+              <i className='las la-link tw:text-[19.5px] tw:text-success tw:m-0 tw:p-0' />
               <Link href={row.isKit ? `/kit/${row.inventoryId}/${row.sku}` : `/product/${row.inventoryId}/${row.sku}`} target='blank' rel='noopener noreferrer'>
                 <span className='tw:text-[11.2px]'>{listing.storeSku}</span>
               </Link>
               {listing.isHidden ? (
                 <p className='tw:text-[11.2px] tw:m-0 tw:p-0'>
-                  <i className='mdi mdi-eye-off label-icon align-middle fs-6 me-0 text-danger' /> <span className='tw:text-[var(--bs-secondary-color)]'>Hidden</span>
+                  <i className='mdi mdi-eye-off label-icon tw:align-middle tw:text-[13px] tw:me-0 tw:text-destructive' /> <span className='tw:text-[var(--bs-secondary-color)]'>Hidden</span>
                 </p>
               ) : null}
               {listing.isManual ? (
                 <p className='tw:text-[11.2px] tw:m-0 tw:p-0'>
-                  <i className='mdi mdi-hand-back-left label-icon align-middle fs-6 me-0 text-primary' /> <span className='tw:text-[var(--bs-secondary-color)]'>Manual</span>
+                  <i className='mdi mdi-hand-back-left label-icon tw:align-middle tw:text-[13px] tw:me-0 tw:text-primary' /> <span className='tw:text-[var(--bs-secondary-color)]'>Manual</span>
                 </p>
               ) : null}
             </div>
@@ -186,7 +186,7 @@ const MarketplacesListingsTable = ({ tableData, pending, setSelectedRows, toggle
         } else {
           return (
             <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-2'>
-              <i className='las la-link fs-4 text-danger tw:m-0 tw:p-0' />
+              <i className='las la-link tw:text-[19.5px] tw:text-destructive tw:m-0 tw:p-0' />
               <span className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>Not Mapped</span>
             </div>
           )

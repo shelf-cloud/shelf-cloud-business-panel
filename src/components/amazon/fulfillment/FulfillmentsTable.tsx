@@ -154,7 +154,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
             return (
               <UncontrolledDropdown className='dropdown tw:inline-block' direction='start'>
                 <DropdownToggle className='btn btn-light btn-sm tw:m-0 tw:p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
-                  <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-1 py-0' style={{ color: '#919FAF' }}></i>
+                  <i className='mdi mdi-dots-vertical tw:align-middle tw:text-[19.5px] tw:m-0 tw:px-1 tw:py-0' style={{ color: '#919FAF' }}></i>
                 </DropdownToggle>
                 {row.inboundPlanId ? (
                   <DropdownMenu className='dropdown-menu-end' container={'body'}>
@@ -167,13 +167,13 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
                             : router.push(`/amazon-sellers/fulfillment/individualUnits/${row.inboundPlanId}`)
                       }>
                       <div>
-                        <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
+                        <i className='ri-file-list-line tw:align-middle tw:me-2 tw:text-[16.25px] tw:text-[color:var(--bs-secondary-color)]'></i>
                         <span className='tw:text-[13px] tw:font-normal tw:text-black'>Manage</span>
                       </div>
                     </DropdownItem>
                     {!row.confirmedDate && (
                       <DropdownItem className='tw:text-danger' onClick={() => setcancelInboundPlanModal({ show: true, inboundPlanId: row.inboundPlanId, inboundPlanName: row.name })}>
-                        <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
+                        <i className={'las la-times-circle tw:align-middle tw:text-[16.25px] tw:me-2'}></i> Cancel
                       </DropdownItem>
                     )}
                     {/* {row.confirmedDate &&
@@ -217,12 +217,12 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
                         })
                       }>
                       <div>
-                        <i className='ri-file-list-line align-middle me-2 fs-5 text-info'></i>
+                        <i className='ri-file-list-line tw:align-middle tw:me-2 tw:text-[16.25px] tw:text-info'></i>
                         <span className='tw:text-[13px] tw:font-normal tw:text-black'>Assign Finished Workflow</span>
                       </div>
                     </DropdownItem>
                     <DropdownItem className='tw:text-danger' onClick={() => setcancelInboundPlanModal({ show: true, inboundPlanId: 'manual', inboundPlanName: row.name })}>
-                      <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
+                      <i className={'las la-times-circle tw:align-middle tw:text-[16.25px] tw:me-2'}></i> Cancel
                     </DropdownItem>
                   </DropdownMenu>
                 )}
@@ -233,7 +233,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
             return (
               <UncontrolledDropdown className='dropdown tw:inline-block' direction='start'>
                 <DropdownToggle className='btn btn-light btn-sm tw:m-0 tw:p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
-                  <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-1 py-0' style={{ color: '#919FAF' }}></i>
+                  <i className='mdi mdi-dots-vertical tw:align-middle tw:text-[19.5px] tw:m-0 tw:px-1 tw:py-0' style={{ color: '#919FAF' }}></i>
                 </DropdownToggle>
                 <DropdownMenu className='dropdown-menu-end' container={'body'}>
                   <DropdownItem
@@ -245,7 +245,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
                           : router.push(`/amazon-sellers/fulfillment/individualUnits/${row.inboundPlanId}`)
                     }>
                     <div>
-                      <i className='ri-file-list-line align-middle me-2 fs-5 text-muted'></i>
+                      <i className='ri-file-list-line tw:align-middle tw:me-2 tw:text-[16.25px] tw:text-[color:var(--bs-secondary-color)]'></i>
                       <span className='tw:text-[13px] tw:font-normal tw:text-black'>View Details</span>
                     </div>
                   </DropdownItem>
@@ -279,17 +279,17 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
             return (
               <UncontrolledDropdown className='dropdown tw:inline-block' direction='start'>
                 <DropdownToggle className='btn btn-light btn-sm tw:m-0 tw:p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
-                  <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-1 py-0' style={{ color: '#919FAF' }}></i>
+                  <i className='mdi mdi-dots-vertical tw:align-middle tw:text-[19.5px] tw:m-0 tw:px-1 tw:py-0' style={{ color: '#919FAF' }}></i>
                 </DropdownToggle>
                 <DropdownMenu className='dropdown-menu-end' container={'body'}>
                   <DropdownItem onClick={() => handleRepairFBAWorkflow(row.inboundPlanId)}>
                     <div>
-                      <i className='las la-undo-alt align-middle me-2 fs-5 text-info'></i>
+                      <i className='las la-undo-alt tw:align-middle tw:me-2 tw:text-[16.25px] tw:text-info'></i>
                       <span className='tw:text-[13px] tw:font-normal'>Repair Inbound Plan</span>
                     </div>
                   </DropdownItem>
                   <DropdownItem className='tw:text-danger' onClick={() => setcancelInboundPlanModal({ show: true, inboundPlanId: row.inboundPlanId, inboundPlanName: row.name })}>
-                    <i className={'las la-times-circle align-middle fs-5 me-2'}></i> Cancel
+                    <i className={'las la-times-circle tw:align-middle tw:text-[16.25px] tw:me-2'}></i> Cancel
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>

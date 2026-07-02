@@ -1,0 +1,44 @@
+/*
+ * grid.css
+ * Bootstrap grid — used subset only.
+ *
+ * Verdict: migration-ui Container/Row/Col (src/components/migration-ui/layout.tsx)
+ * emit pure tw: classes (tw:flex tw:flex-wrap, tw:w-N/12 fractions, tw:mx-auto
+ * max-widths) — no container/row/col classes come from that component.
+ * No literal container-fluid/row classNames exist anywhere in src/.
+ *
+ * BUT: src/components/ui/SearchInput.tsx applies its `widths` prop verbatim
+ * to a plain <div className={widths}> with no wrapping `.row`, and 5 call
+ * sites still pass literal Bootstrap grid strings:
+ *   - IndividualUnitsFulfillment.tsx, MasterBoxesFulfillment.tsx: widths='col-12'
+ *   - Add_Sku_To_Purchase_Order.tsx: widths='col-12 col-md-7'
+ *   - MasterBoxes.tsx, SingleItems.tsx: widths='col-12 col-md-4'
+ *   - Kits.tsx: widths='col-12 col-md-8'
+ * So only .col-12, .col-md-4, .col-md-7, .col-md-8 are real consumers.
+ *
+ * Gutter/.row > * padding rules intentionally NOT ported: none of these divs
+ * sit inside a `.row` (the migration-ui Row never emits `.row`), so Bootstrap
+ * never applied row-gutter padding to them in the ported baseline either —
+ * porting it now would change rendered behavior, not preserve it.
+ *
+ * Ported byte-for-byte from Bootstrap core CSS (compiled w/ Velzon vars).
+ */
+.col-12 {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .col-md-4 {
+    flex: 0 0 auto;
+    width: 33.33333333%;
+  }
+  .col-md-7 {
+    flex: 0 0 auto;
+    width: 58.33333333%;
+  }
+  .col-md-8 {
+    flex: 0 0 auto;
+    width: 66.66666667%;
+  }
+}

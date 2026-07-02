@@ -124,7 +124,7 @@ const InventoryLogs = ({ session }: Props) => {
                       <div className='tw:relative'>
                         <Input type='text' placeholder='Search...' id='search-options' value={serachValue} onChange={filterByText} />
                         <span className='mdi mdi-magnify search-widget-icon'></span>
-                        <span className='mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none' id='search-close-options'></span>
+                        <span className='mdi mdi-close-circle search-widget-icon search-widget-icon-close tw:hidden' id='search-close-options'></span>
                       </div>
                       <Button className='btn-soft-dark' onClick={clearSearch}>
                         Clear

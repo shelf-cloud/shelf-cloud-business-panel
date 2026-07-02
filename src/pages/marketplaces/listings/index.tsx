@@ -107,7 +107,7 @@ const ProductsListings = ({ session }: Props) => {
                                   clearAllSelectedRows()
                                 })
                               }>
-                              <i className='mdi mdi-eye label-icon align-middle fs-5 me-2 text-primary' />
+                              <i className='mdi mdi-eye label-icon tw:align-middle tw:text-[16.25px] tw:me-2 tw:text-primary' />
                               Set Visible
                             </DropdownItem>
                             <DropdownItem
@@ -125,7 +125,7 @@ const ProductsListings = ({ session }: Props) => {
                                   clearAllSelectedRows()
                                 })
                               }>
-                              <i className='mdi mdi-eye-off label-icon align-middle fs-5 me-2 text-danger' />
+                              <i className='mdi mdi-eye-off label-icon tw:align-middle tw:text-[16.25px] tw:me-2 tw:text-destructive' />
                               Set Hidden
                             </DropdownItem>
                             <DropdownItem divider />
@@ -143,7 +143,7 @@ const ProductsListings = ({ session }: Props) => {
                                   clearAllSelectedRows()
                                 })
                               }>
-                              <i className='las la-link label-icon align-middle fs-5 me-2 text-primary' />
+                              <i className='las la-link label-icon tw:align-middle tw:text-[16.25px] tw:me-2 tw:text-primary' />
                               Set Mapped
                             </DropdownItem>
                             <DropdownItem className='tw:text-nowrap tw:text-[var(--bs-secondary-color)] tw:text-[11.2px] tw:text-end' onClick={clearAllSelectedRows}>

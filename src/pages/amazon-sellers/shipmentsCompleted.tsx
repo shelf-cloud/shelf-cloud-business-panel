@@ -228,7 +228,7 @@ const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
                   <Link href={'/amazon-sellers/fulfillments'}>
                     <Button className='tw:text-[11.2px] tw:text-nowrap'>
                       <span className='icon-on'>
-                        <i className='ri-external-link-fill align-bottom me-1' />
+                        <i className='ri-external-link-fill tw:align-bottom tw:me-1' />
                         Fulfillments
                       </span>
                     </Button>
@@ -236,7 +236,7 @@ const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
                   <Link href={'/amazon-sellers/shipments'}>
                     <Button color='info' className='tw:text-[11.2px] tw:text-nowrap'>
                       <span className='icon-on'>
-                        <i className='ri-external-link-fill align-bottom me-1' />
+                        <i className='ri-external-link-fill tw:align-bottom tw:me-1' />
                         Shipments
                       </span>
                     </Button>
@@ -256,14 +256,14 @@ const ShipmentsCompleted = ({ session, sessionToken }: Props) => {
                         onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
                         onChange={(e) => setSearchValue(e.target.value)}
                       />
-                      <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
+                      <span className='mdi mdi-magnify search-widget-icon tw:text-[19.5px]'></span>
                       <span
                         className='tw:flex tw:items-center tw:justify-center input_background_white'
                         style={{
                           cursor: 'pointer',
                         }}
                         onClick={() => setSearchValue('')}>
-                        <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
+                        <i className='mdi mdi-window-close tw:text-[19.5px] tw:m-0 tw:px-2 tw:py-0 tw:text-[color:var(--bs-secondary-color)]' />
                       </span>
                     </div>
                   </div>

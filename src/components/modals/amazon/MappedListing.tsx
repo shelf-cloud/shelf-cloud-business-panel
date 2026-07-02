@@ -167,7 +167,7 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
           <Row md={12} className='tw:mt-4'>
             <div className='tw:text-right tw:mt-2 tw:flex tw:flex-row tw:gap-6 tw:justify-between'>
               <Button disabled={loading || showMappedListingModal.currentSkuMapped === ''} type='button' color='danger' onClick={handleUnMappedProduct}>
-                <i className='las la-unlink fs-5 text-white m-0 p-0 me-1' />
+                <i className='las la-unlink tw:text-[16.25px] tw:text-white tw:m-0 tw:p-0 tw:me-1' />
                 {loading ? <Spinner color='#fff' size={'sm'} /> : 'UnMap'}
               </Button>
               <div className='tw:flex tw:flex-row tw:gap-4'>

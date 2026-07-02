@@ -387,7 +387,7 @@ const FBAShipmentPackingSlip = ({ order }: Props) => {
 
   return (
     <DropdownItem className='edit-item-btn' onClick={downloadPackingSlip}>
-      <i className='mdi mdi-arrow-down-bold label-icon align-middle fs-5 me-2' />
+      <i className='mdi mdi-arrow-down-bold label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
       <span className='tw:text-[13px] tw:font-normal tw:text-black'>Packing Slip</span>
     </DropdownItem>
   )

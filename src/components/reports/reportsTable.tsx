@@ -49,14 +49,14 @@ const ReportsTable = ({ reportList, pending, handleDownloadReport }: Props) => {
         if (row.reportStatus === 'ready') {
           return (
             <div>
-              <i className={'ri-checkbox-circle-fill align-middle me-2 fs-3 text-success'}></i>
+              <i className={'ri-checkbox-circle-fill tw:align-middle tw:me-2 tw:text-[22.75px] tw:text-success'}></i>
               <span className='tw:capitalize'>{row.reportStatus}</span>
             </div>
           )
         } else {
           return (
             <div>
-              <i className={'ri-time-line align-middle me-2 fs-3 text-muted'}></i>
+              <i className={'ri-time-line tw:align-middle tw:me-2 tw:text-[22.75px] tw:text-[color:var(--bs-secondary-color)]'}></i>
               <span className='tw:capitalize'>{row.reportStatus}</span>
             </div>
           )

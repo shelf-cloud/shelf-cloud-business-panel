@@ -1,26 +1,22 @@
-@use './icons.scss';
-@use '../styles/config/default/bootstrap.scss';
-@use '../styles/config/default/app.scss' as *;
-@use '../styles/config/default/custom.scss';
-@import './shepherd.css';
-@import './mermaid.min.css';
+/*
+Ported from src/styles/themes.scss (rule content below its @use/@import lines).
+Resolved against GT compiled output (post-port.css): $font-family-primary -> "Poppins", sans-serif;
+media-breakpoint-down(sm) -> @media (max-width: 575.98px); $theme-colors loop expanded;
+$gray-600 -> #878a99; $light -> #f3f6f9.
+*/
 
-//Rigthsidebar offcanvas
-.offcanvas-header-dark {
-  .btn-close {
-    filter: invert(1) grayscale(100%) brightness(200%);
-  }
+/* Rigthsidebar offcanvas */
+.offcanvas-header-dark .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
 }
 
-body {
-  * {
-    outline: none !important;
-    font-family: $font-family-primary;
-  }
-  input,
-  select {
-    font-size: 16px !important;
-  }
+body * {
+  outline: none !important;
+  font-family: 'Poppins', sans-serif;
+}
+body input,
+body select {
+  font-size: 16px !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -92,17 +88,15 @@ body {
   text-align: center;
 }
 
-.prompt-content {
-  pre {
-    text-wrap: auto;
-    white-space: pre-wrap;
-    overflow-wrap: break-word;
-    word-break: break-word;
-    max-width: 100%;
-  }
+.prompt-content pre {
+  text-wrap: auto;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
 }
 
-// //Calendar
+/* Calendar */
 .fc-direction-ltr .fc-daygrid-event.fc-event-end,
 .fc-direction-rtl .fc-daygrid-event.fc-event-start {
   padding: 5px !important;
@@ -120,31 +114,22 @@ body {
   }
 }
 
-@include media-breakpoint-down(sm) {
+@media (max-width: 575.98px) {
   .fc-toolbar {
     display: block !important;
     text-align: center;
-
-    .fc-left,
-    .fc-right,
-    .fc-center {
-      float: none;
-      display: block;
-      clear: both;
-      margin: 10px 0;
-    }
   }
-
-  .fc {
-    .fc-toolbar {
-      > * {
-        > * {
-          float: none;
-        }
-      }
-    }
+  .fc-toolbar .fc-left,
+  .fc-toolbar .fc-right,
+  .fc-toolbar .fc-center {
+    float: none;
+    display: block;
+    clear: both;
+    margin: 10px 0;
   }
-
+  .fc .fc-toolbar > * > * {
+    float: none;
+  }
   .fc-today-button {
     display: none;
   }
@@ -166,34 +151,48 @@ body {
   background-color: #405189 !important;
 }
 
-// .Toastify__toast {
-//   min-height: 43px !important;
-//   max-height: 43px !important;
-// }
-
-@each $color, $value in $theme-colors {
-  .simplebar-track-#{$color} {
-    .simplebar-scrollbar:before {
-      background: $value !important;
-    }
-  }
+.simplebar-track-primary .simplebar-scrollbar:before {
+  background: #4481fd !important;
 }
 
-// chat
-.chat-conversation .chat-list .message-box-drop {
-  .nav-btn {
-    font-size: 18px;
-    padding: 4px;
-    color: $gray-600;
-  }
+.simplebar-track-secondary .simplebar-scrollbar:before {
+  background: #3577f1 !important;
 }
 
-// authentication
+.simplebar-track-success .simplebar-scrollbar:before {
+  background: #0ab39c !important;
+}
 
-#tsparticles {
-  canvas {
-    position: absolute !important;
-  }
+.simplebar-track-info .simplebar-scrollbar:before {
+  background: #299cdb !important;
+}
+
+.simplebar-track-warning .simplebar-scrollbar:before {
+  background: #f7b84b !important;
+}
+
+.simplebar-track-danger .simplebar-scrollbar:before {
+  background: #f06548 !important;
+}
+
+.simplebar-track-light .simplebar-scrollbar:before {
+  background: #f3f6f9 !important;
+}
+
+.simplebar-track-dark .simplebar-scrollbar:before {
+  background: #212529 !important;
+}
+
+/* chat */
+.chat-conversation .chat-list .message-box-drop .nav-btn {
+  font-size: 18px;
+  padding: 4px;
+  color: #878a99;
+}
+
+/* authentication */
+#tsparticles canvas {
+  position: absolute !important;
 }
 
 .alert-msg-show {
@@ -202,8 +201,7 @@ body {
   z-index: 1005;
 }
 
-// Emoji Picker
-
+/* Emoji Picker */
 .pickerEmoji {
   position: absolute;
   bottom: -100px;
@@ -211,22 +209,21 @@ body {
   transform: translateX(-50%);
 }
 
-.Toastify {
-  .Toastify__toast {
-    min-height: 43px;
-  }
+.Toastify .Toastify__toast {
+  min-height: 43px;
+}
 
-  .Toastify__close-button {
-    top: 6px;
-  }
+.Toastify .Toastify__close-button {
+  top: 6px;
+}
 
-  .Toastify__close-button--light {
-    color: $light;
-  }
-  .Toastify__spinner {
-    border-color: #e0e0e0;
-    border-right-color: #616161;
-  }
+.Toastify .Toastify__close-button--light {
+  color: #f3f6f9;
+}
+
+.Toastify .Toastify__spinner {
+  border-color: #e0e0e0;
+  border-right-color: #616161;
 }
 
 .capitalize {

@@ -67,7 +67,7 @@ const ReceivingPackingSlip = ({ receiving }: Props) => {
 
   return (
     <DropdownItem className='edit-item-btn' onClick={exportExcelFile}>
-      <i className='mdi mdi-arrow-down-bold label-icon align-middle fs-5 tw:me-2' />
+      <i className='mdi mdi-arrow-down-bold label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
       <span className='tw:text-[13px] tw:font-normal tw:text-dark'>Packing Slip</span>
     </DropdownItem>
   )

@@ -549,7 +549,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                             <p className='tw:mt-2 tw:mb-1 tw:p-0 tw:font-semibold tw:text-[19.5px]'>
                               <span>{placementOption.shipmentIds.length}</span> {placementOption.shipmentIds.length > 1 ? 'Shipments' : 'Shipment'}
                               {placementOptionSelected.placementOptionId === placementOption.placementOptionId && (
-                                <i className={'ri-checkbox-circle-fill align-middle ms-2 fs-4 text-success'} />
+                                <i className={'ri-checkbox-circle-fill tw:align-middle tw:ms-2 tw:text-[19.5px] tw:text-success'} />
                               )}
                             </p>
                             <p className='tw:m-0 tw:p-0 tw:text-[11.2px]'>
@@ -608,7 +608,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                   <Row>
                     <Col xs='12' lg='8' xl='6'>
                       <Alert color='secondary' className='alert-border-left'>
-                        <i className='ri-error-warning-line me-3 align-middle fs-5' />
+                        <i className='ri-error-warning-line tw:me-4 tw:align-middle tw:text-[16.25px]' />
                         Please select the shipping mode that you will use for each shipment
                       </Alert>
                     </Col>
@@ -784,10 +784,10 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                             return { ...prev, sameShippingCarrier: 'non-amazon' }
                           })
                         }
-                        className={'tw:m-0 tw:py-1 shadow-sm ' + (finalShippingCharges.sameShippingCarrier === 'non-amazon' && 'border border-3 border-success')}
+                        className={'m-0 py-1 shadow-sm ' + (finalShippingCharges.sameShippingCarrier === 'non-amazon' && 'border border-3 border-success')}
                         style={{ zIndex: 9, cursor: 'pointer' }}>
                         <CardBody>
-                          <p className='tw:m-0 tw:mb-2 tw:p-0 tw:text-[11.2px] tw:font-semibold'>Non-Amazon Partnered Carrier</p>
+                          <p className='m-0 mb-2 p-0 fs-7 tw:font-semibold'>Non-Amazon Partnered Carrier</p>
                           <SelectShippingCarrier
                             id={`shippingCarrierNonAmazon`}
                             selectionInfo={nonAmazonCarrierOptions}
@@ -1194,9 +1194,9 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                     </div>
 
                                     {/* CARRIER NON-AMAZON */}
-                                    {/* <div className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-4'>
+                                    {/* <div className='d-flex flex-row justify-content-start align-items-center gap-3'>
                                       <Input
-                                        className='tw:my-0'
+                                        className='my-0'
                                         type='radio'
                                         style={{ cursor: 'pointer' }}
                                         id={`shippingCarrierNonAmazon-${shipmentId}`}
@@ -1216,7 +1216,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                         }
                                       />
                                       <div>
-                                        <p className={'tw:m-0 tw:p-0 tw:text-[11.2px] ' + (finalShippingCharges.sameShippingCarrier !== 'non-amazon' && 'tw:text-[var(--bs-secondary-color)]')}>
+                                        <p className={'m-0 p-0 fs-7 ' + (finalShippingCharges.sameShippingCarrier !== 'non-amazon' && 'tw:text-[var(--bs-secondary-color)]')}>
                                           Non-Amazon Partnered Carrier
                                         </p>
                                         <SelectShippingCarrier

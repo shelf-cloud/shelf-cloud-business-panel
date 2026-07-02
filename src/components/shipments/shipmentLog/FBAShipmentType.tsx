@@ -226,7 +226,7 @@ const FBAShipmentType = ({ data }: Props) => {
                         Pick Pack Charge
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltip${OrderId}`}></i>
+                            <i className='ri-information-fill tw:ms-1 tw:text-[13px] tw:text-[color:var(--bs-secondary-color)]' id={`tooltip${OrderId}`}></i>
                             <TooltipComponent target={`tooltip${OrderId}`} text={FBAServiceFees(data, currentRegion)} />
                           </>
                         )}

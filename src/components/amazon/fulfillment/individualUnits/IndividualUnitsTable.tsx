@@ -157,7 +157,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
               <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center'>
                 <p className='tw:m-0 tw:p-0 tw:text-[11.2px]'>{`${row.msku}`}</p>
                 <i
-                  className='ri-file-copy-line fs-6 my-0 mx-1 p-0 text-muted'
+                  className='ri-file-copy-line tw:text-[13px] tw:my-0 tw:mx-1 tw:p-0 tw:text-[color:var(--bs-secondary-color)]'
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
                     navigator.clipboard.writeText(row.msku)
@@ -175,7 +175,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
                   {`ASIN: ${row.asin}`}
                 </a>
                 <i
-                  className='ri-file-copy-line fs-6 my-0 mx-1 p-0 text-muted'
+                  className='ri-file-copy-line tw:text-[13px] tw:my-0 tw:mx-1 tw:p-0 tw:text-[color:var(--bs-secondary-color)]'
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
                     navigator.clipboard.writeText(row.asin)
@@ -204,7 +204,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
               <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center'>
                 <p className='tw:m-0 tw:p-0 tw:text-[11.2px]'>{`${row.msku}`}</p>
                 <i
-                  className='ri-file-copy-line fs-6 my-0 mx-1 p-0 text-muted'
+                  className='ri-file-copy-line tw:text-[13px] tw:my-0 tw:mx-1 tw:p-0 tw:text-[color:var(--bs-secondary-color)]'
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
                     navigator.clipboard.writeText(row.msku)
@@ -222,7 +222,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
                   {`ASIN: ${row.asin}`}
                 </a>
                 <i
-                  className='ri-file-copy-line fs-6 my-0 mx-1 p-0 text-muted'
+                  className='ri-file-copy-line tw:text-[13px] tw:my-0 tw:mx-1 tw:p-0 tw:text-[color:var(--bs-secondary-color)]'
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
                     navigator.clipboard.writeText(row.asin)
@@ -300,7 +300,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
                   outline
                   className='tw:p-0 tw:m-0 btn btn-sm btn-icon btn-ghost-info'
                   onClick={() => setinboundFBAHistoryModal({ show: true, sku: row.shelfcloud_sku, msku: row.msku, shipments: row.fbaShipments })}>
-                  <i className='ri-information-fill p-0 m-0 fs-6 text-info' />
+                  <i className='ri-information-fill tw:p-0 tw:m-0 tw:text-[13px] tw:text-info' />
                 </Button>
               )}
             </div>

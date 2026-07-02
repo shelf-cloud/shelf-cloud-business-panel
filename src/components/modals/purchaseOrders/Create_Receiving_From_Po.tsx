@@ -378,7 +378,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
             {hasBoxedErrors.error && (
               <Col xs={12} className='tw:m-0'>
                 <Alert color='danger' className='tw:text-[11.2px] tw:py-1 tw:mb-2'>
-                  <i className='ri-error-warning-line me-3 align-middle fs-5' />
+                  <i className='ri-error-warning-line tw:me-4 tw:align-middle tw:text-[16.25px]' />
                   {hasBoxedErrors.message}
                 </Alert>
               </Col>

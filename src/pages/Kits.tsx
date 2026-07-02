@@ -135,8 +135,8 @@ const Kits = ({ session }: Props) => {
                   pending={isValidating}
                   changeProductState={changeProductState}
                   setMsg={'Set Inactive'}
-                  icon={'las la-eye-slash align-middle fs-5 me-2'}
-                  activeText={'text-danger'}
+                  icon={'las la-eye-slash tw:align-middle tw:text-[16.25px] tw:me-2'}
+                  activeText={'tw:text-destructive'}
                 />
               </CardBody>
             </Card>

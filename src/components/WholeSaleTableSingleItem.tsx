@@ -116,16 +116,16 @@ const WholeSaleTableSingleItem = ({ allData, filteredItems, setAllData, pending,
   const conditionalRowStyles = [
     {
       when: (row: wholesaleProductRow) => Number(row.orderQty) > 0,
-      classNames: ['bg-success bg-opacity-25'],
+      classNames: ['tw:bg-success bg-opacity-25'],
     },
     {
       when: (row: wholesaleProductRow) => Number(row.orderQty) < 0 || !Number.isInteger(Number(row.orderQty)),
-      classNames: ['bg-danger bg-opacity-25'],
+      classNames: ['tw:bg-destructive bg-opacity-25'],
     },
     {
       when: (row: wholesaleProductRow) =>
         Number(row.orderQty) > (row?.quantity.quantity || 0) || skusWithError[row.sku] === true || row.children?.some((child) => skusWithError[child.sku] === true) === true,
-      classNames: ['bg-danger bg-opacity-25'],
+      classNames: ['tw:bg-destructive bg-opacity-25'],
     },
   ]
 

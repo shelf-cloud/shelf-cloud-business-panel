@@ -100,9 +100,9 @@ const Add_Sku_To_Purchase_Order = ({}) => {
       name: <span className='tw:font-bold tw:text-[13px]'>Add</span>,
       selector: (row: SkuToAddPo) => {
         if (skuToAddToPo.some((item) => item.sku == row.sku)) {
-          return <i className='fs-3 text-muted las la-check-circle' />
+          return <i className='tw:text-[22.75px] tw:text-[color:var(--bs-secondary-color)] las la-check-circle' />
         } else {
-          return <i className='fs-3 text-success las la-plus-circle' style={{ cursor: 'pointer' }} onClick={() => handleAddSkuToList(row)} />
+          return <i className='tw:text-[22.75px] tw:text-success las la-plus-circle' style={{ cursor: 'pointer' }} onClick={() => handleAddSkuToList(row)} />
         }
       },
       sortable: false,
@@ -177,7 +177,7 @@ const Add_Sku_To_Purchase_Order = ({}) => {
     {
       name: <span className='tw:font-bold tw:text-[13px]'>Remove</span>,
       selector: (row: SkuInListToAddToPo) => {
-        return <i className='fs-4 text-danger las la-trash-alt ps-3' style={{ cursor: 'pointer' }} onClick={() => handleDeleteFromSkuList(row.sku)} />
+        return <i className='tw:text-[19.5px] tw:text-destructive las la-trash-alt tw:ps-4' style={{ cursor: 'pointer' }} onClick={() => handleDeleteFromSkuList(row.sku)} />
       },
       sortable: false,
       center: true,

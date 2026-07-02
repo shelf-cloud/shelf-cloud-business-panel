@@ -158,7 +158,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                         Pick Pack Charge
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltipPick${OrderId}`}></i>
+                            <i className='ri-information-fill tw:ms-1 tw:text-[13px] tw:text-[color:var(--bs-secondary-color)]' id={`tooltipPick${OrderId}`}></i>
                             <TooltipComponent target={`tooltipPick${OrderId}`} text={serviceFee} />
                           </>
                         )}
@@ -174,7 +174,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                         Labeling
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltipLabel${OrderId}`}></i>
+                            <i className='ri-information-fill tw:ms-1 tw:text-[13px] tw:text-[color:var(--bs-secondary-color)]' id={`tooltipLabel${OrderId}`}></i>
                             <TooltipComponent target={`tooltipLabel${OrderId}`} text={`$ ${data.chargesFees.labelCost} per label`} />
                           </>
                         )}
@@ -186,7 +186,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                         Man Hour
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltipManHour${OrderId}`}></i>
+                            <i className='ri-information-fill tw:ms-1 tw:text-[13px] tw:text-[color:var(--bs-secondary-color)]' id={`tooltipManHour${OrderId}`}></i>
                             <TooltipComponent target={`tooltipManHour${OrderId}`} text={`$ ${data.chargesFees.receivingManHour} per hour`} />
                           </>
                         )}
@@ -226,7 +226,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                 {data.proofOfShipped != '' && data.proofOfShipped != null && (
                   <a href={data.proofOfShipped} target='blank' rel='noopener noreferrer'>
                     <Button color='info' className='btn-label btn-sm tw:text-[11.2px] tw:text-nowrap'>
-                      <i className='las la-truck label-icon align-middle fs-4 me-2' />
+                      <i className='las la-truck label-icon tw:align-middle tw:text-[19.5px] tw:me-2' />
                       Proof Of Shipped
                     </Button>
                   </a>
@@ -238,7 +238,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                     color='info'
                     className='btn-label btn-sm tw:text-[11.2px] tw:text-nowrap'
                     onClick={() => setIndividualUnitsPlan(!state.showIndividualUnitsPlan)}>
-                    <i className='las la-boxes label-icon align-middle fs-3 me-2' />
+                    <i className='las la-boxes label-icon tw:align-middle tw:text-[22.75px] tw:me-2' />
                     {data.individualUnitsPlan?.state == 'Pending' ? 'Waiting for plan...' : 'Individual Units Plan'}
                   </Button>
                 )}
@@ -248,7 +248,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                     target='blank'
                     rel='noopener noreferrer'>
                     <Button color='secondary' className='btn-label btn-sm tw:text-[11.2px] tw:text-nowrap'>
-                      <i className='las la-toilet-paper label-icon align-middle fs-4 me-2' />
+                      <i className='las la-toilet-paper label-icon tw:align-middle tw:text-[19.5px] tw:me-2' />
                       FBA Labels
                     </Button>
                   </a>
@@ -259,7 +259,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                     target='blank'
                     rel='noopener noreferrer'>
                     <Button color='secondary' className='btn-label btn-sm tw:text-[11.2px] tw:text-nowrap'>
-                      <i className='las la-toilet-paper label-icon align-middle fs-4 me-2' />
+                      <i className='las la-toilet-paper label-icon tw:align-middle tw:text-[19.5px] tw:me-2' />
                       Pallet Labels
                     </Button>
                   </a>
@@ -270,7 +270,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                     color='secondary'
                     className='btn-label btn-sm tw:text-[11.2px] tw:text-nowrap'
                     onClick={() => setUploadIndividualUnitsLabelsModal(!state.showUploadIndividualUnitsLabelsModal)}>
-                    <i className='las la-toilet-paper label-icon align-middle fs-4 me-2' />
+                    <i className='las la-toilet-paper label-icon tw:align-middle tw:text-[19.5px] tw:me-2' />
                     Upload Labels
                   </Button>
                 )}

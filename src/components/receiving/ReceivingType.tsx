@@ -209,7 +209,7 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                         Service
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill tw:ms-1 fs-6 tw:text-[var(--bs-secondary-color)]' id={`tooltipService${OrderId}`}></i>
+                            <i className='ri-information-fill tw:ms-1 tw:text-[13px] tw:text-[var(--bs-secondary-color)]' id={`tooltipService${OrderId}`}></i>
                             <TooltipComponent target={`tooltipService${OrderId}`} text={serviceFee} />
                           </>
                         )}
@@ -221,7 +221,7 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                         Pallets
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill tw:ms-1 fs-6 tw:text-[var(--bs-secondary-color)]' id={`tooltipPallet${OrderId}`}></i>
+                            <i className='ri-information-fill tw:ms-1 tw:text-[13px] tw:text-[var(--bs-secondary-color)]' id={`tooltipPallet${OrderId}`}></i>
                             <TooltipComponent
                               target={`tooltipPallet${OrderId}`}
                               text={`${FormatCurrency(state.currentRegion, data.chargesFees.receivingPalletCost!)} per pallet`}
@@ -236,7 +236,7 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                         Wrap Service
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill tw:ms-1 fs-6 tw:text-[var(--bs-secondary-color)]' id={`tooltipWrap${OrderId}`}></i>
+                            <i className='ri-information-fill tw:ms-1 tw:text-[13px] tw:text-[var(--bs-secondary-color)]' id={`tooltipWrap${OrderId}`}></i>
                             <TooltipComponent target={`tooltipWrap${OrderId}`} text={`${FormatCurrency(state.currentRegion, data.chargesFees.receivingWrapService!)} per wrap`} />
                           </>
                         )}
@@ -248,7 +248,7 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                         Man Hour
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill tw:ms-1 fs-6 tw:text-[var(--bs-secondary-color)]' id={`tooltipHour${OrderId}`}></i>
+                            <i className='ri-information-fill tw:ms-1 tw:text-[13px] tw:text-[var(--bs-secondary-color)]' id={`tooltipHour${OrderId}`}></i>
                             <TooltipComponent target={`tooltipHour${OrderId}`} text={`${FormatCurrency(state.currentRegion, data.chargesFees.receivingManHour!)} per hour`} />
                           </>
                         )}
@@ -395,7 +395,7 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                 {!data.isReceivingFromPo && data.orderStatus !== 'received' && (
                   <a href={data.proofOfShipped} target='blank' rel='noopener noreferrer'>
                     <Button color='info'>
-                      <i className='las la-truck label-icon align-middle fs-5 tw:me-2' />
+                      <i className='las la-truck label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
                       Proof Of Received
                     </Button>
                   </a>

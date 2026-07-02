@@ -56,7 +56,7 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
     html += `</tbody>
             </table>
             </div>
-            <h5 class='mt-4'>Item List</h5>
+            <h5 class='mt-6'>Item List</h5>
             <div>`
     {
       individualUnitsPlan.plan.items.map((item) => {

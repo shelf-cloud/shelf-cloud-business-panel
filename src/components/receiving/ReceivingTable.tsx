@@ -36,7 +36,7 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
           <p className='tw:m-0 tw:p-0 tw:font-semibold tw:text-[11.2px]'>{row.orderNumber}</p>
           {row.tag ? (
             <small className='tw:m-0 tw:text-[11.2px] tw:font-light tw:text-[var(--bs-secondary-color)] tw:flex tw:flex-row tw:items-center tw:gap-1' id={`receivingTag-${row.id}`}>
-              <i className='las la-tag label-icon align-middle fs-6' />
+              <i className='las la-tag label-icon tw:align-middle tw:text-[13px]' />
               <span className='tw:text-primary tw:text-[11.2px]'>{row.tag}</span>
             </small>
           ) : null}
@@ -176,18 +176,18 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
               className='tw:inline-flex tw:items-center tw:justify-center tw:rounded tw:bg-[color:var(--vz-light)] tw:m-0 tw:p-0'
               style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }}
               tag='button'>
-              <i className='mdi mdi-dots-vertical align-middle fs-4 tw:m-0 tw:px-1 tw:py-0' style={{ color: '#919FAF' }} />
+              <i className='mdi mdi-dots-vertical tw:align-middle tw:text-[19.5px] tw:m-0 tw:px-1 tw:py-0' style={{ color: '#919FAF' }} />
             </DropdownToggle>
             <DropdownMenu className='dropdown-menu-end tw:text-[11.2px]' container={'body'}>
               <DropdownItem onClick={() => setaddShippingCostModal({ show: true, orderId: row.id, orderNumber: row.orderNumber, shippingCost: row.receivingShippingCost ?? '' })}>
                 <div>
-                  <i className='las la-ship label-icon align-middle tw:me-2 fs-5' />
+                  <i className='las la-ship label-icon tw:align-middle tw:me-2 tw:text-[16.25px]' />
                   <span className='tw:font-normal tw:text-black'>Shipping Cost</span>
                 </div>
               </DropdownItem>
               <DropdownItem onClick={() => setaddTagToOrder({ show: true, orderId: row.id, orderNumber: row.orderNumber, tag: row.tag ?? '' })}>
                 <div>
-                  <i className='las la-tag label-icon align-middle tw:me-2 fs-5' />
+                  <i className='las la-tag label-icon tw:align-middle tw:me-2 tw:text-[16.25px]' />
                   <span className='tw:font-normal tw:text-black'>Add Tag</span>
                 </div>
               </DropdownItem>
@@ -195,7 +195,7 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
               {!row.isReceivingFromPo && row.orderStatus !== 'received' && (
                 <DropdownItem>
                   <a href={row.proofOfShipped || '#'} target='blank' rel='noopener noreferrer' className='tw:!text-black'>
-                    <i className='las la-truck label-icon align-middle fs-5 tw:me-2' />
+                    <i className='las la-truck label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
                     <span className='tw:font-normal tw:text-black'>Proof Of Received</span>
                   </a>
                 </DropdownItem>
@@ -210,7 +210,7 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
                     warehouseId={row.warehouseId}
                     isManualReceiving={!row.isReceivingFromPo}>
                     <DropdownItem>
-                      <i className='las la-toilet-paper label-icon align-middle tw:me-2 fs-5 tw:text-[var(--bs-secondary-color)]' />
+                      <i className='las la-toilet-paper label-icon tw:align-middle tw:me-2 tw:text-[16.25px] tw:text-[var(--bs-secondary-color)]' />
                       <span className='tw:font-normal tw:text-black'>Receiving Labels</span>
                     </DropdownItem>
                   </GenerateReceivingLabels>
@@ -219,13 +219,13 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
               <DropdownItem header>Actions</DropdownItem>
               {row.boxes && (
                 <DropdownItem onClick={() => seteditReceiving({ show: true, order: row })}>
-                  <i className='las la-edit tw:text-primary label-icon align-middle tw:me-2 fs-5' />
+                  <i className='las la-edit tw:text-primary label-icon tw:align-middle tw:me-2 tw:text-[16.25px]' />
                   <span className='tw:font-normal tw:text-black'>Edit Receiving</span>
                 </DropdownItem>
               )}
               {!row.isSCDestination && row.orderStatus !== 'received' && (
                 <DropdownItem onClick={() => setmarkReceivedModal({ show: true, orderId: row.id, orderNumber: row.orderNumber })}>
-                  <i className='las la-check-circle tw:text-success label-icon align-middle tw:me-2 fs-5' />
+                  <i className='las la-check-circle tw:text-success label-icon tw:align-middle tw:me-2 tw:text-[16.25px]' />
                   <span className='tw:font-normal tw:text-black'>Mark as Received</span>
                 </DropdownItem>
               )}
@@ -243,7 +243,7 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
                           orderNumber: row.orderNumber,
                         })
                       }>
-                      <i className='las la-trash-alt tw:text-destructive label-icon align-middle fs-5 tw:me-2' />
+                      <i className='las la-trash-alt tw:text-destructive label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
                       <span className='tw:font-normal tw:text-destructive'>Delete Receiving</span>
                     </DropdownItem>
                   </>

@@ -92,7 +92,7 @@ const ResetPasswordPage = ({}: Props) => {
                   value={validationChangePassword.values.newPassword || ''}
                 />
                 <button className='btn btn-link tw:absolute tw:right-0 tw:top-0 tw:no-underline tw:text-[var(--bs-secondary-color)]' type='button' onClick={() => setShow(!show)}>
-                  <i className='ri-eye-fill align-middle fs-5'></i>
+                  <i className='ri-eye-fill tw:align-middle tw:text-[16.25px]'></i>
                 </button>
               </div>
               {validationChangePassword.touched.newPassword && validationChangePassword.errors.newPassword ? (
@@ -115,7 +115,7 @@ const ResetPasswordPage = ({}: Props) => {
                   value={validationChangePassword.values.confirmPassword || ''}
                 />
                 <button className='btn btn-link tw:absolute tw:right-0 tw:top-0 tw:no-underline tw:text-[var(--bs-secondary-color)]' type='button' onClick={() => setShowConfirm(!showConfirm)}>
-                  <i className='ri-eye-fill align-middle fs-5'></i>
+                  <i className='ri-eye-fill tw:align-middle tw:text-[16.25px]'></i>
                 </button>
               </div>
               {validationChangePassword.touched.confirmPassword && validationChangePassword.errors.confirmPassword ? (

@@ -182,7 +182,7 @@ const CheckNumberDetails = ({ session }: Props) => {
         <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center'>
           <p className='tw:m-0 tw:p-0 tw:font-semibold tw:text-[11.2px]'>{row.invoiceNumber}</p>{' '}
           <i
-            className='ri-file-copy-line fs-6 my-0 mx-1 p-0 text-muted'
+            className='ri-file-copy-line tw:text-[13px] tw:my-0 tw:mx-1 tw:p-0 tw:text-[color:var(--bs-secondary-color)]'
             style={{ cursor: 'pointer' }}
             onClick={() => {
               navigator.clipboard.writeText(row.invoiceNumber)
@@ -212,7 +212,7 @@ const CheckNumberDetails = ({ session }: Props) => {
           <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center'>
             <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)] tw:text-[11.2px]'>{row.poNumber}</p>
             <i
-              className='ri-file-copy-line fs-6 my-0 mx-1 p-0 text-muted'
+              className='ri-file-copy-line tw:text-[13px] tw:my-0 tw:mx-1 tw:p-0 tw:text-[color:var(--bs-secondary-color)]'
               style={{ cursor: 'pointer' }}
               onClick={() => {
                 navigator.clipboard.writeText(row.poNumber)
@@ -378,14 +378,14 @@ const CheckNumberDetails = ({ session }: Props) => {
                       onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
                       onChange={(e) => setSearchValue(e.target.value)}
                     />
-                    <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
+                    <span className='mdi mdi-magnify search-widget-icon tw:text-[19.5px]'></span>
                     <span
                       className='tw:flex tw:items-center tw:justify-center input_background_white'
                       style={{
                         cursor: 'pointer',
                       }}
                       onClick={() => setSearchValue('')}>
-                      <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
+                      <i className='mdi mdi-window-close tw:text-[19.5px] tw:m-0 tw:px-2 tw:py-0 tw:text-[color:var(--bs-secondary-color)]' />
                     </span>
                   </div>
                 </div>

@@ -33,7 +33,7 @@ const CheckSummaryTable = ({ filteredItems, pending, sortBy, setSortBy }: Props)
       name: (
         <span className='tw:font-bold tw:text-[13px] tw:text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'storeId', asc: !sortBy.asc })}>
           Marketplace
-          {sortBy.key === 'storeId' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] text-primary' /> : null}
+          {sortBy.key === 'storeId' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
         </span>
       ),
       selector: (row: CheckSummaryType) => {
@@ -65,7 +65,7 @@ const CheckSummaryTable = ({ filteredItems, pending, sortBy, setSortBy }: Props)
       name: (
         <span className='tw:font-bold tw:text-[13px]' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkNumber', asc: !sortBy.asc })}>
           Check Number{' '}
-          {sortBy.key === 'checkNumber' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] text-primary' /> : null}
+          {sortBy.key === 'checkNumber' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
         </span>
       ),
       selector: (row: CheckSummaryType) => {
@@ -75,7 +75,7 @@ const CheckSummaryTable = ({ filteredItems, pending, sortBy, setSortBy }: Props)
               {row.checkNumber}
             </Link>
             <i
-              className='ri-file-copy-line tw:text-[13px] my-0 mx-1 p-0 text-muted'
+              className='ri-file-copy-line tw:text-[13px] tw:my-0 tw:mx-1 tw:p-0 tw:text-[color:var(--bs-secondary-color)]'
               style={{ cursor: 'pointer' }}
               onClick={() => {
                 navigator.clipboard.writeText(row.checkNumber)
@@ -97,7 +97,7 @@ const CheckSummaryTable = ({ filteredItems, pending, sortBy, setSortBy }: Props)
       name: (
         <span className='tw:font-bold tw:text-[13px]' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkDate', asc: !sortBy.asc })}>
           Check Date{' '}
-          {sortBy.key === 'checkDate' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] text-primary' /> : null}
+          {sortBy.key === 'checkDate' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
         </span>
       ),
       selector: (row: CheckSummaryType) => <span className='tw:text-[11.2px]'>{row.checkDate ? moment.utc(row.checkDate).local().format('D MMM YYYY') : ''}</span>,
@@ -108,7 +108,7 @@ const CheckSummaryTable = ({ filteredItems, pending, sortBy, setSortBy }: Props)
     {
       name: (
         <span className='tw:font-bold tw:text-[13px]' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'pending', asc: !sortBy.asc })}>
-          Total Paid {sortBy.key === 'pending' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] text-primary' /> : null}
+          Total Paid {sortBy.key === 'pending' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
         </span>
       ),
       selector: (row: CheckSummaryType) => {
@@ -122,7 +122,7 @@ const CheckSummaryTable = ({ filteredItems, pending, sortBy, setSortBy }: Props)
       name: (
         <span className='tw:font-bold tw:text-[13px]' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'deductions', asc: !sortBy.asc })}>
           Deductions{' '}
-          {sortBy.key === 'deductions' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] text-primary' /> : null}
+          {sortBy.key === 'deductions' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
         </span>
       ),
       selector: (row: CheckSummaryType) => <span className='tw:text-center tw:text-[11.2px] tw:text-danger'>{FormatCurrency(state.currentRegion, row.deductions)}</span>,

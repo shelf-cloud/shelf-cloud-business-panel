@@ -54,7 +54,7 @@ const MarketplaceManager = ({ session, env }: Props) => {
               <Col lg={12}>
                 <Card>
                   <CardHeader>
-                    <Nav className='nav-tabs-custom tw:rounded card-header-tabs tw:border-b-0' role='tablist'>
+                    <Nav className='nav-tabs-custom tw:rounded-[0.25rem] card-header-tabs tw:border-b-0' role='tablist'>
                       <NavItem style={{ cursor: 'pointer' }}>
                         <NavLink
                           className={activeTab == '1' ? 'tw:text-primary tw:text-[16.25px]' : 'tw:text-[var(--bs-secondary-color)] tw:text-[16.25px]'}

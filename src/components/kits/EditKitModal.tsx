@@ -351,7 +351,7 @@ function EditKitModal({ mutateKits }: Props) {
                   <Row>
                     <h5 className='tw:text-[16.25px] tw:mb-1 tw:font-extrabold'>Kit Children</h5>
                     <Col xl={12} className='tw:p-0 tw:mt-1'>
-                      <table className='table table-hover align-middle table-nowrap'>
+                      <table className='table table-hover tw:align-middle table-nowrap'>
                         <thead>
                           <tr>
                             <th scope='col' className='tw:py-1 tw:m-0 tw:font-semibold tw:text-center tw:bg-primary tw:text-white'></th>
@@ -429,7 +429,7 @@ function EditKitModal({ mutateKits }: Props) {
                                               hasError={meta.error ? true : false}
                                               isClearable
                                             />
-                                            {meta.error ? <ErrorInputLabel error={meta.error} marginTop='mt-0' /> : null}
+                                            {meta.error ? <ErrorInputLabel error={meta.error} marginTop='tw:mt-0' /> : null}
                                           </FormGroup>
                                         )}
                                       </Field>

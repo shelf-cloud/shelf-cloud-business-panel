@@ -290,10 +290,10 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                     {({ getRootProps }) => (
                       <div className='dropzone dz-clickable tw:cursor-pointer'>
                         <div className='dz-message needsclick' {...getRootProps()}>
-                          <div className='tw:mb-4'>
+                          <div className='mb-3'>
                             <i className='display-5 text-muted ri-upload-cloud-2-fill' />
                           </div>
-                          <h4 className='tw:text-[13px] tw:px-4'>Upload Purchase Order Info. Drop Only CSV files here or click to upload.</h4>
+                          <h4 className='fs-6 px-3'>Upload Purchase Order Info. Drop Only CSV files here or click to upload.</h4>
                         </div>
                       </div>
                     )}

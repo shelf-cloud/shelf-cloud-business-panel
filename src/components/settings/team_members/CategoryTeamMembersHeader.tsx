@@ -32,7 +32,7 @@ const CategoryTeamMembersHeader = ({ title, icon, checked, manageUser, setManage
   return (
     <div className='tw:bg-light tw:flex tw:flex-row tw:justify-start tw:items-center tw:py-2'>
       <>
-        <i className={`${icon} fs-5 m-0 p-0 me-2`} />
+        <i className={`${icon} tw:text-[16.25px] tw:m-0 tw:p-0 tw:me-2`} />
         <span className='tw:font-semibold tw:text-[16.25px] tw:capitalize'>{title}</span>
       </>
       <div className='form-check form-switch form-check-right form-check-success'>

@@ -108,14 +108,14 @@ const TeamMembers = ({}: Props) => {
                         onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
                         onChange={(e) => setSearchValue(e.target.value)}
                       />
-                      <span className='mdi mdi-magnify search-widget-icon fs-5'></span>
+                      <span className='mdi mdi-magnify search-widget-icon tw:text-[16.25px]'></span>
                       <span
                         className='tw:flex tw:items-center tw:justify-center tw:bg-white'
                         style={{
                           cursor: 'pointer',
                         }}
                         onClick={() => setSearchValue('')}>
-                        <i className='mdi mdi-window-close fs-5 m-0 px-2 py-0 text-muted' />
+                        <i className='mdi mdi-window-close tw:text-[16.25px] tw:m-0 tw:px-2 tw:py-0 tw:text-[color:var(--bs-secondary-color)]' />
                       </span>
                     </div>
                   </div>

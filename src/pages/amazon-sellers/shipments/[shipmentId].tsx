@@ -162,7 +162,7 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                       <Link href={'/amazon-sellers/shipments'}>
                         <Button outline>
                           <span className='icon-on'>
-                            <i className='ri-arrow-left-line align-bottom me-1' />
+                            <i className='ri-arrow-left-line tw:align-bottom tw:me-1' />
                             FBA Shipments
                           </span>
                         </Button>
@@ -177,7 +177,7 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                             <span className='tw:text-[var(--bs-secondary-color)]'>Shipment ID: </span>
                             {shipmentDetails.shipment.shipmentConfirmationId}
                             <i
-                              className='ri-file-copy-line fs-6 my-0 mx-1 p-0 text-muted'
+                              className='ri-file-copy-line tw:text-[13px] tw:my-0 tw:mx-1 tw:p-0 tw:text-[color:var(--bs-secondary-color)]'
                               style={{ cursor: 'pointer' }}
                               onClick={() => {
                                 navigator.clipboard.writeText(`${shipmentDetails.shipment.shipmentConfirmationId}`)
@@ -238,7 +238,7 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                     </Row>
                     <Row>
                       <Col xs='12' className='tw:gap-2 tw:flex tw:flex-col'>
-                        <Nav className='tw:pt-0 tw:rounded card-header-tabs tw:border-b-0' role='tablist'>
+                        <Nav className='tw:pt-0 tw:rounded-[0.25rem] card-header-tabs tw:border-b-0' role='tablist'>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink to='#' className={'tw:text-[16.25px] tw:font-semibold ' + (activeTab == '1' ? 'tw:text-primary' : 'tw:text-[var(--bs-secondary-color)]')} onClick={() => tabChange('1')} type='button'>
                               <>

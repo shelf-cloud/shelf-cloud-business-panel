@@ -523,11 +523,11 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
               {({ getRootProps, getInputProps }) => (
                 <div className='dropzone dz-clickable tw:cursor-pointer' {...getRootProps()}>
                   <input {...getInputProps()} />
-                  <div className='tw:px-4 dz-message needsclick'>
-                    <div className='tw:mb-4'>
+                  <div className='px-3 dz-message needsclick'>
+                    <div className='mb-3'>
                       <i className='display-4 text-muted ri-upload-cloud-2-fill' />
                     </div>
-                    <p className='tw:text-[13px]'>Upload Products Details. Drop Only CSV files here or click to upload.</p>
+                    <p className='fs-6'>Upload Products Details. Drop Only CSV files here or click to upload.</p>
                   </div>
                 </div>
               )}

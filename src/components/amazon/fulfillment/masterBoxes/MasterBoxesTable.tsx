@@ -176,7 +176,7 @@ const MasterBoxesTable = ({
               <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center'>
                 <p className='tw:m-0 tw:p-0 tw:text-[11.2px]'>{`${row.msku}`}</p>
                 <i
-                  className='ri-file-copy-line fs-6 my-0 mx-1 p-0 text-muted'
+                  className='ri-file-copy-line tw:text-[13px] tw:my-0 tw:mx-1 tw:p-0 tw:text-[color:var(--bs-secondary-color)]'
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
                     navigator.clipboard.writeText(row.msku)
@@ -194,7 +194,7 @@ const MasterBoxesTable = ({
                   {`ASIN: ${row.asin}`}
                 </a>
                 <i
-                  className='ri-file-copy-line fs-6 my-0 mx-1 p-0 text-muted'
+                  className='ri-file-copy-line tw:text-[13px] tw:my-0 tw:mx-1 tw:p-0 tw:text-[color:var(--bs-secondary-color)]'
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
                     navigator.clipboard.writeText(row.asin)
@@ -223,7 +223,7 @@ const MasterBoxesTable = ({
               <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center'>
                 <p className='tw:m-0 tw:p-0 tw:text-[11.2px]'>{`${row.msku}`}</p>
                 <i
-                  className='ri-file-copy-line fs-6 my-0 mx-1 p-0 text-muted'
+                  className='ri-file-copy-line tw:text-[13px] tw:my-0 tw:mx-1 tw:p-0 tw:text-[color:var(--bs-secondary-color)]'
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
                     navigator.clipboard.writeText(row.msku)
@@ -241,7 +241,7 @@ const MasterBoxesTable = ({
                   {`ASIN: ${row.asin}`}
                 </a>
                 <i
-                  className='ri-file-copy-line fs-6 my-0 mx-1 p-0 text-muted'
+                  className='ri-file-copy-line tw:text-[13px] tw:my-0 tw:mx-1 tw:p-0 tw:text-[color:var(--bs-secondary-color)]'
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
                     navigator.clipboard.writeText(row.asin)
@@ -270,9 +270,9 @@ const MasterBoxesTable = ({
         return (
           <div className='tw:text-center'>
             <p className='tw:m-0 tw:p-0 tw:text-[11.2px]'>{row.shelfcloud_sku}</p>
-            {/* <p className='tw:m-0 tw:p-0 d-inline-flex tw:flex-row tw:justify-center tw:items-center tw:gap-1'>
+            {/* <p className='m-0 p-0 d-inline-flex flex-row justify-content-center align-items-center gap-1'>
               <span
-                className='tw:text-primary tw:text-[11.2px]'
+                className='text-primary fs-7'
                 style={{ cursor: 'pointer' }}
                 onClick={() =>
                   setdimensionsModal({
@@ -295,12 +295,12 @@ const MasterBoxesTable = ({
                   <UncontrolledTooltip
                     placement='right'
                     target={`tooltipFBABoxesErrors${row.inventoryId}`}
-                    popperClassName='tw:bg-white shadow tw:p-4 tw:rounded'
+                    popperClassName='bg-white shadow p-3 tw:rounded'
                     style={{ display: 'inline-table' }}
-                    innerClassName='text-black tw:bg-white tw:p-0 tw:relative'>
-                    <p className='tw:text-[13px] tw:text-primary tw:m-0 tw:p-0 tw:font-bold tw:text-left tw:mb-2'>SKU Errors</p>
-                    <table className='table table-striped table-bordered table-sm table-responsive tw:px-2 tw:m-0'>
-                      <tbody className='tw:text-[11.2px] tw:text-left'>
+                    innerClassName='text-black bg-white p-0 position-relative'>
+                    <p className='fs-6 text-primary m-0 p-0 fw-bold text-start mb-2'>SKU Errors</p>
+                    <table className='table table-striped table-bordered table-sm table-responsive px-2 m-0'>
+                      <tbody className='fs-7 text-start'>
                         {row.maxOrderQty <= 0 ? (
                           <tr>
                             <td>{`There's not enough stock to fill a master box`}</td>
@@ -347,15 +347,15 @@ const MasterBoxesTable = ({
                                 if (scboxVolume < amzBoxVolume - amzBoxTenPercent) {
                                   return (
                                     <>
-                                      <p className='tw:m-0 tw:p-0'>{`ShelfCloud Box dimensions do not meet the expected minimum volume ${FormatIntPercentage(
+                                      <p className='m-0 p-0'>{`ShelfCloud Box dimensions do not meet the expected minimum volume ${FormatIntPercentage(
                                         state.currentRegion,
                                         amzBoxVolume
                                       )} - 10%:`}</p>
-                                      <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>
+                                      <p className='m-0 p-0 tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>
                                         Amazon Box Volume:{' '}
                                         <span className='text-black tw:font-semibold'>{FormatIntPercentage(state.currentRegion, amzBoxVolume - amzBoxTenPercent)} inch3</span>
                                       </p>
-                                      <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>
+                                      <p className='m-0 p-0 tw:text-[var(--bs-secondary-color)] tw:text-nowrap'>
                                         ShelfCloud Box Volume: <span className='text-black tw:font-semibold'>{FormatIntPercentage(state.currentRegion, scboxVolume)} inch3</span>
                                       </p>
                                     </>
@@ -422,7 +422,7 @@ const MasterBoxesTable = ({
                   outline
                   className='tw:p-0 tw:m-0 btn btn-sm btn-icon btn-ghost-info'
                   onClick={() => setinboundFBAHistoryModal({ show: true, sku: row.shelfcloud_sku, msku: row.msku, shipments: row.fbaShipments })}>
-                  <i className='ri-information-fill p-0 m-0 fs-6 text-info' />
+                  <i className='ri-information-fill tw:p-0 tw:m-0 tw:text-[13px] tw:text-info' />
                 </Button>
               )}
             </div>

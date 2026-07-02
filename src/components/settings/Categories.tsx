@@ -141,8 +141,8 @@ const Categories = ({}: Props) => {
       selector: (row: Category) => {
         return (
           <div className='tw:flex tw:flex-row tw:flex-nowrap tw:justify-center tw:items-center tw:gap-6'>
-            <i className='ri-pencil-fill fs-3 text-secondary' style={{ cursor: 'pointer' }} onClick={() => handleShowEditFields(row)} />
-            <i className='align-middle text-danger fs-2 las la-trash-alt' style={{ cursor: 'pointer' }} onClick={() => handleDeleteCategory(row.categoryId)} />
+            <i className='ri-pencil-fill tw:text-[22.75px] tw:text-secondary' style={{ cursor: 'pointer' }} onClick={() => handleShowEditFields(row)} />
+            <i className='tw:align-middle tw:text-destructive fs-2 las la-trash-alt' style={{ cursor: 'pointer' }} onClick={() => handleDeleteCategory(row.categoryId)} />
           </div>
         )
       },

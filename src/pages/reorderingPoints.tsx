@@ -324,7 +324,7 @@ const ReorderingPoints = ({ session }: Props) => {
                       />
                       {state.user.us.canEditPrompt ? (
                         <ShadcnButton onClick={() => setPromptModal({ show: true })} className='tw:flex tw:flex-row tw:justify-start tw:items-center tw:gap-1'>
-                          <i className='las la-brain fs-4 m-0 p-0' />
+                          <i className='las la-brain tw:text-[19.5px] tw:m-0 tw:p-0' />
                           Prompt
                         </ShadcnButton>
                       ) : null}
@@ -345,11 +345,11 @@ const ReorderingPoints = ({ session }: Props) => {
                             Set Product Trend Tag
                           </DropdownMenuItem> */}
                           <DropdownMenuItem onClick={() => changeSelectedProductsState(false)}>
-                            <i className='mdi mdi-eye fs-5 text-primary' />
+                            <i className='mdi mdi-eye tw:text-[16.25px] tw:text-primary' />
                             Set Visible
                           </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => changeSelectedProductsState(true)}>
-                            <i className='mdi mdi-eye-off fs-5 text-danger' />
+                            <i className='mdi mdi-eye-off tw:text-[16.25px] tw:text-destructive' />
                             Hide Selected
                           </DropdownMenuItem>
                         </DropdownMenuGroup>

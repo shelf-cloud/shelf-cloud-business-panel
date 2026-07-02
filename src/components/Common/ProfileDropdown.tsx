@@ -80,25 +80,25 @@ const ProfileDropdown = () => {
             <h6 className='dropdown-header tw:capitalize'>Welcome {session?.user?.profileName}</h6>
             {session?.user?.role === 'admin' && (
               <DropdownItem onClick={() => router.push('/Profile')}>
-                <i className='mdi mdi-account-circle text-muted fs-16 align-middle me-1'></i>
+                <i className='mdi mdi-account-circle tw:text-[color:var(--bs-secondary-color)] fs-16 tw:align-middle tw:me-1'></i>
                 <span className='tw:align-middle'>Profile</span>
               </DropdownItem>
             )}
             {session?.user?.role === 'admin' && (
               <DropdownItem onClick={() => router.push('/settings/teamMembers')}>
-                <i className='ri-team-fill text-muted fs-16 align-middle me-1'></i>
+                <i className='ri-team-fill tw:text-[color:var(--bs-secondary-color)] fs-16 tw:align-middle tw:me-1'></i>
                 <span className='tw:align-middle'>Team Members</span>
               </DropdownItem>
             )}
             {session?.user?.role === 'admin' && (
               <DropdownItem onClick={() => router.push('/Settings')}>
-                <i className='mdi mdi-tools text-muted fs-16 align-middle me-1'></i>
+                <i className='mdi mdi-tools tw:text-[color:var(--bs-secondary-color)] fs-16 tw:align-middle tw:me-1'></i>
                 <span className='tw:align-middle'>Account Settings</span>
               </DropdownItem>
             )}
             {session?.user?.role === 'admin' && (
               <DropdownItem onClick={() => router.push('/marketplaceManager')}>
-                <i className='mdi mdi-store text-muted fs-16 align-middle me-1'></i>
+                <i className='mdi mdi-store tw:text-[color:var(--bs-secondary-color)] fs-16 tw:align-middle tw:me-1'></i>
                 <span className='tw:align-middle'>Marketplace Manager</span>
               </DropdownItem>
             )}
@@ -136,11 +136,11 @@ const ProfileDropdown = () => {
             )}
             <div className='dropdown-divider'></div>
             <DropdownItem onClick={() => router.push('/ContactUs')}>
-              <i className='mdi mdi-email-fast text-muted fs-16 align-middle me-1'></i>
+              <i className='mdi mdi-email-fast tw:text-[color:var(--bs-secondary-color)] fs-16 tw:align-middle tw:me-1'></i>
               <span className='tw:align-middle'>Contact Us</span>
             </DropdownItem>
             <DropdownItem onClick={() => signOut()}>
-              <i className='mdi mdi-logout text-muted fs-16 align-middle me-1'></i>{' '}
+              <i className='mdi mdi-logout tw:text-[color:var(--bs-secondary-color)] fs-16 tw:align-middle tw:me-1'></i>{' '}
               <span className='tw:align-middle' data-key='t-logout'>
                 Logout
               </span>

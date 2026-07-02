@@ -127,7 +127,7 @@ const Kit_Page_Layout = ({}: Props) => {
                           categories={productDetails?.categories ?? []}
                           suppliers={productDetails?.suppliers ?? []}
                         />
-                        <Nav className='tw:pt-2 nav-tabs-custom tw:rounded card-header-tabs tw:border-b-0' role='tablist'>
+                        <Nav className='tw:pt-2 nav-tabs-custom tw:rounded-[0.25rem] card-header-tabs tw:border-b-0' role='tablist'>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'

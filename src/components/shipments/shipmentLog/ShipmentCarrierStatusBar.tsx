@@ -59,7 +59,7 @@ const ShipmentCarrierStatusBar = ({ carrier, currentStatus }: Props) => {
             {UPS_STATUS_BAR.map((status, index) => (
               <div
                 key={index}
-                className={'tw:text-center tw:py-2' + (index <= statusIndex ? ' bg-primary bg-gradient' : '')}
+                className={'tw:text-center tw:py-2' + (index <= statusIndex ? ' tw:bg-primary bg-gradient' : '')}
                 style={{ borderRadius: checkBorderRadius(index, statusIndex) }}>
                 <p className={'tw:m-0 tw:p-0 tw:text-[11.2px]' + (index <= statusIndex ? ' tw:font-semibold tw:text-white' : ' tw:font-semibold tw:text-[var(--bs-secondary-color)]')}>{status}</p>
               </div>
@@ -77,7 +77,7 @@ const ShipmentCarrierStatusBar = ({ carrier, currentStatus }: Props) => {
             {FEDEX_STATUS_BAR.map((status, index) => (
               <div
                 key={index}
-                className={'tw:text-center tw:py-2' + (index <= statusIndex ? ' bg-primary bg-gradient' : '')}
+                className={'tw:text-center tw:py-2' + (index <= statusIndex ? ' tw:bg-primary bg-gradient' : '')}
                 style={{ borderRadius: checkBorderRadius(index, statusIndex) }}>
                 <p className={'tw:m-0 tw:p-0 tw:text-[11.2px]' + (index <= statusIndex ? ' tw:font-semibold tw:text-white' : ' tw:font-semibold tw:text-[var(--bs-secondary-color)]')}>{status}</p>
               </div>
@@ -95,7 +95,7 @@ const ShipmentCarrierStatusBar = ({ carrier, currentStatus }: Props) => {
             {UPS_STATUS_BAR.map((status, index) => (
               <div
                 key={index}
-                className={'tw:text-center tw:py-2' + (index <= statusIndex ? ' bg-primary bg-gradient' : '')}
+                className={'tw:text-center tw:py-2' + (index <= statusIndex ? ' tw:bg-primary bg-gradient' : '')}
                 style={{ borderRadius: checkBorderRadius(index, statusIndex) }}>
                 <p className={'tw:m-0 tw:p-0 tw:text-[11.2px]' + (index <= statusIndex ? ' tw:font-semibold tw:text-white' : ' tw:font-semibold tw:text-[var(--bs-secondary-color)]')}>{status}</p>
               </div>

@@ -193,7 +193,7 @@ const UploadProductsModal = ({}: Props) => {
               {({ getRootProps }) => (
                 <div className='dropzone dz-clickable tw:cursor-pointer' {...getRootProps()}>
                   <div className='dz-message needsclick' {...getRootProps()}>
-                    <div className='tw:mb-4'>
+                    <div className='mb-3'>
                       <i className='display-4 text-muted ri-upload-cloud-2-fill' />
                     </div>
                     <h4>Upload Products Info. Drop Only CSV files here or click to upload.</h4>

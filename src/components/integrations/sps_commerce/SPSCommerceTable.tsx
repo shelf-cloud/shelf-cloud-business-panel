@@ -79,7 +79,7 @@ const SPSCommerceTable = ({ tableData, pending, setSelectedRows, toggledClearRow
               <CopyTextToClipboard text={row.sku} label='SKU' />{' '}
             </div>
             <span className='tw:m-0 tw:p-0 text-black tw:text-[11.2px] tw:text-wrap'>{row.title}</span>
-            {row.note && <i className='ri-information-fill fs-5 text-warning' id={`tooltip${row.inventoryId}`} />}
+            {row.note && <i className='ri-information-fill tw:text-[16.25px] tw:text-warning' id={`tooltip${row.inventoryId}`} />}
             {row.note && (
               <SCTooltip target={`tooltip${row.inventoryId}`} placement='right' key={`tooltip${row.inventoryId}`}>
                 <p className='tw:text-[11.2px] tw:text-primary tw:m-0 tw:p-0'>{row.note}</p>

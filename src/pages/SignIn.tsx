@@ -107,7 +107,7 @@ function SignIn({}: Props) {
                       type='button'
                       id='password-addon'
                       onClick={() => setShow(!show)}>
-                      <i className='ri-eye-fill align-middle fs-5'></i>
+                      <i className='ri-eye-fill tw:align-middle tw:text-[16.25px]'></i>
                     </button>
                   </div>
                 </div>

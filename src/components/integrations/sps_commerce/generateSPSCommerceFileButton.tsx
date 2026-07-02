@@ -76,7 +76,7 @@ const GenerateSPSCommerceFileButton = ({ integrationInfo, items, warehouseId, di
 
   return (
     <Button color={color} size='sm' className='tw:text-nowrap' onClick={generateFile} disabled={disabled}>
-      <i className='mdi mdi-arrow-down-bold align-middle fs-5 me-2' />
+      <i className='mdi mdi-arrow-down-bold tw:align-middle tw:text-[16.25px] tw:me-2' />
       Generate File
     </Button>
   )

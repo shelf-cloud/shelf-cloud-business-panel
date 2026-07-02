@@ -96,7 +96,7 @@ const AmazonAdsAuthRedirect = ({}: Props) => {
                       }}
                     />
                   </div>
-                  <i className='las la-sync-alt text-muted fs-1'></i>
+                  <i className='las la-sync-alt tw:text-[color:var(--bs-secondary-color)] tw:text-[calc(1.328125rem+0.9375vw)]'></i>
                   <div>
                     <img
                       loading='lazy'

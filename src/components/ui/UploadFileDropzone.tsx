@@ -23,7 +23,7 @@ function UploadFileDropzone({ accptedFiles, handleAcceptedFiles, description }: 
           <input {...getInputProps()} />
           <div className='tw:px-4 dz-message needsclick'>
             <div className='tw:mb-2'>
-              <i className='display-6 text-primary ri-upload-2-line' />
+              <i className='display-6 tw:text-primary ri-upload-2-line' />
             </div>
             <p className='tw:m-0 tw:mb-2 tw:text-[11.2px]'>Upload 1 file</p>
             <p className='tw:w-3/4 tw:mx-auto tw:text-[11.2px]'>{description}</p>

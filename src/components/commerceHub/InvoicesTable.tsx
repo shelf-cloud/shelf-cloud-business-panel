@@ -48,7 +48,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       name: (
         <span className='tw:font-bold tw:text-[13px] tw:text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'storeId', asc: !sortBy.asc })}>
           Store
-          {sortBy.key === 'storeId' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+          {sortBy.key === 'storeId' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
         </span>
       ),
       selector: (row: Invoice) => {
@@ -83,7 +83,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
         <div className='tw:flex tw:flex-nowrap tw:justify-start tw:items-center'>
           <p className='tw:m-0 tw:p-0 tw:font-semibold tw:text-[11.2px]'>{row.invoiceNumber}</p>{' '}
           <i
-            className='ri-file-copy-line fs-6 my-0 mx-1 p-0 text-muted'
+            className='ri-file-copy-line tw:text-[13px] tw:my-0 tw:mx-1 tw:p-0 tw:text-[color:var(--bs-secondary-color)]'
             style={{ cursor: 'pointer' }}
             onClick={() => {
               navigator.clipboard.writeText(row.invoiceNumber)
@@ -119,7 +119,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
         <div className='tw:flex tw:flex-wrap tw:justify-start tw:items-center'>
           <p className='tw:m-0 tw:p-0 tw:text-[var(--bs-secondary-color)] tw:text-[11.2px]'>{row.poNumber}</p>
           <i
-            className='ri-file-copy-line fs-6 my-0 mx-1 p-0 text-muted'
+            className='ri-file-copy-line tw:text-[13px] tw:my-0 tw:mx-1 tw:p-0 tw:text-[color:var(--bs-secondary-color)]'
             style={{ cursor: 'pointer' }}
             onClick={() => {
               navigator.clipboard.writeText(row.poNumber)
@@ -138,7 +138,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       name: (
         <span className='tw:font-bold tw:text-[13px] tw:text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'closedDate', asc: !sortBy.asc })}>
           Closed Date{' '}
-          {sortBy.key === 'closedDate' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+          {sortBy.key === 'closedDate' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
         </span>
       ),
       selector: (row: Invoice) => <span className='tw:text-[11.2px]'>{moment.utc(row.closedDate).local().format('D MMM YYYY')}</span>,
@@ -150,7 +150,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       name: (
         <span className='tw:font-bold tw:text-[13px] tw:text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'orderTotal', asc: !sortBy.asc })}>
           Order Total{' '}
-          {sortBy.key === 'orderTotal' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+          {sortBy.key === 'orderTotal' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
         </span>
       ),
       selector: (row: Invoice) => <span className='tw:text-[11.2px]'>{FormatCurrency(state.currentRegion, row.orderTotal)}</span>,
@@ -161,7 +161,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
     {
       name: (
         <span className='tw:font-bold tw:text-[13px] tw:text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'dueDate', asc: !sortBy.asc })}>
-          Due Date {sortBy.key === 'dueDate' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+          Due Date {sortBy.key === 'dueDate' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
         </span>
       ),
       selector: (row: Invoice) => (
@@ -177,7 +177,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       name: (
         <span className='tw:font-bold tw:text-[13px] tw:text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkDate', asc: !sortBy.asc })}>
           Check Date{' '}
-          {sortBy.key === 'checkDate' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+          {sortBy.key === 'checkDate' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
         </span>
       ),
       selector: (row: Invoice) => <span className='tw:text-[11.2px]'>{row.checkDate ? moment.utc(row.checkDate).local().format('D MMM YYYY') : ''}</span>,
@@ -189,7 +189,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       name: (
         <span className='tw:font-bold tw:text-[13px] tw:text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkNumber', asc: !sortBy.asc })}>
           Check Number{' '}
-          {sortBy.key === 'checkNumber' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+          {sortBy.key === 'checkNumber' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
         </span>
       ),
       selector: (row: Invoice) => (
@@ -225,7 +225,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       name: (
         <span className='tw:font-bold tw:text-[13px] tw:text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'checkTotal', asc: !sortBy.asc })}>
           Total Paid
-          {sortBy.key === 'checkTotal' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+          {sortBy.key === 'checkTotal' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
         </span>
       ),
       selector: (row: Invoice) => {
@@ -239,7 +239,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
     {
       name: (
         <span className='tw:font-bold tw:text-[13px] tw:text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'pending', asc: !sortBy.asc })}>
-          Pending {sortBy.key === 'pending' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+          Pending {sortBy.key === 'pending' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
         </span>
       ),
       selector: (row: Invoice) => {
@@ -255,7 +255,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       name: (
         <span className='tw:font-bold tw:text-[13px] tw:text-nowrap' style={{ cursor: 'pointer' }} onClick={() => setSortBy({ key: 'commerceHubStatus', asc: !sortBy.asc })}>
           Status{' '}
-          {sortBy.key === 'commerceHubStatus' ? sortBy.asc ? <i className='ri-arrow-up-fill fs-7 text-primary' /> : <i className='ri-arrow-down-fill fs-7 text-primary' /> : null}
+          {sortBy.key === 'commerceHubStatus' ? sortBy.asc ? <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : null}
         </span>
       ),
       selector: (row: Invoice) => {
@@ -291,7 +291,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
           <div className='tw:w-full tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-1'>
             {row.commerceHubComment && (
               <>
-                <i className='ri-information-fill fs-5 text-primary' id={`tooltipCommerceHubComment${row.orderId}`} />
+                <i className='ri-information-fill tw:text-[16.25px] tw:text-primary' id={`tooltipCommerceHubComment${row.orderId}`} />
                 <UncontrolledTooltip
                   placement='left'
                   target={`tooltipCommerceHubComment${row.orderId}`}
@@ -303,7 +303,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
             )}
             <Button id='Popover1' type='button' color='ghost' size='sm'>
               <i
-                className='las la-edit fs-5 text-muted m-0 p-0 '
+                className='las la-edit tw:text-[16.25px] tw:text-[color:var(--bs-secondary-color)] tw:m-0 tw:p-0 '
                 style={{ cursor: 'pointer' }}
                 onClick={() => setEditCommentModal({ show: true, orderId: row.orderId, comment: row.commerceHubComment ?? '' })}
               />

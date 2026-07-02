@@ -91,7 +91,7 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
                       shipmentName: row.shipment.name,
                     })
                   }}
-                  className='ri-pencil-fill fs-6 m-0 p-0 text-primary'
+                  className='ri-pencil-fill tw:text-[13px] tw:m-0 tw:p-0 tw:text-primary'
                   style={{ cursor: 'pointer' }}
                 />
               )}
@@ -270,12 +270,12 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
           return (
             <UncontrolledDropdown className='dropdown tw:inline-block' direction='start'>
               <DropdownToggle className='btn btn-light btn-sm tw:m-0 tw:p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
-                <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-1 py-0' style={{ color: '#919FAF' }} />
+                <i className='mdi mdi-dots-vertical tw:align-middle tw:text-[19.5px] tw:m-0 tw:px-1 tw:py-0' style={{ color: '#919FAF' }} />
               </DropdownToggle>
               <DropdownMenu className='dropdown-menu-end' container={'body'}>
                 <DropdownItem onClick={() => router.push(`/amazon-sellers/shipments/${row.shipmentId}`)}>
                   <div>
-                    <i className='ri-file-list-line label-icon align-middle me-2 fs-5 text-muted' />
+                    <i className='ri-file-list-line label-icon tw:align-middle tw:me-2 tw:text-[16.25px] tw:text-[color:var(--bs-secondary-color)]' />
                     <span className='tw:text-[13px] tw:font-normal tw:text-black'>View Shipment</span>
                   </div>
                 </DropdownItem>
@@ -284,7 +284,7 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
                 {row.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber && (
                   <DropdownItem onClick={() => getFBAShipmentProofOfShipped(row.shipment.shipmentConfirmationId)}>
                     <div>
-                      <i className='las la-truck label-icon align-middle fs-5 me-2' />
+                      <i className='las la-truck label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
                       <span className='tw:text-[11.2px] tw:font-normal tw:text-black'>Proof Of Shipped</span>
                     </div>
                   </DropdownItem>
@@ -292,13 +292,13 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
                 <DropdownItem header>Actions</DropdownItem>
                 {row.status !== 'REVIEWING' && (
                   <DropdownItem onClick={() => setFBAShipmentReviewingStatus(row.shipmentId, !row.isComplete ? 1 : 0, 'IN_DISPUTE')}>
-                    <i className='las la-clipboard-check label-icon align-middle fs-5 me-2' />
+                    <i className='las la-clipboard-check label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
                     <span className='tw:text-[13px] tw:font-normal tw:text-black'>Mark In Dispute</span>
                   </DropdownItem>
                 )}
                 <DropdownItem
                   onClick={() => setFBAShipmentCompleteStatus(row.shipmentId, !row.isComplete ? 1 : 0, !row.isComplete ? 1 : 0, !row.isComplete ? 'MANUALLY_CLOSED' : 'PENDING')}>
-                  <i className='las la-clipboard-check label-icon align-middle fs-5 me-2' />
+                  <i className='las la-clipboard-check label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
                   <span className='tw:text-[13px] tw:font-normal tw:text-black'>{!row.isComplete ? 'Mark Closed' : 'Mark Open'}</span>
                 </DropdownItem>
               </DropdownMenu>

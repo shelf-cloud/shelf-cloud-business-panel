@@ -239,7 +239,7 @@ const ShipmentType = ({ data, showActions, mutateShipments }: Props) => {
                         Pick Pack Charge
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill ms-1 fs-6 text-muted' id={`tooltip${OrderId}`}></i>
+                            <i className='ri-information-fill tw:ms-1 tw:text-[13px] tw:text-[color:var(--bs-secondary-color)]' id={`tooltip${OrderId}`}></i>
                             <TooltipComponent
                               target={`tooltip${OrderId}`}
                               text={`${FormatCurrency(state.currentRegion, data.chargesFees.orderCost!)} first item + ${FormatCurrency(
@@ -290,7 +290,7 @@ const ShipmentType = ({ data, showActions, mutateShipments }: Props) => {
                       data.hasReturn == false &&
                       data.shipCountry == 'US' && (
                         <Button color='warning' className='btn-label btn-sm tw:text-[11.2px] tw:whitespace-nowrap' onClick={() => setModalCreateReturnInfo(data.businessId, data.id)}>
-                          <i className='las la-reply label-icon align-middle fs-4 me-2' />
+                          <i className='las la-reply label-icon tw:align-middle tw:text-[19.5px] tw:me-2' />
                           Create Return
                         </Button>
                       )
@@ -298,7 +298,7 @@ const ShipmentType = ({ data, showActions, mutateShipments }: Props) => {
                       data.hasReturn == false &&
                       data.shipCountry == 'ES' && (
                         <Button color='warning' className='btn-label btn-sm tw:text-[11.2px] tw:whitespace-nowrap' onClick={() => setModalCreateReturnInfo(data.businessId, data.id)}>
-                          <i className='las la-reply label-icon align-middle fs-4 me-2' />
+                          <i className='las la-reply label-icon tw:align-middle tw:text-[19.5px] tw:me-2' />
                           Create Return
                         </Button>
                       )}
@@ -314,7 +314,7 @@ const ShipmentType = ({ data, showActions, mutateShipments }: Props) => {
                           goFlowOrderId: data.goFlowOrderId,
                         })
                       }>
-                      <i className='las la-trash-alt label-icon align-middle fs-4 me-2' />
+                      <i className='las la-trash-alt label-icon tw:align-middle tw:text-[19.5px] tw:me-2' />
                       Cancel Order
                     </Button>
                   )}

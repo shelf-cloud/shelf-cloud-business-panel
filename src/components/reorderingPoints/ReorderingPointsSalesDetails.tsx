@@ -65,7 +65,7 @@ const ReorderingPointsSalesDetails = ({ data, expandedRowProps }: Props) => {
                     <td className='tw:font-bold tw:text-right'>Total</td>
                     <td className='tw:text-right'>{FormatCurrency(state.currentRegion, productSales[data.sku].grossRevenue)}</td>
                     <td className='tw:text-right'>
-                      <i className='fs-6 me-1 text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={`salesTotalMsj${CleanSpecialCharacters(data.sku)}`} />
+                      <i className='tw:text-[13px] tw:me-1 tw:text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={`salesTotalMsj${CleanSpecialCharacters(data.sku)}`} />
                       <UncontrolledTooltip
                         placement='top'
                         target={`salesTotalMsj${CleanSpecialCharacters(data.sku)}`}

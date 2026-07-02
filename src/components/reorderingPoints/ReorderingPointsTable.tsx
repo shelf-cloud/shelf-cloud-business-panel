@@ -115,9 +115,9 @@ const ReorderingPointsTable = ({
                   Order Qty{' '}
                   {setField === 'order' ? (
                     sortingDirectionAsc ? (
-                      <i className='ri-arrow-down-fill fs-7 text-primary' />
+                      <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' />
                     ) : (
-                      <i className='ri-arrow-up-fill fs-7 text-primary' />
+                      <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' />
                     )
                   ) : null}
                 </span>
@@ -128,9 +128,9 @@ const ReorderingPointsTable = ({
                   Adjusted to Box Qty{' '}
                   {setField === 'orderAdjusted' ? (
                     sortingDirectionAsc ? (
-                      <i className='ri-arrow-down-fill fs-7 text-primary' />
+                      <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' />
                     ) : (
-                      <i className='ri-arrow-up-fill fs-7 text-primary' />
+                      <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' />
                     )
                   ) : null}
                 </span>
@@ -184,7 +184,7 @@ const ReorderingPointsTable = ({
               <span className={'tw:text-[11.2px] tw:font-bold'}>
                 {splitNames[`${splitIndex}`].length > 10 ? `${splitNames[`${splitIndex}`].substring(0, 11)}..` : splitNames[`${splitIndex}`]}
                 <Button className='tw:m-0 tw:p-0' color='ghost' size='sm' onClick={() => setValuesAndOpen({ id: `${splitIndex}`, text: splitNames[`${splitIndex}`] })}>
-                  <i className='las la-edit fs-5 text-primary m-0 p-0 ' />
+                  <i className='las la-edit tw:text-[16.25px] tw:text-primary tw:m-0 tw:p-0 ' />
                 </Button>
               </span>
               <span className={'tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'}>Order Qty</span>
@@ -251,7 +251,7 @@ const ReorderingPointsTable = ({
             Urgency
             <br />
             Days To Order{' '}
-            {setField === 'ai_urgency' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
+            {setField === 'ai_urgency' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : null}
           </span>
         </div>
       ),
@@ -260,14 +260,14 @@ const ReorderingPointsTable = ({
 
         return (
           <div className='tw:flex tw:flex-col tw:justify-center tw:items-center tw:gap-1'>
-            <i className={`mdi mdi-alert-octagon fs-3 m-0 p-0 ${aiUrgency.color}`} />
+            <i className={`mdi mdi-alert-octagon tw:text-[22.75px] tw:m-0 tw:p-0 ${aiUrgency.color}`} />
 
             <div className='tw:flex tw:flex-row tw:justify-center tw:items-center tw:gap-1'>
               <span className={`tw:m-0 tw:p-0 tw:text-center tw:text-[11.2px] ${aiUrgency.color}${aiUrgency.urgency === 3 ? ' tw:font-semibold' : ''}`}>{`${FormatIntNumber(
                 state.currentRegion,
                 aiUrgency.daysToOrder
               )} ${aiUrgency.daysToOrder == 1 ? 'day' : 'days'}`}</span>
-              <i className='fs-5 text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={`AI_DaysToOrderIcon-${row.sku}`} />
+              <i className='tw:text-[16.25px] tw:text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={`AI_DaysToOrderIcon-${row.sku}`} />
               <UncontrolledTooltip placement='top' target={`AI_DaysToOrderIcon-${row.sku}`} innerClassName='tw:bg-white tw:border tw:border-[color-mix(in_srgb,var(--info)_50%,transparent)] tw:p-2'>
                 <p className='tw:text-[11.2px] tw:text-primary tw:m-0 tw:p-0 tw:mb-0'>{`Projected days left to place an order after lead time (${FormatIntNumber(
                   state.currentRegion,
@@ -287,59 +287,59 @@ const ReorderingPointsTable = ({
     //     <div className='tw:text-center tw:flex tw:flex-col tw:justify-center tw:items-center tw:gap-1'>
     //       <span className={'tw:text-[11.2px] ' + (setField === 'urgency' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('urgency')}>
     //         Urgency{' '}
-    //         {setField === 'urgency' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
+    //         {setField === 'urgency' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : null}
     //       </span>
     //       <span className={'tw:text-[11.2px] ' + (setField === 'daysRemaining' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('daysRemaining')}>
     //         Remaining Days{' '}
     //         {setField === 'daysRemaining' ? (
     //           sortingDirectionAsc ? (
-    //             <i className='ri-arrow-down-fill fs-7 text-primary' />
+    //             <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' />
     //           ) : (
-    //             <i className='ri-arrow-up-fill fs-7 text-primary' />
+    //             <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' />
     //           )
     //         ) : null}
     //       </span>
     //     </div>
     //   ),
     //   selector: (row: ReorderingPointsProduct) => {
-    //     var color: string = 'text-primary'
+    //     var color: string = 'tw:text-primary'
     //     switch (row.urgency) {
     //       case 3:
-    //         color = 'text-danger'
+    //         color = 'tw:text-destructive'
     //         break
     //       case 2:
-    //         color = 'text-warning'
+    //         color = 'tw:text-warning'
     //         break
     //       case 1:
-    //         color = 'text-info'
+    //         color = 'tw:text-info'
     //         break
     //       default:
-    //         color = 'text-success'
+    //         color = 'tw:text-success'
     //         break
     //     }
     //     return (
-    //       <div className='d-flex flex-column justify-content-center align-items-center gap-1'>
-    //         <i className={`mdi mdi-alert-octagon fs-3 m-0 p-0 ${color}`} />
+    //       <div className='tw:flex tw:flex-col tw:justify-center tw:items-center tw:gap-1'>
+    //         <i className={`mdi mdi-alert-octagon tw:text-[22.75px] tw:m-0 tw:p-0 ${color}`} />
 
-    //         <div className='d-flex flex-row justify-content-center align-items-center gap-1'>
+    //         <div className='tw:flex tw:flex-row tw:justify-center tw:items-center tw:gap-1'>
     //           <span
     //             className={
-    //               'm-0 p-0 text-center fs-7' + (row.daysToOrder <= 0 ? ' text-danger fw-semibold' : '')
+    //               'tw:m-0 tw:p-0 tw:text-center tw:text-[11.2px]' + (row.daysToOrder <= 0 ? ' tw:text-destructive fw-semibold' : '')
     //             }>{`${FormatIntNumber(state.currentRegion, row.daysToOrder)} ${row.daysToOrder == 1 ? 'day' : 'days'}`}</span>
-    //           <i className='fs-5 text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={'DaysToOrderIcon'} />
+    //           <i className='tw:text-[16.25px] tw:text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={'DaysToOrderIcon'} />
     //           <UncontrolledTooltip placement='top' target={'DaysToOrderIcon'} innerClassName='tw:bg-white tw:border tw:border-[color-mix(in_srgb,var(--info)_50%,transparent)] tw:p-2'>
-    //             <p className='fs-7 text-primary m-0 p-0 mb-0'>Remaining days to place order.</p>
+    //             <p className='tw:text-[11.2px] tw:text-primary tw:m-0 tw:p-0 tw:mb-0'>Remaining days to place order.</p>
     //           </UncontrolledTooltip>
     //         </div>
 
-    //         <div className='d-flex flex-row justify-content-center align-items-center gap-1'>
+    //         <div className='tw:flex tw:flex-row tw:justify-center tw:items-center tw:gap-1'>
     //           <span
     //             className={
-    //               'm-0 p-0 text-center fs-7' + (row.daysRemaining <= 0 ? ' text-danger fw-semibold' : '')
+    //               'tw:m-0 tw:p-0 tw:text-center tw:text-[11.2px]' + (row.daysRemaining <= 0 ? ' tw:text-destructive fw-semibold' : '')
     //             }>{`${FormatIntNumber(state.currentRegion, row.daysRemaining)} ${row.daysRemaining == 1 ? 'day' : 'days'}`}</span>
-    //           <i className='fs-5 text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={'DaysRemaining'} />
+    //           <i className='tw:text-[16.25px] tw:text-primary las la-info-circle' style={{ cursor: 'pointer' }} id={'DaysRemaining'} />
     //           <UncontrolledTooltip placement='top' target={'DaysRemaining'} innerClassName='tw:bg-white tw:border tw:border-[color-mix(in_srgb,var(--info)_50%,transparent)] tw:p-2'>
-    //             <p className='fs-7 text-primary m-0 p-0 mb-0'>Remaining days of stock.</p>
+    //             <p className='tw:text-[11.2px] tw:text-primary tw:m-0 tw:p-0 tw:mb-0'>Remaining days of stock.</p>
     //           </UncontrolledTooltip>
     //         </div>
     //       </div>
@@ -354,7 +354,7 @@ const ReorderingPointsTable = ({
     {
       name: (
         <span className={'tw:w-full tw:text-[11.2px] tw:text-center ' + (setField === 'sku' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('sku')}>
-          Product {setField === 'sku' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
+          Product {setField === 'sku' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : null}
         </span>
       ),
       selector: (row: ReorderingPointsProduct) => {
@@ -395,7 +395,7 @@ const ReorderingPointsTable = ({
                       style={{ textDecoration: 'none' }}>
                       {row.asin}
                     </a>
-                    <i className='ri-file-copy-line fs-6 m-0 p-0 text-muted' style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(row.asin)} />
+                    <i className='ri-file-copy-line tw:text-[13px] tw:m-0 tw:p-0 tw:text-[color:var(--bs-secondary-color)]' style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(row.asin)} />
                   </div>
                 )}
                 {row.barcode && (
@@ -435,9 +435,9 @@ const ReorderingPointsTable = ({
             Warehouse{' '}
             {setField === 'warehouseQty' ? (
               sortingDirectionAsc ? (
-                <i className='ri-arrow-down-fill fs-7 text-primary' />
+                <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' />
               ) : (
-                <i className='ri-arrow-up-fill fs-7 text-primary' />
+                <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' />
               )
             ) : null}
           </span>
@@ -445,15 +445,15 @@ const ReorderingPointsTable = ({
             Production{' '}
             {setField === 'productionQty' ? (
               sortingDirectionAsc ? (
-                <i className='ri-arrow-down-fill fs-7 text-primary' />
+                <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' />
               ) : (
-                <i className='ri-arrow-up-fill fs-7 text-primary' />
+                <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' />
               )
             ) : null}
           </span>
           <span className={'tw:text-[11.2px] ' + (setField === 'receiving' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('receiving')}>
             Receiving{' '}
-            {setField === 'receiving' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
+            {setField === 'receiving' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : null}
           </span>
         </div>
       ),
@@ -491,9 +491,9 @@ const ReorderingPointsTable = ({
                       FBA{' '}
                       {setField === 'fbaQty' ? (
                         sortingDirectionAsc ? (
-                          <i className='ri-arrow-down-fill fs-7 text-primary' />
+                          <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' />
                         ) : (
-                          <i className='ri-arrow-up-fill fs-7 text-primary' />
+                          <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' />
                         )
                       ) : null}
                     </span>
@@ -502,9 +502,9 @@ const ReorderingPointsTable = ({
                         AWD{' '}
                         {setField === 'awdQty' ? (
                           sortingDirectionAsc ? (
-                            <i className='ri-arrow-down-fill fs-7 text-primary' />
+                            <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' />
                           ) : (
-                            <i className='ri-arrow-up-fill fs-7 text-primary' />
+                            <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' />
                           )
                         ) : null}
                       </span>
@@ -568,9 +568,9 @@ const ReorderingPointsTable = ({
           Total <br /> Inventory{' '}
           {setField === 'totalInventory' ? (
             sortingDirectionAsc ? (
-              <i className='ri-arrow-down-fill fs-7 text-primary' />
+              <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' />
             ) : (
-              <i className='ri-arrow-up-fill fs-7 text-primary' />
+              <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' />
             )
           ) : null}
         </span>
@@ -591,25 +591,25 @@ const ReorderingPointsTable = ({
           <p className='tw:m-0 tw:mb-1 tw:font-bold tw:text-[11.2px] tw:text-center'>Total Orders</p>
           <div className='tw:grid tw:gap-1' style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
             <span className={'tw:text-[11.2px] ' + (setField === '30D' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('30D')}>
-              30D {setField === '30D' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
+              30D {setField === '30D' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : null}
             </span>
             <span className={'tw:text-[11.2px] ' + (setField === '60D' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('60D')}>
-              60D {setField === '60D' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
+              60D {setField === '60D' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : null}
             </span>
             <span className={'tw:text-[11.2px] ' + (setField === '90D' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('90D')}>
-              90D {setField === '90D' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
+              90D {setField === '90D' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : null}
             </span>
             <span className={'tw:text-[11.2px] ' + (setField === '120D' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('120D')}>
               120D{' '}
-              {setField === '120D' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
+              {setField === '120D' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : null}
             </span>
             <span className={'tw:text-[11.2px] ' + (setField === '180D' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('180D')}>
               180D{' '}
-              {setField === '180D' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
+              {setField === '180D' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : null}
             </span>
             <span className={'tw:text-[11.2px] ' + (setField === '365D' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('365D')}>
               365D{' '}
-              {setField === '365D' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
+              {setField === '365D' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : null}
             </span>
           </div>
         </div>
@@ -657,11 +657,11 @@ const ReorderingPointsTable = ({
         <div className='tw:w-full tw:text-center tw:flex tw:flex-col tw:justify-center tw:items-center'>
           <span className={'tw:text-[11.2px] ' + (setField === 'sellerCost' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('sellerCost')}>
             Supplier Cost{' '}
-            {setField === 'sellerCost' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
+            {setField === 'sellerCost' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : null}
           </span>
           <span className={'tw:text-[11.2px] ' + (setField === 'boxQty' ? 'tw:font-bold' : 'tw:text-[var(--bs-secondary-color)]')} style={{ cursor: 'pointer' }} onClick={() => handleSetSorting('boxQty')}>
             Box Qty{' '}
-            {setField === 'boxQty' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill fs-7 text-primary' /> : <i className='ri-arrow-up-fill fs-7 text-primary' /> : null}
+            {setField === 'boxQty' ? sortingDirectionAsc ? <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' /> : <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' /> : null}
           </span>
         </div>
       ),
@@ -708,9 +708,9 @@ const ReorderingPointsTable = ({
     //         Forecast{' '}
     //         {setField === 'totalSCForecast' ? (
     //           sortingDirectionAsc ? (
-    //             <i className='ri-arrow-down-fill fs-7 text-primary' />
+    //             <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' />
     //           ) : (
-    //             <i className='ri-arrow-up-fill fs-7 text-primary' />
+    //             <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' />
     //           )
     //         ) : null}
     //       </span>
@@ -718,8 +718,8 @@ const ReorderingPointsTable = ({
     //   ),
     //   selector: (row: ReorderingPointsProduct) => {
     //     return (
-    //       <div className='fs-7'>
-    //         <p className='m-0 p-0 text-center' id={'Recommended_Qty'}>
+    //       <div className='tw:text-[11.2px]'>
+    //         <p className='tw:m-0 tw:p-0 tw:text-center' id={'Recommended_Qty'}>
     //           {FormatIntNumber(state.currentRegion, row.totalSCForecast)}
     //         </p>
     //       </div>
@@ -739,9 +739,9 @@ const ReorderingPointsTable = ({
             AI 9 Month Forecast{' '}
             {setField === 'totalAIForecast_1' ? (
               sortingDirectionAsc ? (
-                <i className='ri-arrow-down-fill fs-7 text-primary' />
+                <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' />
               ) : (
-                <i className='ri-arrow-up-fill fs-7 text-primary' />
+                <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' />
               )
             ) : null}
           </span>
@@ -758,7 +758,7 @@ const ReorderingPointsTable = ({
                 <p className='tw:m-0 tw:p-0 tw:text-center'>{FormatIntNumber(state.currentRegion, forecastValue)}</p>
                 {row.totalAIForecast_1.analysis && (
                   <>
-                    <i className='ri-information-fill m-0 fs-5 text-info' id={`ai_forecast_model_1_${row.sku}`}></i>
+                    <i className='ri-information-fill tw:m-0 tw:text-[16.25px] tw:text-info' id={`ai_forecast_model_1_${row.sku}`}></i>
                     <SCTooltip target={`ai_forecast_model_1_${row.sku}`} placement='right' key={`ai_forecast_model_1_${row.sku}`}>
                       <p className='tw:text-[11.2px] tw:text-primary tw:m-0 tw:p-0'>{row.totalAIForecast_1.analysis}</p>
                     </SCTooltip>
@@ -785,9 +785,9 @@ const ReorderingPointsTable = ({
             Forecast{' '}
             {setField === 'ai_forecast_qty' ? (
               sortingDirectionAsc ? (
-                <i className='ri-arrow-down-fill fs-7 text-primary' />
+                <i className='ri-arrow-down-fill tw:text-[11.2px] tw:text-primary' />
               ) : (
-                <i className='ri-arrow-up-fill fs-7 text-primary' />
+                <i className='ri-arrow-up-fill tw:text-[11.2px] tw:text-primary' />
               )
             ) : null}
           </span>
@@ -868,22 +868,22 @@ const ReorderingPointsTable = ({
         return (
           <UncontrolledDropdown className='tw:inline-block' direction='start'>
             <DropdownToggle className='tw:m-0 tw:p-0 tw:rounded tw:bg-[var(--vz-light)]' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
-              <i className='mdi mdi-dots-vertical align-middle fs-4 m-0 px-2 py-0' style={{ color: '#919FAF' }} />
+              <i className='mdi mdi-dots-vertical tw:align-middle tw:text-[19.5px] tw:m-0 tw:px-2 tw:py-0' style={{ color: '#919FAF' }} />
             </DropdownToggle>
             <DropdownMenu className='dropdown-menu-end' container={'body'}>
               <DropdownItem className='edit-item-btn' onClick={() => setRPProductConfig({ isOpen: true, product: row })}>
-                <i className='ri-settings-3-line align-middle me-2 fs-5 text-black'></i>
+                <i className='ri-settings-3-line tw:align-middle tw:me-2 tw:text-[16.25px] text-black'></i>
                 <span className='tw:text-[11.2px] tw:font-normal tw:text-black'>Edit Config</span>
               </DropdownItem>
               {state.user.us.useAiForecast ? (
                 <DropdownItem className='edit-item-btn' onClick={() => handleRegenerateForecast({ inventoryId: row.inventoryId, sku: row.sku })}>
-                  <i className='mdi mdi-reload align-middle me-2 fs-5 text-primary'></i>
+                  <i className='mdi mdi-reload tw:align-middle tw:me-2 tw:text-[16.25px] tw:text-primary'></i>
                   <span className='tw:text-[11.2px] tw:font-normal tw:text-black'>Regenerate Forecast</span>
                 </DropdownItem>
               ) : null}
               {state.user.us.useAiForecast ? (
                 <DropdownItem className='edit-item-btn' onClick={() => setAIForecastProduct(row)}>
-                  <i className='las la-brain align-middle me-2 fs-5 text-info'></i>
+                  <i className='las la-brain tw:align-middle tw:me-2 tw:text-[16.25px] tw:text-info'></i>
                   <span className='tw:text-[11.2px] tw:font-normal tw:text-black'>AI Forecast Details</span>
                 </DropdownItem>
               ) : null}
@@ -893,7 +893,7 @@ const ReorderingPointsTable = ({
                 onClick={() => {
                   setSalesModal({ showSalesModal: true, sku: row.sku, title: row.title, totalUnitsSold: row.totalUnitsSold, marketplaces: row.marketplaces })
                 }}>
-                <i className='ri-search-eye-line align-middle me-2 fs-5 text-primary'></i>
+                <i className='ri-search-eye-line tw:align-middle tw:me-2 tw:text-[16.25px] tw:text-primary'></i>
                 <span className='tw:text-[11.2px] tw:font-normal tw:text-black'>Sales By Marketpalce</span>
               </DropdownItem>
             </DropdownMenu>

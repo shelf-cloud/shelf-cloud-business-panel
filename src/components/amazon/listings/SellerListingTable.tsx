@@ -212,7 +212,7 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
             {row.shelfcloud_sku ? (
               <div className='tw:flex tw:flex-row tw:justify-end tw:items-center tw:gap-2'>
                 <i
-                  className='las la-link fs-4 text-success m-0 p-0'
+                  className='las la-link tw:text-[19.5px] tw:text-success tw:m-0 tw:p-0'
                   style={{ cursor: 'pointer' }}
                   onClick={() =>
                     setshowMappedListingModal((prev) => {
@@ -251,7 +251,7 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
                     }
                   })
                 }>
-                <i className='las la-link fs-4 text-danger m-0 p-0' />
+                <i className='las la-link tw:text-[19.5px] tw:text-destructive tw:m-0 tw:p-0' />
                 <span className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]'>Not Mapped</span>
               </div>
             )}

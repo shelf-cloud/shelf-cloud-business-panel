@@ -156,14 +156,14 @@ const Orders = ({ session, sessionToken }: Props) => {
                           onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
                           onChange={(e) => setSearchValue(e.target.value)}
                         />
-                        <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
+                        <span className='mdi mdi-magnify search-widget-icon tw:text-[19.5px]'></span>
                         <span
                           className='tw:flex tw:items-center tw:justify-center input_background_white'
                           style={{
                             cursor: 'pointer',
                           }}
                           onClick={() => setSearchValue('')}>
-                          <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
+                          <i className='mdi mdi-window-close tw:text-[19.5px] tw:m-0 tw:px-2 tw:py-0 tw:text-[color:var(--bs-secondary-color)]' />
                         </span>
                       </div>
                     </div>

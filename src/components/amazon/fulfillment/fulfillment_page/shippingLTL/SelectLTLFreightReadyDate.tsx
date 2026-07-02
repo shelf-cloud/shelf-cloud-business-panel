@@ -67,8 +67,8 @@ const SelectLTLFreightReadyDate = ({ shipmentId, selectedLTLTransportationOption
           <div
             key={index}
             className={
-              'tw:text-[11.2px] tw:py-1 tw:px-2 border border-2 tw:rounded-lg' +
-              (selectedLTLTransportationOption.transportationOptionId === option.transportationOptionId ? ' border-primary shadow-lg' : '')
+              'tw:text-[11.2px] tw:py-1 tw:px-2 tw:border tw:border-[color:var(--vz-border-color)] tw:border tw:border-[2px] tw:rounded-lg' +
+              (selectedLTLTransportationOption.transportationOptionId === option.transportationOptionId ? ' tw:border-primary tw:shadow-[0_5px_10px_rgba(30,32,37,0.12)]' : '')
             }
             style={{ cursor: 'pointer' }}
             onClick={() => handleChangeFreightReadyDate(option.transportationOptionId)}>

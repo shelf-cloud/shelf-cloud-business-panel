@@ -629,7 +629,7 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
 
   return (
     <DropdownItem className='tw:text-nowrap tw:text-primary tw:text-[13px] tw:py-0' onClick={() => (splits.isSplitting ? printSplitInvoice() : printInvoice())}>
-      <i className='mdi mdi-file-pdf-box label-icon align-middle fs-4 me-2' />
+      <i className='mdi mdi-file-pdf-box label-icon tw:align-middle tw:text-[19.5px] tw:me-2' />
       Generate PDF
     </DropdownItem>
   )

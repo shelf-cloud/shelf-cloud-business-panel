@@ -131,7 +131,7 @@ const EditManualReceivingLog = ({ showEditOrderQty, setshowEditOrderQty, mutateR
                           e.target.closest('tr')?.style.setProperty('background-color', 'color-mix(in srgb, var(--warning) 22%, var(--card))')
                           if (parseInt(e.target.value) <= 0 || parseInt(e.target.value) < product.qtyReceived!) {
                             setError(true)
-                            e.target.classList.remove('border-warning')
+                            e.target.classList.remove('tw:border-warning')
                           } else {
                             setError(false)
                           }

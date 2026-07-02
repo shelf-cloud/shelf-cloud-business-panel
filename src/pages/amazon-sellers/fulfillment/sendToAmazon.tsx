@@ -91,7 +91,7 @@ const SendToAmazon = ({ session }: Props) => {
               <Col lg={12}>
                 <Card>
                   <CardHeader className='tw:flex tw:justify-between tw:items-center'>
-                    <Nav className='nav-tabs-custom tw:rounded card-header-tabs tw:border-b-0' role='tablist'>
+                    <Nav className='nav-tabs-custom tw:rounded-[0.25rem] card-header-tabs tw:border-b-0' role='tablist'>
                       <NavItem style={{ cursor: 'pointer' }}>
                         <NavLink
                           className={activeTab == '1' ? 'tw:text-primary tw:font-semibold tw:text-[16.25px]' : 'tw:text-[var(--bs-secondary-color)] tw:text-[16.25px]'}
@@ -125,14 +125,14 @@ const SendToAmazon = ({ session }: Props) => {
                       <Link href={'/amazon-sellers/fulfillments'}>
                         <Button color='info' className='tw:text-[11.2px]'>
                           <span className='icon-on'>
-                            <i className='ri-external-link-fill align-bottom me-1' />
+                            <i className='ri-external-link-fill tw:align-bottom tw:me-1' />
                             Fulfillments
                           </span>
                         </Button>
                       </Link>
                       {/* <Button color='info' className='tw:flex tw:items-center' onClick={() => setHelpOffCanvasIsOpen(true)}>
-                        <i className='ri-question-line fs-14 p-0 m-0 me-lg-1' />
-                        <span className='tw:hidden d-lg-block'>Need help</span>
+                        <i className='ri-question-line fs-14 tw:p-0 tw:m-0 tw:lg:me-1' />
+                        <span className='tw:hidden tw:lg:block'>Need help</span>
                       </Button> */}
                     </div>
                   </CardHeader>

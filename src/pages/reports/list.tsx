@@ -170,7 +170,7 @@ const List = ({ session }: Props) => {
                           }
                         })
                       }>
-                      <i className='mdi mdi-plus-circle label-icon align-middle fs-5 me-2' />
+                      <i className='mdi mdi-plus-circle label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
                       Create Report
                     </Button>
                   </div>
@@ -185,14 +185,14 @@ const List = ({ session }: Props) => {
                           value={searchValue}
                           onChange={(e) => setSearchValue(e.target.value)}
                         />
-                        <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
+                        <span className='mdi mdi-magnify search-widget-icon tw:text-[19.5px]'></span>
                         <span
                           className='tw:flex tw:items-center tw:justify-center input_background_white'
                           style={{
                             cursor: 'pointer',
                           }}
                           onClick={() => setSearchValue('')}>
-                          <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
+                          <i className='mdi mdi-window-close tw:text-[19.5px] tw:m-0 tw:px-2 tw:py-0 tw:text-[color:var(--bs-secondary-color)]' />
                         </span>
                       </div>
                     </div>

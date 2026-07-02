@@ -75,7 +75,7 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
   return (
     <div ref={rpSettings} className='dropdown'>
       <ShadcnButton variant='light' onClick={() => setOpenDatesMenu(!openDatesMenu)}>
-        <i className='las la-cog fs-4 tw:m-0 tw:p-0 tw:text-primary' />
+        <i className='las la-cog tw:text-[19.5px] tw:m-0 tw:p-0 tw:text-primary' />
         <ChevronDownIcon className='tw:size-3' />
       </ShadcnButton>
       <div className={'dropdown-menu dropdown-menu-xl tw:px-2 tw:pt-4 tw:pb-1' + (openDatesMenu ? ' show' : '')} style={{ minWidth: '300px' }}>
@@ -122,7 +122,7 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
               <Form className='tw:my-2'>
                 <Col xs={12} className='tw:mb-1'>
                   <Label htmlFor='highAlertMax' className='form-label tw:mb-1'>
-                    <i className={'mdi mdi-alert-octagon text-danger fs-5'} /> High Alert
+                    <i className={'mdi mdi-alert-octagon tw:text-destructive tw:text-[16.25px]'} /> High Alert
                   </Label>
                   <div className='tw:flex tw:flex-row tw:justify-between tw:items-center tw:gap-2'>
                     <InputGroup size='sm'>
@@ -162,7 +162,7 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
                 </Col>
                 <Col xs={12} className='tw:mb-1'>
                   <Label htmlFor='mediumAlertMin' className='form-label tw:mb-1'>
-                    <i className={'mdi mdi-alert-octagon text-warning fs-5'} /> Medium Alert
+                    <i className={'mdi mdi-alert-octagon tw:text-warning tw:text-[16.25px]'} /> Medium Alert
                   </Label>
                   <div className='tw:flex tw:flex-row tw:justify-between tw:items-center tw:gap-2'>
                     <InputGroup size='sm'>
@@ -203,7 +203,7 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
                 </Col>
                 <Col xs={12} className='tw:mb-1'>
                   <Label htmlFor='lowAlertMin' className='form-label tw:mb-1'>
-                    <i className={'mdi mdi-alert-octagon text-info fs-5'} /> Low Alert
+                    <i className={'mdi mdi-alert-octagon tw:text-info tw:text-[16.25px]'} /> Low Alert
                   </Label>
                   <div className='tw:flex tw:flex-row tw:justify-between tw:items-center tw:gap-2'>
                     <InputGroup size='sm'>
@@ -244,7 +244,7 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
                 </Col>
                 <Col xs={12} className='tw:mb-1'>
                   <Label htmlFor='noAlertMin' className='form-label tw:mb-1'>
-                    <i className={'mdi mdi-alert-octagon text-success fs-5'} /> No Alert
+                    <i className={'mdi mdi-alert-octagon tw:text-success tw:text-[16.25px]'} /> No Alert
                   </Label>
                   <div className='tw:flex tw:flex-row tw:justify-between tw:items-center tw:gap-2'>
                     <InputGroup size='sm'>

@@ -424,7 +424,7 @@ const CreateOrder = ({ session }: Props) => {
                                   onBlur={handleBlur}
                                   value={values.adress1 || ''}
                                 />
-                                {touched.adress1 && errors.adress1 ? <ErrorInputLabel error={errors.adress1} marginTop='mt-0' /> : null}
+                                {touched.adress1 && errors.adress1 ? <ErrorInputLabel error={errors.adress1} marginTop='tw:mt-0' /> : null}
                                 {!isPickUpOrder && autoCompleteAddress?.length > 0 && (
                                   <div className='tw:absolute'>
                                     <Card>
@@ -578,7 +578,7 @@ const CreateOrder = ({ session }: Props) => {
                                       isClearable
                                       menuPortalTarget={document.body}
                                     />
-                                    {errors.country ? <ErrorInputLabel error={errors.country} marginTop='mt-0' /> : null}
+                                    {errors.country ? <ErrorInputLabel error={errors.country} marginTop='tw:mt-0' /> : null}
                                   </FormGroup>
                                 </Col>
                                 <Col xs={12} md={3}>
@@ -606,7 +606,7 @@ const CreateOrder = ({ session }: Props) => {
                                           isClearable
                                           menuPortalTarget={document.body}
                                         />
-                                        {errors.state ? <ErrorInputLabel error={errors.state} marginTop='mt-0' /> : null}
+                                        {errors.state ? <ErrorInputLabel error={errors.state} marginTop='tw:mt-0' /> : null}
                                       </>
                                     ) : (
                                       <>
@@ -824,14 +824,14 @@ const CreateOrder = ({ session }: Props) => {
                                                         price: '0',
                                                       })
                                                     }>
-                                                    <i className='fs-3 las la-plus-circle m-0 p-0' />
+                                                    <i className='tw:text-[22.75px] las la-plus-circle tw:m-0 tw:p-0' />
                                                   </button>
                                                   <button
                                                     type='button'
                                                     aria-label='Remove product row'
                                                     className='btn btn-link tw:border-0 tw:bg-transparent tw:text-danger tw:m-0 tw:p-0 tw:w-auto'
                                                     onClick={() => remove(index)}>
-                                                    <i className='fs-3 las la-minus-circle m-0 p-0' />
+                                                    <i className='tw:text-[22.75px] las la-minus-circle tw:m-0 tw:p-0' />
                                                   </button>
                                                 </Row>
                                               ) : (
@@ -848,7 +848,7 @@ const CreateOrder = ({ session }: Props) => {
                                                         price: '0',
                                                       })
                                                     }>
-                                                    <i className='fs-3 las la-plus-circle m-0 p-0' />
+                                                    <i className='tw:text-[22.75px] las la-plus-circle tw:m-0 tw:p-0' />
                                                   </button>
                                                 </Row>
                                               )}
@@ -875,7 +875,7 @@ const CreateOrder = ({ session }: Props) => {
                                                       isClearable
                                                       menuPortalTarget={document.body}
                                                     />
-                                                    {meta.error ? <ErrorInputLabel error={meta.error} marginTop='mt-0' /> : null}
+                                                    {meta.error ? <ErrorInputLabel error={meta.error} marginTop='tw:mt-0' /> : null}
                                                   </FormGroup>
                                                 )}
                                               </Field>

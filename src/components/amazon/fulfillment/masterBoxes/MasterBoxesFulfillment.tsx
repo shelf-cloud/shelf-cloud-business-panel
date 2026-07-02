@@ -196,11 +196,11 @@ const MasterBoxesFulfillment = ({ lisiting, pending, mutateFBASkus }: Props) => 
             <DropdownMenu>
               <DropdownItem header>Master Box Visibility</DropdownItem>
               <DropdownItem className='tw:text-nowrap tw:text-[11.2px]' onClick={() => changeSelectedMasterBoxVisibility(false)}>
-                <i className='mdi mdi-eye-off label-icon align-middle fs-5 me-2' />
+                <i className='mdi mdi-eye-off label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
                 Hide Selected
               </DropdownItem>
               <DropdownItem className='tw:text-nowrap tw:text-[11.2px]' onClick={() => changeSelectedMasterBoxVisibility(true)}>
-                <i className='mdi mdi-eye label-icon align-middle fs-5 me-2' />
+                <i className='mdi mdi-eye label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
                 Show Selected
               </DropdownItem>
               <DropdownItem className='tw:text-nowrap tw:text-right tw:text-[11.2px] tw:text-[var(--bs-secondary-color)]' onClick={clearAllSelectedRows}>

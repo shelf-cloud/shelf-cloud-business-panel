@@ -51,17 +51,17 @@ type Props = {
 }
 
 const URGENCY_STATES = {
-  '3': { label: 'High Alert', icon: 'mdi mdi-alert-octagon', color: 'text-danger' },
-  '2': { label: 'Medium Alert', icon: 'mdi mdi-alert-octagon', color: 'text-warning' },
-  '1': { label: 'Low Alert', icon: 'mdi mdi-alert-octagon', color: 'text-info' },
-  '0': { label: 'No Alert', icon: 'mdi mdi-alert-octagon', color: 'text-success' },
+  '3': { label: 'High Alert', icon: 'mdi mdi-alert-octagon', color: 'tw:text-destructive' },
+  '2': { label: 'Medium Alert', icon: 'mdi mdi-alert-octagon', color: 'tw:text-warning' },
+  '1': { label: 'Low Alert', icon: 'mdi mdi-alert-octagon', color: 'tw:text-info' },
+  '0': { label: 'No Alert', icon: 'mdi mdi-alert-octagon', color: 'tw:text-success' },
 }
 
 const AI_URGENCY_STATES = {
-  high: { label: 'High', icon: 'mdi mdi-alert-octagon', color: 'text-danger' },
-  medium: { label: 'Medium', icon: 'mdi mdi-alert-octagon', color: 'text-warning' },
-  low: { label: 'Low', icon: 'mdi mdi-alert-octagon', color: 'text-info' },
-  none: { label: 'None', icon: 'mdi mdi-alert-octagon', color: 'text-success' },
+  high: { label: 'High', icon: 'mdi mdi-alert-octagon', color: 'tw:text-destructive' },
+  medium: { label: 'Medium', icon: 'mdi mdi-alert-octagon', color: 'tw:text-warning' },
+  low: { label: 'Low', icon: 'mdi mdi-alert-octagon', color: 'tw:text-info' },
+  none: { label: 'None', icon: 'mdi mdi-alert-octagon', color: 'tw:text-success' },
 }
 
 const UNITS_DAYS_RANGES = {

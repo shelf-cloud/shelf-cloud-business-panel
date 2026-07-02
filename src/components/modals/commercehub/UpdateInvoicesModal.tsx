@@ -241,7 +241,7 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
               <p className='tw:text-[11.2px] tw:text-[var(--bs-secondary-color)] tw:font-light tw:m-0'>
                 {`You might need to configure in marketplace manager if you don't see a store.`}{' '}
                 <span onClick={() => router.push('/marketplaceManager')} className='tw:text-primary' style={{ cursor: 'pointer' }}>
-                  <i className='ri-external-link-fill ms-1 fs-6 text-primary' />
+                  <i className='ri-external-link-fill tw:ms-1 tw:text-[13px] tw:text-primary' />
                 </span>
               </p>
               <div className='tw:list-none tw:pl-0 tw:mb-0' id='file-previews'>
@@ -288,11 +288,11 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
                 }}>
                 {({ getRootProps }) => (
                   <div className='dropzone dz-clickable cursor-pointer'>
-                    <div className='tw:px-4 dz-message needsclick' {...getRootProps()}>
-                      <div className='tw:mb-4'>
+                    <div className='px-3 dz-message needsclick' {...getRootProps()}>
+                      <div className='mb-3'>
                         <i className='display-4 text-muted ri-upload-cloud-2-fill' />
                       </div>
-                      <p className='tw:text-[13px]'>Upload Invoices File. Drop Only CSV files here or click to upload.</p>
+                      <p className='fs-6'>Upload Invoices File. Drop Only CSV files here or click to upload.</p>
                     </div>
                   </div>
                 )}

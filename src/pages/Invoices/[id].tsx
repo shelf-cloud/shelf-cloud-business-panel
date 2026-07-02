@@ -83,7 +83,7 @@ const InvoiceDetails = () => {
                               // className="d-flex flex-row gap-1 text-decoration-none text-primary"
                               style={{ cursor: 'pointer' }}>
                               <span className='icon-on'>
-                                <i className='ri-arrow-left-line align-bottom me-1' />
+                                <i className='ri-arrow-left-line tw:align-bottom tw:me-1' />
                                 Go Back
                               </span>
                             </Button>

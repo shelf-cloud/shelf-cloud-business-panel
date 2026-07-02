@@ -1,0 +1,885 @@
+/*
+ * components.css
+ *
+ * Bootstrap CORE component rules, ported byte-for-byte (values as compiled with
+ * the Velzon theme) from the pre-cutover Bootstrap build. This file exists
+ * because Bootstrap's compiled core CSS is being dropped from the app, but a
+ * documented subset of Bootstrap component classes is still emitted by live
+ * JSX (raw className strings, not just via migration-ui wrappers).
+ *
+ * Scope: CORE base rules only (display, box model, default color/border via
+ * --bs-* custom properties). Velzon-theme overrides for these same classes
+ * already live in src/styles/components/*.css and src/styles/shell/page-head.css
+ * — this file supplies the base layer those overrides sit on top of, so it
+ * must be loaded BEFORE those override files.
+ *
+ * Utility classes (spacing/display/text/bg/etc.) are explicitly out of scope
+ * here — those are being converted to Tailwind by other agents in parallel.
+ *
+ * Verified via grep across src/**\/*.{tsx,ts} (excluding ai-elements/, shadcn/,
+ * print-window HTML strings, commented JSX) that every class below is emitted
+ * by live rendered markup. migration-ui/* wrappers (src/components/migration-ui)
+ * and SCTooltip were read in full: they emit ONLY tw:-prefixed Tailwind classes,
+ * no Bootstrap component classes — so classes below come from raw/native
+ * markup (native <button>/<input>/<table>/<div> elements, or literal
+ * className strings passed as children into migration-ui components).
+ */
+
+/* ---------------------------------------------------------------------------
+ * Forms: .form-control, .form-control-sm, .form-select, .form-label
+ * Live usage: native <input>/<textarea> form-control(+form-control-sm) across
+ * ~85 sites (e.g. src/pages/CreateOrder.tsx); .form-select on a native
+ * <select> (src/components/modals/shipments/CreateReturnModal.tsx); .form-label
+ * on migration-ui <Label className="form-label"> (src/components/EditProductModal.tsx).
+ * ------------------------------------------------------------------------- */
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--vz-body-color);
+  appearance: none;
+  background-color: var(--vz-input-bg);
+  background-clip: padding-box;
+  border: 1px solid var(--vz-input-border);
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .form-control {
+    transition: none;
+  }
+}
+.form-control[type='file'] {
+  overflow: hidden;
+}
+.form-control[type='file']:not(:disabled):not([readonly]) {
+  cursor: pointer;
+}
+.form-control:focus {
+  color: var(--vz-body-color);
+  background-color: var(--vz-input-bg);
+  border-color: var(--vz-input-focus-border);
+  outline: 0;
+  box-shadow: 0 0 0 0 rgba(68, 129, 253, 0.25);
+}
+.form-control::-webkit-date-and-time-value {
+  min-width: 85px;
+  height: 1.5em;
+  margin: 0;
+}
+.form-control::-webkit-datetime-edit {
+  display: block;
+  padding: 0;
+}
+.form-control::placeholder {
+  color: #878a99;
+  opacity: 1;
+}
+.form-control:disabled {
+  background-color: var(--vz-input-disabled-bg);
+  opacity: 1;
+}
+.form-control::file-selector-button {
+  padding: 0.5rem 0.9rem;
+  margin: -0.5rem -0.9rem;
+  margin-inline-end: 0.9rem;
+  color: var(--vz-body-color);
+  background-color: var(--vz-input-group-addon-bg);
+  pointer-events: none;
+  border-color: inherit;
+  border-style: solid;
+  border-width: 0;
+  border-inline-end-width: 1px;
+  border-radius: 0;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .form-control::file-selector-button {
+    transition: none;
+  }
+}
+.form-control:hover:not(:disabled):not([readonly])::file-selector-button {
+  background-color: var(--vz-input-group-addon-bg);
+}
+
+.form-control-sm {
+  min-height: calc(1.5em + 0.5rem + 2px);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.7109375rem;
+  border-radius: 0.2rem;
+}
+.form-control-sm::file-selector-button {
+  padding: 0.25rem 0.5rem;
+  margin: -0.25rem -0.5rem;
+  margin-inline-end: 0.5rem;
+}
+
+.form-select {
+  --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+  display: block;
+  width: 100%;
+  padding: 0.5rem 2.7rem 0.5rem 0.9rem;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--vz-body-color);
+  appearance: none;
+  background-color: var(--vz-input-bg);
+  background-image: var(--bs-form-select-bg-img), var(--bs-form-select-bg-icon, none);
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  background-size: 16px 12px;
+  border: 1px solid var(--vz-input-border);
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .form-select {
+    transition: none;
+  }
+}
+.form-select:focus {
+  border-color: var(--vz-input-focus-border);
+  outline: 0;
+  box-shadow: 0 0 0 0 rgba(68, 129, 253, 0.25);
+}
+.form-select[multiple],
+.form-select[size]:not([size='1']) {
+  padding-right: 0.9rem;
+  background-image: none;
+}
+.form-select:disabled {
+  background-color: var(--vz-input-disabled-bg);
+}
+.form-select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 var(--vz-body-color);
+}
+
+.form-label {
+  margin-bottom: 0.5rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * Forms: .form-check / .form-check-input / .form-check-label / .form-switch
+ * (+ .form-check-inline). Live usage: raw form-check/form-switch markup in
+ * src/pages/CreateOrder.tsx, src/components/ui/FilterReorderingPoints.tsx,
+ * src/components/reorderingPoints/*, src/components/commerceHub/FilterCommerceHubInvoices.tsx,
+ * src/components/ui/filters/InputCheckFilter.tsx, src/components/marketplaceManager/MarketplaceFees.tsx.
+ * Note: migration-ui Switch (src/components/migration-ui/switch.tsx) is a
+ * separate pure-Tailwind reimplementation and does NOT use these classes —
+ * these rules are only for the raw form-check/form-switch markup still in use.
+ * ------------------------------------------------------------------------- */
+
+.form-check {
+  display: block;
+  min-height: 1.21875rem;
+  padding-left: 1.6em;
+  margin-bottom: 0.125rem;
+}
+.form-check .form-check-input {
+  float: left;
+  margin-left: -1.6em;
+}
+
+.form-check-input {
+  --bs-form-check-bg: var(--vz-input-bg);
+  flex-shrink: 0;
+  width: 1.1em;
+  height: 1.1em;
+  margin-top: 0.2em;
+  vertical-align: top;
+  appearance: none;
+  background-color: var(--bs-form-check-bg);
+  background-image: var(--bs-form-check-bg-image);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border: 1px solid var(--vz-input-check-border);
+  print-color-adjust: exact;
+}
+.form-check-input[type='checkbox'] {
+  border-radius: 0.25em;
+}
+.form-check-input[type='radio'] {
+  border-radius: 50%;
+}
+.form-check-input:active {
+  filter: brightness(90%);
+}
+.form-check-input:focus {
+  border-color: var(--vz-input-focus-border);
+  outline: 0;
+  box-shadow: 0 0 0 0 rgba(68, 129, 253, 0.25);
+}
+.form-check-input:checked {
+  background-color: #4481fd;
+  border-color: #4481fd;
+}
+.form-check-input:checked[type='checkbox'] {
+  --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
+}
+.form-check-input:checked[type='radio'] {
+  --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23fff'/%3e%3c/svg%3e");
+}
+.form-check-input[type='checkbox']:indeterminate {
+  background-color: #4481fd;
+  border-color: #4481fd;
+  --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10h8'/%3e%3c/svg%3e");
+}
+.form-check-input:disabled {
+  pointer-events: none;
+  filter: none;
+  opacity: 0.5;
+}
+.form-check-input[disabled] ~ .form-check-label,
+.form-check-input:disabled ~ .form-check-label {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.form-switch {
+  padding-left: 2.5em;
+}
+.form-switch .form-check-input {
+  --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba%280, 0, 0, 0.25%29'/%3e%3c/svg%3e");
+  width: 2em;
+  margin-left: -2.5em;
+  background-image: var(--bs-form-switch-bg);
+  background-position: left center;
+  border-radius: 2em;
+  transition: background-position 0.15s ease-in-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .form-switch .form-check-input {
+    transition: none;
+  }
+}
+.form-switch .form-check-input:focus {
+  --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgb%28161.5, 192, 254%29'/%3e%3c/svg%3e");
+}
+.form-switch .form-check-input:checked {
+  background-position: right center;
+  --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+}
+
+.form-check-label {
+  cursor: default;
+}
+
+.form-check-inline {
+  display: inline-block;
+  margin-right: 1rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * Forms: .input-group / .input-group-text
+ * Live usage: raw <div className="input-group"> + <span className="input-group-text">
+ * in src/components/WholeSaleOrderModal.tsx, src/pages/CreateOrder.tsx,
+ * src/components/modals/receivings/ReceivingOrderModalUploading.tsx.
+ * (Not routed through migration-ui InputGroup in these call sites, which is
+ * why the raw Bootstrap classes are the ones actually rendered.)
+ * input-group-sm/-lg: zero live usage — skipped.
+ * ------------------------------------------------------------------------- */
+
+.input-group {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  width: 100%;
+}
+.input-group > .form-control,
+.input-group > .form-select,
+.input-group > .form-floating {
+  position: relative;
+  flex: 1 1 auto;
+  width: 1%;
+  min-width: 0;
+}
+.input-group > .form-control:focus,
+.input-group > .form-select:focus,
+.input-group > .form-floating:focus-within {
+  z-index: 5;
+}
+.input-group .btn {
+  position: relative;
+  z-index: 2;
+}
+.input-group .btn:focus {
+  z-index: 5;
+}
+
+.input-group-text {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--vz-body-color);
+  text-align: center;
+  white-space: nowrap;
+  background-color: var(--vz-input-group-addon-bg);
+  border: 1px solid var(--vz-input-border);
+  border-radius: 0.25rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * Buttons: .btn core + used color variants + .btn-sm.
+ * Live usage: raw <button>/<a> "btn" (+ color) strings not fully replaced by
+ * migration-ui Button in some call sites (src/components/EditProductModal.tsx,
+ * src/pages/Profile.tsx, src/pages/SignIn.tsx, src/pages/CreateOrder.tsx,
+ * src/components/UploadProductsModal.tsx, src/components/kits/KitsTable.tsx
+ * via DropdownToggle tag='button', src/containers/Layout/Header.tsx hamburger).
+ * Colors confirmed live: primary, light, success, info, link. secondary/
+ * warning/danger/dark/outline-x / btn-close / btn-group: zero raw usage — skipped
+ * (migration-ui Button/ButtonGroup render these as pure Tailwind already).
+ * ------------------------------------------------------------------------- */
+
+.btn {
+  --bs-btn-padding-x: 0.9rem;
+  --bs-btn-padding-y: 0.5rem;
+  --bs-btn-font-family: ;
+  --bs-btn-font-size: 0.8125rem;
+  --bs-btn-font-weight: 400;
+  --bs-btn-line-height: 1.5;
+  --bs-btn-color: var(--bs-body-color);
+  --bs-btn-bg: transparent;
+  --bs-btn-border-width: 1px;
+  --bs-btn-border-color: transparent;
+  --bs-btn-border-radius: 0.25rem;
+  --bs-btn-hover-border-color: transparent;
+  --bs-btn-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
+  --bs-btn-disabled-opacity: 0.65;
+  --bs-btn-focus-box-shadow: 0 0 0 0 rgba(var(--bs-btn-focus-shadow-rgb), 0.5);
+  display: inline-block;
+  padding: var(--bs-btn-padding-y) var(--bs-btn-padding-x);
+  font-family: var(--bs-btn-font-family);
+  font-size: var(--bs-btn-font-size);
+  font-weight: var(--bs-btn-font-weight);
+  line-height: var(--bs-btn-line-height);
+  color: var(--bs-btn-color);
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  border: var(--bs-btn-border-width) solid var(--bs-btn-border-color);
+  border-radius: var(--bs-btn-border-radius);
+  background-color: var(--bs-btn-bg);
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+}
+.btn:hover {
+  color: var(--bs-btn-hover-color);
+  background-color: var(--bs-btn-hover-bg);
+  border-color: var(--bs-btn-hover-border-color);
+}
+.btn:focus-visible {
+  color: var(--bs-btn-hover-color);
+  background-color: var(--bs-btn-hover-bg);
+  border-color: var(--bs-btn-hover-border-color);
+  outline: 0;
+  box-shadow: var(--bs-btn-focus-box-shadow);
+}
+:not(.btn-check) + .btn:active,
+.btn:first-child:active,
+.btn.active,
+.btn.show {
+  color: var(--bs-btn-active-color);
+  background-color: var(--bs-btn-active-bg);
+  border-color: var(--bs-btn-active-border-color);
+}
+:not(.btn-check) + .btn:active:focus-visible,
+.btn:first-child:active:focus-visible,
+.btn.active:focus-visible,
+.btn.show:focus-visible {
+  box-shadow: var(--bs-btn-focus-box-shadow);
+}
+.btn:disabled,
+.btn.disabled,
+fieldset:disabled .btn {
+  color: var(--bs-btn-disabled-color);
+  pointer-events: none;
+  background-color: var(--bs-btn-disabled-bg);
+  border-color: var(--bs-btn-disabled-border-color);
+  opacity: var(--bs-btn-disabled-opacity);
+}
+
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #4481fd;
+  --bs-btn-border-color: #4481fd;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: rgb(57.8, 109.65, 215.05);
+  --bs-btn-hover-border-color: rgb(54.4, 103.2, 202.4);
+  --bs-btn-focus-shadow-rgb: 96, 148, 253;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: rgb(54.4, 103.2, 202.4);
+  --bs-btn-active-border-color: rgb(51, 96.75, 189.75);
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #4481fd;
+  --bs-btn-disabled-border-color: #4481fd;
+}
+
+.btn-success {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #0ab39c;
+  --bs-btn-border-color: #0ab39c;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: rgb(8.5, 152.15, 132.6);
+  --bs-btn-hover-border-color: rgb(8, 143.2, 124.8);
+  --bs-btn-focus-shadow-rgb: 47, 190, 171;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: rgb(8, 143.2, 124.8);
+  --bs-btn-active-border-color: rgb(7.5, 134.25, 117);
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #0ab39c;
+  --bs-btn-disabled-border-color: #0ab39c;
+}
+
+.btn-info {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #299cdb;
+  --bs-btn-border-color: #299cdb;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: rgb(34.85, 132.6, 186.15);
+  --bs-btn-hover-border-color: rgb(32.8, 124.8, 175.2);
+  --bs-btn-focus-shadow-rgb: 73, 171, 224;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: rgb(32.8, 124.8, 175.2);
+  --bs-btn-active-border-color: rgb(30.75, 117, 164.25);
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #299cdb;
+  --bs-btn-disabled-border-color: #299cdb;
+}
+
+.btn-light {
+  --bs-btn-color: #000;
+  --bs-btn-bg: #f3f6f9;
+  --bs-btn-border-color: #f3f6f9;
+  --bs-btn-hover-color: #000;
+  --bs-btn-hover-bg: rgb(206.55, 209.1, 211.65);
+  --bs-btn-hover-border-color: rgb(194.4, 196.8, 199.2);
+  --bs-btn-focus-shadow-rgb: 207, 209, 212;
+  --bs-btn-active-color: #000;
+  --bs-btn-active-bg: rgb(194.4, 196.8, 199.2);
+  --bs-btn-active-border-color: rgb(182.25, 184.5, 186.75);
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #000;
+  --bs-btn-disabled-bg: #f3f6f9;
+  --bs-btn-disabled-border-color: #f3f6f9;
+}
+
+.btn-link {
+  --bs-btn-font-weight: 400;
+  --bs-btn-color: #4481fd;
+  --bs-btn-bg: transparent;
+  --bs-btn-border-color: transparent;
+  --bs-btn-hover-color: #4481fd;
+  --bs-btn-hover-border-color: transparent;
+  --bs-btn-active-color: #4481fd;
+  --bs-btn-active-border-color: transparent;
+  --bs-btn-disabled-color: #878a99;
+  --bs-btn-disabled-border-color: transparent;
+  --bs-btn-box-shadow: 0 0 0 #000;
+  --bs-btn-focus-shadow-rgb: 49, 132, 253;
+  text-decoration: underline;
+}
+.btn-link:focus-visible {
+  color: var(--bs-btn-color);
+}
+.btn-link:hover {
+  color: var(--bs-btn-hover-color);
+}
+
+.btn-sm {
+  --bs-btn-padding-y: 0.25rem;
+  --bs-btn-padding-x: 0.5rem;
+  --bs-btn-font-size: 0.7109375rem;
+  --bs-btn-border-radius: 0.2rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * Dropdown: .dropdown-menu(+.show) / .dropdown-toggle(+::after caret) /
+ * .dropdown-toggle-split / .visually-hidden.
+ * Live usage: one hand-rolled dropdown NOT using migration-ui Dropdown
+ * (src/components/modals/amazon/Select_Product_Mapped.tsx) — renders raw
+ * "dropdown-menu" + conditional "show", "btn btn-light btn-sm dropdown-toggle
+ * form-control dropdown-toggle-split", and "visually-hidden" for the SR-only
+ * label. migration-ui Dropdown/DropdownMenu (Radix-based) render shadcn
+ * data-slot classes only, not these literal strings, so this is the only
+ * live consumer. .dropdown-item/.dropdown-divider/.dropdown-header: not used
+ * at this call site or elsewhere raw — skipped.
+ * ------------------------------------------------------------------------- */
+
+.dropdown-toggle {
+  white-space: nowrap;
+}
+.dropdown-toggle::after {
+  display: inline-block;
+  margin-left: 0.255em;
+  font-size: 15px;
+  line-height: 15px;
+  content: '\F0140';
+  font-family: 'Material Design Icons';
+}
+
+.dropdown-menu {
+  --bs-dropdown-zindex: 1000;
+  --bs-dropdown-min-width: 10rem;
+  --bs-dropdown-padding-x: 0;
+  --bs-dropdown-padding-y: 0.5rem;
+  --bs-dropdown-spacer: 0.125rem;
+  --bs-dropdown-font-size: 0.8125rem;
+  --bs-dropdown-color: var(--vz-body-color);
+  --bs-dropdown-bg: var(--vz-dropdown-bg);
+  --bs-dropdown-border-color: var(--vz-border-color);
+  --bs-dropdown-border-radius: 0.3rem;
+  --bs-dropdown-border-width: var(--vz-dropdown-border-width);
+  --bs-dropdown-inner-border-radius: calc(0.3rem - (var(--vz-dropdown-border-width)));
+  --bs-dropdown-divider-bg: var(--vz-border-color);
+  --bs-dropdown-divider-margin-y: 0.5rem;
+  --bs-dropdown-box-shadow: 0 5px 10px rgba(30, 32, 37, 0.12);
+  --bs-dropdown-link-color: var(--vz-dropdown-link-color);
+  --bs-dropdown-link-hover-color: var(--vz-dropdown-link-hover-color);
+  --bs-dropdown-link-hover-bg: var(--vz-dropdown-link-hover-bg);
+  --bs-dropdown-link-active-color: var(--vz-dropdown-link-hover-color);
+  --bs-dropdown-link-active-bg: var(--vz-dropdown-link-hover-bg);
+  --bs-dropdown-link-disabled-color: #adb5bd;
+  --bs-dropdown-item-padding-x: 1.2rem;
+  --bs-dropdown-item-padding-y: 0.35rem;
+  --bs-dropdown-header-color: #878a99;
+  --bs-dropdown-header-padding-x: 1rem;
+  --bs-dropdown-header-padding-y: 0.5rem;
+  position: absolute;
+  z-index: var(--bs-dropdown-zindex);
+  display: none;
+  min-width: var(--bs-dropdown-min-width);
+  padding: var(--bs-dropdown-padding-y) var(--bs-dropdown-padding-x);
+  margin: 0;
+  font-size: var(--bs-dropdown-font-size);
+  color: var(--bs-dropdown-color);
+  text-align: left;
+  list-style: none;
+  background-color: var(--bs-dropdown-bg);
+  background-clip: padding-box;
+  border: var(--bs-dropdown-border-width) solid var(--bs-dropdown-border-color);
+  border-radius: var(--bs-dropdown-border-radius);
+}
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-toggle-split {
+  padding-right: 0.675rem;
+  padding-left: 0.675rem;
+  border-left: none;
+}
+.dropdown-toggle-split::after {
+  margin-left: 0;
+}
+.dropdown-toggle-split:before {
+  content: '';
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.12);
+  top: -1px;
+  bottom: -1px;
+  right: -1px;
+  left: 0;
+  border-radius: 0 0.25rem 0.25rem 0;
+}
+
+.visually-hidden,
+.visually-hidden-focusable:not(:focus):not(:focus-within) {
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+.visually-hidden:not(caption),
+.visually-hidden-focusable:not(:focus):not(:focus-within):not(caption) {
+  position: absolute !important;
+}
+.visually-hidden *,
+.visually-hidden-focusable:not(:focus):not(:focus-within) * {
+  overflow: hidden !important;
+}
+
+/* ---------------------------------------------------------------------------
+ * Card: .card-title only.
+ * Live usage: raw <h3>/<h4> className="card-title" NOT inside migration-ui
+ * Card (src/pages/ProductsBulkEdit.tsx, src/components/commerceHub/CheckNumberTable.tsx,
+ * src/components/shipments/shipmentLog/NoShipmentsFound.tsx). migration-ui
+ * Card/CardBody/CardHeader/CardFooter (src/components/migration-ui/card.tsx)
+ * are pure Tailwind and never emit "card"/"card-body"/"card-header"/
+ * "card-footer" — no raw usage of those found either, so only .card-title
+ * core is needed (its Velzon override in src/styles/components/card.css fully
+ * replaces margin, so this just supplies the color custom property Bootstrap
+ * also sets there).
+ * ------------------------------------------------------------------------- */
+
+.card-title {
+  margin-bottom: var(--bs-card-title-spacer-y);
+  color: var(--bs-card-title-color);
+}
+
+/* ---------------------------------------------------------------------------
+ * Badge: .badge base.
+ * Live usage: raw <span className="badge ..."> across WholeSaleTable2.tsx,
+ * WholeSaleTableSingleItem.tsx, src/pages/commercehub/[...id].tsx, etc.
+ * migration-ui Badge (src/components/migration-ui/badge.tsx) is pure
+ * Tailwind and does not emit ".badge" — these raw spans are a separate,
+ * still-live usage.
+ * ------------------------------------------------------------------------- */
+
+.badge {
+  --bs-badge-padding-x: 0.65em;
+  --bs-badge-padding-y: 0.35em;
+  --bs-badge-font-size: 0.75em;
+  --bs-badge-font-weight: 600;
+  --bs-badge-color: #fff;
+  --bs-badge-border-radius: 0.25rem;
+  display: inline-block;
+  padding: var(--bs-badge-padding-y) var(--bs-badge-padding-x);
+  font-size: var(--bs-badge-font-size);
+  font-weight: var(--bs-badge-font-weight);
+  line-height: 1;
+  color: var(--bs-badge-color);
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: var(--bs-badge-border-radius);
+}
+.badge:empty {
+  display: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * Alert: .alert base + .alert-danger / .alert-warning.
+ * Live usage: raw <div role="alert" className="alert alert-danger"> and
+ * "alert alert-warning" in
+ * src/components/modals/reorderingPoints/ReorderingPointsPromtpModal.tsx.
+ * migration-ui Alert (src/components/migration-ui/alert.tsx) is pure
+ * Tailwind and does not emit ".alert" — separate, still-live raw usage.
+ * Other color variants (primary/secondary/success/info/light/dark) and
+ * .alert-dismissible: zero raw usage — skipped.
+ * ------------------------------------------------------------------------- */
+
+.alert {
+  --bs-alert-bg: transparent;
+  --bs-alert-padding-x: 1rem;
+  --bs-alert-padding-y: 0.8rem;
+  --bs-alert-margin-bottom: 1rem;
+  --bs-alert-color: inherit;
+  --bs-alert-border-color: transparent;
+  --bs-alert-border: 1px solid var(--bs-alert-border-color);
+  --bs-alert-border-radius: 0.25rem;
+  --bs-alert-link-color: inherit;
+  position: relative;
+  padding: var(--bs-alert-padding-y) var(--bs-alert-padding-x);
+  margin-bottom: var(--bs-alert-margin-bottom);
+  color: var(--bs-alert-color);
+  background-color: var(--bs-alert-bg);
+  border: var(--bs-alert-border);
+  border-radius: var(--bs-alert-border-radius);
+}
+
+.alert-danger {
+  --bs-alert-color: var(--bs-danger-text-emphasis);
+  --bs-alert-bg: var(--bs-danger-bg-subtle);
+  --bs-alert-border-color: var(--bs-danger-border-subtle);
+  --bs-alert-link-color: var(--bs-danger-text-emphasis);
+}
+
+.alert-warning {
+  --bs-alert-color: var(--bs-warning-text-emphasis);
+  --bs-alert-bg: var(--bs-warning-bg-subtle);
+  --bs-alert-border-color: var(--bs-warning-border-subtle);
+  --bs-alert-link-color: var(--bs-warning-text-emphasis);
+}
+
+/* ---------------------------------------------------------------------------
+ * Spinner: .spinner-border(+.spinner-border-sm) + @keyframes.
+ * Live usage: raw <div className="spinner-border spinner-border-sm"> in
+ * src/components/modals/reorderingPoints/ReorderingPointsPromtpModal.tsx.
+ * migration-ui Spinner (src/components/migration-ui/spinner.tsx) renders the
+ * shadcn icon spinner and does not emit ".spinner-border".
+ * ------------------------------------------------------------------------- */
+
+.spinner-border {
+  display: inline-block;
+  flex-shrink: 0;
+  width: var(--bs-spinner-width);
+  height: var(--bs-spinner-height);
+  vertical-align: var(--bs-spinner-vertical-align);
+  border-radius: 50%;
+  animation: var(--bs-spinner-animation-speed) linear infinite var(--bs-spinner-animation-name);
+}
+@keyframes spinner-border {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spinner-border {
+  --bs-spinner-width: 2rem;
+  --bs-spinner-height: 2rem;
+  --bs-spinner-vertical-align: -0.125em;
+  --bs-spinner-border-width: 0.25em;
+  --bs-spinner-animation-speed: 0.75s;
+  --bs-spinner-animation-name: spinner-border;
+  border: var(--bs-spinner-border-width) solid currentcolor;
+  border-right-color: transparent;
+}
+.spinner-border-sm {
+  --bs-spinner-width: 1rem;
+  --bs-spinner-height: 1rem;
+  --bs-spinner-border-width: 0.2em;
+}
+
+/* ---------------------------------------------------------------------------
+ * Table: .table base + .table-sm / .table-bordered / .table-borderless /
+ * .table-striped / .table-hover / .table-responsive.
+ * Live usage: raw <table className="table ..."> across
+ * src/components/kits/EditKitModal.tsx, src/components/reorderingPoints/ReorderingPointsSalesDetails.tsx,
+ * src/components/shipments/shipmentLog/WholesaleType.tsx (+FBAShipmentType.tsx,
+ * table-borderless), src/components/amazon/fulfillment/masterBoxes/MasterBoxesTable.tsx
+ * (table-striped, table-bordered, table-responsive). Velzon override layer in
+ * src/styles/components/table.css assumes this core exists.
+ * .table-striped-columns/.table-active/.table-[color] modifiers: zero raw
+ * usage beyond what table.css already absorbs (.table .table-light) — skipped.
+ * ------------------------------------------------------------------------- */
+
+.table {
+  --bs-table-color-type: initial;
+  --bs-table-bg-type: initial;
+  --bs-table-color-state: initial;
+  --bs-table-bg-state: initial;
+  --bs-table-color: var(--vz-body-color);
+  --bs-table-bg: transparent;
+  --bs-table-border-color: var(--vz-border-color);
+  --bs-table-accent-bg: transparent;
+  --bs-table-striped-color: var(--vz-body-color);
+  --bs-table-striped-bg: rgba(var(--vz-dark-rgb), 0.02);
+  --bs-table-active-color: var(--vz-body-color);
+  --bs-table-active-bg: rgba(var(--vz-light-rgb), 1);
+  --bs-table-hover-color: var(--vz-body-color);
+  --bs-table-hover-bg: rgba(var(--vz-light-rgb), 1);
+  width: 100%;
+  margin-bottom: 1rem;
+  vertical-align: top;
+  border-color: var(--bs-table-border-color);
+}
+.table > :not(caption) > * > * {
+  padding: 0.75rem 0.6rem;
+  color: var(--bs-table-color-state, var(--bs-table-color-type, var(--bs-table-color)));
+  background-color: var(--bs-table-bg);
+  border-bottom-width: 1px;
+  box-shadow: inset 0 0 0 9999px var(--bs-table-bg-state, var(--bs-table-bg-type, var(--bs-table-accent-bg)));
+}
+.table > tbody {
+  vertical-align: inherit;
+}
+
+.table-sm > :not(caption) > * > * {
+  padding: 0.3rem 0.25rem;
+}
+
+.table-bordered > :not(caption) > * {
+  border-width: 1px 0;
+}
+.table-bordered > :not(caption) > * > * {
+  border-width: 0 1px;
+}
+
+.table-borderless > :not(caption) > * > * {
+  border-bottom-width: 0;
+}
+.table-borderless > :not(:first-child) {
+  border-top-width: 0;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+  --bs-table-color-type: var(--bs-table-striped-color);
+  --bs-table-bg-type: var(--bs-table-striped-bg);
+}
+
+.table-hover > tbody > tr:hover > * {
+  --bs-table-color-state: var(--bs-table-hover-color);
+  --bs-table-bg-state: var(--bs-table-hover-bg);
+}
+
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ---------------------------------------------------------------------------
+ * Modal: .modal-title only (shadcn Dialog renders the rest of the modal
+ * chrome; only the literal "modal-title" class is still used on raw
+ * <p>/<h3> children passed into migration-ui ModalHeader).
+ * Live usage: src/components/InventoryBinsModal.tsx, EditProductModal.tsx,
+ * WholeSaleOrderModal.tsx, ForgotPasswordModal.tsx, UploadProductsModal.tsx,
+ * src/components/receiving/EditManualReceivingLog.tsx. Velzon override
+ * (font-weight: 600) already lives in src/styles/components/modal.css.
+ * --bs-modal-title-line-height is referenced but never defined (the rest of
+ * `.modal` is intentionally not ported since shadcn owns modal chrome); the
+ * property falls back to the inherited line-height, matching Bootstrap's own
+ * default of 1.5 for this app.
+ * ------------------------------------------------------------------------- */
+
+.modal-title {
+  margin-bottom: 0;
+  line-height: var(--bs-modal-title-line-height);
+}
+
+/* ---------------------------------------------------------------------------
+ * Collapse: .collapse:not(.show) only — CRITICAL for the vertical sidebar
+ * submenu (src/containers/Layout/VerticalLayout.tsx renders
+ * `className={'collapse menu-dropdown' + (open ? ' show' : '')}`; the
+ * open/closed state depends entirely on this display toggle).
+ * .collapsing (animated mid-transition state) has zero live usage — the app
+ * toggles the "show" class directly with no intermediate class — skipped.
+ * migration-ui Collapse (src/components/migration-ui/collapse.tsx) is a
+ * separate pure-Tailwind grid-rows implementation and does not use ".collapse".
+ * ------------------------------------------------------------------------- */
+
+.collapse:not(.show) {
+  display: none;
+}
+
+/* ---------------------------------------------------------------
+ * .navbar-nav — CRITICAL, VerticalLayout.tsx sidebar <ul id='navbar-nav'
+ * className='navbar-nav'>. Core reset removes list bullets/padding.
+ * (--bs-navbar-* refs were undefined pre-cutover too — no .navbar ancestor —
+ * kept byte-for-byte for parity.)
+ * --------------------------------------------------------------- */
+.navbar-nav {
+  --bs-nav-link-padding-x: 0;
+  --bs-nav-link-padding-y: 0.5rem;
+  --bs-nav-link-font-weight: ;
+  --bs-nav-link-color: var(--bs-navbar-color);
+  --bs-nav-link-hover-color: var(--bs-navbar-hover-color);
+  --bs-nav-link-disabled-color: var(--bs-navbar-disabled-color);
+  display: flex;
+  flex-direction: column;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}

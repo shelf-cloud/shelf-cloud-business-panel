@@ -32,7 +32,7 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
         type='button'
         aria-expanded='false'
         onClick={() => setOpenDatesMenu(!openDatesMenu)}>
-        <i className='las la-calendar fs-3 m-0 p-0 text-primary' />
+        <i className='las la-calendar tw:text-[22.75px] tw:m-0 tw:p-0 tw:text-primary' />
         <span className='tw:font-semibold tw:m-0 tw:p-0 tw:text-xs'>{`${showMappedCreateReport.startDate} -> ${showMappedCreateReport.endDate}`}</span>
       </button>
       <div className={'dropdown-menu dropdown-menu-md tw:px-4 tw:py-3' + (openDatesMenu ? ' show' : '')}>

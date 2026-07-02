@@ -71,7 +71,7 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
             className='btn btn-light btn-sm dropdown-toggle form-control tw:text-[13px] dropdown-toggle dropdown-toggle-split'
             style={{ backgroundColor: 'white', maxWidth: '35px' }}
             aria-expanded='false'>
-            <span className='visually-hidden'>Toggle Dropdown</span>
+            <span className='tw:sr-only'>Toggle Dropdown</span>
           </span>
         </button>
       )}
@@ -90,14 +90,14 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
                 onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
                 onChange={(e) => setSearchValue(e.target.value)}
               />
-              <span className='mdi mdi-magnify search-widget-icon fs-5'></span>
+              <span className='mdi mdi-magnify search-widget-icon tw:text-[16.25px]'></span>
               <button
                 type='button'
                 aria-label='Clear search'
                 className='tw:flex tw:items-center tw:justify-center input_background_white'
                 style={{ border: 0 }}
                 onClick={() => setSearchValue('')}>
-                <i className='mdi mdi-window-close fs-5 m-0 px-2 py-0 text-muted' />
+                <i className='mdi mdi-window-close tw:text-[16.25px] tw:m-0 tw:px-2 tw:py-0 tw:text-[color:var(--bs-secondary-color)]' />
               </button>
             </div>
           </div>
@@ -109,7 +109,7 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
               <button
                 type='button'
                 key={`${option.sku}-${option.inventoryId}`}
-                className={'btn btn-link tw:w-full tw:border-0 tw:text-left tw:no-underline text-reset tw:m-0 tw:py-2 tw:px-1 tw:flex tw:flex-row tw:gap-2 ' + (showMappedListingModal.shelfCloudSku == `${option.sku}` ? 'tw:bg-light' : '')}
+                className={'btn btn-link tw:w-full tw:border-0 tw:text-left tw:no-underline tw:text-inherit tw:m-0 tw:py-2 tw:px-1 tw:flex tw:flex-row tw:gap-2 ' + (showMappedListingModal.shelfCloudSku == `${option.sku}` ? 'tw:bg-light' : '')}
                 onClick={() => {
                   setshowMappedListingModal((prev: any) => {
                     return {

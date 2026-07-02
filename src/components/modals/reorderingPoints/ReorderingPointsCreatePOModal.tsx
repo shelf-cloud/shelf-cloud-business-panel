@@ -510,7 +510,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                           onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
                           onChange={(e) => handleAddComment(e.target.value, product.sku, product.inventoryId)}
                         />
-                        {savingComment ? <Spinner color='success' size={'sm'} /> : <i className={`mdi mdi-check-all fs-5 tw:m-0 tw:p-0 tw:text-success`} />}
+                        {savingComment ? <Spinner color='success' size={'sm'} /> : <i className={`mdi mdi-check-all tw:text-[16.25px] tw:m-0 tw:p-0 tw:text-success`} />}
                       </td>
                       <td className='tw:text-center tw:align-middle'>{product.boxQty}</td>
                       {splits.isSplitting &&

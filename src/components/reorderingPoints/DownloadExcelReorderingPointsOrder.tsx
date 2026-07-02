@@ -77,7 +77,7 @@ const DownloadExcelReorderingPointsOrder = ({ reorderingPointsOrder, orderDetail
 
   return (
     <DropdownItem className='tw:text-nowrap tw:text-primary tw:text-[13px] tw:py-0' onClick={() => (splits.isSplitting ? exportSplitExcelFile() : exportExcelFile())}>
-      <i className='mdi mdi-arrow-down-bold label-icon align-middle fs-5 me-2' />
+      <i className='mdi mdi-arrow-down-bold label-icon tw:align-middle tw:text-[16.25px] tw:me-2' />
       Download Excel
     </DropdownItem>
   )

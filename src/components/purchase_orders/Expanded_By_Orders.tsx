@@ -281,7 +281,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                           <button
                             type='button'
                             aria-label='Edit PO number'
-                            className={'btn btn-link border-0 bg-transparent text-primary m-0 p-0 ' + (editPONumber && 'tw:hidden')}
+                            className={'btn btn-link tw:border-0 tw:bg-transparent tw:text-primary tw:m-0 tw:p-0 ' + (editPONumber && 'tw:hidden')}
                             onClick={() => seteditPONumber(true)}>
                             <i className='las la-edit tw:text-[16.25px] tw:m-0 tw:p-0' />
                           </button>
@@ -351,7 +351,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                   <button
                     type='button'
                     aria-label='Edit PO note'
-                    className={'btn btn-link border-0 bg-transparent text-primary m-0 p-0 ' + (showEditNote && 'tw:hidden')}
+                    className={'btn btn-link tw:border-0 tw:bg-transparent tw:text-primary tw:m-0 tw:p-0 ' + (showEditNote && 'tw:hidden')}
                     onClick={() => setShowEditNote(true)}>
                     <i className='las la-edit tw:text-[19.5px] tw:m-0 tw:p-0' />
                   </button>

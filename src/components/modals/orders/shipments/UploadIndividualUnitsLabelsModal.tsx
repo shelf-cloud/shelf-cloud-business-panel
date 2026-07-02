@@ -134,7 +134,7 @@ const UploadIndividualUnitsLabelsModal = ({ data, mutateShipment }: Props) => {
                 {({ getRootProps }) => (
                   <div className='dropzone dz-clickable tw:cursor-pointer'>
                     <div className='dz-message needsclick' {...getRootProps()}>
-                      <div className='tw:mb-4'>
+                      <div className='mb-3'>
                         <i className='display-4 text-muted ri-upload-cloud-2-fill' />
                       </div>
                       <h4>Upload Shipping Labels. Drop Only PDF files here or click to upload.</h4>
@@ -184,8 +184,8 @@ const UploadIndividualUnitsLabelsModal = ({ data, mutateShipment }: Props) => {
                 //   {({ getRootProps }) => (
                 //     <div className='dropzone dz-clickable cursor-pointer'>
                 //       <div className='dz-message needsclick' {...getRootProps()}>
-                //         <div className='mb-3'>
-                //           <i className='display-4 text-muted ri-upload-cloud-2-fill' />
+                //         <div className='tw:mb-4'>
+                //           <i className='display-4 tw:text-[color:var(--bs-secondary-color)] ri-upload-cloud-2-fill' />
                 //         </div>
                 //         <h4>Upload Pallet Labels. Drop Only PDF files here or click to upload.</h4>
                 //       </div>

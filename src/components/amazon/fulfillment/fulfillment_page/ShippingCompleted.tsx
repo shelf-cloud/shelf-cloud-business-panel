@@ -112,7 +112,7 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                     <p className='tw:mt-2 tw:mb-1 tw:p-0 tw:font-semibold tw:text-[19.5px]'>
                       <span>{placementOption.shipmentIds.length}</span> {placementOption.shipmentIds.length > 1 ? 'Shipments' : 'Shipment'}
                       {placementOptionSelected.placementOptionId === placementOption.placementOptionId && (
-                        <i className={'ri-checkbox-circle-fill align-middle ms-2 fs-4 text-success'} />
+                        <i className={'ri-checkbox-circle-fill tw:align-middle tw:ms-2 tw:text-[19.5px] tw:text-success'} />
                       )}
                     </p>
                     <p className='tw:m-0 tw:p-0 tw:text-[11.2px]'>

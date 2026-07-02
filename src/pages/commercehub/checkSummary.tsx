@@ -207,7 +207,7 @@ const CheckSummary = ({ session, sessionToken }: Props) => {
             <div className='tw:flex tw:flex-col tw:justify-center tw:items-end tw:gap-2 tw:mb-1 tw:lg:flex-row tw:md:justify-between tw:md:items-center tw:px-1'>
               <div className='tw:w-full tw:flex tw:flex-col tw:justify-center tw:items-start tw:gap-2 tw:mb-0 tw:lg:flex-row tw:lg:justify-start tw:lg:items-center tw:px-0'>
                 <Button color='primary' className='btn-label tw:text-[11.2px]' onClick={downloadInfoToExcel}>
-                  <i className='las la-cloud-download-alt label-icon align-middle fs-4 me-2' />
+                  <i className='las la-cloud-download-alt label-icon tw:align-middle tw:text-[19.5px] tw:me-2' />
                   Download To Excel
                 </Button>
               </div>
@@ -225,14 +225,14 @@ const CheckSummary = ({ session, sessionToken }: Props) => {
                       onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
                       onChange={(e) => setSearchValue(e.target.value)}
                     />
-                    <span className='mdi mdi-magnify search-widget-icon fs-4'></span>
+                    <span className='mdi mdi-magnify search-widget-icon tw:text-[19.5px]'></span>
                     <span
                       className='tw:flex tw:items-center tw:justify-center input_background_white'
                       style={{
                         cursor: 'pointer',
                       }}
                       onClick={() => setSearchValue('')}>
-                      <i className='mdi mdi-window-close fs-4 m-0 px-2 py-0 text-muted' />
+                      <i className='mdi mdi-window-close tw:text-[19.5px] tw:m-0 tw:px-2 tw:py-0 tw:text-[color:var(--bs-secondary-color)]' />
                     </span>
                   </div>
                 </div>

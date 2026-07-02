@@ -542,7 +542,7 @@ const AddKit = ({ session }: Props) => {
                                                       isClearable
                                                       menuPortalTarget={document?.body}
                                                     />
-                                                    {meta.error ? <ErrorInputLabel error={meta.error} marginTop='mt-0' /> : null}
+                                                    {meta.error ? <ErrorInputLabel error={meta.error} marginTop='tw:mt-0' /> : null}
                                                   </FormGroup>
                                                 )}
                                               </Field>
