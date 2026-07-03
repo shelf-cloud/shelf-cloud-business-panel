@@ -10,11 +10,12 @@ import { useReceivingsBoxes } from '@hooks/receivings/useReceivingsBoxes'
 import { useWarehouses } from '@hooks/warehouses/useWarehouse'
 import axios from 'axios'
 import { useFormik } from 'formik'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 
 import { Alert } from '@/components/ui/Alert'
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
+import { InputGroup, InputGroupText } from '@/components/ui/InputGroup'
 import { Label } from '@shadcn/ui/label'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 import { Nav, NavItem, NavLink, TabContent, TabPane } from '@/components/ui/nav-tabs'
@@ -239,7 +240,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
       }}>
       <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl' id='addPaymentToPoModal'>
         <DialogHeader className='pr-6' id='myModalLabel'>
-          <DialogTitle className='modal-title'>Create Receiving From Purchase Orders</DialogTitle>
+          <DialogTitle>Create Receiving From Purchase Orders</DialogTitle>
         </DialogHeader>
         <div className='flex flex-wrap -mx-3'>
           <p className='m-0 text-[16.25px] font-semibold'>
@@ -253,10 +254,10 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                 <Label htmlFor='firstNameinput' className='mb-2 inline-block text-[11.2px]'>
                   *Transaction Number
                 </Label>
-                <div className='input-group'>
-                  <span className='input-group-text font-semibold text-[16.25px] m-0 px-2 py-0' id='basic-addon1'>
+                <InputGroup>
+                  <InputGroupText className='font-semibold text-[16.25px] m-0 px-2 py-0' id='basic-addon1'>
                     {orderNumberStart}
-                  </span>
+                  </InputGroupText>
                   <Input
                     disabled={validation.values.isNewReceiving === 'false'}
                     type='text'
@@ -269,7 +270,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                     aria-invalid={validation.touched.orderNumber && validation.errors.orderNumber ? true : undefined}
                   />
                   {validation.touched.orderNumber && validation.errors.orderNumber ? <div className='text-sm text-destructive'>{validation.errors.orderNumber}</div> : null}
-                </div>
+                </InputGroup>
               </div>
             </div>
             <div className='px-3 w-full md:w-5/12'>
@@ -286,7 +287,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                 }}
                 error={validation.errors.isNewReceiving}
               />
-              {openReceivings && openReceivings.length <= 0 && <p className='text-[var(--bs-secondary-color)] text-[11.2px]'>{`No open receiving to ${state.receivingFromPo.warehouse.name}`}</p>}
+              {openReceivings && openReceivings.length <= 0 && <p className='text-muted-foreground text-[11.2px]'>{`No open receiving to ${state.receivingFromPo.warehouse.name}`}</p>}
               {validation.values.isNewReceiving === 'false' && (
                 <SelectSingleFilter
                   inputLabel='*Select Existing Receiving'
@@ -309,7 +310,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
           <Nav className='nav-tabs border-b' role='tablist'>
             <NavItem style={{ cursor: 'pointer' }}>
               <NavLink
-                className={activeTab == 'summary' ? 'text-primary font-semibold text-[13px] border border-primary' : 'text-[var(--bs-secondary-color)] text-[13px]'}
+                className={activeTab == 'summary' ? 'text-primary font-semibold text-[13px] border border-primary' : 'text-muted-foreground text-[13px]'}
                 onClick={() => {
                   setactiveTab('summary')
                 }}
@@ -319,7 +320,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
             </NavItem>
             <NavItem style={{ cursor: 'pointer' }}>
               <NavLink
-                className={activeTab == 'packages' ? 'text-primary font-semibold text-[13px] border border-primary' : 'text-[var(--bs-secondary-color)] text-[13px]'}
+                className={activeTab == 'packages' ? 'text-primary font-semibold text-[13px] border border-primary' : 'text-muted-foreground text-[13px]'}
                 onClick={() => {
                   setactiveTab('packages')
                 }}
@@ -368,7 +369,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                 <Button
                   disabled={loading || Object.keys(state.receivingFromPo.items).length <= 0}
                   type='button'
-                  className='text-[11.2px] btn-soft-primary'
+                  className='inline-flex h-9 items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium text-[11.2px] btn-soft-primary'
                   onClick={() => setactiveTab('packages')}>
                   Next Step
                 </Button>

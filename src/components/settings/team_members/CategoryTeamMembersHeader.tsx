@@ -35,7 +35,7 @@ const CategoryTeamMembersHeader = ({ title, icon, checked, manageUser, setManage
         <i className={`${icon} text-[16.25px] m-0 p-0 me-2`} />
         <span className='font-semibold text-[16.25px] capitalize'>{title}</span>
       </>
-      <div className='form-check form-switch form-check-right form-check-success'>
+      <div className='flex items-center'>
         <Switch checked={checked} onChange={handleChangePermissions} />
       </div>
     </div>

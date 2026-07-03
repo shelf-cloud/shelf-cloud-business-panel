@@ -159,7 +159,7 @@ const MarketplacesListingsTable = ({ tableData, pending, setSelectedRows, toggle
       id: MAPPED_COL_ID,
       selector: (row: MarketplaceListingsProduct) => {
         if (marketplaceId === '') {
-          return <span className='text-[11.2px] text-[var(--bs-secondary-color)]'>Select Marketplace</span>
+          return <span className='text-[11.2px] text-muted-foreground'>Select Marketplace</span>
         }
 
         const listing = row.listings.find((listing) => listing.storeId_true?.toString() === marketplaceId)
@@ -173,12 +173,12 @@ const MarketplacesListingsTable = ({ tableData, pending, setSelectedRows, toggle
               </Link>
               {listing.isHidden ? (
                 <p className='text-[11.2px] m-0 p-0'>
-                  <i className='mdi mdi-eye-off label-icon align-middle text-[13px] me-0 text-destructive' /> <span className='text-[var(--bs-secondary-color)]'>Hidden</span>
+                  <i className='mdi mdi-eye-off label-icon align-middle text-[13px] me-0 text-destructive' /> <span className='text-muted-foreground'>Hidden</span>
                 </p>
               ) : null}
               {listing.isManual ? (
                 <p className='text-[11.2px] m-0 p-0'>
-                  <i className='mdi mdi-hand-back-left label-icon align-middle text-[13px] me-0 text-primary' /> <span className='text-[var(--bs-secondary-color)]'>Manual</span>
+                  <i className='mdi mdi-hand-back-left label-icon align-middle text-[13px] me-0 text-primary' /> <span className='text-muted-foreground'>Manual</span>
                 </p>
               ) : null}
             </div>
@@ -187,7 +187,7 @@ const MarketplacesListingsTable = ({ tableData, pending, setSelectedRows, toggle
           return (
             <div className='flex flex-row justify-end items-center gap-2'>
               <i className='las la-link text-[19.5px] text-destructive m-0 p-0' />
-              <span className='text-[11.2px] text-[var(--bs-secondary-color)]'>Not Mapped</span>
+              <span className='text-[11.2px] text-muted-foreground'>Not Mapped</span>
             </div>
           )
         }

@@ -63,7 +63,7 @@ const SelectMultipleDropDown = ({ formValue, selectionInfo, selected, handleSele
         onClick={() => setOpenDatesMenu(!openDatesMenu)}>
         <span className='flex-1 px-3 py-[0.3rem] text-[13px] text-left' style={{ backgroundColor: 'white', opacity: '100%' }}>
           {selectedParsed.length === 0 ? (
-            <span className='text-[color:var(--bs-secondary-color)]'>Select</span>
+            <span className='text-muted-foreground'>Select</span>
           ) : (
             selectedParsed
               .map((value) => selectionInfo[value]?.label)
@@ -94,7 +94,7 @@ const SelectMultipleDropDown = ({ formValue, selectionInfo, selected, handleSele
             ))}
           </div>
           <p
-            className='mt-2 mb-0 text-[color:var(--bs-secondary-color)] text-right'
+            className='mt-2 mb-0 text-muted-foreground text-right'
             style={{ cursor: 'pointer' }}
             onClick={() => {
               handleSelection(formValue, '[]')

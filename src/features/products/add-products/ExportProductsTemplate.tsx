@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 
 import { Product } from '@typings'
 

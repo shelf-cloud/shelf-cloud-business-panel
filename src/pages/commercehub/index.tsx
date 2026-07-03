@@ -11,7 +11,7 @@ import AppContext from '@context/AppContext'
 import { DashboardResponse } from '@typesTs/commercehub/dashboard'
 import { CommerceHubStoresResponse } from '@typesTs/commercehub/invoices'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import useSWR from 'swr'
 

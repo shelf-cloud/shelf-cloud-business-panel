@@ -8,7 +8,7 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import { DeductionType } from '@typesTs/commercehub/deductions'
 import moment from 'moment'
 import DataTable from '@components/Common/DataTableSC'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 
 type EditComment = {
@@ -101,7 +101,7 @@ const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClear
         <div className='flex flex-wrap justify-start items-center'>
           <p className='m-0 p-0 font-semibold text-[11.2px]'>{row.invoiceNumber}</p>{' '}
           <i
-            className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-[color:var(--bs-secondary-color)]'
+            className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-muted-foreground'
             style={{ cursor: 'pointer' }}
             onClick={() => {
               navigator.clipboard.writeText(row.invoiceNumber)
@@ -119,7 +119,7 @@ const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClear
     },
     {
       name: <span className='font-bold text-[13px] text-nowrap'>Keyrec No.</span>,
-      selector: (row: DeductionType) => <p className='m-0 p-0 text-[var(--bs-secondary-color)] text-[11.2px]'>{row.keyrecNumber ? row.keyrecNumber : ''}</p>,
+      selector: (row: DeductionType) => <p className='m-0 p-0 text-muted-foreground text-[11.2px]'>{row.keyrecNumber ? row.keyrecNumber : ''}</p>,
       sortable: false,
       left: true,
       compact: true,
@@ -128,7 +128,7 @@ const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClear
       name: <span className='font-bold text-[13px]'>PO No.</span>,
       selector: (row: DeductionType) => (
         <div className='flex flex-wrap justify-start items-center'>
-          <p className='m-0 p-0 text-[var(--bs-secondary-color)] text-[11.2px]'>{row.poNumber}</p>
+          <p className='m-0 p-0 text-muted-foreground text-[11.2px]'>{row.poNumber}</p>
         </div>
       ),
       sortable: false,
@@ -196,13 +196,13 @@ const DeductionsTable = ({ filteredItems, pending, setSelectedRows, toggledClear
         switch (row.status) {
           case 'closed':
           case 'resolved':
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-dark)_10%,transparent)] text-dark p-2'>{` ${row.status} `}</span>
+            return <span className='inline-flex w-fit items-center rounded-sm px-2 py-0.5 text-xs font-medium uppercase bg-[color-mix(in_srgb,var(--vz-dark)_10%,transparent)] text-dark p-2'>{` ${row.status} `}</span>
           case 'reviewing':
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] text-warning p-2'>{` ${row.status} `}</span>
+            return <span className='inline-flex w-fit items-center rounded-sm px-2 py-0.5 text-xs font-medium uppercase bg-[color-mix(in_srgb,var(--vz-warning)_10%,transparent)] text-warning p-2'>{` ${row.status} `}</span>
           case 'pending':
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-info)_10%,transparent)] text-info p-2'>{` ${row.status} `}</span>
+            return <span className='inline-flex w-fit items-center rounded-sm px-2 py-0.5 text-xs font-medium uppercase bg-[color-mix(in_srgb,var(--vz-info)_10%,transparent)] text-info p-2'>{` ${row.status} `}</span>
           default:
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-info)_10%,transparent)] text-info p-2'>{` pending `}</span>
+            return <span className='inline-flex w-fit items-center rounded-sm px-2 py-0.5 text-xs font-medium uppercase bg-[color-mix(in_srgb,var(--vz-info)_10%,transparent)] text-info p-2'>{` pending `}</span>
         }
       },
       sortable: false,

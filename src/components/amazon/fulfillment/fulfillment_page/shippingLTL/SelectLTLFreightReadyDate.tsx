@@ -75,14 +75,14 @@ const SelectLTLFreightReadyDate = ({ shipmentId, selectedLTLTransportationOption
             <p className='m-0 p-0 font-semibold'>{moment.utc(option.carrierAppointment?.startTime).format('ddd')}</p>
             <p className='m-0 p-0 font-semibold'>{moment.utc(option.carrierAppointment?.startTime).format('MMM D')}</p>
             <p className='m-0 p-0'>
-              <span className='text-[var(--bs-secondary-color)]' style={{ fontSize: '0.875em' }}>
+              <span className='text-muted-foreground' style={{ fontSize: '0.875em' }}>
                 from
               </span>{' '}
               {FormatCurrency(state.currentRegion, option.quote?.cost.amount || 0)}
             </p>
             {option.quote?.expiration && (
               <>
-                <p className='m-0 p-0 text-[var(--bs-secondary-color)]' style={{ fontSize: '0.875em' }}>
+                <p className='m-0 p-0 text-muted-foreground' style={{ fontSize: '0.875em' }}>
                   expires
                 </p>
                 <p className='m-0 p-0 text-danger' style={{ fontSize: '0.875em' }}>

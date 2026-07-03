@@ -35,7 +35,7 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
         <div>
           <p className='m-0 p-0 font-semibold text-[11.2px]'>{row.orderNumber}</p>
           {row.tag ? (
-            <small className='m-0 text-[11.2px] font-light text-[var(--bs-secondary-color)] flex flex-row items-center gap-1' id={`receivingTag-${row.id}`}>
+            <small className='m-0 text-[11.2px] font-light text-muted-foreground flex flex-row items-center gap-1' id={`receivingTag-${row.id}`}>
               <i className='las la-tag label-icon align-middle text-[13px]' />
               <span className='text-primary text-[11.2px]'>{row.tag}</span>
             </small>
@@ -70,7 +70,7 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
             return <span className='inline-block rounded text-[9.75px] font-bold uppercase p-2 bg-[color-mix(in_srgb,var(--success)_10%,transparent)] text-success'> {row.orderStatus} </span>
           case 'awaiting_shipment':
           case 'awaiting':
-            return <span className='inline-block rounded text-[9.75px] font-bold uppercase p-2 bg-[color-mix(in_srgb,var(--secondary)_10%,transparent)] text-[var(--bs-secondary-color)]'>{' awaiting '}</span>
+            return <span className='inline-block rounded text-[9.75px] font-bold uppercase p-2 bg-[color-mix(in_srgb,var(--secondary)_10%,transparent)] text-muted-foreground'>{' awaiting '}</span>
           case 'on_hold':
             return <span className='inline-block rounded text-[9.75px] font-bold uppercase p-2 bg-[color-mix(in_srgb,var(--warning)_10%,transparent)] text-warning'>{' on hold '}</span>
           case 'cancelled':
@@ -96,7 +96,7 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
             <p className='m-0'>{row.warehouseName}</p>
             {row.receivingShippingCost && (
               <>
-                <small className='m-0 font-light text-[var(--bs-secondary-color)]' id={`receivingShippingCost-${row.id}`}>
+                <small className='m-0 font-light text-muted-foreground' id={`receivingShippingCost-${row.id}`}>
                   Shipping: <span className='text-primary'>{FormatCurrency(state.currentRegion, row.receivingShippingCost)}</span>
                 </small>
                 <SCTooltip target={`receivingShippingCost-${row.id}`} placement='right' key={`receivingShippingCost-${row.id}`}>
@@ -213,7 +213,7 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
                       warehouseId={row.warehouseId}
                       isManualReceiving={!row.isReceivingFromPo}>
                       <DropdownMenuItem>
-                        <i className='las la-toilet-paper label-icon align-middle me-2 text-[16.25px] text-[var(--bs-secondary-color)]' />
+                        <i className='las la-toilet-paper label-icon align-middle me-2 text-[16.25px] text-muted-foreground' />
                         <span className='font-normal text-black'>Receiving Labels</span>
                       </DropdownMenuItem>
                     </GenerateReceivingLabels>

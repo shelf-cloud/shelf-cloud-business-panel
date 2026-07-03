@@ -94,7 +94,7 @@ const ProductOrderedModals = ({ showOrderedModal, setshowOrderedModal }: Props) 
       <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl' id='myModal'>
         <DialogHeader className='pr-6'>
           <DialogTitle>
-            <p className='modal-title text-[22.75px]' id='myModalLabel'>
+            <p className='m-0 text-[22.75px]' id='myModalLabel'>
               Open Purchase Orders
             </p>
             <p className='text-[16.25px]'>SKU: {showOrderedModal.sku}</p>

@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import { OrderRowType } from '@typings'
 import moment from 'moment'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { DropdownMenuItem } from '@shadcn/ui/dropdown-menu'
 
 type Props = {

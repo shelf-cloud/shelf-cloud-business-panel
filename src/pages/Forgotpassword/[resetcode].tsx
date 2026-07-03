@@ -5,7 +5,7 @@ import { FormEventHandler, useState } from 'react'
 import ShelfCloudLogo from '@images/shelfcloud-blue-h.png'
 import axios from 'axios'
 import { useFormik } from 'formik'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Label } from '@shadcn/ui/label'
 import { Spinner } from '@shadcn/ui/spinner'
@@ -79,7 +79,7 @@ const ResetPasswordPage = ({}: Props) => {
           <h1 className='text-[2.5rem] mb-6 font-bold text-center'>Reset Password</h1>
           <form onSubmit={handleResetPasswordSubmit} className='w-full'>
             <div className='mb-1 w-full'>
-              <Label className='form-label' htmlFor='password-input'>
+              <Label className='mb-2' htmlFor='password-input'>
                 New Password
               </Label>
               <div className='relative auth-pass-inputgroup mb-4'>
@@ -93,7 +93,7 @@ const ResetPasswordPage = ({}: Props) => {
                   onBlur={validationChangePassword.handleBlur}
                   value={validationChangePassword.values.newPassword || ''}
                 />
-                <button className='btn btn-link absolute right-0 top-0 no-underline text-[var(--bs-secondary-color)]' type='button' onClick={() => setShow(!show)}>
+                <button className='inline-flex appearance-none items-center justify-center gap-2 whitespace-nowrap rounded-md border-0 bg-transparent text-sm font-medium absolute right-0 top-0 no-underline text-muted-foreground' type='button' onClick={() => setShow(!show)}>
                   <i className='ri-eye-fill align-middle text-[16.25px]'></i>
                 </button>
               </div>
@@ -102,7 +102,7 @@ const ResetPasswordPage = ({}: Props) => {
               ) : null}
             </div>
             <div className='mb-1 w-full'>
-              <Label className='form-label' htmlFor='password-input'>
+              <Label className='mb-2' htmlFor='password-input'>
                 Confirm Password
               </Label>
               <div className='relative auth-pass-inputgroup mb-4'>
@@ -116,7 +116,7 @@ const ResetPasswordPage = ({}: Props) => {
                   onBlur={validationChangePassword.handleBlur}
                   value={validationChangePassword.values.confirmPassword || ''}
                 />
-                <button className='btn btn-link absolute right-0 top-0 no-underline text-[var(--bs-secondary-color)]' type='button' onClick={() => setShowConfirm(!showConfirm)}>
+                <button className='inline-flex appearance-none items-center justify-center gap-2 whitespace-nowrap rounded-md border-0 bg-transparent text-sm font-medium absolute right-0 top-0 no-underline text-muted-foreground' type='button' onClick={() => setShowConfirm(!showConfirm)}>
                   <i className='ri-eye-fill align-middle text-[16.25px]'></i>
                 </button>
               </div>

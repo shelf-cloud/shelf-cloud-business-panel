@@ -43,7 +43,7 @@ const ConfirmActionModal = ({
   return (
     <Dialog open={!!isOpen} onOpenChange={(open) => { if (!open) handleClose() }}>
       <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg' id='confirmDeleteReceiving'>
-        <DialogHeader className='pr-6 modal-title' id='myModalLabel'>
+        <DialogHeader className='pr-6' id='myModalLabel'>
           <DialogTitle>{headerText}</DialogTitle>
         </DialogHeader>
         <div>
@@ -51,7 +51,7 @@ const ConfirmActionModal = ({
             <p className='mb-2 text-[16.25px] font-semibold'>
               {primaryText} {primaryTextSub && <span className='text-primary'>{primaryTextSub}</span>}
             </p>
-            {descriptionText && <p className='mb-1 text-[var(--bs-secondary-color)]'>{descriptionText}</p>}
+            {descriptionText && <p className='mb-1 text-muted-foreground'>{descriptionText}</p>}
           </div>
         </div>
         <DialogFooter className='items-center'>

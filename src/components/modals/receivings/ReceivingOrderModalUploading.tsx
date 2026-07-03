@@ -14,7 +14,7 @@ import { useWarehouses } from '@hooks/warehouses/useWarehouse'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import Papa from 'papaparse'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 
 import { Button } from '@shadcn/ui/button'
 import { Card } from '@shadcn/ui/card'
@@ -22,6 +22,7 @@ import { Input } from '@shadcn/ui/input'
 import { Label } from '@shadcn/ui/label'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 import { Spinner } from '@shadcn/ui/spinner'
+import { InputGroup, InputGroupText } from '@/components/ui/InputGroup'
 import { Alert } from '@/components/ui/Alert'
 import { Nav, NavItem, NavLink, TabContent, TabPane } from '@/components/ui/nav-tabs'
 import * as Yup from 'yup'
@@ -294,7 +295,7 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
         if (!open) setreceivingUploadingModal({ show: false })
       }}>
       <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl' id='createReceivingOrderByUploading'>
-        <DialogHeader className='pr-6 modal-title' id='myModalLabel'>
+        <DialogHeader className='pr-6' id='myModalLabel'>
           <DialogTitle>Create Receiving by Uploading File</DialogTitle>
         </DialogHeader>
         <div>
@@ -310,10 +311,10 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
                   <Label htmlFor='orderNumber' className='mb-2 inline-block text-[11.2px]'>
                     *Transaction Number
                   </Label>
-                  <div className='input-group'>
-                    <span className='input-group-text font-semibold text-[16.25px] m-0 px-2 py-0' id='basic-addon1'>
+                  <InputGroup>
+                    <InputGroupText className='font-semibold text-[16.25px] m-0 px-2 py-0' id='basic-addon1'>
                       {orderNumberStart}
-                    </span>
+                    </InputGroupText>
                     <Input
                       type='text'
                       className='h-8 text-xs'
@@ -325,7 +326,7 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
                       aria-invalid={Boolean(validation.touched.orderNumber && validation.errors.orderNumber) || undefined}
                     />
                     {validation.touched.orderNumber && validation.errors.orderNumber ? <div className='text-sm text-destructive'>{validation.errors.orderNumber}</div> : null}
-                  </div>
+                  </InputGroup>
                 </div>
               </div>
               <div className='px-3 w-full'>
@@ -356,7 +357,7 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
                           <div className='flex flex-wrap -mx-3 items-center'>
                             <div className='px-3 flex justify-between items-center'>
                               <div>
-                                <p className='text-[var(--bs-secondary-color)] font-bold m-0 text-[11.2px]'>{f.name}</p>
+                                <p className='text-muted-foreground font-bold m-0 text-[11.2px]'>{f.name}</p>
                                 <p className='mb-0 text-[11.2px]'>
                                   <strong>{f.formattedSize}</strong>
                                 </p>
@@ -422,7 +423,7 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
             <Nav className='nav-tabs border-b' role='tablist'>
               <NavItem style={{ cursor: 'pointer' }}>
                 <NavLink
-                  className={activeTab == 'summary' ? '!text-primary font-semibold text-[13px] border border-primary' : '!text-[color:var(--bs-secondary-color)] text-[13px]'}
+                  className={activeTab == 'summary' ? '!text-primary font-semibold text-[13px] border border-primary' : '!text-muted-foreground text-[13px]'}
                   onClick={() => {
                     setactiveTab('summary')
                   }}
@@ -432,7 +433,7 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
               </NavItem>
               <NavItem style={{ cursor: 'pointer' }}>
                 <NavLink
-                  className={activeTab == 'packages' ? '!text-primary font-semibold text-[13px] border border-primary' : '!text-[color:var(--bs-secondary-color)] text-[13px]'}
+                  className={activeTab == 'packages' ? '!text-primary font-semibold text-[13px] border border-primary' : '!text-muted-foreground text-[13px]'}
                   onClick={() => {
                     setactiveTab('packages')
                   }}

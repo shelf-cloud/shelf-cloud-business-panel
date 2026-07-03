@@ -61,7 +61,7 @@ const ShipmentCarrierStatusBar = ({ carrier, currentStatus }: Props) => {
                 key={index}
                 className={'text-center py-2' + (index <= statusIndex ? ' bg-primary bg-gradient' : '')}
                 style={{ borderRadius: checkBorderRadius(index, statusIndex) }}>
-                <p className={'m-0 p-0 text-[11.2px]' + (index <= statusIndex ? ' font-semibold text-white' : ' font-semibold text-[var(--bs-secondary-color)]')}>{status}</p>
+                <p className={'m-0 p-0 text-[11.2px]' + (index <= statusIndex ? ' font-semibold text-white' : ' font-semibold text-muted-foreground')}>{status}</p>
               </div>
             ))}
           </CardContent>
@@ -79,7 +79,7 @@ const ShipmentCarrierStatusBar = ({ carrier, currentStatus }: Props) => {
                 key={index}
                 className={'text-center py-2' + (index <= statusIndex ? ' bg-primary bg-gradient' : '')}
                 style={{ borderRadius: checkBorderRadius(index, statusIndex) }}>
-                <p className={'m-0 p-0 text-[11.2px]' + (index <= statusIndex ? ' font-semibold text-white' : ' font-semibold text-[var(--bs-secondary-color)]')}>{status}</p>
+                <p className={'m-0 p-0 text-[11.2px]' + (index <= statusIndex ? ' font-semibold text-white' : ' font-semibold text-muted-foreground')}>{status}</p>
               </div>
             ))}
           </CardContent>
@@ -97,7 +97,7 @@ const ShipmentCarrierStatusBar = ({ carrier, currentStatus }: Props) => {
                 key={index}
                 className={'text-center py-2' + (index <= statusIndex ? ' bg-primary bg-gradient' : '')}
                 style={{ borderRadius: checkBorderRadius(index, statusIndex) }}>
-                <p className={'m-0 p-0 text-[11.2px]' + (index <= statusIndex ? ' font-semibold text-white' : ' font-semibold text-[var(--bs-secondary-color)]')}>{status}</p>
+                <p className={'m-0 p-0 text-[11.2px]' + (index <= statusIndex ? ' font-semibold text-white' : ' font-semibold text-muted-foreground')}>{status}</p>
               </div>
             ))}
           </CardContent>

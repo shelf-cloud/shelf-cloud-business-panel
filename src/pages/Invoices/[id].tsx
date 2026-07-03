@@ -14,7 +14,7 @@ import { InvoiceFullDetails } from '@typings'
 import axios from 'axios'
 import moment from 'moment'
 import { getSession } from 'next-auth/react'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import useSWR from 'swr'
 
 import { Button } from '@shadcn/ui/button'
@@ -94,7 +94,12 @@ const InvoiceDetails = () => {
                             <PrintInvoice invoiceDetails={invoiceDetails!} />
                             {currentRegion == 'us' && (
                               <a href={`${invoiceDetails?.invoice.payLink}`} target='blank' rel='noopener noreferrer'>
-                                <Button className={invoiceDetails?.invoice.paid ? 'btn btn-soft-success' : 'btn btn-primary'}>
+                                <Button
+                                  className={
+                                    invoiceDetails?.invoice.paid
+                                      ? 'inline-flex h-9 items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium bg-[color-mix(in_srgb,var(--vz-success)_18%,transparent)] text-success hover:bg-success hover:text-white'
+                                      : undefined
+                                  }>
                                   {invoiceDetails?.invoice.paid ? 'View Receipt' : 'Pay Now'}
                                 </Button>
                               </a>

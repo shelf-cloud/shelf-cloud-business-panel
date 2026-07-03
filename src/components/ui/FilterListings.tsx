@@ -72,7 +72,7 @@ const FilterListings = ({ showHidden, condition, mapped }: Props) => {
                     router.replace(`/amazon-sellers/listings?showHidden=${parseInt(showHidden)}&condition=All&mapped=All`)
                     setOpenDatesMenu(false)
                   }}
-                  className='p-0 border-0 bg-transparent no-underline text-[color:var(--bs-secondary-color)] mt-2 text-sm'>
+                  className='p-0 border-0 bg-transparent no-underline text-muted-foreground mt-2 text-sm'>
                   Clear All
                 </button>
               </div>

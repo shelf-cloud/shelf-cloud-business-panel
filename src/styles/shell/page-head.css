@@ -65,7 +65,7 @@
   float: left;
   padding-right: var(--bs-breadcrumb-item-padding-x);
   color: var(--bs-breadcrumb-divider-color);
-  content: var(--bs-breadcrumb-divider, "\f0142");
+  content: "\f0142";
   font-family: 'Material Design Icons';
   font-size: 15px;
   line-height: 20px;

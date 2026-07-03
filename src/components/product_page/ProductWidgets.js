@@ -116,7 +116,7 @@ const ProductWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValu
                       </UncontrolledTooltip>
                     </h4>
                   ) : (
-                    <span className='text-[19.5px] text-[color:var(--bs-secondary-color)] font-light'>No Cost</span>
+                    <span className='text-[19.5px] text-muted-foreground font-light'>No Cost</span>
                   )}
                 </div>
               </div>

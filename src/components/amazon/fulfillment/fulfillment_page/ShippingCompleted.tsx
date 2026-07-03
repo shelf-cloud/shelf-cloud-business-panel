@@ -136,7 +136,7 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                         {discount.target} <span className='font-semibold'>{FormatCurrency(state.currentRegion, discount.value.amount)}</span> {discount.value.code}
                       </p>
                     ))}
-                    <p className='m-0 text-[11.2px] text-[var(--bs-secondary-color)] font-light'>ID: {placementOption.placementOptionId}</p>
+                    <p className='m-0 text-[11.2px] text-muted-foreground font-light'>ID: {placementOption.placementOptionId}</p>
                   </CardContent>
                 </Card>
               )
@@ -146,7 +146,7 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
       {/* SAME SHIPPING MODE */}
       <div>
         <p className='text-[16.25px] font-bold'>Shipping mode</p>
-        <div className='form-check form-switch form-switch-sm flex justify-start items-center gap-2 p-0 my-4'>
+        <div className='flex justify-start items-center gap-2 p-0 my-4'>
           <Switch id='showShippingMode' name='showShippingMode' disabled={true} checked={finalShippingCharges.sameShippingMode} />
           <Label className='check-form-label m-0 font-normal' htmlFor='showShippingMode'>
             Shipping mode will be same for all shipments
@@ -270,7 +270,7 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
               style={{ width: 'fit-content', maxWidth: '430px', zIndex: placementOptionSelected.shipmentIds.length - shipmentIndex }}>
               <CardHeader>
                 <p className='m-0 p-0 font-bold text-[13px]'>Shipment #{shipmentIndex + 1}</p>
-                <p className='m-0 p-0 text-[11.2px] text-[var(--bs-secondary-color)] font-light'>ID: {shipmentId}</p>
+                <p className='m-0 p-0 text-[11.2px] text-muted-foreground font-light'>ID: {shipmentId}</p>
               </CardHeader>
               <CardContent>
                 <p className='m-0 text-[11.2px]'>
@@ -546,7 +546,7 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                                 name={`shippingCarrierAmazon-${shipmentId}`}
                                 checked={finalShippingCharges.sameShippingCarrier === 'amazon'}
                               />
-                              <div className={'' + (finalShippingCharges.sameShippingCarrier !== 'amazon' && 'text-[var(--bs-secondary-color)]')}>
+                              <div className={'' + (finalShippingCharges.sameShippingCarrier !== 'amazon' && 'text-muted-foreground')}>
                                 <p className='m-0 p-0 text-[11.2px]'>{`${inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].carrier.alphaCode} (${CleanStatus(
                                   inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId][0].shippingSolution
                                 )})`}</p>
@@ -650,7 +650,7 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
 
                   {!finalShippingCharges.sameShippingMode && finalShippingCharges.shipments[shipmentId].shippingMode === 'SPD' && (
                     <div className='mt-4'>
-                      <p className='m-0 my-4 p-0 text-[var(--bs-secondary-color)] text-[11.2px]'>
+                      <p className='m-0 my-4 p-0 text-muted-foreground text-[11.2px]'>
                         * The Amazon Partnered Carrier program offers discounted shipping rates, the convenience of buying and printing shipping labels when you create shipments,
                         and automated tracking.
                       </p>

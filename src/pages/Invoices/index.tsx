@@ -9,7 +9,7 @@ import InvoicesTable from '@components/InvoicesTable'
 import AppContext from '@context/AppContext'
 import { InvoiceList } from '@typings'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import useSWR from 'swr'
 
 import { Button } from '@shadcn/ui/button'
@@ -87,7 +87,7 @@ const Invoices = ({ session }: Props) => {
                             <span className='mdi mdi-magnify search-widget-icon'></span>
                             <span className='mdi mdi-close-circle search-widget-icon search-widget-icon-close hidden' id='search-close-options'></span>
                           </div>
-                          <Button className='btn-soft-dark' onClick={() => setSearchValue('')}>
+                          <Button className='!bg-transparent !border-transparent !shadow-none btn-soft-dark' onClick={() => setSearchValue('')}>
                             Clear
                           </Button>
                         </div>

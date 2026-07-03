@@ -33,7 +33,7 @@ const KitType = ({ data }: Props) => {
                     {data.children.map((product: Children, key) => (
                       <tr key={key} className='border-b border-[color:var(--border)]'>
                         <td className='w-1/2 text-[11.2px] font-semibold'>{product.title || ''}</td>
-                        <td className='text-[11.2px] text-[var(--bs-secondary-color)]'>{product.sku}</td>
+                        <td className='text-[11.2px] text-muted-foreground'>{product.sku}</td>
                         <td className='text-center'>{product.available}</td>
                         <td className='text-center'>{product.qty}</td>
                       </tr>

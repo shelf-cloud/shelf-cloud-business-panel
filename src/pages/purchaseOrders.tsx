@@ -86,11 +86,11 @@ const PurchaseOrders = ({ session }: Props) => {
                   <CardHeader>
                     <div className='flex flex-col justify-between items-end mt-0 mb-0 gap-3 lg:flex-row'>
                       <div className='flex-1'>
-                        <p className='m-0 p-0 text-[11.2px] text-[color:var(--bs-secondary-color)] font-normal'>Organize Purchase Orders by:</p>
+                        <p className='m-0 p-0 text-[11.2px] text-muted-foreground font-normal'>Organize Purchase Orders by:</p>
                         <Nav className='pt-1' role='tablist'>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
-                              className={organizeBy == 'suppliers' ? '!text-primary font-semibold text-[16.25px]' : '!text-[color:var(--bs-secondary-color)] text-[16.25px]'}
+                              className={organizeBy == 'suppliers' ? '!text-primary font-semibold text-[16.25px]' : '!text-muted-foreground text-[16.25px]'}
                               onClick={() => {
                                 router.replace(`/purchaseOrders?status=${status}&organizeBy=suppliers`, undefined, { shallow: true })
                               }}>
@@ -99,7 +99,7 @@ const PurchaseOrders = ({ session }: Props) => {
                           </NavItem>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
-                              className={organizeBy == 'orders' ? '!text-primary font-semibold text-[16.25px]' : '!text-[color:var(--bs-secondary-color)] text-[16.25px]'}
+                              className={organizeBy == 'orders' ? '!text-primary font-semibold text-[16.25px]' : '!text-muted-foreground text-[16.25px]'}
                               onClick={() => {
                                 router.replace(`/purchaseOrders?status=${status}&organizeBy=orders`, undefined, { shallow: true })
                               }}
@@ -109,7 +109,7 @@ const PurchaseOrders = ({ session }: Props) => {
                           </NavItem>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
-                              className={organizeBy == 'sku' ? '!text-primary font-semibold text-[16.25px]' : '!text-[color:var(--bs-secondary-color)] text-[16.25px]'}
+                              className={organizeBy == 'sku' ? '!text-primary font-semibold text-[16.25px]' : '!text-muted-foreground text-[16.25px]'}
                               onClick={() => {
                                 router.replace(`/purchaseOrders?status=${status}&organizeBy=sku`, undefined, { shallow: true })
                               }}

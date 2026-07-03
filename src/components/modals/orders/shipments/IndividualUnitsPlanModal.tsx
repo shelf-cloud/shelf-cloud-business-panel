@@ -102,7 +102,7 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
       }}>
       <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl' id='myModal'>
         <DialogHeader className='pr-6' id='myModalLabel'>
-          <DialogTitle className='modal-title'>Individual Units Plan</DialogTitle>
+          <DialogTitle>Individual Units Plan</DialogTitle>
         </DialogHeader>
         <div style={{ overflow: 'auto' }}>
         <div className='px-3 flex-1 basis-0'>
@@ -156,7 +156,7 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
                           )
                       )
                     ) : (
-                      <td key={`empty-${box.boxId}`} className='text-center text-[var(--bs-secondary-color)]'>
+                      <td key={`empty-${box.boxId}`} className='text-center text-muted-foreground'>
                         -
                       </td>
                     )
@@ -216,13 +216,13 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
             <Button
               type='submit'
               variant='light'
-              className='btn mr-4'
+              className='mr-4'
               onClick={() => {
                 setIndividualUnitsPlan(!state.showIndividualUnitsPlan)
               }}>
               Close
             </Button>
-            <Button type='submit' variant='success' className='btn' onClick={handlePrintPlan}>
+            <Button type='submit' variant='success' onClick={handlePrintPlan}>
               Print Plan
             </Button>
           </div>

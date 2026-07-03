@@ -4,7 +4,7 @@ import { useContext, useState } from 'react'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { DebounceInput } from 'react-debounce-input'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 import { Spinner } from '@shadcn/ui/spinner'
@@ -81,7 +81,7 @@ const ChangeFBAShipmentName = ({ editShipmentName, seteditShipmentName }: Props)
       }}>
       <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg' id='ChangeFBAShipmentName'>
         <DialogHeader className='pr-6'>
-          <DialogTitle className='modal-title' id='myModalLabel'>
+          <DialogTitle id='myModalLabel'>
             Rename Shipment
           </DialogTitle>
         </DialogHeader>

@@ -9,7 +9,7 @@ import { AmazonFulfillmentSku, AmazonMarketplace } from '@typesTs/amazon/fulfill
 import axios from 'axios'
 import { useFormik } from 'formik'
 import moment from 'moment'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
 import { NativeSelect } from '@shadcn/ui/native-select'
@@ -304,7 +304,7 @@ const CreateMastBoxesInboundPlanModalManual = ({ orderProducts, showCreateInboun
       }}>
       <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl' id='createInboundPlanModal'>
         <DialogHeader className='pr-6' id='myModalLabel'>
-          <DialogTitle className='modal-title'>
+          <DialogTitle>
             <p className='text-[19.5px] m-0'>Create Manual Fulfillment - Send To Amazon</p>
           </DialogTitle>
         </DialogHeader>
@@ -318,10 +318,10 @@ const CreateMastBoxesInboundPlanModalManual = ({ orderProducts, showCreateInboun
             <div className='flex flex-wrap -mx-3 my-0'>
               <div className='px-3 md:w-6/12'>
                 <div className='mb-4'>
-                  <Label htmlFor='orderNumber' className='form-label'>
+                  <Label htmlFor='orderNumber' className='mb-2'>
                     *Fulfillment Name
                   </Label>
-                  <div className='input-group'>
+                  <div>
                     <Input
                       type='text'
                       className='h-8 text-xs'
@@ -340,7 +340,7 @@ const CreateMastBoxesInboundPlanModalManual = ({ orderProducts, showCreateInboun
               </div>
               <div className='px-3 md:w-6/12'>
                 <div className='mb-4'>
-                  <Label htmlFor='marketplace' className='form-label'>
+                  <Label htmlFor='marketplace' className='mb-2'>
                     *Marketplace destination
                   </Label>
                   <NativeSelect
@@ -367,7 +367,7 @@ const CreateMastBoxesInboundPlanModalManual = ({ orderProducts, showCreateInboun
             <div className='flex flex-wrap -mx-3 my-0'>
               <div className='px-3 md:w-6/12'>
                 <div className='mb-4'>
-                  <Label htmlFor='shipFrom' className='form-label'>
+                  <Label htmlFor='shipFrom' className='mb-2'>
                     *Ship From
                   </Label>
                   <NativeSelect

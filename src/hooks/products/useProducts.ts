@@ -3,7 +3,7 @@ import { useCallback, useContext, useMemo } from 'react'
 import AppContext from '@context/AppContext'
 import type { Product } from '@typings'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import useSWR from 'swr'
 
 import { filterProducts } from './productFilters'

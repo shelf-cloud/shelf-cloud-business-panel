@@ -22,7 +22,7 @@ const CheckNumberTable = ({ summary }: Props) => {
       <div className='px-3 flex-1 basis-0'>
         <Card>
           <CardHeader className='items-center flex justify-between'>
-            <h4 className='card-title mb-0 grow'>Check Summary</h4>
+            <h4 className='text-[1rem] font-medium mb-0 grow'>Check Summary</h4>
           </CardHeader>
 
           <CardContent>
@@ -63,7 +63,7 @@ const CheckNumberTable = ({ summary }: Props) => {
                               {item.checkNumber}
                             </Link>
                           ) : (
-                            <span className='text-[13px] text-[var(--bs-secondary-color)] font-light italic'>Pending</span>
+                            <span className='text-[13px] text-muted-foreground font-light italic'>Pending</span>
                           )}
                         </td>
                         <td>{moment.utc(item.checkDate).local().format('LL')}</td>

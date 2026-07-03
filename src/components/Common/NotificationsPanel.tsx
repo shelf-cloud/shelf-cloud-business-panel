@@ -8,9 +8,11 @@ import { useSocket } from '@hooks/useSocket'
 import { NotificationsPanelResponse } from '@typesTs/notifications'
 import axios from 'axios'
 import moment from 'moment'
-import { toast } from 'react-toastify'
-import { Button } from '@shadcn/ui/button'
+import { toast } from '@/lib/toast'
+import { Button, buttonVariants } from '@shadcn/ui/button'
+import { badgeVariants } from '@shadcn/ui/badge'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@shadcn/ui/dropdown-menu'
+import { cn } from '@/lib/shadcn/utils'
 import useSWR from 'swr'
 
 const fetcher = async (endPoint: string) => await axios.get<NotificationsPanelResponse>(endPoint).then((res) => res.data.notifications)
@@ -69,10 +71,10 @@ const NotificationsPanel = () => {
         <DropdownMenu>
           <div className='dropdown inline-block'>
             <DropdownMenuTrigger asChild>
-              <button type='button' className='btn btn-primary btn-icon'>
+              <button type='button' className={cn(buttonVariants(), 'btn-icon')}>
                 <i className='mdi mdi-bell text-[19.5px]' />
                 {notifications?.some((info) => !info.read) && (
-                  <span className='badge bg-destructive absolute top-0 left-full -translate-x-1/2 -translate-y-1/2'>{notifications?.filter((info) => !info.read).length}</span>
+                  <span className={cn(badgeVariants({ variant: 'destructive' }), 'rounded-sm absolute top-0 left-full -translate-x-1/2 -translate-y-1/2')}>{notifications?.filter((info) => !info.read).length}</span>
                 )}
               </button>
             </DropdownMenuTrigger>
@@ -94,7 +96,7 @@ const NotificationsPanel = () => {
                       {info.title}
                       {!info.read && <i className='text-destructive mdi mdi-alert-circle text-[13px] me-1' />}
                     </p>
-                    <p className='m-0 text-[var(--bs-secondary-color)] font-normal truncate' style={{ fontSize: '0.65rem' }}>
+                    <p className='m-0 text-muted-foreground font-normal truncate' style={{ fontSize: '0.65rem' }}>
                       {info.description}
                     </p>
                     <span className='m-0 font-normal justify-start items-end gap-1 lg:flex lg:flex-row' style={{ fontSize: '0.65rem' }}>
@@ -112,7 +114,7 @@ const NotificationsPanel = () => {
             ) : (
               <div className='flex flex-col gap-2 items-start w-full overflow-auto px-4 py-2'>
                 <div className='w-full py-2'>
-                  <p className='m-0 text-[11.2px] font-normal text-[var(--bs-secondary-color)]'>Notifications will appear here</p>
+                  <p className='m-0 text-[11.2px] font-normal text-muted-foreground'>Notifications will appear here</p>
                 </div>
               </div>
             )}

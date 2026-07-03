@@ -74,7 +74,7 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, ma
             {({ values, handleBlur, setFieldValue, setValues }) => (
               <Form>
                 <div className='flex flex-col justify-start gap-4'>
-                  <div className='form-check form-switch form-switch-right form-switch-sm flex flex-row justify-start items-end'>
+                  <div className='flex flex-row justify-start items-end gap-2'>
                     <Label className='font-normal text-[11.2px] w-3/4'>Show hidden products</Label>
                     <Switch
                       id='showHidden'
@@ -87,7 +87,7 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, ma
                     />
                   </div>
                   {masterBoxVisibility && (
-                    <div className='form-check form-switch form-switch-right form-switch-sm flex flex-row justify-start items-end'>
+                    <div className='flex flex-row justify-start items-end gap-2'>
                       <Label className='font-normal text-[11.2px] w-3/4'>Show hidden visibility in Master Boxes</Label>
                       <Switch
                         id='masterBoxVisibility'
@@ -100,7 +100,7 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, ma
                       />
                     </div>
                   )}
-                  <div className='form-check form-switch form-switch-right form-switch-sm flex flex-row justify-start items-end'>
+                  <div className='flex flex-row justify-start items-end gap-2'>
                     <Label className='font-normal text-[11.2px] w-3/4'>Show With Not Enough Qty</Label>
                     <Switch
                       id='showNotEnough'
@@ -112,7 +112,7 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, ma
                       onBlur={handleBlur}
                     />
                   </div>
-                  <div className='form-check form-switch form-switch-right form-switch-sm flex flex-row justify-start items-end'>
+                  <div className='flex flex-row justify-start items-end gap-2'>
                     <Label className='font-normal text-[11.2px] w-3/4'>Show With No Recommended Ship Date</Label>
                     <Switch
                       id='ShowNoShipDate'
@@ -129,7 +129,7 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, ma
                   <button
                     type='button'
                     onClick={() => handleClearFilters(setValues)}
-                    className='p-0 border-0 bg-transparent no-underline font-normal m-0 text-[11.2px] text-[color:var(--bs-secondary-color)]'>
+                    className='p-0 border-0 bg-transparent no-underline font-normal m-0 text-[11.2px] text-muted-foreground'>
                     Clear All
                   </button>
                   <Button type='submit' size='sm'>

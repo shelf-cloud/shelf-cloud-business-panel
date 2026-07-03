@@ -38,7 +38,7 @@ const ServiceType = ({ data }: Props) => {
                 <table className='w-full whitespace-nowrap mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <tbody className='text-[11.2px]'>
                     <tr className='border-b border-[color:var(--border)] pb-2'>
-                      <td className='text-[var(--bs-secondary-color)]'>Extra Charge</td>
+                      <td className='text-muted-foreground'>Extra Charge</td>
                       <td className='font-semibold text-end'>{FormatCurrency(state.currentRegion, data.extraCharge)}</td>
                     </tr>
                     <tr>

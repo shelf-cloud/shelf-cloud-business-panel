@@ -4,7 +4,7 @@ import { useContext, useState } from 'react'
 import AppContext from '@context/AppContext'
 import { Shipment } from '@typesTs/shipments/shipments'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Dialog, DialogContent, DialogHeader } from '@shadcn/ui/dialog'
 import { NativeSelect } from '@shadcn/ui/native-select'
@@ -77,15 +77,15 @@ function CreateReturnModal({ data, mutateShipments }: Props) {
       }}>
       <DialogContent id='myModal' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl'>
       <DialogHeader className='pr-6'>
-        <h3 className='modal-title' id='myModalLabel'>
+        <h3 className='m-0' id='myModalLabel'>
           Create Return
         </h3>
       </DialogHeader>
       <div>
-        <h4 className='font-normal text-[16.25px] text-[var(--bs-secondary-color)]'>
+        <h4 className='font-normal text-[16.25px] text-muted-foreground'>
           Order: <span className='font-bold text-black'>{data?.orderNumber}</span>
         </h4>
-        <h4 className='font-normal text-[16.25px] text-[var(--bs-secondary-color)]'>
+        <h4 className='font-normal text-[16.25px] text-muted-foreground'>
           Status: <span className='font-bold text-black capitalize'>{data?.orderStatus}</span>
         </h4>
         {data?.totalItems == 1 ? (

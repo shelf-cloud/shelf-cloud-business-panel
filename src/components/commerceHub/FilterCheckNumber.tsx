@@ -55,7 +55,7 @@ const FilterCheckNumber = ({ type, setInvoiceType }: Props) => {
                 setInvoiceType('all')
                 setOpenDatesMenu(false)
               }}
-              className='btn btn-link p-0 border-0 no-underline text-[var(--bs-secondary-color)] mt-2 text-[11.2px]'>
+              className='p-0 border-0 no-underline text-muted-foreground mt-2 text-[11.2px]'>
               Clear All
             </button>
           </div>

@@ -152,7 +152,7 @@ const ProductsListings = ({ session }: Props) => {
                               <i className='las la-link label-icon align-middle text-[16.25px] me-2 text-primary' />
                               Set Mapped
                             </DropdownMenuItem>
-                            <DropdownMenuItem className='text-nowrap text-[var(--bs-secondary-color)] text-[11.2px] text-end' onClick={clearAllSelectedRows}>
+                            <DropdownMenuItem className='text-nowrap text-muted-foreground text-[11.2px] text-end' onClick={clearAllSelectedRows}>
                               Clear
                             </DropdownMenuItem>
                           </DropdownMenuContent>

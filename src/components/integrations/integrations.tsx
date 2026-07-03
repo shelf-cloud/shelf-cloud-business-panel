@@ -40,7 +40,7 @@ const Integrations = ({ env }: Props) => {
                 </div>
                 <span className='text-[22.75px] font-bold'>Amazon Seller FBA</span>
               </div>
-              <p className='text-[var(--bs-secondary-color)] text-[13px]'>Connect to Amazon FBA through Seller Central. You will be able to manage listings, product performance, orders and more...</p>
+              <p className='text-muted-foreground text-[13px]'>Connect to Amazon FBA through Seller Central. You will be able to manage listings, product performance, orders and more...</p>
               <div className='text-right'>
                 {!state.user[state.currentRegion]?.amazonConnected ? (
                   <AmazonAuthButton />
@@ -78,7 +78,7 @@ const Integrations = ({ env }: Props) => {
                 </div>
                 <span className='text-[22.75px] font-bold'>Amazon Ads</span>
               </div>
-              <p className='text-[var(--bs-secondary-color)] text-[13px]'>Connect to Amazon Ads. You will be able to get PPC costs and display cost for accurate product performance more...</p>
+              <p className='text-muted-foreground text-[13px]'>Connect to Amazon Ads. You will be able to get PPC costs and display cost for accurate product performance more...</p>
               <div className='text-right'>
                 {!state.user[state.currentRegion]?.amazonAdsConnected ? (
                   <AmazonAdsAuthButton env={env} />

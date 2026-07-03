@@ -17,7 +17,7 @@ import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoi
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { DebounceInput } from 'react-debounce-input'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { useSWRConfig } from 'swr'
 
 import { Button } from '@shadcn/ui/button'
@@ -26,6 +26,7 @@ import { Input } from '@shadcn/ui/input'
 import { Label } from '@shadcn/ui/label'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@shadcn/ui/dialog'
 import { Spinner } from '@shadcn/ui/spinner'
+import { InputGroup, InputGroupText } from '@/components/ui/InputGroup'
 import { ChevronDownIcon } from 'lucide-react'
 import * as Yup from 'yup'
 
@@ -288,13 +289,13 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
           <div className='flex flex-wrap -mx-3 mb-2'>
             <div className='px-3 w-full md:w-4/12'>
               <div className='mb-3 createOrder_inputs'>
-                <Label htmlFor='lastNameinput' className='form-label mb-1 text-[11.2px]'>
+                <Label htmlFor='lastNameinput' className='mb-1 text-[11.2px]'>
                   *Purchase Order Number
                 </Label>
-                <div className='input-group'>
-                  <span className='input-group-text font-semibold text-[13px]' style={{ padding: '0.2rem 0.9rem' }} id='basic-addon1'>
+                <InputGroup>
+                  <InputGroupText className='font-semibold text-[13px]' style={{ padding: '0.2rem 0.9rem' }} id='basic-addon1'>
                     {orderNumberStart}
-                  </span>
+                  </InputGroupText>
                   <Input
                     type='text'
                     className='text-[13px] h-8 text-xs'
@@ -309,13 +310,13 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                     aria-invalid={validation.touched.orderNumber && validation.errors.orderNumber ? true : undefined}
                   />
                   {validation.touched.orderNumber && validation.errors.orderNumber ? <div className='text-sm text-destructive'>{validation.errors.orderNumber}</div> : null}
-                </div>
+                </InputGroup>
               </div>
             </div>
             {!splits.isSplitting && (
               <>
                 <div className='px-3 w-full md:w-4/12'>
-                  <Label htmlFor='shipmentType' className='form-label text-[11.2px]'>
+                  <Label htmlFor='shipmentType' className='mb-2 text-[11.2px]'>
                     *Shipment Type
                   </Label>
                   <SimpleSelect
@@ -333,7 +334,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                   ) : null}
                 </div>
                 <div className='px-3 w-full md:w-4/12'>
-                  <Label htmlFor='destinationSC' className='form-label text-[11.2px]'>
+                  <Label htmlFor='destinationSC' className='mb-2 text-[11.2px]'>
                     *Select Destination
                   </Label>
                   <SimpleSelect
@@ -359,7 +360,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                 <div
                   className={`px-3 w-full ${MD_WIDTH_12THS[Math.round(12 / Object.entries(validation.values.splitShipmentTypes).length)]} mb-2`}
                   key={`splitShipmentType-${key}`}>
-                  <Label htmlFor={`splitShipmentType-${key}`} className='form-label mb-1 text-[11.2px]'>
+                  <Label htmlFor={`splitShipmentType-${key}`} className='mb-1 text-[11.2px]'>
                     <span className='font-normal'>Shipment Type To: </span>
                     <span className='font-semibold'>{splitNames[`${key}`]}</span>
                   </Label>
@@ -383,7 +384,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
               ))}
               {Object.entries(validation.values.splitDestinations).map(([key, split]) => (
                 <div className={`px-3 w-full ${MD_WIDTH_12THS[Math.round(12 / Object.entries(validation.values.splitDestinations).length)]}`} key={`splitDestination-${key}`}>
-                  <Label htmlFor={`splitDestination-${key}`} className='form-label mb-1 text-[11.2px]'>
+                  <Label htmlFor={`splitDestination-${key}`} className='mb-1 text-[11.2px]'>
                     <span className='font-normal'>Split:: </span>
                     <span className='font-semibold'>{splitNames[`${key}`]}</span>
                   </Label>
@@ -409,9 +410,9 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
               ) : null}
             </div>
           )}
-          <span className='text-[11.2px] text-[var(--bs-secondary-color)]'>*Select the columns you wish to print.</span>
+          <span className='text-[11.2px] text-muted-foreground'>*Select the columns you wish to print.</span>
           <div className='flex flex-row justify-evenly items-start'>
-            <table className='w-full align-middle mb-0 border border-[color:var(--border)] text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_th]:border [&_th]:border-[color:var(--border)] [&_td]:border [&_td]:border-[color:var(--border)] [&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)] [&_tbody_tr:hover]:bg-[color-mix(in_srgb,var(--bs-light)_60%,transparent)]'>
+            <table className='w-full align-middle mb-0 border border-[color:var(--border)] text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_th]:border [&_th]:border-[color:var(--border)] [&_td]:border [&_td]:border-[color:var(--border)] [&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)] [&_tbody_tr:hover]:bg-[color-mix(in_srgb,var(--vz-light)_60%,transparent)]'>
               <thead>
                 <tr>
                   <th>SKU</th>
@@ -508,7 +509,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                       <td className='w-1/4 text-[11.2px]'>
                         {product.title}
                         <br />
-                        <span className='text-[11.2px] text-[var(--bs-secondary-color)]'>{`UPC: ${product.barcode}`}</span>
+                        <span className='text-[11.2px] text-muted-foreground'>{`UPC: ${product.barcode}`}</span>
                       </td>
                       <td className='flex flex-row justify-center items-end gap-1'>
                         <DebounceInput
@@ -579,7 +580,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
           </div>
           <div className='flex flex-wrap -mx-3 my-1'>
             <div className='px-3 w-full md:w-6/12'>
-              <Label className='form-label mb-0 text-[11.2px]'>Order Comment</Label>
+              <Label className='mb-0 text-[11.2px]'>Order Comment</Label>
               <DebounceInput
                 element='textarea'
                 minLength={5}

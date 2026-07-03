@@ -14,7 +14,7 @@ import AppContext from '@context/AppContext'
 import { ReturnList, ReturnOrder, ReturnType } from '@typesTs/returns/returns'
 import axios from 'axios'
 import moment from 'moment'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Card, CardContent } from '@shadcn/ui/card'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@shadcn/ui/dropdown-menu'
@@ -230,7 +230,7 @@ const Returns = ({ session }: Props) => {
                         <DropdownMenuItem className='whitespace-nowrap capitalize text-[11.2px]' onClick={() => changeSelectedProductsState('pending')}>
                           <i className='mdi mdi-backup-restore text-[16.25px] text-warning align-middle m-0 p-0' /> set pending
                         </DropdownMenuItem>
-                        <DropdownMenuItem className='whitespace-nowrap text-right text-[11.2px] text-[var(--bs-secondary-color)]' onClick={clearAllSelectedRows}>
+                        <DropdownMenuItem className='whitespace-nowrap text-right text-[11.2px] text-muted-foreground' onClick={clearAllSelectedRows}>
                           Clear All
                         </DropdownMenuItem>
                       </DropdownMenuContent>

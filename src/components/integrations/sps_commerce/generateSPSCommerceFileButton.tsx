@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import { type SPSCommerceBusinessInfo, type SPSCommerceItem } from '@hooks/integrations/useSPSCommerceIntegrations'
 import moment from 'moment'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 
 import { type VariantProps } from 'class-variance-authority'
 

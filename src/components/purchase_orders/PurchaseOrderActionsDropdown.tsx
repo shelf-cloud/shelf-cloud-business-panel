@@ -14,7 +14,7 @@ import { PurchaseOrder, PurchaseOrderItem } from '@typesTs/purchaseOrders'
 import { Warehouse } from '@typesTs/warehouses/warehouse'
 import axios from 'axios'
 import { Loader2Icon, MoreVerticalIcon, Trash2Icon, WarehouseIcon } from 'lucide-react'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { useSWRConfig } from 'swr'
 
 type Props = {

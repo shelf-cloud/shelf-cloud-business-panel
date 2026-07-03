@@ -1,5 +1,3 @@
-"use client"
-
 import {
   CircleCheckIcon,
   InfoIcon,
@@ -7,15 +5,23 @@ import {
   OctagonXIcon,
   TriangleAlertIcon,
 } from "lucide-react"
-import { useTheme } from "next-themes"
-import { Toaster as Sonner, type ToasterProps } from "sonner"
+import type { ToasterProps } from "sonner"
 
+// Imported via @/lib/toast (not directly from 'sonner') so the mounted Toaster
+// and the toast() dispatcher share one sonner module instance — a duplicate
+// instance means dispatched toasts land in a store this Toaster never reads.
+import { SonnerToaster } from "@/lib/toast"
+
+
+// App is light-only (data-layout-mode is always 'light'; next-themes is not
+// mounted), so the theme is pinned instead of read from a provider.
+// position/duration defaults match the react-toastify container this replaced.
 const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme = "system" } = useTheme()
-
   return (
-    <Sonner
-      theme={theme as ToasterProps["theme"]}
+    <SonnerToaster
+      theme="light"
+      position="top-right"
+      duration={5000}
       className="toaster group"
       icons={{
         success: <CircleCheckIcon className="size-4" />,

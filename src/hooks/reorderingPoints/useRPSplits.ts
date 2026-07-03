@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useRef } from 'react'
 
 import AppContext from '@context/AppContext'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import useSWR from 'swr'
 
 export type SplitNames = { [key: string]: string }

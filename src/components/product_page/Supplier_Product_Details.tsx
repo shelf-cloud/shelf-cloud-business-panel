@@ -4,7 +4,7 @@ import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import axios from 'axios'
 import { useFormik } from 'formik'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
 import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
@@ -120,16 +120,16 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
             </thead>
             <tbody>
               <tr className='text-center'>
-                <td className={sellerCost ? '' : 'text-[color:var(--bs-secondary-color)] font-light italic'}>{sellerCost ? FormatCurrency(state.currentRegion, sellerCost) : 'No Cost'}</td>
-                <td className={inboundShippingCost ? '' : 'text-[color:var(--bs-secondary-color)] font-light italic'}>
+                <td className={sellerCost ? '' : 'text-muted-foreground font-light italic'}>{sellerCost ? FormatCurrency(state.currentRegion, sellerCost) : 'No Cost'}</td>
+                <td className={inboundShippingCost ? '' : 'text-muted-foreground font-light italic'}>
                   {inboundShippingCost ? FormatCurrency(state.currentRegion, inboundShippingCost) : 'No Cost'}
                 </td>
-                <td className={otherCosts ? '' : 'text-[color:var(--bs-secondary-color)] font-light italic'}>{otherCosts ? FormatCurrency(state.currentRegion, otherCosts) : 'No Cost'}</td>
-                <td className={landedCost ? '' : 'text-[color:var(--bs-secondary-color)] font-light italic'}>{landedCost ? FormatCurrency(state.currentRegion, landedCost) : 'No Cost'}</td>
-                <td className={productionTime ? '' : 'text-[color:var(--bs-secondary-color)] font-light italic'}>{`${productionTime ?? 'No'} Days`}</td>
-                <td className={transitTime ? '' : 'text-[color:var(--bs-secondary-color)] font-light italic'}>{`${transitTime ?? 'No'} Days`}</td>
-                <td className={totalLeadTime ? '' : 'text-[color:var(--bs-secondary-color)] font-light italic'}>{`${totalLeadTime ?? 'No'} Days`}</td>
-                <td className={shippingToFBA ? '' : 'text-[color:var(--bs-secondary-color)] font-light italic'}>{shippingToFBA ? FormatCurrency(state.currentRegion, shippingToFBA) : 'No Cost'}</td>
+                <td className={otherCosts ? '' : 'text-muted-foreground font-light italic'}>{otherCosts ? FormatCurrency(state.currentRegion, otherCosts) : 'No Cost'}</td>
+                <td className={landedCost ? '' : 'text-muted-foreground font-light italic'}>{landedCost ? FormatCurrency(state.currentRegion, landedCost) : 'No Cost'}</td>
+                <td className={productionTime ? '' : 'text-muted-foreground font-light italic'}>{`${productionTime ?? 'No'} Days`}</td>
+                <td className={transitTime ? '' : 'text-muted-foreground font-light italic'}>{`${transitTime ?? 'No'} Days`}</td>
+                <td className={totalLeadTime ? '' : 'text-muted-foreground font-light italic'}>{`${totalLeadTime ?? 'No'} Days`}</td>
+                <td className={shippingToFBA ? '' : 'text-muted-foreground font-light italic'}>{shippingToFBA ? FormatCurrency(state.currentRegion, shippingToFBA) : 'No Cost'}</td>
                 <td>
                   <div className='text-right'>
                     <button type='button' aria-label='Edit supplier details' onClick={handleShowEditFields} className='p-0 border-0 bg-transparent'>

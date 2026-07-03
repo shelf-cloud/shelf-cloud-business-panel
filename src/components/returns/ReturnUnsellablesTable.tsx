@@ -15,7 +15,7 @@ const ReturnUnsellablesTable = ({ filterDataTable, pending, openImagesDialog }: 
   const conditionalRowStyles = [
     {
       when: (row: UnsellablesType) => row.converted && !row.dispose,
-      classNames: ['text-[var(--bs-secondary-color)]'],
+      classNames: ['text-muted-foreground'],
     },
     {
       when: (row: UnsellablesType) => !row.converted && row.dispose,

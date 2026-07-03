@@ -24,7 +24,7 @@ import { useRPNewForecast } from '@hooks/reorderingPoints/useRPNewForcast'
 import type { Product } from '@typings'
 import axios from 'axios'
 import { parseAsString, parseAsStringLiteral, useQueryStates } from 'nuqs'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { ChevronDownIcon } from 'lucide-react'
 
 import { Button } from '@shadcn/ui/button'
@@ -253,7 +253,7 @@ const Products = ({ session }: Props) => {
                               Set Inactive
                             </DropdownMenuItem>
                           )}
-                          <DropdownMenuItem className='text-nowrap text-right text-[13px] text-[color:var(--bs-secondary-color)]' onClick={clearAllSelectedRows}>
+                          <DropdownMenuItem className='text-nowrap text-right text-[13px] text-muted-foreground' onClick={clearAllSelectedRows}>
                             Clear All
                           </DropdownMenuItem>
                         </DropdownMenuContent>

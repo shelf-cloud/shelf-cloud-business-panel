@@ -24,7 +24,7 @@ const SelectDropDown = ({ formValue, selectionInfo, selected, handleSelection, e
         style={{ cursor: 'pointer' }}
         onClick={() => setOpenDatesMenu(!openDatesMenu)}>
         <span className='flex-1 px-3 py-[0.3rem] text-[13px] text-left' style={{ backgroundColor: 'white', opacity: '100%' }}>
-          {selected == '' ? <span className='text-[color:var(--bs-secondary-color)]'>Select</span> : selected}
+          {selected == '' ? <span className='text-muted-foreground'>Select</span> : selected}
         </span>
         <span className='flex items-center justify-center px-2' style={{ backgroundColor: 'white', maxWidth: '35px' }} aria-expanded='false'>
           <i className='mdi mdi-chevron-down text-[16.25px]' />
@@ -49,7 +49,7 @@ const SelectDropDown = ({ formValue, selectionInfo, selected, handleSelection, e
           </div>
           <button
             type='button'
-            className={'p-0 border-0 bg-transparent no-underline text-[color:var(--bs-secondary-color)] text-right'}
+            className={'p-0 border-0 bg-transparent no-underline text-muted-foreground text-right'}
             onClick={() => {
               handleSelection(formValue, '')
               setOpenDatesMenu(false)

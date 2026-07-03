@@ -66,7 +66,7 @@ function InventoryBinsModal() {
       }}>
       <DialogContent id='myModal' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg'>
         <DialogHeader className='pr-6 flex justify-between items-start'>
-          <p className='modal-title text-[19.5px]' id='myModalLabel'>
+          <p className='m-0 text-[19.5px]' id='myModalLabel'>
             Warehouse Inventory
           </p>
           <p className='text-[16.25px]'>
@@ -84,7 +84,7 @@ function InventoryBinsModal() {
             return (
               <div key={warehouse.address}>
                 <h5 className='font-bold mb-0'>{warehouse.name}</h5>
-                <p className='m-0 text-[var(--bs-secondary-color)] text-[11.2px]'>{warehouse.address}</p>
+                <p className='m-0 text-muted-foreground text-[11.2px]'>{warehouse.address}</p>
                 <DataTable columns={columns} data={warehouse.bins} progressPending={isValidating} striped={true} highlightOnHover={true} dense />
               </div>
             )

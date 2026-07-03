@@ -5,7 +5,7 @@ import AppContext from '@context/AppContext'
 import { NewTeamMember } from '@typesTs/settings/team_members'
 import axios from 'axios'
 import { useFormik } from 'formik'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader } from '@shadcn/ui/dialog'
 import { Input } from '@shadcn/ui/input'
@@ -117,7 +117,7 @@ const CreateNewTeamMemberModal = ({ showModal, setShowModal }: Props) => {
               <div className='flex flex-wrap -mx-3'>
                 <div className='px-3 lg:w-6/12'>
                   <div className='mb-4'>
-                    <Label htmlFor='name' className='form-label'>
+                    <Label htmlFor='name' className='mb-2'>
                       *Name
                     </Label>
                     <Input
@@ -136,7 +136,7 @@ const CreateNewTeamMemberModal = ({ showModal, setShowModal }: Props) => {
                 </div>
                 <div className='px-3 lg:w-6/12'>
                   <div className='mb-4'>
-                    <Label htmlFor='email' className='form-label'>
+                    <Label htmlFor='email' className='mb-2'>
                       *Email Address
                     </Label>
                     <Input
@@ -161,9 +161,9 @@ const CreateNewTeamMemberModal = ({ showModal, setShowModal }: Props) => {
                     {Object.entries(moduleInfo.modules).map(([subModule, subModuleInfo]) => (
                       <div className='px-3 flex-1 basis-0' key={subModule}>
                         <div className='flex flex-row justify-start items-end w-fit gap-2'>
-                          <Label className='form-check-label text-nowrap font-normal'>{subModule}</Label>
+                          <Label className='text-nowrap font-normal'>{subModule}</Label>
                           <div className='form-check-info'>
-                            <input className='form-check-input size-4 shrink-0 border border-input-border accent-primary rounded-sm' type='checkbox' checked={subModuleInfo.view} onChange={() => handleChangePermissions(module, subModule)} />
+                            <input className='size-4 shrink-0 border border-input-border accent-primary rounded-sm' type='checkbox' checked={subModuleInfo.view} onChange={() => handleChangePermissions(module, subModule)} />
                           </div>
                         </div>
                       </div>

@@ -11,7 +11,7 @@ import { StorageRowProduct } from '@typings'
 import axios from 'axios'
 import { getSession } from 'next-auth/react'
 import CountUp from 'react-countup'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
 import { Input } from '@shadcn/ui/input'
@@ -96,8 +96,8 @@ const Storage = ({ session }: Props) => {
                     </div>
                     <div className='flex flex-row justify-between'>
                       <div>
-                        <p className='uppercase font-semibold text-[var(--bs-secondary-color)] truncate mb-0'>*Estimated Total Monthly Cost</p>
-                        <h4 className='text-[18px] font-normal text-[var(--bs-secondary-color)]'>
+                        <p className='uppercase font-semibold text-muted-foreground truncate mb-0'>*Estimated Total Monthly Cost</p>
+                        <h4 className='text-[18px] font-normal text-muted-foreground'>
                           <span className='counter-value'>
                             <CountUp
                               start={0}
@@ -123,7 +123,7 @@ const Storage = ({ session }: Props) => {
                           <span className='mdi mdi-magnify search-widget-icon'></span>
                           <span className='mdi mdi-close-circle search-widget-icon search-widget-icon-close hidden' id='search-close-options'></span>
                         </div>
-                        <Button className='btn-soft-dark' onClick={() => setSearchValue('')}>
+                        <Button className='!bg-transparent !border-transparent !shadow-none btn-soft-dark' onClick={() => setSearchValue('')}>
                           Clear
                         </Button>
                       </div>

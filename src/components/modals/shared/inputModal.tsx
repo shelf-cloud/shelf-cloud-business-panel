@@ -59,7 +59,7 @@ const InputModal = ({
   return (
     <Dialog open={!!isOpen} onOpenChange={(open) => { if (!open) onClose() }}>
       <DialogContent id='InputModal' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg'>
-      <DialogHeader className='pr-6 modal-title' id='myModalLabel'>
+      <DialogHeader className='pr-6' id='myModalLabel'>
         {headerText}
       </DialogHeader>
       <form onSubmit={handleAddProduct}>
@@ -87,10 +87,10 @@ const InputModal = ({
         <DialogFooter className='items-center'>
           <div className='flex flex-wrap -mx-3'>
             <div className='text-right mt-2 flex flex-row gap-4 justify-end'>
-              <Button disabled={isLoading} type='button' variant='light' className='btn' onClick={onClose}>
+              <Button disabled={isLoading} type='button' variant='light' onClick={onClose}>
                 Cancel
               </Button>
-              <Button disabled={isLoading || !!error} type='submit' variant='success' className='btn'>
+              <Button disabled={isLoading || !!error} type='submit' variant='success'>
                 {isLoading ? (
                   <span>
                     <Spinner className='text-white' /> {loadingText}

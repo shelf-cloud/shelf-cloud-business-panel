@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 
 export type SimpleInputModal = {
   id: string

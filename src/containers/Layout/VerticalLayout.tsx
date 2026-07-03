@@ -48,7 +48,7 @@ const VerticalLayout = () => {
                   <i className={item.icon}></i>
                   <span data-key='t-apps'>{item.label}</span>
                   {item.badgeName ? (
-                    <span className={'badge badge-pill bg-' + item.badgeColor} data-key='t-new'>
+                    <span className={'inline-block rounded-full px-[0.65em] py-[0.35em] text-[0.75em] font-semibold leading-none whitespace-nowrap align-baseline text-white bg-' + item.badgeColor} data-key='t-new'>
                       {item.badgeName}
                     </span>
                   ) : null}
@@ -70,7 +70,7 @@ const VerticalLayout = () => {
                                 }>
                                 {subItem.label}
                                 {subItem.badgeName ? (
-                                  <span className={'badge badge-pill bg-' + subItem.badgeColor} data-key='t-new'>
+                                  <span className={'inline-block rounded-full px-[0.65em] py-[0.35em] text-[0.75em] font-semibold leading-none whitespace-nowrap align-baseline text-white bg-' + subItem.badgeColor} data-key='t-new'>
                                     {subItem.badgeName}
                                   </span>
                                 ) : null}
@@ -115,7 +115,7 @@ const VerticalLayout = () => {
                                           <li className='nav-item rounded-[0.25rem]'>
                                             <Link href={'/#'} className='nav-link w-full' onClick={childItem.click} data-collapse-toggle=''>
                                               {childItem.label}{' '}
-                                              <span className='badge badge-pill bg-danger' data-key='t-new'>
+                                              <span className='inline-block rounded-full px-[0.65em] py-[0.35em] text-[0.75em] font-semibold leading-none whitespace-nowrap align-baseline text-white bg-destructive' data-key='t-new'>
                                                 New
                                               </span>
                                             </Link>
@@ -149,7 +149,7 @@ const VerticalLayout = () => {
                   <i className={item.icon}></i>
                   <span data-key='t-apps'>{item.label}</span>
                   {item.badgeName ? (
-                    <span className={'badge badge-pill bg-' + item.badgeColor} data-key='t-new'>
+                    <span className={'inline-block rounded-full px-[0.65em] py-[0.35em] text-[0.75em] font-semibold leading-none whitespace-nowrap align-baseline text-white bg-' + item.badgeColor} data-key='t-new'>
                       {item.badgeName}
                     </span>
                   ) : null}

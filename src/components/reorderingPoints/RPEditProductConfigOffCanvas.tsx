@@ -105,12 +105,12 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
             SKU: <span className='text-primary'>{rpProductConfig.product.sku}</span>
           </p>
           <p className='text-[13px] m-0 p-0 font-semibold'>{rpProductConfig.product.title}</p>
-          <p className='text-[11.2px] text-[var(--bs-secondary-color)]'>Here you can edit some configurations related to the product to adjust the forecast.</p>
+          <p className='text-[11.2px] text-muted-foreground'>Here you can edit some configurations related to the product to adjust the forecast.</p>
           <form onSubmit={handleAddProduct}>
             <h5 className='text-[16.25px] font-bold'>Warehouse</h5>
             <div className='flex flex-wrap -mx-3'>
               <div className='px-3 w-full md:w-10/12'>
-                <Label htmlFor='orderFrequency' className='text-[11.2px] form-label'>
+                <Label htmlFor='orderFrequency' className='text-[11.2px] mb-2'>
                   Order Frequency (Weeks)
                 </Label>
                 <div className='flex flex-row justify-start items-center gap-2'>
@@ -131,7 +131,7 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
             </div>
             <div className='flex flex-wrap -mx-3'>
               <div className='px-3 w-full md:w-10/12'>
-                <Label htmlFor='leadTimeSC' className='text-[11.2px] form-label'>
+                <Label htmlFor='leadTimeSC' className='text-[11.2px] mb-2'>
                   Lead Time
                 </Label>
                 <div className='flex flex-row justify-start items-center gap-2'>
@@ -152,7 +152,7 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
             </div>
             <div className='flex flex-wrap -mx-3'>
               <div className='px-3 w-full md:w-10/12 mb-4'>
-                <Label htmlFor='daysOfStockSC' className='text-[11.2px] form-label'>
+                <Label htmlFor='daysOfStockSC' className='text-[11.2px] mb-2'>
                   *Days of Stock after Lead Time
                 </Label>
                 <div className='flex flex-row justify-start items-center gap-2'>
@@ -176,7 +176,7 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
                 <h5 className='text-[16.25px] font-bold'>Amazon FBA</h5>
                 <div className='flex flex-wrap -mx-3'>
                   <div className='px-3 w-full md:w-10/12'>
-                    <Label htmlFor='leadTimeFBA' className='text-[11.2px] form-label'>
+                    <Label htmlFor='leadTimeFBA' className='text-[11.2px] mb-2'>
                       Lead Time
                     </Label>
                     <div className='flex flex-row justify-start items-center gap-2'>
@@ -197,7 +197,7 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
                 </div>
                 <div className='flex flex-wrap -mx-3'>
                   <div className='px-3 w-full md:w-10/12 mb-4'>
-                    <Label htmlFor='daysOfStockFBA' className='text-[11.2px] form-label'>
+                    <Label htmlFor='daysOfStockFBA' className='text-[11.2px] mb-2'>
                       *Days of Stock after Lead Time
                     </Label>
                     <div className='flex flex-row justify-start items-center gap-2'>
@@ -223,7 +223,7 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
                 <h5 className='text-[16.25px] font-bold'>Amazon AWD</h5>
                 <div className='flex flex-wrap -mx-3'>
                   <div className='px-3 w-full md:w-10/12'>
-                    <Label htmlFor='leadTimeAWD' className='text-[11.2px] form-label'>
+                    <Label htmlFor='leadTimeAWD' className='text-[11.2px] mb-2'>
                       Lead Time
                     </Label>
                     <div className='flex flex-row justify-start items-center gap-2'>
@@ -244,7 +244,7 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
                 </div>
                 <div className='flex flex-wrap -mx-3'>
                   <div className='px-3 w-full md:w-10/12 mb-4'>
-                    <Label htmlFor='daysOfStockAWD' className='text-[11.2px] form-label'>
+                    <Label htmlFor='daysOfStockAWD' className='text-[11.2px] mb-2'>
                       *Days of Stock after Lead Time
                     </Label>
                     <div className='flex flex-row justify-start items-center gap-2'>
@@ -268,7 +268,7 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
             <h5 className='text-[16.25px] font-bold'>Extra Config</h5>
             <div className='flex flex-wrap -mx-3'>
               <div className='px-3 w-full md:w-10/12'>
-                <Label htmlFor='buffer' className='text-[11.2px] form-label'>
+                <Label htmlFor='buffer' className='text-[11.2px] mb-2'>
                   Buffer
                 </Label>
                 <Input
@@ -286,7 +286,7 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
             </div>
             <div className='flex flex-wrap -mx-3'>
               <div className='px-3 w-full md:w-10/12 mb-4'>
-                <Label htmlFor='sellerCost' className='text-[11.2px] form-label'>
+                <Label htmlFor='sellerCost' className='text-[11.2px] mb-2'>
                   Seller Cost
                 </Label>
                 <div className='flex flex-row justify-start items-center gap-2'>
@@ -305,7 +305,7 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
                 {validation.touched.sellerCost && validation.errors.sellerCost ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.sellerCost}</p> : null}
               </div>
             </div>
-            <p className='text-[11.2px] text-[var(--bs-secondary-color)]'>*The number of days you want to have of stock in addition to the lead time.</p>
+            <p className='text-[11.2px] text-muted-foreground'>*The number of days you want to have of stock in addition to the lead time.</p>
             <div className='flex flex-wrap -mx-3 mt-4'>
               <div className='px-3 md:w-full'>
                 <div className='text-right'>

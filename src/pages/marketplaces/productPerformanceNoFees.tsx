@@ -17,7 +17,7 @@ import axios from 'axios'
 import moment from 'moment'
 import { useQueryState } from 'nuqs'
 import { DebounceInput } from 'react-debounce-input'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Card, CardContent } from '@shadcn/ui/card'
 import { Spinner } from '@shadcn/ui/spinner'
@@ -300,7 +300,7 @@ const ProductPerformanceNoFees = ({ session, sessionToken }: Props) => {
                         cursor: 'pointer',
                       }}
                       onClick={() => setSearchValue('')}>
-                      <i className='mdi mdi-window-close text-[19.5px] m-0 px-2 py-0 text-[color:var(--bs-secondary-color)]' />
+                      <i className='mdi mdi-window-close text-[19.5px] m-0 px-2 py-0 text-muted-foreground' />
                     </span>
                   </div>
                 </div>
@@ -335,7 +335,7 @@ const ProductPerformanceNoFees = ({ session, sessionToken }: Props) => {
                 {loadingData ? (
                   <div>
                     <p className='font-bold text-[26px]'>Product Performance No SC Fees</p>
-                    <div className='text-[16.25px] text-[color:var(--bs-secondary-color)] flex flex-row gap-3'>
+                    <div className='text-[16.25px] text-muted-foreground flex flex-row gap-3'>
                       {`Loading Profit Report from ${selectedMarketplace.name} please wait...`}
                       <>
                         <Spinner className='text-primary' />

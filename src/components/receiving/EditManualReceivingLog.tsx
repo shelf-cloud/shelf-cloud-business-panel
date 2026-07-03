@@ -5,7 +5,7 @@ import AppContext from '@context/AppContext'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { ShipmentOrderItem } from '@typings'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
@@ -79,7 +79,7 @@ const EditManualReceivingLog = ({ showEditOrderQty, setshowEditOrderQty, mutateR
         }
       }}>
       <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl' id='confirmDelete'>
-        <DialogHeader className='pr-6 modal-title' id='myModalLabel'>
+        <DialogHeader className='pr-6' id='myModalLabel'>
           <DialogTitle>Edit Receiving Quantities</DialogTitle>
         </DialogHeader>
         <div>

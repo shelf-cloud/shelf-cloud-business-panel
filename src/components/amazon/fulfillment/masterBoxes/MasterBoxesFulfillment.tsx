@@ -9,9 +9,10 @@ import SearchInput from '@components/ui/SearchInput'
 import AppContext from '@context/AppContext'
 import { AmazonFulfillmentSku, AmzDimensions, Dimensions, FBAShipmentHisotry, FilterProps } from '@typesTs/amazon/fulfillments'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { ChevronDownIcon } from 'lucide-react'
-import { Button } from '@shadcn/ui/button'
+import { Button, buttonVariants } from '@shadcn/ui/button'
+import { cn } from '@/lib/shadcn/utils'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@shadcn/ui/dropdown-menu'
 
 import FilterListings from '../FilterListings'
@@ -193,7 +194,7 @@ const MasterBoxesFulfillment = ({ lisiting, pending, mutateFBASkus }: Props) => 
           />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button type='button' className='btn btn-info text-[11.2px] py-2'>
+              <button type='button' className={cn(buttonVariants({ variant: 'info' }), 'text-[11.2px] py-2')}>
                 Bulk Actions
                 <ChevronDownIcon className='ml-1 size-4' />
               </button>
@@ -208,7 +209,7 @@ const MasterBoxesFulfillment = ({ lisiting, pending, mutateFBASkus }: Props) => 
                 <i className='mdi mdi-eye label-icon align-middle text-[16.25px] me-2' />
                 Show Selected
               </DropdownMenuItem>
-              <DropdownMenuItem className='text-nowrap text-right text-[11.2px] text-[var(--bs-secondary-color)]' onClick={clearAllSelectedRows}>
+              <DropdownMenuItem className='text-nowrap text-right text-[11.2px] text-muted-foreground' onClick={clearAllSelectedRows}>
                 Clear All
               </DropdownMenuItem>
             </DropdownMenuContent>

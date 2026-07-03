@@ -13,7 +13,7 @@ import MasterBoxHelp from '@components/amazon/offcanvas/MasterBoxHelp'
 import AppContext from '@context/AppContext'
 import { AmazonFulfillmentSku } from '@typesTs/amazon/fulfillments'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
 import { Nav, NavItem, NavLink, TabContent, TabPane } from '@/components/ui/nav-tabs'
@@ -96,7 +96,7 @@ const SendToAmazon = ({ session }: Props) => {
                     <Nav className='nav-tabs-custom rounded-[0.25rem] card-header-tabs border-b-0' role='tablist'>
                       <NavItem style={{ cursor: 'pointer' }}>
                         <NavLink
-                          className={activeTab == '1' ? 'text-primary font-semibold text-[16.25px]' : 'text-[var(--bs-secondary-color)] text-[16.25px]'}
+                          className={activeTab == '1' ? 'text-primary font-semibold text-[16.25px]' : 'text-muted-foreground text-[16.25px]'}
                           onClick={() => {
                             router.push(`/amazon-sellers/fulfillment/sendToAmazon`, undefined, { shallow: true })
                             tabChange('1')
@@ -110,7 +110,7 @@ const SendToAmazon = ({ session }: Props) => {
                       <NavItem style={{ cursor: 'pointer' }}>
                         <NavLink
                           to='#'
-                          className={activeTab == '2' ? 'text-primary font-semibold text-[16.25px]' : 'text-[var(--bs-secondary-color)] text-[16.25px]'}
+                          className={activeTab == '2' ? 'text-primary font-semibold text-[16.25px]' : 'text-muted-foreground text-[16.25px]'}
                           onClick={() => {
                             router.push(`/amazon-sellers/fulfillment/sendToAmazon`, undefined, { shallow: true })
                             tabChange('2')

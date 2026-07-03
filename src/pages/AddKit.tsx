@@ -12,7 +12,7 @@ import AppContext from '@context/AppContext'
 import { useCreateKit } from '@hooks/kits/useCreateKit'
 import axios from 'axios'
 import { Field, FieldArray, Formik } from 'formik'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Card, CardContent } from '@shadcn/ui/card'
 import { Input } from '@shadcn/ui/input'
@@ -599,7 +599,7 @@ const AddKit = ({ session }: Props) => {
                               </table>
                             </div>
                           </div>
-                          <h5 className='text-[13px] my-0 text-[color:var(--bs-secondary-color)] font-normal'>*You must complete all required fields or you will not be able to create your product.</h5>
+                          <h5 className='text-[13px] my-0 text-muted-foreground font-normal'>*You must complete all required fields or you will not be able to create your product.</h5>
                           <div className='px-3 md:w-full'>
                             <div className='text-right'>
                               <Button type='submit' disabled={creatingKit}>

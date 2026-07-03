@@ -91,7 +91,7 @@ const InputTextModal = ({
             <p className='text-[16.25px] font-semibold'>
               {primaryText} {primaryTextSub && <span className='text-primary'>{primaryTextSub}</span>}
             </p>
-            {descriptionText && <p className='text-[11.2px] text-[var(--bs-secondary-color)]'>{descriptionText}</p>}
+            {descriptionText && <p className='text-[11.2px] text-muted-foreground'>{descriptionText}</p>}
             <div className='px-3 w-full flex flex-col justify-end items-end'>
               <div className='px-3 w-full text-right'>
                 <DebounceInput

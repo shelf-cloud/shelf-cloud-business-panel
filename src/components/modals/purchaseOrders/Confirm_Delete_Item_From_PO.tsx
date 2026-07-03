@@ -7,7 +7,7 @@ import { useRPNewForecast } from '@hooks/reorderingPoints/useRPNewForcast'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { Split } from '@typesTs/purchaseOrders'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 import { Spinner } from '@shadcn/ui/spinner'
@@ -90,7 +90,7 @@ const Confirm_Delete_Item_From_PO = ({ showDeleteModal, setshowDeleteModal, load
     <Dialog open={!!show} onOpenChange={(open) => { if (!open) handleClose() }}>
       <DialogContent id='confirmDelete' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg'>
         <DialogHeader className='pr-6'>
-          <DialogTitle className='modal-title' id='myModalLabel'>
+          <DialogTitle id='myModalLabel'>
             Confirm Delete Item From PO
           </DialogTitle>
         </DialogHeader>

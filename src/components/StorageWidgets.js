@@ -34,7 +34,7 @@ const StorageWidgets = ({ previousCharge, previousChargeDate, currentBalance, bi
                       />
                     </span>
                   </h4>
-                  <span className='text-[var(--bs-secondary-color)]'>{previousChargeDate}</span>
+                  <span className='text-muted-foreground'>{previousChargeDate}</span>
                 </div>
               </div>
             </div>
@@ -63,7 +63,7 @@ const StorageWidgets = ({ previousCharge, previousChargeDate, currentBalance, bi
                       />
                     </span>
                   </h4>
-                  <span className='text-[var(--bs-secondary-color)]'>{currentMonthDays} accumulated days</span>
+                  <span className='text-muted-foreground'>{currentMonthDays} accumulated days</span>
                 </div>
               </div>
             </div>

@@ -32,7 +32,7 @@ const Settings = ({}: Props) => {
                     <Nav className='nav-tabs-custom rounded-[0.25rem] card-header-tabs border-b-0' role='tablist'>
                       <NavItem style={{ cursor: 'pointer' }}>
                         <NavLink
-                          className={activeTab == '1' ? '!text-primary text-[16.25px]' : '!text-[var(--bs-secondary-color)] text-[16.25px]'}
+                          className={activeTab == '1' ? '!text-primary text-[16.25px]' : '!text-muted-foreground text-[16.25px]'}
                           onClick={() => {
                             tabChange('1')
                           }}>
@@ -45,7 +45,7 @@ const Settings = ({}: Props) => {
                       <NavItem style={{ cursor: 'pointer' }}>
                         <NavLink
                           to='#'
-                          className={activeTab == '2' ? '!text-primary text-[16.25px]' : '!text-[var(--bs-secondary-color)] text-[16.25px]'}
+                          className={activeTab == '2' ? '!text-primary text-[16.25px]' : '!text-muted-foreground text-[16.25px]'}
                           onClick={() => {
                             tabChange('2')
                           }}
@@ -59,7 +59,7 @@ const Settings = ({}: Props) => {
                       <NavItem style={{ cursor: 'pointer' }}>
                         <NavLink
                           to='#'
-                          className={activeTab == '3' ? '!text-primary text-[16.25px]' : '!text-[var(--bs-secondary-color)] text-[16.25px]'}
+                          className={activeTab == '3' ? '!text-primary text-[16.25px]' : '!text-muted-foreground text-[16.25px]'}
                           onClick={() => {
                             tabChange('3')
                           }}

@@ -6,9 +6,8 @@ import AppContext from '@context/AppContext'
 import useInitialState from '@hooks/useInitialState'
 import { Session } from 'next-auth'
 import { NuqsAdapter } from 'nuqs/adapters/next/pages'
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.min.css'
 
+import { Toaster } from '@/components/shadcn/ui/sonner'
 import { TooltipProvider } from '@/components/shadcn/ui/tooltip'
 
 // Plain-CSS chain replacing themes.scss (Bootstrap/Sass removed).
@@ -16,10 +15,8 @@ import { TooltipProvider } from '@/components/shadcn/ui/tooltip'
 // used subset -> fonts -> Velzon component overrides -> plugins -> pages
 // -> custom -> themes-custom -> shell -> tailwind.
 import '../styles/base/icons.css'
-import '../styles/core/root.css'
 import '../styles/core/reboot.css'
 import '../styles/core/grid.css'
-import '../styles/core/components.css'
 import '../styles/base/fonts.css'
 import '../styles/components/avatar.css'
 import '../styles/components/helper.css'
@@ -57,7 +54,7 @@ function MyApp({
   return (
     <SessionProvider session={pageProps.session}>
       <AppContext.Provider value={initialState}>
-        <ToastContainer />
+        <Toaster />
         <NuqsAdapter>
           <TooltipProvider>
             <Layout>

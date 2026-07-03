@@ -3,7 +3,7 @@ import { useContext } from 'react'
 
 import AppContext from '@context/AppContext'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 import { Spinner } from '@shadcn/ui/spinner'

@@ -172,7 +172,7 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
                     {product.barcode && (
                       <div>
                         {`UPC: `}
-                        <span className='font-light text-[color:var(--bs-secondary-color)]'>{product.barcode}</span>
+                        <span className='font-light text-muted-foreground'>{product.barcode}</span>
                       </div>
                     )}
                   </span>
@@ -232,7 +232,7 @@ const ExpandedOrderItems = ({ activeTab, poItems, data, loading, handlereceiving
                     Number(product.inboundQty) <= 0 &&
                     Number(product.receivedQty) <= 0 &&
                     (loading ? (
-                      <i className='text-[19.5px] text-[color:var(--bs-secondary-color)] las la-trash-alt mx-1' />
+                      <i className='text-[19.5px] text-muted-foreground las la-trash-alt mx-1' />
                     ) : (
                       <i
                         className='text-[19.5px] text-destructive las la-trash-alt mx-1'

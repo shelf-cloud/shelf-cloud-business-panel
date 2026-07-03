@@ -97,7 +97,7 @@ const ReturnRMATable = ({ filterDataTable, pending, apiMutateLink, handleReturnS
               <p className='font-semibold text-[11.2px] m-0 p-0'>{row.shipmentOrderNumber}</p>
               {hasImage ? <CameraIcon className='text-destructive size-4' /> : null}
             </div>
-            <p className='text-[var(--bs-secondary-color)] text-[11.2px] m-0 p-0'>
+            <p className='text-muted-foreground text-[11.2px] m-0 p-0'>
               {Object.values(row.returns)[0].orderNumber}
               {Object.values(row.returns).length > 1 && <span className='text-[11.2px] text-danger'>{` +${Object.values(row.returns).length - 1}`}</span>}
             </p>

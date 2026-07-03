@@ -12,7 +12,7 @@ import { useFilterWarehousesByShipmentType } from '@hooks/warehouses/useFilterWa
 import { useWarehouses } from '@hooks/warehouses/useWarehouse'
 import axios from 'axios'
 import { useFormik } from 'formik'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 
 import { Alert } from '@/components/ui/Alert'
 import { Button } from '@shadcn/ui/button'
@@ -21,6 +21,7 @@ import { Label } from '@shadcn/ui/label'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 import { Nav, NavItem, NavLink, TabContent, TabPane } from '@/components/ui/nav-tabs'
 import { Spinner } from '@shadcn/ui/spinner'
+import { InputGroup, InputGroupText } from '@/components/ui/InputGroup'
 import * as Yup from 'yup'
 
 import Create_Manual_Receiving_Packages_Tab from './createReceiving/Create_Manual_Receiving_Packages_Tab'
@@ -202,7 +203,7 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
       }}>
       <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl' id='createReceivingOrderFromTable'>
         <DialogHeader className='pr-6' id='myModalLabel'>
-          <DialogTitle className='modal-title'>Create Manual Receiving</DialogTitle>
+          <DialogTitle>Create Manual Receiving</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleAddProduct}>
           <h5 className='text-[16.25px] font-extrabold'>Receiving Details</h5>
@@ -212,10 +213,10 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
                 <Label htmlFor='orderNumber' className='mb-2 inline-block text-[11.2px]'>
                   *Transaction Number
                 </Label>
-                <div className='input-group'>
-                  <span className='input-group-text font-semibold text-[16.25px] m-0 px-2 py-0' id='basic-addon1'>
+                <InputGroup>
+                  <InputGroupText className='font-semibold text-[16.25px] m-0 px-2 py-0' id='basic-addon1'>
                     {orderNumberStart}
-                  </span>
+                  </InputGroupText>
                   <Input
                     type='text'
                     className='text-[13px] h-8 text-xs'
@@ -226,8 +227,8 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
                     value={validation.values.orderNumber || ''}
                     aria-invalid={validation.touched.orderNumber && validation.errors.orderNumber ? true : undefined}
                   />
-                  {validation.touched.orderNumber && validation.errors.orderNumber ? <div className='text-sm text-destructive'>{validation.errors.orderNumber}</div> : null}
-                </div>
+                </InputGroup>
+                {validation.touched.orderNumber && validation.errors.orderNumber ? <div className='text-sm text-destructive'>{validation.errors.orderNumber}</div> : null}
               </div>
             </div>
             <div className='px-3 w-full md:w-4/12'>
@@ -264,7 +265,7 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
           <Nav className='nav-tabs border-b' role='tablist'>
             <NavItem style={{ cursor: 'pointer' }}>
               <NavLink
-                className={activeTab == 'summary' ? '!text-primary font-semibold text-[13px] border border-primary' : '!text-[color:var(--bs-secondary-color)] text-[13px]'}
+                className={activeTab == 'summary' ? '!text-primary font-semibold text-[13px] border border-primary' : '!text-muted-foreground text-[13px]'}
                 onClick={() => {
                   setactiveTab('summary')
                 }}
@@ -274,7 +275,7 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
             </NavItem>
             <NavItem style={{ cursor: 'pointer' }}>
               <NavLink
-                className={activeTab == 'packages' ? '!text-primary font-semibold text-[13px] border border-primary' : '!text-[color:var(--bs-secondary-color)] text-[13px]'}
+                className={activeTab == 'packages' ? '!text-primary font-semibold text-[13px] border border-primary' : '!text-muted-foreground text-[13px]'}
                 onClick={() => {
                   setactiveTab('packages')
                 }}

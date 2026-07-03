@@ -14,6 +14,8 @@ import { KitRow } from '@typings'
 import DataTable from '@components/Common/DataTableSC'
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@shadcn/ui/dropdown-menu'
+import { buttonVariants } from '@shadcn/ui/button'
+import { cn } from '@/lib/shadcn/utils'
 
 import KitExpandedDetails from './KitExpandedDetails'
 
@@ -219,18 +221,18 @@ const KitsTable = ({ tableData, pending }: Props) => {
           <DropdownMenu>
             <div className='relative inline-block dropdown inline-block'>
             <DropdownMenuTrigger asChild>
-              <button type='button' className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }}>
+              <button type='button' className={cn(buttonVariants({ variant: 'light', size: 'sm' }), 'm-0 p-0')} style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }}>
                 <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-1 py-0' style={{ color: '#919FAF' }}></i>
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end' className='dropdown-menu-end'>
               <DropdownMenuItem className='edit-item-btn' onClick={() => setModalKitDetails(row.kitId, row.sku)}>
-                <i className='ri-pencil-fill align-middle me-2 text-[16.25px] text-[var(--bs-secondary-color)]'></i>
+                <i className='ri-pencil-fill align-middle me-2 text-[16.25px] text-muted-foreground'></i>
                 <span className='text-[11.2px] font-normal'>Edit</span>
               </DropdownMenuItem>
               <DropdownMenuItem className='edit-item-btn'>
                 <Link href={`/kit/${row.kitId}/${row.sku}`}>
-                  <i className='ri-file-list-line align-middle me-2 text-[16.25px] text-[var(--bs-secondary-color)]'></i>
+                  <i className='ri-file-list-line align-middle me-2 text-[16.25px] text-muted-foreground'></i>
                   <span className='text-[11.2px] font-normal text-dark'>View Details</span>
                 </Link>
               </DropdownMenuItem>

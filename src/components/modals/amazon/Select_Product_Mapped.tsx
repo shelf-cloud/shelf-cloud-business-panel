@@ -5,6 +5,8 @@ import { useClickOutside } from '@hooks/useClickOutside'
 
 import { NoImageAdress } from '@lib/assetsConstants'
 import { DebounceInput } from 'react-debounce-input'
+import { buttonVariants } from '@shadcn/ui/button'
+import { cn } from '@/lib/shadcn/utils'
 
 type Props = {
   data: {
@@ -57,25 +59,25 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
   }, [data, searchValue])
 
   return (
-    <div ref={selectProductMappedDiv} className='dropdown mb-4'>
+    <div ref={selectProductMappedDiv} className='relative mb-4'>
       {showMappedListingModal.currentSkuMapped !== '' ? (
         <div className='w-full'>
           <p className='px-4 m-0 py-0 text-[16.25px] font-semibold'>{showMappedListingModal.currentSkuMapped}</p>
         </div>
       ) : (
-        <button type='button' className='btn-group w-full p-0 border-0 bg-transparent' onClick={() => setOpenSelectionList(!openSelectionList)}>
-          <span className='btn btn-light btn-sm block w-full text-[13px] text-left' style={{ backgroundColor: 'white', opacity: '100%' }}>
+        <button type='button' className='flex w-full p-0 border-0 bg-transparent' onClick={() => setOpenSelectionList(!openSelectionList)}>
+          <span className={cn(buttonVariants({ variant: 'light', size: 'sm' }), 'block w-full text-[13px] text-left')} style={{ backgroundColor: 'white', opacity: '100%' }}>
             {showMappedListingModal.shelfCloudSku == '' ? `Select...` : showMappedListingModal.shelfCloudSku}
           </span>
           <span
-            className='btn btn-light btn-sm text-[13px]'
+            className={cn(buttonVariants({ variant: 'light', size: 'sm' }), 'text-[13px]')}
             style={{ backgroundColor: 'white', maxWidth: '35px' }}
             aria-expanded='false'>
             <span className='sr-only'>Toggle Dropdown</span>
           </span>
         </button>
       )}
-      <div className={'dropdown-menu w-full py-4 px-4' + (openSelectionList ? ' show' : '')}>
+      <div className={cn('absolute z-10 mt-1 w-full rounded-md border border-[#E1E3E5] bg-white py-4 px-4 shadow', openSelectionList ? 'block' : 'hidden')}>
         <div className='w-full mb-4'>
           <div className='app-search flex flex-row justify-end items-center p-0'>
             <div className='relative flex rounded-lg w-full overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
@@ -94,10 +96,10 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
               <button
                 type='button'
                 aria-label='Clear search'
-                className='flex items-center justify-center input_background_white'
+                className='flex appearance-none items-center justify-center border-0 bg-transparent input_background_white'
                 style={{ border: 0 }}
                 onClick={() => setSearchValue('')}>
-                <i className='mdi mdi-window-close text-[16.25px] m-0 px-2 py-0 text-[color:var(--bs-secondary-color)]' />
+                <i className='mdi mdi-window-close text-[16.25px] m-0 px-2 py-0 text-muted-foreground' />
               </button>
             </div>
           </div>
@@ -109,7 +111,11 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
               <button
                 type='button'
                 key={`${option.sku}-${option.inventoryId}`}
-                className={'btn btn-link w-full border-0 text-left no-underline text-inherit m-0 py-2 px-1 flex flex-row gap-2 ' + (showMappedListingModal.shelfCloudSku == `${option.sku}` ? 'bg-light' : '')}
+                className={cn(
+                  buttonVariants({ variant: 'link' }),
+                  'w-full border-0 text-left no-underline text-inherit m-0 py-2 px-1 flex flex-row gap-2',
+                  showMappedListingModal.shelfCloudSku == `${option.sku}` && 'bg-[color:var(--vz-light)]'
+                )}
                 onClick={() => {
                   setshowMappedListingModal((prev: any) => {
                     return {
@@ -140,7 +146,7 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
                 <span className='inline-flex flex-col'>
                   <span className='text-[11.2px] m-0 p-0 font-bold'>{option.sku}</span>
                   <span className='text-[11.2px] font-semibold text-primary m-0 p-0'>{option.isKit ? 'Kit' : 'Product'}</span>
-                  <span className='text-[11.2px] text-[var(--bs-secondary-color)] m-0 p-0'>{option.title}</span>
+                  <span className='text-[11.2px] text-muted-foreground m-0 p-0'>{option.title}</span>
                 </span>
               </button>
             ))}

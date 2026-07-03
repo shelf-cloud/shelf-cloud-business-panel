@@ -1,4 +1,4 @@
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 
 import { cn } from '@/lib/shadcn/utils'
 
@@ -24,7 +24,7 @@ const CopyTextToClipboard = ({ text, label, fontSize = 'text-[13px]', className,
   const sizeClass = fontSize.startsWith('fs-') ? (FS_TO_TW[fontSize] ?? 'text-[13px]') : fontSize
   return (
     <i
-      className={cn('ri-file-copy-line', sizeClass, 'my-0 mx-1 p-0 text-[color:var(--bs-secondary-color)] font-normal', className)}
+      className={cn('ri-file-copy-line', sizeClass, 'my-0 mx-1 p-0 text-muted-foreground font-normal', className)}
       style={{ cursor: 'pointer' }}
       title={title ?? `Copy ${label}`}
       aria-label={title ?? `Copy ${label}`}

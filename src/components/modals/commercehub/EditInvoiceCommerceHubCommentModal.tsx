@@ -3,7 +3,7 @@ import { useContext, useState } from 'react'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { DebounceInput } from 'react-debounce-input'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 import { Spinner } from '@shadcn/ui/spinner'
@@ -81,7 +81,7 @@ const EditInvoiceCommerceHubCommentModal = ({ editCommentModal, setEditCommentMo
       }}>
       <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg' id='editInvoiceCommentModal'>
         <DialogHeader className='pr-6' id='myModalLabel'>
-          <DialogTitle className='modal-title'>Invoice Note</DialogTitle>
+          <DialogTitle>Invoice Note</DialogTitle>
         </DialogHeader>
         <div className='flex flex-wrap -mx-3'>
           <div className='px-3 md:w-full mt-2'>
@@ -102,7 +102,6 @@ const EditInvoiceCommerceHubCommentModal = ({ editCommentModal, setEditCommentMo
               disabled={isLoading}
               type='button'
               variant='light'
-              className='btn'
               onClick={() => {
                 setEditCommentModal({
                   show: false,
@@ -112,7 +111,7 @@ const EditInvoiceCommerceHubCommentModal = ({ editCommentModal, setEditCommentMo
               }}>
               Cancel
             </Button>
-            <Button disabled={isLoading} type='button' variant='success' className='btn' onClick={hanldeEditFBAShipmentName}>
+            <Button disabled={isLoading} type='button' variant='success' onClick={hanldeEditFBAShipmentName}>
               {isLoading ? <Spinner className='text-white' /> : 'Save'}
             </Button>
           </div>

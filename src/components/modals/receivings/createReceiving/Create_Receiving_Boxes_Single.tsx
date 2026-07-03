@@ -73,7 +73,7 @@ const Create_Receiving_Boxes_Single = ({ singleSkuPackages, addNewSingleSkuBoxCo
                         <div className='text-left'>
                           <p className='text-nowrap m-0 font-semibold'>{sku}</p>
                           <p className='text-nowrap m-0'>{item.name}</p>
-                          <p className='text-nowrap m-0 text-[var(--bs-secondary-color)]'>PO: {item.poNumber}</p>
+                          <p className='text-nowrap m-0 text-muted-foreground'>PO: {item.poNumber}</p>
                         </div>
                       </div>
                     </td>
@@ -166,7 +166,7 @@ const Create_Receiving_Boxes_Single = ({ singleSkuPackages, addNewSingleSkuBoxCo
         <tfoot>
           <tr>
             <td colSpan={3} className='text-right'>
-              <span className='text-[var(--bs-secondary-color)] italic'>Total Boxes</span>
+              <span className='text-muted-foreground italic'>Total Boxes</span>
             </td>
             <td className='text-center'>
               <span>{FormatIntNumber(state.currentRegion, totalBoxes)}</span>

@@ -3,7 +3,7 @@ import { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
 import AppContext from '@context/AppContext'
 import { OrderRowType, ShipmentOrderItem } from '@typings'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import useSWR from 'swr'
 
 type GetReceivingsResponse = OrderRowType[]

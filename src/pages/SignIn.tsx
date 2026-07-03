@@ -12,7 +12,8 @@ import PuntosImage from '@assets/images/signin-puntos.png'
 import { getSession, signIn } from '@auth/client'
 import ForgotPasswordModal from '@components/ForgotPasswordModal'
 
-import { Button } from '@shadcn/ui/button'
+import { Button, buttonVariants } from '@shadcn/ui/button'
+import { cn } from '@/lib/shadcn/utils'
 import { Input } from '@shadcn/ui/input'
 import { Label } from '@shadcn/ui/label'
 
@@ -84,13 +85,13 @@ function SignIn({}: Props) {
               </p>
               <form onSubmit={handleSignInSubmit} className='w-full'>
                 <div className='mb-6 w-full'>
-                  <Label htmlFor='username' className='form-label'>
+                  <Label htmlFor='username' className='mb-2'>
                     Username
                   </Label>
                   <Input type='text' id='username' name='username' placeholder='Enter username' required ref={usernameRef} />
                 </div>
                 <div className='mb-1 w-full'>
-                  <Label className='form-label' htmlFor='password-input'>
+                  <Label className='mb-2' htmlFor='password-input'>
                     Password
                   </Label>
                   <div className='relative auth-pass-inputgroup mb-4'>
@@ -105,7 +106,7 @@ function SignIn({}: Props) {
                     />
                     <button
                       name='passwordVisibility'
-                      className='btn btn-link absolute right-0 top-0 no-underline text-[var(--bs-secondary-color)]'
+                      className={cn(buttonVariants({ variant: 'link' }), 'absolute right-0 top-0 no-underline text-muted-foreground')}
                       type='button'
                       id='password-addon'
                       onClick={() => setShow(!show)}>
@@ -120,7 +121,7 @@ function SignIn({}: Props) {
                   </a>
                 </div>
                 <div className='mt-6 w-full'>
-                  <Button className='btn btn-primary w-full font-semibold text-[16.25px]' type='submit'>
+                  <Button className='w-full font-semibold text-[16.25px]' type='submit'>
                     Sign In
                   </Button>
                 </div>

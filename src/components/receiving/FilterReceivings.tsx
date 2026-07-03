@@ -81,7 +81,7 @@ const FilterReceivings = ({ searchStatus, setSearchStatus, searchWarehouse, setS
                     setSearchWarehouse({ value: '', label: 'All' })
                     setOpenFilters(false)
                   }}
-                  className='p-0 border-0 no-underline text-[color:var(--bs-secondary-color)] mt-2 text-[11.2px]'>
+                  className='p-0 border-0 no-underline text-muted-foreground mt-2 text-[11.2px]'>
                   Clear All
                 </button>
               </div>

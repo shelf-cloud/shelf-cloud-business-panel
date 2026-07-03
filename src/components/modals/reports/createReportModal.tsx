@@ -88,11 +88,11 @@ const CreateReportModal = ({ showMappedCreateReport, setshowMappedCreateReport, 
         <div className='flex flex-wrap -mx-3'>
           <div className='space-y-3'>
             <div>
-              <p className='font-light text-[var(--bs-secondary-color)] text-[11.2px] mb-1'>Select Report Type:</p>
+              <p className='font-light text-muted-foreground text-[11.2px] mb-1'>Select Report Type:</p>
               <SelectReportType showMappedCreateReport={showMappedCreateReport} setshowMappedCreateReport={setshowMappedCreateReport} />
             </div>
             <div>
-              <p className='font-light text-[var(--bs-secondary-color)] text-[11.2px] mb-1'>Select Report Date Range:</p>
+              <p className='font-light text-muted-foreground text-[11.2px] mb-1'>Select Report Date Range:</p>
               <SelectRangeDates
                 showMappedCreateReport={showMappedCreateReport}
                 setshowMappedCreateReport={setshowMappedCreateReport}
@@ -101,9 +101,9 @@ const CreateReportModal = ({ showMappedCreateReport, setshowMappedCreateReport, 
             </div>
             {showMappedCreateReport.reportType === PRODUCTS_REPORT_TYPE && (
               <div>
-                <p className='font-light text-[var(--bs-secondary-color)] text-[11.2px] mb-1'>Select SKUs:</p>
+                <p className='font-light text-muted-foreground text-[11.2px] mb-1'>Select SKUs:</p>
                 {isLoading ? (
-                  <div className='flex items-center gap-2 text-[var(--bs-secondary-color)] text-[13px]'>
+                  <div className='flex items-center gap-2 text-muted-foreground text-[13px]'>
                     <Spinner className='text-primary' />
                     Loading SKUs...
                   </div>
@@ -135,7 +135,6 @@ const CreateReportModal = ({ showMappedCreateReport, setshowMappedCreateReport, 
                 disabled={showMappedCreateReport.loading}
                 type='button'
                 variant='light'
-                className='btn'
                 onClick={closeModal}>
                 Cancel
               </Button>
@@ -143,7 +142,6 @@ const CreateReportModal = ({ showMappedCreateReport, setshowMappedCreateReport, 
                 disabled={showMappedCreateReport.loading || showMappedCreateReport.reportType === ''}
                 type='button'
                 variant='success'
-                className='btn'
                 onClick={handleCreateReport}>
                 {showMappedCreateReport.loading ? <Spinner className='text-white' /> : 'Request'}
               </Button>

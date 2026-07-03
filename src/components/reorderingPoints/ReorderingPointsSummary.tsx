@@ -34,27 +34,27 @@ const ReorderingPointsSummary = ({ reorderingPointsOrder, selectedSupplier, erro
               <p className='capitalize font-semibold mb-0 text-nowrap' style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 Order Summary
               </p>
-              <p className='text-[11.2px] m-0 p-0 text-[var(--bs-secondary-color)] mb-1'>
+              <p className='text-[11.2px] m-0 p-0 text-muted-foreground mb-1'>
                 <span>{`Supplier: `}</span>
                 <span className='font-semibold text-black'>{selectedSupplier}</span>
               </p>
             </div>
             <div className='flex flex-row items-center justify-between gap-1 md:gap-0 md:flex-col md:items-start lg:items-center'>
-              <span className='text-[var(--bs-secondary-color)] text-[11.2px]'>Total Qty</span>
+              <span className='text-muted-foreground text-[11.2px]'>Total Qty</span>
               <span className='font-semibold text-right'>{FormatIntNumber(state.currentRegion, reorderingPointsOrder.totalQty)}</span>
             </div>
             <div className='flex flex-row items-center justify-between gap-1 md:gap-0 md:flex-col md:items-start lg:items-center'>
-              <span className='text-[var(--bs-secondary-color)] text-[11.2px]'>Total Cost</span>
+              <span className='text-muted-foreground text-[11.2px]'>Total Cost</span>
               <span className='font-semibold text-right'>{FormatCurrency(state.currentRegion, reorderingPointsOrder.totalCost)}</span>
             </div>
             <div className='flex flex-row items-center justify-between gap-1 md:gap-0 md:flex-col md:items-start lg:items-center'>
-              <span className='text-[var(--bs-secondary-color)] text-[11.2px]'>Total Volume</span>
+              <span className='text-muted-foreground text-[11.2px]'>Total Volume</span>
               <span className='font-semibold text-right'>{`${FormatIntPercentage(state.currentRegion, state.currentRegion === 'us' ? reorderingPointsOrder.totalVolume / 61020 : reorderingPointsOrder.totalVolume / 1000000)} m³`}</span>
             </div>
             {splits.isSplitting && (
               <div className='flex flex-row items-center justify-between gap-4 md:items-start lg:items-center'>
                 <div className='flex flex-row items-center justify-between gap-1 md:gap-0 md:flex-col md:items-start lg:items-center'>
-                  <span className='text-[var(--bs-secondary-color)] text-[11.2px]'>Total Splits</span>
+                  <span className='text-muted-foreground text-[11.2px]'>Total Splits</span>
                   <span className='font-semibold text-right'>{FormatIntNumber(state.currentRegion, splits.splitsQty)}</span>
                 </div>
                 <div>
@@ -72,7 +72,7 @@ const ReorderingPointsSummary = ({ reorderingPointsOrder, selectedSupplier, erro
                       }, 0)
                       return (
                         <div key={`summarySplit-${splitIndex}`} className='flex flex-row items-center justify-end gap-2'>
-                          <span className='text-[var(--bs-secondary-color)] text-[11.2px]'>{splitNames[`${splitIndex}`]}</span>
+                          <span className='text-muted-foreground text-[11.2px]'>{splitNames[`${splitIndex}`]}</span>
                           <span className='font-semibold text-right text-[11.2px]'>{`${FormatIntNumber(state.currentRegion, totalSplitQty)} / ${FormatIntPercentage(
                             state.currentRegion,
                             state.currentRegion === 'us' ? totalSplitVolume / 61020 : totalSplitVolume / 1000000

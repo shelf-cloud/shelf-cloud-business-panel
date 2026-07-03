@@ -121,7 +121,7 @@ const FilterProducts = ({ brands, suppliers, categories, brand, supplier, catego
                     setProductFilters({ brand: null, supplier: null, category: null, condition: null, status: null })
                     setOpenDatesMenu(false)
                   }}
-                  className='p-0 border-0 bg-transparent no-underline text-[color:var(--bs-secondary-color)] mt-2 text-sm'>
+                  className='p-0 border-0 bg-transparent no-underline text-muted-foreground mt-2 text-sm'>
                   Clear All
                 </button>
               </div>

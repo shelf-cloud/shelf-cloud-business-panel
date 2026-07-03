@@ -18,8 +18,8 @@ type Props = {
 
 const InputCheckFilter = ({ inputLabel, inputName, value, handleChange, handleBlur }: Props) => {
   return (
-    <div className='form-check form-switch form-switch-right form-switch-md flex flex-row justify-start items-center'>
-      <Label className='form-label'>{inputLabel}</Label>
+    <div className='flex flex-row justify-start items-center gap-2'>
+      <Label className='mb-0'>{inputLabel}</Label>
       <Switch
         id={inputName}
         name={inputName}

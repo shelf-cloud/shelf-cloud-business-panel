@@ -9,10 +9,11 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import moment from 'moment'
 import { useSession } from 'next-auth/react'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Card } from '@shadcn/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { InputGroup, InputGroupText } from '@/components/ui/InputGroup'
 import { Input } from '@shadcn/ui/input'
 import { Label } from '@shadcn/ui/label'
 import { Spinner } from '@shadcn/ui/spinner'
@@ -363,7 +364,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
     <Dialog open={!!state.showWholeSaleOrderModal} onOpenChange={(open) => { if (!open) setWholeSaleOrderModal(!state.showWholeSaleOrderModal) }}>
       <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl' id='myModal'>
         <DialogHeader className='pr-6'>
-          <DialogTitle className='modal-title' id='myModalLabel'>
+          <DialogTitle id='myModalLabel'>
             WholeSale Order with Master Boxes
           </DialogTitle>
         </DialogHeader>
@@ -374,13 +375,13 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
             <div className='px-3 md:w-1/2'>
               <div className='px-3 w-full'>
                 <div className='mb-4'>
-                  <Label htmlFor='orderNumber' className='form-label text-[11.2px]'>
+                  <Label htmlFor='orderNumber' className='mb-2 text-[11.2px]'>
                     *Order Number
                   </Label>
-                  <div className='input-group'>
-                    <span className='input-group-text font-semibold text-[16.25px]' style={{ padding: '0.2rem 0.9rem' }} id='bsnss-prefix'>
+                  <InputGroup>
+                    <InputGroupText className='font-semibold text-[16.25px]' style={{ padding: '0.2rem 0.9rem' }} id='bsnss-prefix'>
                       {orderNumberStart}
-                    </span>
+                    </InputGroupText>
                     <Input
                       type='text'
                       className='text-[13px] h-8 text-xs'
@@ -393,24 +394,24 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                       aria-invalid={(validation.touched.orderNumber && validation.errors.orderNumber ? true : false) || undefined}
                     />
                     {validation.touched.orderNumber && validation.errors.orderNumber ? <div className='text-sm text-destructive'>{validation.errors.orderNumber}</div> : null}
-                  </div>
+                  </InputGroup>
                 </div>
               </div>
               <div className='px-3 w-full'>
-                <Label htmlFor='type' className='form-label text-[11.2px]'>
+                <Label htmlFor='type' className='mb-2 text-[11.2px]'>
                   *Type of Shipment
                 </Label>
                 <div className='flex flex-row justify-start items-center pb-4 gap-4'>
                   <Button
                     type='button'
-                    className={validation.values.type == 'Parcel Boxes' ? '' : 'text-[var(--bs-secondary-color)]'}
+                    className={validation.values.type == 'Parcel Boxes' ? '' : 'text-muted-foreground'}
                     variant={validation.values.type == 'Parcel Boxes' ? undefined : 'light'}
                     onClick={() => validation.setFieldValue('type', 'Parcel Boxes')}>
                     Parcel Boxes
                   </Button>
                   <Button
                     type='button'
-                    className={validation.values.type == 'LTL' ? '' : 'text-[var(--bs-secondary-color)]'}
+                    className={validation.values.type == 'LTL' ? '' : 'text-muted-foreground'}
                     variant={validation.values.type == 'LTL' ? undefined : 'light'}
                     onClick={() => validation.setFieldValue('type', 'LTL')}>
                     Pallets
@@ -420,7 +421,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
               {validation.values.type == 'LTL' && (
                 <div className='px-3 md:w-1/2'>
                   <div className='mb-4'>
-                    <Label htmlFor='numberOfPallets' className='form-label text-[11.2px]'>
+                    <Label htmlFor='numberOfPallets' className='mb-2 text-[11.2px]'>
                       *How many Pallets will be used?
                     </Label>
                     <Input
@@ -505,7 +506,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                                   </div>
                                 )}
                                 <div>
-                                  <p className='text-[var(--bs-secondary-color)] m-0 text-[11.2px]'>{file.name}</p>
+                                  <p className='text-muted-foreground m-0 text-[11.2px]'>{file.name}</p>
                                   <p className='mb-0 text-[11.2px]'>
                                     <strong>{file.formattedSize}</strong>
                                   </p>
@@ -576,7 +577,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                                   </div>
                                 )}
                                 <div>
-                                  <p className='text-[var(--bs-secondary-color)] font-bold m-0 text-[11.2px]'>{file.name}</p>
+                                  <p className='text-muted-foreground font-bold m-0 text-[11.2px]'>{file.name}</p>
                                   <p className='mb-0 text-[11.2px]'>
                                     <strong>{file.formattedSize}</strong>
                                   </p>
@@ -610,7 +611,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     aria-invalid={(validation.touched.thirdInfo && validation.errors.thirdInfo ? true : false) || undefined}
                   />
                   {validation.touched.thirdInfo && validation.errors.thirdInfo ? <div className='text-sm text-destructive'>{validation.errors.thirdInfo}</div> : null}
-                  <h5 className='text-[11.2px] mb-4 text-[var(--bs-secondary-color)]'>*Additional shipping costs apply to this type of shipping.</h5>
+                  <h5 className='text-[11.2px] mb-4 text-muted-foreground'>*Additional shipping costs apply to this type of shipping.</h5>
                 </>
               )}
             </div>

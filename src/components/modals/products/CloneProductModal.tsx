@@ -6,7 +6,7 @@ import { useContext, useState } from 'react'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { useFormik } from 'formik'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
 import { Label } from '@shadcn/ui/label'
@@ -97,7 +97,7 @@ const CloneProductModal = ({ cloneProductModal, setcloneProductModal }: Props) =
         if (!open) setcloneProductModal({ isOpen: false, originalId: 0, originalName: '', originalSku: '' })
       }}>
       <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl' id='myModal'>
-        <DialogHeader className='pr-6 modal-title' id='myModalLabel'>
+        <DialogHeader className='pr-6' id='myModalLabel'>
           <DialogTitle>Clone Product</DialogTitle>
         </DialogHeader>
         <div>
@@ -111,7 +111,7 @@ const CloneProductModal = ({ cloneProductModal, setcloneProductModal }: Props) =
               <h5 className='text-[16.25px] m-0 mt-4 mb-2 font-semibold text-primary'>New Product Details:</h5>
               <div className='px-3 w-full md:w-6/12'>
                 <div className='mb-4'>
-                  <Label htmlFor='firstNameinput' className='form-label'>
+                  <Label htmlFor='firstNameinput' className='mb-2'>
                     *Title
                   </Label>
                   <Input
@@ -130,7 +130,7 @@ const CloneProductModal = ({ cloneProductModal, setcloneProductModal }: Props) =
               </div>
               <div className='px-3 w-full md:w-6/12'>
                 <div className='mb-4'>
-                  <Label htmlFor='lastNameinput' className='form-label'>
+                  <Label htmlFor='lastNameinput' className='mb-2'>
                     *SKU
                   </Label>
                   <Input
@@ -152,7 +152,7 @@ const CloneProductModal = ({ cloneProductModal, setcloneProductModal }: Props) =
               </div>
               <div className='px-3 w-full md:w-6/12'>
                 <div className='mb-4'>
-                  <Label htmlFor='lastNameinput' className='form-label'>
+                  <Label htmlFor='lastNameinput' className='mb-2'>
                     *UPC
                   </Label>
                   <Input
@@ -178,13 +178,12 @@ const CloneProductModal = ({ cloneProductModal, setcloneProductModal }: Props) =
                     disabled={isLoading}
                     type='button'
                     variant='light'
-                    className='btn'
                     onClick={() => {
                       setcloneProductModal({ isOpen: false, originalId: 0, originalName: '', originalSku: '' })
                     }}>
                     Cancel
                   </Button>
-                  <Button type='submit' variant='success' className='btn'>
+                  <Button type='submit' variant='success'>
                     {isLoading ? (
                       <span>
                         <Spinner className='text-white' /> Cloning...

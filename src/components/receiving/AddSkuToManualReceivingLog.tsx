@@ -7,7 +7,7 @@ import { SkuToAddPo } from '@typesTs/purchaseOrders'
 import axios from 'axios'
 import DataTable from '@components/Common/DataTableSC'
 import { DebounceInput } from 'react-debounce-input'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 import { Spinner } from '@shadcn/ui/spinner'
@@ -93,7 +93,7 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
           <>
             <span className='text-[11.2px] font-semibold'>{row.title}</span>
             <br />
-            <span className='text-[var(--bs-secondary-color)] text-[11.2px] font-normal'>{`${row.sku} / ${row.barcode} / ${row.asin}`}</span>
+            <span className='text-muted-foreground text-[11.2px] font-normal'>{`${row.sku} / ${row.barcode} / ${row.asin}`}</span>
           </>
         )
       },
@@ -106,7 +106,7 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
       name: <span className='font-extrabold text-[13px]'></span>,
       selector: (row: SkuToAddPo) => {
         if (skuToAddToPo.some((item) => item.sku == row.sku) || addSkuToReceiving.receivingItems.includes(row.sku)) {
-          return <i className='text-[19.5px] text-[var(--bs-secondary-color)] las la-check-circle' />
+          return <i className='text-[19.5px] text-muted-foreground las la-check-circle' />
         } else {
           return <i className='text-[19.5px] text-success las la-plus-circle' style={{ cursor: 'pointer' }} onClick={() => handleAddSkuToList(row)} />
         }
@@ -150,7 +150,7 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
           <>
             <span className='text-[11.2px] font-semibold'>{row.title}</span>
             <br />
-            <span className='text-[var(--bs-secondary-color)] text-[11.2px] font-normal'>{`${row.sku} / ${row.barcode} / ${row.asin}`}</span>
+            <span className='text-muted-foreground text-[11.2px] font-normal'>{`${row.sku} / ${row.barcode} / ${row.asin}`}</span>
           </>
         )
       },
@@ -279,7 +279,7 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
         <div className='flex flex-wrap -mx-3'>
           <div className='px-3 w-full sm:w-6/12 overflow-auto h-full'>
             <div className='flex flex-wrap -mx-3 flex flex-col-reverse justify-center items-end gap-2 mb-2 md:flex-row md:justify-between md:items-center'>
-              <span className='text-[19.5px] font-semibold text-[var(--bs-secondary-color)] flex-1'>SKU List</span>
+              <span className='text-[19.5px] font-semibold text-muted-foreground flex-1'>SKU List</span>
               <div className='w-full md:w-7/12'>
                 <div className='flex flex-row justify-end items-center p-0'>
                   <div className='relative flex rounded-md w-full overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
@@ -302,7 +302,7 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
                         cursor: 'pointer',
                       }}
                       onClick={() => setSearchValue('')}>
-                      <i className='mdi mdi-window-close text-[19.5px] m-0 px-2 py-0 text-[var(--bs-secondary-color)]' />
+                      <i className='mdi mdi-window-close text-[19.5px] m-0 px-2 py-0 text-muted-foreground' />
                     </span>
                   </div>
                 </div>
@@ -323,7 +323,7 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
           </div>
           <div className='px-3 w-full sm:w-6/12'>
             <div className='flex flex-wrap -mx-3 flex flex-col-reverse justify-center items-end gap-2 mb-2 md:flex-row md:justify-end md:items-center'>
-              <span className='text-[19.5px] font-semibold text-[var(--bs-secondary-color)]'>SKU List to Add to PO</span>
+              <span className='text-[19.5px] font-semibold text-muted-foreground'>SKU List to Add to PO</span>
             </div>
             <div className='px-3 w-full' style={{ height: '60vh', overflowX: 'hidden', overflowY: 'auto' }}>
               <DataTable columns={columnsSkuListAdded} data={skuToAddToPo || []} striped={true} dense={true} fixedHeader={true} fixedHeaderScrollHeight='60vh' />

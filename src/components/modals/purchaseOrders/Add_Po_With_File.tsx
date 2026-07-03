@@ -11,10 +11,11 @@ import { useWarehouses } from '@hooks/warehouses/useWarehouse'
 import axios from 'axios'
 import { Form, Formik } from 'formik'
 import Papa from 'papaparse'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Card } from '@shadcn/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { InputGroup, InputGroupText } from '@/components/ui/InputGroup'
 import { Input } from '@shadcn/ui/input'
 import { Label } from '@shadcn/ui/label'
 import { Spinner } from '@shadcn/ui/spinner'
@@ -184,7 +185,7 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
     <Dialog open={!!state.showCreatePoFromFile} onOpenChange={(open) => { if (!open) setShowCreatePoFromFile(!state.showCreatePoFromFile) }}>
       <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl' id='addPoFromFile'>
         <DialogHeader className='pr-6'>
-          <DialogTitle className='modal-title' id='addPoFromFileModalLabel'>
+          <DialogTitle id='addPoFromFileModalLabel'>
             Create New Purchase Order
           </DialogTitle>
         </DialogHeader>
@@ -195,13 +196,13 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
               <div className='flex flex-wrap -mx-3'>
                 <div className='px-3 md:w-1/2'>
                   <div className='mb-1'>
-                    <Label htmlFor='firstNameinput' className='form-label'>
+                    <Label htmlFor='firstNameinput' className='mb-2'>
                       *Purchase Order Number
                     </Label>
-                    <div className='input-group'>
-                      <span className='input-group-text font-semibold text-[16.25px] m-0 px-2 py-0' id='basic-addon1'>
+                    <InputGroup>
+                      <InputGroupText className='font-semibold text-[16.25px] m-0 px-2 py-0' id='basic-addon1'>
                         {orderNumberStart}
-                      </span>
+                      </InputGroupText>
                       <Input
                         type='text'
                         className='text-[13px] h-8 text-xs'
@@ -213,11 +214,11 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                         aria-invalid={(touched.orderNumber && errors.orderNumber ? true : false) || undefined}
                       />
                       {touched.orderNumber && errors.orderNumber ? <div className='text-sm text-destructive'>{errors.orderNumber}</div> : null}
-                    </div>
+                    </InputGroup>
                   </div>
 
                   <div className='mb-2'>
-                    <Label className='form-label mb-1 text-[11.2px]'>*Destination</Label>
+                    <Label className='mb-1 text-[11.2px]'>*Destination</Label>
                     <SimpleSelect
                       options={warehouses?.map((w) => ({ value: `${w.warehouseId}`, label: w.name })) || []}
                       selected={values.destinationSC}
@@ -242,7 +243,7 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                     error={errors.supplier}
                   />
                   <div className='mb-1'>
-                    <Label htmlFor='firstNameinput' className='form-label mb-1 text-[11.2px]'>
+                    <Label htmlFor='firstNameinput' className='mb-1 text-[11.2px]'>
                       *Date
                     </Label>
                     <Input
@@ -306,7 +307,7 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                               <div className='flex flex-wrap -mx-3 items-center'>
                                 <div className='px-3 flex-1 basis-0 flex justify-between items-center'>
                                   <div>
-                                    <p className='text-[var(--bs-secondary-color)] font-bold m-0'>{f.name}</p>
+                                    <p className='text-muted-foreground font-bold m-0'>{f.name}</p>
                                     <p className='mb-0'>
                                       <strong>{f.formattedSize}</strong>
                                     </p>

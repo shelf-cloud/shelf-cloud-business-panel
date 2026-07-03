@@ -6,7 +6,7 @@ import UploadFileDropzone from '@components/ui/UploadFileDropzone'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import Papa from 'papaparse'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Card } from '@shadcn/ui/card'
 import { Dialog, DialogContent, DialogHeader } from '@shadcn/ui/dialog'
@@ -493,7 +493,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
         })
       }}>
       <DialogContent id='myModal' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl'>
-      <DialogHeader className='pr-6 modal-title' id='myModalLabel'>
+      <DialogHeader className='pr-6' id='myModalLabel'>
         <p className='text-[19.5px]'>Import File Bulk Add/Update Products Details</p>
       </DialogHeader>
       <div>
@@ -547,7 +547,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
                       <div className='flex flex-wrap -mx-3 items-center'>
                         <div className='px-3 flex justify-between items-center'>
                           <div>
-                            <p className='text-[var(--bs-secondary-color)] font-bold m-0'>{f.name}</p>
+                            <p className='text-muted-foreground font-bold m-0'>{f.name}</p>
                             <p className='mb-0'>
                               <strong>{f.formattedSize}</strong>
                             </p>
@@ -597,7 +597,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
         {showerrorResponse && errorResponse?.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='text-danger m-0'>{`Error: ${error}`}</p>)}
         <div className='px-3 w-full'>
           <div className='text-right'>
-            <Button type='button' variant='success' className='btn' onClick={handleUploadProducts}>
+            <Button type='button' variant='success' onClick={handleUploadProducts}>
               {loading ? <Spinner className='size-6' /> : 'Upload File'}
             </Button>
           </div>

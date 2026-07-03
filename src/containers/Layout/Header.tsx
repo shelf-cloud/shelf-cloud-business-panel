@@ -51,7 +51,7 @@ const Header = ({ headerClass }: Props) => {
         <div className='layout-width'>
           <div className='navbar-header'>
             <div className='flex'>
-              <button onClick={toogleMenuBtn} type='button' className='btn btn-sm px-4 header-item vertical-menu-btn topnav-hamburger' id='topnav-hamburger-icon'>
+              <button onClick={toogleMenuBtn} type='button' className='inline-flex appearance-none items-center justify-center border-0 bg-transparent rounded-md text-xs font-medium px-4 header-item vertical-menu-btn topnav-hamburger' id='topnav-hamburger-icon'>
                 <span className='hamburger-icon'>
                   <span></span>
                   <span></span>

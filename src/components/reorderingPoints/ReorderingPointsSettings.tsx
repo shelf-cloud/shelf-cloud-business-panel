@@ -76,22 +76,26 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
   }
 
   return (
-    <div ref={rpSettings} className='dropdown'>
+    <div ref={rpSettings} className='relative inline-block'>
       <ShadcnButton variant='light' onClick={() => setOpenDatesMenu(!openDatesMenu)}>
         <i className='las la-cog text-[19.5px] m-0 p-0 text-primary' />
         <ChevronDownIcon className='size-3' />
       </ShadcnButton>
-      <div className={'dropdown-menu dropdown-menu-xl px-2 pt-4 pb-1' + (openDatesMenu ? ' show' : '')} style={{ minWidth: '300px' }}>
+      <div
+        className={
+          'absolute z-10 mt-1 rounded-md border border-[#E1E3E5] bg-white py-1 shadow px-2 pt-4 pb-1 ' + (openDatesMenu ? 'block' : 'hidden')
+        }
+        style={{ minWidth: '300px' }}>
         {canSplit && (
           <div className='mb-4 px-2'>
             <p className='text-[13px] m-0 p-0 font-semibold'>Splits</p>
-            <p className='text-[11.2px] m-0 p-0 text-[var(--bs-secondary-color)] font-light'>
+            <p className='text-[11.2px] m-0 p-0 text-muted-foreground font-light'>
               Splits are used to split the Purchase Order Quantities in different PDFs. This is usefull when you want to send the Purchase Order Quantities to different Locations.
               Only One Puchase order is created. <span className='font-semibold'>Max. 3 Splits.</span>
             </p>
             <div className='mt-2 grid justify-between items-center gap-2' style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
-              <div className='form-check form-switch form-switch-right form-switch-sm flex flex-row justify-start items-start'>
-                <Label className='form-label'>Split Order</Label>
+              <div className='flex flex-row justify-start items-start'>
+                <Label className='mb-2'>Split Order</Label>
                 <Switch disabled={!canSplit} id='showOnlyOverdue' name='showOnlyOverdue' checked={splits.isSplitting} onChange={(e) => handleIsSplitting(e)} />
               </div>
               <InputGroup size='sm'>
@@ -115,15 +119,15 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
         )}
         <div className='flex flex-col justify-start px-2'>
           <p className='text-[13px] m-0 p-0 font-semibold'>Urgency Time Range</p>
-          <p className='text-[11.2px] m-0 p-0 text-[var(--bs-secondary-color)] font-light'>
+          <p className='text-[11.2px] m-0 p-0 text-muted-foreground font-light'>
             A product&apos;s urgency depends on how many days of stock remain after lead time. The remaining days to place an order to avoid being out of stock during lead time.
           </p>
-          <p className='text-[11.2px] m-0 p-0 text-[var(--bs-secondary-color)] font-light'></p>
+          <p className='text-[11.2px] m-0 p-0 text-muted-foreground font-light'></p>
           <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => handleSubmit(values)}>
             {({ values, errors, touched, handleChange, handleBlur }) => (
               <Form className='my-2'>
                 <div className='px-3 w-full mb-1'>
-                  <Label htmlFor='highAlertMax' className='form-label mb-1'>
+                  <Label htmlFor='highAlertMax' className='mb-2'>
                     <i className={'mdi mdi-alert-octagon text-destructive text-[16.25px]'} /> High Alert
                   </Label>
                   <div className='flex flex-row justify-between items-center gap-2'>
@@ -161,7 +165,7 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
                   {touched.highAlertMax && errors.highAlertMax ? <p className='m-0 p-0 text-right text-danger text-[11.2px]'>{errors.highAlertMax}</p> : null}
                 </div>
                 <div className='px-3 w-full mb-1'>
-                  <Label htmlFor='mediumAlertMin' className='form-label mb-1'>
+                  <Label htmlFor='mediumAlertMin' className='mb-2'>
                     <i className={'mdi mdi-alert-octagon text-warning text-[16.25px]'} /> Medium Alert
                   </Label>
                   <div className='flex flex-row justify-between items-center gap-2'>
@@ -200,7 +204,7 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
                   {touched.mediumAlertMax && errors.mediumAlertMax ? <p className='m-0 p-0 text-right text-danger text-[11.2px]'>{errors.mediumAlertMax}</p> : null}
                 </div>
                 <div className='px-3 w-full mb-1'>
-                  <Label htmlFor='lowAlertMin' className='form-label mb-1'>
+                  <Label htmlFor='lowAlertMin' className='mb-2'>
                     <i className={'mdi mdi-alert-octagon text-info text-[16.25px]'} /> Low Alert
                   </Label>
                   <div className='flex flex-row justify-between items-center gap-2'>
@@ -239,7 +243,7 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
                   {touched.lowAlertMax && errors.lowAlertMax ? <p className='m-0 p-0 text-right text-danger text-[11.2px]'>{errors.lowAlertMax}</p> : null}
                 </div>
                 <div className='px-3 w-full mb-1'>
-                  <Label htmlFor='noAlertMin' className='form-label mb-1'>
+                  <Label htmlFor='noAlertMin' className='mb-2'>
                     <i className={'mdi mdi-alert-octagon text-success text-[16.25px]'} /> No Alert
                   </Label>
                   <div className='flex flex-row justify-between items-center gap-2'>

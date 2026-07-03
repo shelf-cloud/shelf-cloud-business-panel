@@ -17,7 +17,7 @@ const TeamMembersTable = ({ teamMembers, handleManageUser, pending }: Props) => 
         return (
           <>
             <p className='m-0 p-0'>{row.name}</p>
-            <p className='m-0 p-0 text-[var(--bs-secondary-color)] text-[11.2px]'>{row.email}</p>
+            <p className='m-0 p-0 text-muted-foreground text-[11.2px]'>{row.email}</p>
           </>
         )
       },

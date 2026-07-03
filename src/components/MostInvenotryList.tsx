@@ -53,7 +53,7 @@ const MostInvenotryList = ({ products }: Props) => {
                       <span className='text-[13px]'>{item.title}</span>
                     </TableCell>
                     <TableCell>
-                      <span className='text-[color:var(--bs-secondary-color)]'>{item.sku}</span>
+                      <span className='text-muted-foreground'>{item.sku}</span>
                     </TableCell>
                     <TableCell>
                       <h5 className='text-[14px] my-1 font-normal text-center'>{FormatIntNumber(state.currentRegion, item.totalQty)}</h5>

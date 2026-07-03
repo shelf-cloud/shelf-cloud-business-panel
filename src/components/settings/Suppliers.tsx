@@ -4,7 +4,7 @@ import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import DataTable from '@components/Common/DataTableSC'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
 import { Label } from '@shadcn/ui/label'
@@ -221,7 +221,7 @@ const Suppliers = ({}: Props) => {
         <div>
           <form onSubmit={handleAddSupplier} className='flex flex-row justify-start items-center gap-4 w-full'>
             <div className='mb-3'>
-              <Label htmlFor='title' className='form-label'>
+              <Label htmlFor='title' className='mb-2'>
                 *Supplier Name
               </Label>
               <Input
@@ -238,7 +238,7 @@ const Suppliers = ({}: Props) => {
               {validation.touched.name && validation.errors.name ? <div className='text-sm text-destructive'>{validation.errors.name}</div> : null}
             </div>
             <div className='mb-3'>
-              <Label htmlFor='title' className='form-label'>
+              <Label htmlFor='title' className='mb-2'>
                 *Email
               </Label>
               <Input
@@ -255,7 +255,7 @@ const Suppliers = ({}: Props) => {
               {validation.touched.email && validation.errors.email ? <div className='text-sm text-destructive'>{validation.errors.email}</div> : null}
             </div>
             <div className='mb-3'>
-              <Label htmlFor='title' className='form-label'>
+              <Label htmlFor='title' className='mb-2'>
                 *Phone
               </Label>
               <Input
@@ -272,7 +272,7 @@ const Suppliers = ({}: Props) => {
               {validation.touched.phone && validation.errors.phone ? <div className='text-sm text-destructive'>{validation.errors.phone}</div> : null}
             </div>
             <div className='mb-3'>
-              <Label htmlFor='title' className='form-label'>
+              <Label htmlFor='title' className='mb-2'>
                 *Address
               </Label>
               <Input
@@ -289,7 +289,7 @@ const Suppliers = ({}: Props) => {
               {validation.touched.address && validation.errors.address ? <div className='text-sm text-destructive'>{validation.errors.address}</div> : null}
             </div>
             <div className='mb-3'>
-              <Label htmlFor='title' className='form-label'>
+              <Label htmlFor='title' className='mb-2'>
                 *Country
               </Label>
               <Input
@@ -336,7 +336,7 @@ const Suppliers = ({}: Props) => {
       {showEditFields && (
         <form onSubmit={handleEditSupplier} className='flex flex-row justify-start items-center gap-4 w-full'>
           <div className='mb-3'>
-            <Label htmlFor='title' className='form-label'>
+            <Label htmlFor='title' className='mb-2'>
               *Supplier Name
             </Label>
             <Input
@@ -353,7 +353,7 @@ const Suppliers = ({}: Props) => {
             {validationEdit.touched.name && validationEdit.errors.name ? <div className='text-sm text-destructive'>{validationEdit.errors.name}</div> : null}
           </div>
           <div className='mb-3'>
-            <Label htmlFor='title' className='form-label'>
+            <Label htmlFor='title' className='mb-2'>
               *Email
             </Label>
             <Input
@@ -370,7 +370,7 @@ const Suppliers = ({}: Props) => {
             {validationEdit.touched.email && validationEdit.errors.email ? <div className='text-sm text-destructive'>{validationEdit.errors.email}</div> : null}
           </div>
           <div className='mb-3'>
-            <Label htmlFor='title' className='form-label'>
+            <Label htmlFor='title' className='mb-2'>
               *Phone
             </Label>
             <Input
@@ -387,7 +387,7 @@ const Suppliers = ({}: Props) => {
             {validationEdit.touched.phone && validationEdit.errors.phone ? <div className='text-sm text-destructive'>{validationEdit.errors.phone}</div> : null}
           </div>
           <div className='mb-3'>
-            <Label htmlFor='title' className='form-label'>
+            <Label htmlFor='title' className='mb-2'>
               *Address
             </Label>
             <Input
@@ -404,7 +404,7 @@ const Suppliers = ({}: Props) => {
             {validationEdit.touched.address && validationEdit.errors.address ? <div className='text-sm text-destructive'>{validationEdit.errors.address}</div> : null}
           </div>
           <div className='mb-3'>
-            <Label htmlFor='title' className='form-label'>
+            <Label htmlFor='title' className='mb-2'>
               *Country
             </Label>
             <Input

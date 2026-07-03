@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 
 import { Product } from '@typings'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 
 import { DropdownMenuItem } from '@shadcn/ui/dropdown-menu'
 

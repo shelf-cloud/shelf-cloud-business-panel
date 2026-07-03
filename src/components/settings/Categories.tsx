@@ -4,7 +4,7 @@ import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import DataTable from '@components/Common/DataTableSC'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
 import { Label } from '@shadcn/ui/label'
@@ -165,7 +165,7 @@ const Categories = ({}: Props) => {
         <div>
           <form onSubmit={handleAddSupplier} className='flex flex-row justify-start items-center gap-4 w-full'>
             <div className='mb-3'>
-              <Label htmlFor='title' className='form-label'>
+              <Label htmlFor='title' className='mb-2'>
                 *Category Name
               </Label>
               <Input
@@ -196,7 +196,7 @@ const Categories = ({}: Props) => {
       {showEditFields && (
         <form onSubmit={handleEditSupplier} className='flex flex-row justify-start items-center gap-4 w-full'>
           <div className='mb-3'>
-            <Label htmlFor='title' className='form-label'>
+            <Label htmlFor='title' className='mb-2'>
               *Category Name
             </Label>
             <Input

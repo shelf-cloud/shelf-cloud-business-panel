@@ -4,7 +4,7 @@ import AppContext from '@context/AppContext'
 import { Identifier } from '@typings'
 import axios from 'axios'
 import { Field, FieldArray, Form, Formik } from 'formik'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
 import { NativeSelect } from '@shadcn/ui/native-select'
@@ -162,7 +162,7 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
                     {({ remove, push }) => (
                       <>
                         <tr>
-                          <td className='text-[color:var(--bs-secondary-color)] align-middle text-nowrap'>Additional Identifiers</td>
+                          <td className='text-muted-foreground align-middle text-nowrap'>Additional Identifiers</td>
                           <td></td>
                           <td className='align-middle'>
                             <div className='flex flex-row flex-nowrap justify-center items-center mb-0 h-full'>

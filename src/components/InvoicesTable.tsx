@@ -165,7 +165,14 @@ const InvoicesTable = ({ filteredItems, pending }: Props) => {
         if (state.currentRegion == 'us') {
           return (
             <a href={`${row.payLink}`} target='blank' rel='noopener noreferrer'>
-              <Button className={row.paid ? 'btn btn-soft-success' : 'btn btn-primary'}>{row.paid ? 'View Receipt' : 'Pay Now'}</Button>
+              <Button
+                className={
+                  row.paid
+                    ? 'inline-flex h-9 items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium bg-[color-mix(in_srgb,var(--vz-success)_18%,transparent)] text-success hover:bg-success hover:text-white'
+                    : undefined
+                }>
+                {row.paid ? 'View Receipt' : 'Pay Now'}
+              </Button>
             </a>
           )
         } else {

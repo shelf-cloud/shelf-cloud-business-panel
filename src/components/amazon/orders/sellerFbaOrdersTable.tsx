@@ -65,26 +65,26 @@ const SellerFbaOrdersTable = ({ tableData, pending }: Props) => {
       selector: (row: FBAOrder) => {
         switch (row.orderStatus) {
           case 'Shipped':
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-success)_10%,transparent)] text-success p-2 my-2'>{` ${row.orderStatus} `}</span>
+            return <span className='inline-flex w-fit uppercase items-center rounded-sm bg-[color-mix(in_srgb,var(--vz-success)_10%,transparent)] text-success p-2 my-2'>{` ${row.orderStatus} `}</span>
             break
           case 'Processed':
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-secondary)_10%,transparent)] text-secondary p-2 my-2'>{` ${row.orderStatus} `}</span>
+            return <span className='inline-flex w-fit uppercase items-center rounded-sm bg-[color-mix(in_srgb,var(--vz-secondary)_10%,transparent)] text-secondary p-2 my-2'>{` ${row.orderStatus} `}</span>
             break
           case 'Pending':
           case 'Unshipped':
           case 'PartiallyShipped':
           case 'InvoiceUnconfirmed':
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] text-warning p-2 my-2'>{` ${row.orderStatus} `}</span>
+            return <span className='inline-flex w-fit uppercase items-center rounded-sm bg-[color-mix(in_srgb,var(--vz-warning)_10%,transparent)] text-warning p-2 my-2'>{` ${row.orderStatus} `}</span>
             break
           case 'PendingAvailability':
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-danger)_10%,transparent)] text-danger p-2 my-2'>{` ${row.orderStatus} `}</span>
+            return <span className='inline-flex w-fit uppercase items-center rounded-sm bg-[color-mix(in_srgb,var(--vz-danger)_10%,transparent)] text-danger p-2 my-2'>{` ${row.orderStatus} `}</span>
             break
           case 'Unfulfillable':
           case 'Cancelled':
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-dark)_10%,transparent)] text-dark p-2 my-2'>{` ${row.orderStatus} `}</span>
+            return <span className='inline-flex w-fit uppercase items-center rounded-sm bg-[color-mix(in_srgb,var(--vz-dark)_10%,transparent)] text-dark p-2 my-2'>{` ${row.orderStatus} `}</span>
             break
           default:
-            return <span className='badge uppercase text-info bg-[color:var(--vz-light)] p-2 my-2'>{` ${row.orderStatus} `}</span>
+            return <span className='inline-flex w-fit uppercase items-center rounded-sm text-info bg-[color:var(--vz-light)] p-2 my-2'>{` ${row.orderStatus} `}</span>
         }
       },
       center: true,
@@ -122,7 +122,7 @@ const SellerFbaOrdersTable = ({ tableData, pending }: Props) => {
                 0
               )
             )}
-            <span className='text-[var(--bs-secondary-color)] text-[11.2px]'>{` USD`}</span>
+            <span className='text-muted-foreground text-[11.2px]'>{` USD`}</span>
             {row?.orderItems.reduce(
               (total, item: FBAOrderItem) =>
                 total + (item.refund_item + item.refund_itemTax + item.refund_commission + item.refund_adminCommission + item.refund_facilitatorTax_item),

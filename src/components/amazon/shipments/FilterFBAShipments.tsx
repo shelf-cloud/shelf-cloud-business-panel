@@ -61,7 +61,7 @@ const FilterFBAShipments = ({ filters, setfilters }: Props) => {
                 }}
                 options={[{ value: 'all', label: 'All' }, ...STATUSOPTIONS]}
               />
-              <div className='form-check form-switch form-switch-right form-switch-sm flex flex-row justify-start items-end'>
+              <div className='flex flex-row justify-start items-end gap-2'>
                 <Label className='font-normal text-[11.2px] w-3/4'>Show Only Missing Qty</Label>
                 <Switch
                   id='showOnlyOverdue'
@@ -80,7 +80,7 @@ const FilterFBAShipments = ({ filters, setfilters }: Props) => {
                   }))
                   setOpenDatesMenu(false)
                 }}
-                className='p-0 border-0 no-underline text-[var(--bs-secondary-color)] mt-2 text-[11.2px]'>
+                className='p-0 border-0 no-underline text-muted-foreground mt-2 text-[11.2px]'>
                 Clear All
               </button>
             </div>

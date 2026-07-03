@@ -47,7 +47,7 @@ const CommerceHubWidget = ({ summary }: Props) => {
             <div className='flex items-center justify-between'>
               <div className='flex flex-row justify-start items-center'>
                 <div className=''>
-                  <span className={'avatar-title p-2 text-[22.75px] bg-[color-mix(in_srgb,var(--bs-primary)_18%,transparent)] rounded-[1rem]'}>
+                  <span className={'avatar-title p-2 text-[22.75px] bg-[color-mix(in_srgb,var(--vz-primary)_18%,transparent)] rounded-[1rem]'}>
                     <i className='bx bx-money-withdraw' style={{ color: '#39B0EC' }}></i>
                   </span>
                 </div>
@@ -82,7 +82,7 @@ const CommerceHubWidget = ({ summary }: Props) => {
             <div className='flex items-center justify-between'>
               <div className='flex flex-row justify-start items-center'>
                 <div className=''>
-                  <span className={'avatar-title p-2 text-[22.75px] bg-[color-mix(in_srgb,var(--bs-primary)_18%,transparent)] rounded-[1rem]'}>
+                  <span className={'avatar-title p-2 text-[22.75px] bg-[color-mix(in_srgb,var(--vz-primary)_18%,transparent)] rounded-[1rem]'}>
                     <i className='las la-file-invoice-dollar' style={{ color: '#4F6EED' }}></i>
                   </span>
                 </div>

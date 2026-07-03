@@ -136,14 +136,14 @@ const Create_Receiving_Boxes_Multi = ({
                         </div>
                         <div className='text-left'>
                           <p className='text-nowrap m-0 font-semibold'>{item.sku}</p>
-                          <p className='text-nowrap m-0 text-[var(--bs-secondary-color)]'>PO: {item.orderNumber}</p>
+                          <p className='text-nowrap m-0 text-muted-foreground'>PO: {item.orderNumber}</p>
                           <p className='text-nowrap m-0'>Receiving: {item.receivingQty}</p>
                         </div>
                       </div>
                     </div>
                     <Badge
                       variant={pendingToBoxed > 0 ? 'light' : pendingToBoxed < 0 ? 'destructive' : 'success'}
-                      className={'rounded-sm text-center text-[11.2px] ' + (pendingToBoxed > 0 ? 'text-[var(--bs-secondary-color)]' : pendingToBoxed < 0 ? 'text-white' : 'text-white')}>
+                      className={'rounded-sm text-center text-[11.2px] ' + (pendingToBoxed > 0 ? 'text-muted-foreground' : pendingToBoxed < 0 ? 'text-white' : 'text-white')}>
                       {pendingToBoxed}
                     </Badge>
                   </div>
@@ -244,7 +244,7 @@ const Create_Receiving_Boxes_Multi = ({
               />
             </div>
             <div className='px-3 md:w-2/12 mb-2'>
-              <Label htmlFor={`add-sku-to-box-quantity`} className='form-label text-[11.2px]'>
+              <Label htmlFor={`add-sku-to-box-quantity`} className='mb-2 text-[11.2px]'>
                 *Quantity
               </Label>
               <InputNumberForm
@@ -291,7 +291,7 @@ const Create_Receiving_Boxes_Multi = ({
               <div className='flex flex-row justify-between items-center mb-1'>
                 <div style={{ cursor: 'pointer' }} onClick={() => document.getElementById(`box-${boxIndex}-content`)?.classList.toggle('show')}>
                   <p className='m-0 font-semibold text-[13px]'>Box {boxIndex + 1}</p>
-                  <p className={'m-0 text-[11.2px] ' + (Object.entries(box).length === 0 ? 'text-danger' : 'text-[var(--bs-secondary-color)]')}>
+                  <p className={'m-0 text-[11.2px] ' + (Object.entries(box).length === 0 ? 'text-danger' : 'text-muted-foreground')}>
                     {Object.entries(box).length} SKUs, {Object.values(box).reduce((acc, item) => acc + item.quantity, 0)} total units
                   </p>
                 </div>
@@ -310,7 +310,7 @@ const Create_Receiving_Boxes_Multi = ({
                     <div key={`boxed-${boxIndex}-${sku}`} className='w-full flex flex-row justify-between items-center gap-4 bg-light px-4 py-1 rounded'>
                       <div className='text-left'>
                         <p className='text-nowrap m-0 font-semibold'>{sku}</p>
-                        <p className='text-nowrap m-0 text-[var(--bs-secondary-color)]'>Qty: {item.quantity}</p>
+                        <p className='text-nowrap m-0 text-muted-foreground'>Qty: {item.quantity}</p>
                       </div>
                       <Button size='sm' variant='ghost' onClick={() => removeSkuFromMultiSkuBox(boxIndex, sku)} className='text-[11.2px] btn-icon'>
                         <i className='mdi mdi-trash-can-outline text-[16.25px]' />

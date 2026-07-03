@@ -5,7 +5,7 @@ import AppContext from '@context/AppContext'
 import { AmazonFBA } from '@typings'
 import axios from 'axios'
 import { useFormik } from 'formik'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
 import { useSWRConfig } from 'swr'
@@ -116,7 +116,7 @@ const Inventory_Kit_Details = ({ inventoryId, sku, onhand, buffer, available, re
                       />
                       {validation.touched.buffer && validation.errors.buffer ? <div className='text-sm text-destructive'>{validation.errors.buffer}</div> : null}
                     </div>
-                    <button type='button' aria-label='Cancel editing buffer inventory' className='m-0 p-0 border-0 bg-transparent text-[color:var(--bs-secondary-color)]' onClick={() => setShowEditFields(false)}>
+                    <button type='button' aria-label='Cancel editing buffer inventory' className='m-0 p-0 border-0 bg-transparent text-muted-foreground' onClick={() => setShowEditFields(false)}>
                       <i className='text-[22.75px] mdi mdi-close-circle' />
                     </button>
                     <Button type='submit' variant='muted' size='sm' className='m-0 p-0'>

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { ProductTrendTag, ReorderingPointsForecastProducts, ReorderingPointsProduct, ReorderingPointsResponse } from '@typesTs/reorderingPoints/reorderingPoints'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import useSWR from 'swr'
 
 import { getAIForecastTotal, getProductAIForecastCoverageQty, getProductAIForecastUrgency } from '@/lib/getAIForecastUrgency'

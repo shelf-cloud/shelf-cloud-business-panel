@@ -21,7 +21,7 @@ import { useWarehouses } from '@hooks/warehouses/useWarehouse'
 import { OrderRowType } from '@typings'
 import axios from 'axios'
 import moment from 'moment'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Card, CardContent } from '@shadcn/ui/card'
 

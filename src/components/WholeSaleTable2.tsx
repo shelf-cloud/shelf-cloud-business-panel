@@ -176,7 +176,7 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError,
               <p className='m-0'>{row.sku}</p>
               <ul className='m-0 ps-4'>
                 {row.children?.map((child) => (
-                  <li className='m-0 text-[11.2px] text-[var(--bs-secondary-color)]' key={child.idInventory}>{`${child.title} | ${child.sku} | Available: ${child.available} | Used: ${child.qty}`}</li>
+                  <li className='m-0 text-[11.2px] text-muted-foreground' key={child.idInventory}>{`${child.title} | ${child.sku} | Available: ${child.available} | Used: ${child.qty}`}</li>
                 ))}
               </ul>
             </div>
@@ -225,9 +225,13 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError,
       name: <span className='font-semibold text-[13px]'>Type</span>,
       selector: (cell: any) => {
         if (cell.isKit) {
-          return <span className='badge uppercase bg-[color-mix(in_srgb,var(--info)_10%,transparent)] text-info p-2'>kit</span>
+          return (
+            <span className='inline-flex w-fit items-center rounded-sm uppercase bg-[color-mix(in_srgb,var(--info)_10%,transparent)] text-info p-2 text-xs font-medium'>kit</span>
+          )
         } else {
-          return <span className='badge uppercase bg-[color-mix(in_srgb,var(--primary)_10%,transparent)] text-primary p-2'>product</span>
+          return (
+            <span className='inline-flex w-fit items-center rounded-sm uppercase bg-[color-mix(in_srgb,var(--primary)_10%,transparent)] text-primary p-2 text-xs font-medium'>product</span>
+          )
         }
       },
       sortable: true,
@@ -246,7 +250,6 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError,
               <Button
                 variant='info'
                 outline
-                className='btn btn-ghost-info'
                 id={`reservedMasterQty${CleanSpecialCharacters(cell.sku)}`}
                 onClick={() => {
                   setModalProductInfo(cell.quantity.inventoryId, cell.quantity.sku)

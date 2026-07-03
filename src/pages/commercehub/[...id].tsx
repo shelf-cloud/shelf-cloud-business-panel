@@ -15,7 +15,7 @@ import moment from 'moment'
 import { getSession } from 'next-auth/react'
 import DataTable from '@components/Common/DataTableSC'
 import { DebounceInput } from 'react-debounce-input'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
 import useSWR, { mutate } from 'swr'
 
@@ -182,7 +182,7 @@ const CheckNumberDetails = ({ session }: Props) => {
         <div className='flex flex-wrap justify-start items-center'>
           <p className='m-0 p-0 font-semibold text-[11.2px]'>{row.invoiceNumber}</p>{' '}
           <i
-            className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-[color:var(--bs-secondary-color)]'
+            className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-muted-foreground'
             style={{ cursor: 'pointer' }}
             onClick={() => {
               navigator.clipboard.writeText(row.invoiceNumber)
@@ -200,7 +200,7 @@ const CheckNumberDetails = ({ session }: Props) => {
     },
     {
       name: <span className='font-bold text-[13px] text-nowrap'>Keyrec No.</span>,
-      selector: (row: Invoice) => <p className='m-0 p-0 text-[var(--bs-secondary-color)] text-[11.2px]'>{row.keyrecNumber ? row.keyrecNumber : ''}</p>,
+      selector: (row: Invoice) => <p className='m-0 p-0 text-muted-foreground text-[11.2px]'>{row.keyrecNumber ? row.keyrecNumber : ''}</p>,
       sortable: false,
       left: true,
       compact: true,
@@ -210,9 +210,9 @@ const CheckNumberDetails = ({ session }: Props) => {
       selector: (row: Invoice) =>
         row.checkTotal > 0 && (
           <div className='flex flex-wrap justify-start items-center'>
-            <p className='m-0 p-0 text-[var(--bs-secondary-color)] text-[11.2px]'>{row.poNumber}</p>
+            <p className='m-0 p-0 text-muted-foreground text-[11.2px]'>{row.poNumber}</p>
             <i
-              className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-[color:var(--bs-secondary-color)]'
+              className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-muted-foreground'
               style={{ cursor: 'pointer' }}
               onClick={() => {
                 navigator.clipboard.writeText(row.poNumber)
@@ -229,7 +229,7 @@ const CheckNumberDetails = ({ session }: Props) => {
     },
     {
       name: <span className='font-bold text-[13px]'>Comments</span>,
-      selector: (row: Invoice) => <span className='text-[11.2px] text-[var(--bs-secondary-color)]'>{row.comments}</span>,
+      selector: (row: Invoice) => <span className='text-[11.2px] text-muted-foreground'>{row.comments}</span>,
       sortable: false,
       left: true,
       compact: true,
@@ -266,7 +266,7 @@ const CheckNumberDetails = ({ session }: Props) => {
       name: <span className='font-extrabold text-[13px]'>Deductions</span>,
       selector: (row: Invoice) => {
         if (row.checkTotal >= 0) {
-          return <span className={'text-center text-[11.2px] ' + (row.deductions < 0 ? 'text-danger' : 'text-[var(--bs-secondary-color)]')}>{FormatCurrency(state.currentRegion, row.deductions)}</span>
+          return <span className={'text-center text-[11.2px] ' + (row.deductions < 0 ? 'text-danger' : 'text-muted-foreground')}>{FormatCurrency(state.currentRegion, row.deductions)}</span>
         } else {
           return <></>
         }
@@ -280,7 +280,7 @@ const CheckNumberDetails = ({ session }: Props) => {
       name: <span className='font-extrabold text-[13px]'>Charges</span>,
       selector: (row: Invoice) => {
         if (row.checkTotal >= 0) {
-          return <span className={'text-center text-[11.2px] ' + (row.charges < 0 ? 'text-danger' : 'text-[var(--bs-secondary-color)]')}>{FormatCurrency(state.currentRegion, row.charges)}</span>
+          return <span className={'text-center text-[11.2px] ' + (row.charges < 0 ? 'text-danger' : 'text-muted-foreground')}>{FormatCurrency(state.currentRegion, row.charges)}</span>
         } else {
           return <></>
         }
@@ -294,7 +294,7 @@ const CheckNumberDetails = ({ session }: Props) => {
       name: (
         <div className='flex flex-col justify-center items-center'>
           <p className='m-0 font-bold text-[13px]'>Total Paid</p>
-          <p className='m-0 text-[var(--bs-secondary-color)]'>
+          <p className='m-0 text-muted-foreground'>
             <span className='font-semibold'>{FormatCurrency(state.currentRegion, getCheckAmountTotal(filterInvoices))}</span>
           </p>
         </div>
@@ -316,21 +316,21 @@ const CheckNumberDetails = ({ session }: Props) => {
       selector: (row: Invoice) => {
         switch (row.status) {
           case 'paid':
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-success)_10%,transparent)] text-success p-2'>{` ${row.status} `}</span>
+            return <span className='inline-block rounded-[0.25rem] text-[0.75em] font-semibold leading-none whitespace-nowrap align-baseline uppercase bg-[color-mix(in_srgb,var(--success)_10%,transparent)] text-success p-2'>{` ${row.status} `}</span>
           case 'unpaid':
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] text-warning p-2'>{` ${row.status} `}</span>
+            return <span className='inline-block rounded-[0.25rem] text-[0.75em] font-semibold leading-none whitespace-nowrap align-baseline uppercase bg-[color-mix(in_srgb,var(--warning)_10%,transparent)] text-warning p-2'>{` ${row.status} `}</span>
           case 'closed':
           case 'resolved':
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-dark)_10%,transparent)] text-dark p-2'>{` ${row.status} `}</span>
+            return <span className='inline-block rounded-[0.25rem] text-[0.75em] font-semibold leading-none whitespace-nowrap align-baseline uppercase bg-[color-mix(in_srgb,var(--dark)_10%,transparent)] text-dark p-2'>{` ${row.status} `}</span>
           case 'reviewing':
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] text-warning p-2'>{` ${row.status} `}</span>
+            return <span className='inline-block rounded-[0.25rem] text-[0.75em] font-semibold leading-none whitespace-nowrap align-baseline uppercase bg-[color-mix(in_srgb,var(--warning)_10%,transparent)] text-warning p-2'>{` ${row.status} `}</span>
           case 'pending':
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-info)_10%,transparent)] text-info p-2'>{` ${row.status} `}</span>
+            return <span className='inline-block rounded-[0.25rem] text-[0.75em] font-semibold leading-none whitespace-nowrap align-baseline uppercase bg-[color-mix(in_srgb,var(--info)_10%,transparent)] text-info p-2'>{` ${row.status} `}</span>
           default:
             if (row.checkTotal > 0) {
-              return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-success)_10%,transparent)] text-success p-2'>{` Paid `}</span>
+              return <span className='inline-block rounded-[0.25rem] text-[0.75em] font-semibold leading-none whitespace-nowrap align-baseline uppercase bg-[color-mix(in_srgb,var(--success)_10%,transparent)] text-success p-2'>{` Paid `}</span>
             } else {
-              return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-info)_10%,transparent)] text-info p-2'>{` pending `}</span>
+              return <span className='inline-block rounded-[0.25rem] text-[0.75em] font-semibold leading-none whitespace-nowrap align-baseline uppercase bg-[color-mix(in_srgb,var(--info)_10%,transparent)] text-info p-2'>{` pending `}</span>
             }
         }
       },
@@ -385,7 +385,7 @@ const CheckNumberDetails = ({ session }: Props) => {
                         cursor: 'pointer',
                       }}
                       onClick={() => setSearchValue('')}>
-                      <i className='mdi mdi-window-close text-[19.5px] m-0 px-2 py-0 text-[color:var(--bs-secondary-color)]' />
+                      <i className='mdi mdi-window-close text-[19.5px] m-0 px-2 py-0 text-muted-foreground' />
                     </span>
                   </div>
                 </div>

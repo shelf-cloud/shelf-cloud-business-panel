@@ -8,7 +8,7 @@ import { useWarehouses } from '@hooks/warehouses/useWarehouse'
 import { EditReceivingType } from '@pages/receivings'
 import { OrderRowType } from '@typings'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 
 import { Alert } from '@/components/ui/Alert'
 import { Button } from '@shadcn/ui/button'
@@ -153,7 +153,7 @@ const EditReceivingModal = ({ editReceiving, seteditReceiving, mutateReceivings 
       }}>
       <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl' id='editReceivingModal'>
         <DialogHeader className='pr-6' id='myModalLabel'>
-          <DialogTitle className='modal-title'>Edit Receiving</DialogTitle>
+          <DialogTitle>Edit Receiving</DialogTitle>
         </DialogHeader>
         <div className='flex flex-wrap -mx-3'>
           <p className='m-0 text-[16.25px] font-semibold'>
@@ -169,7 +169,7 @@ const EditReceivingModal = ({ editReceiving, seteditReceiving, mutateReceivings 
         <Nav className='nav-tabs border-b' role='tablist'>
           <NavItem style={{ cursor: 'pointer' }}>
             <NavLink
-              className={activeTab == 'summary' ? 'text-primary font-semibold text-[13px] border border-primary' : 'text-[var(--bs-secondary-color)] text-[13px]'}
+              className={activeTab == 'summary' ? 'text-primary font-semibold text-[13px] border border-primary' : 'text-muted-foreground text-[13px]'}
               onClick={() => {
                 setactiveTab('summary')
               }}
@@ -179,7 +179,7 @@ const EditReceivingModal = ({ editReceiving, seteditReceiving, mutateReceivings 
           </NavItem>
           <NavItem style={{ cursor: 'pointer' }}>
             <NavLink
-              className={activeTab == 'packages' ? 'text-primary font-semibold text-[13px] border border-primary' : 'text-[var(--bs-secondary-color)] text-[13px]'}
+              className={activeTab == 'packages' ? 'text-primary font-semibold text-[13px] border border-primary' : 'text-muted-foreground text-[13px]'}
               onClick={() => {
                 setactiveTab('packages')
               }}
@@ -259,7 +259,7 @@ const EditReceivingModal = ({ editReceiving, seteditReceiving, mutateReceivings 
               Cancel
             </Button>
             {activeTab == 'summary' && (
-              <Button disabled={false} type='button' className='text-[11.2px] btn-soft-primary' onClick={() => setactiveTab('packages')}>
+              <Button disabled={false} type='button' className='text-[11.2px] !bg-transparent !border-transparent !shadow-none btn-soft-primary' onClick={() => setactiveTab('packages')}>
                 Next Step
               </Button>
             )}

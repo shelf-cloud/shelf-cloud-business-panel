@@ -85,7 +85,7 @@ const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilter
               <div className='flex flex-wrap -mx-3 mt-2'>
                 <div className='px-3 md:w-3/12'>
                   <div className='mb-3 createOrder_inputs'>
-                    <Label htmlFor='lastNameinput' className='form-label'>
+                    <Label htmlFor='lastNameinput' className='mb-2'>
                       Suppliers
                     </Label>
                     <SimpleSelect
@@ -100,7 +100,7 @@ const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilter
                 </div>
                 <div className='px-3 md:w-3/12'>
                   <div className='mb-3 createOrder_inputs'>
-                    <Label htmlFor='lastNameinput' className='form-label'>
+                    <Label htmlFor='lastNameinput' className='mb-2'>
                       Brands
                     </Label>
                     <SimpleSelect
@@ -115,7 +115,7 @@ const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilter
                 </div>
                 <div className='px-3 md:w-3/12'>
                   <div className='mb-3 createOrder_inputs'>
-                    <Label htmlFor='lastNameinput' className='form-label'>
+                    <Label htmlFor='lastNameinput' className='mb-2'>
                       Categories
                     </Label>
                     <SimpleSelect

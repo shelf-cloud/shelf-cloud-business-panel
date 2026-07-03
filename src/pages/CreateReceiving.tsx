@@ -107,7 +107,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                               cursor: 'pointer',
                             }}
                             onClick={() => setSearchValue('')}>
-                            <i className='mdi mdi-window-close text-[16.25px] m-0 px-2 py-0 text-[color:var(--bs-secondary-color)]' />
+                            <i className='mdi mdi-window-close text-[16.25px] m-0 px-2 py-0 text-muted-foreground' />
                           </span>
                         </div>
                       </div>

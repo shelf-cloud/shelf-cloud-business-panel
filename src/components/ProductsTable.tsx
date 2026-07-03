@@ -311,7 +311,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setSelectedRows
               <DropdownMenuContent align='end'>
                 <DropdownMenuItem className='edit-item-btn'>
                   <Link href={`/product/${row.inventoryId}/${row.sku}`}>
-                    <i className='ri-file-list-line align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]'></i>
+                    <i className='ri-file-list-line align-middle me-2 text-[16.25px] text-muted-foreground'></i>
                     <span className='text-[11.2px] font-normal text-dark'>View Details</span>
                   </Link>
                 </DropdownMenuItem>

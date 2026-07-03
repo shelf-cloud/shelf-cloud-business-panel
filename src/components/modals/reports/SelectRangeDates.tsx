@@ -25,9 +25,9 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
   useClickOutside(selectDates, () => setOpenDatesMenu(false))
 
   return (
-    <div ref={selectDates} className='dropdown'>
+    <div ref={selectDates} className='relative inline-block'>
       <button
-        className='btn btn-light dropdown-toggle flex flex-row justify-start items-center gap-2'
+        className='inline-flex h-9 items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium border border-input-border bg-background hover:bg-accent flex-row justify-start'
         style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }}
         type='button'
         aria-expanded='false'
@@ -35,11 +35,11 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
         <i className='las la-calendar text-[22.75px] m-0 p-0 text-primary' />
         <span className='font-semibold m-0 p-0 text-xs'>{`${showMappedCreateReport.startDate} -> ${showMappedCreateReport.endDate}`}</span>
       </button>
-      <div className={'dropdown-menu dropdown-menu-md px-4 py-3' + (openDatesMenu ? ' show' : '')}>
+      <div className={'absolute z-10 mt-1 rounded-md border border-[#E1E3E5] bg-white shadow px-4 py-3' + (openDatesMenu ? ' block' : ' hidden')}>
         <div className='flex flex-col justify-start gap-1'>
           <button
             type='button'
-            className={'btn btn-link p-0 border-0 text-left no-underline text-inherit ' + (selectedDateFilter == 'today' ? 'font-bold' : '')}
+            className={'block w-full appearance-none border-0 bg-transparent px-0 py-1.5 text-left text-sm no-underline text-inherit ' + (selectedDateFilter == 'today' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('today')
               setshowMappedCreateReport((prev: any) => {
@@ -55,7 +55,7 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
           </button>
           <button
             type='button'
-            className={'btn btn-link p-0 border-0 text-left no-underline text-inherit ' + (selectedDateFilter == 'yesterday' ? 'font-bold' : '')}
+            className={'block w-full appearance-none border-0 bg-transparent px-0 py-1.5 text-left text-sm no-underline text-inherit ' + (selectedDateFilter == 'yesterday' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('yesterday')
               setshowMappedCreateReport((prev: any) => {
@@ -71,7 +71,7 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
           </button>
           <button
             type='button'
-            className={'btn btn-link p-0 border-0 text-left no-underline text-inherit ' + (selectedDateFilter == 'thisweek' ? 'font-bold' : '')}
+            className={'block w-full appearance-none border-0 bg-transparent px-0 py-1.5 text-left text-sm no-underline text-inherit ' + (selectedDateFilter == 'thisweek' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('thisweek')
               setshowMappedCreateReport((prev: any) => {
@@ -87,7 +87,7 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
           </button>
           <button
             type='button'
-            className={'btn btn-link p-0 border-0 text-left no-underline text-inherit ' + (selectedDateFilter == 'lastweek' ? 'font-bold' : '')}
+            className={'block w-full appearance-none border-0 bg-transparent px-0 py-1.5 text-left text-sm no-underline text-inherit ' + (selectedDateFilter == 'lastweek' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('lastweek')
               setshowMappedCreateReport((prev: any) => {
@@ -103,7 +103,7 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
           </button>
           <button
             type='button'
-            className={'btn btn-link p-0 border-0 text-left no-underline text-inherit ' + (selectedDateFilter == 'past7days' ? 'font-bold' : '')}
+            className={'block w-full appearance-none border-0 bg-transparent px-0 py-1.5 text-left text-sm no-underline text-inherit ' + (selectedDateFilter == 'past7days' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('past7days')
               setshowMappedCreateReport((prev: any) => {
@@ -119,7 +119,7 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
           </button>
           <button
             type='button'
-            className={'btn btn-link p-0 border-0 text-left no-underline text-inherit ' + (selectedDateFilter == 'thismonth' ? 'font-bold' : '')}
+            className={'block w-full appearance-none border-0 bg-transparent px-0 py-1.5 text-left text-sm no-underline text-inherit ' + (selectedDateFilter == 'thismonth' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('thismonth')
               setshowMappedCreateReport((prev: any) => {
@@ -135,7 +135,7 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
           </button>
           <button
             type='button'
-            className={'btn btn-link p-0 border-0 text-left no-underline text-inherit ' + (selectedDateFilter == 'past3days' ? 'font-bold' : '')}
+            className={'block w-full appearance-none border-0 bg-transparent px-0 py-1.5 text-left text-sm no-underline text-inherit ' + (selectedDateFilter == 'past3days' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('past3days')
               setshowMappedCreateReport((prev: any) => {
@@ -151,7 +151,7 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
           </button>
           <button
             type='button'
-            className={'btn btn-link p-0 border-0 text-left no-underline text-inherit ' + (selectedDateFilter == 'lastmonth' ? 'font-bold' : '')}
+            className={'block w-full appearance-none border-0 bg-transparent px-0 py-1.5 text-left text-sm no-underline text-inherit ' + (selectedDateFilter == 'lastmonth' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('lastmonth')
               setshowMappedCreateReport((prev: any) => {
@@ -167,7 +167,7 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
           </button>
           <button
             type='button'
-            className={'btn btn-link p-0 border-0 text-left no-underline text-inherit ' + (selectedDateFilter == 'yeartodate' ? 'font-bold' : '')}
+            className={'block w-full appearance-none border-0 bg-transparent px-0 py-1.5 text-left text-sm no-underline text-inherit ' + (selectedDateFilter == 'yeartodate' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('yeartodate')
               setshowMappedCreateReport((prev: any) => {
@@ -183,7 +183,7 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
           </button>
           <button
             type='button'
-            className={'btn btn-link p-0 border-0 text-left no-underline text-inherit ' + (selectedDateFilter == 'lastyear' ? 'font-bold' : '')}
+            className={'block w-full appearance-none border-0 bg-transparent px-0 py-1.5 text-left text-sm no-underline text-inherit ' + (selectedDateFilter == 'lastyear' ? 'font-bold' : '')}
             onClick={() => {
               setSelectedDateFilter('lastyear')
               setshowMappedCreateReport((prev: any) => {
@@ -197,7 +197,7 @@ const SelectRangeDates = ({ showMappedCreateReport, setshowMappedCreateReport, h
             }}>
             Last Year
           </button>
-          <span className='font-light text-[var(--bs-secondary-color)] text-[11.2px] pb-0 border-t pt-1'>Select Range:</span>
+          <span className='font-light text-muted-foreground text-[11.2px] pb-0 border-t pt-1'>Select Range:</span>
           <Flatpickr
             className={'border-0 text-[13px] w-full py-2 px-2' + (selectedDateFilter == 'picker' ? ' font-bold' : '')}
             options={{

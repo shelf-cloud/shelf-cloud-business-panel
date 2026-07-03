@@ -32,7 +32,7 @@ const Pallets = ({ shipmentDetails, handlePrintShipmentBillOfLading, watingRepso
             'Print BOL Document'
           )}
         </Button>
-        <p className='mt-1 text-[11.2px] text-[var(--bs-secondary-color)]'>The BOL will be generated no later than 8 a.m. the morning of pickup.</p>
+        <p className='mt-1 text-[11.2px] text-muted-foreground'>The BOL will be generated no later than 8 a.m. the morning of pickup.</p>
       </div>
 
       <div className='px-3 w-full lg:w-3/4'>

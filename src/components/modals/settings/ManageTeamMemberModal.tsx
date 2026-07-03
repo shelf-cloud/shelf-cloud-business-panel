@@ -4,7 +4,7 @@ import CategoryTeamMembersHeader from '@components/settings/team_members/Categor
 import AppContext from '@context/AppContext'
 import { ManageUser, Modules } from '@typesTs/settings/team_members'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Label } from '@shadcn/ui/label'
 import { Dialog, DialogContent, DialogHeader, DialogFooter } from '@shadcn/ui/dialog'
@@ -177,7 +177,7 @@ function ManageTeamMemberModal({ manageUser, setManageUser, showModal, setShowMo
                   {moduleInfo.modules?.map((subModule) => (
                     <div className='px-3 flex-1 basis-0' key={subModule}>
                       <div className='flex flex-row justify-start items-end w-fit gap-2'>
-                        <Label className='form-check-label text-nowrap font-normal'>{subModule}</Label>
+                        <Label className='text-nowrap font-normal'>{subModule}</Label>
                         <div className='form-check-info'>
                           <input
                             className='size-4 shrink-0 border border-input-border accent-primary rounded-sm'

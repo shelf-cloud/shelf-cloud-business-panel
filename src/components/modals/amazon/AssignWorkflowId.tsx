@@ -9,7 +9,7 @@ import { ActiveWorkFlow } from '@typesTs/amazon/fulfillments/activeWorkflows'
 import { ListInboundPlan } from '@typesTs/amazon/fulfillments/listInboundPlans'
 import axios from 'axios'
 import moment from 'moment'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 import { Spinner } from '@shadcn/ui/spinner'
@@ -171,7 +171,7 @@ const AssignWorkflowId = ({ assignWorkflowIdModal, setassignWorkflowIdModal, ses
       }}>
       <DialogContent id='confirmDelete' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl'>
         <DialogHeader className='pr-6'>
-          <DialogTitle className='modal-title' id='myModalLabel'>
+          <DialogTitle id='myModalLabel'>
             Assign Amazon Workflow ID to ShelfCloud
           </DialogTitle>
         </DialogHeader>
@@ -179,21 +179,21 @@ const AssignWorkflowId = ({ assignWorkflowIdModal, setassignWorkflowIdModal, ses
         <div className='flex flex-wrap -mx-3'>
           <div className='mb-4'>
             <p className='text-[16.25px] m-0 font-semibold text-primary'>ShelfCloud Fulfillment</p>
-            <p className='text-[13px] m-0 text-[var(--bs-secondary-color)]'>
+            <p className='text-[13px] m-0 text-muted-foreground'>
               Fulfillment Name: <span className='font-semibold text-black'>{assignWorkflowIdModal.inboundPlanName}</span>
             </p>
-            <p className='text-[13px] m-0 text-[var(--bs-secondary-color)]'>
+            <p className='text-[13px] m-0 text-muted-foreground'>
               Marketpalce: <span className='font-semibold text-black'>{AMAZON_MARKETPLACES[assignWorkflowIdModal.marketplace].domain}</span>
             </p>
-            <p className='text-[13px] m-0 text-[var(--bs-secondary-color)]'>
+            <p className='text-[13px] m-0 text-muted-foreground'>
               Date Created: <span className='font-semibold text-black'>{moment(assignWorkflowIdModal.dateCreated).local().format('LL hh:mm A')}</span>
             </p>
-            <p className='text-[13px] m-0 text-[var(--bs-secondary-color)]'>
+            <p className='text-[13px] m-0 text-muted-foreground'>
               SKUs: <span className='font-semibold text-black'>{assignWorkflowIdModal.skus}</span> Units:{' '}
               <span className='font-semibold text-black'>{assignWorkflowIdModal.units}</span>
             </p>
           </div>
-          <p className='text-[11.2px] text-[var(--bs-secondary-color)]'>
+          <p className='text-[11.2px] text-muted-foreground'>
             * After Uploading the template file to a new workflow in Amazon Seller Central, Assign it to a ShelfCloud Fulfillment. ShelfCloud would then handle the whole
             fulfillment process.
           </p>

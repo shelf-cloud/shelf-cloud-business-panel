@@ -8,7 +8,7 @@ import AppContext from '@context/AppContext'
 import { useCreateKit } from '@hooks/kits/useCreateKit'
 import axios from 'axios'
 import { Field, FieldArray, Form, Formik } from 'formik'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 import { Input } from '@shadcn/ui/input'
@@ -484,7 +484,7 @@ function EditKitModal({ mutateKits }: Props) {
                       </table>
                     </div>
                   </div>
-                  <p className='text-[11.2px] text-[var(--bs-secondary-color)]'>*You must complete all required fields or you will not be able to create your product.</p>
+                  <p className='text-[11.2px] text-muted-foreground'>*You must complete all required fields or you will not be able to create your product.</p>
                   <div className='px-3 md:w-full'>
                     <div className='text-right flex gap-4 justify-end items-center'>
                       <Button variant='light' onClick={() => setShowEditKitModal(!state.showEditKitModal)}>

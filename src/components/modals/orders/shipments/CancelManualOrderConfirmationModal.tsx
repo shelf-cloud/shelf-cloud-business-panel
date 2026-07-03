@@ -4,7 +4,7 @@ import { useContext, useState } from 'react'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { useFormik } from 'formik'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 import { Label } from '@shadcn/ui/label'
@@ -81,7 +81,7 @@ const CancelManualOrderConfirmationModal = ({ showDeleteModal, setshowDeleteModa
       }}>
       <DialogContent id='confirmDelete' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg'>
         <DialogHeader className='pr-6'>
-          <DialogTitle className='modal-title' id='myModalLabel'>
+          <DialogTitle id='myModalLabel'>
             Confirm Order Cancelation
           </DialogTitle>
         </DialogHeader>
@@ -94,7 +94,7 @@ const CancelManualOrderConfirmationModal = ({ showDeleteModal, setshowDeleteModa
             <form onSubmit={handleCancelOrder}>
               <div className='px-3 md:w-full'>
                 <div className='mb-4 flex gap-2'>
-                  <Label className='form-check-label' htmlFor='notify'>
+                  <Label className='font-normal' htmlFor='notify'>
                     Notify Marketplace
                   </Label>
                   <input
@@ -110,7 +110,7 @@ const CancelManualOrderConfirmationModal = ({ showDeleteModal, setshowDeleteModa
                 </div>
                 <div>
                   <div className='mb-4'>
-                    <Label htmlFor='reason' className='form-label'>
+                    <Label htmlFor='reason' className='mb-2'>
                       Reason
                     </Label>
                     <NativeSelect
@@ -134,7 +134,7 @@ const CancelManualOrderConfirmationModal = ({ showDeleteModal, setshowDeleteModa
                 </div>
               </div>
               <div className='text-right mt-2'>
-                <Button disabled={loading} type='submit' variant='destructive' className='btn'>
+                <Button disabled={loading} type='submit' variant='destructive'>
                   {loading ? <Spinner className='text-white' /> : 'Cancel'}
                 </Button>
               </div>

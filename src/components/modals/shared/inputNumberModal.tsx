@@ -80,7 +80,7 @@ const InputNumberModal = ({
   return (
     <Dialog open={!!isOpen} onOpenChange={(open) => { if (!open) handleClose() }}>
       <DialogContent id='inputNumberModal' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg'>
-      <DialogHeader className='pr-6 modal-title' id='myModalLabel'>
+      <DialogHeader className='pr-6' id='myModalLabel'>
         {headerText}
       </DialogHeader>
       <form onSubmit={handleSubmitForm}>
@@ -89,7 +89,7 @@ const InputNumberModal = ({
             <p className='text-[16.25px] font-semibold'>
               {primaryText} {primaryTextSub && <span className='text-primary'>{primaryTextSub}</span>}
             </p>
-            {descriptionText && <p className='text-[11.2px] text-[var(--bs-secondary-color)]'>{descriptionText}</p>}
+            {descriptionText && <p className='text-[11.2px] text-muted-foreground'>{descriptionText}</p>}
             <div className='px-3 sm:w-full flex flex-col justify-end items-end'>
               <div className='px-3 w-full lg:w-4/12 text-right'>
                 <DebounceInput

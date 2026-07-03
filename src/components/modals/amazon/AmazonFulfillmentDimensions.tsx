@@ -5,7 +5,7 @@ import { FormatIntPercentage } from '@lib/FormatNumbers'
 import { AmzDimensions, Dimensions } from '@typesTs/amazon/fulfillments'
 import axios from 'axios'
 import { useFormik } from 'formik'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 import { Input } from '@shadcn/ui/input'
@@ -147,13 +147,13 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
           <DialogTitle id='myModalLabel'>Listing Box Dimensions</DialogTitle>
         </DialogHeader>
         <h5 className='text-[19.5px] mb-0 font-semibold text-primary'>Amazon Listing:</h5>
-        <p className='m-0 p-0 text-[var(--bs-secondary-color)]'>
+        <p className='m-0 p-0 text-muted-foreground'>
           MSKU: <span className='text-black font-semibold'>{dimensionsModal.msku}</span>
         </p>
-        <p className='m-0 p-0 text-[var(--bs-secondary-color)]'>
+        <p className='m-0 p-0 text-muted-foreground'>
           ASIN: <span className='text-black font-semibold'>{dimensionsModal.asin}</span>
         </p>
-        <p className='m-0 p-0 text-[var(--bs-secondary-color)]'>
+        <p className='m-0 p-0 text-muted-foreground'>
           ShelfCloud SKU: <span className='text-black font-semibold'>{dimensionsModal.scSKU}</span>
         </p>
 
@@ -161,10 +161,10 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
           <div className='flex flex-wrap -mx-3 my-4'>
             <div className='px-3 md:w-3/12'>
               <div className='mb-4'>
-                <Label htmlFor='boxLength' className='form-label'>
+                <Label htmlFor='boxLength' className='mb-2'>
                   *Box Length (inch)
                 </Label>
-                <div className='input-group'>
+                <div>
                   <Input
                     type='number'
                     className='h-8 text-xs'
@@ -181,10 +181,10 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
             </div>
             <div className='px-3 md:w-3/12'>
               <div className='mb-4'>
-                <Label htmlFor='boxWidth' className='form-label'>
+                <Label htmlFor='boxWidth' className='mb-2'>
                   *Box Width (inch)
                 </Label>
-                <div className='input-group'>
+                <div>
                   <Input
                     type='number'
                     className='h-8 text-xs'
@@ -201,10 +201,10 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
             </div>
             <div className='px-3 md:w-3/12'>
               <div className='mb-4'>
-                <Label htmlFor='boxHeight' className='form-label'>
+                <Label htmlFor='boxHeight' className='mb-2'>
                   *Box Height (inch)
                 </Label>
-                <div className='input-group'>
+                <div>
                   <Input
                     type='number'
                     className='h-8 text-xs'
@@ -221,10 +221,10 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
             </div>
             <div className='px-3 md:w-3/12'>
               <div className='mb-4'>
-                <Label htmlFor='boxWeight' className='form-label'>
+                <Label htmlFor='boxWeight' className='mb-2'>
                   *Box Weight (lb)
                 </Label>
-                <div className='input-group'>
+                <div>
                   <Input
                     type='number'
                     className='h-8 text-xs'
@@ -242,10 +242,10 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
           </div>
           <div className='flex flex-wrap -mx-3 mb-2 mt-0'>
             <p className='m-0 text-[16.25px] font-semibold'>Expected Dimensions</p>
-            <p className='m-0 text-[var(--bs-secondary-color)] text-nowrap'>
+            <p className='m-0 text-muted-foreground text-nowrap'>
               Amazon Minimum Expected Box Volume: <span className='text-black font-semibold'>{FormatIntPercentage(state.currentRegion, amzBoxVolume - amzBoxTenPercent)} inch3</span>
             </p>
-            <p className='m-0 text-[var(--bs-secondary-color)] text-nowrap'>
+            <p className='m-0 text-muted-foreground text-nowrap'>
               ShelfCloud Box Volume:{' '}
               <span className='text-black font-semibold'>
                 {FormatIntPercentage(state.currentRegion, validation.values.boxLength * validation.values.boxWidth * validation.values.boxHeight)} inch3
@@ -263,11 +263,10 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
                 <Button
                   type='button'
                   variant='light'
-                  className='btn'
                   onClick={closeModal}>
                   Cancel
                 </Button>
-                <Button disabled={loading} type='submit' variant='success' className='btn'>
+                <Button disabled={loading} type='submit' variant='success'>
                   {loading ? <Spinner className='text-white' /> : 'Save Box Dimensions'}
                 </Button>
               </div>

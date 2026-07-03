@@ -12,7 +12,7 @@ import { Listing, ListingsResponse } from '@typesTs/amazon/listings'
 import axios from 'axios'
 import { CSVLink } from 'react-csv'
 import { DebounceInput } from 'react-debounce-input'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { ChevronDownIcon } from 'lucide-react'
 import { Button } from '@shadcn/ui/button'
 import { Card, CardContent } from '@shadcn/ui/card'
@@ -246,7 +246,7 @@ const Listings = ({ session }: Props) => {
                         cursor: 'pointer',
                       }}
                       onClick={() => setSearchValue('')}>
-                      <i className='mdi mdi-window-close text-[19.5px] m-0 px-2 py-0 text-[color:var(--bs-secondary-color)]' />
+                      <i className='mdi mdi-window-close text-[19.5px] m-0 px-2 py-0 text-muted-foreground' />
                     </span>
                   </div>
                 </div>
@@ -257,7 +257,7 @@ const Listings = ({ session }: Props) => {
                 {data?.error ? (
                   <div>
                     <p className='font-bold text-[26px]'>Amazon Seller</p>
-                    <p className='text-[16.25px] text-[var(--bs-secondary-color)]'>
+                    <p className='text-[16.25px] text-muted-foreground'>
                       {data?.message} <Spinner className='text-primary' />
                     </p>
                   </div>

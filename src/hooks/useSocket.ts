@@ -2,7 +2,7 @@
 import { useEffect } from 'react'
 
 import { ToastNotificationUserBody } from '@typesTs/notifications'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Socket, io } from 'socket.io-client'
 
 let socket: Socket | null = null // Global socket instance

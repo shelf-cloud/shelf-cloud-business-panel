@@ -119,7 +119,7 @@ const ProductsBulkEdit = ({}: Props) => {
       <React.Fragment>
         <Card>
           <CardHeader>
-            <h4 className='card-title'>Products Bulk Edit</h4>
+            <h4 className='mb-2 text-[1rem] font-medium'>Products Bulk Edit</h4>
           </CardHeader>
           <CardContent>{productsDetailsData.length > 0 ? <ProductsBulkEditTable tableData={productsDetailsData || []} pending={pending} /> : <span>Loading...</span>}</CardContent>
         </Card>

@@ -109,7 +109,7 @@ const MKP_table_ByMarketplace = ({
                       style={{ textDecoration: 'none' }}>
                       {row.asin}
                     </a>
-                    <i className='ri-file-copy-line text-[13px] m-0 p-0 text-[var(--bs-secondary-color)]' style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(row.asin)} />
+                    <i className='ri-file-copy-line text-[13px] m-0 p-0 text-muted-foreground' style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(row.asin)} />
                   </div>
                 )}
               </span>
@@ -438,7 +438,7 @@ const MKP_table_ByMarketplace = ({
                 }
               }}
             />
-            <span className='text-[var(--bs-secondary-color)]'>%</span>
+            <span className='text-muted-foreground'>%</span>
           </div>
         </div>
       ),
@@ -462,7 +462,7 @@ const MKP_table_ByMarketplace = ({
                 }
               }}
             />
-            <span className='text-[var(--bs-secondary-color)]'>%</span>
+            <span className='text-muted-foreground'>%</span>
           </div>
         )
       },

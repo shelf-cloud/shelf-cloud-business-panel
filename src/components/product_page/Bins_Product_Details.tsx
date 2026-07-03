@@ -32,7 +32,7 @@ const Bins_Product_Details = ({ bins }: Props) => {
             ))
           ) : (
             <tr>
-              <td className='text-[color:var(--bs-secondary-color)] font-light italic text-center px-2 py-1' colSpan={3}>
+              <td className='text-muted-foreground font-light italic text-center px-2 py-1' colSpan={3}>
                 No Records
               </td>
             </tr>

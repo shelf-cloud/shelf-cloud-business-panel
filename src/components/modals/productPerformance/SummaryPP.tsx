@@ -148,12 +148,12 @@ function SummaryPP({ productsData, summaryModal, setsummaryModal }: Props) {
                         <td className='p-0' colSpan={2}>
                           <Collapse className='ps-3 pe-1 py-0 w-full' isOpen={showTaxes}>
                             <div className='py-1 w-full flex flex-row justify-between items-center'>
-                              <span className='text-[color:var(--bs-secondary-color)] flex flex-row justify-start items-start text-[11.2px]'>Tax Collected</span>
-                              <span className={'font-light text-right text-[color:var(--bs-secondary-color)] text-[11.2px]'}>{FormatCurrency(state.currentRegion, data.taxCollected)}</span>
+                              <span className='text-muted-foreground flex flex-row justify-start items-start text-[11.2px]'>Tax Collected</span>
+                              <span className={'font-light text-right text-muted-foreground text-[11.2px]'}>{FormatCurrency(state.currentRegion, data.taxCollected)}</span>
                             </div>
                             <div className='py-1 w-full flex flex-row justify-between items-center'>
-                              <span className='text-[color:var(--bs-secondary-color)] flex flex-row justify-start items-start text-[11.2px]'>Tax Withheld</span>
-                              <span className='font-light text-right text-[color:var(--bs-secondary-color)] text-[11.2px]'>{FormatCurrency(state.currentRegion, data.taxWithheld)}</span>
+                              <span className='text-muted-foreground flex flex-row justify-start items-start text-[11.2px]'>Tax Withheld</span>
+                              <span className='font-light text-right text-muted-foreground text-[11.2px]'>{FormatCurrency(state.currentRegion, data.taxWithheld)}</span>
                             </div>
                           </Collapse>
                         </td>
@@ -201,60 +201,60 @@ function SummaryPP({ productsData, summaryModal, setsummaryModal }: Props) {
                                       <Collapse className='ps-4 pe-1 py-0 w-full' isOpen={showAmazonFbaFees}>
                                         {market.fees.FBAPerOrderFulfillmentFee! !== 0 && (
                                           <div className='border-b border-[color:var(--border)] py-1 w-full flex flex-row justify-between items-center'>
-                                            <span className='text-[color:var(--bs-secondary-color)] font-normal text-[11.2px]'>FBA Per Order Fee</span>
-                                            <span className={'font-normal text-right text-[color:var(--bs-secondary-color)] text-[11.2px]'}>
+                                            <span className='text-muted-foreground font-normal text-[11.2px]'>FBA Per Order Fee</span>
+                                            <span className={'font-normal text-right text-muted-foreground text-[11.2px]'}>
                                               {FormatCurrency(state.currentRegion, market.fees.FBAPerOrderFulfillmentFee!)}
                                             </span>
                                           </div>
                                         )}
                                         {market.fees.FBAPerUnitFulfillmentFee! !== 0 && (
                                           <div className='border-b border-[color:var(--border)] py-1 w-full flex flex-row justify-between items-center'>
-                                            <span className='text-[color:var(--bs-secondary-color)] font-normal text-[11.2px]'>FBA Per Unit Fee</span>
-                                            <span className={'font-normal text-right text-[color:var(--bs-secondary-color)] text-[11.2px]'}>
+                                            <span className='text-muted-foreground font-normal text-[11.2px]'>FBA Per Unit Fee</span>
+                                            <span className={'font-normal text-right text-muted-foreground text-[11.2px]'}>
                                               {FormatCurrency(state.currentRegion, market.fees.FBAPerUnitFulfillmentFee!)}
                                             </span>
                                           </div>
                                         )}
                                         {market.fees.FBAWeightBasedFee! !== 0 && (
                                           <div className='border-b border-[color:var(--border)] py-1 w-full flex flex-row justify-between items-center'>
-                                            <span className='text-[color:var(--bs-secondary-color)] font-normal text-[11.2px]'>FBA Weight Based Fee</span>
-                                            <span className={'font-normal text-right text-[color:var(--bs-secondary-color)] text-[11.2px]'}>{FormatCurrency(state.currentRegion, market.fees.FBAWeightBasedFee!)}</span>
+                                            <span className='text-muted-foreground font-normal text-[11.2px]'>FBA Weight Based Fee</span>
+                                            <span className={'font-normal text-right text-muted-foreground text-[11.2px]'}>{FormatCurrency(state.currentRegion, market.fees.FBAWeightBasedFee!)}</span>
                                           </div>
                                         )}
                                         {market.fees.VariableClosingFee! !== 0 && (
                                           <div className='border-b border-[color:var(--border)] py-1 w-full flex flex-row justify-between items-center'>
-                                            <span className='text-[color:var(--bs-secondary-color)] font-normal text-[11.2px]'>Variable Closing Fee</span>
-                                            <span className={'font-normal text-right text-[color:var(--bs-secondary-color)] text-[11.2px]'}>{FormatCurrency(state.currentRegion, market.fees.VariableClosingFee!)}</span>
+                                            <span className='text-muted-foreground font-normal text-[11.2px]'>Variable Closing Fee</span>
+                                            <span className={'font-normal text-right text-muted-foreground text-[11.2px]'}>{FormatCurrency(state.currentRegion, market.fees.VariableClosingFee!)}</span>
                                           </div>
                                         )}
                                         {market.fees.Commission! !== 0 && (
                                           <div className='border-b border-[color:var(--border)] py-1 w-full flex flex-row justify-between items-center'>
-                                            <span className='text-[color:var(--bs-secondary-color)] font-normal text-[11.2px]'>Commission</span>
-                                            <span className={'font-normal text-right text-[color:var(--bs-secondary-color)] text-[11.2px]'}>{FormatCurrency(state.currentRegion, market.fees.Commission!)}</span>
+                                            <span className='text-muted-foreground font-normal text-[11.2px]'>Commission</span>
+                                            <span className={'font-normal text-right text-muted-foreground text-[11.2px]'}>{FormatCurrency(state.currentRegion, market.fees.Commission!)}</span>
                                           </div>
                                         )}
                                         {market.fees.FixedClosingFee! !== 0 && (
                                           <div className='border-b border-[color:var(--border)] py-1 w-full flex flex-row justify-between items-center'>
-                                            <span className='text-[color:var(--bs-secondary-color)] font-normal text-[11.2px]'>Fixed Closing Fee</span>
-                                            <span className={'font-normal text-right text-[color:var(--bs-secondary-color)] text-[11.2px]'}>{FormatCurrency(state.currentRegion, market.fees.FixedClosingFee!)}</span>
+                                            <span className='text-muted-foreground font-normal text-[11.2px]'>Fixed Closing Fee</span>
+                                            <span className={'font-normal text-right text-muted-foreground text-[11.2px]'}>{FormatCurrency(state.currentRegion, market.fees.FixedClosingFee!)}</span>
                                           </div>
                                         )}
                                         {market.fees.SalesTaxCollectionFee! !== 0 && (
                                           <div className='border-b border-[color:var(--border)] py-1 w-full flex flex-row justify-between items-center'>
-                                            <span className='text-[color:var(--bs-secondary-color)] font-normal text-[11.2px]'>Sales Tax Collection Fee</span>
-                                            <span className={'font-normal text-right text-[color:var(--bs-secondary-color)] text-[11.2px]'}>{FormatCurrency(state.currentRegion, market.fees.SalesTaxCollectionFee!)}</span>
+                                            <span className='text-muted-foreground font-normal text-[11.2px]'>Sales Tax Collection Fee</span>
+                                            <span className={'font-normal text-right text-muted-foreground text-[11.2px]'}>{FormatCurrency(state.currentRegion, market.fees.SalesTaxCollectionFee!)}</span>
                                           </div>
                                         )}
                                         {market.fees.ShippingChargeback! !== 0 && (
                                           <div className='border-b border-[color:var(--border)] py-1 w-full flex flex-row justify-between items-center'>
-                                            <span className='text-[color:var(--bs-secondary-color)] font-normal text-[11.2px]'>Shipping Holdback Fee</span>
-                                            <span className={'font-normal text-right text-[color:var(--bs-secondary-color)] text-[11.2px]'}>{FormatCurrency(state.currentRegion, market.fees.ShippingChargeback!)}</span>
+                                            <span className='text-muted-foreground font-normal text-[11.2px]'>Shipping Holdback Fee</span>
+                                            <span className={'font-normal text-right text-muted-foreground text-[11.2px]'}>{FormatCurrency(state.currentRegion, market.fees.ShippingChargeback!)}</span>
                                           </div>
                                         )}
                                         {market.fees.GiftwrapChargeback! !== 0 && (
                                           <div className='border-b border-[color:var(--border)] py-1 w-full flex flex-row justify-between items-center'>
-                                            <span className='text-[color:var(--bs-secondary-color)] font-normal text-[11.2px]'>Gift Wrap Chargeback Fee</span>
-                                            <span className={'font-normal text-right text-[color:var(--bs-secondary-color)] text-[11.2px]'}>{FormatCurrency(state.currentRegion, market.fees.GiftwrapChargeback!)}</span>
+                                            <span className='text-muted-foreground font-normal text-[11.2px]'>Gift Wrap Chargeback Fee</span>
+                                            <span className={'font-normal text-right text-muted-foreground text-[11.2px]'}>{FormatCurrency(state.currentRegion, market.fees.GiftwrapChargeback!)}</span>
                                           </div>
                                         )}
                                       </Collapse>
@@ -309,12 +309,12 @@ function SummaryPP({ productsData, summaryModal, setsummaryModal }: Props) {
                         <td className='p-0' colSpan={2}>
                           <Collapse className='ps-3 pe-1 py-0 w-full' isOpen={showPPCCosts}>
                             <div className='py-1 w-full flex flex-row justify-between items-center'>
-                              <span className='text-[color:var(--bs-secondary-color)] flex flex-row justify-start items-start text-[11.2px]'>Sponsored Products</span>
-                              <span className={'font-light text-right text-[color:var(--bs-secondary-color)] text-[11.2px]'}>{FormatCurrency(state.currentRegion, data.sponsoredProducts)}</span>
+                              <span className='text-muted-foreground flex flex-row justify-start items-start text-[11.2px]'>Sponsored Products</span>
+                              <span className={'font-light text-right text-muted-foreground text-[11.2px]'}>{FormatCurrency(state.currentRegion, data.sponsoredProducts)}</span>
                             </div>
                             <div className='py-1 w-full flex flex-row justify-between items-center'>
-                              <span className='text-[color:var(--bs-secondary-color)] flex flex-row justify-start items-start text-[11.2px]'>Sponsored Displays</span>
-                              <span className='font-light text-right text-[color:var(--bs-secondary-color)] text-[11.2px]'>{FormatCurrency(state.currentRegion, data.displayAds)}</span>
+                              <span className='text-muted-foreground flex flex-row justify-start items-start text-[11.2px]'>Sponsored Displays</span>
+                              <span className='font-light text-right text-muted-foreground text-[11.2px]'>{FormatCurrency(state.currentRegion, data.displayAds)}</span>
                             </div>
                           </Collapse>
                         </td>
@@ -327,12 +327,12 @@ function SummaryPP({ productsData, summaryModal, setsummaryModal }: Props) {
                         <td className='p-0' colSpan={2}>
                           <Collapse className='ps-3 pe-1 py-0 w-full' isOpen={showCogs}>
                             <div className='py-1 w-full flex flex-row justify-between items-center'>
-                              <span className='text-[color:var(--bs-secondary-color)] flex flex-row justify-start items-start text-[11.2px]'>Product Cost (Landed)</span>
-                              <span className={'font-light text-right text-[color:var(--bs-secondary-color)] text-[11.2px]'}>{FormatCurrency(state.currentRegion, data.productCost)}</span>
+                              <span className='text-muted-foreground flex flex-row justify-start items-start text-[11.2px]'>Product Cost (Landed)</span>
+                              <span className={'font-light text-right text-muted-foreground text-[11.2px]'}>{FormatCurrency(state.currentRegion, data.productCost)}</span>
                             </div>
                             <div className='py-1 w-full flex flex-row justify-between items-center'>
-                              <span className='text-[color:var(--bs-secondary-color)] flex flex-row justify-start items-start text-[11.2px]'>Shipping To FBA Cost</span>
-                              <span className='font-light text-right text-[color:var(--bs-secondary-color)] text-[11.2px]'>{FormatCurrency(state.currentRegion, data.shippingToFbaCost)}</span>
+                              <span className='text-muted-foreground flex flex-row justify-start items-start text-[11.2px]'>Shipping To FBA Cost</span>
+                              <span className='font-light text-right text-muted-foreground text-[11.2px]'>{FormatCurrency(state.currentRegion, data.shippingToFbaCost)}</span>
                             </div>
                           </Collapse>
                         </td>
@@ -345,12 +345,12 @@ function SummaryPP({ productsData, summaryModal, setsummaryModal }: Props) {
                         <td className='p-0' colSpan={2}>
                           <Collapse className='ps-3 pe-1 py-0 w-full' isOpen={showRefundCogs}>
                             <div className='py-1 w-full flex flex-row justify-between items-center'>
-                              <span className='text-[color:var(--bs-secondary-color)] flex flex-row justify-start items-start text-[11.2px]'>Product Cost (Landed)</span>
-                              <span className={'font-light text-right text-[color:var(--bs-secondary-color)] text-[11.2px]'}>{FormatCurrency(state.currentRegion, data.productCostOfRefunds)}</span>
+                              <span className='text-muted-foreground flex flex-row justify-start items-start text-[11.2px]'>Product Cost (Landed)</span>
+                              <span className={'font-light text-right text-muted-foreground text-[11.2px]'}>{FormatCurrency(state.currentRegion, data.productCostOfRefunds)}</span>
                             </div>
                             {/* <div className='py-1 w-full flex flex-row justify-between items-center'>
-                            <span className='text-[color:var(--bs-secondary-color)] flex flex-row justify-start items-start text-[11.2px]'>Shipping To FBA Cost</span>
-                            <span className='font-light text-right text-[color:var(--bs-secondary-color)] text-[11.2px]'>{FormatCurrency(state.currentRegion, data.shippingToFbaCostOfRefunds)}</span>
+                            <span className='text-muted-foreground flex flex-row justify-start items-start text-[11.2px]'>Shipping To FBA Cost</span>
+                            <span className='font-light text-right text-muted-foreground text-[11.2px]'>{FormatCurrency(state.currentRegion, data.shippingToFbaCostOfRefunds)}</span>
                           </div> */}
                           </Collapse>
                         </td>

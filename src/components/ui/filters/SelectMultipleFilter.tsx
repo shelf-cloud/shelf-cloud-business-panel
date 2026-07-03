@@ -14,7 +14,7 @@ type Props = {
 const SelectMultipleFilter = ({ inputLabel, inputName, value, selectionInfo, selected, handleSelection }: Props) => {
   return (
     <div id={inputName} className='mb-3 createOrder_inputs'>
-      <Label htmlFor='lastNameinput' className='form-label'>
+      <Label htmlFor='lastNameinput' className='mb-2'>
         {inputLabel}
       </Label>
       <SelectMultipleDropDown formValue={value} selectionInfo={selectionInfo} selected={selected} handleSelection={handleSelection} />

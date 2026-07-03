@@ -589,3 +589,73 @@
   margin-left: 0 !important;
   z-index: 1004;
 }
+
+/* Moved from core/components.css at core-CSS teardown (shell-critical). */
+/* ---------------------------------------------------------------------------
+ * Collapse: .menu-dropdown:not(.show) only — CRITICAL for the vertical sidebar
+ * submenu (src/containers/Layout/VerticalLayout.tsx renders
+ * `className={'menu-dropdown' + (open ? ' show' : '')}`; the
+ * open/closed state depends entirely on this display toggle).
+ * Previously targeted bare ".collapse", but unprefixed Tailwind now generates
+ * its own `.collapse{visibility:collapse}` utility — renamed the app-side
+ * class to avoid the collision; selector re-targeted to match.
+ * .collapsing (animated mid-transition state) has zero live usage — the app
+ * toggles the "show" class directly with no intermediate class — skipped.
+ * migration-ui Collapse (src/components/migration-ui/collapse.tsx) is a
+ * separate pure-Tailwind grid-rows implementation and does not use ".menu-dropdown".
+ * ------------------------------------------------------------------------- */
+
+.menu-dropdown:not(.show) {
+  display: none;
+}
+
+/* ---------------------------------------------------------------
+ * .navbar-nav — CRITICAL, VerticalLayout.tsx sidebar <ul id='navbar-nav'
+ * className='navbar-nav'>. Core reset removes list bullets/padding.
+ * (--bs-navbar-* refs were undefined pre-cutover too — no .navbar ancestor —
+ * kept byte-for-byte for parity.)
+ * --------------------------------------------------------------- */
+.navbar-nav {
+  --nav-link-padding-x: 0;
+  --nav-link-padding-y: 0.5rem;
+  --nav-link-font-weight: ;
+  --nav-link-color: inherit;
+  --nav-link-hover-color: inherit;
+  --nav-link-disabled-color: #878a99;
+  display: flex;
+  flex-direction: column;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+
+/* ---------------------------------------------------------------
+ * .nav / .nav-link core base — raw <ul className='nav nav-sm ...'>
+ * submenus in VerticalLayout.tsx rely on Bootstrap's list reset.
+ * Missed in the first port pass; sidebar sub-items grew list markers.
+ * --------------------------------------------------------------- */
+.nav {
+  --nav-link-padding-x: 1rem;
+  --nav-link-padding-y: 0.5rem;
+  --nav-link-font-weight: ;
+  --nav-link-color: #4481fd;
+  --nav-link-hover-color: #4481fd;
+  --nav-link-disabled-color: #878a99;
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+
+.nav-link {
+  display: block;
+  padding: var(--nav-link-padding-y) var(--nav-link-padding-x);
+  font-size: var(--nav-link-font-size);
+  font-weight: var(--nav-link-font-weight);
+  color: var(--nav-link-color);
+  text-decoration: none;
+  background: none;
+  border: 0;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}

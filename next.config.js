@@ -50,6 +50,19 @@ const nextConfig = {
     quietDeps: true,
     silenceDeprecations: ['import'],
   },
+  turbopack: {
+    resolveAlias: {
+      // Pin sonner to one concrete file. Its dual ESM/CJS exports get
+      // instantiated as separate module copies across chunk graphs, so the
+      // toast() dispatcher and the mounted <Toaster/> end up with different
+      // internal ToastState singletons — toasts fire but never render.
+      sonner: './node_modules/sonner/dist/index.mjs',
+    },
+  },
+  webpack: (config) => {
+    config.resolve.alias.sonner = path.join(__dirname, 'node_modules/sonner/dist/index.mjs')
+    return config
+  },
 }
 
 module.exports = nextConfig

@@ -10,8 +10,9 @@ import { PoPaymentHistory, PurchaseOrder, PurchaseOrderItem } from '@typesTs/pur
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { ExpanderComponentProps } from 'react-data-table-component'
-import { toast } from 'react-toastify'
-import { Button } from '@shadcn/ui/button'
+import { toast } from '@/lib/toast'
+import { Button, buttonVariants } from '@shadcn/ui/button'
+import { cn } from '@/lib/shadcn/utils'
 import { Card, CardHeader, CardContent } from '@shadcn/ui/card'
 import { Input } from '@shadcn/ui/input'
 import { Textarea } from '@shadcn/ui/textarea'
@@ -281,13 +282,13 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                   <tbody>
                     {!editPONumber && (
                       <tr>
-                        <td className='text-[color:var(--bs-secondary-color)] text-nowrap'>PO Number:</td>
+                        <td className='text-muted-foreground text-nowrap'>PO Number:</td>
                         <td className='font-semibold w-full'>
                           {data.orderNumber}{' '}
                           <button
                             type='button'
                             aria-label='Edit PO number'
-                            className={'btn btn-link border-0 bg-transparent text-primary m-0 p-0 ' + (editPONumber && 'hidden')}
+                            className={cn(buttonVariants({ variant: 'link' }), 'border-0 bg-transparent text-primary m-0 p-0', editPONumber && 'hidden')}
                             onClick={() => seteditPONumber(true)}>
                             <i className='las la-edit text-[16.25px] m-0 p-0' />
                           </button>
@@ -338,15 +339,15 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                     )}
 
                     <tr>
-                      <td className='text-[color:var(--bs-secondary-color)] text-nowrap'>Supplier:</td>
+                      <td className='text-muted-foreground text-nowrap'>Supplier:</td>
                       <td className='font-semibold w-full'>{data.suppliersName}</td>
                     </tr>
                     <tr>
-                      <td className='text-[color:var(--bs-secondary-color)] text-nowrap'>Created:</td>
+                      <td className='text-muted-foreground text-nowrap'>Created:</td>
                       <td className='font-semibold w-full'>{data.date}</td>
                     </tr>
                     <tr>
-                      <td className='text-[color:var(--bs-secondary-color)] text-nowrap'>Note:</td>
+                      <td className='text-muted-foreground text-nowrap'>Note:</td>
                       <td aria-label='Note value'></td>
                     </tr>
                   </tbody>
@@ -356,7 +357,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                   <button
                     type='button'
                     aria-label='Edit PO note'
-                    className={'btn btn-link border-0 bg-transparent text-primary m-0 p-0 ' + (showEditNote && 'hidden')}
+                    className={cn(buttonVariants({ variant: 'link' }), 'border-0 bg-transparent text-primary m-0 p-0', showEditNote && 'hidden')}
                     onClick={() => setShowEditNote(true)}>
                     <i className='las la-edit text-[19.5px] m-0 p-0' />
                   </button>
@@ -482,7 +483,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                 <h5 className='font-semibold m-0'>Products</h5>
                 {data.hasSplitting && (
                   <>
-                    <p className='m-0 my-1 p-0 text-[11.2px] text-[color:var(--bs-secondary-color)] font-normal'>Split Destinations:</p>
+                    <p className='m-0 my-1 p-0 text-[11.2px] text-muted-foreground font-normal'>Split Destinations:</p>
                     <Nav className='m-0 flex flex-row justify-start items-center gap-2 text-[11.2px]' role='tablist'>
                       <NavItem>
                         <Button type='button' variant={activeTab === 'all' ? undefined : 'light'} size='sm' className='text-[11.2px]' onClick={() => setactiveTab('all')}>

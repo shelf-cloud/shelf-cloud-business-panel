@@ -27,7 +27,7 @@ const SelectShippingCarrier = ({ id, selectionInfo, disabled, selected, handleSe
         disabled={disabled}
         style={{ cursor: 'pointer' }}>
         <span className='py-[0.3rem] text-[11.2px] w-full text-left px-2' style={{ backgroundColor: disabled ? 'lightgrey' : 'white', opacity: '100%' }}>
-          {selected == '' ? <span className='text-[var(--bs-secondary-color)]'>Select</span> : selected}
+          {selected == '' ? <span className='text-muted-foreground'>Select</span> : selected}
         </span>
         <span
           className='flex items-center justify-center text-[13px] border-l border-[color:var(--border)]'
@@ -54,7 +54,7 @@ const SelectShippingCarrier = ({ id, selectionInfo, disabled, selected, handleSe
           </div>
           <button
             type='button'
-            className={'p-0 border-0 no-underline text-[var(--bs-secondary-color)] text-right text-[11.2px] bg-transparent w-full'}
+            className={'p-0 border-0 no-underline text-muted-foreground text-right text-[11.2px] bg-transparent w-full'}
             onClick={() => {
               handleSelection('', '', '')
               setOpenDatesMenu(false)

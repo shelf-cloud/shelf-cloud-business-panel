@@ -31,11 +31,11 @@ const ProfileDropdown = () => {
           }}>
           <div className='relative inline-block flex items-center rounded-[1rem] shadow-sm' style={{ backgroundColor: 'rgba(239, 243, 246, 1)' }}>
           <DropdownMenuTrigger asChild>
-            <button type='button' className='btn'>
+            <button type='button' className='inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium'>
             <span className='flex items-center justify-between gap-2'>
               <span className='text-right flex flex-col'>
                 <span className='inline-block text-[13px] m-0 font-medium user-name-text capitalize'>{session?.user?.businessName}</span>
-                <span className='inline-block text-[11.2px] m-0 text-[var(--bs-secondary-color)] user-name-sub-text'>{state.currentRegion !== '' && (state.currentRegion == 'us' ? 'USA' : 'EUROPE')}</span>
+                <span className='inline-block text-[11.2px] m-0 text-muted-foreground user-name-sub-text'>{state.currentRegion !== '' && (state.currentRegion == 'us' ? 'USA' : 'EUROPE')}</span>
               </span>
               {state &&
                 state.currentRegion !== '' &&
@@ -79,29 +79,29 @@ const ProfileDropdown = () => {
             </span>
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align='end' className='dropdown-menu-end'>
+          <DropdownMenuContent align='end'>
             <DropdownMenuLabel className='dropdown-header capitalize'>Welcome {session?.user?.profileName}</DropdownMenuLabel>
             {session?.user?.role === 'admin' && (
               <DropdownMenuItem onClick={() => router.push('/Profile')}>
-                <i className='mdi mdi-account-circle text-[color:var(--bs-secondary-color)] fs-16 align-middle me-1'></i>
+                <i className='mdi mdi-account-circle text-muted-foreground fs-16 align-middle me-1'></i>
                 <span className='align-middle'>Profile</span>
               </DropdownMenuItem>
             )}
             {session?.user?.role === 'admin' && (
               <DropdownMenuItem onClick={() => router.push('/settings/teamMembers')}>
-                <i className='ri-team-fill text-[color:var(--bs-secondary-color)] fs-16 align-middle me-1'></i>
+                <i className='ri-team-fill text-muted-foreground fs-16 align-middle me-1'></i>
                 <span className='align-middle'>Team Members</span>
               </DropdownMenuItem>
             )}
             {session?.user?.role === 'admin' && (
               <DropdownMenuItem onClick={() => router.push('/Settings')}>
-                <i className='mdi mdi-tools text-[color:var(--bs-secondary-color)] fs-16 align-middle me-1'></i>
+                <i className='mdi mdi-tools text-muted-foreground fs-16 align-middle me-1'></i>
                 <span className='align-middle'>Account Settings</span>
               </DropdownMenuItem>
             )}
             {session?.user?.role === 'admin' && (
               <DropdownMenuItem onClick={() => router.push('/marketplaceManager')}>
-                <i className='mdi mdi-store text-[color:var(--bs-secondary-color)] fs-16 align-middle me-1'></i>
+                <i className='mdi mdi-store text-muted-foreground fs-16 align-middle me-1'></i>
                 <span className='align-middle'>Marketplace Manager</span>
               </DropdownMenuItem>
             )}
@@ -139,11 +139,11 @@ const ProfileDropdown = () => {
             )}
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => router.push('/ContactUs')}>
-              <i className='mdi mdi-email-fast text-[color:var(--bs-secondary-color)] fs-16 align-middle me-1'></i>
+              <i className='mdi mdi-email-fast text-muted-foreground fs-16 align-middle me-1'></i>
               <span className='align-middle'>Contact Us</span>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => signOut()}>
-              <i className='mdi mdi-logout text-[color:var(--bs-secondary-color)] fs-16 align-middle me-1'></i>{' '}
+              <i className='mdi mdi-logout text-muted-foreground fs-16 align-middle me-1'></i>{' '}
               <span className='align-middle' data-key='t-logout'>
                 Logout
               </span>

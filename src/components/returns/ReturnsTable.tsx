@@ -81,7 +81,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
 
   const columns: any = [
     {
-      name: <span className='font-semibold text-[11.2px] text-[var(--bs-secondary-color)]'>Returns Received</span>,
+      name: <span className='font-semibold text-[11.2px] text-muted-foreground'>Returns Received</span>,
       selector: (row: ReturnOrder) => {
         const hasImage = row.orderItems.some((item) => Boolean(item.images?.length))
         return (
@@ -98,7 +98,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
       sortFunction: orderNumber,
     },
     {
-      name: <span className='font-semibold text-[11.2px] text-[var(--bs-secondary-color)]'>Status</span>,
+      name: <span className='font-semibold text-[11.2px] text-muted-foreground'>Status</span>,
       selector: (row: ReturnOrder) => {
         switch (row.orderStatus) {
           case 'shipped':
@@ -126,7 +126,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
       sortFunction: orderStatus,
     },
     {
-      name: <span className='font-semibold text-[11.2px] text-[var(--bs-secondary-color)]'>Reason</span>,
+      name: <span className='font-semibold text-[11.2px] text-muted-foreground'>Reason</span>,
       selector: (row: ReturnOrder) => row.returnReason,
       sortable: true,
       wrap: true,
@@ -137,7 +137,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
       },
     },
     {
-      name: <span className='font-semibold text-[11.2px] text-[var(--bs-secondary-color)]'>Marketplace</span>,
+      name: <span className='font-semibold text-[11.2px] text-muted-foreground'>Marketplace</span>,
       selector: (row: ReturnOrder) => {
         return (
           <>
@@ -165,7 +165,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
       sortFunction: orderMarketplace,
     },
     {
-      name: <span className='font-semibold text-center text-[11.2px] text-[var(--bs-secondary-color)]'>Return Date</span>,
+      name: <span className='font-semibold text-center text-[11.2px] text-muted-foreground'>Return Date</span>,
       selector: (row: ReturnOrder) => row.orderDate,
       sortable: true,
       wrap: true,
@@ -176,7 +176,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
       },
     },
     {
-      name: <span className='font-semibold text-[11.2px] text-[var(--bs-secondary-color)]'>Tracking Number</span>,
+      name: <span className='font-semibold text-[11.2px] text-muted-foreground'>Tracking Number</span>,
       selector: (row: ReturnOrder) => {
         let tracking
         {
@@ -286,7 +286,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
       compact: true,
     },
     {
-      name: <span className='font-semibold text-center text-[11.2px] text-[var(--bs-secondary-color)]'># of Items</span>,
+      name: <span className='font-semibold text-center text-[11.2px] text-muted-foreground'># of Items</span>,
       selector: (row: ReturnOrder) => row.totalItems || '',
       sortable: true,
       wrap: true,
@@ -297,7 +297,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
       },
     },
     {
-      name: <span className='font-semibold text-center text-[11.2px] text-[var(--bs-secondary-color)]'>Charge</span>,
+      name: <span className='font-semibold text-center text-[11.2px] text-muted-foreground'>Charge</span>,
       selector: (row: ReturnOrder) => FormatCurrency(state.currentRegion, row.totalCharge),
       sortable: true,
       wrap: true,
@@ -309,7 +309,7 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
       },
     },
     {
-      name: <span className='font-semibold text-center text-[11.2px] text-[var(--bs-secondary-color)]'>Status</span>,
+      name: <span className='font-semibold text-center text-[11.2px] text-muted-foreground'>Status</span>,
       cell: (row: ReturnOrder) => {
         var returnStateBtn
         switch (row.returnState) {

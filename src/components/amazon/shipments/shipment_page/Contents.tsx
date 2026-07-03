@@ -18,7 +18,7 @@ const Contents = ({ shipmentDetails }: Props) => {
               <th>Title</th>
               <th className='text-nowrap'>Additional Information</th>
               <th className='text-center text-nowrap'>
-                Units Expected <p className='m-0 text-[11.2px] text-[var(--bs-secondary-color)]'>Units Located</p>
+                Units Expected <p className='m-0 text-[11.2px] text-muted-foreground'>Units Located</p>
               </th>
               <th className='text-center'>Status</th>
             </tr>

@@ -21,7 +21,7 @@ const DashboardHeader = ({ user, startDate, endDate, handleChangeDates }: Props)
               <h4 className='text-[13px] mb-1'>
                 Good Morning, <span className='capitalize'>{user}</span>
               </h4>
-              <p className='text-[13px] text-[color:var(--bs-secondary-color)] mb-0'>Here's what's happening with your Inventory today.</p>
+              <p className='text-[13px] text-muted-foreground mb-0'>Here's what's happening with your Inventory today.</p>
             </div>
             <div className='mt-4 lg:mt-0'>
               <form action='#'>

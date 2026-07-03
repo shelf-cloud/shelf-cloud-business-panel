@@ -13,16 +13,18 @@ import axios from 'axios'
 import { Field, FieldArray, Form, Formik } from 'formik'
 import { Session } from 'next-auth'
 import { DebounceInput } from 'react-debounce-input'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import useSWR, { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
-import { Button } from '@shadcn/ui/button'
+import { Button, buttonVariants } from '@shadcn/ui/button'
 import { Card, CardContent } from '@shadcn/ui/card'
 import { Input } from '@shadcn/ui/input'
 import { Label } from '@shadcn/ui/label'
 import { Spinner } from '@shadcn/ui/spinner'
 import { Switch } from '@/components/ui/Switch'
+import { InputGroup, InputGroupText } from '@/components/ui/InputGroup'
+import { cn } from '@/lib/shadcn/utils'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -312,8 +314,8 @@ const CreateOrder = ({ session }: Props) => {
                       <Form>
                         <div className='flex flex-wrap -mx-3'>
                           <div className='flex justify-end items-center'>
-                            <div className='form-check form-check-inline form-switch form-switch-md form-switch-warning mb-2 md:mb-0'>
-                              <Label className='form-check-label' htmlFor='SwitchCheck4'>
+                            <div className='inline-flex items-center gap-2 mb-2 md:mb-0'>
+                              <Label className='font-normal' htmlFor='SwitchCheck4'>
                                 Select for Local PickUp
                               </Label>
                               <Switch
@@ -334,7 +336,7 @@ const CreateOrder = ({ session }: Props) => {
                             <div className='flex flex-wrap -mx-3'>
                               <div className='px-3 w-full md:w-6/12'>
                                 <div className='mb-3 createOrder_inputs'>
-                                  <Label htmlFor='firstNameinput' className='form-label mb-1'>
+                                  <Label htmlFor='firstNameinput' className='mb-1'>
                                     *First Name
                                   </Label>
                                   <Input
@@ -357,7 +359,7 @@ const CreateOrder = ({ session }: Props) => {
                               </div>
                               <div className='px-3 w-full md:w-6/12'>
                                 <div className='mb-3 createOrder_inputs'>
-                                  <Label htmlFor='lastNameinput' className='form-label mb-1'>
+                                  <Label htmlFor='lastNameinput' className='mb-1'>
                                     *Last Name
                                   </Label>
                                   <Input
@@ -384,7 +386,7 @@ const CreateOrder = ({ session }: Props) => {
 
                             <div className='px-3 md:w-full'>
                               <div className='mb-3 createOrder_inputs'>
-                                <Label htmlFor='company' className='form-label mb-1'>
+                                <Label htmlFor='company' className='mb-1'>
                                   Company
                                 </Label>
                                 <Input
@@ -410,7 +412,7 @@ const CreateOrder = ({ session }: Props) => {
 
                             <div className='px-3 md:w-full'>
                               <div className='mb-3 createOrder_inputs relative'>
-                                <Label htmlFor='adress1' className='form-label mb-1'>
+                                <Label htmlFor='adress1' className='mb-1'>
                                   *Address
                                 </Label>
                                 <DebounceInput
@@ -439,7 +441,7 @@ const CreateOrder = ({ session }: Props) => {
                                             <div className='flex justify-between items-center border-b'>
                                               <div className='flex flex-col'>
                                                 <span className='text-[13px] font-semibold'>{address.properties.formatted}</span>
-                                                <span className='text-[11.2px] text-[var(--bs-secondary-color)]'>{`${address.properties.street ? address.properties.street + ', ' : ''}${address.properties.city ? address.properties.city + ', ' : ''}${
+                                                <span className='text-[11.2px] text-muted-foreground'>{`${address.properties.street ? address.properties.street + ', ' : ''}${address.properties.city ? address.properties.city + ', ' : ''}${
                                                   address.properties.postcode ? address.properties.postcode + ', ' : ''
                                                 }${address.properties.state ? address.properties.state + ', ' : ''}${address.properties.country ? address.properties.country : ''}`}</span>
                                               </div>
@@ -470,7 +472,7 @@ const CreateOrder = ({ session }: Props) => {
                                         ))}
                                         <div className='rounded-lg'>
                                           <div className='flex justify-between items-center'>
-                                            <span className='text-[13px] text-[var(--bs-secondary-color)]'></span>
+                                            <span className='text-[13px] text-muted-foreground'></span>
                                             <div className='flex justify-end items-center mt-1'>
                                               <Button
                                                 variant='light'
@@ -514,7 +516,7 @@ const CreateOrder = ({ session }: Props) => {
                               <div className='flex flex-wrap -mx-3'>
                                 <div className='px-3 w-full md:w-3/12'>
                                   <div className='mb-3 createOrder_inputs'>
-                                    <Label htmlFor='compnayNameinput' className='form-label mb-1'>
+                                    <Label htmlFor='compnayNameinput' className='mb-1'>
                                       *City
                                     </Label>
                                     <Input
@@ -538,7 +540,7 @@ const CreateOrder = ({ session }: Props) => {
                                 </div>
                                 <div className='px-3 w-full md:w-3/12'>
                                   <div className='mb-3 createOrder_inputs'>
-                                    <Label htmlFor='compnayNameinput' className='form-label mb-1'>
+                                    <Label htmlFor='compnayNameinput' className='mb-1'>
                                       *Zip Code
                                     </Label>
                                     <Input
@@ -562,7 +564,7 @@ const CreateOrder = ({ session }: Props) => {
                                 </div>
                                 <div className='px-3 w-full md:w-3/12'>
                                   <div className='mb-3 createOrder_inputs'>
-                                    <Label htmlFor='compnayNameinput' className='form-label mb-1'>
+                                    <Label htmlFor='compnayNameinput' className='mb-1'>
                                       *Country
                                     </Label>
                                     <SimpleSelect
@@ -588,7 +590,7 @@ const CreateOrder = ({ session }: Props) => {
                                 </div>
                                 <div className='px-3 w-full md:w-3/12'>
                                   <div className='mb-3 createOrder_inputs'>
-                                    <Label htmlFor='compnayNameinput' className='form-label mb-1'>
+                                    <Label htmlFor='compnayNameinput' className='mb-1'>
                                       *State
                                     </Label>
                                     {stateList[values.country] ? (
@@ -645,7 +647,7 @@ const CreateOrder = ({ session }: Props) => {
                               <div className='flex flex-wrap -mx-3'>
                                 <div className='px-3 w-full md:w-6/12'>
                                   <div className='mb-3 createOrder_inputs'>
-                                    <Label htmlFor='lastNameinput' className='form-label mb-1'>
+                                    <Label htmlFor='lastNameinput' className='mb-1'>
                                       Phone #
                                     </Label>
                                     <Input
@@ -669,7 +671,7 @@ const CreateOrder = ({ session }: Props) => {
                                 </div>
                                 <div className='px-3 w-full md:w-6/12'>
                                   <div className='mb-3 createOrder_inputs'>
-                                    <Label htmlFor='lastNameinput' className='form-label mb-1'>
+                                    <Label htmlFor='lastNameinput' className='mb-1'>
                                       *Email
                                     </Label>
                                     <Input
@@ -700,13 +702,13 @@ const CreateOrder = ({ session }: Props) => {
                           <div className='px-3 w-full md:w-4/12'>
                             <div className='px-3 w-full md:w-full'>
                               <div className='mb-3 createOrder_inputs'>
-                                <Label htmlFor='lastNameinput' className='form-label mb-1'>
+                                <Label htmlFor='lastNameinput' className='mb-1'>
                                   *Order Number
                                 </Label>
-                                <div className='input-group'>
-                                  <span className='input-group-text font-semibold text-[13px] py-1' id='orderNumberid'>
+                                <InputGroup>
+                                  <InputGroupText className='font-semibold text-[13px] py-1' id='orderNumberid'>
                                     {orderNumberStart}
-                                  </span>
+                                  </InputGroupText>
                                   <Input
                                     type='text'
                                     className='h-8 text-xs'
@@ -719,17 +721,17 @@ const CreateOrder = ({ session }: Props) => {
                                     value={values.orderNumber || ''}
                                     aria-invalid={touched.orderNumber && errors.orderNumber ? true : undefined}
                                   />
-                                  {touched.orderNumber && errors.orderNumber ? (
-                                    <div className='m-0 text-sm text-destructive'>
-                                      {errors.orderNumber}
-                                    </div>
-                                  ) : null}
-                                </div>
+                                </InputGroup>
+                                {touched.orderNumber && errors.orderNumber ? (
+                                  <div className='m-0 text-sm text-destructive'>
+                                    {errors.orderNumber}
+                                  </div>
+                                ) : null}
                               </div>
                             </div>
                             <div className='px-3 w-full md:w-6/12 mt-4'>
                               <div className='mb-3 createOrder_inputs'>
-                                <Label htmlFor='lastNameinput' className='form-label'>
+                                <Label htmlFor='lastNameinput' className='mb-2'>
                                   *Amount Paid
                                 </Label>
                                 <Input
@@ -746,7 +748,7 @@ const CreateOrder = ({ session }: Props) => {
                                 {touched.amount && errors.amount ? <div className='text-sm text-destructive'>{errors.amount}</div> : null}
                               </div>
                               <div className='mb-3 createOrder_inputs'>
-                                <Label htmlFor='lastNameinput' className='form-label'>
+                                <Label htmlFor='lastNameinput' className='mb-2'>
                                   *Shipping Paid
                                 </Label>
                                 <Input
@@ -763,7 +765,7 @@ const CreateOrder = ({ session }: Props) => {
                                 {touched.shipping && errors.shipping ? <div className='text-sm text-destructive'>{errors.shipping}</div> : null}
                               </div>
                               <div className='mb-3 createOrder_inputs'>
-                                <Label htmlFor='lastNameinput' className='form-label'>
+                                <Label htmlFor='lastNameinput' className='mb-2'>
                                   *Tax Paid
                                 </Label>
                                 <Input
@@ -820,7 +822,7 @@ const CreateOrder = ({ session }: Props) => {
                                                   <button
                                                     type='button'
                                                     aria-label='Add product row'
-                                                    className='btn btn-link border-0 bg-transparent text-success m-0 p-0 w-auto'
+                                                    className={cn(buttonVariants({ variant: 'link' }), 'border-0 bg-transparent text-success m-0 p-0 w-auto')}
                                                     onClick={() =>
                                                       push({
                                                         sku: '',
@@ -834,7 +836,7 @@ const CreateOrder = ({ session }: Props) => {
                                                   <button
                                                     type='button'
                                                     aria-label='Remove product row'
-                                                    className='btn btn-link border-0 bg-transparent text-danger m-0 p-0 w-auto'
+                                                    className={cn(buttonVariants({ variant: 'link' }), 'border-0 bg-transparent text-destructive m-0 p-0 w-auto')}
                                                     onClick={() => remove(index)}>
                                                     <i className='text-[22.75px] las la-minus-circle m-0 p-0' />
                                                   </button>
@@ -844,7 +846,7 @@ const CreateOrder = ({ session }: Props) => {
                                                   <button
                                                     type='button'
                                                     aria-label='Add product row'
-                                                    className='btn btn-link border-0 bg-transparent text-success m-0 p-0 w-auto'
+                                                    className={cn(buttonVariants({ variant: 'link' }), 'border-0 bg-transparent text-success m-0 p-0 w-auto')}
                                                     onClick={() =>
                                                       push({
                                                         sku: '',
@@ -995,7 +997,7 @@ const CreateOrder = ({ session }: Props) => {
                           {skuExceededAvailability.sku !== '' && (
                             <span className='text-danger text-[13px] font-normal'>{`*SKU: ${skuExceededAvailability.sku} Available: ${skuExceededAvailability.availableQty} Ordered: ${skuExceededAvailability.orderedQty}`}</span>
                           )}
-                          <p className='text-[13px] mb-0 text-[var(--bs-secondary-color)]'>*You must complete all required fields or you will not be able to create your product.</p>
+                          <p className='text-[13px] mb-0 text-muted-foreground'>*You must complete all required fields or you will not be able to create your product.</p>
                           <div className='px-3 md:w-full'>
                             <div className='text-right'>
                               <Button type='submit' disabled={creatingOrder} className='text-[13px] bg-primary'>

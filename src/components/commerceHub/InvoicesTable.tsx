@@ -8,7 +8,7 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import { Invoice } from '@typesTs/commercehub/invoices'
 import moment from 'moment'
 import DataTable from '@components/Common/DataTableSC'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 
@@ -84,7 +84,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
         <div className='flex flex-nowrap justify-start items-center'>
           <p className='m-0 p-0 font-semibold text-[11.2px]'>{row.invoiceNumber}</p>{' '}
           <i
-            className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-[color:var(--bs-secondary-color)]'
+            className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-muted-foreground'
             style={{ cursor: 'pointer' }}
             onClick={() => {
               navigator.clipboard.writeText(row.invoiceNumber)
@@ -102,14 +102,14 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
     },
     {
       name: <span className='font-bold text-[13px] text-nowrap'>Keyrec No.</span>,
-      selector: (row: Invoice) => <p className='m-0 p-0 text-[var(--bs-secondary-color)] text-[11.2px]'>{row.keyrecNumber ? row.keyrecNumber : ''}</p>,
+      selector: (row: Invoice) => <p className='m-0 p-0 text-muted-foreground text-[11.2px]'>{row.keyrecNumber ? row.keyrecNumber : ''}</p>,
       sortable: false,
       left: true,
       compact: true,
     },
     {
       name: <span className='font-bold text-[13px] text-nowrap'>Order No.</span>,
-      selector: (row: Invoice) => <p className='m-0 p-0 text-[var(--bs-secondary-color)] text-[11.2px]'>{row.orderNumber}</p>,
+      selector: (row: Invoice) => <p className='m-0 p-0 text-muted-foreground text-[11.2px]'>{row.orderNumber}</p>,
       sortable: false,
       left: true,
       compact: true,
@@ -118,9 +118,9 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       name: <span className='font-bold text-[13px] text-nowrap'>PO No.</span>,
       selector: (row: Invoice) => (
         <div className='flex flex-wrap justify-start items-center'>
-          <p className='m-0 p-0 text-[var(--bs-secondary-color)] text-[11.2px]'>{row.poNumber}</p>
+          <p className='m-0 p-0 text-muted-foreground text-[11.2px]'>{row.poNumber}</p>
           <i
-            className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-[color:var(--bs-secondary-color)]'
+            className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-muted-foreground'
             style={{ cursor: 'pointer' }}
             onClick={() => {
               navigator.clipboard.writeText(row.poNumber)
@@ -246,7 +246,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       selector: (row: Invoice) => {
         if (!row.checkNumber) return <></>
         const pending = getTotalPending(row.orderTotal, row.deductions, row.charges)
-        return <span className={'text-center text-[11.2px] ' + (pending > 0 ? 'text-danger' : 'text-[var(--bs-secondary-color)]')}>{FormatCurrency(state.currentRegion, pending)}</span>
+        return <span className={'text-center text-[11.2px] ' + (pending > 0 ? 'text-danger' : 'text-muted-foreground')}>{FormatCurrency(state.currentRegion, pending)}</span>
       },
       sortable: false,
       center: true,
@@ -262,23 +262,23 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
       selector: (row: Invoice) => {
         if (row.checkNumber) {
           if (row.deductions < 0) {
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-success)_10%,transparent)] text-success p-2'>{` W/ Deductions `}</span>
+            return <span className='inline-flex w-fit items-center rounded-sm px-2 py-0.5 text-xs font-medium uppercase bg-[color-mix(in_srgb,var(--vz-success)_10%,transparent)] text-success p-2'>{` W/ Deductions `}</span>
           } else {
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-success)_10%,transparent)] text-success p-2'>{` Paid `}</span>
+            return <span className='inline-flex w-fit items-center rounded-sm px-2 py-0.5 text-xs font-medium uppercase bg-[color-mix(in_srgb,var(--vz-success)_10%,transparent)] text-success p-2'>{` Paid `}</span>
           }
         }
         switch (row.commerceHubStatus) {
           case 'paid':
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-success)_10%,transparent)] text-success p-2'>{` ${row.commerceHubStatus} `}</span>
+            return <span className='inline-flex w-fit items-center rounded-sm px-2 py-0.5 text-xs font-medium uppercase bg-[color-mix(in_srgb,var(--vz-success)_10%,transparent)] text-success p-2'>{` ${row.commerceHubStatus} `}</span>
           case 'unpaid':
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] text-warning p-2'>{` ${row.commerceHubStatus} `}</span>
+            return <span className='inline-flex w-fit items-center rounded-sm px-2 py-0.5 text-xs font-medium uppercase bg-[color-mix(in_srgb,var(--vz-warning)_10%,transparent)] text-warning p-2'>{` ${row.commerceHubStatus} `}</span>
           case 'closed':
           case 'resolved':
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-dark)_10%,transparent)] text-dark p-2'>{` ${row.commerceHubStatus} `}</span>
+            return <span className='inline-flex w-fit items-center rounded-sm px-2 py-0.5 text-xs font-medium uppercase bg-[color-mix(in_srgb,var(--vz-dark)_10%,transparent)] text-dark p-2'>{` ${row.commerceHubStatus} `}</span>
           case 'reviewing':
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] text-warning p-2'>{` ${row.commerceHubStatus} `}</span>
+            return <span className='inline-flex w-fit items-center rounded-sm px-2 py-0.5 text-xs font-medium uppercase bg-[color-mix(in_srgb,var(--vz-warning)_10%,transparent)] text-warning p-2'>{` ${row.commerceHubStatus} `}</span>
           default:
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] text-warning p-2'>{` Unpaid `}</span>
+            return <span className='inline-flex w-fit items-center rounded-sm px-2 py-0.5 text-xs font-medium uppercase bg-[color-mix(in_srgb,var(--vz-warning)_10%,transparent)] text-warning p-2'>{` Unpaid `}</span>
         }
       },
       sortable: false,
@@ -304,7 +304,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
             )}
             <Button id='Popover1' type='button' variant='ghost' size='sm'>
               <i
-                className='las la-edit text-[16.25px] text-[color:var(--bs-secondary-color)] m-0 p-0 '
+                className='las la-edit text-[16.25px] text-muted-foreground m-0 p-0 '
                 style={{ cursor: 'pointer' }}
                 onClick={() => setEditCommentModal({ show: true, orderId: row.orderId, comment: row.commerceHubComment ?? '' })}
               />

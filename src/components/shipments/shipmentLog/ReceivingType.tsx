@@ -38,7 +38,7 @@ const ReceivingType = ({ data }: Props) => {
                     {data.orderItems?.map((product: ShipmentOrderItem, key: any) => (
                       <tr key={key} className='border-b border-[color:var(--border)] py-2'>
                         <td className='w-1/2 font-semibold'>{product.title || product.name}</td>
-                        <td className='text-[var(--bs-secondary-color)]'>{product.sku}</td>
+                        <td className='text-muted-foreground'>{product.sku}</td>
                         <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.quantity))}</td>
                         <td className='text-center'>{FormatIntNumber(state.currentRegion, Number(product.qtyReceived))}</td>
                       </tr>
@@ -65,23 +65,23 @@ const ReceivingType = ({ data }: Props) => {
                 <table className='w-full [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <tbody className='text-[11.2px]'>
                     <tr>
-                      <td className='text-[var(--bs-secondary-color)] text-nowrap'>Type of Service:</td>
+                      <td className='text-muted-foreground text-nowrap'>Type of Service:</td>
                       <td className='font-semibold w-full'>{data.carrierService}</td>
                     </tr>
                     <tr>
-                      <td className='text-[var(--bs-secondary-color)] text-nowrap'># Of Pallets:</td>
+                      <td className='text-muted-foreground text-nowrap'># Of Pallets:</td>
                       <td className='font-semibold w-full'>{data.numberPallets}</td>
                     </tr>
                     <tr>
-                      <td className='text-[var(--bs-secondary-color)] text-nowrap'># Of Boxes:</td>
+                      <td className='text-muted-foreground text-nowrap'># Of Boxes:</td>
                       <td className='font-semibold w-full'>{data.numberBoxes}</td>
                     </tr>
                     <tr>
-                      <td className='text-[var(--bs-secondary-color)] text-nowrap'>Shrink Wrap:</td>
+                      <td className='text-muted-foreground text-nowrap'>Shrink Wrap:</td>
                       <td className='font-semibold w-full'>{data.shrinkWrap}</td>
                     </tr>
                     <tr>
-                      <td className='text-[var(--bs-secondary-color)] text-nowrap'>Man Hours:</td>
+                      <td className='text-muted-foreground text-nowrap'>Man Hours:</td>
                       <td className='font-semibold w-full'>{data.manHours}</td>
                     </tr>
                   </tbody>
@@ -98,23 +98,23 @@ const ReceivingType = ({ data }: Props) => {
                 <table className='w-full whitespace-nowrap mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <tbody className='text-[11.2px]'>
                     <tr className='border-b border-[color:var(--border)] pb-2'>
-                      <td className='text-[var(--bs-secondary-color)]'>Service</td>
+                      <td className='text-muted-foreground'>Service</td>
                       <td className='font-semibold text-end'>{FormatCurrency(state.currentRegion, data.receivingService)}</td>
                     </tr>
                     <tr className='border-b border-[color:var(--border)] pb-2'>
-                      <td className='text-[var(--bs-secondary-color)]'>Pallets</td>
+                      <td className='text-muted-foreground'>Pallets</td>
                       <td className='font-semibold text-end'>{FormatCurrency(state.currentRegion, data.receivingPallets)}</td>
                     </tr>
                     <tr className='border-b border-[color:var(--border)] pb-2'>
-                      <td className='text-[var(--bs-secondary-color)]'>Wrap Service</td>
+                      <td className='text-muted-foreground'>Wrap Service</td>
                       <td className='font-semibold text-end'>{FormatCurrency(state.currentRegion, data.receivingWrapService)}</td>
                     </tr>
                     <tr className='border-b border-[color:var(--border)] pb-2'>
-                      <td className='text-[var(--bs-secondary-color)]'>Man Hour</td>
+                      <td className='text-muted-foreground'>Man Hour</td>
                       <td className='font-semibold text-end'>{FormatCurrency(state.currentRegion, data.manHour)}</td>
                     </tr>
                     <tr className='border-b border-[color:var(--border)] pb-2'>
-                      <td className='text-[var(--bs-secondary-color)]'>Extra Charge</td>
+                      <td className='text-muted-foreground'>Extra Charge</td>
                       <td className='font-semibold text-end'>{FormatCurrency(state.currentRegion, data.extraCharge)}</td>
                     </tr>
                     <tr>

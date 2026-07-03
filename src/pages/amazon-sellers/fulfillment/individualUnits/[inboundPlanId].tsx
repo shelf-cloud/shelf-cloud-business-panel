@@ -16,7 +16,7 @@ import MasterBoxHelp from '@components/amazon/offcanvas/MasterBoxHelp'
 import AppContext from '@context/AppContext'
 import { GetLabelsResponse, InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Badge } from '@shadcn/ui/badge'
 import { Button } from '@shadcn/ui/button'
 import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
@@ -520,17 +520,17 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                     </div>
                     <div className='mt-4'>
                       <p className='font-semibold text-[19.5px] m-0 p-0'>
-                        <span className='text-[var(--bs-secondary-color)] font-normal'>Name: </span>
+                        <span className='text-muted-foreground font-normal'>Name: </span>
                         {inboundPlanDetails.name}
                         <Badge variant='info' className='ms-2 text-[13px] rounded-sm'>
                           {inboundPlanDetails.fulfillmentType}
                         </Badge>
                       </p>
                       <p className='font-normal text-[13px] m-0 p-0'>
-                        <span className='text-[var(--bs-secondary-color)]'>Inbound ID: </span>
+                        <span className='text-muted-foreground'>Inbound ID: </span>
                         {inboundPlanId}
                         <i
-                          className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-[color:var(--bs-secondary-color)]'
+                          className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-muted-foreground'
                           style={{ cursor: 'pointer' }}
                           onClick={() => {
                             navigator.clipboard.writeText(`${inboundPlanId}`)
@@ -548,7 +548,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                             <NavLink
                               to='#'
                               className={
-                                'text-[16.25px] font-semibold ' + (activeTab == '1' ? 'text-primary' : inboundPlanDetails.steps[1].complete ? 'text-success opacity-50' : 'text-[var(--bs-secondary-color)]')
+                                'text-[16.25px] font-semibold ' + (activeTab == '1' ? 'text-primary' : inboundPlanDetails.steps[1].complete ? 'text-success opacity-50' : 'text-muted-foreground')
                               }
                               onClick={() => {
                                 tabChange('1')
@@ -563,7 +563,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               className={
-                                'text-[16.25px] font-semibold ' + (activeTab == '2' ? 'text-primary' : inboundPlanDetails.steps[2].complete ? 'text-success opacity-50' : 'text-[var(--bs-secondary-color)]')
+                                'text-[16.25px] font-semibold ' + (activeTab == '2' ? 'text-primary' : inboundPlanDetails.steps[2].complete ? 'text-success opacity-50' : 'text-muted-foreground')
                               }
                               onClick={() => {
                                 inboundPlanDetails?.steps[1]?.complete ? tabChange('2') : document.getElementById('btn_handleNextStepPacking')?.focus()
@@ -577,7 +577,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               className={
-                                'text-[16.25px] font-semibold ' + (activeTab == '3' ? 'text-primary' : inboundPlanDetails.steps[3].complete ? 'text-success opacity-50' : 'text-[var(--bs-secondary-color)]')
+                                'text-[16.25px] font-semibold ' + (activeTab == '3' ? 'text-primary' : inboundPlanDetails.steps[3].complete ? 'text-success opacity-50' : 'text-muted-foreground')
                               }
                               onClick={() => {
                                 inboundPlanDetails?.steps[2]?.complete ? tabChange('3') : document.getElementById('btn_handleNextStepPacking')?.focus()
@@ -592,7 +592,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                             <NavLink
                               to='#'
                               className={
-                                'text-[16.25px] font-semibold ' + (activeTab == '4' ? 'text-primary' : inboundPlanDetails.steps[4].complete ? 'text-success opacity-50' : 'text-[var(--bs-secondary-color)]')
+                                'text-[16.25px] font-semibold ' + (activeTab == '4' ? 'text-primary' : inboundPlanDetails.steps[4].complete ? 'text-success opacity-50' : 'text-muted-foreground')
                               }
                               onClick={() => {
                                 inboundPlanDetails?.steps[3]?.complete ? tabChange('4') : document.getElementById('btn_handleNextShipping')?.focus()
@@ -608,7 +608,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                             <NavLink
                               to='#'
                               className={
-                                'text-[16.25px] font-semibold ' + (activeTab == '5' ? 'text-primary' : inboundPlanDetails.steps[5].complete ? 'text-success opacity-50' : 'text-[var(--bs-secondary-color)]')
+                                'text-[16.25px] font-semibold ' + (activeTab == '5' ? 'text-primary' : inboundPlanDetails.steps[5].complete ? 'text-success opacity-50' : 'text-muted-foreground')
                               }
                               onClick={() => {
                                 inboundPlanDetails?.steps[4]?.complete ? tabChange('5') : document.getElementById('btn_handleNextShipping')?.focus()
@@ -624,7 +624,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                             <NavLink
                               to='#'
                               className={
-                                'text-[16.25px] font-semibold ' + (activeTab == '6' ? 'text-primary' : inboundPlanDetails.steps[6].complete ? 'text-success opacity-50' : 'text-[var(--bs-secondary-color)]')
+                                'text-[16.25px] font-semibold ' + (activeTab == '6' ? 'text-primary' : inboundPlanDetails.steps[6].complete ? 'text-success opacity-50' : 'text-muted-foreground')
                               }
                               onClick={() => {
                                 inboundPlanDetails?.steps[5]?.complete ? tabChange('6') : document.getElementById('btn_handleNextShipping')?.focus()

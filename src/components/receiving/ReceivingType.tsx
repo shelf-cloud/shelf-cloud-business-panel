@@ -173,23 +173,23 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                 <table className='w-full [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <tbody className='text-[11.2px]'>
                     <tr>
-                      <td className='text-[var(--bs-secondary-color)] text-nowrap'>Type of Service:</td>
+                      <td className='text-muted-foreground text-nowrap'>Type of Service:</td>
                       <td className='font-semibold w-full'>{data.carrierService}</td>
                     </tr>
                     <tr>
-                      <td className='text-[var(--bs-secondary-color)] text-nowrap'># Of Pallets:</td>
+                      <td className='text-muted-foreground text-nowrap'># Of Pallets:</td>
                       <td className='font-semibold w-full'>{data.numberPallets}</td>
                     </tr>
                     <tr>
-                      <td className='text-[var(--bs-secondary-color)] text-nowrap'># Of Boxes:</td>
+                      <td className='text-muted-foreground text-nowrap'># Of Boxes:</td>
                       <td className='font-semibold w-full'>{data.numberBoxes}</td>
                     </tr>
                     <tr>
-                      <td className='text-[var(--bs-secondary-color)] text-nowrap'>Shrink Wrap:</td>
+                      <td className='text-muted-foreground text-nowrap'>Shrink Wrap:</td>
                       <td className='font-semibold w-full'>{data.shrinkWrap}</td>
                     </tr>
                     <tr>
-                      <td className='text-[var(--bs-secondary-color)] text-nowrap'>Man Hours:</td>
+                      <td className='text-muted-foreground text-nowrap'>Man Hours:</td>
                       <td className='font-semibold w-full'>{data.manHours}</td>
                     </tr>
                   </tbody>
@@ -206,11 +206,11 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                 <table className='w-full whitespace-nowrap mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <tbody className='text-[11.2px]'>
                     <tr className='border-b border-[color:var(--border)] pb-2'>
-                      <td className='text-[var(--bs-secondary-color)] flex flex-row justify-start items-start'>
+                      <td className='text-muted-foreground flex flex-row justify-start items-start'>
                         Service
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill ms-1 text-[13px] text-[var(--bs-secondary-color)]' id={`tooltipService${OrderId}`}></i>
+                            <i className='ri-information-fill ms-1 text-[13px] text-muted-foreground' id={`tooltipService${OrderId}`}></i>
                             <TooltipComponent target={`tooltipService${OrderId}`} text={serviceFee} />
                           </>
                         )}
@@ -218,11 +218,11 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                       <td className='font-semibold text-end'>{FormatCurrency(state.currentRegion, data.receivingService!)}</td>
                     </tr>
                     <tr className='border-b border-[color:var(--border)] pb-2'>
-                      <td className='text-[var(--bs-secondary-color)]'>
+                      <td className='text-muted-foreground'>
                         Pallets
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill ms-1 text-[13px] text-[var(--bs-secondary-color)]' id={`tooltipPallet${OrderId}`}></i>
+                            <i className='ri-information-fill ms-1 text-[13px] text-muted-foreground' id={`tooltipPallet${OrderId}`}></i>
                             <TooltipComponent
                               target={`tooltipPallet${OrderId}`}
                               text={`${FormatCurrency(state.currentRegion, data.chargesFees.receivingPalletCost!)} per pallet`}
@@ -233,11 +233,11 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                       <td className='font-semibold text-end'>{FormatCurrency(state.currentRegion, data.receivingPallets!)}</td>
                     </tr>
                     <tr className='border-b border-[color:var(--border)] pb-2'>
-                      <td className='text-[var(--bs-secondary-color)] flex flex-row justify-start items-start'>
+                      <td className='text-muted-foreground flex flex-row justify-start items-start'>
                         Wrap Service
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill ms-1 text-[13px] text-[var(--bs-secondary-color)]' id={`tooltipWrap${OrderId}`}></i>
+                            <i className='ri-information-fill ms-1 text-[13px] text-muted-foreground' id={`tooltipWrap${OrderId}`}></i>
                             <TooltipComponent target={`tooltipWrap${OrderId}`} text={`${FormatCurrency(state.currentRegion, data.chargesFees.receivingWrapService!)} per wrap`} />
                           </>
                         )}
@@ -245,11 +245,11 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                       <td className='font-semibold text-end'>{FormatCurrency(state.currentRegion, data.receivingWrapService!)}</td>
                     </tr>
                     <tr className='border-b border-[color:var(--border)] pb-2'>
-                      <td className='text-[var(--bs-secondary-color)] flex flex-row justify-start items-start'>
+                      <td className='text-muted-foreground flex flex-row justify-start items-start'>
                         Man Hour
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill ms-1 text-[13px] text-[var(--bs-secondary-color)]' id={`tooltipHour${OrderId}`}></i>
+                            <i className='ri-information-fill ms-1 text-[13px] text-muted-foreground' id={`tooltipHour${OrderId}`}></i>
                             <TooltipComponent target={`tooltipHour${OrderId}`} text={`${FormatCurrency(state.currentRegion, data.chargesFees.receivingManHour!)} per hour`} />
                           </>
                         )}
@@ -257,7 +257,7 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                       <td className='font-semibold text-end'>{FormatCurrency(state.currentRegion, data.manHour!)}</td>
                     </tr>
                     <tr className='border-b border-[color:var(--border)] pb-2'>
-                      <td className='text-[var(--bs-secondary-color)]'>Extra Charge</td>
+                      <td className='text-muted-foreground'>Extra Charge</td>
                       <td className='font-semibold text-end'>{FormatCurrency(state.currentRegion, data.extraCharge!)}</td>
                     </tr>
                     <tr>
@@ -341,7 +341,7 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                           </Link>
                         </td>
                         {hasPONumber && <td className='font-normal text-nowrap'>{product.poNumber || ''}</td>}
-                        <td className='text-[var(--bs-secondary-color)]'>
+                        <td className='text-muted-foreground'>
                           <div className='flex flex-row justify-start items-center gap-1'>
                             <Link href={`/product/${product.inventoryId}/${product.sku}`} tabIndex={-1} target='blank' rel='noopener noreferrer' className='!text-black'>
                               {product.sku}

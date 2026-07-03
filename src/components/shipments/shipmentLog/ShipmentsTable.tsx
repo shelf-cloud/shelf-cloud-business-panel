@@ -52,7 +52,7 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
               )}
             </div>
             {row.poNumber && row.poNumber !== row.orderNumber && (
-              <span className='m-0 text-[11.2px] text-[color:var(--bs-secondary-color)]' style={{ opacity: '80%' }}>
+              <span className='m-0 text-[11.2px] text-muted-foreground' style={{ opacity: '80%' }}>
                 PO: {row.poNumber}
               </span>
             )}
@@ -115,7 +115,7 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
           Type {sortBy.key === 'orderType' ? sortBy.asc ? <i className='ri-arrow-up-fill text-[11.2px] text-primary' /> : <i className='ri-arrow-down-fill text-[11.2px] text-primary' /> : null}
         </span>
       ),
-      selector: (row: Shipment) => <span className='text-[11.2px] text-[color:var(--bs-secondary-color)]'>{row.orderType}</span>,
+      selector: (row: Shipment) => <span className='text-[11.2px] text-muted-foreground'>{row.orderType}</span>,
       sortable: false,
       wrap: false,
       center: true,
@@ -340,7 +340,7 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align='end'>
                   <DropdownMenuItem onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
-                    <i className='ri-article-line align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
+                    <i className='ri-article-line align-middle me-2 text-[16.25px] text-muted-foreground' />
                     <span className='text-[13px] font-normal text-dark'>View Details</span>
                   </DropdownMenuItem>
                   {state.currentRegion == 'us' && row.orderStatus == 'shipped' && row.hasReturn == false && row.shipCountry == 'US' && (
@@ -362,11 +362,11 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                     <>
                       <DropdownMenuLabel>Documents</DropdownMenuLabel>
                       <DropdownMenuItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'bill_of_lading')}>
-                        <i className='ri-file-text-fill align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
+                        <i className='ri-file-text-fill align-middle me-2 text-[16.25px] text-muted-foreground' />
                         <span className='text-[13px] font-normal text-dark'>Download BOL</span>
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'carton_labels')}>
-                        <i className='ri-file-text-fill align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
+                        <i className='ri-file-text-fill align-middle me-2 text-[16.25px] text-muted-foreground' />
                         <span className='text-[13px] font-normal text-dark'>Carton Label</span>
                       </DropdownMenuItem>
                       <DownloadPackingSlip order={row} />
@@ -385,7 +385,7 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align='end'>
                   <DropdownMenuItem onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
-                    <i className='ri-article-line align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
+                    <i className='ri-article-line align-middle me-2 text-[16.25px] text-muted-foreground' />
                     <span className='text-[13px] font-normal text-dark'>View Details</span>
                   </DropdownMenuItem>
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
@@ -398,12 +398,12 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                   <DropdownMenuLabel>Documents</DropdownMenuLabel>
                   {row.carrierService.toLowerCase() === 'ltl' && (
                     <DropdownMenuItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'bill_of_lading')}>
-                      <i className='ri-file-text-fill align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
+                      <i className='ri-file-text-fill align-middle me-2 text-[16.25px] text-muted-foreground' />
                       <span className='text-[13px] font-normal text-dark'>Download BOL</span>
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'carton_labels')}>
-                    <i className='ri-file-text-fill align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
+                    <i className='ri-file-text-fill align-middle me-2 text-[16.25px] text-muted-foreground' />
                     <span className='text-[13px] font-normal text-dark'>Carton Label</span>
                   </DropdownMenuItem>
                   <DownloadPackingSlip order={row} />
@@ -422,7 +422,7 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align='end'>
                   <DropdownMenuItem onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
-                    <i className='ri-article-line align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
+                    <i className='ri-article-line align-middle me-2 text-[16.25px] text-muted-foreground' />
                     <span className='text-[13px] font-normal text-dark'>View Details</span>
                   </DropdownMenuItem>
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
@@ -473,7 +473,7 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align='end'>
                   <DropdownMenuItem onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
-                    <i className='ri-article-line align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
+                    <i className='ri-article-line align-middle me-2 text-[16.25px] text-muted-foreground' />
                     <span className='text-[13px] font-normal text-dark'>View Details</span>
                   </DropdownMenuItem>
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>

@@ -48,17 +48,17 @@ const StorageFeesDetailsModal = ({}: Props) => {
         if (!open) handleCloseOffModal()
       }}>
       <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl' id='shipmentDetailsModal'>
-        <DialogHeader className='pr-6 modal-title items-start' id='myModalLabel'>
+        <DialogHeader className='pr-6 items-start' id='myModalLabel'>
           <DialogTitle asChild>
             <div>
               {/* <h4 className='fw-semibold mb-3'>Shipment Details</h4> */}
               <div className='w-full mt-2 flex flex-row justify-start items-start gap-4'>
                 <p className='font-bold text-primary text-[22.75px] m-0'>Order: {orderNumber}</p>
               </div>
-              <p className='font-normal text-[var(--bs-secondary-color)] text-[13px] m-0'>
+              <p className='font-normal text-muted-foreground text-[13px] m-0'>
                 Type: <span className='text-black font-semibold'>{orderType}</span>
               </p>
-              <p className='font-normal mb-2 text-[var(--bs-secondary-color)] text-[13px] m-0'>
+              <p className='font-normal mb-2 text-muted-foreground text-[13px] m-0'>
                 Storage Between: <span className='text-black font-semibold'>{`${moment(startDate).format('LL')} - ${moment(endDate).format('LL')}`}</span>
               </p>
             </div>

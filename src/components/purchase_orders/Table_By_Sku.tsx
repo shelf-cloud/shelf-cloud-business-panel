@@ -67,7 +67,7 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
             {row.barcode && (
               <>
                 <br />
-                <span className='text-[color:var(--bs-secondary-color)] text-[11.2px] font-normal'>{row.barcode}</span>
+                <span className='text-muted-foreground text-[11.2px] font-normal'>{row.barcode}</span>
               </>
             )}
           </>

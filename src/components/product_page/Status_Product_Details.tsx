@@ -10,7 +10,7 @@ const Status_Product_Details = ({ active, isKit, inStock }: Props) => {
       <p className='text-[19.5px] text-primary font-semibold'>Status</p>
       <div className='flex flex-col'>
         <div className='flex justify-start items-center'>
-          <i className={'ri-checkbox-circle-fill align-middle me-2 text-[19.5px] ' + (active ? 'text-success' : 'text-[color:var(--bs-secondary-color)]')}></i>
+          <i className={'ri-checkbox-circle-fill align-middle me-2 text-[19.5px] ' + (active ? 'text-success' : 'text-muted-foreground')}></i>
           <span className='text-[13px] font-extrabold'>Active</span>
         </div>
         <div className='flex justify-start items-center mt-2'>

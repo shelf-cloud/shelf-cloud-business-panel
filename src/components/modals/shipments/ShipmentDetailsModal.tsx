@@ -68,7 +68,7 @@ const ShipmentDetailsModal = ({ mutateShipments }: Props) => {
   return (
     <Dialog open={!!show} onOpenChange={(open) => { if (!open) handleCloseOffModal() }}>
       <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl' id='shipmentDetailsModal'>
-        <DialogHeader className='pr-6 modal-title items-start' id='myModalLabel'>
+        <DialogHeader className='pr-6 items-start' id='myModalLabel'>
           <DialogTitle asChild>
             <div>
               {/* <h4 className='fw-semibold mb-3'>Shipment Details</h4> */}
@@ -76,10 +76,10 @@ const ShipmentDetailsModal = ({ mutateShipments }: Props) => {
                 <p className='font-bold text-primary text-[22.75px] m-0'>{orderNumber}</p>
                 <ShipmentStatusBadge status={status} />
               </div>
-              <p className='font-normal text-[var(--bs-secondary-color)] text-[13px] m-0'>
+              <p className='font-normal text-muted-foreground text-[13px] m-0'>
                 Type: <span className='text-black font-semibold'>{orderType}</span>
               </p>
-              <p className='font-normal mb-2 text-[var(--bs-secondary-color)] text-[13px] m-0'>
+              <p className='font-normal mb-2 text-muted-foreground text-[13px] m-0'>
                 Order Date: <span className='text-black font-semibold'>{moment.utc(orderDate).format('LL')}</span>
               </p>
             </div>

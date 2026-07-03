@@ -179,7 +179,7 @@ const FilterReorderingPoints = ({
               <div className='flex flex-wrap -mx-3'>
                 <div className='px-3 w-full md:w-2/12'>
                   <div className='mb-3 createOrder_inputs'>
-                    <Label htmlFor='lastNameinput' className='form-label'>
+                    <Label htmlFor='lastNameinput' className='mb-2'>
                       Urgency
                     </Label>
                     <SelectMultipleDropDown formValue={'urgency'} selectionInfo={URGENCY_STATES} selected={values.urgency} handleSelection={setFieldValue} />
@@ -187,7 +187,7 @@ const FilterReorderingPoints = ({
                 </div>
                 <div className='px-3 w-full md:w-3/12'>
                   <div className='mb-3 createOrder_inputs'>
-                    <Label htmlFor='lastNameinput' className='form-label'>
+                    <Label htmlFor='lastNameinput' className='mb-2'>
                       Gross Revenue
                     </Label>
                     <div className='flex flex-row justify-between items-center gap-2'>
@@ -228,7 +228,7 @@ const FilterReorderingPoints = ({
                 </div>
                 <div className='px-3 w-full md:w-3/12'>
                   <div className='mb-3 createOrder_inputs'>
-                    <Label htmlFor='lastNameinput' className='form-label'>
+                    <Label htmlFor='lastNameinput' className='mb-2'>
                       Net Profit
                     </Label>
                     <div className='flex flex-row justify-between items-center gap-2'>
@@ -269,7 +269,7 @@ const FilterReorderingPoints = ({
                 </div>
                 <div className='px-3 w-full md:w-4/12'>
                   <div className='mb-3 createOrder_inputs'>
-                    <Label htmlFor='lastNameinput' className='form-label'>
+                    <Label htmlFor='lastNameinput' className='mb-2'>
                       Units Sold
                     </Label>
                     <div className='flex flex-row justify-between items-center gap-2'>
@@ -316,7 +316,7 @@ const FilterReorderingPoints = ({
               <div className='flex flex-wrap -mx-3 mt-2'>
                 <div className='px-3 md:w-3/12'>
                   <div className='mb-3 createOrder_inputs'>
-                    <Label htmlFor='supplier' className='form-label'>
+                    <Label htmlFor='supplier' className='mb-2'>
                       Suppliers
                     </Label>
                     <SelectDropDown formValue={'supplier'} selectionInfo={supplierOptions} selected={values.supplier} handleSelection={setFieldValue} />
@@ -324,7 +324,7 @@ const FilterReorderingPoints = ({
                 </div>
                 <div className='px-3 md:w-3/12'>
                   <div className='mb-3 createOrder_inputs'>
-                    <Label htmlFor='brand' className='form-label'>
+                    <Label htmlFor='brand' className='mb-2'>
                       Brands
                     </Label>
                     <SelectDropDown formValue={'brand'} selectionInfo={brandOptions} selected={values.brand} handleSelection={setFieldValue} />
@@ -332,7 +332,7 @@ const FilterReorderingPoints = ({
                 </div>
                 <div className='px-3 md:w-3/12'>
                   <div className='mb-3 createOrder_inputs'>
-                    <Label htmlFor='category' className='form-label'>
+                    <Label htmlFor='category' className='mb-2'>
                       Categories
                     </Label>
                     <SelectDropDown formValue={'category'} selectionInfo={categoryOptions} selected={values.category} handleSelection={setFieldValue} />
@@ -340,7 +340,7 @@ const FilterReorderingPoints = ({
                 </div>
                 <div className='px-3 md:w-3/12'>
                   <div className='mb-3 createOrder_inputs'>
-                    <Label htmlFor='trendTag' className='form-label'>
+                    <Label htmlFor='trendTag' className='mb-2'>
                       Trend Tag
                     </Label>
                     <SelectDropDown formValue={'trendTag'} selectionInfo={TREND_TAGS} selected={values.trendTag} handleSelection={setFieldValue} />
@@ -351,14 +351,14 @@ const FilterReorderingPoints = ({
                 <div className='px-3 w-full md:w-7/12 flex flex-row flex-wrap justify-start items-center gap-6'>
                   <div className='px-3 w-full md:w-3/12'>
                     <div className='mb-3 createOrder_inputs'>
-                      <Label htmlFor='lastNameinput' className='form-label'>
+                      <Label htmlFor='lastNameinput' className='mb-2'>
                         AI Urgency
                       </Label>
                       <SelectMultipleDropDown formValue={'ai_urgency'} selectionInfo={AI_URGENCY_STATES} selected={values.ai_urgency} handleSelection={setFieldValue} />
                     </div>
                   </div>
-                  <div className='form-check form-switch form-switch-right form-switch-md flex flex-row justify-start items-center'>
-                    <Label className='form-label'>Show hidden products</Label>
+                  <div className='flex flex-row justify-start items-center'>
+                    <Label className='mb-2'>Show hidden products</Label>
                     <Switch
                       id='showHidden'
                       name='showHidden'

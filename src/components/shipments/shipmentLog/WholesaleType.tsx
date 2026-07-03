@@ -77,7 +77,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                     {data.orderItems.map((product: ShipmentOrderItem, key) => (
                       <tr key={key} className='border-b py-2'>
                         <td className='w-3/4 font-semibold'>{product.name || ''}</td>
-                        <td className='text-[var(--bs-secondary-color)]'>{product.sku}</td>
+                        <td className='text-muted-foreground'>{product.sku}</td>
                         <td className='text-center'>{product.quantity}</td>
                       </tr>
                     ))}
@@ -109,31 +109,31 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                 <table className='w-full [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <tbody className='text-[11.2px]'>
                     <tr>
-                      <td className='text-[var(--bs-secondary-color)] text-nowrap'>Service Requested:</td>
+                      <td className='text-muted-foreground text-nowrap'>Service Requested:</td>
                       <td className='font-semibold w-full'>{data.carrierService}</td>
                     </tr>
                     <tr>
-                      <td className='text-[var(--bs-secondary-color)] text-nowrap'>Service Used:</td>
+                      <td className='text-muted-foreground text-nowrap'>Service Used:</td>
                       <td className='font-semibold w-full'>{data.carrierType}</td>
                     </tr>
                     <tr>
-                      <td className='text-[var(--bs-secondary-color)] text-nowrap'># Of Pallets:</td>
+                      <td className='text-muted-foreground text-nowrap'># Of Pallets:</td>
                       <td className='font-semibold w-full'>{data.numberPallets}</td>
                     </tr>
                     <tr>
-                      <td className='text-[var(--bs-secondary-color)] text-nowrap'># Of Boxes:</td>
+                      <td className='text-muted-foreground text-nowrap'># Of Boxes:</td>
                       <td className='font-semibold w-full'>{data.numberBoxes}</td>
                     </tr>
                     {data.isThird && (
                       <tr>
-                        <td className='text-[var(--bs-secondary-color)] text-nowrap'>Third Party Shipping Info:</td>
+                        <td className='text-muted-foreground text-nowrap'>Third Party Shipping Info:</td>
                         <td className='font-semibold w-full'>{data.thirdInfo}</td>
                       </tr>
                     )}
                   </tbody>
                 </table>
                 <div className='px-1 text-[11.2px]'>
-                  <span className='m-0 text-[var(--bs-secondary-color)] text-[11.2px]'>Tracking No.</span>
+                  <span className='m-0 text-muted-foreground text-[11.2px]'>Tracking No.</span>
                   <ShipmentTrackingNumber
                     orderStatus={data.orderStatus}
                     orderType={data.orderType}
@@ -155,11 +155,11 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                 <table className='table table-sm table-borderless table-nowrap mb-0'>
                   <tbody className='text-[11.2px]'>
                     <tr className='border-b pb-2'>
-                      <td className='text-[var(--bs-secondary-color)] flex flex-row justify-start items-start'>
+                      <td className='text-muted-foreground flex flex-row justify-start items-start'>
                         Pick Pack Charge
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill ms-1 text-[13px] text-[color:var(--bs-secondary-color)]' id={`tooltipPick${OrderId}`}></i>
+                            <i className='ri-information-fill ms-1 text-[13px] text-muted-foreground' id={`tooltipPick${OrderId}`}></i>
                             <TooltipComponent target={`tooltipPick${OrderId}`} text={serviceFee} />
                           </>
                         )}
@@ -167,15 +167,15 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                       <td className='font-semibold text-right'>{FormatCurrency(state.currentRegion, data.pickpackCharge!)}</td>
                     </tr>
                     <tr className='border-b pb-2'>
-                      <td className='text-[var(--bs-secondary-color)]'>Shipping Charge</td>
+                      <td className='text-muted-foreground'>Shipping Charge</td>
                       <td className='font-semibold text-right'>{FormatCurrency(state.currentRegion, data.onixShipping!)}</td>
                     </tr>
                     <tr className='border-b pb-2'>
-                      <td className='text-[var(--bs-secondary-color)] flex flex-row justify-start items-start'>
+                      <td className='text-muted-foreground flex flex-row justify-start items-start'>
                         Labeling
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill ms-1 text-[13px] text-[color:var(--bs-secondary-color)]' id={`tooltipLabel${OrderId}`}></i>
+                            <i className='ri-information-fill ms-1 text-[13px] text-muted-foreground' id={`tooltipLabel${OrderId}`}></i>
                             <TooltipComponent target={`tooltipLabel${OrderId}`} text={`$ ${data.chargesFees.labelCost} per label`} />
                           </>
                         )}
@@ -183,11 +183,11 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                       <td className='font-semibold text-right'>{FormatCurrency(state.currentRegion, data.labeling!)}</td>
                     </tr>
                     <tr className='border-b pb-2'>
-                      <td className='text-[var(--bs-secondary-color)] flex flex-row justify-start items-start'>
+                      <td className='text-muted-foreground flex flex-row justify-start items-start'>
                         Man Hour
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill ms-1 text-[13px] text-[color:var(--bs-secondary-color)]' id={`tooltipManHour${OrderId}`}></i>
+                            <i className='ri-information-fill ms-1 text-[13px] text-muted-foreground' id={`tooltipManHour${OrderId}`}></i>
                             <TooltipComponent target={`tooltipManHour${OrderId}`} text={`$ ${data.chargesFees.receivingManHour} per hour`} />
                           </>
                         )}
@@ -195,7 +195,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                       <td className='font-semibold text-right'>{FormatCurrency(state.currentRegion, data.manHour!)}</td>
                     </tr>
                     <tr className='border-b pb-2'>
-                      <td className='text-[var(--bs-secondary-color)]'>Extra Charge</td>
+                      <td className='text-muted-foreground'>Extra Charge</td>
                       <td className='font-semibold text-right'>{FormatCurrency(state.currentRegion, data.extraCharge!)}</td>
                     </tr>
                     <tr>
@@ -226,7 +226,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
               <div className='px-3 xl:w-full flex flex-row flex-wrap justify-start items-end gap-2'>
                 {data.proofOfShipped != '' && data.proofOfShipped != null && (
                   <a href={data.proofOfShipped} target='blank' rel='noopener noreferrer'>
-                    <Button variant='info' className='btn-label btn-sm text-[11.2px] text-nowrap'>
+                    <Button variant='info' size='sm' className='btn-label text-[11.2px] text-nowrap'>
                       <i className='las la-truck label-icon align-middle text-[19.5px] me-2' />
                       Proof Of Shipped
                     </Button>
@@ -237,7 +237,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                   <Button
                     disabled={data.individualUnitsPlan?.state == 'Pending' ? true : false}
                     variant='info'
-                    className='btn-label btn-sm text-[11.2px] text-nowrap'
+                    size='sm' className='btn-label text-[11.2px] text-nowrap'
                     onClick={() => setIndividualUnitsPlan(!state.showIndividualUnitsPlan)}>
                     <i className='las la-boxes label-icon align-middle text-[22.75px] me-2' />
                     {data.individualUnitsPlan?.state == 'Pending' ? 'Waiting for plan...' : 'Individual Units Plan'}
@@ -248,7 +248,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                     href={`https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/shelf-cloud%2F${data.labelsName}?alt=media&token=837cdbcf-11ab-4555-9697-50f1c6a3d0e3`}
                     target='blank'
                     rel='noopener noreferrer'>
-                    <Button variant='secondary' className='btn-label btn-sm text-[11.2px] text-nowrap'>
+                    <Button variant='secondary' size='sm' className='btn-label text-[11.2px] text-nowrap'>
                       <i className='las la-toilet-paper label-icon align-middle text-[19.5px] me-2' />
                       FBA Labels
                     </Button>
@@ -259,7 +259,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                     href={`https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/shelf-cloud%2F${data.palletLabelsName}?alt=media&token=837cdbcf-11ab-4555-9697-50f1c6a3d0e3`}
                     target='blank'
                     rel='noopener noreferrer'>
-                    <Button variant='secondary' className='btn-label btn-sm text-[11.2px] text-nowrap'>
+                    <Button variant='secondary' size='sm' className='btn-label text-[11.2px] text-nowrap'>
                       <i className='las la-toilet-paper label-icon align-middle text-[19.5px] me-2' />
                       Pallet Labels
                     </Button>
@@ -269,7 +269,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                   <Button
                     disabled={data.individualUnitsPlan?.state == 'Pending' ? true : false}
                     variant='secondary'
-                    className='btn-label btn-sm text-[11.2px] text-nowrap'
+                    size='sm' className='btn-label text-[11.2px] text-nowrap'
                     onClick={() => setUploadIndividualUnitsLabelsModal(!state.showUploadIndividualUnitsLabelsModal)}>
                     <i className='las la-toilet-paper label-icon align-middle text-[19.5px] me-2' />
                     Upload Labels

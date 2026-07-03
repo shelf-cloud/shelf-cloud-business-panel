@@ -68,7 +68,7 @@ const Edit_Receiving_Boxes_Single = ({
                         <div className='text-left'>
                           <p className='text-nowrap m-0 font-semibold'>{sku}</p>
                           <p className='text-nowrap m-0'>{item.name}</p>
-                          {isReceivingFromPo && <p className='text-nowrap m-0 text-[var(--bs-secondary-color)]'>PO: {item.poNumber}</p>}
+                          {isReceivingFromPo && <p className='text-nowrap m-0 text-muted-foreground'>PO: {item.poNumber}</p>}
                         </div>
                       </div>
                     </td>

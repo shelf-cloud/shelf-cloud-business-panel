@@ -8,7 +8,7 @@ import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { PurchaseOrderItem, Split } from '@typesTs/purchaseOrders'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 import { Input } from '@shadcn/ui/input'
@@ -87,7 +87,7 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
     <Dialog open={!!show} onOpenChange={(open) => { if (!open) handleClose() }}>
       <DialogContent id='confirmDelete' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl'>
         <DialogHeader className='pr-6'>
-          <DialogTitle className='modal-title' id='myModalLabel'>
+          <DialogTitle id='myModalLabel'>
             Edit PO Quantities
           </DialogTitle>
         </DialogHeader>
@@ -152,13 +152,13 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
                     {product.asin && (
                       <>
                         <br />
-                        <span className='text-[var(--bs-secondary-color)] text-[11.2px] font-normal'>ASIN: {product.asin}</span>
+                        <span className='text-muted-foreground text-[11.2px] font-normal'>ASIN: {product.asin}</span>
                       </>
                     )}
                     {product.barcode && (
                       <>
                         <br />
-                        <span className='text-[var(--bs-secondary-color)] text-[11.2px] font-normal'>UPC: {product.barcode}</span>
+                        <span className='text-muted-foreground text-[11.2px] font-normal'>UPC: {product.barcode}</span>
                       </>
                     )}
                   </td>

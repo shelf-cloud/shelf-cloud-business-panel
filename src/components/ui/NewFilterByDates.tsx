@@ -167,7 +167,7 @@ const NewFilterByDates = ({ filterDates, setfilterDates, handleChangeDatesFromPi
             }}>
             Last Year
           </button>
-          <span className='font-light text-[color:var(--bs-secondary-color)] text-[11.2px] pb-1 border-t border-[color:var(--border)] pt-1'>Select Range:</span>
+          <span className='font-light text-muted-foreground text-[11.2px] pb-1 border-t border-[color:var(--border)] pt-1'>Select Range:</span>
           <Flatpickr
             className={'border border-[color:var(--border)] text-[13px] w-full p-2 rounded-md' + (selectedDateFilter == 'picker' ? ' font-bold' : '')}
             options={{

@@ -11,7 +11,7 @@ import { SkuToAddPo } from '@typesTs/purchaseOrders'
 import axios from 'axios'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 import { Spinner } from '@shadcn/ui/spinner'
@@ -87,7 +87,7 @@ const Add_Sku_To_Purchase_Order = ({}) => {
             </div>
             <div>
               <p className='m-0 p-0 text-[11.2px] font-semibold'>{row.title}</p>
-              <p className='m-0 p-0 text-[var(--bs-secondary-color)] text-[11.2px] font-normal'>{`${row.sku} / ${row.barcode} / ${row.asin}`}</p>
+              <p className='m-0 p-0 text-muted-foreground text-[11.2px] font-normal'>{`${row.sku} / ${row.barcode} / ${row.asin}`}</p>
             </div>
           </div>
         )
@@ -102,7 +102,7 @@ const Add_Sku_To_Purchase_Order = ({}) => {
       name: <span className='font-bold text-[13px]'>Add</span>,
       selector: (row: SkuToAddPo) => {
         if (skuToAddToPo.some((item) => item.sku == row.sku)) {
-          return <i className='text-[22.75px] text-[color:var(--bs-secondary-color)] las la-check-circle' />
+          return <i className='text-[22.75px] text-muted-foreground las la-check-circle' />
         } else {
           return <i className='text-[22.75px] text-success las la-plus-circle' style={{ cursor: 'pointer' }} onClick={() => handleAddSkuToList(row)} />
         }
@@ -138,7 +138,7 @@ const Add_Sku_To_Purchase_Order = ({}) => {
             </div>
             <div>
               <p className='m-0 p-0 text-[11.2px] font-semibold'>{row.title}</p>
-              <p className='m-0 p-0 text-[var(--bs-secondary-color)] text-[11.2px] font-normal'>{`${row.sku} / ${row.barcode} / ${row.asin}`}</p>
+              <p className='m-0 p-0 text-muted-foreground text-[11.2px] font-normal'>{`${row.sku} / ${row.barcode} / ${row.asin}`}</p>
             </div>
           </div>
         )
@@ -248,7 +248,7 @@ const Add_Sku_To_Purchase_Order = ({}) => {
   return (
     <Dialog open={!!show} onOpenChange={(open) => { if (!open) handleCloseModal() }}>
       <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl' id='addSkuToPoModal'>
-        <DialogHeader className='pr-6 modal-title pb-0' id='addSkuToPoModalLabel'>
+        <DialogHeader className='pr-6 pb-0' id='addSkuToPoModalLabel'>
           <DialogTitle>Add Products to PO</DialogTitle>
         </DialogHeader>
         <div>

@@ -35,7 +35,7 @@ const ReportsTable = ({ reportList, pending, handleDownloadReport }: Props) => {
             <p className='m-0 p-0'>
               {moment.utc(row.dateCreated).local().format('LL')} {moment.utc(row.timeCreated, 'HH:mm:ss').local().format('HH:mm A')}
             </p>
-            <p className='text-[var(--bs-secondary-color)] text-[11.2px] m-0 p-0'>Expires: {moment(row.dateCreated).add(10, 'days').format('LL')}</p>
+            <p className='text-muted-foreground text-[11.2px] m-0 p-0'>Expires: {moment(row.dateCreated).add(10, 'days').format('LL')}</p>
           </div>
         )
       },
@@ -56,7 +56,7 @@ const ReportsTable = ({ reportList, pending, handleDownloadReport }: Props) => {
         } else {
           return (
             <div>
-              <i className={'ri-time-line align-middle me-2 text-[22.75px] text-[color:var(--bs-secondary-color)]'}></i>
+              <i className={'ri-time-line align-middle me-2 text-[22.75px] text-muted-foreground'}></i>
               <span className='capitalize'>{row.reportStatus}</span>
             </div>
           )

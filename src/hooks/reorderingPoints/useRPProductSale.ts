@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 
 import { ReorderingPointsSalesResponse } from '@typesTs/reorderingPoints/reorderingPoints'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import useSWR from 'swr'
 
 export type ExpandedRowProps = { session: any; startDate: string; endDate: string }

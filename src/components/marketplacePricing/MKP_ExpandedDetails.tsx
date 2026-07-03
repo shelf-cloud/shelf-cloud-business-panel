@@ -41,7 +41,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
                 style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
               />
             </div>
-            <span className='m-0 p-0 text-[11.2px] text-[var(--bs-secondary-color)] text-wrap'>{row.name}</span>
+            <span className='m-0 p-0 text-[11.2px] text-muted-foreground text-wrap'>{row.name}</span>
           </div>
         )
       },
@@ -272,7 +272,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
                 }
               }}
             />
-            <span className='text-[var(--bs-secondary-color)]'>%</span>
+            <span className='text-muted-foreground'>%</span>
           </div>
         </div>
       ),
@@ -295,7 +295,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
                 }
               }}
             />
-            <span className='text-[var(--bs-secondary-color)]'>%</span>
+            <span className='text-muted-foreground'>%</span>
           </div>
         )
       },

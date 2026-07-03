@@ -4,8 +4,9 @@ import { useClickOutside } from '@hooks/useClickOutside'
 
 import SimpleSelect, { SelectSingleValueType } from '@components/Common/SimpleSelect'
 import { ChevronDownIcon } from 'lucide-react'
-import { Button } from '@shadcn/ui/button'
+import { Button, buttonVariants } from '@shadcn/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@shadcn/ui/dropdown-menu'
+import { cn } from '@/lib/shadcn/utils'
 
 type Props = {
   selectedRows: any[]
@@ -60,7 +61,7 @@ const BulkActionsForSelected = ({ selectedRows, clearSelected, statusOptions, ch
                   setselectedStatus({ value: '', label: 'Select Status' })
                   setOpenDatesMenu(false)
                 }}
-                className='btn btn-link p-0 border-0 no-underline text-[var(--bs-secondary-color)] mt-2 text-[11.2px]'>
+                className={cn(buttonVariants({ variant: 'link' }), 'p-0 border-0 no-underline text-muted-foreground mt-2 text-[11.2px]')}>
                 Clear All
               </button>
             </div>

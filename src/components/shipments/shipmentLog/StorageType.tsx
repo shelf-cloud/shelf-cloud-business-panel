@@ -59,7 +59,7 @@ const StorageType = ({ data, totalCharge }: Props) => {
                               </div>
                             </td>
                             <td className='w-1/2 text-[11.2px] font-semibold'>{product.title}</td>
-                            <td className='text-[11.2px] text-[var(--bs-secondary-color)]'>{product.sku}</td>
+                            <td className='text-[11.2px] text-muted-foreground'>{product.sku}</td>
                             <td className='text-center'>{FormatCurrency(state.currentRegion, product.storageFee ?? 0)}</td>
                           </tr>
                         ))}

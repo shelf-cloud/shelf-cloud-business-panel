@@ -10,6 +10,7 @@ import GenerateSPSCommerceFileButton from '@components/integrations/sps_commerce
 import SearchInput from '@components/ui/SearchInput'
 import { SPSCommerceItem, useSPSCommerceIntegrations } from '@hooks/integrations/useSPSCommerceIntegrations'
 import { ChevronDownIcon } from 'lucide-react'
+import { Button } from '@shadcn/ui/button'
 import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@shadcn/ui/dropdown-menu'
 
@@ -88,10 +89,10 @@ const ProductsListings = ({ session }: Props) => {
                       {selectedRows.length > 0 && (
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <button type='button' className='btn btn-primary text-[13px] py-2'>
+                            <Button type='button' className='text-[13px] py-2'>
                               <span className='font-semibold'>{`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''}`}</span> Selected
                               <ChevronDownIcon className='ml-1 size-4' />
-                            </button>
+                            </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align='start'>
                             <DropdownMenuItem className='text-nowrap' onClick={(e) => e.stopPropagation()}>
@@ -105,7 +106,7 @@ const ProductsListings = ({ session }: Props) => {
                                 />
                               )}
                             </DropdownMenuItem>
-                            <DropdownMenuItem className='text-nowrap text-right text-[13px] text-[var(--bs-secondary-color)]' onClick={clearAllSelectedRows}>
+                            <DropdownMenuItem className='text-nowrap text-right text-[13px] text-muted-foreground' onClick={clearAllSelectedRows}>
                               Clear All
                             </DropdownMenuItem>
                           </DropdownMenuContent>
@@ -118,16 +119,16 @@ const ProductsListings = ({ session }: Props) => {
                 <Card>
                   <CardHeader>
                     <p className='m-0 p-0'>
-                      <span className='text-[var(--bs-secondary-color)]'> Vendor Number:</span> <span className='font-semibold'>{integrationInfo?.['VENDOR NUMBER']}</span>
+                      <span className='text-muted-foreground'> Vendor Number:</span> <span className='font-semibold'>{integrationInfo?.['VENDOR NUMBER']}</span>
                     </p>
                     <p className='text-[11.2px] mt-1 mb-0 p-0'>Location Details:</p>
                     <div className='flex gap-4'>
                       <p className='m-0 p-0'>
-                        <span className='text-[var(--bs-secondary-color)]'>Reporting Location Name:</span>{' '}
+                        <span className='text-muted-foreground'>Reporting Location Name:</span>{' '}
                         <span className='font-semibold'>{integrationInfo?.locations[warehouse?.value.toString() || '']?.['REPORTING LOCATION NAME']}</span>
                       </p>
                       <p className='m-0 p-0'>
-                        <span className='text-[var(--bs-secondary-color)]'>Reporting Location Number: </span>
+                        <span className='text-muted-foreground'>Reporting Location Number: </span>
                         <span className='font-semibold'>{integrationInfo?.locations[warehouse?.value.toString() || '']?.['REPORTING LOCATION NUMBER']}</span>
                       </p>
                     </div>

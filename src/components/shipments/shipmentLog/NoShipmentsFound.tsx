@@ -9,7 +9,7 @@ const NoShipmentsFound = ({}: Props) => {
             <i className='ri-inbox-line text-primary text-[32.5px]' />
           </div>
         </div>
-        <h3 className='card-title'>No shipments found</h3>
+        <h3 className='mb-2 text-[1rem] font-medium'>No shipments found</h3>
         {/* <p className='card-text text-muted'>There are no active shipments at the moment.</p> */}
       </div>
     </div>

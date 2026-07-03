@@ -51,7 +51,7 @@ const Create_Manual_Receiving_Packages_Tab = ({
   return (
     <div>
       <div className='flex flex-wrap -mx-3 mb-4'>
-        <Label htmlFor='firstNameinput' className='form-label text-[11.2px]'>
+        <Label htmlFor='firstNameinput' className='mb-2 text-[11.2px]'>
           *Select Box Distribution
         </Label>
         <div className='px-3 w-full flex flex-row flex-wrap justify-start items-center gap-2'>

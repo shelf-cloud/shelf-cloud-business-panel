@@ -12,7 +12,7 @@ import { AmazonFulfillmentSku } from '@typesTs/amazon/fulfillments'
 import moment from 'moment'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 
@@ -158,7 +158,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
               <div className='flex flex-wrap justify-start items-center'>
                 <p className='m-0 p-0 text-[11.2px]'>{`${row.msku}`}</p>
                 <i
-                  className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-[color:var(--bs-secondary-color)]'
+                  className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-muted-foreground'
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
                     navigator.clipboard.writeText(row.msku)
@@ -176,7 +176,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
                   {`ASIN: ${row.asin}`}
                 </a>
                 <i
-                  className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-[color:var(--bs-secondary-color)]'
+                  className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-muted-foreground'
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
                     navigator.clipboard.writeText(row.asin)
@@ -184,7 +184,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
                   }}
                 />
               </div>
-              <p className='text-[11.2px] m-0 p-0 text-[var(--bs-secondary-color)]'>
+              <p className='text-[11.2px] m-0 p-0 text-muted-foreground'>
                 Label Owner: <span className='text-black'>{row.labelOwner}</span> Prep Owner: <span className='text-black'>{row.prepOwner}</span>
               </p>
               <div>
@@ -205,7 +205,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
               <div className='flex flex-wrap justify-start items-center'>
                 <p className='m-0 p-0 text-[11.2px]'>{`${row.msku}`}</p>
                 <i
-                  className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-[color:var(--bs-secondary-color)]'
+                  className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-muted-foreground'
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
                     navigator.clipboard.writeText(row.msku)
@@ -223,7 +223,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
                   {`ASIN: ${row.asin}`}
                 </a>
                 <i
-                  className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-[color:var(--bs-secondary-color)]'
+                  className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-muted-foreground'
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
                     navigator.clipboard.writeText(row.asin)
@@ -231,7 +231,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
                   }}
                 />
               </div>
-              <p className='text-[11.2px] m-0 p-0 text-[var(--bs-secondary-color)]'>
+              <p className='text-[11.2px] m-0 p-0 text-muted-foreground'>
                 Label Owner: <span className='text-black'>{row.labelOwner}</span> Prep Owner: <span className='text-black'>{row.prepOwner}</span>
               </p>
             </div>
@@ -265,9 +265,9 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
       name: <span className='font-bold text-[13px]'>Type</span>,
       selector: (cell: any) => {
         if (cell.isKit) {
-          return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-info)_10%,transparent)] text-info p-2'>kit</span>
+          return <span className='inline-flex w-fit items-center rounded-sm px-2 py-0.5 text-xs font-medium uppercase bg-[color-mix(in_srgb,var(--vz-info)_10%,transparent)] text-info p-2'>kit</span>
         } else {
-          return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-primary)_10%,transparent)] text-primary p-2'>product</span>
+          return <span className='inline-flex w-fit items-center rounded-sm px-2 py-0.5 text-xs font-medium uppercase bg-[color-mix(in_srgb,var(--vz-primary)_10%,transparent)] text-primary p-2'>product</span>
         }
       },
       sortable: true,
@@ -281,25 +281,26 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
         return (
           <div className='flex flex-col justify-start items-start my-1 text-[11.2px]'>
             <span className='m-0 p-0 font-semibold'>
-              <span className='text-[var(--bs-secondary-color)] font-light'>Fulfillable: </span>
+              <span className='text-muted-foreground font-light'>Fulfillable: </span>
               {FormatIntNumber(state.currentRegion, row.afn_fulfillable_quantity)}
             </span>
             <span className='m-0 p-0 font-semibold'>
-              <span className='text-[var(--bs-secondary-color)] font-light'>Reserved: </span>
+              <span className='text-muted-foreground font-light'>Reserved: </span>
               {FormatIntNumber(state.currentRegion, row.afn_reserved_quantity)}
             </span>
             <span className='m-0 p-0 font-semibold'>
-              <span className='text-[var(--bs-secondary-color)] font-light'>Unsellable: </span>
+              <span className='text-muted-foreground font-light'>Unsellable: </span>
               {FormatIntNumber(state.currentRegion, row.afn_unsellable_quantity)}
             </span>
             <div className='m-0 p-0 font-semibold flex flex-row justify-end items-center gap-1'>
-              <span className='text-[var(--bs-secondary-color)] font-light'>Inbound: </span>
+              <span className='text-muted-foreground font-light'>Inbound: </span>
               {FormatIntNumber(state.currentRegion, row.afn_inbound_receiving_quantity + row.afn_inbound_shipped_quantity + row.afn_inbound_working_quantity)}
               {row.fbaShipments.length > 0 && (
                 <Button
                   variant='light'
                   outline
-                  className='p-0 m-0 btn btn-sm btn-icon btn-ghost-info'
+                  size='sm'
+                  className='p-0 m-0 btn-icon btn-ghost-info'
                   onClick={() => setinboundFBAHistoryModal({ show: true, sku: row.shelfcloud_sku, msku: row.msku, shipments: row.fbaShipments })}>
                   <i className='ri-information-fill p-0 m-0 text-[13px] text-info' />
                 </Button>
@@ -321,11 +322,11 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
         return (
           <div className='flex flex-col justify-start items-start my-1 text-[11.2px]'>
             <span className='m-0 p-0 font-semibold'>
-              <span className='text-[var(--bs-secondary-color)] font-light'>On Hand: </span>
+              <span className='text-muted-foreground font-light'>On Hand: </span>
               {FormatIntNumber(state.currentRegion, row.awd_onHand_qty)}
             </span>
             <span className='m-0 p-0 font-semibold'>
-              <span className='text-[var(--bs-secondary-color)] font-light'>Inbound: </span>
+              <span className='text-muted-foreground font-light'>Inbound: </span>
               {FormatIntNumber(state.currentRegion, row.awd_inbound_qty)}
             </span>
           </div>
@@ -397,7 +398,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
               tabIndex={-1}
               variant='info'
               outline
-              className='btn btn-ghost-info text-[11.2px]'
+              className='btn-ghost-info text-[11.2px]'
               id={`reservedMasterQty${CleanSpecialCharacters(cell.sku)}`}
               onClick={() => {
                 setModalProductInfo(cell.inventoryId, cell.sku)

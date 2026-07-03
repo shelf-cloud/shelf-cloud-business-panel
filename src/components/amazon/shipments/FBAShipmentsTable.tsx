@@ -8,6 +8,8 @@ import { FBAShipment } from '@typesTs/amazon/fbaShipments.interface'
 import moment from 'moment'
 import DataTable from '@components/Common/DataTableSC'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@shadcn/ui/dropdown-menu'
+import { buttonVariants } from '@shadcn/ui/button'
+import { cn } from '@/lib/shadcn/utils'
 
 import FBAShipmentPackingSlip from './FBAShipmentPackingSlip'
 
@@ -80,7 +82,7 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
         return (
           <div className='my-2'>
             <p className='m-0 p-0 font-semibold'>{row.shipment.shipmentConfirmationId}</p>
-            <p className='text-[11.2px] m-0 p-0 text-[var(--bs-secondary-color)]'>
+            <p className='text-[11.2px] m-0 p-0 text-muted-foreground'>
               {row.shipment.name}{' '}
               {UpdateShipmentNameStatus.includes(row.shipment.status.toLowerCase()) && row.totalPlacementFees > 0 && (
                 <i
@@ -110,7 +112,7 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
         return (
           <>
             <p className='text-[11.2px] m-0 p-0'>{moment(row.createdAt).local().format('LL')}</p>
-            <p className='text-[11.2px] m-0 p-0 text-[var(--bs-secondary-color)]'>{moment(row.createdAt).local().format('hh:mm A')}</p>
+            <p className='text-[11.2px] m-0 p-0 text-muted-foreground'>{moment(row.createdAt).local().format('hh:mm A')}</p>
           </>
         )
       },
@@ -125,7 +127,7 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
         return (
           <>
             <p className='text-[11.2px] m-0 p-0'>{moment.utc(row.lastUpdated).local().format('LL')}</p>
-            <p className='text-[11.2px] m-0 p-0 text-[var(--bs-secondary-color)]'>{moment.utc(row.lastUpdated).local().format('hh:mm A')}</p>
+            <p className='text-[11.2px] m-0 p-0 text-muted-foreground'>{moment.utc(row.lastUpdated).local().format('hh:mm A')}</p>
           </>
         )
       },
@@ -185,7 +187,7 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
       name: (
         <div className='text-center'>
           <p className='m-0 font-bold text-[13px]'>Units Expected</p>
-          <p className='m-0 text-[11.2px] text-[var(--bs-secondary-color)]'>Units Located</p>
+          <p className='m-0 text-[11.2px] text-muted-foreground'>Units Located</p>
         </div>
       ),
       selector: (row: FBAShipment) => {
@@ -221,34 +223,34 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
           case 'shipped':
           case 'ready_to_ship':
           case 'awaiting':
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-secondary)_10%,transparent)] text-secondary p-2'>{` ${CleanStatus(status)} `}</span>
+            return <span className='inline-flex w-fit items-center rounded-sm px-2 py-0.5 text-xs font-medium uppercase bg-[color-mix(in_srgb,var(--vz-secondary)_10%,transparent)] text-secondary p-2'>{` ${CleanStatus(status)} `}</span>
             break
           case 'delivered':
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-success)_10%,transparent)] text-success p-2'>{` ${CleanStatus(status)} `}</span>
+            return <span className='inline-flex w-fit items-center rounded-sm px-2 py-0.5 text-xs font-medium uppercase bg-[color-mix(in_srgb,var(--vz-success)_10%,transparent)] text-success p-2'>{` ${CleanStatus(status)} `}</span>
             break
           case 'working':
           case 'active':
           case 'unconfirmed':
           case 'reviewing':
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] text-warning p-2'>{` ${CleanStatus(status)} `}</span>
+            return <span className='inline-flex w-fit items-center rounded-sm px-2 py-0.5 text-xs font-medium uppercase bg-[color-mix(in_srgb,var(--vz-warning)_10%,transparent)] text-warning p-2'>{` ${CleanStatus(status)} `}</span>
             break
           case 'in_transit':
           case 'checked_in':
           case 'receiving':
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-secondary)_10%,transparent)] text-secondary p-2'>{` ${CleanStatus(status)} `}</span>
+            return <span className='inline-flex w-fit items-center rounded-sm px-2 py-0.5 text-xs font-medium uppercase bg-[color-mix(in_srgb,var(--vz-secondary)_10%,transparent)] text-secondary p-2'>{` ${CleanStatus(status)} `}</span>
             break
           case 'in_dispute':
           case 'error':
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-danger)_10%,transparent)] text-danger p-2'>{` ${CleanStatus(status)} `}</span>
+            return <span className='inline-flex w-fit items-center rounded-sm px-2 py-0.5 text-xs font-medium uppercase bg-[color-mix(in_srgb,var(--vz-danger)_10%,transparent)] text-danger p-2'>{` ${CleanStatus(status)} `}</span>
             break
           case 'cancelled':
           case 'manually_closed':
           case 'closed':
           case 'deleted':
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-dark)_10%,transparent)] text-dark p-2'>{` ${CleanStatus(status)} `}</span>
+            return <span className='inline-flex w-fit items-center rounded-sm px-2 py-0.5 text-xs font-medium uppercase bg-[color-mix(in_srgb,var(--vz-dark)_10%,transparent)] text-dark p-2'>{` ${CleanStatus(status)} `}</span>
             break
           default:
-            return <span className='badge uppercase bg-[color-mix(in_srgb,var(--bs-secondary)_10%,transparent)] text-secondary p-2'>{` ${CleanStatus(status)} `}</span>
+            return <span className='inline-flex w-fit items-center rounded-sm px-2 py-0.5 text-xs font-medium uppercase bg-[color-mix(in_srgb,var(--vz-secondary)_10%,transparent)] text-secondary p-2'>{` ${CleanStatus(status)} `}</span>
             break
         }
       },
@@ -273,7 +275,7 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
                 <DropdownMenuTrigger asChild>
                   <button
                     type='button'
-                    className='btn btn-light btn-sm m-0 p-0'
+                    className={cn(buttonVariants({ variant: 'light', size: 'sm' }), 'm-0 p-0')}
                     style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }}>
                     <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-1 py-0' style={{ color: '#919FAF' }} />
                   </button>
@@ -281,7 +283,7 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
                 <DropdownMenuContent align='end'>
                   <DropdownMenuItem onClick={() => router.push(`/amazon-sellers/shipments/${row.shipmentId}`)}>
                     <div>
-                      <i className='ri-file-list-line label-icon align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
+                      <i className='ri-file-list-line label-icon align-middle me-2 text-[16.25px] text-muted-foreground' />
                       <span className='text-[13px] font-normal text-black'>View Shipment</span>
                     </div>
                   </DropdownMenuItem>

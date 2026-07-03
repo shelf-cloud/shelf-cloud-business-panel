@@ -3,7 +3,7 @@ import { useContext, useEffect, useRef } from 'react'
 import AppContext from '@context/AppContext'
 import { Warehouse, WarehousesResponse } from '@typesTs/warehouses/warehouse'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import useSWR from 'swr'
 
 export const useWarehouses = () => {

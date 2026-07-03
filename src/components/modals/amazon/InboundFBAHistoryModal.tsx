@@ -85,12 +85,12 @@ const InboundFBAHistoryModal = ({ inboundFBAHistoryModal, setinboundFBAHistoryMo
       }}>
       <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg' id='InboundFBAHistoryModal'>
         <DialogHeader className='pr-6' id='myModalLabel'>
-          <DialogTitle className='modal-title'>
+          <DialogTitle>
             FBA Shipment History
-            <p className='text-[16.25px] mb-0 font-semibold text-[var(--bs-secondary-color)]'>
+            <p className='text-[16.25px] mb-0 font-semibold text-muted-foreground'>
               SKU: <span className='text-black'>{inboundFBAHistoryModal.sku}</span>
             </p>
-            <p className='text-[13px] m-0 font-semibold text-[var(--bs-secondary-color)]'>
+            <p className='text-[13px] m-0 font-semibold text-muted-foreground'>
               FBA SKU: <span className='text-black'>{inboundFBAHistoryModal.msku}</span>
             </p>
           </DialogTitle>

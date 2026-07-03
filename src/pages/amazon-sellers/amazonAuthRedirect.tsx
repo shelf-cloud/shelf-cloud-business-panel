@@ -10,7 +10,7 @@ import BreadCrumb from '@components/Common/BreadCrumb'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import moment from 'moment'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Card, CardContent } from '@shadcn/ui/card'
 import { Spinner } from '@shadcn/ui/spinner'
@@ -96,7 +96,7 @@ const AmazonAuthRedirect = ({}: Props) => {
             <Card className='py-12'>
               <CardContent className='text-center'>
                 <p className='text-primary font-semibold text-[40px]'>ShelfCloud - Amazon</p>
-                <p className='text-[var(--bs-secondary-color)] font-normal text-[22.75px]'>Integration</p>
+                <p className='text-muted-foreground font-normal text-[22.75px]'>Integration</p>
                 <div className='flex flex-row justify-center items-center gap-6 mt-6 mb-12'>
                   <div
                     className='relative'
@@ -117,7 +117,7 @@ const AmazonAuthRedirect = ({}: Props) => {
                       }}
                     />
                   </div>
-                  <i className='las la-sync-alt text-[color:var(--bs-secondary-color)] text-[calc(1.328125rem+0.9375vw)]'></i>
+                  <i className='las la-sync-alt text-muted-foreground text-[calc(1.328125rem+0.9375vw)]'></i>
                   <div>
                     <img
                       loading='lazy'
@@ -146,7 +146,7 @@ const AmazonAuthRedirect = ({}: Props) => {
                     Cancel
                   </Button>
                 </div>
-                <p className='text-[var(--bs-secondary-color)] font-normal text-[13px] mt-0'>Expire at: {expire}</p>
+                <p className='text-muted-foreground font-normal text-[13px] mt-0'>Expire at: {expire}</p>
               </CardContent>
             </Card>
           </div>

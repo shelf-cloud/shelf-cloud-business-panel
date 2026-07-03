@@ -73,12 +73,12 @@ const FBAShipmentType = ({ data }: Props) => {
                           {product.isKit === true &&
                             product.children.length > 0 &&
                             product.children.map((child: KitChildren) => (
-                              <p className='m-0 p-0 text-[var(--bs-secondary-color)] font-light' key={child.orderChildrenId}>
+                              <p className='m-0 p-0 text-muted-foreground font-light' key={child.orderChildrenId}>
                                 {`- ${child.title === undefined ? child.name : child.title} Qty: ${child.quantity}`}
                               </p>
                             ))}
                         </td>
-                        <td className='text-[var(--bs-secondary-color)]'>{product.sku}</td>
+                        <td className='text-muted-foreground'>{product.sku}</td>
                         <td className='text-center'>{product.quantity}</td>
                       </tr>
                     ))}
@@ -102,7 +102,7 @@ const FBAShipmentType = ({ data }: Props) => {
               <CardContent>
                 <div className='flex flex-wrap -mx-3 m-0 p-0 flex flex-row justify-between items-start'>
                   <div className='px-3 w-6/12 m-0 p-0'>
-                    <span className='text-[var(--bs-secondary-color)] text-[11.2px]'>Store:</span>
+                    <span className='text-muted-foreground text-[11.2px]'>Store:</span>
                     <div className='flex flex-col justify-start items-start gap-2'>
                       <img
                         loading='lazy'
@@ -117,9 +117,9 @@ const FBAShipmentType = ({ data }: Props) => {
                       />
                       <span className='text-[11.2px] font-semibold'>{data.storeName}</span>
                     </div>
-                    <span className='text-[var(--bs-secondary-color)] text-[11.2px]'>Order Date:</span>
+                    <span className='text-muted-foreground text-[11.2px]'>Order Date:</span>
                     <p className='text-[11.2px] font-semibold m-0'>{moment.utc(data.orderDate).format('LL')}</p>
-                    <span className='text-[var(--bs-secondary-color)] text-[11.2px]'>Closed Date:</span>
+                    <span className='text-muted-foreground text-[11.2px]'>Closed Date:</span>
                     {data.closedDate && <p className='text-[11.2px] font-semibold m-0'>{moment.utc(data.closedDate).format('LL')}</p>}
                   </div>
                   {/* <Col xs={6} className='m-0 p-0'>
@@ -165,23 +165,23 @@ const FBAShipmentType = ({ data }: Props) => {
                 <table className='w-full whitespace-nowrap m-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <tbody className='text-[11.2px]'>
                     <tr>
-                      <td className='text-[var(--bs-secondary-color)] text-nowrap'>Carrier:</td>
+                      <td className='text-muted-foreground text-nowrap'>Carrier:</td>
                       <td className='font-semibold w-full capitalize'>{data.carrierUsed}</td>
                     </tr>
                     <tr>
-                      <td className='text-[var(--bs-secondary-color)] text-nowrap'>Service Requested:</td>
+                      <td className='text-muted-foreground text-nowrap'>Service Requested:</td>
                       <td className='font-semibold w-full capitalize'>{data.carrierService}</td>
                     </tr>
                     <tr>
-                      <td className='text-[var(--bs-secondary-color)] text-nowrap'>Service Used:</td>
+                      <td className='text-muted-foreground text-nowrap'>Service Used:</td>
                       <td className='font-semibold w-full capitalize'>{data.carrierType}</td>
                     </tr>
                     <tr>
-                      <td className='text-[var(--bs-secondary-color)] text-nowrap'># Of Pallets:</td>
+                      <td className='text-muted-foreground text-nowrap'># Of Pallets:</td>
                       <td className='font-semibold w-full'>{data.numberPallets}</td>
                     </tr>
                     <tr>
-                      <td className='text-[var(--bs-secondary-color)] text-nowrap'># Of Boxes:</td>
+                      <td className='text-muted-foreground text-nowrap'># Of Boxes:</td>
                       <td className='font-semibold w-full'>{data.numberBoxes}</td>
                     </tr>
                     {/* <tr>
@@ -200,7 +200,7 @@ const FBAShipmentType = ({ data }: Props) => {
                   </tbody>
                 </table>
                 <div className='px-1 text-[11.2px]'>
-                  <span className='m-0 text-[var(--bs-secondary-color)] text-[11.2px]'>Tracking No.</span>
+                  <span className='m-0 text-muted-foreground text-[11.2px]'>Tracking No.</span>
                   <ShipmentTrackingNumber
                     orderStatus={data.orderStatus}
                     orderType={data.orderType}
@@ -222,11 +222,11 @@ const FBAShipmentType = ({ data }: Props) => {
                 <table className='w-full whitespace-nowrap mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <tbody className='text-[11.2px]'>
                     <tr className='border-b pb-2'>
-                      <td className='text-[var(--bs-secondary-color)] flex flex-row justify-start items-start'>
+                      <td className='text-muted-foreground flex flex-row justify-start items-start'>
                         Pick Pack Charge
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill ms-1 text-[13px] text-[color:var(--bs-secondary-color)]' id={`tooltip${OrderId}`}></i>
+                            <i className='ri-information-fill ms-1 text-[13px] text-muted-foreground' id={`tooltip${OrderId}`}></i>
                             <TooltipComponent target={`tooltip${OrderId}`} text={FBAServiceFees(data, currentRegion)} />
                           </>
                         )}
@@ -234,11 +234,11 @@ const FBAShipmentType = ({ data }: Props) => {
                       <td className='font-semibold text-right'>{FormatCurrency(state.currentRegion, data.pickpackCharge)}</td>
                     </tr>
                     <tr className='border-b pb-2'>
-                      <td className='text-[var(--bs-secondary-color)]'>Shipping Charge</td>
+                      <td className='text-muted-foreground'>Shipping Charge</td>
                       <td className='font-semibold text-right'>{FormatCurrency(state.currentRegion, data.onixShipping)}</td>
                     </tr>
                     <tr className='border-b pb-2'>
-                      <td className='text-[var(--bs-secondary-color)]'>Extra Charge</td>
+                      <td className='text-muted-foreground'>Extra Charge</td>
                       <td className='font-semibold text-right'>{FormatCurrency(state.currentRegion, data.extraCharge)}</td>
                     </tr>
                     <tr>

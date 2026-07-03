@@ -8,7 +8,7 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import { CheckSummaryType } from '@typesTs/commercehub/checkSummary'
 import moment from 'moment'
 import DataTable from '@components/Common/DataTableSC'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 
 import { getTotalPaid } from './helperFunctions'
@@ -75,7 +75,7 @@ const CheckSummaryTable = ({ filteredItems, pending, sortBy, setSortBy }: Props)
               {row.checkNumber}
             </Link>
             <i
-              className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-[color:var(--bs-secondary-color)]'
+              className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-muted-foreground'
               style={{ cursor: 'pointer' }}
               onClick={() => {
                 navigator.clipboard.writeText(row.checkNumber)
@@ -86,7 +86,7 @@ const CheckSummaryTable = ({ filteredItems, pending, sortBy, setSortBy }: Props)
             />
           </div>
         ) : (
-          <span className='text-[11.2px] text-[var(--bs-secondary-color)] font-light italic'>Pending</span>
+          <span className='text-[11.2px] text-muted-foreground font-light italic'>Pending</span>
         )
       },
       sortable: false,

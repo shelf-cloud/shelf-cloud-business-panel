@@ -71,38 +71,38 @@ const InventoryToSend = ({ inboundPlan, handleNextStep, watingRepsonse }: Props)
                   {inboundPlan.fulfillmentType === 'Master Boxes' ? (
                     <>
                       <p className='m-0 p-0 text-nowrap'>
-                        <span className='text-[var(--bs-secondary-color)]'>Box Weight:</span>
+                        <span className='text-muted-foreground'>Box Weight:</span>
                         {` ${inboundPlan.skus_details[item.msku]?.boxWeight} lbs`}
                       </p>
                       <p className='m-0 p-0 text-nowrap'>
-                        <span className='text-[var(--bs-secondary-color)]'>Box Width:</span>
+                        <span className='text-muted-foreground'>Box Width:</span>
                         {` ${inboundPlan.skus_details[item.msku]?.boxWidth} in`}
                       </p>
                       <p className='m-0 p-0 text-nowrap'>
-                        <span className='text-[var(--bs-secondary-color)]'>Box Height:</span>
+                        <span className='text-muted-foreground'>Box Height:</span>
                         {` ${inboundPlan.skus_details[item.msku]?.boxHeight} in`}
                       </p>
                       <p className='m-0 p-0 text-nowrap'>
-                        <span className='text-[var(--bs-secondary-color)]'>Box Length:</span>
+                        <span className='text-muted-foreground'>Box Length:</span>
                         {` ${inboundPlan.skus_details[item.msku]?.boxLength} in`}
                       </p>
                     </>
                   ) : (
                     <>
                       <p className='m-0 p-0 text-nowrap'>
-                        <span className='text-[var(--bs-secondary-color)]'>Weight:</span>
+                        <span className='text-muted-foreground'>Weight:</span>
                         {` ${inboundPlan.skus_details[item.msku]?.weight} lbs`}
                       </p>
                       <p className='m-0 p-0 text-nowrap'>
-                        <span className='text-[var(--bs-secondary-color)]'>Width:</span>
+                        <span className='text-muted-foreground'>Width:</span>
                         {` ${inboundPlan.skus_details[item.msku]?.width} in`}
                       </p>
                       <p className='m-0 p-0 text-nowrap'>
-                        <span className='text-[var(--bs-secondary-color)]'>Height:</span>
+                        <span className='text-muted-foreground'>Height:</span>
                         {` ${inboundPlan.skus_details[item.msku]?.height} in`}
                       </p>
                       <p className='m-0 p-0 text-nowrap'>
-                        <span className='text-[var(--bs-secondary-color)]'>Length:</span>
+                        <span className='text-muted-foreground'>Length:</span>
                         {` ${inboundPlan.skus_details[item.msku]?.length} in`}
                       </p>
                     </>
@@ -111,27 +111,27 @@ const InventoryToSend = ({ inboundPlan, handleNextStep, watingRepsonse }: Props)
                 <td>
                   {inboundPlan.fulfillmentType === 'Master Boxes' && (
                     <p className='m-0 p-0 text-nowrap'>
-                      <span className='text-[var(--bs-secondary-color)]'>Unit per box:</span>
+                      <span className='text-muted-foreground'>Unit per box:</span>
                       {` ${inboundPlan.skus_details[item.msku]?.boxQty}`}
                     </p>
                   )}
                   <p className='m-0 p-0 text-nowrap'>
-                    <span className='text-[var(--bs-secondary-color)]'>Unit prep:</span>
+                    <span className='text-muted-foreground'>Unit prep:</span>
                     {` ${item.prepOwner}`}
                   </p>
                   <p className='m-0 p-0 text-nowrap'>
-                    <span className='text-[var(--bs-secondary-color)]'>Unit labelling:</span>
+                    <span className='text-muted-foreground'>Unit labelling:</span>
                     {` ${item.labelOwner}`}
                   </p>
                 </td>
                 <td className='text-center'>
                   <p className='m-0 p-0 text-nowrap'>
-                    <span className='text-[var(--bs-secondary-color)]'>Units:</span>
+                    <span className='text-muted-foreground'>Units:</span>
                     {` ${item.quantity}`}
                   </p>
                   {inboundPlan.fulfillmentType === 'Master Boxes' && (
                     <p className='m-0 p-0 text-nowrap'>
-                      <span className='text-[var(--bs-secondary-color)]'>Boxes:</span>
+                      <span className='text-muted-foreground'>Boxes:</span>
                       {` ${inboundPlan.skus_details[item.msku]?.boxes}`}
                     </p>
                   )}

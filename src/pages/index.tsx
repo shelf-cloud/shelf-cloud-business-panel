@@ -17,7 +17,7 @@ import AppContext from '@context/AppContext'
 import { SalesOverTimeResponse } from '@typesTs/dashboard/salesOverTime'
 import axios from 'axios'
 import moment from 'moment'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

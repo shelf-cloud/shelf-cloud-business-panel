@@ -24,7 +24,7 @@ const SearchInput = ({ searchValue, setSearchValue, background, minLength = 1, d
         className='w-full h-9 flex flex-row flex-nowrap justify-around items-center rounded-[4.8px] overflow-hidden'
         style={{ border: '1px solid #E1E3E5', backgroundColor: BACKGROUND_COLORS[background] }}>
         <span
-          className='mdi mdi-magnify text-lg m-0 ps-2 pe-0 py-0 text-[color:var(--bs-secondary-color)]'
+          className='mdi mdi-magnify text-lg m-0 ps-2 pe-0 py-0 text-muted-foreground'
           style={{
             backgroundColor: BACKGROUND_COLORS[background],
           }}
@@ -50,7 +50,7 @@ const SearchInput = ({ searchValue, setSearchValue, background, minLength = 1, d
             backgroundColor: BACKGROUND_COLORS[background],
           }}
           onClick={() => setSearchValue('')}>
-          <i className='mdi mdi-window-close text-lg m-0 px-2 py-0 text-[color:var(--bs-secondary-color)]' />
+          <i className='mdi mdi-window-close text-lg m-0 px-2 py-0 text-muted-foreground' />
         </span>
       </div>
     </div>

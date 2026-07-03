@@ -4,7 +4,7 @@ import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import DataTable from '@components/Common/DataTableSC'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
 import { Label } from '@shadcn/ui/label'
@@ -178,7 +178,7 @@ const Brands = ({}: Props) => {
         <div>
           <form onSubmit={handleAddSupplier} className='flex flex-row justify-start items-center gap-4 w-full'>
             <div className='mb-3'>
-              <Label htmlFor='title' className='form-label'>
+              <Label htmlFor='title' className='mb-2'>
                 *Brand Name
               </Label>
               <Input
@@ -195,7 +195,7 @@ const Brands = ({}: Props) => {
               {validation.touched.name && validation.errors.name ? <div className='text-sm text-destructive'>{validation.errors.name}</div> : null}
             </div>
             <div className='mb-3'>
-              <Label htmlFor='title' className='form-label'>
+              <Label htmlFor='title' className='mb-2'>
                 *Logo
               </Label>
               <Input
@@ -226,7 +226,7 @@ const Brands = ({}: Props) => {
       {showEditFields && (
         <form onSubmit={handleEditSupplier} className='flex flex-row justify-start items-center gap-4 w-full'>
           <div className='mb-3'>
-            <Label htmlFor='title' className='form-label'>
+            <Label htmlFor='title' className='mb-2'>
               *Supplier Name
             </Label>
             <Input
@@ -243,7 +243,7 @@ const Brands = ({}: Props) => {
             {validationEdit.touched.name && validationEdit.errors.name ? <div className='text-sm text-destructive'>{validationEdit.errors.name}</div> : null}
           </div>
           <div className='mb-3'>
-            <Label htmlFor='title' className='form-label'>
+            <Label htmlFor='title' className='mb-2'>
               *Logo
             </Label>
             <Input

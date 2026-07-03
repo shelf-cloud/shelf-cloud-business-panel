@@ -12,7 +12,7 @@ import { DeliveryWindowsOptions, DeliveryWindowsResponse, InboundPlan, Placement
 import axios from 'axios'
 import moment from 'moment'
 // import SelectShippingCarrier from './SelectShippingCarrier'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 
 import { Button } from '@shadcn/ui/button'
 import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
@@ -474,7 +474,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
             <p className='text-[16.25px] font-bold'>Ship Date</p>
             <p className='my-1 mb-2 p-0 text-[11.2px]'>*Shipping date will be the same for all shipments</p>
             {inboundPlan.shipDate ? (
-              <div className='btn btn-sm m-0 rounded border border-2 border-success' style={{ backgroundColor: 'white', cursor: 'default' }}>
+              <div className='inline-flex items-center justify-center h-8 px-3 m-0 rounded border border-2 border-success' style={{ backgroundColor: 'white', cursor: 'default' }}>
                 <span className='text-[13px] m-0 p-4 font-semibold'>{moment(inboundPlan.shipDate).format('MM/DD/YYYY')}</span>
               </div>
             ) : (
@@ -575,7 +575,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                 {discount.target} <span className='font-semibold'>{FormatCurrency(state.currentRegion, discount.value.amount)}</span> {discount.value.code}
                               </p>
                             ))}
-                            <p className='m-0 text-[11.2px] text-[var(--bs-secondary-color)] font-light'>ID: {placementOption.placementOptionId}</p>
+                            <p className='m-0 text-[11.2px] text-muted-foreground font-light'>ID: {placementOption.placementOptionId}</p>
                           </CardContent>
                         </Card>
                       )
@@ -586,7 +586,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
               {/* SAME SHIPPING MODE */}
               <div>
                 <p className='text-[16.25px] font-bold'>Shipping mode</p>
-                <div className='form-check form-switch form-switch-sm flex justify-start items-center gap-2 p-0 my-4'>
+                <div className='flex justify-start items-center gap-2 p-0 my-4'>
                   <Switch
                     id='showShippingMode'
                     name='showShippingMode'
@@ -605,7 +605,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                       })
                     }}
                   />
-                  <Label className='check-form-label m-0 font-normal' htmlFor='showShippingMode'>
+                  <Label className='m-0 font-normal' htmlFor='showShippingMode'>
                     Shipping mode will be same for all shipments
                   </Label>
                 </div>
@@ -822,7 +822,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                       style={{ width: 'fit-content', maxWidth: '430px', zIndex: placementOptionSelected.shipmentIds.length - shipmentIndex }}>
                       <CardHeader>
                         <p className='m-0 p-0 font-bold text-[13px]'>Shipment #{shipmentIndex + 1}</p>
-                        <p className='m-0 p-0 text-[11.2px] text-[var(--bs-secondary-color)] font-light'>ID: {shipmentId}</p>
+                        <p className='m-0 p-0 text-[11.2px] text-muted-foreground font-light'>ID: {shipmentId}</p>
                       </CardHeader>
                       <CardContent>
                         <p className='m-0 text-[11.2px]'>
@@ -1177,7 +1177,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                           })
                                         }
                                       />
-                                      <div className={'' + (finalShippingCharges.sameShippingCarrier !== 'amazon' && 'text-[var(--bs-secondary-color)]')}>
+                                      <div className={'' + (finalShippingCharges.sameShippingCarrier !== 'amazon' && 'text-muted-foreground')}>
                                         <p className='m-0 p-0 text-[11.2px]'>UPS (Amazon Partnered Carrier)</p>
                                         <p className='m-0 p-0 text-[11.2px] font-bold'>
                                           {(Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId])
@@ -1221,7 +1221,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                         }
                                       />
                                       <div>
-                                        <p className={'m-0 p-0 text-[11.2px] ' + (finalShippingCharges.sameShippingCarrier !== 'non-amazon' && 'text-[var(--bs-secondary-color)]')}>
+                                        <p className={'m-0 p-0 text-[11.2px] ' + (finalShippingCharges.sameShippingCarrier !== 'non-amazon' && 'text-muted-foreground')}>
                                           Non-Amazon Partnered Carrier
                                         </p>
                                         <SelectShippingCarrier
@@ -1253,7 +1253,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                       </div>
                                     </div> */}
                                   </div>
-                                  <p className='m-0 my-4 p-0 text-[var(--bs-secondary-color)] text-[11.2px]'>The carrier for this SPD shipment must be the same as other SPD shipments.</p>
+                                  <p className='m-0 my-4 p-0 text-muted-foreground text-[11.2px]'>The carrier for this SPD shipment must be the same as other SPD shipments.</p>
                                 </>
                               ) : (
                                 <>
@@ -1309,7 +1309,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                       </table>
                                     </div>
                                     <p className='m-0 p-0 font-semibold text-[11.2px]'>Carrier:</p>
-                                    <p className='text-[11.2px] text-[var(--bs-secondary-color)]'>{`You'll select your LTL carrier in Step 4.`}</p>
+                                    <p className='text-[11.2px] text-muted-foreground'>{`You'll select your LTL carrier in Step 4.`}</p>
                                   </div>
                                   <SelectLTLFreightReadyDate
                                     shipmentId={shipmentId}
@@ -1329,7 +1329,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                           {finalShippingCharges.sameShippingMode && finalShippingCharges.shippingMode === 'SPD' && finalShippingCharges.sameShippingCarrier === 'non-amazon' && (
                             <div className='my-4 '>
                               <p className='m-0 p-0 font-semibold text-[11.2px]'>Delivery Window:</p>
-                              <p className='text-[11.2px] text-[var(--bs-secondary-color)]'>
+                              <p className='text-[11.2px] text-muted-foreground'>
                                 The delivery window is when you expect your shipment to arrive at the fulfillment center. This information will help us get your products in stock
                                 faster. Choose an estimated 7-day date range. You can update this when you enter tracking details.
                               </p>
@@ -1365,7 +1365,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                         )?.endDate
                                     ).format('LL')}`}
                                   </p>
-                                  <p className='m-0 p-0 text-[var(--bs-secondary-color)] text-[11.2px]'>
+                                  <p className='m-0 p-0 text-muted-foreground text-[11.2px]'>
                                     This delivery window can be edited in the final step up to{' '}
                                     {moment(finalShippingCharges.shipments[shipmentId].deliveryWindow, 'MM/DD/YYYY').format('LL')}.
                                   </p>
@@ -1380,7 +1380,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                             finalShippingCharges.shipments[shipmentId].shippingMode === 'SPD' && (
                               <div className='my-4 '>
                                 <p className='m-0 p-0 font-semibold text-[11.2px]'>Delivery Window:</p>
-                                <p className='text-[11.2px] text-[var(--bs-secondary-color)]'>
+                                <p className='text-[11.2px] text-muted-foreground'>
                                   The delivery window is when you expect your shipment to arrive at the fulfillment center. This information will help us get your products in stock
                                   faster. Choose an estimated 7-day date range. You can update this when you enter tracking details.
                                 </p>
@@ -1416,7 +1416,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                           )?.endDate
                                       ).format('LL')}`}
                                     </p>
-                                    <p className='m-0 p-0 text-[var(--bs-secondary-color)] text-[11.2px]'>
+                                    <p className='m-0 p-0 text-muted-foreground text-[11.2px]'>
                                       This delivery window can be edited in the final step up to{' '}
                                       {moment(finalShippingCharges.shipments[shipmentId].deliveryWindow, 'MM/DD/YYYY').format('LL')}.
                                     </p>
@@ -1429,7 +1429,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
 
                           {!finalShippingCharges.sameShippingMode && finalShippingCharges.shipments[shipmentId].shippingMode === 'SPD' && (
                             <div className='mt-4'>
-                              <p className='m-0 my-4 p-0 text-[var(--bs-secondary-color)] text-[11.2px]'>
+                              <p className='m-0 my-4 p-0 text-muted-foreground text-[11.2px]'>
                                 * The Amazon Partnered Carrier program offers discounted shipping rates, the convenience of buying and printing shipping labels when you create
                                 shipments, and automated tracking.
                               </p>

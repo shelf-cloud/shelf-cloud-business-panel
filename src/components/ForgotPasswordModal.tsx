@@ -1,7 +1,7 @@
 import { FormEventHandler, useRef, useState } from 'react'
 
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 
 import { Button } from '@shadcn/ui/button'
 import { Label } from '@shadcn/ui/label'
@@ -45,7 +45,7 @@ const ForgotPasswordModal = ({ OpenForgotPassword, setOpenForgotPassword }: Prop
       <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg'>
         <DialogHeader className='pr-6'>
           <DialogTitle>
-            <p className='modal-title text-[22.75px]' id='myModalLabel'>
+            <p className='text-[22.75px]' id='myModalLabel'>
               Forgot you password?
             </p>
           </DialogTitle>
@@ -53,17 +53,17 @@ const ForgotPasswordModal = ({ OpenForgotPassword, setOpenForgotPassword }: Prop
         <div>
           <form onSubmit={handleSubmitForgotPassword} className='w-full'>
             <div className='mb-1 w-full'>
-              <Label htmlFor='email' className='form-label'>
+              <Label htmlFor='email' className='mb-2'>
                 Email Address
               </Label>
               <Input type='email' id='email' name='email' placeholder='Enter your email' required ref={emailRef} />
             </div>
             {showMessage && <p className='text-[13px] text-danger'>{message}</p>}
             <div className='mt-6 flex flex-row justify-end items-start gap-4'>
-              <Button variant='light' className='btn btn-light text-[16.25px]' onClick={() => setOpenForgotPassword(false)}>
+              <Button variant='light' className='text-[16.25px]' onClick={() => setOpenForgotPassword(false)}>
                 Close
               </Button>
-              <Button disabled={loading} className='btn btn-primary text-[16.25px]' type='submit'>
+              <Button disabled={loading} className='text-[16.25px]' type='submit'>
                 {loading ? (
                   <>
                     <Spinner className='text-white' role='status' aria-hidden='true' />

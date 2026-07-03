@@ -17,7 +17,7 @@ import { FBAShipment, FBAShipmentsDetailsRepsonse } from '@typesTs/amazon/fbaShi
 import { GetLabelsResponse, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
 import axios from 'axios'
 import moment from 'moment'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Badge } from '@shadcn/ui/badge'
 import { Button } from '@shadcn/ui/button'
 import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
@@ -174,15 +174,15 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                       </Link>
                       <div className='mt-4'>
                         <p className='font-semibold text-[19.5px] m-0 p-0'>
-                          <span className='text-[var(--bs-secondary-color)] font-normal'>Name: </span>
+                          <span className='text-muted-foreground font-normal'>Name: </span>
                           {shipmentDetails.shipment.name}
                         </p>
                         <div className='my-1 flex flex-row justify-start items-center gap-6'>
                           <p className='font-normal text-[13px] m-0 p-0'>
-                            <span className='text-[var(--bs-secondary-color)]'>Shipment ID: </span>
+                            <span className='text-muted-foreground'>Shipment ID: </span>
                             {shipmentDetails.shipment.shipmentConfirmationId}
                             <i
-                              className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-[color:var(--bs-secondary-color)]'
+                              className='ri-file-copy-line text-[13px] my-0 mx-1 p-0 text-muted-foreground'
                               style={{ cursor: 'pointer' }}
                               onClick={() => {
                                 navigator.clipboard.writeText(`${shipmentDetails.shipment.shipmentConfirmationId}`)
@@ -190,13 +190,13 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                               }}
                             />
                           </p>
-                          <p className='m-0 p-0 text-[var(--bs-secondary-color)]'>
+                          <p className='m-0 p-0 text-muted-foreground'>
                             Status:{' '}
                             <Badge variant='success' className='text-[13px]'>
                               {CleanStatus(shipmentDetails.shipment.status)}
                             </Badge>
                           </p>
-                          <p className='m-0 p-0 text-[var(--bs-secondary-color)]'>
+                          <p className='m-0 p-0 text-muted-foreground'>
                             Last Updated: <span className='text-black font-semibold'>{moment(shipmentDetails.lastUpdated).format('LL')}</span>
                           </p>
                         </div>
@@ -245,7 +245,7 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                       <div className='px-3 w-full gap-2 flex flex-col'>
                         <Nav className='pt-0 rounded-[0.25rem] card-header-tabs border-b-0' role='tablist'>
                           <NavItem style={{ cursor: 'pointer' }}>
-                            <NavLink to='#' className={'text-[16.25px] font-semibold ' + (activeTab == '1' ? 'text-primary' : 'text-[var(--bs-secondary-color)]')} onClick={() => tabChange('1')} type='button'>
+                            <NavLink to='#' className={'text-[16.25px] font-semibold ' + (activeTab == '1' ? 'text-primary' : 'text-muted-foreground')} onClick={() => tabChange('1')} type='button'>
                               <>
                                 <i className='far fa-user'></i>
                                 Track Shipment
@@ -254,7 +254,7 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                           </NavItem>
                           {shipmentDetails.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber && (
                             <NavItem style={{ cursor: 'pointer' }}>
-                              <NavLink className={'text-[16.25px] font-semibold ' + (activeTab == '2' ? 'text-primary' : 'text-[var(--bs-secondary-color)]')} onClick={() => tabChange('2')}>
+                              <NavLink className={'text-[16.25px] font-semibold ' + (activeTab == '2' ? 'text-primary' : 'text-muted-foreground')} onClick={() => tabChange('2')}>
                                 <>
                                   <i className='fas fa-home'></i>
                                   Pallets
@@ -263,7 +263,7 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                             </NavItem>
                           )}
                           <NavItem style={{ cursor: 'pointer' }}>
-                            <NavLink className={'text-[16.25px] font-semibold ' + (activeTab == '3' ? 'text-primary' : 'text-[var(--bs-secondary-color)]')} onClick={() => tabChange('3')}>
+                            <NavLink className={'text-[16.25px] font-semibold ' + (activeTab == '3' ? 'text-primary' : 'text-muted-foreground')} onClick={() => tabChange('3')}>
                               <>
                                 <i className='fas fa-home'></i>
                                 Contents
@@ -271,7 +271,7 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                             </NavLink>
                           </NavItem>
                           <NavItem style={{ cursor: 'pointer' }}>
-                            <NavLink to='#' className={'text-[16.25px] font-semibold ' + (activeTab == '4' ? 'text-primary' : 'text-[var(--bs-secondary-color)]')} onClick={() => tabChange('4')} type='button'>
+                            <NavLink to='#' className={'text-[16.25px] font-semibold ' + (activeTab == '4' ? 'text-primary' : 'text-muted-foreground')} onClick={() => tabChange('4')} type='button'>
                               <>
                                 <i className='far fa-user'></i>
                                 Problems

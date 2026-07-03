@@ -8,7 +8,7 @@ import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { getSession } from 'next-auth/react'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Card, CardContent } from '@shadcn/ui/card'
 import { Input } from '@shadcn/ui/input'
@@ -113,7 +113,7 @@ function ContactUs() {
                         <div className='flex flex-wrap -mx-3'>
                           <div className='px-3 w-full lg:w-6/12'>
                             <div className='mb-6'>
-                              <Label htmlFor='firstNameinput' className='form-label'>
+                              <Label htmlFor='firstNameinput' className='mb-2'>
                                 *Company Name
                               </Label>
                               <Input
@@ -129,7 +129,7 @@ function ContactUs() {
                               {validation.touched.companyName && validation.errors.companyName ? <div className='text-sm text-destructive'>{validation.errors.companyName}</div> : null}
                             </div>
                             <div className='mb-6'>
-                              <Label htmlFor='firstNameinput' className='form-label'>
+                              <Label htmlFor='firstNameinput' className='mb-2'>
                                 *Email Address
                               </Label>
                               <Input
@@ -145,7 +145,7 @@ function ContactUs() {
                               {validation.touched.email && validation.errors.email ? <div className='text-sm text-destructive'>{validation.errors.email}</div> : null}
                             </div>
                             <div className='mb-6'>
-                              <Label htmlFor='firstNameinput' className='form-label'>
+                              <Label htmlFor='firstNameinput' className='mb-2'>
                                 *Message Subject
                               </Label>
                               <Input
@@ -163,7 +163,7 @@ function ContactUs() {
                           </div>
                           <div className='px-3 w-full lg:w-6/12 h-auto flex flex-col justify-between pb-6'>
                             <div className='mb-6 flex flex-col h-full md:mb-12'>
-                              <Label htmlFor='firstNameinput' className='form-label'>
+                              <Label htmlFor='firstNameinput' className='mb-2'>
                                 *Message
                               </Label>
                               <Textarea

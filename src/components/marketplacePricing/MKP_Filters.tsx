@@ -119,7 +119,7 @@ const MKP_Filters = ({ filters, supplierOptions, brandOptions, categoryOptions, 
                         handleBlur={handleBlur}
                         placeholder='Units Sold'
                       />
-                      <span className='text-[11.2px] text-[var(--bs-secondary-color)] p-0 m-0'>min</span>
+                      <span className='text-[11.2px] text-muted-foreground p-0 m-0'>min</span>
                       <InputNumberFilter
                         inputName='units1monthmax'
                         value={values.units1monthmax}
@@ -128,7 +128,7 @@ const MKP_Filters = ({ filters, supplierOptions, brandOptions, categoryOptions, 
                         handleBlur={handleBlur}
                         placeholder='Units Sold'
                       />
-                      <span className='text-[11.2px] text-[var(--bs-secondary-color)] p-0 m-0'>max</span>
+                      <span className='text-[11.2px] text-muted-foreground p-0 m-0'>max</span>
                     </div>
                     {touched.units1monthmin && errors.units1monthmin ? <div className='text-sm text-destructive'>{errors.units1monthmin}</div> : null}
                     {touched.units1monthmax && errors.units1monthmax ? <div className='text-sm text-destructive'>{errors.units1monthmax}</div> : null}
@@ -148,7 +148,7 @@ const MKP_Filters = ({ filters, supplierOptions, brandOptions, categoryOptions, 
                         handleBlur={handleBlur}
                         placeholder='Units Sold'
                       />
-                      <span className='text-[11.2px] text-[var(--bs-secondary-color)] p-0 m-0'>min</span>
+                      <span className='text-[11.2px] text-muted-foreground p-0 m-0'>min</span>
                       <InputNumberFilter
                         inputName='units1yearmax'
                         value={values.units1yearmax}
@@ -157,7 +157,7 @@ const MKP_Filters = ({ filters, supplierOptions, brandOptions, categoryOptions, 
                         handleBlur={handleBlur}
                         placeholder='Units Sold'
                       />
-                      <span className='text-[11.2px] text-[var(--bs-secondary-color)] p-0 m-0'>max</span>
+                      <span className='text-[11.2px] text-muted-foreground p-0 m-0'>max</span>
                     </div>
                     {touched.units1yearmin && errors.units1yearmin ? <div className='text-sm text-destructive'>{errors.units1yearmin}</div> : null}
                     {touched.units1yearmax && errors.units1yearmax ? <div className='text-sm text-destructive'>{errors.units1yearmax}</div> : null}

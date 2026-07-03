@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { MKP_Product, MKP_Response } from '@typesTs/marketplacePricing/marketplacePricing'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import useSWR from 'swr'
 
 export type MKP_ExpandedRowProps = {

@@ -105,7 +105,7 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
         return (
           <div>
             <p className='text-[11.2px] m-0 p-0 font-semibold'>{row.sku}</p>
-            <p style={{ margin: '0px' }} className='text-[11.2px] text-[var(--bs-secondary-color)]'>
+            <p style={{ margin: '0px' }} className='text-[11.2px] text-muted-foreground'>
               {row.brand}
             </p>
           </div>
@@ -252,7 +252,7 @@ const SellerListingTable = ({ tableData, pending, setSelectedRows, toggledClearR
                   })
                 }>
                 <i className='las la-link text-[19.5px] text-destructive m-0 p-0' />
-                <span className='text-[11.2px] text-[var(--bs-secondary-color)]'>Not Mapped</span>
+                <span className='text-[11.2px] text-muted-foreground'>Not Mapped</span>
               </div>
             )}
           </div>

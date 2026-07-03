@@ -8,7 +8,7 @@ import { CommerceHubStore } from '@typesTs/commercehub/invoices'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import Papa from 'papaparse'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Card } from '@shadcn/ui/card'
 import { Dialog, DialogContent, DialogHeader } from '@shadcn/ui/dialog'
@@ -195,7 +195,7 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
         if (!open) setshowUpdateInvoices({ show: false })
       }}>
       <DialogContent id='myModal' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl'>
-      <DialogHeader className='pr-6 modal-title' id='myModalLabel'>
+      <DialogHeader className='pr-6' id='myModalLabel'>
         <p className='text-primary text-[19.5px]'>Import File to Update Commerce Hub Invoices</p>
       </DialogHeader>
       <div>
@@ -213,7 +213,7 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
           <div className='flex flex-wrap -mx-3 mb-4'>
             <div className='px-3 md:w-6/12'>
               <div className='mb-0'>
-                <Label htmlFor='storeId' className='form-label'>
+                <Label htmlFor='storeId' className='mb-2'>
                   *Store
                 </Label>
                 <NativeSelect
@@ -235,7 +235,7 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
                 </NativeSelect>
                 {validation.touched.storeId && validation.errors.storeId ? <div className='text-sm text-destructive'>{validation.errors.storeId}</div> : null}
               </div>
-              <p className='text-[11.2px] text-[var(--bs-secondary-color)] font-light m-0'>
+              <p className='text-[11.2px] text-muted-foreground font-light m-0'>
                 {`You might need to configure in marketplace manager if you don't see a store.`}{' '}
                 <span onClick={() => router.push('/marketplaceManager')} className='text-primary' style={{ cursor: 'pointer' }}>
                   <i className='ri-external-link-fill ms-1 text-[13px] text-primary' />
@@ -249,7 +249,7 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
                         <div className='flex flex-wrap -mx-3 items-center'>
                           <div className='px-3 flex justify-between items-center'>
                             <div>
-                              <p className='text-[var(--bs-secondary-color)] font-bold m-0'>{f.name}</p>
+                              <p className='text-muted-foreground font-bold m-0'>{f.name}</p>
                               <p className='mb-0'>
                                 <strong>{f.formattedSize}</strong>
                               </p>

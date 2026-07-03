@@ -8,6 +8,8 @@ import { ListInboundPlan } from '@typesTs/amazon/fulfillments/listInboundPlans'
 import moment from 'moment'
 import DataTable from '@components/Common/DataTableSC'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@shadcn/ui/dropdown-menu'
+import { buttonVariants } from '@shadcn/ui/button'
+import { cn } from '@/lib/shadcn/utils'
 
 type Props = {
   filteredItems: ListInboundPlan[]
@@ -85,25 +87,25 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
         switch (row.status.toLowerCase()) {
           case 'complete':
           case 'completed':
-            return <span className='badge bg-[color-mix(in_srgb,var(--bs-success)_10%,transparent)] text-success uppercase p-2'>{` ${row.status} `}</span>
+            return <span className='inline-block rounded-[0.25rem] text-[0.75em] font-semibold leading-none whitespace-nowrap align-baseline bg-[color-mix(in_srgb,var(--success)_10%,transparent)] text-success uppercase p-2'>{` ${row.status} `}</span>
           case 'delivered':
           case 'creating':
-            return <span className='badge bg-[color-mix(in_srgb,var(--bs-secondary)_10%,transparent)] text-secondary uppercase p-2'>{` ${row.status} `}</span>
+            return <span className='inline-block rounded-[0.25rem] text-[0.75em] font-semibold leading-none whitespace-nowrap align-baseline bg-[color-mix(in_srgb,var(--secondary)_10%,transparent)] text-secondary uppercase p-2'>{` ${row.status} `}</span>
           case 'assign':
           case 'working':
           case 'awaiting':
           case 'active':
-            return <span className='badge bg-[color-mix(in_srgb,var(--bs-warning)_10%,transparent)] text-warning uppercase p-2'>{` ${row.status} `}</span>
+            return <span className='inline-block rounded-[0.25rem] text-[0.75em] font-semibold leading-none whitespace-nowrap align-baseline bg-[color-mix(in_srgb,var(--warning)_10%,transparent)] text-warning uppercase p-2'>{` ${row.status} `}</span>
           case 'ready to ship':
-            return <span className='badge bg-[color-mix(in_srgb,var(--bs-secondary)_10%,transparent)] text-secondary uppercase p-2'>{` ${row.status} `}</span>
+            return <span className='inline-block rounded-[0.25rem] text-[0.75em] font-semibold leading-none whitespace-nowrap align-baseline bg-[color-mix(in_srgb,var(--secondary)_10%,transparent)] text-secondary uppercase p-2'>{` ${row.status} `}</span>
           case 'error':
-            return <span className='badge bg-[color-mix(in_srgb,var(--bs-danger)_10%,transparent)] text-danger uppercase p-2'>{` ${row.status} `}</span>
+            return <span className='inline-block rounded-[0.25rem] text-[0.75em] font-semibold leading-none whitespace-nowrap align-baseline bg-[color-mix(in_srgb,var(--destructive)_10%,transparent)] text-destructive uppercase p-2'>{` ${row.status} `}</span>
           case 'cancelled':
           case 'closed':
           case 'deleted':
-            return <span className='badge bg-[color-mix(in_srgb,var(--bs-dark)_10%,transparent)] text-dark uppercase p-2'> {row.status} </span>
+            return <span className='inline-block rounded-[0.25rem] text-[0.75em] font-semibold leading-none whitespace-nowrap align-baseline bg-[color-mix(in_srgb,var(--dark)_10%,transparent)] text-dark uppercase p-2'> {row.status} </span>
           default:
-            return <span className='badge bg-[color-mix(in_srgb,var(--bs-secondary)_10%,transparent)] text-secondary uppercase p-2'>{` ${row.status} `}</span>
+            return <span className='inline-block rounded-[0.25rem] text-[0.75em] font-semibold leading-none whitespace-nowrap align-baseline bg-[color-mix(in_srgb,var(--secondary)_10%,transparent)] text-secondary uppercase p-2'>{` ${row.status} `}</span>
         }
       },
       sortable: true,
@@ -155,7 +157,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
               <DropdownMenu>
                 <div className='dropdown inline-block'>
                 <DropdownMenuTrigger asChild>
-                    <button type='button' className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }}>
+                    <button type='button' className={cn(buttonVariants({ variant: 'light', size: 'sm' }), 'm-0 p-0')} style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }}>
                       <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-1 py-0' style={{ color: '#919FAF' }}></i>
                     </button>
                   </DropdownMenuTrigger>
@@ -171,7 +173,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
                             : router.push(`/amazon-sellers/fulfillment/individualUnits/${row.inboundPlanId}`)
                       }>
                       <div>
-                        <i className='ri-file-list-line align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]'></i>
+                        <i className='ri-file-list-line align-middle me-2 text-[16.25px] text-muted-foreground'></i>
                         <span className='text-[13px] font-normal text-black'>Manage</span>
                       </div>
                     </DropdownMenuItem>
@@ -238,7 +240,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
               <DropdownMenu>
                 <div className='dropdown inline-block'>
                 <DropdownMenuTrigger asChild>
-                    <button type='button' className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }}>
+                    <button type='button' className={cn(buttonVariants({ variant: 'light', size: 'sm' }), 'm-0 p-0')} style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }}>
                       <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-1 py-0' style={{ color: '#919FAF' }}></i>
                     </button>
                   </DropdownMenuTrigger>
@@ -253,7 +255,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
                           : router.push(`/amazon-sellers/fulfillment/individualUnits/${row.inboundPlanId}`)
                     }>
                     <div>
-                      <i className='ri-file-list-line align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]'></i>
+                      <i className='ri-file-list-line align-middle me-2 text-[16.25px] text-muted-foreground'></i>
                       <span className='text-[13px] font-normal text-black'>View Details</span>
                     </div>
                   </DropdownMenuItem>
@@ -288,7 +290,7 @@ const FulfillmentsTable = ({ filteredItems, pending, setcancelInboundPlanModal, 
               <DropdownMenu>
                 <div className='dropdown inline-block'>
                 <DropdownMenuTrigger asChild>
-                    <button type='button' className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }}>
+                    <button type='button' className={cn(buttonVariants({ variant: 'light', size: 'sm' }), 'm-0 p-0')} style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }}>
                       <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-1 py-0' style={{ color: '#919FAF' }}></i>
                     </button>
                   </DropdownMenuTrigger>

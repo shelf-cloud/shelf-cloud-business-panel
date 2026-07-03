@@ -22,7 +22,7 @@ const AssignCommerceHubFileType = ({ selected, setSelected, options }: Props) =>
   return (
     <DropdownMenu open={isDialogOpen} onOpenChange={(open) => { if (open !== isDialogOpen) setIsDialogOpen(!isDialogOpen) }}>
       <DropdownMenuTrigger asChild>
-        <button type='button' className='text-[11.2px] btn btn-sm btn-light' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }}>
+        <button type='button' className='inline-flex h-8 items-center justify-center gap-2 whitespace-nowrap rounded-md px-3 text-[11.2px] text-xs font-medium' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }}>
           File
           <ChevronDownIcon className='ml-1 size-4' />
         </button>

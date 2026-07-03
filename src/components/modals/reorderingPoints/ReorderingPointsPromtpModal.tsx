@@ -2,10 +2,12 @@ import { useContext, useTransition } from 'react'
 
 import AppContext from '@context/AppContext'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 import { Textarea } from '@shadcn/ui/textarea'
+import { Alert } from '@/components/ui/Alert'
 import snarkdown from 'snarkdown'
 import useSWR from 'swr'
 
@@ -81,18 +83,18 @@ function ReorderingPointsPromptModal({ promptModal, setPromptModal }: Props) {
         <div className='px-6 py-4' style={{ overflowX: 'hidden', overflowY: 'auto', minWidth: 0 }}>
         <p className='text-[13px]'>To forecast using different AI models, you can add custom instructions/rules additionally.</p>
         {isValidating ? (
-          <div className='flex items-center gap-2 text-[var(--bs-secondary-color)] py-4'>
-            <div className='spinner-border spinner-border-sm' role='status' aria-hidden='true' />
+          <div className='flex items-center gap-2 text-muted-foreground py-4'>
+            <Spinner className='size-4' role='status' aria-hidden='true' />
             <span>Loading prompt...</span>
           </div>
         ) : error ? (
-          <div className='alert alert-danger mb-0' role='alert'>
+          <Alert color='danger' className='mb-0'>
             Failed to fetch prompt. Please try again.
-          </div>
+          </Alert>
         ) : data?.error ? (
-          <div className='alert alert-warning mb-0' role='alert'>
+          <Alert color='warning' className='mb-0'>
             {data.message || 'Prompt service returned an error.'}
-          </div>
+          </Alert>
         ) : data?.prompt ? (
           <div className='flex flex-col gap-4' style={{ minWidth: 0, width: '100%' }}>
             {[
@@ -103,7 +105,7 @@ function ReorderingPointsPromptModal({ promptModal, setPromptModal }: Props) {
               // { label: 'Output', content: snarkdown(data.prompt.output) },
             ].map(({ label, content }) => (
               <div key={label} className='border rounded p-4 shadow-sm' style={{ minWidth: 0, overflow: 'hidden' }}>
-                <p className='font-semibold text-[var(--bs-secondary-color)] uppercase mb-2' style={{ fontSize: '0.7rem', letterSpacing: '0.06em' }}>
+                <p className='font-semibold text-muted-foreground uppercase mb-2' style={{ fontSize: '0.7rem', letterSpacing: '0.06em' }}>
                   {label}
                 </p>
                 <div
@@ -114,7 +116,7 @@ function ReorderingPointsPromptModal({ promptModal, setPromptModal }: Props) {
               </div>
             ))}
             <div className='border rounded p-4 shadow-sm'>
-              <p className='font-semibold text-[var(--bs-secondary-color)] uppercase mb-4' style={{ fontSize: '0.7rem', letterSpacing: '0.06em' }}>
+              <p className='font-semibold text-muted-foreground uppercase mb-4' style={{ fontSize: '0.7rem', letterSpacing: '0.06em' }}>
                 Business Rules
               </p>
               <Textarea
@@ -127,7 +129,7 @@ function ReorderingPointsPromptModal({ promptModal, setPromptModal }: Props) {
             </div>
           </div>
         ) : (
-          <p className='text-[var(--bs-secondary-color)] mb-0'>No prompt available.</p>
+          <p className='text-muted-foreground mb-0'>No prompt available.</p>
         )}
         </div>
         <DialogFooter className='items-center'>

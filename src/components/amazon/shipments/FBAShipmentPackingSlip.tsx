@@ -1,6 +1,6 @@
 import { FBAShipment } from '@typesTs/amazon/fbaShipments.interface'
 import ExcelJS from 'exceljs'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { DropdownMenuItem } from '@shadcn/ui/dropdown-menu'
 
 import { shelf_cloud_blue_h, shelf_cloud_signature } from '@/lib/assetsConstants'

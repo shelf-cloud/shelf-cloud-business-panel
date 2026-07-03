@@ -7,7 +7,7 @@ import { FormatBytes } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import axios from 'axios'
 import { useFormik } from 'formik'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
 import { Label } from '@shadcn/ui/label'
@@ -256,27 +256,27 @@ const General_Product_Details = ({
                 </tr>
                 <tr>
                   <td className='font-extrabold'>Description</td>
-                  <td className={description ?? 'text-[color:var(--bs-secondary-color)] font-light italic'}>{description ?? 'No Description'}</td>
+                  <td className={description ?? 'text-muted-foreground font-light italic'}>{description ?? 'No Description'}</td>
                 </tr>
                 <tr>
                   <td className='font-extrabold'>Brand</td>
-                  <td className={brand ?? 'text-[color:var(--bs-secondary-color)] font-light italic'}>{brand ?? 'No Brand'}</td>
+                  <td className={brand ?? 'text-muted-foreground font-light italic'}>{brand ?? 'No Brand'}</td>
                 </tr>
                 <tr>
                   <td className='font-extrabold'>Category</td>
-                  <td className={category ?? 'text-[color:var(--bs-secondary-color)] font-light italic'}>{category ?? 'No Category'}</td>
+                  <td className={category ?? 'text-muted-foreground font-light italic'}>{category ?? 'No Category'}</td>
                 </tr>
                 <tr>
                   <td className='font-extrabold'>Supplier</td>
-                  <td className={supplier ?? 'text-[color:var(--bs-secondary-color)] font-light italic'}>{supplier ?? 'No supplier'}</td>
+                  <td className={supplier ?? 'text-muted-foreground font-light italic'}>{supplier ?? 'No supplier'}</td>
                 </tr>
                 <tr>
                   <td className='font-extrabold'>Condition</td>
-                  <td className={itemCondition ?? 'text-[color:var(--bs-secondary-color)] font-light italic'}>{itemCondition ?? 'No supplier'}</td>
+                  <td className={itemCondition ?? 'text-muted-foreground font-light italic'}>{itemCondition ?? 'No supplier'}</td>
                 </tr>
                 <tr>
                   <td className='font-extrabold'>Tracking</td>
-                  <td className={itemCondition ?? 'text-[color:var(--bs-secondary-color)] font-light italic'}>
+                  <td className={itemCondition ?? 'text-muted-foreground font-light italic'}>
                     <p className='m-0 p-0'>
                       <span className='font-semibold'>FIFO:</span> {useEntryDate ? 'Yes' : 'No'}
                     </p>
@@ -288,7 +288,7 @@ const General_Product_Details = ({
                 {note && (
                   <tr>
                     <td className='font-extrabold'>Note</td>
-                    <td className='text-[color:var(--bs-secondary-color)] font-light italic'>{note}</td>
+                    <td className='text-muted-foreground font-light italic'>{note}</td>
                   </tr>
                 )}
               </tbody>

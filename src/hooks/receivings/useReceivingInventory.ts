@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'r
 
 import AppContext from '@context/AppContext'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import useSWR from 'swr'
 
 type GetReceivingsResponse = { error: boolean; message: string; inventory: ReceivingInventory[] }

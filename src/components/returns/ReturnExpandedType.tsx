@@ -11,7 +11,7 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import { CameraIcon } from 'lucide-react'
 import { ExpanderComponentProps } from 'react-data-table-component'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Card, CardHeader, CardContent } from '@shadcn/ui/card'
 import { Textarea } from '@shadcn/ui/textarea'
@@ -162,19 +162,19 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                 <table className='w-full text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <tbody>
                     <tr>
-                      <td className='text-[var(--bs-secondary-color)] whitespace-nowrap'>Service Requested:</td>
+                      <td className='text-muted-foreground whitespace-nowrap'>Service Requested:</td>
                       <td className='font-semibold w-full'>{data.carrierService}</td>
                     </tr>
                     <tr>
-                      <td className='text-[var(--bs-secondary-color)] whitespace-nowrap'>Service Used:</td>
+                      <td className='text-muted-foreground whitespace-nowrap'>Service Used:</td>
                       <td className='font-semibold w-full'>{data.carrierType}</td>
                     </tr>
                     <tr>
-                      <td className='text-[var(--bs-secondary-color)] whitespace-nowrap'>Customer Name:</td>
+                      <td className='text-muted-foreground whitespace-nowrap'>Customer Name:</td>
                       <td className='font-semibold w-full'>{data.shipName}</td>
                     </tr>
                     <tr>
-                      <td className='text-[var(--bs-secondary-color)] whitespace-nowrap'># Of Pallets:</td>
+                      <td className='text-muted-foreground whitespace-nowrap'># Of Pallets:</td>
                       <td className='font-semibold w-full'>{data.numberPallets}</td>
                     </tr>
                   </tbody>
@@ -191,11 +191,11 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                 <table className='w-full whitespace-nowrap mb-0 text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <tbody>
                     <tr className='border-b border-[color:var(--border)]'>
-                      <td className='text-[var(--bs-secondary-color)] flex flex-row justify-start items-start'>
+                      <td className='text-muted-foreground flex flex-row justify-start items-start'>
                         Pick Pack Charge
                         {data.chargesFees && (
                           <>
-                            <i className='ri-information-fill ms-1 text-[13px] text-[var(--bs-secondary-color)]' id={`tooltip${OrderId}`}></i>
+                            <i className='ri-information-fill ms-1 text-[13px] text-muted-foreground' id={`tooltip${OrderId}`}></i>
                             <TooltipComponent target={`tooltip${OrderId}`} text={serviceFee} />
                           </>
                         )}
@@ -203,11 +203,11 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                       <td className='font-semibold text-right'>{FormatCurrency(state.currentRegion, data.pickpackCharge!)}</td>
                     </tr>
                     <tr className='border-b border-[color:var(--border)]'>
-                      <td className='text-[var(--bs-secondary-color)]'>Shipping Charge</td>
+                      <td className='text-muted-foreground'>Shipping Charge</td>
                       <td className='font-semibold text-right'>{FormatCurrency(state.currentRegion, data.onixShipping!)}</td>
                     </tr>
                     <tr className='border-b border-[color:var(--border)]'>
-                      <td className='text-[var(--bs-secondary-color)]'>Extra Charge</td>
+                      <td className='text-muted-foreground'>Extra Charge</td>
                       <td className='font-semibold text-right'>{FormatCurrency(state.currentRegion, data.extraCharge!)}</td>
                     </tr>
                     <tr>
@@ -236,7 +236,7 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                   <form onSubmit={handleAddComment}>
                     <div className='px-3 w-full'>
                       <div className='m-0'>
-                        <Label htmlFor='comment' className='form-label'>
+                        <Label htmlFor='comment' className='mb-2'>
                           Edit Comment
                         </Label>
                         <Textarea
@@ -291,7 +291,7 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                     {data.orderItems.map((product: OrderItem, key) => (
                       <tr key={key} className='border-b border-[color:var(--border)]'>
                         <td className='w-1/2 font-semibold'>{product.title ? product.title : product.name}</td>
-                        <td className='text-[var(--bs-secondary-color)]'>{product.sku}</td>
+                        <td className='text-muted-foreground'>{product.sku}</td>
                         <td>
                           {product.images && product.images.length > 0 ? (
                             <ShadcnButton
@@ -305,7 +305,7 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                             </ShadcnButton>
                           ) : null}
                         </td>
-                        <td className='text-[var(--bs-secondary-color)] capitalize'>{product.state}</td>
+                        <td className='text-muted-foreground capitalize'>{product.state}</td>
                         <td className='text-center'>{product.qtyReceived ? product.qtyReceived : product.quantity}</td>
                       </tr>
                     ))}

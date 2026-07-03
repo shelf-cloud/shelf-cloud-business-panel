@@ -148,7 +148,7 @@ const FilterByDates = ({ shipmentsStartDate, shipmentsEndDate, setShipmentsStart
             }}>
             Last Year
           </button>
-          <span className='font-light text-[color:var(--bs-secondary-color)] text-sm pb-1 border-t pt-1'>Select Range:</span>
+          <span className='font-light text-muted-foreground text-sm pb-1 border-t pt-1'>Select Range:</span>
           <Flatpickr
             className={'border border-[#E1E3E5] text-sm w-full p-2' + (selectedDateFilter == 'picker' ? ' font-bold' : '')}
             options={{

@@ -19,7 +19,7 @@ const StorageTable = ({ data }: Props) => {
             <CardContent>
               <div className='overflow-x-auto'>
                 <table className='w-full align-middle text-center mb-0 border border-[color:var(--border)] [&_td]:border-t [&_td]:border-[color:var(--border)] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
-                  <thead className='bg-[color:var(--vz-light)] text-[var(--bs-secondary-color)]'>
+                  <thead className='bg-[color:var(--vz-light)] text-muted-foreground'>
                     <tr className='text-[16.25px] font-bold'>
                       <th scope='col'>Bin Name</th>
                       <th scope='col'>Bin Quantity</th>

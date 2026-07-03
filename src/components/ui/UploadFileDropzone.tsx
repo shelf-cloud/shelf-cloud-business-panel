@@ -1,5 +1,5 @@
 import Dropzone, { Accept } from 'react-dropzone'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 
 type Props = {
   accptedFiles: Accept | undefined

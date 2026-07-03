@@ -100,7 +100,7 @@ const Kit_Page_Layout = ({}: Props) => {
                       </Link>
                       <div className='mt-3'>
                         <div className='font-semibold text-[22.75px]'>
-                          <span className='text-[color:var(--bs-secondary-color)] font-normal'>SKU:</span> {info![1]} <CopyTextToClipboard text={info![1]} label='SKU' fontSize='fs-4' />
+                          <span className='text-muted-foreground font-normal'>SKU:</span> {info![1]} <CopyTextToClipboard text={info![1]} label='SKU' fontSize='fs-4' />
                         </div>
                       </div>
                     </div>
@@ -133,7 +133,7 @@ const Kit_Page_Layout = ({}: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={'text-[16.25px] font-semibold ' + (activeTab == '1' ? '!text-primary' : '!text-[color:var(--bs-secondary-color)]')}
+                              className={'text-[16.25px] font-semibold ' + (activeTab == '1' ? '!text-primary' : '!text-muted-foreground')}
                               onClick={() => {
                                 tabChange('1')
                               }}
@@ -146,7 +146,7 @@ const Kit_Page_Layout = ({}: Props) => {
                           </NavItem>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
-                              className={'text-[16.25px] font-semibold ' + (activeTab == '2' ? '!text-primary' : '!text-[color:var(--bs-secondary-color)]')}
+                              className={'text-[16.25px] font-semibold ' + (activeTab == '2' ? '!text-primary' : '!text-muted-foreground')}
                               onClick={() => {
                                 tabChange('2')
                               }}>
@@ -159,7 +159,7 @@ const Kit_Page_Layout = ({}: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={'text-[16.25px] font-semibold ' + (activeTab == '3' ? '!text-primary' : '!text-[color:var(--bs-secondary-color)]')}
+                              className={'text-[16.25px] font-semibold ' + (activeTab == '3' ? '!text-primary' : '!text-muted-foreground')}
                               onClick={() => {
                                 tabChange('3')
                               }}
@@ -173,7 +173,7 @@ const Kit_Page_Layout = ({}: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={'text-[16.25px] font-semibold ' + (activeTab == '4' ? '!text-primary' : '!text-[color:var(--bs-secondary-color)]')}
+                              className={'text-[16.25px] font-semibold ' + (activeTab == '4' ? '!text-primary' : '!text-muted-foreground')}
                               onClick={() => {
                                 tabChange('4')
                               }}
@@ -187,7 +187,7 @@ const Kit_Page_Layout = ({}: Props) => {
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
                               to='#'
-                              className={'text-[16.25px] font-semibold ' + (activeTab == '5' ? '!text-primary' : '!text-[color:var(--bs-secondary-color)]')}
+                              className={'text-[16.25px] font-semibold ' + (activeTab == '5' ? '!text-primary' : '!text-muted-foreground')}
                               onClick={() => {
                                 tabChange('5')
                               }}

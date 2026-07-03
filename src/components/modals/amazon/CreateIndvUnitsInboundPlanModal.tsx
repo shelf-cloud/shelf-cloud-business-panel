@@ -12,7 +12,7 @@ import { AmazonFulfillmentSku, AmazonMarketplace } from '@typesTs/amazon/fulfill
 import axios from 'axios'
 import { useFormik } from 'formik'
 import moment from 'moment'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 import { Input } from '@shadcn/ui/input'
@@ -375,7 +375,7 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
     <Dialog open={!!showCreateInboundPlanModal} onOpenChange={(open) => { if (!open) setShowCreateInboundPlanModal(false) }}>
       <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl' id='createInboundPlanModal'>
         <DialogHeader className='pr-6'>
-          <DialogTitle className='modal-title' id='myModalLabel'>
+          <DialogTitle id='myModalLabel'>
             <p className='text-[19.5px] m-0'>Create Individual Units Fulfillment - Send To Amazon</p>
           </DialogTitle>
         </DialogHeader>
@@ -386,10 +386,10 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
             <div className='flex flex-wrap -mx-3 my-0'>
               <div className='px-3 md:w-1/2'>
                 <div className='mb-4'>
-                  <Label htmlFor='orderNumber' className='form-label'>
+                  <Label htmlFor='orderNumber' className='mb-2'>
                     *Fulfillment Name
                   </Label>
-                  <div className='input-group'>
+                  <div>
                     <Input
                       type='text'
                       className='h-8 text-xs'
@@ -408,7 +408,7 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
               </div>
               <div className='px-3 md:w-1/2'>
                 <div className='mb-4'>
-                  <Label htmlFor='marketplace' className='form-label'>
+                  <Label htmlFor='marketplace' className='mb-2'>
                     *Marketplace destination
                   </Label>
                   <NativeSelect
@@ -435,7 +435,7 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
             <div className='flex flex-wrap -mx-3 my-0'>
               <div className='px-3 md:w-1/2'>
                 <div className='mb-4'>
-                  <Label htmlFor='shipFrom' className='form-label'>
+                  <Label htmlFor='shipFrom' className='mb-2'>
                     *Ship From
                   </Label>
                   <NativeSelect

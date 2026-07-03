@@ -181,7 +181,7 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
                 )}
                 {row.barcode && (
                   <>
-                    UPC:<span className='font-light text-[color:var(--bs-secondary-color)]'>{row.barcode}</span>
+                    UPC:<span className='font-light text-muted-foreground'>{row.barcode}</span>
                     <CopyTextToClipboard text={row.barcode} label='UPC' />
                   </>
                 )}
@@ -284,7 +284,7 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
       name: (
         <div className='text-center flex flex-col justify-center items-center gap-1'>
           <span className='font-semibold text-[13px]'>ROI</span>
-          <span className={'font-normal text-[16.25px] ' + (totalRoi === null ? 'text-[color:var(--bs-secondary-color)]' : totalRoi > 0 ? 'text-primary' : 'text-destructive')}>
+          <span className={'font-normal text-[16.25px] ' + (totalRoi === null ? 'text-muted-foreground' : totalRoi > 0 ? 'text-primary' : 'text-destructive')}>
             {totalRoi === null ? 'N/A' : `${FormatIntPercentage(state.currentRegion, totalRoi)}%`}
           </span>
         </div>
@@ -292,7 +292,7 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
       selector: (row: ProductPerformance) => {
         const roi = getProductRoi(row, selectedMarketplace.storeId)
 
-        if (roi === null) return <span className='text-[color:var(--bs-secondary-color)]'>N/A</span>
+        if (roi === null) return <span className='text-muted-foreground'>N/A</span>
 
         return <span className={roi >= 0 ? 'text-black' : 'text-destructive'}>{FormatIntPercentage(state.currentRegion, roi)}%</span>
       },
@@ -306,7 +306,7 @@ const ProductPerformanceTable = ({ tableData, pending, selectedMarketplace }: Pr
         <div className='text-center flex flex-col justify-center items-center gap-1'>
           <span className='font-semibold text-[13px]'>Refunds</span>
           <span
-            className={'font-normal text-[16.25px] ' + (tableData.reduce((total: number, product: ProductPerformance) => total + product.refundsQty, 0) > 0 ? 'text-primary' : 'text-[color:var(--bs-secondary-color)]')}>
+            className={'font-normal text-[16.25px] ' + (tableData.reduce((total: number, product: ProductPerformance) => total + product.refundsQty, 0) > 0 ? 'text-primary' : 'text-muted-foreground')}>
             {FormatIntNumber(
               state.currentRegion,
               tableData.reduce((total: number, product: ProductPerformance) => total + product.refundsQty, 0)

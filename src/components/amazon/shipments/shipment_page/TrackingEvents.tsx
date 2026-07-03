@@ -28,7 +28,7 @@ const TrackingEvents = ({ shipmentDetails, handlePrintShipmentBillOfLading, wati
             'Download Bill Of Lading'
           )}
         </Button>
-        <p className='mt-4 text-[11.2px] text-[var(--bs-secondary-color)]'>The BOL will be generated no later than 8 a.m. the morning of pickup.</p>
+        <p className='mt-4 text-[11.2px] text-muted-foreground'>The BOL will be generated no later than 8 a.m. the morning of pickup.</p>
       </div>
     </div>
   )

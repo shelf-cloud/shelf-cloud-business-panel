@@ -14,7 +14,7 @@ import { FormatBytes } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import axios from 'axios'
 import { useFormik } from 'formik'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import * as Yup from 'yup'
 
 import { Button } from '@shadcn/ui/button'
@@ -594,7 +594,7 @@ const AddProducts = ({ session }: Props) => {
                       <h5 className='text-[16.25px] mt-3 font-bold text-primary'>Box Dimensions</h5>
                       <div className='shrink-0'>
                         <div className='flex items-center gap-2'>
-                          <Label className='text-[color:var(--bs-secondary-color)]'>Same as unit dimensions</Label>
+                          <Label className='text-muted-foreground'>Same as unit dimensions</Label>
                           <Switch checked={useSameUnitDimensions} onChange={handleBoxDimensionsCheckbox} />
                         </div>
                       </div>
@@ -690,7 +690,7 @@ const AddProducts = ({ session }: Props) => {
                       </div>
                     </div>
 
-                    <h5 className='text-[11.2px] mb-3 text-[color:var(--bs-secondary-color)] font-light'>*You must complete all required fields.</h5>
+                    <h5 className='text-[11.2px] mb-3 text-muted-foreground font-light'>*You must complete all required fields.</h5>
                     <div className='px-3 w-full'>
                       <div className='text-right'>
                         <Button type='submit'>

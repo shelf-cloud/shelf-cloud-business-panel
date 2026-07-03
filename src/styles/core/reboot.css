@@ -2,7 +2,7 @@
  * reboot.css
  * Bootstrap 5.3.8 Reboot section, ported byte-for-byte from Bootstrap core CSS
  * (compiled with Velzon variables). Establishes app-wide element baseline:
- * box-sizing, body defaults, headings h1-h6, p, lists, a{color:var(--bs-link-color)}
+ * box-sizing, body defaults, headings h1-h6, p, lists, a{color:#4481fd}
  * (kept — !text-* anchor convention in ported components assumes this exists),
  * img/svg, table/caption/th resets, label, form-control element resets,
  * fieldset/legend, hr, small/mark, code/pre/kbd, [hidden], etc.
@@ -35,13 +35,12 @@
 
 body {
   margin: 0;
-  font-family: var(--bs-body-font-family);
-  font-size: var(--bs-body-font-size);
-  font-weight: var(--bs-body-font-weight);
-  line-height: var(--bs-body-line-height);
-  color: var(--bs-body-color);
-  text-align: var(--bs-body-text-align);
-  background-color: var(--bs-body-bg);
+  font-family: var(--vz-font-sans-serif);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #eff3f6;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -50,7 +49,7 @@ hr {
   margin: 1rem 0;
   color: inherit;
   border: 0;
-  border-top: var(--bs-border-width) solid;
+  border-top: 1px solid;
   opacity: 0.25;
 }
 
@@ -59,7 +58,7 @@ h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
   margin-bottom: 0.5rem;
   font-weight: 500;
   line-height: 1.2;
-  color: var(--bs-heading-color);
+  color: inherit;
 }
 
 h1, .h1 {
@@ -161,8 +160,8 @@ small, .small {
 
 mark, .mark {
   padding: 0.2em;
-  color: var(--bs-highlight-color);
-  background-color: var(--bs-highlight-bg);
+  color: #212529;
+  background-color: #fcf8e3;
 }
 
 sub,
@@ -182,11 +181,11 @@ sup {
 }
 
 a {
-  color: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 1));
+  color: rgba(68, 129, 253, 1);
   text-decoration: underline;
 }
 a:hover {
-  --bs-link-color-rgb: var(--bs-link-hover-color-rgb);
+  --bs-link-color-rgb: 68, 129, 253;
 }
 
 a:not([href]):not([class]), a:not([href]):not([class]):hover {
@@ -217,7 +216,7 @@ pre code {
 
 code {
   font-size: 0.875em;
-  color: var(--bs-code-color);
+  color: #f672a7;
   word-wrap: break-word;
 }
 a > code {

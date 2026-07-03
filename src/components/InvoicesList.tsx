@@ -41,7 +41,7 @@ const InvoicesList = ({ invoices }: Props) => {
                   <TableRow key={invoice.invoiceNumber}>
                     <TableCell>
                       <Link href={`/Invoices/${invoice.idOfInvoice}`}>
-                        <h5 className='text-[14px] my-1 text-center text-[color:var(--bs-secondary-color)]' style={{ cursor: 'pointer' }}>
+                        <h5 className='text-[14px] my-1 text-center text-muted-foreground' style={{ cursor: 'pointer' }}>
                           {invoice.invoiceNumber}
                         </h5>
                       </Link>
@@ -63,10 +63,10 @@ const InvoicesList = ({ invoices }: Props) => {
                       <span
                         className={
                           invoice.paid
-                            ? 'text-[14px] my-1 text-[color:var(--bs-secondary-color)]'
+                            ? 'text-[14px] my-1 text-muted-foreground'
                             : moment(today).isAfter(invoice.expireDate)
                               ? 'text-[14px] my-1 text-destructive'
-                              : 'text-[14px] my-1 text-[color:var(--bs-secondary-color)]'
+                              : 'text-[14px] my-1 text-muted-foreground'
                         }>
                         {moment(invoice.expireDate, 'YYYY-MM-DD').format('LL')}
                       </span>

@@ -6,7 +6,7 @@ import UploadFileDropzone from '@components/ui/UploadFileDropzone'
 import AppContext from '@context/AppContext'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { Accept } from 'react-dropzone/.'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Card } from '@shadcn/ui/card'
 import { Dialog, DialogContent, DialogFooter, DialogHeader } from '@shadcn/ui/dialog'
@@ -92,7 +92,7 @@ const UploadFileModal = ({
   return (
     <Dialog open={!!isOpen} onOpenChange={(open) => { if (!open) handleClose() }}>
       <DialogContent id='confirmDeleteReceiving' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg'>
-      <DialogHeader className='pr-6 modal-title' id='myModalLabel'>
+      <DialogHeader className='pr-6' id='myModalLabel'>
         {headerText}
       </DialogHeader>
       <div>
@@ -100,7 +100,7 @@ const UploadFileModal = ({
           <p className='mb-2 text-[13px] font-semibold'>
             {primaryText} {primaryTextSub && <span className='text-primary'>{primaryTextSub}</span>}
           </p>
-          {descriptionText && <p className='mb-1 text-[11.2px] text-[var(--bs-secondary-color)]'>{descriptionText}</p>}
+          {descriptionText && <p className='mb-1 text-[11.2px] text-muted-foreground'>{descriptionText}</p>}
           <div>
             <UploadFileDropzone accptedFiles={acceptedFiles} handleAcceptedFiles={handleAcceptedFiles} description={uploadZoneText} />
           </div>
@@ -137,7 +137,7 @@ const UploadFileModal = ({
                           />
                         </div>
                         <div className='flex-grow'>
-                          <p className='text-[var(--bs-secondary-color)] font-bold m-0'>{f.name}</p>
+                          <p className='text-muted-foreground font-bold m-0'>{f.name}</p>
                           <p className='mb-0'>
                             <strong>{f.formattedSize}</strong>
                           </p>

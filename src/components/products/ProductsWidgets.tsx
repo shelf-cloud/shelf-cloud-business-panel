@@ -139,7 +139,7 @@ const ProductsWidgets = ({}: Props) => {
                 </p>
                 <div className='shrink-0'>
                   <h5 className={'text-[13px] mb-0 font-bold'}>
-                    {FormatIntNumber(state.currentRegion, fbaProductsWidget?.totalQty ?? 0)} <span className='text-[11.2px] font-light text-[color:var(--bs-secondary-color)]'>Units</span>
+                    {FormatIntNumber(state.currentRegion, fbaProductsWidget?.totalQty ?? 0)} <span className='text-[11.2px] font-light text-muted-foreground'>Units</span>
                   </h5>
                 </div>
               </div>
@@ -158,7 +158,7 @@ const ProductsWidgets = ({}: Props) => {
                       duration={1}
                     />
                   </span>
-                  <span className='text-[11.2px] font-light text-[color:var(--bs-secondary-color)]'> Seller C.</span>
+                  <span className='text-[11.2px] font-light text-muted-foreground'> Seller C.</span>
                 </p>
                 <p className='text-[16.25px] font-semibold mb-0 text-nowrap'>
                   <span className='counter-value'>
@@ -172,7 +172,7 @@ const ProductsWidgets = ({}: Props) => {
                       duration={1}
                     />
                   </span>
-                  <span className='text-[11.2px] font-light text-[color:var(--bs-secondary-color)]'> Landed C.</span>
+                  <span className='text-[11.2px] font-light text-muted-foreground'> Landed C.</span>
                 </p>
               </div>
             </CardContent>

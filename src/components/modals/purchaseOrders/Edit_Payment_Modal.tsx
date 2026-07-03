@@ -5,7 +5,7 @@ import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import axios from 'axios'
 import { useFormik } from 'formik'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Dialog, DialogContent, DialogHeader } from '@shadcn/ui/dialog'
 import { Input } from '@shadcn/ui/input'
@@ -136,7 +136,7 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
         })
       }}>
       <DialogContent id='addPaymentToPoModal' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg'>
-      <DialogHeader className='pr-6 modal-title' id='myModalLabel'>
+      <DialogHeader className='pr-6' id='myModalLabel'>
         Edit Payment
       </DialogHeader>
       <div>
@@ -149,7 +149,7 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
           <div className='flex flex-wrap -mx-3'>
             <div className='px-3 md:w-6/12'>
               <div className='mb-4'>
-                <Label htmlFor='firstNameinput' className='form-label'>
+                <Label htmlFor='firstNameinput' className='mb-2'>
                   *Payment Date
                 </Label>
                 <Input
@@ -167,7 +167,7 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
             </div>
             <div className='px-3 md:w-6/12'>
               <div className='mb-4'>
-                <Label htmlFor='firstNameinput' className='form-label'>
+                <Label htmlFor='firstNameinput' className='mb-2'>
                   *Payment Amount
                 </Label>
                 <Input
@@ -182,7 +182,7 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
                   onBlur={validation.handleBlur}
                   aria-invalid={(validation.touched.amount && validation.errors.amount ? true : false) || undefined}
                 />
-                <small className='text-[11.2px] text-[var(--bs-secondary-color)]'>{FormatCurrency(state.currentRegion, validation.values.amount)}</small>
+                <small className='text-[11.2px] text-muted-foreground'>{FormatCurrency(state.currentRegion, validation.values.amount)}</small>
                 {validation.touched.amount && validation.errors.amount ? <div className='text-sm text-destructive'>{validation.errors.amount}</div> : null}
               </div>
             </div>
@@ -190,7 +190,7 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
           <div className='flex flex-wrap -mx-3'>
             <div className='px-3 md:w-full'>
               <div className='mb-4'>
-                <Label htmlFor='comment' className='form-label'>
+                <Label htmlFor='comment' className='mb-2'>
                   Comments
                 </Label>
                 <Textarea
@@ -208,10 +208,10 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
           </div>
           <div className='flex flex-wrap -mx-3'>
             <div className='flex justify-between items-center'>
-              <Button disabled={loading} type='button' variant='destructive' className='btn text-[11.2px]' onClick={handleDeletePayment}>
+              <Button disabled={loading} type='button' variant='destructive' className='text-[11.2px]' onClick={handleDeletePayment}>
                 {loading ? <Spinner className='size-6 text-white' /> : 'Delete'}
               </Button>
-              <Button disabled={loading} type='submit' variant='success' className='btn text-[11.2px]'>
+              <Button disabled={loading} type='submit' variant='success' className='text-[11.2px]'>
                 {loading ? <Spinner className='size-6 text-white' /> : 'Edit Payment'}
               </Button>
             </div>

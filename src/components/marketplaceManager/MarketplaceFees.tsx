@@ -11,7 +11,7 @@ import { MarketplaceFees, MarketplaceFeesResponse } from '@typesTs/marketplaces/
 import axios from 'axios'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Spinner } from '@shadcn/ui/spinner'
 import useSWR, { useSWRConfig } from 'swr'
@@ -241,7 +241,7 @@ const MarketplacesFees = ({}: Props) => {
           return (
             <span
               className={
-                row.comissionFee === 0 ? 'text-[var(--bs-secondary-color)] font-light' : row.comissionFee < 0 || row.comissionFee > 100 ? 'text-danger font-bold' : 'text-black'
+                row.comissionFee === 0 ? 'text-muted-foreground font-light' : row.comissionFee < 0 || row.comissionFee > 100 ? 'text-danger font-bold' : 'text-black'
               }>{`${row.comissionFee} %`}</span>
           )
         return (
@@ -272,7 +272,7 @@ const MarketplacesFees = ({}: Props) => {
     {
       name: <span className='font-bold text-[13px]'>Fixed Fee</span>,
       selector: (row: MarketplaceFees) => {
-        if (!showEditFields) return <span className={row.fixedFee === 0 ? 'text-[var(--bs-secondary-color)] font-light' : 'text-black'}>{FormatCurrency(state.currentRegion, row.fixedFee)}</span>
+        if (!showEditFields) return <span className={row.fixedFee === 0 ? 'text-muted-foreground font-light' : 'text-black'}>{FormatCurrency(state.currentRegion, row.fixedFee)}</span>
         return (
           <DebounceInput
             minLength={1}
@@ -311,7 +311,7 @@ const MarketplacesFees = ({}: Props) => {
             <div className='text-[11.2px] flex flex-row justify-center items-center gap-2'>
               <input
                 type='checkbox'
-                className='form-check-input'
+                className='size-4 shrink-0 rounded-sm border border-input-border accent-primary'
                 onChange={(e) => {
                   e.target.checked && row.commerceHubFileType === '' ? setHasError(true) : setHasError(false)
                   setmarketplaceFees((prev) => ({ ...prev, [row.storeId]: { ...row, isCommerceHub: e.target.checked, commerceHubFileType: '' } }))
@@ -348,7 +348,7 @@ const MarketplacesFees = ({}: Props) => {
     {
       name: <span className='font-bold text-[13px]'>Pay Terms</span>,
       selector: (row: MarketplaceFees) => {
-        if (!showEditFields) return <span className={row.payTerms === 0 ? 'text-[var(--bs-secondary-color)] font-light' : 'text-black'}>{row.payTerms}</span>
+        if (!showEditFields) return <span className={row.payTerms === 0 ? 'text-muted-foreground font-light' : 'text-black'}>{row.payTerms}</span>
         return (
           <DebounceInput
             minLength={1}

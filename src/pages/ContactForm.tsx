@@ -4,7 +4,7 @@ import { FormEventHandler, useRef } from 'react'
 
 import { getSession } from '@auth/client'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Label } from '@shadcn/ui/label'
 
@@ -80,7 +80,7 @@ function ContactForm({}: Props) {
             <p className='w-full text-center text-[16.25px] mb-6'>We are here for you! How can we help?</p>
             <form onSubmit={handleContactFormSubmit} className='w-full'>
               <div className='mb-6 w-full'>
-                <Label htmlFor='name' className='form-label'>
+                <Label htmlFor='name' className='mb-2'>
                   Name
                 </Label>
                 <input
@@ -94,7 +94,7 @@ function ContactForm({}: Props) {
                 />
               </div>
               <div className='mb-1 w-full'>
-                <Label className='form-label' htmlFor='email'>
+                <Label className='mb-2' htmlFor='email'>
                   Email
                 </Label>
                 <div className='relative auth-pass-inputgroup mb-4'>
@@ -109,7 +109,7 @@ function ContactForm({}: Props) {
                 </div>
               </div>
               <div className='mb-1 w-full'>
-                <Label className='form-label' htmlFor='message'>
+                <Label className='mb-2' htmlFor='message'>
                   Message
                 </Label>
                 <div className='relative auth-pass-inputgroup mb-4'>
